@@ -1,0 +1,53 @@
+# Rust build outputs
+/target/
+**/target/
+
+# Cargo / rustup local state
+.cargo/credentials.toml
+.rustup/
+
+# Test and benchmark leftovers
+*.profraw
+*.profdata
+*.gcda
+*.gcno
+*.lcov
+
+# Logs and temp files
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Generated runtime artifacts
+/runs/*
+!/runs/.gitkeep
+
+# Generated Agda exports
+/agda/Generated/*
+!/agda/Generated/.gitkeep
+
+# Local sqlite and telemetry scratch copies outside the tracked run tree
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Compressed checkpoint and blob outputs when created ad hoc in the repo root
+*.cbor.zst
+*.bin.zst
+*.jsonl
+*.ndjson

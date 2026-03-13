@@ -1,0 +1,16 @@
+[package]
+name = "pen-search"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+pen-core = { path = "../pen-core" }
+pen-eval = { path = "../pen-eval" }
+pen-store = { path = "../pen-store" }
+pen-type = { path = "../pen-type" }
+serde.workspace = true
+thiserror.workspace = true
+toml.workspace = true

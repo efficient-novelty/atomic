@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RunManifestV1",
+  "type": "object",
+  "properties": {
+    "artifacts": {
+      "$ref": "#/$defs/RunArtifacts"
+    },
+    "compat": {
+      "$ref": "#/$defs/RunCompat"
+    },
+    "config": {
+      "$ref": "#/$defs/ConfigFingerprint"
+    },
+    "created_utc": {
+      "type": "string"
+    },
+    "host": {
+      "$ref": "#/$defs/HostInfo"
+    },
+    "position": {
+      "$ref": "#/$defs/RunPosition"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "integer",
+      "format": "uint32",
+      "minimum": 0
+    },
+    "status": {
+      "$ref": "#/$defs/RunStatus"
+    },
+    "updated_utc": {
+      "type": "string"
+    },
+    "workspace_version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "status",
+    "created_utc",
+    "updated_utc",
+    "workspace_version",
+    "compat",
+    "host",
+    "config",
+    "position",
+    "artifacts"
+  ],
+  "$defs": {
+    "ConfigFingerprint": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ]
+    },
+    "HostInfo": {
+      "type": "object",
+      "properties": {
+        "arch": {
+          "type": "string"
+        },
+        "logical_cpus": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "os": {
+          "type": "string"
+        },
+        "ram_bytes": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "os",
+        "arch",
+        "logical_cpus",
+        "ram_bytes"
+      ]
+    },
+    "RunArtifacts": {
+      "type": "object",
+      "properties": {
+        "checkpoints_dir": {
+          "type": "string"
+        },
+        "reports_dir": {
+          "type": "string"
+        },
+        "telemetry": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "telemetry",
+        "reports_dir",
+        "checkpoints_dir"
+      ]
+    },
+    "RunCompat": {
+      "type": "object",
+      "properties": {
+        "ast_schema_hash": {
+          "type": "string"
+        },
+        "evaluator_hash": {
+          "type": "string"
+        },
+        "search_semantics_hash": {
+          "type": "string"
+        },
+        "store_schema_hash": {
+          "type": "string"
+        },
+        "type_rules_hash": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ast_schema_hash",
+        "type_rules_hash",
+        "evaluator_hash",
+        "search_semantics_hash",
+        "store_schema_hash"
+      ]
+    },
+    "RunPosition": {
+      "type": "object",
+      "properties": {
+        "active_band": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "active_step": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "completed_step": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "frontier_epoch": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "completed_step",
+        "active_step",
+        "active_band",
+        "frontier_epoch"
+      ]
+    },
+    "RunStatus": {
+      "type": "string",
+      "enum": [
+        "running",
+        "paused",
+        "completed",
+        "failed"
+      ]
+    }
+  }
+}

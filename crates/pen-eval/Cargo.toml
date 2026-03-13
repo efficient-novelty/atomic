@@ -1,0 +1,12 @@
+[package]
+name = "pen-eval"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+pen-core = { path = "../pen-core" }
+pen-type = { path = "../pen-type" }
+serde.workspace = true
+thiserror.workspace = true

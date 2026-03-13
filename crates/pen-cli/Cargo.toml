@@ -1,0 +1,17 @@
+[package]
+name = "pen-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+pen-accel = { path = "../pen-accel" }
+pen-agda = { path = "../pen-agda" }
+pen-core = { path = "../pen-core" }
+pen-eval = { path = "../pen-eval" }
+pen-search = { path = "../pen-search" }
+pen-store = { path = "../pen-store" }
+pen-type = { path = "../pen-type" }

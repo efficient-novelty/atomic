@@ -1,0 +1,41 @@
+[mode]
+strict = true
+debug = false
+
+[search]
+until_step = 15
+workers = "auto"
+max_workers = 12
+frontier_mode = "obligation_guided"
+learned_motifs = false
+
+[objective]
+exact_clause_policy = "strict"
+window_depth = 2
+selector = "minimal_positive_overshoot"
+
+[memory]
+reserve_for_os_gib = 4.0
+target_rss_gib = 8.5
+soft_rss_gib = 9.0
+pressure_rss_gib = 10.5
+emergency_rss_gib = 11.5
+hard_rss_gib = 12.0
+hot_frontier_gib = 2.25
+intern_gib = 2.0
+dedupe_gib = 1.25
+cache_gib = 0.75
+spill_buffers_gib = 0.50
+checkpoint_buffers_gib = 0.25
+worker_arena_mib = 64
+
+[checkpoint]
+root = "runs"
+step_on_accept = true
+frontier_interval_sec = 180
+retain_frontier_generations = 3
+compression = "zstd"
+
+[accel]
+backend = "cpu"
+verify_on_cpu = true

@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FrontierManifestV1",
+  "type": "object",
+  "properties": {
+    "band_index": {
+      "type": "integer",
+      "format": "uint32",
+      "minimum": 0
+    },
+    "base_step_checkpoint": {
+      "type": "string"
+    },
+    "counts": {
+      "$ref": "#/$defs/FrontierCounts"
+    },
+    "files": {
+      "$ref": "#/$defs/FrontierFiles"
+    },
+    "frontier_epoch": {
+      "type": "integer",
+      "format": "uint32",
+      "minimum": 0
+    },
+    "memory_snapshot": {
+      "$ref": "#/$defs/MemorySnapshot"
+    },
+    "resume_compatible": {
+      "$ref": "#/$defs/ResumeCompatible"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "scheduler": {
+      "$ref": "#/$defs/FrontierScheduler"
+    },
+    "schema_version": {
+      "type": "integer",
+      "format": "uint32",
+      "minimum": 0
+    },
+    "step_index": {
+      "type": "integer",
+      "format": "uint32",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "step_index",
+    "band_index",
+    "frontier_epoch",
+    "base_step_checkpoint",
+    "resume_compatible",
+    "counts",
+    "files",
+    "memory_snapshot",
+    "scheduler"
+  ],
+  "$defs": {
+    "FrontierCounts": {
+      "type": "object",
+      "properties": {
+        "cold_states": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "dedupe_keys": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "hot_states": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "hot_states",
+        "cold_states",
+        "dedupe_keys"
+      ]
+    },
+    "FrontierFiles": {
+      "type": "object",
+      "properties": {
+        "cache_blob": {
+          "type": "string"
+        },
+        "cold_shards": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dedupe_segments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hot_shards": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "hot_shards",
+        "cold_shards",
+        "dedupe_segments",
+        "cache_blob"
+      ]
+    },
+    "FrontierScheduler": {
+      "type": "object",
+      "properties": {
+        "priority_heads": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
+          }
+        },
+        "spill_generation": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "worker_count": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0
+        }
+      },
+      "required": [
+        "worker_count",
+        "priority_heads",
+        "spill_generation"
+      ]
+    },
+    "MemorySnapshot": {
+      "type": "object",
+      "properties": {
+        "cache_bytes": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "dedupe_bytes": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "hot_frontier_bytes": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "interner_bytes": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "rss_bytes": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "rss_bytes",
+        "hot_frontier_bytes",
+        "interner_bytes",
+        "dedupe_bytes",
+        "cache_bytes"
+      ]
+    },
+    "ResumeCompatible": {
+      "type": "object",
+      "properties": {
+        "ast_schema_hash": {
+          "type": "string"
+        },
+        "evaluator_hash": {
+          "type": "string"
+        },
+        "record_layout_id": {
+          "type": "string"
+        },
+        "search_semantics_hash": {
+          "type": "string"
+        },
+        "type_rules_hash": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ast_schema_hash",
+        "type_rules_hash",
+        "evaluator_hash",
+        "search_semantics_hash",
+        "record_layout_id"
+      ]
+    }
+  }
+}

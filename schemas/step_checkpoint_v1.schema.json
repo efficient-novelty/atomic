@@ -1,0 +1,608 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StepCheckpointV1",
+  "type": "object",
+  "properties": {
+    "accepted": {
+      "$ref": "#/$defs/AcceptedCandidate"
+    },
+    "accepted_utc": {
+      "type": "string"
+    },
+    "compat": {
+      "$ref": "#/$defs/CheckpointCompat"
+    },
+    "library_snapshot": {
+      "$ref": "#/$defs/LibrarySnapshot"
+    },
+    "near_misses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/NearMiss"
+      }
+    },
+    "objective": {
+      "$ref": "#/$defs/StepObjective"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "integer",
+      "format": "uint32",
+      "minimum": 0
+    },
+    "stats": {
+      "$ref": "#/$defs/StepStats"
+    },
+    "step_index": {
+      "type": "integer",
+      "format": "uint32",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "step_index",
+    "accepted_utc",
+    "compat",
+    "objective",
+    "accepted",
+    "library_snapshot",
+    "near_misses",
+    "stats"
+  ],
+  "$defs": {
+    "AcceptedCandidate": {
+      "type": "object",
+      "properties": {
+        "bit_kappa": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0
+        },
+        "candidate_hash": {
+          "type": "string"
+        },
+        "canonical_hash": {
+          "type": "string"
+        },
+        "clause_kappa": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0
+        },
+        "nu": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0
+        },
+        "overshoot": {
+          "$ref": "#/$defs/Rational"
+        },
+        "rho": {
+          "$ref": "#/$defs/Rational"
+        },
+        "shape_fingerprint": {
+          "type": "string"
+        },
+        "support_fingerprint": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "candidate_hash",
+        "canonical_hash",
+        "bit_kappa",
+        "clause_kappa",
+        "nu",
+        "rho",
+        "overshoot",
+        "shape_fingerprint",
+        "support_fingerprint"
+      ]
+    },
+    "BitBand": {
+      "type": "object",
+      "properties": {
+        "max": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0
+        },
+        "min": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ]
+    },
+    "CheckpointCompat": {
+      "type": "object",
+      "properties": {
+        "ast_schema_hash": {
+          "type": "string"
+        },
+        "evaluator_hash": {
+          "type": "string"
+        },
+        "search_semantics_hash": {
+          "type": "string"
+        },
+        "type_rules_hash": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ast_schema_hash",
+        "type_rules_hash",
+        "evaluator_hash",
+        "search_semantics_hash"
+      ]
+    },
+    "ClauseRec": {
+      "type": "object",
+      "properties": {
+        "expr": {
+          "$ref": "#/$defs/Expr"
+        },
+        "role": {
+          "$ref": "#/$defs/ClauseRole"
+        }
+      },
+      "required": [
+        "role",
+        "expr"
+      ]
+    },
+    "ClauseRole": {
+      "type": "string",
+      "enum": [
+        "formation",
+        "introduction",
+        "elimination",
+        "path_attach",
+        "computation"
+      ]
+    },
+    "Expr": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "Univ"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "App": {
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/Expr"
+                },
+                {
+                  "$ref": "#/$defs/Expr"
+                }
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "App"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Lam": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Lam"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Pi": {
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/Expr"
+                },
+                {
+                  "$ref": "#/$defs/Expr"
+                }
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Pi"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Sigma": {
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/Expr"
+                },
+                {
+                  "$ref": "#/$defs/Expr"
+                }
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Sigma"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Var": {
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Var"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Lib": {
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Lib"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Id": {
+              "type": "array",
+              "maxItems": 3,
+              "minItems": 3,
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/Expr"
+                },
+                {
+                  "$ref": "#/$defs/Expr"
+                },
+                {
+                  "$ref": "#/$defs/Expr"
+                }
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Id"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Refl": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Refl"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Susp": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Susp"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Trunc": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Trunc"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "PathCon": {
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "PathCon"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Flat": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Flat"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Sharp": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Sharp"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Disc": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Disc"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Shape": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Shape"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Next": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Next"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Eventually": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Eventually"
+          ]
+        }
+      ]
+    },
+    "LibrarySnapshot": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LibrarySnapshotEntry"
+          }
+        },
+        "window_depth": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0
+        }
+      },
+      "required": [
+        "window_depth",
+        "entries"
+      ]
+    },
+    "LibrarySnapshotEntry": {
+      "type": "object",
+      "properties": {
+        "candidate_hash": {
+          "type": "string"
+        },
+        "step": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "telescope": {
+          "$ref": "#/$defs/Telescope"
+        }
+      },
+      "required": [
+        "step",
+        "candidate_hash",
+        "telescope"
+      ]
+    },
+    "NearMiss": {
+      "type": "object",
+      "properties": {
+        "bit_kappa": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0
+        },
+        "candidate_hash": {
+          "type": "string"
+        },
+        "canonical_hash": {
+          "type": "string"
+        },
+        "clause_kappa": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0
+        },
+        "nu": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "candidate_hash",
+        "canonical_hash",
+        "bit_kappa",
+        "clause_kappa",
+        "nu",
+        "status"
+      ]
+    },
+    "Rational": {
+      "type": "object",
+      "properties": {
+        "den": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "num": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "required": [
+        "num",
+        "den"
+      ]
+    },
+    "StepObjective": {
+      "type": "object",
+      "properties": {
+        "bar": {
+          "$ref": "#/$defs/Rational"
+        },
+        "bit_band": {
+          "$ref": "#/$defs/BitBand"
+        },
+        "exact_clause_kappa": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0
+        }
+      },
+      "required": [
+        "bar",
+        "exact_clause_kappa",
+        "bit_band"
+      ]
+    },
+    "StepStats": {
+      "type": "object",
+      "properties": {
+        "frontier_scanned": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "heuristic_drops": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "sound_prunes": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "typed_prefixes": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "frontier_scanned",
+        "typed_prefixes",
+        "sound_prunes",
+        "heuristic_drops"
+      ]
+    },
+    "Telescope": {
+      "type": "object",
+      "properties": {
+        "clauses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClauseRec"
+          }
+        }
+      },
+      "required": [
+        "clauses"
+      ]
+    }
+  }
+}
