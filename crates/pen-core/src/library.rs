@@ -11,6 +11,7 @@ pub struct LibraryEntry {
     pub has_loop: bool,
     pub is_truncated: Option<u8>,
     pub axiomatic_exports: u16,
+    pub library_refs: u16,
     pub capabilities: CapabilityFlags,
     pub class: TelescopeClass,
 }
@@ -37,6 +38,8 @@ impl LibraryEntry {
             .iter()
             .map(|clause| &clause.expr)
             .collect();
+        let library_refs =
+            u16::try_from(telescope.lib_refs().len()).expect("library ref count exceeded u16");
         let path_dims = telescope.path_dimensions();
         let has_loop = !path_dims.is_empty();
         let is_truncated = find_truncation(&exprs);
@@ -78,7 +81,7 @@ impl LibraryEntry {
             is_truncated: is_truncated.is_some(),
             axiomatic_exports: usize::from(axiomatic_exports),
             has_dependent_functions: matches!(class, TelescopeClass::Former),
-            has_modal_ops: matches!(class, TelescopeClass::Modal),
+            has_modal_ops: exprs.iter().any(|expr| contains_modal_expr(expr)),
             has_differential_ops: matches!(class, TelescopeClass::Axiomatic),
             has_curvature: exprs.iter().any(is_curvature_expr),
             has_metric: exprs.iter().any(is_metric_expr),
@@ -92,6 +95,7 @@ impl LibraryEntry {
             has_loop,
             is_truncated,
             axiomatic_exports,
+            library_refs,
             capabilities,
             class,
         }
@@ -161,6 +165,30 @@ fn is_point_term(expr: &&Expr) -> bool {
     }
 }
 
+fn contains_modal_expr(expr: &Expr) -> bool {
+    match expr {
+        Expr::Flat(_)
+        | Expr::Sharp(_)
+        | Expr::Disc(_)
+        | Expr::Shape(_) => true,
+        Expr::App(left, right) | Expr::Pi(left, right) | Expr::Sigma(left, right) => {
+            contains_modal_expr(left) || contains_modal_expr(right)
+        }
+        Expr::Lam(body)
+        | Expr::Refl(body)
+        | Expr::Susp(body)
+        | Expr::Trunc(body)
+        | Expr::Next(body)
+        | Expr::Eventually(body) => contains_modal_expr(body),
+        Expr::Id(ty, left, right) => {
+            contains_modal_expr(ty)
+                || contains_modal_expr(left)
+                || contains_modal_expr(right)
+        }
+        Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_) => false,
+    }
+}
+
 fn is_curvature_expr(expr: &&Expr) -> bool {
     match expr {
         Expr::Pi(left, _) | Expr::App(left, _) => matches!(left.as_ref(), Expr::Lib(11)),
@@ -195,6 +223,12 @@ mod tests {
         let cohesion = LibraryEntry::from_telescope(&Telescope::reference(10), &empty);
         assert_eq!(cohesion.class, TelescopeClass::Modal);
         assert!(cohesion.capabilities.has_modal_ops);
+        assert_eq!(cohesion.library_refs, 0);
+
+        let connections = LibraryEntry::from_telescope(&Telescope::reference(11), &empty);
+        assert_eq!(connections.class, TelescopeClass::Axiomatic);
+        assert!(connections.capabilities.has_modal_ops);
+        assert_eq!(connections.library_refs, 1);
 
         let dct = LibraryEntry::from_telescope(&Telescope::reference(15), &empty);
         assert_eq!(dct.class, TelescopeClass::Synthesis);

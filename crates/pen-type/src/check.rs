@@ -140,7 +140,13 @@ fn check_expr(context: CheckContext, expr: &Expr) -> CheckResult {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => check_expr(context, body),
+        | Expr::Eventually(body) => {
+            let body_context = CheckContext {
+                clause_depth: context.clause_depth + 1,
+                ..context
+            };
+            check_expr(body_context, body)
+        }
     }
 }
 
@@ -195,6 +201,19 @@ mod tests {
         );
         assert_eq!(
             check_telescope(&library, &Telescope::reference(2)),
+            CheckResult::Ok
+        );
+    }
+
+    #[test]
+    fn unary_shell_reference_telescopes_preserve_scope() {
+        let library: Library = Vec::new();
+        assert_eq!(
+            check_telescope(&library, &Telescope::reference(6)),
+            CheckResult::Ok
+        );
+        assert_eq!(
+            check_telescope(&library, &Telescope::reference(10)),
             CheckResult::Ok
         );
     }

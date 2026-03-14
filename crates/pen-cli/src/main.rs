@@ -6,6 +6,27 @@ mod cmd_run;
 mod output;
 mod report;
 
+use clap::Parser;
+use cli::{Cli, Commands};
+
 fn main() {
-    println!("pen-cli bootstrap placeholder");
+    let cli = Cli::parse();
+    let result = match cli.command {
+        Commands::Run(args) => cmd_run::run(args),
+        Commands::Resume(args) => cmd_resume::resume(args),
+        Commands::Inspect(args) => cmd_inspect::inspect(args),
+        Commands::ExportAgda(args) => cmd_export_agda::export_agda(args),
+    };
+
+    match result {
+        Ok(output) => {
+            if !output.is_empty() {
+                println!("{output}");
+            }
+        }
+        Err(error) => {
+            eprintln!("error: {error:#}");
+            std::process::exit(1);
+        }
+    }
 }

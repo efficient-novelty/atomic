@@ -11,7 +11,9 @@ pub struct Telescope {
     pub clauses: Vec<ClauseRec>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
+#[derive(
+    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
+)]
 pub enum TelescopeClass {
     Foundation,
     Former,

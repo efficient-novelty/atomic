@@ -1,0 +1,45 @@
+{
+  "window_depth": 2,
+  "entries": [
+    {
+      "step": 2,
+      "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+      "telescope": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": {
+              "App": [
+                "Univ",
+                {
+                  "Var": 1
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": 3,
+      "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+      "telescope": {
+        "clauses": [
+          {
+            "role": "introduction",
+            "expr": {
+              "App": [
+                {
+                  "Lib": 2
+                },
+                {
+                  "Var": 1
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

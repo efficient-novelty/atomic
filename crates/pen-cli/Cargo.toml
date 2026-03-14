@@ -15,3 +15,23 @@ pen-eval = { path = "../pen-eval" }
 pen-search = { path = "../pen-search" }
 pen-store = { path = "../pen-store" }
 pen-type = { path = "../pen-type" }
+serde.workspace = true
+serde_json.workspace = true
+time.workspace = true
+sha2.workspace = true
+
+[[test]]
+name = "atomic_bootstrap"
+path = "../../tests/integration/atomic_bootstrap.rs"
+
+[[test]]
+name = "resume_roundtrip"
+path = "../../tests/integration/resume_roundtrip.rs"
+
+[[test]]
+name = "deterministic_replay"
+path = "../../tests/integration/deterministic_replay.rs"
+
+[[test]]
+name = "agda_export"
+path = "../../tests/integration/agda_export.rs"

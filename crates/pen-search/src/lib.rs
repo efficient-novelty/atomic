@@ -3,6 +3,7 @@ pub mod branch_bound;
 pub mod config;
 pub mod dedupe;
 pub mod diversify;
+pub mod engine;
 pub mod enumerate;
 pub mod expand;
 pub mod frontier;

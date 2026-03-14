@@ -16,7 +16,20 @@ and reporting. Cubical Agda remains a sidecar for export and verification only.
 
 ## Current status
 
-The repository is being bootstrapped in the frozen order:
+The repository now has a real integration surface for the frozen v1 contracts:
+
+- `pen-cli run` writes `run.json`, step checkpoints, step reports, and telemetry.
+- `pen-cli resume` extends the same run directory deterministically.
+- `pen-cli inspect` reports on run directories and frozen artifact files.
+- `pen-cli export-agda` and `xtask export-reference-agda` emit manifest-backed Agda stubs.
+
+The important honesty note is that `run` and `resume` are now hybrid:
+
+- they perform real live atomic bootstrap search through step 11,
+- they fall back to deterministic reference replay from step 12 onward,
+- and they still write the same frozen artifacts the future frontier engine will consume.
+
+The workspace is still being filled in according to the frozen order:
 
 1. `pen-core`
 2. `pen-store`
@@ -29,3 +42,19 @@ The repository is being bootstrapped in the frozen order:
 9. `pen-accel`
 
 Progress is tracked in [plan_progress.md](plan_progress.md).
+
+## Current commands
+
+- `cargo run -p pen-cli -- run --config configs/debug.toml --until-step 11`
+- `cargo run -p pen-cli -- resume runs/<run-id>`
+- `cargo run -p pen-cli -- inspect runs/<run-id>`
+- `cargo run -p pen-cli -- export-agda --run-dir runs/<run-id>`
+- `cargo run -p xtask -- generate-schemas`
+- `cargo run -p xtask -- export-reference-agda 15`
+
+## Verification
+
+- `cargo test --workspace`
+- `cargo run -p pen-cli -- run --config configs/debug.toml --root %TEMP%\\pen-cli-smoke --run-id smoke-run --until-step 11`
+- `cargo run -p pen-cli -- export-agda --until-step 2 --output-dir %TEMP%\\pen-agda-smoke`
+- `cargo run -p xtask -- export-reference-agda 2`
