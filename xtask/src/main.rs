@@ -1,5 +1,6 @@
 use anyhow::{Context, Result, bail};
 use pen_agda::export::{ExportStepInput, export_steps};
+use pen_agda::manifest::ExportSource;
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::telescope::Telescope;
 use pen_eval::bar::DiscoveryRecord;
@@ -88,6 +89,10 @@ fn export_reference_agda(root: PathBuf, until_step: u32) -> Result<()> {
             label: step_label(step_index).to_owned(),
             candidate_hash: evaluated.candidate_hash,
             canonical_hash: evaluated.canonical_hash,
+            bit_kappa: evaluated.bit_kappa,
+            clause_kappa: evaluated.clause_kappa,
+            nu: evaluated.nu,
+            rho: evaluated.rho,
             telescope,
         });
     }
@@ -97,6 +102,7 @@ fn export_reference_agda(root: PathBuf, until_step: u32) -> Result<()> {
         "xtask-reference-export",
         &steps,
         false,
+        ExportSource::ReferenceReplayFallback,
     )?;
     Ok(())
 }

@@ -368,7 +368,7 @@ mod tests {
             step_index: 10,
             band_index: 4,
             frontier_epoch: 17,
-            base_step_checkpoint: "../../steps/step-09-hopf.cbor.zst".to_owned(),
+            base_step_checkpoint: "../../../steps/step-09-hopf.cbor.zst".to_owned(),
             resume_compatible: ResumeCompatible {
                 ast_schema_hash: "blake3:ast".to_owned(),
                 type_rules_hash: "blake3:type".to_owned(),

@@ -8,8 +8,27 @@ The current CLI path is an honest hybrid bootstrap surface:
 
 - live atomic search is used through step 15,
 - deterministic reference replay is no longer needed for the current 15-step corpus,
-- and both paths write the same real run artifacts while preserving the hot-path
-  invariants the later frontier engine must keep.
+- bounded resume now consumes stored step/frontier artifacts instead of
+  rebuilding a full config-driven prefix,
+- and the exact step-4 through step-15 path now emits deterministic frontier
+  evidence while preserving the hot-path invariants the later frontier engine
+  must keep.
+
+## Evidence comparison lane
+
+`scripts/compare_runs.py` is the canonical post-hoc evidence tool for the
+current bounded surface. It reads existing run directories and compares:
+
+- accepted trajectory equality or deltas
+- per-step provenance sequences
+- replay-ablation summaries
+- prune sample totals
+- frontier-retention deltas
+- governor state and pressure-action sequences
+- step-15 claim-boundary consistency
+
+The script emits a human-readable signoff report plus a machine-readable JSON
+summary without moving truth out of the stored Rust artifacts.
 
 ## Non-negotiable invariants
 
@@ -24,6 +43,7 @@ The current CLI path is an honest hybrid bootstrap surface:
 
 - exact compatibility match -> frontier resume allowed
 - same AST, type, and evaluator but different search semantics -> resume from step
+- same AST and type but different evaluator -> resume from step and reevaluate
 - AST schema change -> no automatic frontier resume
 
 ## What is already frozen
@@ -33,3 +53,4 @@ The current CLI path is an honest hybrid bootstrap surface:
 - step checkpoint compatibility hashes
 - live atomic bootstrap search through step 15
 - reference replay over the frozen 15-step telescope corpus
+- canonical comparison of persisted evidence lanes via `scripts/compare_runs.py`

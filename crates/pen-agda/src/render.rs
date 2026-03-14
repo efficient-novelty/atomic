@@ -1,3 +1,4 @@
+use crate::manifest::ProofClaims;
 use pen_core::expr::Expr;
 use pen_core::telescope::Telescope;
 
@@ -5,8 +6,16 @@ pub fn step_module_name(step_index: u32) -> String {
     format!("Step{step_index:02}")
 }
 
+pub fn payload_module_name(step_index: u32) -> String {
+    format!("Payload{step_index:02}")
+}
+
 pub fn step_source_file(step_index: u32) -> String {
     format!("{}.agda", step_module_name(step_index))
+}
+
+pub fn payload_source_file(step_index: u32) -> String {
+    format!("{}.agda", payload_module_name(step_index))
 }
 
 pub fn step_verify_log_file(step_index: u32) -> String {
@@ -19,9 +28,12 @@ pub fn render_step_module(
     telescope: &Telescope,
     candidate_hash: &str,
     canonical_hash: &str,
+    payload_module: &str,
 ) -> String {
     let module_name = step_module_name(step_index);
-    let imports = render_imports(telescope);
+    let prior_imports = render_imports(telescope);
+    let mut imports = vec![format!("open import {payload_module} as {payload_module}")];
+    imports.extend(prior_imports);
     let clauses = telescope
         .clauses
         .iter()
@@ -42,7 +54,40 @@ pub fn render_step_module(
     };
 
     format!(
-        "module {module_name} where\n\nopen import Agda.Primitive using (Set)\n\n{imports_block}-- step: {step_index}\n-- label: {label}\n-- candidate_hash: {candidate_hash}\n-- canonical_hash: {canonical_hash}\n\npostulate\n  T : Set\n{clauses}\n"
+        "module {module_name} where\n\nopen import Agda.Primitive using (Set)\n\n{imports_block}-- step: {step_index}\n-- label: {label}\n-- candidate_hash: {candidate_hash}\n-- canonical_hash: {canonical_hash}\n-- proof_payload: {payload_module}\n\npostulate\n  T : Set\n{clauses}\n"
+    )
+}
+
+pub fn render_payload_module(
+    step_index: u32,
+    label: &str,
+    candidate_hash: &str,
+    canonical_hash: &str,
+    claims: &ProofClaims,
+) -> String {
+    let module_name = payload_module_name(step_index);
+    let import_steps = if claims.import_steps.is_empty() {
+        "none".to_owned()
+    } else {
+        claims
+            .import_steps
+            .iter()
+            .map(|step| format!("{step:02}"))
+            .collect::<Vec<_>>()
+            .join(",")
+    };
+
+    format!(
+        "module {module_name} where\n\nopen import Agda.Primitive using (Set)\n\n-- step: {step_index}\n-- label: {label}\n-- candidate_hash: {candidate_hash}\n-- canonical_hash: {canonical_hash}\n-- canonical_key: {}\n-- bit_kappa: {}\n-- clause_kappa: {}\n-- desugared_kappa: {}\n-- rho: {}\n-- import_steps: {import_steps}\n-- nu_g: {}\n-- nu_h: {}\n-- nu_c: {}\n-- nu_total: {}\n\npostulate\n  ContractWitness : Set\n",
+        claims.canonical_key,
+        claims.bit_kappa,
+        claims.clause_kappa,
+        claims.desugared_kappa,
+        claims.rho,
+        claims.nu_claim.nu_g,
+        claims.nu_claim.nu_h,
+        claims.nu_claim.nu_c,
+        claims.nu_claim.nu_total,
     )
 }
 
@@ -135,21 +180,56 @@ fn fresh(ctx: &[String]) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::{expr_to_agda_comment, render_step_module, step_module_name};
+    use super::{
+        expr_to_agda_comment, payload_module_name, render_payload_module, render_step_module,
+        step_module_name,
+    };
+    use crate::manifest::{NuClaim, ProofClaims};
     use pen_core::expr::Expr;
+    use pen_core::rational::Rational;
     use pen_core::telescope::Telescope;
 
     #[test]
     fn renderer_uses_stable_step_module_names() {
         assert_eq!(step_module_name(5), "Step05");
+        assert_eq!(payload_module_name(5), "Payload05");
     }
 
     #[test]
     fn renderer_emits_useful_comments_and_imports() {
-        let source = render_step_module(9, "Hopf", &Telescope::reference(9), "a", "b");
+        let source = render_step_module(9, "Hopf", &Telescope::reference(9), "a", "b", "Payload09");
         assert!(source.contains("module Step09 where"));
+        assert!(source.contains("open import Payload09 as Payload09"));
         assert!(source.contains("open import Step08 as Step08"));
         assert!(source.contains("-- translated:"));
+    }
+
+    #[test]
+    fn payload_renderer_emits_contract_claims() {
+        let source = render_payload_module(
+            15,
+            "DCT",
+            "candidate",
+            "canonical",
+            &ProofClaims {
+                canonical_key: "f00dbabe".to_owned(),
+                bit_kappa: 229,
+                clause_kappa: 8,
+                desugared_kappa: 8,
+                rho: Rational::new(103, 8),
+                import_steps: vec![10],
+                nu_claim: NuClaim {
+                    nu_g: 2,
+                    nu_h: 15,
+                    nu_c: 86,
+                    nu_total: 103,
+                },
+            },
+        );
+        assert!(source.contains("module Payload15 where"));
+        assert!(source.contains("-- canonical_key: f00dbabe"));
+        assert!(source.contains("-- nu_total: 103"));
+        assert!(source.contains("-- import_steps: 10"));
     }
 
     #[test]

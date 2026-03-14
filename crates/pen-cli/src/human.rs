@@ -45,7 +45,14 @@ pub fn clause_lines(telescope: &Telescope) -> Vec<String> {
         .clauses
         .iter()
         .enumerate()
-        .map(|(index, clause)| format!("c{:02} [{}] {}", index + 1, role_name(clause), render_expr(&clause.expr)))
+        .map(|(index, clause)| {
+            format!(
+                "c{:02} [{}] {}",
+                index + 1,
+                role_name(clause),
+                render_expr(&clause.expr)
+            )
+        })
         .collect()
 }
 
@@ -106,7 +113,10 @@ fn render_expr_with_ctx(ctx: &[String], expr: &Expr) -> String {
             let binder = fresh(ctx);
             let mut next_ctx = vec![binder.clone()];
             next_ctx.extend_from_slice(ctx);
-            format!("(fun {binder} -> {})", render_expr_with_ctx(&next_ctx, body))
+            format!(
+                "(fun {binder} -> {})",
+                render_expr_with_ctx(&next_ctx, body)
+            )
         }
         Expr::Pi(domain, codomain) => {
             let binder = fresh(ctx);

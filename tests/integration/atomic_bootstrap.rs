@@ -4,7 +4,8 @@ use std::fs;
 
 use support::{
     assert_success, compact_step_summaries, fixtures_root, load_trajectory_fixture,
-    normalize_checkpoint, read_json, run_pen_cli, temp_dir, workspace_root,
+    normalize_checkpoint, read_json, read_text, run_pen_cli, temp_dir, workspace_root,
+    write_pressure_config,
 };
 
 #[test]
@@ -365,10 +366,140 @@ fn bootstrap_run_uses_live_search_through_step_fifteen() {
     let stdout = assert_success(output);
 
     assert!(stdout.contains("completed_step: 15"));
+    assert!(stdout.contains("replay_ablation: matches_reference_replay x15"));
+    assert!(stdout.contains("late_step_claim: executable_canon step 15 DCT nu=103"));
 
     let actual_steps = compact_step_summaries(&run_dir);
     let expected_steps = load_trajectory_fixture("reference_steps_until_15.json");
     assert_eq!(actual_steps, expected_steps);
+    assert!(
+        run_dir
+            .join("checkpoints")
+            .join("frontier")
+            .join("step-15")
+            .join("band-08")
+            .join("frontier.manifest.json")
+            .exists()
+    );
+    assert!(
+        run_dir
+            .join("checkpoints")
+            .join("frontier")
+            .join("step-15")
+            .join("band-08")
+            .join("hot-000.bin")
+            .exists()
+    );
+    assert!(
+        run_dir
+            .join("checkpoints")
+            .join("frontier")
+            .join("step-15")
+            .join("band-08")
+            .join("frontier-runtime.json")
+            .exists()
+    );
+    assert!(
+        run_dir
+            .join("checkpoints")
+            .join("frontier")
+            .join("step-15")
+            .join("band-08")
+            .join("dedupe-000.txt")
+            .exists()
+    );
+    assert!(
+        run_dir
+            .join("meta.sqlite3")
+            .metadata()
+            .expect("metadata db")
+            .len()
+            > 0
+    );
+
+    let step15_summary = read_json(
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-15-summary.json"),
+    );
+    assert_eq!(
+        step15_summary["replay_ablation"]["status"].as_str(),
+        Some("matches_reference_replay")
+    );
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn bootstrap_run_surfaces_pressure_hardened_spill_backed_retention() {
+    let root = temp_dir("bootstrap-pressure");
+    let run_dir = root.join("pressure-run");
+    let config_path = root.join("pressure.toml");
+    let root_arg = root.to_string_lossy().to_string();
+    let config_arg = config_path.to_string_lossy().to_string();
+
+    write_pressure_config(&config_path);
+
+    let stdout = assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &config_arg,
+        "--root",
+        &root_arg,
+        "--run-id",
+        "pressure-run",
+        "--until-step",
+        "15",
+    ]));
+
+    assert!(stdout.contains("completed_step: 15"));
+    let debug = read_text(&run_dir.join("reports").join("latest.debug.txt"));
+    assert!(debug.contains("frontier pressure: state=orange action=spill_cold"));
+    assert!(debug.contains("retention policy: focus=temporal"));
+    assert!(debug.contains("replay ablation: matches_reference_replay x15"));
+
+    let step15_summary = read_json(
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-15-summary.json"),
+    );
+    assert_eq!(
+        step15_summary["frontier_pressure"]["pressure_action"].as_str(),
+        Some("spill_cold")
+    );
+    assert_eq!(
+        step15_summary["frontier_pressure"]["governor_state"].as_str(),
+        Some("orange")
+    );
+    assert_eq!(
+        step15_summary["replay_ablation"]["status"].as_str(),
+        Some("matches_reference_replay")
+    );
+
+    let frontier_stdout = assert_success(run_pen_cli([
+        "inspect",
+        &run_dir
+            .join("checkpoints")
+            .join("frontier")
+            .join("step-15")
+            .join("band-08")
+            .join("frontier.manifest.json")
+            .to_string_lossy(),
+    ]));
+    assert!(frontier_stdout.contains("resident_cold_records:"));
+    assert!(frontier_stdout.contains("spilled_cold_records:"));
+
+    let step_stdout = assert_success(run_pen_cli([
+        "inspect",
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-15-summary.json")
+            .to_string_lossy(),
+    ]));
+    assert!(step_stdout.contains("replay_ablation: matches_reference_replay"));
 
     fs::remove_dir_all(root).ok();
 }

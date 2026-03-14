@@ -1,0 +1,538 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{4}{section.2}\protected@file@percent }
+\newlabel{sec:introduction}{{1}{4}{Introduction}{section.2}{}}
+\newlabel{sec:introduction@cref}{{[section][1][]1}{[1][4][]4}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Three claim layers.}{4}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Fixed shared vocabulary.}{4}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Vocabulary Dependence.}{4}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Conjecture versus finding.}{5}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Scope and limitations.}{6}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Main contributions.}{6}{section*.12}\protected@file@percent }
+\citation{alphageometry}
+\citation{leandojo}
+\citation{openai-lean}
+\citation{quickspec}
+\citation{isacosy}
+\citation{hipster}
+\citation{synquid}
+\citation{lenat-am}
+\citation{colton-atf}
+\citation{hott}
+\citation{cubical}
+\citation{cubical-agda}
+\citation{lumsdaine}
+\citation{vdberg-garner}
+\@writefile{toc}{\contentsline {paragraph}{Outline.}{7}{section*.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{7}{section.19}\protected@file@percent }
+\newlabel{sec:related}{{2}{7}{Related Work}{section.19}{}}
+\newlabel{sec:related@cref}{{[section][2][]2}{[1][7][]7}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{AI theorem proving.}{7}{section*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Theory exploration and lemma discovery.}{7}{section*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Program synthesis and type-directed search.}{7}{section*.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Automated mathematical discovery.}{7}{section*.23}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Type-theoretic foundations.}{8}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}The PEN Synthesis Trajectory}{8}{section.25}\protected@file@percent }
+\newlabel{sec:genesis}{{3}{8}{The PEN Synthesis Trajectory}{section.25}{}}
+\newlabel{sec:genesis@cref}{{[section][3][]3}{[1][8][]8}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Syntactic Skeletons vs.\ Semantic Interpretation}{8}{subsection.26}\protected@file@percent }
+\newlabel{sec:semantic-firewall}{{3.1}{8}{Syntactic Skeletons vs.\ Semantic Interpretation}{subsection.26}{}}
+\newlabel{sec:semantic-firewall@cref}{{[subsection][1][3]3.1}{[1][8][]8}{}{}{}}
+\newlabel{def:nu-components-preview}{{3.1}{8}{Three structural components of novelty}{theorem.30}{}}
+\newlabel{def:nu-components-preview@cref}{{[theorem][1][3]3.1}{[1][8][]8}{}{}{}}
+\citation{nakano}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces The PEN Synthesis Trajectory. $\nu $ is the Generative Capacity (count of atomic inference rules added to the derivation logic). The quantitative canon in this table is the machine-verified output of the current bounded live atomic strict engine (\S  \ref {sec:verification}). Legacy structural and uniform diagnostics are discussed later only as secondary cross-checks and do not override these values. Rows 10--15 should be read as selected AST skeletons with post-hoc semantic readings, not as literal theorem-level presentations of the named human theories; in particular, Step~13 receives the metric-equivalent reading and Step~15 receives the semantic DCT completion.}}{9}{table.32}\protected@file@percent }
+\newlabel{tab:genesis}{{1}{9}{The PEN Synthesis Trajectory. $\nu $ is the Generative Capacity (count of atomic inference rules added to the derivation logic). The quantitative canon in this table is the machine-verified output of the current bounded live atomic strict engine (\S \ref {sec:verification}). Legacy structural and uniform diagnostics are discussed later only as secondary cross-checks and do not override these values. Rows 10--15 should be read as selected AST skeletons with post-hoc semantic readings, not as literal theorem-level presentations of the named human theories; in particular, Step~13 receives the metric-equivalent reading and Step~15 receives the semantic DCT completion}{table.32}{}}
+\newlabel{tab:genesis@cref}{{[table][1][]1}{[1][8][]9}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Reading the Table}{9}{subsection.33}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}The Efficiency Peak}{9}{subsection.38}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}The Model}{10}{section.39}\protected@file@percent }
+\newlabel{sec:framework}{{4}{10}{The Model}{section.39}{}}
+\newlabel{sec:framework@cref}{{[section][4][]4}{[1][10][]10}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}State and Candidates}{10}{subsection.40}\protected@file@percent }
+\newlabel{def:state}{{4.1}{10}{State}{theorem.41}{}}
+\newlabel{def:state@cref}{{[theorem][1][4]4.1}{[1][10][]10}{}{}{}}
+\newlabel{def:candidate}{{4.2}{10}{Candidate}{theorem.42}{}}
+\newlabel{def:candidate@cref}{{[theorem][2][4]4.2}{[1][10][]10}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}The Dual-Cost Model}{10}{subsection.43}\protected@file@percent }
+\newlabel{def:latency}{{4.3}{10}{Integration Latency}{theorem.44}{}}
+\newlabel{def:latency@cref}{{[theorem][3][4]4.3}{[1][10][]10}{}{}{}}
+\newlabel{def:effort}{{4.4}{10}{Construction Effort}{theorem.45}{}}
+\newlabel{def:effort@cref}{{[theorem][4][4]4.4}{[1][10][]10}{}{}{}}
+\newlabel{def:derivability}{{4.5}{10}{Definitional derivability vs.\ constructive irreducibility}{theorem.47}{}}
+\newlabel{def:derivability@cref}{{[theorem][5][4]4.5}{[1][10][]10}{}{}{}}
+\citation{kolmogorov}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces MBTT grammar used in the model for clause accounting and bit-cost audit.}}{11}{table.51}\protected@file@percent }
+\newlabel{tab:mbtt-grammar-main}{{2}{11}{MBTT grammar used in the model for clause accounting and bit-cost audit}{table.51}{}}
+\newlabel{tab:mbtt-grammar-main@cref}{{[table][2][]2}{[1][11][]11}{}{}{}}
+\newlabel{rem:kappa-invariance}{{4.6}{11}{Kolmogorov invariance of the encoding bias}{theorem.52}{}}
+\newlabel{rem:kappa-invariance@cref}{{[theorem][6][4]4.6}{[1][11][]11}{}{}{}}
+\newlabel{def:api-graph}{{4.7}{11}{API dependency graph and structural bundle}{theorem.53}{}}
+\newlabel{def:api-graph@cref}{{[theorem][7][4]4.7}{[1][11][]11}{}{}{}}
+\newlabel{def:minimal-api}{{4.8}{11}{Minimal Complete API}{theorem.54}{}}
+\newlabel{def:minimal-api@cref}{{[theorem][8][4]4.8}{[1][11][]11}{}{}{}}
+\newlabel{lem:metric-scc}{{4.9}{12}{SCC minimality of the Step-13 metric package}{theorem.59}{}}
+\newlabel{lem:metric-scc@cref}{{[theorem][9][4]4.9}{[1][12][]12}{}{}{}}
+\newlabel{ax:constructive-irreducibility}{{4.10}{12}{Constructive Irreducibility Boundary}{theorem.60}{}}
+\newlabel{ax:constructive-irreducibility@cref}{{[theorem][10][4]4.10}{[1][12][]12}{}{}{}}
+\newlabel{rem:kolmogorov-ambiguity}{{4.11}{12}{Specification selection and the $S^3$ example}{theorem.63}{}}
+\newlabel{rem:kolmogorov-ambiguity@cref}{{[theorem][11][4]4.11}{[1][12][]12}{}{}{}}
+\newlabel{def:interface}{{4.12}{12}{Interface Basis}{theorem.64}{}}
+\newlabel{def:interface@cref}{{[theorem][12][4]4.12}{[1][12][]12}{}{}{}}
+\newlabel{lem:trace}{{4.13}{13}{Integration Trace Principle}{theorem.66}{}}
+\newlabel{lem:trace@cref}{{[theorem][13][4]4.13}{[1][12][]13}{}{}{}}
+\newlabel{thm:canonicity-preservation}{{4.14}{13}{Canonicity preservation under maximal interface density}{theorem.67}{}}
+\newlabel{thm:canonicity-preservation@cref}{{[theorem][14][4]4.14}{[1][13][]13}{}{}{}}
+\newlabel{thm:univalent-functoriality}{{4.15}{13}{Univalent functoriality and API integration debt}{theorem.68}{}}
+\newlabel{thm:univalent-functoriality@cref}{{[theorem][15][4]4.15}{[1][13][]13}{}{}{}}
+\newlabel{rem:maximal-coupling}{{4.16}{14}{Resolution of the API coupling gap}{theorem.69}{}}
+\newlabel{rem:maximal-coupling@cref}{{[theorem][16][4]4.16}{[1][14][]14}{}{}{}}
+\newlabel{lem:recurrence}{{4.17}{14}{Latency Recurrence}{theorem.70}{}}
+\newlabel{lem:recurrence@cref}{{[theorem][17][4]4.17}{[1][14][]14}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Novelty: Generative Capacity}{14}{subsection.72}\protected@file@percent }
+\newlabel{def:novelty}{{4.18}{15}{Generative Capacity}{theorem.73}{}}
+\newlabel{def:novelty@cref}{{[theorem][18][4]4.18}{[1][14][]15}{}{}{}}
+\newlabel{def:nu-components}{{4.19}{15}{Formal components of novelty}{theorem.75}{}}
+\newlabel{def:nu-components@cref}{{[theorem][19][4]4.19}{[1][15][]15}{}{}{}}
+\newlabel{rem:library-api}{{4.20}{15}{Library extensions vs.\ foundational primitives}{theorem.79}{}}
+\newlabel{rem:library-api@cref}{{[theorem][20][4]4.20}{[1][15][]15}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Scalar provenance policy (strict first-use).}{15}{section*.80}\protected@file@percent }
+\newlabel{thm:spectral-preview}{{4.21}{15}{DCT fixed-point preview}{theorem.81}{}}
+\newlabel{thm:spectral-preview@cref}{{[theorem][21][4]4.21}{[1][15][]15}{}{}{}}
+\newlabel{ex:foundation-steps}{{4.22}{15}{Foundation steps}{theorem.82}{}}
+\newlabel{ex:foundation-steps@cref}{{[theorem][22][4]4.22}{[1][15][]15}{}{}{}}
+\citation{lawvere-adjoint}
+\newlabel{lem:adjoint-completion}{{4.23}{16}{Adjoint Completion Principle}{theorem.83}{}}
+\newlabel{lem:adjoint-completion@cref}{{[theorem][23][4]4.23}{[1][16][]16}{}{}{}}
+\newlabel{thm:telescopic-elimination}{{4.24}{16}{Telescopic elimination capacity for API bundles}{theorem.87}{}}
+\newlabel{thm:telescopic-elimination@cref}{{[theorem][24][4]4.24}{[1][16][]16}{}{}{}}
+\newlabel{ex:telescopic-elimination}{{4.25}{17}{Late-stage API bundles}{theorem.88}{}}
+\newlabel{ex:telescopic-elimination@cref}{{[theorem][25][4]4.25}{[1][17][]17}{}{}{}}
+\newlabel{def:efficiency}{{4.26}{17}{Efficiency}{theorem.89}{}}
+\newlabel{def:efficiency@cref}{{[theorem][26][4]4.26}{[1][17][]17}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Selection Dynamics}{17}{subsection.90}\protected@file@percent }
+\newlabel{def:inflation}{{4.27}{17}{Structural Inflation}{theorem.91}{}}
+\newlabel{def:inflation@cref}{{[theorem][27][4]4.27}{[1][17][]17}{}{}{}}
+\newlabel{rem:phi-not-tau}{{4.28}{17}{}{theorem.92}{}}
+\newlabel{rem:phi-not-tau@cref}{{[theorem][28][4]4.28}{[1][17][]17}{}{}{}}
+\newlabel{def:omega}{{4.29}{17}{Cumulative Baseline}{theorem.93}{}}
+\newlabel{def:omega@cref}{{[theorem][29][4]4.29}{[1][17][]17}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}The Five Axioms}{17}{subsection.94}\protected@file@percent }
+\newlabel{ax:cumulative}{{4.30}{17}{Cumulative Growth}{theorem.95}{}}
+\newlabel{ax:cumulative@cref}{{[theorem][30][4]4.30}{[1][17][]17}{}{}{}}
+\newlabel{ax:horizon}{{4.31}{17}{Horizon Policy}{theorem.96}{}}
+\newlabel{ax:horizon@cref}{{[theorem][31][4]4.31}{[1][17][]17}{}{}{}}
+\newlabel{ax:admissibility}{{4.32}{17}{Admissibility}{theorem.97}{}}
+\newlabel{ax:admissibility@cref}{{[theorem][32][4]4.32}{[1][17][]17}{}{}{}}
+\newlabel{rem:admissibility-constraints}{{4.33}{17}{Admissibility constraints for axiomatic extensions}{theorem.98}{}}
+\newlabel{rem:admissibility-constraints@cref}{{[theorem][33][4]4.33}{[1][17][]17}{}{}{}}
+\newlabel{rem:axiom-packing}{{4.34}{18}{Defense against axiom packing}{theorem.103}{}}
+\newlabel{rem:axiom-packing@cref}{{[theorem][34][4]4.34}{[1][17][]18}{}{}{}}
+\newlabel{def:primality}{{4.35}{18}{Constructive primality}{theorem.104}{}}
+\newlabel{def:primality@cref}{{[theorem][35][4]4.35}{[1][18][]18}{}{}{}}
+\newlabel{ax:selection}{{4.36}{18}{Selection}{theorem.105}{}}
+\newlabel{ax:selection@cref}{{[theorem][36][4]4.36}{[1][18][]18}{}{}{}}
+\newlabel{rem:api-assembly}{{4.38}{18}{Algorithmic API assembly and compositional synergy}{theorem.107}{}}
+\newlabel{rem:api-assembly@cref}{{[theorem][38][4]4.38}{[1][18][]18}{}{}{}}
+\newlabel{ax:integration}{{4.39}{19}{Coherent Integration}{theorem.108}{}}
+\newlabel{ax:integration@cref}{{[theorem][39][4]4.39}{[1][19][]19}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Realization Time}{19}{subsection.109}\protected@file@percent }
+\newlabel{def:tau}{{4.40}{19}{}{theorem.110}{}}
+\newlabel{def:tau@cref}{{[theorem][40][4]4.40}{[1][19][]19}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Executable PEN Loop}{19}{subsection.111}\protected@file@percent }
+\newlabel{sec:pen-loop}{{4.7}{19}{Executable PEN Loop}{subsection.111}{}}
+\newlabel{sec:pen-loop@cref}{{[subsection][7][4]4.7}{[1][19][]19}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Exact-Band Atomic Search}{19}{subsection.118}\protected@file@percent }
+\newlabel{sec:mdp-mcts}{{4.8}{19}{Exact-Band Atomic Search}{subsection.118}{}}
+\newlabel{sec:mdp-mcts@cref}{{[subsection][8][4]4.8}{[1][19][]19}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Coherence Windows}{20}{section.119}\protected@file@percent }
+\newlabel{sec:coherence}{{5}{20}{Coherence Windows}{section.119}{}}
+\newlabel{sec:coherence@cref}{{[section][5][]5}{[1][20][]20}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Induced Obligations}{20}{subsection.120}\protected@file@percent }
+\newlabel{def:obligations}{{5.1}{20}{Induced Obligations}{theorem.121}{}}
+\newlabel{def:obligations@cref}{{[theorem][1][5]5.1}{[1][20][]20}{}{}{}}
+\newlabel{def:window}{{5.2}{20}{Coherence Window}{theorem.122}{}}
+\newlabel{def:window@cref}{{[theorem][2][5]5.2}{[1][20][]20}{}{}{}}
+\newlabel{def:reduction}{{5.3}{20}{Obligation Reduction}{theorem.123}{}}
+\newlabel{def:reduction@cref}{{[theorem][3][5]5.3}{[1][20][]20}{}{}{}}
+\newlabel{def:arity}{{5.4}{20}{Historical support and arity}{theorem.124}{}}
+\newlabel{def:arity@cref}{{[theorem][4][5]5.4}{[1][20][]20}{}{}{}}
+\newlabel{lem:arity-dimension}{{5.5}{20}{Arity-to-dimension correspondence}{theorem.125}{}}
+\newlabel{lem:arity-dimension@cref}{{[theorem][5][5]5.5}{[1][20][]20}{}{}{}}
+\citation{lurie}
+\citation{lumsdaine}
+\citation{vdberg-garner}
+\newlabel{def:dim-obligation}{{5.6}{21}{Coherence Obligation by Dimension}{theorem.126}{}}
+\newlabel{def:dim-obligation@cref}{{[theorem][6][5]5.6}{[1][20][]21}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Theorem A: Extensional Systems ($d = 1$)}{21}{subsection.127}\protected@file@percent }
+\newlabel{thm:ext-window}{{5.7}{21}{Extensional Coherence Window}{theorem.128}{}}
+\newlabel{thm:ext-window@cref}{{[theorem][7][5]5.7}{[1][21][]21}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Theorem B: Intensional Systems ($d = 2$)}{21}{subsection.129}\protected@file@percent }
+\newlabel{thm:int-window}{{5.8}{21}{Intensional Coherence Window}{theorem.130}{}}
+\newlabel{thm:int-window@cref}{{[theorem][8][5]5.8}{[1][21][]21}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Upper Bound: $d \leq 2$}{21}{subsubsection.131}\protected@file@percent }
+\newlabel{thm:upper}{{5.9}{21}{Coherence Upper Bound}{theorem.132}{}}
+\newlabel{thm:upper@cref}{{[theorem][9][5]5.9}{[1][21][]21}{}{}{}}
+\newlabel{rem:encapsulation}{{5.10}{22}{Sealing Encapsulation}{theorem.133}{}}
+\newlabel{rem:encapsulation@cref}{{[theorem][10][5]5.10}{[1][21][]22}{}{}{}}
+\newlabel{rem:dim-temporal}{{5.11}{22}{Arity-to-dimension correspondence}{theorem.134}{}}
+\newlabel{rem:dim-temporal@cref}{{[theorem][11][5]5.11}{[1][22][]22}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}Lower Bound: $d \geq 2$}{22}{subsubsection.135}\protected@file@percent }
+\newlabel{thm:lower}{{5.12}{22}{Coherence Lower Bound}{theorem.136}{}}
+\newlabel{thm:lower@cref}{{[theorem][12][5]5.12}{[1][22][]22}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}The Adjunction Depth Barrier}{22}{subsection.138}\protected@file@percent }
+\newlabel{sec:event-horizon}{{5.4}{22}{The Adjunction Depth Barrier}{subsection.138}{}}
+\newlabel{sec:event-horizon@cref}{{[subsection][4][5]5.4}{[1][22][]22}{}{}{}}
+\newlabel{thm:adjunction-barrier}{{5.14}{22}{The Adjunction Barrier}{theorem.139}{}}
+\newlabel{thm:adjunction-barrier@cref}{{[theorem][14][5]5.14}{[1][22][]22}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Cohomological Upper Bound: Spectral Degeneration}{23}{subsection.143}\protected@file@percent }
+\newlabel{sec:spectral-upper}{{5.5}{23}{Cohomological Upper Bound: Spectral Degeneration}{subsection.143}{}}
+\newlabel{sec:spectral-upper@cref}{{[subsection][5][5]5.5}{[1][23][]23}{}{}{}}
+\newlabel{thm:spectral-degeneracy}{{5.16}{23}{Spectral Degeneration at $E_2$}{theorem.146}{}}
+\newlabel{thm:spectral-degeneracy@cref}{{[theorem][16][5]5.16}{[1][23][]23}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Topological Lower Bound: The Clutching Family}{24}{subsection.149}\protected@file@percent }
+\newlabel{sec:clutching-family}{{5.6}{24}{Topological Lower Bound: The Clutching Family}{subsection.149}{}}
+\newlabel{sec:clutching-family@cref}{{[subsection][6][5]5.6}{[1][24][]24}{}{}{}}
+\newlabel{thm:clutching-bound}{{5.18}{24}{Fibrational Lower Bound}{theorem.150}{}}
+\newlabel{thm:clutching-bound@cref}{{[theorem][18][5]5.18}{[1][24][]24}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}The Complexity Scaling Theorem}{24}{section.152}\protected@file@percent }
+\newlabel{sec:scaling}{{6}{24}{The Complexity Scaling Theorem}{section.152}{}}
+\newlabel{sec:scaling@cref}{{[section][6][]6}{[1][24][]24}{}{}{}}
+\newlabel{thm:scaling}{{6.1}{24}{Complexity Scaling}{theorem.153}{}}
+\newlabel{thm:scaling@cref}{{[theorem][1][6]6.1}{[1][24][]24}{}{}{}}
+\newlabel{cor:fibonacci}{{6.2}{25}{}{theorem.154}{}}
+\newlabel{cor:fibonacci@cref}{{[theorem][2][6]6.2}{[1][25][]25}{}{}{}}
+\newlabel{rem:int-ext-complexity}{{6.3}{25}{Internal vs.\ external complexity}{theorem.155}{}}
+\newlabel{rem:int-ext-complexity@cref}{{[theorem][3][6]6.3}{[1][25][]25}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Stagnation of Class~1 Systems}{25}{subsection.156}\protected@file@percent }
+\newlabel{sec:stagnation}{{6.1}{25}{Stagnation of Class~1 Systems}{subsection.156}{}}
+\newlabel{sec:stagnation@cref}{{[subsection][1][6]6.1}{[1][25][]25}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Acceleration of Class~2 Systems}{25}{subsection.157}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}The Combinatorial Novelty Theorem}{25}{section.158}\protected@file@percent }
+\newlabel{sec:exponentiality}{{7}{25}{The Combinatorial Novelty Theorem}{section.158}{}}
+\newlabel{sec:exponentiality@cref}{{[section][7][]7}{[1][25][]25}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}OIT Exponentiality}{25}{subsection.159}\protected@file@percent }
+\newlabel{thm:oit-exponentiality}{{7.1}{25}{OIT Exponentiality}{theorem.160}{}}
+\newlabel{thm:oit-exponentiality@cref}{{[theorem][1][7]7.1}{[1][25][]25}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}HIT Constraints}{25}{subsection.161}\protected@file@percent }
+\newlabel{rem:hit-constraints}{{7.2}{25}{}{theorem.162}{}}
+\newlabel{rem:hit-constraints@cref}{{[theorem][2][7]7.2}{[1][25][]25}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Restoring Superlinear Growth}{25}{subsection.163}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Mechanism 1: Dependent Elimination.}{25}{section*.164}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Mechanism 2: Library Cross-Interaction.}{26}{section*.165}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Mechanism 3: Composite Constructions.}{26}{section*.166}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Combinatorial Schema Synthesis}{26}{subsection.167}\protected@file@percent }
+\newlabel{sec:ltp}{{7.4}{26}{Combinatorial Schema Synthesis}{subsection.167}{}}
+\newlabel{sec:ltp@cref}{{[subsection][4][7]7.4}{[1][26][]26}{}{}{}}
+\newlabel{def:dct}{{7.3}{26}{Syntactic LTL-Cohesive Extension}{theorem.168}{}}
+\newlabel{def:dct@cref}{{[theorem][3][7]7.3}{[1][26][]26}{}{}{}}
+\newlabel{thm:tensor}{{7.4}{26}{Combinatorial Schema Synthesis}{theorem.173}{}}
+\newlabel{thm:tensor@cref}{{[theorem][4][7]7.4}{[1][26][]26}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}Divergence of Efficiency}{26}{subsection.174}\protected@file@percent }
+\newlabel{lem:log-effort}{{7.5}{26}{Bounded Effort Growth}{theorem.175}{}}
+\newlabel{lem:log-effort@cref}{{[theorem][5][7]7.5}{[1][26][]26}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Rejected candidates at first admissibility under the same fixed evaluator and vocabulary. Rejection here means ``not an efficient frontier point under PEN,'' not ``mathematically invalid.''}}{27}{table.180}\protected@file@percent }
+\newlabel{tab:rejected}{{3}{27}{Rejected candidates at first admissibility under the same fixed evaluator and vocabulary. Rejection here means ``not an efficient frontier point under PEN,'' not ``mathematically invalid.''}{table.180}{}}
+\newlabel{tab:rejected@cref}{{[table][3][]3}{[1][27][]27}{}{}{}}
+\newlabel{thm:divergence}{{7.6}{27}{Divergence of Efficiency}{theorem.176}{}}
+\newlabel{thm:divergence@cref}{{[theorem][6][7]7.6}{[1][26][]27}{}{}{}}
+\newlabel{prop:discrete-asymptote-main}{{7.7}{27}{Asymptotic rejection of discrete candidates}{theorem.177}{}}
+\newlabel{prop:discrete-asymptote-main@cref}{{[theorem][7][7]7.7}{[1][27][]27}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6}Why Discrete Families Lose}{27}{subsection.178}\protected@file@percent }
+\newlabel{sec:discrete-frontier}{{7.6}{27}{Why Discrete Families Lose}{subsection.178}{}}
+\newlabel{sec:discrete-frontier@cref}{{[subsection][6][7]7.6}{[1][27][]27}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Structural reading.}{27}{section*.181}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Generous bundling still loses.}{28}{section*.182}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Higher but losing packages.}{28}{section*.183}\protected@file@percent }
+\newlabel{rem:divergence-vs-termination}{{7.8}{28}{Divergence vs.\ termination}{theorem.184}{}}
+\newlabel{rem:divergence-vs-termination@cref}{{[theorem][8][7]7.8}{[1][28][]28}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.7}The Tangent Topos Hypothesis and the Combinatorial Squeeze}{28}{subsection.185}\protected@file@percent }
+\newlabel{sec:tangent-topos}{{7.7}{28}{The Tangent Topos Hypothesis and the Combinatorial Squeeze}{subsection.185}{}}
+\newlabel{sec:tangent-topos@cref}{{[subsection][7][7]7.7}{[1][28][]28}{}{}{}}
+\newlabel{lem:infinitesimal-temporal}{{7.9}{28}{Syntactic-Semantic Transfer: Emergence of the Infinitesimal}{theorem.186}{}}
+\newlabel{lem:infinitesimal-temporal@cref}{{[theorem][9][7]7.9}{[1][28][]28}{}{}{}}
+\newlabel{lem:internalization}{{7.10}{29}{Internalization of the Meta-Algorithm}{theorem.187}{}}
+\newlabel{lem:internalization@cref}{{[theorem][10][7]7.10}{[1][29][]29}{}{}{}}
+\newlabel{thm:end-of-history}{{7.11}{29}{Algorithmic Halting via the Combinatorial Squeeze}{theorem.188}{}}
+\newlabel{thm:end-of-history@cref}{{[theorem][11][7]7.11}{[1][29][]29}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}The Temporal-Cohesive Shell as a Terminal Structural Fixed Point}{30}{section.189}\protected@file@percent }
+\newlabel{sec:decomposition}{{8}{30}{The Temporal-Cohesive Shell as a Terminal Structural Fixed Point}{section.189}{}}
+\newlabel{sec:decomposition@cref}{{[section][8][]8}{[1][30][]30}{}{}{}}
+\newlabel{sec:dct-discovery}{{8}{30}{The Temporal-Cohesive Shell as a Terminal Structural Fixed Point}{section.189}{}}
+\newlabel{sec:dct-discovery@cref}{{[section][8][]8}{[1][30][]30}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Why the Temporal-Cohesive Shell Is a Terminal Signal}{30}{subsection.190}\protected@file@percent }
+\newlabel{thm:spectral}{{8.1}{30}{Terminal temporal-cohesive fixed-point signal}{theorem.191}{}}
+\newlabel{thm:spectral@cref}{{[theorem][1][8]8.1}{[1][30][]30}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Consolidated DCT Property Bundle}{31}{subsection.192}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}Mechanized Step-15 Novelty Accounting}{31}{subsection.193}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4}Calibration Facts Used by the DCT Analysis}{31}{subsection.194}\protected@file@percent }
+\newlabel{thm:topological-projection}{{8.2}{31}{Topological Projection of the Path Algebra (CCHM)}{theorem.195}{}}
+\newlabel{thm:topological-projection@cref}{{[theorem][2][8]8.2}{[1][31][]31}{}{}{}}
+\newlabel{rem:nuH-sensitivity}{{8.3}{32}{Sensitivity of $\nu _H$}{theorem.198}{}}
+\newlabel{rem:nuH-sensitivity@cref}{{[theorem][3][8]8.3}{[1][32][]32}{}{}{}}
+\newlabel{prop:grammar-canonical}{{8.4}{32}{Schema Canonicality}{theorem.199}{}}
+\newlabel{prop:grammar-canonical@cref}{{[theorem][4][8]8.4}{[1][32][]32}{}{}{}}
+\newlabel{rem:witness-pisigma-attribution}{{8.5}{32}{Witness and $\Pi /\Sigma $ attribution}{theorem.200}{}}
+\newlabel{rem:witness-pisigma-attribution@cref}{{[theorem][5][8]8.5}{[1][32][]32}{}{}{}}
+\newlabel{prop:s2s3}{{8.6}{32}{$S^2 \equiv S^3$ Syntactic Identity}{theorem.201}{}}
+\newlabel{prop:s2s3@cref}{{[theorem][6][8]8.6}{[1][32][]32}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Computational Verification}{32}{section.202}\protected@file@percent }
+\newlabel{sec:verification}{{9}{32}{Computational Verification}{section.202}{}}
+\newlabel{sec:verification@cref}{{[section][9][]9}{[1][32][]32}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}The Rust Atomic Engine}{32}{subsection.203}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Candidate generation.}{33}{section*.208}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Charged cost and persisted artifacts.}{33}{section*.209}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Strict novelty computation.}{33}{section*.210}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Semantic minimality.}{33}{section*.211}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Results.}{33}{section*.212}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Rejected candidates.}{33}{section*.213}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Schema Canonicality Verification}{34}{subsection.214}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.3}Uniform Diagnostic}{34}{subsection.215}\protected@file@percent }
+\newlabel{sec:uniform-nu}{{9.3}{34}{Uniform Diagnostic}{subsection.215}{}}
+\newlabel{sec:uniform-nu@cref}{{[subsection][3][9]9.3}{[1][34][]34}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.4}Meta-Theoretic Rule Audit}{34}{subsection.216}\protected@file@percent }
+\newlabel{sec:inference-nu}{{9.4}{34}{Meta-Theoretic Rule Audit}{subsection.216}{}}
+\newlabel{sec:inference-nu@cref}{{[subsection][4][9]9.4}{[1][34][]34}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Results.}{34}{section*.217}\protected@file@percent }
+\newlabel{rem:automation-scope}{{9.2}{34}{Automation scope of the verification}{theorem.219}{}}
+\newlabel{rem:automation-scope@cref}{{[theorem][2][9]9.2}{[1][34][]34}{}{}{}}
+\citation{cubical-agda}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.5}Determinism and Comparison Lanes}{35}{subsection.220}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.6}Cubical Agda Mechanization}{35}{subsection.221}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Obligation decomposition and the abstraction barrier.}{35}{section*.222}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.7}Coherence Window Stress-Testing}{35}{subsection.223}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10}Discussion}{36}{section.224}\protected@file@percent }
+\newlabel{sec:discussion}{{10}{36}{Discussion}{section.224}{}}
+\newlabel{sec:discussion@cref}{{[section][10][]10}{[1][36][]36}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}What Is Proved, What Is Assumed, What Is Open}{36}{subsection.225}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Proved.}{36}{section*.226}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Assumed.}{36}{section*.227}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Open.}{37}{section*.228}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Conjecture versus implemented finding.}{37}{section*.229}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.2}Limitations}{37}{subsection.230}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Scope of the Step-15 claim.}{37}{section*.231}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Objective dependence.}{37}{section*.232}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Component decomposition for axiomatic steps.}{38}{section*.233}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The current Step-15 computation.}{38}{section*.234}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.3}Mathematical Implications}{38}{subsection.235}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.4}Falsifiability}{38}{subsection.236}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {11}Conclusion}{39}{section.240}\protected@file@percent }
+\newlabel{sec:conclusion}{{11}{39}{Conclusion}{section.240}{}}
+\newlabel{sec:conclusion@cref}{{[section][11][]11}{[1][38][]39}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Boundary Cases and Algorithmic Limits}{39}{appendix.246}\protected@file@percent }
+\newlabel{sec:boundaries}{{A}{39}{Boundary Cases and Algorithmic Limits}{appendix.246}{}}
+\newlabel{sec:boundaries@cref}{{[section][1][]A}{[1][39][]39}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Algorithmic Criticality}{39}{subsection.247}\protected@file@percent }
+\newlabel{sec:criticality}{{A.1}{39}{Algorithmic Criticality}{subsection.247}{}}
+\newlabel{sec:criticality@cref}{{[subsection][1][1]A.1}{[1][39][]39}{}{}{}}
+\newlabel{thm:rigidity}{{A.1}{39}{Rigidity of the $d=2$ critical window}{theorem.248}{}}
+\newlabel{thm:rigidity@cref}{{[theorem][1][1]A.1}{[1][39][]39}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}The Algorithmic Inefficiency of the Discrete}{40}{subsection.249}\protected@file@percent }
+\newlabel{sec:discrete}{{A.2}{40}{The Algorithmic Inefficiency of the Discrete}{subsection.249}{}}
+\newlabel{sec:discrete@cref}{{[subsection][2][1]A.2}{[1][40][]40}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}The Univalent Horizon}{40}{subsection.250}\protected@file@percent }
+\newlabel{sec:godelian}{{A.3}{40}{The Univalent Horizon}{subsection.250}{}}
+\newlabel{sec:godelian@cref}{{[subsection][3][1]A.3}{[1][40][]40}{}{}{}}
+\newlabel{def:godelian-horizon}{{A.2}{40}{The Univalent Horizon}{theorem.251}{}}
+\newlabel{def:godelian-horizon@cref}{{[theorem][2][1]A.2}{[1][40][]40}{}{}{}}
+\newlabel{cor:confinement}{{A.3}{40}{Connected-component confinement}{theorem.252}{}}
+\newlabel{cor:confinement@cref}{{[theorem][3][1]A.3}{[1][40][]40}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}The DCT Novelty Count and Adjoint Completion}{40}{subsection.253}\protected@file@percent }
+\newlabel{sec:adjoint-completion}{{A.4}{40}{The DCT Novelty Count and Adjoint Completion}{subsection.253}{}}
+\newlabel{sec:adjoint-completion@cref}{{[subsection][4][1]A.4}{[1][40][]40}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Artifact Map and Reproduction Checklist}{40}{appendix.254}\protected@file@percent }
+\newlabel{app:artifact-map}{{B}{40}{Artifact Map and Reproduction Checklist}{appendix.254}{}}
+\newlabel{app:artifact-map@cref}{{[section][2][]B}{[1][40][]40}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Repository layout.}{41}{section*.255}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Minimal rerun checklist.}{41}{section*.256}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {C}Worked Arithmetic and Rejected Candidates}{41}{appendix.263}\protected@file@percent }
+\newlabel{app:rejections}{{C}{41}{Worked Arithmetic and Rejected Candidates}{appendix.263}{}}
+\newlabel{app:rejections@cref}{{[section][3][]C}{[1][41][]41}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Worked arithmetic for Steps 5--6}{41}{subsection.264}\protected@file@percent }
+\newlabel{app:worked-arithmetic}{{C.1}{41}{Worked arithmetic for Steps 5--6}{subsection.264}{}}
+\newlabel{app:worked-arithmetic@cref}{{[subsection][1][3]C.1}{[1][41][]41}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}Rejected candidates}{41}{subsection.265}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Discrete candidates.}{41}{section*.266}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Generous arithmetic bundling.}{41}{section*.267}\protected@file@percent }
+\citation{lawvere}
+\citation{schreiber}
+\citation{nakano}
+\citation{kock}
+\@writefile{toc}{\contentsline {paragraph}{Higher but losing geometric or algebraic packages.}{42}{section*.268}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {D}DCT: Key Theorems and Derived Construction Families}{42}{appendix.269}\protected@file@percent }
+\newlabel{app:dct}{{D}{42}{DCT: Key Theorems and Derived Construction Families}{appendix.269}{}}
+\newlabel{app:dct@cref}{{[section][4][]D}{[1][42][]42}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.1}Internal Tangent Bundle}{42}{subsection.270}\protected@file@percent }
+\newlabel{thm:tangent}{{D.1}{42}{}{theorem.271}{}}
+\newlabel{thm:tangent@cref}{{[theorem][1][4]D.1}{[1][42][]42}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.2}Temporal Evolution}{42}{subsection.272}\protected@file@percent }
+\newlabel{thm:temporal}{{D.2}{42}{}{theorem.273}{}}
+\newlabel{thm:temporal@cref}{{[theorem][2][4]D.2}{[1][42][]42}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.3}Symplectic Flow Corollary}{42}{subsection.274}\protected@file@percent }
+\newlabel{thm:symplectic-flow}{{D.3}{42}{}{theorem.275}{}}
+\newlabel{thm:symplectic-flow@cref}{{[theorem][3][4]D.3}{[1][42][]42}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.4}Representative Formalization Families}{42}{subsection.277}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.5}Relation to Existing Frameworks}{42}{subsection.278}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.6}Semantic Audit of DCT Novelty}{43}{subsection.279}\protected@file@percent }
+\newlabel{tab:nu-audit}{{D.6}{43}{Semantic Audit of DCT Novelty}{subsection.279}{}}
+\newlabel{tab:nu-audit@cref}{{[subsection][6][4]D.6}{[1][43][]43}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{What the current code supports.}{43}{section*.280}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Representative schema examples.}{43}{section*.281}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {E}Post-Hoc Semantic Interpretations of AST Skeletons (Steps 10--14)}{43}{appendix.285}\protected@file@percent }
+\newlabel{app:formal-specs}{{E}{43}{Post-Hoc Semantic Interpretations of AST Skeletons (Steps 10--14)}{appendix.285}{}}
+\newlabel{app:formal-specs@cref}{{[section][5][]E}{[1][43][]43}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Axiomatic status.}{43}{section*.286}\protected@file@percent }
+\citation{lawvere}
+\citation{schreiber}
+\@writefile{toc}{\contentsline {subsection}{\numberline {E.1}Step 10: Cohesion (Adjoint Quadruple of Modalities)}{44}{subsection.287}\protected@file@percent }
+\newlabel{app:cohesion-spec}{{E.1}{44}{Step 10: Cohesion (Adjoint Quadruple of Modalities)}{subsection.287}{}}
+\newlabel{app:cohesion-spec@cref}{{[subsection][1][5]E.1}{[1][44][]44}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Type formation axioms ($\kappa = 4$ clauses).}{44}{section*.288}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Derived inference rules ($\nu = 19$: $\nu _G = 2$, $\nu _C = 17$).}{44}{section*.289}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {E.2}Step 11: Connections ($\nabla $ on Cohesive Types)}{44}{subsection.290}\protected@file@percent }
+\newlabel{app:connections-spec}{{E.2}{44}{\texorpdfstring {Step 11: Connections ($\nabla $ on Cohesive Types)}{Step 11: Connections (nabla on Cohesive Types)}}{subsection.290}{}}
+\newlabel{app:connections-spec@cref}{{[subsection][2][5]E.2}{[1][44][]44}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Axioms ($\kappa = 5$ clauses).}{45}{section*.291}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Derived inference rules ($\nu = 26$: $\nu _G = 2$, $\nu _C = 24$).}{45}{section*.292}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Why not definable.}{45}{section*.293}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {E.3}Step 12: Curvature ($R = d\nabla + \nabla \wedge \nabla $)}{45}{subsection.294}\protected@file@percent }
+\newlabel{app:curvature-spec}{{E.3}{45}{\texorpdfstring {Step 12: Curvature ($R = d\nabla + \nabla \wedge \nabla $)}{Step 12: Curvature (R = d nabla + nabla wedge nabla)}}{subsection.294}{}}
+\newlabel{app:curvature-spec@cref}{{[subsection][3][5]E.3}{[1][45][]45}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Axioms ($\kappa = 6$ clauses).}{45}{section*.295}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Derived inference rules ($\nu = 34$: $\nu _G = 1$, $\nu _C = 33$).}{45}{section*.296}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Why not definable.}{45}{section*.297}\protected@file@percent }
+\citation{licata-shulman}
+\citation{shulman-real-cohesive}
+\@writefile{toc}{\contentsline {subsection}{\numberline {E.4}Step 13: Endomorphic Operator Bundle (metric-equivalent reading)}{46}{subsection.298}\protected@file@percent }
+\newlabel{app:metric-spec}{{E.4}{46}{\texorpdfstring {Step 13: Endomorphic Operator Bundle (metric-equivalent reading)}{Step 13: Endomorphic Operator Bundle (metric-equivalent reading)}}{subsection.298}{}}
+\newlabel{app:metric-spec@cref}{{[subsection][4][5]E.4}{[1][45][]46}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Resolution of the Scalar Penalty: The Operator-Theoretic Bypass.}{46}{section*.299}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{How $\mathbb  {R}$ is typed (explicit dependency accounting).}{46}{section*.300}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Axioms ($\kappa = 7$ clauses).}{46}{section*.301}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Derivation schemas ($\nu = 46$: $\nu _G = 4$, $\nu _C = 42$).}{47}{section*.302}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Why not definable.}{47}{section*.303}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Derivability of components vs.\ $\mathbb  {N}$'s addition.}{47}{section*.304}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {E.5}Step 14: Hilbert Functional (Operator Algebra)}{47}{subsection.305}\protected@file@percent }
+\newlabel{app:hilbert-spec}{{E.5}{47}{Step 14: Hilbert Functional (Operator Algebra)}{subsection.305}{}}
+\newlabel{app:hilbert-spec@cref}{{[subsection][5][5]E.5}{[1][47][]47}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Axioms ($\kappa = 9$ clauses).}{48}{section*.306}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Derived inference rules ($\nu = 62$: $\nu _G = 5$, $\nu _C = 57$).}{48}{section*.307}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Why not definable.}{48}{section*.308}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Selection margin at Step~14.}{48}{section*.309}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {F}The MBTT Encoding Audit}{48}{appendix.310}\protected@file@percent }
+\newlabel{sec:mbtt-audit}{{F}{48}{The MBTT Encoding Audit}{appendix.310}{}}
+\newlabel{sec:mbtt-audit@cref}{{[section][6][]F}{[1][48][]48}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {F.1}Full Audit: Clause Counts vs.\ MBTT Bit-Lengths}{48}{subsection.311}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Complete encoding audit. $\kappa $ is the clause count (used in the main text); MBTT is the total bit-length of all clauses in the prefix-free encoding. The specification shown for each step is the one \emph  {selected} by the minimal-overshoot criterion (\cref  {ax:selection}).}}{49}{table.313}\protected@file@percent }
+\newlabel{tab:mbtt-audit}{{4}{49}{Complete encoding audit. $\kappa $ is the clause count (used in the main text); MBTT is the total bit-length of all clauses in the prefix-free encoding. The specification shown for each step is the one \emph {selected} by the minimal-overshoot criterion (\cref {ax:selection})}{table.313}{}}
+\newlabel{tab:mbtt-audit@cref}{{[table][4][]4}{[1][48][]49}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Step 13 selected AST skeleton: endomorphic operator bundle ($\kappa = 7$ clauses, 138~bits total). Library references: Connections at index 11 ($\textsc  {Lib}(11) = 10$~bits), Curvature at index 12 ($\textsc  {Lib}(12) = 10$~bits). The classical metric reading is post-hoc and discussed in \cref  {app:metric-spec}.}}{49}{table.316}\protected@file@percent }
+\newlabel{tab:step13}{{5}{49}{Step 13 selected AST skeleton: endomorphic operator bundle ($\kappa = 7$ clauses, 138~bits total). Library references: Connections at index 11 ($\textsc {Lib}(11) = 10$~bits), Curvature at index 12 ($\textsc {Lib}(12) = 10$~bits). The classical metric reading is post-hoc and discussed in \cref {app:metric-spec}}{table.316}{}}
+\newlabel{tab:step13@cref}{{[table][5][]5}{[1][49][]49}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {F.2}Per-Clause Breakdown: Steps 13--15}{49}{subsection.314}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {F.3}Canonicality of the Encoding}{49}{subsection.321}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Step 14: Hilbert-functional shell ($\kappa = 9$ clauses, 169~bits total). Library references: Connection shell at index 11, Curvature shell at index 12, endomorphic operator bundle at index 13 ($\textsc  {Lib}(13) = 10$~bits).}}{50}{table.318}\protected@file@percent }
+\newlabel{tab:step14}{{6}{50}{Step 14: Hilbert-functional shell ($\kappa = 9$ clauses, 169~bits total). Library references: Connection shell at index 11, Curvature shell at index 12, endomorphic operator bundle at index 13 ($\textsc {Lib}(13) = 10$~bits)}{table.318}{}}
+\newlabel{tab:step14@cref}{{[table][6][]6}{[1][49][]50}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Step 15: temporal-cohesive shell (semantic DCT completion) ($\kappa = 8$ clauses, 229~bits total). Library reference: modal shell at index 10 ($\textsc  {Lib}(10) = 10$~bits). The audited AST contains temporal operators and exchange clauses only; the infinitesimal reading is derived semantically rather than encoded as a primitive node.}}{50}{table.320}\protected@file@percent }
+\newlabel{tab:step15}{{7}{50}{Step 15: temporal-cohesive shell (semantic DCT completion) ($\kappa = 8$ clauses, 229~bits total). Library reference: modal shell at index 10 ($\textsc {Lib}(10) = 10$~bits). The audited AST contains temporal operators and exchange clauses only; the infinitesimal reading is derived semantically rather than encoded as a primitive node}{table.320}{}}
+\newlabel{tab:step15@cref}{{[table][7][]7}{[1][49][]50}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {F.4}Search-Space Tractability and Strict Recovery}{51}{subsection.325}\protected@file@percent }
+\newlabel{sec:search-tractability}{{F.4}{51}{Search-Space Tractability and Strict Recovery}{subsection.325}{}}
+\newlabel{sec:search-tractability@cref}{{[subsection][4][6]F.4}{[1][51][]51}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {G}A Detailed Proof of the 15-Step Genesis Sequence}{51}{appendix.333}\protected@file@percent }
+\newlabel{sec:genesis-sequence-proof}{{G}{51}{A Detailed Proof of the 15-Step Genesis Sequence}{appendix.333}{}}
+\newlabel{sec:genesis-sequence-proof@cref}{{[section][7][]G}{[1][51][]51}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {G.1}Proof Contract}{52}{subsection.334}\protected@file@percent }
+\newlabel{subsec:genesis-proof-contract}{{G.1}{52}{Proof Contract}{subsection.334}{}}
+\newlabel{subsec:genesis-proof-contract@cref}{{[subsection][1][7]G.1}{[1][51][]52}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {G.2}A Global Bar Lemma}{52}{subsection.339}\protected@file@percent }
+\newlabel{subsec:genesis-bar-lemma}{{G.2}{52}{A Global Bar Lemma}{subsection.339}{}}
+\newlabel{subsec:genesis-bar-lemma@cref}{{[subsection][2][7]G.2}{[1][52][]52}{}{}{}}
+\newlabel{lem:genesis-bar-lemma}{{G.1}{52}{Bar computation along the strict genesis trace}{theorem.340}{}}
+\newlabel{lem:genesis-bar-lemma@cref}{{[theorem][1][7]G.1}{[1][52][]52}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {G.3}Bootstrap: Steps 1--4}{52}{subsection.343}\protected@file@percent }
+\newlabel{subsec:genesis-bootstrap-proof}{{G.3}{52}{Bootstrap: Steps 1--4}{subsection.343}{}}
+\newlabel{subsec:genesis-bootstrap-proof@cref}{{[subsection][3][7]G.3}{[1][52][]52}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Strict genesis trace used in the proof. The `cap/bands' column reports the strict admissibility cap together with the searched exact $\kappa $-band(s). The `raw/dist.' column reports raw and deduplicated candidate counts. `Runner-up' and `near miss' mean the top displayed strict-lane competitor in the bar-clearing and subcritical pools respectively; a dash means that no distinct competitor was displayed by the verified strict trace.}}{53}{table.342}\protected@file@percent }
+\newlabel{tab:genesis-sequence-trace}{{8}{53}{Strict genesis trace used in the proof. The `cap/bands' column reports the strict admissibility cap together with the searched exact $\kappa $-band(s). The `raw/dist.' column reports raw and deduplicated candidate counts. `Runner-up' and `near miss' mean the top displayed strict-lane competitor in the bar-clearing and subcritical pools respectively; a dash means that no distinct competitor was displayed by the verified strict trace}{table.342}{}}
+\newlabel{tab:genesis-sequence-trace@cref}{{[table][8][]8}{[1][52][]53}{}{}{}}
+\newlabel{prop:genesis-step1}{{G.2}{53}{Step 1: Universe}{theorem.344}{}}
+\newlabel{prop:genesis-step1@cref}{{[theorem][2][7]G.2}{[1][52][]53}{}{}{}}
+\newlabel{prop:genesis-step2}{{G.3}{53}{Step 2: Unit}{theorem.345}{}}
+\newlabel{prop:genesis-step2@cref}{{[theorem][3][7]G.3}{[1][53][]53}{}{}{}}
+\newlabel{prop:genesis-step3}{{G.4}{54}{Step 3: Witness}{theorem.346}{}}
+\newlabel{prop:genesis-step3@cref}{{[theorem][4][7]G.4}{[1][54][]54}{}{}{}}
+\newlabel{prop:genesis-step4}{{G.5}{54}{Step 4: Dependent function and sum types}{theorem.347}{}}
+\newlabel{prop:genesis-step4@cref}{{[theorem][5][7]G.5}{[1][54][]54}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {G.4}Geometric Ascent: Steps 5--9}{55}{subsection.348}\protected@file@percent }
+\newlabel{subsec:genesis-geometric-proof}{{G.4}{55}{Geometric Ascent: Steps 5--9}{subsection.348}{}}
+\newlabel{subsec:genesis-geometric-proof@cref}{{[subsection][4][7]G.4}{[1][54][]55}{}{}{}}
+\newlabel{prop:genesis-step5}{{G.6}{55}{Step 5: The circle}{theorem.349}{}}
+\newlabel{prop:genesis-step5@cref}{{[theorem][6][7]G.6}{[1][55][]55}{}{}{}}
+\newlabel{prop:genesis-step6}{{G.7}{55}{Step 6: Propositional truncation}{theorem.350}{}}
+\newlabel{prop:genesis-step6@cref}{{[theorem][7][7]G.7}{[1][55][]55}{}{}{}}
+\newlabel{prop:genesis-step7}{{G.8}{56}{Step 7: The 2-sphere}{theorem.351}{}}
+\newlabel{prop:genesis-step7@cref}{{[theorem][8][7]G.8}{[1][55][]56}{}{}{}}
+\newlabel{prop:genesis-step8}{{G.9}{56}{Step 8: The H-space on $S^3$}{theorem.352}{}}
+\newlabel{prop:genesis-step8@cref}{{[theorem][9][7]G.9}{[1][56][]56}{}{}{}}
+\newlabel{prop:genesis-step9}{{G.10}{56}{Step 9: The Hopf fibration}{theorem.353}{}}
+\newlabel{prop:genesis-step9@cref}{{[theorem][10][7]G.10}{[1][56][]56}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {G.5}Framework Abstraction: Steps 10--14}{57}{subsection.354}\protected@file@percent }
+\newlabel{subsec:genesis-framework-proof}{{G.5}{57}{Framework Abstraction: Steps 10--14}{subsection.354}{}}
+\newlabel{subsec:genesis-framework-proof@cref}{{[subsection][5][7]G.5}{[1][57][]57}{}{}{}}
+\newlabel{prop:genesis-step10}{{G.11}{57}{Step 10: Cohesion}{theorem.355}{}}
+\newlabel{prop:genesis-step10@cref}{{[theorem][11][7]G.11}{[1][57][]57}{}{}{}}
+\newlabel{prop:genesis-step11}{{G.12}{58}{Step 11: Connections}{theorem.356}{}}
+\newlabel{prop:genesis-step11@cref}{{[theorem][12][7]G.12}{[1][57][]58}{}{}{}}
+\newlabel{prop:genesis-step12}{{G.13}{58}{Step 12: Curvature}{theorem.357}{}}
+\newlabel{prop:genesis-step12@cref}{{[theorem][13][7]G.13}{[1][58][]58}{}{}{}}
+\newlabel{prop:genesis-step13}{{G.14}{58}{Step 13: Endomorphic operator bundle}{theorem.358}{}}
+\newlabel{prop:genesis-step13@cref}{{[theorem][14][7]G.14}{[1][58][]58}{}{}{}}
+\newlabel{prop:genesis-step14}{{G.15}{59}{Step 14: Hilbert functional}{theorem.359}{}}
+\newlabel{prop:genesis-step14@cref}{{[theorem][15][7]G.15}{[1][59][]59}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {G.6}Terminal Synthesis: Step 15}{60}{subsection.360}\protected@file@percent }
+\newlabel{subsec:genesis-terminal-proof}{{G.6}{60}{Terminal Synthesis: Step 15}{subsection.360}{}}
+\newlabel{subsec:genesis-terminal-proof@cref}{{[subsection][6][7]G.6}{[1][60][]60}{}{}{}}
+\newlabel{prop:genesis-step15}{{G.16}{60}{Step 15: Temporal-cohesive shell}{theorem.361}{}}
+\newlabel{prop:genesis-step15@cref}{{[theorem][16][7]G.16}{[1][60][]60}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {G.7}Conclusion of the Step-by-Step Proof}{60}{subsection.362}\protected@file@percent }
+\newlabel{subsec:genesis-proof-conclusion}{{G.7}{60}{Conclusion of the Step-by-Step Proof}{subsection.362}{}}
+\newlabel{subsec:genesis-proof-conclusion@cref}{{[subsection][7][7]G.7}{[1][60][]60}{}{}{}}
+\newlabel{thm:strict-genesis-sequence}{{G.17}{60}{The strict genesis sequence}{theorem.363}{}}
+\newlabel{thm:strict-genesis-sequence@cref}{{[theorem][17][7]G.17}{[1][60][]60}{}{}{}}
+\bibcite{hott}{1}
+\bibcite{cubical}{2}
+\bibcite{schreiber}{3}
+\bibcite{lawvere}{4}
+\bibcite{nakano}{5}
+\bibcite{cchm-hits}{6}
+\bibcite{cubical-agda}{7}
+\bibcite{licata-shulman}{8}
+\bibcite{shulman-real-cohesive}{9}
+\bibcite{alphageometry}{10}
+\bibcite{leandojo}{11}
+\bibcite{openai-lean}{12}
+\bibcite{quickspec}{13}
+\bibcite{isacosy}{14}
+\bibcite{hipster}{15}
+\bibcite{synquid}{16}
+\bibcite{lenat-am}{17}
+\bibcite{colton-atf}{18}
+\bibcite{lurie}{19}
+\newlabel{cor:genesis-no-step16}{{G.18}{61}{No Step~16 continuation in the current bounded live atomic lane}{theorem.364}{}}
+\newlabel{cor:genesis-no-step16@cref}{{[theorem][18][7]G.18}{[1][60][]61}{}{}{}}
+\bibcite{lumsdaine}{20}
+\bibcite{vdberg-garner}{21}
+\bibcite{kuratowski}{22}
+\bibcite{pnueli}{23}
+\bibcite{kock}{24}
+\bibcite{maclane-coherence}{25}
+\bibcite{stasheff}{26}
+\bibcite{kraus-vonraumer}{27}
+\bibcite{kolmogorov}{28}
+\bibcite{lawvere-adjoint}{29}
+\bibcite{godel}{30}
+\gdef \@abspage@last{62}

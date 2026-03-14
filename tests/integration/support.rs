@@ -3,7 +3,9 @@
 use serde::Deserialize;
 use serde_json::Value;
 use std::ffi::OsStr;
+use std::ffi::OsString;
 use std::fs;
+use std::io::ErrorKind;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -54,6 +56,30 @@ where
         .expect("pen-cli should run")
 }
 
+pub fn run_compare_runs<I, S>(args: I) -> Output
+where
+    I: IntoIterator<Item = S>,
+    S: AsRef<OsStr>,
+{
+    let script = workspace_root().join("scripts").join("compare_runs.py");
+    let args = args
+        .into_iter()
+        .map(|arg| arg.as_ref().to_os_string())
+        .collect::<Vec<OsString>>();
+
+    for (program, prefix) in python_invocations() {
+        let mut command = Command::new(program);
+        command.args(prefix).arg(&script).args(&args);
+        match command.output() {
+            Ok(output) => return output,
+            Err(error) if error.kind() == ErrorKind::NotFound => continue,
+            Err(error) => panic!("failed to run {}: {error}", script.display()),
+        }
+    }
+
+    panic!("no Python interpreter found for {}", script.display());
+}
+
 pub fn assert_success(output: Output) -> String {
     let stdout = String::from_utf8_lossy(&output.stdout).to_string();
     let stderr = String::from_utf8_lossy(&output.stderr).to_string();
@@ -80,6 +106,45 @@ pub fn read_text(path: &Path) -> String {
     fs::read_to_string(path).unwrap_or_else(|error| {
         panic!("failed to read {}: {error}", path.display());
     })
+}
+
+pub fn latest_frontier_manifest_path(run_dir: &Path) -> PathBuf {
+    let run_manifest = read_json(&run_dir.join("run.json"));
+    let step_index = run_manifest["position"]["completed_step"]
+        .as_u64()
+        .expect("completed_step");
+    let band_index = run_manifest["position"]["active_band"]
+        .as_u64()
+        .expect("active_band");
+    run_dir
+        .join("checkpoints")
+        .join("frontier")
+        .join(format!("step-{step_index:02}"))
+        .join(format!("band-{band_index:02}"))
+        .join("frontier.manifest.json")
+}
+
+pub fn mutate_latest_frontier_manifest(run_dir: &Path, mutate: impl FnOnce(&mut Value)) {
+    let path = latest_frontier_manifest_path(run_dir);
+    let mut manifest = read_json(&path);
+    mutate(&mut manifest);
+    fs::write(
+        &path,
+        format!(
+            "{}\n",
+            serde_json::to_string_pretty(&manifest).expect("serialize manifest")
+        ),
+    )
+    .expect("rewrite frontier manifest");
+}
+
+pub fn rewrite_config_workers(path: &Path, workers: u16) {
+    let updated = read_text(path).replace("workers = 1", &format!("workers = {workers}"));
+    fs::write(path, updated).expect("rewrite config");
+}
+
+pub fn write_pressure_config(path: &Path) {
+    fs::write(path, pressure_config()).expect("write pressure config");
 }
 
 pub fn load_trajectory_fixture(name: &str) -> Vec<TrajectoryStepFixture> {
@@ -142,4 +207,27 @@ fn rational_to_string(value: &Value) -> String {
     let num = value["num"].as_i64().expect("rational numerator");
     let den = value["den"].as_i64().expect("rational denominator");
     format!("{num}/{den}")
+}
+
+fn pressure_config() -> String {
+    read_text(&workspace_root().join("configs").join("debug.toml"))
+        .replace("target_rss_gib = 4.0", "target_rss_gib = 0.0000001")
+        .replace("soft_rss_gib = 4.5", "soft_rss_gib = 0.0000002")
+        .replace("pressure_rss_gib = 5.0", "pressure_rss_gib = 0.0000010")
+        .replace("emergency_rss_gib = 5.5", "emergency_rss_gib = 0.0000020")
+        .replace("hard_rss_gib = 6.0", "hard_rss_gib = 0.0000040")
+        .replace("spill_buffers_gib = 0.25", "spill_buffers_gib = 0.0000001")
+        .replace(
+            "checkpoint_buffers_gib = 0.25",
+            "checkpoint_buffers_gib = 0.0000001",
+        )
+        .replace("worker_arena_mib = 32", "worker_arena_mib = 0")
+}
+
+fn python_invocations() -> Vec<(&'static str, Vec<&'static str>)> {
+    if cfg!(windows) {
+        vec![("python", vec![]), ("py", vec!["-3"])]
+    } else {
+        vec![("python3", vec![]), ("python", vec![])]
+    }
 }

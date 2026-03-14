@@ -8,6 +8,7 @@ rust-version.workspace = true
 [dependencies]
 anyhow.workspace = true
 pen-core = { path = "../pen-core" }
+pen-eval = { path = "../pen-eval" }
 pen-store = { path = "../pen-store" }
 serde.workspace = true
 serde_json.workspace = true

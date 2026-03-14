@@ -1,6 +1,9 @@
 use pen_core::ids::{ClauseId, ObligationSetId, StateId};
+use pen_type::obligations::RetentionClass;
 
 pub const FRONTIER_STATE_REC_V1_BYTES: usize = 64;
+const RETENTION_CLASS_SHIFT: u16 = 10;
+const RETENTION_CLASS_MASK: u16 = 0b11 << RETENTION_CLASS_SHIFT;
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct PrefixState {
@@ -119,12 +122,22 @@ impl FrontierStateRecV1 {
             reserved: u32::from_le_bytes(bytes[60..64].try_into().expect("reserved")),
         }
     }
+
+    pub fn retention_class(self) -> RetentionClass {
+        match (self.flags & RETENTION_CLASS_MASK) >> RETENTION_CLASS_SHIFT {
+            0 => RetentionClass::GenericMacro,
+            1 => RetentionClass::StructuralSupport,
+            2 => RetentionClass::RareBridgeHead,
+            _ => RetentionClass::RareFocusHead,
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::{FRONTIER_STATE_REC_V1_BYTES, FrontierStateRecV1, PrefixState};
     use pen_core::ids::{ClauseId, ObligationSetId, StateId};
+    use pen_type::obligations::RetentionClass;
 
     #[test]
     fn frontier_record_round_trips_exact_64_byte_layout() {
@@ -150,5 +163,6 @@ mod tests {
 
         assert_eq!(bytes.len(), FRONTIER_STATE_REC_V1_BYTES);
         assert_eq!(FrontierStateRecV1::from_le_bytes(bytes), record);
+        assert_eq!(record.retention_class(), RetentionClass::GenericMacro);
     }
 }

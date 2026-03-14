@@ -1,0 +1,699 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from collections import Counter
+from pathlib import Path
+from typing import Any
+
+PRUNE_KEYS = ("quotient_dedupe", "sound_minimality", "heuristic_shaping")
+CLAIM_KEYS = (
+    "status",
+    "adopted_step",
+    "adopted_label",
+    "adopted_nu",
+    "matches_accepted",
+)
+
+
+def main() -> int:
+    args = parse_args()
+    lanes = build_lane_specs(args)
+    if not lanes:
+        raise SystemExit("provide at least one run directory or --lane LABEL=PATH")
+
+    lane_summaries = [load_lane(label, path) for label, path in lanes]
+    lane_by_label = {lane["label"]: lane for lane in lane_summaries}
+    baseline_label = args.baseline or lane_summaries[0]["label"]
+    if baseline_label not in lane_by_label:
+        raise SystemExit(f"baseline lane not found: {baseline_label}")
+
+    summary = build_summary(lane_summaries, baseline_label)
+    text_summary = render_text_summary(summary)
+
+    if args.text_out is not None:
+        write_text(args.text_out, text_summary)
+    if args.json_out is not None:
+        write_text(args.json_out, json.dumps(summary, indent=2, sort_keys=True) + "\n")
+
+    sys.stdout.write(text_summary)
+    return 0
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Compare persisted pen-atomic run directories and emit a canonical "
+            "human-readable plus machine-readable evidence summary."
+        )
+    )
+    parser.add_argument(
+        "run_dirs",
+        nargs="*",
+        metavar="RUN_DIR",
+        help="run directories to compare; lane labels default to the directory name",
+    )
+    parser.add_argument(
+        "--lane",
+        action="append",
+        default=[],
+        metavar="LABEL=PATH",
+        help="explicit lane label and run directory",
+    )
+    parser.add_argument(
+        "--baseline",
+        metavar="LABEL",
+        help="lane label to use as the authoritative baseline; defaults to the first lane",
+    )
+    parser.add_argument(
+        "--json-out",
+        type=Path,
+        help="optional path for the machine-readable JSON summary",
+    )
+    parser.add_argument(
+        "--text-out",
+        type=Path,
+        help="optional path for the human-readable text summary",
+    )
+    return parser.parse_args()
+
+
+def build_lane_specs(args: argparse.Namespace) -> list[tuple[str, Path]]:
+    lanes: list[tuple[str, Path]] = []
+    seen_labels: set[str] = set()
+
+    for spec in args.lane:
+        label, path = parse_lane_spec(spec)
+        if label in seen_labels:
+            raise SystemExit(f"duplicate lane label: {label}")
+        seen_labels.add(label)
+        lanes.append((label, path))
+
+    for raw_path in args.run_dirs:
+        path = Path(raw_path).resolve()
+        label = path.name
+        if label in seen_labels:
+            raise SystemExit(f"duplicate lane label: {label}")
+        seen_labels.add(label)
+        lanes.append((label, path))
+
+    return lanes
+
+
+def parse_lane_spec(spec: str) -> tuple[str, Path]:
+    if "=" not in spec:
+        raise SystemExit(f"invalid --lane value '{spec}'; expected LABEL=PATH")
+    label, raw_path = spec.split("=", 1)
+    label = label.strip()
+    raw_path = raw_path.strip()
+    if not label or not raw_path:
+        raise SystemExit(f"invalid --lane value '{spec}'; expected LABEL=PATH")
+    return label, Path(raw_path).resolve()
+
+
+def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
+    manifest_path = run_dir / "run.json"
+    steps_dir = run_dir / "reports" / "steps"
+    telemetry_path = run_dir / "telemetry.ndjson"
+
+    if not manifest_path.exists():
+        raise SystemExit(f"missing run manifest: {manifest_path}")
+    if not steps_dir.exists():
+        raise SystemExit(f"missing step summaries: {steps_dir}")
+
+    manifest = load_json(manifest_path)
+    step_paths = sorted(steps_dir.glob("step-*-summary.json"))
+    if not step_paths:
+        raise SystemExit(f"no step summaries found in {steps_dir}")
+
+    steps = [load_json(path) for path in step_paths]
+    telemetry_events = load_ndjson(telemetry_path)
+    telemetry_steps = {
+        int(event["step_index"]): event.get("payload", {})
+        for event in telemetry_events
+        if event.get("event") == "step_accepted" and event.get("step_index") is not None
+    }
+    run_mode = "unknown"
+    for event in telemetry_events:
+        if event.get("event") == "run_started":
+            run_mode = str(event.get("payload", {}).get("mode", "unknown"))
+            break
+
+    trajectory = [trajectory_entry(step) for step in steps]
+    provenance_sequence = []
+    replay_sequence = []
+    governor_sequence = []
+    prune_totals = Counter({key: 0 for key in PRUNE_KEYS})
+    frontier_deltas = []
+    frontier_retention_totals = Counter()
+
+    for step in steps:
+        step_index = int(step.get("step_index", 0))
+        telemetry_step = telemetry_steps.get(step_index, {})
+
+        provenance = str(step.get("provenance", "unknown") or "unknown")
+        replay_status = str(
+            (step.get("replay_ablation") or telemetry_step.get("replay_ablation") or {}).get(
+                "status", "not_recorded"
+            )
+        )
+        pressure = step.get("frontier_pressure") or telemetry_step.get("frontier_pressure") or {}
+        governor_state = str(pressure.get("governor_state", "unknown") or "unknown")
+        pressure_action = str(pressure.get("pressure_action", "unknown") or "unknown")
+        rss_bytes = int(pressure.get("rss_bytes", 0) or 0)
+
+        provenance_sequence.append({"step_index": step_index, "value": provenance})
+        replay_sequence.append({"step_index": step_index, "value": replay_status})
+        governor_sequence.append(
+            {
+                "step_index": step_index,
+                "state": governor_state,
+                "action": pressure_action,
+                "rss_bytes": rss_bytes,
+                "value": f"{governor_state}/{pressure_action}",
+            }
+        )
+
+        step_prunes = prune_counts(step, telemetry_step)
+        for key in PRUNE_KEYS:
+            prune_totals[key] += step_prunes.get(key, 0)
+
+        frontier_deltas.append(
+            {"step_index": step_index, "delta": frontier_retention_delta(step)}
+        )
+        frontier_retention_totals.update(frontier_retention_counts(step))
+
+    latest_frontier = load_latest_frontier(run_dir)
+    step15 = next(
+        (step for step in steps if int(step.get("step_index", 0)) == 15),
+        None,
+    )
+
+    lane = {
+        "label": label,
+        "path": str(run_dir),
+        "run_id": str(manifest.get("run_id", "")),
+        "completed_step": int(manifest.get("position", {}).get("completed_step", len(steps))),
+        "run_mode": run_mode,
+        "trajectory": trajectory,
+        "trajectory_fingerprint": hash_json(trajectory),
+        "provenance_sequence": provenance_sequence,
+        "provenance_summary": summarize_counter(
+            Counter(item["value"] for item in provenance_sequence)
+        ),
+        "replay_ablation_sequence": replay_sequence,
+        "replay_ablation_summary": summarize_counter(
+            Counter(item["value"] for item in replay_sequence)
+        ),
+        "prune_sample_totals": ordered_dict(
+            [(key, int(prune_totals.get(key, 0))) for key in PRUNE_KEYS]
+        ),
+        "frontier_retention_delta_total": sum(item["delta"] for item in frontier_deltas),
+        "frontier_retention_delta_by_step": frontier_deltas,
+        "frontier_retention_totals": summarize_counter(frontier_retention_totals),
+        "governor_summary": {
+            "states": summarize_counter(
+                Counter(item["state"] for item in governor_sequence)
+            ),
+            "actions": summarize_counter(
+                Counter(item["action"] for item in governor_sequence)
+            ),
+            "max_rss_bytes": max((item["rss_bytes"] for item in governor_sequence), default=0),
+            "sequence": governor_sequence,
+        },
+        "latest_frontier": latest_frontier,
+        "step15_claim": normalize_claim(
+            step15.get("canon_evidence", {}).get("late_step_claim") if step15 else None
+        ),
+    }
+    return lane
+
+
+def trajectory_entry(step: dict[str, Any]) -> dict[str, Any]:
+    accepted = step.get("accepted", {})
+    return ordered_dict(
+        [
+            ("step_index", int(step.get("step_index", 0))),
+            ("label", str(step.get("label", ""))),
+            ("candidate_hash", str(accepted.get("candidate_hash", ""))),
+            ("canonical_hash", str(accepted.get("canonical_hash", ""))),
+            ("bit_kappa", int(accepted.get("bit_kappa", 0) or 0)),
+            ("clause_kappa", int(accepted.get("clause_kappa", 0) or 0)),
+            ("nu", int(accepted.get("nu", 0) or 0)),
+            ("rho", rational_to_string(accepted.get("rho"))),
+            ("objective_bar", rational_to_string(step.get("objective_bar"))),
+            ("overshoot", rational_to_string(accepted.get("overshoot"))),
+        ]
+    )
+
+
+def prune_counts(step: dict[str, Any], telemetry_step: dict[str, Any]) -> Counter:
+    counts = Counter({key: 0 for key in PRUNE_KEYS})
+    prune_reports = step.get("prune_reports") or []
+    if prune_reports:
+        for report in prune_reports:
+            key = str(report.get("prune_class", ""))
+            if key in PRUNE_KEYS:
+                counts[key] += 1
+        return counts
+
+    telemetry_counts = telemetry_step.get("prune_samples", {})
+    for key in PRUNE_KEYS:
+        counts[key] += int(telemetry_counts.get(key, 0) or 0)
+    return counts
+
+
+def frontier_retention_delta(step: dict[str, Any]) -> int:
+    stats = step.get("search_stats") or {}
+    kept = int(stats.get("frontier_hot_states", 0) or 0) + int(
+        stats.get("frontier_cold_states", 0) or 0
+    )
+    dropped = int(stats.get("frontier_drops", 0) or 0)
+    return kept - dropped
+
+
+def frontier_retention_counts(step: dict[str, Any]) -> Counter:
+    counts = Counter()
+    for candidate in step.get("candidate_reports") or []:
+        key = normalize_frontier_retention(candidate.get("frontier_retention", "not_recorded"))
+        counts[key] += 1
+    return counts
+
+
+def normalize_frontier_retention(value: Any) -> str:
+    label = str(value or "not_recorded")
+    if label == "cold":
+        return "cold_resident"
+    return label
+
+
+def load_latest_frontier(run_dir: Path) -> dict[str, Any]:
+    frontier_root = run_dir / "checkpoints" / "frontier"
+    if not frontier_root.exists():
+        return {"present": False}
+
+    candidates = []
+    for path in sorted(frontier_root.rglob("frontier.manifest.json")):
+        manifest = load_json(path)
+        candidates.append(
+            (
+                int(manifest.get("step_index", 0) or 0),
+                int(manifest.get("band_index", 0) or 0),
+                int(manifest.get("frontier_epoch", 0) or 0),
+                str(path),
+                path,
+                manifest,
+            )
+        )
+
+    if not candidates:
+        return {"present": False}
+
+    _, _, _, _, manifest_path, manifest = max(candidates)
+    cache_blob = manifest.get("files", {}).get("cache_blob")
+    cache = {}
+    if cache_blob:
+        cache_path = manifest_path.parent / str(cache_blob)
+        if cache_path.exists():
+            cache = load_json(cache_path)
+
+    return ordered_dict(
+        [
+            ("present", True),
+            ("step_index", int(manifest.get("step_index", 0) or 0)),
+            ("band_index", int(manifest.get("band_index", 0) or 0)),
+            ("frontier_epoch", int(manifest.get("frontier_epoch", 0) or 0)),
+            ("hot_states", int(manifest.get("counts", {}).get("hot_states", 0) or 0)),
+            ("cold_states", int(manifest.get("counts", {}).get("cold_states", 0) or 0)),
+            ("dedupe_keys", int(manifest.get("counts", {}).get("dedupe_keys", 0) or 0)),
+            ("worker_count", int(manifest.get("scheduler", {}).get("worker_count", 0) or 0)),
+            (
+                "spill_generation",
+                int(manifest.get("scheduler", {}).get("spill_generation", 0) or 0),
+            ),
+            ("governor_state", str(cache.get("governor_state", "unknown"))),
+            ("pressure_action", str(cache.get("pressure_action", "unknown"))),
+            (
+                "resident_cold_records",
+                int(cache.get("resident_cold_records", 0) or 0),
+            ),
+            (
+                "spilled_cold_records",
+                int(cache.get("spilled_cold_records", 0) or 0),
+            ),
+        ]
+    )
+
+
+def normalize_claim(claim: Any) -> dict[str, Any]:
+    if not isinstance(claim, dict) or not claim:
+        return ordered_dict(
+            [
+                ("present", False),
+                ("status", "missing"),
+                ("adopted_step", 0),
+                ("adopted_label", ""),
+                ("adopted_nu", 0),
+                ("matches_accepted", False),
+            ]
+        )
+
+    return ordered_dict(
+        [
+            ("present", True),
+            ("status", str(claim.get("status", "missing"))),
+            ("adopted_step", int(claim.get("adopted_step", 0) or 0)),
+            ("adopted_label", str(claim.get("adopted_label", ""))),
+            ("adopted_nu", int(claim.get("adopted_nu", 0) or 0)),
+            ("matches_accepted", bool(claim.get("matches_accepted", False))),
+        ]
+    )
+
+
+def build_summary(lanes: list[dict[str, Any]], baseline_label: str) -> dict[str, Any]:
+    baseline = next(lane for lane in lanes if lane["label"] == baseline_label)
+    matching_lanes = []
+    mismatched_lanes = []
+    claim_matching_lanes = []
+    claim_mismatches = []
+
+    baseline_claim = comparable_claim(baseline["step15_claim"])
+
+    for lane in lanes:
+        matches, deltas = compare_trajectory(baseline["trajectory"], lane["trajectory"])
+        lane["trajectory_vs_baseline"] = {
+            "baseline_label": baseline_label,
+            "matches": matches,
+            "deltas": deltas,
+        }
+        if matches:
+            matching_lanes.append(lane["label"])
+        else:
+            mismatched_lanes.append(lane["label"])
+
+        if comparable_claim(lane["step15_claim"]) == baseline_claim:
+            claim_matching_lanes.append(lane["label"])
+        else:
+            claim_mismatches.append(
+                {
+                    "label": lane["label"],
+                    "claim": lane["step15_claim"],
+                }
+            )
+
+    trajectory_status = (
+        "all_match_baseline" if not mismatched_lanes else "deltas_present"
+    )
+    claim_status = "consistent" if not claim_mismatches else "inconsistent"
+    signoff_status = (
+        "ready"
+        if trajectory_status == "all_match_baseline" and claim_status == "consistent"
+        else "attention"
+    )
+
+    return ordered_dict(
+        [
+            ("comparison_version", 1),
+            ("baseline_lane", baseline_label),
+            ("lane_order", [lane["label"] for lane in lanes]),
+            (
+                "trajectory_consistency",
+                ordered_dict(
+                    [
+                        ("status", trajectory_status),
+                        ("baseline_fingerprint", baseline["trajectory_fingerprint"]),
+                        ("matching_lanes", matching_lanes),
+                        ("mismatched_lanes", mismatched_lanes),
+                    ]
+                ),
+            ),
+            (
+                "step15_claim_boundary",
+                ordered_dict(
+                    [
+                        ("status", claim_status),
+                        ("baseline", baseline["step15_claim"]),
+                        ("matching_lanes", claim_matching_lanes),
+                        ("mismatches", claim_mismatches),
+                    ]
+                ),
+            ),
+            (
+                "signoff",
+                ordered_dict(
+                    [
+                        ("status", signoff_status),
+                        (
+                            "summary",
+                            signoff_summary(
+                                signoff_status,
+                                baseline_label,
+                                len(lanes),
+                                baseline["step15_claim"],
+                            ),
+                        ),
+                    ]
+                ),
+            ),
+            ("lanes", lanes),
+        ]
+    )
+
+
+def signoff_summary(
+    status: str, baseline_label: str, lane_count: int, baseline_claim: dict[str, Any]
+) -> str:
+    if status == "ready":
+        return (
+            f"all {lane_count} lanes preserve baseline {baseline_label} and the "
+            f"step-15 {baseline_claim['adopted_label']} claim boundary"
+        )
+    return f"one or more lanes diverge from baseline {baseline_label} or the step-15 claim"
+
+
+def compare_trajectory(
+    baseline: list[dict[str, Any]], current: list[dict[str, Any]]
+) -> tuple[bool, list[dict[str, Any]]]:
+    baseline_by_step = {entry["step_index"]: entry for entry in baseline}
+    current_by_step = {entry["step_index"]: entry for entry in current}
+    deltas = []
+
+    for step_index in sorted(set(baseline_by_step) | set(current_by_step)):
+        baseline_entry = baseline_by_step.get(step_index)
+        current_entry = current_by_step.get(step_index)
+        if baseline_entry == current_entry:
+            continue
+        deltas.append(
+            ordered_dict(
+                [
+                    ("step_index", step_index),
+                    ("baseline", baseline_entry),
+                    ("current", current_entry),
+                ]
+            )
+        )
+
+    return (not deltas, deltas)
+
+
+def comparable_claim(claim: dict[str, Any]) -> dict[str, Any]:
+    return {key: claim.get(key) for key in CLAIM_KEYS}
+
+
+def render_text_summary(summary: dict[str, Any]) -> str:
+    lines = [
+        f"Comparison Signoff: {summary['signoff']['status']}",
+        f"baseline: {summary['baseline_lane']}",
+        f"lanes: {', '.join(summary['lane_order'])}",
+        f"trajectory: {render_trajectory_status(summary)}",
+        f"step15 claim boundary: {render_claim_status(summary['step15_claim_boundary'])}",
+    ]
+
+    for lane in summary["lanes"]:
+        lines.append("")
+        lines.extend(render_lane_summary(lane))
+
+    return "\n".join(lines) + "\n"
+
+
+def render_trajectory_status(summary: dict[str, Any]) -> str:
+    consistency = summary["trajectory_consistency"]
+    if consistency["status"] == "all_match_baseline":
+        return (
+            f"all {len(summary['lane_order'])} lanes match baseline "
+            f"{summary['baseline_lane']}"
+        )
+    return (
+        f"mismatches detected in {', '.join(consistency['mismatched_lanes'])}"
+    )
+
+
+def render_claim_status(claim_boundary: dict[str, Any]) -> str:
+    baseline = claim_boundary["baseline"]
+    if claim_boundary["status"] == "consistent":
+        return (
+            f"consistent ({baseline['status']} step {baseline['adopted_step']} "
+            f"{baseline['adopted_label']} nu={baseline['adopted_nu']} "
+            f"matches_accepted={str(baseline['matches_accepted']).lower()})"
+        )
+    mismatched = ", ".join(item["label"] for item in claim_boundary["mismatches"])
+    return f"inconsistent ({mismatched})"
+
+
+def render_lane_summary(lane: dict[str, Any]) -> list[str]:
+    deltas = lane["trajectory_vs_baseline"]["deltas"]
+    trajectory_line = (
+        f"trajectory: matches baseline ({lane['trajectory_fingerprint']})"
+        if not deltas
+        else (
+            f"trajectory: diverges at {render_delta_steps(deltas)} "
+            f"({lane['trajectory_fingerprint']})"
+        )
+    )
+    governor_compact = compact_sequence(lane["governor_summary"]["sequence"])
+    replay_compact = compact_sequence(lane["replay_ablation_sequence"])
+    provenance_compact = compact_sequence(lane["provenance_sequence"])
+    last_retention_delta = lane["frontier_retention_delta_by_step"][-1]["delta"]
+    last_retention_step = lane["frontier_retention_delta_by_step"][-1]["step_index"]
+
+    lines = [
+        f"Lane {lane['label']}",
+        f"  run_id: {lane['run_id']}",
+        f"  mode: {lane['run_mode']}",
+        f"  completed_step: {lane['completed_step']}",
+        f"  {trajectory_line}",
+        f"  provenance sequence: {render_compact_sequence(provenance_compact)}",
+        f"  replay ablation: {render_compact_sequence(replay_compact)}",
+        f"  prune samples: {render_prune_totals(lane['prune_sample_totals'])}",
+        (
+            "  frontier retention delta: "
+            f"total={lane['frontier_retention_delta_total']} "
+            f"latest=step {last_retention_step} {render_signed(last_retention_delta)}"
+        ),
+        (
+            "  governor sequence: "
+            f"{render_compact_sequence(governor_compact)} "
+            f"(max_rss_bytes={lane['governor_summary']['max_rss_bytes']})"
+        ),
+        f"  latest frontier: {render_latest_frontier(lane['latest_frontier'])}",
+        (
+            "  step15 claim: "
+            f"{lane['step15_claim']['status']} step {lane['step15_claim']['adopted_step']} "
+            f"{lane['step15_claim']['adopted_label']} nu={lane['step15_claim']['adopted_nu']} "
+            f"matches_accepted={str(lane['step15_claim']['matches_accepted']).lower()}"
+        ),
+    ]
+    return lines
+
+
+def render_delta_steps(deltas: list[dict[str, Any]]) -> str:
+    steps = [f"step {delta['step_index']}" for delta in deltas]
+    return ", ".join(steps)
+
+
+def render_prune_totals(prune_totals: dict[str, int]) -> str:
+    return ", ".join(f"{key}={prune_totals.get(key, 0)}" for key in PRUNE_KEYS)
+
+
+def render_latest_frontier(frontier: dict[str, Any]) -> str:
+    if not frontier.get("present"):
+        return "not present"
+    return (
+        f"step {frontier['step_index']} band {frontier['band_index']} "
+        f"epoch={frontier['frontier_epoch']} hot={frontier['hot_states']} "
+        f"cold={frontier['cold_states']} dedupe={frontier['dedupe_keys']} "
+        f"spill_generation={frontier['spill_generation']} "
+        f"cache={frontier['governor_state']}/{frontier['pressure_action']}"
+    )
+
+
+def compact_sequence(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    if not items:
+        return []
+
+    compacted = []
+    start_step = items[0]["step_index"]
+    end_step = items[0]["step_index"]
+    value = items[0]["value"]
+
+    for item in items[1:]:
+        if item["value"] == value and item["step_index"] == end_step + 1:
+            end_step = item["step_index"]
+            continue
+        compacted.append(
+            {"start_step": start_step, "end_step": end_step, "value": value}
+        )
+        start_step = item["step_index"]
+        end_step = item["step_index"]
+        value = item["value"]
+
+    compacted.append({"start_step": start_step, "end_step": end_step, "value": value})
+    return compacted
+
+
+def render_compact_sequence(chunks: list[dict[str, Any]]) -> str:
+    if not chunks:
+        return "none"
+    parts = []
+    for chunk in chunks:
+        if chunk["start_step"] == chunk["end_step"]:
+            step_label = f"{chunk['start_step']:02}"
+        else:
+            step_label = f"{chunk['start_step']:02}-{chunk['end_step']:02}"
+        parts.append(f"{step_label} {chunk['value']}")
+    return "; ".join(parts)
+
+
+def render_signed(value: int) -> str:
+    return f"+{value}" if value >= 0 else str(value)
+
+
+def hash_json(value: Any) -> str:
+    payload = json.dumps(value, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def load_json(path: Path) -> Any:
+    with path.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+def load_ndjson(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    events = []
+    with path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            line = line.strip()
+            if not line:
+                continue
+            events.append(json.loads(line))
+    return events
+
+
+def rational_to_string(value: Any) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, dict) and "num" in value and "den" in value:
+        return f"{value['num']}/{value['den']}"
+    return "0/1"
+
+
+def summarize_counter(counter: Counter) -> dict[str, int]:
+    return ordered_dict((key, int(counter[key])) for key in sorted(counter))
+
+
+def ordered_dict(items: Any) -> dict[str, Any]:
+    return dict(items)
+
+
+def write_text(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -2,12 +2,13 @@ use crate::cli::ExportAgdaArgs;
 use crate::report::{StepReport, load_step_reports, replay_reference_steps};
 use anyhow::{Context, Result};
 use pen_agda::export::{ExportStepInput, export_steps};
+use pen_agda::manifest::ExportSource;
 use pen_search::config::RuntimeConfig;
 use std::fs;
 use std::path::{Path, PathBuf};
 
 pub fn export_agda(args: ExportAgdaArgs) -> Result<String> {
-    let (run_id, steps, output_dir) = if let Some(run_dir) = args.run_dir.clone() {
+    let (run_id, steps, output_dir, source) = if let Some(run_dir) = args.run_dir.clone() {
         let run_dir = absolute(run_dir)?;
         let reports = load_step_reports(&run_dir)?;
         let run_id = run_dir
@@ -16,7 +17,12 @@ pub fn export_agda(args: ExportAgdaArgs) -> Result<String> {
             .unwrap_or("run")
             .to_owned();
         let output_dir = args.output_dir.unwrap_or_else(|| run_dir.join("agda"));
-        (run_id, reports, output_dir)
+        (
+            run_id,
+            reports,
+            output_dir,
+            ExportSource::AcceptedRunArtifacts,
+        )
     } else {
         let workspace = workspace_root();
         let config_text = fs::read_to_string(workspace.join("configs").join("default.toml"))
@@ -27,17 +33,23 @@ pub fn export_agda(args: ExportAgdaArgs) -> Result<String> {
         let output_dir = args
             .output_dir
             .unwrap_or_else(|| workspace.join("agda").join("Generated"));
-        ("reference-export".to_owned(), reports, output_dir)
+        (
+            "reference-export".to_owned(),
+            reports,
+            output_dir,
+            ExportSource::ReferenceReplayFallback,
+        )
     };
 
     let step_inputs = steps.iter().map(step_to_export_input).collect::<Vec<_>>();
-    let manifest = export_steps(&output_dir, &run_id, &step_inputs, args.verify)?;
+    let manifest = export_steps(&output_dir, &run_id, &step_inputs, args.verify, source)?;
 
     Ok(format!(
-        "agda export written to {}\nsteps: {}\nverify_requested: {}",
+        "agda export written to {}\nsteps: {}\nverify_requested: {}\nsource: {:?}",
         output_dir.display(),
         manifest.steps.len(),
-        manifest.verify_requested
+        manifest.verify_requested,
+        manifest.source,
     ))
 }
 
@@ -47,6 +59,10 @@ fn step_to_export_input(step: &StepReport) -> ExportStepInput {
         label: step.label.clone(),
         candidate_hash: step.accepted.candidate_hash.clone(),
         canonical_hash: step.accepted.canonical_hash.clone(),
+        bit_kappa: step.accepted.bit_kappa,
+        clause_kappa: step.accepted.clause_kappa,
+        nu: step.accepted.nu,
+        rho: step.accepted.rho,
         telescope: step.telescope.clone(),
     }
 }
@@ -96,6 +112,7 @@ mod tests {
         .expect("export should succeed");
 
         assert!(output.contains("steps: 2"));
+        assert!(output.contains("source: ReferenceReplayFallback"));
         assert!(output_dir.join("manifest.json").exists());
         fs::remove_dir_all(output_dir).ok();
     }

@@ -4,15 +4,35 @@
   "generated_utc": "<generated_utc>",
   "output_dir": "<output_dir>",
   "verify_requested": false,
+  "source": "reference_replay_fallback",
   "steps": [
     {
       "step_index": 1,
       "label": "Universe",
       "module_name": "Step01",
       "source_file": "Step01.agda",
+      "payload_module_name": "Payload01",
+      "payload_file": "Payload01.agda",
       "verify_log_file": "Step01.verify.log",
       "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
       "canonical_hash": "blake3:23ab301fcb806f4f151974b767119ea66f8ee39bcf5b7d9c95924fc2902663b2",
+      "claims": {
+        "canonical_key": "b7b3b3c3",
+        "bit_kappa": 14,
+        "clause_kappa": 2,
+        "desugared_kappa": 2,
+        "rho": {
+          "num": 1,
+          "den": 2
+        },
+        "import_steps": [],
+        "nu_claim": {
+          "nu_g": 0,
+          "nu_h": 0,
+          "nu_c": 1,
+          "nu_total": 1
+        }
+      },
       "verification": "pending"
     },
     {
@@ -20,9 +40,28 @@
       "label": "Unit",
       "module_name": "Step02",
       "source_file": "Step02.agda",
+      "payload_module_name": "Payload02",
+      "payload_file": "Payload02.agda",
       "verify_log_file": "Step02.verify.log",
       "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
       "canonical_hash": "blake3:cd72c5935198d40c0ef48ae172c9ccba1ef9c90435494569121c8dccd3466476",
+      "claims": {
+        "canonical_key": "71b84e92",
+        "bit_kappa": 10,
+        "clause_kappa": 1,
+        "desugared_kappa": 1,
+        "rho": {
+          "num": 1,
+          "den": 1
+        },
+        "import_steps": [],
+        "nu_claim": {
+          "nu_g": 1,
+          "nu_h": 0,
+          "nu_c": 0,
+          "nu_total": 1
+        }
+      },
       "verification": "pending"
     }
   ]

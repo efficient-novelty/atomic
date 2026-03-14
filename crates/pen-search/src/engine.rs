@@ -1,5 +1,5 @@
 use crate::accept::{AcceptanceOutcome, select_acceptance};
-use crate::dedupe::dedupe_stable_by;
+use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{EnumerationContext, enumerate_telescopes};
 use crate::expand::{ExpandedCandidate, evaluate_candidate};
 use anyhow::{Result, bail};
@@ -12,21 +12,49 @@ use pen_store::manifest::NearMiss;
 use pen_type::admissibility::{
     StrictAdmissibility, passes_strict_admissibility, strict_admissibility,
 };
+use pen_type::obligations::{RetentionPolicy, summarize_structural_debt};
+use std::collections::{BTreeMap, BTreeSet};
 
 pub const LIVE_BOOTSTRAP_MAX_STEP: u32 = 15;
+const MAX_PRUNE_SAMPLES: usize = 3;
+
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct FrontierRetentionOutcome {
+    pub pressure: FrontierPressure,
+    pub resident_cold_candidates: BTreeSet<String>,
+    pub spill_cold_candidates: BTreeSet<String>,
+    pub dropped_candidates: BTreeSet<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DedupePruneEvidence {
+    pub candidate: ExpandedCandidate,
+    pub first_seen_candidate_hash: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct MinimalityPruneEvidence {
+    pub candidate: ExpandedCandidate,
+    pub admissible_bar_clear_subbundles: usize,
+}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AtomicSearchStep {
     pub step_index: u32,
     pub objective_bar: Rational,
     pub admissibility: StrictAdmissibility,
+    pub retention_policy: RetentionPolicy,
+    pub frontier_retention: FrontierRetentionOutcome,
     pub telescope: Telescope,
     pub accepted: ExpandedCandidate,
     pub retained_candidates: Vec<ExpandedCandidate>,
     pub near_misses: Vec<NearMiss>,
     pub evaluated_candidates: usize,
     pub dedupe_prunes: usize,
+    pub minimality_prunes: usize,
     pub heuristic_drops: usize,
+    pub dedupe_pruned_candidates: Vec<DedupePruneEvidence>,
+    pub minimality_pruned_candidates: Vec<MinimalityPruneEvidence>,
 }
 
 pub fn supports_live_atomic_search(until_step: u32) -> bool {
@@ -37,12 +65,64 @@ pub fn search_bootstrap_prefix(
     until_step: u32,
     window_depth: u16,
 ) -> Result<Vec<AtomicSearchStep>> {
+    search_bootstrap_prefix_with_runtime(
+        until_step,
+        window_depth,
+        FrontierRuntimeLimits::unlimited(),
+    )
+}
+
+pub fn search_bootstrap_prefix_with_runtime(
+    until_step: u32,
+    window_depth: u16,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<Vec<AtomicSearchStep>> {
+    search_bootstrap_from_prefix_with_runtime(&[], until_step, window_depth, retention_runtime)
+}
+
+pub fn search_bootstrap_from_prefix(
+    accepted_prefix: &[Telescope],
+    until_step: u32,
+    window_depth: u16,
+) -> Result<Vec<AtomicSearchStep>> {
+    search_bootstrap_from_prefix_with_runtime(
+        accepted_prefix,
+        until_step,
+        window_depth,
+        FrontierRuntimeLimits::unlimited(),
+    )
+}
+
+pub fn search_bootstrap_from_prefix_with_runtime(
+    accepted_prefix: &[Telescope],
+    until_step: u32,
+    window_depth: u16,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<Vec<AtomicSearchStep>> {
     let mut library: Library = Vec::new();
     let mut history: Vec<DiscoveryRecord> = Vec::new();
     let mut steps = Vec::new();
 
-    for step_index in 1..=until_step.min(LIVE_BOOTSTRAP_MAX_STEP) {
-        let outcome = search_next_step(step_index, window_depth, &library, &history)?;
+    for (offset, telescope) in accepted_prefix.iter().enumerate() {
+        let step_index = u32::try_from(offset + 1).expect("accepted prefix length exceeded u32");
+        let accepted = evaluate_candidate(&library, &history, telescope.clone())?;
+        history.push(DiscoveryRecord::new(
+            step_index,
+            u32::from(accepted.nu),
+            u32::from(accepted.clause_kappa),
+        ));
+        library.push(LibraryEntry::from_telescope(telescope, &library));
+    }
+
+    let start_step = u32::try_from(accepted_prefix.len()).expect("prefix length exceeded u32") + 1;
+    for step_index in start_step..=until_step.min(LIVE_BOOTSTRAP_MAX_STEP) {
+        let outcome = search_next_step(
+            step_index,
+            window_depth,
+            &library,
+            &history,
+            retention_runtime,
+        )?;
         history.push(DiscoveryRecord::new(
             step_index,
             u32::from(outcome.accepted.nu),
@@ -60,8 +140,11 @@ fn search_next_step(
     window_depth: u16,
     library: &Library,
     history: &[DiscoveryRecord],
+    retention_runtime: FrontierRuntimeLimits,
 ) -> Result<AtomicSearchStep> {
+    let structural_debt = summarize_structural_debt(library, window_depth);
     let admissibility = strict_admissibility(step_index, window_depth, library);
+    let retention_policy = structural_debt.retention_policy();
     let objective_bar = compute_bar(window_depth as usize, step_index, history).bar;
     let mut candidates = Vec::new();
     let nu_history = history
@@ -112,43 +195,78 @@ fn search_next_step(
     }
     let evaluated_candidates = candidates.len();
 
-    let (deduped, dedupe_prunes, _) =
-        dedupe_stable_by(candidates, |candidate| candidate.canonical_key.clone());
-    let minimal = deduped
-        .into_iter()
-        .filter(|candidate| {
-            analyze_semantic_minimality(
-                step_index,
-                objective_bar,
-                admissibility,
-                &candidate.telescope,
-                library,
-                &nu_history,
-            )
-            .is_minimal()
-        })
-        .collect::<Vec<_>>();
-    let minimality_prunes = evaluated_candidates
-        .saturating_sub(dedupe_prunes)
-        .saturating_sub(minimal.len());
-    // The bounded bootstrap path already evaluates a complete candidate pool, so
-    // shaping it before exact acceptance can only hide real winners.
+    let mut seen_canonical = BTreeMap::new();
+    let mut deduped = Vec::new();
+    let mut dedupe_pruned_candidates = Vec::new();
+    for candidate in candidates {
+        if let Some(first_seen_candidate_hash) =
+            seen_canonical.get(&candidate.canonical_hash).cloned()
+        {
+            if dedupe_pruned_candidates.len() < MAX_PRUNE_SAMPLES {
+                dedupe_pruned_candidates.push(DedupePruneEvidence {
+                    candidate,
+                    first_seen_candidate_hash,
+                });
+            }
+            continue;
+        }
+        seen_canonical.insert(
+            candidate.canonical_hash.clone(),
+            candidate.candidate_hash.clone(),
+        );
+        deduped.push(candidate);
+    }
+    let dedupe_prunes = evaluated_candidates.saturating_sub(deduped.len());
+    let deduped_len = deduped.len();
+    let mut minimal = Vec::new();
+    let mut minimality_pruned_candidates = Vec::new();
+    for candidate in deduped {
+        let witness = analyze_semantic_minimality(
+            step_index,
+            objective_bar,
+            admissibility,
+            &candidate.telescope,
+            library,
+            &nu_history,
+        );
+        if witness.is_minimal() {
+            minimal.push(candidate);
+        } else if minimality_pruned_candidates.len() < MAX_PRUNE_SAMPLES {
+            minimality_pruned_candidates.push(MinimalityPruneEvidence {
+                candidate: candidate.clone(),
+                admissible_bar_clear_subbundles: witness.admissible_bar_clear_subbundles.len(),
+            });
+        }
+    }
+    let minimality_prunes = deduped_len.saturating_sub(minimal.len());
+    // Exact acceptance still competes over the full semantically minimal pool.
     let retained = minimal;
-    let heuristic_drops = 0;
     if retained.is_empty() {
         bail!("no semantically minimal candidates survived for step {step_index}");
     }
     let acceptance = select_acceptance(objective_bar, &retained)
         .ok_or_else(|| anyhow::anyhow!("no candidate cleared the bar at step {step_index}"))?;
+    let frontier_retention = build_frontier_retention(
+        objective_bar,
+        retention_policy,
+        &retained,
+        retention_runtime,
+    );
+    let heuristic_drops = frontier_retention.dropped_candidates.len();
 
     build_step_result(
         step_index,
         objective_bar,
         admissibility,
+        retention_policy,
+        frontier_retention,
         acceptance,
         evaluated_candidates,
         dedupe_prunes,
-        heuristic_drops + minimality_prunes,
+        minimality_prunes,
+        heuristic_drops,
+        dedupe_pruned_candidates,
+        minimality_pruned_candidates,
         &retained,
     )
 }
@@ -157,10 +275,15 @@ fn build_step_result(
     step_index: u32,
     objective_bar: Rational,
     admissibility: StrictAdmissibility,
+    retention_policy: RetentionPolicy,
+    frontier_retention: FrontierRetentionOutcome,
     acceptance: AcceptanceOutcome,
     evaluated_candidates: usize,
     dedupe_prunes: usize,
+    minimality_prunes: usize,
     heuristic_drops: usize,
+    dedupe_pruned_candidates: Vec<DedupePruneEvidence>,
+    minimality_pruned_candidates: Vec<MinimalityPruneEvidence>,
     retained: &[ExpandedCandidate],
 ) -> Result<AtomicSearchStep> {
     let accepted = retained
@@ -173,19 +296,81 @@ fn build_step_result(
         step_index,
         objective_bar,
         admissibility,
+        retention_policy,
+        frontier_retention,
         telescope: accepted.telescope.clone(),
         accepted,
         retained_candidates: retained.to_vec(),
         near_misses: acceptance.near_misses,
         evaluated_candidates,
         dedupe_prunes,
+        minimality_prunes,
         heuristic_drops,
+        dedupe_pruned_candidates,
+        minimality_pruned_candidates,
     })
+}
+
+fn build_frontier_retention(
+    objective_bar: Rational,
+    retention_policy: RetentionPolicy,
+    retained: &[ExpandedCandidate],
+    retention_runtime: FrontierRuntimeLimits,
+) -> FrontierRetentionOutcome {
+    let hot_count = retained
+        .iter()
+        .filter(|candidate| candidate.rho >= objective_bar)
+        .count();
+    let mut below_bar = retained
+        .iter()
+        .filter(|candidate| candidate.rho < objective_bar)
+        .cloned()
+        .collect::<Vec<_>>();
+    below_bar.sort_by_key(|candidate| {
+        let retention_class = retention_policy.classify(candidate.retention_signals());
+        (
+            retention_class.priority_rank(),
+            objective_bar - candidate.rho,
+            candidate.clause_kappa,
+            std::cmp::Reverse(candidate.nu),
+            candidate.canonical_hash.clone(),
+        )
+    });
+
+    let plan = plan_pressure_cold_retention(
+        below_bar,
+        hot_count,
+        retention_policy,
+        retention_runtime,
+        |candidate| retention_policy.classify(candidate.retention_signals()),
+    );
+
+    FrontierRetentionOutcome {
+        pressure: plan.pressure,
+        resident_cold_candidates: plan
+            .resident
+            .iter()
+            .map(|candidate| candidate.candidate_hash.clone())
+            .collect(),
+        spill_cold_candidates: plan
+            .spill
+            .iter()
+            .map(|candidate| candidate.candidate_hash.clone())
+            .collect(),
+        dropped_candidates: plan
+            .dropped
+            .iter()
+            .map(|candidate| candidate.candidate_hash.clone())
+            .collect(),
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{LIVE_BOOTSTRAP_MAX_STEP, search_bootstrap_prefix, supports_live_atomic_search};
+    use super::{
+        LIVE_BOOTSTRAP_MAX_STEP, search_bootstrap_from_prefix, search_bootstrap_prefix,
+        supports_live_atomic_search,
+    };
     use crate::expand::evaluate_candidate;
     use pen_core::{
         library::{Library, LibraryEntry},
@@ -197,9 +382,7 @@ mod tests {
         minimality::analyze_semantic_minimality,
     };
     use pen_type::{
-        admissibility::{
-            StrictAdmissibility, passes_strict_admissibility, strict_admissibility,
-        },
+        admissibility::{StrictAdmissibility, passes_strict_admissibility, strict_admissibility},
         connectivity::{ConnectivityWitness, analyze_connectivity, passes_connectivity},
     };
 
@@ -228,6 +411,19 @@ mod tests {
         assert_eq!(steps[12].telescope, Telescope::reference(13));
         assert_eq!(steps[13].telescope, Telescope::reference(14));
         assert_eq!(steps[14].telescope, Telescope::reference(15));
+    }
+
+    #[test]
+    fn bootstrap_search_can_continue_from_stored_prefix_telescopes() {
+        let prefix = (1..=4).map(Telescope::reference).collect::<Vec<_>>();
+        let steps = search_bootstrap_from_prefix(&prefix, 6, 2)
+            .expect("bootstrap continuation should succeed");
+
+        assert_eq!(steps.len(), 2);
+        assert_eq!(steps[0].step_index, 5);
+        assert_eq!(steps[0].telescope, Telescope::reference(5));
+        assert_eq!(steps[1].step_index, 6);
+        assert_eq!(steps[1].telescope, Telescope::reference(6));
     }
 
     #[test]
@@ -297,7 +493,12 @@ mod tests {
                 historical_anchor_ref: Some(10),
             }
         );
-        assert!(passes_strict_admissibility(15, &library, &dct, admissibility));
+        assert!(passes_strict_admissibility(
+            15,
+            &library,
+            &dct,
+            admissibility
+        ));
         assert_eq!(
             connectivity,
             ConnectivityWitness {

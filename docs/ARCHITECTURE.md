@@ -1,41 +1,36 @@
 # Architecture
 
-`pen-atomic` is a deterministic strict-only Rust workspace for rediscovering the
-current 15-step PEN genesis sequence from anonymous MBTT structure. The hot path
-is entirely Rust: AST handling, checking, admissibility, enumeration, scoring,
-selection, manifests, checkpoints, telemetry, and CLI reporting. Cubical Agda is
-kept as an export and verification sidecar only.
-
-This document describes the current executable architecture, not the aspirational
-end state. For project status and remaining deliverables, see
+`pen-atomic` is a deterministic strict-only Rust workspace for rediscovering
+the current 15-step PEN genesis sequence from anonymous MBTT structure. This
+document records the current executable architecture, not a superseded
+scaffolding plan. For the remaining closeout item, see
 [`plan_progress.md`](../plan_progress.md).
 
-## Current state
+## Current executable surface
 
-The current supported strict lane is honest and materially useful:
+The repository can currently do all of the following:
 
-- `pen-cli run` performs live atomic search through step 15.
-- `pen-cli resume` regenerates the same strict trajectory deterministically from
-  the run config and writes the same frozen artifact surface.
-- `pen-cli inspect` reads run directories and frozen manifests without mutating
-  them.
-- `pen-cli export-agda` and `xtask export-reference-agda` emit manifest-backed
-  Agda stubs for accepted steps.
-- Debug reporting now shows retained valid candidates, bar comparisons, minimal
-  overshoot acceptance, and human-readable telescope translations.
+- `pen-cli run` performs live atomic strict search through step 15.
+- `pen-cli resume` consumes the latest compatible frontier generation when the
+  frozen compatibility ladder admits it and otherwise falls back deterministically
+  to step resume or step reevaluation.
+- `pen-cli inspect` reads run directories and frontier manifests without
+  mutating them.
+- `pen-cli export-agda` exports accepted run artifacts, and it labels
+  reference-replay fallback exports explicitly when no run directory is present.
+- `xtask export-reference-agda` emits deterministic reference payloads.
+- `scripts/compare_runs.py` emits deterministic text and JSON summaries across
+  cold, rerun, resume, pressure, and reference lanes from stored artifacts.
+- The accepted late-step executable canon is fixed at step 15 / `DCT` with
+  `nu = 103`.
 
-The main incompleteness is below the CLI surface:
-
-- frontier storage is still mostly contract-first rather than fully operational
-- the memory governor is not yet enforcing the frozen pressure model
-- resume compatibility logic exists, but frontier-backed resume is not yet wired
-  into the live CLI path
-- replay still exists as an explicit fallback path for requests outside the
-  currently supported live bootstrap range
+This executable surface is intentionally bounded. The live authoritative lane is
+the current strict 15-step corpus, not a claim that the repo already ships a
+broad open-ended anti-junk frontier engine.
 
 ## Design rules
 
-The current workspace follows a few hard architectural rules:
+The current workspace follows these hard rules:
 
 - strict mode only
 - exact integer and rational comparisons on the hot path
@@ -62,15 +57,12 @@ pen-eval          |
 
 ### `pen-core`
 
-`pen-core` defines the frozen anonymous kernel:
+`pen-core` defines the anonymous kernel:
 
 - MBTT expressions, clauses, and telescopes
 - canonical structural keys and stable hashing inputs
 - exact rational arithmetic
-- library snapshots and capability extraction
-- human-agnostic structural helpers used by the rest of the workspace
-
-This crate is where the repo decides what the search objects actually are.
+- library snapshots and structural capability extraction
 
 ### `pen-type`
 
@@ -80,47 +72,35 @@ This crate is where the repo decides what the search objects actually are.
 - scope and connectivity checks
 - admissibility bands
 - obligation tracking over the active window
-- structural capability and debt summaries
-
-This crate decides whether a candidate is even allowed to compete at a given
-step.
 
 ### `pen-eval`
 
-`pen-eval` owns structural scoring and exact bar math:
+`pen-eval` owns authoritative structural scoring:
 
 - native `nu`
 - exact `rho` and bar computation
 - SCC-based semantic minimality
 - structural trace generation
 
-This crate provides the authoritative scoring path for acceptance.
-
 ### `pen-search`
 
-`pen-search` is the live search orchestrator:
+`pen-search` is the live orchestrator:
 
-- telescope enumeration under admissibility constraints
+- anonymous MBTT enumeration under admissibility constraints
 - canonical dedupe
-- exact deterministic acceptance
-- bounded bootstrap search through step 15
-- resume-compatibility decision logic for future frontier resume
-
-At the moment, the live search path is intentionally bounded and complete for
-the current 15-step strict corpus rather than broad open-ended exploration.
+- exact deterministic acceptance by minimal positive overshoot
+- bounded live bootstrap search through step 15
+- resume-compatibility decisions for frontier and step artifacts
 
 ### `pen-store`
 
-`pen-store` owns frozen artifact contracts and runtime-storage surfaces:
+`pen-store` owns the frozen artifact contracts and bounded frontier persistence:
 
-- run and frontier manifest schemas
-- step checkpoint types
+- run, step, and frontier manifests
 - telemetry layout
-- placeholders and scaffolding for queue, shard, blob, spill, sqlite, and
-  migration machinery
-
-The artifact schema is real and already used by the CLI, even though much of the
-frontier runtime implementation is still incomplete.
+- hot and cold shard persistence
+- dedupe segments, checksum sidecars, cache blobs, and metadata storage
+- governor evaluation and spill metadata for bounded frontier generations
 
 ### `pen-cli`
 
@@ -131,49 +111,45 @@ frontier runtime implementation is still incomplete.
 - `inspect`
 - `export-agda`
 
-It translates search results into run directories, reports, checkpoints,
-telemetry, and human-readable output. It is also where semantic labels and the
-new candidate-level debug presentation are allowed to appear.
+It translates search results into reports, checkpoints, telemetry, and
+human-readable output. Semantic labels appear here, not in the hot path.
 
 ### `pen-agda`
 
-`pen-agda` turns accepted telescopes into proof-facing stubs and verification
-artifacts. It currently provides export and optional verification support, but
-does not participate in search or acceptance.
+`pen-agda` renders accepted telescopes into proof-facing export artifacts. It is
+downstream of accepted Rust artifacts and never participates in acceptance.
 
 ### `pen-accel`
 
-`pen-accel` is optional and subordinate to CPU truth. It contains early
-acceleration scaffolding and must not become the authoritative semantic path.
+`pen-accel` is optional and subordinate to CPU truth. Any acceleration
+scaffolding is outside the authoritative acceptance contract described here.
 
 ## Runtime flow
 
 The current strict run path looks like this:
 
 1. `pen-cli` loads a TOML runtime config and decides the target step.
-2. `pen-cli::report::generate_steps` chooses live atomic bootstrap search when
-   the requested step is within the currently supported range.
+2. For targets within the supported live range, `pen-cli` selects live atomic
+   bootstrap search; beyond that range it uses explicit reference replay.
 3. `pen-search` derives the step bar from accepted history and obtains strict
    admissibility from `pen-type`.
 4. `pen-search` enumerates candidate telescopes for the allowed `kappa` band and
    structural lane.
 5. `pen-type` filters out inadmissible or disconnected candidates.
-6. `pen-eval` computes exact `nu`, `rho`, and semantic minimality for the
-   surviving candidates.
-7. `pen-search` dedupes by canonical key, applies exact deterministic acceptance
-   by minimal positive overshoot, and preserves retained valid candidates for
-   evidence reporting.
-8. `pen-cli` writes run manifests, step checkpoints, step reports, telemetry,
-   and `latest.txt` / `latest.debug.txt`.
-9. Optional export paths turn the accepted steps into Agda modules and an export
+6. `pen-eval` computes exact `nu`, `rho`, and semantic minimality for surviving
+   candidates.
+7. `pen-search` removes canonical duplicates deterministically, accepts the
+   minimal positive overshoot winner, and retains bounded frontier evidence for
+   reporting and resume.
+8. `pen-cli` writes run manifests, step checkpoints, frontier checkpoints, step
+   reports, telemetry, and latest summaries.
+9. Optional export paths turn accepted steps into Agda modules and an export
    manifest.
 
-## Search architecture
+## Search and frontier model
 
-The current live engine is best understood as a bounded exact search loop rather
-than a frontier-heavy general explorer.
-
-For each step:
+The current live engine is a bounded exact strict lane, not a speculative
+template or replay shortcut:
 
 - admissibility defines the exact clause band and structural lane that may open
 - enumeration generates anonymous MBTT telescopes only within that lane
@@ -182,25 +158,13 @@ For each step:
 - semantic minimality rejects candidates with admissible bar-clearing terminal
   SCC subbundles
 - exact acceptance chooses the candidate with minimal positive overshoot, then
-  uses deterministic structural tie-breakers
+  applies deterministic structural tie-breakers
+- retained valid candidates, prune samples, and frontier pressure metadata are
+  persisted for the bounded lane
 
-This is enough to recover the full current strict 15-step corpus. It is not yet
-the final anti-junk or memory-safe frontier engine described in the longer-range
-project plan.
-
-## Reporting architecture
-
-The reporting surface now has two layers:
-
-- standard reports summarize the current accepted step, `nu`, `kappa`, `rho`,
-  bar, and minimal overshoot
-- debug reports expose retained valid candidates, candidate-level bar distance,
-  human-readable telescope translations, imports from earlier steps, and the
-  accepted minimal-overshoot winner
-
-This means the current CLI can explain why a step won within the bounded search
-pool, even though broader frontier evidence and prune-surface reporting are not
-complete yet.
+The bounded frontier runtime is real for this lane: hot and cold shards, dedupe
+segments, checksum sidecars, `frontier-runtime.json`, and `meta.sqlite3` are all
+written and reused by `inspect` and compatible `resume` paths.
 
 ## Artifact model
 
@@ -215,47 +179,64 @@ contains:
 - `reports/latest.debug.txt`
 - `reports/steps/step-XX-summary.json`
 - `checkpoints/steps/step-XX.json`
+- `checkpoints/frontier/step-XX/band-YY/frontier.manifest.json`
+- `checkpoints/frontier/step-XX/band-YY/hot-*.bin`
+- `checkpoints/frontier/step-XX/band-YY/cold-*.bin`
+- `checkpoints/frontier/step-XX/band-YY/dedupe-*.txt`
+- `checkpoints/frontier/step-XX/band-YY/frontier-runtime.json`
+- checksum sidecars for persisted frontier payloads
 
-The `checkpoints/frontier/` directory also exists, but the live CLI does not yet
-persist or resume real frontier state there.
+Step checkpoints are the stable resume unit. Frontier checkpoints are disposable
+speed artifacts that become resumable only when compatibility hashes and the
+record layout match exactly.
 
 ## Resume model
 
 There are two resume layers in the current codebase:
 
-- a real compatibility policy for frontier manifests and step reevaluation
-- the current CLI resume path, which regenerates the target strict trajectory and
-  rewrites the frozen artifact surface
+- a frozen compatibility ladder that chooses frontier resume, step resume, step
+  reevaluation, or migration-required outcomes from stored artifacts
+- a CLI resume path that consumes the latest compatible frontier generation when
+  available and otherwise falls back to stored step artifacts
 
-So the architectural contract for richer resume already exists, but the
-end-to-end frontier-backed runtime is still future work.
+`pen-cli inspect` reads the same frontier manifests, shard files, and cache blob
+surface that `pen-cli resume` uses for exact-match frontier resume.
 
-## Agda boundary
+## Reporting and Agda boundary
 
-Agda remains downstream of accepted Rust artifacts:
+The reporting surface now explains the bounded lane at candidate level:
+
+- standard output summarizes the accepted step, `nu`, `kappa`, `rho`, bar
+  distance, overshoot, and provenance
+- debug output adds retained valid candidates, prune classes, frontier
+  retention, replay-ablation summaries, and pressure-state reporting
+- step 15 explicitly carries the executable canon claim `DCT` at `nu = 103`
+
+Agda remains strictly downstream:
 
 - Rust discovers anonymous candidates
 - Rust decides admissibility and acceptance
 - Rust writes frozen reports and checkpoints
-- Agda receives accepted telescopes for export or verification
+- Agda receives accepted telescopes for export or verification only
 
-This split is intentional. The sidecar can validate or present the result, but
-it cannot steer the hot path.
+## Honesty boundary
 
-## Current honesty boundary
-
-The current repository can honestly claim all of the following:
+The current repository can honestly claim:
 
 - live atomic strict discovery through step 15
-- exact deterministic acceptance over the real candidate pool used by the
-  bounded engine
+- exact deterministic acceptance over the bounded live candidate pool
 - frozen late-step executable canon, including step 15 / `DCT` at `nu = 103`
 - deterministic run artifacts and CLI-level evidence for the current corpus
+- real bounded frontier persistence and frontier-backed deterministic resume
+- deterministic comparison artifacts from stored run directories
+- deterministic Agda export from accepted run artifacts with explicit fallback
+  labeling
 
-It should not yet claim:
+It should not claim:
 
-- full frontier-backed resume
-- finished shard/blob/queue storage
-- implemented memory-governor pressure behavior
-- open-ended anti-junk retention beyond the current bounded structural lanes
-- final proof-facing Agda payload completeness
+- open-ended anti-junk retention beyond the current bounded strict lanes
+- that the live search loop is already a broad frontier-driven explorer under
+  sustained pressure
+- that Agda participates in or proves acceptance truth
+- that optional acceleration scaffolding is part of the authoritative acceptance
+  contract

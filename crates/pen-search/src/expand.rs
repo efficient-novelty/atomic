@@ -9,6 +9,7 @@ use pen_core::telescope::{Telescope, TelescopeClass};
 use pen_eval::bar::{DiscoveryRecord, compute_rho};
 use pen_eval::nu::{NativeNuResult, compute_native_nu};
 use pen_type::check::{CheckError, CheckResult, check_telescope};
+use pen_type::obligations::RetentionSignals;
 use std::collections::BTreeSet;
 use thiserror::Error;
 
@@ -37,6 +38,20 @@ pub struct ExpandedCandidate {
     pub trace: Vec<String>,
     pub shape_fingerprint: String,
     pub support_fingerprint: String,
+}
+
+impl ExpandedCandidate {
+    pub fn retention_signals(&self) -> RetentionSignals {
+        RetentionSignals {
+            telescope_class: self.telescope_class,
+            eliminator_score: self.signals.eliminator_score,
+            former_score: self.signals.former_score,
+            dependent_motive_density: self.signals.dependent_motive_density,
+            library_reference_density: self.signals.library_reference_density,
+            generic_binder_count: self.signals.generic_binder_count,
+            closure_score: self.signals.closure_score,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Error, Eq, PartialEq)]

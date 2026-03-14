@@ -33,9 +33,18 @@ pub fn decide_resume(current: &CurrentCompat, frontier: &FrontierManifestV1) -> 
 
     if same_frontier_compat(current, resume) {
         ResumeDecision::FrontierCheckpoint
-    } else if same_ast_type_eval(current, resume) {
+    } else {
+        decide_step_resume(
+            &current.checkpoint_compat(),
+            &checkpoint_compat_from_resume(&frontier.resume_compatible),
+        )
+    }
+}
+
+pub fn decide_step_resume(current: &CheckpointCompat, stored: &CheckpointCompat) -> ResumeDecision {
+    if same_ast_type_eval_checkpoint(current, stored) {
         ResumeDecision::StepCheckpoint
-    } else if same_ast_and_type(current, resume) {
+    } else if same_ast_and_type_checkpoint(current, stored) {
         ResumeDecision::StepCheckpointReevaluate
     } else {
         ResumeDecision::MigrationRequired
@@ -50,24 +59,33 @@ fn same_frontier_compat(current: &CurrentCompat, resume: &ResumeCompatible) -> b
         && current.record_layout_id == resume.record_layout_id
 }
 
-fn same_ast_type_eval(current: &CurrentCompat, resume: &ResumeCompatible) -> bool {
-    current.ast_schema_hash == resume.ast_schema_hash
-        && current.type_rules_hash == resume.type_rules_hash
-        && current.evaluator_hash == resume.evaluator_hash
+fn same_ast_type_eval_checkpoint(current: &CheckpointCompat, stored: &CheckpointCompat) -> bool {
+    current.ast_schema_hash == stored.ast_schema_hash
+        && current.type_rules_hash == stored.type_rules_hash
+        && current.evaluator_hash == stored.evaluator_hash
 }
 
-fn same_ast_and_type(current: &CurrentCompat, resume: &ResumeCompatible) -> bool {
-    current.ast_schema_hash == resume.ast_schema_hash
-        && current.type_rules_hash == resume.type_rules_hash
+fn same_ast_and_type_checkpoint(current: &CheckpointCompat, stored: &CheckpointCompat) -> bool {
+    current.ast_schema_hash == stored.ast_schema_hash
+        && current.type_rules_hash == stored.type_rules_hash
+}
+
+pub fn checkpoint_compat_from_resume(value: &ResumeCompatible) -> CheckpointCompat {
+    CheckpointCompat {
+        ast_schema_hash: value.ast_schema_hash.clone(),
+        type_rules_hash: value.type_rules_hash.clone(),
+        evaluator_hash: value.evaluator_hash.clone(),
+        search_semantics_hash: value.search_semantics_hash.clone(),
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{CurrentCompat, ResumeDecision, decide_resume};
+    use super::{CurrentCompat, ResumeDecision, decide_resume, decide_step_resume};
     use pen_store::layout::{FRONTIER_RECORD_LAYOUT_ID, SCHEMA_VERSION_V1};
     use pen_store::manifest::{
-        FrontierCounts, FrontierFiles, FrontierManifestV1, FrontierScheduler, MemorySnapshot,
-        ResumeCompatible,
+        CheckpointCompat, FrontierCounts, FrontierFiles, FrontierManifestV1, FrontierScheduler,
+        MemorySnapshot, ResumeCompatible,
     };
 
     fn current() -> CurrentCompat {
@@ -87,7 +105,7 @@ mod tests {
             step_index: 10,
             band_index: 4,
             frontier_epoch: 17,
-            base_step_checkpoint: "../../steps/step-09.cbor.zst".to_owned(),
+            base_step_checkpoint: "../../../steps/step-09.cbor.zst".to_owned(),
             resume_compatible,
             counts: FrontierCounts::default(),
             files: FrontierFiles::default(),
@@ -161,6 +179,42 @@ mod tests {
 
         assert_eq!(
             decide_resume(&current, &frontier),
+            ResumeDecision::MigrationRequired
+        );
+    }
+
+    #[test]
+    fn checkpoint_resume_policy_uses_the_same_ast_type_eval_ladder() {
+        let current = current().checkpoint_compat();
+        let matching = CheckpointCompat {
+            ast_schema_hash: "blake3:ast".to_owned(),
+            type_rules_hash: "blake3:type".to_owned(),
+            evaluator_hash: "blake3:eval".to_owned(),
+            search_semantics_hash: "blake3:search".to_owned(),
+        };
+
+        assert_eq!(
+            decide_step_resume(&current, &matching),
+            ResumeDecision::StepCheckpoint
+        );
+        assert_eq!(
+            decide_step_resume(
+                &current,
+                &CheckpointCompat {
+                    evaluator_hash: "blake3:other-eval".to_owned(),
+                    ..matching.clone()
+                }
+            ),
+            ResumeDecision::StepCheckpointReevaluate
+        );
+        assert_eq!(
+            decide_step_resume(
+                &current,
+                &CheckpointCompat {
+                    ast_schema_hash: "blake3:other-ast".to_owned(),
+                    ..matching
+                }
+            ),
             ResumeDecision::MigrationRequired
         );
     }

@@ -52,8 +52,7 @@ pub fn enumerate_next_clauses(context: EnumerationContext) -> Vec<ClauseRec> {
                     || supports_operator_bundle_clause(expr))
                 && (!context.require_hilbert_functional_clauses
                     || supports_hilbert_functional_clause(expr))
-                && (!context.require_temporal_shell_clauses
-                    || supports_temporal_shell_clause(expr))
+                && (!context.require_temporal_shell_clauses || supports_temporal_shell_clause(expr))
         })
         .map(|expr| ClauseRec::new(primary_role(&expr), expr))
         .collect()
@@ -363,8 +362,12 @@ fn temporal_shell_clause_options(modal_anchor_ref: u32) -> Vec<Vec<ClauseRec>> {
             Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
         ),
         Expr::Pi(
-            Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))))),
-            Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+            Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                Expr::Var(1),
+            ))))),
+            Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                Expr::Var(1),
+            ))))),
         ),
         Expr::Lam(Box::new(Expr::App(
             Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
@@ -2597,7 +2600,9 @@ mod tests {
         assert!(supports_temporal_shell_clause_at_position(
             2,
             &pen_core::expr::Expr::Pi(
-                Box::new(pen_core::expr::Expr::Next(Box::new(pen_core::expr::Expr::Var(1)))),
+                Box::new(pen_core::expr::Expr::Next(Box::new(
+                    pen_core::expr::Expr::Var(1)
+                ))),
                 Box::new(pen_core::expr::Expr::Eventually(Box::new(
                     pen_core::expr::Expr::Var(1),
                 ))),

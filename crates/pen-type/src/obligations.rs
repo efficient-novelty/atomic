@@ -1,4 +1,162 @@
 use pen_core::library::Library;
+use pen_core::telescope::TelescopeClass;
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum RetentionFocus {
+    #[default]
+    OpenBand,
+    Former,
+    Hit,
+    Axiomatic,
+    Modal,
+    Temporal,
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum RetentionClass {
+    RareFocusHead,
+    RareBridgeHead,
+    StructuralSupport,
+    #[default]
+    GenericMacro,
+}
+
+impl RetentionClass {
+    pub const fn priority_rank(self) -> u8 {
+        match self {
+            Self::RareFocusHead => 0,
+            Self::RareBridgeHead => 1,
+            Self::StructuralSupport => 2,
+            Self::GenericMacro => 3,
+        }
+    }
+
+    pub const fn is_rare_head(self) -> bool {
+        matches!(self, Self::RareFocusHead | Self::RareBridgeHead)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub struct RetentionSignals {
+    pub telescope_class: TelescopeClass,
+    pub eliminator_score: u16,
+    pub former_score: u16,
+    pub dependent_motive_density: u16,
+    pub library_reference_density: u16,
+    pub generic_binder_count: u16,
+    pub closure_score: u16,
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct RetentionPolicy {
+    pub focus: RetentionFocus,
+    pub focus_quota: usize,
+    pub bridge_quota: usize,
+    pub support_quota: usize,
+    pub macro_quota: usize,
+    pub cold_limit: usize,
+}
+
+impl RetentionPolicy {
+    pub fn quota_for(self, class: RetentionClass) -> usize {
+        match class {
+            RetentionClass::RareFocusHead => self.focus_quota,
+            RetentionClass::RareBridgeHead => self.bridge_quota,
+            RetentionClass::StructuralSupport => self.support_quota,
+            RetentionClass::GenericMacro => self.macro_quota,
+        }
+    }
+
+    pub fn classify(self, signals: RetentionSignals) -> RetentionClass {
+        if self.matches_focus_head(signals) {
+            return RetentionClass::RareFocusHead;
+        }
+        if self.matches_bridge_head(signals) {
+            return RetentionClass::RareBridgeHead;
+        }
+        if self.looks_structural_support(signals) {
+            return RetentionClass::StructuralSupport;
+        }
+        RetentionClass::GenericMacro
+    }
+
+    fn matches_focus_head(self, signals: RetentionSignals) -> bool {
+        match self.focus {
+            RetentionFocus::OpenBand => false,
+            RetentionFocus::Former => {
+                matches!(
+                    signals.telescope_class,
+                    TelescopeClass::Former | TelescopeClass::Foundation
+                ) || (signals.former_score > 0 && signals.eliminator_score > 0)
+            }
+            RetentionFocus::Hit => {
+                matches!(
+                    signals.telescope_class,
+                    TelescopeClass::Hit | TelescopeClass::Suspension
+                ) || (signals.eliminator_score > 0 && signals.closure_score > 1)
+            }
+            RetentionFocus::Axiomatic => matches!(
+                signals.telescope_class,
+                TelescopeClass::Axiomatic | TelescopeClass::Map
+            ),
+            RetentionFocus::Modal => signals.telescope_class == TelescopeClass::Modal,
+            RetentionFocus::Temporal => signals.telescope_class == TelescopeClass::Synthesis,
+        }
+    }
+
+    fn matches_bridge_head(self, signals: RetentionSignals) -> bool {
+        match self.focus {
+            RetentionFocus::OpenBand => false,
+            RetentionFocus::Former => {
+                signals.telescope_class == TelescopeClass::Hit
+                    || (signals.telescope_class == TelescopeClass::Unknown
+                        && signals.eliminator_score > 0)
+            }
+            RetentionFocus::Hit => matches!(
+                signals.telescope_class,
+                TelescopeClass::Former | TelescopeClass::Foundation
+            ),
+            RetentionFocus::Axiomatic => matches!(
+                signals.telescope_class,
+                TelescopeClass::Modal | TelescopeClass::Former | TelescopeClass::Map
+            ),
+            RetentionFocus::Modal => matches!(
+                signals.telescope_class,
+                TelescopeClass::Axiomatic | TelescopeClass::Map
+            ),
+            RetentionFocus::Temporal => matches!(
+                signals.telescope_class,
+                TelescopeClass::Modal | TelescopeClass::Axiomatic
+            ),
+        }
+    }
+
+    fn looks_structural_support(self, signals: RetentionSignals) -> bool {
+        let structural_weight = u32::from(signals.eliminator_score)
+            + u32::from(signals.former_score)
+            + u32::from(signals.dependent_motive_density)
+            + u32::from(signals.library_reference_density)
+            + u32::from(signals.closure_score);
+        let macro_pressure = u32::from(signals.generic_binder_count);
+
+        structural_weight > macro_pressure
+            || signals.library_reference_density > 0
+            || matches!(
+                signals.telescope_class,
+                TelescopeClass::Foundation
+                    | TelescopeClass::Former
+                    | TelescopeClass::Hit
+                    | TelescopeClass::Suspension
+                    | TelescopeClass::Map
+                    | TelescopeClass::Modal
+                    | TelescopeClass::Axiomatic
+                    | TelescopeClass::Synthesis
+            )
+    }
+}
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct StructuralDebt {
@@ -210,6 +368,74 @@ impl StructuralDebt {
 
         usize::from(self.active_entries.max(2))
     }
+
+    pub fn retention_focus(self) -> RetentionFocus {
+        if self.requires_former_eliminator_package() || self.requires_initial_hit_package() {
+            return RetentionFocus::Former;
+        }
+        if self.requires_truncation_hit_package()
+            || self.requires_higher_hit_package()
+            || self.requires_sphere_lift_package()
+        {
+            return RetentionFocus::Hit;
+        }
+        if self.requires_modal_shell_package() {
+            return RetentionFocus::Modal;
+        }
+        if self.requires_temporal_shell_package() {
+            return RetentionFocus::Temporal;
+        }
+        if self.requires_axiomatic_bundle_package()
+            || self.requires_connection_shell_package()
+            || self.requires_curvature_shell_package()
+            || self.requires_operator_bundle_package()
+            || self.requires_hilbert_functional_package()
+        {
+            return RetentionFocus::Axiomatic;
+        }
+        if self.has_temporal_ops {
+            return RetentionFocus::Temporal;
+        }
+        if self.has_modal_ops {
+            return RetentionFocus::Modal;
+        }
+        if self.max_path_dimension > 0 {
+            return RetentionFocus::Hit;
+        }
+        RetentionFocus::OpenBand
+    }
+
+    pub fn retention_policy(self) -> RetentionPolicy {
+        let focus = self.retention_focus();
+        let quota_cap = self.quota_per_bucket().max(1);
+        let focus_quota = match focus {
+            RetentionFocus::OpenBand => 1,
+            RetentionFocus::Former | RetentionFocus::Hit => 1,
+            RetentionFocus::Axiomatic | RetentionFocus::Modal | RetentionFocus::Temporal => 2,
+        }
+        .min(quota_cap);
+        let bridge_quota = match focus {
+            RetentionFocus::OpenBand => 0,
+            RetentionFocus::Former | RetentionFocus::Hit | RetentionFocus::Modal => 1,
+            RetentionFocus::Axiomatic | RetentionFocus::Temporal => 2,
+        }
+        .min(quota_cap);
+        let support_quota = usize::from(self.active_entries >= 2).min(quota_cap);
+        let macro_quota = usize::from(matches!(focus, RetentionFocus::OpenBand)).min(quota_cap);
+        let cold_limit = match focus {
+            RetentionFocus::OpenBand | RetentionFocus::Former | RetentionFocus::Hit => 4,
+            RetentionFocus::Axiomatic | RetentionFocus::Modal | RetentionFocus::Temporal => 6,
+        };
+
+        RetentionPolicy {
+            focus,
+            focus_quota,
+            bridge_quota,
+            support_quota,
+            macro_quota,
+            cold_limit,
+        }
+    }
 }
 
 pub fn summarize_structural_debt(library: &Library, window_depth: u16) -> StructuralDebt {
@@ -272,9 +498,12 @@ pub fn summarize_structural_debt(library: &Library, window_depth: u16) -> Struct
 
 #[cfg(test)]
 mod tests {
-    use super::{StructuralDebt, summarize_structural_debt};
+    use super::{
+        RetentionClass, RetentionFocus, RetentionPolicy, RetentionSignals, StructuralDebt,
+        summarize_structural_debt,
+    };
     use pen_core::library::{Library, LibraryEntry};
-    use pen_core::telescope::Telescope;
+    use pen_core::telescope::{Telescope, TelescopeClass};
 
     #[test]
     fn debt_summary_tracks_active_window_capabilities() {
@@ -548,5 +777,49 @@ mod tests {
         assert_eq!(debt.hilbert_shell_entries, 1);
         assert_eq!(debt.temporal_shell_entries, 1);
         assert!(!debt.requires_temporal_shell_package());
+    }
+
+    #[test]
+    fn retention_policy_tracks_the_active_obligation_focus() {
+        let mut library: Library = Vec::new();
+        for step in 1..=14 {
+            let telescope = Telescope::reference(step);
+            let entry = LibraryEntry::from_telescope(&telescope, &library);
+            library.push(entry);
+        }
+
+        let debt = summarize_structural_debt(&library, 2);
+        let policy = debt.retention_policy();
+
+        assert_eq!(policy.focus, RetentionFocus::Temporal);
+        assert_eq!(policy.focus_quota, 2);
+        assert_eq!(policy.bridge_quota, 2);
+        assert_eq!(policy.cold_limit, 6);
+    }
+
+    #[test]
+    fn retention_policy_demotes_generic_macro_pressure() {
+        let policy = RetentionPolicy {
+            focus: RetentionFocus::Axiomatic,
+            focus_quota: 2,
+            bridge_quota: 1,
+            support_quota: 1,
+            macro_quota: 0,
+            cold_limit: 6,
+        };
+        let macro_like = RetentionSignals {
+            telescope_class: TelescopeClass::Unknown,
+            generic_binder_count: 4,
+            ..RetentionSignals::default()
+        };
+        let focused = RetentionSignals {
+            telescope_class: TelescopeClass::Axiomatic,
+            generic_binder_count: 4,
+            library_reference_density: 2,
+            ..RetentionSignals::default()
+        };
+
+        assert_eq!(policy.classify(macro_like), RetentionClass::GenericMacro);
+        assert_eq!(policy.classify(focused), RetentionClass::RareFocusHead);
     }
 }

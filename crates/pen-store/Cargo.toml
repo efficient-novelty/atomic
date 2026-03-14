@@ -8,7 +8,9 @@ rust-version.workspace = true
 [dependencies]
 anyhow.workspace = true
 pen-core = { path = "../pen-core" }
+rusqlite = { version = "0.37.0", features = ["bundled"] }
 schemars.workspace = true
 serde.workspace = true
 serde_json.workspace = true
+sha2.workspace = true
 thiserror.workspace = true

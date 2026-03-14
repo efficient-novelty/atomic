@@ -1,9 +1,14 @@
 use crate::cli::InspectArgs;
 use crate::cmd_run::current_search_compat;
-use crate::report::{StepReport, load_step_reports, render_debug_report, render_standard_report};
+use crate::report::{
+    LateStepClaimStatus, StepReport, load_step_reports, render_debug_report,
+    render_replay_ablation, render_standard_report, summarize_prune_reports,
+};
 use anyhow::{Context, Result, bail};
 use pen_search::resume::decide_resume;
+use pen_store::frontier::read_frontier_manifest;
 use pen_store::manifest::{FrontierManifestV1, RunManifestV1};
+use pen_store::spill::read_frontier_cache_blob;
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -26,31 +31,117 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
     {
         let text = fs::read_to_string(&path).with_context(|| format!("read {}", path.display()))?;
         let step: StepReport = serde_json::from_str(&text).context("parse step summary")?;
+        let late_step_claim = if step.canon_evidence.late_step_claim.status
+            == LateStepClaimStatus::NotApplicable
+        {
+            String::new()
+        } else {
+            format!(
+                "\nlate_step_claim: {} step {} {} nu={} matches_current_acceptance={}",
+                match step.canon_evidence.late_step_claim.status {
+                    LateStepClaimStatus::NotApplicable => "not_applicable",
+                    LateStepClaimStatus::ExecutableCanon => "executable_canon",
+                    LateStepClaimStatus::HistoricalProvenanceOnly => "historical_provenance_only",
+                },
+                step.canon_evidence.late_step_claim.adopted_step,
+                step.canon_evidence.late_step_claim.adopted_label,
+                step.canon_evidence.late_step_claim.adopted_nu,
+                step.canon_evidence.late_step_claim.matches_accepted
+            )
+        };
+        let frontier_details = if step.frontier_pressure
+            == pen_search::diversify::FrontierPressure::default()
+        {
+            String::new()
+        } else {
+            format!(
+                "\nretention_focus: {}\nfrontier_pressure: state={} action={} requested_cold={} retained_cold={} resident_cold={} spill_backed={} dropped={}",
+                match step.frontier_policy.focus {
+                    pen_type::obligations::RetentionFocus::OpenBand => "open_band",
+                    pen_type::obligations::RetentionFocus::Former => "former",
+                    pen_type::obligations::RetentionFocus::Hit => "hit",
+                    pen_type::obligations::RetentionFocus::Axiomatic => "axiomatic",
+                    pen_type::obligations::RetentionFocus::Modal => "modal",
+                    pen_type::obligations::RetentionFocus::Temporal => "temporal",
+                },
+                step.frontier_pressure.governor_state.as_str(),
+                step.frontier_pressure.pressure_action.as_str(),
+                step.frontier_pressure.requested_cold_limit,
+                step.frontier_pressure.retained_cold_limit,
+                step.frontier_pressure.resident_cold_limit,
+                step.frontier_pressure.spill_backed_cold_records,
+                step.frontier_pressure.dropped_cold_records
+            )
+        };
+        let replay_ablation = render_replay_ablation(&step.replay_ablation)
+            .map(|ablation| format!("\nreplay_ablation: {ablation}"))
+            .unwrap_or_default();
+        let prune_summary = if step.prune_reports.is_empty() {
+            String::new()
+        } else {
+            format!(
+                "\nprune_samples: {}",
+                summarize_prune_reports(&step.prune_reports)
+            )
+        };
         return Ok(format!(
-            "step {} ({})\nnu: {}\nkappa: {}\nrho: {}\nbar: {}\ncandidate: {}\ncanonical: {}",
+            "step {} ({})\nnu: {}\nkappa: {}\ncharged_kappa: {}\nrho: {}\nbar: {}\nbar_distance: {}\ncandidate: {}\ncanonical: {}{}{}{}{}",
             step.step_index,
             step.label,
             step.accepted.nu,
             step.accepted.clause_kappa,
+            step.canon_evidence.charged_clause_kappa,
             step.accepted.rho,
             step.objective_bar,
+            step.canon_evidence.bar_distance,
             step.accepted.candidate_hash,
-            step.accepted.canonical_hash
+            step.accepted.canonical_hash,
+            late_step_claim,
+            replay_ablation,
+            prune_summary,
+            frontier_details,
         ));
     }
     if path.file_name().and_then(|name| name.to_str()) == Some("frontier.manifest.json") {
-        let text = fs::read_to_string(&path).with_context(|| format!("read {}", path.display()))?;
-        let frontier: FrontierManifestV1 =
-            serde_json::from_str(&text).context("parse frontier manifest")?;
+        let frontier: FrontierManifestV1 = read_frontier_manifest(&path)?;
         let decision = decide_resume(&current_search_compat(), &frontier);
+        let frontier_dir = path
+            .parent()
+            .context("frontier manifest must have a parent directory")?;
+        let cache_blob = read_frontier_cache_blob(frontier_dir, &frontier.files.cache_blob)?;
+        let cache_lines = cache_blob
+            .map(|cache| {
+                format!(
+                    "\nfrontier_epoch: {}\nworker_count: {}\npriority_heads: {:?}\nspill_generation: {}\ngovernor_state: {}\npressure_action: {}\nresident_cold_records: {}\nspilled_cold_records: {}\ncache_blob: {}",
+                    frontier.frontier_epoch,
+                    frontier.scheduler.worker_count,
+                    frontier.scheduler.priority_heads,
+                    frontier.scheduler.spill_generation,
+                    cache.governor_state.as_str(),
+                    cache.pressure_action.as_str(),
+                    cache.resident_cold_records,
+                    cache.spilled_cold_records,
+                    frontier.files.cache_blob
+                )
+            })
+            .unwrap_or_else(|| {
+                format!(
+                    "\nfrontier_epoch: {}\nworker_count: {}\npriority_heads: {:?}\nspill_generation: {}",
+                    frontier.frontier_epoch,
+                    frontier.scheduler.worker_count,
+                    frontier.scheduler.priority_heads,
+                    frontier.scheduler.spill_generation
+                )
+            });
         return Ok(format!(
-            "frontier step {} band {}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}",
+            "frontier step {} band {}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
             frontier.step_index,
             frontier.band_index,
             frontier.counts.hot_states,
             frontier.counts.cold_states,
             frontier.counts.dedupe_keys,
-            decision
+            decision,
+            cache_lines
         ));
     }
 
