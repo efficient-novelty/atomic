@@ -1,7 +1,7 @@
 use crate::accept::{AcceptanceOutcome, select_acceptance};
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{EnumerationContext, enumerate_telescopes};
-use crate::expand::{ExpandedCandidate, evaluate_candidate};
+use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use anyhow::{Result, bail};
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::rational::Rational;
@@ -12,7 +12,9 @@ use pen_store::manifest::NearMiss;
 use pen_type::admissibility::{
     StrictAdmissibility, passes_strict_admissibility, strict_admissibility,
 };
+use pen_type::check::{CheckResult, check_telescope};
 use pen_type::obligations::{RetentionPolicy, summarize_structural_debt};
+use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
 pub const LIVE_BOOTSTRAP_MAX_STEP: u32 = 15;
@@ -38,6 +40,67 @@ pub struct MinimalityPruneEvidence {
     pub admissible_bar_clear_subbundles: usize,
 }
 
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct CandidateScoreDistribution {
+    pub candidate_count: usize,
+    pub clears_bar: usize,
+    pub below_bar: usize,
+    pub clause_kappa_counts: BTreeMap<u16, usize>,
+    pub nu_summary: IntegerDistributionSummary,
+    pub rho_summary: RationalDistributionSummary,
+}
+
+impl Default for CandidateScoreDistribution {
+    fn default() -> Self {
+        Self {
+            candidate_count: 0,
+            clears_bar: 0,
+            below_bar: 0,
+            clause_kappa_counts: BTreeMap::new(),
+            nu_summary: IntegerDistributionSummary::default(),
+            rho_summary: RationalDistributionSummary::default(),
+        }
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct IntegerDistributionSummary {
+    pub min: u16,
+    pub median: u16,
+    pub max: u16,
+    pub average: Rational,
+}
+
+impl Default for IntegerDistributionSummary {
+    fn default() -> Self {
+        Self {
+            min: 0,
+            median: 0,
+            max: 0,
+            average: Rational::zero(),
+        }
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct RationalDistributionSummary {
+    pub min: Rational,
+    pub median: Rational,
+    pub max: Rational,
+    pub average: Rational,
+}
+
+impl Default for RationalDistributionSummary {
+    fn default() -> Self {
+        Self {
+            min: Rational::zero(),
+            median: Rational::zero(),
+            max: Rational::zero(),
+            average: Rational::zero(),
+        }
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AtomicSearchStep {
     pub step_index: u32,
@@ -49,7 +112,15 @@ pub struct AtomicSearchStep {
     pub accepted: ExpandedCandidate,
     pub retained_candidates: Vec<ExpandedCandidate>,
     pub near_misses: Vec<NearMiss>,
+    pub enumerated_candidates: usize,
+    pub well_formed_candidates: usize,
+    pub malformed_rejections: usize,
+    pub malformed_rejection_reasons: BTreeMap<String, usize>,
+    pub admissibility_rejections: usize,
     pub evaluated_candidates: usize,
+    pub canonical_candidates: usize,
+    pub semantically_minimal_candidates: usize,
+    pub scored_candidate_distribution: CandidateScoreDistribution,
     pub dedupe_prunes: usize,
     pub minimality_prunes: usize,
     pub heuristic_drops: usize,
@@ -147,6 +218,11 @@ fn search_next_step(
     let retention_policy = structural_debt.retention_policy();
     let objective_bar = compute_bar(window_depth as usize, step_index, history).bar;
     let mut candidates = Vec::new();
+    let mut enumerated_candidates = 0usize;
+    let mut well_formed_candidates = 0usize;
+    let mut malformed_rejections = 0usize;
+    let mut malformed_rejection_reasons = BTreeMap::new();
+    let mut admissibility_rejections = 0usize;
     let nu_history = history
         .iter()
         .map(|record| (record.step_index, record.nu))
@@ -180,12 +256,26 @@ fn search_next_step(
             },
             clause_kappa,
         );
+        enumerated_candidates += telescopes.len();
 
         for telescope in telescopes {
+            match check_telescope(library, &telescope) {
+                CheckResult::Ok => {
+                    well_formed_candidates += 1;
+                }
+                CheckResult::Err(error) => {
+                    malformed_rejections += 1;
+                    *malformed_rejection_reasons
+                        .entry(error.kind_label().to_owned())
+                        .or_insert(0) += 1;
+                    continue;
+                }
+            }
             if !passes_strict_admissibility(step_index, library, &telescope, admissibility) {
+                admissibility_rejections += 1;
                 continue;
             }
-            let candidate = evaluate_candidate(library, history, telescope)?;
+            let candidate = evaluate_checked_candidate(library, history, telescope)?;
             candidates.push(candidate);
         }
     }
@@ -194,6 +284,7 @@ fn search_next_step(
         bail!("no atomic candidates were generated for step {step_index}");
     }
     let evaluated_candidates = candidates.len();
+    let scored_candidate_distribution = candidate_score_distribution(&candidates, objective_bar);
 
     let mut seen_canonical = BTreeMap::new();
     let mut deduped = Vec::new();
@@ -218,6 +309,7 @@ fn search_next_step(
     }
     let dedupe_prunes = evaluated_candidates.saturating_sub(deduped.len());
     let deduped_len = deduped.len();
+    let canonical_candidates = deduped_len;
     let mut minimal = Vec::new();
     let mut minimality_pruned_candidates = Vec::new();
     for candidate in deduped {
@@ -241,6 +333,7 @@ fn search_next_step(
     let minimality_prunes = deduped_len.saturating_sub(minimal.len());
     // Exact acceptance still competes over the full semantically minimal pool.
     let retained = minimal;
+    let semantically_minimal_candidates = retained.len();
     if retained.is_empty() {
         bail!("no semantically minimal candidates survived for step {step_index}");
     }
@@ -261,7 +354,15 @@ fn search_next_step(
         retention_policy,
         frontier_retention,
         acceptance,
+        enumerated_candidates,
+        well_formed_candidates,
+        malformed_rejections,
+        malformed_rejection_reasons,
+        admissibility_rejections,
         evaluated_candidates,
+        canonical_candidates,
+        semantically_minimal_candidates,
+        scored_candidate_distribution,
         dedupe_prunes,
         minimality_prunes,
         heuristic_drops,
@@ -278,7 +379,15 @@ fn build_step_result(
     retention_policy: RetentionPolicy,
     frontier_retention: FrontierRetentionOutcome,
     acceptance: AcceptanceOutcome,
+    enumerated_candidates: usize,
+    well_formed_candidates: usize,
+    malformed_rejections: usize,
+    malformed_rejection_reasons: BTreeMap<String, usize>,
+    admissibility_rejections: usize,
     evaluated_candidates: usize,
+    canonical_candidates: usize,
+    semantically_minimal_candidates: usize,
+    scored_candidate_distribution: CandidateScoreDistribution,
     dedupe_prunes: usize,
     minimality_prunes: usize,
     heuristic_drops: usize,
@@ -302,7 +411,15 @@ fn build_step_result(
         accepted,
         retained_candidates: retained.to_vec(),
         near_misses: acceptance.near_misses,
+        enumerated_candidates,
+        well_formed_candidates,
+        malformed_rejections,
+        malformed_rejection_reasons,
+        admissibility_rejections,
         evaluated_candidates,
+        canonical_candidates,
+        semantically_minimal_candidates,
+        scored_candidate_distribution,
         dedupe_prunes,
         minimality_prunes,
         heuristic_drops,
@@ -362,6 +479,64 @@ fn build_frontier_retention(
             .iter()
             .map(|candidate| candidate.candidate_hash.clone())
             .collect(),
+    }
+}
+
+fn candidate_score_distribution(
+    candidates: &[ExpandedCandidate],
+    objective_bar: Rational,
+) -> CandidateScoreDistribution {
+    if candidates.is_empty() {
+        return CandidateScoreDistribution::default();
+    }
+
+    let mut clause_kappa_counts = BTreeMap::new();
+    let mut nu_values = Vec::with_capacity(candidates.len());
+    let mut rho_values = Vec::with_capacity(candidates.len());
+    let mut nu_sum = 0_i64;
+    let mut rho_sum = Rational::zero();
+    let mut clears_bar = 0usize;
+
+    for candidate in candidates {
+        *clause_kappa_counts
+            .entry(candidate.clause_kappa)
+            .or_insert(0) += 1;
+        nu_values.push(candidate.nu);
+        rho_values.push(candidate.rho);
+        nu_sum += i64::from(candidate.nu);
+        rho_sum = rho_sum + candidate.rho;
+        if candidate.rho >= objective_bar {
+            clears_bar += 1;
+        }
+    }
+
+    nu_values.sort_unstable();
+    rho_values.sort();
+    let candidate_count = candidates.len();
+
+    CandidateScoreDistribution {
+        candidate_count,
+        clears_bar,
+        below_bar: candidate_count.saturating_sub(clears_bar),
+        clause_kappa_counts,
+        nu_summary: IntegerDistributionSummary {
+            min: *nu_values.first().expect("candidate count checked above"),
+            median: nu_values[candidate_count / 2],
+            max: *nu_values.last().expect("candidate count checked above"),
+            average: Rational::new(
+                nu_sum,
+                i64::try_from(candidate_count).expect("candidate count exceeded i64"),
+            ),
+        },
+        rho_summary: RationalDistributionSummary {
+            min: *rho_values.first().expect("candidate count checked above"),
+            median: rho_values[candidate_count / 2],
+            max: *rho_values.last().expect("candidate count checked above"),
+            average: rho_sum
+                / Rational::from_integer(
+                    i64::try_from(candidate_count).expect("candidate count exceeded i64"),
+                ),
+        },
     }
 }
 

@@ -83,6 +83,14 @@ pub fn evaluate_candidate(
         CheckResult::Err(error) => return Err(ExpansionError::Check(error)),
     }
 
+    evaluate_checked_candidate(library, history, telescope)
+}
+
+pub fn evaluate_checked_candidate(
+    library: &Library,
+    history: &[DiscoveryRecord],
+    telescope: Telescope,
+) -> Result<ExpandedCandidate, ExpansionError> {
     let native = compute_native_nu(
         &telescope,
         library,

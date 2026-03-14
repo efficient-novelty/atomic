@@ -6,9 +6,9 @@ use pen_core::telescope::{Telescope, TelescopeClass};
 use pen_eval::bar::{DiscoveryRecord, compute_bar};
 use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
 use pen_search::engine::{
-    AtomicSearchStep, DedupePruneEvidence, FrontierRetentionOutcome, MinimalityPruneEvidence,
-    search_bootstrap_from_prefix_with_runtime, search_bootstrap_prefix_with_runtime,
-    supports_live_atomic_search,
+    AtomicSearchStep, CandidateScoreDistribution, DedupePruneEvidence,
+    FrontierRetentionOutcome, MinimalityPruneEvidence, search_bootstrap_from_prefix_with_runtime,
+    search_bootstrap_prefix_with_runtime, supports_live_atomic_search,
 };
 use pen_search::expand::evaluate_candidate;
 use pen_store::manifest::{AcceptedCandidate, NearMiss};
@@ -48,7 +48,15 @@ pub struct StepReport {
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 pub struct StepSearchStats {
+    pub enumerated_candidates: usize,
+    pub well_formed_candidates: usize,
+    pub malformed_rejections: usize,
+    #[serde(default)]
+    pub malformed_rejection_reasons: BTreeMap<String, usize>,
+    pub admissibility_rejections: usize,
     pub evaluated_candidates: usize,
+    pub canonical_candidates: usize,
+    pub semantically_minimal_candidates: usize,
     pub dedupe_prunes: usize,
     pub minimality_prunes: usize,
     pub heuristic_drops: usize,
@@ -58,6 +66,8 @@ pub struct StepSearchStats {
     pub frontier_resident_cold_states: usize,
     pub frontier_spill_states: usize,
     pub frontier_drops: usize,
+    #[serde(default)]
+    pub scored_candidate_distribution: CandidateScoreDistribution,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -467,7 +477,14 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
             trace: evaluated.trace.clone(),
             near_misses: Vec::new(),
             search_stats: StepSearchStats {
+                enumerated_candidates: 1,
+                well_formed_candidates: 1,
+                malformed_rejections: 0,
+                malformed_rejection_reasons: BTreeMap::new(),
+                admissibility_rejections: 0,
                 evaluated_candidates: 1,
+                canonical_candidates: 1,
+                semantically_minimal_candidates: 1,
                 dedupe_prunes: 0,
                 minimality_prunes: 0,
                 heuristic_drops: 0,
@@ -477,6 +494,7 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 frontier_resident_cold_states: 0,
                 frontier_spill_states: 0,
                 frontier_drops: 0,
+                scored_candidate_distribution: single_candidate_distribution(&evaluated, objective_bar),
             },
             candidate_reports: vec![candidate_report(
                 objective_bar,
@@ -659,6 +677,48 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
             step.search_stats.frontier_drops
         ));
         lines.push(format!(
+            "  candidate funnel: enumerated={} well_formed={} malformed={} admissibility_rejected={} scored={} canonical={} semantically_minimal={} frontier_kept={} frontier_dropped={}",
+            step.search_stats.enumerated_candidates,
+            step.search_stats.well_formed_candidates,
+            step.search_stats.malformed_rejections,
+            step.search_stats.admissibility_rejections,
+            step.search_stats.evaluated_candidates,
+            step.search_stats.canonical_candidates,
+            step.search_stats.semantically_minimal_candidates,
+            step.search_stats.frontier_hot_states + step.search_stats.frontier_cold_states,
+            step.search_stats.frontier_drops
+        ));
+        if !step.search_stats.malformed_rejection_reasons.is_empty() {
+            lines.push(format!(
+                "  malformed rejects: {}",
+                summarize_named_counts(&step.search_stats.malformed_rejection_reasons)
+            ));
+        }
+        if step.search_stats.scored_candidate_distribution.candidate_count > 0 {
+            lines.push(format!(
+                "  scored candidates: clears_bar={} below_bar={} clause_kappa={}",
+                step.search_stats.scored_candidate_distribution.clears_bar,
+                step.search_stats.scored_candidate_distribution.below_bar,
+                summarize_u16_counts(
+                    &step.search_stats.scored_candidate_distribution.clause_kappa_counts
+                )
+            ));
+            lines.push(format!(
+                "  scored nu summary: min={} median={} max={} avg={}",
+                step.search_stats.scored_candidate_distribution.nu_summary.min,
+                step.search_stats.scored_candidate_distribution.nu_summary.median,
+                step.search_stats.scored_candidate_distribution.nu_summary.max,
+                step.search_stats.scored_candidate_distribution.nu_summary.average
+            ));
+            lines.push(format!(
+                "  scored rho summary: min={} median={} max={} avg={}",
+                step.search_stats.scored_candidate_distribution.rho_summary.min,
+                step.search_stats.scored_candidate_distribution.rho_summary.median,
+                step.search_stats.scored_candidate_distribution.rho_summary.max,
+                step.search_stats.scored_candidate_distribution.rho_summary.average
+            ));
+        }
+        lines.push(format!(
             "  retention policy: focus={} quotas(focus={}, bridge={}, support={}, macro={}) cold_limit={}",
             retention_focus_label(step.frontier_policy.focus),
             step.frontier_policy.focus_quota,
@@ -824,7 +884,14 @@ fn step_to_report_with_provenance(
         trace: step.accepted.trace,
         near_misses: step.near_misses,
         search_stats: StepSearchStats {
+            enumerated_candidates: step.enumerated_candidates,
+            well_formed_candidates: step.well_formed_candidates,
+            malformed_rejections: step.malformed_rejections,
+            malformed_rejection_reasons: step.malformed_rejection_reasons,
+            admissibility_rejections: step.admissibility_rejections,
             evaluated_candidates: step.evaluated_candidates,
+            canonical_candidates: step.canonical_candidates,
+            semantically_minimal_candidates: step.semantically_minimal_candidates,
             dedupe_prunes: step.dedupe_prunes,
             minimality_prunes: step.minimality_prunes,
             heuristic_drops: step.heuristic_drops,
@@ -834,6 +901,7 @@ fn step_to_report_with_provenance(
             frontier_resident_cold_states: frontier_stats.frontier_resident_cold_states,
             frontier_spill_states: frontier_stats.frontier_spill_states,
             frontier_drops: frontier_stats.frontier_drops,
+            scored_candidate_distribution: step.scored_candidate_distribution,
         },
         candidate_reports,
         prune_reports,
@@ -1022,6 +1090,32 @@ fn candidate_status_heading(status: CandidateStatus, distance_to_bar: Rational) 
     }
 }
 
+fn single_candidate_distribution(
+    candidate: &pen_search::expand::ExpandedCandidate,
+    objective_bar: Rational,
+) -> CandidateScoreDistribution {
+    let clears_bar = usize::from(candidate.rho >= objective_bar);
+    let below_bar = 1usize.saturating_sub(clears_bar);
+    CandidateScoreDistribution {
+        candidate_count: 1,
+        clears_bar,
+        below_bar,
+        clause_kappa_counts: BTreeMap::from([(candidate.clause_kappa, 1usize)]),
+        nu_summary: pen_search::engine::IntegerDistributionSummary {
+            min: candidate.nu,
+            median: candidate.nu,
+            max: candidate.nu,
+            average: Rational::from_integer(i64::from(candidate.nu)),
+        },
+        rho_summary: pen_search::engine::RationalDistributionSummary {
+            min: candidate.rho,
+            median: candidate.rho,
+            max: candidate.rho,
+            average: candidate.rho,
+        },
+    }
+}
+
 fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Result<Vec<StepReport>> {
     let mut library: Library = Vec::new();
     let mut history: Vec<DiscoveryRecord> = Vec::new();
@@ -1053,7 +1147,14 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
             trace: evaluated.trace.clone(),
             near_misses: Vec::new(),
             search_stats: StepSearchStats {
+                enumerated_candidates: 1,
+                well_formed_candidates: 1,
+                malformed_rejections: 0,
+                malformed_rejection_reasons: BTreeMap::new(),
+                admissibility_rejections: 0,
                 evaluated_candidates: 1,
+                canonical_candidates: 1,
+                semantically_minimal_candidates: 1,
                 dedupe_prunes: 0,
                 minimality_prunes: 0,
                 heuristic_drops: 0,
@@ -1063,6 +1164,7 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 frontier_resident_cold_states: 0,
                 frontier_spill_states: 0,
                 frontier_drops: 0,
+                scored_candidate_distribution: single_candidate_distribution(&evaluated, objective_bar),
             },
             candidate_reports: vec![candidate_report(
                 objective_bar,
@@ -1364,6 +1466,22 @@ fn summarize_replay_ablation(steps: &[StepReport]) -> String {
         .join(", ")
 }
 
+fn summarize_named_counts(counts: &BTreeMap<String, usize>) -> String {
+    counts
+        .iter()
+        .map(|(label, count)| format!("{label}={count}"))
+        .collect::<Vec<_>>()
+        .join(", ")
+}
+
+fn summarize_u16_counts(counts: &BTreeMap<u16, usize>) -> String {
+    counts
+        .iter()
+        .map(|(label, count)| format!("{label}:{count}"))
+        .collect::<Vec<_>>()
+        .join(", ")
+}
+
 fn frontier_retention_delta(step: &StepReport) -> i64 {
     let kept = step.search_stats.frontier_hot_states + step.search_stats.frontier_cold_states;
     let dropped = step.search_stats.frontier_drops;
@@ -1537,14 +1655,28 @@ mod tests {
     fn live_search_reports_candidate_breakdowns() {
         let steps = search_atomic_bootstrap_steps(4, 2).expect("bootstrap search should succeed");
         let debug = render_debug_report("run-1", &steps);
+        let step = &steps[3];
 
         assert!(
-            steps[3]
+            step
                 .candidate_reports
                 .iter()
                 .any(|candidate| candidate.status == CandidateStatus::AcceptedMinimalOvershoot)
         );
+        assert_eq!(
+            step.search_stats.enumerated_candidates,
+            step.search_stats.well_formed_candidates + step.search_stats.malformed_rejections
+        );
+        assert!(step.search_stats.well_formed_candidates >= step.search_stats.evaluated_candidates);
+        assert_eq!(
+            step.search_stats.scored_candidate_distribution.candidate_count,
+            step.search_stats.evaluated_candidates
+        );
         assert!(debug.contains("retained valid candidates:"));
+        assert!(debug.contains("candidate funnel:"));
+        assert!(debug.contains("scored candidates:"));
+        assert!(debug.contains("scored nu summary:"));
+        assert!(debug.contains("scored rho summary:"));
         assert!(debug.contains("class: Former"));
         assert!(debug.contains("c01 [introduction]"));
         assert!(debug.contains("fun x1 ->"));

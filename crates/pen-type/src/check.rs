@@ -24,6 +24,18 @@ pub enum CheckError {
     BareUnivAsArgument,
 }
 
+impl CheckError {
+    pub const fn kind_label(&self) -> &'static str {
+        match self {
+            Self::LibRefOutOfBounds { .. } => "lib_ref_out_of_bounds",
+            Self::VarRefOutOfBounds { .. } => "var_ref_out_of_bounds",
+            Self::AmbientContextTooLarge { .. } => "ambient_context_too_large",
+            Self::EmptyTelescope => "empty_telescope",
+            Self::BareUnivAsArgument => "bare_univ_as_argument",
+        }
+    }
+}
+
 pub fn check_telescope(library: &Library, telescope: &Telescope) -> CheckResult {
     if telescope.clauses.is_empty() {
         return CheckResult::Err(CheckError::EmptyTelescope);
