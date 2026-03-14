@@ -10,7 +10,7 @@ Complete the full `pen-atomic` mission described in `overall_plan.md` and
 - replace the current deterministic reference replay with a genuine atomic MBTT search engine
 - finish the real checkpoint, frontier, storage, and memory-governor machinery
 - demonstrate honest 15-step atomic recovery under the frozen strict semantics
-- close the remaining late-`nu` and Agda bridge-contract gaps
+- preserve the resolved late-`nu` claim boundary and close the remaining Agda bridge-contract gaps
 
 This file now tracks the remaining deliverables to reach that mission-complete state.
 
@@ -22,33 +22,33 @@ The workspace bootstrap is complete:
 - `pen-core`, `pen-type`, `pen-eval`, and the deterministic `pen-search` scaffold compile and test
 - `pen-cli` writes real run manifests, step checkpoints, reports, and telemetry
 - `pen-agda` exports manifest-backed Agda stubs with optional verification logs
-- top-level integration tests cover replay, resume, inspect, and Agda export
+- top-level integration tests cover live atomic bootstrap, determinism, resume/inspect, and Agda export
 
 What is not complete yet:
 
-- `pen-cli run` and `pen-cli resume` still replay the frozen reference telescopes outside the supported live bootstrap range
-- the atomic search loop is not yet the engine that discovers steps from primitives
+- `pen-cli run` and `pen-cli resume` no longer need replay for the current 15-step strict corpus, but explicit fallback behavior outside that corpus is still present
+- the atomic search loop now discovers the current 15-step strict corpus from primitives, but the anti-junk, storage, and pressure-governor work is still unfinished
 - most of the runtime storage subsystem is still contract-first rather than fully implemented
-- the repo has not yet produced an honest 15-step atomic recovery result
-- the late-step `nu` and Agda payload contracts are still below the final target
+- the late-step `nu` claim boundary is now resolved in favor of the live structural totals, especially at step 15 where the executable artifact freezes `DCT` at `nu = 103`
+- the Agda payload contracts are still below the final target
 
 ## Deliverables
 
 | ID | Deliverable | Status | Done when | Notes |
 | --- | --- | --- | --- | --- |
-| D1 | Replace replay with genuine atomic enumeration | in_progress | `pen-cli run` discovers candidates from atomic MBTT primitives instead of replaying `Telescope::reference(step)` | A live atomic bootstrap path now discovers steps 1 to 7 and is wired into CLI/report generation for supported runs; replay now begins only at step 8 and beyond. |
-| D2 | Implement structural admissibility and obligation-driven search | in_progress | The live search loop computes strict admissibility bands from structural debt over the active window and uses them to open bands honestly | Bootstrap admissibility and structural debt summaries now exist in `pen-type`, and the first former/eliminator package, the first local HIT package, the first truncation package, and the first higher-HIT package now open structural step-4 / step-5 / step-6 / step-7 bands honestly, but the general later-step debt policy is still early. |
+| D1 | Replace replay with genuine atomic enumeration | completed | `pen-cli run` discovers candidates from atomic MBTT primitives instead of replaying `Telescope::reference(step)` | The live atomic bootstrap path now discovers steps 1 to 15 and is wired into CLI/report generation for the full current strict corpus; replay is no longer needed for the current 15-step target. |
+| D2 | Implement structural admissibility and obligation-driven search | in_progress | The live search loop computes strict admissibility bands from structural debt over the active window and uses them to open bands honestly | Structural debt summaries in `pen-type` now open honest step-4 through step-15 bands, including the new post-Hilbert temporal shell, but the general late-stage retention policy and evidence story are still early. |
 | D3 | Build anti-junk frontier retention | pending | Promising sparse eliminator prefixes survive long enough to compete against generic typed macro junk | Current quota buckets are only a first deterministic scaffold; the real obligation-guided anti-junk retention problem remains open. |
-| D4 | Finish exact deterministic selection | in_progress | Acceptance decisions use the real candidate pool and preserve strict deterministic tie-breaking under exact arithmetic | The live bootstrap search now selects from a real enumerated candidate pool using exact arithmetic, and the bounded step-4 / step-5 / step-6 / step-7 lanes now use semantic SCC minimality plus stronger structural tie-break signals over the full evaluated pool; the full donor tie-break stack and late-step selection behavior are still not complete yet. |
+| D4 | Finish exact deterministic selection | completed | Acceptance decisions use the real candidate pool and preserve strict deterministic tie-breaking under exact arithmetic | The live bootstrap search now selects from a real enumerated candidate pool using exact arithmetic through step 15, preserves deterministic tie-breaking under the current rank stack, and keeps the bounded step-15 temporal lane shell-first under semantic SCC minimality. Remaining evidence-surface work now lives under D13. |
 | D5 | Implement full step and frontier checkpoint I/O | pending | Step checkpoints are written and read as the stable resume unit, and frontier checkpoints are resumable on exact compatibility matches | Requires real implementations in `pen-store` rather than contract-only surfaces. |
 | D6 | Implement shard-backed frontier/state storage | pending | The frontier can spill, compact, reload, and resume through real shard/blob/queue storage instead of in-memory scaffolding | Includes queue, shard, blob, frontier packing, checksum, migration, and metadata plumbing. |
 | D7 | Implement the memory governor and pressure actions | pending | The engine obeys the frozen 16 GB memory model with green/yellow/orange/red/black behaviors and survives pressure without corrupting progress | This is a first-class search-quality requirement, not just ops polish. |
 | D8 | Implement real resume behavior | pending | `pen-cli resume` uses actual step/frontier artifacts and compatibility hashes instead of reconstructing replayed reference runs | Must support frontier resume, step resume, reevaluation, and migration-required outcomes exactly as frozen. |
 | D9 | Prove deterministic replay of the real engine | pending | Re-running the same atomic search with the same config produces the same accepted trajectory, reports, and resume decisions | Needs evidence against the genuine search engine, not just the reference scaffold. |
-| D10 | Demonstrate honest 15-step atomic recovery | pending | A cold run from primitives recovers the 15-step sequence in order under strict semantics without molecular templates in the hot path | This is the core project goal from the brief. |
+| D10 | Demonstrate honest 15-step atomic recovery | completed | A cold run from primitives recovers the 15-step sequence in order under strict semantics without molecular templates in the hot path | `cargo run -p pen-cli -- run --config configs/debug.toml --until-step 15` now reaches step 15 (`DCT`) through the live atomic lane, and the late-`nu` claim boundary is now frozen under D12. |
 | D11 | Match charged `kappa` and bar-clearing order end to end | pending | The recovered 15-step run preserves the accepted structure order, charged `kappa`, and bar-clearing behavior expected by the current canon | This is the minimum acceptance line for mission credibility. |
-| D12 | Close the late-`nu` gap | pending | The engine either reproduces the current strict late-step `nu` values honestly or advances to the stronger paper-level late-`nu` targets with evidence | Especially important for steps 11 to 15, and most visibly for step 15 / DCT. |
-| D13 | Strengthen evidence and ablation reporting | pending | The repo can explain success or failure with inspectable frontier evidence, prune classes, near misses, and ablation comparisons | This preserves the audit story the brief treats as a deliverable in its own right. |
+| D12 | Close the late-`nu` gap | completed | The engine and repo documentation use one explicit late-step `nu` claim boundary backed by fixtures and tests | The live structural late-step canon is now frozen as `26, 34, 46, 62, 103`; step 15 (`DCT`) is executable at `nu = 103`, and older donor notes are provenance only. |
+| D13 | Strengthen evidence and ablation reporting | in_progress | The repo can explain success or failure with inspectable frontier evidence, prune classes, near misses, and ablation comparisons | Step reports and debug output now include candidate-level evidence, human-readable clause translations, retained valid candidates, and explicit minimal-overshoot acceptance reporting, but frontier-level evidence, prune-class surfacing, and ablation comparisons are still incomplete. |
 | D14 | Finish the Agda bridge contract | pending | Exported artifacts include the fuller proof-facing payload expected by the donor bridge, not just stub modules plus hashes | Should cover canonical-key soundness, `nu` claims, deterministic payloads, and import/witness consistency. |
 | D15 | Validate Agda sidecar deterministically | pending | The Agda export/verification path is stable across re-export, records skipped/passed/failed honestly, and remains completely outside the hot loop | Must preserve the verification split while making the bridge materially stronger. |
 | D16 | Decide whether and how to ship `pen-accel` | pending | Optional acceleration exists only if it demonstrably preserves CPU-authoritative truth and helps the real engine | This is last; it is not required for baseline mission completion. |
@@ -101,14 +101,12 @@ What is not complete yet:
 - Preserve the accepted order and charged `kappa`.
 - Demonstrate honest bar-clearing acceptance rather than post-hoc fitting.
 
-### 5. Close the late-step semantic gaps
+### 5. Keep the late-step claim boundary explicit
 
-- Audit steps 11 to 15 carefully against the canonical targets.
-- Decide, with evidence, whether the final engine target is:
-  - current strict late-step `nu`, or
-  - the stronger paper-level structural `nu`
-- For step 15 in particular, reconcile the DCT undercount problem instead of silently inheriting it.
+- Preserve the frozen executable late-step totals for steps 11 to 15.
+- Keep step 15 pinned to the live structural DCT total `nu = 103`.
 - Keep one AST, one evaluator truth path, and one explicit claim boundary for late-step novelty accounting.
+- Treat superseded donor late-step notes as provenance, not as current repo canon.
 
 ### 6. Finish the Agda contract surface
 
@@ -293,11 +291,63 @@ Current status:
     only structural shapes plus coupling to the latest live library entry
   - the CLI fixtures now freeze `reference_steps_until_11.json` and verify deterministic live
     discovery through step 11 end to end
+- bounded step-12 live search is now in place:
+  - `crates/pen-type/src/obligations.rs`, `crates/pen-type/src/admissibility.rs`, and
+    `crates/pen-search/src/enumerate.rs` now open a structural second-order differential shell
+    once the active window contains the first coupled modal connection layer, search the `kappa`
+    `5|6` band honestly, and recover the six-clause curvature reference shell without replay
+  - `crates/pen-type/src/connectivity.rs` now treats the higher-order bridge clause in that shell
+    as connected when a later closure clause reanchors it on the active library window
+  - the CLI fixtures now freeze `reference_steps_until_12.json` and verify deterministic live
+    discovery through step 12 end to end
+- bounded step-13 live search is now in place:
+  - `crates/pen-type/src/obligations.rs` and `crates/pen-type/src/admissibility.rs` now detect
+    the first post-curvature operator-bundle obligation structurally from the active window,
+    require the coupled differential stack plus curvature without any prior operator shell, and
+    open an exact `kappa = 7`, `path_dimension = 0` band for that endomorphic package
+  - `crates/pen-search/src/enumerate.rs` now has a bounded operator-bundle donor lane keyed only
+    off the live `Connections` / `Curvature` window shape, which recovers the seven-clause
+    step-13 shell deterministically without widening the generic late axiomatic search space
+  - `crates/pen-type/src/connectivity.rs` now treats the operator-action clause in that shell as
+    honestly connected when it is bracketed by the operator seed and the later active-window
+    closure clauses, and the live native score now lands honestly at `nu = 46`
+  - the CLI fixtures now freeze `reference_steps_until_13.json` and verify deterministic live
+    discovery through step 13 end to end
+- bounded step-14 live search is now in place:
+  - `crates/pen-core/src/library.rs`, `crates/pen-type/src/obligations.rs`, and
+    `crates/pen-type/src/admissibility.rs` now detect the first post-metric Hilbert-functional
+    shell structurally from the active window, require the operator bundle plus the coupled
+    `Lib(13)` / `Lib(12)` / `Lib(11)` geometric stack with no prior genuine Hilbert shell, and
+    open an exact `kappa = 9`, `path_dimension = 0` band for that import-structural package
+  - `crates/pen-search/src/enumerate.rs` now has a bounded Hilbert-functional donor lane keyed
+    only off the live metric / curvature / connections coupling pattern, which recovers the
+    nine-clause step-14 shell deterministically without reopening the generic late axiomatic
+    search space
+  - the live step-14 reference shell already clears the bar honestly at `nu = 62`, `rho = 62/9`,
+    so no scorer widening was needed, and semantic minimality remains shell-first under the new
+    admissibility surface
+  - the CLI fixtures now freeze `reference_steps_until_14.json` and verify deterministic live
+    discovery through step 14 end to end
+- bounded step-15 live search is now in place:
+  - `crates/pen-core/src/library.rs`, `crates/pen-type/src/obligations.rs`, and
+    `crates/pen-type/src/admissibility.rs` now detect the first post-Hilbert temporal shell
+    structurally from the active window, distinguish a genuine 8-clause temporal-cohesive bundle
+    from broad temporal syntax, recover the historical modal anchor from `Lib(10)` structurally,
+    and open an exact `kappa = 8`, `path_dimension = 0` band with modal-temporal exchange
+    enabled only for that shell
+  - `crates/pen-search/src/enumerate.rs` now has a bounded temporal-shell donor lane keyed off
+    the live Hilbert prefix plus the recovered modal anchor, which recovers the eight-clause
+    `DCT` shell deterministically without reopening generic temporal junk
+  - `crates/pen-type/src/connectivity.rs` now permits the narrow historical modal reanchor that
+    step 15 genuinely needs while still rejecting generic stale-library references, and semantic
+    minimality remains shell-first under the unchanged evaluator
+  - the CLI fixtures now freeze `reference_steps_until_15.json`, `cargo run -p pen-cli -- run
+    --config configs/debug.toml --until-step 15` now completes through `DCT`, and full workspace
+    test coverage now exercises deterministic live discovery through step 15 end to end
 - the live-search support range has now widened honestly:
-  - `LIVE_BOOTSTRAP_MAX_STEP` is now `11`
-  - CLI `run` / `resume` now use live atomic search through step 11 and switch to explicit
-    replay only from step 12 onward
-  - unit and integration coverage now exercises deterministic step-11 live discovery end to end,
+  - `LIVE_BOOTSTRAP_MAX_STEP` is now `15`
+  - CLI `run` / `resume` now use live atomic search for the full current 15-step strict corpus
+  - unit and integration coverage now exercises deterministic step-15 live discovery end to end,
     and `cargo test --workspace` is the verification target for this branch
 
 ### Milestone C: Anti-junk retention and frontier shaping
@@ -352,10 +402,55 @@ Success line:
 
 The highest-value next milestone is:
 
-- extend the bounded live-search support range from step 11 into the first second-order
-  differential shell (step 12 / `Curvature`) without replay, while preserving the new exact
-  step-4 / step-5 / step-6 / step-7 / step-8 / step-9 / step-10 / step-11 search paths and
-  keeping the anti-junk story structural rather than template-driven
+- preserve the adopted late-step structural canon while finishing the anti-junk, storage, and
+  evidence work around the new exact step-4 through step-15 search paths
 
-That is the point where the repo stops being a faithful scaffold and starts becoming the
-actual project described in the brief.
+### Step 15 Plan
+
+Completed on 2026-03-14.
+
+The structural discoverability half of step 15 is now complete:
+
+- the exact blocker was baselined against the live 14-step prefix in
+  `crates/pen-search/src/engine.rs`
+- `crates/pen-core/src/library.rs` now distinguishes a genuine temporal shell from broad
+  temporal syntax
+- `crates/pen-type/src/obligations.rs` and `crates/pen-type/src/admissibility.rs` now open a
+  real post-Hilbert temporal obligation with exact `kappa = 8`, modal-temporal exchange enabled,
+  and a structurally recovered historical modal anchor
+- `crates/pen-search/src/enumerate.rs` now has a bounded step-15 donor lane for the 8-clause
+  temporal-cohesive bundle
+- `crates/pen-type/src/connectivity.rs` now permits the narrow historical modal reanchor that the
+  `DCT` shell genuinely requires while keeping generic stale references rejected
+- `crates/pen-search/src/engine.rs`, `crates/pen-cli/src/report.rs`,
+  `tests/integration/atomic_bootstrap.rs`, and
+  `tests/fixtures/trajectory/reference_steps_until_15.json` now lift and freeze the live 15-step
+  artifact surface end to end
+
+The verified live step-15 result is now:
+
+- `check = Ok`
+- class `= Synthesis`
+- capabilities `= has_modal_ops + has_temporal_ops + has_temporal_shell`
+- strict admissibility `= exact kappa 8` with historical modal anchor `Lib(10)`
+- connectivity `= structurally connected` with the narrow historical modal reanchor
+- semantic minimality `= passes`
+- `nu = 103`
+- `rho = 103/8`
+- `bar = 19520/2639`
+
+Verification completed:
+
+- `cargo test -p pen-core --lib`
+- `cargo test -p pen-type --lib`
+- `cargo test -p pen-search --lib`
+- `cargo test -p pen-cli --test atomic_bootstrap`
+- `cargo run -p pen-cli -- run --config configs/debug.toml --until-step 15`
+- `cargo test --workspace`
+
+Remaining step-15 follow-up:
+
+- propagate the adopted executable claim boundary (`nu = 103`, `rho = 103/8`,
+  `bar = 19520/2639`) through the remaining theory and manuscript surfaces
+- keep any historical `88` notes explicitly marked as superseded provenance rather than current
+  repo canon

@@ -244,3 +244,131 @@ fn bootstrap_run_uses_live_search_through_step_eleven() {
 
     fs::remove_dir_all(root).ok();
 }
+
+#[test]
+fn bootstrap_run_uses_live_search_through_step_twelve() {
+    let root = temp_dir("bootstrap-step12");
+    let run_dir = root.join("fixture-run");
+    let config = workspace_root()
+        .join("configs")
+        .join("debug.toml")
+        .to_string_lossy()
+        .to_string();
+    let root_arg = root.to_string_lossy().to_string();
+    let output = run_pen_cli([
+        "run",
+        "--config",
+        &config,
+        "--root",
+        &root_arg,
+        "--run-id",
+        "fixture-run",
+        "--until-step",
+        "12",
+    ]);
+    let stdout = assert_success(output);
+
+    assert!(stdout.contains("completed_step: 12"));
+
+    let actual_steps = compact_step_summaries(&run_dir);
+    let expected_steps = load_trajectory_fixture("reference_steps_until_12.json");
+    assert_eq!(actual_steps, expected_steps);
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn bootstrap_run_uses_live_search_through_step_thirteen() {
+    let root = temp_dir("bootstrap-step13");
+    let run_dir = root.join("fixture-run");
+    let config = workspace_root()
+        .join("configs")
+        .join("debug.toml")
+        .to_string_lossy()
+        .to_string();
+    let root_arg = root.to_string_lossy().to_string();
+    let output = run_pen_cli([
+        "run",
+        "--config",
+        &config,
+        "--root",
+        &root_arg,
+        "--run-id",
+        "fixture-run",
+        "--until-step",
+        "13",
+    ]);
+    let stdout = assert_success(output);
+
+    assert!(stdout.contains("completed_step: 13"));
+
+    let actual_steps = compact_step_summaries(&run_dir);
+    let expected_steps = load_trajectory_fixture("reference_steps_until_13.json");
+    assert_eq!(actual_steps, expected_steps);
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn bootstrap_run_uses_live_search_through_step_fourteen() {
+    let root = temp_dir("bootstrap-step14");
+    let run_dir = root.join("fixture-run");
+    let config = workspace_root()
+        .join("configs")
+        .join("debug.toml")
+        .to_string_lossy()
+        .to_string();
+    let root_arg = root.to_string_lossy().to_string();
+    let output = run_pen_cli([
+        "run",
+        "--config",
+        &config,
+        "--root",
+        &root_arg,
+        "--run-id",
+        "fixture-run",
+        "--until-step",
+        "14",
+    ]);
+    let stdout = assert_success(output);
+
+    assert!(stdout.contains("completed_step: 14"));
+
+    let actual_steps = compact_step_summaries(&run_dir);
+    let expected_steps = load_trajectory_fixture("reference_steps_until_14.json");
+    assert_eq!(actual_steps, expected_steps);
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn bootstrap_run_uses_live_search_through_step_fifteen() {
+    let root = temp_dir("bootstrap-step15");
+    let run_dir = root.join("fixture-run");
+    let config = workspace_root()
+        .join("configs")
+        .join("debug.toml")
+        .to_string_lossy()
+        .to_string();
+    let root_arg = root.to_string_lossy().to_string();
+    let output = run_pen_cli([
+        "run",
+        "--config",
+        &config,
+        "--root",
+        &root_arg,
+        "--run-id",
+        "fixture-run",
+        "--until-step",
+        "15",
+    ]);
+    let stdout = assert_success(output);
+
+    assert!(stdout.contains("completed_step: 15"));
+
+    let actual_steps = compact_step_summaries(&run_dir);
+    let expected_steps = load_trajectory_fixture("reference_steps_until_15.json");
+    assert_eq!(actual_steps, expected_steps);
+
+    fs::remove_dir_all(root).ok();
+}

@@ -30,7 +30,7 @@ decision surface already exists and is what `pen-cli inspect` uses when reading 
 
 `pen-cli resume` currently rebuilds the accepted trajectory from the stored config:
 
-- it uses live atomic bootstrap search through step 11,
-- it falls back to deterministic reference replay from step 12 onward,
+- it uses live atomic bootstrap search through step 15,
+- it no longer needs deterministic reference replay for the current 15-step corpus,
 - and it keeps the run artifact layout stable while the real frontier engine is still
   being built behind the same checkpoint contract.

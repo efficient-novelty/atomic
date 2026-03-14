@@ -25,6 +25,10 @@ pub struct EnumerationContext {
     pub require_axiomatic_bundle_clauses: bool,
     pub require_modal_shell_clauses: bool,
     pub require_connection_shell_clauses: bool,
+    pub require_curvature_shell_clauses: bool,
+    pub require_operator_bundle_clauses: bool,
+    pub require_hilbert_functional_clauses: bool,
+    pub require_temporal_shell_clauses: bool,
     pub historical_anchor_ref: Option<u32>,
 }
 
@@ -42,6 +46,14 @@ pub fn enumerate_next_clauses(context: EnumerationContext) -> Vec<ClauseRec> {
                 && (!context.require_modal_shell_clauses || supports_modal_shell_clause(expr))
                 && (!context.require_connection_shell_clauses
                     || supports_connection_shell_clause(expr))
+                && (!context.require_curvature_shell_clauses
+                    || supports_curvature_shell_clause(expr))
+                && (!context.require_operator_bundle_clauses
+                    || supports_operator_bundle_clause(expr))
+                && (!context.require_hilbert_functional_clauses
+                    || supports_hilbert_functional_clause(expr))
+                && (!context.require_temporal_shell_clauses
+                    || supports_temporal_shell_clause(expr))
         })
         .map(|expr| ClauseRec::new(primary_role(&expr), expr))
         .collect()
@@ -52,6 +64,22 @@ pub fn enumerate_telescopes(
     base_context: EnumerationContext,
     clause_kappa: u16,
 ) -> Vec<Telescope> {
+    if base_context.require_temporal_shell_clauses {
+        return enumerate_temporal_shell_telescopes(library, base_context, clause_kappa);
+    }
+
+    if base_context.require_hilbert_functional_clauses {
+        return enumerate_hilbert_functional_telescopes(library, base_context, clause_kappa);
+    }
+
+    if base_context.require_operator_bundle_clauses {
+        return enumerate_operator_bundle_telescopes(library, base_context, clause_kappa);
+    }
+
+    if base_context.require_curvature_shell_clauses && clause_kappa < 6 {
+        return Vec::new();
+    }
+
     let mut telescopes = Vec::new();
     let mut prefix = Vec::new();
     let clause_options_by_position = (0..usize::from(clause_kappa))
@@ -110,6 +138,24 @@ pub fn enumerate_telescopes(
                     )
                 });
             }
+            if base_context.require_curvature_shell_clauses {
+                clauses.retain(|clause| {
+                    supports_curvature_shell_clause_at_position(
+                        position,
+                        &clause.expr,
+                        base_context.library_size,
+                    )
+                });
+            }
+            if base_context.require_temporal_shell_clauses {
+                clauses.retain(|clause| {
+                    supports_temporal_shell_clause_at_position(
+                        position,
+                        &clause.expr,
+                        base_context.historical_anchor_ref,
+                    )
+                });
+            }
             clauses
         })
         .collect::<Vec<_>>();
@@ -122,6 +168,218 @@ pub fn enumerate_telescopes(
     );
     telescopes.sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
     telescopes
+}
+
+fn enumerate_operator_bundle_telescopes(
+    library: &Library,
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+) -> Vec<Telescope> {
+    if clause_kappa != 7 || base_context.max_expr_nodes < 7 || base_context.max_path_dimension != 0
+    {
+        return Vec::new();
+    }
+
+    let Some(clause_options_by_position) =
+        operator_bundle_clause_options(base_context.library_size)
+    else {
+        return Vec::new();
+    };
+
+    let mut telescopes = Vec::new();
+    let mut prefix = Vec::new();
+    enumerate_telescopes_dfs(
+        library,
+        clause_kappa,
+        &clause_options_by_position,
+        &mut prefix,
+        &mut telescopes,
+    );
+    telescopes.sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
+    telescopes
+}
+
+fn enumerate_hilbert_functional_telescopes(
+    library: &Library,
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+) -> Vec<Telescope> {
+    if clause_kappa != 9 || base_context.max_expr_nodes < 7 || base_context.max_path_dimension != 0
+    {
+        return Vec::new();
+    }
+
+    let Some(clause_options_by_position) =
+        hilbert_functional_clause_options(base_context.library_size)
+    else {
+        return Vec::new();
+    };
+
+    let mut telescopes = Vec::new();
+    let mut prefix = Vec::new();
+    enumerate_telescopes_dfs(
+        library,
+        clause_kappa,
+        &clause_options_by_position,
+        &mut prefix,
+        &mut telescopes,
+    );
+    telescopes.sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
+    telescopes
+}
+
+fn enumerate_temporal_shell_telescopes(
+    library: &Library,
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+) -> Vec<Telescope> {
+    let Some(anchor) = base_context.historical_anchor_ref else {
+        return Vec::new();
+    };
+    if clause_kappa != 8
+        || base_context.max_expr_nodes < 7
+        || base_context.max_path_dimension != 0
+        || !base_context.include_modal
+        || !base_context.include_temporal
+        || !library.iter().any(|entry| entry.capabilities.has_hilbert)
+    {
+        return Vec::new();
+    }
+
+    let clause_options_by_position = temporal_shell_clause_options(anchor);
+    let mut telescopes = Vec::new();
+    let mut prefix = Vec::new();
+    enumerate_telescopes_dfs(
+        library,
+        clause_kappa,
+        &clause_options_by_position,
+        &mut prefix,
+        &mut telescopes,
+    );
+    telescopes.sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
+    telescopes
+}
+
+fn operator_bundle_clause_options(library_size: u32) -> Option<Vec<Vec<ClauseRec>>> {
+    if library_size < 2 {
+        return None;
+    }
+
+    let latest = library_size;
+    let previous = latest - 1;
+    let exprs = vec![
+        Expr::Sigma(
+            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+        ),
+        Expr::Pi(
+            Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+            Box::new(Expr::Lib(previous)),
+        ),
+        Expr::Pi(
+            Box::new(Expr::Var(1)),
+            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+        ),
+        Expr::Lam(Box::new(Expr::App(
+            Box::new(Expr::Var(1)),
+            Box::new(Expr::Var(2)),
+        ))),
+        Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
+        Expr::Lam(Box::new(Expr::Pi(
+            Box::new(Expr::Var(1)),
+            Box::new(Expr::Var(1)),
+        ))),
+        Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+    ];
+
+    Some(
+        exprs
+            .into_iter()
+            .map(|expr| vec![ClauseRec::new(primary_role(&expr), expr)])
+            .collect(),
+    )
+}
+
+fn hilbert_functional_clause_options(library_size: u32) -> Option<Vec<Vec<ClauseRec>>> {
+    if library_size < 3 {
+        return None;
+    }
+
+    let latest = library_size;
+    let previous = latest - 1;
+    let older = latest - 2;
+    let exprs = vec![
+        Expr::Sigma(
+            Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
+            )),
+            Box::new(Expr::Var(1)),
+        ),
+        Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1))),
+        Expr::Pi(
+            Box::new(Expr::Var(1)),
+            Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+        ),
+        Expr::Pi(
+            Box::new(Expr::Lam(Box::new(Expr::Var(1)))),
+            Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+        ),
+        Expr::Sigma(
+            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+        ),
+        Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+        Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
+        Expr::Pi(Box::new(Expr::Lib(older)), Box::new(Expr::Var(1))),
+        Expr::Lam(Box::new(Expr::Pi(
+            Box::new(Expr::Var(1)),
+            Box::new(Expr::Univ),
+        ))),
+    ];
+
+    Some(
+        exprs
+            .into_iter()
+            .map(|expr| vec![ClauseRec::new(primary_role(&expr), expr)])
+            .collect(),
+    )
+}
+
+fn temporal_shell_clause_options(modal_anchor_ref: u32) -> Vec<Vec<ClauseRec>> {
+    let exprs = vec![
+        Expr::Next(Box::new(Expr::Var(1))),
+        Expr::Eventually(Box::new(Expr::Var(1))),
+        Expr::Pi(
+            Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+            Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+        ),
+        Expr::Lam(Box::new(Expr::App(
+            Box::new(Expr::Lib(modal_anchor_ref)),
+            Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+        ))),
+        Expr::Pi(
+            Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+        ),
+        Expr::Pi(
+            Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))))),
+            Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+        ),
+        Expr::Lam(Box::new(Expr::App(
+            Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+            Box::new(Expr::Var(2)),
+        ))),
+        Expr::Pi(
+            Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+        ),
+    ];
+
+    exprs
+        .into_iter()
+        .map(|expr| vec![ClauseRec::new(primary_role(&expr), expr)])
+        .collect()
 }
 
 pub fn enumerate_exprs(context: EnumerationContext) -> Vec<Expr> {
@@ -393,6 +651,268 @@ fn supports_connection_shell_clause(expr: &Expr) -> bool {
     )
 }
 
+fn supports_curvature_shell_clause(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(domain.as_ref(), Expr::Lib(_))
+                && matches!(
+                    codomain.as_ref(),
+                    Expr::Pi(inner_domain, inner_codomain)
+                        if matches!(inner_domain.as_ref(), Expr::Var(_))
+                            && matches!(inner_codomain.as_ref(), Expr::Var(_))
+                )
+    ) || matches!(
+        expr,
+        Expr::Lam(body)
+            if matches!(
+                body.as_ref(),
+                Expr::App(function, argument)
+                    if matches!(function.as_ref(), Expr::Lib(_))
+                        && matches!(argument.as_ref(), Expr::Var(_))
+            ) || matches!(
+                body.as_ref(),
+                Expr::Pi(domain, codomain)
+                    if matches!(domain.as_ref(), Expr::Var(_))
+                        && matches!(codomain.as_ref(), Expr::Var(_))
+            )
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(domain.as_ref(), Expr::Var(_))
+                && matches!(codomain.as_ref(), Expr::Lib(_))
+    ) || matches!(
+        expr,
+        Expr::App(function, argument)
+            if matches!(function.as_ref(), Expr::Lib(_))
+                && matches!(
+                    argument.as_ref(),
+                    Expr::App(inner_function, inner_argument)
+                        if matches!(inner_function.as_ref(), Expr::Var(_))
+                            && matches!(inner_argument.as_ref(), Expr::Var(_))
+                )
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(domain.as_ref(), Expr::Lib(_))
+                && matches!(codomain.as_ref(), Expr::Lib(_))
+    )
+}
+
+fn supports_operator_bundle_clause(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Sigma(left, right)
+            if matches!(
+                left.as_ref(),
+                Expr::Pi(domain, codomain)
+                    if matches!(domain.as_ref(), Expr::Var(_))
+                        && matches!(codomain.as_ref(), Expr::Var(_))
+            ) && matches!(
+                right.as_ref(),
+                Expr::Pi(domain, codomain)
+                    if matches!(domain.as_ref(), Expr::Var(_))
+                        && matches!(codomain.as_ref(), Expr::Var(_))
+            )
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Sigma(left, right)
+                    if matches!(left.as_ref(), Expr::Var(_))
+                        && matches!(right.as_ref(), Expr::Var(_))
+            ) && matches!(codomain.as_ref(), Expr::Lib(_))
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(domain.as_ref(), Expr::Var(_))
+                && matches!(
+                    codomain.as_ref(),
+                    Expr::Pi(inner_domain, inner_codomain)
+                        if matches!(inner_domain.as_ref(), Expr::Var(_))
+                            && matches!(inner_codomain.as_ref(), Expr::Var(_))
+                )
+    ) || matches!(
+        expr,
+        Expr::Lam(body)
+            if matches!(
+                body.as_ref(),
+                Expr::App(function, argument)
+                    if matches!(function.as_ref(), Expr::Var(_))
+                        && matches!(argument.as_ref(), Expr::Var(_))
+            ) || matches!(
+                body.as_ref(),
+                Expr::Pi(domain, codomain)
+                    if matches!(domain.as_ref(), Expr::Var(_))
+                        && matches!(codomain.as_ref(), Expr::Var(_))
+            )
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(domain.as_ref(), Expr::Lib(_))
+                && (matches!(codomain.as_ref(), Expr::Lib(_))
+                    || matches!(codomain.as_ref(), Expr::Var(_)))
+    )
+}
+
+fn supports_hilbert_functional_clause(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Sigma(left, right)
+            if matches!(
+                left.as_ref(),
+                Expr::Pi(domain, codomain)
+                    if matches!(domain.as_ref(), Expr::Var(_))
+                        && matches!(
+                            codomain.as_ref(),
+                            Expr::Pi(inner_domain, inner_codomain)
+                                if matches!(inner_domain.as_ref(), Expr::Var(_))
+                                    && matches!(inner_codomain.as_ref(), Expr::Univ)
+                        )
+            ) && matches!(right.as_ref(), Expr::Var(_))
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(domain.as_ref(), Expr::Var(_))
+                && matches!(codomain.as_ref(), Expr::Var(_) | Expr::Univ)
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(domain.as_ref(), Expr::Var(_))
+                && matches!(
+                    codomain.as_ref(),
+                    Expr::Sigma(left, right)
+                        if matches!(left.as_ref(), Expr::Var(_))
+                            && matches!(right.as_ref(), Expr::Var(_))
+                )
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(domain.as_ref(), Expr::Lam(body) if matches!(body.as_ref(), Expr::Var(_)))
+                && matches!(
+                    codomain.as_ref(),
+                    Expr::Sigma(left, right)
+                        if matches!(left.as_ref(), Expr::Var(_))
+                            && matches!(right.as_ref(), Expr::Var(_))
+                )
+    ) || matches!(
+        expr,
+        Expr::Sigma(left, right)
+            if matches!(
+                left.as_ref(),
+                Expr::Pi(domain, codomain)
+                    if matches!(domain.as_ref(), Expr::Var(_))
+                        && matches!(codomain.as_ref(), Expr::Var(_))
+            ) && matches!(
+                right.as_ref(),
+                Expr::Pi(domain, codomain)
+                    if matches!(domain.as_ref(), Expr::Var(_))
+                        && matches!(codomain.as_ref(), Expr::Var(_))
+            )
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(domain.as_ref(), Expr::Lib(_))
+                && matches!(codomain.as_ref(), Expr::Var(_))
+    ) || matches!(
+        expr,
+        Expr::Lam(body)
+            if matches!(
+                body.as_ref(),
+                Expr::Pi(domain, codomain)
+                    if matches!(domain.as_ref(), Expr::Var(_))
+                        && matches!(codomain.as_ref(), Expr::Univ)
+            )
+    )
+}
+
+fn supports_temporal_shell_clause(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Next(body) | Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(_))
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Next(body) if matches!(body.as_ref(), Expr::Var(_))
+            ) && matches!(
+                codomain.as_ref(),
+                Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(_))
+            )
+    ) || matches!(
+        expr,
+        Expr::Lam(body)
+            if matches!(
+                body.as_ref(),
+                Expr::App(function, argument)
+                    if matches!(function.as_ref(), Expr::Lib(_))
+                        && matches!(
+                            argument.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(_))
+                        )
+            ) || matches!(
+                body.as_ref(),
+                Expr::App(function, argument)
+                    if matches!(
+                        function.as_ref(),
+                        Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(_))
+                    ) && matches!(argument.as_ref(), Expr::Var(_))
+            )
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Flat(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(_))
+                    )
+            ) && matches!(
+                codomain.as_ref(),
+                Expr::Next(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(_))
+                    )
+            )
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Sharp(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(_))
+                    )
+            ) && matches!(
+                codomain.as_ref(),
+                Expr::Eventually(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(_))
+                    )
+            )
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Next(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(_))
+                    )
+            ) && matches!(
+                codomain.as_ref(),
+                Expr::Next(body) if matches!(body.as_ref(), Expr::Var(_))
+            )
+    )
+}
+
 fn supports_initial_hit_clause_at_position(position: usize, expr: &Expr) -> bool {
     match position {
         0 => {
@@ -551,6 +1071,366 @@ fn supports_connection_shell_clause_at_position(
     }
 }
 
+fn supports_curvature_shell_clause_at_position(
+    position: usize,
+    expr: &Expr,
+    library_size: u32,
+) -> bool {
+    if library_size == 0 {
+        return false;
+    }
+
+    let latest = library_size;
+    match position {
+        0 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lib(index) if *index == latest)
+                    && matches!(
+                        codomain.as_ref(),
+                        Expr::Pi(inner_domain, inner_codomain)
+                            if matches!(inner_domain.as_ref(), Expr::Var(1))
+                                && matches!(inner_codomain.as_ref(), Expr::Var(1))
+                    )
+        ),
+        1 => matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(function.as_ref(), Expr::Lib(index) if *index == latest)
+                            && matches!(argument.as_ref(), Expr::Var(1))
+                )
+        ),
+        2 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Var(1))
+                    && matches!(codomain.as_ref(), Expr::Lib(index) if *index == latest)
+        ),
+        3 => matches!(
+            expr,
+            Expr::App(function, argument)
+                if matches!(function.as_ref(), Expr::Lib(index) if *index == latest)
+                    && matches!(
+                        argument.as_ref(),
+                        Expr::App(inner_function, inner_argument)
+                            if matches!(inner_function.as_ref(), Expr::Var(1))
+                                && matches!(inner_argument.as_ref(), Expr::Var(2))
+                    )
+        ),
+        4 => matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::Pi(domain, codomain)
+                        if matches!(domain.as_ref(), Expr::Var(1))
+                            && matches!(codomain.as_ref(), Expr::Var(2))
+                )
+        ),
+        _ => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lib(index) if *index == latest)
+                    && matches!(codomain.as_ref(), Expr::Lib(index) if *index == latest)
+        ),
+    }
+}
+
+#[cfg_attr(not(test), allow(dead_code))]
+fn supports_operator_bundle_clause_at_position(
+    position: usize,
+    expr: &Expr,
+    library_size: u32,
+) -> bool {
+    if library_size < 2 {
+        return false;
+    }
+
+    let latest = library_size;
+    let previous = latest - 1;
+    match position {
+        0 => matches!(
+            expr,
+            Expr::Sigma(left, right)
+                if matches!(
+                    left.as_ref(),
+                    Expr::Pi(domain, codomain)
+                        if matches!(domain.as_ref(), Expr::Var(1))
+                            && matches!(codomain.as_ref(), Expr::Var(1))
+                ) && matches!(
+                    right.as_ref(),
+                    Expr::Pi(domain, codomain)
+                        if matches!(domain.as_ref(), Expr::Var(1))
+                            && matches!(codomain.as_ref(), Expr::Var(1))
+                )
+        ),
+        1 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sigma(left, right)
+                        if matches!(left.as_ref(), Expr::Var(1))
+                            && matches!(right.as_ref(), Expr::Var(2))
+                ) && matches!(codomain.as_ref(), Expr::Lib(index) if *index == previous)
+        ),
+        2 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Var(1))
+                    && matches!(
+                        codomain.as_ref(),
+                        Expr::Pi(inner_domain, inner_codomain)
+                            if matches!(inner_domain.as_ref(), Expr::Var(1))
+                                && matches!(inner_codomain.as_ref(), Expr::Var(1))
+                    )
+        ),
+        3 => matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(function.as_ref(), Expr::Var(1))
+                            && matches!(argument.as_ref(), Expr::Var(2))
+                )
+        ),
+        4 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lib(index) if *index == latest)
+                    && matches!(codomain.as_ref(), Expr::Lib(index) if *index == latest)
+        ),
+        5 => matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::Pi(domain, codomain)
+                        if matches!(domain.as_ref(), Expr::Var(1))
+                            && matches!(codomain.as_ref(), Expr::Var(1))
+                )
+        ),
+        _ => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lib(index) if *index == latest)
+                    && matches!(codomain.as_ref(), Expr::Var(1))
+        ),
+    }
+}
+
+#[cfg_attr(not(test), allow(dead_code))]
+fn supports_hilbert_functional_clause_at_position(
+    position: usize,
+    expr: &Expr,
+    library_size: u32,
+) -> bool {
+    if library_size < 3 {
+        return false;
+    }
+
+    let latest = library_size;
+    let previous = latest - 1;
+    let older = latest - 2;
+    match position {
+        0 => matches!(
+            expr,
+            Expr::Sigma(left, right)
+                if matches!(
+                    left.as_ref(),
+                    Expr::Pi(domain, codomain)
+                        if matches!(domain.as_ref(), Expr::Var(1))
+                            && matches!(
+                                codomain.as_ref(),
+                                Expr::Pi(inner_domain, inner_codomain)
+                                    if matches!(inner_domain.as_ref(), Expr::Var(1))
+                                        && matches!(inner_codomain.as_ref(), Expr::Univ)
+                            )
+                ) && matches!(right.as_ref(), Expr::Var(1))
+        ),
+        1 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Var(1))
+                    && matches!(codomain.as_ref(), Expr::Var(1))
+        ),
+        2 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Var(1))
+                    && matches!(
+                        codomain.as_ref(),
+                        Expr::Sigma(left, right)
+                            if matches!(left.as_ref(), Expr::Var(1))
+                                && matches!(right.as_ref(), Expr::Var(1))
+                    )
+        ),
+        3 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lam(body) if matches!(body.as_ref(), Expr::Var(1)))
+                    && matches!(
+                        codomain.as_ref(),
+                        Expr::Sigma(left, right)
+                            if matches!(left.as_ref(), Expr::Var(1))
+                                && matches!(right.as_ref(), Expr::Var(2))
+                    )
+        ),
+        4 => matches!(
+            expr,
+            Expr::Sigma(left, right)
+                if matches!(
+                    left.as_ref(),
+                    Expr::Pi(domain, codomain)
+                        if matches!(domain.as_ref(), Expr::Var(1))
+                            && matches!(codomain.as_ref(), Expr::Var(1))
+                ) && matches!(
+                    right.as_ref(),
+                    Expr::Pi(domain, codomain)
+                        if matches!(domain.as_ref(), Expr::Var(1))
+                            && matches!(codomain.as_ref(), Expr::Var(1))
+                )
+        ),
+        5 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lib(index) if *index == latest)
+                    && matches!(codomain.as_ref(), Expr::Var(1))
+        ),
+        6 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lib(index) if *index == previous)
+                    && matches!(codomain.as_ref(), Expr::Var(1))
+        ),
+        7 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lib(index) if *index == older)
+                    && matches!(codomain.as_ref(), Expr::Var(1))
+        ),
+        _ => matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::Pi(domain, codomain)
+                        if matches!(domain.as_ref(), Expr::Var(1))
+                            && matches!(codomain.as_ref(), Expr::Univ)
+                )
+        ),
+    }
+}
+
+#[cfg_attr(not(test), allow(dead_code))]
+fn supports_temporal_shell_clause_at_position(
+    position: usize,
+    expr: &Expr,
+    historical_anchor_ref: Option<u32>,
+) -> bool {
+    let Some(anchor) = historical_anchor_ref else {
+        return false;
+    };
+
+    match position {
+        0 => matches!(expr, Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))),
+        1 => matches!(expr, Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))),
+        2 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+                )
+        ),
+        3 => matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
+                            && matches!(
+                                argument.as_ref(),
+                                Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                            )
+                )
+        ),
+        4 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Flat(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        ),
+        5 => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sharp(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        ),
+        6 => matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(
+                            function.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        ) && matches!(argument.as_ref(), Expr::Var(2))
+                )
+        ),
+        _ => matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+                )
+        ),
+    }
+}
+
 fn is_minimal_former_intro_clause(expr: &Expr) -> bool {
     match expr {
         Expr::Lam(body) => {
@@ -694,11 +1574,12 @@ fn contains_eliminator_expr(expr: &Expr) -> bool {
 mod tests {
     use super::{
         EnumerationContext, enumerate_exprs, enumerate_next_clauses, enumerate_telescopes,
-        supports_axiomatic_bundle_clause_at_position, supports_former_package_clause_at_position,
-        supports_connection_shell_clause_at_position,
-        supports_higher_hit_clause_at_position, supports_initial_hit_clause_at_position,
-        supports_modal_shell_clause_at_position, supports_sphere_lift_clause_at_position,
-        supports_truncation_hit_clause_at_position,
+        supports_axiomatic_bundle_clause_at_position, supports_connection_shell_clause_at_position,
+        supports_curvature_shell_clause_at_position, supports_former_package_clause_at_position,
+        supports_higher_hit_clause_at_position, supports_hilbert_functional_clause_at_position,
+        supports_initial_hit_clause_at_position, supports_modal_shell_clause_at_position,
+        supports_operator_bundle_clause_at_position, supports_sphere_lift_clause_at_position,
+        supports_temporal_shell_clause_at_position, supports_truncation_hit_clause_at_position,
     };
     use pen_core::library::{Library, LibraryEntry};
     use pen_core::telescope::Telescope;
@@ -731,6 +1612,10 @@ mod tests {
             require_axiomatic_bundle_clauses: false,
             require_modal_shell_clauses: false,
             require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
             historical_anchor_ref: None,
         };
 
@@ -773,6 +1658,10 @@ mod tests {
             require_axiomatic_bundle_clauses: false,
             require_modal_shell_clauses: false,
             require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
             historical_anchor_ref: None,
         });
         let rendered = exprs
@@ -807,6 +1696,10 @@ mod tests {
                 require_axiomatic_bundle_clauses: false,
                 require_modal_shell_clauses: false,
                 require_connection_shell_clauses: false,
+                require_curvature_shell_clauses: false,
+                require_operator_bundle_clauses: false,
+                require_hilbert_functional_clauses: false,
+                require_temporal_shell_clauses: false,
                 historical_anchor_ref: None,
             },
             2,
@@ -837,6 +1730,10 @@ mod tests {
             require_axiomatic_bundle_clauses: false,
             require_modal_shell_clauses: false,
             require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
             historical_anchor_ref: None,
         });
         assert!(clauses.iter().any(|clause| {
@@ -1064,6 +1961,199 @@ mod tests {
     }
 
     #[test]
+    fn curvature_shell_filters_accept_the_reference_second_order_bundle() {
+        assert!(supports_curvature_shell_clause_at_position(
+            0,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Lib(11)),
+                Box::new(pen_core::expr::Expr::Pi(
+                    Box::new(pen_core::expr::Expr::Var(1)),
+                    Box::new(pen_core::expr::Expr::Var(1)),
+                )),
+            ),
+            11,
+        ));
+        assert!(supports_curvature_shell_clause_at_position(
+            1,
+            &pen_core::expr::Expr::Lam(Box::new(pen_core::expr::Expr::App(
+                Box::new(pen_core::expr::Expr::Lib(11)),
+                Box::new(pen_core::expr::Expr::Var(1)),
+            ))),
+            11,
+        ));
+        assert!(supports_curvature_shell_clause_at_position(
+            2,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Var(1)),
+                Box::new(pen_core::expr::Expr::Lib(11)),
+            ),
+            11,
+        ));
+        assert!(supports_curvature_shell_clause_at_position(
+            3,
+            &pen_core::expr::Expr::App(
+                Box::new(pen_core::expr::Expr::Lib(11)),
+                Box::new(pen_core::expr::Expr::App(
+                    Box::new(pen_core::expr::Expr::Var(1)),
+                    Box::new(pen_core::expr::Expr::Var(2)),
+                )),
+            ),
+            11,
+        ));
+        assert!(supports_curvature_shell_clause_at_position(
+            4,
+            &pen_core::expr::Expr::Lam(Box::new(pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Var(1)),
+                Box::new(pen_core::expr::Expr::Var(2)),
+            ))),
+            11,
+        ));
+        assert!(supports_curvature_shell_clause_at_position(
+            5,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Lib(11)),
+                Box::new(pen_core::expr::Expr::Lib(11)),
+            ),
+            11,
+        ));
+    }
+
+    #[test]
+    fn operator_bundle_filters_accept_the_reference_metric_reading_shell() {
+        assert!(supports_operator_bundle_clause_at_position(
+            0,
+            &pen_core::expr::Expr::Sigma(
+                Box::new(pen_core::expr::Expr::Pi(
+                    Box::new(pen_core::expr::Expr::Var(1)),
+                    Box::new(pen_core::expr::Expr::Var(1)),
+                )),
+                Box::new(pen_core::expr::Expr::Pi(
+                    Box::new(pen_core::expr::Expr::Var(1)),
+                    Box::new(pen_core::expr::Expr::Var(1)),
+                )),
+            ),
+            12,
+        ));
+        assert!(supports_operator_bundle_clause_at_position(
+            1,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Sigma(
+                    Box::new(pen_core::expr::Expr::Var(1)),
+                    Box::new(pen_core::expr::Expr::Var(2)),
+                )),
+                Box::new(pen_core::expr::Expr::Lib(11)),
+            ),
+            12,
+        ));
+        assert!(supports_operator_bundle_clause_at_position(
+            2,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Var(1)),
+                Box::new(pen_core::expr::Expr::Pi(
+                    Box::new(pen_core::expr::Expr::Var(1)),
+                    Box::new(pen_core::expr::Expr::Var(1)),
+                )),
+            ),
+            12,
+        ));
+        assert!(supports_operator_bundle_clause_at_position(
+            3,
+            &pen_core::expr::Expr::Lam(Box::new(pen_core::expr::Expr::App(
+                Box::new(pen_core::expr::Expr::Var(1)),
+                Box::new(pen_core::expr::Expr::Var(2)),
+            ))),
+            12,
+        ));
+        assert!(supports_operator_bundle_clause_at_position(
+            4,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Lib(12)),
+                Box::new(pen_core::expr::Expr::Lib(12)),
+            ),
+            12,
+        ));
+        assert!(supports_operator_bundle_clause_at_position(
+            5,
+            &pen_core::expr::Expr::Lam(Box::new(pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Var(1)),
+                Box::new(pen_core::expr::Expr::Var(1)),
+            ))),
+            12,
+        ));
+        assert!(supports_operator_bundle_clause_at_position(
+            6,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Lib(12)),
+                Box::new(pen_core::expr::Expr::Var(1)),
+            ),
+            12,
+        ));
+    }
+
+    #[test]
+    fn hilbert_functional_filters_accept_the_reference_step_fourteen_shell() {
+        assert!(supports_hilbert_functional_clause_at_position(
+            0,
+            &pen_core::expr::Expr::Sigma(
+                Box::new(pen_core::expr::Expr::Pi(
+                    Box::new(pen_core::expr::Expr::Var(1)),
+                    Box::new(pen_core::expr::Expr::Pi(
+                        Box::new(pen_core::expr::Expr::Var(1)),
+                        Box::new(pen_core::expr::Expr::Univ),
+                    )),
+                )),
+                Box::new(pen_core::expr::Expr::Var(1)),
+            ),
+            13,
+        ));
+        assert!(supports_hilbert_functional_clause_at_position(
+            3,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Lam(Box::new(
+                    pen_core::expr::Expr::Var(1),
+                ))),
+                Box::new(pen_core::expr::Expr::Sigma(
+                    Box::new(pen_core::expr::Expr::Var(1)),
+                    Box::new(pen_core::expr::Expr::Var(2)),
+                )),
+            ),
+            13,
+        ));
+        assert!(supports_hilbert_functional_clause_at_position(
+            5,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Lib(13)),
+                Box::new(pen_core::expr::Expr::Var(1)),
+            ),
+            13,
+        ));
+        assert!(supports_hilbert_functional_clause_at_position(
+            6,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Lib(12)),
+                Box::new(pen_core::expr::Expr::Var(1)),
+            ),
+            13,
+        ));
+        assert!(supports_hilbert_functional_clause_at_position(
+            7,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Lib(11)),
+                Box::new(pen_core::expr::Expr::Var(1)),
+            ),
+            13,
+        ));
+        assert!(supports_hilbert_functional_clause_at_position(
+            8,
+            &pen_core::expr::Expr::Lam(Box::new(pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Var(1)),
+                Box::new(pen_core::expr::Expr::Univ),
+            ))),
+            13,
+        ));
+    }
+
+    #[test]
     fn step_four_enumeration_contains_the_reference_former_package() {
         let library = library_until(3);
         let admissibility = strict_admissibility(4, 2, &library);
@@ -1085,6 +2175,11 @@ mod tests {
                 require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
                 require_modal_shell_clauses: admissibility.require_modal_shell_package,
                 require_connection_shell_clauses: admissibility.require_connection_shell_package,
+                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
+                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
+                require_hilbert_functional_clauses: admissibility
+                    .require_hilbert_functional_package,
+                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
             },
             admissibility.min_clause_kappa,
@@ -1119,6 +2214,11 @@ mod tests {
                 require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
                 require_modal_shell_clauses: admissibility.require_modal_shell_package,
                 require_connection_shell_clauses: admissibility.require_connection_shell_package,
+                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
+                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
+                require_hilbert_functional_clauses: admissibility
+                    .require_hilbert_functional_package,
+                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
             },
             admissibility.min_clause_kappa,
@@ -1153,6 +2253,11 @@ mod tests {
                 require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
                 require_modal_shell_clauses: admissibility.require_modal_shell_package,
                 require_connection_shell_clauses: admissibility.require_connection_shell_package,
+                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
+                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
+                require_hilbert_functional_clauses: admissibility
+                    .require_hilbert_functional_package,
+                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
             },
             admissibility.min_clause_kappa,
@@ -1187,6 +2292,11 @@ mod tests {
                 require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
                 require_modal_shell_clauses: admissibility.require_modal_shell_package,
                 require_connection_shell_clauses: admissibility.require_connection_shell_package,
+                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
+                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
+                require_hilbert_functional_clauses: admissibility
+                    .require_hilbert_functional_package,
+                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
             },
             admissibility.min_clause_kappa,
@@ -1221,6 +2331,11 @@ mod tests {
                 require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
                 require_modal_shell_clauses: admissibility.require_modal_shell_package,
                 require_connection_shell_clauses: admissibility.require_connection_shell_package,
+                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
+                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
+                require_hilbert_functional_clauses: admissibility
+                    .require_hilbert_functional_package,
+                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
             },
             admissibility.min_clause_kappa,
@@ -1255,6 +2370,11 @@ mod tests {
                 require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
                 require_modal_shell_clauses: admissibility.require_modal_shell_package,
                 require_connection_shell_clauses: admissibility.require_connection_shell_package,
+                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
+                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
+                require_hilbert_functional_clauses: admissibility
+                    .require_hilbert_functional_package,
+                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
             },
             admissibility.min_clause_kappa,
@@ -1289,6 +2409,11 @@ mod tests {
                 require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
                 require_modal_shell_clauses: admissibility.require_modal_shell_package,
                 require_connection_shell_clauses: admissibility.require_connection_shell_package,
+                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
+                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
+                require_hilbert_functional_clauses: admissibility
+                    .require_hilbert_functional_package,
+                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
             },
             admissibility.min_clause_kappa,
@@ -1322,8 +2447,12 @@ mod tests {
                 require_sphere_lift_clauses: admissibility.require_sphere_lift_package,
                 require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
                 require_modal_shell_clauses: admissibility.require_modal_shell_package,
-                require_connection_shell_clauses: admissibility
-                    .require_connection_shell_package,
+                require_connection_shell_clauses: admissibility.require_connection_shell_package,
+                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
+                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
+                require_hilbert_functional_clauses: admissibility
+                    .require_hilbert_functional_package,
+                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
             },
             admissibility.min_clause_kappa,
@@ -1332,6 +2461,242 @@ mod tests {
         assert!(
             telescopes.contains(&Telescope::reference(11)),
             "enumerated {} step-11 telescopes, but not the reference connection shell",
+            telescopes.len()
+        );
+    }
+
+    #[test]
+    fn step_twelve_enumeration_contains_the_reference_curvature_shell() {
+        let library = library_until(11);
+        let admissibility = strict_admissibility(12, 2, &library);
+        let telescopes = enumerate_telescopes(
+            &library,
+            EnumerationContext {
+                library_size: library.len() as u32,
+                scope_size: admissibility.ambient_depth,
+                max_path_dimension: admissibility.max_path_dimension,
+                include_trunc: admissibility.include_trunc,
+                include_modal: admissibility.include_modal,
+                include_temporal: admissibility.include_temporal,
+                max_expr_nodes: admissibility.max_expr_nodes,
+                require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
+                require_initial_hit_clauses: admissibility.require_initial_hit_package,
+                require_truncation_hit_clauses: admissibility.require_truncation_hit_package,
+                require_higher_hit_clauses: admissibility.require_higher_hit_package,
+                require_sphere_lift_clauses: admissibility.require_sphere_lift_package,
+                require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
+                require_modal_shell_clauses: admissibility.require_modal_shell_package,
+                require_connection_shell_clauses: admissibility.require_connection_shell_package,
+                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
+                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
+                require_hilbert_functional_clauses: admissibility
+                    .require_hilbert_functional_package,
+                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
+                historical_anchor_ref: admissibility.historical_anchor_ref,
+            },
+            admissibility.max_clause_kappa,
+        );
+
+        assert!(
+            telescopes.contains(&Telescope::reference(12)),
+            "enumerated {} step-12 telescopes, but not the reference curvature shell",
+            telescopes.len()
+        );
+    }
+
+    #[test]
+    fn step_thirteen_enumeration_contains_the_reference_operator_bundle() {
+        let library = library_until(12);
+        let admissibility = strict_admissibility(13, 2, &library);
+        let telescopes = enumerate_telescopes(
+            &library,
+            EnumerationContext {
+                library_size: library.len() as u32,
+                scope_size: admissibility.ambient_depth,
+                max_path_dimension: admissibility.max_path_dimension,
+                include_trunc: admissibility.include_trunc,
+                include_modal: admissibility.include_modal,
+                include_temporal: admissibility.include_temporal,
+                max_expr_nodes: admissibility.max_expr_nodes,
+                require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
+                require_initial_hit_clauses: admissibility.require_initial_hit_package,
+                require_truncation_hit_clauses: admissibility.require_truncation_hit_package,
+                require_higher_hit_clauses: admissibility.require_higher_hit_package,
+                require_sphere_lift_clauses: admissibility.require_sphere_lift_package,
+                require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
+                require_modal_shell_clauses: admissibility.require_modal_shell_package,
+                require_connection_shell_clauses: admissibility.require_connection_shell_package,
+                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
+                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
+                require_hilbert_functional_clauses: admissibility
+                    .require_hilbert_functional_package,
+                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
+                historical_anchor_ref: admissibility.historical_anchor_ref,
+            },
+            admissibility.max_clause_kappa,
+        );
+
+        assert!(
+            telescopes.contains(&Telescope::reference(13)),
+            "enumerated {} step-13 telescopes, but not the reference operator bundle",
+            telescopes.len()
+        );
+    }
+
+    #[test]
+    fn step_fourteen_enumeration_contains_the_reference_hilbert_functional_shell() {
+        let library = library_until(13);
+        let admissibility = strict_admissibility(14, 2, &library);
+        let telescopes = enumerate_telescopes(
+            &library,
+            EnumerationContext {
+                library_size: library.len() as u32,
+                scope_size: admissibility.ambient_depth,
+                max_path_dimension: admissibility.max_path_dimension,
+                include_trunc: admissibility.include_trunc,
+                include_modal: admissibility.include_modal,
+                include_temporal: admissibility.include_temporal,
+                max_expr_nodes: admissibility.max_expr_nodes,
+                require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
+                require_initial_hit_clauses: admissibility.require_initial_hit_package,
+                require_truncation_hit_clauses: admissibility.require_truncation_hit_package,
+                require_higher_hit_clauses: admissibility.require_higher_hit_package,
+                require_sphere_lift_clauses: admissibility.require_sphere_lift_package,
+                require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
+                require_modal_shell_clauses: admissibility.require_modal_shell_package,
+                require_connection_shell_clauses: admissibility.require_connection_shell_package,
+                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
+                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
+                require_hilbert_functional_clauses: admissibility
+                    .require_hilbert_functional_package,
+                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
+                historical_anchor_ref: admissibility.historical_anchor_ref,
+            },
+            admissibility.max_clause_kappa,
+        );
+
+        assert!(
+            telescopes.contains(&Telescope::reference(14)),
+            "enumerated {} step-14 telescopes, but not the reference Hilbert shell",
+            telescopes.len()
+        );
+    }
+
+    #[test]
+    fn temporal_shell_filters_accept_the_reference_dct_bundle() {
+        assert!(supports_temporal_shell_clause_at_position(
+            0,
+            &pen_core::expr::Expr::Next(Box::new(pen_core::expr::Expr::Var(1))),
+            Some(10),
+        ));
+        assert!(supports_temporal_shell_clause_at_position(
+            1,
+            &pen_core::expr::Expr::Eventually(Box::new(pen_core::expr::Expr::Var(1))),
+            Some(10),
+        ));
+        assert!(supports_temporal_shell_clause_at_position(
+            2,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Next(Box::new(pen_core::expr::Expr::Var(1)))),
+                Box::new(pen_core::expr::Expr::Eventually(Box::new(
+                    pen_core::expr::Expr::Var(1),
+                ))),
+            ),
+            Some(10),
+        ));
+        assert!(supports_temporal_shell_clause_at_position(
+            3,
+            &pen_core::expr::Expr::Lam(Box::new(pen_core::expr::Expr::App(
+                Box::new(pen_core::expr::Expr::Lib(10)),
+                Box::new(pen_core::expr::Expr::Next(Box::new(
+                    pen_core::expr::Expr::Var(1),
+                ))),
+            ))),
+            Some(10),
+        ));
+        assert!(supports_temporal_shell_clause_at_position(
+            4,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Flat(Box::new(
+                    pen_core::expr::Expr::Next(Box::new(pen_core::expr::Expr::Var(1))),
+                ))),
+                Box::new(pen_core::expr::Expr::Next(Box::new(
+                    pen_core::expr::Expr::Flat(Box::new(pen_core::expr::Expr::Var(1))),
+                ))),
+            ),
+            Some(10),
+        ));
+        assert!(supports_temporal_shell_clause_at_position(
+            5,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Sharp(Box::new(
+                    pen_core::expr::Expr::Eventually(Box::new(pen_core::expr::Expr::Var(1))),
+                ))),
+                Box::new(pen_core::expr::Expr::Eventually(Box::new(
+                    pen_core::expr::Expr::Sharp(Box::new(pen_core::expr::Expr::Var(1))),
+                ))),
+            ),
+            Some(10),
+        ));
+        assert!(supports_temporal_shell_clause_at_position(
+            6,
+            &pen_core::expr::Expr::Lam(Box::new(pen_core::expr::Expr::App(
+                Box::new(pen_core::expr::Expr::Eventually(Box::new(
+                    pen_core::expr::Expr::Var(1),
+                ))),
+                Box::new(pen_core::expr::Expr::Var(2)),
+            ))),
+            Some(10),
+        ));
+        assert!(supports_temporal_shell_clause_at_position(
+            7,
+            &pen_core::expr::Expr::Pi(
+                Box::new(pen_core::expr::Expr::Next(Box::new(
+                    pen_core::expr::Expr::Next(Box::new(pen_core::expr::Expr::Var(1))),
+                ))),
+                Box::new(pen_core::expr::Expr::Next(Box::new(
+                    pen_core::expr::Expr::Var(1),
+                ))),
+            ),
+            Some(10),
+        ));
+    }
+
+    #[test]
+    fn step_fifteen_enumeration_contains_the_reference_temporal_shell() {
+        let library = library_until(14);
+        let admissibility = strict_admissibility(15, 2, &library);
+        let telescopes = enumerate_telescopes(
+            &library,
+            EnumerationContext {
+                library_size: library.len() as u32,
+                scope_size: admissibility.ambient_depth,
+                max_path_dimension: admissibility.max_path_dimension,
+                include_trunc: admissibility.include_trunc,
+                include_modal: admissibility.include_modal,
+                include_temporal: admissibility.include_temporal,
+                max_expr_nodes: admissibility.max_expr_nodes,
+                require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
+                require_initial_hit_clauses: admissibility.require_initial_hit_package,
+                require_truncation_hit_clauses: admissibility.require_truncation_hit_package,
+                require_higher_hit_clauses: admissibility.require_higher_hit_package,
+                require_sphere_lift_clauses: admissibility.require_sphere_lift_package,
+                require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
+                require_modal_shell_clauses: admissibility.require_modal_shell_package,
+                require_connection_shell_clauses: admissibility.require_connection_shell_package,
+                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
+                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
+                require_hilbert_functional_clauses: admissibility
+                    .require_hilbert_functional_package,
+                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
+                historical_anchor_ref: admissibility.historical_anchor_ref,
+            },
+            admissibility.max_clause_kappa,
+        );
+
+        assert!(
+            telescopes.contains(&Telescope::reference(15)),
+            "enumerated {} step-15 telescopes, but not the reference temporal shell",
             telescopes.len()
         );
     }

@@ -52,7 +52,7 @@ Strict canon:
 
 - shell: connection shell
 - `kappa = 5`
-- `nu = 27`
+- `nu = 26`
 
 Semantic reading:
 
@@ -69,7 +69,7 @@ Strict canon:
 
 - shell: curvature shell
 - `kappa = 6`
-- `nu = 35`
+- `nu = 34`
 
 Semantic reading:
 
@@ -85,7 +85,7 @@ Strict canon:
 
 - shell: endomorphic operator bundle (metric reading)
 - `kappa = 7`
-- `nu = 47`
+- `nu = 46`
 
 This row needs special care.
 
@@ -103,7 +103,7 @@ Strict canon:
 
 - shell: Hilbert-functional shell
 - `kappa = 9`
-- `nu = 63`
+- `nu = 62`
 
 Semantic reading:
 
@@ -145,4 +145,3 @@ They should not become target IDs in the Rust search crates.
 
 - Read [genesis.md](genesis.md) for the exact strict values.
 - Read [terminal-dct.md](terminal-dct.md) for the temporal-cohesive step that follows this phase.
-

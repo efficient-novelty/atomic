@@ -1,17 +1,16 @@
 # Genesis
 
-This is the exact 15-step strict canon that `pen-atomic` should treat as the default target.
-The quantitative table below is copied from `pen_paper.tex`, not from the older paper-level structural audits.
+This is the exact 15-step executable canon that `pen-atomic` should treat as the default target.
+The quantitative table below is synchronized to the frozen reference fixtures and the current structural evaluator, not to superseded donor-manuscript late totals.
 
 ## How To Read This File
 
-- The `Selected AST skeleton` column is the exact structure description used in the strict canonical table.
+- The `Selected AST skeleton` column is the exact structure description used in the canonical table.
 - The late rows are shell-first:
   the selector found anonymous typed shells, and the human names are semantic readings.
-- The `nu` values here are the strict machine values from `pen_paper.tex`.
-  Some other TeX files still use older late totals.
+- The `nu` values here are the current executable values frozen by the repo's fixtures and evaluator.
 
-## Exact Strict Table From `pen_paper.tex`
+## Exact Current Table
 
 | Step | tau | Selected AST skeleton | Delta | nu | kappa | rho | Bar |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
@@ -25,11 +24,11 @@ The quantitative table below is copied from `pen_paper.tex`, not from the older 
 | 8 | 54 | H-space `S^3` | 21 | 18 | 5 | 3.60 | 3.43 |
 | 9 | 88 | Hopf fibration | 34 | 17 | 4 | 4.25 | 4.01 |
 | 10 | 143 | Modal shell (cohesion reading) | 55 | 19 | 4 | 4.75 | 4.46 |
-| 11 | 232 | Connection shell | 89 | 27 | 5 | 5.40 | 4.91 |
-| 12 | 376 | Curvature shell | 144 | 35 | 6 | 5.83 | 5.47 |
-| 13 | 609 | Endomorphic operator bundle (metric reading) | 233 | 47 | 7 | 6.71 | 6.07 |
-| 14 | 986 | Hilbert-functional shell | 377 | 63 | 9 | 7.00 | 6.78 |
-| 15 | 1596 | Temporal-cohesive shell (semantic DCT completion) | 610 | 88 | 8 | 11.00 | 7.51 |
+| 11 | 232 | Connection shell | 89 | 26 | 5 | 5.20 | 4.91 |
+| 12 | 376 | Curvature shell | 144 | 34 | 6 | 5.67 | 5.42 |
+| 13 | 609 | Endomorphic operator bundle (metric reading) | 233 | 46 | 7 | 6.57 | 5.99 |
+| 14 | 986 | Hilbert-functional shell | 377 | 62 | 9 | 6.89 | 6.68 |
+| 15 | 1596 | Temporal-cohesive shell (semantic DCT completion) | 610 | 103 | 8 | 12.88 | 7.40 |
 
 ## Phase Structure
 
@@ -69,7 +68,7 @@ These are best read as promoted API shells over the geometric core, not as fully
 - temporal-cohesive shell
 - semantic completion read as DCT
 
-This is the terminal shell in the current strict lane.
+This is the terminal shell in the current executable lane.
 
 ## Proof-Status Boundary
 
@@ -80,7 +79,7 @@ The strict proof spine sharpens the status of the late rows.
 - steps 11 to 14:
   expository reconstructions are allowed, but they must match the strict totals,
 - step 15:
-  only the strict total `nu = 88` is canonical.
+  the frozen structural total `nu = 103` is canonical.
 
 That boundary matters for the rewrite because it tells us what is settled versus what is still explanatory overlay.
 
@@ -99,18 +98,10 @@ That is why step 1 is sometimes discussed against `0.50` even though the main ta
 
 ## Quantitative Drift To Watch
 
-Other manuscripts still use an older paper-level late regime:
+Some older donor manuscripts still preserve a mismatched late-step lane.
 
-| Step | Older late `nu` values seen elsewhere |
-| --- | ---: |
-| 11 | 26 |
-| 12 | 34 |
-| 13 | 46 |
-| 14 | 62 |
-| 15 | 103 |
-
-For `pen-atomic`, the default quantitative target is still the strict canon above.
-If the rewrite later aims to recover the larger structural totals, treat that as a second milestone, not as something the current repo already settled.
+For `pen-atomic`, the default quantitative target is the executable canon above.
+If a provenance note disagrees with the frozen fixtures, prefer the executable table here.
 
 ## Why This File Is The Default Target
 
@@ -123,4 +114,3 @@ This table is the cleanest single statement of:
 - and the shell-first semantic boundary.
 
 Everything else in the theory tree either explains why this sequence is mathematically expected or clarifies where the late semantic readings came from.
-

@@ -85,8 +85,9 @@ impl LibraryEntry {
             has_differential_ops: matches!(class, TelescopeClass::Axiomatic),
             has_curvature: exprs.iter().any(is_curvature_expr),
             has_metric: exprs.iter().any(is_metric_expr),
-            has_hilbert: exprs.iter().any(is_hilbert_expr),
+            has_hilbert: matches_hilbert_functional_shell(telescope, library),
             has_temporal_ops: exprs.iter().any(|expr| expr.is_temporal()),
+            has_temporal_shell: matches_temporal_cohesive_shell(telescope, library),
         };
 
         Self {
@@ -167,10 +168,7 @@ fn is_point_term(expr: &&Expr) -> bool {
 
 fn contains_modal_expr(expr: &Expr) -> bool {
     match expr {
-        Expr::Flat(_)
-        | Expr::Sharp(_)
-        | Expr::Disc(_)
-        | Expr::Shape(_) => true,
+        Expr::Flat(_) | Expr::Sharp(_) | Expr::Disc(_) | Expr::Shape(_) => true,
         Expr::App(left, right) | Expr::Pi(left, right) | Expr::Sigma(left, right) => {
             contains_modal_expr(left) || contains_modal_expr(right)
         }
@@ -181,9 +179,7 @@ fn contains_modal_expr(expr: &Expr) -> bool {
         | Expr::Next(body)
         | Expr::Eventually(body) => contains_modal_expr(body),
         Expr::Id(ty, left, right) => {
-            contains_modal_expr(ty)
-                || contains_modal_expr(left)
-                || contains_modal_expr(right)
+            contains_modal_expr(ty) || contains_modal_expr(left) || contains_modal_expr(right)
         }
         Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_) => false,
     }
@@ -204,17 +200,222 @@ fn is_metric_expr(expr: &&Expr) -> bool {
     }
 }
 
-fn is_hilbert_expr(expr: &&Expr) -> bool {
-    match expr {
-        Expr::Sigma(_, _) => true,
-        Expr::Pi(left, _) => matches!(left.as_ref(), Expr::Lib(13) | Expr::Lib(12)),
-        _ => false,
+fn matches_hilbert_functional_shell(telescope: &Telescope, library: &Library) -> bool {
+    let latest = library.len() as u32;
+    if latest < 3 {
+        return false;
     }
+    let previous = latest - 1;
+    let older = latest - 2;
+
+    telescope.path_dimensions().is_empty()
+        && telescope.clauses.len() == 9
+        && matches!(
+            &telescope.clauses[0].expr,
+            Expr::Sigma(left, right)
+                if matches!(
+                    left.as_ref(),
+                    Expr::Pi(domain, codomain)
+                        if matches!(domain.as_ref(), Expr::Var(1))
+                            && matches!(
+                                codomain.as_ref(),
+                                Expr::Pi(inner_domain, inner_codomain)
+                                    if matches!(inner_domain.as_ref(), Expr::Var(1))
+                                        && matches!(inner_codomain.as_ref(), Expr::Univ)
+                            )
+                ) && matches!(right.as_ref(), Expr::Var(1))
+        )
+        && matches!(
+            &telescope.clauses[1].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Var(1))
+                    && matches!(codomain.as_ref(), Expr::Var(1))
+        )
+        && matches!(
+            &telescope.clauses[2].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Var(1))
+                    && matches!(
+                        codomain.as_ref(),
+                        Expr::Sigma(left, right)
+                            if matches!(left.as_ref(), Expr::Var(1))
+                                && matches!(right.as_ref(), Expr::Var(1))
+                    )
+        )
+        && matches!(
+            &telescope.clauses[3].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lam(body) if matches!(body.as_ref(), Expr::Var(1)))
+                    && matches!(
+                        codomain.as_ref(),
+                        Expr::Sigma(left, right)
+                            if matches!(left.as_ref(), Expr::Var(1))
+                                && matches!(right.as_ref(), Expr::Var(2))
+                    )
+        )
+        && matches!(
+            &telescope.clauses[4].expr,
+            Expr::Sigma(left, right)
+                if matches!(
+                    left.as_ref(),
+                    Expr::Pi(domain, codomain)
+                        if matches!(domain.as_ref(), Expr::Var(1))
+                            && matches!(codomain.as_ref(), Expr::Var(1))
+                ) && matches!(
+                    right.as_ref(),
+                    Expr::Pi(domain, codomain)
+                        if matches!(domain.as_ref(), Expr::Var(1))
+                            && matches!(codomain.as_ref(), Expr::Var(1))
+                )
+        )
+        && matches!(
+            &telescope.clauses[5].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lib(index) if *index == latest)
+                    && matches!(codomain.as_ref(), Expr::Var(1))
+        )
+        && matches!(
+            &telescope.clauses[6].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lib(index) if *index == previous)
+                    && matches!(codomain.as_ref(), Expr::Var(1))
+        )
+        && matches!(
+            &telescope.clauses[7].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lib(index) if *index == older)
+                    && matches!(codomain.as_ref(), Expr::Var(1))
+        )
+        && matches!(
+            &telescope.clauses[8].expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::Pi(domain, codomain)
+                        if matches!(domain.as_ref(), Expr::Var(1))
+                            && matches!(codomain.as_ref(), Expr::Univ)
+                )
+        )
+}
+
+fn matches_temporal_cohesive_shell(telescope: &Telescope, library: &Library) -> bool {
+    let Some(anchor) = latest_modal_shell_anchor_ref(library) else {
+        return false;
+    };
+    if !library.iter().any(|entry| entry.capabilities.has_hilbert) {
+        return false;
+    }
+
+    telescope.path_dimensions().is_empty()
+        && telescope.clauses.len() == 8
+        && matches!(
+            &telescope.clauses[0].expr,
+            Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+        )
+        && matches!(
+            &telescope.clauses[1].expr,
+            Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+        )
+        && matches!(
+            &telescope.clauses[2].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1)))
+                    && matches!(
+                        codomain.as_ref(),
+                        Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+                    )
+        )
+        && matches!(
+            &telescope.clauses[3].expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
+                            && matches!(
+                                argument.as_ref(),
+                                Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                            )
+                )
+        )
+        && matches!(
+            &telescope.clauses[4].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Flat(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        )
+        && matches!(
+            &telescope.clauses[5].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sharp(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        )
+        && matches!(
+            &telescope.clauses[6].expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(
+                            function.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        ) && matches!(argument.as_ref(), Expr::Var(2))
+                )
+        )
+        && matches!(
+            &telescope.clauses[7].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+                )
+        )
+}
+
+fn latest_modal_shell_anchor_ref(library: &Library) -> Option<u32> {
+    library.iter().enumerate().rev().find_map(|(index, entry)| {
+        (entry.class == TelescopeClass::Modal && entry.capabilities.has_modal_ops)
+            .then_some(index as u32 + 1)
+    })
 }
 
 #[cfg(test)]
 mod tests {
     use super::LibraryEntry;
+    use crate::library::Library;
     use crate::telescope::{Telescope, TelescopeClass};
 
     #[test]
@@ -230,8 +431,46 @@ mod tests {
         assert!(connections.capabilities.has_modal_ops);
         assert_eq!(connections.library_refs, 1);
 
+        let curvature = LibraryEntry::from_telescope(&Telescope::reference(12), &empty);
+        assert_eq!(curvature.class, TelescopeClass::Axiomatic);
+        assert!(curvature.capabilities.has_curvature);
+
         let dct = LibraryEntry::from_telescope(&Telescope::reference(15), &empty);
         assert_eq!(dct.class, TelescopeClass::Synthesis);
         assert!(dct.capabilities.has_temporal_ops);
+        assert!(!dct.capabilities.has_temporal_shell);
+    }
+
+    #[test]
+    fn genuine_hilbert_marker_stays_closed_until_the_post_metric_shell() {
+        let mut library: Library = Vec::new();
+        for step in 1..=12 {
+            let telescope = Telescope::reference(step);
+            let entry = LibraryEntry::from_telescope(&telescope, &library);
+            library.push(entry);
+        }
+
+        let metric = LibraryEntry::from_telescope(&Telescope::reference(13), &library);
+        assert!(metric.capabilities.has_metric);
+        assert!(!metric.capabilities.has_hilbert);
+        library.push(metric);
+
+        let hilbert = LibraryEntry::from_telescope(&Telescope::reference(14), &library);
+        assert!(hilbert.capabilities.has_metric);
+        assert!(hilbert.capabilities.has_hilbert);
+    }
+
+    #[test]
+    fn genuine_temporal_marker_stays_closed_until_the_post_hilbert_shell() {
+        let mut library: Library = Vec::new();
+        for step in 1..=14 {
+            let telescope = Telescope::reference(step);
+            let entry = LibraryEntry::from_telescope(&telescope, &library);
+            library.push(entry);
+        }
+
+        let dct = LibraryEntry::from_telescope(&Telescope::reference(15), &library);
+        assert!(dct.capabilities.has_temporal_ops);
+        assert!(dct.capabilities.has_temporal_shell);
     }
 }

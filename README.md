@@ -25,8 +25,8 @@ The repository now has a real integration surface for the frozen v1 contracts:
 
 The important honesty note is that `run` and `resume` are now hybrid:
 
-- they perform real live atomic bootstrap search through step 11,
-- they fall back to deterministic reference replay from step 12 onward,
+- they perform real live atomic bootstrap search through step 15,
+- they no longer need deterministic reference replay for the current 15-step corpus,
 - and they still write the same frozen artifacts the future frontier engine will consume.
 
 The workspace is still being filled in according to the frozen order:
@@ -45,7 +45,7 @@ Progress is tracked in [plan_progress.md](plan_progress.md).
 
 ## Current commands
 
-- `cargo run -p pen-cli -- run --config configs/debug.toml --until-step 11`
+- `cargo run -p pen-cli -- run --config configs/debug.toml --until-step 15`
 - `cargo run -p pen-cli -- resume runs/<run-id>`
 - `cargo run -p pen-cli -- inspect runs/<run-id>`
 - `cargo run -p pen-cli -- export-agda --run-dir runs/<run-id>`
@@ -55,6 +55,6 @@ Progress is tracked in [plan_progress.md](plan_progress.md).
 ## Verification
 
 - `cargo test --workspace`
-- `cargo run -p pen-cli -- run --config configs/debug.toml --root %TEMP%\\pen-cli-smoke --run-id smoke-run --until-step 11`
+- `cargo run -p pen-cli -- run --config configs/debug.toml --root %TEMP%\\pen-cli-smoke --run-id smoke-run --until-step 15`
 - `cargo run -p pen-cli -- export-agda --until-step 2 --output-dir %TEMP%\\pen-agda-smoke`
 - `cargo run -p xtask -- export-reference-agda 2`

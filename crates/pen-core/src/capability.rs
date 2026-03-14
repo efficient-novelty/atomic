@@ -15,4 +15,5 @@ pub struct CapabilityFlags {
     pub has_metric: bool,
     pub has_hilbert: bool,
     pub has_temporal_ops: bool,
+    pub has_temporal_shell: bool,
 }

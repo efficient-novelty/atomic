@@ -3,16 +3,17 @@
 ## The Sequence the New Repo Should Care About
 
 Prefer `../theory/genesis.md` for the theorem-facing canonical table.
-This file is the engineering digest of that canon.
+This file is the engineering digest of that executable canon.
 
 The rewrite should target the current 15-step genesis sequence, not the older 16-step variant still visible in some Agda files.
 
-There are two important value regimes:
+The repo now has one executable late-step canon:
 
-1. The paper or aspirational target sequence.
-2. The current executable strict sequence.
+1. structure order is frozen through step 15,
+2. charged `kappa` is frozen through step 15,
+3. the late `nu` totals are frozen by the live fixtures and structural evaluator.
 
-The structures and `kappa` values now line up well. The late `nu` values do not.
+Older donor notes that disagree with those values are provenance only.
 
 ## Bar Formula
 
@@ -28,27 +29,27 @@ This is implemented in `engine/src/RunAbInitio.hs` via `computeBarD` and backed 
 
 ## Canonical 15-Step Table
 
-| Step | Name | Delta | Kappa | Paper target nu | Current strict nu | Current strict rho |
-| --- | --- | ---: | ---: | ---: | ---: | ---: |
-| 1 | Universe | 1 | 2 | 1 | 1 | 0.50 |
-| 2 | Unit | 1 | 1 | 1 | 1 | 1.00 |
-| 3 | Witness | 2 | 1 | 2 | 2 | 2.00 |
-| 4 | Pi/Sigma | 3 | 3 | 5 | 5 | 1.67 |
-| 5 | S1 | 5 | 3 | 7 | 7 | 2.33 |
-| 6 | Trunc | 8 | 3 | 8 | 8 | 2.67 |
-| 7 | S2 | 13 | 3 | 10 | 10 | 3.33 |
-| 8 | S3 | 21 | 5 | 18 | 18 | 3.60 |
-| 9 | Hopf | 34 | 4 | 17 | 17 | 4.25 |
-| 10 | Cohesion | 55 | 4 | 19 | 19 | 4.75 |
-| 11 | Connections | 89 | 5 | 26 | 27 | 5.40 |
-| 12 | Curvature | 144 | 6 | 34 | 35 | 5.83 |
-| 13 | Metric | 233 | 7 | 46 | 47 | 6.71 |
-| 14 | Hilbert | 377 | 9 | 62 | 63 | 7.00 |
-| 15 | DCT | 610 | 8 | 103 | 88 | 11.00 |
+| Step | Name | Delta | Kappa | Canonical nu | Canonical rho |
+| --- | --- | ---: | ---: | ---: | ---: |
+| 1 | Universe | 1 | 2 | 1 | 0.50 |
+| 2 | Unit | 1 | 1 | 1 | 1.00 |
+| 3 | Witness | 2 | 1 | 2 | 2.00 |
+| 4 | Pi/Sigma | 3 | 3 | 5 | 1.67 |
+| 5 | S1 | 5 | 3 | 7 | 2.33 |
+| 6 | Trunc | 8 | 3 | 8 | 2.67 |
+| 7 | S2 | 13 | 3 | 10 | 3.33 |
+| 8 | S3 | 21 | 5 | 18 | 3.60 |
+| 9 | Hopf | 34 | 4 | 17 | 4.25 |
+| 10 | Cohesion | 55 | 4 | 19 | 4.75 |
+| 11 | Connections | 89 | 5 | 26 | 5.20 |
+| 12 | Curvature | 144 | 6 | 34 | 5.67 |
+| 13 | Metric | 233 | 7 | 46 | 6.57 |
+| 14 | Hilbert | 377 | 9 | 62 | 6.89 |
+| 15 | DCT | 610 | 8 | 103 | 12.88 |
 
-## Current Strict Bars
+## Current Bars
 
-These are the bars recorded in the current strict trace summarized in `../theory/genesis.md`:
+These are the bars recorded in the current executable trace summarized in `../theory/genesis.md`:
 
 | Step | Bar |
 | --- | ---: |
@@ -63,34 +64,30 @@ These are the bars recorded in the current strict trace summarized in `../theory
 | 9 | 4.01 |
 | 10 | 4.46 |
 | 11 | 4.91 |
-| 12 | 5.47 |
-| 13 | 6.07 |
-| 14 | 6.78 |
-| 15 | 7.51 |
+| 12 | 5.42 |
+| 13 | 5.99 |
+| 14 | 6.68 |
+| 15 | 7.40 |
 
-## Why the Mismatch Matters
+## Why This Matters
 
-The rewrite must not silently optimize for the wrong finish line.
+The rewrite must not silently optimize for a superseded finish line.
 
 ### Structures and kappa
 
-These are close to stable:
+These are now stable:
 
-- structure order is now stable in the strict lane,
+- structure order is now stable in the executable lane,
 - charged `kappa` is stable,
-- steps 1 through 10 line up well enough to treat as solid donor behavior.
+- steps 1 through 15 line up well enough to treat as solid donor behavior.
 
 ### Late nu
 
-These remain unsettled:
+These are now frozen in the repo's executable canon:
 
-- steps 11 through 14 are off by +1 in the current strict lane,
-- step 15 is far below the paper target because the current strict molecular scorer undercounts the full structural payload.
-
-The key distinction is:
-
-- `computeNativeNu(exact DCT AST)` reaches the larger structural value,
-- but the current strict molecular path only charges `nu_G + nu_C + selected topological nu_H`, which leaves DCT at `88`.
+- steps 11 through 14 land at `26, 34, 46, 62`,
+- step 15 lands at `103`,
+- `compute_native_nu(exact DCT AST)` and the frozen live step-15 fixture agree on that final total.
 
 ## Step-by-Step Notes
 
@@ -104,11 +101,11 @@ The current repo recovers the right structures, but mostly via molecular compila
 
 ### Steps 11 to 15
 
-These are the most unstable region:
+These are now executable-canon territory:
 
 - structure identity is stable enough,
 - `kappa` is stable enough,
-- `nu` accounting is still under active tension between paper-level structural audits and current executable strict scoring.
+- `nu` accounting is frozen by the live fixtures and evaluator, culminating in `DCT` at `103`.
 
 ## Success Criteria for the Rewrite
 
@@ -122,12 +119,12 @@ A new repo will likely need staged goals.
 
 ### Stronger success
 
-- recover the current strict `nu` values with a cleaner atomic engine
+- recover the current executable `nu` values with a cleaner atomic engine
 - preserve deterministic replay and checkpointing
 
 ### Strongest success
 
-- recover the paper-level late `nu` values without cheating or hiding molecular templates
+- justify the executable late `nu` values with theorem-level decomposition and independent audits
 
 ## Primary Source Files
 

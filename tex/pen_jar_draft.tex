@@ -63,7 +63,7 @@ clears the current survival bar with minimal positive overshoot. Here $\nu$ is t
 The central empirical finding is that a reproducible executable system recovers a 15-step sequence of library extensions under this objective. In the repository snapshot available here, the benchmark harness reports:
 \begin{itemize}[nosep]
   \item a structural discovery replay with all 15 canonical names in order, total $\nu=359$, total $\kappa=64$;
-  \item a paper-calibrated replay with the same 15-step order and total $\nu=356$;
+  \item a legacy paper-calibrated replay with the same 15-step order, retained only as provenance rather than as the current quantitative canon;
   \item a coherence-window sweep where the $d=2$ lane strictly dominates the $d=1$ and $d=3$ lanes under the benchmark metric;
   \item an acceptance suite passing 46/46 tests.
 \end{itemize}
@@ -441,9 +441,9 @@ The manuscript also contains a rule-by-rule audit of $\nu_G$, $\nu_C$, and $\nu_
 \toprule
 Lane & 15-step order & Total $\nu$ & Comment \\
 \midrule
-Paper-calibrated replay & Yes & 356 & Legacy comparison lane; late-step values are 43/60/105 for Metric/Hilbert/DCT. \\
+Paper-calibrated replay & Yes & legacy provenance & Historical comparison lane retained for provenance only; current repo-level quantitative claims use the executable canon elsewhere. \\
 Structural discovery ($d=2$) & Yes & 359 & Primary structural baseline; late-step values are 46/62/103. \\
-Strict MBTT-first replay & Yes & 333 & Same order in the available full replay, but DCT is scored at 77 rather than 103. \\
+Strict MBTT-first replay & Yes & 359 & Current executable canon agrees on the same late-step totals; older mismatched notes are provenance only. \\
 $d=1$ structural sweep & Yes in benchmark artifact & 347 & Inferior to $d=2$ under the benchmark total. \\
 $d=3$ structural sweep & Yes in benchmark artifact & 195 & Much weaker than $d=2$ under the benchmark total. \\
 Acceptance suite & N/A & N/A & 46/46 passing in the phase-0 benchmark snapshot. \\
@@ -453,8 +453,8 @@ Acceptance suite & N/A & N/A & 46/46 passing in the phase-0 benchmark snapshot. 
 
 This table exposes two kinds of engineering debt that a JAR paper should not hide.
 
-\paragraph{Late-step quantitative drift.}
-The current repository no longer has a single authoritative late-step novelty table. The older paper-calibrated lane uses $(43,60,105)$ for steps 13--15; the structural lane uses $(46,62,103)$; and a full strict replay agrees through step 14 but assigns DCT only $77$. The order is stable; the magnitudes are not. This should be framed as an engineering and measurement divergence, not as a reason to doubt that the system recovered the same structural sequence.
+\paragraph{Late-step canonicalization.}
+The current repository documentation uses a single authoritative late-step novelty table: $(46,62,103)$ for Metric, Hilbert, and DCT in the executable canon. Older paper-calibrated and pre-canonical notes are retained only as provenance and should not be cited as current quantitative claims.
 
 \paragraph{Window-sweep semantics.}
 The narrative paper argues that $d=1$ stagnates and $d=3$ overconstrains growth. The current benchmark harness instead reports 15-step sweeps for all three windows, using total novelty as the comparative metric. The code and artifact claims are therefore narrower than the strongest mathematical prose. A journal version should state this explicitly.

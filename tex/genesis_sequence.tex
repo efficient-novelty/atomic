@@ -126,8 +126,8 @@ that stronger fact directly.
 Second, the proof-strength boundary from \cref{rem:automation-scope} is
 maintained verbatim:
 steps~1--10 admit exact or exact-reconstruction language,
-steps~11--14 are expository reconstructions constrained to match the strict
-totals, and step~15 canonizes only the strict total $\nu=88$.
+steps~11--14 are expository reconstructions constrained to match the executable
+totals, and step~15 canonizes the executable structural total $\nu=103$.
 
 \subsection{A Global Bar Lemma}
 \label{subsec:genesis-bar-lemma}
@@ -192,11 +192,11 @@ Step & Structure & $\Delta_n$ & $\nu$ & $\kappa$ & $\rho$ & Bar & Margin & cap/b
 8  & $S^3$       & 21  & 18 & 5 & 3.60 & 3.43 & 0.17 & 5 / 5   & 1 / 1      & --- & --- \\
 9  & Hopf        & 34  & 17 & 4 & 4.25 & 4.01 & 0.24 & 5 / 4   & 1 / 1      & --- & --- \\
 10 & Cohesion    & 55  & 19 & 4 & 4.75 & 4.46 & 0.29 & 5 / 4   & 2 / 2      & --- & Hopf (4.25) \\
-11 & Connections & 89  & 27 & 5 & 5.40 & 4.91 & 0.49 & 6 / 5   & 2 / 2      & --- & $S^3$ (3.60) \\
-12 & Curvature   & 144 & 35 & 6 & 5.83 & 5.47 & 0.36 & 6 / 5|6 & 3 / 3      & --- & $S^3$ (3.60) \\
-13 & Metric      & 233 & 47 & 7 & 6.71 & 6.07 & 0.65 & 8 / 7   & 3 / 3      & --- & HIT (2.29) \\
-14 & Hilbert     & 377 & 63 & 9 & 7.00 & 6.78 & 0.22 & 9 / 8|9 & 4 / 4      & --- & HIT (3.00) \\
-15 & DCT         & 610 & 88 & 8 & 11.00 & 7.51 & 3.49 & 9 / 8   & 3 / 3      & --- & HIT (3.00) \\
+11 & Connections & 89  & 26  & 5 & 5.20  & 4.91 & 0.29 & 6 / 5   & 2 / 2      & --- & $S^3$ (3.60) \\
+12 & Curvature   & 144 & 34  & 6 & 5.67  & 5.42 & 0.24 & 6 / 5|6 & 3 / 3      & --- & $S^3$ (3.60) \\
+13 & Metric      & 233 & 46  & 7 & 6.57  & 5.99 & 0.58 & 8 / 7   & 3 / 3      & --- & HIT (2.29) \\
+14 & Hilbert     & 377 & 62  & 9 & 6.89  & 6.68 & 0.21 & 9 / 8|9 & 4 / 4      & --- & HIT (3.00) \\
+15 & DCT         & 610 & 103 & 8 & 12.88 & 7.40 & 5.48 & 9 / 8   & 3 / 3      & --- & HIT (3.00) \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -660,16 +660,16 @@ without the cohesive layer from Step~10 there is no differential package to
 select.
 
 \paragraph{Why the novelty count has this value.}
-The expository rule audit in \cref{app:connections-spec} reconstructs the strict
-total as $\nu=27=2+25$, where the new interaction comes from cohesive
-cross-rules, function-space rules, and library interactions with the previously
-selected HITs and Hopf.
+The expository rule audit in \cref{app:connections-spec} reconstructs the
+current executable total as $\nu=26$, with the new interaction coming from
+cohesive cross-rules, function-space rules, and library interactions with the
+previously selected HITs and Hopf.
 By \cref{rem:automation-scope}, this reconstruction is subordinate to, but
 consistent with, the strict total in \cref{tab:genesis-sequence-trace}.
 
 \paragraph{Why it is the unique selected winner at this step.}
 The strict trace opens cap/band $6/5$ and the viable set is singleton:
-Connections clears the bar at $\rho=5.40$, while the displayed near miss is only
+Connections clears the bar at $\rho=5.20$, while the displayed near miss is only
 the old $S^3$ package at $\rho=3.60$; see
 \cref{tab:genesis-sequence-trace}.
 Thus the strict lane does not need any external steering here: the first
@@ -704,8 +704,8 @@ differentiate, the next non-derivable interaction is precisely the failure of
 flatness.
 
 \paragraph{Why the novelty count has this value.}
-The expository audit in \cref{app:curvature-spec} reconstructs the strict total
-as $\nu=35=2+33$, with the extra weight coming from interactions among
+The expository audit in \cref{app:curvature-spec} reconstructs the executable
+total as $\nu=34$, with the extra weight coming from interactions among
 curvature, connection, and cohesive structure.
 By \cref{rem:automation-scope}, that reconstruction is explanatory rather than a
 second oracle, but it agrees with the canonical strict total in
@@ -713,7 +713,7 @@ second oracle, but it agrees with the canonical strict total in
 
 \paragraph{Why it is the unique selected winner at this step.}
 The strict trace opens cap/bands $6/(5|6)$ and nevertheless yields a singleton
-viable set: Curvature clears the bar at $\rho=5.83$, while the displayed near
+viable set: Curvature clears the bar at $\rho=5.67$, while the displayed near
 misses are far below the bar; see \cref{tab:genesis-sequence-trace}.
 Thus the switch from differential to curvature structure is not a naming
 convention but a mechanically unique strict continuation.
@@ -751,7 +751,7 @@ library.
 
 \paragraph{Why the novelty count has this value.}
 The expository reconstruction in \cref{app:metric-spec} gives
-$\nu=47=4+43$, where the dominant term is the bounded coupling with the
+$\nu=46$, where the dominant term is the bounded coupling with the
 curvature and connection layers.
 The same section explains why a bare metric tensor would have
 $\rho\le 3.0$, far below the Step~13 bar, so the strict total in
@@ -760,7 +760,7 @@ tensor-driven.
 
 \paragraph{Why it is the unique selected winner at this step.}
 The strict trace opens cap/band $8/7$ and the viable set is singleton:
-Metric clears the bar at $\rho=6.71$, whereas the displayed near miss is only an
+Metric clears the bar at $\rho=6.57$, whereas the displayed near miss is only an
 unnamed HIT candidate at $\rho=2.29$; see
 \cref{tab:genesis-sequence-trace}.
 Hence the selected metric bundle is uniquely forced by the strict objective, and
@@ -795,13 +795,13 @@ whole geometric stack in analytic form.
 
 \paragraph{Why the novelty count has this value.}
 The expository reconstruction in \cref{app:hilbert-spec} gives
-$\nu=63=5+58$, dominated by the coupling to Metric, Curvature, and Connections.
+$\nu=62$, dominated by the coupling to Metric, Curvature, and Connections.
 The same section also shows why the margin is small: even two extra charged
 clauses would drop the package below the Step~14 bar.
 
 \paragraph{Why it is the unique selected winner at this step.}
 The strict trace opens cap/bands $9/(8|9)$ and still yields a singleton viable
-set: Hilbert clears the bar at $\rho=7.00$, while the displayed near miss is
+set: Hilbert clears the bar at $\rho=6.89$, while the displayed near miss is
 only an unnamed HIT candidate at $\rho=3.00$; see
 \cref{tab:genesis-sequence-trace}.
 Thus the operator-analytic layer is the unique strict continuation of the metric
@@ -813,7 +813,7 @@ bundle, with no competing bar-clearer in the verified run.
 
 Step~15 is special.
 The mathematical interpretation as DCT is theorem-level and semantic, but the
-only canonical quantitative claim is the strict total $\nu=88$;
+canonical quantitative claim is the executable structural total $\nu=103$;
 see \cref{sec:decomposition,rem:automation-scope}.
 
 \begin{proposition}[Step 15: Temporal-cohesive synthesis]
@@ -845,16 +845,15 @@ of Step~10 with temporal operators in a way that internalizes the library's own
 evolution; see \cref{thm:end-of-history,sec:decomposition}.
 
 \paragraph{Why the novelty count has this value.}
-Only the strict total $\nu=88$ is canonical here; no finer split is asserted in
-this section.
-By \cref{sec:verification,sec:adjoint-completion}, the strict engine computes
-that total from the conceptual temporal shell together with the explicit
-path-style witness payload preserved by compilation.
+The executable structural total $\nu=103$ is canonical here.
+By \cref{sec:verification,sec:adjoint-completion}, the current evaluator
+computes that total from the temporal shell together with its structural
+temporal-cohesive interaction payload.
 This is exactly the number reported in \cref{tab:genesis-sequence-trace}.
 
 \paragraph{Why it is the unique selected winner at this step.}
 The strict trace opens cap/band $9/8$ and the viable set is singleton:
-DCT clears the bar at $\rho=11.00$ against bar $7.51$, while the displayed near
+DCT clears the bar at $\rho=12.88$ against bar $7.40$, while the displayed near
 miss is only an unnamed HIT candidate at $\rho=3.00$; see
 \cref{tab:genesis-sequence-trace}.
 This is also the largest absolute overshoot in the entire sequence.
@@ -899,7 +898,7 @@ lane.
 
 \begin{proof}
 By \cref{thm:strict-genesis-sequence}, Step~15 is the selected temporal-cohesive
-shell with the canonical strict total $\nu=88$.
+shell with the canonical executable total $\nu=103$.
 By the halting theorem \cref{thm:end-of-history}, every internal Step~16
 continuation has zero marginal external novelty and every disconnected
 continuation fails the positive Step~16 bar.

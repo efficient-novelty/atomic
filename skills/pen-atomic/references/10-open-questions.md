@@ -65,18 +65,15 @@ This should be decided early because it affects:
 - telemetry
 - proof narrative
 
-## 6. What Is the Step-15 Truth Target?
+## 6. How Much Step-15 Decomposition Should the Repo Expose?
 
-The repo currently exposes a real tension:
+The repo now freezes `DCT` at `nu = 103`.
 
-- full structural DCT analysis gives the larger `nu`
-- current strict molecular lane selects `DCT` with `nu = 88`
+The remaining question is presentation:
 
-The new repo should decide whether step 15 success means:
-
-- match current strict executable behavior,
-- or match the larger structural target,
-- or produce both numbers with a clear explanation.
+- cite only the total `103`,
+- cite the standard split `nu_G = 2`, `nu_H = 15`, `nu_C = 86`,
+- or expose both the total and the supporting trace-level bonuses in reports.
 
 ## 7. How Minimal Should the Agda Sidecar Be?
 

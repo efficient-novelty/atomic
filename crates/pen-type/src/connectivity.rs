@@ -1,6 +1,6 @@
 use pen_core::expr::Expr;
 use pen_core::library::Library;
-use pen_core::telescope::Telescope;
+use pen_core::telescope::{Telescope, TelescopeClass};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct ConnectivityWitness {
@@ -8,6 +8,7 @@ pub struct ConnectivityWitness {
     pub references_active_window: bool,
     pub self_contained: bool,
     pub max_lib_ref: u32,
+    pub historical_reanchor: bool,
 }
 
 pub fn analyze_connectivity(library: &Library, telescope: &Telescope) -> ConnectivityWitness {
@@ -16,12 +17,16 @@ pub fn analyze_connectivity(library: &Library, telescope: &Telescope) -> Connect
         references_active_window: telescope.references_window(library.len() as u32),
         self_contained: telescope.lib_refs().is_empty(),
         max_lib_ref: telescope.max_lib_ref(),
+        historical_reanchor: allows_temporal_modal_reanchor(library, telescope),
     }
 }
 
 pub fn passes_connectivity(library: &Library, telescope: &Telescope) -> bool {
     let witness = analyze_connectivity(library, telescope);
-    witness.connected && (witness.references_active_window || witness.self_contained)
+    witness.connected
+        && (witness.references_active_window
+            || witness.self_contained
+            || witness.historical_reanchor)
 }
 
 fn is_structurally_connected(telescope: &Telescope) -> bool {
@@ -44,8 +49,22 @@ fn is_structurally_connected(telescope: &Telescope) -> bool {
                 && ((i + 1)..telescope.clauses.len()).any(|j| {
                     is_higher_path_witness_clause(&telescope.clauses[j].expr)
                 });
+        let has_higher_order_bridge_attachment =
+            is_higher_order_bridge_clause(&telescope.clauses[i].expr)
+                && ((i + 1)..telescope.clauses.len())
+                    .any(|j| telescope.clauses[j].expr.has_lib_pointer());
+        let has_operator_bundle_bridge_attachment =
+            is_operator_action_clause(&telescope.clauses[i].expr)
+                && (0..i).any(|j| is_operator_bundle_seed_clause(&telescope.clauses[j].expr))
+                && ((i + 1)..telescope.clauses.len())
+                    .any(|j| is_operator_bundle_closure_clause(&telescope.clauses[j].expr));
 
-        has_var_edge || has_lib_edge || has_path_attachment || has_higher_path_witness_attachment
+        has_var_edge
+            || has_lib_edge
+            || has_path_attachment
+            || has_higher_path_witness_attachment
+            || has_higher_order_bridge_attachment
+            || has_operator_bundle_bridge_attachment
     })
 }
 
@@ -101,6 +120,177 @@ fn is_higher_path_witness_clause(expr: &Expr) -> bool {
     matches!(expr, Expr::Lam(body) if matches!(body.as_ref(), Expr::Var(1) | Expr::Var(2)))
 }
 
+fn is_higher_order_bridge_clause(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Lam(body)
+            if matches!(
+                body.as_ref(),
+                Expr::Pi(domain, codomain) | Expr::Sigma(domain, codomain)
+                    if domain.var_refs().contains(&1) && codomain.var_refs().contains(&2)
+            )
+    )
+}
+
+fn is_operator_action_clause(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Lam(body)
+            if matches!(
+                body.as_ref(),
+                Expr::App(function, argument)
+                    if matches!(function.as_ref(), Expr::Var(1))
+                        && matches!(argument.as_ref(), Expr::Var(2))
+            )
+    )
+}
+
+fn is_operator_bundle_seed_clause(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Sigma(left, right)
+            if matches!(
+                left.as_ref(),
+                Expr::Pi(domain, codomain)
+                    if matches!(domain.as_ref(), Expr::Var(1))
+                        && matches!(codomain.as_ref(), Expr::Var(1))
+            ) && matches!(
+                right.as_ref(),
+                Expr::Pi(domain, codomain)
+                    if matches!(domain.as_ref(), Expr::Var(1))
+                        && matches!(codomain.as_ref(), Expr::Var(1))
+            )
+    )
+}
+
+fn is_operator_bundle_closure_clause(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(domain.as_ref(), Expr::Lib(_))
+                && (matches!(codomain.as_ref(), Expr::Lib(_))
+                    || matches!(codomain.as_ref(), Expr::Var(1)))
+    )
+}
+
+fn allows_temporal_modal_reanchor(library: &Library, telescope: &Telescope) -> bool {
+    let Some(anchor) = latest_modal_shell_anchor_ref(library) else {
+        return false;
+    };
+
+    library
+        .last()
+        .is_some_and(|entry| entry.capabilities.has_hilbert)
+        && matches_temporal_shell_pattern(telescope, anchor)
+}
+
+fn latest_modal_shell_anchor_ref(library: &Library) -> Option<u32> {
+    library.iter().enumerate().rev().find_map(|(index, entry)| {
+        (entry.class == TelescopeClass::Modal && entry.capabilities.has_modal_ops)
+            .then_some(index as u32 + 1)
+    })
+}
+
+fn matches_temporal_shell_pattern(telescope: &Telescope, anchor: u32) -> bool {
+    telescope.path_dimensions().is_empty()
+        && telescope.clauses.len() == 8
+        && matches!(
+            &telescope.clauses[0].expr,
+            Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+        )
+        && matches!(
+            &telescope.clauses[1].expr,
+            Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+        )
+        && matches!(
+            &telescope.clauses[2].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1)))
+                    && matches!(
+                        codomain.as_ref(),
+                        Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+                    )
+        )
+        && matches!(
+            &telescope.clauses[3].expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
+                            && matches!(
+                                argument.as_ref(),
+                                Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                            )
+                )
+        )
+        && matches!(
+            &telescope.clauses[4].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Flat(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        )
+        && matches!(
+            &telescope.clauses[5].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sharp(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        )
+        && matches!(
+            &telescope.clauses[6].expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(
+                            function.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        ) && matches!(argument.as_ref(), Expr::Var(2))
+                )
+        )
+        && matches!(
+            &telescope.clauses[7].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+                )
+        )
+}
+
 #[cfg(test)]
 mod tests {
     use super::{ConnectivityWitness, analyze_connectivity, passes_connectivity};
@@ -128,6 +318,7 @@ mod tests {
                 references_active_window: true,
                 self_contained: false,
                 max_lib_ref: 2,
+                historical_reanchor: false,
             }
         );
         assert!(passes_connectivity(&library, &Telescope::reference(3)));
@@ -144,6 +335,7 @@ mod tests {
                 references_active_window: false,
                 self_contained: true,
                 max_lib_ref: 0,
+                historical_reanchor: false,
             }
         );
         assert!(passes_connectivity(&library, &Telescope::reference(4)));
@@ -160,6 +352,7 @@ mod tests {
                 references_active_window: false,
                 self_contained: true,
                 max_lib_ref: 0,
+                historical_reanchor: false,
             }
         );
         assert!(passes_connectivity(&library, &Telescope::reference(5)));
@@ -176,6 +369,7 @@ mod tests {
                 references_active_window: false,
                 self_contained: true,
                 max_lib_ref: 0,
+                historical_reanchor: false,
             }
         );
         assert!(passes_connectivity(&library, &Telescope::reference(6)));
@@ -192,6 +386,7 @@ mod tests {
                 references_active_window: false,
                 self_contained: true,
                 max_lib_ref: 0,
+                historical_reanchor: false,
             }
         );
         assert!(passes_connectivity(&library, &Telescope::reference(7)));
@@ -208,6 +403,7 @@ mod tests {
                 references_active_window: false,
                 self_contained: true,
                 max_lib_ref: 0,
+                historical_reanchor: false,
             }
         );
         assert!(passes_connectivity(&library, &Telescope::reference(8)));
@@ -224,6 +420,7 @@ mod tests {
                 references_active_window: true,
                 self_contained: false,
                 max_lib_ref: 8,
+                historical_reanchor: false,
             }
         );
         assert!(passes_connectivity(&library, &Telescope::reference(9)));
@@ -240,14 +437,66 @@ mod tests {
                 references_active_window: false,
                 self_contained: true,
                 max_lib_ref: 0,
+                historical_reanchor: false,
             }
         );
         assert!(passes_connectivity(&library, &Telescope::reference(10)));
     }
 
     #[test]
+    fn connectivity_accepts_higher_order_bridge_shells_over_the_active_window() {
+        let library = library_until(11);
+        let witness = analyze_connectivity(&library, &Telescope::reference(12));
+        assert_eq!(
+            witness,
+            ConnectivityWitness {
+                connected: true,
+                references_active_window: true,
+                self_contained: false,
+                max_lib_ref: 11,
+                historical_reanchor: false,
+            }
+        );
+        assert!(passes_connectivity(&library, &Telescope::reference(12)));
+    }
+
+    #[test]
+    fn connectivity_accepts_operator_bundle_bridges_over_curvature() {
+        let library = library_until(12);
+        let witness = analyze_connectivity(&library, &Telescope::reference(13));
+        assert_eq!(
+            witness,
+            ConnectivityWitness {
+                connected: true,
+                references_active_window: true,
+                self_contained: false,
+                max_lib_ref: 12,
+                historical_reanchor: false,
+            }
+        );
+        assert!(passes_connectivity(&library, &Telescope::reference(13)));
+    }
+
+    #[test]
     fn connectivity_rejects_stale_library_refs() {
         let library = library_until(4);
         assert!(!passes_connectivity(&library, &Telescope::reference(3)));
+    }
+
+    #[test]
+    fn connectivity_accepts_temporal_shells_reanchored_through_the_modal_history() {
+        let library = library_until(14);
+        let witness = analyze_connectivity(&library, &Telescope::reference(15));
+        assert_eq!(
+            witness,
+            ConnectivityWitness {
+                connected: true,
+                references_active_window: false,
+                self_contained: false,
+                max_lib_ref: 10,
+                historical_reanchor: true,
+            }
+        );
+        assert!(passes_connectivity(&library, &Telescope::reference(15)));
     }
 }

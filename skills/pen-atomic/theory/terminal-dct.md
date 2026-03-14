@@ -1,22 +1,23 @@
 # Terminal DCT
 
-This file explains the step-15 terminal shell, the DCT completion story, and the sharp boundary between the strict canon and the larger older structural audit.
+This file explains the step-15 terminal shell, the DCT completion story, and the current executable novelty account now frozen in the repo.
 
-## The Strict Canonical Step 15
+## The Current Executable Step 15
 
-From `pen_paper.tex`, the canonical strict row is:
+The frozen live artifact and structural evaluator now agree on the step-15 row:
 
 - selected shell:
   temporal-cohesive shell (semantic DCT completion)
 - `Delta = 610`
-- `nu = 88`
+- `nu = 103`
 - `kappa = 8`
-- `rho = 11.00`
-- `Bar = 7.51`
+- `rho = 103/8`
+- `Bar = 19520/2639`
 - absolute overshoot:
-  `3.49`
+  `115657/21112`
 
-This is the largest overshoot in the strict sequence.
+Rounded, this is `rho ~= 12.88`, `Bar ~= 7.40`, and overshoot `~= 5.48`.
+This is the largest overshoot in the current executable sequence.
 
 ## What The Shell Contains
 
@@ -39,46 +40,30 @@ The important negative fact is also repeated often:
 
 The infinitesimal reading is a semantic consequence, not a hot-path primitive.
 
-## Strict Canon Versus Older Structural Audit
+## Why 103 Is Now The Canonical Repo Value
 
-There are two different step-15 stories in the TeX corpus.
+The current repo no longer has an executable late-step split for DCT.
 
-### Strict canon used by the rewrite
+- `crates/pen-eval/src/nu.rs` freezes the reference sequence at `...103` and asserts it in tests.
+- `tests/fixtures/trajectory/reference_steps_until_15.json` freezes the live step-15 artifact with `nu = 103` and `rho = 103/8`.
+- `plan_progress.md` records step 15 as structurally live-discoverable at `nu = 103`.
 
-- `nu = 88`
-- `kappa = 8`
-- `rho = 11.00`
+The older mismatched DCT claim now survives only in superseded theory and manuscript commentary.
+For the repo's current truth surface, `103` is the DCT total to cite.
 
-This is the current executable selection value in `pen_paper.tex`.
+## Current Structural Decomposition
 
-### Older structural audit
-
-`pen_lmcs.tex`, `synthetic_framework_abstraction_mscs_draft.tex`, and `DCT.tex` still present:
+The repo's step-15 total is the structural account:
 
 - `nu = 103`
 - `kappa = 8`
 - `rho = 12.875`
 
-often decomposed as:
+with the usual split:
 
 - `nu_G = 2`
 - `nu_H = 15`
 - `nu_C = 86`
-
-That larger figure is mathematically important, but it is not the present strict machine canon.
-
-## Why The Drift Exists
-
-The strict paper explains the gap directly:
-
-- the current strict engine scores the conceptual temporal shell at conceptual cost `kappa = 8`,
-- it adds native novelty on that shell,
-- then only the explicit topological witness payload that survives into the compiled telescope is counted.
-
-So the rewrite should assume:
-
-- `88` is the executable target to match first,
-- `103` is the older fuller structural audit that may become a later milestone.
 
 ## Theorem Package Around Step 15
 
@@ -133,12 +118,11 @@ This matters because the geometric branch dies early if the quadratic term is re
 
 - Preserve the temporal atoms and shell structure in the hot path.
 - Keep DCT as a post-hoc semantic completion, not a target label.
-- Default to the strict `nu = 88` canon for replay and checkpoint fixtures.
-- Treat the larger `nu = 103` account as a second-layer structural audit, useful but not yet the rewrite's default truth target.
+- Default to the executable `nu = 103` canon for replay, checkpoint, and report fixtures.
+- Treat older mismatched donor notes as superseded provenance, not as the repo's current claim boundary.
 
 ## Cross-Links
 
 - Read [genesis.md](genesis.md) for the exact strict row.
 - Read [late-framework-abstraction.md](late-framework-abstraction.md) for the steps that prepare the temporal shell.
 - Read [downstream-interpretations.md](downstream-interpretations.md) for the cosmology, physics, and RH papers that build on this step.
-

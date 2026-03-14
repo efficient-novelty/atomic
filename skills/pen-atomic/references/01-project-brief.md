@@ -68,12 +68,13 @@ The current canonical target for the rewrite is the 15-step sequence described i
 
 ### Current executable strict lane
 
-The current executable strict lane finds all 15 structures, but late `nu` values do not match the paper-level target exactly. It currently reports:
+The current executable strict lane now finds all 15 structures with a frozen late-step canonical total profile. It currently reports:
 
 - exact structure order,
 - exact `kappa`,
 - exact early and middle `nu`,
-- but late `nu` mismatches, especially step 15.
+- exact late `nu` totals `26, 34, 46, 62, 103`,
+- and `DCT` at `nu = 103`, `kappa = 8`.
 
 ### Older or conflicting narratives
 

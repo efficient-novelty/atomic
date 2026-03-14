@@ -3,6 +3,7 @@ mod cmd_export_agda;
 mod cmd_inspect;
 mod cmd_resume;
 mod cmd_run;
+mod human;
 mod output;
 mod report;
 
