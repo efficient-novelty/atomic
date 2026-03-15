@@ -825,23 +825,23 @@ We call $\mathcal{S}$ \emph{constructively composite} at step~$n$ if there exist
 Otherwise $\mathcal{S}$ is \emph{constructively prime}.
 \end{definition}
 
-\begin{axiom}[Selection]
+\begin{axiom}[Selection via Variational Optimization]
 \label{ax:selection}
-The Selection Bar is $\mathrm{Bar}_n := \Phi_n \cdot \Omega_{n-1}$.
-From admissible candidates, select $X$ with $\rho(X) \geq \mathrm{Bar}_n$ and \emph{minimal positive overshoot.}
-Ties broken by minimal $\kappa$.
-If no candidate clears the bar, the tick idles.
+The Selection Bar is $\mathrm{Bar}_n := \Phi_n \cdot \Omega_{n-1}$. Rather than a greedy, unconstrained maximization of novelty, PEN operates via the minimization of a structural objective functional over the moduli space of candidate MBTT telescopes. For any candidate $X$, we define the cost functional:
+\begin{equation}
+    \mathcal{J}_n(X) = \mathcal{P}_{\mathrm{adm}}(X) + \mathcal{P}_{\mathrm{bar}}(X) + \gamma \big( \rho(X) - \mathrm{Bar}_n \big) + \epsilon \kappa(X)
+\end{equation}
+Where:
+\begin{itemize}[nosep]
+    \item $\mathcal{P}_{\mathrm{adm}}(X)$ applies an infinite penalty to ill-typed or non-canonical telescopes (enforcing absolute constraint satisfaction).
+    \item $\mathcal{P}_{\mathrm{bar}}(X)$ applies an infinite penalty if $\rho(X) < \mathrm{Bar}_n$ (the sub-criticality barrier).
+    \item $\gamma > 0$ weights the positive efficiency surplus, and $0 < \epsilon \ll \gamma$ acts as a Kolmogorov tie-breaker favoring minimal syntax.
+\end{itemize}
+The selected candidate $X_{n+1}$ is the global minimum $\arg\min_X \mathcal{J}_n(X)$. This uniquely and analytically enforces the \emph{minimal positive overshoot} criterion.
 \end{axiom}
 
-\begin{remark}[Minimal overshoot]
-The minimal-overshoot criterion is not reward shaping or raw greed.
-It is PEN's MDL-style filter for constructive primality.
-If one maximized $\rho$ outright, constructively composite candidates would dominate by packing several independently viable strongly connected components into one update and thereby importing surplus inferential power not forced by the historical integration debt.
-Minimal overshoot removes that slack: once a proper SCC-factor already clears the bar, the packed candidate is rejected as over-expressive for the current step.
-This is not only conceptual.
-In the current strict replay, the greedy max-$\rho$ ablation (\texttt{--max-rho}) first diverges at Step~6, selecting $S^2$ instead of propositional truncation; the resulting library compresses to 14 rather than 15 steps and reaches an inflated terminal shell with $\nu=99$ and $\rho=12.375$.
-Greedy selection therefore does not preserve the one-constructively-prime-update-at-a-time interpretation of the trajectory, even though it still finds a high-scoring late package.
-PEN therefore assimilates one structurally indivisible concept at a time, choosing the bar-clearer whose efficiency is closest to the cumulative baseline.
+\begin{remark}[Minimal overshoot as least structural action]
+Formulating selection as the minimization of $\mathcal{J}_n(X)$ replaces heuristic sorting with formal constrained optimization. If the engine greedily maximized $\rho$, it would be vulnerable to ``axiom packing''—absorbing multiple independent components into a single composite update. By selecting the global minimum of the objective functional, the system dynamically tracks the frontier of the optimization landscape. It settles into the nearest admissible structural ground state, absorbing exactly the required capacity to clear the historical debt while leaving no unmotivated structural excitations.
 \end{remark}
 
 \begin{remark}[Algorithmic API assembly and compositional synergy]

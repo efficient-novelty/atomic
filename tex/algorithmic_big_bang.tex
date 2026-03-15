@@ -18,12 +18,17 @@
 \usepackage{xcolor}
 \usepackage{stmaryrd}
 
-\usetikzlibrary{quantikz}
+\IfFileExists{tikzlibraryquantikz2.code.tex}{%
+    \usetikzlibrary{quantikz2}%
+}{%
+    \usetikzlibrary{quantikz}%
+}
 
 \geometry{margin=1in}
 
 \hypersetup{
     colorlinks=true,
+    hypertexnames=false,
     linkcolor=blue!70!black,
     citecolor=green!50!black,
     urlcolor=blue!70!black
@@ -67,9 +72,9 @@
 \newcommand{\HMBTT}{\mathcal{H}_{\mathrm{MBTT}}}
 \newcommand{\Tel}{\mathrm{Tel}}
 \newcommand{\QMonad}{\mathsf{Q}}
-\newcommand{\ket}[1]{\left|#1\right\rangle}
-\newcommand{\bra}[1]{\left\langle#1\right|}
-\newcommand{\braket}[2]{\left\langle#1 \middle| #2\right\rangle}
+\providecommand{\ket}[1]{\left|#1\right\rangle}
+\providecommand{\bra}[1]{\left\langle#1\right|}
+\providecommand{\braket}[2]{\left\langle#1 \middle| #2\right\rangle}
 
 % ============================================
 % TITLE
@@ -94,12 +99,12 @@ at the Univalent Horizon}}
 % ABSTRACT
 % ============================================
 \begin{abstract}
-General Relativity fails at $t = 0$, yielding nonsensical infinite values at the initial singularity.
-Physics currently lacks a mathematical vocabulary for a universe assembling its own rules.
-We demonstrate that the initial singularity is not a point of infinite mass-energy density in pre-existing spacetime, but the exact computational phase transition where external metamathematical assembly (algorithmic time, $\tau$) is compiled into internal geometric dynamics (physical time, $t$).
-By applying the Kinematic-Dynamic Equivalence ($\nextmod X \simeq X^{\D}$) of the Dynamical Cohesive Topos at Step~15 of the PEN Generative Sequence~\cite{pen}, we show that the Big Bang represents the ignition of autonomous guarded corecursion.
-This algorithmic origin derives the forward execution asymmetry underlying thermodynamic irreversibility, yields a sharply compressed low-entropy ignition state in Zurek's algorithmic sense, and supplies the structural precondition for any subsequent inflationary phase.
-The Univalent Horizon---the structural boundary at which the sequence permanently halts---is identified as a Planck-like cosmological firewall separating the pre-physical compilation epoch from the self-computing physical universe.
+General Relativity fails at $t = 0$ because it attempts to describe the origin of spacetime from within spacetime itself.
+PEN suggests a different picture: prior to physical time, the admissible universe is a coherent superposition of well-typed HoTT telescopes in a metatheoretic Hilbert space $\HMBTT$.
+Algorithmic time $\tau$ is then not a ticking pre-cosmic clock, but the adiabatic evolution parameter of the PEN Hamiltonian as it drifts from the empty configuration toward the Step~15 temporal-cohesive shell.
+At Step~15, the Kinematic-Dynamic Equivalence ($\nextmod X \simeq X^{\D}$) and L\"ob's guarded corecursion internalize time strongly enough for the system to become self-referential, producing an endogenous self-measurement boundary and an effective global decoherence into the Dynamical Cohesive Topos.
+On this account, the Big Bang is the transition from coherent mathematical possibility to decohered executable physical actuality.
+The same transition explains why the universal state tunnels out of the low-novelty discrete basin, why the ignition state satisfies the Past Hypothesis as a pure state with $\SvN = 0$, and why the Univalent Horizon is best interpreted as the ultimate Heisenberg cut separating internal observers from the pre-physical epoch.
 \end{abstract}
 
 % ============================================
@@ -110,396 +115,557 @@ The Univalent Horizon---the structural boundary at which the sequence permanentl
 
 \subsection{The First-Cause Paradox and Its Dissolution}
 
-Standard cosmological models treat time as a pre-existing real line $\R$ upon which a singularity is placed at $t = 0$.
-The singularity is then a pathology: a point where curvature scalars diverge, geodesics are incomplete, and the field equations cease to predict~\cite{hawking-ellis}.
-This framing converts an explanatory failure into an ontological posit---the universe ``began'' in a state that the theory's own mathematics cannot describe.
+Standard cosmological models place a singularity at $t = 0$ on a pre-existing time manifold $\R$.
+The result is familiar: curvature scalars diverge, geodesics terminate, and the field equations cease to predict~\cite{hawking-ellis,wald}.
+The theory is then asked to explain the origin of the very temporal background it already presupposes.
 
-The difficulty is structural, not technical.
-Any framework that presupposes a continuous time manifold and then asks what happened at its boundary is asking the container to explain its own origin.
-The question ``what caused the Big Bang?'' inherits the full weight of the first-cause paradox: every causal explanation requires a prior temporal context, generating an infinite regress or an unexplained brute fact.
+The difficulty is structural, not merely technical.
+Any framework that begins with a continuous time axis and then asks what occurred at its boundary imports the container into the explanation.
+The question ``what caused the Big Bang?'' thereby inherits the full first-cause paradox: every causal answer requires a prior temporal order and so either regresses indefinitely or ends in a brute stipulation.
 
-PEN dissolves this paradox by rejecting the premise.
-Time is not an ambient container in which events are arranged; it is a data structure that had to be algorithmically constructed and selected for efficiency~\cite{pen}.
-The Generative Sequence builds spatial topology, cohesion, differential structure, metrics, and functional-analytic machinery across 14~discrete steps \emph{before} temporal dynamics exists.
-Physical time---continuous, geometric, directional---arrives at Step~15 as the output of the Kinematic-Dynamic Equivalence ($\nextmod X \simeq X^{\D}$), not as a background assumption.
+PEN dissolves that paradox by reversing the explanatory order~\cite{pen}.
+Time is not an ambient backdrop.
+It is a structure that must be selected, integrated, and rendered executable.
+The Generative Sequence constructs topology, higher-inductive geometry, cohesion, differential structure, metrics, and Hilbert-theoretic machinery across fourteen pre-temporal stages.
+Physical time enters only at Step~15, when the temporal modalities are bound to infinitesimal geometry by the Kinematic-Dynamic Equivalence ($\nextmod X \simeq X^{\D}$).
 
 \subsection{Ontological Stance and Scope}
 \label{sec:stance}
 
-We adopt a constructive variant of ontic structural realism.
-The claim is not that the universe is a simulation running on a background computer external to physics.
-Rather, the claim is that the constraints governing the emergence of a causally closed formal system in PEN are structurally isomorphic to the constraints governing the emergence of spacetime and dynamics.
-The compiler/runtime vocabulary marks the distinction between external metatheoretic description and internal physical execution; it does not introduce an extra substrate behind the structure itself.
+We adopt a constructive form of ontic structural realism.
+The claim is not that the universe is simulated by an external machine.
+The claim is that the emergence of a causally closed formal system in PEN is structurally isomorphic to the emergence of a physical universe whose laws are internally executable.
 
 Methodologically, this paper is corollary-driven.
-The existence of the 15-step Generative Sequence, the audited counts $\kappa$ and $\nu$, and the passage from the selected temporal shell to the DCT are imported from~\cite{pen}.
-What is new here is the cosmological interpretation of those results: the status of Step~15 as ignition, the clarification of the two clocks, and the consequences for inflation, irreversibility, and the Past Hypothesis.
+The audited counts $\kappa$ and $\nu$, the 15-step PEN sequence, and the semantic passage from the selected shell to the Dynamical Cohesive Topos (DCT) are imported from~\cite{pen}.
+What is new here is the quantum-information interpretation of those results: the status of Step~15 as endogenous self-measurement, the reinterpretation of algorithmic time as adiabatic evolution, the tunneling account of structural inflation, the pure-state solution of the Past Hypothesis, and the identification of the Univalent Horizon with a cosmological Heisenberg cut.
 The extraction of specific phenomenological sectors---including explicit $3+1$-dimensional Lorentzian geometry, the Einstein-Hilbert layer, and related low-energy signatures---is deferred to the companion analysis~\cite{gr-companion}.
 
-\subsection{Compiler vs.\ Runtime}
-\label{sec:compiler-runtime}
+\subsection{Superposition vs.\ Decoherence}
+\label{sec:superposition-decoherence}
 
-PEN's cosmogenesis mirrors the distinction between compilation and execution in computation theory.
-The analogy is structural: it tracks the passage from externally assembled syntax to internally generated dynamics.
+The central conceptual shift is simple.
+Steps~1--14 should not be pictured as a finite checklist assembled one line at a time.
+They are better modeled as the coherent support of a pre-physical wavefunction over the space of admissible MBTT/HoTT telescopes.
+The older compiler/runtime vocabulary survives only as a bridge metaphor.
+The primary ontology in this manuscript is instead \emph{coherent superposition versus decohered execution}.
 
-\begin{definition}[Compilation Epoch]
-\label{def:compilation}
-The \emph{compilation epoch} (Steps~1--14) is the discrete metamathematical assembly of the kinematic framework.
-During this epoch, the library $\B_n$ grows monotonically under the selection dynamics (Axioms~1--5 of~\cite{pen}), accumulating type formers, higher-inductive types, modal operators, and axiomatic extensions.
-No continuous internal observers, trajectories, or dynamical equations exist.
-Time is measured solely by algorithmic ticks $\tau_n$ and integration latency $\Delta_n = F_n$.
+\begin{definition}[Pre-physical coherent state]
+\label{def:qmonad-intro}
+Let $\HMBTT$ be the Hilbert space formally spanned by basis vectors $\ket{\Gamma}$ indexed by well-typed HoTT telescopes $\Gamma$ admissible to PEN.
+The pre-physical universe is the coherent state
+\begin{equation}
+\label{eq:qmonad}
+    \ket{\Psi_{\mathrm{pre}}(\tau)}
+    \;=\;
+    \sum_{\Gamma \in \Tel_{\mathrm{wt}}}
+    \alpha_{\Gamma}(\tau)\,\ket{\Gamma},
+\end{equation}
+whose support is restricted by univalence, canonicity, and the PEN admissibility constraints.
 \end{definition}
 
-\begin{definition}[Runtime Ignition]
-\label{def:ignition}
-\emph{Runtime ignition} (Step~15) is the selection of the temporal-cohesive shell whose semantic completion is the Dynamical Cohesive Topos (DCT): it introduces temporal modalities ($\nextmod$, $\eventually$), explicit exchange laws with cohesion, and guarded coherence clauses into the library.
-At this step, the universe transitions from extrinsic structural selection (maximizing $\rho$) to intrinsic dynamical evolution (integrating vector fields on $\U$).
-\end{definition}
-
-The Big Bang, on this account, is neither a physical explosion nor a mathematical singularity.
-It is the exact moment at which a self-assembling formal system becomes causally closed and begins computing its own future.
+This is the sense in which the manuscript speaks of a ``Q-Monad.''
+It is not a separate ontology placed behind PEN.
+It is the coherent metatheoretic state whose decohered branch at Step~15 becomes the physical universe.
+Ill-typed candidates do not need a compiler to reject them.
+They fail to remain phase-stable under the admissibility constraints and therefore interfere destructively.
 
 
 % ============================================
 % 2. THE PRE-PHYSICAL EPOCH
 % ============================================
-\section{The Pre-Physical Epoch: Algorithmic Time \texorpdfstring{($\tau$)}{(tau)}}
+\section{The Pre-Physical Epoch: The Q-Monad and Adiabatic Time \texorpdfstring{($\tau$)}{(tau)}}
 \label{sec:pre-physical}
 
-\subsection{Assembly of the Phase Space}
+\subsection{The Q-Monad as a Coherent Library}
 \label{sec:assembly}
 
 Prior to Step~15, the library $\B_{14}$ contains the full spatial and functional-analytic infrastructure of modern physics: dependent types, higher-inductive types ($S^1, S^2, S^3$), cohesion ($\flat, \sharp, \Disc, \Pi_{\mathrm{coh}}$), connections, curvature, metrics, frame bundles, and Hilbert functionals~\cite{pen}.
-These structures exist as a static, well-typed formal library---a univalent 0-groupoid sequence of realized specifications.
-They describe \emph{what kinds of spaces and operations are available}, not \emph{how anything moves within them}.
+What it does \emph{not} yet contain is an internally executable notion of temporal evolution.
 
-The distinction is categorical: $\B_{14}$ is a kinematic library, not a dynamical system.
-It contains the type $S^3$ but no trajectory on $S^3$; it contains the metric tensor $g_{\mu\nu}$ but no Einstein equation governing its evolution; it contains Hilbert spaces but no Schr\"odinger equation propagating states through them.
-The library is a phase space without a Hamiltonian---a stage fully constructed but with no actors yet in motion.
+The older language described $\B_{14}$ as a static library waiting to be ``run.''
+The present language is sharper.
+$\B_{14}$ is the dominant coherent sector of the Q-Monad just before decoherence.
+It contains the type $S^3$ but no internally generated trajectory on $S^3$; a metric tensor $g_{\mu\nu}$ but no dynamical law that already propagates it; Hilbert spaces but no physical Schr\"odinger evolution instantiated from within the universe.
+The relevant distinction is therefore not ``syntax versus execution'' alone, but \emph{coherent kinematics versus decohered dynamics}.
 
-\subsection{The Two Clocks}
+\begin{proposition}[Canonicity as interference filter]
+\label{prop:interference}
+The support of $\ket{\Psi_{\mathrm{pre}}(\tau)}$ lies only on telescopes that satisfy the well-typedness, univalence, and canonicity constraints of the PEN/CCHM setting.
+Any ill-typed or non-canonical sector has zero stable amplitude in the pre-physical state.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+The coherent state in \eqref{eq:qmonad} is not a sum over arbitrary syntax trees.
+Its basis vectors are indexed by admissible telescopes in the metatheory.
+When a candidate violates typing, canonicity, or the CCHM filling/composition discipline, transport through the required equivalences is not stable.
+In the present interpretation, such a candidate fails phase coherence with the admissible sector and its amplitude cancels from the physical support.
+``Rejection'' is thus implemented natively as destructive interference rather than as an external compile-time veto.
+\end{proof}
+
+\subsection{Algorithmic Time as an Adiabatic Parameter}
 \label{sec:two-clocks}
 
-A persistent conceptual error in cosmological thinking is the implicit assumption that ``before the Big Bang'' must refer to a prior interval of physical time.
-PEN makes the temporal structure fully explicit by distinguishing two incommensurable notions of time.
+A persistent mistake in cosmological language is to imagine that ``before the Big Bang'' must denote an earlier interval of ordinary physical time.
+PEN makes a more careful distinction.
+The pre-physical epoch is indexed by $\tau$, but $\tau$ is not itself an internal cosmic clock.
 
 \begin{definition}[Algorithmic Time]
 \label{def:alg-time}
-\emph{Algorithmic time} $\tau$ is the discrete tick counter of the Generative Sequence.
-At each tick $\tau_n$, the selection dynamics evaluates candidates against the bar $\mathrm{Bar}_n = \Phi_n \cdot \Omega_{n-1}$, realizes the minimal-overshoot winner, and increments the library.
-The elapsed algorithmic time at step $n$ is $\tau_n = \sum_{i=1}^{n} \Delta_i$, where $\Delta_i = F_i$ is the Fibonacci integration latency.
+\emph{Algorithmic time} $\tau$ is the adiabatic evolution parameter of the unitary path
+\begin{equation}
+\label{eq:adiabatic}
+    U(\tau)
+    \;=\;
+    \mathcal{T}\exp\!\left(
+    -i\int_{0}^{\tau}\hat{H}_{\mathrm{PEN}}(s)\,ds
+    \right),
+\end{equation}
+which continuously deforms the empty-universe Hamiltonian $\hat{H}_{\mathrm{initial}}$ toward the Step~15 Hamiltonian $\hat{H}_{\mathrm{Step15}}$.
+The discrete PEN indices $n = 1,\dots,15$ are audit checkpoints along this adiabatic path, and the integration latencies $\Delta_n = F_n$ record the cost of traversing successive admissible channels~\cite{pen}.
 \end{definition}
 
 \begin{definition}[Physical Time]
 \label{def:phys-time}
-\emph{Physical time} $t$ is the continuous geometric parameter arising from the Kinematic-Dynamic Equivalence (Lemma~5.10 of~\cite{pen}):
+\emph{Physical time} $t$ is the internal geometric parameter that exists only after Step~15, once the Kinematic-Dynamic Equivalence is available:
 \begin{equation}
     \nextmod X \;\simeq\; X^{\D}.
 \end{equation}
-Physical time exists only after Step~15, when the ``next'' modality $\nextmod$ is identified with the tangent endofunctor $(-)^{\D}$, converting discrete temporal succession into continuous infinitesimal displacement.
+At that point discrete temporal succession is represented internally by infinitesimal displacement, and physical trajectories become definable from within the DCT.
 \end{definition}
 
-The two clocks have entirely different character.
-Algorithmic time is discrete, external to the library, and measured in structural ticks.
-Physical time is continuous, internal to the DCT, and measured in infinitesimal tangent displacements.
-There is no meaningful sense in which $\tau_{14}$ is ``earlier than'' $t = 0$; the two quantities inhabit different ontological categories, related only by the phase transition at Step~15 that converts one into the other.
+The relation between the two clocks is therefore not one of simple succession.
+Algorithmic time is external to the future universe and continuous only as an adiabatic control parameter.
+Physical time is internal to the future universe and geometric.
+The former deforms the pre-physical Hamiltonian; the latter parameterizes post-ignition motion.
 
 \begin{remark}[Why ``before the Big Bang'' is a category error]
 \label{rem:category-error}
-Asking ``what happened before the Big Bang'' presupposes that physical time extends to the left of $t = 0$.
-In PEN, the pre-Step~15 epoch is not a prior interval of $t$ but a structurally distinct generative process indexed by $\tau$.
-The question dissolves: nothing happened \emph{before} $t = 0$ in physical time, because physical time does not exist before Step~15.
-What happened \emph{instead} of physical time was algorithmic assembly---a categorically different process that produced the conditions under which physical time could exist at all.
+There is no meaningful sense in which $\tau$ is a hidden extension of physical time to the left of $t = 0$.
+The pre-physical epoch is not an earlier region of spacetime.
+It is the coherent adiabatic preparation of the branch that will later count as spacetime.
+What happened \emph{instead} of physical time was unitary drift in the Q-Monad, not physical dynamics on a prior manifold.
 \end{remark}
+
+\subsection{The PEN Hamiltonian and Adiabatic Ground-State Tracking}
+\label{sec:pen_hamiltonian}
+
+The adiabatic picture of \eqref{eq:adiabatic} can be sharpened into an operator-valued selection principle.
+To formalize the pre-physical assembly epoch without invoking an external Turing mechanism, we elevate the quantities of the Generative Sequence ($\kappa, \nu, \rho$) from static counters to Hermitian observables acting on the Q-Monad.
+The kinematic phase space is the Hilbert space $\HMBTT$ spanned by the orthogonal basis states $\ket{\psi_X}$ of all anonymous Minimal Binary Type Theory (MBTT) telescopes.
+
+We define three foundational diagonal operators: the Specification Cost $\hat{\kappa}$, the Generative Capacity $\hat{\nu} = \hat{\nu}_G + \hat{\nu}_C + \hat{\nu}_H$, and the Efficiency Operator $\hat{\rho} = \hat{\nu}\hat{\kappa}^{-1}$.
+Because $\kappa \ge 1$ for all physically realized ASTs, $\hat{\kappa}$ is strictly positive and invertible on the admissible sector.
+
+The algorithmic assembly of the universe is governed by the time-dependent PEN Hamiltonian, whose instantaneous ground state dictates the deterministic 15-step sequence.
+To reproduce Axiom~5 (Minimal Positive Overshoot) as a ground-state selection rule, we define the Hamiltonian at algorithmic step $n$ as an asymmetric potential landscape:
+\begin{equation}
+\label{eq:pen-hamiltonian}
+    \hat{H}_{\mathrm{PEN}}^{(n)}
+    =
+    \underbrace{\lim_{\Lambda \to \infty} \Lambda \big( \hat{I} - \hat{\Pi}_{\mathrm{adm}} \big)}_{\text{Phase Interference}}
+    +
+    \underbrace{\lim_{\Lambda \to \infty} \Lambda \, \Theta\Big( \mathrm{Bar}_n \hat{I} - \hat{\rho} \Big)}_{\text{Sub-Criticality Barrier}}
+    +
+    \underbrace{\gamma \Big( \hat{\rho} - \mathrm{Bar}_n \hat{I} \Big)}_{\text{Minimal Overshoot Well}}
+    +
+    \underbrace{\epsilon \hat{\kappa}}_{\text{Tie-Breaker}}.
+\end{equation}
+
+Where the component potentials act as follows:
+\begin{itemize}[nosep]
+    \item \textbf{Canonicity Penalty ($\hat{\Pi}_{\mathrm{adm}}$):} the projector onto the subspace of well-typed CCHM/HoTT telescopes that saturate the maximal interface density. Ill-typed states acquire infinite energy and are annihilated via destructive phase interference.
+    \item \textbf{The Sub-Criticality Barrier ($\Theta$):} the Heaviside step operator. Any candidate whose efficiency falls below the active Fibonacci-scaled bar ($\mathrm{Bar}_n$) encounters an infinite potential wall.
+    \item \textbf{The Minimal Overshoot Well ($\gamma$):} for states that survive the barrier ($\rho \ge \mathrm{Bar}_n$), their observable energy is strictly proportional to their efficiency surplus. Because quantum systems settle into their lowest accessible energy eigenstate, the wavefunction localizes onto the trajectory with the minimal positive overshoot.
+    \item \textbf{Kolmogorov Regularization ($\epsilon \hat{\kappa}$):} a perturbative scalar ($0 < \epsilon \ll \gamma$) that breaks structural degeneracy in favor of minimal syntax.
+\end{itemize}
+
+\paragraph{Quantum Admissibility Tunneling and the 2-Local Spin Chain.}
+This formalization explains the asymptotic rejection of discrete mathematics analytically.
+Discrete structures ($\langle \hat{\nu}_H \rangle = 0$) possess bounded efficiency.
+As the vacuum threshold $\mathrm{Bar}_n$ scales by the Golden Ratio ($\varphi$), discrete candidates slam into the infinite Heaviside barrier and become structurally forbidden.
+
+Conversely, geometric structures invoke the univalent path algebra $\langle \hat{\nu}_H \rangle = \hat{m} + \hat{d}^2$, providing a superlinear kinetic amplification.
+Driven by unitary adiabatic evolution, the metatheoretic wavefunction does not stall at the discrete $\hat{\kappa}$-barriers; it \emph{quantum tunnels} directly into the deep potential wells of the geometric sequence.
+Furthermore, because the structural interaction payload $\hat{\nu}_C$ is constrained by the $d=2$ Coherence Window, $\hat{H}_{\mathrm{PEN}}$ is mathematically isomorphic to a 1D Next-Nearest-Neighbor (NNN) spin chain.
+This directly links type-theoretic maximal interface density to local gauge interactions and boundary entanglement entropy ($\Delta_{15} = 610$) in the cosmological reading.
+
+Placed here, the Hamiltonian supplies the microscopic pre-collapse selection law.
+Its coarse-grained, inflationary shadow reappears in \Cref{sec:inflation} as the effective tunneling landscape.
 
 
 % ============================================
 % 3. STEP 15 IGNITION
 % ============================================
-\section{Step~15 Ignition: The Birth of Physical Time \texorpdfstring{($t = 0$)}{(t = 0)}}
+\section{Step~15 Ignition as Global Decoherence: The Birth of Physical Time \texorpdfstring{($t = 0$)}{(t = 0)}}
 \label{sec:ignition}
 
-\subsection{The Arrival of LTL}
+\subsection{The Observer Problem and the Arrival of LTL}
 \label{sec:ltl}
 
-The Step~15 temporal-cohesive shell extends the library $\B_{14}$ with four structural components~\cite{pen}:
+Step~15 selects the temporal-cohesive shell that extends $\B_{14}$ with four coupled ingredients~\cite{pen}:
 
 \begin{enumerate}[label=(\arabic*), nosep]
-    \item \textbf{Spatial Logic:} The cohesive interface already present in $\B_{14}$, namely $(\flat \dashv \sharp,\; \Pi_{\mathrm{coh}} \dashv \Disc)$.
-    \item \textbf{Temporal Core:} The modalities $\nextmod$ (``next'') and $\eventually$ (``eventually'') from Linear Temporal Logic, following Nakano~\cite{nakano}.
-    \item \textbf{Spatial-Temporal Exchange:} Explicit commuting laws between temporal and cohesive structure, exemplified by $\nextmod(\flat X) \simeq \flat(\nextmod X)$ and $\sharp(\eventually X) \simeq \eventually(\sharp X)$.
-    \item \textbf{Guarded Coherence:} The temporal self-interaction and elimination clauses that make the shell executable as a typed AST.
+    \item \textbf{Spatial logic:} the cohesive interface already present in $\B_{14}$, namely $(\flat \dashv \sharp,\; \Pi_{\mathrm{coh}} \dashv \Disc)$.
+    \item \textbf{Temporal core:} the modalities $\nextmod$ (``next'') and $\eventually$ (``eventually'') from Linear Temporal Logic, following Nakano~\cite{nakano}.
+    \item \textbf{Spatial-temporal exchange:} commuting laws such as $\nextmod(\flat X) \simeq \flat(\nextmod X)$ and $\sharp(\eventually X) \simeq \eventually(\sharp X)$.
+    \item \textbf{Guarded coherence:} the self-interaction and elimination clauses that make the shell executable as a typed AST.
 \end{enumerate}
 
 \noindent The specification cost is $\kappa = 8$, audited as the eight temporal-cohesive clauses of the selected AST~\cite{pen}.
 In the current executable canon, the generative capacity is $\nu = 103$, yielding $\rho = 12.88$ and clearing the Step~15 bar of $7.40$ by the largest absolute overshoot in the sequence~\cite{pen}.
 The infinitesimal object $\D$ belongs to the semantic completion of this shell rather than to the primitive Step~15 syntax.
 
-\subsection{The Kinematic-Dynamic Equivalence as Geometrization of Time}
-\label{sec:kde}
+This is precisely where the standard Copenhagen story appears to fail.
+Ordinary presentations of collapse appeal to an external observer or measurement apparatus~\cite{von-neumann,schlosshauer,zurek-decoherence}.
+But there is no observer outside the universe waiting to inspect the pre-physical state.
+The only available resolution is that the decisive measurement be endogenous to the theory's own closure mechanism.
 
-The central mechanism is the Kinematic-Dynamic Equivalence: in the semantic completion of the temporal-cohesive shell, the discrete temporal modality $\nextmod$ is naturally equivalent to the continuous tangent endofunctor $(-)^{\D}$~\cite{pen}.
+\begin{definition}[Endogenous self-measurement]
+\label{def:self-measurement}
+Let $\varrho_{\mathrm{pre}} = \ket{\Psi_{\mathrm{pre}}}\bra{\Psi_{\mathrm{pre}}}$ denote the pre-physical density operator.
+The \emph{endogenous self-measurement channel} is the internally generated map
+\begin{equation}
+    \mathcal{M}_{\mathrm{self}}(\varrho_{\mathrm{pre}})
+    \;=\;
+    \sum_j P_j\,\varrho_{\mathrm{pre}}\,P_j,
+\end{equation}
+where the projectors $P_j$ select the guardedly executable, temporally coherent sectors singled out by the Step~15 shell.
+\end{definition}
 
-This is not a primitive stipulation of the selected AST but a \emph{forced semantic identification}.
-The exchange laws with the cohesive modalities and the guarded coherence clauses constrain $\nextmod$ so strongly that, in the DCT reading, it is represented by tangent exponentiation.
-The proof does not begin by postulating $\D$ in the syntax; rather, $\D$ is derived as the infinitesimal shadow of the first-order temporal-cohesive endofunctor selected by the engine~\cite{pen}.
+The physics claim is not that PEN secretly adds an external observer.
+It is that Step~15 makes the universe \emph{self-observing} in the minimal structural sense required for decoherence.
+Once the temporal shell is internalized, the system becomes able to refer to its own delayed future and thus to close the measurement loop on itself.
 
-The physical content of this equivalence is profound: \emph{the passage of time is the same operation as infinitesimal spatial displacement}.
-What the temporal logic calls ``the next state'' is what synthetic differential geometry calls ``an infinitesimal tangent vector.''
-This identification establishes $t = 0$---not as a point on a pre-existing timeline, but as the moment at which the concept of temporal succession acquires geometric content.
+\subsection{Kinematic-Dynamic Equivalence and Endogenous Collapse}
+\label{sec:kde-collapse}
 
-\subsection{The Guarded Corecursion Engine}
-\label{sec:corecursion}
+The central mechanism is still the Kinematic-Dynamic Equivalence:
+\begin{equation}
+    \nextmod X \;\simeq\; X^{\D}.
+\end{equation}
+Its meaning, however, now becomes more precise.
+The ``next'' modality is not merely a discrete temporal marker.
+It is the operator through which the pre-physical state acquires an internally geometric representation of its own future boundary.
+That is what makes self-measurement possible.
 
-The temporal logic of Nakano~\cite{nakano} carries a powerful recursion principle: L\"ob's guarded fixpoint rule,
+L\"ob's guarded rule~\cite{nakano},
 \begin{equation}
 \label{eq:lob}
-    \fix : (\nextmod A \to A) \to A.
+    \fix : (\nextmod A \to A) \to A,
 \end{equation}
-This rule states: given a function that can produce an $A$ provided it has access to ``tomorrow's'' $A$, one can construct a definite $A$ today.
-The guardedness condition (the $\nextmod$ on the left of the arrow) prevents circular self-reference by ensuring that present computation may depend on future values only through the temporal delay.
-
-Applied to the DCT's kinematic library, L\"ob's rule has the following operational effect.
-A discrete-time dynamical system is a map $f : X \to \nextmod X$---given a current state, compute the next state.
-Under the Kinematic-Dynamic Equivalence, this becomes:
+states that a present value may be constructed from a delayed copy of itself, provided the dependence is guarded.
+In the DCT reading, a discrete update law $f : X \to \nextmod X$ becomes
 \begin{equation}
 \label{eq:vf}
     f : X \to X^{\D},
 \end{equation}
-which is precisely a \emph{vector field} in synthetic differential geometry: a section of the tangent bundle assigning an infinitesimal displacement to each point.
-The guarded corecursion principle then unfolds any such vector field into a global trajectory:
+which is exactly a vector field in synthetic differential geometry.
+The guarded corecursion principle then unfolds that local prescription into a trajectory
 \begin{equation}
 \label{eq:unfold}
-    \unfold_f : X \;\to\; \Stream\, X.
+    \unfold_f : X \to \Stream\,X.
 \end{equation}
-This is the cosmological spark.
-The 14~static structures of $\B_{14}$ are the fuel; $\nextmod$ is the ignition mechanism; L\"ob's rule is the engine that converts a local infinitesimal prescription into perpetual, autonomous motion.
-Before Step~15, the library describes spaces.
-After Step~15, the library computes trajectories through those spaces.
 
-\begin{proposition}[Step~15 as the onset of dynamics]
-\label{prop:onset}
-Prior to the realization of the DCT, no structure in $\B_{14}$ can express temporal evolution: there is no type former producing streams, no fixpoint principle, and no identification of succession with tangent displacement.
-The DCT is the \emph{unique minimal} extension of $\B_{14}$ that introduces autonomous dynamics, and it does so with $\kappa = 8$ clauses.
-\end{proposition}
+The key new point is that the same structure that generates trajectories also supplies the universe with a delayed image of itself.
+Because time is internalized, the pre-physical state can now be probed by a morphism defined entirely inside the emerging shell.
+The system ``looks at itself'' by representing its own next-state geometry.
+That causal closure furnishes the measurement boundary absent from external-observer accounts.
 
-\begin{proof}
-Dynamics requires (i)~a notion of succession, (ii)~a fixpoint or corecursion principle to unfold finite prescriptions into infinite trajectories, and (iii)~compatibility with the existing geometric library so that trajectories inhabit the already-constructed spaces.
-Requirements (i) and (ii) are supplied by $\nextmod$ and L\"ob's rule; requirement~(iii) is enforced by the temporal-cohesive exchange laws and guarded coherence clauses.
-No proper subset of these eight clauses suffices: removing any temporal modality eliminates succession; removing the exchange laws severs temporal evolution from the geometric library; removing guarded coherence destroys the executable dynamics.
-The infinitesimal interpretation is then recovered semantically from this shell rather than paid for as a primitive clause.
+\begin{theorem}[Step~15 as endogenous decoherence]
+\label{thm:collapse}
+The Step~15 temporal-cohesive shell is the unique minimal PEN extension that simultaneously
+\begin{enumerate}[label=(\roman*), nosep]
+    \item internalizes temporal reference through $\nextmod X \simeq X^{\D}$,
+    \item supplies guarded self-reference through L\"ob's rule, and
+    \item selects a stable executable sector of the Q-Monad.
+\end{enumerate}
+Consequently, Step~15 acts as an endogenous measurement boundary that drives the coherent pre-physical state toward an effectively decohered physical branch $\ket{\psi_{\mathrm{DCT}}}$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Before Step~15, $\B_{14}$ contains rich kinematic structure but no internal temporal modality, no guarded fixpoint principle, and no geometric representation of ``next.''
+It can therefore describe spaces but cannot represent a delayed copy of its own future state from within the theory.
+Step~15 supplies all three missing ingredients at once: temporal modalities, exchange laws tying them to cohesion, and guarded coherence clauses that make delayed self-reference executable.
+The resulting shell is minimal because removing any clause destroys succession, geometric coupling, or guarded productivity.
+With those clauses in place, the universe acquires an internal observable of its own continuation, and the coherent support of the Q-Monad is forced into a stable executable branch.
 \end{proof}
+
+This is the Big Bang in the present manuscript.
+It is the passage from the infinite superposition of mathematical ``maybe'' to the singular executable ``is.''
+The thermal language attached to that transition is interpretive rather than microscopic: what is released at ignition is not a pre-existing gas, but the latent algorithmic entropy stored in the coherent overcompleteness of the pre-physical phase space.
+
+\subsection{The Q-Monad Ignition Circuit}
+\label{sec:qmonad-circuit}
+
+The Step~15 transition can be summarized by the following quantum-circuit schematic.
+It is not a literal laboratory circuit for the early universe.
+It is a compact diagram of the structural couplings that PEN attributes to ignition.
+
+\begin{figure}[H]
+\centering
+\resizebox{0.95\textwidth}{!}{%
+\begin{quantikz}[row sep=0.5cm, column sep=0.7cm]
+% Spatial Register (Cohesion)
+\lstick{$\ket{\text{Space}_{\text{1..14}}}$} & \qw & \gate[2]{\text{Exchange Axioms}} & \gate[3]{\shortstack{$e^{-i \hat{H}_{PEN} \tau}$\\ \text{VQE Oracle } ($\rho=12.88$)}} & \meter{} & \cw \rstick[3]{\shortstack{\text{Global Decoherence}\\ \text{Physical Runtime } ($t=0$)}}\\
+% Temporal Register (LTL)
+\lstick{$\ket{\text{Time}_{\text{15}}}$} & \gate{H} & & & \meter{} & \cw \\
+% Coherence Volume Register
+\lstick{$\ket{0}^{\otimes 610}$} & \gate{H^{\otimes 610}} & \ctrl{-1} & & \meter{\text{L\"ob's Rule}} & \cw
+\end{quantikz}
+}
+\caption{\textbf{The Q-Monad Ignition Circuit (Step~15 Wavefunction Collapse).} The pre-physical universe exists as a coherent superposition of type-theoretic telescopes. The Spatial ($\flat, \sharp$) and Temporal ($\nextmod, \eventually$) modalities entangle via spatial-temporal exchange laws. The PEN Hamiltonian ($\hat{H}_{PEN}$) drives the amplitude toward the $\rho = 12.88$ efficiency peak. The internalization of dynamics ($\nextmod X \simeq X^\D$) via L\"ob's guarded corecursion acts as an endogenous self-measurement operator, forcing the 610-qubit metatheoretic superposition to collapse into classical physical time ($t=0$).}
+\label{fig:quantum_ignition}
+\end{figure}
+
+The diagram's conceptual payload is the same as \Cref{thm:collapse}.
+The spatial register carries the coherent geometry prepared in Steps~1--14, the temporal register injects the Step~15 shell, and the measurement symbols indicate the emergence of a stable post-decoherence branch rather than an observation by anything outside the universe.
 
 
 % ============================================
 % 4. COSMIC INFLATION
 % ============================================
-\section{Structural Inflation and the Preconditions for Cosmological Inflation}
+\section{Cosmic Inflation via Tunneling and Novelty Gradients}
 \label{sec:inflation}
 
-\subsection{\texorpdfstring{The $\rho = 12.88$ Efficiency Peak}{The rho = 12.88 Efficiency Peak}}
+\subsection{\texorpdfstring{The $\rho = 12.88$ Channel and the Effective Potential}{The rho = 12.88 channel and the effective potential}}
 \label{sec:rho-spike}
 
-The executable efficiency ratio at Step~15 is $\rho = 103/8 = 12.88$, clearing the bar ($7.40$) by an absolute overshoot of $5.48$---the largest in the entire 15-step sequence~\cite{pen}.
-This ``efficiency singularity'' is the PEN counterpart of the cosmological singularity, but with a crucial difference: the mathematics does not break down.
-Where General Relativity produces divergent curvature scalars at $t = 0$, PEN produces a finite, well-defined maximum of algorithmic efficiency.
-The singularity is not a failure of the formalism but a signature of \emph{optimal synthesis}---the point at which the library's combinatorial capacity is most powerfully leveraged.
+The audited efficiency ratio at Step~15 remains
+\begin{equation}
+    \rho \;=\; \frac{\nu}{\kappa} \;=\; \frac{103}{8} \;=\; 12.88,
+\end{equation}
+clearing the PEN bar by the largest absolute overshoot in the sequence~\cite{pen}.
+The numerical fact is unchanged from earlier drafts.
+What changes here is its interpretation.
+
+Rather than treating $\rho = 12.88$ as a merely algorithmic spike, we interpret it as the depth of the preferred adiabatic channel in an effective novelty potential:
+\begin{equation}
+\label{eq:veff}
+    V_{\mathrm{eff}}(X)
+    \;=\;
+    \lambda\,\kappa(X) - \mu\,\nu_H(X),
+\end{equation}
+where $\kappa(X)$ measures integration debt, $\nu_H(X)$ is the future novelty eigenvalue of sector $X$, and $\lambda,\mu > 0$ fix the relative scale of cost and downstream generativity.
+The precise microscopic derivation of \eqref{eq:veff} is not claimed here.
+Equation~\eqref{eq:veff} should therefore be read as the coarse-grained inflationary shadow of the full pre-physical Hamiltonian introduced in \Cref{sec:pen_hamiltonian}.
+Its role is to make explicit the intuition already implicit in PEN: the universe prefers channels whose future combinatorial and geometric yield more than compensates for their initial integration cost.
 
 \begin{remark}[Efficiency singularity vs.\ curvature singularity]
 \label{rem:singularity-contrast}
-In GR, the initial singularity signals the breakdown of the theory: physical quantities (density, temperature, curvature) diverge, and the Einstein equations lose predictive power~\cite{hawking-ellis,wald}.
-In PEN, the ``singularity'' at Step~15 is a computable finite maximum of a well-defined ratio.
-It arises not from a failure of description but from the temporal-cohesive shell's measured interaction payload with the existing library.
-The manuscript now treats the executable structural total $\nu = 103$ as canonical~\cite{pen}.
-The analogy is precise: both mark the moment of cosmological origin.
-The disanalogy is equally precise: one is a breakdown, the other is a peak of algorithmic performance.
+General Relativity reaches $t = 0$ by losing control of its own variables~\cite{hawking-ellis,wald}.
+PEN reaches Step~15 by achieving a finite, computable maximum of structural preference.
+The cosmological singularity is therefore re-read not as a blow-up of curvature but as a narrowing of the adiabatic landscape toward the unique channel with the greatest downstream novelty leverage.
 \end{remark}
 
-\subsection{\texorpdfstring{The $\nu = 103$ Explosion and the Inflationary Epoch}{The nu = 103 Explosion and the Inflationary Epoch}}
+\subsection{Tunneling Beyond \texorpdfstring{$\N$}{N}: Why Geometry Wins}
 \label{sec:nu-explosion}
 
-Cosmic inflation is the hypothesis that the very early universe underwent a brief period of exponentially rapid expansion of the metric scale factor, during which the number of accessible physical degrees of freedom increased by many orders of magnitude~\cite{guth,linde}.
-In PEN, the analogous phenomenon is not the spatial expansion itself but the combinatorial schema explosion at Step~15 that first makes such a phase dynamically expressible.
-The claim of this section is therefore one of \emph{structural inflation}: the sudden release of executable geometric and temporal degrees of freedom.
-It does \emph{not} identify the logical count $\nu = 103$ with the metric scale factor $a(t)$.
+The obvious objection is this: if discrete mathematics is cheap, why does the universal state not remain trapped there?
+Why does the pre-physical wavefunction not settle into $\N$, recursion, and combinatorics alone?
 
-The mechanism is the Combinatorial Schema Synthesis theorem~\cite{pen}: when the DCT's temporal modalities ($\nextmod$, $\eventually$) are introduced into a library of 14~structures already equipped with spatial modalities ($\flat, \sharp, \Disc, \Pi_{\mathrm{coh}}$), the cross-interaction at depth~2 produces a superlinear expansion of new inference schemas.
-In the current executable lane, this temporal-cohesive shell is evaluated at $\kappa = 8$ and yields the canonical value $\nu = 103$.
-Representative schema families include:
+PEN's answer is that $\N$ is only a \emph{local} minimum.
+It has low integration debt, but its novelty frontier is nearly linear.
+By contrast, the univalent geometric ladder
+\begin{equation}
+    S^1 \to S^2 \to S^3 \to \cdots
+\end{equation}
+has higher debt but superlinear future novelty because higher-inductive geometry, cohesion, and later temporal coupling generate rapidly expanding families of equivalences, transports, and interaction schemas.
+The quantity $\nu_H$ in \eqref{eq:veff} is meant to register that asymmetry.
 
-\begin{itemize}[nosep]
-    \item Guarded temporal endomorphism and recursion patterns built from $\nextmod$ and $\eventually$.
-    \item Spatial-temporal exchange laws that tie the new temporal operators to the pre-existing cohesive modalities.
-    \item Transport and flow-like interaction with the already selected cohesive and differential layers.
-\end{itemize}
+In this language, structural inflation is a tunneling phenomenon.
+The universal wavefunction crosses the discrete barrier not because discrete mathematics is inconsistent, but because the geometric sector creates a deeper global well once future novelty is included.
+The large Step~15 value $\nu = 103$ is then the first post-barrier release of executable degrees of freedom: not yet metric inflation itself, but the unlocking of the logical conditions under which any Guth-Linde inflationary dynamics could later be expressed~\cite{guth,linde,vilenkin}.
 
-The picture is one of sudden, explosive logical cross-interaction: 14~structures that previously coexisted as independent library entries are now woven into a single dynamical fabric, with each pair generating new eliminators, new homotopy schemas, and new compositional types.
-This is the algorithmic analogue of the release of latent degrees of freedom in an inflationary phase transition: the physical ingredients are not injected from outside but are \emph{unlocked} by the synthesis of previously disconnected structure.
-
-\begin{proposition}[Structural inflation as a necessary precondition]
-\label{prop:structural-inflation}
-The combinatorial amplification at Step~15 ($\nu = 103$, compared to $\nu \leq 62$ at all prior steps) is a necessary structural precondition for any later physical inflationary dynamics.
-It is not itself the claim that the metric scale factor $a(t)$ has already undergone exponential expansion.
-Rather, Step~15 is the first stage at which the ingredients required to formulate such dynamics coexist inside a single executable framework: differentiable manifolds, Lorentzian metric structure, temporal evolution, and guardedly unfoldable fields.
+\begin{proposition}[Novelty-driven tunneling]
+\label{prop:tunneling}
+Suppose sectors $X$ and $Y$ satisfy $\kappa(X) < \kappa(Y)$, but $\nu_H(X)$ grows only linearly while $\nu_H(Y)$ grows superlinearly under further admissible extensions.
+Then there exists a horizon scale beyond which $V_{\mathrm{eff}}(Y) < V_{\mathrm{eff}}(X)$.
+At that point the adiabatic ground sector preferentially weights $Y$ despite its higher immediate cost.
 \end{proposition}
 
 \begin{proof}[Proof sketch]
-Before Step~15, the relevant geometric ingredients are present only as static library entries in $\B_{14}$; after Step~15, they are bound together by the temporal-cohesive shell and acquire dynamical meaning through the Kinematic-Dynamic Equivalence.
-A Guth-Linde style inflationary model requires not merely a manifold and a scalar field, but an equation of motion propagating that field on a spacetime background.
-PEN therefore identifies the earliest structural point at which physical inflation can even be written down.
-Which concrete inflaton potential or low-energy effective action is realized is a separate phenomenological question, deferred to~\cite{gr-companion}.
+Equation~\eqref{eq:veff} penalizes immediate debt and rewards downstream novelty.
+If $\nu_H(Y)$ eventually dominates $\nu_H(X)$ strongly enough, then the term $-\mu\nu_H(Y)$ outweighs the larger initial value of $\lambda\kappa(Y)$.
+The lower effective potential of $Y$ then makes it the preferred adiabatic channel.
+The proposition does not identify a literal instanton for PEN.
+It formalizes the manuscript's claim that discrete structure can be bypassed in favor of a more expensive but globally deeper geometric basin.
 \end{proof}
+
+\begin{remark}[Inflationary analogy]
+\label{rem:inflation}
+The tunneling language is intentionally structural.
+This section does not claim that $\nu = 103$ is itself a scale factor or that PEN directly computes an inflaton potential.
+The claim is narrower and stronger: Step~15 is the earliest point at which a universe can exit the discrete basin, bind space and time into one executable sector, and thereby acquire the prerequisites for any later physical inflationary model.
+\end{remark}
 
 
 % ============================================
 % 5. THE ARROW OF TIME
 % ============================================
-\section{The Arrow of Time and Minimal Entropy}
+\section{The Arrow of Time, Collapse, and Minimal Entropy}
 \label{sec:arrow}
 
 \subsection{The Causal Arrow from Guardedness}
 \label{sec:causal-arrow}
 
-Why does time flow in one direction?
-In thermodynamic accounts, the arrow of time is derived from the second law and the assumption of a low-entropy initial condition---but this merely pushes the question back to why the initial condition was special.
-In PEN, the arrow of time is not a thermodynamic consequence but a \emph{type-theoretic primitive}: it is built into the logical structure of the $\nextmod$ operator.
+Why does time point forward?
+In ordinary thermodynamic accounts, the arrow is derived from the second law plus a special low-entropy boundary condition.
+That leaves untouched the deeper question of why the boundary condition was special at all.
 
-The guardedness condition in L\"ob's rule~\eqref{eq:lob} is asymmetric by construction: a term of type $\nextmod A \to A$ can use tomorrow's value to compute today's value, but there is no dual rule $A \to \nextmod A$ that would allow today's value to determine tomorrow's independently of the dynamical law.
-More precisely, the only way to produce a term of type $\nextmod A$ is by applying a dynamical system $f : A \to \nextmod A$ to a current state; one cannot extract a future state except by running the system forward.
+PEN places the asymmetry earlier.
+Once Step~15 has decohered the Q-Monad into an executable branch, the guarded modality $\nextmod$ permits forward unfolding but not arbitrary recoherence.
+The universe can compute its next state from its present state; it cannot, in general, reconstruct the coherent pre-collapse amplitudes from an already executed branch.
 
-\begin{theorem}[Type-theoretic irreversibility]
+\begin{theorem}[Guarded irreversibility]
 \label{thm:irreversibility}
-In the DCT, the guarded corecursion principle $\fix : (\nextmod A \to A) \to A$ is not invertible: there is no general term of type $A \to (\nextmod A \to A)$ that recovers the generating function from its fixpoint.
-Consequently, the temporal unfolding $\unfold_f : X \to \Stream\, X$ is causally one-directional: given a stream, one can extract any finite prefix by iterated application of $\nextmod$, but one cannot in general recover the state at tick $n$ from the state at tick $n + k$ for $k > 0$.
+In the DCT, the guarded corecursion principle
+\[
+    \fix : (\nextmod A \to A) \to A
+\]
+is not generally invertible.
+Consequently, the unfolding map $\unfold_f : X \to \Stream\,X$ is causally one-directional: internal observers may propagate admissible states forward, but they do not possess a generic morphism that recoheres an executed stream back into the pre-physical superposition from which it descended.
 \end{theorem}
 
 \begin{proof}[Proof sketch]
-Suppose for contradiction that a general inverse $\fix^{-1} : A \to (\nextmod A \to A)$ existed.
-Then for any type $A$, one could construct a term of type $\nextmod A \to A$ from any element of $A$, which when fed back into $\fix$ would yield a fixpoint independent of the dynamical law $f$.
-This violates the productivity guarantee of guarded corecursion: the $\nextmod$ guard ensures that each step of the unfolding makes genuine computational progress.
-A general inverse would collapse the guarded modality, making $\nextmod A \simeq A$, which contradicts the non-triviality of temporal logic in the DCT (the temporal-cohesive exchange laws require $\nextmod$ to remain distinguishable from the identity).
+If a general inverse to guarded corecursion existed, the delay encoded by $\nextmod$ could be discharged without forward progress.
+That would collapse $\nextmod A$ into $A$, trivialize the guarded modality, and erase the temporal asymmetry that Step~15 introduced.
+The DCT does permit time-reversal symmetries for specific internal equations of motion, but it does not permit a generic inverse that undoes the runtime branch-selection mechanism itself.
 \end{proof}
 
-\begin{remark}[Execution asymmetry vs.\ geometric reversibility]
+\begin{remark}[Microscopic reversibility vs.\ branch irreversibility]
 \label{rem:reversibility}
-The asymmetry proved in \Cref{thm:irreversibility} concerns the production of the runtime trace, not the symmetry group of every internal law of motion.
-Once Step~15 has supplied a geometric vector field $v : \U \to \U^{\D}$, that field may integrate to a reversible diffeomorphism, a symplectic flow, or an equation admitting a formal time-reversal involution.
-One may therefore solve a microscopic law backward inside the already-generated geometry.
-What one cannot do is \emph{un-run} the universe's guarded execution to recover the present by retrocausal compilation.
-The runtime computes forward even when some of the equations it hosts are geometrically reversible.
+Nothing here forbids reversible Hamiltonian or symplectic dynamics within the already decohered universe.
+What is excluded is the stronger operation of undoing the measurement boundary that made the universe physical in the first place.
+The laws hosted by the runtime may be locally reversible; the global transition from coherent possibility to executed branch is not.
 \end{remark}
 
-\begin{corollary}[Type safety excludes closed timelike curves]
-\label{cor:ctc}
-In the guarded fragment of the DCT, any putative closed timelike curve requiring a state to be fed into its own causal past would demand discharge of a $\nextmod$-guard without forward progress.
-No such term is typable.
-Hence closed timelike curves are excluded at the level of the universe's native type safety.
-\end{corollary}
-
-\begin{proof}
-A CTC would amount to a circular dependency in which a future state is extracted from a stream and reintroduced as an input to its own earlier production.
-By \Cref{thm:irreversibility}, the guarded unfolding map is not generally invertible, and by guarded typing rules the delay on $\nextmod$ cannot be eliminated except through forward execution.
-Therefore the required self-feeding term is ill-typed.
-\end{proof}
-
-\subsection{The Past Hypothesis as Algorithmic Compression}
+\subsection{The Past Hypothesis as a Pure Ignition State}
 \label{sec:past-hypothesis}
 
-The ``Past Hypothesis''---the empirical observation that the universe began in a state of extraordinarily low entropy~\cite{penrose-road,carroll}---is one of the deepest unexplained facts in physics.
-Statistical mechanics can explain why entropy increases \emph{given} a low-entropy initial state, but it cannot explain why the initial state was special.
-The low-entropy boundary condition is typically imposed by hand as a cosmological axiom.
+The Past Hypothesis says that the universe began in an extraordinarily low-entropy state~\cite{penrose-road,carroll}.
+Standard statistical mechanics can explain why entropy rises \emph{given} such a state, but not why the boundary condition was special.
+In the present framework, the cleanest answer is quantum-theoretic: the ignition state is pure.
 
-PEN provides a constructive explanation.
-The $t = 0$ state---the state of the universe at the moment of runtime ignition---is not an arbitrary initial condition.
-It is the \emph{output} of 15~steps of strict efficiency maximization under Kolmogorov-complexity-minimal specification.
+\begin{theorem}[Pure ignition state]
+\label{thm:vn-entropy}
+Let
+\begin{equation}
+\label{eq:pure-state}
+    \varrho_0
+    \;=\;
+    \ket{\psi_{\mathrm{DCT}}}\bra{\psi_{\mathrm{DCT}}}
+\end{equation}
+be the post-ignition density operator selected by the Step~15 measurement boundary.
+Then the von Neumann entropy at $t = 0$ is exactly zero:
+\begin{equation}
+\label{eq:vn-zero}
+    \SvN(\varrho_0)
+    \;=\;
+    -\Tr(\varrho_0 \log \varrho_0)
+    \;=\;
+    0.
+\end{equation}
+\end{theorem}
 
-\begin{theorem}[Minimal realized description at $t = 0$]
+\begin{proof}
+A rank-one projector has spectrum $\{1,0,0,\ldots\}$.
+Substituting those eigenvalues into the von Neumann entropy formula yields $-1\cdot\log 1 = 0$, while the zero eigenvalues contribute nothing~\cite{von-neumann}.
+\end{proof}
+
+This already solves the Past Hypothesis at the microscopic level.
+The state at $t=0$ is special because it is not a generic mixed macrostate.
+It is the pure branch singled out by endogenous decoherence.
+Macroscopic thermodynamic entropy arises only afterward, once coarse-graining, branching, and environmental entanglement are possible inside the runtime~\cite{zurek-decoherence,schlosshauer}.
+
+PEN's original compression result remains intact and now appears as a classical shadow of that purer statement.
+
+\begin{theorem}[Minimal realized description at \texorpdfstring{$t = 0$}{t = 0}]
 \label{thm:past-hypothesis}
-The physical state at the onset of dynamics ($t = 0$) is specified by the complete DCT library $\B_{15}$, whose total specification complexity is $\kappa_{\mathrm{total}} = \sum_{i=1}^{15} \kappa_i = 64$ clauses (equivalently, 610~bits in MBTT encoding~\cite{pen}).
+The ignition branch $\ket{\psi_{\mathrm{DCT}}}$ is specified by the complete DCT library $\B_{15}$, whose total specification complexity is $\kappa_{\mathrm{total}} = \sum_{i=1}^{15}\kappa_i = 64$ clauses, equivalently 610 bits in the MBTT encoding audited in~\cite{pen}.
 Within the PEN selection dynamics, this is the shortest realized description compatible with the full kinematic framework.
-Any alternative bar-clearing trajectory obeying the same local minimal-overshoot rule and producing equivalent kinematic capacity requires equal or greater total $\kappa$.
 \end{theorem}
 
 \begin{proof}[Proof sketch]
-The selection dynamics at each step chooses the candidate with minimal overshoot (Axiom~4 of~\cite{pen}), with ties broken by minimal $\kappa$.
-Within that admissible class of bar-clearing trajectories, the realized path is therefore greedily minimal at every stage.
-Any alternative trajectory that reaches equivalent kinematic capacity while obeying the same acceptance rule must match or exceed the accumulated specification cost of the realized path.
+PEN chooses at each stage the minimal overshoot that clears the relevant bar, with ties broken by minimal $\kappa$.
+The realized trajectory is therefore greedily minimal within the admissible class.
+Any alternative route to the same full kinematic and temporal capacity must match or exceed its specification length.
 \end{proof}
 
-\begin{corollary}[Past Hypothesis in Zurek's algorithmic sense]
+\begin{corollary}[Past Hypothesis in dual form]
 \label{cor:zurek-past}
-Zurek's account of physical entropy assigns to a definite microstate an algorithmic contribution given by the length of its shortest specification, together with the usual coarse-grained missing information~\cite{zurek-complexity}.
-Since PEN realizes the ignition state by the shortest description in its admissible class, the algorithmic contribution to physical entropy is minimized at $t = 0$.
-If ignition is also taken to precede any substantial coarse-grained branching of macrostates, then the total physical entropy is correspondingly minimal there, yielding a constructive realization of the Past Hypothesis.
+The Past Hypothesis is realized twice at ignition:
+\begin{enumerate}[label=(\roman*), nosep]
+    \item microscopically, because $\varrho_0$ is pure and has $\SvN = 0$;
+    \item algorithmically, because the realized ignition branch has minimal specification complexity in the admissible PEN class.
+\end{enumerate}
+Thermodynamic entropy is therefore not a pre-Big-Bang datum.
+It is a post-collapse runtime phenomenon.
 \end{corollary}
-
-\begin{proof}
-The first clause is Zurek's decomposition of physical entropy.
-The second follows from \Cref{thm:past-hypothesis}: the ignition state is generated by the shortest realized description compatible with the PEN constraints.
-The final sentence is the cosmological interpretation obtained by applying that decomposition at the boundary between compilation and runtime.
-\end{proof}
 
 \begin{remark}[What the 610-bit claim does and does not mean]
 \label{rem:entropy}
-The 610-bit figure is a statement about the shortest description of the ignition state, not a literal calculation of the late universe's thermodynamic entropy.
-Its force lies in fixing the algorithmic part of the entropy budget at a minimum compatible with PEN.
-Once runtime begins, coarse-grained multiplicity can grow rapidly, recovering the familiar thermodynamic arrow without sacrificing the compressed origin.
-In this precise sense, PEN turns the Past Hypothesis from a brute boundary condition into the output of a compression principle.
+The 610-bit figure is not a literal entropy count for the late universe.
+It measures the shortest admissible description of the ignition branch.
+Its significance is that the algorithmic part of the entropy budget is fixed at a minimum exactly where the quantum part is also pure.
+The manuscript's claim is therefore stronger than in the earlier draft: low initial entropy is not merely compressed, but compressed \emph{after} the branch has already been selected as a rank-one state.
 \end{remark}
 
 
 % ============================================
-% 6. THE UNIVALENT HORIZON AS COSMOLOGICAL FIREWALL
+% 6. THE UNIVALENT HORIZON AS HEISENBERG CUT
 % ============================================
-\section{The Univalent Horizon as the Cosmological Firewall}
+\section{The Univalent Horizon as the Heisenberg Cut}
 \label{sec:firewall}
 
-\subsection{Resolving the Halting Problem: Structural Termination}
+\subsection{Closure After Decoherence: Structural Termination}
 \label{sec:termination}
 
 The PEN Generative Sequence does not ``die'' at Step~15.
-It halts---in the precise sense of Theorem~5.12 of~\cite{pen}---because the external generator is rendered obsolete.
+It halts in the stronger sense that the external search procedure is rendered unnecessary~\cite{pen}.
+Before ignition, the universe is prepared as a coherent state over admissible telescopes.
+After ignition, the selected branch carries its own dynamics internally.
 
-The argument has three steps:
+The closure argument is unchanged in substance, but it now has a measurement-theoretic reading:
 \begin{enumerate}[nosep]
-    \item The DCT internalizes the evolutionary mechanism as a geometric flow on $\U$ (Lemma~5.11 of~\cite{pen}).
-    The metamathematical process of ``searching for the next type'' is representable as a vector field $v : \U \to \U^{\D}$, unfolded into a trajectory by guarded corecursion.
+    \item The DCT internalizes the evolutionary mechanism as a geometric flow on $\U$.
+    The metatheoretic search for the ``next'' structure is represented internally as a vector field $v : \U \to \U^{\D}$.
     \item By univalence, paths in $\U$ are type equivalences: $(A =_{\U} B) \simeq (A \simeq B)$.
-    Integrating the vector field produces a continuous family of types connected by paths in $\U$, hence a family of pairwise equivalent types.
-    The flow is permanently confined to the connected component of $\U$ containing $\B_{15}$.
-    \item Any candidate $Y$ proposed at Step~16 is either (a)~internally derivable (contributing $\nu = 0$) or (b)~structurally alien to the $d = 2$ Coherence Window (incurring $\Delta_{16} = F_{16} = 987$ integration latency, making $\rho \ll \mathrm{Bar}_{16} \approx 8.80$).
-    In either case, the bar is permanently uncleared.
+    Integrating the vector field therefore keeps the post-collapse universe inside the connected component of $\U$ containing $\B_{15}$.
+    \item Any candidate proposed as a genuinely new Step~16 input is either already internally derivable, contributing no new novelty, or else lies outside the coherent window and incurs prohibitive integration debt~\cite{pen}.
 \end{enumerate}
 
-The universe does not stop evolving at Step~15; it stops \emph{needing external structural input} at Step~15.
-The distinction is between a system that cannot continue (failure) and a system that has achieved self-sufficiency (closure).
-The Generative Sequence halts because the DCT is a fixpoint of the selection dynamics, not because the dynamics has run out of candidates.
+Step~15 is therefore both a beginning and a termination.
+It begins physical time, but it terminates the need for external preparation.
+The decohered universe is causally closed.
 
-\subsection{Epistemic Isolation: The Planck Boundary Analogy}
+\subsection{Epistemic Isolation and the Heisenberg Cut}
 \label{sec:epistemic}
 
-The closest standard cosmological analogue of the Univalent Horizon is not the Cosmic Microwave Background at recombination ($t \approx 380{,}000$ years), which is only an electromagnetic opacity surface, but the Planck boundary ($t \lesssim 10^{-43}\,\mathrm{s}$), where classical spacetime is no longer expected to furnish a reliable description~\cite{mukhanov}.
-PEN provides a structural analogue of that deeper boundary: not merely a limit on photon propagation, but a limit on what an internal observer can represent as a physical observable.
+The reason internal observers cannot access the pre-physical epoch is no longer merely that the earlier stages lie ``outside the runtime.''
+The deeper reason is measurement-theoretic.
+The boundary between $\ket{\Psi_{\mathrm{pre}}}$ and $\ket{\psi_{\mathrm{DCT}}}$ is the ultimate Heisenberg cut~\cite{von-neumann,schlosshauer}.
 
-\begin{proposition}[Epistemic isolation of the compilation epoch]
+\begin{proposition}[The Univalent Horizon as measurement boundary]
 \label{prop:epistemic}
-Internal observers---agents whose perceptual and computational apparatus is itself a structure within $\B_{15}$---cannot construct an observable that probes the discrete algorithmic steps (1--14) that built the topos.
-The pre-Bang compilation epoch is accessible only via type-theoretic deduction, not physical measurement.
+Internal observers---agents whose measuring devices, Hilbert spaces, and trajectories are themselves structures within $\B_{15}$---cannot construct a physical observable that recovers the coherent amplitudes of the pre-Step~15 Q-Monad.
+The pre-physical epoch is accessible only by type-theoretic deduction, not by runtime measurement.
 \end{proposition}
 
 \begin{proof}[Proof sketch]
-An ``observation'' in the DCT is a continuous geometric flow: a section of some bundle, a functional on a Hilbert space, or a path in a moduli space.
-All such flows are terms in the internal language of the DCT, and by the Univalent Horizon (Theorem~5.12 of~\cite{pen}), they are confined to the connected component of $\U$ containing $\B_{15}$.
-The discrete algorithmic steps $\tau_1, \ldots, \tau_{14}$ are \emph{not} connected to $\B_{15}$ by paths in $\U$---they belong to the external metatheory, not the internal geometry.
-Any attempt to construct a physical observable that ``sees'' the compilation epoch would require a path crossing the Univalent Horizon, which is precisely what the horizon forbids.
+Any physical observation available to an internal observer is already a term in the internal language of the DCT: a section, a functional, a path, or an operator defined on post-collapse structure.
+Such observables act on the branch $\ket{\psi_{\mathrm{DCT}}}$ and on its later descendants.
+They do not act on the external coherent support that was removed by the Step~15 measurement boundary.
+By univalence and structural termination, no internal path crosses back from the post-collapse connected component of $\U$ to the pre-physical superposition that prepared it.
 \end{proof}
 
-\begin{remark}[The Planck boundary as a physical shadow of the Univalent Horizon]
+\begin{remark}[The cosmic quantum eraser]
 \label{rem:planck}
-The Planck boundary is the stage at which continuum spacetime ceases to be a trustworthy effective description and pre-geometric or quantum-gravitational structure is expected to dominate~\cite{mukhanov}.
-In PEN, the Univalent Horizon plays the analogous structural role.
-The limitation is not just that a particular signal channel thermalizes; it is that internal continuous observables do not extend across the compilation/runtime boundary at all.
-The analogy is therefore to a breakdown of representability, not merely to an opacity of electromagnetic matter.
+In laboratory quantum mechanics, one may sometimes recover lost interference by carefully reversing a measurement setup.
+Nothing analogous is available here.
+Physical measurement cannot retrocausally access the coherent wavefunction prior to the universe's own ignition boundary.
+The Univalent Horizon is therefore stronger than an opacity surface and stronger than a mere halting problem.
+It is a cosmological quantum eraser with no external laboratory from which the erasure can be undone.
 \end{remark}
 
 
@@ -509,26 +675,25 @@ The analogy is therefore to a breakdown of representability, not merely to an op
 \section{Conclusion}
 \label{sec:conclusion}
 
-The standard approach to cosmogenesis looks for a physical, kinetic mechanism that \emph{triggered} the Big Bang---a quantum fluctuation, a tunneling event, a collision of branes.
-Each such proposal presupposes the very structures (quantum fields, spacetime, dynamics) whose origin it is supposed to explain.
+Standard cosmogenesis seeks a physical trigger for the Big Bang: a vacuum fluctuation, a tunneling event, a brane collision, a high-energy instability.
+Each proposal begins by assuming some fragment of the physical order whose origin it is meant to explain.
 
 PEN inverts the explanatory order.
-The Big Bang is not an event that happened within physics; it is the mathematically necessary boundary at which physics \emph{begins}.
-Specifically:
-
+The Big Bang is not an event that occurs within an already given universe.
+It is the decoherence boundary at which a coherent metatheoretic state becomes an executable physical one.
+The resulting picture may be summarized as follows:
 \begin{enumerate}[nosep]
-    \item \textbf{The compilation epoch} (Steps~1--14) assembles the kinematic framework---types, spaces, cohesion, metrics, Hilbert functionals---in discrete algorithmic time $\tau$, without presupposing continuous dynamics.
-    \item \textbf{Runtime ignition} (Step~15) introduces the DCT, whose Kinematic-Dynamic Equivalence ($\nextmod X \simeq X^{\D}$) geometrizes time, converting discrete temporal logic into continuous infinitesimal structure.
-    L\"ob's guarded corecursion sets the static library into perpetual, autonomous motion.
-    \item \textbf{Structural inflation} is the combinatorial schema explosion ($\nu = 103$) produced by the sudden cross-interaction of 14~previously disconnected kinematic structures; it supplies the precondition for, rather than a replacement of, any later metric inflation.
-    \item \textbf{The arrow of time} is the type-theoretic asymmetry of guarded execution: the runtime computes forward even when some internal microscopic laws remain geometrically time-reversal symmetric.
-    \item \textbf{The Past Hypothesis} is realized as the minimized algorithmic contribution to physical entropy, in Zurek's sense, at the moment the runtime first ignites.
-    \item \textbf{The Univalent Horizon} is a Planck-like cosmological firewall separating the pre-physical compilation epoch from the self-computing physical runtime.
-    The pre-Bang universe is epistemically isolated from internal observers, accessible only through the type-theoretic deduction that PEN provides.
+    \item \textbf{The pre-physical epoch} is the Q-Monad: a coherent superposition of admissible HoTT telescopes in $\HMBTT$, with ill-typed sectors removed by destructive interference.
+    \item \textbf{Algorithmic time $\tau$} is the adiabatic control parameter of the PEN Hamiltonian, not a hidden physical clock.
+    \item \textbf{Step~15 ignition} introduces temporal modalities, exchange axioms, and guarded self-reference, allowing the universe to measure itself and decohere into the DCT branch at $t = 0$.
+    \item \textbf{Structural inflation} is the tunneling of the universal state out of the low-debt discrete basin and into the high-novelty geometric sector whose first major release is the $\nu = 103$ Step~15 explosion.
+    \item \textbf{The Past Hypothesis} is solved because the ignition state is pure, with $\SvN = 0$, and simultaneously minimal in algorithmic description length.
+    \item \textbf{The Univalent Horizon} is the Heisenberg cut that forever separates internal physical observers from the coherent pre-physical epoch.
 \end{enumerate}
 
-On the structural-realist reading adopted here, the physical universe is the runtime execution of the Dynamical Cohesive Topos.
-We must stop looking for a first cause within physics and instead recognize the Big Bang as the halting condition of the universe's foundational compilation phase---the moment at which the formal system achieves self-sufficiency and begins computing its own future.
+On this reading, the universe did not begin as a singular point of infinite density.
+It began when a coherent mathematical wavefunction acquired the capacity for self-reference, decohered into one guardedly executable branch, and thereby became physical.
+The Big Bang is the transition from mathematical possibility to causal actuality.
 
 
 % ============================================
@@ -557,6 +722,9 @@ A.H.\ Guth, ``Inflationary Universe: A Possible Solution to the Horizon and Flat
 \bibitem{linde}
 A.D.\ Linde, ``A New Inflationary Universe Scenario: A Possible Solution of the Horizon, Flatness, Homogeneity, Isotropy, and Primordial Monopole Problems,'' \emph{Physics Letters B} 108 (1982), 389--393.
 
+\bibitem{vilenkin}
+A.\ Vilenkin, ``Creation of Universes from Nothing,'' \emph{Physics Letters B} 117 (1982), 25--28.
+
 \bibitem{mukhanov}
 V.F.\ Mukhanov, \emph{Physical Foundations of Cosmology}, Cambridge University Press, 2005.
 
@@ -568,6 +736,15 @@ S.M.\ Carroll, ``The Cosmological Constant,'' \emph{Living Reviews in Relativity
 
 \bibitem{zurek-complexity}
 W.H.\ Zurek, ``Algorithmic Randomness and Physical Entropy,'' \emph{Physical Review A} 40 (1989), 4731--4751.
+
+\bibitem{zurek-decoherence}
+W.H.\ Zurek, ``Decoherence, Einselection, and the Quantum Origins of the Classical,'' \emph{Reviews of Modern Physics} 75 (2003), 715--775.
+
+\bibitem{schlosshauer}
+M.\ Schlosshauer, ``Decoherence, the Measurement Problem, and Interpretations of Quantum Mechanics,'' \emph{Reviews of Modern Physics} 76 (2005), 1267--1305.
+
+\bibitem{von-neumann}
+J.\ von Neumann, \emph{Mathematical Foundations of Quantum Mechanics}, Princeton University Press, 1955.
 
 \bibitem{hott}
 The Univalent Foundations Program, ``Homotopy Type Theory: Univalent Foundations of Mathematics,'' Institute for Advanced Study, 2013.
