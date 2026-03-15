@@ -420,15 +420,13 @@ pub fn assess_strict_admissibility_from_family_matches(
                 AdmissibilityDecision::rejected_by_exact_legality("bootstrap_type_shape")
             }
         }
-        _ => {
-            assess_strict_admissibility_from_terminal_summary(
-                step_index,
-                telescope.kappa() as u16,
-                admissibility,
-                matched_families,
-                telescope.is_trivially_derivable(library),
-            )
-        }
+        _ => assess_strict_admissibility_from_terminal_summary(
+            step_index,
+            telescope.kappa() as u16,
+            admissibility,
+            matched_families,
+            telescope.is_trivially_derivable(library),
+        ),
     }
 }
 

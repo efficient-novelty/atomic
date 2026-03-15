@@ -31,6 +31,13 @@ impl PrefixBound {
         self.bit_kappa_used = self.bit_kappa_used.min(bit_kappa_used);
     }
 
+    pub fn absorb_bound(&mut self, other: Self) {
+        self.nu_lower_bound = self.nu_lower_bound.min(other.nu_lower_bound);
+        self.nu_upper_bound = self.nu_upper_bound.max(other.nu_upper_bound);
+        self.clause_kappa_used = self.clause_kappa_used.min(other.clause_kappa_used);
+        self.bit_kappa_used = self.bit_kappa_used.min(other.bit_kappa_used);
+    }
+
     pub fn rho_lower(self) -> Option<Rational> {
         (self.clause_kappa_used != 0).then(|| {
             Rational::new(
@@ -114,5 +121,26 @@ mod tests {
         assert_eq!(bound.rho_lower(), None);
         assert_eq!(bound.rho_upper(), None);
         assert!(!bound.can_clear_bar(Rational::new(1, 1)));
+    }
+
+    #[test]
+    fn absorb_bound_merges_precomputed_extrema() {
+        let mut bound = PrefixBound::singleton(18, 5, 88);
+        bound.absorb_bound(PrefixBound {
+            nu_lower_bound: 12,
+            nu_upper_bound: 22,
+            clause_kappa_used: 4,
+            bit_kappa_used: 80,
+        });
+
+        assert_eq!(
+            bound,
+            PrefixBound {
+                nu_lower_bound: 12,
+                nu_upper_bound: 22,
+                clause_kappa_used: 4,
+                bit_kappa_used: 80,
+            }
+        );
     }
 }

@@ -350,7 +350,11 @@ impl PrefixLegalityCache {
         }
         let clause_kappa = parent_signature.clause_position.saturating_add(1);
         self.stats.trivial_derivability_hits += 1;
-        if parent_summary.admissibility.extend(clause).is_trivially_derivable() {
+        if parent_summary
+            .admissibility
+            .extend(clause)
+            .is_trivially_derivable()
+        {
             self.stats.trivial_derivability_prunes += 1;
             return Some(assess_strict_admissibility_from_terminal_summary(
                 step_index,

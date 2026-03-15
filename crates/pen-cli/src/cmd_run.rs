@@ -560,6 +560,10 @@ fn write_frontier_snapshots(
                     .search_stats
                     .incremental_terminal_admissibility_rejections
                     as u64,
+                incremental_terminal_prefix_bar_prunes: step
+                    .search_stats
+                    .incremental_terminal_prefix_bar_prunes
+                    as u64,
                 worker_count: frontier_worker_count,
                 priority_heads: window.priority_heads(8),
                 interner_bytes: 0,

@@ -127,19 +127,39 @@ impl PrefixCache {
         nu_history: &[(u32, u32)],
         retention_policy: RetentionPolicy,
     ) -> Result<()> {
+        let bound = bound_for_telescope(&telescope, library, nu_history);
+        self.record_group_with_bound(
+            step_index,
+            prefix_telescope,
+            vec![telescope],
+            bound,
+            library,
+            history,
+            retention_policy,
+        )
+    }
+
+    pub fn record_group_with_bound(
+        &mut self,
+        step_index: u32,
+        prefix_telescope: Telescope,
+        telescopes: Vec<Telescope>,
+        bound: PrefixBound,
+        library: &Library,
+        history: &[DiscoveryRecord],
+        retention_policy: RetentionPolicy,
+    ) -> Result<()> {
+        if telescopes.is_empty() {
+            return Ok(());
+        }
+
         let signature = PrefixSignature::new(step_index, library, &prefix_telescope);
-        let exact_nu = u16::try_from(structural_nu(&telescope, library, nu_history).total)
-            .expect("nu exceeded u16");
-        let bit_kappa_used =
-            u16::try_from(telescope_bit_cost(&telescope)).expect("bit cost exceeded u16");
-        let clause_kappa_used = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+        let telescope_count = telescopes.len();
 
         if let Some(group) = self.groups.get_mut(&signature) {
-            group
-                .bound
-                .absorb_completion(exact_nu, clause_kappa_used, bit_kappa_used);
-            group.telescopes.push(telescope);
-            self.stats.merged_by_signature += 1;
+            group.bound.absorb_bound(bound);
+            group.telescopes.extend(telescopes);
+            self.stats.merged_by_signature += telescope_count;
             return Ok(());
         }
 
@@ -151,13 +171,27 @@ impl PrefixCache {
             retention_class: retention_policy.classify(prefix_candidate.retention_signals()),
             shape_hash64: signature.shape_hash64,
             support_hash64: signature.support_hash64,
-            bound: PrefixBound::singleton(exact_nu, clause_kappa_used, bit_kappa_used),
-            telescopes: vec![telescope],
+            bound,
+            telescopes,
         };
         self.groups.insert(signature, group);
         self.stats.created += 1;
+        self.stats.merged_by_signature += telescope_count.saturating_sub(1);
         Ok(())
     }
+}
+
+fn bound_for_telescope(
+    telescope: &Telescope,
+    library: &Library,
+    nu_history: &[(u32, u32)],
+) -> PrefixBound {
+    let exact_nu = u16::try_from(structural_nu(telescope, library, nu_history).total)
+        .expect("nu exceeded u16");
+    let bit_kappa_used =
+        u16::try_from(telescope_bit_cost(telescope)).expect("bit cost exceeded u16");
+    let clause_kappa_used = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+    PrefixBound::singleton(exact_nu, clause_kappa_used, bit_kappa_used)
 }
 
 fn truncated_hash64(bytes: &[u8]) -> u64 {
@@ -217,6 +251,7 @@ fn structural_family_flags(prefix_telescope: &Telescope, library: &Library) -> u
 #[cfg(test)]
 mod tests {
     use super::{PrefixCache, PrefixSignature};
+    use crate::bounds::PrefixBound;
     use pen_core::clause::{ClauseRec, ClauseRole};
     use pen_core::expr::Expr;
     use pen_core::library::{Library, LibraryEntry};
@@ -309,5 +344,56 @@ mod tests {
         let (_, group) = cache.iter().next().expect("group should exist");
         assert_eq!(group.telescopes.len(), 2);
         assert!(group.bound.nu_upper_bound >= group.bound.nu_lower_bound);
+    }
+
+    #[test]
+    fn cache_can_insert_a_precomputed_group_without_recomputing_each_merge_step() {
+        let prefix = Telescope::new(vec![clause(Expr::Univ), clause(Expr::Var(1))]);
+        let telescope_a = Telescope::new(vec![
+            clause(Expr::Univ),
+            clause(Expr::Var(1)),
+            clause(Expr::PathCon(1)),
+        ]);
+        let telescope_b = Telescope::new(vec![
+            clause(Expr::Univ),
+            clause(Expr::Var(1)),
+            clause(Expr::PathCon(2)),
+        ]);
+        let mut cache = PrefixCache::default();
+        let history = vec![DiscoveryRecord::new(1, 2, 2)];
+        let policy = RetentionPolicy {
+            focus: RetentionFocus::Former,
+            focus_quota: 1,
+            bridge_quota: 1,
+            support_quota: 1,
+            macro_quota: 1,
+            cold_limit: 4,
+        };
+
+        cache
+            .record_group_with_bound(
+                2,
+                prefix.clone(),
+                vec![telescope_a, telescope_b],
+                PrefixBound {
+                    nu_lower_bound: 5,
+                    nu_upper_bound: 8,
+                    clause_kappa_used: 3,
+                    bit_kappa_used: 12,
+                },
+                &Library::default(),
+                &history,
+                policy,
+            )
+            .expect("precomputed group should record");
+
+        assert_eq!(cache.len(), 1);
+        assert_eq!(cache.stats().created, 1);
+        assert_eq!(cache.stats().merged_by_signature, 1);
+        let (_, group) = cache.iter().next().expect("group should exist");
+        assert_eq!(group.prefix_telescope, prefix);
+        assert_eq!(group.telescopes.len(), 2);
+        assert_eq!(group.bound.nu_lower_bound, 5);
+        assert_eq!(group.bound.nu_upper_bound, 8);
     }
 }

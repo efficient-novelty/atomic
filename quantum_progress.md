@@ -1,6 +1,6 @@
 # Quantum Progress
 
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 
 This file is the operational status snapshot for
 [`quantum_improvement_plan.md`](./quantum_improvement_plan.md). It is not a
@@ -46,6 +46,9 @@ guarded 15-step canon.
   summary keyed by `PrefixSignature`, rejecting terminal continuations that are
   provably trivially derivable before full telescope assembly and before any
   direct admissibility fallback.
+- realistic shadow now also computes an exact terminal-prefix completion bound
+  per retained one-clause-short prefix and prunes any such prefix group that
+  cannot clear the current bar before retained-prefix frontier planning runs.
 - `PrefixSignature` now includes:
   - clause position
   - obligation set id
@@ -76,6 +79,7 @@ guarded 15-step canon.
   - `incremental_trivial_derivability_prunes`
   - `incremental_terminal_admissibility_hits`
   - `incremental_terminal_admissibility_rejections`
+  - `incremental_terminal_prefix_bar_prunes`
 - step telemetry now also carries the first Phase-2 timing counters:
   - `step_wall_clock_millis`
   - `candidate_discovery_wall_clock_millis`
@@ -88,6 +92,9 @@ guarded 15-step canon.
   - `cold_frontier_bytes`
   - `dedupe_bytes`
   - plus persisted frontier `memory_snapshot` bytes in frontier manifests
+- stored realistic-shadow step-11 artifacts now show the first landed earlier
+  exact partial-prefix bar prune via
+  `incremental_terminal_prefix_bar_prunes = 1`.
 
 ## What Is No Longer A Gap
 
@@ -106,18 +113,21 @@ it as if it were still missing:
   derivability reuse before full telescope assembly
 - extending the strengthened-signature memo layer into cached terminal
   admissibility decisions for late-family realistic shadow work
+- landing an earlier exact terminal-prefix bar prune before retained-prefix
+  frontier planning
 - adding the first timing telemetry and deterministic frontier memory
   high-water metrics for the memoized realistic-shadow path
 
 ## Active Gaps
 
-### 1. Stronger partial-prefix bounds beyond family-based clause filtering
+### 1. Stronger partial-prefix bounds beyond family-based filtering and the landed terminal-prefix bar prune
 
 The realistic lane now has an earlier exact prune for impossible mixed-family
-prefixes plus exact active-window clause filtering on child and terminal clause
-options, but its strongest `nu`/bar reasoning is still too late in the search.
+prefixes, exact active-window clause filtering on child and terminal clause
+options, and an exact one-clause-short terminal-prefix bar prune, but its
+strongest `nu`/bar reasoning still only fires at the terminal-prefix frontier.
 We do not yet have the stronger sound partial-prefix bound story needed to
-prune earlier with confidence.
+prune confidently earlier than that one-clause-short point.
 
 ### 2. Broader non-family admissibility reuse beyond the landed filter layer
 
@@ -143,9 +153,11 @@ expensive relative to their payoff.
 ### Now
 
 - define a stronger sound partial-prefix bound beyond exact clause-family
-  impossibility pruning and the landed active-window clause filtering
+  impossibility pruning, the landed active-window clause filtering, and the
+  landed terminal-prefix bar prune
 - use the new active-window, trivial-derivability, and terminal-admissibility
-  payoff counters to target broader exact admissibility/filter reuse
+  payoff counters together with `incremental_terminal_prefix_bar_prunes` to
+  target broader exact admissibility/filter reuse
 - use the new timing telemetry and deterministic frontier memory high-water
   metrics to identify the late-step prefix lanes that still do redundant work
 - keep the strengthened-signature caches exact and deterministic
@@ -165,8 +177,8 @@ expensive relative to their payoff.
 
 1. Audit the current `nu` and legality pipeline and identify the strongest
    partial-prefix exact bound that goes beyond the landed clause-family
-   impossibility prunes and active-window clause filtering without unsound
-   inference.
+   impossibility prunes, active-window clause filtering, and the one-clause-
+   short terminal-prefix bar prune without unsound inference.
 2. Extend the landed legality/connectivity/family/active-window/trivial-
    derivability/terminal-admissibility memo path into another exact
    admissibility summary that fires before the full terminal telescope is

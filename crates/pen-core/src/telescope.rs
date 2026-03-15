@@ -425,7 +425,9 @@ impl Telescope {
 
         has_higher_path
             && !non_path_exprs.is_empty()
-            && non_path_exprs.into_iter().all(|expr| expr.is_trunc_context())
+            && non_path_exprs
+                .into_iter()
+                .all(|expr| expr.is_trunc_context())
     }
 }
 

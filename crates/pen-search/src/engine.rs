@@ -1,4 +1,5 @@
 use crate::accept::{AcceptanceOutcome, select_acceptance};
+use crate::bounds::PrefixBound;
 use crate::config::SearchProfile;
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{EnumerationContext, build_clause_catalog, enumerate_telescopes};
@@ -11,12 +12,14 @@ use crate::scheduler::build_schedule;
 use crate::state::{FrontierStateRecV1, PrefixState};
 use crate::worker::run_worker_batch;
 use anyhow::{Result, bail};
+use pen_core::encode::telescope_bit_cost;
 use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::rational::Rational;
 use pen_core::telescope::Telescope;
 use pen_eval::bar::{DiscoveryRecord, compute_bar};
 use pen_eval::minimality::analyze_semantic_minimality;
+use pen_eval::nu::structural_nu;
 use pen_store::manifest::{NearMiss, SearchTiming};
 use pen_type::admissibility::{
     AdmissibilityDiagnostics, AdmissibilityMode, StrictAdmissibility, assess_strict_admissibility,
@@ -136,6 +139,7 @@ pub struct AtomicSearchStep {
     pub incremental_trivial_derivability_prunes: usize,
     pub incremental_terminal_admissibility_hits: usize,
     pub incremental_terminal_admissibility_rejections: usize,
+    pub incremental_terminal_prefix_bar_prunes: usize,
     pub search_timing: SearchTiming,
     pub prefix_frontier_hot_states: usize,
     pub prefix_frontier_cold_states: usize,
@@ -199,6 +203,7 @@ struct RealisticShadowDiscovery {
     malformed_rejection_reasons: BTreeMap<String, usize>,
     admissibility_rejections: usize,
     admissibility_diagnostics: AdmissibilityDiagnostics,
+    terminal_prefix_bar_prunes: usize,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -360,6 +365,7 @@ fn search_next_step(
     let mut incremental_trivial_derivability_prunes = 0usize;
     let mut incremental_terminal_admissibility_hits = 0usize;
     let mut incremental_terminal_admissibility_rejections = 0usize;
+    let mut incremental_terminal_prefix_bar_prunes = 0usize;
     let discovery_start = Instant::now();
     let nu_history = history
         .iter()
@@ -373,6 +379,7 @@ fn search_next_step(
             history,
             admissibility,
             retention_policy,
+            objective_bar,
             &nu_history,
         )?;
         prefix_cache = discovery.prefix_cache;
@@ -401,6 +408,7 @@ fn search_next_step(
         incremental_terminal_admissibility_hits = legality_stats.terminal_admissibility_hits;
         incremental_terminal_admissibility_rejections =
             legality_stats.terminal_admissibility_rejections;
+        incremental_terminal_prefix_bar_prunes = discovery.terminal_prefix_bar_prunes;
     } else {
         for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
             let telescopes = enumerate_telescopes(
@@ -452,8 +460,9 @@ fn search_next_step(
     };
     let prefix_frontier_planning_wall_clock_millis =
         elapsed_millis(prefix_frontier_planning_start.elapsed());
-    let prefix_states_exact_pruned =
-        prefix_frontier.exact_pruned + incremental_clause_family_prunes;
+    let prefix_states_exact_pruned = prefix_frontier.exact_pruned
+        + incremental_clause_family_prunes
+        + incremental_terminal_prefix_bar_prunes;
 
     if admissibility_mode == AdmissibilityMode::RealisticShadow {
         for signature in &prefix_frontier.retained_prefix_signatures {
@@ -569,6 +578,7 @@ fn search_next_step(
         incremental_trivial_derivability_prunes,
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
+        incremental_terminal_prefix_bar_prunes,
         search_timing,
         prefix_frontier.frontier.hot.len(),
         prefix_frontier.frontier.cold.len(),
@@ -625,6 +635,7 @@ fn build_step_result(
     incremental_trivial_derivability_prunes: usize,
     incremental_terminal_admissibility_hits: usize,
     incremental_terminal_admissibility_rejections: usize,
+    incremental_terminal_prefix_bar_prunes: usize,
     search_timing: SearchTiming,
     prefix_frontier_hot_states: usize,
     prefix_frontier_cold_states: usize,
@@ -681,6 +692,7 @@ fn build_step_result(
         incremental_trivial_derivability_prunes,
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
+        incremental_terminal_prefix_bar_prunes,
         search_timing,
         prefix_frontier_hot_states,
         prefix_frontier_cold_states,
@@ -781,6 +793,7 @@ fn discover_realistic_shadow_candidates(
     history: &[DiscoveryRecord],
     admissibility: StrictAdmissibility,
     retention_policy: RetentionPolicy,
+    objective_bar: Rational,
     nu_history: &[(u32, u32)],
 ) -> Result<RealisticShadowDiscovery> {
     let mut discovery = RealisticShadowDiscovery::default();
@@ -848,6 +861,7 @@ fn discover_realistic_shadow_candidates(
                     history,
                     admissibility,
                     retention_policy,
+                    objective_bar,
                     nu_history,
                     &work_item.signature,
                     &work_item.prefix_telescope,
@@ -900,6 +914,7 @@ fn record_terminal_prefix_group(
     history: &[DiscoveryRecord],
     admissibility: StrictAdmissibility,
     retention_policy: RetentionPolicy,
+    objective_bar: Rational,
     nu_history: &[(u32, u32)],
     prefix_signature: &PrefixSignature,
     prefix_telescope: &Telescope,
@@ -916,6 +931,8 @@ fn record_terminal_prefix_group(
             last_clause_options,
         )
         .unwrap_or_else(|| last_clause_options.iter().collect());
+    let mut retained_telescopes = Vec::new();
+    let mut retained_bound: Option<PrefixBound> = None;
 
     for clause in filtered_clauses {
         let Some(connectivity_decision) = discovery.prefix_legality_cache.terminal_connectivity(
@@ -932,15 +949,13 @@ fn record_terminal_prefix_group(
             continue;
         }
 
-        let cached_admissibility_decision = discovery
-            .prefix_legality_cache
-            .terminal_admissibility(
-                step_index,
-                prefix_signature,
-                library,
-                clause,
-                admissibility,
-            );
+        let cached_admissibility_decision = discovery.prefix_legality_cache.terminal_admissibility(
+            step_index,
+            prefix_signature,
+            library,
+            clause,
+            admissibility,
+        );
         let mut telescope = None;
         if matches!(
             connectivity_decision,
@@ -979,17 +994,37 @@ fn record_terminal_prefix_group(
             telescope.clauses.push(clause.clone());
             telescope
         });
-
-        discovery.prefix_cache.record_group(
-            step_index,
-            prefix_telescope.clone(),
-            telescope,
-            library,
-            history,
-            nu_history,
-            retention_policy,
-        )?;
+        let exact_nu = u16::try_from(structural_nu(&telescope, library, nu_history).total)
+            .expect("nu exceeded u16");
+        let bit_kappa_used =
+            u16::try_from(telescope_bit_cost(&telescope)).expect("bit cost exceeded u16");
+        let clause_kappa_used = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+        let completion_bound = PrefixBound::singleton(exact_nu, clause_kappa_used, bit_kappa_used);
+        if let Some(bound) = retained_bound.as_mut() {
+            bound.absorb_bound(completion_bound);
+        } else {
+            retained_bound = Some(completion_bound);
+        }
+        retained_telescopes.push(telescope);
     }
+
+    let Some(retained_bound) = retained_bound else {
+        return Ok(());
+    };
+    if !retained_bound.can_clear_bar(objective_bar) {
+        discovery.terminal_prefix_bar_prunes += 1;
+        return Ok(());
+    }
+
+    discovery.prefix_cache.record_group_with_bound(
+        step_index,
+        prefix_telescope.clone(),
+        retained_telescopes,
+        retained_bound,
+        library,
+        history,
+        retention_policy,
+    )?;
 
     Ok(())
 }
@@ -1604,6 +1639,7 @@ mod tests {
         assert!(step.incremental_active_window_clause_filter_prunes > 0);
         assert!(step.incremental_trivial_derivability_hits > 0);
         assert!(step.incremental_terminal_admissibility_hits > 0);
+        assert!(step.incremental_terminal_prefix_bar_prunes > 0);
         assert!(
             step.admissibility_rejections
                 + step
