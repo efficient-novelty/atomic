@@ -26,10 +26,20 @@ What is still incomplete:
 - the anti-junk frontier engine is not yet the full long-range design
 - the Agda bridge is still lighter than the final proof-facing target
 
+The current search-architecture focus has shifted again:
+
+- `realistic_frontier_shadow` already has real prefix-frontier retention and
+  persisted frontier evidence
+- `pen-search` now has explicit `bounds.rs` and `prefix_cache.rs` primitives
+  for quantum-inspired prefix work
+- the next gap is true online prefix expansion, not "add a frontier for the
+  first time"
+
 Start with the current architecture doc before diving into donor material:
 
 - [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
 - [plan_progress.md](../../plan_progress.md)
+- [../../quantum_progress.md](../../quantum_progress.md)
 
 ## Working Rules
 
@@ -57,7 +67,9 @@ For most tasks, read in this order:
 
 1. [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
 2. [plan_progress.md](../../plan_progress.md)
-3. [theory/README.md](theory/README.md)
+3. [../../quantum_progress.md](../../quantum_progress.md) when the task touches
+   prefix search, bounds, caching, or the quantum plan
+4. [theory/README.md](theory/README.md)
 
 Then branch based on the task.
 
@@ -70,6 +82,8 @@ Then branch based on the task.
   and smoke-test commands.
 - Read [../../plan_progress.md](../../plan_progress.md) for current completion
   status, deliverables, and immediate next priorities.
+- Read [../../quantum_progress.md](../../quantum_progress.md) for the current
+  delta between the quantum improvement plan and the live Rust codebase.
 - Read [theory/README.md](theory/README.md) when you need the theorem map or
   manuscript map.
 - Read [theory/genesis.md](theory/genesis.md) when you need the exact strict
@@ -145,6 +159,7 @@ Focus on:
 Read:
 
 - [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
+- [../../quantum_progress.md](../../quantum_progress.md)
 - [theory/genesis.md](theory/genesis.md)
 - [theory/novelty-selection-and-rejection.md](theory/novelty-selection-and-rejection.md)
 - [references/05-search-and-selection.md](references/05-search-and-selection.md)
@@ -156,8 +171,10 @@ Focus on:
 - exact-band search and bar semantics
 - admissibility from structural debt, not names
 - deterministic dedupe and SCC minimality
-- the difference between the current bounded live lane and the unfinished
-  anti-junk frontier engine
+- the difference between the current realistic prefix frontier and the still
+  unfinished online prefix-first engine
+- using `PrefixBound` and `PrefixCache` as the starting point for further
+  quantum-inspired search work
 
 ### If you are working on reporting or evidence
 
@@ -229,7 +246,9 @@ Reject designs that:
   strict 15-step lane.
 - The repo now has real live atomic search through step 15, exact deterministic
   selection, and a richer candidate-level evidence surface.
-- The biggest unfinished areas are broader anti-junk frontier design,
+- The current quantum-focused search gap is true online prefix expansion on top
+  of the new explicit bounds and prefix-cache primitives.
+- Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) for current

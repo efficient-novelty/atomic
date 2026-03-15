@@ -209,6 +209,7 @@ pub struct StepStats {
 #[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 pub struct FrontierCounts {
     pub prefix_states_explored: u64,
+    pub prefix_states_merged_by_signature: u64,
     pub prefix_states_exact_pruned: u64,
     pub prefix_states_heuristic_dropped: u64,
     pub hot_states: u64,
@@ -381,6 +382,7 @@ mod tests {
             },
             counts: FrontierCounts {
                 prefix_states_explored: 17_449_876,
+                prefix_states_merged_by_signature: 4_110_551,
                 prefix_states_exact_pruned: 1_220_014,
                 prefix_states_heuristic_dropped: 342_118,
                 hot_states: 2_241_132,

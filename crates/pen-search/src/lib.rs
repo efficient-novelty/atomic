@@ -1,4 +1,5 @@
 pub mod accept;
+pub mod bounds;
 pub mod branch_bound;
 pub mod config;
 pub mod dedupe;
@@ -8,6 +9,7 @@ pub mod enumerate;
 pub mod expand;
 pub mod frontier;
 pub mod motif;
+pub mod prefix_cache;
 pub mod priority;
 pub mod resume;
 pub mod scheduler;

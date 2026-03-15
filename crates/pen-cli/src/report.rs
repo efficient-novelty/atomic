@@ -73,6 +73,8 @@ pub struct StepSearchStats {
     #[serde(default)]
     pub prefix_states_explored: usize,
     #[serde(default)]
+    pub prefix_states_merged_by_signature: usize,
+    #[serde(default)]
     pub prefix_states_exact_pruned: usize,
     #[serde(default)]
     pub prefix_states_heuristic_dropped: usize,
@@ -653,6 +655,7 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 minimality_prunes: 0,
                 heuristic_drops: 0,
                 prefix_states_explored: 0,
+                prefix_states_merged_by_signature: 0,
                 prefix_states_exact_pruned: 0,
                 prefix_states_heuristic_dropped: 0,
                 prefix_frontier_hot_states: 0,
@@ -890,8 +893,9 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
         ));
         if step.search_stats.prefix_states_explored > 0 {
             lines.push(format!(
-                "  prefix frontier: explored={} exact_pruned={} heuristic_dropped={} hot={} cold={}",
+                "  prefix frontier: explored={} merged={} exact_pruned={} heuristic_dropped={} hot={} cold={}",
                 step.search_stats.prefix_states_explored,
+                step.search_stats.prefix_states_merged_by_signature,
                 step.search_stats.prefix_states_exact_pruned,
                 step.search_stats.prefix_states_heuristic_dropped,
                 step.search_stats.prefix_frontier_hot_states,
@@ -1162,6 +1166,7 @@ fn step_to_report_with_provenance(
             minimality_prunes: step.minimality_prunes,
             heuristic_drops: step.heuristic_drops,
             prefix_states_explored: step.prefix_states_explored,
+            prefix_states_merged_by_signature: step.prefix_states_merged_by_signature,
             prefix_states_exact_pruned: step.prefix_states_exact_pruned,
             prefix_states_heuristic_dropped: step.prefix_states_heuristic_dropped,
             prefix_frontier_hot_states: step.prefix_frontier_hot_states,
@@ -1449,6 +1454,7 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 minimality_prunes: 0,
                 heuristic_drops: 0,
                 prefix_states_explored: 0,
+                prefix_states_merged_by_signature: 0,
                 prefix_states_exact_pruned: 0,
                 prefix_states_heuristic_dropped: 0,
                 prefix_frontier_hot_states: 0,

@@ -606,9 +606,15 @@ fn realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_compe
         let evaluated = summary["search_stats"]["evaluated_candidates"]
             .as_u64()
             .expect("evaluated_candidates");
+        let enumerated = summary["search_stats"]["enumerated_candidates"]
+            .as_u64()
+            .expect("enumerated_candidates");
         let prefix_explored = summary["search_stats"]["prefix_states_explored"]
             .as_u64()
             .expect("prefix_states_explored");
+        let prefix_merged = summary["search_stats"]["prefix_states_merged_by_signature"]
+            .as_u64()
+            .expect("prefix_states_merged_by_signature");
         let prefix_exact_pruned = summary["search_stats"]["prefix_states_exact_pruned"]
             .as_u64()
             .expect("prefix_states_exact_pruned");
@@ -628,6 +634,10 @@ fn realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_compe
         assert!(
             prefix_explored > 0,
             "expected realistic shadow step {step} to explore at least one prefix state",
+        );
+        assert!(
+            prefix_merged <= enumerated,
+            "expected merged-prefix accounting to stay bounded by the enumerated pool at step {step}, got merged={prefix_merged} enumerated={enumerated}",
         );
         assert_eq!(
             prefix_explored,
@@ -680,6 +690,10 @@ fn realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_compe
         step15["search_stats"]["prefix_states_explored"].as_u64()
     );
     assert_eq!(
+        frontier["counts"]["prefix_states_merged_by_signature"].as_u64(),
+        step15["search_stats"]["prefix_states_merged_by_signature"].as_u64()
+    );
+    assert_eq!(
         frontier["counts"]["prefix_states_exact_pruned"].as_u64(),
         step15["search_stats"]["prefix_states_exact_pruned"].as_u64()
     );
@@ -698,6 +712,7 @@ fn realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_compe
             .to_string_lossy(),
     ]));
     assert!(frontier_inspect.contains("prefix_explored:"));
+    assert!(frontier_inspect.contains("prefix_merged:"));
     assert!(frontier_inspect.contains("prefix_exact_pruned:"));
     assert!(frontier_inspect.contains("prefix_heuristic_dropped:"));
     let step_inspect = assert_success(run_pen_cli([
@@ -709,6 +724,7 @@ fn realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_compe
             .to_string_lossy(),
     ]));
     assert!(step_inspect.contains("prefix_frontier: explored="));
+    assert!(step_inspect.contains(" merged="));
 
     fs::remove_dir_all(root).ok();
 }
@@ -962,7 +978,10 @@ fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
             realistic_reevaluate_dir.to_string_lossy()
         ),
         "--lane",
-        &format!("realistic-pressure={}", realistic_pressure_dir.to_string_lossy()),
+        &format!(
+            "realistic-pressure={}",
+            realistic_pressure_dir.to_string_lossy()
+        ),
         "--text-out",
         &text_out.to_string_lossy(),
         "--json-out",
@@ -1055,10 +1074,7 @@ fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
         .iter()
         .find(|row| row["label"].as_str() == Some("realistic-frontier-resume"))
         .expect("realistic frontier resume row");
-    assert_eq!(
-        realistic_resume_row["status"].as_str(),
-        Some("ready")
-    );
+    assert_eq!(realistic_resume_row["status"].as_str(), Some("ready"));
     assert_eq!(
         realistic_resume_row["run_mode"].as_str(),
         Some("frontier_checkpoint_resume")
@@ -1262,18 +1278,22 @@ fn delta_step_indexes(value: &serde_json::Value) -> Vec<u32> {
 }
 
 fn write_realistic_pressure_config(path: &std::path::Path) {
-    let config = read_text(&workspace_root().join("configs").join("realistic_frontier_shadow.toml"))
-        .replace("workers = \"auto\"", "workers = 1")
-        .replace("target_rss_gib = 8.5", "target_rss_gib = 0.0000001")
-        .replace("soft_rss_gib = 9.0", "soft_rss_gib = 0.0000002")
-        .replace("pressure_rss_gib = 10.5", "pressure_rss_gib = 0.0000010")
-        .replace("emergency_rss_gib = 11.5", "emergency_rss_gib = 0.0000020")
-        .replace("hard_rss_gib = 12.0", "hard_rss_gib = 0.0000040")
-        .replace("spill_buffers_gib = 0.50", "spill_buffers_gib = 0.0000001")
-        .replace(
-            "checkpoint_buffers_gib = 0.25",
-            "checkpoint_buffers_gib = 0.0000001",
-        )
-        .replace("worker_arena_mib = 64", "worker_arena_mib = 0");
+    let config = read_text(
+        &workspace_root()
+            .join("configs")
+            .join("realistic_frontier_shadow.toml"),
+    )
+    .replace("workers = \"auto\"", "workers = 1")
+    .replace("target_rss_gib = 8.5", "target_rss_gib = 0.0000001")
+    .replace("soft_rss_gib = 9.0", "soft_rss_gib = 0.0000002")
+    .replace("pressure_rss_gib = 10.5", "pressure_rss_gib = 0.0000010")
+    .replace("emergency_rss_gib = 11.5", "emergency_rss_gib = 0.0000020")
+    .replace("hard_rss_gib = 12.0", "hard_rss_gib = 0.0000040")
+    .replace("spill_buffers_gib = 0.50", "spill_buffers_gib = 0.0000001")
+    .replace(
+        "checkpoint_buffers_gib = 0.25",
+        "checkpoint_buffers_gib = 0.0000001",
+    )
+    .replace("worker_arena_mib = 64", "worker_arena_mib = 0");
     fs::write(path, config).expect("write realistic pressure config");
 }

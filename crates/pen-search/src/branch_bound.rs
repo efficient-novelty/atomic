@@ -1,3 +1,4 @@
+use crate::bounds::PrefixBound;
 use pen_core::canonical::CanonKey;
 use pen_core::rational::Rational;
 
@@ -30,17 +31,12 @@ pub struct AcceptRank {
     pub canonical_key: CanonKey,
 }
 
-pub fn sound_prune_by_bar(
-    nu_upper_bound: u16,
-    clause_kappa_used: u16,
-    bar: Rational,
-) -> BranchDecision {
-    if clause_kappa_used == 0 {
+pub fn sound_prune_by_bar(bound: PrefixBound, bar: Rational) -> BranchDecision {
+    if bound.clause_kappa_used == 0 {
         return BranchDecision::Prune(PruneClass::SoundImpossible);
     }
 
-    let rho_upper = Rational::new(i64::from(nu_upper_bound), i64::from(clause_kappa_used));
-    if rho_upper < bar {
+    if !bound.can_clear_bar(bar) {
         BranchDecision::Prune(PruneClass::SoundImpossible)
     } else {
         BranchDecision::Keep
@@ -54,6 +50,7 @@ pub fn better_rank(left: &AcceptRank, right: &AcceptRank) -> bool {
 #[cfg(test)]
 mod tests {
     use super::{AcceptRank, BranchDecision, PruneClass, better_rank, sound_prune_by_bar};
+    use crate::bounds::PrefixBound;
     use pen_core::canonical::CanonKey;
     use pen_core::rational::Rational;
     use std::cmp::Reverse;
@@ -61,11 +58,11 @@ mod tests {
     #[test]
     fn upper_bound_prune_is_exact() {
         assert_eq!(
-            sound_prune_by_bar(10, 4, Rational::new(3, 1)),
+            sound_prune_by_bar(PrefixBound::singleton(10, 4, 80), Rational::new(3, 1)),
             BranchDecision::Prune(PruneClass::SoundImpossible)
         );
         assert_eq!(
-            sound_prune_by_bar(17, 4, Rational::new(4, 1)),
+            sound_prune_by_bar(PrefixBound::singleton(17, 4, 80), Rational::new(4, 1)),
             BranchDecision::Keep
         );
     }

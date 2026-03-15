@@ -1,3 +1,4 @@
+use crate::bounds::PrefixBound;
 use crate::branch_bound::{BranchDecision, PruneClass, sound_prune_by_bar};
 use crate::scheduler::WorkerAssignment;
 use pen_core::ids::StateId;
@@ -17,7 +18,7 @@ pub fn run_worker_batch(assignment: &WorkerAssignment, bar: Rational) -> WorkerB
     let heuristic_drops = 0;
 
     for record in &assignment.records {
-        match sound_prune_by_bar(record.nu_upper_bound, record.clause_kappa_used, bar) {
+        match sound_prune_by_bar(PrefixBound::from(record), bar) {
             BranchDecision::Keep => processed_state_ids.push(record.state_id),
             BranchDecision::Prune(PruneClass::SoundImpossible) => sound_prunes += 1,
             BranchDecision::Prune(PruneClass::QuotientDedupe)

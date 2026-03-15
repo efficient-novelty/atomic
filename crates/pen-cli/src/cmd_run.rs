@@ -500,6 +500,10 @@ fn write_frontier_snapshots(
                 cold_records,
                 dedupe_keys: dedupe_keys.into_iter().collect(),
                 prefix_states_explored: step.search_stats.prefix_states_explored as u64,
+                prefix_states_merged_by_signature: step
+                    .search_stats
+                    .prefix_states_merged_by_signature
+                    as u64,
                 prefix_states_exact_pruned: step.search_stats.prefix_states_exact_pruned as u64,
                 prefix_states_heuristic_dropped: step.search_stats.prefix_states_heuristic_dropped
                     as u64,

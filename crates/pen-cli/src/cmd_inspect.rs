@@ -88,8 +88,9 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
             String::new()
         } else {
             format!(
-                "\nprefix_frontier: explored={} exact_pruned={} heuristic_dropped={} hot={} cold={}",
+                "\nprefix_frontier: explored={} merged={} exact_pruned={} heuristic_dropped={} hot={} cold={}",
                 step.search_stats.prefix_states_explored,
+                step.search_stats.prefix_states_merged_by_signature,
                 step.search_stats.prefix_states_exact_pruned,
                 step.search_stats.prefix_states_heuristic_dropped,
                 step.search_stats.prefix_frontier_hot_states,
@@ -148,10 +149,11 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 )
             });
         return Ok(format!(
-            "frontier step {} band {}\nprefix_explored: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
+            "frontier step {} band {}\nprefix_explored: {}\nprefix_merged: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
             frontier.step_index,
             frontier.band_index,
             frontier.counts.prefix_states_explored,
+            frontier.counts.prefix_states_merged_by_signature,
             frontier.counts.prefix_states_exact_pruned,
             frontier.counts.prefix_states_heuristic_dropped,
             frontier.counts.hot_states,

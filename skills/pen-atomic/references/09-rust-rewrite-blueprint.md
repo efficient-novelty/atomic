@@ -1,5 +1,21 @@
 # Rust Rewrite Blueprint
 
+## Current Repo Delta
+
+Large parts of this blueprint are now real code rather than aspirational
+scaffolding. In particular:
+
+- the bounded strict and realistic lanes both execute through step 15
+- frontier manifests, runtime blobs, shard persistence, and compatibility-gated
+  resume are real
+- `pen-search` now has explicit `bounds.rs` and `prefix_cache.rs` modules for
+  prefix-oriented search state
+
+For quantum-focused work, the main architectural next step is not crate
+bootstrap. It is evolving `pen-search` from post-hoc terminal-prefix grouping
+into true online prefix expansion while preserving the current exact acceptance
+contract.
+
 ## Frozen Identity
 
 - Repo name: `pen-atomic`
@@ -199,7 +215,8 @@ Port strict evaluation:
 Port and then replace search:
 
 - start by matching current strict selection behavior on frozen fixtures
-- then attack the atomic-only frontier problem with better retention, bounds, and state storage
+- then attack the atomic-only frontier problem with better retention, bounds,
+  state storage, and online prefix expansion
 
 ### Phase 4
 

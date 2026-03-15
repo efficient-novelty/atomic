@@ -199,6 +199,7 @@ mod tests {
             },
             counts: FrontierCounts {
                 prefix_states_explored: 8,
+                prefix_states_merged_by_signature: 5,
                 prefix_states_exact_pruned: 2,
                 prefix_states_heuristic_dropped: 1,
                 hot_states: 2,

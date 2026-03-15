@@ -4,20 +4,18 @@ use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_co
 use crate::enumerate::{EnumerationContext, enumerate_telescopes_with_terminal_prefixes};
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
+use crate::prefix_cache::{PrefixCache, PrefixCandidateGroup, PrefixSignature};
 use crate::priority::{PriorityInputs, build_priority_key};
 use crate::scheduler::build_schedule;
 use crate::state::{FrontierStateRecV1, PrefixState};
 use crate::worker::run_worker_batch;
 use anyhow::{Result, bail};
-use pen_core::encode::telescope_bit_cost;
-use pen_core::hash::blake3_hex;
 use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::rational::Rational;
 use pen_core::telescope::Telescope;
 use pen_eval::bar::{DiscoveryRecord, compute_bar};
 use pen_eval::minimality::analyze_semantic_minimality;
-use pen_eval::nu::structural_nu;
 use pen_store::manifest::NearMiss;
 use pen_type::admissibility::{
     AdmissibilityDiagnostics, AdmissibilityMode, StrictAdmissibility, assess_strict_admissibility,
@@ -119,6 +117,7 @@ pub struct AtomicSearchStep {
     pub admissibility: StrictAdmissibility,
     pub admissibility_diagnostics: AdmissibilityDiagnostics,
     pub prefix_states_explored: usize,
+    pub prefix_states_merged_by_signature: usize,
     pub prefix_states_exact_pruned: usize,
     pub prefix_states_heuristic_dropped: usize,
     pub prefix_frontier_hot_states: usize,
@@ -152,7 +151,7 @@ pub struct AtomicSearchStep {
 struct PrefixFrontierPlan {
     frontier: FrontierWindow,
     dedupe_keys: BTreeSet<String>,
-    retained_prefix_keys: Vec<String>,
+    retained_prefix_signatures: Vec<PrefixSignature>,
     explored: usize,
     exact_pruned: usize,
     heuristic_dropped: usize,
@@ -160,24 +159,8 @@ struct PrefixFrontierPlan {
 }
 
 #[derive(Clone, Debug)]
-struct PrefixCandidateGroup {
-    key: String,
-    dedupe_key: String,
-    prefix_telescope: Telescope,
-    retention_class: RetentionClass,
-    shape_hash64: u64,
-    support_hash64: u64,
-    depth: u16,
-    clause_kappa_used: u16,
-    nu_lower_bound: u16,
-    nu_upper_bound: u16,
-    bit_kappa_used: u16,
-    telescopes: Vec<Telescope>,
-}
-
-#[derive(Clone, Debug)]
 struct PrefixFrontierItem {
-    key: String,
+    signature: PrefixSignature,
     dedupe_key: String,
     retention_class: RetentionClass,
     record: FrontierStateRecV1,
@@ -314,7 +297,7 @@ fn search_next_step(
     let objective_bar = compute_bar(window_depth as usize, step_index, history).bar;
     let mut telescopes = Vec::new();
     let mut candidates = Vec::new();
-    let mut prefix_groups = BTreeMap::new();
+    let mut prefix_cache = PrefixCache::default();
     let mut enumerated_candidates = 0usize;
     let mut well_formed_candidates = 0usize;
     let mut malformed_rejections = 0usize;
@@ -359,12 +342,13 @@ fn search_next_step(
         if admissibility_mode == AdmissibilityMode::RealisticShadow {
             if terminal_prefix_telescope(&telescope).is_some() {
                 record_prefix_candidate_group(
+                    step_index,
                     library,
                     history,
                     &nu_history,
                     telescope,
                     retention_policy,
-                    &mut prefix_groups,
+                    &mut prefix_cache,
                 )?;
             } else {
                 let candidate = evaluate_checked_candidate(library, history, telescope)?;
@@ -382,15 +366,15 @@ fn search_next_step(
             objective_bar,
             retention_policy,
             retention_runtime,
-            &prefix_groups,
+            &prefix_cache,
         )
     } else {
         PrefixFrontierPlan::default()
     };
 
     if admissibility_mode == AdmissibilityMode::RealisticShadow {
-        for key in &prefix_frontier.retained_prefix_keys {
-            let Some(group) = prefix_groups.get(key) else {
+        for signature in &prefix_frontier.retained_prefix_signatures {
+            let Some(group) = prefix_cache.get(signature) else {
                 continue;
             };
             let mut group_telescopes = group.telescopes.clone();
@@ -476,6 +460,7 @@ fn search_next_step(
         admissibility,
         admissibility_diagnostics,
         prefix_frontier.explored,
+        prefix_cache.stats().merged_by_signature,
         prefix_frontier.exact_pruned,
         prefix_frontier.heuristic_dropped,
         prefix_frontier.frontier.hot.len(),
@@ -514,6 +499,7 @@ fn build_step_result(
     admissibility: StrictAdmissibility,
     admissibility_diagnostics: AdmissibilityDiagnostics,
     prefix_states_explored: usize,
+    prefix_states_merged_by_signature: usize,
     prefix_states_exact_pruned: usize,
     prefix_states_heuristic_dropped: usize,
     prefix_frontier_hot_states: usize,
@@ -552,6 +538,7 @@ fn build_step_result(
         admissibility,
         admissibility_diagnostics,
         prefix_states_explored,
+        prefix_states_merged_by_signature,
         prefix_states_exact_pruned,
         prefix_states_heuristic_dropped,
         prefix_frontier_hot_states,
@@ -645,49 +632,26 @@ fn build_frontier_retention(
 }
 
 fn record_prefix_candidate_group(
+    step_index: u32,
     library: &Library,
     history: &[DiscoveryRecord],
     nu_history: &[(u32, u32)],
     telescope: Telescope,
     retention_policy: RetentionPolicy,
-    groups: &mut BTreeMap<String, PrefixCandidateGroup>,
+    prefix_cache: &mut PrefixCache,
 ) -> Result<()> {
     let Some(prefix_telescope) = terminal_prefix_telescope(&telescope) else {
         return Ok(());
     };
-    let key = prefix_telescope_key(&prefix_telescope);
-    let exact_nu = u16::try_from(structural_nu(&telescope, library, nu_history).total)
-        .expect("nu exceeded u16");
-    let bit_kappa = u16::try_from(telescope_bit_cost(&telescope)).expect("bit cost exceeded u16");
-    let clause_kappa = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
-
-    let group = if let Some(existing) = groups.get_mut(&key) {
-        existing
-    } else {
-        let prefix_candidate =
-            evaluate_checked_candidate(library, history, prefix_telescope.clone())?;
-        groups.entry(key.clone()).or_insert(PrefixCandidateGroup {
-            dedupe_key: prefix_dedupe_key(&key),
-            key: key.clone(),
-            depth: u16::try_from(prefix_telescope.clauses.len()).expect("depth exceeded u16"),
-            prefix_telescope,
-            retention_class: retention_policy.classify(prefix_candidate.retention_signals()),
-            shape_hash64: truncated_hash64(prefix_candidate.candidate_hash.as_bytes()),
-            support_hash64: truncated_hash64(prefix_candidate.canonical_hash.as_bytes()),
-            clause_kappa_used: clause_kappa,
-            nu_lower_bound: exact_nu,
-            nu_upper_bound: exact_nu,
-            bit_kappa_used: bit_kappa,
-            telescopes: Vec::new(),
-        })
-    };
-
-    group.nu_lower_bound = group.nu_lower_bound.min(exact_nu);
-    group.nu_upper_bound = group.nu_upper_bound.max(exact_nu);
-    group.bit_kappa_used = group.bit_kappa_used.min(bit_kappa);
-    group.clause_kappa_used = group.clause_kappa_used.min(clause_kappa);
-    group.telescopes.push(telescope);
-    Ok(())
+    prefix_cache.record_group(
+        step_index,
+        prefix_telescope,
+        telescope,
+        library,
+        history,
+        nu_history,
+        retention_policy,
+    )
 }
 
 fn build_prefix_frontier_plan(
@@ -695,19 +659,19 @@ fn build_prefix_frontier_plan(
     objective_bar: Rational,
     retention_policy: RetentionPolicy,
     retention_runtime: FrontierRuntimeLimits,
-    groups: &BTreeMap<String, PrefixCandidateGroup>,
+    prefix_cache: &PrefixCache,
 ) -> PrefixFrontierPlan {
-    if groups.is_empty() {
+    if prefix_cache.is_empty() {
         return PrefixFrontierPlan::default();
     }
 
-    let explored = groups.len();
-    let mut items = groups
-        .values()
+    let explored = prefix_cache.len();
+    let mut items = prefix_cache
+        .iter()
         .enumerate()
-        .map(|(ordinal, group)| PrefixFrontierItem {
-            key: group.key.clone(),
-            dedupe_key: group.dedupe_key.clone(),
+        .map(|(ordinal, (signature, group))| PrefixFrontierItem {
+            signature: signature.clone(),
+            dedupe_key: signature.dedupe_key(),
             retention_class: group.retention_class,
             record: prefix_frontier_record(
                 step_index,
@@ -741,7 +705,7 @@ fn build_prefix_frontier_plan(
         return PrefixFrontierPlan {
             frontier: FrontierWindow::default(),
             dedupe_keys: BTreeSet::new(),
-            retained_prefix_keys: Vec::new(),
+            retained_prefix_signatures: Vec::new(),
             explored,
             exact_pruned: exact_pruned_state_ids.len(),
             heuristic_dropped: 0,
@@ -795,25 +759,25 @@ fn build_prefix_frontier_plan(
     for item in hot_items {
         let mut record = item.record;
         record.flags = prefix_frontier_flags(item.retention_class, true);
-        keys_by_state.insert(record.state_id, (item.key, item.dedupe_key));
+        keys_by_state.insert(record.state_id, (item.signature, item.dedupe_key));
         frontier.push_hot(record);
     }
     for item in resident.into_iter().chain(spill.into_iter()) {
         let mut record = item.record;
         record.flags = prefix_frontier_flags(item.retention_class, false);
-        keys_by_state.insert(record.state_id, (item.key, item.dedupe_key));
+        keys_by_state.insert(record.state_id, (item.signature, item.dedupe_key));
         frontier.push_cold(record);
     }
     frontier.compact_sorted();
 
-    let retained_prefix_keys = frontier
+    let retained_prefix_signatures = frontier
         .hot
         .iter()
         .chain(frontier.cold.iter())
         .filter_map(|record| {
             keys_by_state
                 .get(&record.state_id)
-                .map(|(key, _)| key.clone())
+                .map(|(signature, _)| signature.clone())
         })
         .collect::<Vec<_>>();
     let dedupe_keys = frontier
@@ -830,7 +794,7 @@ fn build_prefix_frontier_plan(
     PrefixFrontierPlan {
         frontier,
         dedupe_keys,
-        retained_prefix_keys,
+        retained_prefix_signatures,
         explored,
         exact_pruned: exact_pruned_state_ids.len(),
         heuristic_dropped,
@@ -843,14 +807,6 @@ fn terminal_prefix_telescope(telescope: &Telescope) -> Option<Telescope> {
         .then(|| Telescope::new(telescope.clauses[..telescope.clauses.len() - 1].to_vec()))
 }
 
-fn prefix_telescope_key(telescope: &Telescope) -> String {
-    serde_json::to_string(telescope).expect("prefix telescope should serialize")
-}
-
-fn prefix_dedupe_key(key: &str) -> String {
-    format!("blake3:{}", blake3_hex(key.as_bytes()))
-}
-
 fn prefix_frontier_record(
     step_index: u32,
     ordinal: u64,
@@ -858,12 +814,13 @@ fn prefix_frontier_record(
     frontier_hot: bool,
 ) -> FrontierStateRecV1 {
     let state_id = StateId::new((u64::from(step_index) << 32) | ordinal);
-    let band_index = u8::try_from(group.clause_kappa_used).expect("band index exceeded u8");
+    let bound = group.bound;
+    let band_index = u8::try_from(bound.clause_kappa_used).expect("band index exceeded u8");
     let priority_key = build_priority_key(PriorityInputs {
         band_index,
-        nu_lower_bound: group.nu_lower_bound,
-        bit_kappa_used: group.bit_kappa_used,
-        clause_kappa_used: group.clause_kappa_used,
+        nu_lower_bound: bound.nu_lower_bound,
+        bit_kappa_used: bound.bit_kappa_used,
+        clause_kappa_used: bound.clause_kappa_used,
         depth: group.depth,
         state_id,
     });
@@ -876,10 +833,10 @@ fn prefix_frontier_record(
         obligation_set_id: ObligationSetId::new(step_index),
         shape_hash64: group.shape_hash64,
         support_hash64: group.support_hash64,
-        nu_lower_bound: group.nu_lower_bound,
-        nu_upper_bound: group.nu_upper_bound,
-        bit_kappa_used: group.bit_kappa_used,
-        clause_kappa_used: group.clause_kappa_used,
+        nu_lower_bound: bound.nu_lower_bound,
+        nu_upper_bound: bound.nu_upper_bound,
+        bit_kappa_used: bound.bit_kappa_used,
+        clause_kappa_used: bound.clause_kappa_used,
         depth: group.depth,
         step_index: u8::try_from(step_index).expect("step index exceeded u8"),
         band_index,
@@ -898,11 +855,6 @@ fn prefix_frontier_flags(retention_class: RetentionClass, frontier_hot: bool) ->
         RetentionClass::RareFocusHead => 0b11 << 10,
     };
     retention_bits | class_bits
-}
-
-fn truncated_hash64(bytes: &[u8]) -> u64 {
-    let hash = blake3_hex(bytes);
-    u64::from_str_radix(&hash[..16], 16).expect("blake3 prefix should parse")
 }
 
 fn candidate_score_distribution(

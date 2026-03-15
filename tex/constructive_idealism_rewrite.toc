@@ -24,4 +24,4 @@
 \contentsline {section}{\numberline {7}Scope and Limits}{16}{section.47}%
 \contentsline {section}{\numberline {8}Conclusion: Judico, Ergo Est}{17}{section.49}%
 \contentsline {subsection}{\numberline {8.1}Summary of the Revised Arc}{17}{subsection.50}%
-\contentsline {subsection}{\numberline {8.2}Closing Maxim}{17}{subsection.55}%
+\contentsline {subsection}{\numberline {8.2}Closing Maxim}{17}{subsection.51}%

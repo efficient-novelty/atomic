@@ -1,5 +1,21 @@
 # Search and Selection
 
+## Current Rust Status For Quantum Work
+
+Before following donor material, anchor on the current Rust engine:
+
+- the repo already has a realistic shadow lane with live prefix-frontier
+  retention, persisted frontier artifacts, and exact prefix bar pruning
+- `crates/pen-search/src/bounds.rs` now provides an explicit `PrefixBound` API
+- `crates/pen-search/src/prefix_cache.rs` now provides `PrefixSignature`,
+  `PrefixCache`, and merge accounting
+- reports and frontier manifests now surface
+  `prefix_states_merged_by_signature`
+
+The important remaining gap is that the realistic lane still enumerates full
+telescopes first and only then groups them by terminal prefix. The next search
+step is to make prefixes first-class online expansion states.
+
 ## Core Strict Loop
 
 The current strict lane in `engine/src/RunAbInitio.hs` is roughly:
@@ -157,6 +173,10 @@ The user's frozen architecture moves checkpointing into a first-class contract. 
 - replace current in-memory frontier behavior with explicit resumable state
 - use exact rational or integer comparison in the hot path
 - harden anti-junk retention so true eliminator structures are not deleted early
+- move from post-hoc terminal-prefix grouping toward true online prefix
+  expansion
+- treat `PrefixBound` and `PrefixCache` as current building blocks, not future
+  placeholders
 
 ## Primary Source Files
 

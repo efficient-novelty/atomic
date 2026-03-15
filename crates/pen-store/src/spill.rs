@@ -37,6 +37,7 @@ pub struct FrontierRuntimeInput<const N: usize> {
     pub cold_records: Vec<[u8; N]>,
     pub dedupe_keys: Vec<String>,
     pub prefix_states_explored: u64,
+    pub prefix_states_merged_by_signature: u64,
     pub prefix_states_exact_pruned: u64,
     pub prefix_states_heuristic_dropped: u64,
     pub worker_count: u16,
@@ -171,6 +172,7 @@ pub fn persist_frontier_runtime<const N: usize>(
     Ok(FrontierRuntimeArtifacts {
         counts: FrontierCounts {
             prefix_states_explored: input.prefix_states_explored,
+            prefix_states_merged_by_signature: input.prefix_states_merged_by_signature,
             prefix_states_exact_pruned: input.prefix_states_exact_pruned,
             prefix_states_heuristic_dropped: input.prefix_states_heuristic_dropped,
             hot_states: input.hot_records.len() as u64,
@@ -292,6 +294,7 @@ mod tests {
                 "dedupe-a".to_owned(),
             ],
             prefix_states_explored: 6,
+            prefix_states_merged_by_signature: 3,
             prefix_states_exact_pruned: 1,
             prefix_states_heuristic_dropped: 1,
             worker_count: 2,
@@ -331,6 +334,7 @@ mod tests {
         assert_eq!(artifacts.files.cache_blob, FRONTIER_CACHE_BLOB_FILE);
         assert_eq!(artifacts.scheduler.spill_generation, 7);
         assert_eq!(artifacts.counts.prefix_states_explored, 6);
+        assert_eq!(artifacts.counts.prefix_states_merged_by_signature, 3);
         assert_eq!(artifacts.counts.prefix_states_exact_pruned, 1);
         assert_eq!(artifacts.counts.prefix_states_heuristic_dropped, 1);
         assert!(root.join(FRONTIER_CACHE_BLOB_FILE).exists());
