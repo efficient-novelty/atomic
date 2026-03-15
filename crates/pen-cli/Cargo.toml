@@ -20,6 +20,9 @@ serde_json.workspace = true
 time.workspace = true
 sha2.workspace = true
 
+[dev-dependencies]
+fs2 = "0.4.3"
+
 [[test]]
 name = "atomic_bootstrap"
 path = "../../tests/integration/atomic_bootstrap.rs"

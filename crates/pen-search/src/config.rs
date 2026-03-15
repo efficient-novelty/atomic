@@ -18,6 +18,7 @@ impl RuntimeConfig {
             mode: ModeConfig {
                 strict: true,
                 debug: false,
+                search_profile: SearchProfile::StrictCanonGuarded,
             },
             search: SearchConfig {
                 until_step: 15,
@@ -65,10 +66,37 @@ impl RuntimeConfig {
     }
 }
 
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SearchProfile {
+    #[default]
+    Unknown,
+    StrictCanonGuarded,
+    RelaxedShadow,
+    RealisticFrontierShadow,
+}
+
+impl SearchProfile {
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::Unknown => "unknown",
+            Self::StrictCanonGuarded => "strict_canon_guarded",
+            Self::RelaxedShadow => "relaxed_shadow",
+            Self::RealisticFrontierShadow => "realistic_frontier_shadow",
+        }
+    }
+}
+
+const fn default_search_profile() -> SearchProfile {
+    SearchProfile::StrictCanonGuarded
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct ModeConfig {
     pub strict: bool,
     pub debug: bool,
+    #[serde(default = "default_search_profile")]
+    pub search_profile: SearchProfile,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -200,7 +228,7 @@ pub struct AccelConfig {
 
 #[cfg(test)]
 mod tests {
-    use super::{RuntimeConfig, WorkerSetting};
+    use super::{RuntimeConfig, SearchProfile, WorkerSetting};
     use std::fs;
 
     fn load_config(name: &str) -> RuntimeConfig {
@@ -226,5 +254,46 @@ mod tests {
         assert_eq!(config.search.workers, WorkerSetting::Fixed(1));
         assert_eq!(config.search.resolve_workers(16), 1);
         assert!(config.mode.debug);
+        assert_eq!(
+            config.mode.search_profile,
+            SearchProfile::StrictCanonGuarded
+        );
+    }
+
+    #[test]
+    fn shadow_profiles_parse_with_expected_labels() {
+        assert_eq!(
+            load_config("strict_canon_guarded.toml").mode.search_profile,
+            SearchProfile::StrictCanonGuarded
+        );
+        assert_eq!(
+            load_config("relaxed_shadow.toml").mode.search_profile,
+            SearchProfile::RelaxedShadow
+        );
+        assert_eq!(
+            load_config("realistic_frontier_shadow.toml")
+                .mode
+                .search_profile,
+            SearchProfile::RealisticFrontierShadow
+        );
+    }
+
+    #[test]
+    fn missing_search_profile_defaults_to_strict_canon_guarded() {
+        let source = fs::read_to_string(
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .ancestors()
+                .nth(2)
+                .expect("workspace root")
+                .join("configs")
+                .join("debug.toml"),
+        )
+        .expect("config file should exist")
+        .replace("search_profile = \"strict_canon_guarded\"\n", "");
+        let config = RuntimeConfig::from_toml_str(&source).expect("config should parse");
+        assert_eq!(
+            config.mode.search_profile,
+            SearchProfile::StrictCanonGuarded
+        );
     }
 }

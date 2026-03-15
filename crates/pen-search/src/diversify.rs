@@ -67,6 +67,7 @@ const DEDUPE_BYTES_PER_RECORD: u64 = 32;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct FrontierRuntimeLimits {
+    pub worker_count: u16,
     pub governor: GovernorConfig,
     pub spill: SpillConfig,
     pub record_bytes: u64,
@@ -80,6 +81,7 @@ impl FrontierRuntimeLimits {
     pub fn unlimited() -> Self {
         let max = u64::MAX / 4;
         Self {
+            worker_count: 1,
             governor: GovernorConfig {
                 green_limit_bytes: max,
                 yellow_limit_bytes: max,
@@ -307,6 +309,7 @@ mod tests {
             cold_limit: 3,
         };
         let runtime = FrontierRuntimeLimits {
+            worker_count: 1,
             governor: GovernorConfig {
                 green_limit_bytes: 1,
                 yellow_limit_bytes: 2,

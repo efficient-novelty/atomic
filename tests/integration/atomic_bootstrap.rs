@@ -3,9 +3,9 @@ mod support;
 use std::fs;
 
 use support::{
-    assert_success, compact_step_summaries, fixtures_root, load_trajectory_fixture,
-    normalize_checkpoint, read_json, read_text, run_pen_cli, temp_dir, workspace_root,
-    write_pressure_config,
+    assert_success, compact_search_space_stats, compact_step_summaries, fixtures_root,
+    load_search_space_fixture, load_trajectory_fixture, normalize_checkpoint, read_json, read_text,
+    run_compare_runs, run_pen_cli, temp_dir, workspace_root, write_pressure_config,
 };
 
 #[test]
@@ -366,12 +366,21 @@ fn bootstrap_run_uses_live_search_through_step_fifteen() {
     let stdout = assert_success(output);
 
     assert!(stdout.contains("completed_step: 15"));
+    assert!(stdout.contains("search_profile: strict_canon_guarded"));
     assert!(stdout.contains("replay_ablation: matches_reference_replay x15"));
     assert!(stdout.contains("late_step_claim: executable_canon step 15 DCT nu=103"));
 
     let actual_steps = compact_step_summaries(&run_dir);
     let expected_steps = load_trajectory_fixture("reference_steps_until_15.json");
     assert_eq!(actual_steps, expected_steps);
+    let actual_search_space = compact_search_space_stats(&run_dir);
+    let expected_search_space =
+        load_search_space_fixture("reference_search_space_strict_canon_guarded_until_15.json");
+    assert_eq!(actual_search_space, expected_search_space);
+    let latest = read_text(&run_dir.join("reports").join("latest.txt"));
+    let debug = read_text(&run_dir.join("reports").join("latest.debug.txt"));
+    assert!(latest.contains("search_profile: strict_canon_guarded"));
+    assert!(debug.contains("search_profile: strict_canon_guarded"));
     assert!(
         run_dir
             .join("checkpoints")
@@ -426,6 +435,521 @@ fn bootstrap_run_uses_live_search_through_step_fifteen() {
     assert_eq!(
         step15_summary["replay_ablation"]["status"].as_str(),
         Some("matches_reference_replay")
+    );
+    assert_eq!(
+        step15_summary["search_profile"].as_str(),
+        Some("strict_canon_guarded")
+    );
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn relaxed_shadow_run_preserves_reference_sequence_and_exposes_late_competition() {
+    let root = temp_dir("relaxed-shadow");
+    let run_dir = root.join("relaxed-shadow");
+    let output = run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("relaxed_shadow.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "relaxed-shadow",
+        "--until-step",
+        "12",
+    ]);
+    let stdout = assert_success(output);
+
+    assert!(stdout.contains("completed_step: 12"));
+    assert!(stdout.contains("search_profile: relaxed_shadow"));
+    assert!(stdout.contains("replay_ablation: matches_reference_replay x12"));
+
+    let actual_steps = compact_step_summaries(&run_dir);
+    let expected_steps = load_trajectory_fixture("reference_steps_until_12.json");
+    assert_eq!(actual_steps, expected_steps);
+
+    let latest = read_text(&run_dir.join("reports").join("latest.txt"));
+    let debug = read_text(&run_dir.join("reports").join("latest.debug.txt"));
+    assert!(latest.contains("search_profile: relaxed_shadow"));
+    assert!(debug.contains("search_profile: relaxed_shadow"));
+
+    let step10 = read_json(
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-10-summary.json"),
+    );
+    let step11 = read_json(
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-11-summary.json"),
+    );
+    let step12 = read_json(
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-12-summary.json"),
+    );
+
+    assert_eq!(
+        step10["search_stats"]["enumerated_candidates"].as_u64(),
+        Some(7)
+    );
+    assert_eq!(
+        step10["search_stats"]["admissibility_rejections"].as_u64(),
+        Some(5)
+    );
+    assert_eq!(
+        step10["search_stats"]["evaluated_candidates"].as_u64(),
+        Some(2)
+    );
+    assert_eq!(
+        step10["search_stats"]["admissibility_diagnostics"]["structural_debt_cap_rejections"]
+            .as_u64(),
+        Some(5)
+    );
+    assert_eq!(
+        step10["search_stats"]["admissibility_diagnostics"]["admitted_deprioritized"].as_u64(),
+        Some(1)
+    );
+
+    assert_eq!(
+        step11["search_stats"]["enumerated_candidates"].as_u64(),
+        Some(24)
+    );
+    assert_eq!(
+        step11["search_stats"]["admissibility_rejections"].as_u64(),
+        Some(22)
+    );
+    assert_eq!(
+        step11["search_stats"]["evaluated_candidates"].as_u64(),
+        Some(2)
+    );
+    assert_eq!(
+        step11["search_stats"]["scored_candidate_distribution"]["clause_kappa_counts"]["5"]
+            .as_u64(),
+        Some(1)
+    );
+    assert_eq!(
+        step11["search_stats"]["scored_candidate_distribution"]["clause_kappa_counts"]["6"]
+            .as_u64(),
+        Some(1)
+    );
+
+    assert_eq!(
+        step12["search_stats"]["enumerated_candidates"].as_u64(),
+        Some(24)
+    );
+    assert_eq!(
+        step12["search_stats"]["admissibility_rejections"].as_u64(),
+        Some(22)
+    );
+    assert_eq!(
+        step12["search_stats"]["evaluated_candidates"].as_u64(),
+        Some(2)
+    );
+    assert_eq!(
+        step12["search_stats"]["scored_candidate_distribution"]["clears_bar"].as_u64(),
+        Some(2)
+    );
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_competition() {
+    let root = temp_dir("realistic-shadow");
+    let run_dir = root.join("realistic-shadow");
+    let output = run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("realistic_frontier_shadow.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "realistic-shadow",
+        "--until-step",
+        "15",
+    ]);
+    let stdout = assert_success(output);
+
+    assert!(stdout.contains("completed_step: 15"));
+    assert!(stdout.contains("search_profile: realistic_frontier_shadow"));
+    assert!(stdout.contains("replay_ablation: matches_reference_replay x15"));
+
+    let actual_steps = compact_step_summaries(&run_dir);
+    let expected_steps = load_trajectory_fixture("reference_steps_until_15.json");
+    assert_eq!(actual_steps, expected_steps);
+
+    let latest = read_text(&run_dir.join("reports").join("latest.txt"));
+    let debug = read_text(&run_dir.join("reports").join("latest.debug.txt"));
+    assert!(latest.contains("search_profile: realistic_frontier_shadow"));
+    assert!(debug.contains("search_profile: realistic_frontier_shadow"));
+    assert!(debug.contains("prefix frontier: explored="));
+
+    for step in 10..=15 {
+        let summary = read_json(
+            &run_dir
+                .join("reports")
+                .join("steps")
+                .join(format!("step-{step:02}-summary.json")),
+        );
+        let evaluated = summary["search_stats"]["evaluated_candidates"]
+            .as_u64()
+            .expect("evaluated_candidates");
+        let prefix_explored = summary["search_stats"]["prefix_states_explored"]
+            .as_u64()
+            .expect("prefix_states_explored");
+        let prefix_exact_pruned = summary["search_stats"]["prefix_states_exact_pruned"]
+            .as_u64()
+            .expect("prefix_states_exact_pruned");
+        let prefix_heuristic_dropped = summary["search_stats"]["prefix_states_heuristic_dropped"]
+            .as_u64()
+            .expect("prefix_states_heuristic_dropped");
+        let prefix_hot = summary["search_stats"]["prefix_frontier_hot_states"]
+            .as_u64()
+            .expect("prefix_frontier_hot_states");
+        let prefix_cold = summary["search_stats"]["prefix_frontier_cold_states"]
+            .as_u64()
+            .expect("prefix_frontier_cold_states");
+        assert!(
+            evaluated > 1 || prefix_exact_pruned > 0,
+            "expected realistic shadow step {step} to keep competition or sound-prune a competing prefix, got evaluated={evaluated} exact_pruned={prefix_exact_pruned}",
+        );
+        assert!(
+            prefix_explored > 0,
+            "expected realistic shadow step {step} to explore at least one prefix state",
+        );
+        assert_eq!(
+            prefix_explored,
+            prefix_exact_pruned + prefix_heuristic_dropped + prefix_hot + prefix_cold,
+            "expected realistic shadow step {step} prefix frontier counts to balance",
+        );
+    }
+
+    let step13 = read_json(
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-13-summary.json"),
+    );
+    let step14 = read_json(
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-14-summary.json"),
+    );
+    let step15 = read_json(
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-15-summary.json"),
+    );
+
+    assert_eq!(
+        step13["search_stats"]["enumerated_candidates"].as_u64(),
+        Some(2)
+    );
+    assert_eq!(
+        step14["search_stats"]["enumerated_candidates"].as_u64(),
+        Some(2)
+    );
+    assert_eq!(
+        step15["search_stats"]["enumerated_candidates"].as_u64(),
+        Some(2)
+    );
+    let frontier = read_json(
+        &run_dir
+            .join("checkpoints")
+            .join("frontier")
+            .join("step-15")
+            .join("band-08")
+            .join("frontier.manifest.json"),
+    );
+    assert_eq!(
+        frontier["counts"]["prefix_states_explored"].as_u64(),
+        step15["search_stats"]["prefix_states_explored"].as_u64()
+    );
+    assert_eq!(
+        frontier["counts"]["prefix_states_exact_pruned"].as_u64(),
+        step15["search_stats"]["prefix_states_exact_pruned"].as_u64()
+    );
+    assert_eq!(
+        frontier["counts"]["prefix_states_heuristic_dropped"].as_u64(),
+        step15["search_stats"]["prefix_states_heuristic_dropped"].as_u64()
+    );
+    let frontier_inspect = assert_success(run_pen_cli([
+        "inspect",
+        &run_dir
+            .join("checkpoints")
+            .join("frontier")
+            .join("step-15")
+            .join("band-08")
+            .join("frontier.manifest.json")
+            .to_string_lossy(),
+    ]));
+    assert!(frontier_inspect.contains("prefix_explored:"));
+    assert!(frontier_inspect.contains("prefix_exact_pruned:"));
+    assert!(frontier_inspect.contains("prefix_heuristic_dropped:"));
+    let step_inspect = assert_success(run_pen_cli([
+        "inspect",
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-15-summary.json")
+            .to_string_lossy(),
+    ]));
+    assert!(step_inspect.contains("prefix_frontier: explored="));
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn compare_runs_reports_relaxed_shadow_admissibility_and_competition_deltas() {
+    let root = temp_dir("relaxed-shadow-compare");
+    let guarded_dir = root.join("guarded");
+    let relaxed_dir = root.join("relaxed");
+
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("strict_canon_guarded.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "guarded",
+        "--until-step",
+        "12",
+    ]));
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("relaxed_shadow.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "relaxed",
+        "--until-step",
+        "12",
+    ]));
+
+    let text_out = root.join("compare.txt");
+    let json_out = root.join("compare.json");
+    let stdout = assert_success(run_compare_runs([
+        "--baseline",
+        "guarded",
+        "--lane",
+        &format!("guarded={}", guarded_dir.to_string_lossy()),
+        "--lane",
+        &format!("relaxed={}", relaxed_dir.to_string_lossy()),
+        "--text-out",
+        &text_out.to_string_lossy(),
+        "--json-out",
+        &json_out.to_string_lossy(),
+    ]));
+
+    assert!(stdout.contains("accepted hashes: all 2 lanes match baseline guarded"));
+    assert!(stdout.contains("search-space counts: mismatches detected in relaxed"));
+    assert!(stdout.contains("admissibility diagnostics: mismatches detected in relaxed"));
+    assert!(stdout.contains("late-step competition: mismatches detected in relaxed"));
+
+    let summary = read_json(&json_out);
+    assert_eq!(
+        summary["trajectory_consistency"]["status"].as_str(),
+        Some("all_match_baseline")
+    );
+    assert_eq!(
+        summary["accepted_hash_consistency"]["status"].as_str(),
+        Some("all_match_baseline")
+    );
+    assert_eq!(
+        summary["search_space_count_consistency"]["status"].as_str(),
+        Some("deltas_present")
+    );
+    assert_eq!(
+        summary["admissibility_diagnostics_consistency"]["status"].as_str(),
+        Some("deltas_present")
+    );
+    assert_eq!(
+        summary["late_step_competition_consistency"]["status"].as_str(),
+        Some("deltas_present")
+    );
+
+    let relaxed_lane = summary["lanes"]
+        .as_array()
+        .expect("lanes")
+        .iter()
+        .find(|lane| lane["label"].as_str() == Some("relaxed"))
+        .expect("relaxed lane");
+    assert_eq!(
+        relaxed_lane["search_profile"].as_str(),
+        Some("relaxed_shadow")
+    );
+    assert_eq!(
+        relaxed_lane["accepted_hashes_vs_baseline"]["matches"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        delta_step_indexes(&relaxed_lane["search_space_counts_vs_baseline"]["deltas"]),
+        vec![10, 11, 12]
+    );
+    assert_eq!(
+        delta_step_indexes(&relaxed_lane["admissibility_diagnostics_vs_baseline"]["deltas"]),
+        vec![10, 11, 12]
+    );
+    assert_eq!(
+        delta_step_indexes(&relaxed_lane["late_step_competition_vs_baseline"]["deltas"]),
+        vec![10, 11, 12]
+    );
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
+    let root = temp_dir("workstream4-rollout");
+    let guarded_dir = root.join("guarded");
+    let realistic_dir = root.join("realistic");
+    let realistic_pressure_dir = root.join("realistic-pressure");
+    let realistic_pressure_config = root.join("realistic-pressure.toml");
+
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("strict_canon_guarded.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "guarded",
+        "--until-step",
+        "15",
+    ]));
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("realistic_frontier_shadow.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "realistic",
+        "--until-step",
+        "15",
+    ]));
+
+    write_realistic_pressure_config(&realistic_pressure_config);
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &realistic_pressure_config.to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "realistic-pressure",
+        "--until-step",
+        "15",
+    ]));
+
+    let text_out = root.join("compare.txt");
+    let json_out = root.join("compare.json");
+    let stdout = assert_success(run_compare_runs([
+        "--baseline",
+        "guarded",
+        "--lane",
+        &format!("guarded={}", guarded_dir.to_string_lossy()),
+        "--lane",
+        &format!("realistic={}", realistic_dir.to_string_lossy()),
+        "--lane",
+        &format!("realistic-pressure={}", realistic_pressure_dir.to_string_lossy()),
+        "--text-out",
+        &text_out.to_string_lossy(),
+        "--json-out",
+        &json_out.to_string_lossy(),
+    ]));
+
+    assert!(stdout.contains("workstream4 rollout: ready"));
+    assert!(stdout.contains("workstream4 parity set: ready (realistic, realistic-pressure)"));
+    assert!(stdout.contains("workstream4 pressure set: ready (realistic-pressure)"));
+
+    let summary = read_json(&json_out);
+    let rollout = &summary["workstream4_rollout"];
+    assert_eq!(rollout["status"].as_str(), Some("ready"));
+    assert_eq!(rollout["parity_set"]["status"].as_str(), Some("ready"));
+    assert_eq!(rollout["pressure_set"]["status"].as_str(), Some("ready"));
+
+    let parity_ready = rollout["parity_set"]["ready_lanes"]
+        .as_array()
+        .expect("parity ready lanes")
+        .iter()
+        .map(|value| value.as_str().expect("lane label"))
+        .collect::<Vec<_>>();
+    assert_eq!(parity_ready, vec!["realistic", "realistic-pressure"]);
+
+    let realistic_row = rollout["parity_set"]["lanes"]
+        .as_array()
+        .expect("parity rows")
+        .iter()
+        .find(|row| row["label"].as_str() == Some("realistic"))
+        .expect("realistic parity row");
+    assert_eq!(
+        realistic_row["trajectory_matches_baseline"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        realistic_row["accepted_hashes_match_baseline"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        realistic_row["step15_claim_matches_baseline"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        realistic_row["late_step_competition_differs_from_baseline"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        realistic_row["prefix_frontier_present"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(realistic_row["pressure_exercised"].as_bool(), Some(false));
+
+    let realistic_pressure_row = rollout["pressure_set"]["lanes"]
+        .as_array()
+        .expect("pressure rows")
+        .iter()
+        .find(|row| row["label"].as_str() == Some("realistic-pressure"))
+        .expect("realistic pressure row");
+    assert_eq!(realistic_pressure_row["status"].as_str(), Some("ready"));
+    assert_eq!(
+        realistic_pressure_row["pressure_exercised"].as_bool(),
+        Some(true)
+    );
+    assert_ne!(
+        realistic_pressure_row["latest_frontier_pressure_action"].as_str(),
+        Some("none")
+    );
+    assert_ne!(
+        realistic_pressure_row["latest_frontier_governor_state"].as_str(),
+        Some("green")
     );
 
     fs::remove_dir_all(root).ok();
@@ -499,7 +1023,105 @@ fn bootstrap_run_surfaces_pressure_hardened_spill_backed_retention() {
             .join("step-15-summary.json")
             .to_string_lossy(),
     ]));
+    assert!(step_stdout.contains("search_profile: strict_canon_guarded"));
     assert!(step_stdout.contains("replay_ablation: matches_reference_replay"));
 
     fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn realistic_shadow_pressure_run_surfaces_prefix_frontier_pressure_and_drop() {
+    let root = temp_dir("realistic-pressure");
+    let run_dir = root.join("realistic-pressure-run");
+    let config_path = root.join("realistic-pressure.toml");
+    let root_arg = root.to_string_lossy().to_string();
+    let config_arg = config_path.to_string_lossy().to_string();
+
+    write_realistic_pressure_config(&config_path);
+
+    let stdout = assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &config_arg,
+        "--root",
+        &root_arg,
+        "--run-id",
+        "realistic-pressure-run",
+        "--until-step",
+        "15",
+    ]));
+    assert!(stdout.contains("search_profile: realistic_frontier_shadow"));
+
+    let step4_summary = read_json(
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-04-summary.json"),
+    );
+    assert_eq!(
+        step4_summary["frontier_pressure"]["pressure_action"].as_str(),
+        Some("spill_cold")
+    );
+    assert!(
+        step4_summary["search_stats"]["prefix_states_heuristic_dropped"]
+            .as_u64()
+            .expect("prefix_states_heuristic_dropped")
+            > 0
+    );
+    assert_eq!(
+        step4_summary["search_stats"]["prefix_frontier_cold_states"].as_u64(),
+        Some(1)
+    );
+
+    let frontier = read_json(
+        &run_dir
+            .join("checkpoints")
+            .join("frontier")
+            .join("step-04")
+            .join("band-03")
+            .join("frontier.manifest.json"),
+    );
+    assert_eq!(
+        frontier["counts"]["prefix_states_heuristic_dropped"].as_u64(),
+        step4_summary["search_stats"]["prefix_states_heuristic_dropped"].as_u64()
+    );
+    let frontier_inspect = assert_success(run_pen_cli([
+        "inspect",
+        &run_dir
+            .join("checkpoints")
+            .join("frontier")
+            .join("step-04")
+            .join("band-03")
+            .join("frontier.manifest.json")
+            .to_string_lossy(),
+    ]));
+    assert!(frontier_inspect.contains("prefix_heuristic_dropped:"));
+
+    fs::remove_dir_all(root).ok();
+}
+
+fn delta_step_indexes(value: &serde_json::Value) -> Vec<u32> {
+    value
+        .as_array()
+        .expect("delta array")
+        .iter()
+        .map(|delta| delta["step_index"].as_u64().expect("step_index") as u32)
+        .collect()
+}
+
+fn write_realistic_pressure_config(path: &std::path::Path) {
+    let config = read_text(&workspace_root().join("configs").join("realistic_frontier_shadow.toml"))
+        .replace("workers = \"auto\"", "workers = 1")
+        .replace("target_rss_gib = 8.5", "target_rss_gib = 0.0000001")
+        .replace("soft_rss_gib = 9.0", "soft_rss_gib = 0.0000002")
+        .replace("pressure_rss_gib = 10.5", "pressure_rss_gib = 0.0000010")
+        .replace("emergency_rss_gib = 11.5", "emergency_rss_gib = 0.0000020")
+        .replace("hard_rss_gib = 12.0", "hard_rss_gib = 0.0000040")
+        .replace("spill_buffers_gib = 0.50", "spill_buffers_gib = 0.0000001")
+        .replace(
+            "checkpoint_buffers_gib = 0.25",
+            "checkpoint_buffers_gib = 0.0000001",
+        )
+        .replace("worker_arena_mib = 64", "worker_arena_mib = 0");
+    fs::write(path, config).expect("write realistic pressure config");
 }

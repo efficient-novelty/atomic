@@ -3,14 +3,19 @@
 `pen-atomic` is a deterministic strict-only Rust workspace for rediscovering
 the current 15-step PEN genesis sequence from anonymous MBTT structure. This
 document records the current executable architecture, not a superseded
-scaffolding plan. For the remaining closeout item, see
+scaffolding plan. For the current rollout and closeout status, see
 [`plan_progress.md`](../plan_progress.md).
 
 ## Current executable surface
 
 The repository can currently do all of the following:
 
-- `pen-cli run` performs live atomic strict search through step 15.
+- `pen-cli run` performs live search through step 15 under explicit search
+  profiles.
+- `strict_canon_guarded` is the authoritative lane for the current executable
+  15-step corpus.
+- `realistic_frontier_shadow` is the broader comparison-backed lane for
+  Workstream 4 rollout.
 - `pen-cli resume` consumes the latest compatible frontier generation when the
   frozen compatibility ladder admits it and otherwise falls back deterministically
   to step resume or step reevaluation.
@@ -20,13 +25,15 @@ The repository can currently do all of the following:
   reference-replay fallback exports explicitly when no run directory is present.
 - `xtask export-reference-agda` emits deterministic reference payloads.
 - `scripts/compare_runs.py` emits deterministic text and JSON summaries across
-  cold, rerun, resume, pressure, and reference lanes from stored artifacts.
+  guarded, realistic, rerun, resume, pressure, and reference lanes from stored
+  artifacts, including the current Workstream 4 rollout parity/pressure view.
 - The accepted late-step executable canon is fixed at step 15 / `DCT` with
   `nu = 103`.
 
-This executable surface is intentionally bounded. The live authoritative lane is
-the current strict 15-step corpus, not a claim that the repo already ships a
-broad open-ended anti-junk frontier engine.
+This executable surface is intentionally split during rollout. The live
+authoritative lane remains the guarded 15-step corpus. The realistic lane is a
+broader comparison-backed shadow surface, not a default-claim that the repo
+already ships an open-ended anti-junk frontier engine.
 
 ## Design rules
 
@@ -126,11 +133,12 @@ scaffolding is outside the authoritative acceptance contract described here.
 
 ## Runtime flow
 
-The current strict run path looks like this:
+The current run path looks like this after search-profile selection:
 
 1. `pen-cli` loads a TOML runtime config and decides the target step.
 2. For targets within the supported live range, `pen-cli` selects live atomic
-   bootstrap search; beyond that range it uses explicit reference replay.
+   bootstrap search semantics for the configured profile; beyond that range it
+   uses explicit reference replay.
 3. `pen-search` derives the step bar from accepted history and obtains strict
    admissibility from `pen-type`.
 4. `pen-search` enumerates candidate telescopes for the allowed `kappa` band and
@@ -148,8 +156,16 @@ The current strict run path looks like this:
 
 ## Search and frontier model
 
-The current live engine is a bounded exact strict lane, not a speculative
-template or replay shortcut:
+The current engine has two honest live search surfaces:
+
+- `strict_canon_guarded`: the authoritative bounded exact lane for the current
+  15-step corpus
+- `realistic_frontier_shadow`: a broader shadow lane with generative late-step
+  competition and live prefix-frontier retention, still gated by parity
+  comparison rather than promoted to default
+
+Across both profiles, the live engine is a bounded exact structural search, not
+a speculative template or replay shortcut:
 
 - admissibility defines the exact clause band and structural lane that may open
 - enumeration generates anonymous MBTT telescopes only within that lane
@@ -162,9 +178,9 @@ template or replay shortcut:
 - retained valid candidates, prune samples, and frontier pressure metadata are
   persisted for the bounded lane
 
-The bounded frontier runtime is real for this lane: hot and cold shards, dedupe
-segments, checksum sidecars, `frontier-runtime.json`, and `meta.sqlite3` are all
-written and reused by `inspect` and compatible `resume` paths.
+The bounded frontier runtime is real for these lanes: hot and cold shards,
+dedupe segments, checksum sidecars, `frontier-runtime.json`, and `meta.sqlite3`
+are all written and reused by `inspect` and compatible `resume` paths.
 
 ## Artifact model
 
@@ -223,17 +239,23 @@ Agda remains strictly downstream:
 
 The current repository can honestly claim:
 
-- live atomic strict discovery through step 15
+- live guarded discovery through step 15
+- realistic shadow discovery through step 15 with genuine late-step
+  multi-candidate competition and prefix-frontier retention
 - exact deterministic acceptance over the bounded live candidate pool
 - frozen late-step executable canon, including step 15 / `DCT` at `nu = 103`
 - deterministic run artifacts and CLI-level evidence for the current corpus
 - real bounded frontier persistence and frontier-backed deterministic resume
-- deterministic comparison artifacts from stored run directories
+- deterministic comparison artifacts from stored run directories, including the
+  current guarded-versus-realistic rollout matrix
 - deterministic Agda export from accepted run artifacts with explicit fallback
   labeling
+- guarded remains the authoritative truth surface while realistic stays
+  comparison-backed
 
 It should not claim:
 
+- that `realistic_frontier_shadow` is already the default or authoritative lane
 - open-ended anti-junk retention beyond the current bounded strict lanes
 - that the live search loop is already a broad frontier-driven explorer under
   sustained pressure

@@ -47,6 +47,7 @@ fn resume_roundtrip_keeps_the_reference_sequence_and_inspect_output() {
 
     let inspect = run_pen_cli(["inspect", &run_dir_arg]);
     let inspect_stdout = assert_success(inspect);
+    assert!(inspect_stdout.contains("search_profile: strict_canon_guarded"));
     assert!(inspect_stdout.contains("latest: step 15 (DCT)"));
     assert!(inspect_stdout.contains("provenance: frontier_checkpoint_resume"));
     assert!(inspect_stdout.contains("step 15 DCT"));
@@ -92,6 +93,7 @@ fn resume_roundtrip_keeps_the_reference_sequence_and_inspect_output() {
 
     let telemetry = read_text(&run_dir.join("telemetry.ndjson"));
     assert!(telemetry.contains("\"mode\":\"frontier_checkpoint_resume\""));
+    assert!(telemetry.contains("\"search_profile\":\"strict_canon_guarded\""));
     assert!(telemetry.contains("\"replay_ablation\""));
 
     let frontier_inspect = run_pen_cli([

@@ -8,27 +8,32 @@ sidecar.
 
 ## Project status
 
-- live atomic strict search currently recovers the full 15-step corpus
+- `strict_canon_guarded` remains the authoritative live lane and recovers the
+  full 15-step corpus
+- `realistic_frontier_shadow` is a broader comparison-backed lane that
+  preserves the same accepted 15-step sequence while exposing genuine late-step
+  competition and prefix-frontier retention
 - the accepted late-step executable canon is fixed at step 15 / `DCT` with
   `nu = 103`
 - `pen-cli run`, `resume`, `inspect`, and `export-agda` operate on real stored
   artifacts
 - bounded frontier persistence and frontier-backed deterministic resume are real
-  for the current lane
+  for the current rollout lanes
 - hot-path crates stay structural and name-free
 - Agda export is observational only and cannot influence acceptance
 - optional acceleration scaffolding is outside the authoritative acceptance
   contract
 
-Progress on final closeout is tracked in
-[plan_progress.md](plan_progress.md). Workstream 3 is complete; the only
-remaining repo-level closeout item is the final `pen-accel` decision.
+Progress on rollout, parity hardening, and honesty-boundary closeout is tracked
+in [plan_progress.md](plan_progress.md). Workstream 4 is active. The guarded
+lane remains authoritative while `realistic_frontier_shadow` stays
+comparison-backed rather than default.
 
 ## Current executable surface
 
-- `pen-cli run` performs live atomic strict search through step 15 and writes
-  `run.json`, step checkpoints, frontier checkpoints, reports, telemetry, and
-  metadata
+- `pen-cli run` performs live search through step 15 under explicit search
+  profiles and writes `run.json`, step checkpoints, frontier checkpoints,
+  reports, telemetry, and metadata
 - `pen-cli resume` reuses the latest compatible frontier generation when
   possible and otherwise falls back deterministically to step resume or step
   reevaluation
@@ -37,8 +42,9 @@ remaining repo-level closeout item is the final `pen-accel` decision.
 - `pen-cli export-agda` exports accepted run artifacts, or a clearly labeled
   reference-replay fallback when no run directory is provided
 - `xtask export-reference-agda` emits deterministic reference payloads
-- `scripts/compare_runs.py` compares stored cold, rerun, resume, pressure, and
-  reference lanes and emits deterministic text and JSON summaries
+- `scripts/compare_runs.py` compares stored guarded, realistic, rerun, resume,
+  pressure, and reference lanes and emits deterministic text and JSON summaries
+  including the current Workstream 4 parity and pressure rollout view
 
 ## Prerequisites
 
@@ -129,6 +135,14 @@ If you are unsure where to start:
 - use `configs/cpu_only.toml` for the clearest full 15-step CPU-authoritative
   run
 
+For rollout and comparison work, use the dedicated search-profile configs:
+
+- `configs/strict_canon_guarded.toml`: authoritative guarded baseline
+- `configs/relaxed_shadow.toml`: earlier widening lane for admissibility and
+  competition deltas through step 12
+- `configs/realistic_frontier_shadow.toml`: broader comparison-backed lane with
+  generative late enumeration and prefix-frontier retention through step 15
+
 ## Quick Start
 
 ### 1. Verify the workspace builds
@@ -194,6 +208,36 @@ Single-worker debug-style run all the way to step 15:
 ```powershell
 cargo run -p pen-cli -- run --config configs/debug.toml --root runs --run-id debug-full --until-step 15 --debug
 ```
+
+## Guarded vs Realistic Comparison
+
+Workstream 4 keeps the guarded lane authoritative and uses the realistic lane
+as a comparison-backed rollout surface.
+
+Authoritative guarded baseline:
+
+```powershell
+cargo run -p pen-cli -- run --config configs/strict_canon_guarded.toml --root runs --run-id guarded --until-step 15
+```
+
+Broader realistic shadow lane:
+
+```powershell
+cargo run -p pen-cli -- run --config configs/realistic_frontier_shadow.toml --root runs --run-id realistic --until-step 15
+```
+
+Compare the stored evidence:
+
+```powershell
+python scripts/compare_runs.py --baseline guarded --lane guarded=runs/guarded --lane realistic=runs/realistic
+```
+
+If you also want a pressure-backed realistic lane, copy the realistic config,
+lower the RSS limits, run it, and add that run directory as another `--lane`.
+The comparison output now reports a Workstream 4 rollout section showing:
+
+- which realistic lanes preserve guarded parity
+- which realistic lanes also exercise real pressure without losing parity
 
 ## What A Run Writes
 
@@ -261,11 +305,16 @@ The repository can honestly claim all of the following today:
 - frontier checkpoints are compatibility-gated accelerators, not semantic truth
 - Agda cannot influence search or acceptance
 - the executable late-step canon is fixed at step 15 / `DCT` with `nu = 103`
+- `strict_canon_guarded` is the authoritative lane
+- `realistic_frontier_shadow` is a broader comparison-backed lane, not the
+  default truth surface
 
 Intentional limits:
 
-- the authoritative live lane is the bounded strict 15-step corpus, not a claim
-  of open-ended anti-junk exploration
+- the authoritative live lane remains the bounded guarded 15-step corpus, not a
+  claim of open-ended anti-junk exploration
+- `realistic_frontier_shadow` still requires comparison-backed parity evidence
+  and pressure evidence before any default-lane promotion
 - historical alternate late-step totals remain provenance only
 - Agda artifacts are observational only
 - optional acceleration scaffolding is outside the authoritative acceptance

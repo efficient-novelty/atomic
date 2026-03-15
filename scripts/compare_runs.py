@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -17,6 +18,20 @@ CLAIM_KEYS = (
     "adopted_nu",
     "matches_accepted",
 )
+SEARCH_SPACE_COUNT_KEYS = (
+    "enumerated",
+    "well_formed",
+    "admissibility_rejected",
+    "evaluated",
+    "canonical",
+    "semantically_minimal",
+    "retained",
+)
+LATE_STEP_COMPETITION_START = 10
+ADMISSIBILITY_REASON_LIMIT = 5
+WORKSTREAM4_REALISTIC_PROFILE = "realistic_frontier_shadow"
+NEUTRAL_GOVERNOR_STATES = {"green", "unknown"}
+NEUTRAL_PRESSURE_ACTIONS = {"none", "unknown"}
 
 
 def main() -> int:
@@ -143,6 +158,14 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
             break
 
     trajectory = [trajectory_entry(step) for step in steps]
+    accepted_hashes = [accepted_hash_entry(step) for step in steps]
+    search_space_counts = [search_space_count_entry(step) for step in steps]
+    admissibility_diagnostics = [admissibility_diagnostics_entry(step) for step in steps]
+    late_step_competition = [
+        late_step_competition_entry(step)
+        for step in steps
+        if int(step.get("step_index", 0) or 0) >= LATE_STEP_COMPETITION_START
+    ]
     provenance_sequence = []
     replay_sequence = []
     governor_sequence = []
@@ -197,9 +220,14 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
         "path": str(run_dir),
         "run_id": str(manifest.get("run_id", "")),
         "completed_step": int(manifest.get("position", {}).get("completed_step", len(steps))),
+        "search_profile": load_search_profile(run_dir, steps, telemetry_events),
         "run_mode": run_mode,
         "trajectory": trajectory,
         "trajectory_fingerprint": hash_json(trajectory),
+        "accepted_hashes": accepted_hashes,
+        "search_space_counts": search_space_counts,
+        "admissibility_diagnostics": admissibility_diagnostics,
+        "late_step_competition": late_step_competition,
         "provenance_sequence": provenance_sequence,
         "provenance_summary": summarize_counter(
             Counter(item["value"] for item in provenance_sequence)
@@ -230,6 +258,114 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
         ),
     }
     return lane
+
+
+def accepted_hash_entry(step: dict[str, Any]) -> dict[str, Any]:
+    accepted = step.get("accepted", {})
+    return ordered_dict(
+        [
+            ("step_index", int(step.get("step_index", 0) or 0)),
+            ("candidate_hash", str(accepted.get("candidate_hash", ""))),
+            ("canonical_hash", str(accepted.get("canonical_hash", ""))),
+        ]
+    )
+
+
+def search_space_count_entry(step: dict[str, Any]) -> dict[str, Any]:
+    stats = step.get("search_stats") or {}
+    return ordered_dict(
+        [
+            ("step_index", int(step.get("step_index", 0) or 0)),
+            ("enumerated", int(stats.get("enumerated_candidates", 0) or 0)),
+            ("well_formed", int(stats.get("well_formed_candidates", 0) or 0)),
+            (
+                "admissibility_rejected",
+                int(stats.get("admissibility_rejections", 0) or 0),
+            ),
+            ("evaluated", int(stats.get("evaluated_candidates", 0) or 0)),
+            ("canonical", int(stats.get("canonical_candidates", 0) or 0)),
+            (
+                "semantically_minimal",
+                int(stats.get("semantically_minimal_candidates", 0) or 0),
+            ),
+            ("retained", int(stats.get("retained_candidates", 0) or 0)),
+        ]
+    )
+
+
+def late_step_competition_entry(step: dict[str, Any]) -> dict[str, Any]:
+    stats = step.get("search_stats") or {}
+    distribution = stats.get("scored_candidate_distribution") or {}
+    return ordered_dict(
+        [
+            ("step_index", int(step.get("step_index", 0) or 0)),
+            ("evaluated", int(stats.get("evaluated_candidates", 0) or 0)),
+            ("clears_bar", int(distribution.get("clears_bar", 0) or 0)),
+            ("below_bar", int(distribution.get("below_bar", 0) or 0)),
+            ("retained", int(stats.get("retained_candidates", 0) or 0)),
+        ]
+    )
+
+
+def admissibility_diagnostics_entry(step: dict[str, Any]) -> dict[str, Any]:
+    stats = step.get("search_stats") or {}
+    diagnostics = stats.get("admissibility_diagnostics") or {}
+    reasons = diagnostics.get("reason_counts") or {}
+    top_reasons = [
+        ordered_dict([("reason", str(reason)), ("count", int(count or 0))])
+        for reason, count in sorted(
+            reasons.items(),
+            key=lambda item: (-int(item[1] or 0), str(item[0])),
+        )[:ADMISSIBILITY_REASON_LIMIT]
+    ]
+    return ordered_dict(
+        [
+            ("step_index", int(step.get("step_index", 0) or 0)),
+            (
+                "exact_legality_rejections",
+                int(diagnostics.get("exact_legality_rejections", 0) or 0),
+            ),
+            (
+                "structural_debt_cap_rejections",
+                int(diagnostics.get("structural_debt_cap_rejections", 0) or 0),
+            ),
+            (
+                "admitted_deprioritized",
+                int(diagnostics.get("admitted_deprioritized", 0) or 0),
+            ),
+            (
+                "admitted_focus_aligned",
+                int(diagnostics.get("admitted_focus_aligned", 0) or 0),
+            ),
+            ("top_reasons", top_reasons),
+        ]
+    )
+
+
+def load_search_profile(
+    run_dir: Path, steps: list[dict[str, Any]], telemetry_events: list[dict[str, Any]]
+) -> str:
+    for step in reversed(steps):
+        value = step.get("search_profile")
+        if value:
+            return str(value)
+
+    for event in telemetry_events:
+        if event.get("event") == "run_started":
+            payload = event.get("payload", {})
+            value = payload.get("search_profile")
+            if value:
+                return str(value)
+            break
+
+    config_path = run_dir / "config.toml"
+    if config_path.exists():
+        text = config_path.read_text(encoding="utf-8")
+        match = re.search(r'^\s*search_profile\s*=\s*"([^"]+)"\s*$', text, re.MULTILINE)
+        if match:
+            return match.group(1)
+
+    return "unknown"
 
 
 def trajectory_entry(step: dict[str, Any]) -> dict[str, Any]:
@@ -326,6 +462,20 @@ def load_latest_frontier(run_dir: Path) -> dict[str, Any]:
             ("step_index", int(manifest.get("step_index", 0) or 0)),
             ("band_index", int(manifest.get("band_index", 0) or 0)),
             ("frontier_epoch", int(manifest.get("frontier_epoch", 0) or 0)),
+            (
+                "prefix_explored",
+                int(manifest.get("counts", {}).get("prefix_states_explored", 0) or 0),
+            ),
+            (
+                "prefix_exact_pruned",
+                int(manifest.get("counts", {}).get("prefix_states_exact_pruned", 0) or 0),
+            ),
+            (
+                "prefix_heuristic_dropped",
+                int(
+                    manifest.get("counts", {}).get("prefix_states_heuristic_dropped", 0) or 0
+                ),
+            ),
             ("hot_states", int(manifest.get("counts", {}).get("hot_states", 0) or 0)),
             ("cold_states", int(manifest.get("counts", {}).get("cold_states", 0) or 0)),
             ("dedupe_keys", int(manifest.get("counts", {}).get("dedupe_keys", 0) or 0)),
@@ -377,6 +527,14 @@ def build_summary(lanes: list[dict[str, Any]], baseline_label: str) -> dict[str,
     baseline = next(lane for lane in lanes if lane["label"] == baseline_label)
     matching_lanes = []
     mismatched_lanes = []
+    accepted_matching_lanes = []
+    accepted_mismatched_lanes = []
+    count_matching_lanes = []
+    count_mismatched_lanes = []
+    admissibility_matching_lanes = []
+    admissibility_mismatched_lanes = []
+    competition_matching_lanes = []
+    competition_mismatched_lanes = []
     claim_matching_lanes = []
     claim_mismatches = []
 
@@ -394,6 +552,58 @@ def build_summary(lanes: list[dict[str, Any]], baseline_label: str) -> dict[str,
         else:
             mismatched_lanes.append(lane["label"])
 
+        accepted_matches, accepted_deltas = compare_step_tables(
+            baseline["accepted_hashes"], lane["accepted_hashes"]
+        )
+        lane["accepted_hashes_vs_baseline"] = {
+            "baseline_label": baseline_label,
+            "matches": accepted_matches,
+            "deltas": accepted_deltas,
+        }
+        if accepted_matches:
+            accepted_matching_lanes.append(lane["label"])
+        else:
+            accepted_mismatched_lanes.append(lane["label"])
+
+        count_matches, count_deltas = compare_step_tables(
+            baseline["search_space_counts"], lane["search_space_counts"]
+        )
+        lane["search_space_counts_vs_baseline"] = {
+            "baseline_label": baseline_label,
+            "matches": count_matches,
+            "deltas": count_deltas,
+        }
+        if count_matches:
+            count_matching_lanes.append(lane["label"])
+        else:
+            count_mismatched_lanes.append(lane["label"])
+
+        admissibility_matches, admissibility_deltas = compare_step_tables(
+            baseline["admissibility_diagnostics"], lane["admissibility_diagnostics"]
+        )
+        lane["admissibility_diagnostics_vs_baseline"] = {
+            "baseline_label": baseline_label,
+            "matches": admissibility_matches,
+            "deltas": admissibility_deltas,
+        }
+        if admissibility_matches:
+            admissibility_matching_lanes.append(lane["label"])
+        else:
+            admissibility_mismatched_lanes.append(lane["label"])
+
+        competition_matches, competition_deltas = compare_step_tables(
+            baseline["late_step_competition"], lane["late_step_competition"]
+        )
+        lane["late_step_competition_vs_baseline"] = {
+            "baseline_label": baseline_label,
+            "matches": competition_matches,
+            "deltas": competition_deltas,
+        }
+        if competition_matches:
+            competition_matching_lanes.append(lane["label"])
+        else:
+            competition_mismatched_lanes.append(lane["label"])
+
         if comparable_claim(lane["step15_claim"]) == baseline_claim:
             claim_matching_lanes.append(lane["label"])
         else:
@@ -408,22 +618,66 @@ def build_summary(lanes: list[dict[str, Any]], baseline_label: str) -> dict[str,
         "all_match_baseline" if not mismatched_lanes else "deltas_present"
     )
     claim_status = "consistent" if not claim_mismatches else "inconsistent"
+    workstream4_rollout = build_workstream4_rollout(
+        lanes,
+        baseline_label,
+        baseline_claim,
+    )
     signoff_status = (
         "ready"
-        if trajectory_status == "all_match_baseline" and claim_status == "consistent"
+        if trajectory_status == "all_match_baseline"
+        and claim_status == "consistent"
+        and workstream4_rollout["status"] != "attention"
         else "attention"
     )
 
     return ordered_dict(
         [
-            ("comparison_version", 1),
+            ("comparison_version", 3),
             ("baseline_lane", baseline_label),
             ("lane_order", [lane["label"] for lane in lanes]),
+            (
+                "accepted_hash_consistency",
+                consistency_summary(
+                    baseline_label,
+                    baseline["accepted_hashes"],
+                    accepted_matching_lanes,
+                    accepted_mismatched_lanes,
+                ),
+            ),
+            (
+                "search_space_count_consistency",
+                consistency_summary(
+                    baseline_label,
+                    baseline["search_space_counts"],
+                    count_matching_lanes,
+                    count_mismatched_lanes,
+                ),
+            ),
+            (
+                "admissibility_diagnostics_consistency",
+                consistency_summary(
+                    baseline_label,
+                    baseline["admissibility_diagnostics"],
+                    admissibility_matching_lanes,
+                    admissibility_mismatched_lanes,
+                ),
+            ),
+            (
+                "late_step_competition_consistency",
+                consistency_summary(
+                    baseline_label,
+                    baseline["late_step_competition"],
+                    competition_matching_lanes,
+                    competition_mismatched_lanes,
+                ),
+            ),
             (
                 "trajectory_consistency",
                 ordered_dict(
                     [
                         ("status", trajectory_status),
+                        ("baseline_label", baseline_label),
                         ("baseline_fingerprint", baseline["trajectory_fingerprint"]),
                         ("matching_lanes", matching_lanes),
                         ("mismatched_lanes", mismatched_lanes),
@@ -441,6 +695,7 @@ def build_summary(lanes: list[dict[str, Any]], baseline_label: str) -> dict[str,
                     ]
                 ),
             ),
+            ("workstream4_rollout", workstream4_rollout),
             (
                 "signoff",
                 ordered_dict(
@@ -463,6 +718,154 @@ def build_summary(lanes: list[dict[str, Any]], baseline_label: str) -> dict[str,
     )
 
 
+def consistency_summary(
+    baseline_label: str,
+    baseline_value: Any,
+    matching_lanes: list[str],
+    mismatched_lanes: list[str],
+) -> dict[str, Any]:
+    return ordered_dict(
+        [
+            (
+                "status",
+                "all_match_baseline" if not mismatched_lanes else "deltas_present",
+            ),
+            ("baseline_label", baseline_label),
+            ("baseline_fingerprint", hash_json(baseline_value)),
+            ("matching_lanes", matching_lanes),
+            ("mismatched_lanes", mismatched_lanes),
+        ]
+    )
+
+
+def build_workstream4_rollout(
+    lanes: list[dict[str, Any]],
+    baseline_label: str,
+    baseline_claim: dict[str, Any],
+) -> dict[str, Any]:
+    realistic_lanes = [
+        lane
+        for lane in lanes
+        if lane["label"] != baseline_label
+        and lane["search_profile"] == WORKSTREAM4_REALISTIC_PROFILE
+    ]
+    parity_rows = [build_workstream4_parity_row(lane, baseline_claim) for lane in realistic_lanes]
+    pressure_rows = [
+        build_workstream4_pressure_row(lane, baseline_claim)
+        for lane in realistic_lanes
+        if has_pressure_evidence(lane)
+    ]
+
+    parity_set = rollout_set_summary(parity_rows)
+    pressure_set = rollout_set_summary(pressure_rows)
+    overall_status = workstream4_rollout_status(parity_set["status"], pressure_set["status"])
+
+    return ordered_dict(
+        [
+            ("status", overall_status),
+            ("baseline_label", baseline_label),
+            ("authoritative_lane", baseline_label),
+            ("realistic_profile", WORKSTREAM4_REALISTIC_PROFILE),
+            ("parity_set", parity_set),
+            ("pressure_set", pressure_set),
+        ]
+    )
+
+
+def build_workstream4_parity_row(
+    lane: dict[str, Any], baseline_claim: dict[str, Any]
+) -> dict[str, Any]:
+    trajectory_matches = bool(lane["trajectory_vs_baseline"]["matches"])
+    accepted_hashes_match = bool(lane["accepted_hashes_vs_baseline"]["matches"])
+    claim_matches = comparable_claim(lane["step15_claim"]) == baseline_claim
+    search_space_differs = not lane["search_space_counts_vs_baseline"]["matches"]
+    late_step_competition_differs = not lane["late_step_competition_vs_baseline"]["matches"]
+    prefix_frontier_present = has_prefix_frontier_evidence(lane)
+    pressure_exercised = has_pressure_evidence(lane)
+    status = (
+        "ready"
+        if trajectory_matches
+        and accepted_hashes_match
+        and claim_matches
+        and late_step_competition_differs
+        and prefix_frontier_present
+        else "attention"
+    )
+
+    return ordered_dict(
+        [
+            ("label", lane["label"]),
+            ("status", status),
+            ("completed_step", lane["completed_step"]),
+            ("trajectory_matches_baseline", trajectory_matches),
+            ("accepted_hashes_match_baseline", accepted_hashes_match),
+            ("step15_claim_matches_baseline", claim_matches),
+            ("search_space_differs_from_baseline", search_space_differs),
+            ("late_step_competition_differs_from_baseline", late_step_competition_differs),
+            ("prefix_frontier_present", prefix_frontier_present),
+            ("pressure_exercised", pressure_exercised),
+        ]
+    )
+
+
+def build_workstream4_pressure_row(
+    lane: dict[str, Any], baseline_claim: dict[str, Any]
+) -> dict[str, Any]:
+    parity_row = build_workstream4_parity_row(lane, baseline_claim)
+    latest_frontier = lane["latest_frontier"]
+    return ordered_dict(
+        list(parity_row.items())
+        + [
+            (
+                "latest_frontier_pressure_action",
+                str(latest_frontier.get("pressure_action", "unknown")),
+            ),
+            (
+                "latest_frontier_governor_state",
+                str(latest_frontier.get("governor_state", "unknown")),
+            ),
+            (
+                "spilled_cold_records",
+                int(latest_frontier.get("spilled_cold_records", 0) or 0),
+            ),
+        ]
+    )
+
+
+def rollout_set_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    if not rows:
+        return ordered_dict(
+            [
+                ("status", "not_present"),
+                ("ready_lanes", []),
+                ("attention_lanes", []),
+                ("lanes", []),
+            ]
+        )
+
+    ready_lanes = [row["label"] for row in rows if row["status"] == "ready"]
+    attention_lanes = [row["label"] for row in rows if row["status"] != "ready"]
+    status = "ready" if not attention_lanes else "attention"
+    return ordered_dict(
+        [
+            ("status", status),
+            ("ready_lanes", ready_lanes),
+            ("attention_lanes", attention_lanes),
+            ("lanes", rows),
+        ]
+    )
+
+
+def workstream4_rollout_status(parity_status: str, pressure_status: str) -> str:
+    if parity_status == "not_present":
+        return "not_present"
+    if parity_status == "attention" or pressure_status == "attention":
+        return "attention"
+    if pressure_status == "ready":
+        return "ready"
+    return "parity_only"
+
+
 def signoff_summary(
     status: str, baseline_label: str, lane_count: int, baseline_claim: dict[str, Any]
 ) -> str:
@@ -475,6 +878,12 @@ def signoff_summary(
 
 
 def compare_trajectory(
+    baseline: list[dict[str, Any]], current: list[dict[str, Any]]
+) -> tuple[bool, list[dict[str, Any]]]:
+    return compare_step_tables(baseline, current)
+
+
+def compare_step_tables(
     baseline: list[dict[str, Any]], current: list[dict[str, Any]]
 ) -> tuple[bool, list[dict[str, Any]]]:
     baseline_by_step = {entry["step_index"]: entry for entry in baseline}
@@ -490,6 +899,7 @@ def compare_trajectory(
             ordered_dict(
                 [
                     ("step_index", step_index),
+                    ("changed_keys", changed_keys(baseline_entry, current_entry)),
                     ("baseline", baseline_entry),
                     ("current", current_entry),
                 ]
@@ -499,17 +909,74 @@ def compare_trajectory(
     return (not deltas, deltas)
 
 
+def changed_keys(
+    baseline_entry: dict[str, Any] | None, current_entry: dict[str, Any] | None
+) -> list[str]:
+    if not isinstance(baseline_entry, dict) or not isinstance(current_entry, dict):
+        return []
+
+    keys = sorted(set(baseline_entry) | set(current_entry))
+    return [
+        key
+        for key in keys
+        if key != "step_index" and baseline_entry.get(key) != current_entry.get(key)
+    ]
+
+
 def comparable_claim(claim: dict[str, Any]) -> dict[str, Any]:
     return {key: claim.get(key) for key in CLAIM_KEYS}
 
 
+def has_prefix_frontier_evidence(lane: dict[str, Any]) -> bool:
+    latest_frontier = lane.get("latest_frontier") or {}
+    return int(latest_frontier.get("prefix_explored", 0) or 0) > 0
+
+
+def has_pressure_evidence(lane: dict[str, Any]) -> bool:
+    governor_sequence = lane.get("governor_summary", {}).get("sequence") or []
+    for item in governor_sequence:
+        if str(item.get("state", "unknown")) not in NEUTRAL_GOVERNOR_STATES:
+            return True
+        if str(item.get("action", "unknown")) not in NEUTRAL_PRESSURE_ACTIONS:
+            return True
+
+    latest_frontier = lane.get("latest_frontier") or {}
+    return (
+        str(latest_frontier.get("governor_state", "unknown")) not in NEUTRAL_GOVERNOR_STATES
+        or str(latest_frontier.get("pressure_action", "unknown")) not in NEUTRAL_PRESSURE_ACTIONS
+    )
+
+
 def render_text_summary(summary: dict[str, Any]) -> str:
+    workstream4_rollout = summary["workstream4_rollout"]
     lines = [
         f"Comparison Signoff: {summary['signoff']['status']}",
         f"baseline: {summary['baseline_lane']}",
         f"lanes: {', '.join(summary['lane_order'])}",
         f"trajectory: {render_trajectory_status(summary)}",
+        f"accepted hashes: {render_consistency_status(summary['accepted_hash_consistency'])}",
+        (
+            "search-space counts: "
+            f"{render_consistency_status(summary['search_space_count_consistency'])}"
+        ),
+        (
+            "admissibility diagnostics: "
+            f"{render_consistency_status(summary['admissibility_diagnostics_consistency'])}"
+        ),
+        (
+            "late-step competition: "
+            f"{render_consistency_status(summary['late_step_competition_consistency'])}"
+        ),
         f"step15 claim boundary: {render_claim_status(summary['step15_claim_boundary'])}",
+        f"workstream4 rollout: {workstream4_rollout['status']}",
+        (
+            "workstream4 parity set: "
+            f"{render_workstream4_set(workstream4_rollout['parity_set'])}"
+        ),
+        (
+            "workstream4 pressure set: "
+            f"{render_workstream4_set(workstream4_rollout['pressure_set'])}"
+        ),
     ]
 
     for lane in summary["lanes"]:
@@ -520,11 +987,14 @@ def render_text_summary(summary: dict[str, Any]) -> str:
 
 
 def render_trajectory_status(summary: dict[str, Any]) -> str:
-    consistency = summary["trajectory_consistency"]
+    return render_consistency_status(summary["trajectory_consistency"])
+
+
+def render_consistency_status(consistency: dict[str, Any]) -> str:
     if consistency["status"] == "all_match_baseline":
         return (
-            f"all {len(summary['lane_order'])} lanes match baseline "
-            f"{summary['baseline_lane']}"
+            f"all {len(consistency['matching_lanes'])} lanes match baseline "
+            f"{consistency['baseline_label']}"
         )
     return (
         f"mismatches detected in {', '.join(consistency['mismatched_lanes'])}"
@@ -543,8 +1013,23 @@ def render_claim_status(claim_boundary: dict[str, Any]) -> str:
     return f"inconsistent ({mismatched})"
 
 
+def render_workstream4_set(rollout_set: dict[str, Any]) -> str:
+    status = rollout_set["status"]
+    if status == "not_present":
+        return "not present"
+
+    if status == "ready":
+        return f"ready ({', '.join(rollout_set['ready_lanes'])})"
+
+    return f"attention ({', '.join(rollout_set['attention_lanes'])})"
+
+
 def render_lane_summary(lane: dict[str, Any]) -> list[str]:
     deltas = lane["trajectory_vs_baseline"]["deltas"]
+    accepted_hash_deltas = lane["accepted_hashes_vs_baseline"]["deltas"]
+    search_space_deltas = lane["search_space_counts_vs_baseline"]["deltas"]
+    admissibility_deltas = lane["admissibility_diagnostics_vs_baseline"]["deltas"]
+    late_step_deltas = lane["late_step_competition_vs_baseline"]["deltas"]
     trajectory_line = (
         f"trajectory: matches baseline ({lane['trajectory_fingerprint']})"
         if not deltas
@@ -562,9 +1047,17 @@ def render_lane_summary(lane: dict[str, Any]) -> list[str]:
     lines = [
         f"Lane {lane['label']}",
         f"  run_id: {lane['run_id']}",
+        f"  search profile: {lane['search_profile']}",
         f"  mode: {lane['run_mode']}",
         f"  completed_step: {lane['completed_step']}",
         f"  {trajectory_line}",
+        f"  accepted hashes: {render_lane_comparison(accepted_hash_deltas)}",
+        f"  search-space counts: {render_lane_comparison(search_space_deltas)}",
+        f"  admissibility diagnostics: {render_lane_comparison(admissibility_deltas)}",
+        (
+            "  late-step competition: "
+            f"{render_late_step_competition(lane['late_step_competition'], late_step_deltas)}"
+        ),
         f"  provenance sequence: {render_compact_sequence(provenance_compact)}",
         f"  replay ablation: {render_compact_sequence(replay_compact)}",
         f"  prune samples: {render_prune_totals(lane['prune_sample_totals'])}",
@@ -592,6 +1085,35 @@ def render_lane_summary(lane: dict[str, Any]) -> list[str]:
 def render_delta_steps(deltas: list[dict[str, Any]]) -> str:
     steps = [f"step {delta['step_index']}" for delta in deltas]
     return ", ".join(steps)
+
+
+def render_lane_comparison(deltas: list[dict[str, Any]]) -> str:
+    if not deltas:
+        return "matches baseline"
+    return f"diverges at {render_delta_steps(deltas)}"
+
+
+def render_late_step_competition(
+    entries: list[dict[str, Any]], deltas: list[dict[str, Any]]
+) -> str:
+    if not entries:
+        return "not recorded"
+    if deltas:
+        return f"diverges at {render_delta_steps(deltas)}"
+
+    compact = compact_sequence(
+        [
+            {
+                "step_index": entry["step_index"],
+                "value": (
+                    f"eval={entry['evaluated']} clears={entry['clears_bar']} "
+                    f"below={entry['below_bar']} retained={entry['retained']}"
+                ),
+            }
+            for entry in entries
+        ]
+    )
+    return render_compact_sequence(compact)
 
 
 def render_prune_totals(prune_totals: dict[str, int]) -> str:

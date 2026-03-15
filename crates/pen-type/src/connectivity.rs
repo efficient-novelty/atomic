@@ -191,6 +191,42 @@ fn latest_modal_shell_anchor_ref(library: &Library) -> Option<u32> {
     })
 }
 
+fn matches_temporal_flat_next_bridge(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Flat(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
+            ) && (
+                matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+                || matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                )
+            )
+    )
+}
+
 fn matches_temporal_shell_pattern(telescope: &Telescope, anchor: u32) -> bool {
     telescope.path_dimensions().is_empty()
         && telescope.clauses.len() == 8
@@ -226,22 +262,7 @@ fn matches_temporal_shell_pattern(telescope: &Telescope, anchor: u32) -> bool {
         )
         && matches!(
             &telescope.clauses[4].expr,
-            Expr::Pi(domain, codomain)
-                if matches!(
-                    domain.as_ref(),
-                    Expr::Flat(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                ) && matches!(
-                    codomain.as_ref(),
-                    Expr::Next(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                )
+            expr if matches_temporal_flat_next_bridge(expr)
         )
         && matches!(
             &telescope.clauses[5].expr,
@@ -294,6 +315,7 @@ fn matches_temporal_shell_pattern(telescope: &Telescope, anchor: u32) -> bool {
 #[cfg(test)]
 mod tests {
     use super::{ConnectivityWitness, analyze_connectivity, passes_connectivity};
+    use pen_core::expr::Expr;
     use pen_core::library::{Library, LibraryEntry};
     use pen_core::telescope::Telescope;
 
@@ -498,5 +520,30 @@ mod tests {
             }
         );
         assert!(passes_connectivity(&library, &Telescope::reference(15)));
+    }
+
+    #[test]
+    fn connectivity_accepts_realistic_temporal_reanchor_variants() {
+        let library = library_until(14);
+        let mut telescope = Telescope::reference(15);
+        telescope.clauses[4].expr = Expr::Pi(
+            Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
+                Box::new(Expr::Var(1)),
+            )))))),
+        );
+
+        let witness = analyze_connectivity(&library, &telescope);
+        assert_eq!(
+            witness,
+            ConnectivityWitness {
+                connected: true,
+                references_active_window: false,
+                self_contained: false,
+                max_lib_ref: 10,
+                historical_reanchor: true,
+            }
+        );
+        assert!(passes_connectivity(&library, &telescope));
     }
 }

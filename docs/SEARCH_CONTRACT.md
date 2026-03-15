@@ -1,31 +1,57 @@
 # Search Contract
 
-The search engine is strict-only, deterministic, and CPU-first.
+The search engine remains strict-only, deterministic, and CPU-first. During
+Workstream 4 the repo ships explicit rollout profiles instead of pretending
+there is only one live claim surface.
+
+## Active profiles
+
+- `strict_canon_guarded`: authoritative live lane for the current executable
+  15-step corpus
+- `relaxed_shadow`: comparison lane for the earlier admissibility-widening
+  deltas through step 12
+- `realistic_frontier_shadow`: broader comparison-backed lane with generative
+  late enumeration and live prefix-frontier retention through step 15
+
+The realistic lane is real runtime behavior, not a paper placeholder, but it is
+still rollout-gated by parity evidence rather than promoted to default truth.
 
 ## Current executable scope
 
-The current CLI path is an honest hybrid bootstrap surface:
+The current CLI path can honestly claim all of the following:
 
-- live atomic search is used through step 15,
-- deterministic reference replay is no longer needed for the current 15-step corpus,
-- bounded resume now consumes stored step/frontier artifacts instead of
-  rebuilding a full config-driven prefix,
-- and the exact step-4 through step-15 path now emits deterministic frontier
-  evidence while preserving the hot-path invariants the later frontier engine
-  must keep.
+- live search is used through step 15 in both the guarded and realistic lanes
+- deterministic reference replay is no longer needed for the current 15-step
+  corpus, except when the CLI is explicitly asked to extend beyond the live
+  range
+- bounded resume consumes stored step/frontier artifacts instead of rebuilding
+  a config-driven prefix
+- exact step-4 through step-15 search emits deterministic frontier evidence
+  while preserving the hot-path invariants the broader frontier engine must keep
 
 ## Evidence comparison lane
 
 `scripts/compare_runs.py` is the canonical post-hoc evidence tool for the
-current bounded surface. It reads existing run directories and compares:
+bounded rollout surface. It reads existing run directories and compares:
 
 - accepted trajectory equality or deltas
+- accepted-hash equality or deltas
+- per-step search-space count deltas
+- admissibility-diagnostic deltas
+- late-step competition deltas
 - per-step provenance sequences
 - replay-ablation summaries
 - prune sample totals
 - frontier-retention deltas
 - governor state and pressure-action sequences
 - step-15 claim-boundary consistency
+
+The script also emits a Workstream 4 rollout view:
+
+- parity set: realistic lanes must preserve guarded trajectory, accepted hashes,
+  and step-15 claim boundary while still showing broader late-step competition
+- pressure set: pressure-backed realistic lanes must preserve the same parity
+  while exercising non-neutral governor or spill behavior
 
 The script emits a human-readable signoff report plus a machine-readable JSON
 summary without moving truth out of the stored Rust artifacts.
@@ -36,8 +62,8 @@ summary without moving truth out of the stored Rust artifacts.
 2. No floating-point ranking or threshold checks in the hot path.
 3. No mutable AST trees inside frontier states.
 4. Every prune is classified as sound, quotient or dedupe, or heuristic shaping.
-5. GPU acceleration is advisory only and must be rechecked on CPU before sound prune
-   or acceptance.
+5. GPU acceleration is advisory only and must be rechecked on CPU before sound prune or acceptance.
+6. The guarded lane remains authoritative until rollout parity and the docs agree on a wider honesty boundary.
 
 ## Resume rules
 
@@ -52,5 +78,5 @@ summary without moving truth out of the stored Rust artifacts.
 - deterministic candidate hashing and canonical hashing
 - step checkpoint compatibility hashes
 - live atomic bootstrap search through step 15
-- reference replay over the frozen 15-step telescope corpus
+- the guarded executable canon ending at step 15 / `DCT` with `nu = 103`
 - canonical comparison of persisted evidence lanes via `scripts/compare_runs.py`

@@ -1,6 +1,9 @@
 use crate::cli::RunArgs;
 use crate::output::{OutputStyle, render_run_output};
-use crate::report::{GeneratedSteps, StepReport, generate_steps_with_runtime, write_step_reports};
+use crate::report::{
+    GeneratedSteps, StepReport, annotate_search_profile, generate_steps_for_profile_with_runtime,
+    write_step_reports,
+};
 use anyhow::{Context, Result, bail};
 use pen_core::hash::blake3_hex;
 use pen_core::ids::{ClauseId, ObligationSetId, StateId};
@@ -44,11 +47,13 @@ pub fn run(args: RunArgs) -> Result<String> {
 
     let until_step = args.until_step.unwrap_or(config.search.until_step);
     let worker_count = resolved_worker_count(&config);
-    let GeneratedSteps { mode, steps } = generate_steps_with_runtime(
+    let GeneratedSteps { mode, mut steps } = generate_steps_for_profile_with_runtime(
         until_step,
         config.objective.window_depth,
+        config.mode.search_profile,
         frontier_runtime_limits(&config, worker_count),
     )?;
+    annotate_search_profile(&mut steps, config.mode.search_profile);
     let created_utc = now_utc()?;
     let updated_utc = created_utc.clone();
     let manifest = build_run_manifest(&run_id, &config_text, &steps, created_utc, updated_utc);
@@ -61,6 +66,7 @@ pub fn run(args: RunArgs) -> Result<String> {
         worker_count,
         &config,
         mode.as_str(),
+        config.mode.search_profile.as_str(),
     )?;
     Ok(render_run_output(
         OutputStyle::from_debug(args.debug),
@@ -107,6 +113,7 @@ pub(crate) fn write_run_artifacts(
     worker_count: u16,
     config: &RuntimeConfig,
     mode: &str,
+    search_profile: &str,
 ) -> Result<()> {
     fs::create_dir_all(run_dir).with_context(|| format!("create {}", run_dir.display()))?;
     fs::create_dir_all(run_dir.join("reports").join("steps"))?;
@@ -121,7 +128,7 @@ pub(crate) fn write_run_artifacts(
     write_step_reports(run_dir, steps)?;
     write_step_checkpoints(run_dir, manifest, steps, config.objective.window_depth)?;
     write_frontier_snapshots(run_dir, manifest, steps, worker_count, config, &metadata)?;
-    write_telemetry(run_dir, manifest, steps, mode)?;
+    write_telemetry(run_dir, manifest, steps, mode, search_profile)?;
 
     fs::write(
         run_dir.join("reports").join("latest.txt"),
@@ -227,6 +234,16 @@ fn checkpoint_near_misses(step: &StepReport) -> Vec<NearMiss> {
 
 fn checkpoint_stats(step: &StepReport) -> StepStats {
     if step.step_index >= 4 {
+        if step.search_stats.prefix_states_explored > 0 {
+            return StepStats {
+                frontier_scanned: step.search_stats.prefix_states_explored as u64,
+                typed_prefixes: (step.search_stats.prefix_frontier_hot_states
+                    + step.search_stats.prefix_frontier_cold_states)
+                    as u64,
+                sound_prunes: step.search_stats.prefix_states_exact_pruned as u64,
+                heuristic_drops: step.search_stats.prefix_states_heuristic_dropped as u64,
+            };
+        }
         return StepStats {
             frontier_scanned: step.search_stats.evaluated_candidates as u64,
             typed_prefixes: step
@@ -267,6 +284,7 @@ fn write_telemetry(
     manifest: &RunManifestV1,
     steps: &[StepReport],
     mode: &str,
+    search_profile: &str,
 ) -> Result<()> {
     let mut lines = Vec::new();
     lines.push(serde_json::to_string(&TelemetryEventV1 {
@@ -277,6 +295,7 @@ fn write_telemetry(
         payload: json!({
             "created_utc": manifest.created_utc,
             "mode": mode,
+            "search_profile": search_profile,
         }),
     })?);
 
@@ -430,6 +449,7 @@ pub(crate) fn frontier_runtime_limits(
     worker_count: u16,
 ) -> FrontierRuntimeLimits {
     FrontierRuntimeLimits {
+        worker_count,
         governor: governor_config(config),
         spill: spill_config(config),
         record_bytes: FrontierStateRecV1::BYTE_LEN as u64,
@@ -479,6 +499,10 @@ fn write_frontier_snapshots(
                 hot_records,
                 cold_records,
                 dedupe_keys: dedupe_keys.into_iter().collect(),
+                prefix_states_explored: step.search_stats.prefix_states_explored as u64,
+                prefix_states_exact_pruned: step.search_stats.prefix_states_exact_pruned as u64,
+                prefix_states_heuristic_dropped: step.search_stats.prefix_states_heuristic_dropped
+                    as u64,
                 worker_count: frontier_worker_count,
                 priority_heads: window.priority_heads(8),
                 interner_bytes: 0,
@@ -569,6 +593,32 @@ fn frontier_window_for_step(
     step: &StepReport,
     worker_count: u16,
 ) -> (FrontierWindow, BTreeSet<String>) {
+    if !step.prefix_frontier.is_empty() {
+        let mut frontier = FrontierWindow {
+            hot: step
+                .prefix_frontier
+                .hot_states
+                .iter()
+                .map(|state| state.to_record())
+                .collect(),
+            cold: step
+                .prefix_frontier
+                .cold_states
+                .iter()
+                .map(|state| state.to_record())
+                .collect(),
+        };
+        frontier.compact_sorted();
+        return (
+            frontier,
+            step.prefix_frontier
+                .dedupe_keys
+                .iter()
+                .cloned()
+                .collect::<BTreeSet<_>>(),
+        );
+    }
+
     let mut frontier = FrontierWindow::default();
     let mut dedupe_keys = BTreeSet::new();
 

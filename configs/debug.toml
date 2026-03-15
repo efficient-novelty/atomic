@@ -1,6 +1,7 @@
 [mode]
 strict = true
 debug = true
+search_profile = "strict_canon_guarded"
 
 [search]
 until_step = 6

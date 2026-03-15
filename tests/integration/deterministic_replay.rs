@@ -48,7 +48,9 @@ fn repeated_runs_with_the_same_inputs_are_deterministic() {
     let debug_b = read_text(&run_dir_b.join("reports").join("latest.debug.txt"));
     assert_eq!(debug_a, debug_b);
     let latest_a = read_text(&run_dir_a.join("reports").join("latest.txt"));
+    assert!(latest_a.contains("search_profile: strict_canon_guarded"));
     assert!(latest_a.contains("replay_ablation: matches_reference_replay x15"));
+    assert!(debug_a.contains("search_profile: strict_canon_guarded"));
     assert!(debug_a.contains("late_step_claim: executable_canon step 15 DCT nu=103"));
     assert!(debug_a.contains("replay ablation: matches_reference_replay x15"));
     assert!(debug_a.contains("canon evidence: charged_kappa=8"));
@@ -315,29 +317,68 @@ fn compare_runs_script_emits_a_deterministic_evidence_signoff() {
     assert_eq!(read_text(&text_a), read_text(&text_b));
     assert_eq!(read_text(&json_a), read_text(&json_b));
     assert!(stdout_a.contains("Comparison Signoff: ready"));
+    assert!(stdout_a.contains("accepted hashes: all 7 lanes match baseline cold-live"));
+    assert!(stdout_a.contains(
+        "search-space counts: mismatches detected in compat-reevaluate, reference-replay"
+    ));
+    assert!(stdout_a.contains("late-step competition: all 7 lanes match baseline cold-live"));
     assert!(stdout_a.contains("Lane spill-pressure"));
+    assert!(stdout_a.contains("search profile: strict_canon_guarded"));
     assert!(stdout_a.contains("governor sequence: 01-15 orange/spill_cold"));
 
     let summary = read_json(&json_a);
     assert_eq!(summary["signoff"]["status"].as_str(), Some("ready"));
+    assert_eq!(summary["comparison_version"].as_u64(), Some(3));
     assert_eq!(
         summary["trajectory_consistency"]["status"].as_str(),
+        Some("all_match_baseline")
+    );
+    assert_eq!(
+        summary["accepted_hash_consistency"]["status"].as_str(),
+        Some("all_match_baseline")
+    );
+    assert_eq!(
+        summary["search_space_count_consistency"]["status"].as_str(),
+        Some("deltas_present")
+    );
+    assert_eq!(
+        summary["late_step_competition_consistency"]["status"].as_str(),
         Some("all_match_baseline")
     );
     assert_eq!(
         summary["step15_claim_boundary"]["status"].as_str(),
         Some("consistent")
     );
+    assert_eq!(
+        summary["workstream4_rollout"]["status"].as_str(),
+        Some("not_present")
+    );
     assert_eq!(summary["baseline_lane"].as_str(), Some("cold-live"));
     assert_eq!(summary["lanes"].as_array().map(Vec::len), Some(7));
 
     let cold_live = lane_summary(&summary, "cold-live");
+    assert_eq!(
+        cold_live["search_profile"].as_str(),
+        Some("strict_canon_guarded")
+    );
     assert_eq!(
         cold_live["run_mode"].as_str(),
         Some("atomic_search_bootstrap")
     );
     assert_eq!(
         cold_live["trajectory_vs_baseline"]["matches"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        cold_live["accepted_hashes_vs_baseline"]["matches"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        cold_live["search_space_counts_vs_baseline"]["matches"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        cold_live["late_step_competition_vs_baseline"]["matches"].as_bool(),
         Some(true)
     );
 
@@ -370,6 +411,10 @@ fn compare_runs_script_emits_a_deterministic_evidence_signoff() {
         reevaluate["provenance_summary"]["step_checkpoint_reevaluate"].as_u64(),
         Some(15)
     );
+    assert_eq!(
+        reevaluate["search_space_counts_vs_baseline"]["matches"].as_bool(),
+        Some(false)
+    );
 
     let pressure = lane_summary(&summary, "spill-pressure");
     assert_eq!(
@@ -382,6 +427,10 @@ fn compare_runs_script_emits_a_deterministic_evidence_signoff() {
     );
 
     let reference = lane_summary(&summary, "reference-replay");
+    assert_eq!(
+        reference["search_profile"].as_str(),
+        Some("strict_canon_guarded")
+    );
     assert_eq!(reference["run_mode"].as_str(), Some("reference_replay"));
     assert_eq!(
         reference["provenance_summary"]["reference_replay"].as_u64(),
@@ -390,6 +439,18 @@ fn compare_runs_script_emits_a_deterministic_evidence_signoff() {
     assert_eq!(
         reference["latest_frontier"]["present"].as_bool(),
         Some(false)
+    );
+    assert_eq!(
+        reference["accepted_hashes_vs_baseline"]["matches"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        reference["search_space_counts_vs_baseline"]["matches"].as_bool(),
+        Some(false)
+    );
+    assert_eq!(
+        reference["late_step_competition_vs_baseline"]["matches"].as_bool(),
+        Some(true)
     );
 
     fs::remove_dir_all(root).ok();

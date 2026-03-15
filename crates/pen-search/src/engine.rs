@@ -1,19 +1,30 @@
 use crate::accept::{AcceptanceOutcome, select_acceptance};
+use crate::config::SearchProfile;
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
-use crate::enumerate::{EnumerationContext, enumerate_telescopes};
+use crate::enumerate::{EnumerationContext, enumerate_telescopes_with_terminal_prefixes};
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
+use crate::frontier::FrontierWindow;
+use crate::priority::{PriorityInputs, build_priority_key};
+use crate::scheduler::build_schedule;
+use crate::state::{FrontierStateRecV1, PrefixState};
+use crate::worker::run_worker_batch;
 use anyhow::{Result, bail};
+use pen_core::encode::telescope_bit_cost;
+use pen_core::hash::blake3_hex;
+use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::rational::Rational;
 use pen_core::telescope::Telescope;
 use pen_eval::bar::{DiscoveryRecord, compute_bar};
 use pen_eval::minimality::analyze_semantic_minimality;
+use pen_eval::nu::structural_nu;
 use pen_store::manifest::NearMiss;
 use pen_type::admissibility::{
-    StrictAdmissibility, passes_strict_admissibility, strict_admissibility,
+    AdmissibilityDiagnostics, AdmissibilityMode, StrictAdmissibility, assess_strict_admissibility,
+    strict_admissibility_for_mode,
 };
 use pen_type::check::{CheckResult, check_telescope};
-use pen_type::obligations::{RetentionPolicy, summarize_structural_debt};
+use pen_type::obligations::{RetentionClass, RetentionPolicy, summarize_structural_debt};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -106,8 +117,17 @@ pub struct AtomicSearchStep {
     pub step_index: u32,
     pub objective_bar: Rational,
     pub admissibility: StrictAdmissibility,
+    pub admissibility_diagnostics: AdmissibilityDiagnostics,
+    pub prefix_states_explored: usize,
+    pub prefix_states_exact_pruned: usize,
+    pub prefix_states_heuristic_dropped: usize,
+    pub prefix_frontier_hot_states: usize,
+    pub prefix_frontier_cold_states: usize,
     pub retention_policy: RetentionPolicy,
+    pub frontier_pressure: FrontierPressure,
     pub frontier_retention: FrontierRetentionOutcome,
+    pub frontier_window: FrontierWindow,
+    pub frontier_dedupe_keys: BTreeSet<String>,
     pub telescope: Telescope,
     pub accepted: ExpandedCandidate,
     pub retained_candidates: Vec<ExpandedCandidate>,
@@ -126,6 +146,41 @@ pub struct AtomicSearchStep {
     pub heuristic_drops: usize,
     pub dedupe_pruned_candidates: Vec<DedupePruneEvidence>,
     pub minimality_pruned_candidates: Vec<MinimalityPruneEvidence>,
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+struct PrefixFrontierPlan {
+    frontier: FrontierWindow,
+    dedupe_keys: BTreeSet<String>,
+    retained_prefix_keys: Vec<String>,
+    explored: usize,
+    exact_pruned: usize,
+    heuristic_dropped: usize,
+    pressure: FrontierPressure,
+}
+
+#[derive(Clone, Debug)]
+struct PrefixCandidateGroup {
+    key: String,
+    dedupe_key: String,
+    prefix_telescope: Telescope,
+    retention_class: RetentionClass,
+    shape_hash64: u64,
+    support_hash64: u64,
+    depth: u16,
+    clause_kappa_used: u16,
+    nu_lower_bound: u16,
+    nu_upper_bound: u16,
+    bit_kappa_used: u16,
+    telescopes: Vec<Telescope>,
+}
+
+#[derive(Clone, Debug)]
+struct PrefixFrontierItem {
+    key: String,
+    dedupe_key: String,
+    retention_class: RetentionClass,
+    record: FrontierStateRecV1,
 }
 
 pub fn supports_live_atomic_search(until_step: u32) -> bool {
@@ -148,7 +203,27 @@ pub fn search_bootstrap_prefix_with_runtime(
     window_depth: u16,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<Vec<AtomicSearchStep>> {
-    search_bootstrap_from_prefix_with_runtime(&[], until_step, window_depth, retention_runtime)
+    search_bootstrap_prefix_for_profile_with_runtime(
+        until_step,
+        window_depth,
+        SearchProfile::StrictCanonGuarded,
+        retention_runtime,
+    )
+}
+
+pub fn search_bootstrap_prefix_for_profile_with_runtime(
+    until_step: u32,
+    window_depth: u16,
+    search_profile: SearchProfile,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<Vec<AtomicSearchStep>> {
+    search_bootstrap_from_prefix_for_profile_with_runtime(
+        &[],
+        until_step,
+        window_depth,
+        search_profile,
+        retention_runtime,
+    )
 }
 
 pub fn search_bootstrap_from_prefix(
@@ -170,9 +245,26 @@ pub fn search_bootstrap_from_prefix_with_runtime(
     window_depth: u16,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<Vec<AtomicSearchStep>> {
+    search_bootstrap_from_prefix_for_profile_with_runtime(
+        accepted_prefix,
+        until_step,
+        window_depth,
+        SearchProfile::StrictCanonGuarded,
+        retention_runtime,
+    )
+}
+
+pub fn search_bootstrap_from_prefix_for_profile_with_runtime(
+    accepted_prefix: &[Telescope],
+    until_step: u32,
+    window_depth: u16,
+    search_profile: SearchProfile,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<Vec<AtomicSearchStep>> {
     let mut library: Library = Vec::new();
     let mut history: Vec<DiscoveryRecord> = Vec::new();
     let mut steps = Vec::new();
+    let admissibility_mode = admissibility_mode_for_profile(search_profile);
 
     for (offset, telescope) in accepted_prefix.iter().enumerate() {
         let step_index = u32::try_from(offset + 1).expect("accepted prefix length exceeded u32");
@@ -192,6 +284,7 @@ pub fn search_bootstrap_from_prefix_with_runtime(
             window_depth,
             &library,
             &history,
+            admissibility_mode,
             retention_runtime,
         )?;
         history.push(DiscoveryRecord::new(
@@ -211,72 +304,102 @@ fn search_next_step(
     window_depth: u16,
     library: &Library,
     history: &[DiscoveryRecord],
+    admissibility_mode: AdmissibilityMode,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<AtomicSearchStep> {
     let structural_debt = summarize_structural_debt(library, window_depth);
-    let admissibility = strict_admissibility(step_index, window_depth, library);
+    let admissibility =
+        strict_admissibility_for_mode(step_index, window_depth, library, admissibility_mode);
     let retention_policy = structural_debt.retention_policy();
     let objective_bar = compute_bar(window_depth as usize, step_index, history).bar;
+    let mut telescopes = Vec::new();
     let mut candidates = Vec::new();
+    let mut prefix_groups = BTreeMap::new();
     let mut enumerated_candidates = 0usize;
     let mut well_formed_candidates = 0usize;
     let mut malformed_rejections = 0usize;
     let mut malformed_rejection_reasons = BTreeMap::new();
     let mut admissibility_rejections = 0usize;
+    let mut admissibility_diagnostics = AdmissibilityDiagnostics::default();
     let nu_history = history
         .iter()
         .map(|record| (record.step_index, record.nu))
         .collect::<Vec<_>>();
 
     for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
-        let telescopes = enumerate_telescopes(
+        let enumeration = enumerate_telescopes_with_terminal_prefixes(
             library,
-            EnumerationContext {
-                library_size: library.len() as u32,
-                scope_size: admissibility.ambient_depth,
-                max_path_dimension: admissibility.max_path_dimension,
-                include_trunc: admissibility.include_trunc,
-                include_modal: admissibility.include_modal,
-                include_temporal: admissibility.include_temporal,
-                max_expr_nodes: admissibility.max_expr_nodes,
-                require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
-                require_initial_hit_clauses: admissibility.require_initial_hit_package,
-                require_truncation_hit_clauses: admissibility.require_truncation_hit_package,
-                require_higher_hit_clauses: admissibility.require_higher_hit_package,
-                require_sphere_lift_clauses: admissibility.require_sphere_lift_package,
-                require_axiomatic_bundle_clauses: admissibility.require_axiomatic_bundle_package,
-                require_modal_shell_clauses: admissibility.require_modal_shell_package,
-                require_connection_shell_clauses: admissibility.require_connection_shell_package,
-                require_curvature_shell_clauses: admissibility.require_curvature_shell_package,
-                require_operator_bundle_clauses: admissibility.require_operator_bundle_package,
-                require_hilbert_functional_clauses: admissibility
-                    .require_hilbert_functional_package,
-                require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
-                historical_anchor_ref: admissibility.historical_anchor_ref,
-            },
+            EnumerationContext::from_admissibility(library, admissibility),
             clause_kappa,
         );
-        enumerated_candidates += telescopes.len();
+        enumerated_candidates += enumeration.telescopes.len();
+        telescopes.extend(enumeration.telescopes);
+    }
 
-        for telescope in telescopes {
-            match check_telescope(library, &telescope) {
-                CheckResult::Ok => {
-                    well_formed_candidates += 1;
-                }
-                CheckResult::Err(error) => {
-                    malformed_rejections += 1;
-                    *malformed_rejection_reasons
-                        .entry(error.kind_label().to_owned())
-                        .or_insert(0) += 1;
-                    continue;
-                }
+    for telescope in telescopes {
+        match check_telescope(library, &telescope) {
+            CheckResult::Ok => {
+                well_formed_candidates += 1;
             }
-            if !passes_strict_admissibility(step_index, library, &telescope, admissibility) {
-                admissibility_rejections += 1;
+            CheckResult::Err(error) => {
+                malformed_rejections += 1;
+                *malformed_rejection_reasons
+                    .entry(error.kind_label().to_owned())
+                    .or_insert(0) += 1;
                 continue;
             }
+        }
+        let admissibility_decision =
+            assess_strict_admissibility(step_index, library, &telescope, admissibility);
+        admissibility_diagnostics.record(&admissibility_decision);
+        if !admissibility_decision.is_admitted() {
+            admissibility_rejections += 1;
+            continue;
+        }
+        if admissibility_mode == AdmissibilityMode::RealisticShadow {
+            if terminal_prefix_telescope(&telescope).is_some() {
+                record_prefix_candidate_group(
+                    library,
+                    history,
+                    &nu_history,
+                    telescope,
+                    retention_policy,
+                    &mut prefix_groups,
+                )?;
+            } else {
+                let candidate = evaluate_checked_candidate(library, history, telescope)?;
+                candidates.push(candidate);
+            }
+        } else {
             let candidate = evaluate_checked_candidate(library, history, telescope)?;
             candidates.push(candidate);
+        }
+    }
+
+    let prefix_frontier = if admissibility_mode == AdmissibilityMode::RealisticShadow {
+        build_prefix_frontier_plan(
+            step_index,
+            objective_bar,
+            retention_policy,
+            retention_runtime,
+            &prefix_groups,
+        )
+    } else {
+        PrefixFrontierPlan::default()
+    };
+
+    if admissibility_mode == AdmissibilityMode::RealisticShadow {
+        for key in &prefix_frontier.retained_prefix_keys {
+            let Some(group) = prefix_groups.get(key) else {
+                continue;
+            };
+            let mut group_telescopes = group.telescopes.clone();
+            group_telescopes
+                .sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
+            for telescope in group_telescopes {
+                let candidate = evaluate_checked_candidate(library, history, telescope)?;
+                candidates.push(candidate);
+            }
         }
     }
 
@@ -351,8 +474,21 @@ fn search_next_step(
         step_index,
         objective_bar,
         admissibility,
+        admissibility_diagnostics,
+        prefix_frontier.explored,
+        prefix_frontier.exact_pruned,
+        prefix_frontier.heuristic_dropped,
+        prefix_frontier.frontier.hot.len(),
+        prefix_frontier.frontier.cold.len(),
         retention_policy,
+        if admissibility_mode == AdmissibilityMode::RealisticShadow {
+            prefix_frontier.pressure
+        } else {
+            frontier_retention.pressure
+        },
         frontier_retention,
+        prefix_frontier.frontier,
+        prefix_frontier.dedupe_keys,
         acceptance,
         enumerated_candidates,
         well_formed_candidates,
@@ -376,8 +512,17 @@ fn build_step_result(
     step_index: u32,
     objective_bar: Rational,
     admissibility: StrictAdmissibility,
+    admissibility_diagnostics: AdmissibilityDiagnostics,
+    prefix_states_explored: usize,
+    prefix_states_exact_pruned: usize,
+    prefix_states_heuristic_dropped: usize,
+    prefix_frontier_hot_states: usize,
+    prefix_frontier_cold_states: usize,
     retention_policy: RetentionPolicy,
+    frontier_pressure: FrontierPressure,
     frontier_retention: FrontierRetentionOutcome,
+    frontier_window: FrontierWindow,
+    frontier_dedupe_keys: BTreeSet<String>,
     acceptance: AcceptanceOutcome,
     enumerated_candidates: usize,
     well_formed_candidates: usize,
@@ -405,8 +550,17 @@ fn build_step_result(
         step_index,
         objective_bar,
         admissibility,
+        admissibility_diagnostics,
+        prefix_states_explored,
+        prefix_states_exact_pruned,
+        prefix_states_heuristic_dropped,
+        prefix_frontier_hot_states,
+        prefix_frontier_cold_states,
         retention_policy,
+        frontier_pressure,
         frontier_retention,
+        frontier_window,
+        frontier_dedupe_keys,
         telescope: accepted.telescope.clone(),
         accepted,
         retained_candidates: retained.to_vec(),
@@ -426,6 +580,14 @@ fn build_step_result(
         dedupe_pruned_candidates,
         minimality_pruned_candidates,
     })
+}
+
+fn admissibility_mode_for_profile(search_profile: SearchProfile) -> AdmissibilityMode {
+    match search_profile {
+        SearchProfile::StrictCanonGuarded | SearchProfile::Unknown => AdmissibilityMode::Guarded,
+        SearchProfile::RelaxedShadow => AdmissibilityMode::RelaxedShadow,
+        SearchProfile::RealisticFrontierShadow => AdmissibilityMode::RealisticShadow,
+    }
 }
 
 fn build_frontier_retention(
@@ -480,6 +642,267 @@ fn build_frontier_retention(
             .map(|candidate| candidate.candidate_hash.clone())
             .collect(),
     }
+}
+
+fn record_prefix_candidate_group(
+    library: &Library,
+    history: &[DiscoveryRecord],
+    nu_history: &[(u32, u32)],
+    telescope: Telescope,
+    retention_policy: RetentionPolicy,
+    groups: &mut BTreeMap<String, PrefixCandidateGroup>,
+) -> Result<()> {
+    let Some(prefix_telescope) = terminal_prefix_telescope(&telescope) else {
+        return Ok(());
+    };
+    let key = prefix_telescope_key(&prefix_telescope);
+    let exact_nu = u16::try_from(structural_nu(&telescope, library, nu_history).total)
+        .expect("nu exceeded u16");
+    let bit_kappa = u16::try_from(telescope_bit_cost(&telescope)).expect("bit cost exceeded u16");
+    let clause_kappa = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+
+    let group = if let Some(existing) = groups.get_mut(&key) {
+        existing
+    } else {
+        let prefix_candidate =
+            evaluate_checked_candidate(library, history, prefix_telescope.clone())?;
+        groups.entry(key.clone()).or_insert(PrefixCandidateGroup {
+            dedupe_key: prefix_dedupe_key(&key),
+            key: key.clone(),
+            depth: u16::try_from(prefix_telescope.clauses.len()).expect("depth exceeded u16"),
+            prefix_telescope,
+            retention_class: retention_policy.classify(prefix_candidate.retention_signals()),
+            shape_hash64: truncated_hash64(prefix_candidate.candidate_hash.as_bytes()),
+            support_hash64: truncated_hash64(prefix_candidate.canonical_hash.as_bytes()),
+            clause_kappa_used: clause_kappa,
+            nu_lower_bound: exact_nu,
+            nu_upper_bound: exact_nu,
+            bit_kappa_used: bit_kappa,
+            telescopes: Vec::new(),
+        })
+    };
+
+    group.nu_lower_bound = group.nu_lower_bound.min(exact_nu);
+    group.nu_upper_bound = group.nu_upper_bound.max(exact_nu);
+    group.bit_kappa_used = group.bit_kappa_used.min(bit_kappa);
+    group.clause_kappa_used = group.clause_kappa_used.min(clause_kappa);
+    group.telescopes.push(telescope);
+    Ok(())
+}
+
+fn build_prefix_frontier_plan(
+    step_index: u32,
+    objective_bar: Rational,
+    retention_policy: RetentionPolicy,
+    retention_runtime: FrontierRuntimeLimits,
+    groups: &BTreeMap<String, PrefixCandidateGroup>,
+) -> PrefixFrontierPlan {
+    if groups.is_empty() {
+        return PrefixFrontierPlan::default();
+    }
+
+    let explored = groups.len();
+    let mut items = groups
+        .values()
+        .enumerate()
+        .map(|(ordinal, group)| PrefixFrontierItem {
+            key: group.key.clone(),
+            dedupe_key: group.dedupe_key.clone(),
+            retention_class: group.retention_class,
+            record: prefix_frontier_record(
+                step_index,
+                u64::try_from(ordinal).expect("ordinal exceeded u64"),
+                group,
+                false,
+            ),
+        })
+        .collect::<Vec<_>>();
+
+    let mut provisional = FrontierWindow {
+        hot: items.iter().map(|item| item.record).collect(),
+        cold: Vec::new(),
+    };
+    provisional.compact_sorted();
+    let schedule = build_schedule(&provisional, retention_runtime.worker_count);
+    let mut exact_pruned_state_ids = BTreeSet::new();
+    let mut retained_state_ids = BTreeSet::new();
+    for assignment in &schedule.assignments {
+        let result = run_worker_batch(assignment, objective_bar);
+        retained_state_ids.extend(result.processed_state_ids);
+        for record in &assignment.records {
+            if !retained_state_ids.contains(&record.state_id) {
+                exact_pruned_state_ids.insert(record.state_id);
+            }
+        }
+    }
+
+    items.retain(|item| retained_state_ids.contains(&item.record.state_id));
+    if items.is_empty() {
+        return PrefixFrontierPlan {
+            frontier: FrontierWindow::default(),
+            dedupe_keys: BTreeSet::new(),
+            retained_prefix_keys: Vec::new(),
+            explored,
+            exact_pruned: exact_pruned_state_ids.len(),
+            heuristic_dropped: 0,
+            pressure: FrontierPressure::default(),
+        };
+    }
+
+    let mut ordered = FrontierWindow {
+        hot: items.iter().map(|item| item.record).collect(),
+        cold: Vec::new(),
+    };
+    ordered.compact_sorted();
+    let items_by_state = items
+        .into_iter()
+        .map(|item| (item.record.state_id, item))
+        .collect::<BTreeMap<_, _>>();
+    let mut class_counts = BTreeMap::new();
+    let mut hot_items = Vec::new();
+    let mut cold_candidates = Vec::new();
+    for record in ordered.hot {
+        let item = items_by_state
+            .get(&record.state_id)
+            .expect("state lookup")
+            .clone();
+        let count = class_counts.entry(item.retention_class).or_insert(0usize);
+        if *count < retention_policy.quota_for(item.retention_class) {
+            *count += 1;
+            hot_items.push(item);
+        } else {
+            cold_candidates.push(item);
+        }
+    }
+    if hot_items.is_empty() && !cold_candidates.is_empty() {
+        hot_items.push(cold_candidates.remove(0));
+    }
+
+    let cold_plan = plan_pressure_cold_retention(
+        cold_candidates,
+        hot_items.len(),
+        retention_policy,
+        retention_runtime,
+        |item: &PrefixFrontierItem| item.retention_class,
+    );
+    let heuristic_dropped = cold_plan.dropped.len();
+    let pressure = cold_plan.pressure;
+    let resident = cold_plan.resident;
+    let spill = cold_plan.spill;
+
+    let mut frontier = FrontierWindow::default();
+    let mut keys_by_state = BTreeMap::new();
+    for item in hot_items {
+        let mut record = item.record;
+        record.flags = prefix_frontier_flags(item.retention_class, true);
+        keys_by_state.insert(record.state_id, (item.key, item.dedupe_key));
+        frontier.push_hot(record);
+    }
+    for item in resident.into_iter().chain(spill.into_iter()) {
+        let mut record = item.record;
+        record.flags = prefix_frontier_flags(item.retention_class, false);
+        keys_by_state.insert(record.state_id, (item.key, item.dedupe_key));
+        frontier.push_cold(record);
+    }
+    frontier.compact_sorted();
+
+    let retained_prefix_keys = frontier
+        .hot
+        .iter()
+        .chain(frontier.cold.iter())
+        .filter_map(|record| {
+            keys_by_state
+                .get(&record.state_id)
+                .map(|(key, _)| key.clone())
+        })
+        .collect::<Vec<_>>();
+    let dedupe_keys = frontier
+        .hot
+        .iter()
+        .chain(frontier.cold.iter())
+        .filter_map(|record| {
+            keys_by_state
+                .get(&record.state_id)
+                .map(|(_, dedupe_key)| dedupe_key.clone())
+        })
+        .collect::<BTreeSet<_>>();
+
+    PrefixFrontierPlan {
+        frontier,
+        dedupe_keys,
+        retained_prefix_keys,
+        explored,
+        exact_pruned: exact_pruned_state_ids.len(),
+        heuristic_dropped,
+        pressure,
+    }
+}
+
+fn terminal_prefix_telescope(telescope: &Telescope) -> Option<Telescope> {
+    (telescope.clauses.len() > 1)
+        .then(|| Telescope::new(telescope.clauses[..telescope.clauses.len() - 1].to_vec()))
+}
+
+fn prefix_telescope_key(telescope: &Telescope) -> String {
+    serde_json::to_string(telescope).expect("prefix telescope should serialize")
+}
+
+fn prefix_dedupe_key(key: &str) -> String {
+    format!("blake3:{}", blake3_hex(key.as_bytes()))
+}
+
+fn prefix_frontier_record(
+    step_index: u32,
+    ordinal: u64,
+    group: &PrefixCandidateGroup,
+    frontier_hot: bool,
+) -> FrontierStateRecV1 {
+    let state_id = StateId::new((u64::from(step_index) << 32) | ordinal);
+    let band_index = u8::try_from(group.clause_kappa_used).expect("band index exceeded u8");
+    let priority_key = build_priority_key(PriorityInputs {
+        band_index,
+        nu_lower_bound: group.nu_lower_bound,
+        bit_kappa_used: group.bit_kappa_used,
+        clause_kappa_used: group.clause_kappa_used,
+        depth: group.depth,
+        state_id,
+    });
+    let prefix = PrefixState {
+        state_id,
+        parent_state_id: StateId::new(0),
+        last_clause_id: ClauseId::new(
+            u32::try_from(group.prefix_telescope.clauses.len()).expect("clause count exceeded u32"),
+        ),
+        obligation_set_id: ObligationSetId::new(step_index),
+        shape_hash64: group.shape_hash64,
+        support_hash64: group.support_hash64,
+        nu_lower_bound: group.nu_lower_bound,
+        nu_upper_bound: group.nu_upper_bound,
+        bit_kappa_used: group.bit_kappa_used,
+        clause_kappa_used: group.clause_kappa_used,
+        depth: group.depth,
+        step_index: u8::try_from(step_index).expect("step index exceeded u8"),
+        band_index,
+        flags: prefix_frontier_flags(group.retention_class, frontier_hot),
+    };
+
+    FrontierStateRecV1::from_prefix(prefix, priority_key, 0)
+}
+
+fn prefix_frontier_flags(retention_class: RetentionClass, frontier_hot: bool) -> u16 {
+    let retention_bits = if frontier_hot { 0b1 << 8 } else { 0b1 << 9 };
+    let class_bits = match retention_class {
+        RetentionClass::GenericMacro => 0,
+        RetentionClass::StructuralSupport => 0b01 << 10,
+        RetentionClass::RareBridgeHead => 0b10 << 10,
+        RetentionClass::RareFocusHead => 0b11 << 10,
+    };
+    retention_bits | class_bits
+}
+
+fn truncated_hash64(bytes: &[u8]) -> u64 {
+    let hash = blake3_hex(bytes);
+    u64::from_str_radix(&hash[..16], 16).expect("blake3 prefix should parse")
 }
 
 fn candidate_score_distribution(
@@ -543,9 +966,11 @@ fn candidate_score_distribution(
 #[cfg(test)]
 mod tests {
     use super::{
-        LIVE_BOOTSTRAP_MAX_STEP, search_bootstrap_from_prefix, search_bootstrap_prefix,
+        AtomicSearchStep, LIVE_BOOTSTRAP_MAX_STEP, search_bootstrap_from_prefix,
+        search_bootstrap_from_prefix_for_profile_with_runtime, search_bootstrap_prefix,
         supports_live_atomic_search,
     };
+    use crate::config::SearchProfile;
     use crate::expand::evaluate_candidate;
     use pen_core::{
         library::{Library, LibraryEntry},
@@ -557,9 +982,37 @@ mod tests {
         minimality::analyze_semantic_minimality,
     };
     use pen_type::{
-        admissibility::{StrictAdmissibility, passes_strict_admissibility, strict_admissibility},
+        admissibility::{
+            AdmissibilityMode, PackagePolicies, PackagePolicy, StrictAdmissibility,
+            StructuralFamily, assess_strict_admissibility, passes_strict_admissibility,
+            strict_admissibility, strict_admissibility_for_mode,
+        },
         connectivity::{ConnectivityWitness, analyze_connectivity, passes_connectivity},
     };
+
+    fn reference_prefix(until_step: u32) -> Vec<Telescope> {
+        (1..=until_step).map(Telescope::reference).collect()
+    }
+
+    fn relaxed_shadow_step_from_reference_prefix(step_index: u32) -> AtomicSearchStep {
+        assert!(step_index >= 1);
+        let prefix = if step_index == 1 {
+            Vec::new()
+        } else {
+            reference_prefix(step_index - 1)
+        };
+        search_bootstrap_from_prefix_for_profile_with_runtime(
+            &prefix,
+            step_index,
+            2,
+            SearchProfile::RelaxedShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("relaxed shadow step should succeed")
+        .into_iter()
+        .last()
+        .expect("relaxed shadow step")
+    }
 
     #[test]
     fn live_search_support_is_honest_about_current_bootstrap_range() {
@@ -644,6 +1097,7 @@ mod tests {
         assert_eq!(
             admissibility,
             StrictAdmissibility {
+                mode: AdmissibilityMode::Guarded,
                 min_clause_kappa: 8,
                 max_clause_kappa: 8,
                 ambient_depth: 2,
@@ -665,6 +1119,11 @@ mod tests {
                 require_operator_bundle_package: false,
                 require_hilbert_functional_package: false,
                 require_temporal_shell_package: true,
+                package_policies: PackagePolicies {
+                    temporal_shell: PackagePolicy::Require,
+                    ..PackagePolicies::default()
+                },
+                focus_family: Some(StructuralFamily::TemporalShell),
                 historical_anchor_ref: Some(10),
             }
         );
@@ -687,5 +1146,148 @@ mod tests {
         assert!(passes_connectivity(&library, &dct));
         assert!(minimality.is_minimal());
         assert!(minimality.admissible_bar_clear_subbundles.is_empty());
+    }
+
+    #[test]
+    fn relaxed_shadow_switches_modal_step_ten_to_preference_based_admissibility() {
+        let prefix = reference_prefix(9);
+        let relaxed = search_bootstrap_from_prefix_for_profile_with_runtime(
+            &prefix,
+            10,
+            2,
+            SearchProfile::RelaxedShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("relaxed bootstrap step should succeed");
+
+        let relaxed_step = relaxed.last().expect("relaxed step");
+
+        assert_eq!(relaxed_step.telescope, Telescope::reference(10));
+        assert_eq!(
+            relaxed_step.admissibility.mode,
+            AdmissibilityMode::RelaxedShadow
+        );
+        assert_eq!(
+            relaxed_step.admissibility.focus_family,
+            Some(StructuralFamily::ModalShell)
+        );
+        assert_eq!(
+            relaxed_step.admissibility.package_policies.modal_shell,
+            PackagePolicy::Prefer
+        );
+        assert!(!relaxed_step.admissibility.require_modal_shell_package);
+        assert!(relaxed_step.admissibility.historical_anchor_ref.is_some());
+        assert!(
+            relaxed_step
+                .admissibility_diagnostics
+                .admitted_focus_aligned
+                > 0
+        );
+        assert!(
+            relaxed_step
+                .admissibility_diagnostics
+                .admitted_deprioritized
+                > 0
+        );
+    }
+
+    #[test]
+    fn relaxed_shadow_keeps_the_reference_telescope_admissible_through_step_fifteen() {
+        let mut library: Library = Vec::new();
+
+        for step_index in 1..=15 {
+            let telescope = Telescope::reference(step_index);
+            let admissibility = strict_admissibility_for_mode(
+                step_index,
+                2,
+                &library,
+                AdmissibilityMode::RelaxedShadow,
+            );
+            let decision =
+                assess_strict_admissibility(step_index, &library, &telescope, admissibility);
+
+            assert!(
+                decision.is_admitted(),
+                "reference step {step_index} should remain admissible in relaxed shadow, got {} ({})",
+                decision.class.as_str(),
+                decision.reason
+            );
+
+            library.push(LibraryEntry::from_telescope(&telescope, &library));
+        }
+    }
+
+    #[test]
+    fn relaxed_shadow_step_ten_exposes_late_competition() {
+        let step = relaxed_shadow_step_from_reference_prefix(10);
+
+        assert_eq!(step.telescope, Telescope::reference(10));
+        assert!(
+            step.evaluated_candidates > 1,
+            "expected relaxed shadow step 10 to evaluate competing candidates, got {}",
+            step.evaluated_candidates
+        );
+        assert!(
+            step.admissibility_diagnostics.admitted_deprioritized > 0,
+            "expected relaxed shadow step 10 to admit de-prioritized competition"
+        );
+    }
+
+    #[test]
+    fn relaxed_shadow_step_eleven_exposes_late_competition() {
+        let step = relaxed_shadow_step_from_reference_prefix(11);
+
+        assert_eq!(step.telescope, Telescope::reference(11));
+        assert!(
+            step.evaluated_candidates > 1,
+            "expected relaxed shadow step 11 to evaluate competing candidates, got {}",
+            step.evaluated_candidates
+        );
+        assert!(
+            step.admissibility_diagnostics.admitted_deprioritized > 0,
+            "expected relaxed shadow step 11 to admit de-prioritized competition"
+        );
+    }
+
+    #[test]
+    fn relaxed_shadow_step_twelve_exposes_late_competition() {
+        let step = relaxed_shadow_step_from_reference_prefix(12);
+
+        assert_eq!(step.telescope, Telescope::reference(12));
+        assert!(
+            step.evaluated_candidates > 1,
+            "expected relaxed shadow step 12 to evaluate competing candidates, got {}",
+            step.evaluated_candidates
+        );
+        assert!(
+            step.admissibility_diagnostics.admitted_deprioritized > 0,
+            "expected relaxed shadow step 12 to admit de-prioritized competition"
+        );
+    }
+
+    #[test]
+    fn realistic_shadow_step_fifteen_builds_a_nonempty_terminal_prefix_frontier() {
+        let prefix = reference_prefix(14);
+        let realistic = search_bootstrap_from_prefix_for_profile_with_runtime(
+            &prefix,
+            15,
+            2,
+            SearchProfile::RealisticFrontierShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("realistic bootstrap step should succeed");
+        let step = realistic.last().expect("realistic step");
+
+        assert_eq!(step.step_index, 15);
+        assert_eq!(step.telescope, Telescope::reference(15));
+        assert_eq!(step.prefix_states_explored, 2);
+        assert_eq!(step.prefix_frontier_hot_states, 2);
+        assert_eq!(step.prefix_frontier_cold_states, 0);
+        assert_eq!(
+            step.prefix_frontier_hot_states + step.prefix_frontier_cold_states,
+            step.prefix_states_explored
+        );
+        assert_eq!(step.frontier_window.total_len(), 2);
+        assert_eq!(step.frontier_dedupe_keys.len(), 2);
     }
 }

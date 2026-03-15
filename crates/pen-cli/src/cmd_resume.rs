@@ -5,9 +5,9 @@ use crate::cmd_run::{
 };
 use crate::output::{OutputStyle, render_run_output};
 use crate::report::{
-    GeneratedSteps, StepGenerationMode, StepProvenance, StepReport,
-    extend_steps_from_reports_with_runtime, load_step_reports,
-    reevaluate_steps_from_reports_with_runtime,
+    GeneratedSteps, StepGenerationMode, StepProvenance, StepReport, annotate_search_profile,
+    extend_steps_from_reports_for_profile_with_runtime, load_step_reports,
+    reevaluate_steps_from_reports_for_profile_with_runtime,
 };
 use anyhow::{Context, Result, bail};
 use pen_search::config::RuntimeConfig;
@@ -40,6 +40,7 @@ pub fn resume(args: ResumeArgs) -> Result<String> {
 
     if manifest.position.completed_step >= target {
         let mut steps = load_step_reports(&run_dir)?;
+        annotate_search_profile(&mut steps, config.mode.search_profile);
         steps.truncate(target as usize);
         return Ok(render_run_output(
             OutputStyle::from_debug(args.debug),
@@ -48,9 +49,13 @@ pub fn resume(args: ResumeArgs) -> Result<String> {
         ));
     }
 
-    let existing_steps = load_step_reports(&run_dir)?;
-    let prepared = prepare_resume(&run_dir, &manifest, &config, target, &existing_steps)?;
-    let steps = prepared.generated.steps;
+    let mut existing_steps = load_step_reports(&run_dir)?;
+    annotate_search_profile(&mut existing_steps, config.mode.search_profile);
+    let PreparedResume {
+        generated: GeneratedSteps { mode, mut steps },
+        worker_count,
+    } = prepare_resume(&run_dir, &manifest, &config, target, &existing_steps)?;
+    annotate_search_profile(&mut steps, config.mode.search_profile);
     let updated = now_utc()?;
     let new_manifest = build_run_manifest(
         &manifest.run_id,
@@ -65,9 +70,10 @@ pub fn resume(args: ResumeArgs) -> Result<String> {
         &config_text,
         &new_manifest,
         &steps,
-        prepared.worker_count,
+        worker_count,
         &config,
-        prepared.generated.mode.as_str(),
+        mode.as_str(),
+        config.mode.search_profile.as_str(),
     )?;
     Ok(render_run_output(
         OutputStyle::from_debug(args.debug),
@@ -98,10 +104,11 @@ fn prepare_resume(
             ResumeDecision::FrontierCheckpoint => {
                 validate_frontier_checkpoint(run_dir, manifest, existing_steps, &frontier)?;
                 let frontier_worker_count = frontier.manifest.scheduler.worker_count.max(1);
-                let mut generated = extend_steps_from_reports_with_runtime(
+                let mut generated = extend_steps_from_reports_for_profile_with_runtime(
                     existing_steps,
                     target,
                     config.objective.window_depth,
+                    config.mode.search_profile,
                     frontier_runtime_limits(config, frontier_worker_count),
                 )?;
                 for step in generated.steps.iter_mut().skip(existing_steps.len()) {
@@ -127,10 +134,11 @@ fn prepare_resume(
                 ResumeDecision::FrontierCheckpoint
                 | ResumeDecision::StepCheckpoint
                 | ResumeDecision::StepCheckpointReevaluate => Ok(PreparedResume {
-                    generated: reevaluate_steps_from_reports_with_runtime(
+                    generated: reevaluate_steps_from_reports_for_profile_with_runtime(
                         existing_steps,
                         target,
                         config.objective.window_depth,
+                        config.mode.search_profile,
                         frontier_runtime_limits(config, worker_count),
                     )?,
                     worker_count,
@@ -159,10 +167,11 @@ fn prepare_step_resume(
 ) -> Result<PreparedResume> {
     match decision {
         ResumeDecision::FrontierCheckpoint | ResumeDecision::StepCheckpoint => {
-            let mut generated = extend_steps_from_reports_with_runtime(
+            let mut generated = extend_steps_from_reports_for_profile_with_runtime(
                 existing_steps,
                 target,
                 config.objective.window_depth,
+                config.mode.search_profile,
                 frontier_runtime_limits(config, worker_count),
             )?;
             generated.mode = StepGenerationMode::StepCheckpointResume;
@@ -172,10 +181,11 @@ fn prepare_step_resume(
             })
         }
         ResumeDecision::StepCheckpointReevaluate => Ok(PreparedResume {
-            generated: reevaluate_steps_from_reports_with_runtime(
+            generated: reevaluate_steps_from_reports_for_profile_with_runtime(
                 existing_steps,
                 target,
                 config.objective.window_depth,
+                config.mode.search_profile,
                 frontier_runtime_limits(config, worker_count),
             )?,
             worker_count,

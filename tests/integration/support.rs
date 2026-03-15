@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+use fs2::FileExt;
 use serde::Deserialize;
 use serde_json::Value;
 use std::ffi::OsStr;
@@ -21,6 +22,18 @@ pub struct TrajectoryStepFixture {
     pub clause_kappa: u16,
     pub nu: u16,
     pub rho: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
+pub struct SearchSpaceStepFixture {
+    pub step_index: u32,
+    pub enumerated: u64,
+    pub well_formed: u64,
+    pub admissibility_rejected: u64,
+    pub evaluated: u64,
+    pub canonical: u64,
+    pub semantically_minimal: u64,
+    pub retained: u64,
 }
 
 pub fn workspace_root() -> PathBuf {
@@ -50,6 +63,7 @@ where
     I: IntoIterator<Item = S>,
     S: AsRef<OsStr>,
 {
+    let _lock = integration_process_lock();
     Command::new(env!("CARGO_BIN_EXE_pen-cli"))
         .args(args)
         .output()
@@ -155,6 +169,14 @@ pub fn load_trajectory_fixture(name: &str) -> Vec<TrajectoryStepFixture> {
     })
 }
 
+pub fn load_search_space_fixture(name: &str) -> Vec<SearchSpaceStepFixture> {
+    let path = fixtures_root().join("search_space").join(name);
+    let text = read_text(&path);
+    serde_json::from_str(&text).unwrap_or_else(|error| {
+        panic!("failed to parse {}: {error}", path.display());
+    })
+}
+
 pub fn compact_step_summaries(run_dir: &Path) -> Vec<TrajectoryStepFixture> {
     let steps_dir = run_dir.join("reports").join("steps");
     let mut files = fs::read_dir(&steps_dir)
@@ -166,6 +188,20 @@ pub fn compact_step_summaries(run_dir: &Path) -> Vec<TrajectoryStepFixture> {
     files
         .iter()
         .map(|path| compact_step_summary(path))
+        .collect()
+}
+
+pub fn compact_search_space_stats(run_dir: &Path) -> Vec<SearchSpaceStepFixture> {
+    let steps_dir = run_dir.join("reports").join("steps");
+    let mut files = fs::read_dir(&steps_dir)
+        .unwrap_or_else(|error| panic!("failed to read {}: {error}", steps_dir.display()))
+        .map(|entry| entry.expect("step entry should exist").path())
+        .filter(|path| path.extension().and_then(|ext| ext.to_str()) == Some("json"))
+        .collect::<Vec<_>>();
+    files.sort();
+    files
+        .iter()
+        .map(|path| compact_search_space_step(path))
         .collect()
 }
 
@@ -203,6 +239,27 @@ fn compact_step_summary(path: &Path) -> TrajectoryStepFixture {
     }
 }
 
+fn compact_search_space_step(path: &Path) -> SearchSpaceStepFixture {
+    let value = read_json(path);
+    let stats = &value["search_stats"];
+    SearchSpaceStepFixture {
+        step_index: value["step_index"].as_u64().expect("step_index") as u32,
+        enumerated: stats["enumerated_candidates"].as_u64().expect("enumerated"),
+        well_formed: stats["well_formed_candidates"]
+            .as_u64()
+            .expect("well_formed"),
+        admissibility_rejected: stats["admissibility_rejections"]
+            .as_u64()
+            .expect("admissibility_rejected"),
+        evaluated: stats["evaluated_candidates"].as_u64().expect("evaluated"),
+        canonical: stats["canonical_candidates"].as_u64().expect("canonical"),
+        semantically_minimal: stats["semantically_minimal_candidates"]
+            .as_u64()
+            .expect("semantically_minimal"),
+        retained: stats["retained_candidates"].as_u64().expect("retained"),
+    }
+}
+
 fn rational_to_string(value: &Value) -> String {
     let num = value["num"].as_i64().expect("rational numerator");
     let den = value["den"].as_i64().expect("rational denominator");
@@ -230,4 +287,22 @@ fn python_invocations() -> Vec<(&'static str, Vec<&'static str>)> {
     } else {
         vec![("python3", vec![]), ("python", vec![])]
     }
+}
+
+fn integration_process_lock() -> fs::File {
+    let lock_path = std::env::temp_dir().join("pen-cli-integration.lock");
+    let file = fs::OpenOptions::new()
+        .create(true)
+        .read(true)
+        .write(true)
+        .truncate(false)
+        .open(&lock_path)
+        .unwrap_or_else(|error| {
+            panic!("failed to open {}: {error}", lock_path.display());
+        });
+    // Serialize full pen-cli subprocesses across integration-test threads and binaries.
+    file.lock_exclusive().unwrap_or_else(|error| {
+        panic!("failed to lock {}: {error}", lock_path.display());
+    });
+    file
 }

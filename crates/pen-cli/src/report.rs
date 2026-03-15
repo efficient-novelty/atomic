@@ -1,17 +1,21 @@
 use crate::human::{clause_lines, describe_candidate, library_refs, step_label, translation_guide};
 use anyhow::Result;
+use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::rational::Rational;
 use pen_core::telescope::{Telescope, TelescopeClass};
 use pen_eval::bar::{DiscoveryRecord, compute_bar};
+use pen_search::config::SearchProfile;
 use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
 use pen_search::engine::{
-    AtomicSearchStep, CandidateScoreDistribution, DedupePruneEvidence,
-    FrontierRetentionOutcome, MinimalityPruneEvidence, search_bootstrap_from_prefix_with_runtime,
-    search_bootstrap_prefix_with_runtime, supports_live_atomic_search,
+    AtomicSearchStep, CandidateScoreDistribution, DedupePruneEvidence, FrontierRetentionOutcome,
+    MinimalityPruneEvidence, search_bootstrap_from_prefix_for_profile_with_runtime,
+    search_bootstrap_prefix_for_profile_with_runtime, supports_live_atomic_search,
 };
 use pen_search::expand::evaluate_candidate;
+use pen_search::state::FrontierStateRecV1;
 use pen_store::manifest::{AcceptedCandidate, NearMiss};
+use pen_type::admissibility::AdmissibilityDiagnostics;
 use pen_type::obligations::{RetentionClass, RetentionPolicy};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
@@ -22,6 +26,8 @@ use std::path::Path;
 pub struct StepReport {
     pub step_index: u32,
     pub label: String,
+    #[serde(default)]
+    pub search_profile: SearchProfile,
     pub objective_bar: Rational,
     pub accepted: AcceptedCandidate,
     pub telescope: Telescope,
@@ -39,6 +45,8 @@ pub struct StepReport {
     #[serde(default)]
     pub frontier_pressure: FrontierPressure,
     #[serde(default)]
+    pub prefix_frontier: PrefixFrontierArtifact,
+    #[serde(default)]
     pub provenance: StepProvenance,
     #[serde(default)]
     pub canon_evidence: CanonEvidence,
@@ -54,12 +62,24 @@ pub struct StepSearchStats {
     #[serde(default)]
     pub malformed_rejection_reasons: BTreeMap<String, usize>,
     pub admissibility_rejections: usize,
+    #[serde(default)]
+    pub admissibility_diagnostics: AdmissibilityDiagnostics,
     pub evaluated_candidates: usize,
     pub canonical_candidates: usize,
     pub semantically_minimal_candidates: usize,
     pub dedupe_prunes: usize,
     pub minimality_prunes: usize,
     pub heuristic_drops: usize,
+    #[serde(default)]
+    pub prefix_states_explored: usize,
+    #[serde(default)]
+    pub prefix_states_exact_pruned: usize,
+    #[serde(default)]
+    pub prefix_states_heuristic_dropped: usize,
+    #[serde(default)]
+    pub prefix_frontier_hot_states: usize,
+    #[serde(default)]
+    pub prefix_frontier_cold_states: usize,
     pub retained_candidates: usize,
     pub frontier_hot_states: usize,
     pub frontier_cold_states: usize,
@@ -68,6 +88,89 @@ pub struct StepSearchStats {
     pub frontier_drops: usize,
     #[serde(default)]
     pub scored_candidate_distribution: CandidateScoreDistribution,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PrefixFrontierArtifact {
+    #[serde(default)]
+    pub hot_states: Vec<FrontierStateSnapshot>,
+    #[serde(default)]
+    pub cold_states: Vec<FrontierStateSnapshot>,
+    #[serde(default)]
+    pub dedupe_keys: Vec<String>,
+}
+
+impl PrefixFrontierArtifact {
+    pub fn is_empty(&self) -> bool {
+        self.hot_states.is_empty() && self.cold_states.is_empty() && self.dedupe_keys.is_empty()
+    }
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct FrontierStateSnapshot {
+    pub state_id: u64,
+    pub parent_state_id: u64,
+    pub last_clause_id: u32,
+    pub obligation_set_id: u32,
+    pub shape_hash64: u64,
+    pub support_hash64: u64,
+    pub nu_lower_bound: u16,
+    pub nu_upper_bound: u16,
+    pub bit_kappa_used: u16,
+    pub clause_kappa_used: u16,
+    pub depth: u16,
+    pub step_index: u8,
+    pub band_index: u8,
+    pub flags: u16,
+    pub priority_key: u32,
+    pub worker_hint: u16,
+}
+
+impl From<FrontierStateRecV1> for FrontierStateSnapshot {
+    fn from(record: FrontierStateRecV1) -> Self {
+        Self {
+            state_id: record.state_id.get(),
+            parent_state_id: record.parent_state_id.get(),
+            last_clause_id: record.last_clause_id.get(),
+            obligation_set_id: record.obligation_set_id.get(),
+            shape_hash64: record.shape_hash64,
+            support_hash64: record.support_hash64,
+            nu_lower_bound: record.nu_lower_bound,
+            nu_upper_bound: record.nu_upper_bound,
+            bit_kappa_used: record.bit_kappa_used,
+            clause_kappa_used: record.clause_kappa_used,
+            depth: record.depth,
+            step_index: record.step_index,
+            band_index: record.band_index,
+            flags: record.flags,
+            priority_key: record.priority_key,
+            worker_hint: record.worker_hint,
+        }
+    }
+}
+
+impl FrontierStateSnapshot {
+    pub fn to_record(&self) -> FrontierStateRecV1 {
+        FrontierStateRecV1 {
+            state_id: StateId::new(self.state_id),
+            parent_state_id: StateId::new(self.parent_state_id),
+            last_clause_id: ClauseId::new(self.last_clause_id),
+            obligation_set_id: ObligationSetId::new(self.obligation_set_id),
+            shape_hash64: self.shape_hash64,
+            support_hash64: self.support_hash64,
+            nu_lower_bound: self.nu_lower_bound,
+            nu_upper_bound: self.nu_upper_bound,
+            bit_kappa_used: self.bit_kappa_used,
+            clause_kappa_used: self.clause_kappa_used,
+            depth: self.depth,
+            step_index: self.step_index,
+            band_index: self.band_index,
+            flags: self.flags,
+            priority_key: self.priority_key,
+            worker_hint: self.worker_hint,
+            reserved: 0,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -309,12 +412,27 @@ pub fn generate_steps_with_runtime(
     window_depth: u16,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<GeneratedSteps> {
+    generate_steps_for_profile_with_runtime(
+        until_step,
+        window_depth,
+        SearchProfile::StrictCanonGuarded,
+        retention_runtime,
+    )
+}
+
+pub fn generate_steps_for_profile_with_runtime(
+    until_step: u32,
+    window_depth: u16,
+    search_profile: SearchProfile,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<GeneratedSteps> {
     if supports_live_atomic_search(until_step) {
         return Ok(GeneratedSteps {
             mode: StepGenerationMode::AtomicBootstrapSearch,
-            steps: search_atomic_bootstrap_steps_with_runtime(
+            steps: search_atomic_bootstrap_steps_for_profile_with_runtime(
                 until_step,
                 window_depth,
+                search_profile,
                 retention_runtime,
             )?,
         });
@@ -346,6 +464,22 @@ pub fn extend_steps_from_reports_with_runtime(
     window_depth: u16,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<GeneratedSteps> {
+    extend_steps_from_reports_for_profile_with_runtime(
+        existing_steps,
+        until_step,
+        window_depth,
+        SearchProfile::StrictCanonGuarded,
+        retention_runtime,
+    )
+}
+
+pub fn extend_steps_from_reports_for_profile_with_runtime(
+    existing_steps: &[StepReport],
+    until_step: u32,
+    window_depth: u16,
+    search_profile: SearchProfile,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<GeneratedSteps> {
     let completed_step = existing_steps
         .last()
         .map(|step| step.step_index)
@@ -367,10 +501,11 @@ pub fn extend_steps_from_reports_with_runtime(
             .iter()
             .map(|step| step.telescope.clone())
             .collect::<Vec<_>>();
-        let resumed = search_bootstrap_from_prefix_with_runtime(
+        let resumed = search_bootstrap_from_prefix_for_profile_with_runtime(
             &telescopes,
             until_step,
             window_depth,
+            search_profile,
             retention_runtime,
         )?
         .into_iter()
@@ -382,7 +517,12 @@ pub fn extend_steps_from_reports_with_runtime(
         });
     }
 
-    generate_steps_with_runtime(until_step, window_depth, retention_runtime)
+    generate_steps_for_profile_with_runtime(
+        until_step,
+        window_depth,
+        search_profile,
+        retention_runtime,
+    )
 }
 
 #[cfg_attr(not(test), allow(dead_code))]
@@ -405,6 +545,22 @@ pub fn reevaluate_steps_from_reports_with_runtime(
     window_depth: u16,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<GeneratedSteps> {
+    reevaluate_steps_from_reports_for_profile_with_runtime(
+        existing_steps,
+        until_step,
+        window_depth,
+        SearchProfile::StrictCanonGuarded,
+        retention_runtime,
+    )
+}
+
+pub fn reevaluate_steps_from_reports_for_profile_with_runtime(
+    existing_steps: &[StepReport],
+    until_step: u32,
+    window_depth: u16,
+    search_profile: SearchProfile,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<GeneratedSteps> {
     ensure_contiguous_steps(existing_steps)?;
 
     let prefix_len = existing_steps.len().min(until_step as usize);
@@ -423,10 +579,11 @@ pub fn reevaluate_steps_from_reports_with_runtime(
     }
 
     if supports_live_atomic_search(until_step) {
-        let resumed = search_bootstrap_from_prefix_with_runtime(
+        let resumed = search_bootstrap_from_prefix_for_profile_with_runtime(
             &prefix_telescopes,
             until_step,
             window_depth,
+            search_profile,
             retention_runtime,
         )?
         .into_iter()
@@ -438,7 +595,12 @@ pub fn reevaluate_steps_from_reports_with_runtime(
         });
     }
 
-    generate_steps_with_runtime(until_step, window_depth, retention_runtime)
+    generate_steps_for_profile_with_runtime(
+        until_step,
+        window_depth,
+        search_profile,
+        retention_runtime,
+    )
 }
 
 pub fn replay_reference_steps(until_step: u32, window_depth: u16) -> Result<Vec<StepReport>> {
@@ -471,6 +633,7 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
         steps.push(StepReport {
             step_index,
             label: step_label(step_index).to_owned(),
+            search_profile: SearchProfile::Unknown,
             objective_bar,
             accepted,
             telescope: telescope.clone(),
@@ -482,19 +645,28 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 malformed_rejections: 0,
                 malformed_rejection_reasons: BTreeMap::new(),
                 admissibility_rejections: 0,
+                admissibility_diagnostics: AdmissibilityDiagnostics::default(),
                 evaluated_candidates: 1,
                 canonical_candidates: 1,
                 semantically_minimal_candidates: 1,
                 dedupe_prunes: 0,
                 minimality_prunes: 0,
                 heuristic_drops: 0,
+                prefix_states_explored: 0,
+                prefix_states_exact_pruned: 0,
+                prefix_states_heuristic_dropped: 0,
+                prefix_frontier_hot_states: 0,
+                prefix_frontier_cold_states: 0,
                 retained_candidates: 1,
                 frontier_hot_states: 0,
                 frontier_cold_states: 0,
                 frontier_resident_cold_states: 0,
                 frontier_spill_states: 0,
                 frontier_drops: 0,
-                scored_candidate_distribution: single_candidate_distribution(&evaluated, objective_bar),
+                scored_candidate_distribution: single_candidate_distribution(
+                    &evaluated,
+                    objective_bar,
+                ),
             },
             candidate_reports: vec![candidate_report(
                 objective_bar,
@@ -505,6 +677,7 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
             prune_reports: Vec::new(),
             frontier_policy: RetentionPolicy::default(),
             frontier_pressure: FrontierPressure::default(),
+            prefix_frontier: PrefixFrontierArtifact::default(),
             provenance: StepProvenance::ReferenceReplay,
             canon_evidence,
             replay_ablation: ReplayAblation::default(),
@@ -538,10 +711,29 @@ pub fn search_atomic_bootstrap_steps_with_runtime(
     window_depth: u16,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<Vec<StepReport>> {
-    let steps = search_bootstrap_prefix_with_runtime(until_step, window_depth, retention_runtime)?
-        .into_iter()
-        .map(step_to_report)
-        .collect();
+    search_atomic_bootstrap_steps_for_profile_with_runtime(
+        until_step,
+        window_depth,
+        SearchProfile::StrictCanonGuarded,
+        retention_runtime,
+    )
+}
+
+pub fn search_atomic_bootstrap_steps_for_profile_with_runtime(
+    until_step: u32,
+    window_depth: u16,
+    search_profile: SearchProfile,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<Vec<StepReport>> {
+    let steps = search_bootstrap_prefix_for_profile_with_runtime(
+        until_step,
+        window_depth,
+        search_profile,
+        retention_runtime,
+    )?
+    .into_iter()
+    .map(step_to_report)
+    .collect();
     finalize_step_reports(steps, window_depth)
 }
 
@@ -556,6 +748,12 @@ pub fn write_step_reports(run_dir: &Path, steps: &[StepReport]) -> Result<()> {
     }
 
     Ok(())
+}
+
+pub fn annotate_search_profile(steps: &mut [StepReport], search_profile: SearchProfile) {
+    for step in steps {
+        step.search_profile = search_profile;
+    }
 }
 
 pub fn load_step_reports(run_dir: &Path) -> Result<Vec<StepReport>> {
@@ -592,8 +790,9 @@ pub fn render_standard_report(run_id: &str, steps: &[StepReport]) -> String {
         .unwrap_or_default();
 
     format!(
-        "run {run_id}\ncompleted_step: {}\nlatest: step {} ({})\nnu: {}\nkappa: {}\ncharged_kappa: {}\nrho: {}\nbar: {}\nbar_distance: {}\nprovenance: {}\nrun_provenance: {}\nreplay_ablation: {}\nminimal_overshoot: {}{}",
+        "run {run_id}\ncompleted_step: {}\nsearch_profile: {}\nlatest: step {} ({})\nnu: {}\nkappa: {}\ncharged_kappa: {}\nrho: {}\nbar: {}\nbar_distance: {}\nprovenance: {}\nrun_provenance: {}\nreplay_ablation: {}\nminimal_overshoot: {}{}",
         last.step_index,
+        report_search_profile(steps),
         last.step_index,
         last.label,
         last.accepted.nu,
@@ -613,6 +812,7 @@ pub fn render_standard_report(run_id: &str, steps: &[StepReport]) -> String {
 pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
     let mut lines = vec![
         format!("run {run_id} debug"),
+        format!("search_profile: {}", report_search_profile(steps)),
         String::new(),
         "translation guide:".to_owned(),
     ];
@@ -688,34 +888,98 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
             step.search_stats.frontier_hot_states + step.search_stats.frontier_cold_states,
             step.search_stats.frontier_drops
         ));
+        if step.search_stats.prefix_states_explored > 0 {
+            lines.push(format!(
+                "  prefix frontier: explored={} exact_pruned={} heuristic_dropped={} hot={} cold={}",
+                step.search_stats.prefix_states_explored,
+                step.search_stats.prefix_states_exact_pruned,
+                step.search_stats.prefix_states_heuristic_dropped,
+                step.search_stats.prefix_frontier_hot_states,
+                step.search_stats.prefix_frontier_cold_states
+            ));
+        }
+        lines.push(format!(
+            "  admissibility diagnostics: exact_legality={} structural_cap={} de-prioritized={} focus_aligned={}",
+            step.search_stats
+                .admissibility_diagnostics
+                .exact_legality_rejections,
+            step.search_stats
+                .admissibility_diagnostics
+                .structural_debt_cap_rejections,
+            step.search_stats.admissibility_diagnostics.admitted_deprioritized,
+            step.search_stats.admissibility_diagnostics.admitted_focus_aligned
+        ));
+        if !step
+            .search_stats
+            .admissibility_diagnostics
+            .reason_counts
+            .is_empty()
+        {
+            lines.push(format!(
+                "  admissibility reasons: {}",
+                summarize_named_counts(&step.search_stats.admissibility_diagnostics.reason_counts)
+            ));
+        }
         if !step.search_stats.malformed_rejection_reasons.is_empty() {
             lines.push(format!(
                 "  malformed rejects: {}",
                 summarize_named_counts(&step.search_stats.malformed_rejection_reasons)
             ));
         }
-        if step.search_stats.scored_candidate_distribution.candidate_count > 0 {
+        if step
+            .search_stats
+            .scored_candidate_distribution
+            .candidate_count
+            > 0
+        {
             lines.push(format!(
                 "  scored candidates: clears_bar={} below_bar={} clause_kappa={}",
                 step.search_stats.scored_candidate_distribution.clears_bar,
                 step.search_stats.scored_candidate_distribution.below_bar,
                 summarize_u16_counts(
-                    &step.search_stats.scored_candidate_distribution.clause_kappa_counts
+                    &step
+                        .search_stats
+                        .scored_candidate_distribution
+                        .clause_kappa_counts
                 )
             ));
             lines.push(format!(
                 "  scored nu summary: min={} median={} max={} avg={}",
-                step.search_stats.scored_candidate_distribution.nu_summary.min,
-                step.search_stats.scored_candidate_distribution.nu_summary.median,
-                step.search_stats.scored_candidate_distribution.nu_summary.max,
-                step.search_stats.scored_candidate_distribution.nu_summary.average
+                step.search_stats
+                    .scored_candidate_distribution
+                    .nu_summary
+                    .min,
+                step.search_stats
+                    .scored_candidate_distribution
+                    .nu_summary
+                    .median,
+                step.search_stats
+                    .scored_candidate_distribution
+                    .nu_summary
+                    .max,
+                step.search_stats
+                    .scored_candidate_distribution
+                    .nu_summary
+                    .average
             ));
             lines.push(format!(
                 "  scored rho summary: min={} median={} max={} avg={}",
-                step.search_stats.scored_candidate_distribution.rho_summary.min,
-                step.search_stats.scored_candidate_distribution.rho_summary.median,
-                step.search_stats.scored_candidate_distribution.rho_summary.max,
-                step.search_stats.scored_candidate_distribution.rho_summary.average
+                step.search_stats
+                    .scored_candidate_distribution
+                    .rho_summary
+                    .min,
+                step.search_stats
+                    .scored_candidate_distribution
+                    .rho_summary
+                    .median,
+                step.search_stats
+                    .scored_candidate_distribution
+                    .rho_summary
+                    .max,
+                step.search_stats
+                    .scored_candidate_distribution
+                    .rho_summary
+                    .average
             ));
         }
         lines.push(format!(
@@ -878,6 +1142,7 @@ fn step_to_report_with_provenance(
     StepReport {
         step_index: step.step_index,
         label: step_label(step.step_index).to_owned(),
+        search_profile: SearchProfile::Unknown,
         objective_bar: step.objective_bar,
         accepted,
         telescope: step.telescope,
@@ -889,12 +1154,18 @@ fn step_to_report_with_provenance(
             malformed_rejections: step.malformed_rejections,
             malformed_rejection_reasons: step.malformed_rejection_reasons,
             admissibility_rejections: step.admissibility_rejections,
+            admissibility_diagnostics: step.admissibility_diagnostics,
             evaluated_candidates: step.evaluated_candidates,
             canonical_candidates: step.canonical_candidates,
             semantically_minimal_candidates: step.semantically_minimal_candidates,
             dedupe_prunes: step.dedupe_prunes,
             minimality_prunes: step.minimality_prunes,
             heuristic_drops: step.heuristic_drops,
+            prefix_states_explored: step.prefix_states_explored,
+            prefix_states_exact_pruned: step.prefix_states_exact_pruned,
+            prefix_states_heuristic_dropped: step.prefix_states_heuristic_dropped,
+            prefix_frontier_hot_states: step.prefix_frontier_hot_states,
+            prefix_frontier_cold_states: step.prefix_frontier_cold_states,
             retained_candidates: candidate_reports.len(),
             frontier_hot_states: frontier_stats.frontier_hot_states,
             frontier_cold_states: frontier_stats.frontier_cold_states,
@@ -906,7 +1177,24 @@ fn step_to_report_with_provenance(
         candidate_reports,
         prune_reports,
         frontier_policy: step.retention_policy,
-        frontier_pressure: step.frontier_retention.pressure,
+        frontier_pressure: step.frontier_pressure,
+        prefix_frontier: PrefixFrontierArtifact {
+            hot_states: step
+                .frontier_window
+                .hot
+                .iter()
+                .copied()
+                .map(FrontierStateSnapshot::from)
+                .collect(),
+            cold_states: step
+                .frontier_window
+                .cold
+                .iter()
+                .copied()
+                .map(FrontierStateSnapshot::from)
+                .collect(),
+            dedupe_keys: step.frontier_dedupe_keys.iter().cloned().collect(),
+        },
         provenance,
         canon_evidence,
         replay_ablation: ReplayAblation::default(),
@@ -1141,6 +1429,7 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
         steps.push(StepReport {
             step_index,
             label: step_label(step_index).to_owned(),
+            search_profile: SearchProfile::Unknown,
             objective_bar,
             accepted,
             telescope: telescope.clone(),
@@ -1152,19 +1441,28 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 malformed_rejections: 0,
                 malformed_rejection_reasons: BTreeMap::new(),
                 admissibility_rejections: 0,
+                admissibility_diagnostics: AdmissibilityDiagnostics::default(),
                 evaluated_candidates: 1,
                 canonical_candidates: 1,
                 semantically_minimal_candidates: 1,
                 dedupe_prunes: 0,
                 minimality_prunes: 0,
                 heuristic_drops: 0,
+                prefix_states_explored: 0,
+                prefix_states_exact_pruned: 0,
+                prefix_states_heuristic_dropped: 0,
+                prefix_frontier_hot_states: 0,
+                prefix_frontier_cold_states: 0,
                 retained_candidates: 1,
                 frontier_hot_states: 0,
                 frontier_cold_states: 0,
                 frontier_resident_cold_states: 0,
                 frontier_spill_states: 0,
                 frontier_drops: 0,
-                scored_candidate_distribution: single_candidate_distribution(&evaluated, objective_bar),
+                scored_candidate_distribution: single_candidate_distribution(
+                    &evaluated,
+                    objective_bar,
+                ),
             },
             candidate_reports: vec![candidate_report(
                 objective_bar,
@@ -1175,6 +1473,7 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
             prune_reports: Vec::new(),
             frontier_policy: RetentionPolicy::default(),
             frontier_pressure: FrontierPressure::default(),
+            prefix_frontier: PrefixFrontierArtifact::default(),
             provenance: StepProvenance::StepCheckpointReevaluate,
             canon_evidence,
             replay_ablation: ReplayAblation::default(),
@@ -1488,6 +1787,16 @@ fn frontier_retention_delta(step: &StepReport) -> i64 {
     kept as i64 - dropped as i64
 }
 
+fn report_search_profile(steps: &[StepReport]) -> &'static str {
+    steps
+        .iter()
+        .rev()
+        .map(|step| step.search_profile)
+        .find(|profile| *profile != SearchProfile::Unknown)
+        .unwrap_or(SearchProfile::Unknown)
+        .as_str()
+}
+
 fn retention_class_breakdown(step: &StepReport) -> String {
     if !step
         .candidate_reports
@@ -1658,8 +1967,7 @@ mod tests {
         let step = &steps[3];
 
         assert!(
-            step
-                .candidate_reports
+            step.candidate_reports
                 .iter()
                 .any(|candidate| candidate.status == CandidateStatus::AcceptedMinimalOvershoot)
         );
@@ -1669,7 +1977,9 @@ mod tests {
         );
         assert!(step.search_stats.well_formed_candidates >= step.search_stats.evaluated_candidates);
         assert_eq!(
-            step.search_stats.scored_candidate_distribution.candidate_count,
+            step.search_stats
+                .scored_candidate_distribution
+                .candidate_count,
             step.search_stats.evaluated_candidates
         );
         assert!(debug.contains("retained valid candidates:"));
@@ -1758,6 +2068,7 @@ mod tests {
             15,
             2,
             FrontierRuntimeLimits {
+                worker_count: 1,
                 governor: GovernorConfig {
                     green_limit_bytes: 1,
                     yellow_limit_bytes: 2,

@@ -1,7 +1,7 @@
 [mode]
 strict = true
 debug = false
-search_profile = "strict_canon_guarded"
+search_profile = "relaxed_shadow"
 
 [search]
 until_step = 15

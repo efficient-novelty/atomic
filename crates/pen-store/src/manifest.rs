@@ -208,6 +208,9 @@ pub struct StepStats {
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 pub struct FrontierCounts {
+    pub prefix_states_explored: u64,
+    pub prefix_states_exact_pruned: u64,
+    pub prefix_states_heuristic_dropped: u64,
     pub hot_states: u64,
     pub cold_states: u64,
     pub dedupe_keys: u64,
@@ -377,6 +380,9 @@ mod tests {
                 record_layout_id: FRONTIER_RECORD_LAYOUT_ID.to_owned(),
             },
             counts: FrontierCounts {
+                prefix_states_explored: 17_449_876,
+                prefix_states_exact_pruned: 1_220_014,
+                prefix_states_heuristic_dropped: 342_118,
                 hot_states: 2_241_132,
                 cold_states: 15_208_744,
                 dedupe_keys: 10_677_731,

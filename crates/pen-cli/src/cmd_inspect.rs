@@ -84,10 +84,23 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 summarize_prune_reports(&step.prune_reports)
             )
         };
+        let prefix_frontier = if step.search_stats.prefix_states_explored == 0 {
+            String::new()
+        } else {
+            format!(
+                "\nprefix_frontier: explored={} exact_pruned={} heuristic_dropped={} hot={} cold={}",
+                step.search_stats.prefix_states_explored,
+                step.search_stats.prefix_states_exact_pruned,
+                step.search_stats.prefix_states_heuristic_dropped,
+                step.search_stats.prefix_frontier_hot_states,
+                step.search_stats.prefix_frontier_cold_states
+            )
+        };
         return Ok(format!(
-            "step {} ({})\nnu: {}\nkappa: {}\ncharged_kappa: {}\nrho: {}\nbar: {}\nbar_distance: {}\ncandidate: {}\ncanonical: {}{}{}{}{}",
+            "step {} ({})\nsearch_profile: {}\nnu: {}\nkappa: {}\ncharged_kappa: {}\nrho: {}\nbar: {}\nbar_distance: {}\ncandidate: {}\ncanonical: {}{}{}{}{}{}",
             step.step_index,
             step.label,
+            step.search_profile.as_str(),
             step.accepted.nu,
             step.accepted.clause_kappa,
             step.canon_evidence.charged_clause_kappa,
@@ -99,6 +112,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
             late_step_claim,
             replay_ablation,
             prune_summary,
+            prefix_frontier,
             frontier_details,
         ));
     }
@@ -134,9 +148,12 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 )
             });
         return Ok(format!(
-            "frontier step {} band {}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
+            "frontier step {} band {}\nprefix_explored: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
             frontier.step_index,
             frontier.band_index,
+            frontier.counts.prefix_states_explored,
+            frontier.counts.prefix_states_exact_pruned,
+            frontier.counts.prefix_states_heuristic_dropped,
             frontier.counts.hot_states,
             frontier.counts.cold_states,
             frontier.counts.dedupe_keys,
