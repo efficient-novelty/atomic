@@ -25,7 +25,7 @@ sidecar.
   contract
 
 Rollout, parity hardening, and honesty-boundary closeout are tracked in
-[plan_progress.md](plan_progress.md). Workstream 4 is complete. The guarded
+[overall_plan.md](overall_plan.md). Workstream 4 is complete. The guarded
 lane remains authoritative while `realistic_frontier_shadow` stays
 comparison-backed rather than default.
 

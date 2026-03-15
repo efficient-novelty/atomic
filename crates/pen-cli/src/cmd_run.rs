@@ -508,18 +508,24 @@ fn write_frontier_snapshots(
                 prefix_states_exact_pruned: step.search_stats.prefix_states_exact_pruned as u64,
                 prefix_states_heuristic_dropped: step.search_stats.prefix_states_heuristic_dropped
                     as u64,
-                incremental_legality_cache_hits: step
-                    .search_stats
-                    .incremental_legality_cache_hits as u64,
+                incremental_legality_cache_hits: step.search_stats.incremental_legality_cache_hits
+                    as u64,
                 incremental_connectivity_shortcuts: step
                     .search_stats
-                    .incremental_connectivity_shortcuts as u64,
+                    .incremental_connectivity_shortcuts
+                    as u64,
                 incremental_connectivity_fallbacks: step
                     .search_stats
-                    .incremental_connectivity_fallbacks as u64,
-                incremental_connectivity_prunes: step
+                    .incremental_connectivity_fallbacks
+                    as u64,
+                incremental_connectivity_prunes: step.search_stats.incremental_connectivity_prunes
+                    as u64,
+                incremental_clause_family_filter_hits: step
                     .search_stats
-                    .incremental_connectivity_prunes as u64,
+                    .incremental_clause_family_filter_hits
+                    as u64,
+                incremental_clause_family_prunes: step.search_stats.incremental_clause_family_prunes
+                    as u64,
                 worker_count: frontier_worker_count,
                 priority_heads: window.priority_heads(8),
                 interner_bytes: 0,

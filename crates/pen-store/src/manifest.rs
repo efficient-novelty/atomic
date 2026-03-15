@@ -222,6 +222,10 @@ pub struct FrontierCounts {
     pub incremental_connectivity_fallbacks: u64,
     #[serde(default)]
     pub incremental_connectivity_prunes: u64,
+    #[serde(default)]
+    pub incremental_clause_family_filter_hits: u64,
+    #[serde(default)]
+    pub incremental_clause_family_prunes: u64,
     pub hot_states: u64,
     pub cold_states: u64,
     pub dedupe_keys: u64,
@@ -400,6 +404,8 @@ mod tests {
                 incremental_connectivity_shortcuts: 91_220,
                 incremental_connectivity_fallbacks: 14_331,
                 incremental_connectivity_prunes: 203_114,
+                incremental_clause_family_filter_hits: 5_882_441,
+                incremental_clause_family_prunes: 118_204,
                 hot_states: 2_241_132,
                 cold_states: 15_208_744,
                 dedupe_keys: 10_677_731,

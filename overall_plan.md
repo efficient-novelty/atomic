@@ -2,7 +2,7 @@
 
 This file is the repo-wide reference freeze for the current `pen-atomic`
 closeout state. It is not a build-from-scratch blueprint anymore. The active
-remaining item lives in [`plan_progress.md`](plan_progress.md).
+remaining quantum-search item lives in [`quantum_progress.md`](quantum_progress.md).
 
 ## Settled decisions
 
@@ -104,5 +104,5 @@ The compatibility ladder is frozen:
   described in the current docs.
 
 For the executable architecture, use
-[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). For closeout status, use
-[`plan_progress.md`](plan_progress.md).
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). For the remaining
+quantum-search delta, use [`quantum_progress.md`](quantum_progress.md).

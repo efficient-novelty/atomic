@@ -4,7 +4,7 @@ use pen_core::encode::expr_bit_length;
 use pen_core::expr::Expr;
 use pen_core::library::Library;
 use pen_core::telescope::Telescope;
-use pen_type::admissibility::{AdmissibilityMode, StrictAdmissibility};
+use pen_type::admissibility::{AdmissibilityMode, StrictAdmissibility, StructuralFamily};
 use pen_type::check::{CheckResult, check_telescope};
 use pen_type::connectivity::passes_connectivity;
 use std::collections::{BTreeMap, BTreeSet};
@@ -616,6 +616,86 @@ fn clauses_for_position(
         });
     }
     dedupe_sorted_clauses(clauses)
+}
+
+pub(crate) fn clause_kappa_can_match_structural_family(
+    family: StructuralFamily,
+    clause_kappa: u16,
+) -> bool {
+    match family {
+        StructuralFamily::FormerEliminator
+        | StructuralFamily::InitialHit
+        | StructuralFamily::TruncationHit
+        | StructuralFamily::HigherHit => clause_kappa == 3,
+        StructuralFamily::SphereLift | StructuralFamily::ConnectionShell => clause_kappa == 5,
+        StructuralFamily::AxiomaticBundle | StructuralFamily::ModalShell => clause_kappa == 4,
+        StructuralFamily::CurvatureShell => clause_kappa == 6,
+        StructuralFamily::OperatorBundle => clause_kappa == 7,
+        StructuralFamily::TemporalShell => clause_kappa == 8,
+        StructuralFamily::HilbertFunctional => clause_kappa == 9,
+    }
+}
+
+pub(crate) fn clause_supports_structural_family_at_position(
+    family: StructuralFamily,
+    position: usize,
+    clause: &ClauseRec,
+    context: EnumerationContext,
+) -> bool {
+    match family {
+        StructuralFamily::FormerEliminator => {
+            supports_former_package_clause_at_position(position, &clause.expr)
+        }
+        StructuralFamily::InitialHit => {
+            supports_initial_hit_clause_at_position(position, &clause.expr)
+        }
+        StructuralFamily::TruncationHit => {
+            supports_truncation_hit_clause_at_position(position, &clause.expr)
+        }
+        StructuralFamily::HigherHit => {
+            supports_higher_hit_clause_at_position(position, &clause.expr)
+        }
+        StructuralFamily::SphereLift => {
+            supports_sphere_lift_clause_at_position(position, &clause.expr)
+        }
+        StructuralFamily::AxiomaticBundle => supports_axiomatic_bundle_clause_at_position(
+            position,
+            &clause.expr,
+            context.library_size,
+            context.historical_anchor_ref,
+        ),
+        StructuralFamily::ModalShell => {
+            supports_modal_shell_clause_at_position(position, &clause.expr)
+        }
+        StructuralFamily::ConnectionShell => supports_connection_shell_clause_at_position(
+            position,
+            &clause.expr,
+            context.library_size,
+        ),
+        StructuralFamily::CurvatureShell => supports_curvature_shell_clause_at_position(
+            position,
+            &clause.expr,
+            context.library_size,
+        ),
+        StructuralFamily::OperatorBundle => supports_operator_bundle_clause_at_position(
+            position,
+            &clause.expr,
+            context.library_size,
+            context.generative_late_families,
+        ),
+        StructuralFamily::HilbertFunctional => supports_hilbert_functional_clause_at_position(
+            position,
+            &clause.expr,
+            context.library_size,
+            context.generative_late_families,
+        ),
+        StructuralFamily::TemporalShell => supports_temporal_shell_clause_at_position(
+            position,
+            &clause.expr,
+            context.historical_anchor_ref,
+            context.generative_late_families,
+        ),
+    }
 }
 
 pub fn enumerate_exprs(context: EnumerationContext) -> Vec<Expr> {

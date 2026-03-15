@@ -127,6 +127,8 @@ pub struct AtomicSearchStep {
     pub incremental_connectivity_shortcuts: usize,
     pub incremental_connectivity_fallbacks: usize,
     pub incremental_connectivity_prunes: usize,
+    pub incremental_clause_family_filter_hits: usize,
+    pub incremental_clause_family_prunes: usize,
     pub prefix_frontier_hot_states: usize,
     pub prefix_frontier_cold_states: usize,
     pub retention_policy: RetentionPolicy,
@@ -341,6 +343,8 @@ fn search_next_step(
     let mut incremental_connectivity_shortcuts = 0usize;
     let mut incremental_connectivity_fallbacks = 0usize;
     let mut incremental_connectivity_prunes = 0usize;
+    let mut incremental_clause_family_filter_hits = 0usize;
+    let mut incremental_clause_family_prunes = 0usize;
     let nu_history = history
         .iter()
         .map(|record| (record.step_index, record.nu))
@@ -370,6 +374,8 @@ fn search_next_step(
         incremental_connectivity_shortcuts = legality_stats.connectivity_shortcuts;
         incremental_connectivity_fallbacks = legality_stats.connectivity_fallbacks;
         incremental_connectivity_prunes = legality_stats.connectivity_prunes;
+        incremental_clause_family_filter_hits = legality_stats.clause_family_filter_hits;
+        incremental_clause_family_prunes = legality_stats.clause_family_prunes;
     } else {
         for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
             let telescopes = enumerate_telescopes(
@@ -417,6 +423,8 @@ fn search_next_step(
     } else {
         PrefixFrontierPlan::default()
     };
+    let prefix_states_exact_pruned =
+        prefix_frontier.exact_pruned + incremental_clause_family_prunes;
 
     if admissibility_mode == AdmissibilityMode::RealisticShadow {
         for signature in &prefix_frontier.retained_prefix_signatures {
@@ -511,12 +519,14 @@ fn search_next_step(
         prefixes_created,
         prefix_frontier.explored,
         prefix_cache.stats().merged_by_signature,
-        prefix_frontier.exact_pruned,
+        prefix_states_exact_pruned,
         prefix_frontier.heuristic_dropped,
         incremental_legality_cache_hits,
         incremental_connectivity_shortcuts,
         incremental_connectivity_fallbacks,
         incremental_connectivity_prunes,
+        incremental_clause_family_filter_hits,
+        incremental_clause_family_prunes,
         prefix_frontier.frontier.hot.len(),
         prefix_frontier.frontier.cold.len(),
         retention_policy,
@@ -564,6 +574,8 @@ fn build_step_result(
     incremental_connectivity_shortcuts: usize,
     incremental_connectivity_fallbacks: usize,
     incremental_connectivity_prunes: usize,
+    incremental_clause_family_filter_hits: usize,
+    incremental_clause_family_prunes: usize,
     prefix_frontier_hot_states: usize,
     prefix_frontier_cold_states: usize,
     retention_policy: RetentionPolicy,
@@ -611,6 +623,8 @@ fn build_step_result(
         incremental_connectivity_shortcuts,
         incremental_connectivity_fallbacks,
         incremental_connectivity_prunes,
+        incremental_clause_family_filter_hits,
+        incremental_clause_family_prunes,
         prefix_frontier_hot_states,
         prefix_frontier_cold_states,
         retention_policy,
@@ -750,7 +764,13 @@ fn discover_realistic_shadow_candidates(
                 let signature = PrefixSignature::new(step_index, library, &prefix_telescope);
                 discovery
                     .prefix_legality_cache
-                    .insert_root(signature.clone(), library, &prefix_telescope)
+                    .insert_root(
+                        signature.clone(),
+                        clause_kappa,
+                        library,
+                        &prefix_telescope,
+                        admissibility,
+                    )
                     .then_some(OnlinePrefixWorkItem {
                         clause_kappa,
                         prefix_telescope,
@@ -789,6 +809,7 @@ fn discover_realistic_shadow_candidates(
                     child_signature.clone(),
                     library,
                     clause,
+                    admissibility,
                 ) {
                     continue;
                 }
@@ -1449,6 +1470,32 @@ mod tests {
     }
 
     #[test]
+    fn realistic_shadow_step_eleven_prunes_impossible_family_hybrids_early() {
+        let prefix = reference_prefix(10);
+        let realistic = search_bootstrap_from_prefix_for_profile_with_runtime(
+            &prefix,
+            11,
+            2,
+            SearchProfile::RealisticFrontierShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("realistic bootstrap step should succeed");
+        let step = realistic.last().expect("realistic step");
+
+        assert_eq!(step.step_index, 11);
+        assert_eq!(step.telescope, Telescope::reference(11));
+        assert!(step.incremental_clause_family_filter_hits > 0);
+        assert!(step.incremental_clause_family_prunes > 0);
+        assert_eq!(step.admissibility_rejections, 1);
+        assert_eq!(
+            step.admissibility_diagnostics
+                .structural_debt_cap_rejections,
+            1
+        );
+        assert_eq!(step.full_telescopes_evaluated, 1);
+    }
+
+    #[test]
     fn realistic_shadow_step_fifteen_builds_a_nonempty_terminal_prefix_frontier() {
         let prefix = reference_prefix(14);
         let realistic = search_bootstrap_from_prefix_for_profile_with_runtime(
@@ -1469,6 +1516,7 @@ mod tests {
         assert_eq!(step.prefix_frontier_cold_states, 0);
         assert!(step.incremental_legality_cache_hits > 0);
         assert!(step.incremental_connectivity_fallbacks > 0);
+        assert!(step.incremental_clause_family_filter_hits > 0);
         assert!(
             step.prefix_frontier_hot_states + step.prefix_frontier_cold_states
                 <= step.prefix_states_explored

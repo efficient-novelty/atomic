@@ -554,7 +554,10 @@ mod tests {
 
         assert!(summary.structurally_connected());
         assert_eq!(summary.structurally_connected(), witness.connected);
-        assert_eq!(summary.references_active_window(), witness.references_active_window);
+        assert_eq!(
+            summary.references_active_window(),
+            witness.references_active_window
+        );
         assert_eq!(summary.self_contained(), witness.self_contained);
         assert_eq!(summary.max_lib_ref(), witness.max_lib_ref);
     }

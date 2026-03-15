@@ -207,6 +207,8 @@ mod tests {
                 incremental_connectivity_shortcuts: 3,
                 incremental_connectivity_fallbacks: 1,
                 incremental_connectivity_prunes: 2,
+                incremental_clause_family_filter_hits: 4,
+                incremental_clause_family_prunes: 1,
                 hot_states: 2,
                 cold_states: 3,
                 dedupe_keys: 5,

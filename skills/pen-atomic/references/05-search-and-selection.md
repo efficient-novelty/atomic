@@ -14,15 +14,26 @@ Before following donor material, anchor on the current Rust engine:
 - the realistic shadow lane now expands prefixes online through
   clause-position catalogs and only exact-evaluates retained full telescopes
   downstream
+- realistic shadow now also carries an exact incremental clause-family
+  feasibility summary keyed by `PrefixSignature`, pruning mixed late-family
+  prefixes before they reach terminal admissibility
 - reports and frontier manifests now surface
   `prefix_states_merged_by_signature` plus the plan-aligned counters
   `prefixes_created`, `full_telescopes_evaluated`,
   `canonical_dedupe_prunes`, and `semantic_minimality_prunes`
+- memo/filter payoff artifacts now also surface
+  `incremental_legality_cache_hits`,
+  `incremental_connectivity_shortcuts`,
+  `incremental_connectivity_fallbacks`,
+  `incremental_connectivity_prunes`,
+  `incremental_clause_family_filter_hits`, and
+  `incremental_clause_family_prunes`
 
 The important remaining gap is no longer "make prefixes first-class online
 states" because that control-flow shift has happened. The next search step is
-to move stronger sound bound reasoning and memoized legality/filter reuse
-earlier into that online prefix engine.
+to move stronger sound bound reasoning beyond the landed exact clause-family
+impossibility prunes and extend memoized legality/connectivity/family reuse
+into cached terminal admissibility decisions.
 
 ## Core Strict Loop
 
@@ -181,8 +192,8 @@ The user's frozen architecture moves checkpointing into a first-class contract. 
 - replace current in-memory frontier behavior with explicit resumable state
 - use exact rational or integer comparison in the hot path
 - harden anti-junk retention so true eliminator structures are not deleted early
-- move from terminal-prefix-only exact pruning toward earlier partial-prefix
-  sound bounds inside the online prefix engine
+- extend the landed exact clause-family impossibility prunes toward stronger
+  partial-prefix sound bounds inside the online prefix engine
 - treat strengthened `PrefixSignature` state and the plan-aligned counters as
   current building blocks for memoization and measurement, not future
   placeholders

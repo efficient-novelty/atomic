@@ -32,6 +32,9 @@ guarded 15-step canon.
   placeholders.
 - `PrefixLegalityCache` now reuses incremental legality/connectivity summaries
   keyed by `PrefixSignature` during realistic online prefix expansion.
+- realistic shadow now also keeps an exact incremental clause-family
+  feasibility summary keyed by `PrefixSignature`, pruning mixed late-family
+  prefixes as soon as no admissible structural family remains.
 - `PrefixSignature` now includes:
   - clause position
   - obligation set id
@@ -54,6 +57,8 @@ guarded 15-step canon.
   - `incremental_connectivity_shortcuts`
   - `incremental_connectivity_fallbacks`
   - `incremental_connectivity_prunes`
+  - `incremental_clause_family_filter_hits`
+  - `incremental_clause_family_prunes`
 
 ## What Is No Longer A Gap
 
@@ -68,33 +73,36 @@ it as if it were still missing:
 
 ## Active Gaps
 
-### 1. Earlier exact pruning on partial prefixes
+### 1. Stronger partial-prefix bounds beyond clause-family impossibility
 
-The realistic lane is online, but its strongest exact pruning is still too late
-in the search. We do not yet have the stronger sound partial-prefix bound story
-needed to prune earlier with confidence.
+The realistic lane now has an earlier exact prune for impossible mixed-family
+prefixes, but its strongest `nu`/bar reasoning is still too late in the
+search. We do not yet have the stronger sound partial-prefix bound story needed
+to prune earlier with confidence.
 
-### 2. Real memoization on top of the strengthened signature
+### 2. Terminal admissibility reuse beyond the new clause-family filter
 
 The strengthened signature is now used for incremental legality/connectivity
-summary reuse, but it is not yet used for:
+reuse and exact clause-family feasibility pruning, but it is not yet used for:
 
-- cached admissibility summaries beyond the current exact check/connectivity
-  reuse
-- cached late-family structural filter reuse keyed by active-window state
+- cached terminal admissibility decisions beyond the current legality,
+  connectivity, and family-feasibility reuse
+- broader active-window clause filtering beyond the landed exact family
+  impossibility prunes
 
-### 3. Phase-2 metrics
+### 3. Phase-2 timing and memory metrics
 
-The first cache-hit metrics are now live, but we still need the clause-family
-filter side of the Phase-2 metric surface.
+The memo/filter counters are now live, but we still need wall-clock and memory
+high-water metrics next to them.
 
 ## Forward Plan
 
 ### Now
 
-- define an earlier sound partial-prefix bound
-- extend the new legality/connectivity memo layer into admissibility and
-  clause-family filter reuse
+- define a stronger sound partial-prefix bound beyond exact clause-family
+  impossibility pruning
+- extend the new legality/connectivity/family memo layer into cached terminal
+  admissibility decisions
 - keep the strengthened-signature caches exact and deterministic
 
 ### Next
@@ -111,12 +119,13 @@ filter side of the Phase-2 metric surface.
 ## Next Concrete Steps
 
 1. Audit the current `nu` and legality pipeline and identify the strongest
-   partial-prefix exact bound that can be justified without unsound inference.
-2. Extend the landed incremental legality/connectivity summary path into exact
-   admissibility and late-family filter reuse.
+   partial-prefix exact bound that goes beyond the landed clause-family
+   impossibility prunes without unsound inference.
+2. Extend the landed incremental legality/connectivity/family summary path into
+   cached terminal admissibility decisions.
 3. Use the memo counters from stored artifacts to retune late-step prefix
    priority/order.
-4. Add timing and memory counters next to the new memo metrics.
+4. Add timing and memory counters next to the new memo/filter metrics.
 
 ## Guardrails
 

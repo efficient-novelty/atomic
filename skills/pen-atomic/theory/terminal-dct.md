@@ -46,7 +46,7 @@ The current repo no longer has an executable late-step split for DCT.
 
 - `crates/pen-eval/src/nu.rs` freezes the reference sequence at `...103` and asserts it in tests.
 - `tests/fixtures/trajectory/reference_steps_until_15.json` freezes the live step-15 artifact with `nu = 103` and `rho = 103/8`.
-- `plan_progress.md` records step 15 as structurally live-discoverable at `nu = 103`.
+- `overall_plan.md` records step 15 as structurally live-discoverable at `nu = 103`.
 
 The older mismatched DCT claim now survives only in superseded theory and manuscript commentary.
 For the repo's current truth surface, `103` is the DCT total to cite.

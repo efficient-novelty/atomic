@@ -38,6 +38,9 @@ The current search-architecture focus has shifted again:
   and structural family flags for future d = 2 memoization
 - realistic shadow now has a real `PrefixLegalityCache` that reuses
   incremental legality/connectivity summaries keyed by `PrefixSignature`
+- realistic shadow now also keeps an exact incremental clause-family
+  feasibility summary keyed by `PrefixSignature`, pruning mixed late-family
+  prefixes before they reach terminal admissibility
 - reports and frontier manifests now expose the plan-aligned counters
   `prefixes_created`, `full_telescopes_evaluated`,
   `canonical_dedupe_prunes`, and `semantic_minimality_prunes`
@@ -45,15 +48,17 @@ The current search-architecture focus has shifted again:
   payoff counters `incremental_legality_cache_hits`,
   `incremental_connectivity_shortcuts`,
   `incremental_connectivity_fallbacks`, and
-  `incremental_connectivity_prunes`
-- the next gap is earlier sound bound pruning plus extending the new memo layer
-  into admissibility and clause-family filter reuse, not "add a frontier for
-  the first time"
+  `incremental_connectivity_prunes`, `incremental_clause_family_filter_hits`,
+  and `incremental_clause_family_prunes`
+- the next gap is stronger sound bound pruning beyond the landed exact
+  clause-family impossibility prunes plus extending the new memo layer into
+  cached terminal admissibility decisions, not "add a frontier for the first
+  time"
 
 Start with the current architecture doc before diving into donor material:
 
 - [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
-- [plan_progress.md](../../plan_progress.md)
+- [../../overall_plan.md](../../overall_plan.md)
 - [../../quantum_progress.md](../../quantum_progress.md)
 
 ## Working Rules
@@ -81,7 +86,7 @@ Start with the current architecture doc before diving into donor material:
 For most tasks, read in this order:
 
 1. [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
-2. [plan_progress.md](../../plan_progress.md)
+2. [../../overall_plan.md](../../overall_plan.md)
 3. [../../quantum_progress.md](../../quantum_progress.md) when the task touches
    prefix search, bounds, caching, or the quantum plan
 4. [theory/README.md](theory/README.md)
@@ -95,7 +100,7 @@ Then branch based on the task.
   honesty boundary.
 - Read [../../README.md](../../README.md) for the current user-facing commands
   and smoke-test commands.
-- Read [../../plan_progress.md](../../plan_progress.md) for current completion
+- Read [../../overall_plan.md](../../overall_plan.md) for current completion
   status, deliverables, and immediate next priorities.
 - Read [../../quantum_progress.md](../../quantum_progress.md) for the current
   delta between the quantum improvement plan and the live Rust codebase.
@@ -142,7 +147,7 @@ Then branch based on the task.
 Read:
 
 - [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
-- [../../plan_progress.md](../../plan_progress.md)
+- [../../overall_plan.md](../../overall_plan.md)
 - [references/09-rust-rewrite-blueprint.md](references/09-rust-rewrite-blueprint.md)
 
 Focus on:
@@ -190,15 +195,15 @@ Focus on:
   the landed legality/connectivity memo path, and the still-missing earlier
   partial-prefix bound pruning
 - using strengthened `PrefixSignature` state, the landed memo counters, and the
-  remaining clause-family/admissibility gaps as the starting point for further
-  quantum-inspired search work
+  remaining bound/admissibility gaps past the landed clause-family pruning as
+  the starting point for further quantum-inspired search work
 
 ### If you are working on reporting or evidence
 
 Read:
 
 - [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
-- [../../plan_progress.md](../../plan_progress.md)
+- [../../overall_plan.md](../../overall_plan.md)
 - [references/08-evidence-and-invariants.md](references/08-evidence-and-invariants.md)
 
 Focus on:
@@ -263,9 +268,10 @@ Reject designs that:
   strict 15-step lane.
 - The repo now has real live atomic search through step 15, exact deterministic
   selection, and a richer candidate-level evidence surface.
-- The current quantum-focused search gap is earlier partial-prefix bound
-  pruning plus extending the landed prefix-signature memo layer from
-  legality/connectivity reuse into admissibility and clause-family filtering.
+- The current quantum-focused search gap is stronger partial-prefix bound
+  pruning beyond the landed exact clause-family impossibility prunes plus
+  extending the prefix-signature memo layer from legality/connectivity/family
+  reuse into cached terminal admissibility decisions.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.

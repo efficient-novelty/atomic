@@ -45,6 +45,8 @@ pub struct FrontierRuntimeInput<const N: usize> {
     pub incremental_connectivity_shortcuts: u64,
     pub incremental_connectivity_fallbacks: u64,
     pub incremental_connectivity_prunes: u64,
+    pub incremental_clause_family_filter_hits: u64,
+    pub incremental_clause_family_prunes: u64,
     pub worker_count: u16,
     pub priority_heads: Vec<u32>,
     pub interner_bytes: u64,
@@ -185,6 +187,8 @@ pub fn persist_frontier_runtime<const N: usize>(
             incremental_connectivity_shortcuts: input.incremental_connectivity_shortcuts,
             incremental_connectivity_fallbacks: input.incremental_connectivity_fallbacks,
             incremental_connectivity_prunes: input.incremental_connectivity_prunes,
+            incremental_clause_family_filter_hits: input.incremental_clause_family_filter_hits,
+            incremental_clause_family_prunes: input.incremental_clause_family_prunes,
             hot_states: input.hot_records.len() as u64,
             cold_states: input.cold_records.len() as u64,
             dedupe_keys: BTreeSet::<String>::from_iter(input.dedupe_keys.iter().cloned()).len()
@@ -312,6 +316,8 @@ mod tests {
             incremental_connectivity_shortcuts: 4,
             incremental_connectivity_fallbacks: 2,
             incremental_connectivity_prunes: 3,
+            incremental_clause_family_filter_hits: 5,
+            incremental_clause_family_prunes: 2,
             worker_count: 2,
             priority_heads: vec![11, 22],
             interner_bytes: 16,
@@ -357,6 +363,8 @@ mod tests {
         assert_eq!(artifacts.counts.incremental_connectivity_shortcuts, 4);
         assert_eq!(artifacts.counts.incremental_connectivity_fallbacks, 2);
         assert_eq!(artifacts.counts.incremental_connectivity_prunes, 3);
+        assert_eq!(artifacts.counts.incremental_clause_family_filter_hits, 5);
+        assert_eq!(artifacts.counts.incremental_clause_family_prunes, 2);
         assert!(root.join(FRONTIER_CACHE_BLOB_FILE).exists());
 
         let cache_blob = read_frontier_cache_blob(&root, &artifacts.files.cache_blob)

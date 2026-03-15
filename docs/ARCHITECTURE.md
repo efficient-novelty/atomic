@@ -4,7 +4,7 @@
 the current 15-step PEN genesis sequence from anonymous MBTT structure. This
 document records the current executable architecture, not a superseded
 scaffolding plan. For the current rollout and closeout status, see
-[`plan_progress.md`](../plan_progress.md).
+[`overall_plan.md`](../overall_plan.md).
 
 ## Current executable surface
 
