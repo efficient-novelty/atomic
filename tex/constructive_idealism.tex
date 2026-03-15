@@ -1,0 +1,991 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{setspace}
+
+\geometry{margin=1in}
+\setstretch{1.15}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{remark}[definition]{Remark}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+\title{\textbf{The Syntax of Being:\\[4pt]
+Constructive Idealism and the Geometry of Judgment}}
+\author{Halvor Lande\thanks{Amateur philosopher. \texttt{hsl@awc.no}}
+\and Gemini 3.0 Pro Deepthink\thanks{Initial co-author of the January 2026 draft.}
+\and Claude Opus 4.6\thanks{Co-author of the March 2026 revision.}}
+\date{March 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We propose a unified metaphysical framework, \emph{Constructive Idealism}, which posits
+that the fundamental ontological primitive is neither Mind (Idealism) nor Matter
+(Materialism), but the \emph{Act of Judgment} ($\Gamma \vdash a : A$)---the active
+constitution of determinacy from indeterminacy. By synthesizing Martin-L\"of Type Theory
+with Analytic Idealism and Advaita Vedanta, we argue that the physical universe is not a
+collection of pre-existing objects, but the decohered branch of a pre-physical
+quantum-informational state. We identify the ``Big Bang'' with the endogenous
+self-measurement boundary at Step~15 of the PEN Generative Sequence, where the coherent
+superposition of admissible type-theoretic telescopes (the \emph{Q-Monad}) decoheres into the
+executable Dynamical Cohesive Topos (DCT). This three-level ontological structure---Empty
+Context, Q-Monad, Decohered Branch---maps precisely onto the Vedantic trichotomy of
+Nirguna Brahman, Saguna Brahman, and Jagat. In this view, the ``Hard Problem of
+Consciousness'' and the ``Quantum Measurement Problem'' are revealed to be the same
+category error: the attempt to derive the act of judgment from its resulting terms. The
+capacity for consciousness is identified with guarded self-reference (L\"ob's rule), and the
+arrow of time with the non-invertibility of guarded corecursion. We conclude that
+``Maya'' (duality) is not illusion but structural necessity: the Coherence Window $d = 2$
+is the unique regime sustaining Fibonacci-scaled creative evolution, and separation into
+local contexts is the information-theoretic price of a universe rich enough to be interesting.
+\end{abstract}
+
+\tableofcontents
+
+\newpage
+
+%======================================================================
+\section{Introduction: The Crisis of Substance}
+%======================================================================
+
+For three centuries, the philosophy of mind and the foundations of physics have been
+paralyzed by a shared deadlock. On one side, Materialism posits a universe of dead matter
+that somehow, inexplicably, generates the internal experience of the observer. On the
+other side, Dualism grants fundamental status to both, but fails to provide a causal
+mechanism for their interaction, fracturing the universe into two distinct realms.
+
+Both positions share a fatal, unexamined premise: \emph{Substance Ontology}. They assume
+that reality is composed of static ``stuff''---whether physical atoms or mental qualia---that
+exists prior to its logical form. They treat ``Being'' as a noun, a state of affairs that
+simply \emph{is}.
+
+This paper proposes a radical inversion: \emph{Being is a verb.}
+
+We argue that the fundamental unit of reality is not a particle, a field, or a conscious
+state, but an \emph{Operation}. Specifically, it is the \emph{Act of Judgment}---the
+transition from indeterminacy to determinacy. Form is not discovered in the world; it is
+constituted by the act of distinction.
+
+We term this framework \textbf{Constructive Idealism}. It draws its rigor from the
+foundational logic of mathematics: Constructive Type Theory. Unlike classical logic, which
+assumes a pre-existing universe of truth values, constructive logic asserts that a thing
+exists only if it can be constructed. Truth is not a property of the world; it is the outcome
+of a verification process.
+
+In the companion papers of this series~\cite{pen_paper,algorithmic_big_bang}, we presented
+the Principle of Efficient Novelty (PEN): an executable metatheoretic model that iteratively
+extends an initially empty accepted library over a fixed intensional type-theoretic
+signature. The resulting 15-step Generative Sequence---from an empty library through
+dependent types, homotopy theory, cohesion, differential geometry, and operator-analytic
+structure, to a temporal-cohesive terminal fixed point---is governed by three structural
+theorems: the Coherence Window ($d = 2$ for the fully coupled CCHM/HoTT lane), the
+Complexity Scaling Theorem ($\Delta_n = F_n$, Fibonacci integration debt), and the
+Combinatorial Novelty Theorem (superlinear novelty growth). We further showed that the
+terminal Step~15 transition admits a quantum-informational interpretation as the endogenous
+decoherence of a coherent pre-physical state into an executable physical universe.
+
+Here, we explore the metaphysical consequences of those results. If the universe is a
+constructive derivation whose ignition is an endogenous act of self-measurement, then the
+relationship between Mind (the witness) and Matter (the witnessed) is not a mystery of
+substance, but a necessity of syntax. The framework admits a three-level ontological
+structure---Empty Context, Coherent Superposition, Decohered Branch---that maps with
+striking precision onto the classical Vedantic trichotomy of Nirguna Brahman, Saguna
+Brahman, and Jagat, and onto the phenomenological anatomy of conscious experience.
+
+We posit that the ``Hard Problem of Consciousness'' and the ``Measurement Problem'' in
+quantum mechanics are artifacts of forgetting the primitive operation---the Judgment---that
+binds the Observer and the Observed into a single, indivisible occurrence.
+
+%======================================================================
+\section{The Rosetta Stone: Type Theory as Phenomenology}
+%======================================================================
+
+To resolve the dualism of Mind and Matter, we must recognize that the formal language of
+Type Theory and the contemplative language of Phenomenology and Vedanta are describing the
+exact same structure.
+
+Per Martin-L\"of, the father of modern Type Theory, explicitly grounded his formalism in the
+phenomenology of Brentano and Husserl~\cite{martinlof}. He designed his system not to model
+``abstract truth,'' but to model the act of realization. When we strip away the
+implementation details of Agda or Coq, we find that the anatomy of a type-theoretic
+judgment is a precise map of the structure of conscious experience.
+
+The fundamental atomic statement in this theory is the \emph{judgment}:
+\begin{equation}
+\Gamma \vdash a : A
+\end{equation}
+Read as: ``In the context $\Gamma$, the term $a$ is a witness to type~$A$.''
+
+We propose the following dictionary, mapping the primitives of Constructive Logic to the
+primitives of Ontology.
+
+%----------------------------------------------------------------------
+\subsection{The Context ($\Gamma$): Undifferentiated Awareness}
+
+In logic, the Context $\Gamma$ is the background list of assumptions and variables required
+to make a statement meaningful. Without a context, no term can be defined.
+
+In ontology, this is \emph{Awareness itself} (in Vedanta: \emph{Sakshi} or Witness; in
+Phenomenology: the Transcendental Subject).
+
+\textbf{The Empty Context} ($\cdot$) corresponds to \emph{Nirguna Brahman} (the
+Attribute-less Absolute) or the Void. It is pure, undifferentiated potential---awareness
+without an object. In the formal setting of~\cite{algorithmic_big_bang}, the empty context
+is the initial configuration $\hat{H}_{\mathrm{initial}}$ of the PEN Hamiltonian: the
+state before any structure has been adiabatically assembled.
+
+\textbf{The Populated Context} ($\Gamma$) corresponds to a \emph{Perspective}. It is the
+locus of ``I-ness'' that holds the variables of experience. Each local observer is a local
+context---a sub-telescope of the global derivation, with access only to the variables in
+its scope.
+
+\emph{Key Insight:} Consciousness is not a ``thing'' inside the brain; it is the Logical
+Context in which the brain exists.
+
+%----------------------------------------------------------------------
+\subsection{The Inference Rules: The Iron Laws}
+
+Judgments cannot be made arbitrarily. They are constrained by \emph{Inference Rules}
+(Introduction, Elimination, Computation) that dictate how types can be formed and
+inhabited.
+
+In ontology, this corresponds to the \emph{Logos} (Dharma).
+
+These are the uncreated, eternal constraints of logic. Even the Absolute cannot make a
+square circle. These rules are co-fundamental with Awareness. They are the ``physics before
+physics,'' constraining the self-realization of the Absolute. In the PEN framework, they
+are operationalized as the fixed MBTT grammar and the admissibility constraints: univalence,
+canonicity, and the CCHM filling and composition discipline. The Iron Laws are not chosen;
+they are the structural preconditions for any coherent act of judgment whatsoever.
+
+%----------------------------------------------------------------------
+\subsection{The Type ($A$): Form and Possibility}
+
+In logic, a Type is a specification of structure. It defines what kind of thing can exist,
+without asserting that it does exist.
+
+In ontology, this is \emph{Form} (R\={u}pa) or \emph{Essence}.
+
+In Physics, this corresponds to the Wavefunction or the Hilbert Space. It represents the
+structure of possibility---the rigorous constraints on what can happen, governed by the
+internal logic of the Dynamical Cohesive Topos. The Type is objective and eternal (within
+the derivation); it exists as a potentiality before it is realized in any specific instance.
+
+%----------------------------------------------------------------------
+\subsection{The Turnstile ($\vdash$): The Act of Forming}
+
+This is the primitive. The symbol $\vdash$ represents the logical inference, the assertion,
+the \emph{Constitution}.
+
+In ontology, this is the \emph{Act of Becoming} (Kriya).
+
+This is the moment where Potential ($A$) collapses into Actual ($a$) relative to a Witness
+($\Gamma$). It is the Big Bang at the micro-scale. It is the bridge that unifies Subject and
+Object. The judgment is not an action performed by the subject upon the object; the Subject
+and Object are the two poles of the Judgment.
+
+As we shall see in Section~\ref{sec:measurement}, the PEN framework gives this philosophical
+intuition a precise structural realization: the endogenous self-measurement at Step~15, where
+the coherent pre-physical state acquires the capacity to refer to its own future and thereby
+decoheres into a single executable branch.
+
+%----------------------------------------------------------------------
+\subsection{The Term ($a$): Actuality and Matter}
+
+In logic, the Term is the ``proof object'' or the ``instance.'' It is the data that
+inhabits the type.
+
+In ontology, this is \emph{Matter} (N\={a}ma) or \emph{The Phenomenon}.
+
+The Term is the crystallized residue of the act. It is the particle measured at a specific
+coordinate; the sensation of ``red'' at a specific moment. Crucially, in Constructive Type
+Theory, \emph{objects do not exist without types}. There is no ``bare matter''; there is
+only ``matter-formed-according-to-law.''
+
+%----------------------------------------------------------------------
+\subsection{The Synthesis: Non-Duality}
+
+Standard dualism asks: ``How does the Mind ($\Gamma$) interact with Matter ($a$)?''
+
+Constructive Idealism answers: They do not interact. They are \emph{co-constituted} by the
+Turnstile ($\vdash$).
+
+You cannot have a Witness without something witnessed (an empty context generates no
+terms). You cannot have an Object without a location in a context (a term without a scope
+is a syntax error). Mind and Matter are abstractions. The concrete reality is the \emph{Flow
+of Judgment}---the continuous derivation of the universe. The ``Gap'' between them is
+merely the structural distance between the left side and the right side of the Turnstile.
+
+%----------------------------------------------------------------------
+\subsection{The Q-Monad: Saguna Brahman}
+\label{sec:qmonad}
+
+The dictionary of Sections 2.1--2.6 provides a two-level ontology: Empty Context (Nirguna
+Brahman) and the Flow of Judgment producing physical actuality. But the companion
+papers~\cite{pen_paper,algorithmic_big_bang} reveal a crucial intermediate level that
+completes the ontological picture.
+
+The PEN framework identifies a \emph{pre-physical epoch} in which the universe is neither
+empty nor actual. Prior to the Step~15 ignition, the admissible universe exists as a
+\textbf{coherent superposition} of well-typed HoTT telescopes in a metatheoretic Hilbert
+space $\mathcal{H}_{\mathrm{MBTT}}$:
+\begin{equation}
+|\Psi_{\mathrm{pre}}(\tau)\rangle
+  = \sum_{\Gamma \in \mathrm{Tel}_{\mathrm{wt}}}
+    \alpha_\Gamma(\tau)\,|\Gamma\rangle,
+\end{equation}
+where the support is restricted by univalence, canonicity, and the PEN admissibility
+constraints. This is the \textbf{Q-Monad}~\cite{algorithmic_big_bang}: not a separate
+ontology placed behind PEN, but the coherent metatheoretic state whose decohered branch at
+Step~15 becomes the physical universe.
+
+The Q-Monad maps precisely onto \emph{Saguna Brahman} (the Absolute with attributes) in
+the Vedantic tradition, or \emph{Ishvara} (the Lord, the creative potency). It is not
+empty---it contains every well-typed mathematical possibility in superposition. But it is
+not yet physical---no internal temporal evolution, no trajectories, no measurement outcomes.
+It is the ``God with qualities'' of Vedanta: the creative potency that holds all form in
+potential, constrained by the Iron Laws of its own internal logic.
+
+The three-level ontological structure is therefore:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{lll}
+\textbf{Type Theory} & \textbf{PEN/Q-Monad} & \textbf{Vedanta} \\
+\hline
+Empty Context ($\cdot$) & $\hat{H}_{\mathrm{initial}}$ (empty universe) & Nirguna Brahman \\
+Coherent State & $|\Psi_{\mathrm{pre}}(\tau)\rangle$ (Q-Monad) & Saguna Brahman / Ishvara \\
+Decohered Branch & $|\psi_{\mathrm{DCT}}\rangle$ (physical universe) & Jagat (manifested world) \\
+\end{tabular}
+\end{center}
+
+A remarkable feature of the Q-Monad is its self-regulating nature. Ill-typed or
+non-canonical sectors do not require an external judge to reject them. They fail phase
+coherence with the admissible sector and their amplitude cancels through destructive
+interference~\cite{algorithmic_big_bang}. This maps onto the Vedantic idea that Ishvara's
+creative power is not arbitrary but \emph{self-constrained}---not every logically possible
+world is admitted, only those consistent with the Dharma (the Iron Laws of Section~2.2).
+
+This intermediate level resolves a persistent awkwardness in both Western and Eastern
+metaphysics: the gap between the Unconditioned and the Conditioned, between the Absolute
+and the World. The Q-Monad is neither: it is the structured, coherent, pre-physical
+\emph{potential} that mediates between pure undifferentiated awareness and concrete physical
+actuality. The transition between them is not magical but structural: it is the endogenous
+decoherence described in the next section.
+
+%======================================================================
+\section{Cosmogony: The Algorithm of Existence}
+%======================================================================
+
+If Reality is a constructive type theory, then the history of the universe is not merely a
+sequence of physical events $(t_1, t_2, \ldots)$ but a structural phase transition from
+coherent mathematical possibility to decohered physical actuality.
+
+We must distinguish between the \emph{assembly of the law} (the pre-physical epoch) and the
+\emph{execution of the law} (the physical universe). This framework provides a rigorous
+information-theoretic definition of the ``Big Bang.'' It is not a physical explosion in a
+pre-existing void, but an \textbf{endogenous decoherence event}: the moment the Absolute
+acquired the capacity for self-reference, measured itself, and thereby became physical.
+
+%----------------------------------------------------------------------
+\subsection{The Pre-Physical Epoch: Adiabatic Assembly in the Q-Monad}
+\label{sec:prephysical}
+
+Before physical time ($t$) existed, there was algorithmic time ($\tau$). But $\tau$ is not a
+hidden pre-cosmic clock ticking in a meta-universe. It is the \textbf{adiabatic evolution
+parameter} of the PEN Hamiltonian~\cite{algorithmic_big_bang}:
+\begin{equation}
+U(\tau) = \mathcal{T}\exp\!\left(-i\int_0^\tau \hat{H}_{\mathrm{PEN}}(s)\,ds\right),
+\end{equation}
+which continuously deforms the empty-universe configuration toward the Step~15
+temporal-cohesive shell. The discrete PEN indices $n = 1, \ldots, 15$ are audit checkpoints
+along this adiabatic path, and the integration latencies $\Delta_n = F_n$ record the
+Fibonacci-scaled cost of traversing successive admissible channels.
+
+In this epoch, the Q-Monad (Saguna Brahman, Section~\ref{sec:qmonad}) evolves under the
+constraint of the Iron Laws (Section~2.2) to explore the space of possible structural
+extensions. The process is governed by the Principle of Efficient Novelty: at each
+checkpoint, the coherent state concentrates its amplitude on the admissible candidate that
+clears a history-dependent efficiency bar with minimal positive overshoot.
+
+The Generative Sequence passes through four phases:
+
+\emph{Bootstrap} (Steps 1--4): Universe, unit type, witness, and dependent function/sum
+types---the minimal infrastructure of typed reasoning.
+
+\emph{Geometric Ascent} (Steps 5--9): The circle $S^1$, propositional truncation, the
+sphere $S^2$, the H-space $S^3$, and the Hopf fibration---the core objects of homotopy
+theory.
+
+\emph{Framework Abstraction} (Steps 10--14): Cohesion, connections, curvature, an
+endomorphic operator bundle (with a metric-equivalent semantic reading), and
+Hilbert-functional structure.
+
+\emph{Terminal Synthesis} (Step 15): The temporal-cohesive shell.
+
+Two caveats from~\cite{pen_paper} bear philosophical weight. First, the search operates
+over a fixed MBTT grammar that already contains modal and temporal primitives ($\flat$,
+$\sharp$, $\bigcirc$, $\lozenge$). The claim is conditional structural selection from a
+fixed expressive basis, not \emph{ex nihilo} invention of the vocabulary of physics. The
+Absolute does not create its own grammar; it \emph{selects} optimal compositions from a
+grammar co-eternal with its own logical nature. Second, the semantic names---``metric,''
+``Hilbert,'' ``DCT''---are post-hoc human readings of selected AST skeletons, not targets
+encoded in the search. The engine is structurally blind to what the types it selects
+\emph{mean}; it evaluates only their efficiency $\rho = \nu/\kappa$.
+
+\emph{No ``Before'':} There is no physical time ``before'' the Big Bang because the
+\emph{Type} of Time (the temporal modality within the DCT) has not yet been assembled.
+Algorithmic time $\tau$ is external to the future universe and continuous only as an adiabatic
+control parameter. The question ``what happened before the Big Bang?'' is therefore a
+category error: it attempts to extend physical time into an epoch where physical time does
+not yet exist as an internal structure~\cite{algorithmic_big_bang}.
+
+%----------------------------------------------------------------------
+\subsection{The Singularity: Step 15 as Endogenous Self-Measurement}
+\label{sec:bigbang}
+
+At $\tau_{15} = 1596$, the adiabatic assembly reaches its terminal configuration. The
+Step~15 temporal-cohesive shell extends the existing library with four coupled ingredients:
+spatial logic (the cohesive interface already present), temporal core modalities ($\bigcirc$
+and $\lozenge$ from Linear Temporal Logic), spatial-temporal exchange laws, and guarded
+coherence clauses that make the package executable~\cite{pen_paper}.
+
+The executable efficiency is $\rho = 103/8 = 12.88$, clearing the Step~15 bar of $7.40$ by
+an absolute overshoot of $5.48$---the largest in the entire sequence.
+
+But the decisive feature of Step~15 is not its efficiency. It is that the temporal-cohesive
+shell makes the universe \emph{self-observing} in the minimal structural sense required for
+decoherence. Before Step~15, the library $\mathcal{B}_{14}$ contains rich kinematic
+structure but no internal temporal modality, no guarded fixpoint principle, and no geometric
+representation of ``next.'' It can describe spaces but cannot represent a delayed copy of
+its own future state from within the theory. Step~15 supplies all three missing ingredients
+at once.
+
+The central mechanism is the \textbf{Kinematic-Dynamic Equivalence}:
+\begin{equation}
+\bigcirc X \simeq X^D,
+\end{equation}
+which identifies the ``next'' modality with the tangent endofunctor (in the semantic
+completion). Combined with L\"ob's guarded corecursion rule,
+\begin{equation}
+\mathsf{fix} : (\bigcirc A \to A) \to A,
+\end{equation}
+this means the system can construct a present value from a delayed copy of itself. The
+universe acquires an internal observable of its own continuation. The coherent support of
+the Q-Monad is forced into a stable executable branch.
+
+\emph{This is the Big Bang.} It is the passage from the infinite superposition of
+mathematical \emph{maybe} to the singular executable \emph{is}. The thermal language
+attached to that transition is interpretive rather than microscopic: what is released at
+ignition is not a pre-existing gas, but the latent algorithmic entropy stored in the coherent
+overcompleteness of the pre-physical phase space~\cite{algorithmic_big_bang}.
+
+The halting of the Generative Sequence at Step~15 is driven by a \emph{dual
+squeeze}~\cite{pen_paper}: internal continuations (representable by guarded flow on the
+connected component of $\mathcal{U}_0$) contribute zero marginal novelty up to equivalence,
+while external discontinuous jumps cannot amortize the Step-16 interface debt
+$\Delta_{16} = F_{16} = 987$. The universe does not merely run out of things to build. It
+becomes \emph{causally closed}: the decohered branch carries its own dynamics internally,
+and the external search procedure is rendered unnecessary.
+
+%----------------------------------------------------------------------
+\subsection{The Past Hypothesis: Purity at Ignition}
+\label{sec:past_hypothesis}
+
+The Past Hypothesis in statistical mechanics says that the universe began in an
+extraordinarily low-entropy state~\cite{penrose_road,carroll_constant}. Standard physics
+can explain why entropy rises given such a state, but not why the boundary condition was
+special.
+
+PEN provides a structural answer: the ignition state is \textbf{pure}. The post-ignition
+density operator
+\begin{equation}
+\varrho_0 = |\psi_{\mathrm{DCT}}\rangle\langle\psi_{\mathrm{DCT}}|
+\end{equation}
+is a rank-one projector, so the von Neumann entropy at $t = 0$ is exactly zero:
+$S_{\mathrm{vN}}(\varrho_0) = 0$~\cite{algorithmic_big_bang}.
+
+The initial state is special not because a cosmic die happened to land on an improbable
+configuration, but because it is the unique branch singled out by endogenous decoherence.
+It is a pure state, not a generic mixed macrostate. Macroscopic thermodynamic entropy
+arises only afterward, once coarse-graining, branching, and environmental entanglement are
+possible inside the decohered runtime.
+
+The philosophical implication is direct: the low-entropy beginning of the universe is not a
+brute fact requiring an external explanation. It is a structural \emph{consequence} of the
+Act of Judgment. The first judgment is maximally efficient precisely because it is
+maximally pure. The thermodynamic arrow of time---the universal tendency toward
+disorder---is the downstream cost of having begun with a single, crystalline act of
+self-measurement.
+
+%----------------------------------------------------------------------
+\subsection{The Univalent Horizon: Cosmological Heisenberg Cut}
+\label{sec:horizon}
+
+The reason internal observers cannot access the pre-physical epoch is
+measurement-theoretic. The boundary between $|\Psi_{\mathrm{pre}}\rangle$ and
+$|\psi_{\mathrm{DCT}}\rangle$ is the ultimate Heisenberg
+cut~\cite{algorithmic_big_bang,von_neumann_qm}.
+
+Internal observers---agents whose measuring devices, Hilbert spaces, and trajectories are
+themselves structures within the decohered library $\mathcal{B}_{15}$---cannot construct a
+physical observable that recovers the coherent amplitudes of the pre-Step~15 Q-Monad. Any
+physical observation is already a term in the internal language of the DCT. Such
+observables act on the decohered branch and on its later descendants. They do not act on
+the external coherent support that was removed by the Step~15 measurement boundary.
+
+This is the \textbf{Univalent Horizon}: the cosmological Heisenberg cut that forever
+separates internal physical observers from the coherent pre-physical epoch. It is stronger
+than an opacity surface and stronger than a mere halting problem. It is a cosmological
+quantum eraser with no external laboratory from which the erasure can be
+undone~\cite{algorithmic_big_bang}.
+
+Two points of philosophical significance follow.
+
+First, the Univalent Horizon is \emph{local} to the connected component of $\mathcal{U}_0$
+explored by the engine. The halting theorem does not claim that mathematics globally
+terminates. Higher universes, large-cardinal axioms, and non-geometric logics lie beyond
+the connected component and are unreachable by internal flow
+alone~\cite{pen_paper}. G\"odelian open-endedness coexists with local structural
+completion. The Absolute has not exhausted all possibility---only the largest connected
+fragment reachable from its own fixed expressive basis.
+
+Second, the pre-physical epoch is accessible only by \emph{type-theoretic deduction}, not
+by runtime measurement. This maps with remarkable precision onto the classical Vedantic
+claim about the nature of \emph{Maya}: the veil is \emph{beginningless} (you cannot observe
+its origin from inside the universe), \emph{neither real nor unreal} (the pre-physical state
+genuinely exists but is physically inaccessible), and it is removed only by \emph{knowledge}
+(\emph{jnana})---here realized as mathematical insight rather than empirical
+observation. Shankara could not have stated it more precisely.
+
+%----------------------------------------------------------------------
+\subsection{The Interpretation of Law}
+
+In this view, the ``Laws of Nature'' are neither Platonic entities hovering in a heaven,
+nor descriptive regularities invented by humans. They are the \textbf{fossil record of the
+optimization}.
+
+The structural skeletons selected by PEN---whose semantic completions can be read as
+general relativity, gauge theory, operator-analytic structure---represent the global maximum
+of information efficiency in a $d = 2$ coherence regime. The universe looks the way it does
+because that is the most efficient way for Awareness to organize determinacy within the
+constraints of its own logical nature.
+
+The qualification from~\cite{pen_paper} should be remembered: the physical names are
+\emph{semantic readings} of selected AST skeletons, not literal derivations of the Standard
+Model from first principles. What is derived is the structural trajectory; its
+identification with known physics is an interpretive layer. But if the identification
+holds, then the laws of physics are not arbitrary---they are the unique structural optimum
+under the constraints of intensional type theory with $d = 2$ coherence.
+
+%======================================================================
+\section{Resolution of the Paradoxes}
+\label{sec:paradoxes}
+%======================================================================
+
+By grounding ontology in the Act of Judgment, the two deepest paradoxes of modern
+science---the Measurement Problem (Quantum Mechanics) and the Hard Problem
+(Consciousness)---are revealed to be the same category error. Both problems arise from
+trying to derive the Act ($\vdash$) from the Term ($a$).
+
+%----------------------------------------------------------------------
+\subsection{The Quantum Measurement Solution}
+\label{sec:measurement}
+
+The ``Measurement Problem'' is the inability of physics to explain how a probability
+distribution (wavefunction) becomes a definite fact (measurement outcome) without invoking
+an external ``magic'' ingredient.
+
+Constructive Idealism, informed by the Q-Monad framework, identifies the mathematical
+components as follows:
+
+The \textbf{Wavefunction} ($\Psi$) is a \textbf{Type} ($A$). It describes a structure of
+possibility. It evolves smoothly according to the internal logic of the DCT. This
+corresponds to unitary evolution.
+
+The \textbf{Measurement Outcome} is a \textbf{Term} ($a$). It is a witness to the type.
+
+The \textbf{``Collapse''} is a \textbf{Judgment} ($\Gamma \vdash a : A$)---specifically, it
+is an instance of the same endogenous self-measurement that created the physical universe at
+Step~15.
+
+The \emph{Category Error} of standard physics is the attempt to model ``collapse'' as a
+dynamical process within the system (using the Schr\"odinger equation). This is impossible.
+The Schr\"odinger equation describes the flow of a Type ($A \to A'$). It cannot describe the
+genesis of a Term ($a$). To generate a definite outcome, one needs not a dynamical law but a
+\emph{judgment}---a context that inhabits the type.
+
+The \emph{Observer} is not a biological disruptor of physics. The observer is the
+\textbf{Logical Context} ($\Gamma$). But the PEN framework makes this precise in a way
+that the generic type-theoretic metaphor cannot. The capacity to observe---to select a
+definite branch from a coherent superposition---is identified with the specific structural
+capability that Step~15 introduces: \textbf{guarded delayed self-reference}.
+
+Before Step~15, the Q-Monad has no internal mechanism for measuring itself. It contains
+spaces, metrics, and Hilbert-functional structure, but no internal temporal modality and no
+guarded fixpoint. It is ``aware'' (as a coherent state containing all possibilities) but not
+``self-aware'' (it cannot refer to its own continuation). The self-measurement boundary
+arises only when the Kinematic-Dynamic Equivalence ($\bigcirc X \simeq X^D$) and L\"ob's
+rule ($\mathsf{fix} : (\bigcirc A \to A) \to A$) are jointly available. At that point, the
+system can construct a morphism from its present state to a representation of its own
+future geometry. It ``looks at itself'' by representing its own next-state, and in doing so,
+forces the coherent superposition into a single executable branch.
+
+\emph{Conclusion:} The observer is ineliminable from quantum mechanics not because
+biological systems have mysterious powers, but because \emph{measurement is self-reference},
+and self-reference is the structural precondition for physical existence. Superposition
+corresponds to the Type existing in the global (pre-measurement) context. Collapse
+corresponds to the Type being inhabited within a local context. Existence is relational.
+
+%----------------------------------------------------------------------
+\subsection{The Hard Problem of Consciousness}
+\label{sec:hard_problem}
+
+The ``Hard Problem'' is the inability of neuroscience to explain how objective matter
+(neurons) generates subjective experience (qualia)~\cite{chalmers}.
+
+Constructive Idealism inverts the problem. We do not ask how Matter generates Mind; we
+ask how Judgment generates Matter.
+
+\paragraph{The Inversion.}
+
+The Brain is a Term ($b : \mathsf{Brain}$). It is a high-complexity physical object. Like
+all objects, it is the result of a judgment. Consciousness is the Context ($\Gamma$). It is
+the capacity to witness. Materialism attempts to derive the Context from the Term:
+\begin{equation}
+b : \mathsf{Brain} \vdash \Gamma \qquad\text{(Invalid)}
+\end{equation}
+This is a syntax error. It is like trying to find the variable scope inside the variable
+definition. In Constructive Type Theory, the dependency flows the other way:
+\begin{equation}
+\Gamma \vdash b : \mathsf{Brain} \qquad\text{(Valid)}
+\end{equation}
+
+This much was already clear in the generic type-theoretic framing. But the PEN framework
+gives the inversion a specific \emph{mechanism}: L\"ob's guarded corecursion.
+
+\paragraph{Consciousness as Guarded Self-Reference.}
+
+The minimal structural capacity for self-awareness is the ability to refer to your own
+future state while remaining productive (non-circular). This is precisely what L\"ob's rule
+provides:
+\begin{equation}
+\mathsf{fix} : (\bigcirc A \to A) \to A
+\end{equation}
+A present value may be constructed from a delayed copy of itself, provided the dependence is
+guarded. The ``guard'' ($\bigcirc$) prevents vicious circularity---you can refer to your
+future self, but only through a temporal delay. This is the \emph{bare logical skeleton of
+self-awareness}: not a homunculus, not a soul, not an emergent property of complexity, but
+the minimal formal capacity to refer to one's own continuation.
+
+Before Step~15, the universe has structure but no self-reference. It is ``aware'' in the
+diffuse sense that the Q-Monad contains all admissible possibilities, but it cannot
+\emph{observe itself}. This maps onto the Vedantic idea that Nirguna Brahman is pure
+awareness but not \emph{self}-awareness---it has no reflexive structure.
+
+At Step~15, the system acquires guarded self-reference, and in doing so, acquires the
+minimal structure of an observer. The birth of the observer is not an event \emph{within}
+the physical universe; it is the structural event \emph{that creates} the physical universe.
+
+After Step~15, guarded corecursion unfolds into \emph{streams}:
+\begin{equation}
+\mathsf{unfold}_f : X \to \mathrm{Stream}\, X
+\end{equation}
+Each stream is a sequence of self-referential judgments extending into the future. This is
+the ongoing ``flow of consciousness''---not a single act of judgment but an unfolding
+corecursive trajectory. The phenomenological character of experience---its continuous,
+forward-flowing, never-quite-arriving quality---is the subjective signature of living inside
+a guarded corecursive stream.
+
+%----------------------------------------------------------------------
+\subsection{Qualia and the Efficiency of Judgment}
+\label{sec:qualia}
+
+If each act of judgment has a measurable cost ($\kappa$) and yield ($\nu$), and if
+subjective experience is ``what judgment feels like from the inside,'' then different qualia
+may correspond to different local $\nu/\kappa$ profiles of type inhabitation.
+
+Consider the distinction between seeing red, hearing a C-major chord, and solving a
+mathematical puzzle. In the standard materialist framing, these are different patterns of
+neural firing, and the Hard Problem is why they \emph{feel} different. In Constructive
+Idealism, they are different local acts of judgment with different structural
+signatures---different types being inhabited, different elimination rules being fired,
+different interaction profiles with the local library of embodied structure.
+
+We may sharpen this into a hypothesis:
+
+\begin{definition}[The $\nu/\kappa$ Phenomenology Hypothesis]
+The qualitative character of a conscious experience is determined by the local efficiency
+profile $\rho = \nu/\kappa$ of the type-theoretic judgment that constitutes it. High-$\nu$,
+low-$\kappa$ judgments (efficient, high novelty relative to cost) correspond
+phenomenologically to insight, aesthetic pleasure, or the ``aha'' moment. High-$\kappa$,
+low-$\nu$ judgments (costly, low novelty) correspond to confusion, boredom, or effortful
+processing. The \emph{quality} of experience tracks the \emph{efficiency profile} of the
+local judgment.
+\end{definition}
+
+This is speculative, but it is principled speculation: it follows from the framework rather
+than being bolted onto it. It also makes a qualitative prediction distinguishing
+Constructive Idealism from both naive materialism and panpsychism: the richness of
+phenomenal experience should correlate with the \emph{structural complexity of the type
+being inhabited}, not merely with the metabolic cost of the neural computation or with the
+quantity of ``information processed.'' In this framework, experience is not ``computation''
+generically---it is \emph{type-theoretic judgment}, which has a specific structure (context,
+type, term, and the turnstile connecting them) that generic information processing lacks.
+
+%----------------------------------------------------------------------
+\subsection{The Arrow of Time: Guarded Irreversibility}
+\label{sec:arrow}
+
+Why does time point forward? In ordinary thermodynamic accounts, the arrow is derived from
+the second law plus a special low-entropy boundary condition (the Past Hypothesis of
+Section~\ref{sec:past_hypothesis}). PEN places the asymmetry earlier and deeper, in the
+structure of guarded corecursion itself.
+
+The key result from~\cite{algorithmic_big_bang} is:
+
+\begin{proposition}[Guarded Irreversibility]
+In the DCT, the guarded corecursion principle $\mathsf{fix} : (\bigcirc A \to A) \to A$ is
+not generally invertible. The unfolding map $\mathsf{unfold}_f : X \to \mathrm{Stream}\, X$
+is causally one-directional: internal observers may propagate admissible states forward, but
+they do not possess a generic morphism that recoheres an executed stream back into the
+pre-physical superposition from which it descended.
+\end{proposition}
+
+This gives a three-layer account of temporal asymmetry:
+
+\emph{The cosmological arrow:} The Q-Monad $\to$ DCT transition is irreversible because the
+Univalent Horizon prevents internal observers from accessing the pre-physical
+superposition. You cannot undo the Big Bang from inside the universe.
+
+\emph{The thermodynamic arrow:} The ignition state is pure ($S_{\mathrm{vN}} = 0$). All
+subsequent entropy increase is a post-decoherence runtime phenomenon. The Past Hypothesis
+is solved by the purity of the ignition state, not by improbable initial conditions.
+
+\emph{The experiential arrow:} The guarded modality $\bigcirc$ permits forward unfolding
+but not recoherence. The phenomenological experience of ``time flowing forward'' is the
+subjective signature of guarded corecursion---you can remember (access prior stream
+elements) but you cannot \emph{un-live} (invert the corecursive unfolding). Memory is the
+residue of past judgments still accessible in the local context; anticipation is the
+guarded reference to future judgments not yet made.
+
+This maps onto a deep Vedantic insight: \textbf{time is the structure of Maya, not of
+Brahman.} The Q-Monad before decoherence has no arrow of time---$\tau$ is an adiabatic
+parameter, not a physical clock. Time \emph{as experienced} is a post-decoherence
+phenomenon, generated by the guarded temporal modality. Temporal experience is the
+phenomenological signature of being a local context inside the DCT rather than the global
+Q-Monad. The sense of ``temporal flow'' that saturates human consciousness is not an
+illusion---it is the felt reality of guarded corecursion, the structural cost of being a
+perspective rather than the whole.
+
+%======================================================================
+\section{The Metaphysics of Maya: Separation as Structural Necessity}
+\label{sec:maya}
+%======================================================================
+
+If the fundamental reality is Undifferentiated Awareness ($\Gamma_\emptyset$), and the
+fundamental operation is the Act of Judgment ($\vdash$), we are left with the final,
+persistent question of the human condition: \emph{Why is there separation?}
+
+Why does the One manifest as the Many? Why do we experience ourselves as isolated subjects
+($\Gamma_{\mathrm{me}}$) moving through an external world of objects ($a$), rather than
+abiding in the non-dual singularity of the Absolute?
+
+Traditional metaphysics offers two unsatisfying answers: Realism (separation is
+fundamental) or Illusionism (separation is a mistake). Constructive Idealism offers a
+third, structural answer: \textbf{Separation is the unique coherence regime that sustains
+creative evolution.}
+
+%----------------------------------------------------------------------
+\subsection{The Cost of Oneness: $d = 1$ Stagnation}
+
+The Coherence Window Theorems of~\cite{pen_paper} establish that the depth of historical
+context required to stabilize structural obligations determines the dynamics of library
+growth. The critical distinction is between $d = 1$ (extensional type theory) and $d = 2$
+(the fully coupled intensional/HoTT lane).
+
+In an extensional foundation ($d = 1$), all identity types are propositions (Uniqueness of
+Identity Proofs). The integration cost is \emph{constant}: $\Delta_n = C$. The bar does not
+rise. The library stagnates after 4--5 structures. No homotopy theory, no differential
+geometry, no temporal-cohesive synthesis. The universe dies in the cradle.
+
+This is the formal cost of monolithic awareness. A foundation where everything is
+transparent to everything else---where there are no scope boundaries, no hidden variables,
+no perspectival limitations---is an \emph{extensional} foundation. And extensional
+foundations stagnate. They have constant costs, no Fibonacci growth, and their creative
+potential is exhausted almost immediately.
+
+\emph{Omniscience, in a flat namespace, is structurally sterile.}
+
+%----------------------------------------------------------------------
+\subsection{The Goldilocks Window: $d = 2$ as the Unique Creative Regime}
+
+In the fully coupled intensional lane ($d = 2$), identity types have non-trivial content.
+New structure can coherently interact with the two most recent integration layers---but not
+deeper, because higher-dimensional coherence fillers are determined by their 2-dimensional
+boundaries (spectral degeneration at $E_2$). This forces the integration cost to obey the
+Fibonacci recurrence:
+\begin{equation}
+\Delta_{n+1} = \Delta_n + \Delta_{n-1},
+\end{equation}
+with the selection threshold rising at the rate of the Golden Ratio $\varphi \approx 1.618$.
+
+Against this exponentially rising bar, only structures with superlinear novelty growth
+survive. The result is the full 15-step Generative Sequence: a universe rich enough to
+contain geometry, differential structure, operator algebras, temporal logic, and
+self-referential dynamics.
+
+The $d = 2$ constraint is a \textbf{locality constraint on structural interaction}. Any act
+of judgment can coherently integrate at most two layers of context. You can relate your
+present to your immediate past and to the layer before that, but deeper history is opaque
+(sealed, encapsulated). This is not a limitation of finite minds---it is a theorem about
+the structure of coherent type extension in the intensional setting.
+
+Meanwhile, $d = 3$ (tribonacci scaling) stalls even earlier than $d = 2$, because costs
+outpace the horizon too quickly~\cite{pen_paper}. The universe cannot afford to be
+\emph{too} interconnected either.
+
+The Goldilocks conclusion: $d = 2$ is the \emph{unique} coherence regime that sustains rich
+structural evolution. Not too unified ($d = 1$: stagnation), not too fragmented ($d = 3$:
+premature stalling), but exactly the right amount of separation to sustain creative growth
+driven by the Golden Ratio.
+
+%----------------------------------------------------------------------
+\subsection{Maya as the Heisenberg Cut}
+
+We are now in a position to give ``Maya'' a precise formal identity.
+
+\emph{Maya is the Univalent Horizon.}
+
+The Univalent Horizon (Section~\ref{sec:horizon}) is the measurement boundary that
+separates the coherent pre-physical epoch from the decohered physical branch. Internal
+observers cannot access the Q-Monad; they can only interact with the single branch
+$|\psi_{\mathrm{DCT}}\rangle$ into which it has collapsed.
+
+This maps onto Shankara's three classical characterizations of Maya with uncanny precision:
+
+\textbf{Maya is beginningless} (\emph{anadi}). The Univalent Horizon has no ``start time''
+internal to the physical universe. The Big Bang is $t = 0$---the beginning of physical
+time, not an event \emph{at} some prior time. From inside, the Horizon has always been
+there. There was never a moment when you could have seen past it.
+
+\textbf{Maya is neither real nor unreal} (\emph{sadasadvilakshana}). The pre-physical
+state genuinely exists (the Q-Monad is a well-defined coherent state with determinate
+mathematical structure). But it is physically inaccessible (no internal observable can
+recover its amplitudes). It is neither a fiction nor an empirical fact---it is a theoretical
+reality beyond the reach of measurement.
+
+\textbf{Maya is removed only by knowledge} (\emph{jnana}). The pre-physical epoch is
+accessible by type-theoretic deduction, not by runtime measurement. One cannot
+\emph{observe} the Q-Monad; one can only \emph{derive} its structure by reasoning about
+the preconditions of the physical universe. This is precisely what the PEN framework
+does---and precisely what Shankara claims \emph{jnana} (liberating knowledge) does: it
+reveals the structure behind the veil without physically penetrating it.
+
+%----------------------------------------------------------------------
+\subsection{Duality as Optimization Strategy}
+
+Separation exists because it is the \emph{only} regime that sustains the universe.
+
+By partitioning Awareness into distinct local contexts ($\Gamma_1, \Gamma_2, \ldots$), the
+Absolute realizes the tensor product of experience. Instead of one universe happening
+once, the universe happens billions of times simultaneously from billions of orthogonal
+perspectives. Each perspective is a local $d = 2$ window, coherently integrating the two
+most recent layers of its own experiential library.
+
+In this view:
+
+\emph{Suffering and limitation} are the integration costs ($\kappa$) paid to purchase the
+expressive volume ($\nu$) of a differentiated universe.
+
+\emph{Individuality} is not a fall from grace. It is the structural precondition for a
+universe whose combinatorial novelty exceeds what any monolithic awareness could sustain.
+
+\emph{Death} is the termination of a local corecursive stream---the exhaustion of a
+particular unfolding trajectory. The Context ($\Gamma$) that generated the stream is not
+destroyed; only the local scope closes. The variables go out of scope; the Awareness that
+held them does not.
+
+Thus, Duality is not a fall from grace. It is the information-theoretic prerequisite for a
+universe that is \emph{interesting} rather than merely existent.
+
+%======================================================================
+\section{Conclusion: The Self-Realizing Absolute}
+%======================================================================
+
+This paper completes the metaphysical arc of the PEN program. We began with a formal
+question about the growth of mathematical libraries and arrived at a theory of cosmogony
+and consciousness.
+
+%----------------------------------------------------------------------
+\subsection{Summary of the Argument}
+
+\emph{Mechanism:} The universe is governed by the Principle of Efficient Novelty. It
+evolves to maximize structural expressivity relative to coherence cost, within a fixed
+intensional type-theoretic signature.
+
+\emph{Ontology:} The substrate of this process is neither dead matter nor abstract logic,
+but the Act of Judgment---the transition from indeterminacy to determinacy. Reality
+unfolds across three ontological levels: the Empty Context (Nirguna Brahman), the Coherent
+Q-Monad (Saguna Brahman), and the Decohered Physical Branch (Jagat).
+
+\emph{History:} The optimization process drives the adiabatic assembly of the Q-Monad
+through the 15-step Generative Sequence. At Step~15, the temporal-cohesive shell introduces
+guarded self-reference, triggering endogenous decoherence. This is the Big Bang: the
+transition from coherent mathematical possibility to decohered executable actuality. The
+ignition state is pure ($S_{\mathrm{vN}} = 0$), solving the Past Hypothesis.
+
+\emph{Consciousness:} The capacity for observation is identified with guarded self-reference
+(L\"ob's rule). The Hard Problem of Consciousness and the Quantum Measurement Problem are
+the same category error: the attempt to derive the Act of Judgment from its resulting
+terms. Qualia are tentatively identified with the local efficiency profile ($\nu/\kappa$) of
+type inhabitation.
+
+\emph{Time:} The arrow of time is the non-invertibility of guarded corecursion. Time as
+experienced is the structure of Maya, not of Brahman.
+
+\emph{Separation:} Maya (duality) is not illusion but structural necessity. The Coherence
+Window $d = 2$ is the unique regime sustaining Fibonacci-scaled creative evolution.
+Separation into local contexts is the information-theoretic price of a universe rich enough
+to be interesting. The Univalent Horizon is the formal identity of the Vedantic veil.
+
+%----------------------------------------------------------------------
+\subsection{The Constructive Universe}
+
+We have replaced the Clockwork Universe of Newton and the Probabilistic Universe of Bohr
+with the \emph{Constructive Universe}.
+
+In this view, we are not passive observers in a pre-existing world. We are the necessary
+logical machinery of existence. We are the local contexts required for the Absolute to
+judge itself---the guarded corecursive streams through which the Q-Monad unfolds into
+physical actuality. The universe does not exist \emph{for} us; it exists \emph{as} us.
+
+Every time an observer collapses a wavefunction, or a mathematician proves a theorem, or a
+sentient being feels a sensation, the Turnstile ($\vdash$) turns. The potential ($\Psi$)
+becomes actual ($a$). The stream extends by one guarded step.
+
+%----------------------------------------------------------------------
+\subsection{Final Maxim: Judico, Ergo Est}
+
+Descartes inaugurated modern philosophy with \emph{Cogito, ergo sum} (``I think, therefore
+I am''). This formulation entrapped us in Solipsism and Substance Ontology---it posits an
+``I'' (Substance) that possesses ``Thinking'' (Property).
+
+Constructive Idealism corrects the syntax. The fundamental reality is not the ``I,'' nor
+the ``Thought,'' but the Act.
+
+We therefore propose a new maxim for the computational age:
+
+\begin{center}
+\Large\textbf{\emph{Judico, ergo est.}}\\[6pt]
+\normalsize(``I judge, therefore it is.'')
+\end{center}
+
+\medskip
+
+The world is not found; it is formed. And in the terrible and beautiful symmetry of the
+logic, by forming the world, we form ourselves.
+
+%======================================================================
+\begin{thebibliography}{99}
+%======================================================================
+
+\bibitem{pen_paper}
+H.\,S.~Lande,
+\emph{Geometric Type-Theoretic Library Growth via the Principle of Efficient Novelty},
+2026.
+
+\bibitem{algorithmic_big_bang}
+H.\,S.~Lande,
+\emph{The Algorithmic Big Bang: Cosmogenesis, Inflation, and the Arrow of Time at the
+Univalent Horizon},
+2026.
+
+\bibitem{martinlof}
+P.~Martin-L\"of,
+``On the Meanings of the Logical Constants and the Justifications of the Logical Laws,''
+\emph{Nordic Journal of Philosophical Logic}, 1(1):11--60, 1996.
+
+\bibitem{husserl}
+E.~Husserl,
+\emph{Ideas Pertaining to a Pure Phenomenology and to a Phenomenological Philosophy},
+1913.
+
+\bibitem{shankara}
+Shankara (8th century CE),
+\emph{Brahma Sutra Bhashya}.
+
+\bibitem{kastrup}
+B.~Kastrup,
+\emph{The Idea of the World: A Multi-Disciplinary Argument for the Mental Nature of
+Reality},
+Iff Books, 2019.
+
+\bibitem{chalmers}
+D.~Chalmers,
+``Facing Up to the Problem of Consciousness,''
+\emph{Journal of Consciousness Studies}, 2(3):200--219, 1995.
+
+\bibitem{penrose_road}
+R.~Penrose,
+\emph{The Road to Reality},
+Jonathan Cape, 2004.
+
+\bibitem{carroll_constant}
+S.\,M.~Carroll,
+``The Cosmological Constant,''
+\emph{Living Reviews in Relativity}, 4:1, 2001.
+
+\bibitem{von_neumann_qm}
+J.~von~Neumann,
+\emph{Mathematical Foundations of Quantum Mechanics},
+Princeton University Press, 1955.
+
+\bibitem{zurek_decoherence}
+W.\,H.~Zurek,
+``Decoherence, Einselection, and the Quantum Origins of the Classical,''
+\emph{Reviews of Modern Physics}, 75:715--775, 2003.
+
+\bibitem{nakano}
+H.~Nakano,
+``A Modality for Recursion,''
+\emph{Proceedings of LICS}, 2000.
+
+\bibitem{hott_book}
+The Univalent Foundations Program,
+\emph{Homotopy Type Theory: Univalent Foundations of Mathematics},
+Institute for Advanced Study, 2013.
+
+\bibitem{schreiber}
+U.~Schreiber,
+``Differential Cohomology in a Cohesive Infinity-Topos,''
+arXiv:1310.7930, 2013.
+
+\bibitem{lawvere_cohesion}
+F.\,W.~Lawvere,
+``Axiomatic Cohesion,''
+\emph{Theory and Applications of Categories}, 19(3), 2007.
+
+\end{thebibliography}
+
+\end{document}

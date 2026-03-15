@@ -1,7 +1,7 @@
 use crate::accept::{AcceptanceOutcome, select_acceptance};
 use crate::config::SearchProfile;
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
-use crate::enumerate::{EnumerationContext, enumerate_telescopes_with_terminal_prefixes};
+use crate::enumerate::{EnumerationContext, build_clause_catalog, enumerate_telescopes};
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
 use crate::prefix_cache::{PrefixCache, PrefixCandidateGroup, PrefixSignature};
@@ -22,6 +22,7 @@ use pen_type::admissibility::{
     strict_admissibility_for_mode,
 };
 use pen_type::check::{CheckResult, check_telescope};
+use pen_type::connectivity::passes_connectivity;
 use pen_type::obligations::{RetentionClass, RetentionPolicy, summarize_structural_debt};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
@@ -166,6 +167,25 @@ struct PrefixFrontierItem {
     record: FrontierStateRecV1,
 }
 
+#[derive(Clone, Debug, Default)]
+struct RealisticShadowDiscovery {
+    prefix_cache: PrefixCache,
+    candidates: Vec<ExpandedCandidate>,
+    prefix_states_explored: usize,
+    enumerated_candidates: usize,
+    well_formed_candidates: usize,
+    malformed_rejections: usize,
+    malformed_rejection_reasons: BTreeMap<String, usize>,
+    admissibility_rejections: usize,
+    admissibility_diagnostics: AdmissibilityDiagnostics,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+struct OnlinePrefixWorkItem {
+    clause_kappa: u16,
+    prefix_telescope: Telescope,
+}
+
 pub fn supports_live_atomic_search(until_step: u32) -> bool {
     until_step <= LIVE_BOOTSTRAP_MAX_STEP
 }
@@ -295,9 +315,9 @@ fn search_next_step(
         strict_admissibility_for_mode(step_index, window_depth, library, admissibility_mode);
     let retention_policy = structural_debt.retention_policy();
     let objective_bar = compute_bar(window_depth as usize, step_index, history).bar;
-    let mut telescopes = Vec::new();
     let mut candidates = Vec::new();
     let mut prefix_cache = PrefixCache::default();
+    let mut prefix_states_explored = 0usize;
     let mut enumerated_candidates = 0usize;
     let mut well_formed_candidates = 0usize;
     let mut malformed_rejections = 0usize;
@@ -309,59 +329,62 @@ fn search_next_step(
         .map(|record| (record.step_index, record.nu))
         .collect::<Vec<_>>();
 
-    for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
-        let enumeration = enumerate_telescopes_with_terminal_prefixes(
+    if admissibility_mode == AdmissibilityMode::RealisticShadow {
+        let discovery = discover_realistic_shadow_candidates(
+            step_index,
             library,
-            EnumerationContext::from_admissibility(library, admissibility),
-            clause_kappa,
-        );
-        enumerated_candidates += enumeration.telescopes.len();
-        telescopes.extend(enumeration.telescopes);
-    }
+            history,
+            admissibility,
+            retention_policy,
+            &nu_history,
+        )?;
+        prefix_cache = discovery.prefix_cache;
+        candidates = discovery.candidates;
+        prefix_states_explored = discovery.prefix_states_explored;
+        enumerated_candidates = discovery.enumerated_candidates;
+        well_formed_candidates = discovery.well_formed_candidates;
+        malformed_rejections = discovery.malformed_rejections;
+        malformed_rejection_reasons = discovery.malformed_rejection_reasons;
+        admissibility_rejections = discovery.admissibility_rejections;
+        admissibility_diagnostics = discovery.admissibility_diagnostics;
+    } else {
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let telescopes = enumerate_telescopes(
+                library,
+                EnumerationContext::from_admissibility(library, admissibility),
+                clause_kappa,
+            );
+            enumerated_candidates += telescopes.len();
 
-    for telescope in telescopes {
-        match check_telescope(library, &telescope) {
-            CheckResult::Ok => {
-                well_formed_candidates += 1;
-            }
-            CheckResult::Err(error) => {
-                malformed_rejections += 1;
-                *malformed_rejection_reasons
-                    .entry(error.kind_label().to_owned())
-                    .or_insert(0) += 1;
-                continue;
-            }
-        }
-        let admissibility_decision =
-            assess_strict_admissibility(step_index, library, &telescope, admissibility);
-        admissibility_diagnostics.record(&admissibility_decision);
-        if !admissibility_decision.is_admitted() {
-            admissibility_rejections += 1;
-            continue;
-        }
-        if admissibility_mode == AdmissibilityMode::RealisticShadow {
-            if terminal_prefix_telescope(&telescope).is_some() {
-                record_prefix_candidate_group(
-                    step_index,
-                    library,
-                    history,
-                    &nu_history,
-                    telescope,
-                    retention_policy,
-                    &mut prefix_cache,
-                )?;
-            } else {
+            for telescope in telescopes {
+                match check_telescope(library, &telescope) {
+                    CheckResult::Ok => {
+                        well_formed_candidates += 1;
+                    }
+                    CheckResult::Err(error) => {
+                        malformed_rejections += 1;
+                        *malformed_rejection_reasons
+                            .entry(error.kind_label().to_owned())
+                            .or_insert(0) += 1;
+                        continue;
+                    }
+                }
+                let admissibility_decision =
+                    assess_strict_admissibility(step_index, library, &telescope, admissibility);
+                admissibility_diagnostics.record(&admissibility_decision);
+                if !admissibility_decision.is_admitted() {
+                    admissibility_rejections += 1;
+                    continue;
+                }
                 let candidate = evaluate_checked_candidate(library, history, telescope)?;
                 candidates.push(candidate);
             }
-        } else {
-            let candidate = evaluate_checked_candidate(library, history, telescope)?;
-            candidates.push(candidate);
         }
     }
 
     let prefix_frontier = if admissibility_mode == AdmissibilityMode::RealisticShadow {
         build_prefix_frontier_plan(
+            prefix_states_explored,
             step_index,
             objective_bar,
             retention_policy,
@@ -631,30 +654,162 @@ fn build_frontier_retention(
     }
 }
 
-fn record_prefix_candidate_group(
+fn discover_realistic_shadow_candidates(
     step_index: u32,
     library: &Library,
     history: &[DiscoveryRecord],
-    nu_history: &[(u32, u32)],
-    telescope: Telescope,
+    admissibility: StrictAdmissibility,
     retention_policy: RetentionPolicy,
-    prefix_cache: &mut PrefixCache,
+    nu_history: &[(u32, u32)],
+) -> Result<RealisticShadowDiscovery> {
+    let mut discovery = RealisticShadowDiscovery::default();
+    let enumeration_context = EnumerationContext::from_admissibility(library, admissibility);
+
+    for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+        if clause_kappa <= 1 {
+            let telescopes = enumerate_telescopes(library, enumeration_context, clause_kappa);
+            discovery.enumerated_candidates += telescopes.len();
+            for telescope in telescopes {
+                discovery.well_formed_candidates += 1;
+                let admissibility_decision =
+                    assess_strict_admissibility(step_index, library, &telescope, admissibility);
+                discovery
+                    .admissibility_diagnostics
+                    .record(&admissibility_decision);
+                if !admissibility_decision.is_admitted() {
+                    discovery.admissibility_rejections += 1;
+                    continue;
+                }
+                discovery
+                    .candidates
+                    .push(evaluate_checked_candidate(library, history, telescope)?);
+            }
+            continue;
+        }
+
+        let clause_catalog = build_clause_catalog(enumeration_context, clause_kappa);
+        if clause_catalog.is_empty() {
+            continue;
+        }
+
+        let mut frontier = clause_catalog
+            .clauses_at(0)
+            .iter()
+            .filter_map(|clause| {
+                let prefix_telescope = Telescope::new(vec![clause.clone()]);
+                (check_telescope(library, &prefix_telescope) == CheckResult::Ok).then_some(
+                    OnlinePrefixWorkItem {
+                        clause_kappa,
+                        prefix_telescope,
+                    },
+                )
+            })
+            .collect::<Vec<_>>();
+
+        while let Some(work_item) = pop_best_prefix(&mut frontier) {
+            discovery.prefix_states_explored += 1;
+            let prefix_len = work_item.prefix_telescope.clauses.len();
+
+            if prefix_len + 1 == usize::from(work_item.clause_kappa) {
+                record_terminal_prefix_group(
+                    step_index,
+                    library,
+                    history,
+                    admissibility,
+                    retention_policy,
+                    nu_history,
+                    &work_item.prefix_telescope,
+                    clause_catalog.clauses_at(prefix_len),
+                    &mut discovery,
+                )?;
+                continue;
+            }
+
+            for clause in clause_catalog.clauses_at(prefix_len) {
+                let mut child_prefix = work_item.prefix_telescope.clone();
+                child_prefix.clauses.push(clause.clone());
+                if check_telescope(library, &child_prefix) != CheckResult::Ok {
+                    continue;
+                }
+                frontier.push(OnlinePrefixWorkItem {
+                    clause_kappa: work_item.clause_kappa,
+                    prefix_telescope: child_prefix,
+                });
+            }
+        }
+    }
+
+    Ok(discovery)
+}
+
+fn record_terminal_prefix_group(
+    step_index: u32,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility: StrictAdmissibility,
+    retention_policy: RetentionPolicy,
+    nu_history: &[(u32, u32)],
+    prefix_telescope: &Telescope,
+    last_clause_options: &[pen_core::clause::ClauseRec],
+    discovery: &mut RealisticShadowDiscovery,
 ) -> Result<()> {
-    let Some(prefix_telescope) = terminal_prefix_telescope(&telescope) else {
-        return Ok(());
-    };
-    prefix_cache.record_group(
-        step_index,
-        prefix_telescope,
-        telescope,
-        library,
-        history,
-        nu_history,
-        retention_policy,
+    for clause in last_clause_options {
+        let mut telescope = prefix_telescope.clone();
+        telescope.clauses.push(clause.clone());
+        if check_telescope(library, &telescope) != CheckResult::Ok
+            || !passes_connectivity(library, &telescope)
+        {
+            continue;
+        }
+
+        discovery.enumerated_candidates += 1;
+        discovery.well_formed_candidates += 1;
+        let admissibility_decision =
+            assess_strict_admissibility(step_index, library, &telescope, admissibility);
+        discovery
+            .admissibility_diagnostics
+            .record(&admissibility_decision);
+        if !admissibility_decision.is_admitted() {
+            discovery.admissibility_rejections += 1;
+            continue;
+        }
+
+        discovery.prefix_cache.record_group(
+            step_index,
+            prefix_telescope.clone(),
+            telescope,
+            library,
+            history,
+            nu_history,
+            retention_policy,
+        )?;
+    }
+
+    Ok(())
+}
+
+fn pop_best_prefix(frontier: &mut Vec<OnlinePrefixWorkItem>) -> Option<OnlinePrefixWorkItem> {
+    if frontier.is_empty() {
+        return None;
+    }
+
+    frontier.sort_by(|left, right| {
+        prefix_frontier_work_key(left).cmp(&prefix_frontier_work_key(right))
+    });
+    Some(frontier.remove(0))
+}
+
+fn prefix_frontier_work_key(item: &OnlinePrefixWorkItem) -> (u16, u32, usize, String) {
+    (
+        item.clause_kappa,
+        item.prefix_telescope.bit_cost(),
+        item.prefix_telescope.kappa(),
+        serde_json::to_string(&item.prefix_telescope).expect("prefix telescope should serialize"),
     )
 }
 
 fn build_prefix_frontier_plan(
+    explored: usize,
     step_index: u32,
     objective_bar: Rational,
     retention_policy: RetentionPolicy,
@@ -662,10 +817,12 @@ fn build_prefix_frontier_plan(
     prefix_cache: &PrefixCache,
 ) -> PrefixFrontierPlan {
     if prefix_cache.is_empty() {
-        return PrefixFrontierPlan::default();
+        return PrefixFrontierPlan {
+            explored,
+            ..PrefixFrontierPlan::default()
+        };
     }
 
-    let explored = prefix_cache.len();
     let mut items = prefix_cache
         .iter()
         .enumerate()
@@ -800,11 +957,6 @@ fn build_prefix_frontier_plan(
         heuristic_dropped,
         pressure,
     }
-}
-
-fn terminal_prefix_telescope(telescope: &Telescope) -> Option<Telescope> {
-    (telescope.clauses.len() > 1)
-        .then(|| Telescope::new(telescope.clauses[..telescope.clauses.len() - 1].to_vec()))
 }
 
 fn prefix_frontier_record(
@@ -1232,12 +1384,12 @@ mod tests {
 
         assert_eq!(step.step_index, 15);
         assert_eq!(step.telescope, Telescope::reference(15));
-        assert_eq!(step.prefix_states_explored, 2);
+        assert!(step.prefix_states_explored > step.frontier_window.total_len());
         assert_eq!(step.prefix_frontier_hot_states, 2);
         assert_eq!(step.prefix_frontier_cold_states, 0);
-        assert_eq!(
-            step.prefix_frontier_hot_states + step.prefix_frontier_cold_states,
-            step.prefix_states_explored
+        assert!(
+            step.prefix_frontier_hot_states + step.prefix_frontier_cold_states
+                <= step.prefix_states_explored
         );
         assert_eq!(step.frontier_window.total_len(), 2);
         assert_eq!(step.frontier_dedupe_keys.len(), 2);

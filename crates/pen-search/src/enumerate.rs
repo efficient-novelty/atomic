@@ -40,6 +40,29 @@ pub struct TelescopeEnumeration {
     pub terminal_prefixes: Vec<Telescope>,
 }
 
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct ClauseCatalog {
+    clause_kappa: u16,
+    options_by_position: Vec<Vec<ClauseRec>>,
+}
+
+impl ClauseCatalog {
+    pub fn clause_kappa(&self) -> u16 {
+        self.clause_kappa
+    }
+
+    pub fn clauses_at(&self, position: usize) -> &[ClauseRec] {
+        self.options_by_position
+            .get(position)
+            .map(Vec::as_slice)
+            .unwrap_or(&[])
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.options_by_position.is_empty()
+    }
+}
+
 impl EnumerationContext {
     pub fn from_admissibility(library: &Library, admissibility: StrictAdmissibility) -> Self {
         Self {
@@ -459,122 +482,18 @@ pub fn enumerate_telescopes_with_terminal_prefixes(
     base_context: EnumerationContext,
     clause_kappa: u16,
 ) -> TelescopeEnumeration {
-    if base_context.require_curvature_shell_clauses && clause_kappa < 6 {
+    let clause_catalog = build_clause_catalog(base_context, clause_kappa);
+    if clause_catalog.is_empty() {
         return TelescopeEnumeration::default();
     }
 
     let mut telescopes = Vec::new();
     let mut terminal_prefixes = Vec::new();
     let mut prefix = Vec::new();
-    let clause_options_by_position = (0..usize::from(clause_kappa))
-        .map(|position| {
-            let clause_context = EnumerationContext {
-                scope_size: base_context.scope_size + position as u32,
-                ..base_context
-            };
-            let mut clauses = late_clause_options(position, clause_context, clause_kappa)
-                .unwrap_or_else(|| enumerate_next_clauses(clause_context));
-            if base_context.require_former_eliminator_clauses {
-                clauses.retain(|clause| {
-                    supports_former_package_clause_at_position(position, &clause.expr)
-                });
-            }
-            if base_context.require_initial_hit_clauses {
-                clauses.retain(|clause| {
-                    supports_initial_hit_clause_at_position(position, &clause.expr)
-                });
-            }
-            if base_context.require_truncation_hit_clauses {
-                clauses.retain(|clause| {
-                    supports_truncation_hit_clause_at_position(position, &clause.expr)
-                });
-            }
-            if base_context.require_higher_hit_clauses {
-                clauses.retain(|clause| {
-                    supports_higher_hit_clause_at_position(position, &clause.expr)
-                });
-            }
-            if base_context.require_sphere_lift_clauses {
-                clauses.retain(|clause| {
-                    supports_sphere_lift_clause_at_position(position, &clause.expr)
-                });
-            }
-            if base_context.require_axiomatic_bundle_clauses {
-                clauses.retain(|clause| {
-                    supports_axiomatic_bundle_clause_at_position(
-                        position,
-                        &clause.expr,
-                        base_context.library_size,
-                        base_context.historical_anchor_ref,
-                    )
-                });
-            }
-            if base_context.require_modal_shell_clauses {
-                clauses.retain(|clause| {
-                    supports_modal_shell_clause_at_position(position, &clause.expr)
-                });
-            }
-            if base_context.require_connection_shell_clauses {
-                clauses.retain(|clause| {
-                    supports_connection_shell_clause_at_position(
-                        position,
-                        &clause.expr,
-                        base_context.library_size,
-                    )
-                });
-            }
-            if base_context.require_curvature_shell_clauses {
-                clauses.retain(|clause| {
-                    supports_curvature_shell_clause_at_position(
-                        position,
-                        &clause.expr,
-                        base_context.library_size,
-                    )
-                });
-            }
-            if base_context.require_operator_bundle_clauses
-                || (base_context.generative_late_families && clause_kappa == 7)
-            {
-                clauses.retain(|clause| {
-                    supports_operator_bundle_clause_at_position(
-                        position,
-                        &clause.expr,
-                        base_context.library_size,
-                        base_context.generative_late_families,
-                    )
-                });
-            }
-            if base_context.require_hilbert_functional_clauses
-                || (base_context.generative_late_families && clause_kappa == 9)
-            {
-                clauses.retain(|clause| {
-                    supports_hilbert_functional_clause_at_position(
-                        position,
-                        &clause.expr,
-                        base_context.library_size,
-                        base_context.generative_late_families,
-                    )
-                });
-            }
-            if base_context.require_temporal_shell_clauses
-                || (base_context.generative_late_families && clause_kappa == 8)
-            {
-                clauses.retain(|clause| {
-                    supports_temporal_shell_clause_at_position(
-                        position,
-                        &clause.expr,
-                        base_context.historical_anchor_ref,
-                        base_context.generative_late_families,
-                    )
-                });
-            }
-            dedupe_sorted_clauses(clauses)
-        })
-        .collect::<Vec<_>>();
     enumerate_telescopes_dfs(
         library,
-        clause_kappa,
-        &clause_options_by_position,
+        clause_catalog.clause_kappa(),
+        &clause_catalog.options_by_position,
         &mut prefix,
         &mut telescopes,
         &mut terminal_prefixes,
@@ -586,6 +505,117 @@ pub fn enumerate_telescopes_with_terminal_prefixes(
         telescopes,
         terminal_prefixes,
     }
+}
+
+pub fn build_clause_catalog(base_context: EnumerationContext, clause_kappa: u16) -> ClauseCatalog {
+    if base_context.require_curvature_shell_clauses && clause_kappa < 6 {
+        return ClauseCatalog::default();
+    }
+
+    let options_by_position = (0..usize::from(clause_kappa))
+        .map(|position| clauses_for_position(base_context, clause_kappa, position))
+        .collect::<Vec<_>>();
+
+    ClauseCatalog {
+        clause_kappa,
+        options_by_position,
+    }
+}
+
+fn clauses_for_position(
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+    position: usize,
+) -> Vec<ClauseRec> {
+    let clause_context = EnumerationContext {
+        scope_size: base_context.scope_size + position as u32,
+        ..base_context
+    };
+    let mut clauses = late_clause_options(position, clause_context, clause_kappa)
+        .unwrap_or_else(|| enumerate_next_clauses(clause_context));
+    if base_context.require_former_eliminator_clauses {
+        clauses.retain(|clause| supports_former_package_clause_at_position(position, &clause.expr));
+    }
+    if base_context.require_initial_hit_clauses {
+        clauses.retain(|clause| supports_initial_hit_clause_at_position(position, &clause.expr));
+    }
+    if base_context.require_truncation_hit_clauses {
+        clauses.retain(|clause| supports_truncation_hit_clause_at_position(position, &clause.expr));
+    }
+    if base_context.require_higher_hit_clauses {
+        clauses.retain(|clause| supports_higher_hit_clause_at_position(position, &clause.expr));
+    }
+    if base_context.require_sphere_lift_clauses {
+        clauses.retain(|clause| supports_sphere_lift_clause_at_position(position, &clause.expr));
+    }
+    if base_context.require_axiomatic_bundle_clauses {
+        clauses.retain(|clause| {
+            supports_axiomatic_bundle_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.library_size,
+                base_context.historical_anchor_ref,
+            )
+        });
+    }
+    if base_context.require_modal_shell_clauses {
+        clauses.retain(|clause| supports_modal_shell_clause_at_position(position, &clause.expr));
+    }
+    if base_context.require_connection_shell_clauses {
+        clauses.retain(|clause| {
+            supports_connection_shell_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.library_size,
+            )
+        });
+    }
+    if base_context.require_curvature_shell_clauses {
+        clauses.retain(|clause| {
+            supports_curvature_shell_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.library_size,
+            )
+        });
+    }
+    if base_context.require_operator_bundle_clauses
+        || (base_context.generative_late_families && clause_kappa == 7)
+    {
+        clauses.retain(|clause| {
+            supports_operator_bundle_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.library_size,
+                base_context.generative_late_families,
+            )
+        });
+    }
+    if base_context.require_hilbert_functional_clauses
+        || (base_context.generative_late_families && clause_kappa == 9)
+    {
+        clauses.retain(|clause| {
+            supports_hilbert_functional_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.library_size,
+                base_context.generative_late_families,
+            )
+        });
+    }
+    if base_context.require_temporal_shell_clauses
+        || (base_context.generative_late_families && clause_kappa == 8)
+    {
+        clauses.retain(|clause| {
+            supports_temporal_shell_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.historical_anchor_ref,
+                base_context.generative_late_families,
+            )
+        });
+    }
+    dedupe_sorted_clauses(clauses)
 }
 
 pub fn enumerate_exprs(context: EnumerationContext) -> Vec<Expr> {

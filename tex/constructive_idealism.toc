@@ -1,0 +1,31 @@
+\contentsline {section}{\numberline {1}Introduction: The Crisis of Substance}{3}{section.1}%
+\contentsline {section}{\numberline {2}The Rosetta Stone: Type Theory as Phenomenology}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}The Context ($\Gamma $): Undifferentiated Awareness}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}The Inference Rules: The Iron Laws}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}The Type ($A$): Form and Possibility}{4}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}The Turnstile ($\vdash $): The Act of Forming}{5}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}The Term ($a$): Actuality and Matter}{5}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}The Synthesis: Non-Duality}{5}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}The Q-Monad: Saguna Brahman}{5}{subsection.2.7}%
+\contentsline {section}{\numberline {3}Cosmogony: The Algorithm of Existence}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}The Pre-Physical Epoch: Adiabatic Assembly in the Q-Monad}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}The Singularity: Step 15 as Endogenous Self-Measurement}{7}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}The Past Hypothesis: Purity at Ignition}{8}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}The Univalent Horizon: Cosmological Heisenberg Cut}{9}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}The Interpretation of Law}{9}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Resolution of the Paradoxes}{10}{section.4}%
+\contentsline {subsection}{\numberline {4.1}The Quantum Measurement Solution}{10}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}The Hard Problem of Consciousness}{11}{subsection.4.2}%
+\contentsline {paragraph}{The Inversion.}{11}{subsection.4.2}%
+\contentsline {paragraph}{Consciousness as Guarded Self-Reference.}{11}{equation.8}%
+\contentsline {subsection}{\numberline {4.3}Qualia and the Efficiency of Judgment}{12}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}The Arrow of Time: Guarded Irreversibility}{12}{subsection.4.4}%
+\contentsline {section}{\numberline {5}The Metaphysics of Maya: Separation as Structural Necessity}{13}{section.5}%
+\contentsline {subsection}{\numberline {5.1}The Cost of Oneness: $d = 1$ Stagnation}{13}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}The Goldilocks Window: $d = 2$ as the Unique Creative Regime}{14}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Maya as the Heisenberg Cut}{14}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Duality as Optimization Strategy}{15}{subsection.5.4}%
+\contentsline {section}{\numberline {6}Conclusion: The Self-Realizing Absolute}{15}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Summary of the Argument}{15}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}The Constructive Universe}{16}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Final Maxim: Judico, Ergo Est}{16}{subsection.6.3}%

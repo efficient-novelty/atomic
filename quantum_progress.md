@@ -32,6 +32,19 @@ This pass landed the first explicit quantum-oriented search primitives:
 - reports, inspect output, and frontier manifests now expose
   `prefix_states_merged_by_signature`.
 
+This pass also crossed the next Phase-1 control-flow threshold:
+
+- `crates/pen-search/src/enumerate.rs` now exposes a reusable per-position
+  `ClauseCatalog`, so the engine can drive search from clause-position catalogs
+  instead of asking the enumerator for whole telescopes up front.
+- `crates/pen-search/src/engine.rs` now runs `realistic_frontier_shadow`
+  through a real prefix work queue: it expands checked prefixes online,
+  discovers terminal prefixes before full completion, and only evaluates full
+  candidates from retained terminal-prefix groups.
+- `prefix_states_explored` in realistic shadow mode now reflects actual
+  intermediate prefix exploration rather than just the number of retained
+  terminal-prefix groups.
+
 Acceptance semantics did not change:
 
 - guarded and realistic lanes still preserve the current accepted trajectory.
@@ -57,16 +70,19 @@ scratch.
 
 ### 2. The real current gap is driver control, not just data structures
 
-The realistic lane still works like this:
+The realistic lane no longer starts from a pool of admissible full telescopes.
+It now works like this:
 
-1. enumerate admissible full telescopes
-2. derive terminal prefixes from those full telescopes
-3. retain and prune prefix groups
-4. evaluate only the retained full candidates
+1. build exact per-position clause catalogs for each admissible `kappa` band
+2. expand checked prefixes online through a deterministic prefix work queue
+3. stop at terminal prefixes and compute exact completion groups there
+4. retain and prune those terminal-prefix groups
+5. evaluate only the retained full candidates
 
-That is already useful, but it is not yet the Phase-1 target from the quantum
-plan. The missing step is to make prefixes first-class search states that drive
-expansion online.
+That is a real Phase-1 move. The remaining gap is that exact bound-driven
+pruning is still concentrated at the terminal-prefix frontier; earlier partial
+prefixes do not yet have the stronger sound `nu_upper` story from the quantum
+plan.
 
 ### 3. Small exact abstractions help without threatening correctness
 
@@ -85,6 +101,11 @@ The new `PrefixSignature` and merge metric make the "bounded entanglement"
 translation more concrete. We still are not using the full active-window
 signature or incremental legality summaries yet, but the code now has a natural
 place for them.
+
+The new clause-catalog and prefix-work-queue split also makes the next d = 2
+memoization step more obvious: early prefix expansion now has stable position
+boundaries where incremental legality summaries and cached per-position family
+filters can attach cleanly.
 
 ### 5. Phase 1 and Phase 2 are now coupled more tightly
 
@@ -112,20 +133,29 @@ far-future cleanup.
   - CLI reports and inspect output
   - frontier manifests and spill/runtime persistence
   - realistic-shadow integration assertions
+- Added reusable clause-position catalogs in
+  `crates/pen-search/src/enumerate.rs`.
+- Rewired `realistic_frontier_shadow` in
+  `crates/pen-search/src/engine.rs` to expand prefixes online through those
+  catalogs instead of enumerating all full telescopes first.
+- Updated realistic-shadow tests so they assert the new online-prefix behavior
+  honestly: explored prefix states now exceed the retained frontier size at step
+  15.
 
 ## Immediate Next Steps
 
 ### Next Step 1: Online Prefix Expansion
 
-Refactor `realistic_frontier_shadow` so it expands prefixes directly instead of
-enumerating complete telescopes first and grouping them afterward.
+The repo now has the first online prefix driver for realistic shadow mode, but
+the next gap is to move exact bound reasoning earlier than the terminal-prefix
+frontier.
 
-The minimum acceptable shape is:
+The minimum acceptable next shape is:
 
-- frontier pops a retained prefix state
-- exact bounds prune prefixes before full completion
-- children are generated from the prefix
-- only complete surviving prefixes enter full evaluation
+- partial prefixes carry sound `nu_upper` bounds before the final clause
+- exact bar pruning can fire before the search reaches terminal prefixes
+- prefix priority keys reflect those stronger bounds instead of only structural
+  work ordering
 - final exact evaluation, semantic minimality, dedupe, and acceptance stay
   unchanged
 
@@ -157,7 +187,7 @@ is easier to measure.
 
 ### Next Step 4: Start Phase-2 Plumbing
 
-After online prefix expansion is in place:
+After early partial-prefix bounds are in place:
 
 - introduce incremental check summaries
 - cache per-position clause catalogs
@@ -179,5 +209,6 @@ The following remain non-negotiable while doing quantum-inspired work:
 
 Verified after this pass with:
 
+- `cargo test -p pen-search`
 - `cargo test -p pen-search -p pen-cli -p pen-store`
 - `cargo test -p pen-search -p pen-cli -p pen-store realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_competition -- --nocapture`
