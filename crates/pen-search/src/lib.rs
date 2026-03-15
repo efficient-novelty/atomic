@@ -10,6 +10,7 @@ pub mod expand;
 pub mod frontier;
 pub mod motif;
 pub mod prefix_cache;
+pub mod prefix_memo;
 pub mod priority;
 pub mod resume;
 pub mod scheduler;

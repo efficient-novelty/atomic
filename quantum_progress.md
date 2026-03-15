@@ -2,228 +2,133 @@
 
 Last updated: 2026-03-15
 
-This file tracks the repo's actual progress against
-[`quantum_improvement_plan.md`](./quantum_improvement_plan.md). It is meant to
-prevent us from planning against an out-of-date baseline.
+This file is the operational status snapshot for
+[`quantum_improvement_plan.md`](./quantum_improvement_plan.md). It is not a
+running journal.
 
-## Current Status
+## Objective
 
-The repo was already ahead of the quantum plan's assumed starting point before
-this pass:
+Improve the realistic shadow search lane with earlier sound pruning and d = 2
+memoization while preserving the current exact acceptance contract and the
+guarded 15-step canon.
 
-- `strict_canon_guarded` already preserved the authoritative deterministic
-  15-step sequence.
-- `realistic_frontier_shadow` already had real prefix-frontier retention,
-  persisted frontier artifacts, pressure accounting, and parity coverage through
-  step 15.
-- the main remaining Phase-1 gap was not "add any prefix frontier at all," but
-  "replace post-hoc terminal-prefix grouping with true online prefix expansion."
+## Current State
 
-This pass landed the first explicit quantum-oriented search primitives:
+### Authoritative behavior
 
-- `crates/pen-search/src/bounds.rs` now defines a shared `PrefixBound` API for
-  exact lower and upper `nu` bounds and exact `rho_upper` bar pruning.
-- `crates/pen-search/src/prefix_cache.rs` now defines `PrefixSignature`,
-  `PrefixCache`, and `PrefixCacheStats`.
-- `crates/pen-search/src/engine.rs` now uses the prefix cache instead of the
-  previous ad hoc string-keyed grouping path in realistic shadow mode.
-- `crates/pen-search/src/branch_bound.rs` and
-  `crates/pen-search/src/worker.rs` now consume `PrefixBound` directly.
-- reports, inspect output, and frontier manifests now expose
-  `prefix_states_merged_by_signature`.
-
-This pass also crossed the next Phase-1 control-flow threshold:
-
-- `crates/pen-search/src/enumerate.rs` now exposes a reusable per-position
-  `ClauseCatalog`, so the engine can drive search from clause-position catalogs
-  instead of asking the enumerator for whole telescopes up front.
-- `crates/pen-search/src/engine.rs` now runs `realistic_frontier_shadow`
-  through a real prefix work queue: it expands checked prefixes online,
-  discovers terminal prefixes before full completion, and only evaluates full
-  candidates from retained terminal-prefix groups.
-- `prefix_states_explored` in realistic shadow mode now reflects actual
-  intermediate prefix exploration rather than just the number of retained
-  terminal-prefix groups.
-
-This pass then closed the two follow-on gaps that file had left open:
-
-- `crates/pen-search/src/prefix_cache.rs` now gives `PrefixSignature` compact
-  state beyond serialized-prefix identity: active-window hashing, shape/support
-  summary hashes, and structural family flags, while still preserving exact
-  identity through the serialized key.
-- realistic shadow search now counts `prefixes_created` as a first-class search
-  metric instead of only counting explored/retained prefixes after the fact.
-- step summaries, debug reports, inspect output, and frontier manifests now
-  expose the plan-aligned counters `prefixes_created`,
-  `full_telescopes_evaluated`, `canonical_dedupe_prunes`, and
-  `semantic_minimality_prunes`.
-
-Acceptance semantics did not change:
-
-- guarded and realistic lanes still preserve the current accepted trajectory.
+- `strict_canon_guarded` remains the authoritative executable lane.
+- guarded and realistic lanes both preserve the current accepted 15-step
+  sequence.
 - exact evaluation, semantic minimality, and deterministic acceptance remain
   downstream of the prefix layer.
-- the hot path remains structural and name-free.
 
-## Relevant Learnings
+### What is already implemented
 
-### 1. The quantum plan's baseline was partly stale
-
-The repo no longer matches a pure "enumerate all full telescopes, then think
-about frontiers later" baseline. It already has:
-
-- realistic shadow late-step competition
-- prefix-frontier persistence
-- exact prefix pruning by bar
-- bounded frontier pressure and spill behavior
-
-That means new work should be framed as converging the current realistic lane
-toward online prefix-first search, not rebuilding prefix retention from
-scratch.
-
-### 2. The real current gap is driver control, not just data structures
-
-The realistic lane no longer starts from a pool of admissible full telescopes.
-It now works like this:
-
-1. build exact per-position clause catalogs for each admissible `kappa` band
-2. expand checked prefixes online through a deterministic prefix work queue
-3. stop at terminal prefixes and compute exact completion groups there
-4. retain and prune those terminal-prefix groups
-5. evaluate only the retained full candidates
-
-That is a real Phase-1 move. The remaining gap is that exact bound-driven
-pruning is still concentrated at the terminal-prefix frontier; earlier partial
-prefixes do not yet have the stronger sound `nu_upper` story from the quantum
-plan.
-
-### 3. Small exact abstractions help without threatening correctness
-
-Pulling bounds and signatures into dedicated modules paid off immediately:
-
-- bar pruning now goes through a shared exact `PrefixBound` contract
-- prefix grouping is no longer hidden inside a one-off `BTreeMap<String, ...>`
-- merge accounting is visible in reports and manifests
-
-This is a good pattern for the next phases: add explicit exact search
-abstractions first, then change control flow around them.
-
-### 4. The d = 2 story is now better grounded in the code
-
-The new `PrefixSignature` and merge metric make the "bounded entanglement"
-translation more concrete. The signature now carries an explicit depth-2
-active-window hash plus structural family flags and shape/support summaries, so
-later memoization no longer needs to invent a home for that state.
-
-The new clause-catalog and prefix-work-queue split also makes the next d = 2
-memoization step more obvious: early prefix expansion now has stable position
-boundaries where incremental legality summaries and cached per-position family
-filters can attach cleanly.
-
-### 5. Phase 1 and Phase 2 are now coupled more tightly
-
-Once prefixes become true online states, the next bottleneck will be repeated
-checking and repeated per-position clause-family work. That means:
-
-- incremental legality summaries
-- cached clause catalogs
-- cached family filters
-
-should be treated as the immediate follow-on to online prefix expansion, not as
-far-future cleanup.
-
-### 6. Plan metrics need to survive persistence to stay useful
-
-Adding the quantum-plan counters only to in-memory search structs would have
-left the repo in an awkward place where real runs still reported older names.
-Threading `prefixes_created` and the plan-aligned evaluation/prune counters
-through step summaries, inspect output, and frontier manifests turned out to be
-worth doing immediately: it keeps progress measurable from stored artifacts, not
-just from temporary debug sessions.
-
-## What Changed In This Pass
-
-- Added `PrefixBound` and tests in
-  `crates/pen-search/src/bounds.rs`.
-- Added `PrefixSignature`, `PrefixCache`, and merge-tracking tests in
-  `crates/pen-search/src/prefix_cache.rs`.
-- Rewired realistic-shadow terminal-prefix grouping in
-  `crates/pen-search/src/engine.rs` to use the new cache layer.
-- Rewired worker-side exact bar pruning to consume `PrefixBound`.
-- Added `prefix_states_merged_by_signature` to:
-  - `pen-search` step results
-  - CLI reports and inspect output
-  - frontier manifests and spill/runtime persistence
-  - realistic-shadow integration assertions
-- Added reusable clause-position catalogs in
-  `crates/pen-search/src/enumerate.rs`.
-- Rewired `realistic_frontier_shadow` in
-  `crates/pen-search/src/engine.rs` to expand prefixes online through those
-  catalogs instead of enumerating all full telescopes first.
-- Updated realistic-shadow tests so they assert the new online-prefix behavior
-  honestly: explored prefix states now exceed the retained frontier size at step
-  15.
-- Strengthened `PrefixSignature` so it now records:
-  - a depth-2 active-window hash
-  - shape and support summary hashes
-  - structural family flags for modal/temporal/path/dependent late-family state
-- Added the missing plan-aligned counters:
+- `realistic_frontier_shadow` already expands prefixes online through
+  clause-position catalogs.
+- `PrefixBound` exists and is used for exact bound handling and bar pruning at
+  the retained prefix frontier.
+- `PrefixCache` and `PrefixSignature` are real search primitives, not
+  placeholders.
+- `PrefixLegalityCache` now reuses incremental legality/connectivity summaries
+  keyed by `PrefixSignature` during realistic online prefix expansion.
+- `PrefixSignature` now includes:
+  - clause position
+  - obligation set id
+  - active-window hash
+  - shape/support summary hashes
+  - structural family flags
+  - exact serialized-prefix identity
+- frontier artifacts, reports, and inspect output already expose the main
+  Phase-1 counters:
   - `prefixes_created`
+  - `prefix_states_explored`
+  - `prefix_states_merged_by_signature`
+  - `prefix_states_exact_pruned`
   - `full_telescopes_evaluated`
   - `canonical_dedupe_prunes`
   - `semantic_minimality_prunes`
-- Persisted `prefixes_created` through frontier runtime/manifests and surfaced
-  the plan-aligned counters in step summaries, debug reports, and inspect
-  output.
+- reports and frontier manifests now also expose the first Phase-2 memoization
+  payoff counters:
+  - `incremental_legality_cache_hits`
+  - `incremental_connectivity_shortcuts`
+  - `incremental_connectivity_fallbacks`
+  - `incremental_connectivity_prunes`
 
-## Immediate Next Steps
+## What Is No Longer A Gap
 
-### Next Step 1: Online Prefix Expansion
+The following work should be treated as complete enough to stop planning around
+it as if it were still missing:
 
-The repo now has the first online prefix driver for realistic shadow mode, but
-the next gap is to move exact bound reasoning earlier than the terminal-prefix
-frontier.
+- adding any prefix frontier at all
+- replacing ad hoc prefix grouping with explicit bounds/signature modules
+- making realistic shadow expand prefixes online
+- exposing the core Phase-1 counters in reports/manifests
+- strengthening `PrefixSignature` beyond exact serialized-prefix identity
 
-The minimum acceptable next shape is:
+## Active Gaps
 
-- partial prefixes carry sound `nu_upper` bounds before the final clause
-- exact bar pruning can fire before the search reaches terminal prefixes
-- prefix priority keys reflect those stronger bounds instead of only structural
-  work ordering
-- final exact evaluation, semantic minimality, dedupe, and acceptance stay
-  unchanged
+### 1. Earlier exact pruning on partial prefixes
 
-### Next Step 2: Use The Stronger Signature For Real Memoization
+The realistic lane is online, but its strongest exact pruning is still too late
+in the search. We do not yet have the stronger sound partial-prefix bound story
+needed to prune earlier with confidence.
 
-`PrefixSignature` now carries the compact state we needed. The next job is to
-actually consume that state:
+### 2. Real memoization on top of the strengthened signature
 
-- cache incremental legality summaries by strengthened signature
-- cache per-position clause-family filters against the active-window hash
-- use the family flags to avoid repeating late-family structural work
+The strengthened signature is now used for incremental legality/connectivity
+summary reuse, but it is not yet used for:
 
-### Next Step 3: Start Phase-2 Plumbing
+- cached admissibility summaries beyond the current exact check/connectivity
+  reuse
+- cached late-family structural filter reuse keyed by active-window state
 
-After early partial-prefix bounds are in place:
+### 3. Phase-2 metrics
 
-- introduce an explicit incremental check summary type
-- reuse strengthened prefix signatures as cache keys
-- make clause-catalog reuse and family-filter reuse visible in metrics
+The first cache-hit metrics are now live, but we still need the clause-family
+filter side of the Phase-2 metric surface.
 
-This is now the most direct follow-on after the Phase-1 instrumentation pass.
+## Forward Plan
+
+### Now
+
+- define an earlier sound partial-prefix bound
+- extend the new legality/connectivity memo layer into admissibility and
+  clause-family filter reuse
+- keep the strengthened-signature caches exact and deterministic
+
+### Next
+
+- retune prefix priority/order once earlier bounds exist
+- add wall-clock and memory high-water metrics next to the new memo counters
+
+### Later
+
+- deterministic continuation profile variants
+- restricted interference/normalization sidecar
+- declarative late-family grammar
+
+## Next Concrete Steps
+
+1. Audit the current `nu` and legality pipeline and identify the strongest
+   partial-prefix exact bound that can be justified without unsound inference.
+2. Extend the landed incremental legality/connectivity summary path into exact
+   admissibility and late-family filter reuse.
+3. Use the memo counters from stored artifacts to retune late-step prefix
+   priority/order.
+4. Add timing and memory counters next to the new memo metrics.
 
 ## Guardrails
-
-The following remain non-negotiable while doing quantum-inspired work:
 
 - no floats on the hot path
 - no stochastic acceptance in guarded mode
 - no semantic labels in core search/eval
-- no accelerator path that can bypass exact evaluation or exact acceptance
-- no claim that the realistic lane is already open-ended online prefix search
+- no accelerator path that bypasses exact check/eval/minimality/acceptance
+- no over-claim that realistic shadow is already an open-ended online frontier
+  explorer
 
-## Verification Status
+## Verification
 
-Verified after this pass with:
+Latest relevant verification:
 
-- `cargo test -p pen-search -p pen-cli -p pen-store`
+- `cargo test -p pen-type -p pen-search -p pen-cli -p pen-store`

@@ -5,6 +5,7 @@ use crate::enumerate::{EnumerationContext, build_clause_catalog, enumerate_teles
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
 use crate::prefix_cache::{PrefixCache, PrefixCandidateGroup, PrefixSignature};
+use crate::prefix_memo::{PrefixLegalityCache, TerminalConnectivityDecision};
 use crate::priority::{PriorityInputs, build_priority_key};
 use crate::scheduler::build_schedule;
 use crate::state::{FrontierStateRecV1, PrefixState};
@@ -122,6 +123,10 @@ pub struct AtomicSearchStep {
     pub prefix_states_merged_by_signature: usize,
     pub prefix_states_exact_pruned: usize,
     pub prefix_states_heuristic_dropped: usize,
+    pub incremental_legality_cache_hits: usize,
+    pub incremental_connectivity_shortcuts: usize,
+    pub incremental_connectivity_fallbacks: usize,
+    pub incremental_connectivity_prunes: usize,
     pub prefix_frontier_hot_states: usize,
     pub prefix_frontier_cold_states: usize,
     pub retention_policy: RetentionPolicy,
@@ -174,6 +179,7 @@ struct PrefixFrontierItem {
 #[derive(Clone, Debug, Default)]
 struct RealisticShadowDiscovery {
     prefix_cache: PrefixCache,
+    prefix_legality_cache: PrefixLegalityCache,
     candidates: Vec<ExpandedCandidate>,
     prefixes_created: usize,
     prefix_states_explored: usize,
@@ -189,6 +195,7 @@ struct RealisticShadowDiscovery {
 struct OnlinePrefixWorkItem {
     clause_kappa: u16,
     prefix_telescope: Telescope,
+    signature: PrefixSignature,
 }
 
 pub fn supports_live_atomic_search(until_step: u32) -> bool {
@@ -330,6 +337,10 @@ fn search_next_step(
     let mut malformed_rejection_reasons = BTreeMap::new();
     let mut admissibility_rejections = 0usize;
     let mut admissibility_diagnostics = AdmissibilityDiagnostics::default();
+    let mut incremental_legality_cache_hits = 0usize;
+    let mut incremental_connectivity_shortcuts = 0usize;
+    let mut incremental_connectivity_fallbacks = 0usize;
+    let mut incremental_connectivity_prunes = 0usize;
     let nu_history = history
         .iter()
         .map(|record| (record.step_index, record.nu))
@@ -354,6 +365,11 @@ fn search_next_step(
         malformed_rejection_reasons = discovery.malformed_rejection_reasons;
         admissibility_rejections = discovery.admissibility_rejections;
         admissibility_diagnostics = discovery.admissibility_diagnostics;
+        let legality_stats = discovery.prefix_legality_cache.stats();
+        incremental_legality_cache_hits = legality_stats.legality_hits;
+        incremental_connectivity_shortcuts = legality_stats.connectivity_shortcuts;
+        incremental_connectivity_fallbacks = legality_stats.connectivity_fallbacks;
+        incremental_connectivity_prunes = legality_stats.connectivity_prunes;
     } else {
         for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
             let telescopes = enumerate_telescopes(
@@ -497,6 +513,10 @@ fn search_next_step(
         prefix_cache.stats().merged_by_signature,
         prefix_frontier.exact_pruned,
         prefix_frontier.heuristic_dropped,
+        incremental_legality_cache_hits,
+        incremental_connectivity_shortcuts,
+        incremental_connectivity_fallbacks,
+        incremental_connectivity_prunes,
         prefix_frontier.frontier.hot.len(),
         prefix_frontier.frontier.cold.len(),
         retention_policy,
@@ -540,6 +560,10 @@ fn build_step_result(
     prefix_states_merged_by_signature: usize,
     prefix_states_exact_pruned: usize,
     prefix_states_heuristic_dropped: usize,
+    incremental_legality_cache_hits: usize,
+    incremental_connectivity_shortcuts: usize,
+    incremental_connectivity_fallbacks: usize,
+    incremental_connectivity_prunes: usize,
     prefix_frontier_hot_states: usize,
     prefix_frontier_cold_states: usize,
     retention_policy: RetentionPolicy,
@@ -583,6 +607,10 @@ fn build_step_result(
         prefix_states_merged_by_signature,
         prefix_states_exact_pruned,
         prefix_states_heuristic_dropped,
+        incremental_legality_cache_hits,
+        incremental_connectivity_shortcuts,
+        incremental_connectivity_fallbacks,
+        incremental_connectivity_prunes,
         prefix_frontier_hot_states,
         prefix_frontier_cold_states,
         retention_policy,
@@ -719,12 +747,15 @@ fn discover_realistic_shadow_candidates(
             .iter()
             .filter_map(|clause| {
                 let prefix_telescope = Telescope::new(vec![clause.clone()]);
-                (check_telescope(library, &prefix_telescope) == CheckResult::Ok).then_some(
-                    OnlinePrefixWorkItem {
+                let signature = PrefixSignature::new(step_index, library, &prefix_telescope);
+                discovery
+                    .prefix_legality_cache
+                    .insert_root(signature.clone(), library, &prefix_telescope)
+                    .then_some(OnlinePrefixWorkItem {
                         clause_kappa,
                         prefix_telescope,
-                    },
-                )
+                        signature,
+                    })
             })
             .collect::<Vec<_>>();
         discovery.prefixes_created += frontier.len();
@@ -741,6 +772,7 @@ fn discover_realistic_shadow_candidates(
                     admissibility,
                     retention_policy,
                     nu_history,
+                    &work_item.signature,
                     &work_item.prefix_telescope,
                     clause_catalog.clauses_at(prefix_len),
                     &mut discovery,
@@ -751,13 +783,20 @@ fn discover_realistic_shadow_candidates(
             for clause in clause_catalog.clauses_at(prefix_len) {
                 let mut child_prefix = work_item.prefix_telescope.clone();
                 child_prefix.clauses.push(clause.clone());
-                if check_telescope(library, &child_prefix) != CheckResult::Ok {
+                let child_signature = PrefixSignature::new(step_index, library, &child_prefix);
+                if !discovery.prefix_legality_cache.insert_child(
+                    &work_item.signature,
+                    child_signature.clone(),
+                    library,
+                    clause,
+                ) {
                     continue;
                 }
                 discovery.prefixes_created += 1;
                 frontier.push(OnlinePrefixWorkItem {
                     clause_kappa: work_item.clause_kappa,
                     prefix_telescope: child_prefix,
+                    signature: child_signature,
                 });
             }
         }
@@ -773,6 +812,7 @@ fn record_terminal_prefix_group(
     admissibility: StrictAdmissibility,
     retention_policy: RetentionPolicy,
     nu_history: &[(u32, u32)],
+    prefix_signature: &PrefixSignature,
     prefix_telescope: &Telescope,
     last_clause_options: &[pen_core::clause::ClauseRec],
     discovery: &mut RealisticShadowDiscovery,
@@ -780,8 +820,23 @@ fn record_terminal_prefix_group(
     for clause in last_clause_options {
         let mut telescope = prefix_telescope.clone();
         telescope.clauses.push(clause.clone());
-        if check_telescope(library, &telescope) != CheckResult::Ok
-            || !passes_connectivity(library, &telescope)
+        let Some(connectivity_decision) = discovery.prefix_legality_cache.terminal_connectivity(
+            prefix_signature,
+            library,
+            clause,
+        ) else {
+            continue;
+        };
+        if matches!(
+            connectivity_decision,
+            TerminalConnectivityDecision::PruneDisconnected
+        ) {
+            continue;
+        }
+        if matches!(
+            connectivity_decision,
+            TerminalConnectivityDecision::NeedsFallback
+        ) && !passes_connectivity(library, &telescope)
         {
             continue;
         }
@@ -1412,6 +1467,8 @@ mod tests {
         assert!(step.prefix_states_explored > step.frontier_window.total_len());
         assert_eq!(step.prefix_frontier_hot_states, 2);
         assert_eq!(step.prefix_frontier_cold_states, 0);
+        assert!(step.incremental_legality_cache_hits > 0);
+        assert!(step.incremental_connectivity_fallbacks > 0);
         assert!(
             step.prefix_frontier_hot_states + step.prefix_frontier_cold_states
                 <= step.prefix_states_explored

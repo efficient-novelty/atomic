@@ -41,6 +41,10 @@ pub struct FrontierRuntimeInput<const N: usize> {
     pub prefix_states_merged_by_signature: u64,
     pub prefix_states_exact_pruned: u64,
     pub prefix_states_heuristic_dropped: u64,
+    pub incremental_legality_cache_hits: u64,
+    pub incremental_connectivity_shortcuts: u64,
+    pub incremental_connectivity_fallbacks: u64,
+    pub incremental_connectivity_prunes: u64,
     pub worker_count: u16,
     pub priority_heads: Vec<u32>,
     pub interner_bytes: u64,
@@ -177,6 +181,10 @@ pub fn persist_frontier_runtime<const N: usize>(
             prefix_states_merged_by_signature: input.prefix_states_merged_by_signature,
             prefix_states_exact_pruned: input.prefix_states_exact_pruned,
             prefix_states_heuristic_dropped: input.prefix_states_heuristic_dropped,
+            incremental_legality_cache_hits: input.incremental_legality_cache_hits,
+            incremental_connectivity_shortcuts: input.incremental_connectivity_shortcuts,
+            incremental_connectivity_fallbacks: input.incremental_connectivity_fallbacks,
+            incremental_connectivity_prunes: input.incremental_connectivity_prunes,
             hot_states: input.hot_records.len() as u64,
             cold_states: input.cold_records.len() as u64,
             dedupe_keys: BTreeSet::<String>::from_iter(input.dedupe_keys.iter().cloned()).len()
@@ -300,6 +308,10 @@ mod tests {
             prefix_states_merged_by_signature: 3,
             prefix_states_exact_pruned: 1,
             prefix_states_heuristic_dropped: 1,
+            incremental_legality_cache_hits: 12,
+            incremental_connectivity_shortcuts: 4,
+            incremental_connectivity_fallbacks: 2,
+            incremental_connectivity_prunes: 3,
             worker_count: 2,
             priority_heads: vec![11, 22],
             interner_bytes: 16,
@@ -341,6 +353,10 @@ mod tests {
         assert_eq!(artifacts.counts.prefix_states_merged_by_signature, 3);
         assert_eq!(artifacts.counts.prefix_states_exact_pruned, 1);
         assert_eq!(artifacts.counts.prefix_states_heuristic_dropped, 1);
+        assert_eq!(artifacts.counts.incremental_legality_cache_hits, 12);
+        assert_eq!(artifacts.counts.incremental_connectivity_shortcuts, 4);
+        assert_eq!(artifacts.counts.incremental_connectivity_fallbacks, 2);
+        assert_eq!(artifacts.counts.incremental_connectivity_prunes, 3);
         assert!(root.join(FRONTIER_CACHE_BLOB_FILE).exists());
 
         let cache_blob = read_frontier_cache_blob(&root, &artifacts.files.cache_blob)

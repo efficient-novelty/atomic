@@ -1,4 +1,5 @@
 use crate::context::CheckContext;
+use pen_core::clause::ClauseRec;
 use pen_core::expr::Expr;
 use pen_core::library::Library;
 use pen_core::telescope::Telescope;
@@ -36,34 +37,76 @@ impl CheckError {
     }
 }
 
-pub fn check_telescope(library: &Library, telescope: &Telescope) -> CheckResult {
-    if telescope.clauses.is_empty() {
-        return CheckResult::Err(CheckError::EmptyTelescope);
-    }
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub struct CheckSummary {
+    ambient_depth: u32,
+    clause_depth: u32,
+}
 
-    let ambient_depth = required_ambient_depth(telescope);
-    let max_ambient = 2;
-    if ambient_depth > max_ambient {
-        return CheckResult::Err(CheckError::AmbientContextTooLarge {
-            required: ambient_depth,
-            max: max_ambient,
-        });
-    }
-
-    let mut clause_depth = 0;
-    for clause in &telescope.clauses {
-        let context = CheckContext {
-            library_size: library.len(),
-            ambient_depth,
-            clause_depth,
-        };
-        if let CheckResult::Err(error) = check_expr(context, &clause.expr) {
-            return CheckResult::Err(error);
+impl CheckSummary {
+    pub const fn empty() -> Self {
+        Self {
+            ambient_depth: 0,
+            clause_depth: 0,
         }
-        clause_depth += 1;
     }
 
-    CheckResult::Ok
+    pub fn from_telescope(library: &Library, telescope: &Telescope) -> Result<Self, CheckError> {
+        if telescope.clauses.is_empty() {
+            return Err(CheckError::EmptyTelescope);
+        }
+
+        let mut summary = Self::empty();
+        for clause in &telescope.clauses {
+            summary = summary.extend_clause(library.len(), clause)?;
+        }
+        Ok(summary)
+    }
+
+    pub fn extend_clause(
+        self,
+        library_size: usize,
+        clause: &ClauseRec,
+    ) -> Result<Self, CheckError> {
+        let ambient_depth = self
+            .ambient_depth
+            .max(required_ambient_expr(self.clause_depth, &clause.expr));
+        let max_ambient = 2;
+        if ambient_depth > max_ambient {
+            return Err(CheckError::AmbientContextTooLarge {
+                required: ambient_depth,
+                max: max_ambient,
+            });
+        }
+
+        let context = CheckContext {
+            library_size,
+            ambient_depth,
+            clause_depth: self.clause_depth,
+        };
+        match check_expr(context, &clause.expr) {
+            CheckResult::Ok => Ok(Self {
+                ambient_depth,
+                clause_depth: self.clause_depth + 1,
+            }),
+            CheckResult::Err(error) => Err(error),
+        }
+    }
+
+    pub const fn ambient_depth(self) -> u32 {
+        self.ambient_depth
+    }
+
+    pub const fn clause_depth(self) -> u32 {
+        self.clause_depth
+    }
+}
+
+pub fn check_telescope(library: &Library, telescope: &Telescope) -> CheckResult {
+    match CheckSummary::from_telescope(library, telescope) {
+        Ok(_) => CheckResult::Ok,
+        Err(error) => CheckResult::Err(error),
+    }
 }
 
 pub fn check_and_filter(library: &Library, telescopes: Vec<Telescope>) -> (Vec<Telescope>, usize) {
@@ -162,16 +205,6 @@ fn check_expr(context: CheckContext, expr: &Expr) -> CheckResult {
     }
 }
 
-fn required_ambient_depth(telescope: &Telescope) -> u32 {
-    telescope
-        .clauses
-        .iter()
-        .enumerate()
-        .map(|(index, clause)| required_ambient_expr(index as u32, &clause.expr))
-        .max()
-        .unwrap_or(0)
-}
-
 fn required_ambient_expr(clause_depth: u32, expr: &Expr) -> u32 {
     match expr {
         Expr::Var(index) => index.saturating_sub(clause_depth),
@@ -200,7 +233,9 @@ fn required_ambient_expr(clause_depth: u32, expr: &Expr) -> u32 {
 
 #[cfg(test)]
 mod tests {
-    use super::{CheckError, CheckResult, check_telescope};
+    use super::{CheckError, CheckResult, CheckSummary, check_telescope};
+    use pen_core::clause::{ClauseRec, ClauseRole};
+    use pen_core::expr::Expr;
     use pen_core::library::Library;
     use pen_core::telescope::Telescope;
 
@@ -239,6 +274,43 @@ mod tests {
             CheckResult::Err(CheckError::LibRefOutOfBounds {
                 index: 2,
                 library_size: 0
+            })
+        );
+    }
+
+    #[test]
+    fn incremental_summary_matches_full_reference_checking() {
+        let library: Library = Vec::new();
+        let telescope = Telescope::reference(10);
+        let mut summary = CheckSummary::empty();
+
+        for clause in &telescope.clauses {
+            summary = summary
+                .extend_clause(library.len(), clause)
+                .expect("reference clause should extend");
+        }
+
+        assert_eq!(
+            summary,
+            CheckSummary::from_telescope(&library, &telescope).expect("summary should build"),
+        );
+        assert_eq!(summary.clause_depth(), telescope.kappa() as u32);
+        assert_eq!(check_telescope(&library, &telescope), CheckResult::Ok);
+    }
+
+    #[test]
+    fn incremental_summary_rejects_newly_out_of_scope_clause() {
+        let library: Library = Vec::new();
+        let base = Telescope::new(vec![ClauseRec::new(ClauseRole::Formation, Expr::Var(1))]);
+        let summary =
+            CheckSummary::from_telescope(&library, &base).expect("base clause should check");
+        let bad_clause = ClauseRec::new(ClauseRole::Formation, Expr::Var(4));
+
+        assert_eq!(
+            summary.extend_clause(library.len(), &bad_clause),
+            Err(CheckError::AmbientContextTooLarge {
+                required: 3,
+                max: 2,
             })
         );
     }

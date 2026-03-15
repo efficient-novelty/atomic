@@ -1,6 +1,8 @@
+use pen_core::clause::ClauseRec;
 use pen_core::expr::Expr;
 use pen_core::library::Library;
 use pen_core::telescope::{Telescope, TelescopeClass};
+use std::collections::BTreeSet;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct ConnectivityWitness {
@@ -11,12 +13,181 @@ pub struct ConnectivityWitness {
     pub historical_reanchor: bool,
 }
 
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+struct ConnectivityClauseState {
+    has_lib_pointer: bool,
+    is_path_con: bool,
+    is_trunc_like_anchor: bool,
+    is_higher_path_con: bool,
+    is_higher_order_bridge: bool,
+    is_operator_action: bool,
+    has_prior_operator_bundle_seed: bool,
+    later_pathcon_seen: bool,
+}
+
+impl ConnectivityClauseState {
+    fn new(expr: &Expr, has_prior_operator_bundle_seed: bool) -> Self {
+        Self {
+            has_lib_pointer: expr.has_lib_pointer(),
+            is_path_con: matches!(expr, Expr::PathCon(_)),
+            is_trunc_like_anchor: matches!(expr, Expr::Trunc(_))
+                || matches!(expr, Expr::App(function, _) if matches!(function.as_ref(), Expr::Trunc(_))),
+            is_higher_path_con: matches!(expr, Expr::PathCon(dimension) if *dimension > 1),
+            is_higher_order_bridge: is_higher_order_bridge_clause(expr),
+            is_operator_action: is_operator_action_clause(expr),
+            has_prior_operator_bundle_seed,
+            later_pathcon_seen: false,
+        }
+    }
+
+    fn local_path_anchor(self, has_point_constructor: bool) -> bool {
+        (has_point_constructor && !self.is_path_con) || self.is_trunc_like_anchor
+    }
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct ConnectivitySummary {
+    clauses: Vec<ConnectivityClauseState>,
+    unresolved_indices: BTreeSet<usize>,
+    has_point_constructor: bool,
+    has_operator_bundle_seed: bool,
+    references_active_window: bool,
+    self_contained: bool,
+    max_lib_ref: u32,
+}
+
+impl ConnectivitySummary {
+    pub fn from_telescope(library: &Library, telescope: &Telescope) -> Self {
+        let mut summary = Self {
+            references_active_window: library.len() <= 2,
+            self_contained: true,
+            ..Self::default()
+        };
+        for clause in &telescope.clauses {
+            summary = summary.extend(library, clause);
+        }
+        summary
+    }
+
+    pub fn extend(mut self, library: &Library, clause: &ClauseRec) -> Self {
+        let new_index = self.clauses.len();
+        let previous_latest = new_index.checked_sub(1);
+        let has_point_constructor_before = self.has_point_constructor;
+        let new_expr = &clause.expr;
+        let new_clause_has_lib_pointer = new_expr.has_lib_pointer();
+        let new_clause_is_path_con = matches!(new_expr, Expr::PathCon(_));
+        let new_clause_is_point_constructor = is_point_constructor_expr(new_expr);
+        let new_clause_is_higher_path_witness = is_higher_path_witness_clause(new_expr);
+        let new_clause_is_operator_bundle_closure = is_operator_bundle_closure_clause(new_expr);
+        let new_clause_refs = new_expr.lib_refs();
+        let lib_size = library.len() as u32;
+
+        if lib_size <= 2 {
+            self.references_active_window = true;
+        } else if new_clause_refs.contains(&lib_size)
+            || new_clause_refs.contains(&lib_size.saturating_sub(1))
+        {
+            self.references_active_window = true;
+        }
+
+        if !new_clause_refs.is_empty() {
+            self.self_contained = false;
+            self.max_lib_ref = self
+                .max_lib_ref
+                .max(new_clause_refs.iter().next_back().copied().unwrap_or(0));
+        }
+
+        let mut newly_resolved = Vec::new();
+        let candidate_indices = self
+            .unresolved_indices
+            .iter()
+            .copied()
+            .chain(previous_latest)
+            .collect::<Vec<_>>();
+        for index in candidate_indices {
+            let clause_state = &mut self.clauses[index];
+            if clause_state_satisfied_by_new_clause(
+                clause_state,
+                index,
+                new_index,
+                new_expr,
+                has_point_constructor_before,
+                new_clause_has_lib_pointer,
+                new_clause_is_path_con,
+                new_clause_is_point_constructor,
+                new_clause_is_higher_path_witness,
+                new_clause_is_operator_bundle_closure,
+            ) {
+                newly_resolved.push(index);
+            }
+        }
+
+        if let Some(previous_latest) = previous_latest {
+            if !newly_resolved.contains(&previous_latest)
+                && !self.unresolved_indices.contains(&previous_latest)
+            {
+                self.unresolved_indices.insert(previous_latest);
+            }
+        }
+        for index in newly_resolved {
+            self.unresolved_indices.remove(&index);
+        }
+
+        self.clauses.push(ConnectivityClauseState::new(
+            new_expr,
+            self.has_operator_bundle_seed,
+        ));
+        self.has_point_constructor |= new_clause_is_point_constructor;
+        self.has_operator_bundle_seed |= is_operator_bundle_seed_clause(new_expr);
+
+        if new_clause_is_point_constructor && !has_point_constructor_before {
+            let mut path_resolved = Vec::new();
+            for index in self.unresolved_indices.iter().copied().collect::<Vec<_>>() {
+                let clause_state = &self.clauses[index];
+                if clause_state.later_pathcon_seen && clause_state.local_path_anchor(true) {
+                    path_resolved.push(index);
+                }
+            }
+            for index in path_resolved {
+                self.unresolved_indices.remove(&index);
+            }
+        }
+
+        self
+    }
+
+    pub fn structurally_connected(&self) -> bool {
+        self.unresolved_indices.is_empty()
+    }
+
+    pub fn references_active_window(&self) -> bool {
+        self.references_active_window
+    }
+
+    pub fn self_contained(&self) -> bool {
+        self.self_contained
+    }
+
+    pub fn max_lib_ref(&self) -> u32 {
+        self.max_lib_ref
+    }
+
+    pub fn passes_without_reanchor(&self) -> bool {
+        self.structurally_connected() && (self.references_active_window || self.self_contained)
+    }
+
+    pub fn needs_reanchor_fallback(&self) -> bool {
+        self.structurally_connected() && !self.references_active_window && !self.self_contained
+    }
+}
+
 pub fn analyze_connectivity(library: &Library, telescope: &Telescope) -> ConnectivityWitness {
+    let summary = ConnectivitySummary::from_telescope(library, telescope);
     ConnectivityWitness {
-        connected: is_structurally_connected(telescope),
-        references_active_window: telescope.references_window(library.len() as u32),
-        self_contained: telescope.lib_refs().is_empty(),
-        max_lib_ref: telescope.max_lib_ref(),
+        connected: summary.structurally_connected(),
+        references_active_window: summary.references_active_window(),
+        self_contained: summary.self_contained(),
+        max_lib_ref: summary.max_lib_ref(),
         historical_reanchor: allows_temporal_modal_reanchor(library, telescope),
     }
 }
@@ -29,43 +200,42 @@ pub fn passes_connectivity(library: &Library, telescope: &Telescope) -> bool {
             || witness.historical_reanchor)
 }
 
-fn is_structurally_connected(telescope: &Telescope) -> bool {
-    if telescope.clauses.len() <= 1 {
-        return true;
-    }
+fn clause_state_satisfied_by_new_clause(
+    clause_state: &mut ConnectivityClauseState,
+    earlier_index: usize,
+    later_index: usize,
+    expr: &Expr,
+    has_point_constructor_before: bool,
+    new_clause_has_lib_pointer: bool,
+    new_clause_is_path_con: bool,
+    new_clause_is_point_constructor: bool,
+    new_clause_is_higher_path_witness: bool,
+    new_clause_is_operator_bundle_closure: bool,
+) -> bool {
+    let de_bruijn = (later_index - earlier_index) as u32;
+    let has_var_edge = expr.var_refs().contains(&de_bruijn)
+        || later_clause_depends_on(earlier_index, later_index, expr, 0);
+    let has_path_attachment = if new_clause_is_path_con {
+        if clause_state.local_path_anchor(has_point_constructor_before) {
+            true
+        } else {
+            clause_state.later_pathcon_seen = true;
+            false
+        }
+    } else if new_clause_is_point_constructor {
+        clause_state.later_pathcon_seen && clause_state.local_path_anchor(true)
+    } else {
+        false
+    };
 
-    (0..telescope.clauses.len() - 1).all(|i| {
-        let has_var_edge = ((i + 1)..telescope.clauses.len()).any(|j| {
-            let de_bruijn = (j - i) as u32;
-            telescope.clauses[j].expr.var_refs().contains(&de_bruijn)
-                || later_clause_depends_on(i, j, &telescope.clauses[j].expr, 0)
-        });
-        let has_lib_edge = telescope.clauses[i].expr.has_lib_pointer();
-        let has_path_attachment = is_local_path_anchor(telescope, i)
-            && ((i + 1)..telescope.clauses.len())
-                .any(|j| matches!(telescope.clauses[j].expr, Expr::PathCon(_)));
-        let has_higher_path_witness_attachment =
-            matches!(telescope.clauses[i].expr, Expr::PathCon(dimension) if dimension > 1)
-                && ((i + 1)..telescope.clauses.len()).any(|j| {
-                    is_higher_path_witness_clause(&telescope.clauses[j].expr)
-                });
-        let has_higher_order_bridge_attachment =
-            is_higher_order_bridge_clause(&telescope.clauses[i].expr)
-                && ((i + 1)..telescope.clauses.len())
-                    .any(|j| telescope.clauses[j].expr.has_lib_pointer());
-        let has_operator_bundle_bridge_attachment =
-            is_operator_action_clause(&telescope.clauses[i].expr)
-                && (0..i).any(|j| is_operator_bundle_seed_clause(&telescope.clauses[j].expr))
-                && ((i + 1)..telescope.clauses.len())
-                    .any(|j| is_operator_bundle_closure_clause(&telescope.clauses[j].expr));
-
-        has_var_edge
-            || has_lib_edge
-            || has_path_attachment
-            || has_higher_path_witness_attachment
-            || has_higher_order_bridge_attachment
-            || has_operator_bundle_bridge_attachment
-    })
+    has_var_edge
+        || clause_state.has_lib_pointer
+        || has_path_attachment
+        || (clause_state.is_higher_path_con && new_clause_is_higher_path_witness)
+        || (clause_state.is_higher_order_bridge && new_clause_has_lib_pointer)
+        || (clause_state.is_operator_action
+            && clause_state.has_prior_operator_bundle_seed
+            && new_clause_is_operator_bundle_closure)
 }
 
 fn later_clause_depends_on(
@@ -109,11 +279,15 @@ fn later_clause_depends_on(
     }
 }
 
-fn is_local_path_anchor(telescope: &Telescope, clause_index: usize) -> bool {
-    let expr = &telescope.clauses[clause_index].expr;
-    (telescope.has_point_constructor() && !matches!(expr, Expr::PathCon(_)))
-        || matches!(expr, Expr::Trunc(_))
-        || matches!(expr, Expr::App(function, _) if matches!(function.as_ref(), Expr::Trunc(_)))
+fn is_point_constructor_expr(expr: &Expr) -> bool {
+    matches!(expr, Expr::App(left, _) if matches!(left.as_ref(), Expr::Univ))
+        || matches!(expr, Expr::Var(_))
+        || matches!(
+            expr,
+            Expr::App(left, right)
+                if matches!(left.as_ref(), Expr::Lib(_))
+                    && matches!(right.as_ref(), Expr::Var(_))
+        )
 }
 
 fn is_higher_path_witness_clause(expr: &Expr) -> bool {
@@ -314,7 +488,10 @@ fn matches_temporal_shell_pattern(telescope: &Telescope, anchor: u32) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use super::{ConnectivityWitness, analyze_connectivity, passes_connectivity};
+    use super::{
+        ConnectivitySummary, ConnectivityWitness, analyze_connectivity, passes_connectivity,
+    };
+    use pen_core::clause::{ClauseRec, ClauseRole};
     use pen_core::expr::Expr;
     use pen_core::library::{Library, LibraryEntry};
     use pen_core::telescope::Telescope;
@@ -344,6 +521,42 @@ mod tests {
             }
         );
         assert!(passes_connectivity(&library, &Telescope::reference(3)));
+    }
+
+    #[test]
+    fn incremental_summary_matches_reference_temporal_shell_connectivity() {
+        let library = library_until(14);
+        let telescope = Telescope::reference(15);
+        let witness = analyze_connectivity(&library, &telescope);
+        let summary = ConnectivitySummary::from_telescope(&library, &telescope);
+
+        assert!(summary.structurally_connected());
+        assert!(!summary.references_active_window());
+        assert!(!summary.self_contained());
+        assert!(summary.needs_reanchor_fallback());
+        assert_eq!(summary.max_lib_ref(), witness.max_lib_ref);
+        assert!(witness.historical_reanchor);
+    }
+
+    #[test]
+    fn point_constructor_can_close_an_earlier_path_attachment_gap_incrementally() {
+        let telescope = Telescope::new(vec![
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1))),
+            ),
+            ClauseRec::new(ClauseRole::Introduction, Expr::PathCon(1)),
+            ClauseRec::new(ClauseRole::Introduction, Expr::Var(1)),
+        ]);
+        let library: Library = Vec::new();
+        let summary = ConnectivitySummary::from_telescope(&library, &telescope);
+        let witness = analyze_connectivity(&library, &telescope);
+
+        assert!(summary.structurally_connected());
+        assert_eq!(summary.structurally_connected(), witness.connected);
+        assert_eq!(summary.references_active_window(), witness.references_active_window);
+        assert_eq!(summary.self_contained(), witness.self_contained);
+        assert_eq!(summary.max_lib_ref(), witness.max_lib_ref);
     }
 
     #[test]

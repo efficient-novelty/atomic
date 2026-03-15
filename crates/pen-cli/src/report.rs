@@ -87,6 +87,14 @@ pub struct StepSearchStats {
     #[serde(default)]
     pub prefix_states_heuristic_dropped: usize,
     #[serde(default)]
+    pub incremental_legality_cache_hits: usize,
+    #[serde(default)]
+    pub incremental_connectivity_shortcuts: usize,
+    #[serde(default)]
+    pub incremental_connectivity_fallbacks: usize,
+    #[serde(default)]
+    pub incremental_connectivity_prunes: usize,
+    #[serde(default)]
     pub prefix_frontier_hot_states: usize,
     #[serde(default)]
     pub prefix_frontier_cold_states: usize,
@@ -670,6 +678,10 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 prefix_states_merged_by_signature: 0,
                 prefix_states_exact_pruned: 0,
                 prefix_states_heuristic_dropped: 0,
+                incremental_legality_cache_hits: 0,
+                incremental_connectivity_shortcuts: 0,
+                incremental_connectivity_fallbacks: 0,
+                incremental_connectivity_prunes: 0,
                 prefix_frontier_hot_states: 0,
                 prefix_frontier_cold_states: 0,
                 retained_candidates: 1,
@@ -914,6 +926,19 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
                 step.search_stats.prefix_frontier_hot_states,
                 step.search_stats.prefix_frontier_cold_states
             ));
+            if step.search_stats.incremental_legality_cache_hits > 0
+                || step.search_stats.incremental_connectivity_shortcuts > 0
+                || step.search_stats.incremental_connectivity_fallbacks > 0
+                || step.search_stats.incremental_connectivity_prunes > 0
+            {
+                lines.push(format!(
+                    "  prefix memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={}",
+                    step.search_stats.incremental_legality_cache_hits,
+                    step.search_stats.incremental_connectivity_shortcuts,
+                    step.search_stats.incremental_connectivity_fallbacks,
+                    step.search_stats.incremental_connectivity_prunes
+                ));
+            }
         }
         lines.push(format!(
             "  admissibility diagnostics: exact_legality={} structural_cap={} de-prioritized={} focus_aligned={}",
@@ -1186,6 +1211,10 @@ fn step_to_report_with_provenance(
             prefix_states_merged_by_signature: step.prefix_states_merged_by_signature,
             prefix_states_exact_pruned: step.prefix_states_exact_pruned,
             prefix_states_heuristic_dropped: step.prefix_states_heuristic_dropped,
+            incremental_legality_cache_hits: step.incremental_legality_cache_hits,
+            incremental_connectivity_shortcuts: step.incremental_connectivity_shortcuts,
+            incremental_connectivity_fallbacks: step.incremental_connectivity_fallbacks,
+            incremental_connectivity_prunes: step.incremental_connectivity_prunes,
             prefix_frontier_hot_states: step.prefix_frontier_hot_states,
             prefix_frontier_cold_states: step.prefix_frontier_cold_states,
             retained_candidates: candidate_reports.len(),
@@ -1478,6 +1507,10 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 prefix_states_merged_by_signature: 0,
                 prefix_states_exact_pruned: 0,
                 prefix_states_heuristic_dropped: 0,
+                incremental_legality_cache_hits: 0,
+                incremental_connectivity_shortcuts: 0,
+                incremental_connectivity_fallbacks: 0,
+                incremental_connectivity_prunes: 0,
                 prefix_frontier_hot_states: 0,
                 prefix_frontier_cold_states: 0,
                 retained_candidates: 1,

@@ -214,6 +214,14 @@ pub struct FrontierCounts {
     pub prefix_states_merged_by_signature: u64,
     pub prefix_states_exact_pruned: u64,
     pub prefix_states_heuristic_dropped: u64,
+    #[serde(default)]
+    pub incremental_legality_cache_hits: u64,
+    #[serde(default)]
+    pub incremental_connectivity_shortcuts: u64,
+    #[serde(default)]
+    pub incremental_connectivity_fallbacks: u64,
+    #[serde(default)]
+    pub incremental_connectivity_prunes: u64,
     pub hot_states: u64,
     pub cold_states: u64,
     pub dedupe_keys: u64,
@@ -388,6 +396,10 @@ mod tests {
                 prefix_states_merged_by_signature: 4_110_551,
                 prefix_states_exact_pruned: 1_220_014,
                 prefix_states_heuristic_dropped: 342_118,
+                incremental_legality_cache_hits: 8_604_229,
+                incremental_connectivity_shortcuts: 91_220,
+                incremental_connectivity_fallbacks: 14_331,
+                incremental_connectivity_prunes: 203_114,
                 hot_states: 2_241_132,
                 cold_states: 15_208_744,
                 dedupe_keys: 10_677_731,

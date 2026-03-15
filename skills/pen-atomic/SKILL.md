@@ -36,11 +36,19 @@ The current search-architecture focus has shifted again:
   clause-position catalogs instead of enumerating all full telescopes first
 - `PrefixSignature` now carries active-window hashing, shape/support summaries,
   and structural family flags for future d = 2 memoization
+- realistic shadow now has a real `PrefixLegalityCache` that reuses
+  incremental legality/connectivity summaries keyed by `PrefixSignature`
 - reports and frontier manifests now expose the plan-aligned counters
   `prefixes_created`, `full_telescopes_evaluated`,
   `canonical_dedupe_prunes`, and `semantic_minimality_prunes`
-- the next gap is earlier sound bound pruning and Phase-2 memoization on top of
-  the online prefix engine, not "add a frontier for the first time"
+- reports, manifests, and inspect output now also expose the first memoization
+  payoff counters `incremental_legality_cache_hits`,
+  `incremental_connectivity_shortcuts`,
+  `incremental_connectivity_fallbacks`, and
+  `incremental_connectivity_prunes`
+- the next gap is earlier sound bound pruning plus extending the new memo layer
+  into admissibility and clause-family filter reuse, not "add a frontier for
+  the first time"
 
 Start with the current architecture doc before diving into donor material:
 
@@ -178,11 +186,12 @@ Focus on:
 - exact-band search and bar semantics
 - admissibility from structural debt, not names
 - deterministic dedupe and SCC minimality
-- the remaining difference between the current realistic online prefix engine
-  and the still-missing earlier partial-prefix bound pruning
-- using strengthened `PrefixSignature` state and the plan-aligned counters as
-  the starting point for Phase-2 memoization and further quantum-inspired
-  search work
+- the remaining difference between the current realistic online prefix engine,
+  the landed legality/connectivity memo path, and the still-missing earlier
+  partial-prefix bound pruning
+- using strengthened `PrefixSignature` state, the landed memo counters, and the
+  remaining clause-family/admissibility gaps as the starting point for further
+  quantum-inspired search work
 
 ### If you are working on reporting or evidence
 
@@ -255,8 +264,8 @@ Reject designs that:
 - The repo now has real live atomic search through step 15, exact deterministic
   selection, and a richer candidate-level evidence surface.
 - The current quantum-focused search gap is earlier partial-prefix bound
-  pruning and Phase-2 memoization on top of the online prefix engine and the
-  strengthened prefix-signature state.
+  pruning plus extending the landed prefix-signature memo layer from
+  legality/connectivity reuse into admissibility and clause-family filtering.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.
