@@ -247,7 +247,8 @@ The current repository can honestly claim:
 - deterministic run artifacts and CLI-level evidence for the current corpus
 - real bounded frontier persistence and frontier-backed deterministic resume
 - deterministic comparison artifacts from stored run directories, including the
-  current guarded-versus-realistic rollout matrix
+  current guarded-versus-realistic rollout matrix across cold, resume,
+  reevaluate, and pressure lanes
 - deterministic Agda export from accepted run artifacts with explicit fallback
   labeling
 - guarded remains the authoritative truth surface while realistic stays

@@ -232,12 +232,19 @@ Compare the stored evidence:
 python scripts/compare_runs.py --baseline guarded --lane guarded=runs/guarded --lane realistic=runs/realistic
 ```
 
-If you also want a pressure-backed realistic lane, copy the realistic config,
-lower the RSS limits, run it, and add that run directory as another `--lane`.
+For the full Workstream 4 rollout matrix, also compare:
+
+- a realistic frontier-resume lane
+- a realistic compatibility-forced step-resume lane
+- a realistic compatibility-forced reevaluate lane
+- a realistic pressure-backed lane
+
 The comparison output now reports a Workstream 4 rollout section showing:
 
-- which realistic lanes preserve guarded parity
-- which realistic lanes also exercise real pressure without losing parity
+- cold realistic lanes that preserve guarded parity
+- realistic resume and reevaluate lanes that preserve guarded parity
+- realistic pressure lanes that exercise non-neutral governor behavior without
+  losing parity
 
 ## What A Run Writes
 

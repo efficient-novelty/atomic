@@ -50,6 +50,8 @@ The script also emits a Workstream 4 rollout view:
 
 - parity set: realistic lanes must preserve guarded trajectory, accepted hashes,
   and step-15 claim boundary while still showing broader late-step competition
+- resume set: realistic frontier-resume, step-resume, and reevaluate lanes must
+  each preserve the same guarded parity surface
 - pressure set: pressure-backed realistic lanes must preserve the same parity
   while exercising non-neutral governor or spill behavior
 

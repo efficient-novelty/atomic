@@ -30,6 +30,12 @@ SEARCH_SPACE_COUNT_KEYS = (
 LATE_STEP_COMPETITION_START = 10
 ADMISSIBILITY_REASON_LIMIT = 5
 WORKSTREAM4_REALISTIC_PROFILE = "realistic_frontier_shadow"
+WORKSTREAM4_COLD_MODES = {"atomic_search_bootstrap"}
+WORKSTREAM4_RESUME_REQUIRED_MODES = (
+    "frontier_checkpoint_resume",
+    "step_checkpoint_resume",
+    "step_checkpoint_reevaluate",
+)
 NEUTRAL_GOVERNOR_STATES = {"green", "unknown"}
 NEUTRAL_PRESSURE_ACTIONS = {"none", "unknown"}
 
@@ -749,7 +755,16 @@ def build_workstream4_rollout(
         if lane["label"] != baseline_label
         and lane["search_profile"] == WORKSTREAM4_REALISTIC_PROFILE
     ]
-    parity_rows = [build_workstream4_parity_row(lane, baseline_claim) for lane in realistic_lanes]
+    parity_rows = [
+        build_workstream4_parity_row(lane, baseline_claim)
+        for lane in realistic_lanes
+        if lane["run_mode"] in WORKSTREAM4_COLD_MODES
+    ]
+    resume_rows = [
+        build_workstream4_resume_row(lane, baseline_claim)
+        for lane in realistic_lanes
+        if lane["run_mode"] in WORKSTREAM4_RESUME_REQUIRED_MODES
+    ]
     pressure_rows = [
         build_workstream4_pressure_row(lane, baseline_claim)
         for lane in realistic_lanes
@@ -757,8 +772,14 @@ def build_workstream4_rollout(
     ]
 
     parity_set = rollout_set_summary(parity_rows)
+    resume_set = rollout_set_summary(resume_rows, WORKSTREAM4_RESUME_REQUIRED_MODES)
     pressure_set = rollout_set_summary(pressure_rows)
-    overall_status = workstream4_rollout_status(parity_set["status"], pressure_set["status"])
+    overall_status = workstream4_rollout_status(
+        parity_set["status"],
+        resume_set["status"],
+        pressure_set["status"],
+        len(realistic_lanes),
+    )
 
     return ordered_dict(
         [
@@ -767,6 +788,7 @@ def build_workstream4_rollout(
             ("authoritative_lane", baseline_label),
             ("realistic_profile", WORKSTREAM4_REALISTIC_PROFILE),
             ("parity_set", parity_set),
+            ("resume_set", resume_set),
             ("pressure_set", pressure_set),
         ]
     )
@@ -797,6 +819,7 @@ def build_workstream4_parity_row(
             ("label", lane["label"]),
             ("status", status),
             ("completed_step", lane["completed_step"]),
+            ("run_mode", lane["run_mode"]),
             ("trajectory_matches_baseline", trajectory_matches),
             ("accepted_hashes_match_baseline", accepted_hashes_match),
             ("step15_claim_matches_baseline", claim_matches),
@@ -806,6 +829,12 @@ def build_workstream4_parity_row(
             ("pressure_exercised", pressure_exercised),
         ]
     )
+
+
+def build_workstream4_resume_row(
+    lane: dict[str, Any], baseline_claim: dict[str, Any]
+) -> dict[str, Any]:
+    return build_workstream4_parity_row(lane, baseline_claim)
 
 
 def build_workstream4_pressure_row(
@@ -832,23 +861,35 @@ def build_workstream4_pressure_row(
     )
 
 
-def rollout_set_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
+def rollout_set_summary(
+    rows: list[dict[str, Any]], required_modes: tuple[str, ...] = ()
+) -> dict[str, Any]:
     if not rows:
         return ordered_dict(
             [
                 ("status", "not_present"),
+                ("required_modes", list(required_modes)),
+                ("present_modes", []),
+                ("missing_modes", list(required_modes)),
                 ("ready_lanes", []),
                 ("attention_lanes", []),
                 ("lanes", []),
             ]
         )
 
+    present_modes = sorted({str(row.get("run_mode", "unknown")) for row in rows})
+    missing_modes = [
+        mode for mode in required_modes if mode not in set(present_modes)
+    ]
     ready_lanes = [row["label"] for row in rows if row["status"] == "ready"]
     attention_lanes = [row["label"] for row in rows if row["status"] != "ready"]
-    status = "ready" if not attention_lanes else "attention"
+    status = "ready" if not attention_lanes and not missing_modes else "attention"
     return ordered_dict(
         [
             ("status", status),
+            ("required_modes", list(required_modes)),
+            ("present_modes", present_modes),
+            ("missing_modes", missing_modes),
             ("ready_lanes", ready_lanes),
             ("attention_lanes", attention_lanes),
             ("lanes", rows),
@@ -856,14 +897,21 @@ def rollout_set_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
     )
 
 
-def workstream4_rollout_status(parity_status: str, pressure_status: str) -> str:
-    if parity_status == "not_present":
+def workstream4_rollout_status(
+    parity_status: str,
+    resume_status: str,
+    pressure_status: str,
+    realistic_lane_count: int,
+) -> str:
+    if realistic_lane_count == 0:
         return "not_present"
-    if parity_status == "attention" or pressure_status == "attention":
+    if (
+        parity_status != "ready"
+        or resume_status != "ready"
+        or pressure_status != "ready"
+    ):
         return "attention"
-    if pressure_status == "ready":
-        return "ready"
-    return "parity_only"
+    return "ready"
 
 
 def signoff_summary(
@@ -974,6 +1022,10 @@ def render_text_summary(summary: dict[str, Any]) -> str:
             f"{render_workstream4_set(workstream4_rollout['parity_set'])}"
         ),
         (
+            "workstream4 resume set: "
+            f"{render_workstream4_set(workstream4_rollout['resume_set'])}"
+        ),
+        (
             "workstream4 pressure set: "
             f"{render_workstream4_set(workstream4_rollout['pressure_set'])}"
         ),
@@ -1017,6 +1069,10 @@ def render_workstream4_set(rollout_set: dict[str, Any]) -> str:
     status = rollout_set["status"]
     if status == "not_present":
         return "not present"
+
+    missing_modes = rollout_set.get("missing_modes") or []
+    if missing_modes:
+        return f"attention (missing modes: {', '.join(missing_modes)})"
 
     if status == "ready":
         return f"ready ({', '.join(rollout_set['ready_lanes'])})"

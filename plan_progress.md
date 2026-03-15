@@ -120,7 +120,8 @@ Status as of 2026-03-15:
   evidence.
 - Workstream 3 is complete and its exit gate is now covered by executable
   evidence.
-- Workstream 4 is now the active stream.
+- Workstream 4 is complete and its exit gate is now covered by executable
+  evidence.
 
 What is already accomplished in the repo:
 
@@ -174,12 +175,12 @@ What is already accomplished in the repo:
 - integration and unit coverage now freeze realistic shadow late competition
   through step 15
 
-What remains after Workstream 2:
+What remains after Workstream 4:
 
-- Workstream 4 rollout, parity hardening, and honesty-boundary docs are now the
-  active stream
 - broader historical-anchor demotion beyond the step-10-to-12 closeout target
   remains later realism work where it is still justified
+- any future default-lane promotion still requires new evidence beyond the
+  completed Workstream 4 boundary
 
 ## Workstream 0: Baseline and preservation harness
 
@@ -611,8 +612,9 @@ Goal:
 
 Status:
 
-- started on 2026-03-15
-- initial guarded-versus-realistic comparison-set hardening is now in place
+- complete on 2026-03-15
+- the guarded-versus-realistic rollout matrix is now frozen across cold,
+  resume, reevaluate, and pressure lanes
 - guarded remains authoritative; realistic frontier shadow remains
   comparison-backed
 
@@ -644,19 +646,49 @@ Primary file targets:
 
 Accomplished so far:
 
-- `scripts/compare_runs.py` now freezes a first Workstream-4 rollout view on top
-  of the existing lane diffing surface:
+- `scripts/compare_runs.py` now freezes the full Workstream-4 rollout view on
+  top of the existing lane diffing surface:
 - parity-set status for `realistic_frontier_shadow` lanes against the guarded
   baseline
+- resume-set status for realistic frontier-resume, compatibility-forced
+  step-resume, and compatibility-forced reevaluate lanes
 - pressure-set status for realistic lanes that exercise non-neutral governor or
   spill behavior
+- realistic resume integration coverage now freezes:
+- exact-match frontier resume
+- compatibility-forced step resume
+- compatibility-forced reevaluation
+- each of the realistic resume paths preserves the accepted 15-step reference
+  trajectory and retains the realistic search-profile evidence surface
 - the README, architecture doc, and search-contract doc now agree on the
   current honesty boundary:
 - `strict_canon_guarded` is authoritative
 - `realistic_frontier_shadow` is broader but comparison-backed
 - default-lane promotion is still future work, not current truth
-- integration coverage now freezes the initial guarded-versus-realistic
-  parity/pressure comparison set
+- integration coverage now freezes the completed guarded-versus-realistic
+  parity/resume/pressure comparison matrix
+
+Closeout evidence:
+
+- `python -m py_compile scripts/compare_runs.py` passes
+- `cargo test --test atomic_bootstrap compare_runs_reports_workstream4_rollout_parity_and_pressure_sets -- --nocapture`
+  passes
+- `cargo test --test resume_roundtrip realistic_resume_roundtrip -- --nocapture`
+  passes
+- `cargo test --test deterministic_replay compare_runs_script_emits_a_deterministic_evidence_signoff -- --nocapture`
+  passes
+- the completed rollout matrix now covers:
+- guarded cold baseline
+- realistic cold baseline
+- realistic frontier resume
+- realistic compatibility-forced step resume
+- realistic compatibility-forced reevaluate
+- realistic constrained-memory pressure
+- the compare output now reports Workstream-4 `ready` only when all of the
+  following are present and parity-clean:
+- realistic cold parity set
+- realistic resume/reevaluate set
+- realistic pressure set
 
 Exit gate:
 
@@ -665,6 +697,16 @@ Exit gate:
 - the realistic lane has reproducible parity evidence against the current canon
 - docs no longer describe the late live lane as broader or narrower than it
   really is
+
+Exit gate status:
+
+- met for the Workstream 4 target boundary
+- genuine late-step multi-candidate search and live prefix-frontier retention
+  were already established by Workstreams 2 and 3 and are now covered by the
+  final rollout evidence matrix
+- realistic cold, realistic resume, realistic reevaluate, and realistic
+  pressure lanes now all preserve guarded accepted-hash parity through step 15
+- guarded remains authoritative and the docs now say so consistently
 
 ## Risks and mitigations
 
@@ -696,19 +738,6 @@ Mitigation:
 
 - do not prioritize Workstream 3 until Workstream 2 produces real late
   competition
-
-## Immediate next actions
-
-The next implementation pass should do only the following:
-
-1. start Workstream 4 by freezing the current guarded-versus-realistic evidence
-   matrix into a repeatable parity and pressure comparison set
-2. update the architecture and search-contract docs so they describe the new
-   prefix-frontier runtime honestly
-3. keep the guarded lane authoritative while realistic frontier shadow remains
-   comparison-backed rather than default
-4. only consider any default-lane promotion after the docs and parity evidence
-   agree on the repo's actual honesty boundary
 
 ## Definition of done
 

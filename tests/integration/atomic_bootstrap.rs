@@ -4,8 +4,9 @@ use std::fs;
 
 use support::{
     assert_success, compact_search_space_stats, compact_step_summaries, fixtures_root,
-    load_search_space_fixture, load_trajectory_fixture, normalize_checkpoint, read_json, read_text,
-    run_compare_runs, run_pen_cli, temp_dir, workspace_root, write_pressure_config,
+    load_search_space_fixture, load_trajectory_fixture, mutate_latest_frontier_manifest,
+    normalize_checkpoint, read_json, read_text, run_compare_runs, run_pen_cli, temp_dir,
+    workspace_root, write_pressure_config,
 };
 
 #[test]
@@ -822,20 +823,31 @@ fn compare_runs_reports_relaxed_shadow_admissibility_and_competition_deltas() {
 #[test]
 fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
     let root = temp_dir("workstream4-rollout");
+    let root_arg = root.to_string_lossy().to_string();
+    let guarded_config = workspace_root()
+        .join("configs")
+        .join("strict_canon_guarded.toml")
+        .to_string_lossy()
+        .to_string();
+    let realistic_config = workspace_root()
+        .join("configs")
+        .join("realistic_frontier_shadow.toml")
+        .to_string_lossy()
+        .to_string();
     let guarded_dir = root.join("guarded");
     let realistic_dir = root.join("realistic");
+    let realistic_frontier_resume_dir = root.join("realistic-frontier-resume");
+    let realistic_step_resume_dir = root.join("realistic-step-resume");
+    let realistic_reevaluate_dir = root.join("realistic-reevaluate");
     let realistic_pressure_dir = root.join("realistic-pressure");
     let realistic_pressure_config = root.join("realistic-pressure.toml");
 
     assert_success(run_pen_cli([
         "run",
         "--config",
-        &workspace_root()
-            .join("configs")
-            .join("strict_canon_guarded.toml")
-            .to_string_lossy(),
+        &guarded_config,
         "--root",
-        &root.to_string_lossy(),
+        &root_arg,
         "--run-id",
         "guarded",
         "--until-step",
@@ -844,14 +856,70 @@ fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
     assert_success(run_pen_cli([
         "run",
         "--config",
-        &workspace_root()
-            .join("configs")
-            .join("realistic_frontier_shadow.toml")
-            .to_string_lossy(),
+        &realistic_config,
         "--root",
-        &root.to_string_lossy(),
+        &root_arg,
         "--run-id",
         "realistic",
+        "--until-step",
+        "15",
+    ]));
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &realistic_config,
+        "--root",
+        &root_arg,
+        "--run-id",
+        "realistic-frontier-resume",
+        "--until-step",
+        "12",
+    ]));
+    assert_success(run_pen_cli([
+        "resume",
+        &realistic_frontier_resume_dir.to_string_lossy(),
+        "--until-step",
+        "15",
+    ]));
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &realistic_config,
+        "--root",
+        &root_arg,
+        "--run-id",
+        "realistic-step-resume",
+        "--until-step",
+        "12",
+    ]));
+    mutate_latest_frontier_manifest(&realistic_step_resume_dir, |manifest| {
+        manifest["resume_compatible"]["search_semantics_hash"] =
+            serde_json::Value::String("blake3:realistic-search-change".to_owned());
+    });
+    assert_success(run_pen_cli([
+        "resume",
+        &realistic_step_resume_dir.to_string_lossy(),
+        "--until-step",
+        "15",
+    ]));
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &realistic_config,
+        "--root",
+        &root_arg,
+        "--run-id",
+        "realistic-reevaluate",
+        "--until-step",
+        "12",
+    ]));
+    mutate_latest_frontier_manifest(&realistic_reevaluate_dir, |manifest| {
+        manifest["resume_compatible"]["evaluator_hash"] =
+            serde_json::Value::String("blake3:realistic-eval-change".to_owned());
+    });
+    assert_success(run_pen_cli([
+        "resume",
+        &realistic_reevaluate_dir.to_string_lossy(),
         "--until-step",
         "15",
     ]));
@@ -862,7 +930,7 @@ fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
         "--config",
         &realistic_pressure_config.to_string_lossy(),
         "--root",
-        &root.to_string_lossy(),
+        &root_arg,
         "--run-id",
         "realistic-pressure",
         "--until-step",
@@ -879,6 +947,21 @@ fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
         "--lane",
         &format!("realistic={}", realistic_dir.to_string_lossy()),
         "--lane",
+        &format!(
+            "realistic-frontier-resume={}",
+            realistic_frontier_resume_dir.to_string_lossy()
+        ),
+        "--lane",
+        &format!(
+            "realistic-step-resume={}",
+            realistic_step_resume_dir.to_string_lossy()
+        ),
+        "--lane",
+        &format!(
+            "realistic-reevaluate={}",
+            realistic_reevaluate_dir.to_string_lossy()
+        ),
+        "--lane",
         &format!("realistic-pressure={}", realistic_pressure_dir.to_string_lossy()),
         "--text-out",
         &text_out.to_string_lossy(),
@@ -888,13 +971,23 @@ fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
 
     assert!(stdout.contains("workstream4 rollout: ready"));
     assert!(stdout.contains("workstream4 parity set: ready (realistic, realistic-pressure)"));
+    assert!(
+        stdout.contains(
+            "workstream4 resume set: ready (realistic-frontier-resume, realistic-step-resume, realistic-reevaluate)"
+        )
+    );
     assert!(stdout.contains("workstream4 pressure set: ready (realistic-pressure)"));
 
     let summary = read_json(&json_out);
     let rollout = &summary["workstream4_rollout"];
     assert_eq!(rollout["status"].as_str(), Some("ready"));
     assert_eq!(rollout["parity_set"]["status"].as_str(), Some("ready"));
+    assert_eq!(rollout["resume_set"]["status"].as_str(), Some("ready"));
     assert_eq!(rollout["pressure_set"]["status"].as_str(), Some("ready"));
+    assert_eq!(
+        summary["accepted_hash_consistency"]["status"].as_str(),
+        Some("all_match_baseline")
+    );
 
     let parity_ready = rollout["parity_set"]["ready_lanes"]
         .as_array()
@@ -931,6 +1024,65 @@ fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
         Some(true)
     );
     assert_eq!(realistic_row["pressure_exercised"].as_bool(), Some(false));
+    assert_eq!(
+        realistic_row["run_mode"].as_str(),
+        Some("atomic_search_bootstrap")
+    );
+
+    let resume_modes = rollout["resume_set"]["present_modes"]
+        .as_array()
+        .expect("resume present modes")
+        .iter()
+        .map(|value| value.as_str().expect("resume mode"))
+        .collect::<Vec<_>>();
+    assert_eq!(
+        resume_modes,
+        vec![
+            "frontier_checkpoint_resume",
+            "step_checkpoint_reevaluate",
+            "step_checkpoint_resume",
+        ]
+    );
+    assert!(
+        rollout["resume_set"]["missing_modes"]
+            .as_array()
+            .expect("resume missing modes")
+            .is_empty()
+    );
+    let realistic_resume_row = rollout["resume_set"]["lanes"]
+        .as_array()
+        .expect("resume rows")
+        .iter()
+        .find(|row| row["label"].as_str() == Some("realistic-frontier-resume"))
+        .expect("realistic frontier resume row");
+    assert_eq!(
+        realistic_resume_row["status"].as_str(),
+        Some("ready")
+    );
+    assert_eq!(
+        realistic_resume_row["run_mode"].as_str(),
+        Some("frontier_checkpoint_resume")
+    );
+    let realistic_step_resume_row = rollout["resume_set"]["lanes"]
+        .as_array()
+        .expect("resume rows")
+        .iter()
+        .find(|row| row["label"].as_str() == Some("realistic-step-resume"))
+        .expect("realistic step resume row");
+    assert_eq!(
+        realistic_step_resume_row["run_mode"].as_str(),
+        Some("step_checkpoint_resume")
+    );
+    let realistic_reevaluate_row = rollout["resume_set"]["lanes"]
+        .as_array()
+        .expect("resume rows")
+        .iter()
+        .find(|row| row["label"].as_str() == Some("realistic-reevaluate"))
+        .expect("realistic reevaluate row");
+    assert_eq!(
+        realistic_reevaluate_row["run_mode"].as_str(),
+        Some("step_checkpoint_reevaluate")
+    );
 
     let realistic_pressure_row = rollout["pressure_set"]["lanes"]
         .as_array()

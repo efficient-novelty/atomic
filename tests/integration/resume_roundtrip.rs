@@ -193,6 +193,163 @@ fn resume_roundtrip_reevaluates_when_frontier_evaluator_changes() {
 }
 
 #[test]
+fn realistic_resume_roundtrip_keeps_the_reference_sequence_and_prefix_frontier_evidence() {
+    let root = temp_dir("realistic-resume");
+    let run_dir = root.join("resume-run");
+    let config = workspace_root()
+        .join("configs")
+        .join("realistic_frontier_shadow.toml")
+        .to_string_lossy()
+        .to_string();
+    let root_arg = root.to_string_lossy().to_string();
+    let run_dir_arg = run_dir.to_string_lossy().to_string();
+
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &config,
+        "--root",
+        &root_arg,
+        "--run-id",
+        "resume-run",
+        "--until-step",
+        "12",
+    ]));
+
+    let resumed = run_pen_cli(["resume", &run_dir_arg, "--until-step", "15"]);
+    let resumed_stdout = assert_success(resumed);
+    assert!(resumed_stdout.contains("completed_step: 15"));
+    assert!(resumed_stdout.contains("search_profile: realistic_frontier_shadow"));
+
+    let inspect_stdout = assert_success(run_pen_cli(["inspect", &run_dir_arg]));
+    assert!(inspect_stdout.contains("search_profile: realistic_frontier_shadow"));
+    assert!(inspect_stdout.contains("provenance: frontier_checkpoint_resume"));
+    assert!(inspect_stdout.contains("late_step_claim: executable_canon step 15 DCT nu=103"));
+
+    let actual_steps = compact_step_summaries(&run_dir);
+    let expected_steps = load_trajectory_fixture("reference_steps_until_15.json");
+    assert_eq!(actual_steps, expected_steps);
+
+    let step15_summary = read_json(
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-15-summary.json"),
+    );
+    assert_eq!(
+        step15_summary["search_profile"].as_str(),
+        Some("realistic_frontier_shadow")
+    );
+    assert_eq!(
+        step15_summary["provenance"].as_str(),
+        Some("frontier_checkpoint_resume")
+    );
+    assert!(
+        step15_summary["search_stats"]["prefix_states_explored"]
+            .as_u64()
+            .expect("prefix_states_explored")
+            > 0
+    );
+    let step_inspect_stdout = assert_success(run_pen_cli([
+        "inspect",
+        &run_dir
+            .join("reports")
+            .join("steps")
+            .join("step-15-summary.json")
+            .to_string_lossy(),
+    ]));
+    assert!(step_inspect_stdout.contains("prefix_frontier: explored="));
+
+    let telemetry = read_text(&run_dir.join("telemetry.ndjson"));
+    assert!(telemetry.contains("\"mode\":\"frontier_checkpoint_resume\""));
+    assert!(telemetry.contains("\"search_profile\":\"realistic_frontier_shadow\""));
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn realistic_resume_roundtrip_falls_back_to_step_checkpoint_when_frontier_search_changes() {
+    let root = temp_dir("realistic-resume-search-change");
+    let run_dir = root.join("resume-run");
+    let config = workspace_root()
+        .join("configs")
+        .join("realistic_frontier_shadow.toml")
+        .to_string_lossy()
+        .to_string();
+    let root_arg = root.to_string_lossy().to_string();
+    let run_dir_arg = run_dir.to_string_lossy().to_string();
+
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &config,
+        "--root",
+        &root_arg,
+        "--run-id",
+        "resume-run",
+        "--until-step",
+        "12",
+    ]));
+
+    mutate_latest_frontier_manifest(&run_dir, |manifest| {
+        manifest["resume_compatible"]["search_semantics_hash"] =
+            Value::String("blake3:other-realistic-search".to_owned());
+    });
+
+    assert_success(run_pen_cli(["resume", &run_dir_arg, "--until-step", "15"]));
+    let actual_steps = compact_step_summaries(&run_dir);
+    let expected_steps = load_trajectory_fixture("reference_steps_until_15.json");
+    assert_eq!(actual_steps, expected_steps);
+
+    let telemetry = read_text(&run_dir.join("telemetry.ndjson"));
+    assert!(telemetry.contains("\"mode\":\"step_checkpoint_resume\""));
+    assert!(telemetry.contains("\"search_profile\":\"realistic_frontier_shadow\""));
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn realistic_resume_roundtrip_reevaluates_when_frontier_evaluator_changes() {
+    let root = temp_dir("realistic-resume-eval-change");
+    let run_dir = root.join("resume-run");
+    let config = workspace_root()
+        .join("configs")
+        .join("realistic_frontier_shadow.toml")
+        .to_string_lossy()
+        .to_string();
+    let root_arg = root.to_string_lossy().to_string();
+    let run_dir_arg = run_dir.to_string_lossy().to_string();
+
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &config,
+        "--root",
+        &root_arg,
+        "--run-id",
+        "resume-run",
+        "--until-step",
+        "12",
+    ]));
+
+    mutate_latest_frontier_manifest(&run_dir, |manifest| {
+        manifest["resume_compatible"]["evaluator_hash"] =
+            Value::String("blake3:other-realistic-eval".to_owned());
+    });
+
+    assert_success(run_pen_cli(["resume", &run_dir_arg, "--until-step", "15"]));
+    let actual_steps = compact_step_summaries(&run_dir);
+    let expected_steps = load_trajectory_fixture("reference_steps_until_15.json");
+    assert_eq!(actual_steps, expected_steps);
+
+    let telemetry = read_text(&run_dir.join("telemetry.ndjson"));
+    assert!(telemetry.contains("\"mode\":\"step_checkpoint_reevaluate\""));
+    assert!(telemetry.contains("\"search_profile\":\"realistic_frontier_shadow\""));
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
 fn resume_roundtrip_requires_migration_when_frontier_ast_changes() {
     let root = temp_dir("resume-ast-change");
     let run_dir = root.join("resume-run");
