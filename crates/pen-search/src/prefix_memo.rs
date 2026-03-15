@@ -6,7 +6,10 @@ use crate::prefix_cache::PrefixSignature;
 use pen_core::clause::ClauseRec;
 use pen_core::library::Library;
 use pen_core::telescope::Telescope;
-use pen_type::admissibility::{PackagePolicy, StrictAdmissibility, StructuralFamily};
+use pen_type::admissibility::{
+    AdmissibilityDecision, PackagePolicy, StrictAdmissibility, StructuralFamily,
+    StructuralFamilyMatchMask, assess_strict_admissibility_from_family_matches,
+};
 use pen_type::check::CheckSummary;
 use pen_type::connectivity::ConnectivitySummary;
 use std::collections::BTreeMap;
@@ -19,6 +22,8 @@ pub struct PrefixLegalityCacheStats {
     pub connectivity_prunes: usize,
     pub clause_family_filter_hits: usize,
     pub clause_family_prunes: usize,
+    pub terminal_admissibility_hits: usize,
+    pub terminal_admissibility_rejections: usize,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -114,6 +119,16 @@ impl PrefixFamilyFilterSummary {
 
     fn is_empty(self) -> bool {
         self.possible_families_mask == 0
+    }
+
+    fn match_mask(self) -> StructuralFamilyMatchMask {
+        let mut mask = StructuralFamilyMatchMask::empty();
+        for family in StructuralFamily::ALL {
+            if self.possible_families_mask & structural_family_bit(family) != 0 {
+                mask.insert(family);
+            }
+        }
+        mask
     }
 }
 
@@ -239,18 +254,49 @@ impl PrefixLegalityCache {
         self.stats.connectivity_fallbacks += 1;
         Some(TerminalConnectivityDecision::NeedsFallback)
     }
+
+    pub fn terminal_admissibility(
+        &mut self,
+        step_index: u32,
+        parent_signature: &PrefixSignature,
+        library: &Library,
+        telescope: &Telescope,
+        clause: &ClauseRec,
+        admissibility: StrictAdmissibility,
+    ) -> Option<AdmissibilityDecision> {
+        let parent_filter = self.family_filters.get(parent_signature).copied()?;
+        self.stats.terminal_admissibility_hits += 1;
+        let terminal_filter = parent_filter.retain_matching(
+            usize::from(parent_signature.clause_position),
+            clause,
+            EnumerationContext::from_admissibility(library, admissibility),
+        );
+        let decision = assess_strict_admissibility_from_family_matches(
+            step_index,
+            library,
+            telescope,
+            admissibility,
+            terminal_filter.match_mask(),
+        );
+        if !decision.is_admitted() {
+            self.stats.terminal_admissibility_rejections += 1;
+        }
+        Some(decision)
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::{PrefixLegalityCache, TerminalConnectivityDecision};
+    use crate::enumerate::{EnumerationContext, build_clause_catalog};
     use crate::prefix_cache::PrefixSignature;
     use pen_core::clause::{ClauseRec, ClauseRole};
     use pen_core::expr::Expr;
     use pen_core::library::{Library, LibraryEntry};
     use pen_core::telescope::Telescope;
     use pen_type::admissibility::{
-        AdmissibilityMode, strict_admissibility, strict_admissibility_for_mode,
+        AdmissibilityMode, assess_strict_admissibility, strict_admissibility,
+        strict_admissibility_for_mode,
     };
 
     fn library_until(step: u32) -> Library {
@@ -309,5 +355,33 @@ mod tests {
         );
         assert_eq!(cache.stats().legality_hits, 1);
         assert_eq!(cache.stats().connectivity_fallbacks, 1);
+    }
+
+    #[test]
+    fn terminal_admissibility_matches_direct_assessment_when_family_summary_is_available() {
+        let library = library_until(14);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::RealisticShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(signature.clone(), 8, &library, &prefix, admissibility));
+
+        for clause in clause_catalog.clauses_at(7) {
+            let mut telescope = prefix.clone();
+            telescope.clauses.push(clause.clone());
+
+            let cached = cache
+                .terminal_admissibility(15, &signature, &library, &telescope, clause, admissibility)
+                .expect("terminal admissibility should reuse family summary");
+            let direct = assess_strict_admissibility(15, &library, &telescope, admissibility);
+
+            assert_eq!(cached, direct);
+        }
+
+        assert!(cache.stats().terminal_admissibility_hits > 0);
     }
 }

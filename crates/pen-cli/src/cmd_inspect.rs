@@ -93,17 +93,25 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 && step.search_stats.incremental_connectivity_prunes == 0
                 && step.search_stats.incremental_clause_family_filter_hits == 0
                 && step.search_stats.incremental_clause_family_prunes == 0
+                && step.search_stats.incremental_terminal_admissibility_hits == 0
+                && step
+                    .search_stats
+                    .incremental_terminal_admissibility_rejections
+                    == 0
             {
                 String::new()
             } else {
                 format!(
-                    "\nprefix_memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={}",
+                    "\nprefix_memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={}",
                     step.search_stats.incremental_legality_cache_hits,
                     step.search_stats.incremental_connectivity_shortcuts,
                     step.search_stats.incremental_connectivity_fallbacks,
                     step.search_stats.incremental_connectivity_prunes,
                     step.search_stats.incremental_clause_family_filter_hits,
-                    step.search_stats.incremental_clause_family_prunes
+                    step.search_stats.incremental_clause_family_prunes,
+                    step.search_stats.incremental_terminal_admissibility_hits,
+                    step.search_stats
+                        .incremental_terminal_admissibility_rejections
                 )
             };
             format!(
@@ -170,7 +178,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 )
             });
         return Ok(format!(
-            "frontier step {} band {}\nprefix_created: {}\nprefix_explored: {}\nprefix_merged: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nlegality_hits: {}\nconnectivity_shortcuts: {}\nconnectivity_fallbacks: {}\nconnectivity_prunes: {}\nclause_family_hits: {}\nclause_family_prunes: {}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
+            "frontier step {} band {}\nprefix_created: {}\nprefix_explored: {}\nprefix_merged: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nlegality_hits: {}\nconnectivity_shortcuts: {}\nconnectivity_fallbacks: {}\nconnectivity_prunes: {}\nclause_family_hits: {}\nclause_family_prunes: {}\nterminal_admissibility_hits: {}\nterminal_admissibility_rejections: {}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
             frontier.step_index,
             frontier.band_index,
             frontier.counts.prefixes_created,
@@ -184,6 +192,10 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
             frontier.counts.incremental_connectivity_prunes,
             frontier.counts.incremental_clause_family_filter_hits,
             frontier.counts.incremental_clause_family_prunes,
+            frontier.counts.incremental_terminal_admissibility_hits,
+            frontier
+                .counts
+                .incremental_terminal_admissibility_rejections,
             frontier.counts.hot_states,
             frontier.counts.cold_states,
             frontier.counts.dedupe_keys,

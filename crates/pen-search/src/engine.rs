@@ -129,6 +129,8 @@ pub struct AtomicSearchStep {
     pub incremental_connectivity_prunes: usize,
     pub incremental_clause_family_filter_hits: usize,
     pub incremental_clause_family_prunes: usize,
+    pub incremental_terminal_admissibility_hits: usize,
+    pub incremental_terminal_admissibility_rejections: usize,
     pub prefix_frontier_hot_states: usize,
     pub prefix_frontier_cold_states: usize,
     pub retention_policy: RetentionPolicy,
@@ -345,6 +347,8 @@ fn search_next_step(
     let mut incremental_connectivity_prunes = 0usize;
     let mut incremental_clause_family_filter_hits = 0usize;
     let mut incremental_clause_family_prunes = 0usize;
+    let mut incremental_terminal_admissibility_hits = 0usize;
+    let mut incremental_terminal_admissibility_rejections = 0usize;
     let nu_history = history
         .iter()
         .map(|record| (record.step_index, record.nu))
@@ -376,6 +380,9 @@ fn search_next_step(
         incremental_connectivity_prunes = legality_stats.connectivity_prunes;
         incremental_clause_family_filter_hits = legality_stats.clause_family_filter_hits;
         incremental_clause_family_prunes = legality_stats.clause_family_prunes;
+        incremental_terminal_admissibility_hits = legality_stats.terminal_admissibility_hits;
+        incremental_terminal_admissibility_rejections =
+            legality_stats.terminal_admissibility_rejections;
     } else {
         for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
             let telescopes = enumerate_telescopes(
@@ -527,6 +534,8 @@ fn search_next_step(
         incremental_connectivity_prunes,
         incremental_clause_family_filter_hits,
         incremental_clause_family_prunes,
+        incremental_terminal_admissibility_hits,
+        incremental_terminal_admissibility_rejections,
         prefix_frontier.frontier.hot.len(),
         prefix_frontier.frontier.cold.len(),
         retention_policy,
@@ -576,6 +585,8 @@ fn build_step_result(
     incremental_connectivity_prunes: usize,
     incremental_clause_family_filter_hits: usize,
     incremental_clause_family_prunes: usize,
+    incremental_terminal_admissibility_hits: usize,
+    incremental_terminal_admissibility_rejections: usize,
     prefix_frontier_hot_states: usize,
     prefix_frontier_cold_states: usize,
     retention_policy: RetentionPolicy,
@@ -625,6 +636,8 @@ fn build_step_result(
         incremental_connectivity_prunes,
         incremental_clause_family_filter_hits,
         incremental_clause_family_prunes,
+        incremental_terminal_admissibility_hits,
+        incremental_terminal_admissibility_rejections,
         prefix_frontier_hot_states,
         prefix_frontier_cold_states,
         retention_policy,
@@ -864,8 +877,19 @@ fn record_terminal_prefix_group(
 
         discovery.enumerated_candidates += 1;
         discovery.well_formed_candidates += 1;
-        let admissibility_decision =
-            assess_strict_admissibility(step_index, library, &telescope, admissibility);
+        let admissibility_decision = discovery
+            .prefix_legality_cache
+            .terminal_admissibility(
+                step_index,
+                prefix_signature,
+                library,
+                &telescope,
+                clause,
+                admissibility,
+            )
+            .unwrap_or_else(|| {
+                assess_strict_admissibility(step_index, library, &telescope, admissibility)
+            });
         discovery
             .admissibility_diagnostics
             .record(&admissibility_decision);
@@ -1486,6 +1510,8 @@ mod tests {
         assert_eq!(step.telescope, Telescope::reference(11));
         assert!(step.incremental_clause_family_filter_hits > 0);
         assert!(step.incremental_clause_family_prunes > 0);
+        assert!(step.incremental_terminal_admissibility_hits > 0);
+        assert!(step.incremental_terminal_admissibility_rejections > 0);
         assert_eq!(step.admissibility_rejections, 1);
         assert_eq!(
             step.admissibility_diagnostics
@@ -1517,6 +1543,7 @@ mod tests {
         assert!(step.incremental_legality_cache_hits > 0);
         assert!(step.incremental_connectivity_fallbacks > 0);
         assert!(step.incremental_clause_family_filter_hits > 0);
+        assert!(step.incremental_terminal_admissibility_hits > 0);
         assert!(
             step.prefix_frontier_hot_states + step.prefix_frontier_cold_states
                 <= step.prefix_states_explored

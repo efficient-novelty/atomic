@@ -85,6 +85,44 @@ impl StructuralFamily {
     }
 }
 
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub struct StructuralFamilyMatchMask(u16);
+
+impl StructuralFamilyMatchMask {
+    pub const fn empty() -> Self {
+        Self(0)
+    }
+
+    pub fn insert(&mut self, family: StructuralFamily) {
+        self.0 |= structural_family_bit(family);
+    }
+
+    pub const fn matches(self, family: StructuralFamily) -> bool {
+        self.0 & structural_family_bit(family) != 0
+    }
+
+    pub const fn is_empty(self) -> bool {
+        self.0 == 0
+    }
+}
+
+const fn structural_family_bit(family: StructuralFamily) -> u16 {
+    match family {
+        StructuralFamily::FormerEliminator => 1 << 0,
+        StructuralFamily::InitialHit => 1 << 1,
+        StructuralFamily::TruncationHit => 1 << 2,
+        StructuralFamily::HigherHit => 1 << 3,
+        StructuralFamily::SphereLift => 1 << 4,
+        StructuralFamily::AxiomaticBundle => 1 << 5,
+        StructuralFamily::ModalShell => 1 << 6,
+        StructuralFamily::ConnectionShell => 1 << 7,
+        StructuralFamily::CurvatureShell => 1 << 8,
+        StructuralFamily::OperatorBundle => 1 << 9,
+        StructuralFamily::HilbertFunctional => 1 << 10,
+        StructuralFamily::TemporalShell => 1 << 11,
+    }
+}
+
 #[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 pub struct PackagePolicies {
     pub former_eliminator: PackagePolicy,
@@ -305,6 +343,39 @@ pub fn assess_strict_admissibility(
     telescope: &Telescope,
     admissibility: StrictAdmissibility,
 ) -> AdmissibilityDecision {
+    if step_index <= 3 {
+        return assess_strict_admissibility_from_family_matches(
+            step_index,
+            library,
+            telescope,
+            admissibility,
+            StructuralFamilyMatchMask::empty(),
+        );
+    }
+
+    let matched_families = package_match_profile(
+        library,
+        telescope,
+        admissibility.historical_anchor_ref,
+        admissibility.mode,
+    )
+    .to_match_mask();
+    assess_strict_admissibility_from_family_matches(
+        step_index,
+        library,
+        telescope,
+        admissibility,
+        matched_families,
+    )
+}
+
+pub fn assess_strict_admissibility_from_family_matches(
+    step_index: u32,
+    library: &Library,
+    telescope: &Telescope,
+    admissibility: StrictAdmissibility,
+    matched_families: StructuralFamilyMatchMask,
+) -> AdmissibilityDecision {
     if !admissibility.supports_exact_clause_kappa(telescope.kappa() as u16) {
         return AdmissibilityDecision::rejected_by_exact_legality("outside_exact_kappa_band");
     }
@@ -354,15 +425,8 @@ pub fn assess_strict_admissibility(
                 return AdmissibilityDecision::rejected_by_exact_legality("trivially_derivable");
             }
 
-            let package_matches = package_match_profile(
-                library,
-                telescope,
-                admissibility.historical_anchor_ref,
-                admissibility.mode,
-            );
-
             if let Some(family) = admissibility.required_focus_family() {
-                if !package_matches.matches(family) {
+                if !matched_families.matches(family) {
                     return AdmissibilityDecision::rejected_by_structural_debt_cap(format!(
                         "missing_required_{}",
                         family.slug()
@@ -371,7 +435,7 @@ pub fn assess_strict_admissibility(
             }
 
             for family in StructuralFamily::ALL {
-                if package_matches.matches(family)
+                if matched_families.matches(family)
                     && matches!(admissibility.policy_for(family), PackagePolicy::Forbid)
                 {
                     return AdmissibilityDecision::rejected_by_structural_debt_cap(format!(
@@ -382,7 +446,7 @@ pub fn assess_strict_admissibility(
             }
 
             let matches_allowed_family = StructuralFamily::ALL.into_iter().any(|family| {
-                package_matches.matches(family)
+                matched_families.matches(family)
                     && !matches!(admissibility.policy_for(family), PackagePolicy::Forbid)
             });
             if admissibility.focus_family.is_some() && !matches_allowed_family {
@@ -392,7 +456,7 @@ pub fn assess_strict_admissibility(
             }
 
             match admissibility.focus_family {
-                Some(family) if package_matches.matches(family) => {
+                Some(family) if matched_families.matches(family) => {
                     AdmissibilityDecision::admitted_focus_aligned(format!(
                         "focus_{}",
                         family.slug()
@@ -805,6 +869,16 @@ impl PackageMatchProfile {
             StructuralFamily::HilbertFunctional => self.hilbert_functional,
             StructuralFamily::TemporalShell => self.temporal_shell,
         }
+    }
+
+    fn to_match_mask(self) -> StructuralFamilyMatchMask {
+        let mut mask = StructuralFamilyMatchMask::empty();
+        for family in StructuralFamily::ALL {
+            if self.matches(family) {
+                mask.insert(family);
+            }
+        }
+        mask
     }
 }
 

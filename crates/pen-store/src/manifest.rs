@@ -226,6 +226,10 @@ pub struct FrontierCounts {
     pub incremental_clause_family_filter_hits: u64,
     #[serde(default)]
     pub incremental_clause_family_prunes: u64,
+    #[serde(default)]
+    pub incremental_terminal_admissibility_hits: u64,
+    #[serde(default)]
+    pub incremental_terminal_admissibility_rejections: u64,
     pub hot_states: u64,
     pub cold_states: u64,
     pub dedupe_keys: u64,
@@ -406,6 +410,8 @@ mod tests {
                 incremental_connectivity_prunes: 203_114,
                 incremental_clause_family_filter_hits: 5_882_441,
                 incremental_clause_family_prunes: 118_204,
+                incremental_terminal_admissibility_hits: 2_104_331,
+                incremental_terminal_admissibility_rejections: 74_220,
                 hot_states: 2_241_132,
                 cold_states: 15_208_744,
                 dedupe_keys: 10_677_731,
