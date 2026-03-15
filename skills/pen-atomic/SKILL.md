@@ -22,7 +22,6 @@ The repo now has a real bounded live-search lane:
 
 What is still incomplete:
 
-- frontier-backed resume is not yet wired into the live CLI path
 - `pen-store` is still partly contract-first
 - the anti-junk frontier engine is not yet the full long-range design
 - the Agda bridge is still lighter than the final proof-facing target
@@ -230,8 +229,8 @@ Reject designs that:
   strict 15-step lane.
 - The repo now has real live atomic search through step 15, exact deterministic
   selection, and a richer candidate-level evidence surface.
-- The biggest unfinished areas are anti-junk frontier retention, real
-  frontier-backed storage/resume, the memory governor, and the stronger Agda
-  contract.
+- The biggest unfinished areas are broader anti-junk frontier design,
+  storage/runtime hardening beyond the current bounded resume lanes, the memory
+  governor, and the stronger Agda contract.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) for current
   behavior, then use the theory and donor references only as needed.

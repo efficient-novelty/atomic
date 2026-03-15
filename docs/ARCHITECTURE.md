@@ -14,8 +14,8 @@ The repository can currently do all of the following:
   profiles.
 - `strict_canon_guarded` is the authoritative lane for the current executable
   15-step corpus.
-- `realistic_frontier_shadow` is the broader comparison-backed lane for
-  Workstream 4 rollout.
+- `realistic_frontier_shadow` is the broader comparison-backed lane frozen by
+  the completed Workstream 4 rollout matrix.
 - `pen-cli resume` consumes the latest compatible frontier generation when the
   frozen compatibility ladder admits it and otherwise falls back deterministically
   to step resume or step reevaluation.

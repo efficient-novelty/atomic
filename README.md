@@ -24,8 +24,8 @@ sidecar.
 - optional acceleration scaffolding is outside the authoritative acceptance
   contract
 
-Progress on rollout, parity hardening, and honesty-boundary closeout is tracked
-in [plan_progress.md](plan_progress.md). Workstream 4 is active. The guarded
+Rollout, parity hardening, and honesty-boundary closeout are tracked in
+[plan_progress.md](plan_progress.md). Workstream 4 is complete. The guarded
 lane remains authoritative while `realistic_frontier_shadow` stays
 comparison-backed rather than default.
 
@@ -211,8 +211,8 @@ cargo run -p pen-cli -- run --config configs/debug.toml --root runs --run-id deb
 
 ## Guarded vs Realistic Comparison
 
-Workstream 4 keeps the guarded lane authoritative and uses the realistic lane
-as a comparison-backed rollout surface.
+The completed Workstream 4 rollout keeps the guarded lane authoritative and
+uses the realistic lane as a comparison-backed rollout surface.
 
 Authoritative guarded baseline:
 

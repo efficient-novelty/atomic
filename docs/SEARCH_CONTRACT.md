@@ -1,8 +1,8 @@
 # Search Contract
 
-The search engine remains strict-only, deterministic, and CPU-first. During
-Workstream 4 the repo ships explicit rollout profiles instead of pretending
-there is only one live claim surface.
+The search engine remains strict-only, deterministic, and CPU-first. With
+Workstream 4 closed, the repo still ships explicit rollout profiles instead of
+pretending there is only one live claim surface.
 
 ## Active profiles
 
