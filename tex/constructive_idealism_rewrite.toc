@@ -1,0 +1,27 @@
+\contentsline {section}{\numberline {1}Introduction: The Crisis of Substance}{3}{section.2}%
+\contentsline {subsection}{\numberline {1.1}Three Claim Layers}{3}{subsection.3}%
+\contentsline {section}{\numberline {2}The Rosetta Stone: Type Theory as Phenomenology}{4}{section.8}%
+\contentsline {subsection}{\numberline {2.1}Context as Witnessing Condition}{4}{subsection.10}%
+\contentsline {subsection}{\numberline {2.2}Type as Form of Possibility}{5}{subsection.11}%
+\contentsline {subsection}{\numberline {2.3}Term as Actuality}{5}{subsection.12}%
+\contentsline {subsection}{\numberline {2.4}The Turnstile as Primitive Act}{6}{subsection.13}%
+\contentsline {section}{\numberline {3}Cosmogony: The Algorithm of Existence}{6}{section.14}%
+\contentsline {subsection}{\numberline {3.1}Algorithmic Time and Physical Time}{7}{subsection.15}%
+\contentsline {subsection}{\numberline {3.2}The Current 15-Step Genesis Sequence}{7}{subsection.21}%
+\contentsline {subsection}{\numberline {3.3}What Must Be Rewritten from the Old Draft}{8}{subsection.24}%
+\contentsline {section}{\numberline {4}Step~15 Ignition: Endogenous Self-Measurement and the Birth of Physical Time}{9}{section.25}%
+\contentsline {subsection}{\numberline {4.1}The Step~15 Structural Package}{9}{subsection.26}%
+\contentsline {subsection}{\numberline {4.2}Pre-Physical Coherence and Decohered Branching}{10}{subsection.32}%
+\contentsline {subsection}{\numberline {4.3}Ignition Thesis}{11}{subsection.35}%
+\contentsline {section}{\numberline {5}Measurement and Consciousness as the Same Category Error}{12}{section.39}%
+\contentsline {subsection}{\numberline {5.1}Quantum Measurement}{12}{subsection.40}%
+\contentsline {subsection}{\numberline {5.2}The Hard Problem}{13}{subsection.41}%
+\contentsline {subsection}{\numberline {5.3}Shared Diagnosis}{14}{subsection.42}%
+\contentsline {section}{\numberline {6}The Metaphysics of Maya: Separation as Localization}{14}{section.43}%
+\contentsline {subsection}{\numberline {6.1}Why the One Appears as the Many}{14}{subsection.44}%
+\contentsline {subsection}{\numberline {6.2}Scope, Partition, and Perspective}{15}{subsection.45}%
+\contentsline {subsection}{\numberline {6.3}A Careful Optimization Reading}{15}{subsection.46}%
+\contentsline {section}{\numberline {7}Scope and Limits}{16}{section.47}%
+\contentsline {section}{\numberline {8}Conclusion: Judico, Ergo Est}{17}{section.49}%
+\contentsline {subsection}{\numberline {8.1}Summary of the Revised Arc}{17}{subsection.50}%
+\contentsline {subsection}{\numberline {8.2}Closing Maxim}{17}{subsection.55}%
