@@ -55,7 +55,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
             String::new()
         } else {
             format!(
-                "\nretention_focus: {}\nfrontier_pressure: state={} action={} requested_cold={} retained_cold={} resident_cold={} spill_backed={} dropped={}",
+                "\nretention_focus: {}\nfrontier_pressure: state={} action={} rss_bytes={} hot_bytes={} cold_bytes={} dedupe_bytes={} requested_cold={} retained_cold={} resident_cold={} spill_backed={} dropped={}",
                 match step.frontier_policy.focus {
                     pen_type::obligations::RetentionFocus::OpenBand => "open_band",
                     pen_type::obligations::RetentionFocus::Former => "former",
@@ -66,6 +66,10 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 },
                 step.frontier_pressure.governor_state.as_str(),
                 step.frontier_pressure.pressure_action.as_str(),
+                step.frontier_pressure.rss_bytes,
+                step.frontier_pressure.hot_frontier_bytes,
+                step.frontier_pressure.cold_frontier_bytes,
+                step.frontier_pressure.dedupe_bytes,
                 step.frontier_pressure.requested_cold_limit,
                 step.frontier_pressure.retained_cold_limit,
                 step.frontier_pressure.resident_cold_limit,
@@ -190,7 +194,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 )
             });
         return Ok(format!(
-            "frontier step {} band {}\nprefix_created: {}\nprefix_explored: {}\nprefix_merged: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nlegality_hits: {}\nconnectivity_shortcuts: {}\nconnectivity_fallbacks: {}\nconnectivity_prunes: {}\nclause_family_hits: {}\nclause_family_prunes: {}\nactive_window_filter_hits: {}\nactive_window_filter_prunes: {}\nterminal_admissibility_hits: {}\nterminal_admissibility_rejections: {}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
+            "frontier step {} band {}\nprefix_created: {}\nprefix_explored: {}\nprefix_merged: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nlegality_hits: {}\nconnectivity_shortcuts: {}\nconnectivity_fallbacks: {}\nconnectivity_prunes: {}\nclause_family_hits: {}\nclause_family_prunes: {}\nactive_window_filter_hits: {}\nactive_window_filter_prunes: {}\nterminal_admissibility_hits: {}\nterminal_admissibility_rejections: {}\nmemory_snapshot: rss_bytes={} hot_frontier_bytes={} interner_bytes={} dedupe_bytes={} cache_bytes={}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
             frontier.step_index,
             frontier.band_index,
             frontier.counts.prefixes_created,
@@ -212,6 +216,11 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
             frontier
                 .counts
                 .incremental_terminal_admissibility_rejections,
+            frontier.memory_snapshot.rss_bytes,
+            frontier.memory_snapshot.hot_frontier_bytes,
+            frontier.memory_snapshot.interner_bytes,
+            frontier.memory_snapshot.dedupe_bytes,
+            frontier.memory_snapshot.cache_bytes,
             frontier.counts.hot_states,
             frontier.counts.cold_states,
             frontier.counts.dedupe_keys,

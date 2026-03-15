@@ -239,6 +239,15 @@ pub struct FrontierCounts {
     pub dedupe_keys: u64,
 }
 
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
+#[serde(default)]
+pub struct SearchTiming {
+    pub step_wall_clock_millis: u64,
+    pub candidate_discovery_wall_clock_millis: u64,
+    pub prefix_frontier_planning_wall_clock_millis: u64,
+    pub selection_wall_clock_millis: u64,
+}
+
 #[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 pub struct FrontierFiles {
     pub hot_shards: Vec<String>,

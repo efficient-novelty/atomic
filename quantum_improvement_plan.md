@@ -151,12 +151,12 @@ Primary:
 - `full_telescopes_evaluated`
 - `canonical_dedupe_prunes`
 - `semantic_minimality_prunes`
+- per-step timing telemetry
+- frontier memory high-water bytes
 
 Next metrics to add:
 
-- clause-catalog/family-filter cache hits
-- wall-clock timing per step
-- peak RSS / frontier memory high-water marks
+- using the new timing and memory evidence to retune late-step prefix order
 
 ## Non-Negotiables
 
@@ -176,7 +176,8 @@ Next metrics to add:
    prefix expansion.
 3. Extend the landed legality/connectivity memo layer into exact admissibility
    and late-family filter reuse keyed by strengthened `PrefixSignature` state.
-4. Add timing and memory metrics next to the new memo counters.
+4. Use the new timing telemetry and frontier memory high-water metrics to
+   retune late-step prefix priority/order.
 5. Only after 1 to 4 are stable, revisit deterministic continuation profiles or
    interference-sidecar work.
 

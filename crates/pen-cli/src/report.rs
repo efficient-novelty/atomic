@@ -14,7 +14,7 @@ use pen_search::engine::{
 };
 use pen_search::expand::evaluate_candidate;
 use pen_search::state::FrontierStateRecV1;
-use pen_store::manifest::{AcceptedCandidate, NearMiss};
+use pen_store::manifest::{AcceptedCandidate, NearMiss, SearchTiming};
 use pen_type::admissibility::AdmissibilityDiagnostics;
 use pen_type::obligations::{RetentionClass, RetentionPolicy};
 use serde::{Deserialize, Serialize};
@@ -106,6 +106,8 @@ pub struct StepSearchStats {
     pub incremental_terminal_admissibility_hits: usize,
     #[serde(default)]
     pub incremental_terminal_admissibility_rejections: usize,
+    #[serde(skip, default)]
+    pub search_timing: SearchTiming,
     #[serde(default)]
     pub prefix_frontier_hot_states: usize,
     #[serde(default)]
@@ -700,6 +702,7 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 incremental_active_window_clause_filter_prunes: 0,
                 incremental_terminal_admissibility_hits: 0,
                 incremental_terminal_admissibility_rejections: 0,
+                search_timing: SearchTiming::default(),
                 prefix_frontier_hot_states: 0,
                 prefix_frontier_cold_states: 0,
                 retained_candidates: 1,
@@ -1073,10 +1076,13 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
             step.frontier_policy.cold_limit
         ));
         lines.push(format!(
-            "  frontier pressure: state={} action={} rss_bytes={} requested_cold={} retained_cold={} resident_cold={} spill_backed={} dropped={}",
+            "  frontier pressure: state={} action={} rss_bytes={} hot_bytes={} cold_bytes={} dedupe_bytes={} requested_cold={} retained_cold={} resident_cold={} spill_backed={} dropped={}",
             step.frontier_pressure.governor_state.as_str(),
             step.frontier_pressure.pressure_action.as_str(),
             step.frontier_pressure.rss_bytes,
+            step.frontier_pressure.hot_frontier_bytes,
+            step.frontier_pressure.cold_frontier_bytes,
+            step.frontier_pressure.dedupe_bytes,
             step.frontier_pressure.requested_cold_limit,
             step.frontier_pressure.retained_cold_limit,
             step.frontier_pressure.resident_cold_limit,
@@ -1263,6 +1269,7 @@ fn step_to_report_with_provenance(
             incremental_terminal_admissibility_hits: step.incremental_terminal_admissibility_hits,
             incremental_terminal_admissibility_rejections: step
                 .incremental_terminal_admissibility_rejections,
+            search_timing: step.search_timing,
             prefix_frontier_hot_states: step.prefix_frontier_hot_states,
             prefix_frontier_cold_states: step.prefix_frontier_cold_states,
             retained_candidates: candidate_reports.len(),
@@ -1565,6 +1572,7 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 incremental_active_window_clause_filter_prunes: 0,
                 incremental_terminal_admissibility_hits: 0,
                 incremental_terminal_admissibility_rejections: 0,
+                search_timing: SearchTiming::default(),
                 prefix_frontier_hot_states: 0,
                 prefix_frontier_cold_states: 0,
                 retained_candidates: 1,

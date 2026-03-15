@@ -121,6 +121,12 @@ pub struct FrontierPressure {
     pub governor_state: GovernorState,
     pub pressure_action: PressureAction,
     pub rss_bytes: u64,
+    #[serde(default)]
+    pub hot_frontier_bytes: u64,
+    #[serde(default)]
+    pub cold_frontier_bytes: u64,
+    #[serde(default)]
+    pub dedupe_bytes: u64,
     pub hot_count: usize,
     pub cold_candidate_count: usize,
     pub requested_cold_limit: usize,
@@ -136,6 +142,9 @@ impl Default for FrontierPressure {
             governor_state: GovernorState::Green,
             pressure_action: PressureAction::None,
             rss_bytes: 0,
+            hot_frontier_bytes: 0,
+            cold_frontier_bytes: 0,
+            dedupe_bytes: 0,
             hot_count: 0,
             cold_candidate_count: 0,
             requested_cold_limit: 0,
@@ -193,10 +202,8 @@ where
         }
     }
 
-    let governor_decision = evaluate_governor(
-        runtime.governor,
-        runtime.usage_for(hot_count, quota_retained.len()),
-    );
+    let memory_usage = runtime.usage_for(hot_count, quota_retained.len());
+    let governor_decision = evaluate_governor(runtime.governor, memory_usage);
     let resident_cold_limit = if governor_decision.action.spills() {
         quota_retained
             .len()
@@ -218,6 +225,9 @@ where
             governor_state: governor_decision.state,
             pressure_action: governor_decision.action,
             rss_bytes: governor_decision.rss_bytes,
+            hot_frontier_bytes: memory_usage.hot_frontier_bytes,
+            cold_frontier_bytes: memory_usage.cold_frontier_bytes,
+            dedupe_bytes: memory_usage.dedupe_bytes,
             hot_count,
             cold_candidate_count,
             requested_cold_limit,

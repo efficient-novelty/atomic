@@ -70,6 +70,18 @@ guarded 15-step canon.
   - `incremental_active_window_clause_filter_prunes`
   - `incremental_terminal_admissibility_hits`
   - `incremental_terminal_admissibility_rejections`
+- step telemetry now also carries the first Phase-2 timing counters:
+  - `step_wall_clock_millis`
+  - `candidate_discovery_wall_clock_millis`
+  - `prefix_frontier_planning_wall_clock_millis`
+  - `selection_wall_clock_millis`
+- deterministic reports, step summaries, and frontier inspect output now also
+  surface the first memory high-water metrics for the retained prefix frontier:
+  - `rss_bytes`
+  - `hot_frontier_bytes`
+  - `cold_frontier_bytes`
+  - `dedupe_bytes`
+  - plus persisted frontier `memory_snapshot` bytes in frontier manifests
 
 ## What Is No Longer A Gap
 
@@ -86,6 +98,8 @@ it as if it were still missing:
   assembly
 - extending the strengthened-signature memo layer into cached terminal
   admissibility decisions for late-family realistic shadow work
+- adding the first timing telemetry and deterministic frontier memory
+  high-water metrics for the memoized realistic-shadow path
 
 ## Active Gaps
 
@@ -108,10 +122,12 @@ and cached terminal admissibility decisions, but it is not yet used for:
 - a more explicit partial-prefix admissibility summary that goes beyond the
   current family-shaped filter surface
 
-### 3. Phase-2 timing and memory metrics
+### 3. Using the new timing and memory evidence to retune search order
 
-The memo/filter counters are now live, but we still need wall-clock and memory
-high-water metrics next to them.
+The timing telemetry and deterministic frontier memory high-water metrics are
+now live, but we have not yet used them to retune realistic late-step prefix
+priority/order or to explain which retained-prefix paths are still too
+expensive relative to their payoff.
 
 ## Forward Plan
 
@@ -121,12 +137,14 @@ high-water metrics next to them.
   impossibility pruning and the landed active-window clause filtering
 - use the new active-window and terminal-admissibility payoff counters to
   target broader exact admissibility/filter reuse
+- use the new timing telemetry and deterministic frontier memory high-water
+  metrics to identify the late-step prefix lanes that still do redundant work
 - keep the strengthened-signature caches exact and deterministic
 
 ### Next
 
-- retune prefix priority/order once earlier bounds exist
-- add wall-clock and memory high-water metrics next to the new memo counters
+- retune prefix priority/order once earlier bounds exist and the new timing/
+  memory evidence is stable
 
 ### Later
 
@@ -143,9 +161,9 @@ high-water metrics next to them.
 2. Extend the landed legality/connectivity/family/active-window/terminal-
    admissibility memo path into another exact admissibility summary that fires
    before the full terminal telescope is assembled.
-3. Use the expanded memo counters from stored artifacts to retune late-step
+3. Use the expanded memo counters together with the new timing telemetry and
+   frontier memory high-water metrics from stored artifacts to retune late-step
    prefix priority/order.
-4. Add timing and memory counters next to the memo/filter metrics.
 
 ## Guardrails
 

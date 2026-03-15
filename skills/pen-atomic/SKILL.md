@@ -60,10 +60,20 @@ The current search-architecture focus has shifted again:
   `incremental_active_window_clause_filter_prunes`,
   `incremental_terminal_admissibility_hits`, and
   `incremental_terminal_admissibility_rejections`
+- step telemetry now also carries per-step timing metrics
+  `step_wall_clock_millis`,
+  `candidate_discovery_wall_clock_millis`,
+  `prefix_frontier_planning_wall_clock_millis`, and
+  `selection_wall_clock_millis`
+- deterministic reports and frontier inspect output now also expose frontier
+  memory high-water bytes including `rss_bytes`, `hot_frontier_bytes`,
+  `cold_frontier_bytes`, `dedupe_bytes`, and persisted frontier
+  `memory_snapshot` bytes
 - the next gap is stronger sound bound pruning beyond the landed exact
   clause-family impossibility prunes plus the landed active-window
   clause filtering, then broader non-family admissibility/filter reuse beyond
-  the landed terminal-admissibility cache,
+  the landed terminal-admissibility cache, plus using the new timing/memory
+  evidence to retune realistic late-step order,
   not "add a frontier for the first time"
 
 Start with the current architecture doc before diving into donor material:
@@ -206,7 +216,9 @@ Focus on:
   the landed legality/connectivity/family/active-window/terminal-
   admissibility memo path, and the still-missing earlier partial-prefix bound
   pruning plus broader non-family admissibility reuse
-- using strengthened `PrefixSignature` state, the landed memo counters, and the
+- using strengthened `PrefixSignature` state, the landed memo counters, the
+  new timing telemetry, and the deterministic frontier memory high-water
+  metrics as the
   remaining bound/admissibility gaps past the landed clause-family pruning,
   active-window clause filtering, and terminal-admissibility cache as the
   starting point for further quantum-inspired search work
@@ -286,7 +298,7 @@ Reject designs that:
   active-window clause filtering plus broader non-family
   admissibility/filter reuse beyond the landed
   legality/connectivity/family/active-window/terminal-admissibility memo
-  layer.
+  layer, then using the new timing/memory evidence to retune late-step order.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.

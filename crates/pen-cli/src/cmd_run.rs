@@ -358,11 +358,21 @@ fn write_telemetry(
                 "frontier_pressure": {
                     "governor_state": step.frontier_pressure.governor_state.as_str(),
                     "pressure_action": step.frontier_pressure.pressure_action.as_str(),
+                    "rss_bytes": step.frontier_pressure.rss_bytes,
+                    "hot_frontier_bytes": step.frontier_pressure.hot_frontier_bytes,
+                    "cold_frontier_bytes": step.frontier_pressure.cold_frontier_bytes,
+                    "dedupe_bytes": step.frontier_pressure.dedupe_bytes,
                     "requested_cold_limit": step.frontier_pressure.requested_cold_limit,
                     "retained_cold_limit": step.frontier_pressure.retained_cold_limit,
                     "resident_cold_limit": step.frontier_pressure.resident_cold_limit,
                     "spill_backed_cold_records": step.frontier_pressure.spill_backed_cold_records,
                     "dropped_cold_records": step.frontier_pressure.dropped_cold_records,
+                },
+                "search_timing": {
+                    "step_wall_clock_millis": step.search_stats.search_timing.step_wall_clock_millis,
+                    "candidate_discovery_wall_clock_millis": step.search_stats.search_timing.candidate_discovery_wall_clock_millis,
+                    "prefix_frontier_planning_wall_clock_millis": step.search_stats.search_timing.prefix_frontier_planning_wall_clock_millis,
+                    "selection_wall_clock_millis": step.search_stats.search_timing.selection_wall_clock_millis,
                 },
             }),
         })?);

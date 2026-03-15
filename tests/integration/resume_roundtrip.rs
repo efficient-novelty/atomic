@@ -263,6 +263,7 @@ fn realistic_resume_roundtrip_keeps_the_reference_sequence_and_prefix_frontier_e
     let telemetry = read_text(&run_dir.join("telemetry.ndjson"));
     assert!(telemetry.contains("\"mode\":\"frontier_checkpoint_resume\""));
     assert!(telemetry.contains("\"search_profile\":\"realistic_frontier_shadow\""));
+    assert!(telemetry.contains("\"search_timing\""));
 
     fs::remove_dir_all(root).ok();
 }

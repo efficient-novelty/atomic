@@ -17,7 +17,7 @@ use pen_core::rational::Rational;
 use pen_core::telescope::Telescope;
 use pen_eval::bar::{DiscoveryRecord, compute_bar};
 use pen_eval::minimality::analyze_semantic_minimality;
-use pen_store::manifest::NearMiss;
+use pen_store::manifest::{NearMiss, SearchTiming};
 use pen_type::admissibility::{
     AdmissibilityDiagnostics, AdmissibilityMode, StrictAdmissibility, assess_strict_admissibility,
     strict_admissibility_for_mode,
@@ -27,6 +27,7 @@ use pen_type::connectivity::passes_connectivity;
 use pen_type::obligations::{RetentionClass, RetentionPolicy, summarize_structural_debt};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
+use std::time::{Duration, Instant};
 
 pub const LIVE_BOOTSTRAP_MAX_STEP: u32 = 15;
 const MAX_PRUNE_SAMPLES: usize = 3;
@@ -133,6 +134,7 @@ pub struct AtomicSearchStep {
     pub incremental_active_window_clause_filter_prunes: usize,
     pub incremental_terminal_admissibility_hits: usize,
     pub incremental_terminal_admissibility_rejections: usize,
+    pub search_timing: SearchTiming,
     pub prefix_frontier_hot_states: usize,
     pub prefix_frontier_cold_states: usize,
     pub retention_policy: RetentionPolicy,
@@ -328,6 +330,7 @@ fn search_next_step(
     admissibility_mode: AdmissibilityMode,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<AtomicSearchStep> {
+    let step_start = Instant::now();
     let structural_debt = summarize_structural_debt(library, window_depth);
     let admissibility =
         strict_admissibility_for_mode(step_index, window_depth, library, admissibility_mode);
@@ -353,6 +356,7 @@ fn search_next_step(
     let mut incremental_active_window_clause_filter_prunes = 0usize;
     let mut incremental_terminal_admissibility_hits = 0usize;
     let mut incremental_terminal_admissibility_rejections = 0usize;
+    let discovery_start = Instant::now();
     let nu_history = history
         .iter()
         .map(|record| (record.step_index, record.nu))
@@ -425,7 +429,9 @@ fn search_next_step(
             }
         }
     }
+    let candidate_discovery_wall_clock_millis = elapsed_millis(discovery_start.elapsed());
 
+    let prefix_frontier_planning_start = Instant::now();
     let prefix_frontier = if admissibility_mode == AdmissibilityMode::RealisticShadow {
         build_prefix_frontier_plan(
             prefix_states_explored,
@@ -438,6 +444,8 @@ fn search_next_step(
     } else {
         PrefixFrontierPlan::default()
     };
+    let prefix_frontier_planning_wall_clock_millis =
+        elapsed_millis(prefix_frontier_planning_start.elapsed());
     let prefix_states_exact_pruned =
         prefix_frontier.exact_pruned + incremental_clause_family_prunes;
 
@@ -459,6 +467,7 @@ fn search_next_step(
     if candidates.is_empty() {
         bail!("no atomic candidates were generated for step {step_index}");
     }
+    let selection_start = Instant::now();
     let evaluated_candidates = candidates.len();
     let full_telescopes_evaluated = evaluated_candidates;
     let scored_candidate_distribution = candidate_score_distribution(&candidates, objective_bar);
@@ -525,6 +534,12 @@ fn search_next_step(
         retention_runtime,
     );
     let heuristic_drops = frontier_retention.dropped_candidates.len();
+    let search_timing = SearchTiming {
+        step_wall_clock_millis: elapsed_millis(step_start.elapsed()),
+        candidate_discovery_wall_clock_millis,
+        prefix_frontier_planning_wall_clock_millis,
+        selection_wall_clock_millis: elapsed_millis(selection_start.elapsed()),
+    };
 
     build_step_result(
         step_index,
@@ -546,6 +561,7 @@ fn search_next_step(
         incremental_active_window_clause_filter_prunes,
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
+        search_timing,
         prefix_frontier.frontier.hot.len(),
         prefix_frontier.frontier.cold.len(),
         retention_policy,
@@ -599,6 +615,7 @@ fn build_step_result(
     incremental_active_window_clause_filter_prunes: usize,
     incremental_terminal_admissibility_hits: usize,
     incremental_terminal_admissibility_rejections: usize,
+    search_timing: SearchTiming,
     prefix_frontier_hot_states: usize,
     prefix_frontier_cold_states: usize,
     retention_policy: RetentionPolicy,
@@ -652,6 +669,7 @@ fn build_step_result(
         incremental_active_window_clause_filter_prunes,
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
+        search_timing,
         prefix_frontier_hot_states,
         prefix_frontier_cold_states,
         retention_policy,
@@ -1225,6 +1243,10 @@ fn candidate_score_distribution(
                 ),
         },
     }
+}
+
+fn elapsed_millis(duration: Duration) -> u64 {
+    u64::try_from(duration.as_millis()).unwrap_or(u64::MAX)
 }
 
 #[cfg(test)]

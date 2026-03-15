@@ -1231,6 +1231,18 @@ fn realistic_shadow_pressure_run_surfaces_prefix_frontier_pressure_and_drop() {
         Some("spill_cold")
     );
     assert!(
+        step4_summary["frontier_pressure"]["rss_bytes"]
+            .as_u64()
+            .expect("frontier pressure rss bytes")
+            > 0
+    );
+    assert!(
+        step4_summary["frontier_pressure"]["hot_frontier_bytes"]
+            .as_u64()
+            .expect("frontier pressure hot bytes")
+            > 0
+    );
+    assert!(
         step4_summary["search_stats"]["prefix_states_heuristic_dropped"]
             .as_u64()
             .expect("prefix_states_heuristic_dropped")
@@ -1253,6 +1265,7 @@ fn realistic_shadow_pressure_run_surfaces_prefix_frontier_pressure_and_drop() {
         frontier["counts"]["prefix_states_heuristic_dropped"].as_u64(),
         step4_summary["search_stats"]["prefix_states_heuristic_dropped"].as_u64()
     );
+    assert!(frontier["memory_snapshot"]["rss_bytes"].is_u64());
     let frontier_inspect = assert_success(run_pen_cli([
         "inspect",
         &run_dir
@@ -1264,6 +1277,10 @@ fn realistic_shadow_pressure_run_surfaces_prefix_frontier_pressure_and_drop() {
             .to_string_lossy(),
     ]));
     assert!(frontier_inspect.contains("prefix_heuristic_dropped:"));
+    assert!(frontier_inspect.contains("memory_snapshot:"));
+
+    let telemetry = read_text(&run_dir.join("telemetry.ndjson"));
+    assert!(telemetry.contains("\"search_timing\""));
 
     fs::remove_dir_all(root).ok();
 }
