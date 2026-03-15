@@ -22,6 +22,8 @@ pub struct PrefixLegalityCacheStats {
     pub connectivity_prunes: usize,
     pub clause_family_filter_hits: usize,
     pub clause_family_prunes: usize,
+    pub active_window_clause_filter_hits: usize,
+    pub active_window_clause_filter_prunes: usize,
     pub terminal_admissibility_hits: usize,
     pub terminal_admissibility_rejections: usize,
 }
@@ -255,6 +257,31 @@ impl PrefixLegalityCache {
         Some(TerminalConnectivityDecision::NeedsFallback)
     }
 
+    pub fn filter_active_window_clauses<'a>(
+        &mut self,
+        parent_signature: &PrefixSignature,
+        position: usize,
+        library: &Library,
+        admissibility: StrictAdmissibility,
+        clauses: &'a [ClauseRec],
+    ) -> Option<Vec<&'a ClauseRec>> {
+        let parent_filter = self.family_filters.get(parent_signature).copied()?;
+        self.stats.active_window_clause_filter_hits += 1;
+        let context = EnumerationContext::from_admissibility(library, admissibility);
+        let mut filtered = Vec::with_capacity(clauses.len());
+        for clause in clauses {
+            if parent_filter
+                .retain_matching(position, clause, context)
+                .is_empty()
+            {
+                self.stats.active_window_clause_filter_prunes += 1;
+                continue;
+            }
+            filtered.push(clause);
+        }
+        Some(filtered)
+    }
+
     pub fn terminal_admissibility(
         &mut self,
         step_index: u32,
@@ -383,5 +410,34 @@ mod tests {
         }
 
         assert!(cache.stats().terminal_admissibility_hits > 0);
+    }
+
+    #[test]
+    fn active_window_clause_filter_skips_impossible_terminal_continuations() {
+        let library = library_until(10);
+        let admissibility =
+            strict_admissibility_for_mode(11, 2, &library, AdmissibilityMode::RealisticShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 5);
+        let prefix = Telescope::new(Telescope::reference(11).clauses[..4].to_vec());
+        let signature = PrefixSignature::new(11, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(signature.clone(), 5, &library, &prefix, admissibility));
+
+        let filtered = cache
+            .filter_active_window_clauses(
+                &signature,
+                4,
+                &library,
+                admissibility,
+                clause_catalog.clauses_at(4),
+            )
+            .expect("family summary should enable active-window filtering");
+
+        assert!(!filtered.is_empty());
+        assert!(filtered.len() < clause_catalog.clauses_at(4).len());
+        assert_eq!(cache.stats().active_window_clause_filter_hits, 1);
+        assert!(cache.stats().active_window_clause_filter_prunes > 0);
     }
 }

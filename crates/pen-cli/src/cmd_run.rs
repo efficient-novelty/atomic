@@ -526,6 +526,14 @@ fn write_frontier_snapshots(
                     as u64,
                 incremental_clause_family_prunes: step.search_stats.incremental_clause_family_prunes
                     as u64,
+                incremental_active_window_clause_filter_hits: step
+                    .search_stats
+                    .incremental_active_window_clause_filter_hits
+                    as u64,
+                incremental_active_window_clause_filter_prunes: step
+                    .search_stats
+                    .incremental_active_window_clause_filter_prunes
+                    as u64,
                 incremental_terminal_admissibility_hits: step
                     .search_stats
                     .incremental_terminal_admissibility_hits

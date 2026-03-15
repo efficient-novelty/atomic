@@ -47,6 +47,8 @@ pub struct FrontierRuntimeInput<const N: usize> {
     pub incremental_connectivity_prunes: u64,
     pub incremental_clause_family_filter_hits: u64,
     pub incremental_clause_family_prunes: u64,
+    pub incremental_active_window_clause_filter_hits: u64,
+    pub incremental_active_window_clause_filter_prunes: u64,
     pub incremental_terminal_admissibility_hits: u64,
     pub incremental_terminal_admissibility_rejections: u64,
     pub worker_count: u16,
@@ -191,6 +193,10 @@ pub fn persist_frontier_runtime<const N: usize>(
             incremental_connectivity_prunes: input.incremental_connectivity_prunes,
             incremental_clause_family_filter_hits: input.incremental_clause_family_filter_hits,
             incremental_clause_family_prunes: input.incremental_clause_family_prunes,
+            incremental_active_window_clause_filter_hits: input
+                .incremental_active_window_clause_filter_hits,
+            incremental_active_window_clause_filter_prunes: input
+                .incremental_active_window_clause_filter_prunes,
             incremental_terminal_admissibility_hits: input.incremental_terminal_admissibility_hits,
             incremental_terminal_admissibility_rejections: input
                 .incremental_terminal_admissibility_rejections,
@@ -323,6 +329,8 @@ mod tests {
             incremental_connectivity_prunes: 3,
             incremental_clause_family_filter_hits: 5,
             incremental_clause_family_prunes: 2,
+            incremental_active_window_clause_filter_hits: 4,
+            incremental_active_window_clause_filter_prunes: 3,
             incremental_terminal_admissibility_hits: 7,
             incremental_terminal_admissibility_rejections: 2,
             worker_count: 2,
@@ -372,6 +380,18 @@ mod tests {
         assert_eq!(artifacts.counts.incremental_connectivity_prunes, 3);
         assert_eq!(artifacts.counts.incremental_clause_family_filter_hits, 5);
         assert_eq!(artifacts.counts.incremental_clause_family_prunes, 2);
+        assert_eq!(
+            artifacts
+                .counts
+                .incremental_active_window_clause_filter_hits,
+            4
+        );
+        assert_eq!(
+            artifacts
+                .counts
+                .incremental_active_window_clause_filter_prunes,
+            3
+        );
         assert_eq!(artifacts.counts.incremental_terminal_admissibility_hits, 7);
         assert_eq!(
             artifacts

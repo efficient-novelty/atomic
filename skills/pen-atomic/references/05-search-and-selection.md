@@ -17,6 +17,10 @@ Before following donor material, anchor on the current Rust engine:
 - realistic shadow now also carries an exact incremental clause-family
   feasibility summary keyed by `PrefixSignature`, pruning mixed late-family
   prefixes before they reach terminal admissibility
+- realistic shadow now also uses that strengthened family summary for exact
+  active-window clause filtering keyed by `PrefixSignature`, skipping child and
+  terminal clause options that cannot match any still-admissible structural
+  family before child-prefix legality or terminal assembly
 - reports and frontier manifests now surface
   `prefix_states_merged_by_signature` plus the plan-aligned counters
   `prefixes_created`, `full_telescopes_evaluated`,
@@ -27,13 +31,16 @@ Before following donor material, anchor on the current Rust engine:
   `incremental_connectivity_fallbacks`,
   `incremental_connectivity_prunes`,
   `incremental_clause_family_filter_hits`, and
-  `incremental_clause_family_prunes`
+  `incremental_clause_family_prunes`,
+  `incremental_active_window_clause_filter_hits`,
+  `incremental_active_window_clause_filter_prunes`
 
 The important remaining gap is no longer "make prefixes first-class online
 states" because that control-flow shift has happened. The next search step is
 to move stronger sound bound reasoning beyond the landed exact clause-family
-impossibility prunes and extend memoized legality/connectivity/family reuse
-into cached terminal admissibility decisions.
+impossibility prunes and active-window clause filtering, then extend memoized
+legality/connectivity/family reuse beyond the landed terminal admissibility
+cache into stronger non-family admissibility summaries.
 
 ## Core Strict Loop
 
@@ -192,8 +199,9 @@ The user's frozen architecture moves checkpointing into a first-class contract. 
 - replace current in-memory frontier behavior with explicit resumable state
 - use exact rational or integer comparison in the hot path
 - harden anti-junk retention so true eliminator structures are not deleted early
-- extend the landed exact clause-family impossibility prunes toward stronger
-  partial-prefix sound bounds inside the online prefix engine
+- extend the landed exact clause-family impossibility prunes and active-window
+  clause filtering toward stronger partial-prefix sound bounds inside the
+  online prefix engine
 - treat strengthened `PrefixSignature` state and the plan-aligned counters as
   current building blocks for memoization and measurement, not future
   placeholders

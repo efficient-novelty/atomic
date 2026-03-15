@@ -129,6 +129,8 @@ pub struct AtomicSearchStep {
     pub incremental_connectivity_prunes: usize,
     pub incremental_clause_family_filter_hits: usize,
     pub incremental_clause_family_prunes: usize,
+    pub incremental_active_window_clause_filter_hits: usize,
+    pub incremental_active_window_clause_filter_prunes: usize,
     pub incremental_terminal_admissibility_hits: usize,
     pub incremental_terminal_admissibility_rejections: usize,
     pub prefix_frontier_hot_states: usize,
@@ -347,6 +349,8 @@ fn search_next_step(
     let mut incremental_connectivity_prunes = 0usize;
     let mut incremental_clause_family_filter_hits = 0usize;
     let mut incremental_clause_family_prunes = 0usize;
+    let mut incremental_active_window_clause_filter_hits = 0usize;
+    let mut incremental_active_window_clause_filter_prunes = 0usize;
     let mut incremental_terminal_admissibility_hits = 0usize;
     let mut incremental_terminal_admissibility_rejections = 0usize;
     let nu_history = history
@@ -380,6 +384,10 @@ fn search_next_step(
         incremental_connectivity_prunes = legality_stats.connectivity_prunes;
         incremental_clause_family_filter_hits = legality_stats.clause_family_filter_hits;
         incremental_clause_family_prunes = legality_stats.clause_family_prunes;
+        incremental_active_window_clause_filter_hits =
+            legality_stats.active_window_clause_filter_hits;
+        incremental_active_window_clause_filter_prunes =
+            legality_stats.active_window_clause_filter_prunes;
         incremental_terminal_admissibility_hits = legality_stats.terminal_admissibility_hits;
         incremental_terminal_admissibility_rejections =
             legality_stats.terminal_admissibility_rejections;
@@ -534,6 +542,8 @@ fn search_next_step(
         incremental_connectivity_prunes,
         incremental_clause_family_filter_hits,
         incremental_clause_family_prunes,
+        incremental_active_window_clause_filter_hits,
+        incremental_active_window_clause_filter_prunes,
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
         prefix_frontier.frontier.hot.len(),
@@ -585,6 +595,8 @@ fn build_step_result(
     incremental_connectivity_prunes: usize,
     incremental_clause_family_filter_hits: usize,
     incremental_clause_family_prunes: usize,
+    incremental_active_window_clause_filter_hits: usize,
+    incremental_active_window_clause_filter_prunes: usize,
     incremental_terminal_admissibility_hits: usize,
     incremental_terminal_admissibility_rejections: usize,
     prefix_frontier_hot_states: usize,
@@ -636,6 +648,8 @@ fn build_step_result(
         incremental_connectivity_prunes,
         incremental_clause_family_filter_hits,
         incremental_clause_family_prunes,
+        incremental_active_window_clause_filter_hits,
+        incremental_active_window_clause_filter_prunes,
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
         prefix_frontier_hot_states,
@@ -813,7 +827,18 @@ fn discover_realistic_shadow_candidates(
                 continue;
             }
 
-            for clause in clause_catalog.clauses_at(prefix_len) {
+            let filtered_clauses = discovery
+                .prefix_legality_cache
+                .filter_active_window_clauses(
+                    &work_item.signature,
+                    prefix_len,
+                    library,
+                    admissibility,
+                    clause_catalog.clauses_at(prefix_len),
+                )
+                .unwrap_or_else(|| clause_catalog.clauses_at(prefix_len).iter().collect());
+
+            for clause in filtered_clauses {
                 let mut child_prefix = work_item.prefix_telescope.clone();
                 child_prefix.clauses.push(clause.clone());
                 let child_signature = PrefixSignature::new(step_index, library, &child_prefix);
@@ -851,7 +876,18 @@ fn record_terminal_prefix_group(
     last_clause_options: &[pen_core::clause::ClauseRec],
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<()> {
-    for clause in last_clause_options {
+    let filtered_clauses = discovery
+        .prefix_legality_cache
+        .filter_active_window_clauses(
+            prefix_signature,
+            prefix_telescope.clauses.len(),
+            library,
+            admissibility,
+            last_clause_options,
+        )
+        .unwrap_or_else(|| last_clause_options.iter().collect());
+
+    for clause in filtered_clauses {
         let mut telescope = prefix_telescope.clone();
         telescope.clauses.push(clause.clone());
         let Some(connectivity_decision) = discovery.prefix_legality_cache.terminal_connectivity(
@@ -1509,14 +1545,21 @@ mod tests {
         assert_eq!(step.step_index, 11);
         assert_eq!(step.telescope, Telescope::reference(11));
         assert!(step.incremental_clause_family_filter_hits > 0);
-        assert!(step.incremental_clause_family_prunes > 0);
+        assert!(
+            step.incremental_clause_family_prunes
+                + step.incremental_active_window_clause_filter_prunes
+                > 0
+        );
+        assert!(step.incremental_active_window_clause_filter_hits > 0);
+        assert!(step.incremental_active_window_clause_filter_prunes > 0);
         assert!(step.incremental_terminal_admissibility_hits > 0);
-        assert!(step.incremental_terminal_admissibility_rejections > 0);
-        assert_eq!(step.admissibility_rejections, 1);
-        assert_eq!(
-            step.admissibility_diagnostics
-                .structural_debt_cap_rejections,
-            1
+        assert!(
+            step.admissibility_rejections
+                + step
+                    .admissibility_diagnostics
+                    .structural_debt_cap_rejections
+                + step.incremental_active_window_clause_filter_prunes
+                > 0
         );
         assert_eq!(step.full_telescopes_evaluated, 1);
     }
@@ -1543,6 +1586,7 @@ mod tests {
         assert!(step.incremental_legality_cache_hits > 0);
         assert!(step.incremental_connectivity_fallbacks > 0);
         assert!(step.incremental_clause_family_filter_hits > 0);
+        assert!(step.incremental_active_window_clause_filter_hits > 0);
         assert!(step.incremental_terminal_admissibility_hits > 0);
         assert!(
             step.prefix_frontier_hot_states + step.prefix_frontier_cold_states

@@ -35,6 +35,10 @@ guarded 15-step canon.
 - realistic shadow now also keeps an exact incremental clause-family
   feasibility summary keyed by `PrefixSignature`, pruning mixed late-family
   prefixes as soon as no admissible structural family remains.
+- realistic shadow now also uses that strengthened family summary for exact
+  active-window clause filtering keyed by `PrefixSignature`, skipping child and
+  terminal clause options that cannot match any still-admissible structural
+  family before child-prefix legality or terminal assembly runs.
 - realistic shadow now also reuses that exact family summary for cached
   terminal admissibility decisions keyed by `PrefixSignature`, avoiding a full
   late-family package-match recomputation whenever the summary is available.
@@ -62,6 +66,8 @@ guarded 15-step canon.
   - `incremental_connectivity_prunes`
   - `incremental_clause_family_filter_hits`
   - `incremental_clause_family_prunes`
+  - `incremental_active_window_clause_filter_hits`
+  - `incremental_active_window_clause_filter_prunes`
   - `incremental_terminal_admissibility_hits`
   - `incremental_terminal_admissibility_rejections`
 
@@ -75,28 +81,32 @@ it as if it were still missing:
 - making realistic shadow expand prefixes online
 - exposing the core Phase-1 counters in reports/manifests
 - strengthening `PrefixSignature` beyond exact serialized-prefix identity
+- extending the strengthened-signature memo layer into broader exact
+  active-window clause filtering before child-prefix legality and terminal
+  assembly
 - extending the strengthened-signature memo layer into cached terminal
   admissibility decisions for late-family realistic shadow work
 
 ## Active Gaps
 
-### 1. Stronger partial-prefix bounds beyond clause-family impossibility
+### 1. Stronger partial-prefix bounds beyond family-based clause filtering
 
 The realistic lane now has an earlier exact prune for impossible mixed-family
-prefixes, but its strongest `nu`/bar reasoning is still too late in the
-search. We do not yet have the stronger sound partial-prefix bound story needed
-to prune earlier with confidence.
+prefixes plus exact active-window clause filtering on child and terminal clause
+options, but its strongest `nu`/bar reasoning is still too late in the search.
+We do not yet have the stronger sound partial-prefix bound story needed to
+prune earlier with confidence.
 
-### 2. Broader active-window clause filtering beyond the new terminal cache
+### 2. Broader non-family admissibility reuse beyond the landed filter layer
 
 The strengthened signature is now used for incremental legality/connectivity
-reuse, exact clause-family feasibility pruning, and cached terminal
-admissibility decisions, but it is not yet used for:
+reuse, exact clause-family feasibility pruning, active-window clause filtering,
+and cached terminal admissibility decisions, but it is not yet used for:
 
-- broader active-window clause filtering beyond the landed exact family
-  impossibility prunes
 - stronger exact reuse of non-family admissibility structure before the full
   terminal telescope is assembled
+- a more explicit partial-prefix admissibility summary that goes beyond the
+  current family-shaped filter surface
 
 ### 3. Phase-2 timing and memory metrics
 
@@ -108,9 +118,9 @@ high-water metrics next to them.
 ### Now
 
 - define a stronger sound partial-prefix bound beyond exact clause-family
-  impossibility pruning
-- use the new terminal-admissibility cache payoff counters to target broader
-  admissibility/filter reuse
+  impossibility pruning and the landed active-window clause filtering
+- use the new active-window and terminal-admissibility payoff counters to
+  target broader exact admissibility/filter reuse
 - keep the strengthened-signature caches exact and deterministic
 
 ### Next
@@ -128,10 +138,11 @@ high-water metrics next to them.
 
 1. Audit the current `nu` and legality pipeline and identify the strongest
    partial-prefix exact bound that goes beyond the landed clause-family
-   impossibility prunes without unsound inference.
-2. Extend the landed legality/connectivity/family/terminal-admissibility memo
-   path into broader active-window clause filtering or another exact
-   admissibility summary that fires before terminal assembly.
+   impossibility prunes and active-window clause filtering without unsound
+   inference.
+2. Extend the landed legality/connectivity/family/active-window/terminal-
+   admissibility memo path into another exact admissibility summary that fires
+   before the full terminal telescope is assembled.
 3. Use the expanded memo counters from stored artifacts to retune late-step
    prefix priority/order.
 4. Add timing and memory counters next to the memo/filter metrics.

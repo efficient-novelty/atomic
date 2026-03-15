@@ -99,6 +99,10 @@ pub struct StepSearchStats {
     #[serde(default)]
     pub incremental_clause_family_prunes: usize,
     #[serde(default)]
+    pub incremental_active_window_clause_filter_hits: usize,
+    #[serde(default)]
+    pub incremental_active_window_clause_filter_prunes: usize,
+    #[serde(default)]
     pub incremental_terminal_admissibility_hits: usize,
     #[serde(default)]
     pub incremental_terminal_admissibility_rejections: usize,
@@ -692,6 +696,8 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 incremental_connectivity_prunes: 0,
                 incremental_clause_family_filter_hits: 0,
                 incremental_clause_family_prunes: 0,
+                incremental_active_window_clause_filter_hits: 0,
+                incremental_active_window_clause_filter_prunes: 0,
                 incremental_terminal_admissibility_hits: 0,
                 incremental_terminal_admissibility_rejections: 0,
                 prefix_frontier_hot_states: 0,
@@ -944,6 +950,14 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
                 || step.search_stats.incremental_connectivity_prunes > 0
                 || step.search_stats.incremental_clause_family_filter_hits > 0
                 || step.search_stats.incremental_clause_family_prunes > 0
+                || step
+                    .search_stats
+                    .incremental_active_window_clause_filter_hits
+                    > 0
+                || step
+                    .search_stats
+                    .incremental_active_window_clause_filter_prunes
+                    > 0
                 || step.search_stats.incremental_terminal_admissibility_hits > 0
                 || step
                     .search_stats
@@ -951,13 +965,15 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
                     > 0
             {
                 lines.push(format!(
-                    "  prefix memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={}",
+                    "  prefix memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} active_window_filter_hits={} active_window_filter_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={}",
                     step.search_stats.incremental_legality_cache_hits,
                     step.search_stats.incremental_connectivity_shortcuts,
                     step.search_stats.incremental_connectivity_fallbacks,
                     step.search_stats.incremental_connectivity_prunes,
                     step.search_stats.incremental_clause_family_filter_hits,
                     step.search_stats.incremental_clause_family_prunes,
+                    step.search_stats.incremental_active_window_clause_filter_hits,
+                    step.search_stats.incremental_active_window_clause_filter_prunes,
                     step.search_stats.incremental_terminal_admissibility_hits,
                     step.search_stats.incremental_terminal_admissibility_rejections
                 ));
@@ -1240,6 +1256,10 @@ fn step_to_report_with_provenance(
             incremental_connectivity_prunes: step.incremental_connectivity_prunes,
             incremental_clause_family_filter_hits: step.incremental_clause_family_filter_hits,
             incremental_clause_family_prunes: step.incremental_clause_family_prunes,
+            incremental_active_window_clause_filter_hits: step
+                .incremental_active_window_clause_filter_hits,
+            incremental_active_window_clause_filter_prunes: step
+                .incremental_active_window_clause_filter_prunes,
             incremental_terminal_admissibility_hits: step.incremental_terminal_admissibility_hits,
             incremental_terminal_admissibility_rejections: step
                 .incremental_terminal_admissibility_rejections,
@@ -1541,6 +1561,8 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 incremental_connectivity_prunes: 0,
                 incremental_clause_family_filter_hits: 0,
                 incremental_clause_family_prunes: 0,
+                incremental_active_window_clause_filter_hits: 0,
+                incremental_active_window_clause_filter_prunes: 0,
                 incremental_terminal_admissibility_hits: 0,
                 incremental_terminal_admissibility_rejections: 0,
                 prefix_frontier_hot_states: 0,

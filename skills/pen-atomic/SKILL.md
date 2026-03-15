@@ -41,6 +41,10 @@ The current search-architecture focus has shifted again:
 - realistic shadow now also keeps an exact incremental clause-family
   feasibility summary keyed by `PrefixSignature`, pruning mixed late-family
   prefixes before they reach terminal admissibility
+- realistic shadow now also uses that strengthened family summary for exact
+  active-window clause filtering keyed by `PrefixSignature`, skipping child and
+  terminal clause options that cannot match any still-admissible structural
+  family before child-prefix legality or terminal assembly
 - realistic shadow now also reuses that exact family summary for cached
   terminal admissibility decisions keyed by `PrefixSignature`
 - reports and frontier manifests now expose the plan-aligned counters
@@ -52,11 +56,14 @@ The current search-architecture focus has shifted again:
   `incremental_connectivity_fallbacks`, and
   `incremental_connectivity_prunes`, `incremental_clause_family_filter_hits`,
   `incremental_clause_family_prunes`,
+  `incremental_active_window_clause_filter_hits`,
+  `incremental_active_window_clause_filter_prunes`,
   `incremental_terminal_admissibility_hits`, and
   `incremental_terminal_admissibility_rejections`
 - the next gap is stronger sound bound pruning beyond the landed exact
-  clause-family impossibility prunes plus broader active-window
-  admissibility/filter reuse beyond the landed terminal-admissibility cache,
+  clause-family impossibility prunes plus the landed active-window
+  clause filtering, then broader non-family admissibility/filter reuse beyond
+  the landed terminal-admissibility cache,
   not "add a frontier for the first time"
 
 Start with the current architecture doc before diving into donor material:
@@ -196,13 +203,13 @@ Focus on:
 - admissibility from structural debt, not names
 - deterministic dedupe and SCC minimality
 - the remaining difference between the current realistic online prefix engine,
-  the landed legality/connectivity/family/terminal-admissibility memo path,
-  and the still-missing earlier partial-prefix bound pruning plus broader
-  active-window clause filtering
+  the landed legality/connectivity/family/active-window/terminal-
+  admissibility memo path, and the still-missing earlier partial-prefix bound
+  pruning plus broader non-family admissibility reuse
 - using strengthened `PrefixSignature` state, the landed memo counters, and the
-  remaining bound/admissibility gaps past the landed clause-family pruning and
-  terminal-admissibility cache as the starting point for further
-  quantum-inspired search work
+  remaining bound/admissibility gaps past the landed clause-family pruning,
+  active-window clause filtering, and terminal-admissibility cache as the
+  starting point for further quantum-inspired search work
 
 ### If you are working on reporting or evidence
 
@@ -275,9 +282,11 @@ Reject designs that:
 - The repo now has real live atomic search through step 15, exact deterministic
   selection, and a richer candidate-level evidence surface.
 - The current quantum-focused search gap is stronger partial-prefix bound
-  pruning beyond the landed exact clause-family impossibility prunes plus
-  broader active-window admissibility/filter reuse beyond the landed
-  legality/connectivity/family/terminal-admissibility memo layer.
+  pruning beyond the landed exact clause-family impossibility prunes and
+  active-window clause filtering plus broader non-family
+  admissibility/filter reuse beyond the landed
+  legality/connectivity/family/active-window/terminal-admissibility memo
+  layer.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.
