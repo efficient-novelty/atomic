@@ -117,6 +117,7 @@ pub struct AtomicSearchStep {
     pub objective_bar: Rational,
     pub admissibility: StrictAdmissibility,
     pub admissibility_diagnostics: AdmissibilityDiagnostics,
+    pub prefixes_created: usize,
     pub prefix_states_explored: usize,
     pub prefix_states_merged_by_signature: usize,
     pub prefix_states_exact_pruned: usize,
@@ -137,10 +138,13 @@ pub struct AtomicSearchStep {
     pub malformed_rejections: usize,
     pub malformed_rejection_reasons: BTreeMap<String, usize>,
     pub admissibility_rejections: usize,
+    pub full_telescopes_evaluated: usize,
     pub evaluated_candidates: usize,
     pub canonical_candidates: usize,
     pub semantically_minimal_candidates: usize,
     pub scored_candidate_distribution: CandidateScoreDistribution,
+    pub canonical_dedupe_prunes: usize,
+    pub semantic_minimality_prunes: usize,
     pub dedupe_prunes: usize,
     pub minimality_prunes: usize,
     pub heuristic_drops: usize,
@@ -171,6 +175,7 @@ struct PrefixFrontierItem {
 struct RealisticShadowDiscovery {
     prefix_cache: PrefixCache,
     candidates: Vec<ExpandedCandidate>,
+    prefixes_created: usize,
     prefix_states_explored: usize,
     enumerated_candidates: usize,
     well_formed_candidates: usize,
@@ -317,6 +322,7 @@ fn search_next_step(
     let objective_bar = compute_bar(window_depth as usize, step_index, history).bar;
     let mut candidates = Vec::new();
     let mut prefix_cache = PrefixCache::default();
+    let mut prefixes_created = 0usize;
     let mut prefix_states_explored = 0usize;
     let mut enumerated_candidates = 0usize;
     let mut well_formed_candidates = 0usize;
@@ -340,6 +346,7 @@ fn search_next_step(
         )?;
         prefix_cache = discovery.prefix_cache;
         candidates = discovery.candidates;
+        prefixes_created = discovery.prefixes_created;
         prefix_states_explored = discovery.prefix_states_explored;
         enumerated_candidates = discovery.enumerated_candidates;
         well_formed_candidates = discovery.well_formed_candidates;
@@ -414,6 +421,7 @@ fn search_next_step(
         bail!("no atomic candidates were generated for step {step_index}");
     }
     let evaluated_candidates = candidates.len();
+    let full_telescopes_evaluated = evaluated_candidates;
     let scored_candidate_distribution = candidate_score_distribution(&candidates, objective_bar);
 
     let mut seen_canonical = BTreeMap::new();
@@ -438,6 +446,7 @@ fn search_next_step(
         deduped.push(candidate);
     }
     let dedupe_prunes = evaluated_candidates.saturating_sub(deduped.len());
+    let canonical_dedupe_prunes = dedupe_prunes;
     let deduped_len = deduped.len();
     let canonical_candidates = deduped_len;
     let mut minimal = Vec::new();
@@ -461,6 +470,7 @@ fn search_next_step(
         }
     }
     let minimality_prunes = deduped_len.saturating_sub(minimal.len());
+    let semantic_minimality_prunes = minimality_prunes;
     // Exact acceptance still competes over the full semantically minimal pool.
     let retained = minimal;
     let semantically_minimal_candidates = retained.len();
@@ -482,6 +492,7 @@ fn search_next_step(
         objective_bar,
         admissibility,
         admissibility_diagnostics,
+        prefixes_created,
         prefix_frontier.explored,
         prefix_cache.stats().merged_by_signature,
         prefix_frontier.exact_pruned,
@@ -503,10 +514,13 @@ fn search_next_step(
         malformed_rejections,
         malformed_rejection_reasons,
         admissibility_rejections,
+        full_telescopes_evaluated,
         evaluated_candidates,
         canonical_candidates,
         semantically_minimal_candidates,
         scored_candidate_distribution,
+        canonical_dedupe_prunes,
+        semantic_minimality_prunes,
         dedupe_prunes,
         minimality_prunes,
         heuristic_drops,
@@ -521,6 +535,7 @@ fn build_step_result(
     objective_bar: Rational,
     admissibility: StrictAdmissibility,
     admissibility_diagnostics: AdmissibilityDiagnostics,
+    prefixes_created: usize,
     prefix_states_explored: usize,
     prefix_states_merged_by_signature: usize,
     prefix_states_exact_pruned: usize,
@@ -538,10 +553,13 @@ fn build_step_result(
     malformed_rejections: usize,
     malformed_rejection_reasons: BTreeMap<String, usize>,
     admissibility_rejections: usize,
+    full_telescopes_evaluated: usize,
     evaluated_candidates: usize,
     canonical_candidates: usize,
     semantically_minimal_candidates: usize,
     scored_candidate_distribution: CandidateScoreDistribution,
+    canonical_dedupe_prunes: usize,
+    semantic_minimality_prunes: usize,
     dedupe_prunes: usize,
     minimality_prunes: usize,
     heuristic_drops: usize,
@@ -560,6 +578,7 @@ fn build_step_result(
         objective_bar,
         admissibility,
         admissibility_diagnostics,
+        prefixes_created,
         prefix_states_explored,
         prefix_states_merged_by_signature,
         prefix_states_exact_pruned,
@@ -580,10 +599,13 @@ fn build_step_result(
         malformed_rejections,
         malformed_rejection_reasons,
         admissibility_rejections,
+        full_telescopes_evaluated,
         evaluated_candidates,
         canonical_candidates,
         semantically_minimal_candidates,
         scored_candidate_distribution,
+        canonical_dedupe_prunes,
+        semantic_minimality_prunes,
         dedupe_prunes,
         minimality_prunes,
         heuristic_drops,
@@ -705,6 +727,7 @@ fn discover_realistic_shadow_candidates(
                 )
             })
             .collect::<Vec<_>>();
+        discovery.prefixes_created += frontier.len();
 
         while let Some(work_item) = pop_best_prefix(&mut frontier) {
             discovery.prefix_states_explored += 1;
@@ -731,6 +754,7 @@ fn discover_realistic_shadow_candidates(
                 if check_telescope(library, &child_prefix) != CheckResult::Ok {
                     continue;
                 }
+                discovery.prefixes_created += 1;
                 frontier.push(OnlinePrefixWorkItem {
                     clause_kappa: work_item.clause_kappa,
                     prefix_telescope: child_prefix,
@@ -1384,6 +1408,7 @@ mod tests {
 
         assert_eq!(step.step_index, 15);
         assert_eq!(step.telescope, Telescope::reference(15));
+        assert!(step.prefixes_created >= step.prefix_states_explored);
         assert!(step.prefix_states_explored > step.frontier_window.total_len());
         assert_eq!(step.prefix_frontier_hot_states, 2);
         assert_eq!(step.prefix_frontier_cold_states, 0);
@@ -1391,6 +1416,9 @@ mod tests {
             step.prefix_frontier_hot_states + step.prefix_frontier_cold_states
                 <= step.prefix_states_explored
         );
+        assert_eq!(step.full_telescopes_evaluated, step.evaluated_candidates);
+        assert_eq!(step.canonical_dedupe_prunes, step.dedupe_prunes);
+        assert_eq!(step.semantic_minimality_prunes, step.minimality_prunes);
         assert_eq!(step.frontier_window.total_len(), 2);
         assert_eq!(step.frontier_dedupe_keys.len(), 2);
     }

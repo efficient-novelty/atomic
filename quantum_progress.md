@@ -45,6 +45,19 @@ This pass also crossed the next Phase-1 control-flow threshold:
   intermediate prefix exploration rather than just the number of retained
   terminal-prefix groups.
 
+This pass then closed the two follow-on gaps that file had left open:
+
+- `crates/pen-search/src/prefix_cache.rs` now gives `PrefixSignature` compact
+  state beyond serialized-prefix identity: active-window hashing, shape/support
+  summary hashes, and structural family flags, while still preserving exact
+  identity through the serialized key.
+- realistic shadow search now counts `prefixes_created` as a first-class search
+  metric instead of only counting explored/retained prefixes after the fact.
+- step summaries, debug reports, inspect output, and frontier manifests now
+  expose the plan-aligned counters `prefixes_created`,
+  `full_telescopes_evaluated`, `canonical_dedupe_prunes`, and
+  `semantic_minimality_prunes`.
+
 Acceptance semantics did not change:
 
 - guarded and realistic lanes still preserve the current accepted trajectory.
@@ -98,9 +111,9 @@ abstractions first, then change control flow around them.
 ### 4. The d = 2 story is now better grounded in the code
 
 The new `PrefixSignature` and merge metric make the "bounded entanglement"
-translation more concrete. We still are not using the full active-window
-signature or incremental legality summaries yet, but the code now has a natural
-place for them.
+translation more concrete. The signature now carries an explicit depth-2
+active-window hash plus structural family flags and shape/support summaries, so
+later memoization no longer needs to invent a home for that state.
 
 The new clause-catalog and prefix-work-queue split also makes the next d = 2
 memoization step more obvious: early prefix expansion now has stable position
@@ -118,6 +131,15 @@ checking and repeated per-position clause-family work. That means:
 
 should be treated as the immediate follow-on to online prefix expansion, not as
 far-future cleanup.
+
+### 6. Plan metrics need to survive persistence to stay useful
+
+Adding the quantum-plan counters only to in-memory search structs would have
+left the repo in an awkward place where real runs still reported older names.
+Threading `prefixes_created` and the plan-aligned evaluation/prune counters
+through step summaries, inspect output, and frontier manifests turned out to be
+worth doing immediately: it keeps progress measurable from stored artifacts, not
+just from temporary debug sessions.
 
 ## What Changed In This Pass
 
@@ -141,6 +163,18 @@ far-future cleanup.
 - Updated realistic-shadow tests so they assert the new online-prefix behavior
   honestly: explored prefix states now exceed the retained frontier size at step
   15.
+- Strengthened `PrefixSignature` so it now records:
+  - a depth-2 active-window hash
+  - shape and support summary hashes
+  - structural family flags for modal/temporal/path/dependent late-family state
+- Added the missing plan-aligned counters:
+  - `prefixes_created`
+  - `full_telescopes_evaluated`
+  - `canonical_dedupe_prunes`
+  - `semantic_minimality_prunes`
+- Persisted `prefixes_created` through frontier runtime/manifests and surfaced
+  the plan-aligned counters in step summaries, debug reports, and inspect
+  output.
 
 ## Immediate Next Steps
 
@@ -159,41 +193,24 @@ The minimum acceptable next shape is:
 - final exact evaluation, semantic minimality, dedupe, and acceptance stay
   unchanged
 
-### Next Step 2: Strengthen PrefixSignature
+### Next Step 2: Use The Stronger Signature For Real Memoization
 
-Extend `PrefixSignature` beyond serialized-prefix identity so it captures the
-compact state aspects the quantum plan cares about:
+`PrefixSignature` now carries the compact state we needed. The next job is to
+actually consume that state:
 
-- clause position
-- obligation/window summary
-- support shape summary
-- relevant family flags
+- cache incremental legality summaries by strengthened signature
+- cache per-position clause-family filters against the active-window hash
+- use the family flags to avoid repeating late-family structural work
 
-The goal is to support sound merging and later memoization without smuggling
-semantic labels into the hot path.
-
-### Next Step 3: Add Missing Phase-1 Metrics
-
-Add explicit counters for:
-
-- `prefixes_created`
-- `full_telescopes_evaluated`
-- `canonical_dedupe_prunes`
-- `semantic_minimality_prunes`
-
-Some of this information already exists under different names; the next pass
-should align the instrumentation with the quantum plan terminology so progress
-is easier to measure.
-
-### Next Step 4: Start Phase-2 Plumbing
+### Next Step 3: Start Phase-2 Plumbing
 
 After early partial-prefix bounds are in place:
 
-- introduce incremental check summaries
-- cache per-position clause catalogs
-- cache late-family structural filter results
+- introduce an explicit incremental check summary type
+- reuse strengthened prefix signatures as cache keys
+- make clause-catalog reuse and family-filter reuse visible in metrics
 
-This is the next likely performance win after online prefix-first control flow.
+This is now the most direct follow-on after the Phase-1 instrumentation pass.
 
 ## Guardrails
 
@@ -209,6 +226,4 @@ The following remain non-negotiable while doing quantum-inspired work:
 
 Verified after this pass with:
 
-- `cargo test -p pen-search`
 - `cargo test -p pen-search -p pen-cli -p pen-store`
-- `cargo test -p pen-search -p pen-cli -p pen-store realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_competition -- --nocapture`

@@ -9,12 +9,20 @@ Before following donor material, anchor on the current Rust engine:
 - `crates/pen-search/src/bounds.rs` now provides an explicit `PrefixBound` API
 - `crates/pen-search/src/prefix_cache.rs` now provides `PrefixSignature`,
   `PrefixCache`, and merge accounting
+- `PrefixSignature` now carries active-window hashing, shape/support summaries,
+  and structural family flags in addition to exact serialized-prefix identity
+- the realistic shadow lane now expands prefixes online through
+  clause-position catalogs and only exact-evaluates retained full telescopes
+  downstream
 - reports and frontier manifests now surface
-  `prefix_states_merged_by_signature`
+  `prefix_states_merged_by_signature` plus the plan-aligned counters
+  `prefixes_created`, `full_telescopes_evaluated`,
+  `canonical_dedupe_prunes`, and `semantic_minimality_prunes`
 
-The important remaining gap is that the realistic lane still enumerates full
-telescopes first and only then groups them by terminal prefix. The next search
-step is to make prefixes first-class online expansion states.
+The important remaining gap is no longer "make prefixes first-class online
+states" because that control-flow shift has happened. The next search step is
+to move stronger sound bound reasoning and memoized legality/filter reuse
+earlier into that online prefix engine.
 
 ## Core Strict Loop
 
@@ -173,9 +181,10 @@ The user's frozen architecture moves checkpointing into a first-class contract. 
 - replace current in-memory frontier behavior with explicit resumable state
 - use exact rational or integer comparison in the hot path
 - harden anti-junk retention so true eliminator structures are not deleted early
-- move from post-hoc terminal-prefix grouping toward true online prefix
-  expansion
-- treat `PrefixBound` and `PrefixCache` as current building blocks, not future
+- move from terminal-prefix-only exact pruning toward earlier partial-prefix
+  sound bounds inside the online prefix engine
+- treat strengthened `PrefixSignature` state and the plan-aligned counters as
+  current building blocks for memoization and measurement, not future
   placeholders
 
 ## Primary Source Files

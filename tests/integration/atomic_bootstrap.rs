@@ -594,7 +594,7 @@ fn realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_compe
     let debug = read_text(&run_dir.join("reports").join("latest.debug.txt"));
     assert!(latest.contains("search_profile: realistic_frontier_shadow"));
     assert!(debug.contains("search_profile: realistic_frontier_shadow"));
-    assert!(debug.contains("prefix frontier: explored="));
+    assert!(debug.contains("prefix frontier: created="));
 
     for step in 10..=15 {
         let summary = read_json(
@@ -723,7 +723,7 @@ fn realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_compe
             .join("step-15-summary.json")
             .to_string_lossy(),
     ]));
-    assert!(step_inspect.contains("prefix_frontier: explored="));
+    assert!(step_inspect.contains("prefix_frontier: created="));
     assert!(step_inspect.contains(" merged="));
 
     fs::remove_dir_all(root).ok();

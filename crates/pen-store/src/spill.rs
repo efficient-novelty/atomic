@@ -36,6 +36,7 @@ pub struct FrontierRuntimeInput<const N: usize> {
     pub hot_records: Vec<[u8; N]>,
     pub cold_records: Vec<[u8; N]>,
     pub dedupe_keys: Vec<String>,
+    pub prefixes_created: u64,
     pub prefix_states_explored: u64,
     pub prefix_states_merged_by_signature: u64,
     pub prefix_states_exact_pruned: u64,
@@ -171,6 +172,7 @@ pub fn persist_frontier_runtime<const N: usize>(
 
     Ok(FrontierRuntimeArtifacts {
         counts: FrontierCounts {
+            prefixes_created: input.prefixes_created,
             prefix_states_explored: input.prefix_states_explored,
             prefix_states_merged_by_signature: input.prefix_states_merged_by_signature,
             prefix_states_exact_pruned: input.prefix_states_exact_pruned,
@@ -293,6 +295,7 @@ mod tests {
                 "dedupe-a".to_owned(),
                 "dedupe-a".to_owned(),
             ],
+            prefixes_created: 9,
             prefix_states_explored: 6,
             prefix_states_merged_by_signature: 3,
             prefix_states_exact_pruned: 1,
@@ -333,6 +336,7 @@ mod tests {
         );
         assert_eq!(artifacts.files.cache_blob, FRONTIER_CACHE_BLOB_FILE);
         assert_eq!(artifacts.scheduler.spill_generation, 7);
+        assert_eq!(artifacts.counts.prefixes_created, 9);
         assert_eq!(artifacts.counts.prefix_states_explored, 6);
         assert_eq!(artifacts.counts.prefix_states_merged_by_signature, 3);
         assert_eq!(artifacts.counts.prefix_states_exact_pruned, 1);

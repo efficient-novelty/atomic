@@ -198,6 +198,7 @@ mod tests {
                 record_layout_id: FRONTIER_RECORD_LAYOUT_ID.to_owned(),
             },
             counts: FrontierCounts {
+                prefixes_created: 11,
                 prefix_states_explored: 8,
                 prefix_states_merged_by_signature: 5,
                 prefix_states_exact_pruned: 2,

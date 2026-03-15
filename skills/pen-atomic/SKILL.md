@@ -32,8 +32,15 @@ The current search-architecture focus has shifted again:
   persisted frontier evidence
 - `pen-search` now has explicit `bounds.rs` and `prefix_cache.rs` primitives
   for quantum-inspired prefix work
-- the next gap is true online prefix expansion, not "add a frontier for the
-  first time"
+- `realistic_frontier_shadow` now expands prefixes online through
+  clause-position catalogs instead of enumerating all full telescopes first
+- `PrefixSignature` now carries active-window hashing, shape/support summaries,
+  and structural family flags for future d = 2 memoization
+- reports and frontier manifests now expose the plan-aligned counters
+  `prefixes_created`, `full_telescopes_evaluated`,
+  `canonical_dedupe_prunes`, and `semantic_minimality_prunes`
+- the next gap is earlier sound bound pruning and Phase-2 memoization on top of
+  the online prefix engine, not "add a frontier for the first time"
 
 Start with the current architecture doc before diving into donor material:
 
@@ -171,10 +178,11 @@ Focus on:
 - exact-band search and bar semantics
 - admissibility from structural debt, not names
 - deterministic dedupe and SCC minimality
-- the difference between the current realistic prefix frontier and the still
-  unfinished online prefix-first engine
-- using `PrefixBound` and `PrefixCache` as the starting point for further
-  quantum-inspired search work
+- the remaining difference between the current realistic online prefix engine
+  and the still-missing earlier partial-prefix bound pruning
+- using strengthened `PrefixSignature` state and the plan-aligned counters as
+  the starting point for Phase-2 memoization and further quantum-inspired
+  search work
 
 ### If you are working on reporting or evidence
 
@@ -246,8 +254,9 @@ Reject designs that:
   strict 15-step lane.
 - The repo now has real live atomic search through step 15, exact deterministic
   selection, and a richer candidate-level evidence surface.
-- The current quantum-focused search gap is true online prefix expansion on top
-  of the new explicit bounds and prefix-cache primitives.
+- The current quantum-focused search gap is earlier partial-prefix bound
+  pruning and Phase-2 memoization on top of the online prefix engine and the
+  strengthened prefix-signature state.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.

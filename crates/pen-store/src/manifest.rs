@@ -208,6 +208,8 @@ pub struct StepStats {
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 pub struct FrontierCounts {
+    #[serde(default)]
+    pub prefixes_created: u64,
     pub prefix_states_explored: u64,
     pub prefix_states_merged_by_signature: u64,
     pub prefix_states_exact_pruned: u64,
@@ -381,6 +383,7 @@ mod tests {
                 record_layout_id: FRONTIER_RECORD_LAYOUT_ID.to_owned(),
             },
             counts: FrontierCounts {
+                prefixes_created: 26_114_992,
                 prefix_states_explored: 17_449_876,
                 prefix_states_merged_by_signature: 4_110_551,
                 prefix_states_exact_pruned: 1_220_014,

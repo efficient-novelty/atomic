@@ -258,7 +258,7 @@ fn realistic_resume_roundtrip_keeps_the_reference_sequence_and_prefix_frontier_e
             .join("step-15-summary.json")
             .to_string_lossy(),
     ]));
-    assert!(step_inspect_stdout.contains("prefix_frontier: explored="));
+    assert!(step_inspect_stdout.contains("prefix_frontier: created="));
 
     let telemetry = read_text(&run_dir.join("telemetry.ndjson"));
     assert!(telemetry.contains("\"mode\":\"frontier_checkpoint_resume\""));

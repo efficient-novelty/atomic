@@ -499,6 +499,7 @@ fn write_frontier_snapshots(
                 hot_records,
                 cold_records,
                 dedupe_keys: dedupe_keys.into_iter().collect(),
+                prefixes_created: step.search_stats.prefixes_created as u64,
                 prefix_states_explored: step.search_stats.prefix_states_explored as u64,
                 prefix_states_merged_by_signature: step
                     .search_stats

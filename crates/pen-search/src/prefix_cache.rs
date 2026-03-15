@@ -1,32 +1,56 @@
 use crate::bounds::PrefixBound;
 use crate::expand::evaluate_checked_candidate;
 use anyhow::Result;
+use pen_core::canonical::canonical_key_telescope;
 use pen_core::encode::telescope_bit_cost;
 use pen_core::hash::blake3_hex;
 use pen_core::ids::ObligationSetId;
-use pen_core::library::Library;
+use pen_core::library::{Library, LibraryEntry};
 use pen_core::telescope::Telescope;
 use pen_eval::bar::DiscoveryRecord;
 use pen_eval::nu::structural_nu;
 use pen_type::obligations::{RetentionClass, RetentionPolicy};
 use std::collections::BTreeMap;
 
+const ACTIVE_WINDOW_DEPTH: usize = 2;
+const FAMILY_FLAG_LIBRARY_REFS: u16 = 1 << 0;
+const FAMILY_FLAG_PATH_SPACE: u16 = 1 << 1;
+const FAMILY_FLAG_MODAL: u16 = 1 << 2;
+const FAMILY_FLAG_TEMPORAL: u16 = 1 << 3;
+const FAMILY_FLAG_DIFFERENTIAL: u16 = 1 << 4;
+const FAMILY_FLAG_CURVATURE: u16 = 1 << 5;
+const FAMILY_FLAG_METRIC: u16 = 1 << 6;
+const FAMILY_FLAG_HILBERT: u16 = 1 << 7;
+const FAMILY_FLAG_TEMPORAL_SHELL: u16 = 1 << 8;
+const FAMILY_FLAG_DEPENDENT: u16 = 1 << 9;
+
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct PrefixSignature {
     pub clause_position: u16,
     pub obligation_set_id: ObligationSetId,
+    pub active_window_hash64: u64,
+    pub shape_hash64: u64,
+    pub support_hash64: u64,
+    pub family_flags: u16,
     pub prefix_hash64: u64,
     exact_key: String,
 }
 
 impl PrefixSignature {
-    pub fn new(step_index: u32, prefix_telescope: &Telescope) -> Self {
+    pub fn new(step_index: u32, library: &Library, prefix_telescope: &Telescope) -> Self {
         let exact_key =
             serde_json::to_string(prefix_telescope).expect("prefix telescope should serialize");
+        let canonical_key = canonical_key_telescope(prefix_telescope);
+        let candidate_hash = format!("blake3:{}", blake3_hex(exact_key.as_bytes()));
+        let canonical_hash = format!("blake3:{}", blake3_hex(canonical_key.0.as_bytes()));
         Self {
             clause_position: u16::try_from(prefix_telescope.clauses.len())
                 .expect("depth exceeded u16"),
             obligation_set_id: ObligationSetId::new(step_index),
+            active_window_hash64: active_window_hash64(library),
+            shape_hash64: truncated_hash64(candidate_hash.as_bytes()),
+            support_hash64: truncated_hash64(canonical_hash.as_bytes()),
+            family_flags: structural_family_flags(prefix_telescope, library),
             prefix_hash64: truncated_hash64(exact_key.as_bytes()),
             exact_key,
         }
@@ -34,6 +58,18 @@ impl PrefixSignature {
 
     pub fn dedupe_key(&self) -> String {
         format!("blake3:{}", blake3_hex(self.exact_key.as_bytes()))
+    }
+
+    pub fn has_library_refs(&self) -> bool {
+        self.family_flags & FAMILY_FLAG_LIBRARY_REFS != 0
+    }
+
+    pub fn has_modal_family(&self) -> bool {
+        self.family_flags & FAMILY_FLAG_MODAL != 0
+    }
+
+    pub fn has_temporal_family(&self) -> bool {
+        self.family_flags & FAMILY_FLAG_TEMPORAL != 0
     }
 }
 
@@ -91,7 +127,7 @@ impl PrefixCache {
         nu_history: &[(u32, u32)],
         retention_policy: RetentionPolicy,
     ) -> Result<()> {
-        let signature = PrefixSignature::new(step_index, &prefix_telescope);
+        let signature = PrefixSignature::new(step_index, library, &prefix_telescope);
         let exact_nu = u16::try_from(structural_nu(&telescope, library, nu_history).total)
             .expect("nu exceeded u16");
         let bit_kappa_used =
@@ -113,8 +149,8 @@ impl PrefixCache {
             depth: signature.clause_position,
             prefix_telescope,
             retention_class: retention_policy.classify(prefix_candidate.retention_signals()),
-            shape_hash64: truncated_hash64(prefix_candidate.candidate_hash.as_bytes()),
-            support_hash64: truncated_hash64(prefix_candidate.canonical_hash.as_bytes()),
+            shape_hash64: signature.shape_hash64,
+            support_hash64: signature.support_hash64,
             bound: PrefixBound::singleton(exact_nu, clause_kappa_used, bit_kappa_used),
             telescopes: vec![telescope],
         };
@@ -129,15 +165,73 @@ fn truncated_hash64(bytes: &[u8]) -> u64 {
     u64::from_str_radix(&hash[..16], 16).expect("blake3 prefix should parse")
 }
 
+fn active_window_hash64(library: &Library) -> u64 {
+    let start = library.len().saturating_sub(ACTIVE_WINDOW_DEPTH);
+    let active_window = &library[start..];
+    if active_window.is_empty() {
+        return 0;
+    }
+
+    let bytes = serde_json::to_vec(active_window).expect("active window should serialize");
+    truncated_hash64(&bytes)
+}
+
+fn structural_family_flags(prefix_telescope: &Telescope, library: &Library) -> u16 {
+    let entry = LibraryEntry::from_telescope(prefix_telescope, library);
+    let mut flags = 0_u16;
+
+    if entry.library_refs > 0 {
+        flags |= FAMILY_FLAG_LIBRARY_REFS;
+    }
+    if entry.has_loop || !entry.path_dims.is_empty() {
+        flags |= FAMILY_FLAG_PATH_SPACE;
+    }
+    if entry.capabilities.has_modal_ops {
+        flags |= FAMILY_FLAG_MODAL;
+    }
+    if entry.capabilities.has_temporal_ops {
+        flags |= FAMILY_FLAG_TEMPORAL;
+    }
+    if entry.capabilities.has_differential_ops {
+        flags |= FAMILY_FLAG_DIFFERENTIAL;
+    }
+    if entry.capabilities.has_curvature {
+        flags |= FAMILY_FLAG_CURVATURE;
+    }
+    if entry.capabilities.has_metric {
+        flags |= FAMILY_FLAG_METRIC;
+    }
+    if entry.capabilities.has_hilbert {
+        flags |= FAMILY_FLAG_HILBERT;
+    }
+    if entry.capabilities.has_temporal_shell {
+        flags |= FAMILY_FLAG_TEMPORAL_SHELL;
+    }
+    if entry.capabilities.has_dependent_functions {
+        flags |= FAMILY_FLAG_DEPENDENT;
+    }
+
+    flags
+}
+
 #[cfg(test)]
 mod tests {
     use super::{PrefixCache, PrefixSignature};
     use pen_core::clause::{ClauseRec, ClauseRole};
     use pen_core::expr::Expr;
-    use pen_core::library::Library;
+    use pen_core::library::{Library, LibraryEntry};
     use pen_core::telescope::Telescope;
     use pen_eval::bar::DiscoveryRecord;
     use pen_type::obligations::{RetentionFocus, RetentionPolicy};
+
+    fn replay_reference_library(last_step: u32) -> Library {
+        let mut library = Vec::new();
+        for step in 1..=last_step {
+            let telescope = Telescope::reference(step);
+            library.push(LibraryEntry::from_telescope(&telescope, &library));
+        }
+        library
+    }
 
     fn clause(expr: Expr) -> ClauseRec {
         ClauseRec::new(ClauseRole::Formation, expr)
@@ -145,12 +239,19 @@ mod tests {
 
     #[test]
     fn prefix_signature_keeps_exactness_while_exposing_compact_fields() {
-        let telescope = Telescope::reference(10);
-        let signature = PrefixSignature::new(10, &telescope);
+        let library = replay_reference_library(14);
+        let telescope = Telescope::reference(15);
+        let signature = PrefixSignature::new(15, &library, &telescope);
 
-        assert_eq!(signature.clause_position, 4);
-        assert_eq!(signature.obligation_set_id.get(), 10);
+        assert_eq!(signature.clause_position, 8);
+        assert_eq!(signature.obligation_set_id.get(), 15);
+        assert_ne!(signature.active_window_hash64, 0);
+        assert_ne!(signature.shape_hash64, 0);
+        assert_ne!(signature.support_hash64, 0);
         assert_ne!(signature.prefix_hash64, 0);
+        assert!(signature.has_library_refs());
+        assert!(signature.has_modal_family());
+        assert!(signature.has_temporal_family());
         assert!(signature.dedupe_key().starts_with("blake3:"));
     }
 
