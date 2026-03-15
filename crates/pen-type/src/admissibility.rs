@@ -421,58 +421,72 @@ pub fn assess_strict_admissibility_from_family_matches(
             }
         }
         _ => {
-            if telescope.is_trivially_derivable(library) {
-                return AdmissibilityDecision::rejected_by_exact_legality("trivially_derivable");
-            }
-
-            if let Some(family) = admissibility.required_focus_family() {
-                if !matched_families.matches(family) {
-                    return AdmissibilityDecision::rejected_by_structural_debt_cap(format!(
-                        "missing_required_{}",
-                        family.slug()
-                    ));
-                }
-            }
-
-            for family in StructuralFamily::ALL {
-                if matched_families.matches(family)
-                    && matches!(admissibility.policy_for(family), PackagePolicy::Forbid)
-                {
-                    return AdmissibilityDecision::rejected_by_structural_debt_cap(format!(
-                        "forbidden_{}",
-                        family.slug()
-                    ));
-                }
-            }
-
-            let matches_allowed_family = StructuralFamily::ALL.into_iter().any(|family| {
-                matched_families.matches(family)
-                    && !matches!(admissibility.policy_for(family), PackagePolicy::Forbid)
-            });
-            if admissibility.focus_family.is_some() && !matches_allowed_family {
-                return AdmissibilityDecision::rejected_by_structural_debt_cap(
-                    "no_allowed_structural_family",
-                );
-            }
-
-            match admissibility.focus_family {
-                Some(family) if matched_families.matches(family) => {
-                    AdmissibilityDecision::admitted_focus_aligned(format!(
-                        "focus_{}",
-                        family.slug()
-                    ))
-                }
-                Some(family) if admissibility.policy_for(family).is_focus() => {
-                    AdmissibilityDecision::admitted_deprioritized(format!(
-                        "off_focus_{}",
-                        family.slug()
-                    ))
-                }
-                Some(_) | None => {
-                    AdmissibilityDecision::admitted_focus_aligned("open_band_structural")
-                }
-            }
+            assess_strict_admissibility_from_terminal_summary(
+                step_index,
+                telescope.kappa() as u16,
+                admissibility,
+                matched_families,
+                telescope.is_trivially_derivable(library),
+            )
         }
+    }
+}
+
+pub fn assess_strict_admissibility_from_terminal_summary(
+    step_index: u32,
+    clause_kappa: u16,
+    admissibility: StrictAdmissibility,
+    matched_families: StructuralFamilyMatchMask,
+    trivially_derivable: bool,
+) -> AdmissibilityDecision {
+    debug_assert!(step_index > 3);
+
+    if !admissibility.supports_exact_clause_kappa(clause_kappa) {
+        return AdmissibilityDecision::rejected_by_exact_legality("outside_exact_kappa_band");
+    }
+
+    if trivially_derivable {
+        return AdmissibilityDecision::rejected_by_exact_legality("trivially_derivable");
+    }
+
+    if let Some(family) = admissibility.required_focus_family() {
+        if !matched_families.matches(family) {
+            return AdmissibilityDecision::rejected_by_structural_debt_cap(format!(
+                "missing_required_{}",
+                family.slug()
+            ));
+        }
+    }
+
+    for family in StructuralFamily::ALL {
+        if matched_families.matches(family)
+            && matches!(admissibility.policy_for(family), PackagePolicy::Forbid)
+        {
+            return AdmissibilityDecision::rejected_by_structural_debt_cap(format!(
+                "forbidden_{}",
+                family.slug()
+            ));
+        }
+    }
+
+    let matches_allowed_family = StructuralFamily::ALL.into_iter().any(|family| {
+        matched_families.matches(family)
+            && !matches!(admissibility.policy_for(family), PackagePolicy::Forbid)
+    });
+    if admissibility.focus_family.is_some() && !matches_allowed_family {
+        return AdmissibilityDecision::rejected_by_structural_debt_cap(
+            "no_allowed_structural_family",
+        );
+    }
+
+    match admissibility.focus_family {
+        Some(family) if matched_families.matches(family) => {
+            AdmissibilityDecision::admitted_focus_aligned(format!("focus_{}", family.slug()))
+        }
+        Some(family) if admissibility.policy_for(family).is_focus() => {
+            AdmissibilityDecision::admitted_deprioritized(format!("off_focus_{}", family.slug()))
+        }
+        Some(_) | None => AdmissibilityDecision::admitted_focus_aligned("open_band_structural"),
     }
 }
 

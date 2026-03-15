@@ -425,7 +425,7 @@ impl Telescope {
 
         has_higher_path
             && !non_path_exprs.is_empty()
-            && non_path_exprs.into_iter().all(is_trunc_context_expr)
+            && non_path_exprs.into_iter().all(|expr| expr.is_trunc_context())
     }
 }
 
@@ -475,28 +475,6 @@ fn primary_role(expr: &Expr) -> ClauseRole {
 fn is_concrete_type_formation(expr: &Expr) -> bool {
     matches!(expr, Expr::Univ)
         || matches!(expr, Expr::App(left, _) if matches!(left.as_ref(), Expr::Univ))
-}
-
-fn is_trunc_context_expr(expr: &Expr) -> bool {
-    match expr {
-        Expr::Trunc(_) => true,
-        Expr::App(left, right) => is_trunc_context_expr(left) || is_trunc_context_expr(right),
-        Expr::Lam(body)
-        | Expr::Refl(body)
-        | Expr::Flat(body)
-        | Expr::Sharp(body)
-        | Expr::Disc(body)
-        | Expr::Shape(body)
-        | Expr::Next(body)
-        | Expr::Eventually(body) => is_trunc_context_expr(body),
-        Expr::Pi(left, right) | Expr::Sigma(left, right) => {
-            is_trunc_context_expr(left) && is_trunc_context_expr(right)
-        }
-        Expr::Id(a, x, y) => {
-            is_trunc_context_expr(a) || is_trunc_context_expr(x) || is_trunc_context_expr(y)
-        }
-        Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_) | Expr::Susp(_) => false,
-    }
 }
 
 fn is_basic_formation_entry(expr: &&Expr) -> bool {

@@ -132,6 +132,8 @@ pub struct AtomicSearchStep {
     pub incremental_clause_family_prunes: usize,
     pub incremental_active_window_clause_filter_hits: usize,
     pub incremental_active_window_clause_filter_prunes: usize,
+    pub incremental_trivial_derivability_hits: usize,
+    pub incremental_trivial_derivability_prunes: usize,
     pub incremental_terminal_admissibility_hits: usize,
     pub incremental_terminal_admissibility_rejections: usize,
     pub search_timing: SearchTiming,
@@ -354,6 +356,8 @@ fn search_next_step(
     let mut incremental_clause_family_prunes = 0usize;
     let mut incremental_active_window_clause_filter_hits = 0usize;
     let mut incremental_active_window_clause_filter_prunes = 0usize;
+    let mut incremental_trivial_derivability_hits = 0usize;
+    let mut incremental_trivial_derivability_prunes = 0usize;
     let mut incremental_terminal_admissibility_hits = 0usize;
     let mut incremental_terminal_admissibility_rejections = 0usize;
     let discovery_start = Instant::now();
@@ -392,6 +396,8 @@ fn search_next_step(
             legality_stats.active_window_clause_filter_hits;
         incremental_active_window_clause_filter_prunes =
             legality_stats.active_window_clause_filter_prunes;
+        incremental_trivial_derivability_hits = legality_stats.trivial_derivability_hits;
+        incremental_trivial_derivability_prunes = legality_stats.trivial_derivability_prunes;
         incremental_terminal_admissibility_hits = legality_stats.terminal_admissibility_hits;
         incremental_terminal_admissibility_rejections =
             legality_stats.terminal_admissibility_rejections;
@@ -559,6 +565,8 @@ fn search_next_step(
         incremental_clause_family_prunes,
         incremental_active_window_clause_filter_hits,
         incremental_active_window_clause_filter_prunes,
+        incremental_trivial_derivability_hits,
+        incremental_trivial_derivability_prunes,
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
         search_timing,
@@ -613,6 +621,8 @@ fn build_step_result(
     incremental_clause_family_prunes: usize,
     incremental_active_window_clause_filter_hits: usize,
     incremental_active_window_clause_filter_prunes: usize,
+    incremental_trivial_derivability_hits: usize,
+    incremental_trivial_derivability_prunes: usize,
     incremental_terminal_admissibility_hits: usize,
     incremental_terminal_admissibility_rejections: usize,
     search_timing: SearchTiming,
@@ -667,6 +677,8 @@ fn build_step_result(
         incremental_clause_family_prunes,
         incremental_active_window_clause_filter_hits,
         incremental_active_window_clause_filter_prunes,
+        incremental_trivial_derivability_hits,
+        incremental_trivial_derivability_prunes,
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
         search_timing,
@@ -906,8 +918,6 @@ fn record_terminal_prefix_group(
         .unwrap_or_else(|| last_clause_options.iter().collect());
 
     for clause in filtered_clauses {
-        let mut telescope = prefix_telescope.clone();
-        telescope.clauses.push(clause.clone());
         let Some(connectivity_decision) = discovery.prefix_legality_cache.terminal_connectivity(
             prefix_signature,
             library,
@@ -921,29 +931,41 @@ fn record_terminal_prefix_group(
         ) {
             continue;
         }
-        if matches!(
-            connectivity_decision,
-            TerminalConnectivityDecision::NeedsFallback
-        ) && !passes_connectivity(library, &telescope)
-        {
-            continue;
-        }
 
-        discovery.enumerated_candidates += 1;
-        discovery.well_formed_candidates += 1;
-        let admissibility_decision = discovery
+        let cached_admissibility_decision = discovery
             .prefix_legality_cache
             .terminal_admissibility(
                 step_index,
                 prefix_signature,
                 library,
-                &telescope,
                 clause,
                 admissibility,
-            )
-            .unwrap_or_else(|| {
-                assess_strict_admissibility(step_index, library, &telescope, admissibility)
+            );
+        let mut telescope = None;
+        if matches!(
+            connectivity_decision,
+            TerminalConnectivityDecision::NeedsFallback
+        ) {
+            let mut fallback_telescope = prefix_telescope.clone();
+            fallback_telescope.clauses.push(clause.clone());
+            if !passes_connectivity(library, &fallback_telescope) {
+                continue;
+            }
+            telescope = Some(fallback_telescope);
+        }
+
+        discovery.enumerated_candidates += 1;
+        discovery.well_formed_candidates += 1;
+        let admissibility_decision = if let Some(decision) = cached_admissibility_decision {
+            decision
+        } else {
+            let fallback_telescope = telescope.get_or_insert_with(|| {
+                let mut telescope = prefix_telescope.clone();
+                telescope.clauses.push(clause.clone());
+                telescope
             });
+            assess_strict_admissibility(step_index, library, fallback_telescope, admissibility)
+        };
         discovery
             .admissibility_diagnostics
             .record(&admissibility_decision);
@@ -951,6 +973,12 @@ fn record_terminal_prefix_group(
             discovery.admissibility_rejections += 1;
             continue;
         }
+
+        let telescope = telescope.unwrap_or_else(|| {
+            let mut telescope = prefix_telescope.clone();
+            telescope.clauses.push(clause.clone());
+            telescope
+        });
 
         discovery.prefix_cache.record_group(
             step_index,
@@ -1574,6 +1602,7 @@ mod tests {
         );
         assert!(step.incremental_active_window_clause_filter_hits > 0);
         assert!(step.incremental_active_window_clause_filter_prunes > 0);
+        assert!(step.incremental_trivial_derivability_hits > 0);
         assert!(step.incremental_terminal_admissibility_hits > 0);
         assert!(
             step.admissibility_rejections
@@ -1609,6 +1638,7 @@ mod tests {
         assert!(step.incremental_connectivity_fallbacks > 0);
         assert!(step.incremental_clause_family_filter_hits > 0);
         assert!(step.incremental_active_window_clause_filter_hits > 0);
+        assert!(step.incremental_trivial_derivability_hits > 0);
         assert!(step.incremental_terminal_admissibility_hits > 0);
         assert!(
             step.prefix_frontier_hot_states + step.prefix_frontier_cold_states

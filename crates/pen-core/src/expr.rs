@@ -92,6 +92,28 @@ impl Expr {
         )
     }
 
+    pub fn is_trunc_context(&self) -> bool {
+        match self {
+            Self::Trunc(_) => true,
+            Self::App(left, right) => left.is_trunc_context() || right.is_trunc_context(),
+            Self::Lam(body)
+            | Self::Refl(body)
+            | Self::Flat(body)
+            | Self::Sharp(body)
+            | Self::Disc(body)
+            | Self::Shape(body)
+            | Self::Next(body)
+            | Self::Eventually(body) => body.is_trunc_context(),
+            Self::Pi(left, right) | Self::Sigma(left, right) => {
+                left.is_trunc_context() && right.is_trunc_context()
+            }
+            Self::Id(a, x, y) => {
+                a.is_trunc_context() || x.is_trunc_context() || y.is_trunc_context()
+            }
+            Self::Univ | Self::Var(_) | Self::Lib(_) | Self::PathCon(_) | Self::Susp(_) => false,
+        }
+    }
+
     fn collect_lib_refs(&self, refs: &mut BTreeSet<u32>) {
         match self {
             Self::App(left, right) | Self::Pi(left, right) | Self::Sigma(left, right) => {

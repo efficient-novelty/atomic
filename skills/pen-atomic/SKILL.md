@@ -45,6 +45,10 @@ The current search-architecture focus has shifted again:
   active-window clause filtering keyed by `PrefixSignature`, skipping child and
   terminal clause options that cannot match any still-admissible structural
   family before child-prefix legality or terminal assembly
+- realistic shadow now also keeps an exact incremental terminal
+  trivial-derivability summary keyed by `PrefixSignature`, pruning terminal
+  continuations that are provably trivially derivable before full telescope
+  assembly
 - realistic shadow now also reuses that exact family summary for cached
   terminal admissibility decisions keyed by `PrefixSignature`
 - reports and frontier manifests now expose the plan-aligned counters
@@ -58,6 +62,8 @@ The current search-architecture focus has shifted again:
   `incremental_clause_family_prunes`,
   `incremental_active_window_clause_filter_hits`,
   `incremental_active_window_clause_filter_prunes`,
+  `incremental_trivial_derivability_hits`,
+  `incremental_trivial_derivability_prunes`,
   `incremental_terminal_admissibility_hits`, and
   `incremental_terminal_admissibility_rejections`
 - step telemetry now also carries per-step timing metrics
@@ -72,8 +78,8 @@ The current search-architecture focus has shifted again:
 - the next gap is stronger sound bound pruning beyond the landed exact
   clause-family impossibility prunes plus the landed active-window
   clause filtering, then broader non-family admissibility/filter reuse beyond
-  the landed terminal-admissibility cache, plus using the new timing/memory
-  evidence to retune realistic late-step order,
+  the landed trivial-derivability and terminal-admissibility summaries, plus
+  using the new timing/memory evidence to retune realistic late-step order,
   not "add a frontier for the first time"
 
 Start with the current architecture doc before diving into donor material:
@@ -214,8 +220,9 @@ Focus on:
 - deterministic dedupe and SCC minimality
 - the remaining difference between the current realistic online prefix engine,
   the landed legality/connectivity/family/active-window/terminal-
-  admissibility memo path, and the still-missing earlier partial-prefix bound
-  pruning plus broader non-family admissibility reuse
+  admissibility memo path plus the landed terminal trivial-derivability reuse,
+  and the still-missing earlier partial-prefix bound pruning plus broader
+  non-family admissibility reuse
 - using strengthened `PrefixSignature` state, the landed memo counters, the
   new timing telemetry, and the deterministic frontier memory high-water
   metrics as the
@@ -297,8 +304,9 @@ Reject designs that:
   pruning beyond the landed exact clause-family impossibility prunes and
   active-window clause filtering plus broader non-family
   admissibility/filter reuse beyond the landed
-  legality/connectivity/family/active-window/terminal-admissibility memo
-  layer, then using the new timing/memory evidence to retune late-step order.
+  legality/connectivity/family/active-window/trivial-derivability/terminal-
+  admissibility memo layer, then using the new timing/memory evidence to
+  retune late-step order.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.

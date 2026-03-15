@@ -105,6 +105,11 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                     .search_stats
                     .incremental_active_window_clause_filter_prunes
                     == 0
+                && step.search_stats.incremental_trivial_derivability_hits == 0
+                && step
+                    .search_stats
+                    .incremental_trivial_derivability_prunes
+                    == 0
                 && step.search_stats.incremental_terminal_admissibility_hits == 0
                 && step
                     .search_stats
@@ -114,7 +119,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 String::new()
             } else {
                 format!(
-                    "\nprefix_memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} active_window_filter_hits={} active_window_filter_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={}",
+                    "\nprefix_memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} active_window_filter_hits={} active_window_filter_prunes={} trivial_derivability_hits={} trivial_derivability_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={}",
                     step.search_stats.incremental_legality_cache_hits,
                     step.search_stats.incremental_connectivity_shortcuts,
                     step.search_stats.incremental_connectivity_fallbacks,
@@ -125,6 +130,8 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                         .incremental_active_window_clause_filter_hits,
                     step.search_stats
                         .incremental_active_window_clause_filter_prunes,
+                    step.search_stats.incremental_trivial_derivability_hits,
+                    step.search_stats.incremental_trivial_derivability_prunes,
                     step.search_stats.incremental_terminal_admissibility_hits,
                     step.search_stats
                         .incremental_terminal_admissibility_rejections
@@ -194,7 +201,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 )
             });
         return Ok(format!(
-            "frontier step {} band {}\nprefix_created: {}\nprefix_explored: {}\nprefix_merged: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nlegality_hits: {}\nconnectivity_shortcuts: {}\nconnectivity_fallbacks: {}\nconnectivity_prunes: {}\nclause_family_hits: {}\nclause_family_prunes: {}\nactive_window_filter_hits: {}\nactive_window_filter_prunes: {}\nterminal_admissibility_hits: {}\nterminal_admissibility_rejections: {}\nmemory_snapshot: rss_bytes={} hot_frontier_bytes={} interner_bytes={} dedupe_bytes={} cache_bytes={}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
+            "frontier step {} band {}\nprefix_created: {}\nprefix_explored: {}\nprefix_merged: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nlegality_hits: {}\nconnectivity_shortcuts: {}\nconnectivity_fallbacks: {}\nconnectivity_prunes: {}\nclause_family_hits: {}\nclause_family_prunes: {}\nactive_window_filter_hits: {}\nactive_window_filter_prunes: {}\ntrivial_derivability_hits: {}\ntrivial_derivability_prunes: {}\nterminal_admissibility_hits: {}\nterminal_admissibility_rejections: {}\nmemory_snapshot: rss_bytes={} hot_frontier_bytes={} interner_bytes={} dedupe_bytes={} cache_bytes={}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
             frontier.step_index,
             frontier.band_index,
             frontier.counts.prefixes_created,
@@ -212,6 +219,8 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
             frontier
                 .counts
                 .incremental_active_window_clause_filter_prunes,
+            frontier.counts.incremental_trivial_derivability_hits,
+            frontier.counts.incremental_trivial_derivability_prunes,
             frontier.counts.incremental_terminal_admissibility_hits,
             frontier
                 .counts

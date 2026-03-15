@@ -42,6 +42,10 @@ guarded 15-step canon.
 - realistic shadow now also reuses that exact family summary for cached
   terminal admissibility decisions keyed by `PrefixSignature`, avoiding a full
   late-family package-match recomputation whenever the summary is available.
+- realistic shadow now also keeps an exact incremental trivial-derivability
+  summary keyed by `PrefixSignature`, rejecting terminal continuations that are
+  provably trivially derivable before full telescope assembly and before any
+  direct admissibility fallback.
 - `PrefixSignature` now includes:
   - clause position
   - obligation set id
@@ -68,6 +72,8 @@ guarded 15-step canon.
   - `incremental_clause_family_prunes`
   - `incremental_active_window_clause_filter_hits`
   - `incremental_active_window_clause_filter_prunes`
+  - `incremental_trivial_derivability_hits`
+  - `incremental_trivial_derivability_prunes`
   - `incremental_terminal_admissibility_hits`
   - `incremental_terminal_admissibility_rejections`
 - step telemetry now also carries the first Phase-2 timing counters:
@@ -96,6 +102,8 @@ it as if it were still missing:
 - extending the strengthened-signature memo layer into broader exact
   active-window clause filtering before child-prefix legality and terminal
   assembly
+- extending the strengthened-signature memo layer into exact terminal trivial-
+  derivability reuse before full telescope assembly
 - extending the strengthened-signature memo layer into cached terminal
   admissibility decisions for late-family realistic shadow work
 - adding the first timing telemetry and deterministic frontier memory
@@ -115,12 +123,13 @@ prune earlier with confidence.
 
 The strengthened signature is now used for incremental legality/connectivity
 reuse, exact clause-family feasibility pruning, active-window clause filtering,
-and cached terminal admissibility decisions, but it is not yet used for:
+terminal trivial-derivability pruning, and cached terminal admissibility
+decisions, but it is not yet used for:
 
 - stronger exact reuse of non-family admissibility structure before the full
   terminal telescope is assembled
 - a more explicit partial-prefix admissibility summary that goes beyond the
-  current family-shaped filter surface
+  landed family-shaped filter surface plus trivial-derivability reuse
 
 ### 3. Using the new timing and memory evidence to retune search order
 
@@ -135,8 +144,8 @@ expensive relative to their payoff.
 
 - define a stronger sound partial-prefix bound beyond exact clause-family
   impossibility pruning and the landed active-window clause filtering
-- use the new active-window and terminal-admissibility payoff counters to
-  target broader exact admissibility/filter reuse
+- use the new active-window, trivial-derivability, and terminal-admissibility
+  payoff counters to target broader exact admissibility/filter reuse
 - use the new timing telemetry and deterministic frontier memory high-water
   metrics to identify the late-step prefix lanes that still do redundant work
 - keep the strengthened-signature caches exact and deterministic
@@ -158,9 +167,10 @@ expensive relative to their payoff.
    partial-prefix exact bound that goes beyond the landed clause-family
    impossibility prunes and active-window clause filtering without unsound
    inference.
-2. Extend the landed legality/connectivity/family/active-window/terminal-
-   admissibility memo path into another exact admissibility summary that fires
-   before the full terminal telescope is assembled.
+2. Extend the landed legality/connectivity/family/active-window/trivial-
+   derivability/terminal-admissibility memo path into another exact
+   admissibility summary that fires before the full terminal telescope is
+   assembled.
 3. Use the expanded memo counters together with the new timing telemetry and
    frontier memory high-water metrics from stored artifacts to retune late-step
    prefix priority/order.

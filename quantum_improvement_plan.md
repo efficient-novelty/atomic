@@ -50,6 +50,11 @@ The repo is already past the original "just add a prefix frontier" stage.
   - `incremental_connectivity_shortcuts`
   - `incremental_connectivity_fallbacks`
   - `incremental_connectivity_prunes`
+- realistic shadow now also keeps an exact incremental terminal
+  trivial-derivability summary keyed by `PrefixSignature`, and stored artifacts
+  expose:
+  - `incremental_trivial_derivability_hits`
+  - `incremental_trivial_derivability_prunes`
 
 ## Main Gap
 
@@ -174,8 +179,9 @@ Next metrics to add:
    logic.
 2. Introduce an incremental legality summary type and thread it through online
    prefix expansion.
-3. Extend the landed legality/connectivity memo layer into exact admissibility
-   and late-family filter reuse keyed by strengthened `PrefixSignature` state.
+3. Extend the landed legality/connectivity/trivial-derivability memo layer into
+   further exact admissibility and late-family filter reuse keyed by
+   strengthened `PrefixSignature` state.
 4. Use the new timing telemetry and frontier memory high-water metrics to
    retune late-step prefix priority/order.
 5. Only after 1 to 4 are stable, revisit deterministic continuation profiles or

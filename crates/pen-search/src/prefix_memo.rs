@@ -4,11 +4,12 @@ use crate::enumerate::{
 };
 use crate::prefix_cache::PrefixSignature;
 use pen_core::clause::ClauseRec;
+use pen_core::expr::Expr;
 use pen_core::library::Library;
 use pen_core::telescope::Telescope;
 use pen_type::admissibility::{
     AdmissibilityDecision, PackagePolicy, StrictAdmissibility, StructuralFamily,
-    StructuralFamilyMatchMask, assess_strict_admissibility_from_family_matches,
+    StructuralFamilyMatchMask, assess_strict_admissibility_from_terminal_summary,
 };
 use pen_type::check::CheckSummary;
 use pen_type::connectivity::ConnectivitySummary;
@@ -24,6 +25,8 @@ pub struct PrefixLegalityCacheStats {
     pub clause_family_prunes: usize,
     pub active_window_clause_filter_hits: usize,
     pub active_window_clause_filter_prunes: usize,
+    pub trivial_derivability_hits: usize,
+    pub trivial_derivability_prunes: usize,
     pub terminal_admissibility_hits: usize,
     pub terminal_admissibility_rejections: usize,
 }
@@ -32,6 +35,7 @@ pub struct PrefixLegalityCacheStats {
 struct PrefixLegalitySummary {
     check: CheckSummary,
     connectivity: ConnectivitySummary,
+    admissibility: PrefixAdmissibilitySummary,
 }
 
 impl PrefixLegalitySummary {
@@ -39,6 +43,7 @@ impl PrefixLegalitySummary {
         Some(Self {
             check: CheckSummary::from_telescope(library, prefix_telescope).ok()?,
             connectivity: ConnectivitySummary::from_telescope(library, prefix_telescope),
+            admissibility: PrefixAdmissibilitySummary::from_telescope(prefix_telescope),
         })
     }
 
@@ -46,7 +51,56 @@ impl PrefixLegalitySummary {
         Some(Self {
             check: self.check.extend_clause(library.len(), clause).ok()?,
             connectivity: self.connectivity.clone().extend(library, clause),
+            admissibility: self.admissibility.extend(clause),
         })
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct PrefixAdmissibilitySummary {
+    all_clauses_lib_or_var: bool,
+    has_higher_path: bool,
+    non_path_expr_count: usize,
+    non_path_exprs_all_trunc_context: bool,
+}
+
+impl PrefixAdmissibilitySummary {
+    fn from_telescope(prefix_telescope: &Telescope) -> Self {
+        prefix_telescope
+            .clauses
+            .iter()
+            .fold(Self::default(), |summary, clause| summary.extend(clause))
+    }
+
+    fn extend(self, clause: &ClauseRec) -> Self {
+        let is_path = matches!(clause.expr, Expr::PathCon(_));
+        let is_higher_path = matches!(clause.expr, Expr::PathCon(dimension) if dimension > 1);
+        Self {
+            all_clauses_lib_or_var: self.all_clauses_lib_or_var
+                && matches!(clause.expr, Expr::Lib(_) | Expr::Var(_)),
+            has_higher_path: self.has_higher_path || is_higher_path,
+            non_path_expr_count: self.non_path_expr_count + usize::from(!is_path),
+            non_path_exprs_all_trunc_context: self.non_path_exprs_all_trunc_context
+                && (is_path || clause.expr.is_trunc_context()),
+        }
+    }
+
+    fn is_trivially_derivable(self) -> bool {
+        self.all_clauses_lib_or_var
+            || (self.has_higher_path
+                && self.non_path_expr_count > 0
+                && self.non_path_exprs_all_trunc_context)
+    }
+}
+
+impl Default for PrefixAdmissibilitySummary {
+    fn default() -> Self {
+        Self {
+            all_clauses_lib_or_var: true,
+            has_higher_path: false,
+            non_path_expr_count: 0,
+            non_path_exprs_all_trunc_context: true,
+        }
     }
 }
 
@@ -287,10 +341,26 @@ impl PrefixLegalityCache {
         step_index: u32,
         parent_signature: &PrefixSignature,
         library: &Library,
-        telescope: &Telescope,
         clause: &ClauseRec,
         admissibility: StrictAdmissibility,
     ) -> Option<AdmissibilityDecision> {
+        let parent_summary = self.summaries.get(parent_signature)?;
+        if step_index <= 3 {
+            return None;
+        }
+        let clause_kappa = parent_signature.clause_position.saturating_add(1);
+        self.stats.trivial_derivability_hits += 1;
+        if parent_summary.admissibility.extend(clause).is_trivially_derivable() {
+            self.stats.trivial_derivability_prunes += 1;
+            return Some(assess_strict_admissibility_from_terminal_summary(
+                step_index,
+                clause_kappa,
+                admissibility,
+                StructuralFamilyMatchMask::empty(),
+                true,
+            ));
+        }
+
         let parent_filter = self.family_filters.get(parent_signature).copied()?;
         self.stats.terminal_admissibility_hits += 1;
         let terminal_filter = parent_filter.retain_matching(
@@ -298,12 +368,12 @@ impl PrefixLegalityCache {
             clause,
             EnumerationContext::from_admissibility(library, admissibility),
         );
-        let decision = assess_strict_admissibility_from_family_matches(
+        let decision = assess_strict_admissibility_from_terminal_summary(
             step_index,
-            library,
-            telescope,
+            clause_kappa,
             admissibility,
             terminal_filter.match_mask(),
+            false,
         );
         if !decision.is_admitted() {
             self.stats.terminal_admissibility_rejections += 1;
@@ -314,7 +384,7 @@ impl PrefixLegalityCache {
 
 #[cfg(test)]
 mod tests {
-    use super::{PrefixLegalityCache, TerminalConnectivityDecision};
+    use super::{PrefixAdmissibilitySummary, PrefixLegalityCache, TerminalConnectivityDecision};
     use crate::enumerate::{EnumerationContext, build_clause_catalog};
     use crate::prefix_cache::PrefixSignature;
     use pen_core::clause::{ClauseRec, ClauseRole};
@@ -362,6 +432,21 @@ mod tests {
     }
 
     #[test]
+    fn admissibility_summary_tracks_trivial_derivability_incrementally() {
+        let lib_only = Telescope::new(vec![
+            ClauseRec::new(ClauseRole::Introduction, Expr::Var(1)),
+            ClauseRec::new(ClauseRole::Introduction, Expr::Lib(2)),
+        ]);
+        assert!(PrefixAdmissibilitySummary::from_telescope(&lib_only).is_trivially_derivable());
+
+        let trunc_hybrid = Telescope::new(vec![
+            ClauseRec::new(ClauseRole::Formation, Expr::Trunc(Box::new(Expr::Var(1)))),
+            ClauseRec::new(ClauseRole::PathAttach, Expr::PathCon(2)),
+        ]);
+        assert!(PrefixAdmissibilitySummary::from_telescope(&trunc_hybrid).is_trivially_derivable());
+    }
+
+    #[test]
     fn temporal_shell_terminal_summary_flags_reanchor_fallback() {
         let library = library_until(14);
         let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
@@ -402,7 +487,7 @@ mod tests {
             telescope.clauses.push(clause.clone());
 
             let cached = cache
-                .terminal_admissibility(15, &signature, &library, &telescope, clause, admissibility)
+                .terminal_admissibility(15, &signature, &library, clause, admissibility)
                 .expect("terminal admissibility should reuse family summary");
             let direct = assess_strict_admissibility(15, &library, &telescope, admissibility);
 

@@ -211,6 +211,8 @@ mod tests {
                 incremental_clause_family_prunes: 1,
                 incremental_active_window_clause_filter_hits: 3,
                 incremental_active_window_clause_filter_prunes: 2,
+                incremental_trivial_derivability_hits: 5,
+                incremental_trivial_derivability_prunes: 1,
                 incremental_terminal_admissibility_hits: 3,
                 incremental_terminal_admissibility_rejections: 1,
                 hot_states: 2,
