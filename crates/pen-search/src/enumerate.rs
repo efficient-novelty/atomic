@@ -10,6 +10,13 @@ use pen_type::connectivity::passes_connectivity;
 use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum LateFamilySurface {
+    None,
+    RealisticShadow,
+    DemoBreadthShadow,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct EnumerationContext {
     pub library_size: u32,
     pub scope_size: u32,
@@ -31,7 +38,7 @@ pub struct EnumerationContext {
     pub require_hilbert_functional_clauses: bool,
     pub require_temporal_shell_clauses: bool,
     pub historical_anchor_ref: Option<u32>,
-    pub generative_late_families: bool,
+    pub late_family_surface: LateFamilySurface,
 }
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
@@ -86,10 +93,13 @@ impl EnumerationContext {
             require_hilbert_functional_clauses: admissibility.require_hilbert_functional_package,
             require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
             historical_anchor_ref: admissibility.historical_anchor_ref,
-            generative_late_families: matches!(
-                admissibility.mode,
-                AdmissibilityMode::RealisticShadow
-            ),
+            late_family_surface: match admissibility.mode {
+                AdmissibilityMode::RealisticShadow => LateFamilySurface::RealisticShadow,
+                AdmissibilityMode::DemoBreadthShadow => LateFamilySurface::DemoBreadthShadow,
+                AdmissibilityMode::Guarded | AdmissibilityMode::RelaxedShadow => {
+                    LateFamilySurface::None
+                }
+            },
         }
     }
 }
@@ -254,6 +264,104 @@ fn operator_bundle_reference_clause(position: usize, context: EnumerationContext
     })
 }
 
+fn demo_operator_bundle_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
+    if context.library_size < 2 {
+        return Vec::new();
+    }
+
+    let latest = context.library_size;
+    let previous = latest - 1;
+    match position {
+        0 => vec![
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                )),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        1 => vec![
+            Expr::Pi(
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+                Box::new(Expr::Lib(previous)),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Lib(previous)),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Sigma(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Lib(latest)),
+            ),
+        ],
+        2 => vec![
+            Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        3 => vec![
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Var(1)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::App(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+            ))),
+        ],
+        4 => vec![
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(previous))),
+        ],
+        5 => vec![
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Var(1)),
+            ))),
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Var(1)),
+            ))),
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ))),
+        ],
+        6 => vec![
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
+            Expr::Pi(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        _ => Vec::new(),
+    }
+}
+
 fn hilbert_functional_reference_clause(
     position: usize,
     context: EnumerationContext,
@@ -297,6 +405,136 @@ fn hilbert_functional_reference_clause(
     })
 }
 
+fn demo_hilbert_functional_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
+    if context.library_size < 3 {
+        return Vec::new();
+    }
+
+    let latest = context.library_size;
+    let previous = latest - 1;
+    let older = latest - 2;
+    match position {
+        0 => vec![
+            Expr::Sigma(
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
+                )),
+                Box::new(Expr::Var(1)),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(2)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
+                )),
+                Box::new(Expr::Var(1)),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Univ))),
+                )),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        1 => vec![
+            Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1))),
+            Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1))),
+            Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        2 => vec![
+            Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        3 => vec![
+            Expr::Pi(
+                Box::new(Expr::Lam(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Var(1)),
+                )))),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Lam(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        4 => vec![
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                )),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        5 => vec![
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
+            Expr::Pi(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        6 => vec![
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
+            Expr::Pi(Box::new(Expr::Lib(older)), Box::new(Expr::Var(1))),
+            Expr::Pi(
+                Box::new(Expr::Lib(previous)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        7 => vec![
+            Expr::Pi(Box::new(Expr::Lib(older)), Box::new(Expr::Var(1))),
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+            Expr::Pi(
+                Box::new(Expr::Lib(older)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        8 => vec![
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Univ),
+            ))),
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Univ),
+            ))),
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
+            ))),
+        ],
+        _ => Vec::new(),
+    }
+}
+
 fn temporal_shell_reference_clause(position: usize, context: EnumerationContext) -> Option<Expr> {
     let anchor = context.historical_anchor_ref?;
 
@@ -335,57 +573,192 @@ fn temporal_shell_reference_clause(position: usize, context: EnumerationContext)
     })
 }
 
+fn demo_temporal_shell_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
+    let Some(anchor) = context.historical_anchor_ref else {
+        return Vec::new();
+    };
+
+    match position {
+        0 => vec![
+            Expr::Next(Box::new(Expr::Var(1))),
+            Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+            Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+        ],
+        1 => vec![
+            Expr::Eventually(Box::new(Expr::Var(1))),
+            Expr::Eventually(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+            Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+        ],
+        2 => vec![
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Var(1),
+                ))))),
+            ),
+        ],
+        3 => vec![
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+            ))),
+        ],
+        4 => vec![
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Flat(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+            ),
+        ],
+        5 => vec![
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    Expr::Var(1),
+                ))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Var(1),
+                ))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Var(1),
+                ))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    Expr::Var(1),
+                ))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Next(Box::new(Expr::Var(1))),
+                ))))),
+            ),
+        ],
+        6 => vec![
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Var(1),
+                ))))),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(
+                    1,
+                )))))),
+                Box::new(Expr::Var(2)),
+            ))),
+        ],
+        7 => vec![
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Flat(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Sharp(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+            ),
+        ],
+        _ => Vec::new(),
+    }
+}
+
 fn operator_bundle_family_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
     let Some(reference) = operator_bundle_reference_clause(position, context) else {
         return Vec::new();
     };
-    if !context.generative_late_families || position != 5 {
-        return vec![reference];
+    match context.late_family_surface {
+        LateFamilySurface::None => vec![reference],
+        LateFamilySurface::RealisticShadow if position == 5 => vec![
+            reference,
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Var(1)),
+            ))),
+        ],
+        LateFamilySurface::RealisticShadow => vec![reference],
+        LateFamilySurface::DemoBreadthShadow => demo_operator_bundle_clauses(position, context),
     }
-
-    vec![
-        reference,
-        Expr::Lam(Box::new(Expr::Pi(
-            Box::new(Expr::Var(2)),
-            Box::new(Expr::Var(1)),
-        ))),
-    ]
 }
 
 fn hilbert_functional_family_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
     let Some(reference) = hilbert_functional_reference_clause(position, context) else {
         return Vec::new();
     };
-    if !context.generative_late_families || context.library_size < 3 || position != 8 {
-        return vec![reference];
+    match context.late_family_surface {
+        LateFamilySurface::None => vec![reference],
+        LateFamilySurface::RealisticShadow if context.library_size >= 3 && position == 8 => vec![
+            reference,
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Univ),
+            ))),
+        ],
+        LateFamilySurface::RealisticShadow => vec![reference],
+        LateFamilySurface::DemoBreadthShadow => demo_hilbert_functional_clauses(position, context),
     }
-
-    vec![
-        reference,
-        Expr::Lam(Box::new(Expr::Pi(
-            Box::new(Expr::Var(2)),
-            Box::new(Expr::Univ),
-        ))),
-    ]
 }
 
 fn temporal_shell_family_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
     let Some(reference) = temporal_shell_reference_clause(position, context) else {
         return Vec::new();
     };
-    if !context.generative_late_families || position != 4 {
-        return vec![reference];
+    match context.late_family_surface {
+        LateFamilySurface::None => vec![reference],
+        LateFamilySurface::RealisticShadow if position == 4 => vec![
+            reference,
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+            ),
+        ],
+        LateFamilySurface::RealisticShadow => vec![reference],
+        LateFamilySurface::DemoBreadthShadow => demo_temporal_shell_clauses(position, context),
     }
-
-    vec![
-        reference,
-        Expr::Pi(
-            Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
-            Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
-                Box::new(Expr::Var(1)),
-            )))))),
-        ),
-    ]
 }
 
 fn late_clause_options(
@@ -580,38 +953,38 @@ fn clauses_for_position(
         });
     }
     if base_context.require_operator_bundle_clauses
-        || (base_context.generative_late_families && clause_kappa == 7)
+        || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 7)
     {
         clauses.retain(|clause| {
             supports_operator_bundle_clause_at_position(
                 position,
                 &clause.expr,
                 base_context.library_size,
-                base_context.generative_late_families,
+                base_context.late_family_surface,
             )
         });
     }
     if base_context.require_hilbert_functional_clauses
-        || (base_context.generative_late_families && clause_kappa == 9)
+        || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 9)
     {
         clauses.retain(|clause| {
             supports_hilbert_functional_clause_at_position(
                 position,
                 &clause.expr,
                 base_context.library_size,
-                base_context.generative_late_families,
+                base_context.late_family_surface,
             )
         });
     }
     if base_context.require_temporal_shell_clauses
-        || (base_context.generative_late_families && clause_kappa == 8)
+        || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 8)
     {
         clauses.retain(|clause| {
             supports_temporal_shell_clause_at_position(
                 position,
                 &clause.expr,
                 base_context.historical_anchor_ref,
-                base_context.generative_late_families,
+                base_context.late_family_surface,
             )
         });
     }
@@ -681,19 +1054,19 @@ pub(crate) fn clause_supports_structural_family_at_position(
             position,
             &clause.expr,
             context.library_size,
-            context.generative_late_families,
+            context.late_family_surface,
         ),
         StructuralFamily::HilbertFunctional => supports_hilbert_functional_clause_at_position(
             position,
             &clause.expr,
             context.library_size,
-            context.generative_late_families,
+            context.late_family_surface,
         ),
         StructuralFamily::TemporalShell => supports_temporal_shell_clause_at_position(
             position,
             &clause.expr,
             context.historical_anchor_ref,
-            context.generative_late_families,
+            context.late_family_surface,
         ),
     }
 }
@@ -1465,15 +1838,44 @@ fn supports_operator_bundle_clause_at_position(
     position: usize,
     expr: &Expr,
     library_size: u32,
-    generative_late_families: bool,
+    late_family_surface: LateFamilySurface,
 ) -> bool {
     if library_size < 2 {
         return false;
     }
 
+    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
+        let context = EnumerationContext {
+            library_size,
+            scope_size: 0,
+            max_path_dimension: 0,
+            include_trunc: false,
+            include_modal: false,
+            include_temporal: false,
+            max_expr_nodes: 0,
+            require_former_eliminator_clauses: false,
+            require_initial_hit_clauses: false,
+            require_truncation_hit_clauses: false,
+            require_higher_hit_clauses: false,
+            require_sphere_lift_clauses: false,
+            require_axiomatic_bundle_clauses: false,
+            require_modal_shell_clauses: false,
+            require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
+            historical_anchor_ref: None,
+            late_family_surface,
+        };
+        return demo_operator_bundle_clauses(position, context)
+            .into_iter()
+            .any(|candidate| candidate == *expr);
+    }
+
     let latest = library_size;
     let previous = latest - 1;
-    if generative_late_families && position == 5 {
+    if late_family_surface != LateFamilySurface::None && position == 5 {
         return matches!(
             expr,
             Expr::Lam(body)
@@ -1563,16 +1965,45 @@ fn supports_hilbert_functional_clause_at_position(
     position: usize,
     expr: &Expr,
     library_size: u32,
-    generative_late_families: bool,
+    late_family_surface: LateFamilySurface,
 ) -> bool {
     if library_size < 3 {
         return false;
     }
 
+    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
+        let context = EnumerationContext {
+            library_size,
+            scope_size: 0,
+            max_path_dimension: 0,
+            include_trunc: false,
+            include_modal: false,
+            include_temporal: false,
+            max_expr_nodes: 0,
+            require_former_eliminator_clauses: false,
+            require_initial_hit_clauses: false,
+            require_truncation_hit_clauses: false,
+            require_higher_hit_clauses: false,
+            require_sphere_lift_clauses: false,
+            require_axiomatic_bundle_clauses: false,
+            require_modal_shell_clauses: false,
+            require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
+            historical_anchor_ref: None,
+            late_family_surface,
+        };
+        return demo_hilbert_functional_clauses(position, context)
+            .into_iter()
+            .any(|candidate| candidate == *expr);
+    }
+
     let latest = library_size;
     let previous = latest - 1;
     let older = latest - 2;
-    if generative_late_families && position == 8 {
+    if late_family_surface != LateFamilySurface::None && position == 8 {
         return matches!(
             expr,
             Expr::Lam(body)
@@ -1680,13 +2111,42 @@ fn supports_temporal_shell_clause_at_position(
     position: usize,
     expr: &Expr,
     historical_anchor_ref: Option<u32>,
-    generative_late_families: bool,
+    late_family_surface: LateFamilySurface,
 ) -> bool {
     let Some(anchor) = historical_anchor_ref else {
         return false;
     };
 
-    if generative_late_families && position == 4 {
+    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
+        let context = EnumerationContext {
+            library_size: anchor.max(1),
+            scope_size: 0,
+            max_path_dimension: 0,
+            include_trunc: false,
+            include_modal: true,
+            include_temporal: true,
+            max_expr_nodes: 0,
+            require_former_eliminator_clauses: false,
+            require_initial_hit_clauses: false,
+            require_truncation_hit_clauses: false,
+            require_higher_hit_clauses: false,
+            require_sphere_lift_clauses: false,
+            require_axiomatic_bundle_clauses: false,
+            require_modal_shell_clauses: false,
+            require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
+            historical_anchor_ref: Some(anchor),
+            late_family_surface,
+        };
+        return demo_temporal_shell_clauses(position, context)
+            .into_iter()
+            .any(|candidate| candidate == *expr);
+    }
+
+    if late_family_surface != LateFamilySurface::None && position == 4 {
         return matches!(
             expr,
             Expr::Pi(domain, codomain)
@@ -1959,13 +2419,14 @@ fn contains_eliminator_expr(expr: &Expr) -> bool {
 #[cfg(test)]
 mod tests {
     use super::{
-        EnumerationContext, enumerate_exprs, enumerate_next_clauses, enumerate_telescopes,
-        supports_axiomatic_bundle_clause_at_position, supports_connection_shell_clause_at_position,
-        supports_curvature_shell_clause_at_position, supports_former_package_clause_at_position,
-        supports_higher_hit_clause_at_position, supports_hilbert_functional_clause_at_position,
-        supports_initial_hit_clause_at_position, supports_modal_shell_clause_at_position,
-        supports_operator_bundle_clause_at_position, supports_sphere_lift_clause_at_position,
-        supports_temporal_shell_clause_at_position, supports_truncation_hit_clause_at_position,
+        EnumerationContext, LateFamilySurface, enumerate_exprs, enumerate_next_clauses,
+        enumerate_telescopes, supports_axiomatic_bundle_clause_at_position,
+        supports_connection_shell_clause_at_position, supports_curvature_shell_clause_at_position,
+        supports_former_package_clause_at_position, supports_higher_hit_clause_at_position,
+        supports_hilbert_functional_clause_at_position, supports_initial_hit_clause_at_position,
+        supports_modal_shell_clause_at_position, supports_operator_bundle_clause_at_position,
+        supports_sphere_lift_clause_at_position, supports_temporal_shell_clause_at_position,
+        supports_truncation_hit_clause_at_position,
     };
     use pen_core::library::{Library, LibraryEntry};
     use pen_core::telescope::Telescope;
@@ -2012,7 +2473,7 @@ mod tests {
             require_hilbert_functional_clauses: false,
             require_temporal_shell_clauses: false,
             historical_anchor_ref: None,
-            generative_late_families: false,
+            late_family_surface: LateFamilySurface::None,
         };
 
         let first = enumerate_next_clauses(context);
@@ -2059,7 +2520,7 @@ mod tests {
             require_hilbert_functional_clauses: false,
             require_temporal_shell_clauses: false,
             historical_anchor_ref: None,
-            generative_late_families: false,
+            late_family_surface: LateFamilySurface::None,
         });
         let rendered = exprs
             .iter()
@@ -2098,7 +2559,7 @@ mod tests {
                 require_hilbert_functional_clauses: false,
                 require_temporal_shell_clauses: false,
                 historical_anchor_ref: None,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             2,
         );
@@ -2133,7 +2594,7 @@ mod tests {
             require_hilbert_functional_clauses: false,
             require_temporal_shell_clauses: false,
             historical_anchor_ref: None,
-            generative_late_families: false,
+            late_family_surface: LateFamilySurface::None,
         });
         assert!(clauses.iter().any(|clause| {
             clause.expr
@@ -2432,7 +2893,7 @@ mod tests {
                 )),
             ),
             12,
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_operator_bundle_clause_at_position(
             1,
@@ -2444,7 +2905,7 @@ mod tests {
                 Box::new(pen_core::expr::Expr::Lib(11)),
             ),
             12,
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_operator_bundle_clause_at_position(
             2,
@@ -2456,7 +2917,7 @@ mod tests {
                 )),
             ),
             12,
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_operator_bundle_clause_at_position(
             3,
@@ -2465,7 +2926,7 @@ mod tests {
                 Box::new(pen_core::expr::Expr::Var(2)),
             ))),
             12,
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_operator_bundle_clause_at_position(
             4,
@@ -2474,7 +2935,7 @@ mod tests {
                 Box::new(pen_core::expr::Expr::Lib(12)),
             ),
             12,
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_operator_bundle_clause_at_position(
             5,
@@ -2483,7 +2944,7 @@ mod tests {
                 Box::new(pen_core::expr::Expr::Var(1)),
             ))),
             12,
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_operator_bundle_clause_at_position(
             6,
@@ -2492,7 +2953,7 @@ mod tests {
                 Box::new(pen_core::expr::Expr::Var(1)),
             ),
             12,
-            false,
+            LateFamilySurface::None,
         ));
     }
 
@@ -2511,7 +2972,7 @@ mod tests {
                 Box::new(pen_core::expr::Expr::Var(1)),
             ),
             13,
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_hilbert_functional_clause_at_position(
             3,
@@ -2525,7 +2986,7 @@ mod tests {
                 )),
             ),
             13,
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_hilbert_functional_clause_at_position(
             5,
@@ -2534,7 +2995,7 @@ mod tests {
                 Box::new(pen_core::expr::Expr::Var(1)),
             ),
             13,
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_hilbert_functional_clause_at_position(
             6,
@@ -2543,7 +3004,7 @@ mod tests {
                 Box::new(pen_core::expr::Expr::Var(1)),
             ),
             13,
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_hilbert_functional_clause_at_position(
             7,
@@ -2552,7 +3013,7 @@ mod tests {
                 Box::new(pen_core::expr::Expr::Var(1)),
             ),
             13,
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_hilbert_functional_clause_at_position(
             8,
@@ -2561,7 +3022,7 @@ mod tests {
                 Box::new(pen_core::expr::Expr::Univ),
             ))),
             13,
-            false,
+            LateFamilySurface::None,
         ));
     }
 
@@ -2593,7 +3054,7 @@ mod tests {
                     .require_hilbert_functional_package,
                 require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             admissibility.min_clause_kappa,
         );
@@ -2633,7 +3094,7 @@ mod tests {
                     .require_hilbert_functional_package,
                 require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             admissibility.min_clause_kappa,
         );
@@ -2673,7 +3134,7 @@ mod tests {
                     .require_hilbert_functional_package,
                 require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             admissibility.min_clause_kappa,
         );
@@ -2713,7 +3174,7 @@ mod tests {
                     .require_hilbert_functional_package,
                 require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             admissibility.min_clause_kappa,
         );
@@ -2753,7 +3214,7 @@ mod tests {
                     .require_hilbert_functional_package,
                 require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             admissibility.min_clause_kappa,
         );
@@ -2793,7 +3254,7 @@ mod tests {
                     .require_hilbert_functional_package,
                 require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             admissibility.min_clause_kappa,
         );
@@ -2833,7 +3294,7 @@ mod tests {
                     .require_hilbert_functional_package,
                 require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             admissibility.min_clause_kappa,
         );
@@ -2892,7 +3353,7 @@ mod tests {
                     .require_hilbert_functional_package,
                 require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             admissibility.min_clause_kappa,
         );
@@ -2958,7 +3419,7 @@ mod tests {
                     .require_hilbert_functional_package,
                 require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             admissibility.max_clause_kappa,
         );
@@ -3024,7 +3485,7 @@ mod tests {
                     .require_hilbert_functional_package,
                 require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             admissibility.max_clause_kappa,
         );
@@ -3083,7 +3544,7 @@ mod tests {
                     .require_hilbert_functional_package,
                 require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             admissibility.max_clause_kappa,
         );
@@ -3120,13 +3581,13 @@ mod tests {
             0,
             &pen_core::expr::Expr::Next(Box::new(pen_core::expr::Expr::Var(1))),
             Some(10),
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
             1,
             &pen_core::expr::Expr::Eventually(Box::new(pen_core::expr::Expr::Var(1))),
             Some(10),
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
             2,
@@ -3139,7 +3600,7 @@ mod tests {
                 ))),
             ),
             Some(10),
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
             3,
@@ -3150,7 +3611,7 @@ mod tests {
                 ))),
             ))),
             Some(10),
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
             4,
@@ -3163,7 +3624,7 @@ mod tests {
                 ))),
             ),
             Some(10),
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
             5,
@@ -3176,7 +3637,7 @@ mod tests {
                 ))),
             ),
             Some(10),
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
             6,
@@ -3187,7 +3648,7 @@ mod tests {
                 Box::new(pen_core::expr::Expr::Var(2)),
             ))),
             Some(10),
-            false,
+            LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
             7,
@@ -3200,7 +3661,7 @@ mod tests {
                 ))),
             ),
             Some(10),
-            false,
+            LateFamilySurface::None,
         ));
     }
 
@@ -3232,7 +3693,7 @@ mod tests {
                     .require_hilbert_functional_package,
                 require_temporal_shell_clauses: admissibility.require_temporal_shell_package,
                 historical_anchor_ref: admissibility.historical_anchor_ref,
-                generative_late_families: false,
+                late_family_surface: LateFamilySurface::None,
             },
             admissibility.max_clause_kappa,
         );

@@ -17,6 +17,10 @@ discovery-side reserve retuning is intentionally omitted here.
 - [ ] Keep full candidate-list generation on early steps wherever it remains
       affordable.
 
+Latest stored evidence: `runs/codex-demo-rawcount` raises step `1` to `546`
+generated raw surface, up from `288`, but the explicit `2144` target is still
+far away.
+
 ## 2. Structural Scheduling
 
 - [x] Add a deterministic demo bucket key.
@@ -36,6 +40,11 @@ discovery-side reserve retuning is intentionally omitted here.
       positional filters.
 - [ ] Strengthen exact prefix bounds so widening does not explode full
       terminal work.
+
+Latest stored evidence: the landed demo-only operator/Hilbert/temporal surface
+widening plus raw generated-surface counting moves steps `10` to `15` only to
+generated counts `5/11/11/11/12/14` and exact-screened counts `2/2/1/3/3/3`,
+so this workstream remains open.
 
 ## 4. Floor Attainment
 
@@ -75,10 +84,10 @@ Default `10m` signoff targets:
 
 ## 7. Signoff Gates
 
-- [ ] `demo_breadth_shadow` preserves accepted-hash parity with guarded.
+- [x] `demo_breadth_shadow` preserves accepted-hash parity with guarded.
 - [ ] Step 1 reports `2144`.
 - [ ] Steps `1` to `4` fit the shared early `90s` budget honestly.
-- [ ] The default `10m` profile completes within `600s` on this computer.
+- [x] The default `10m` profile completes within `600s` on this computer.
 - [ ] Late steps show large honest breadth with moderate full evaluations.
-- [ ] No silent guarded or replay fallback is used when the demo lane misses
+- [x] No silent guarded or replay fallback is used when the demo lane misses
       budget or certification.

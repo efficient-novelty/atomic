@@ -12,6 +12,7 @@ pub enum AdmissibilityMode {
     Guarded,
     RelaxedShadow,
     RealisticShadow,
+    DemoBreadthShadow,
 }
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
@@ -692,7 +693,7 @@ fn can_relax_focus_family(mode: AdmissibilityMode, family: StructuralFamily) -> 
                 | StructuralFamily::ConnectionShell
                 | StructuralFamily::CurvatureShell
         ),
-        AdmissibilityMode::RealisticShadow => matches!(
+        AdmissibilityMode::RealisticShadow | AdmissibilityMode::DemoBreadthShadow => matches!(
             family,
             StructuralFamily::AxiomaticBundle
                 | StructuralFamily::ModalShell
@@ -722,7 +723,9 @@ fn clause_band_for_mode(
         Some(StructuralFamily::ConnectionShell)
             if matches!(
                 mode,
-                AdmissibilityMode::RelaxedShadow | AdmissibilityMode::RealisticShadow
+                AdmissibilityMode::RelaxedShadow
+                    | AdmissibilityMode::RealisticShadow
+                    | AdmissibilityMode::DemoBreadthShadow
             ) =>
         {
             (5, 6)
@@ -772,7 +775,9 @@ fn max_expr_nodes_for_mode(
 
     match (mode, focus_family) {
         (
-            AdmissibilityMode::RelaxedShadow | AdmissibilityMode::RealisticShadow,
+            AdmissibilityMode::RelaxedShadow
+            | AdmissibilityMode::RealisticShadow
+            | AdmissibilityMode::DemoBreadthShadow,
             Some(StructuralFamily::AxiomaticBundle),
         ) => focused_cap.max(4),
         _ => focused_cap,
@@ -840,7 +845,9 @@ fn historical_anchor_ref_for_focus(
 ) -> Option<u32> {
     match (mode, focus_family) {
         (
-            AdmissibilityMode::RelaxedShadow | AdmissibilityMode::RealisticShadow,
+            AdmissibilityMode::RelaxedShadow
+            | AdmissibilityMode::RealisticShadow
+            | AdmissibilityMode::DemoBreadthShadow,
             Some(StructuralFamily::ModalShell),
         ) => loop_anchor,
         (_, Some(StructuralFamily::AxiomaticBundle)) => loop_anchor,

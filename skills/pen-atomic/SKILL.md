@@ -238,6 +238,10 @@ On the demo-lane side:
   admissible, exact-screened, pruned, fully scored, and best-overshoot stats,
   and use those bucket stats plus retention-class bridge potential and low-
   redundancy cues to order proof-close work without changing acceptance truth
+- demo discovery now also widens the operator-bundle, Hilbert-functional, and
+  temporal-shell late-family clause surfaces only for `demo_breadth_shadow`,
+  while still mapping the demo profile back to realistic-shadow admissibility
+  so guarded acceptance parity stays unchanged
 - demo materialize can now also yield into `ProofClose` with the explicit
   `materialize_reserve_handoff` reason once an incumbent exists and the
   remaining exact surface has already flipped into closure-first reserve
@@ -247,6 +251,14 @@ On the demo-lane side:
   machine visible even when scout already adjusted budget at the handoff
 - `pen-cli` debug output, `--narrative`, and `scripts/compare_runs.py` now
   also surface compact demo bucket summaries from stored step artifacts
+- demo generated-surface reporting now also counts raw root prefixes, raw
+  child prefixes, forced single-continuation collapses, and raw terminal
+  completions instead of using
+  `max(prefixes_created, enumerated_candidates)`, and fresh
+  `runs/codex-demo-rawcount` artifacts now show step-1
+  `generated_raw_prefixes = 546` plus late-step generated counts
+  `5/11/11/11/12/14`, so the lane is more honest about breadth while still
+  missing the intended floors
 - the current demo gap is not "make the lane look broader"; it is meeting the
   surfaced early and late breadth floors honestly, then turning the landed
   spill/reserve feedback plus the landed repeated discovery-side reserve

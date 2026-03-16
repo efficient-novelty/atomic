@@ -6,7 +6,8 @@ use crate::branch_bound::{AcceptRank, better_rank};
 use crate::config::{DemoConfig, RuntimeConfig, SearchProfile};
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{
-    ClauseCatalog, EnumerationContext, build_clause_catalog, enumerate_telescopes,
+    ClauseCatalog, EnumerationContext, LateFamilySurface, build_clause_catalog,
+    enumerate_telescopes,
 };
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
@@ -498,6 +499,7 @@ struct RealisticShadowDiscovery {
     prefix_legality_cache: PrefixLegalityCache,
     demo_bucket_stats: BTreeMap<DemoBucketKey, DemoBucketStats>,
     candidates: Vec<ExpandedCandidate>,
+    raw_generated_surface: usize,
     stop_reason: Option<DemoBreadthHarvestExitReason>,
     terminal_rank_incumbent: Option<AcceptRank>,
     terminal_rank_prunes: usize,
@@ -1678,6 +1680,7 @@ fn admissibility_mode_name(mode: AdmissibilityMode) -> &'static str {
         AdmissibilityMode::Guarded => "guarded",
         AdmissibilityMode::RelaxedShadow => "relaxed_shadow",
         AdmissibilityMode::RealisticShadow => "realistic_shadow",
+        AdmissibilityMode::DemoBreadthShadow => "demo_breadth_shadow",
     }
 }
 
@@ -1826,8 +1829,7 @@ fn sync_demo_proof_close_runtime(
     total_groups: usize,
     closed_groups: usize,
     step_start: Instant,
-    prefixes_created: usize,
-    enumerated_candidates: usize,
+    generated_raw_surface: u64,
     prefix_states_exact_pruned: usize,
     full_telescopes_evaluated: usize,
 ) {
@@ -1843,7 +1845,7 @@ fn sync_demo_proof_close_runtime(
     if let Some(observer) = demo_narrative.as_mut() {
         let progress = narrative_progress_snapshot(
             current_elapsed,
-            generated_surface_from_counts(prefixes_created, enumerated_candidates),
+            generated_raw_surface,
             exact_screened_surface_from_counts(
                 prefix_states_exact_pruned,
                 full_telescopes_evaluated,
@@ -1852,7 +1854,7 @@ fn sync_demo_proof_close_runtime(
         );
         let detail = demo_proof_close_status_detail(
             budget,
-            generated_surface_from_counts(prefixes_created, enumerated_candidates),
+            generated_raw_surface,
             exact_screened_surface_from_counts(
                 prefix_states_exact_pruned,
                 full_telescopes_evaluated,
@@ -2002,8 +2004,7 @@ fn begin_demo_proof_close(
     entry_reason: DemoProofCloseEntryReason,
     remaining_groups: usize,
     step_start: Instant,
-    prefixes_created: usize,
-    enumerated_candidates: usize,
+    generated_raw_surface: u64,
     prefix_states_exact_pruned: usize,
     full_telescopes_evaluated: usize,
 ) -> u64 {
@@ -2020,7 +2021,7 @@ fn begin_demo_proof_close(
     if let Some(observer) = demo_narrative.as_mut() {
         let progress = narrative_progress_snapshot(
             proof_close_started_elapsed,
-            generated_surface_from_counts(prefixes_created, enumerated_candidates),
+            generated_raw_surface,
             exact_screened_surface_from_counts(
                 prefix_states_exact_pruned,
                 full_telescopes_evaluated,
@@ -2029,7 +2030,7 @@ fn begin_demo_proof_close(
         );
         let detail = demo_proof_close_status_detail(
             budget,
-            generated_surface_from_counts(prefixes_created, enumerated_candidates),
+            generated_raw_surface,
             exact_screened_surface_from_counts(
                 prefix_states_exact_pruned,
                 full_telescopes_evaluated,
@@ -2060,7 +2061,7 @@ fn discovery_progress_snapshot(
 ) -> NarrativeProgressSnapshot {
     narrative_progress_snapshot(
         elapsed_millis(step_start.elapsed()),
-        generated_surface_from_counts(discovery.prefixes_created, discovery.enumerated_candidates),
+        discovery.raw_generated_surface as u64,
         discovery_exact_screened_surface(discovery),
         discovery.candidates.len() as u64,
     )
@@ -2076,17 +2077,11 @@ fn discovery_exact_screened_surface(discovery: &RealisticShadowDiscovery) -> u64
 fn discovery_scout_detail(discovery: &RealisticShadowDiscovery, elapsed_millis: u64) -> String {
     format!(
         "generated_per_sec={} admissibility_per_sec={} exact_bound_per_sec={} full_eval_per_sec={} generated={} admissibility_checks={} exact_bound_checks={} full_evals={}",
-        per_second(
-            generated_surface_from_counts(
-                discovery.prefixes_created,
-                discovery.enumerated_candidates
-            ),
-            elapsed_millis
-        ),
+        per_second(discovery.raw_generated_surface as u64, elapsed_millis),
         per_second(discovery.well_formed_candidates as u64, elapsed_millis),
         per_second(discovery.partial_prefix_bound_checks as u64, elapsed_millis),
         per_second(discovery.candidates.len() as u64, elapsed_millis),
-        generated_surface_from_counts(discovery.prefixes_created, discovery.enumerated_candidates),
+        discovery.raw_generated_surface,
         discovery.well_formed_candidates,
         discovery.partial_prefix_bound_checks,
         discovery.candidates.len()
@@ -2097,8 +2092,7 @@ fn discovery_harvest_detail(
     budget: DemoStepBudget,
     discovery: &RealisticShadowDiscovery,
 ) -> String {
-    let generated_surface =
-        generated_surface_from_counts(discovery.prefixes_created, discovery.enumerated_candidates);
+    let generated_surface = discovery.raw_generated_surface as u64;
     let exact_screened_surface = discovery_exact_screened_surface(discovery);
     format!(
         "{} admissibility_rejections={} partial_prefix_prunes={} terminal_prefix_bar_prunes={}",
@@ -2312,6 +2306,7 @@ fn search_next_step(
     let mut prefix_cache = PrefixCache::default();
     let mut prefixes_created = 0usize;
     let mut prefix_states_explored = 0usize;
+    let generated_raw_surface;
     let mut enumerated_candidates = 0usize;
     let mut well_formed_candidates = 0usize;
     let mut malformed_rejections = 0usize;
@@ -2358,7 +2353,10 @@ fn search_next_step(
         .collect::<Vec<_>>();
     let mut demo_bucket_stats = BTreeMap::new();
 
-    if admissibility_mode == AdmissibilityMode::RealisticShadow {
+    if matches!(
+        admissibility_mode,
+        AdmissibilityMode::RealisticShadow | AdmissibilityMode::DemoBreadthShadow
+    ) {
         let discovery = discover_realistic_shadow_candidates(
             step_index,
             library,
@@ -2390,6 +2388,7 @@ fn search_next_step(
         demo_bucket_stats = discovery.demo_bucket_stats;
         prefixes_created = discovery.prefixes_created;
         prefix_states_explored = discovery.prefix_states_explored;
+        generated_raw_surface = discovery.raw_generated_surface;
         enumerated_candidates = discovery.enumerated_candidates;
         well_formed_candidates = discovery.well_formed_candidates;
         malformed_rejections = discovery.malformed_rejections;
@@ -2456,29 +2455,34 @@ fn search_next_step(
                 candidates.push(candidate);
             }
         }
+        generated_raw_surface = usize::try_from(generated_surface_from_counts(
+            prefixes_created,
+            enumerated_candidates,
+        ))
+        .expect("generated surface exceeded usize");
         if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
             observer.close_discovery(
                 narrative_progress_snapshot(
                     elapsed_millis(step_start.elapsed()),
-                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                    generated_raw_surface as u64,
                     exact_screened_surface_from_counts(0, candidates.len()),
                     candidates.len() as u64,
                 ),
                 format!(
                     "generated_per_sec={} admissibility_per_sec={} exact_bound_per_sec=0 full_eval_per_sec={} generated={} admissibility_checks={} exact_bound_checks=0 full_evals={}",
                     per_second(
-                        generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                        generated_raw_surface as u64,
                         elapsed_millis(step_start.elapsed())
                     ),
                     per_second(well_formed_candidates as u64, elapsed_millis(step_start.elapsed())),
                     per_second(candidates.len() as u64, elapsed_millis(step_start.elapsed())),
-                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                    generated_raw_surface,
                     well_formed_candidates,
                     candidates.len()
                 ),
                 demo_surface_status_detail(
                     budget,
-                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                    generated_raw_surface as u64,
                     exact_screened_surface_from_counts(0, candidates.len()),
                     candidates.len() as u64,
                 ),
@@ -2496,7 +2500,10 @@ fn search_next_step(
     let candidate_discovery_wall_clock_millis = elapsed_millis(discovery_start.elapsed());
 
     let prefix_frontier_planning_start = Instant::now();
-    let prefix_frontier = if admissibility_mode == AdmissibilityMode::RealisticShadow {
+    let prefix_frontier = if matches!(
+        admissibility_mode,
+        AdmissibilityMode::RealisticShadow | AdmissibilityMode::DemoBreadthShadow
+    ) {
         build_prefix_frontier_plan(
             prefix_states_explored,
             step_index,
@@ -2519,13 +2526,13 @@ fn search_next_step(
         observer.enter_materialize(
             narrative_progress_snapshot(
                 elapsed_millis(step_start.elapsed()),
-                generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                generated_raw_surface as u64,
                 exact_screened_surface_from_counts(prefix_states_exact_pruned, candidates.len()),
                 candidates.len() as u64,
             ),
             demo_materialize_status_detail(
                 budget,
-                generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                generated_raw_surface as u64,
                 exact_screened_surface_from_counts(prefix_states_exact_pruned, candidates.len()),
                 candidates.len() as u64,
                 retained_prefix_groups,
@@ -2541,7 +2548,10 @@ fn search_next_step(
     let mut demo_proof_close_started_elapsed_millis = None::<u64>;
     let mut demo_proof_close_total_groups = 0usize;
     let mut demo_proof_close_closed_groups = 0usize;
-    if admissibility_mode == AdmissibilityMode::RealisticShadow {
+    if matches!(
+        admissibility_mode,
+        AdmissibilityMode::RealisticShadow | AdmissibilityMode::DemoBreadthShadow
+    ) {
         let mut incumbent_terminal_rank = None;
         let mut pending_group_signatures = prefix_frontier.retained_prefix_signatures.clone();
         while !pending_group_signatures.is_empty() {
@@ -2562,8 +2572,7 @@ fn search_next_step(
                             DemoProofCloseEntryReason::MaterializeReserveHandoff,
                             remaining_groups,
                             step_start,
-                            prefixes_created,
-                            enumerated_candidates,
+                            generated_raw_surface as u64,
                             prefix_states_exact_pruned,
                             candidates.len(),
                         ));
@@ -2607,8 +2616,7 @@ fn search_next_step(
                             demo_proof_close_total_groups,
                             demo_proof_close_closed_groups,
                             step_start,
-                            prefixes_created,
-                            enumerated_candidates,
+                            generated_raw_surface as u64,
                             prefix_states_exact_pruned,
                             candidates.len(),
                         );
@@ -2639,8 +2647,7 @@ fn search_next_step(
                                 demo_proof_close_total_groups,
                                 demo_proof_close_closed_groups,
                                 step_start,
-                                prefixes_created,
-                                enumerated_candidates,
+                                generated_raw_surface as u64,
                                 prefix_states_exact_pruned,
                                 candidates.len(),
                             );
@@ -2675,8 +2682,7 @@ fn search_next_step(
                                         DemoProofCloseEntryReason::SoftCapHandoff,
                                         remaining_groups,
                                         step_start,
-                                        prefixes_created,
-                                        enumerated_candidates,
+                                        generated_raw_surface as u64,
                                         prefix_states_exact_pruned,
                                         candidates.len(),
                                     )
@@ -2762,8 +2768,7 @@ fn search_next_step(
                         demo_proof_close_total_groups,
                         demo_proof_close_closed_groups,
                         step_start,
-                        prefixes_created,
-                        enumerated_candidates,
+                        generated_raw_surface as u64,
                         prefix_states_exact_pruned,
                         candidates.len(),
                     );
@@ -2787,8 +2792,7 @@ fn search_next_step(
                 proof_close_entry_reason,
                 0,
                 step_start,
-                prefixes_created,
-                enumerated_candidates,
+                generated_raw_surface as u64,
                 prefix_states_exact_pruned,
                 candidates.len(),
             );
@@ -2868,7 +2872,7 @@ fn search_next_step(
         observer.enter_seal(
             narrative_progress_snapshot(
                 elapsed_millis(step_start.elapsed()),
-                generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                generated_raw_surface as u64,
                 exact_screened_surface_from_counts(
                     prefix_states_exact_pruned,
                     full_telescopes_evaluated,
@@ -2881,7 +2885,7 @@ fn search_next_step(
                 acceptance.near_misses.len(),
                 demo_surface_status_detail(
                     budget,
-                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                    generated_raw_surface as u64,
                     exact_screened_surface_from_counts(
                         prefix_states_exact_pruned,
                         full_telescopes_evaluated,
@@ -2909,6 +2913,7 @@ fn search_next_step(
         objective_bar,
         admissibility,
         admissibility_diagnostics,
+        generated_raw_surface,
         prefixes_created,
         prefix_frontier.explored,
         prefix_cache.stats().merged_by_signature,
@@ -2941,7 +2946,10 @@ fn search_next_step(
         prefix_frontier.frontier.hot.len(),
         prefix_frontier.frontier.cold.len(),
         retention_policy,
-        if admissibility_mode == AdmissibilityMode::RealisticShadow {
+        if matches!(
+            admissibility_mode,
+            AdmissibilityMode::RealisticShadow | AdmissibilityMode::DemoBreadthShadow
+        ) {
             prefix_frontier.pressure
         } else {
             frontier_retention.pressure
@@ -2977,6 +2985,7 @@ fn build_step_result(
     objective_bar: Rational,
     admissibility: StrictAdmissibility,
     admissibility_diagnostics: AdmissibilityDiagnostics,
+    generated_raw_surface: usize,
     prefixes_created: usize,
     prefix_states_explored: usize,
     prefix_states_merged_by_signature: usize,
@@ -3041,6 +3050,7 @@ fn build_step_result(
         .ok_or_else(|| anyhow::anyhow!("accepted candidate vanished during selection"))?;
     let demo_funnel = build_demo_funnel_stats(
         objective_bar,
+        generated_raw_surface,
         prefixes_created,
         enumerated_candidates,
         well_formed_candidates,
@@ -3127,6 +3137,7 @@ fn build_step_result(
 
 fn build_demo_funnel_stats(
     objective_bar: Rational,
+    generated_raw_surface: usize,
     prefixes_created: usize,
     enumerated_candidates: usize,
     well_formed_candidates: usize,
@@ -3140,11 +3151,7 @@ fn build_demo_funnel_stats(
     winner_overshoot: Rational,
 ) -> DemoFunnelStats {
     DemoFunnelStats {
-        generated_raw_prefixes: usize::try_from(generated_surface_from_counts(
-            prefixes_created,
-            enumerated_candidates,
-        ))
-        .expect("generated surface exceeded usize"),
+        generated_raw_prefixes: generated_raw_surface,
         // Prefix creation is already signature-gated on the live path, so the
         // currently honest canonical-prefix surface is the stored unique
         // created-prefix count for prefix search and the enumerated count for
@@ -3267,7 +3274,10 @@ fn discover_realistic_shadow_candidates(
     demo_narrative: &mut Option<DemoNarrativeRuntime>,
 ) -> Result<RealisticShadowDiscovery> {
     let mut discovery = RealisticShadowDiscovery::default();
-    let enumeration_context = EnumerationContext::from_admissibility(library, admissibility);
+    let mut enumeration_context = EnumerationContext::from_admissibility(library, admissibility);
+    if demo_step_budget.is_some() {
+        enumeration_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+    }
 
     for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
         if demo_discovery_budget_exhausted(
@@ -3280,6 +3290,7 @@ fn discover_realistic_shadow_candidates(
         }
         if clause_kappa <= 1 {
             let telescopes = enumerate_telescopes(library, enumeration_context, clause_kappa);
+            discovery.raw_generated_surface += telescopes.len();
             discovery.enumerated_candidates += telescopes.len();
             for telescope in telescopes {
                 if demo_discovery_budget_exhausted(
@@ -3322,6 +3333,7 @@ fn discover_realistic_shadow_candidates(
             ) {
                 break;
             }
+            discovery.raw_generated_surface += 1;
             let prefix_telescope = Telescope::new(vec![clause.clone()]);
             let signature = PrefixSignature::new(step_index, library, &prefix_telescope);
             if !discovery.prefix_legality_cache.insert_root(
@@ -3553,6 +3565,7 @@ fn discover_realistic_shadow_candidates(
                 ) {
                     break;
                 }
+                discovery.raw_generated_surface += 1;
                 let mut child_prefix = work_item.prefix_telescope.clone();
                 child_prefix.clauses.push(clause.clone());
                 let child_signature = PrefixSignature::new(step_index, library, &child_prefix);
@@ -3698,6 +3711,7 @@ fn prepare_exact_two_step_terminal_surface(
 
     let mut terminal_prefixes = Vec::new();
     for clause in &work_item.next_clauses {
+        discovery.raw_generated_surface += 1;
         let mut child_prefix = work_item.prefix_telescope.clone();
         child_prefix.clauses.push(clause.clone());
         let child_signature = PrefixSignature::new(step_index, library, &child_prefix);
@@ -3899,6 +3913,7 @@ fn collapse_single_continuation_chain(
         work_item,
     )?;
     discovery.prefixes_created += collapsed_signatures.len();
+    discovery.raw_generated_surface += collapsed_signatures.len();
     Some(work_item)
 }
 
@@ -4424,6 +4439,7 @@ fn materialize_terminal_prefix_group(
         evaluations, bound, ..
     } = summary;
     let generated_terminal_candidates = evaluations.len();
+    discovery.raw_generated_surface += generated_terminal_candidates;
     let mut retained_telescopes = Vec::new();
 
     for evaluation in evaluations {
