@@ -213,9 +213,12 @@ On the demo-lane side:
 - demo runs now persist per-step narratives, event streams, and phase-level
   full-evaluation accounting plus `breadth_harvest_exit_reason`,
   `proof_close_entry_reason`, and `proof_close_overrun_reason`
-- the current demo gap is not "make the lane look broader"; it is adding the
-  missing funnel/closure counters, compare-tool consumption of the stored demo
-  phase evidence, and stronger proof-close reserve/closure accounting
+- demo runs now also persist live proof-close reserve and closure accounting
+  plus proof-close milestone and reserve-exhaustion narrative pulses from the
+  search loop itself
+- the current demo gap is not "make the lane look broader"; it is meeting the
+  surfaced early and late breadth floors honestly and letting the newly stored
+  proof-close reserve/closure evidence steer scheduling more directly
 
 Start with the current architecture doc before diving into donor material:
 
@@ -400,8 +403,10 @@ Focus on:
   streams rather than reconstructing it from debug text
 - using the new phase reason fields
   `breadth_harvest_exit_reason`, `proof_close_entry_reason`, and
-  `proof_close_overrun_reason` as current stored truth, while remembering that
-  funnel/closure counters and compare-tool parity are still the next gap
+  `proof_close_overrun_reason` plus the new proof-close reserve and closure
+  fields as current stored truth, while remembering that the next gap is
+  broader real widening and stronger closure-aware scheduling rather than
+  "add counters for the first time"
 
 ### If you are working on reporting or evidence
 
@@ -492,7 +497,7 @@ Reject designs that:
   timing/memory evidence to retune late-step order.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
-  governor, the stronger Agda contract, and the demo lane's missing
-  funnel/closure counters plus compare-tool parity.
+  governor, the stronger Agda contract, and the demo lane's still-missing
+  honest floor hits plus stronger closure-aware widening.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) for current
   behavior, then use the theory and donor references only as needed.

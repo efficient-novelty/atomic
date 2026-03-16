@@ -1147,6 +1147,18 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
                     .map(|reason| reason.as_str())
                     .unwrap_or("none")
             ));
+            lines.push(format!(
+                "  demo proof_close: reserve_millis={} elapsed_millis={} remaining_millis={} reserve_overrun_millis={} reserve_exhausted={} groups_closed={} groups_total={} groups_remaining={} closure_percent={}",
+                step.search_stats.demo_phase.proof_close_reserved_millis,
+                step.search_stats.demo_phase.proof_close_elapsed_millis,
+                step.search_stats.demo_phase.proof_close_remaining_millis,
+                step.search_stats.demo_phase.proof_close_reserve_overrun_millis,
+                step.search_stats.demo_phase.proof_close_reserve_exhausted,
+                step.search_stats.demo_phase.proof_close_frontier_groups_closed,
+                step.search_stats.demo_phase.proof_close_frontier_total_groups,
+                step.search_stats.demo_phase.proof_close_frontier_groups_remaining,
+                step.search_stats.demo_phase.proof_close_closure_percent
+            ));
         }
         if step.search_stats.prefix_states_explored > 0 {
             lines.push(format!(

@@ -102,6 +102,7 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
             closure.closure_percent
         ),
         demo_phase_line(step),
+        proof_close_line(step),
         format!(
             "timing       discovery={} frontier_plan={} selection={}",
             format_millis(
@@ -411,6 +412,22 @@ fn demo_phase_line(step: &StepReport) -> String {
     )
 }
 
+fn proof_close_line(step: &StepReport) -> String {
+    let phase = &step.search_stats.demo_phase;
+    format!(
+        "proof_close  reserve={} elapsed={} remaining={} reserve_overrun={} exhausted={} groups_closed={}/{} groups_remaining={} closure={}%",
+        format_millis(phase.proof_close_reserved_millis),
+        format_millis(phase.proof_close_elapsed_millis),
+        format_millis(phase.proof_close_remaining_millis),
+        format_millis(phase.proof_close_reserve_overrun_millis),
+        phase.proof_close_reserve_exhausted,
+        phase.proof_close_frontier_groups_closed,
+        phase.proof_close_frontier_total_groups,
+        phase.proof_close_frontier_groups_remaining,
+        phase.proof_close_closure_percent
+    )
+}
+
 fn time_line(step_index: u32, elapsed_millis: u64, demo: &DemoConfig) -> String {
     if step_index <= 4 {
         return format!(
@@ -517,6 +534,7 @@ mod tests {
         assert!(text.contains("closure"));
         assert!(text.contains("demo_funnel"));
         assert!(text.contains("phase_eval"));
+        assert!(text.contains("proof_close  reserve="));
         assert!(text.contains("phase_change"));
         assert!(text.contains("scout"));
         assert!(text.contains("retained candidates"));

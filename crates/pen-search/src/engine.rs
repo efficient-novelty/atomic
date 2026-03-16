@@ -204,6 +204,24 @@ pub struct DemoPhaseStats {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub proof_close_entry_reason: Option<DemoProofCloseEntryReason>,
     #[serde(default)]
+    pub proof_close_reserved_millis: u64,
+    #[serde(default)]
+    pub proof_close_elapsed_millis: u64,
+    #[serde(default)]
+    pub proof_close_remaining_millis: u64,
+    #[serde(default)]
+    pub proof_close_reserve_overrun_millis: u64,
+    #[serde(default)]
+    pub proof_close_reserve_exhausted: bool,
+    #[serde(default)]
+    pub proof_close_frontier_total_groups: usize,
+    #[serde(default)]
+    pub proof_close_frontier_groups_closed: usize,
+    #[serde(default)]
+    pub proof_close_frontier_groups_remaining: usize,
+    #[serde(default)]
+    pub proof_close_closure_percent: u16,
+    #[serde(default)]
     pub proof_close_full_evals: usize,
     #[serde(default)]
     pub proof_close_overrun_full_evals: usize,
@@ -701,6 +719,8 @@ struct DemoNarrativeRuntime {
     recorder: NarrativeRecorder,
     scout_sample_recorded: bool,
     breadth_harvest_entered: bool,
+    proof_close_last_reported_closure_percent: u16,
+    proof_close_reserve_exhausted_reported: bool,
 }
 
 impl DemoNarrativeRuntime {
@@ -751,6 +771,8 @@ impl DemoNarrativeRuntime {
             recorder,
             scout_sample_recorded: false,
             breadth_harvest_entered: false,
+            proof_close_last_reported_closure_percent: 0,
+            proof_close_reserve_exhausted_reported: false,
         }
     }
 
@@ -862,6 +884,56 @@ impl DemoNarrativeRuntime {
             Some(detail),
             Some(progress),
         );
+    }
+
+    fn maybe_record_proof_close_progress(
+        &mut self,
+        progress: NarrativeProgressSnapshot,
+        detail: String,
+        phase: &DemoPhaseStats,
+    ) {
+        if phase.proof_close_frontier_total_groups > 0 {
+            let milestone = if phase.proof_close_closure_percent >= 100
+                && self.proof_close_last_reported_closure_percent < 100
+            {
+                Some(100)
+            } else if phase.proof_close_closure_percent >= 75
+                && self.proof_close_last_reported_closure_percent < 75
+            {
+                Some(75)
+            } else if phase.proof_close_closure_percent >= 50
+                && self.proof_close_last_reported_closure_percent < 50
+            {
+                Some(50)
+            } else if phase.proof_close_closure_percent >= 25
+                && self.proof_close_last_reported_closure_percent < 25
+            {
+                Some(25)
+            } else {
+                None
+            };
+            if let Some(milestone) = milestone {
+                self.recorder.push(
+                    NarrativeEventKind::BudgetPulse,
+                    Some(StepPhase::ProofClose),
+                    format!("proof_close certified {milestone}% of the retained frontier groups"),
+                    Some(detail.clone()),
+                    Some(progress.clone()),
+                );
+                self.proof_close_last_reported_closure_percent = milestone;
+            }
+        }
+        if phase.proof_close_reserve_exhausted && !self.proof_close_reserve_exhausted_reported {
+            self.recorder.push(
+                NarrativeEventKind::BudgetPulse,
+                Some(StepPhase::ProofClose),
+                "proof_close exhausted the reserved certification slice and is overrunning to finish exact closure"
+                    .to_owned(),
+                Some(detail),
+                Some(progress),
+            );
+            self.proof_close_reserve_exhausted_reported = true;
+        }
     }
 
     fn enter_seal(
@@ -1020,6 +1092,90 @@ fn cap_status(current: u64, limit: Option<u64>) -> String {
     }
 }
 
+fn demo_proof_close_closure_percent(closed_groups: usize, total_groups: usize) -> u16 {
+    if total_groups == 0 {
+        return 100;
+    }
+
+    u16::try_from(((closed_groups.min(total_groups) as u128) * 100) / (total_groups as u128))
+        .expect("proof-close closure percent exceeded u16")
+}
+
+fn sync_demo_proof_close_accounting(
+    phase: &mut DemoPhaseStats,
+    budget: DemoStepBudget,
+    proof_close_started_elapsed_millis: u64,
+    current_elapsed_millis: u64,
+    total_groups: usize,
+    closed_groups: usize,
+) {
+    let elapsed_millis = current_elapsed_millis.saturating_sub(proof_close_started_elapsed_millis);
+    let closed_groups = closed_groups.min(total_groups);
+    let remaining_groups = total_groups.saturating_sub(closed_groups);
+
+    phase.proof_close_reserved_millis = budget.proof_close_reserve_millis;
+    phase.proof_close_elapsed_millis = elapsed_millis;
+    phase.proof_close_remaining_millis = budget
+        .proof_close_reserve_millis
+        .saturating_sub(elapsed_millis);
+    phase.proof_close_reserve_overrun_millis =
+        elapsed_millis.saturating_sub(budget.proof_close_reserve_millis);
+    phase.proof_close_reserve_exhausted = phase.proof_close_reserve_exhausted
+        || (remaining_groups > 0 && elapsed_millis >= budget.proof_close_reserve_millis);
+    phase.proof_close_frontier_total_groups = total_groups;
+    phase.proof_close_frontier_groups_closed = closed_groups;
+    phase.proof_close_frontier_groups_remaining = remaining_groups;
+    phase.proof_close_closure_percent =
+        demo_proof_close_closure_percent(closed_groups, total_groups);
+}
+
+fn sync_demo_proof_close_runtime(
+    phase: &mut DemoPhaseStats,
+    demo_narrative: &mut Option<DemoNarrativeRuntime>,
+    budget: DemoStepBudget,
+    proof_close_started_elapsed_millis: u64,
+    total_groups: usize,
+    closed_groups: usize,
+    step_start: Instant,
+    prefixes_created: usize,
+    enumerated_candidates: usize,
+    prefix_states_exact_pruned: usize,
+    full_telescopes_evaluated: usize,
+) {
+    let current_elapsed = elapsed_millis(step_start.elapsed());
+    sync_demo_proof_close_accounting(
+        phase,
+        budget,
+        proof_close_started_elapsed_millis,
+        current_elapsed,
+        total_groups,
+        closed_groups,
+    );
+    if let Some(observer) = demo_narrative.as_mut() {
+        let progress = narrative_progress_snapshot(
+            current_elapsed,
+            generated_surface_from_counts(prefixes_created, enumerated_candidates),
+            exact_screened_surface_from_counts(
+                prefix_states_exact_pruned,
+                full_telescopes_evaluated,
+            ),
+            full_telescopes_evaluated as u64,
+        );
+        let detail = demo_proof_close_status_detail(
+            budget,
+            generated_surface_from_counts(prefixes_created, enumerated_candidates),
+            exact_screened_surface_from_counts(
+                prefix_states_exact_pruned,
+                full_telescopes_evaluated,
+            ),
+            full_telescopes_evaluated as u64,
+            phase.proof_close_frontier_groups_remaining,
+            phase,
+        );
+        observer.maybe_record_proof_close_progress(progress, detail, phase);
+    }
+}
+
 fn demo_surface_status_detail(
     budget: DemoStepBudget,
     generated_surface: u64,
@@ -1052,7 +1208,7 @@ fn demo_phase_status_detail(phase: &DemoPhaseStats) -> String {
         .map(|reason| reason.as_str())
         .unwrap_or("none");
     format!(
-        "materialize_full_evals={} proof_close_full_evals={} proof_close_overrun={} soft_cap={} cap_triggered={} breadth_exit={} proof_close_reason={} proof_close_overrun_reason={}",
+        "materialize_full_evals={} proof_close_full_evals={} proof_close_overrun={} soft_cap={} cap_triggered={} breadth_exit={} proof_close_reason={} proof_close_overrun_reason={} proof_close_reserve={} proof_close_elapsed={} proof_close_remaining={} proof_close_reserve_overrun={} proof_close_reserve_exhausted={} proof_close_groups_closed={}/{} proof_close_groups_remaining={} proof_close_closure={}%",
         phase.materialize_full_evals,
         phase.proof_close_full_evals,
         phase.proof_close_overrun_full_evals,
@@ -1060,7 +1216,16 @@ fn demo_phase_status_detail(phase: &DemoPhaseStats) -> String {
         phase.materialize_soft_cap_triggered,
         breadth_exit,
         proof_close_reason,
-        proof_close_overrun_reason
+        proof_close_overrun_reason,
+        format_duration_millis(phase.proof_close_reserved_millis),
+        format_duration_millis(phase.proof_close_elapsed_millis),
+        format_duration_millis(phase.proof_close_remaining_millis),
+        format_duration_millis(phase.proof_close_reserve_overrun_millis),
+        phase.proof_close_reserve_exhausted,
+        phase.proof_close_frontier_groups_closed,
+        phase.proof_close_frontier_total_groups,
+        phase.proof_close_frontier_groups_remaining,
+        phase.proof_close_closure_percent
     )
 }
 
@@ -1126,8 +1291,7 @@ fn demo_proof_close_status_detail(
     phase: &DemoPhaseStats,
 ) -> String {
     format!(
-        "proof_close_reserve={} remaining_retained_prefix_groups={} {} {}",
-        format_duration_millis(budget.proof_close_reserve_millis),
+        "remaining_retained_prefix_groups={} {} {}",
         remaining_retained_prefix_groups,
         demo_surface_status_detail(
             budget,
@@ -1427,6 +1591,12 @@ fn search_next_step(
         full_eval_soft_cap: demo_step_budget.and_then(|budget| budget.full_eval_soft_cap),
         generated_floor: demo_step_budget.and_then(|budget| budget.generated_floor),
         exact_screened_floor: demo_step_budget.and_then(|budget| budget.exact_screened_floor),
+        proof_close_reserved_millis: demo_step_budget
+            .map(|budget| budget.proof_close_reserve_millis)
+            .unwrap_or(0),
+        proof_close_remaining_millis: demo_step_budget
+            .map(|budget| budget.proof_close_reserve_millis)
+            .unwrap_or(0),
         ..DemoPhaseStats::default()
     };
     let discovery_start = Instant::now();
@@ -1601,6 +1771,9 @@ fn search_next_step(
     }
 
     let mut demo_proof_close_entered = false;
+    let mut demo_proof_close_started_elapsed_millis = None::<u64>;
+    let mut demo_proof_close_total_groups = 0usize;
+    let mut demo_proof_close_closed_groups = 0usize;
     if admissibility_mode == AdmissibilityMode::RealisticShadow {
         let mut incumbent_terminal_rank = None;
         for (group_index, signature) in prefix_frontier
@@ -1609,6 +1782,26 @@ fn search_next_step(
             .enumerate()
         {
             let Some(group) = prefix_cache.get(signature) else {
+                if demo_proof_close_entered {
+                    demo_proof_close_closed_groups += 1;
+                    if let (Some(proof_close_started_elapsed), Some(budget)) =
+                        (demo_proof_close_started_elapsed_millis, demo_step_budget)
+                    {
+                        sync_demo_proof_close_runtime(
+                            &mut demo_phase,
+                            &mut demo_narrative,
+                            budget,
+                            proof_close_started_elapsed,
+                            demo_proof_close_total_groups,
+                            demo_proof_close_closed_groups,
+                            step_start,
+                            prefixes_created,
+                            enumerated_candidates,
+                            prefix_states_exact_pruned,
+                            candidates.len(),
+                        );
+                    }
+                }
                 continue;
             };
             if let (Some(group_best_rank), Some(incumbent_rank)) =
@@ -1616,6 +1809,26 @@ fn search_next_step(
             {
                 if !better_rank(group_best_rank, incumbent_rank) {
                     incremental_terminal_rank_prunes += group.candidates.len();
+                    if demo_proof_close_entered {
+                        demo_proof_close_closed_groups += 1;
+                        if let (Some(proof_close_started_elapsed), Some(budget)) =
+                            (demo_proof_close_started_elapsed_millis, demo_step_budget)
+                        {
+                            sync_demo_proof_close_runtime(
+                                &mut demo_phase,
+                                &mut demo_narrative,
+                                budget,
+                                proof_close_started_elapsed,
+                                demo_proof_close_total_groups,
+                                demo_proof_close_closed_groups,
+                                step_start,
+                                prefixes_created,
+                                enumerated_candidates,
+                                prefix_states_exact_pruned,
+                                candidates.len(),
+                            );
+                        }
+                    }
                     continue;
                 }
             }
@@ -1634,43 +1847,67 @@ fn search_next_step(
                             demo_phase.materialize_full_evals = candidates.len();
                             demo_phase.proof_close_entry_reason =
                                 Some(DemoProofCloseEntryReason::SoftCapHandoff);
+                            let proof_close_started_elapsed = elapsed_millis(step_start.elapsed());
+                            let remaining_groups =
+                                retained_prefix_groups.saturating_sub(group_index);
+                            demo_proof_close_started_elapsed_millis =
+                                Some(proof_close_started_elapsed);
+                            demo_proof_close_total_groups = remaining_groups;
+                            demo_proof_close_closed_groups = 0;
+                            if let Some(budget) = demo_step_budget {
+                                sync_demo_proof_close_accounting(
+                                    &mut demo_phase,
+                                    budget,
+                                    proof_close_started_elapsed,
+                                    proof_close_started_elapsed,
+                                    remaining_groups,
+                                    demo_proof_close_closed_groups,
+                                );
+                            }
                             if let (Some(observer), Some(budget)) =
                                 (demo_narrative.as_mut(), demo_step_budget)
                             {
-                                observer.enter_proof_close_with_message(
-                                    narrative_progress_snapshot(
-                                        elapsed_millis(step_start.elapsed()),
-                                        generated_surface_from_counts(
-                                            prefixes_created,
-                                            enumerated_candidates,
-                                        ),
-                                        exact_screened_surface_from_counts(
-                                            prefix_states_exact_pruned,
-                                            candidates.len(),
-                                        ),
-                                        candidates.len() as u64,
+                                let progress = narrative_progress_snapshot(
+                                    proof_close_started_elapsed,
+                                    generated_surface_from_counts(
+                                        prefixes_created,
+                                        enumerated_candidates,
                                     ),
+                                    exact_screened_surface_from_counts(
+                                        prefix_states_exact_pruned,
+                                        candidates.len(),
+                                    ),
+                                    candidates.len() as u64,
+                                );
+                                let detail = demo_proof_close_status_detail(
+                                    budget,
+                                    generated_surface_from_counts(
+                                        prefixes_created,
+                                        enumerated_candidates,
+                                    ),
+                                    exact_screened_surface_from_counts(
+                                        prefix_states_exact_pruned,
+                                        candidates.len(),
+                                    ),
+                                    candidates.len() as u64,
+                                    remaining_groups,
+                                    &demo_phase,
+                                );
+                                observer.enter_proof_close_with_message(
+                                    progress.clone(),
                                     format!(
                                         "{} with {} retained prefix groups still needing exact certification",
                                         demo_proof_close_entry_message(
                                             DemoProofCloseEntryReason::SoftCapHandoff
                                         ),
-                                        retained_prefix_groups.saturating_sub(group_index)
+                                        remaining_groups
                                     ),
-                                    demo_proof_close_status_detail(
-                                        budget,
-                                        generated_surface_from_counts(
-                                            prefixes_created,
-                                            enumerated_candidates,
-                                        ),
-                                        exact_screened_surface_from_counts(
-                                            prefix_states_exact_pruned,
-                                            candidates.len(),
-                                        ),
-                                        candidates.len() as u64,
-                                        retained_prefix_groups.saturating_sub(group_index),
-                                        &demo_phase,
-                                    ),
+                                    detail.clone(),
+                                );
+                                observer.maybe_record_proof_close_progress(
+                                    progress,
+                                    detail,
+                                    &demo_phase,
                                 );
                             }
                             demo_proof_close_entered = true;
@@ -1726,6 +1963,26 @@ fn search_next_step(
                     }
                 }
             }
+            if demo_proof_close_entered {
+                demo_proof_close_closed_groups += 1;
+                if let (Some(proof_close_started_elapsed), Some(budget)) =
+                    (demo_proof_close_started_elapsed_millis, demo_step_budget)
+                {
+                    sync_demo_proof_close_runtime(
+                        &mut demo_phase,
+                        &mut demo_narrative,
+                        budget,
+                        proof_close_started_elapsed,
+                        demo_proof_close_total_groups,
+                        demo_proof_close_closed_groups,
+                        step_start,
+                        prefixes_created,
+                        enumerated_candidates,
+                        prefix_states_exact_pruned,
+                        candidates.len(),
+                    );
+                }
+            }
         }
     }
 
@@ -1737,29 +1994,36 @@ fn search_next_step(
         let proof_close_entry_reason =
             demo_proof_close_entry_reason(demo_phase.breadth_harvest_exit_reason);
         demo_phase.proof_close_entry_reason = Some(proof_close_entry_reason);
+        let proof_close_started_elapsed = elapsed_millis(step_start.elapsed());
+        if let Some(budget) = demo_step_budget {
+            sync_demo_proof_close_accounting(
+                &mut demo_phase,
+                budget,
+                proof_close_started_elapsed,
+                proof_close_started_elapsed,
+                0,
+                0,
+            );
+        }
         if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
+            let progress = narrative_progress_snapshot(
+                proof_close_started_elapsed,
+                generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                exact_screened_surface_from_counts(prefix_states_exact_pruned, candidates.len()),
+                candidates.len() as u64,
+            );
+            let detail = demo_proof_close_status_detail(
+                budget,
+                generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                exact_screened_surface_from_counts(prefix_states_exact_pruned, candidates.len()),
+                candidates.len() as u64,
+                0,
+                &demo_phase,
+            );
             observer.enter_proof_close_with_message(
-                narrative_progress_snapshot(
-                    elapsed_millis(step_start.elapsed()),
-                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
-                    exact_screened_surface_from_counts(
-                        prefix_states_exact_pruned,
-                        candidates.len(),
-                    ),
-                    candidates.len() as u64,
-                ),
+                progress,
                 demo_proof_close_entry_message(proof_close_entry_reason),
-                demo_proof_close_status_detail(
-                    budget,
-                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
-                    exact_screened_surface_from_counts(
-                        prefix_states_exact_pruned,
-                        candidates.len(),
-                    ),
-                    candidates.len() as u64,
-                    0,
-                    &demo_phase,
-                ),
+                detail,
             );
         }
     }
@@ -3941,6 +4205,15 @@ mod tests {
             step.demo_phase.materialize_full_evals + step.demo_phase.proof_close_full_evals,
             step.full_telescopes_evaluated
         );
+        assert!(step.demo_phase.proof_close_reserved_millis > 0);
+        assert!(step.demo_phase.proof_close_frontier_total_groups > 0);
+        assert_eq!(
+            step.demo_phase.proof_close_frontier_groups_closed,
+            step.demo_phase.proof_close_frontier_total_groups
+        );
+        assert_eq!(step.demo_phase.proof_close_frontier_groups_remaining, 0);
+        assert_eq!(step.demo_phase.proof_close_closure_percent, 100);
+        assert!(!step.demo_phase.proof_close_reserve_exhausted);
         assert!(step.narrative_events.iter().any(|event| {
             event.kind == NarrativeEventKind::PhaseChange
                 && event.phase == Some(StepPhase::ProofClose)
@@ -4024,6 +4297,43 @@ mod tests {
             event.kind == NarrativeEventKind::PhaseChange
                 && event.phase == Some(StepPhase::ProofClose)
                 && event.message.contains("reserved certification slice")
+        }));
+    }
+
+    #[test]
+    fn demo_zero_reserve_records_proof_close_reserve_exhaustion() {
+        let mut config = demo_runtime_config_10m();
+        config.demo.scout_fraction = "0.00".to_owned();
+        config.demo.proof_close_reserve_fraction = "0.00".to_owned();
+        config.demo.floors.generated_floor.remove("15");
+        config.demo.floors.exact_screened_floor.remove("15");
+        config
+            .demo
+            .caps
+            .full_eval_soft_cap
+            .insert("15".to_owned(), 0);
+        let step = search_bootstrap_prefix_for_config_with_runtime(
+            15,
+            2,
+            &config,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("demo steps should build")
+        .into_iter()
+        .last()
+        .expect("step should exist");
+
+        assert_eq!(step.demo_phase.proof_close_reserved_millis, 0);
+        assert!(step.demo_phase.proof_close_reserve_exhausted);
+        assert!(step.demo_phase.proof_close_frontier_total_groups > 0);
+        assert_eq!(step.demo_phase.proof_close_frontier_groups_remaining, 0);
+        assert_eq!(step.demo_phase.proof_close_closure_percent, 100);
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::BudgetPulse
+                && event.phase == Some(StepPhase::ProofClose)
+                && event
+                    .message
+                    .contains("exhausted the reserved certification slice")
         }));
     }
 

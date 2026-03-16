@@ -427,6 +427,42 @@ def demo_phase_entry(step: dict[str, Any], search_profile: str) -> dict[str, Any
                 optional_string(phase.get("proof_close_overrun_reason")),
             ),
             (
+                "proof_close_reserved_millis",
+                int(phase.get("proof_close_reserved_millis", 0) or 0),
+            ),
+            (
+                "proof_close_elapsed_millis",
+                int(phase.get("proof_close_elapsed_millis", 0) or 0),
+            ),
+            (
+                "proof_close_remaining_millis",
+                int(phase.get("proof_close_remaining_millis", 0) or 0),
+            ),
+            (
+                "proof_close_reserve_overrun_millis",
+                int(phase.get("proof_close_reserve_overrun_millis", 0) or 0),
+            ),
+            (
+                "proof_close_reserve_exhausted",
+                bool(phase.get("proof_close_reserve_exhausted", False)),
+            ),
+            (
+                "proof_close_frontier_total_groups",
+                int(phase.get("proof_close_frontier_total_groups", 0) or 0),
+            ),
+            (
+                "proof_close_frontier_groups_closed",
+                int(phase.get("proof_close_frontier_groups_closed", 0) or 0),
+            ),
+            (
+                "proof_close_frontier_groups_remaining",
+                int(phase.get("proof_close_frontier_groups_remaining", 0) or 0),
+            ),
+            (
+                "proof_close_closure_percent",
+                int(phase.get("proof_close_closure_percent", 0) or 0),
+            ),
+            (
                 "materialize_full_evals",
                 int(phase.get("materialize_full_evals", 0) or 0),
             ),
@@ -462,6 +498,9 @@ def has_demo_phase_evidence(
             optional_string(phase.get("breadth_harvest_exit_reason")) is not None,
             optional_string(phase.get("proof_close_entry_reason")) is not None,
             optional_string(phase.get("proof_close_overrun_reason")) is not None,
+            int(phase.get("proof_close_reserved_millis", 0) or 0) > 0,
+            int(phase.get("proof_close_elapsed_millis", 0) or 0) > 0,
+            int(phase.get("proof_close_frontier_total_groups", 0) or 0) > 0,
             int(funnel.get("generated_raw_prefixes", 0) or 0) > 0,
             int(funnel.get("exact_bound_screened", 0) or 0) > 0,
             int(closure.get("frontier_total_seen", 0) or 0) > 0,
@@ -1292,7 +1331,13 @@ def render_lane_summary(lane: dict[str, Any]) -> list[str]:
             f"breadth_exit={latest_demo['breadth_harvest_exit_reason'] or 'none'} "
             f"proof_close_reason={latest_demo['proof_close_entry_reason'] or 'none'} "
             f"overrun_reason={latest_demo['proof_close_overrun_reason'] or 'none'} "
-            f"overrun_full_evals={latest_demo['proof_close_overrun_full_evals']}"
+            f"overrun_full_evals={latest_demo['proof_close_overrun_full_evals']} "
+            f"proof_close_closure={latest_demo['proof_close_closure_percent']}% "
+            f"groups_closed={latest_demo['proof_close_frontier_groups_closed']}/{latest_demo['proof_close_frontier_total_groups']} "
+            f"reserve={latest_demo['proof_close_elapsed_millis']}/{latest_demo['proof_close_reserved_millis']}ms "
+            f"reserve_remaining={latest_demo['proof_close_remaining_millis']}ms "
+            f"reserve_overrun={latest_demo['proof_close_reserve_overrun_millis']}ms "
+            f"reserve_exhausted={str(latest_demo['proof_close_reserve_exhausted']).lower()}"
         )
         lines.append(
             "  demo funnel latest: "

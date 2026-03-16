@@ -895,6 +895,7 @@ fn compare_runs_reports_demo_phase_floor_and_closure_evidence() {
     assert!(stdout.contains("Lane demo"));
     assert!(stdout.contains("demo phase latest:"));
     assert!(stdout.contains("demo funnel latest:"));
+    assert!(stdout.contains("proof_close_closure="));
 
     let summary = read_json(&json_out);
     let demo_lane = summary["lanes"]
@@ -926,6 +927,18 @@ fn compare_runs_reports_demo_phase_floor_and_closure_evidence() {
         demo_evidence
             .last()
             .and_then(|step| step["closure_percent"].as_u64())
+            .is_some()
+    );
+    assert!(
+        demo_evidence
+            .last()
+            .and_then(|step| step["proof_close_reserved_millis"].as_u64())
+            .is_some()
+    );
+    assert!(
+        demo_evidence
+            .last()
+            .and_then(|step| step["proof_close_closure_percent"].as_u64())
             .is_some()
     );
 
