@@ -12,6 +12,10 @@ pretending there is only one live claim surface.
   deltas through step 12
 - `realistic_frontier_shadow`: broader comparison-backed lane with generative
   late enumeration and live prefix-frontier retention through step 15
+- `demo_breadth_shadow`: experimental comparison-backed demo lane scaffold with
+  explicit 5-minute, 10-minute, and 15-minute budget metadata; in the current
+  milestone it still reuses realistic-shadow search semantics while the
+  dedicated demo scheduler, funnel counters, and narrative pipeline land
 
 The realistic lane is real runtime behavior, not a paper placeholder, but it is
 still rollout-gated by parity evidence rather than promoted to default truth.
@@ -21,6 +25,9 @@ still rollout-gated by parity evidence rather than promoted to default truth.
 The current CLI path can honestly claim all of the following:
 
 - live search is used through step 15 in both the guarded and realistic lanes
+- the CLI can also run the experimental `demo_breadth_shadow` profile configs,
+  which currently carry demo budget metadata while reusing realistic-shadow
+  search semantics
 - deterministic reference replay is no longer needed for the current 15-step
   corpus, except when the CLI is explicitly asked to extend beyond the live
   range

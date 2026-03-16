@@ -1,0 +1,99 @@
+[mode]
+strict = true
+debug = false
+search_profile = "demo_breadth_shadow"
+
+[search]
+until_step = 15
+workers = "auto"
+max_workers = 12
+frontier_mode = "obligation_guided"
+learned_motifs = false
+
+[objective]
+exact_clause_policy = "strict"
+window_depth = 2
+selector = "minimal_positive_overshoot"
+
+[memory]
+reserve_for_os_gib = 4.0
+target_rss_gib = 8.5
+soft_rss_gib = 9.0
+pressure_rss_gib = 10.5
+emergency_rss_gib = 11.5
+hard_rss_gib = 12.0
+hot_frontier_gib = 2.25
+intern_gib = 2.0
+dedupe_gib = 1.25
+cache_gib = 0.75
+spill_buffers_gib = 0.50
+checkpoint_buffers_gib = 0.25
+worker_arena_mib = 64
+
+[checkpoint]
+root = "runs"
+step_on_accept = true
+frontier_interval_sec = 180
+retain_frontier_generations = 3
+compression = "zstd"
+
+[accel]
+backend = "auto"
+verify_on_cpu = true
+
+# This first scaffolding milestone keeps demo_breadth_shadow comparison-backed
+# and reuses realistic frontier search semantics while the budget controller,
+# funnel counters, and demo-specific scheduler land.
+[demo]
+enabled = true
+profile = "10m"
+total_budget_sec = 600
+early_exhaustive_budget_sec = 90
+adaptive_reserve_sec = 120
+proof_close_reserve_fraction = "0.30"
+scout_fraction = "0.10"
+
+[demo.narrative]
+live_console = true
+min_lines_per_step = 30
+max_lines_per_step = 200
+pulse_interval_millis = 500
+persist_step_events = true
+show_progress_bar = true
+
+[demo.floors.step_floor_sec]
+5 = 12
+6 = 14
+7 = 18
+8 = 24
+9 = 32
+10 = 15
+11 = 25
+12 = 35
+13 = 55
+14 = 70
+15 = 90
+
+[demo.floors.generated_floor]
+10 = 500
+11 = 800
+12 = 1200
+13 = 2200
+14 = 3500
+15 = 5000
+
+[demo.floors.exact_screened_floor]
+10 = 120
+11 = 220
+12 = 400
+13 = 700
+14 = 1100
+15 = 1800
+
+[demo.caps.full_eval_soft_cap]
+10 = 25
+11 = 35
+12 = 50
+13 = 70
+14 = 90
+15 = 120

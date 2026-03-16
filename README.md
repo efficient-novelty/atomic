@@ -13,6 +13,10 @@ sidecar.
 - `realistic_frontier_shadow` is a broader comparison-backed lane that
   preserves the same accepted 15-step sequence while exposing genuine late-step
   competition and prefix-frontier retention
+- `demo_breadth_shadow` now has an experimental config/runtime scaffold for
+  5-minute, 10-minute, and 15-minute comparison-backed demo runs; this first
+  milestone still reuses realistic-shadow search semantics while the dedicated
+  demo breadth controller and narrative pipeline land
 - the accepted late-step executable canon is fixed at step 15 / `DCT` with
   `nu = 103`
 - `pen-cli run`, `resume`, `inspect`, and `export-agda` operate on real stored
@@ -142,6 +146,12 @@ For rollout and comparison work, use the dedicated search-profile configs:
   competition deltas through step 12
 - `configs/realistic_frontier_shadow.toml`: broader comparison-backed lane with
   generative late enumeration and prefix-frontier retention through step 15
+- `configs/demo_breadth_shadow_5m.toml`: experimental narrow demo profile with
+  a shared 90-second early exhaustive window and a 5-minute total budget
+- `configs/demo_breadth_shadow_10m.toml`: experimental default demo profile
+  with a shared 90-second early exhaustive window and a 10-minute total budget
+- `configs/demo_breadth_shadow_15m.toml`: experimental broad demo profile with
+  a shared 90-second early exhaustive window and a 15-minute total budget
 
 ## Quick Start
 
@@ -224,6 +234,12 @@ Broader realistic shadow lane:
 
 ```powershell
 cargo run -p pen-cli -- run --config configs/realistic_frontier_shadow.toml --root runs --run-id realistic --until-step 15
+```
+
+Experimental demo breadth scaffold:
+
+```powershell
+cargo run -p pen-cli -- run --config configs/demo_breadth_shadow_10m.toml --root runs --run-id demo-10m --until-step 15
 ```
 
 Compare the stored evidence:

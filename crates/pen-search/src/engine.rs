@@ -867,7 +867,9 @@ fn admissibility_mode_for_profile(search_profile: SearchProfile) -> Admissibilit
     match search_profile {
         SearchProfile::StrictCanonGuarded | SearchProfile::Unknown => AdmissibilityMode::Guarded,
         SearchProfile::RelaxedShadow => AdmissibilityMode::RelaxedShadow,
-        SearchProfile::RealisticFrontierShadow => AdmissibilityMode::RealisticShadow,
+        SearchProfile::RealisticFrontierShadow | SearchProfile::DemoBreadthShadow => {
+            AdmissibilityMode::RealisticShadow
+        }
     }
 }
 
@@ -2432,6 +2434,14 @@ mod tests {
     fn live_search_support_is_honest_about_current_bootstrap_range() {
         assert!(supports_live_atomic_search(LIVE_BOOTSTRAP_MAX_STEP));
         assert!(!supports_live_atomic_search(LIVE_BOOTSTRAP_MAX_STEP + 1));
+    }
+
+    #[test]
+    fn demo_breadth_shadow_currently_reuses_realistic_shadow_admissibility() {
+        assert_eq!(
+            super::admissibility_mode_for_profile(SearchProfile::DemoBreadthShadow),
+            AdmissibilityMode::RealisticShadow
+        );
     }
 
     #[test]
