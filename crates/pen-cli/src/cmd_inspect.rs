@@ -80,6 +80,23 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
         let replay_ablation = render_replay_ablation(&step.replay_ablation)
             .map(|ablation| format!("\nreplay_ablation: {ablation}"))
             .unwrap_or_default();
+        let timing_details = if step.provenance == crate::report::StepProvenance::ReferenceReplay
+            && step.search_stats.search_timing == pen_store::manifest::SearchTiming::default()
+        {
+            String::new()
+        } else {
+            format!(
+                "\ntiming: step_ms={} discovery_ms={} frontier_plan_ms={} selection_ms={}",
+                step.search_stats.search_timing.step_wall_clock_millis,
+                step.search_stats
+                    .search_timing
+                    .candidate_discovery_wall_clock_millis,
+                step.search_stats
+                    .search_timing
+                    .prefix_frontier_planning_wall_clock_millis,
+                step.search_stats.search_timing.selection_wall_clock_millis
+            )
+        };
         let prune_summary = if step.prune_reports.is_empty() {
             String::new()
         } else {
@@ -105,6 +122,11 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                     .search_stats
                     .incremental_active_window_clause_filter_prunes
                     == 0
+                && step.search_stats.incremental_terminal_clause_filter_hits == 0
+                && step
+                    .search_stats
+                    .incremental_terminal_clause_filter_prunes
+                    == 0
                 && step.search_stats.incremental_trivial_derivability_hits == 0
                 && step.search_stats.incremental_trivial_derivability_prunes == 0
                 && step.search_stats.incremental_terminal_admissibility_hits == 0
@@ -117,7 +139,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 String::new()
             } else {
                 format!(
-                    "\nprefix_memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} active_window_filter_hits={} active_window_filter_prunes={} trivial_derivability_hits={} trivial_derivability_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={} terminal_prefix_bar_prunes={}",
+                    "\nprefix_memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} active_window_filter_hits={} active_window_filter_prunes={} terminal_clause_filter_hits={} terminal_clause_filter_prunes={} trivial_derivability_hits={} trivial_derivability_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={} terminal_prefix_bar_prunes={}",
                     step.search_stats.incremental_legality_cache_hits,
                     step.search_stats.incremental_connectivity_shortcuts,
                     step.search_stats.incremental_connectivity_fallbacks,
@@ -128,6 +150,8 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                         .incremental_active_window_clause_filter_hits,
                     step.search_stats
                         .incremental_active_window_clause_filter_prunes,
+                    step.search_stats.incremental_terminal_clause_filter_hits,
+                    step.search_stats.incremental_terminal_clause_filter_prunes,
                     step.search_stats.incremental_trivial_derivability_hits,
                     step.search_stats.incremental_trivial_derivability_prunes,
                     step.search_stats.incremental_terminal_admissibility_hits,
@@ -149,7 +173,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
             )
         };
         return Ok(format!(
-            "step {} ({})\nsearch_profile: {}\nnu: {}\nkappa: {}\ncharged_kappa: {}\nrho: {}\nbar: {}\nbar_distance: {}\ncandidate: {}\ncanonical: {}{}{}{}{}{}",
+            "step {} ({})\nsearch_profile: {}\nnu: {}\nkappa: {}\ncharged_kappa: {}\nrho: {}\nbar: {}\nbar_distance: {}\ncandidate: {}\ncanonical: {}{}{}{}{}{}{}",
             step.step_index,
             step.label,
             step.search_profile.as_str(),
@@ -163,6 +187,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
             step.accepted.canonical_hash,
             late_step_claim,
             replay_ablation,
+            timing_details,
             prune_summary,
             prefix_frontier,
             frontier_details,
@@ -200,7 +225,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 )
             });
         return Ok(format!(
-            "frontier step {} band {}\nprefix_created: {}\nprefix_explored: {}\nprefix_merged: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nlegality_hits: {}\nconnectivity_shortcuts: {}\nconnectivity_fallbacks: {}\nconnectivity_prunes: {}\nclause_family_hits: {}\nclause_family_prunes: {}\nactive_window_filter_hits: {}\nactive_window_filter_prunes: {}\ntrivial_derivability_hits: {}\ntrivial_derivability_prunes: {}\nterminal_admissibility_hits: {}\nterminal_admissibility_rejections: {}\nterminal_prefix_bar_prunes: {}\nmemory_snapshot: rss_bytes={} hot_frontier_bytes={} interner_bytes={} dedupe_bytes={} cache_bytes={}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
+            "frontier step {} band {}\nprefix_created: {}\nprefix_explored: {}\nprefix_merged: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nlegality_hits: {}\nconnectivity_shortcuts: {}\nconnectivity_fallbacks: {}\nconnectivity_prunes: {}\nclause_family_hits: {}\nclause_family_prunes: {}\nactive_window_filter_hits: {}\nactive_window_filter_prunes: {}\nterminal_clause_filter_hits: {}\nterminal_clause_filter_prunes: {}\ntrivial_derivability_hits: {}\ntrivial_derivability_prunes: {}\nterminal_admissibility_hits: {}\nterminal_admissibility_rejections: {}\nterminal_prefix_bar_prunes: {}\nmemory_snapshot: rss_bytes={} hot_frontier_bytes={} interner_bytes={} dedupe_bytes={} cache_bytes={}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
             frontier.step_index,
             frontier.band_index,
             frontier.counts.prefixes_created,
@@ -218,6 +243,8 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
             frontier
                 .counts
                 .incremental_active_window_clause_filter_prunes,
+            frontier.counts.incremental_terminal_clause_filter_hits,
+            frontier.counts.incremental_terminal_clause_filter_prunes,
             frontier.counts.incremental_trivial_derivability_hits,
             frontier.counts.incremental_trivial_derivability_prunes,
             frontier.counts.incremental_terminal_admissibility_hits,

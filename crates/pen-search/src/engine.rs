@@ -135,6 +135,8 @@ pub struct AtomicSearchStep {
     pub incremental_clause_family_prunes: usize,
     pub incremental_active_window_clause_filter_hits: usize,
     pub incremental_active_window_clause_filter_prunes: usize,
+    pub incremental_terminal_clause_filter_hits: usize,
+    pub incremental_terminal_clause_filter_prunes: usize,
     pub incremental_trivial_derivability_hits: usize,
     pub incremental_trivial_derivability_prunes: usize,
     pub incremental_terminal_admissibility_hits: usize,
@@ -361,6 +363,8 @@ fn search_next_step(
     let mut incremental_clause_family_prunes = 0usize;
     let mut incremental_active_window_clause_filter_hits = 0usize;
     let mut incremental_active_window_clause_filter_prunes = 0usize;
+    let mut incremental_terminal_clause_filter_hits = 0usize;
+    let mut incremental_terminal_clause_filter_prunes = 0usize;
     let mut incremental_trivial_derivability_hits = 0usize;
     let mut incremental_trivial_derivability_prunes = 0usize;
     let mut incremental_terminal_admissibility_hits = 0usize;
@@ -403,6 +407,8 @@ fn search_next_step(
             legality_stats.active_window_clause_filter_hits;
         incremental_active_window_clause_filter_prunes =
             legality_stats.active_window_clause_filter_prunes;
+        incremental_terminal_clause_filter_hits = legality_stats.terminal_clause_filter_hits;
+        incremental_terminal_clause_filter_prunes = legality_stats.terminal_clause_filter_prunes;
         incremental_trivial_derivability_hits = legality_stats.trivial_derivability_hits;
         incremental_trivial_derivability_prunes = legality_stats.trivial_derivability_prunes;
         incremental_terminal_admissibility_hits = legality_stats.terminal_admissibility_hits;
@@ -574,6 +580,8 @@ fn search_next_step(
         incremental_clause_family_prunes,
         incremental_active_window_clause_filter_hits,
         incremental_active_window_clause_filter_prunes,
+        incremental_terminal_clause_filter_hits,
+        incremental_terminal_clause_filter_prunes,
         incremental_trivial_derivability_hits,
         incremental_trivial_derivability_prunes,
         incremental_terminal_admissibility_hits,
@@ -631,6 +639,8 @@ fn build_step_result(
     incremental_clause_family_prunes: usize,
     incremental_active_window_clause_filter_hits: usize,
     incremental_active_window_clause_filter_prunes: usize,
+    incremental_terminal_clause_filter_hits: usize,
+    incremental_terminal_clause_filter_prunes: usize,
     incremental_trivial_derivability_hits: usize,
     incremental_trivial_derivability_prunes: usize,
     incremental_terminal_admissibility_hits: usize,
@@ -688,6 +698,8 @@ fn build_step_result(
         incremental_clause_family_prunes,
         incremental_active_window_clause_filter_hits,
         incremental_active_window_clause_filter_prunes,
+        incremental_terminal_clause_filter_hits,
+        incremental_terminal_clause_filter_prunes,
         incremental_trivial_derivability_hits,
         incremental_trivial_derivability_prunes,
         incremental_terminal_admissibility_hits,
@@ -931,10 +943,31 @@ fn record_terminal_prefix_group(
             last_clause_options,
         )
         .unwrap_or_else(|| last_clause_options.iter().collect());
+    let terminal_clauses = discovery
+        .prefix_legality_cache
+        .filter_terminal_clauses(
+            step_index,
+            prefix_signature,
+            library,
+            admissibility,
+            &filtered_clauses,
+        )
+        .map(|clauses| {
+            clauses
+                .into_iter()
+                .map(|clause| (clause.clause, Some(clause.admissibility_decision)))
+                .collect::<Vec<_>>()
+        })
+        .unwrap_or_else(|| {
+            filtered_clauses
+                .into_iter()
+                .map(|clause| (clause, None))
+                .collect()
+        });
     let mut retained_telescopes = Vec::new();
     let mut retained_bound: Option<PrefixBound> = None;
 
-    for clause in filtered_clauses {
+    for (clause, cached_admissibility_decision) in terminal_clauses {
         let Some(connectivity_decision) = discovery.prefix_legality_cache.terminal_connectivity(
             prefix_signature,
             library,
@@ -949,13 +982,6 @@ fn record_terminal_prefix_group(
             continue;
         }
 
-        let cached_admissibility_decision = discovery.prefix_legality_cache.terminal_admissibility(
-            step_index,
-            prefix_signature,
-            library,
-            clause,
-            admissibility,
-        );
         let mut telescope = None;
         if matches!(
             connectivity_decision,
@@ -1637,6 +1663,7 @@ mod tests {
         );
         assert!(step.incremental_active_window_clause_filter_hits > 0);
         assert!(step.incremental_active_window_clause_filter_prunes > 0);
+        assert!(step.incremental_terminal_clause_filter_hits > 0);
         assert!(step.incremental_trivial_derivability_hits > 0);
         assert!(step.incremental_terminal_admissibility_hits > 0);
         assert!(step.incremental_terminal_prefix_bar_prunes > 0);
@@ -1674,6 +1701,7 @@ mod tests {
         assert!(step.incremental_connectivity_fallbacks > 0);
         assert!(step.incremental_clause_family_filter_hits > 0);
         assert!(step.incremental_active_window_clause_filter_hits > 0);
+        assert!(step.incremental_terminal_clause_filter_hits > 0);
         assert!(step.incremental_trivial_derivability_hits > 0);
         assert!(step.incremental_terminal_admissibility_hits > 0);
         assert!(

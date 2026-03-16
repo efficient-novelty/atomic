@@ -1,6 +1,6 @@
 # Quantum Improvement Plan
 
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 
 This file is the operational plan for the repo's quantum-inspired search work.
 It is intentionally focused on the live Rust codebase, not on older proposal
@@ -50,11 +50,18 @@ The repo is already past the original "just add a prefix frontier" stage.
   - `incremental_connectivity_shortcuts`
   - `incremental_connectivity_fallbacks`
   - `incremental_connectivity_prunes`
+- realistic shadow now also reuses an exact terminal admissibility summary as
+  an explicit terminal-clause filter keyed by `PrefixSignature`, and stored
+  artifacts expose:
+  - `incremental_terminal_clause_filter_hits`
+  - `incremental_terminal_clause_filter_prunes`
 - realistic shadow now also keeps an exact incremental terminal
   trivial-derivability summary keyed by `PrefixSignature`, and stored artifacts
   expose:
   - `incremental_trivial_derivability_hits`
   - `incremental_trivial_derivability_prunes`
+- per-step timing telemetry is now also persisted in stored step summaries and
+  rendered by inspect output next to frontier memory bytes
 
 ## Main Gap
 
@@ -161,7 +168,8 @@ Primary:
 
 Next metrics to add:
 
-- using the new timing and memory evidence to retune late-step prefix order
+- using the now-persisted timing and memory evidence to retune late-step
+  prefix order
 
 ## Non-Negotiables
 

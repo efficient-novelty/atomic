@@ -42,6 +42,10 @@ guarded 15-step canon.
 - realistic shadow now also reuses that exact family summary for cached
   terminal admissibility decisions keyed by `PrefixSignature`, avoiding a full
   late-family package-match recomputation whenever the summary is available.
+- realistic shadow now also reuses that exact terminal admissibility summary as
+  an explicit terminal-clause filter keyed by `PrefixSignature`, so last-clause
+  options can be rejected before terminal connectivity work or fallback
+  telescope assembly runs.
 - realistic shadow now also keeps an exact incremental trivial-derivability
   summary keyed by `PrefixSignature`, rejecting terminal continuations that are
   provably trivially derivable before full telescope assembly and before any
@@ -75,6 +79,8 @@ guarded 15-step canon.
   - `incremental_clause_family_prunes`
   - `incremental_active_window_clause_filter_hits`
   - `incremental_active_window_clause_filter_prunes`
+  - `incremental_terminal_clause_filter_hits`
+  - `incremental_terminal_clause_filter_prunes`
   - `incremental_trivial_derivability_hits`
   - `incremental_trivial_derivability_prunes`
   - `incremental_terminal_admissibility_hits`
@@ -85,6 +91,10 @@ guarded 15-step canon.
   - `candidate_discovery_wall_clock_millis`
   - `prefix_frontier_planning_wall_clock_millis`
   - `selection_wall_clock_millis`
+- stored step summaries now also persist `search_timing`, and `pen-cli
+  inspect` step output now renders those per-step timing counters alongside
+  the existing frontier-pressure memory bytes so late-step order retunes can
+  be driven directly from stored run artifacts.
 - deterministic reports, step summaries, and frontier inspect output now also
   surface the first memory high-water metrics for the retained prefix frontier:
   - `rss_bytes`
@@ -113,10 +123,15 @@ it as if it were still missing:
   derivability reuse before full telescope assembly
 - extending the strengthened-signature memo layer into cached terminal
   admissibility decisions for late-family realistic shadow work
+- moving that cached terminal admissibility reuse forward into an explicit
+  terminal-clause filter before terminal connectivity or fallback telescope
+  assembly
 - landing an earlier exact terminal-prefix bar prune before retained-prefix
   frontier planning
 - adding the first timing telemetry and deterministic frontier memory
   high-water metrics for the memoized realistic-shadow path
+- persisting and rendering the per-step timing telemetry in stored step
+  summaries and inspect output for realistic-shadow artifact analysis
 
 ## Active Gaps
 
@@ -133,8 +148,9 @@ prune confidently earlier than that one-clause-short point.
 
 The strengthened signature is now used for incremental legality/connectivity
 reuse, exact clause-family feasibility pruning, active-window clause filtering,
-terminal trivial-derivability pruning, and cached terminal admissibility
-decisions, but it is not yet used for:
+an explicit terminal-clause admissibility filter, terminal trivial-
+derivability pruning, and cached terminal admissibility decisions, but it is
+not yet used for:
 
 - stronger exact reuse of non-family admissibility structure before the full
   terminal telescope is assembled
@@ -155,11 +171,13 @@ expensive relative to their payoff.
 - define a stronger sound partial-prefix bound beyond exact clause-family
   impossibility pruning, the landed active-window clause filtering, and the
   landed terminal-prefix bar prune
-- use the new active-window, trivial-derivability, and terminal-admissibility
-  payoff counters together with `incremental_terminal_prefix_bar_prunes` to
-  target broader exact admissibility/filter reuse
-- use the new timing telemetry and deterministic frontier memory high-water
-  metrics to identify the late-step prefix lanes that still do redundant work
+- use the new active-window, terminal-clause, trivial-derivability, and
+  terminal-admissibility payoff counters together with
+  `incremental_terminal_prefix_bar_prunes` to target broader exact
+  admissibility/filter reuse
+- use the now-persisted timing telemetry and deterministic frontier memory
+  high-water metrics from stored step summaries and inspect output to identify
+  the late-step prefix lanes that still do redundant work
 - keep the strengthened-signature caches exact and deterministic
 
 ### Next
@@ -179,13 +197,13 @@ expensive relative to their payoff.
    partial-prefix exact bound that goes beyond the landed clause-family
    impossibility prunes, active-window clause filtering, and the one-clause-
    short terminal-prefix bar prune without unsound inference.
-2. Extend the landed legality/connectivity/family/active-window/trivial-
-   derivability/terminal-admissibility memo path into another exact
-   admissibility summary that fires before the full terminal telescope is
+2. Extend the landed legality/connectivity/family/active-window/terminal-
+   clause/trivial-derivability/terminal-admissibility memo path into another
+   exact admissibility summary that fires before the full terminal telescope is
    assembled.
-3. Use the expanded memo counters together with the new timing telemetry and
-   frontier memory high-water metrics from stored artifacts to retune late-step
-   prefix priority/order.
+3. Use the expanded memo counters together with the now-persisted timing
+   telemetry and frontier memory high-water metrics from stored artifacts to
+   retune late-step prefix priority/order.
 
 ## Guardrails
 

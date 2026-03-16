@@ -103,6 +103,10 @@ pub struct StepSearchStats {
     #[serde(default)]
     pub incremental_active_window_clause_filter_prunes: usize,
     #[serde(default)]
+    pub incremental_terminal_clause_filter_hits: usize,
+    #[serde(default)]
+    pub incremental_terminal_clause_filter_prunes: usize,
+    #[serde(default)]
     pub incremental_trivial_derivability_hits: usize,
     #[serde(default)]
     pub incremental_trivial_derivability_prunes: usize,
@@ -112,7 +116,7 @@ pub struct StepSearchStats {
     pub incremental_terminal_admissibility_rejections: usize,
     #[serde(default)]
     pub incremental_terminal_prefix_bar_prunes: usize,
-    #[serde(skip, default)]
+    #[serde(default)]
     pub search_timing: SearchTiming,
     #[serde(default)]
     pub prefix_frontier_hot_states: usize,
@@ -706,6 +710,8 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 incremental_clause_family_prunes: 0,
                 incremental_active_window_clause_filter_hits: 0,
                 incremental_active_window_clause_filter_prunes: 0,
+                incremental_terminal_clause_filter_hits: 0,
+                incremental_terminal_clause_filter_prunes: 0,
                 incremental_trivial_derivability_hits: 0,
                 incremental_trivial_derivability_prunes: 0,
                 incremental_terminal_admissibility_hits: 0,
@@ -970,6 +976,11 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
                     .search_stats
                     .incremental_active_window_clause_filter_prunes
                     > 0
+                || step.search_stats.incremental_terminal_clause_filter_hits > 0
+                || step
+                    .search_stats
+                    .incremental_terminal_clause_filter_prunes
+                    > 0
                 || step.search_stats.incremental_trivial_derivability_hits > 0
                 || step.search_stats.incremental_trivial_derivability_prunes > 0
                 || step.search_stats.incremental_terminal_admissibility_hits > 0
@@ -980,7 +991,7 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
                 || step.search_stats.incremental_terminal_prefix_bar_prunes > 0
             {
                 lines.push(format!(
-                    "  prefix memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} active_window_filter_hits={} active_window_filter_prunes={} trivial_derivability_hits={} trivial_derivability_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={} terminal_prefix_bar_prunes={}",
+                    "  prefix memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} active_window_filter_hits={} active_window_filter_prunes={} terminal_clause_filter_hits={} terminal_clause_filter_prunes={} trivial_derivability_hits={} trivial_derivability_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={} terminal_prefix_bar_prunes={}",
                     step.search_stats.incremental_legality_cache_hits,
                     step.search_stats.incremental_connectivity_shortcuts,
                     step.search_stats.incremental_connectivity_fallbacks,
@@ -989,6 +1000,8 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
                     step.search_stats.incremental_clause_family_prunes,
                     step.search_stats.incremental_active_window_clause_filter_hits,
                     step.search_stats.incremental_active_window_clause_filter_prunes,
+                    step.search_stats.incremental_terminal_clause_filter_hits,
+                    step.search_stats.incremental_terminal_clause_filter_prunes,
                     step.search_stats.incremental_trivial_derivability_hits,
                     step.search_stats.incremental_trivial_derivability_prunes,
                     step.search_stats.incremental_terminal_admissibility_hits,
@@ -1281,6 +1294,10 @@ fn step_to_report_with_provenance(
                 .incremental_active_window_clause_filter_hits,
             incremental_active_window_clause_filter_prunes: step
                 .incremental_active_window_clause_filter_prunes,
+            incremental_terminal_clause_filter_hits: step
+                .incremental_terminal_clause_filter_hits,
+            incremental_terminal_clause_filter_prunes: step
+                .incremental_terminal_clause_filter_prunes,
             incremental_trivial_derivability_hits: step.incremental_trivial_derivability_hits,
             incremental_trivial_derivability_prunes: step.incremental_trivial_derivability_prunes,
             incremental_terminal_admissibility_hits: step.incremental_terminal_admissibility_hits,
@@ -1588,6 +1605,8 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 incremental_clause_family_prunes: 0,
                 incremental_active_window_clause_filter_hits: 0,
                 incremental_active_window_clause_filter_prunes: 0,
+                incremental_terminal_clause_filter_hits: 0,
+                incremental_terminal_clause_filter_prunes: 0,
                 incremental_trivial_derivability_hits: 0,
                 incremental_trivial_derivability_prunes: 0,
                 incremental_terminal_admissibility_hits: 0,
@@ -2195,6 +2214,11 @@ mod tests {
         assert!(debug.contains("retention policy: focus=temporal"));
         assert!(debug.contains("frontier pressure: state=green action=none"));
         assert!(debug.contains("late_step_claim: executable_canon step 15 DCT nu=103"));
+        assert!(
+            serde_json::to_string(late)
+                .expect("serialize late step")
+                .contains("\"search_timing\"")
+        );
         assert!(
             render_standard_report("run-1", &steps)
                 .contains("late_step_claim: executable_canon step 15 DCT nu=103")

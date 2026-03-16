@@ -49,6 +49,8 @@ pub struct FrontierRuntimeInput<const N: usize> {
     pub incremental_clause_family_prunes: u64,
     pub incremental_active_window_clause_filter_hits: u64,
     pub incremental_active_window_clause_filter_prunes: u64,
+    pub incremental_terminal_clause_filter_hits: u64,
+    pub incremental_terminal_clause_filter_prunes: u64,
     pub incremental_trivial_derivability_hits: u64,
     pub incremental_trivial_derivability_prunes: u64,
     pub incremental_terminal_admissibility_hits: u64,
@@ -200,6 +202,9 @@ pub fn persist_frontier_runtime<const N: usize>(
                 .incremental_active_window_clause_filter_hits,
             incremental_active_window_clause_filter_prunes: input
                 .incremental_active_window_clause_filter_prunes,
+            incremental_terminal_clause_filter_hits: input.incremental_terminal_clause_filter_hits,
+            incremental_terminal_clause_filter_prunes: input
+                .incremental_terminal_clause_filter_prunes,
             incremental_trivial_derivability_hits: input.incremental_trivial_derivability_hits,
             incremental_trivial_derivability_prunes: input.incremental_trivial_derivability_prunes,
             incremental_terminal_admissibility_hits: input.incremental_terminal_admissibility_hits,
@@ -337,6 +342,8 @@ mod tests {
             incremental_clause_family_prunes: 2,
             incremental_active_window_clause_filter_hits: 4,
             incremental_active_window_clause_filter_prunes: 3,
+            incremental_terminal_clause_filter_hits: 3,
+            incremental_terminal_clause_filter_prunes: 2,
             incremental_trivial_derivability_hits: 6,
             incremental_trivial_derivability_prunes: 2,
             incremental_terminal_admissibility_hits: 7,
@@ -401,6 +408,8 @@ mod tests {
                 .incremental_active_window_clause_filter_prunes,
             3
         );
+        assert_eq!(artifacts.counts.incremental_terminal_clause_filter_hits, 3);
+        assert_eq!(artifacts.counts.incremental_terminal_clause_filter_prunes, 2);
         assert_eq!(artifacts.counts.incremental_trivial_derivability_hits, 6);
         assert_eq!(artifacts.counts.incremental_trivial_derivability_prunes, 2);
         assert_eq!(artifacts.counts.incremental_terminal_admissibility_hits, 7);

@@ -25,6 +25,8 @@ pub struct PrefixLegalityCacheStats {
     pub clause_family_prunes: usize,
     pub active_window_clause_filter_hits: usize,
     pub active_window_clause_filter_prunes: usize,
+    pub terminal_clause_filter_hits: usize,
+    pub terminal_clause_filter_prunes: usize,
     pub trivial_derivability_hits: usize,
     pub trivial_derivability_prunes: usize,
     pub terminal_admissibility_hits: usize,
@@ -212,6 +214,12 @@ pub enum TerminalConnectivityDecision {
     NeedsFallback,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct FilteredTerminalClause<'a> {
+    pub clause: &'a ClauseRec,
+    pub admissibility_decision: AdmissibilityDecision,
+}
+
 #[derive(Clone, Debug, Default)]
 pub struct PrefixLegalityCache {
     summaries: BTreeMap<PrefixSignature, PrefixLegalitySummary>,
@@ -336,6 +344,44 @@ impl PrefixLegalityCache {
         Some(filtered)
     }
 
+    pub fn filter_terminal_clauses<'a>(
+        &mut self,
+        step_index: u32,
+        parent_signature: &PrefixSignature,
+        library: &Library,
+        admissibility: StrictAdmissibility,
+        clauses: &[&'a ClauseRec],
+    ) -> Option<Vec<FilteredTerminalClause<'a>>> {
+        if step_index <= 3
+            || !self.summaries.contains_key(parent_signature)
+            || !self.family_filters.contains_key(parent_signature)
+        {
+            return None;
+        }
+
+        self.stats.terminal_clause_filter_hits += 1;
+        let mut filtered = Vec::with_capacity(clauses.len());
+        for clause in clauses {
+            let decision = self.terminal_admissibility(
+                step_index,
+                parent_signature,
+                library,
+                clause,
+                admissibility,
+            )?;
+            if !decision.is_admitted() {
+                self.stats.terminal_clause_filter_prunes += 1;
+                continue;
+            }
+            filtered.push(FilteredTerminalClause {
+                clause: *clause,
+                admissibility_decision: decision,
+            });
+        }
+
+        Some(filtered)
+    }
+
     pub fn terminal_admissibility(
         &mut self,
         step_index: u32,
@@ -388,7 +434,9 @@ impl PrefixLegalityCache {
 
 #[cfg(test)]
 mod tests {
-    use super::{PrefixAdmissibilitySummary, PrefixLegalityCache, TerminalConnectivityDecision};
+    use super::{
+        PrefixAdmissibilitySummary, PrefixLegalityCache, TerminalConnectivityDecision,
+    };
     use crate::enumerate::{EnumerationContext, build_clause_catalog};
     use crate::prefix_cache::PrefixSignature;
     use pen_core::clause::{ClauseRec, ClauseRole};
@@ -528,5 +576,35 @@ mod tests {
         assert!(filtered.len() < clause_catalog.clauses_at(4).len());
         assert_eq!(cache.stats().active_window_clause_filter_hits, 1);
         assert!(cache.stats().active_window_clause_filter_prunes > 0);
+    }
+
+    #[test]
+    fn terminal_clause_filter_skips_inadmissible_last_clauses_before_connectivity() {
+        let library = library_until(10);
+        let admissibility =
+            strict_admissibility_for_mode(11, 2, &library, AdmissibilityMode::RealisticShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 5);
+        let prefix = Telescope::new(Telescope::reference(11).clauses[..4].to_vec());
+        let signature = PrefixSignature::new(11, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(signature.clone(), 5, &library, &prefix, admissibility));
+
+        let terminal_filtered = cache
+            .filter_terminal_clauses(
+                11,
+                &signature,
+                &library,
+                admissibility,
+                &clause_catalog.clauses_at(4).iter().collect::<Vec<_>>(),
+            )
+            .expect("terminal summary should enable terminal filtering");
+
+        assert!(!terminal_filtered.is_empty());
+        assert!(terminal_filtered.len() < clause_catalog.clauses_at(4).len());
+        assert_eq!(cache.stats().terminal_clause_filter_hits, 1);
+        assert!(cache.stats().terminal_clause_filter_prunes > 0);
+        assert!(cache.stats().terminal_admissibility_hits > 0);
     }
 }

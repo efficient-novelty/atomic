@@ -231,6 +231,10 @@ pub struct FrontierCounts {
     #[serde(default)]
     pub incremental_active_window_clause_filter_prunes: u64,
     #[serde(default)]
+    pub incremental_terminal_clause_filter_hits: u64,
+    #[serde(default)]
+    pub incremental_terminal_clause_filter_prunes: u64,
+    #[serde(default)]
     pub incremental_trivial_derivability_hits: u64,
     #[serde(default)]
     pub incremental_trivial_derivability_prunes: u64,
@@ -431,6 +435,8 @@ mod tests {
                 incremental_clause_family_prunes: 118_204,
                 incremental_active_window_clause_filter_hits: 922_144,
                 incremental_active_window_clause_filter_prunes: 311_406,
+                incremental_terminal_clause_filter_hits: 441_210,
+                incremental_terminal_clause_filter_prunes: 118_304,
                 incremental_trivial_derivability_hits: 1_407_225,
                 incremental_trivial_derivability_prunes: 92_118,
                 incremental_terminal_admissibility_hits: 2_104_331,
