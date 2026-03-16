@@ -48,7 +48,7 @@ pub fn render_limit_line(label: &str, current: u64, limit: Option<u64>, noun: &s
     }
 }
 
-fn render_bar(current: u64, target: u64) -> String {
+pub fn render_bar(current: u64, target: u64) -> String {
     const WIDTH: u64 = 16;
     if target == 0 {
         return "-".repeat(WIDTH as usize);

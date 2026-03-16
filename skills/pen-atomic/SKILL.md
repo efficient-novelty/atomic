@@ -213,6 +213,9 @@ On the demo-lane side:
 - demo runs now persist per-step narratives, event streams, and phase-level
   full-evaluation accounting plus `breadth_harvest_exit_reason`,
   `proof_close_entry_reason`, and `proof_close_overrun_reason`
+- `pen-cli run|resume --narrative` can now append that stored per-step demo
+  narrative to terminal output, and `scripts/compare_runs.py` now also flags
+  missing demo narrative or event artifacts explicitly
 - demo runs now also persist live proof-close reserve and closure accounting
   plus proof-close milestone and reserve-exhaustion narrative pulses from the
   search loop itself

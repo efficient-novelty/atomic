@@ -178,6 +178,7 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
         for step in steps
         if (entry := demo_phase_entry(step, search_profile)) is not None
     ]
+    narrative_artifacts = narrative_artifact_entry(steps_dir, steps, search_profile)
     provenance_sequence = []
     replay_sequence = []
     governor_sequence = []
@@ -241,6 +242,7 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
         "admissibility_diagnostics": admissibility_diagnostics,
         "late_step_competition": late_step_competition,
         "demo_phase_evidence": demo_phase_evidence,
+        "narrative_artifacts": narrative_artifacts,
         "provenance_sequence": provenance_sequence,
         "provenance_summary": summarize_counter(
             Counter(item["value"] for item in provenance_sequence)
@@ -505,6 +507,56 @@ def has_demo_phase_evidence(
             int(funnel.get("exact_bound_screened", 0) or 0) > 0,
             int(closure.get("frontier_total_seen", 0) or 0) > 0,
         )
+    )
+
+
+def narrative_artifact_entry(
+    steps_dir: Path, steps: list[dict[str, Any]], search_profile: str
+) -> dict[str, Any]:
+    if search_profile != "demo_breadth_shadow":
+        return ordered_dict(
+            [
+                ("status", "not_applicable"),
+                ("expected_steps", 0),
+                ("present_narrative_steps", 0),
+                ("present_event_steps", 0),
+                ("missing_narrative_steps", []),
+                ("missing_event_steps", []),
+            ]
+        )
+
+    missing_narrative_steps = []
+    missing_event_steps = []
+    present_narrative_steps = 0
+    present_event_steps = 0
+
+    for step in steps:
+        step_index = int(step.get("step_index", 0) or 0)
+        narrative_path = steps_dir / f"step-{step_index:02}-narrative.txt"
+        events_path = steps_dir / f"step-{step_index:02}-events.ndjson"
+        if narrative_path.exists():
+            present_narrative_steps += 1
+        else:
+            missing_narrative_steps.append(step_index)
+        if events_path.exists():
+            present_event_steps += 1
+        else:
+            missing_event_steps.append(step_index)
+
+    status = (
+        "complete"
+        if not missing_narrative_steps and not missing_event_steps
+        else "missing"
+    )
+    return ordered_dict(
+        [
+            ("status", status),
+            ("expected_steps", len(steps)),
+            ("present_narrative_steps", present_narrative_steps),
+            ("present_event_steps", present_event_steps),
+            ("missing_narrative_steps", missing_narrative_steps),
+            ("missing_event_steps", missing_event_steps),
+        ]
     )
 
 
@@ -1349,6 +1401,11 @@ def render_lane_summary(lane: dict[str, Any]) -> list[str]:
             f"closure={latest_demo['closure_percent']}% "
             f"winner_overshoot={latest_demo['winner_overshoot']}"
         )
+    if lane["narrative_artifacts"]["status"] != "not_applicable":
+        lines.append(
+            "  narrative artifacts: "
+            f"{render_narrative_artifacts(lane['narrative_artifacts'])}"
+        )
     return lines
 
 
@@ -1407,6 +1464,29 @@ def render_floor_result(actual: int, target: int | None, status: str) -> str:
     if target is None:
         return "not_applicable"
     return f"{status} ({actual}/{target})"
+
+
+def render_narrative_artifacts(narrative_artifacts: dict[str, Any]) -> str:
+    expected = int(narrative_artifacts.get("expected_steps", 0) or 0)
+    if narrative_artifacts["status"] == "complete":
+        return (
+            "complete "
+            f"(text={narrative_artifacts['present_narrative_steps']}/{expected}, "
+            f"events={narrative_artifacts['present_event_steps']}/{expected})"
+        )
+
+    details = []
+    missing_narrative_steps = narrative_artifacts.get("missing_narrative_steps") or []
+    missing_event_steps = narrative_artifacts.get("missing_event_steps") or []
+    if missing_narrative_steps:
+        details.append(f"text={render_step_list(missing_narrative_steps)}")
+    if missing_event_steps:
+        details.append(f"events={render_step_list(missing_event_steps)}")
+    return "missing (" + ", ".join(details) + ")"
+
+
+def render_step_list(steps: list[int]) -> str:
+    return ", ".join(f"step {step}" for step in steps)
 
 
 def compact_sequence(items: list[dict[str, Any]]) -> list[dict[str, Any]]:

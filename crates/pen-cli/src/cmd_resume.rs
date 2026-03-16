@@ -1,7 +1,7 @@
 use crate::cli::ResumeArgs;
 use crate::cmd_run::{
     build_run_manifest, current_search_compat, frontier_runtime_limits, now_utc,
-    resolved_worker_count, write_run_artifacts,
+    resolved_worker_count, terminal_narrative_config, write_run_artifacts,
 };
 use crate::output::{OutputStyle, render_run_output};
 use crate::report::{
@@ -46,6 +46,7 @@ pub fn resume(args: ResumeArgs) -> Result<String> {
             OutputStyle::from_debug(args.debug),
             &manifest.run_id,
             &steps,
+            terminal_narrative_config(&config, args.narrative),
         ));
     }
 
@@ -79,6 +80,7 @@ pub fn resume(args: ResumeArgs) -> Result<String> {
         OutputStyle::from_debug(args.debug),
         &manifest.run_id,
         &steps,
+        terminal_narrative_config(&config, args.narrative),
     ))
 }
 
@@ -426,6 +428,7 @@ mod tests {
             run_id: Some("resume-run".to_owned()),
             until_step: Some(2),
             debug: false,
+            narrative: false,
         })
         .expect("initial run should succeed");
 
@@ -433,6 +436,7 @@ mod tests {
             run_dir: root.join("resume-run"),
             until_step: Some(4),
             debug: false,
+            narrative: false,
         })
         .expect("resume should succeed");
 

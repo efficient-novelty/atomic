@@ -1,4 +1,6 @@
-use crate::progress::{format_millis, format_seconds, render_goal_line, render_limit_line};
+use crate::progress::{
+    format_millis, format_seconds, render_bar, render_goal_line, render_limit_line,
+};
 use crate::report::{CandidateStatus, FrontierRetention, PruneReportClass, StepReport};
 use anyhow::Result;
 use pen_search::config::{DemoConfig, RuntimeConfig, SearchProfile};
@@ -95,12 +97,7 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
             full_eval_soft_cap,
             "evaluated",
         ),
-        format!(
-            "closure      frontier_total={} certified_nonwinning={} closure={}%",
-            closure.frontier_total_seen,
-            closure.frontier_certified_nonwinning,
-            closure.closure_percent
-        ),
+        closure_line(&closure, demo),
         demo_phase_line(step),
         proof_close_line(step),
         format!(
@@ -234,6 +231,16 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
     }
 
     lines.join("\n")
+}
+
+pub fn render_run_narrative(steps: &[StepReport], demo: &DemoConfig) -> String {
+    if steps.is_empty() {
+        return "demo narrative\n  none".to_owned();
+    }
+
+    let mut sections = vec!["demo narrative".to_owned()];
+    sections.extend(steps.iter().map(|step| render_step_narrative(step, demo)));
+    sections.join("\n\n")
 }
 
 fn step_events(step: &StepReport) -> Vec<NarrativeEvent> {
@@ -429,25 +436,61 @@ fn proof_close_line(step: &StepReport) -> String {
 }
 
 fn time_line(step_index: u32, elapsed_millis: u64, demo: &DemoConfig) -> String {
-    if step_index <= 4 {
+    let (budget, note) = if step_index <= 4 {
+        (
+            Some(u64::from(demo.early_exhaustive_budget_sec)),
+            Some("shared early window across steps 1-4"),
+        )
+    } else {
+        (
+            demo.floors
+                .step_floor_sec
+                .get(&step_index.to_string())
+                .copied()
+                .map(u64::from),
+            None,
+        )
+    };
+    let Some(budget_seconds) = budget else {
+        return format!("time         {}", format_millis(elapsed_millis));
+    };
+    let budget_millis = budget_seconds * 1_000;
+    let status = if elapsed_millis <= budget_millis {
+        "within limit"
+    } else {
+        "over limit"
+    };
+    let note_suffix = note.map(|value| format!("; {value}")).unwrap_or_default();
+    if demo.narrative.show_progress_bar {
         return format!(
-            "time         {} (shared early window {} across steps 1-4)",
+            "time         [{}] {} / {} ({status}{note_suffix})",
+            render_bar(elapsed_millis.min(budget_millis), budget_millis),
             format_millis(elapsed_millis),
-            format_seconds(demo.early_exhaustive_budget_sec)
+            format_seconds(u32::try_from(budget_seconds).expect("budget seconds exceeded u32"))
         );
     }
 
-    let budget = demo
-        .floors
-        .step_floor_sec
-        .get(&step_index.to_string())
-        .copied()
-        .map(u64::from);
-    render_limit_line(
-        "time",
-        elapsed_millis,
-        budget.map(|seconds| seconds * 1_000),
-        "budget_ms",
+    format!(
+        "time         {} / {} ({status}{note_suffix})",
+        format_millis(elapsed_millis),
+        format_seconds(u32::try_from(budget_seconds).expect("budget seconds exceeded u32"))
+    )
+}
+
+fn closure_line(closure: &pen_search::engine::DemoClosureStats, demo: &DemoConfig) -> String {
+    if demo.narrative.show_progress_bar {
+        return format!(
+            "closure      [{}] {}% frontier_total={} certified_nonwinning={}",
+            render_bar(u64::from(closure.closure_percent), 100),
+            closure.closure_percent,
+            closure.frontier_total_seen,
+            closure.frontier_certified_nonwinning
+        );
+    }
+
+    format!(
+        "closure      {}% frontier_total={} certified_nonwinning={}",
+        closure.closure_percent, closure.frontier_total_seen, closure.frontier_certified_nonwinning
     )
 }
 
@@ -532,9 +575,11 @@ mod tests {
 
         assert!(text.contains("events"));
         assert!(text.contains("closure"));
+        assert!(text.contains("closure      ["));
         assert!(text.contains("demo_funnel"));
         assert!(text.contains("phase_eval"));
         assert!(text.contains("proof_close  reserve="));
+        assert!(text.contains("time         ["));
         assert!(text.contains("phase_change"));
         assert!(text.contains("scout"));
         assert!(text.contains("retained candidates"));

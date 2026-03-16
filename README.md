@@ -155,6 +155,8 @@ For rollout and comparison work, use the dedicated search-profile configs:
 
 Demo runs now also write first-pass per-step narrative artifacts in
 `reports/steps/step-XX-narrative.txt` and `reports/steps/step-XX-events.ndjson`.
+Add `--narrative` to `pen-cli run` or `pen-cli resume` if you want that stored
+per-step demo narrative appended to the terminal report as well.
 
 ## Quick Start
 
@@ -242,7 +244,7 @@ cargo run -p pen-cli -- run --config configs/realistic_frontier_shadow.toml --ro
 Experimental demo breadth scaffold:
 
 ```powershell
-cargo run -p pen-cli -- run --config configs/demo_breadth_shadow_10m.toml --root runs --run-id demo-10m --until-step 15
+cargo run -p pen-cli -- run --config configs/demo_breadth_shadow_10m.toml --root runs --run-id demo-10m --until-step 15 --narrative
 ```
 
 Compare the stored evidence:
@@ -250,6 +252,9 @@ Compare the stored evidence:
 ```powershell
 python scripts/compare_runs.py --baseline guarded --lane guarded=runs/guarded --lane realistic=runs/realistic
 ```
+
+For demo lanes, the compare output now also calls out missing
+`step-XX-narrative.txt` and `step-XX-events.ndjson` artifacts explicitly.
 
 For the full Workstream 4 rollout matrix, also compare:
 
@@ -341,6 +346,13 @@ Intentional limits:
   claim of open-ended anti-junk exploration
 - `realistic_frontier_shadow` still requires comparison-backed parity evidence
   and pressure evidence before any default-lane promotion
+- comparison-backed demo/reporting surfaces do not invent fake discoveries or
+  fake breadth to look broader than the stored search work really was
+- when a comparison-backed lane misses a floor, budget, or certification
+  target, it must report the miss in stored artifacts instead of silently
+  falling back to guarded or replay behavior
+- comparison-backed docs and summaries only claim what persisted run evidence
+  and compare output actually support
 - historical alternate late-step totals remain provenance only
 - Agda artifacts are observational only
 - optional acceleration scaffolding is outside the authoritative acceptance

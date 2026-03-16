@@ -72,7 +72,22 @@ pub fn run(args: RunArgs) -> Result<String> {
         OutputStyle::from_debug(args.debug),
         &run_id,
         &steps,
+        terminal_narrative_config(&config, args.narrative),
     ))
+}
+
+pub(crate) fn terminal_narrative_config<'a>(
+    config: &'a RuntimeConfig,
+    requested: bool,
+) -> Option<&'a pen_search::config::DemoConfig> {
+    if requested
+        && config.mode.search_profile == pen_search::config::SearchProfile::DemoBreadthShadow
+        && config.demo.enabled
+    {
+        Some(&config.demo)
+    } else {
+        None
+    }
 }
 
 pub(crate) fn current_run_compat() -> RunCompat {
@@ -855,6 +870,7 @@ mod tests {
             run_id: Some("test-run".to_owned()),
             until_step: Some(3),
             debug: false,
+            narrative: false,
         })
         .expect("run command should succeed");
 
@@ -880,6 +896,7 @@ mod tests {
             run_id: Some("demo-test-run".to_owned()),
             until_step: Some(3),
             debug: false,
+            narrative: false,
         })
         .expect("demo run should succeed");
 

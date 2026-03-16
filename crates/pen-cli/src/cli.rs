@@ -28,6 +28,11 @@ pub struct RunArgs {
     pub until_step: Option<u32>,
     #[arg(long)]
     pub debug: bool,
+    #[arg(
+        long,
+        help = "append per-step demo narrative output to the terminal report"
+    )]
+    pub narrative: bool,
 }
 
 #[derive(Debug, Clone, Args)]
@@ -37,6 +42,11 @@ pub struct ResumeArgs {
     pub until_step: Option<u32>,
     #[arg(long)]
     pub debug: bool,
+    #[arg(
+        long,
+        help = "append per-step demo narrative output to the terminal report"
+    )]
+    pub narrative: bool,
 }
 
 #[derive(Debug, Clone, Args)]

@@ -946,6 +946,136 @@ fn compare_runs_reports_demo_phase_floor_and_closure_evidence() {
 }
 
 #[test]
+fn demo_run_and_resume_append_narrative_output_when_requested() {
+    let root = temp_dir("demo-narrative-output");
+    let run_dir = root.join("demo-narrative");
+
+    let run_stdout = assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("demo_breadth_shadow_10m.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "demo-narrative",
+        "--until-step",
+        "2",
+        "--narrative",
+    ]));
+
+    assert!(run_stdout.contains("completed_step: 2"));
+    assert!(run_stdout.contains("demo narrative"));
+    assert!(run_stdout.contains("step 02 demo narrative"));
+    assert!(run_stdout.contains("time         ["));
+    assert!(run_stdout.contains("closure      ["));
+
+    let resume_stdout = assert_success(run_pen_cli([
+        "resume",
+        &run_dir.to_string_lossy(),
+        "--until-step",
+        "3",
+        "--narrative",
+    ]));
+
+    assert!(resume_stdout.contains("completed_step: 3"));
+    assert!(resume_stdout.contains("step 03 demo narrative"));
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn compare_runs_reports_missing_demo_narrative_artifacts_explicitly() {
+    let root = temp_dir("demo-missing-narrative");
+    let guarded_dir = root.join("guarded");
+    let demo_dir = root.join("demo");
+
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("strict_canon_guarded.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "guarded",
+        "--until-step",
+        "2",
+    ]));
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("demo_breadth_shadow_10m.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "demo",
+        "--until-step",
+        "2",
+    ]));
+
+    fs::remove_file(
+        demo_dir
+            .join("reports")
+            .join("steps")
+            .join("step-02-narrative.txt"),
+    )
+    .expect("remove narrative artifact");
+    fs::remove_file(
+        demo_dir
+            .join("reports")
+            .join("steps")
+            .join("step-01-events.ndjson"),
+    )
+    .expect("remove events artifact");
+
+    let json_out = root.join("compare-missing.json");
+    let stdout = assert_success(run_compare_runs([
+        "--baseline",
+        "guarded",
+        "--lane",
+        &format!("guarded={}", guarded_dir.to_string_lossy()),
+        "--lane",
+        &format!("demo={}", demo_dir.to_string_lossy()),
+        "--json-out",
+        &json_out.to_string_lossy(),
+    ]));
+
+    assert!(stdout.contains("narrative artifacts: missing"));
+    assert!(stdout.contains("text=step 2"));
+    assert!(stdout.contains("events=step 1"));
+
+    let summary = read_json(&json_out);
+    let demo_lane = summary["lanes"]
+        .as_array()
+        .expect("lanes")
+        .iter()
+        .find(|lane| lane["label"].as_str() == Some("demo"))
+        .expect("demo lane");
+    assert_eq!(
+        demo_lane["narrative_artifacts"]["status"].as_str(),
+        Some("missing")
+    );
+    assert_eq!(
+        demo_lane["narrative_artifacts"]["missing_narrative_steps"].as_array(),
+        Some(&vec![serde_json::Value::from(2)])
+    );
+    assert_eq!(
+        demo_lane["narrative_artifacts"]["missing_event_steps"].as_array(),
+        Some(&vec![serde_json::Value::from(1)])
+    );
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
 fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
     let root = temp_dir("workstream4-rollout");
     let root_arg = root.to_string_lossy().to_string();

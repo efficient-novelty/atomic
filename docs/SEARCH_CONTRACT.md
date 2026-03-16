@@ -16,7 +16,9 @@ pretending there is only one live claim surface.
   explicit 5-minute, 10-minute, and 15-minute budget metadata; in the current
   milestone it still reuses realistic-shadow search semantics while the
   dedicated demo scheduler, funnel counters, and live phase observer land;
-  demo runs now also persist first-pass narrative text and event artifacts
+  demo runs now also persist first-pass narrative text and event artifacts, and
+  `pen-cli run|resume --narrative` can append that per-step narrative to the
+  terminal report
 
 The realistic lane is real runtime behavior, not a paper placeholder, but it is
 still rollout-gated by parity evidence rather than promoted to default truth.
@@ -52,6 +54,8 @@ bounded rollout surface. It reads existing run directories and compares:
 - prune sample totals
 - frontier-retention deltas
 - governor state and pressure-action sequences
+- missing demo narrative and event artifacts when a demo lane should have
+  written them
 - step-15 claim-boundary consistency
 
 The script also emits a Workstream 4 rollout view:
@@ -74,6 +78,14 @@ summary without moving truth out of the stored Rust artifacts.
 4. Every prune is classified as sound, quotient or dedupe, or heuristic shaping.
 5. GPU acceleration is advisory only and must be rechecked on CPU before sound prune or acceptance.
 6. The guarded lane remains authoritative until rollout parity and the docs agree on a wider honesty boundary.
+
+## Honesty boundary
+
+- no fake discoveries
+- no fake breadth
+- no silent guarded or replay fallback when a comparison-backed lane misses a
+  floor, budget, or certification target
+- no claim beyond persisted run evidence and comparison-backed summaries
 
 ## Resume rules
 
