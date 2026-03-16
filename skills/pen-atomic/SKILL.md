@@ -67,6 +67,11 @@ The current search-architecture focus has shifted again:
   on retained prefix groups and uses them to skip dominated late full-telescope
   evaluations once an already-seen semantically minimal bar-clear candidate
   cannot be beaten
+- realistic shadow now also materializes retained terminal-prefix groups as
+  soon as they are popped, caches those exact full candidates on the retained
+  group, and uses the proven semantically minimal incumbent to skip later
+  dominated late terminal prefixes before they count as explored or enter the
+  retained frontier
 - realistic shadow now also computes exact terminal-prefix completion bounds
   and prunes one-clause-short prefix groups that cannot clear the current bar
   before retained-prefix frontier planning
@@ -139,6 +144,10 @@ The current search-architecture focus has shifted again:
   `incremental_terminal_rank_prunes = 1` and
   `full_telescopes_evaluated = 1`, confirming that dominated late retained
   terminal surfaces are now skipped before final candidate evaluation
+- fresh realistic-shadow step-13 and step-15 artifacts now also show
+  `prefix_states_explored = 2` and
+  `prefix_frontier_hot_states = 1`, confirming that the dominated late
+  terminal prefix is now pruned before retained frontier planning
 - fresh realistic-shadow step-15 artifacts now also show
   `incremental_connectivity_shortcuts = 2` and
   `incremental_connectivity_fallbacks = 0`, confirming that temporal-shell
@@ -149,12 +158,13 @@ The current search-architecture focus has shifted again:
   clause filtering plus the landed budgeted small-tree completion-bound prune
   plus the landed exact terminal-prefix bar prune plus the landed exact
   terminal-prefix completion reuse plus the landed exact late terminal
-  accept-rank prune plus the landed multi-step partial-prefix bar-decision
-  reuse plus the landed exact historical-reanchor connectivity shortcut, then
-  broader non-family admissibility/filter reuse before terminal completion
-  summaries are built beyond the landed trivial-derivability and terminal-
-  admissibility summaries plus the landed cached next-clause reuse, then
-  continuing to use the new timing/memory evidence to retune realistic
+  accept-rank prune plus the landed eager terminal-prefix-group materialization
+  and cached full-candidate reuse plus the landed multi-step partial-prefix
+  bar-decision reuse plus the landed exact historical-reanchor connectivity
+  shortcut, then broader non-family admissibility/filter reuse before terminal
+  completion summaries are built beyond the landed trivial-derivability and
+  terminal-admissibility summaries plus the landed cached next-clause reuse,
+  then continuing to use the new timing/memory evidence to retune realistic
   late-step order past the first continuation-aware queue retune, not "add a
   frontier for the first time" or "collapse obviously forced late-family
   suffixes for the first time"

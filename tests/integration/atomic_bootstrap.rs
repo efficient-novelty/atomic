@@ -1248,15 +1248,17 @@ fn realistic_shadow_pressure_run_surfaces_prefix_frontier_pressure_and_drop() {
             .expect("frontier pressure hot bytes")
             > 0
     );
-    assert!(
-        step4_summary["search_stats"]["prefix_states_heuristic_dropped"]
-            .as_u64()
-            .expect("prefix_states_heuristic_dropped")
-            > 0
+    assert_eq!(
+        step4_summary["search_stats"]["incremental_terminal_rank_prunes"].as_u64(),
+        Some(3)
+    );
+    assert_eq!(
+        step4_summary["search_stats"]["prefix_frontier_hot_states"].as_u64(),
+        Some(1)
     );
     assert_eq!(
         step4_summary["search_stats"]["prefix_frontier_cold_states"].as_u64(),
-        Some(1)
+        Some(0)
     );
 
     let frontier = read_json(
@@ -1268,8 +1270,8 @@ fn realistic_shadow_pressure_run_surfaces_prefix_frontier_pressure_and_drop() {
             .join("frontier.manifest.json"),
     );
     assert_eq!(
-        frontier["counts"]["prefix_states_heuristic_dropped"].as_u64(),
-        step4_summary["search_stats"]["prefix_states_heuristic_dropped"].as_u64()
+        frontier["counts"]["incremental_terminal_rank_prunes"].as_u64(),
+        step4_summary["search_stats"]["incremental_terminal_rank_prunes"].as_u64()
     );
     assert!(frontier["memory_snapshot"]["rss_bytes"].is_u64());
     let frontier_inspect = assert_success(run_pen_cli([

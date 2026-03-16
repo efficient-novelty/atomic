@@ -2,7 +2,7 @@ use crate::accept::{
     AcceptanceOutcome, acceptance_rank, acceptance_rank_for_telescope, select_acceptance,
 };
 use crate::bounds::PrefixBound;
-use crate::branch_bound::better_rank;
+use crate::branch_bound::{AcceptRank, better_rank};
 use crate::config::SearchProfile;
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{
@@ -213,6 +213,8 @@ struct RealisticShadowDiscovery {
     prefix_cache: PrefixCache,
     prefix_legality_cache: PrefixLegalityCache,
     candidates: Vec<ExpandedCandidate>,
+    terminal_rank_incumbent: Option<AcceptRank>,
+    terminal_rank_prunes: usize,
     prefixes_created: usize,
     prefix_states_explored: usize,
     enumerated_candidates: usize,
@@ -237,6 +239,12 @@ struct OnlinePrefixWorkItem {
     clause_count: usize,
     next_clauses: Vec<pen_core::clause::ClauseRec>,
     order_key: String,
+}
+
+#[derive(Clone, Debug, Default)]
+struct MaterializedTerminalPrefixGroup {
+    candidates: Vec<PrefixGroupCandidate>,
+    bound: Option<PrefixBound>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -452,6 +460,7 @@ fn search_next_step(
             legality_stats.terminal_admissibility_rejections;
         incremental_terminal_prefix_completion_hits =
             legality_stats.terminal_prefix_completion_hits;
+        incremental_terminal_rank_prunes = discovery.terminal_rank_prunes;
         incremental_partial_prefix_bound_hits = legality_stats.partial_prefix_bound_hits;
         incremental_partial_prefix_bound_checks = discovery.partial_prefix_bound_checks;
         incremental_partial_prefix_bound_prunes = discovery.partial_prefix_bound_prunes;
@@ -541,8 +550,14 @@ fn search_next_step(
                     }
                 }
 
-                let candidate =
-                    evaluate_checked_candidate(library, history, group_candidate.telescope)?;
+                let candidate = match group_candidate.evaluated_candidate.clone() {
+                    Some(candidate) => candidate,
+                    None => evaluate_checked_candidate(
+                        library,
+                        history,
+                        group_candidate.telescope.clone(),
+                    )?,
+                };
                 if let Some(rank) = acceptance_rank(objective_bar, &candidate) {
                     let witness = analyze_semantic_minimality(
                         step_index,
@@ -984,7 +999,6 @@ fn discover_realistic_shadow_candidates(
         }
 
         while let Some(work_item) = pop_best_prefix(&mut frontier) {
-            discovery.prefix_states_explored += 1;
             let Some(work_item) = collapse_single_continuation_chain(
                 step_index,
                 library,
@@ -998,12 +1012,10 @@ fn discover_realistic_shadow_candidates(
             let prefix_len = work_item.prefix_telescope.clauses.len();
 
             if prefix_len + 1 == usize::from(work_item.clause_kappa) {
-                record_terminal_prefix_group(
+                let mut group = materialize_terminal_prefix_group(
                     step_index,
                     library,
-                    history,
                     admissibility,
-                    retention_policy,
                     objective_bar,
                     nu_history,
                     &work_item.signature,
@@ -1011,9 +1023,47 @@ fn discover_realistic_shadow_candidates(
                     &work_item.next_clauses,
                     &mut discovery,
                 )?;
+                let Some(retained_bound) = group.bound else {
+                    continue;
+                };
+                if !retained_bound.can_clear_bar(objective_bar) {
+                    discovery.terminal_prefix_bar_prunes += 1;
+                    continue;
+                }
+                if let (Some(group_best_rank), Some(incumbent_rank)) = (
+                    best_prefix_group_accept_rank(&group.candidates),
+                    discovery.terminal_rank_incumbent.as_ref(),
+                ) {
+                    if !better_rank(&group_best_rank, incumbent_rank) {
+                        discovery.terminal_rank_prunes += group.candidates.len();
+                        continue;
+                    }
+                }
+
+                discovery.prefix_states_explored += 1;
+                cache_evaluated_terminal_prefix_group_candidates(
+                    step_index,
+                    objective_bar,
+                    library,
+                    history,
+                    admissibility,
+                    nu_history,
+                    &mut group.candidates,
+                    &mut discovery,
+                )?;
+                discovery.prefix_cache.record_group_with_bound(
+                    step_index,
+                    work_item.prefix_telescope.clone(),
+                    group.candidates,
+                    retained_bound,
+                    library,
+                    history,
+                    retention_policy,
+                )?;
                 continue;
             }
 
+            discovery.prefix_states_explored += 1;
             for clause in &work_item.next_clauses {
                 let mut child_prefix = work_item.prefix_telescope.clone();
                 child_prefix.clauses.push(clause.clone());
@@ -1544,19 +1594,17 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     summary
 }
 
-fn record_terminal_prefix_group(
+fn materialize_terminal_prefix_group(
     step_index: u32,
     library: &Library,
-    history: &[DiscoveryRecord],
     admissibility: StrictAdmissibility,
-    retention_policy: RetentionPolicy,
     objective_bar: Rational,
     nu_history: &[(u32, u32)],
     prefix_signature: &PrefixSignature,
     prefix_telescope: &Telescope,
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
     discovery: &mut RealisticShadowDiscovery,
-) -> Result<()> {
+) -> Result<MaterializedTerminalPrefixGroup> {
     let summary = if let Some(summary) = discovery
         .prefix_legality_cache
         .terminal_prefix_completion_summary(prefix_signature)
@@ -1615,28 +1663,77 @@ fn record_terminal_prefix_group(
                 retained_telescopes.push(PrefixGroupCandidate {
                     telescope: completion.telescope,
                     accept_rank,
+                    evaluated_candidate: None,
                 });
             }
         }
     }
 
-    let Some(retained_bound) = bound else {
-        return Ok(());
-    };
-    if !retained_bound.can_clear_bar(objective_bar) {
-        discovery.terminal_prefix_bar_prunes += 1;
-        return Ok(());
-    }
+    Ok(MaterializedTerminalPrefixGroup {
+        candidates: retained_telescopes,
+        bound,
+    })
+}
 
-    discovery.prefix_cache.record_group_with_bound(
-        step_index,
-        prefix_telescope.clone(),
-        retained_telescopes,
-        retained_bound,
-        library,
-        history,
-        retention_policy,
-    )?;
+fn best_prefix_group_accept_rank(candidates: &[PrefixGroupCandidate]) -> Option<AcceptRank> {
+    let mut best = None;
+    for candidate in candidates {
+        let Some(rank) = candidate.accept_rank.clone() else {
+            continue;
+        };
+        match &best {
+            Some(current) if !better_rank(&rank, current) => {}
+            _ => best = Some(rank),
+        }
+    }
+    best
+}
+
+fn cache_evaluated_terminal_prefix_group_candidates(
+    step_index: u32,
+    objective_bar: Rational,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility: StrictAdmissibility,
+    nu_history: &[(u32, u32)],
+    candidates: &mut [PrefixGroupCandidate],
+    discovery: &mut RealisticShadowDiscovery,
+) -> Result<()> {
+    candidates.sort_by_key(|candidate| {
+        serde_json::to_string(&candidate.telescope)
+            .expect("terminal group telescope should serialize")
+    });
+
+    for candidate in candidates {
+        let evaluated = match candidate.evaluated_candidate.clone() {
+            Some(evaluated) => evaluated,
+            None => evaluate_checked_candidate(library, history, candidate.telescope.clone())?,
+        };
+        let candidate_rank = candidate
+            .accept_rank
+            .clone()
+            .or_else(|| acceptance_rank(objective_bar, &evaluated));
+        if let Some(rank) = candidate_rank.clone() {
+            let witness = analyze_semantic_minimality(
+                step_index,
+                objective_bar,
+                admissibility,
+                &evaluated.telescope,
+                library,
+                nu_history,
+            );
+            let better_than_incumbent = discovery
+                .terminal_rank_incumbent
+                .as_ref()
+                .map(|current| better_rank(&rank, current))
+                .unwrap_or(true);
+            if witness.is_minimal() && better_than_incumbent {
+                discovery.terminal_rank_incumbent = Some(rank);
+            }
+        }
+        candidate.accept_rank = candidate_rank;
+        candidate.evaluated_candidate = Some(evaluated);
+    }
 
     Ok(())
 }
@@ -2461,7 +2558,7 @@ mod tests {
         assert_eq!(step.telescope, Telescope::reference(15));
         assert!(step.prefixes_created >= step.prefix_states_explored);
         assert!(step.prefix_states_explored > step.frontier_window.total_len());
-        assert_eq!(step.prefix_frontier_hot_states, 2);
+        assert_eq!(step.prefix_frontier_hot_states, 1);
         assert_eq!(step.prefix_frontier_cold_states, 0);
         assert!(step.incremental_legality_cache_hits > 0);
         assert_eq!(step.incremental_connectivity_fallbacks, 0);
@@ -2473,7 +2570,7 @@ mod tests {
         assert!(step.incremental_terminal_prefix_completion_hits > 0);
         assert!(step.incremental_terminal_rank_prunes > 0);
         assert!(step.incremental_partial_prefix_bound_checks > 0);
-        assert_eq!(step.prefix_states_explored, 3);
+        assert_eq!(step.prefix_states_explored, 2);
         assert!(
             step.prefix_frontier_hot_states + step.prefix_frontier_cold_states
                 <= step.prefix_states_explored
@@ -2482,7 +2579,7 @@ mod tests {
         assert_eq!(step.full_telescopes_evaluated, step.evaluated_candidates);
         assert_eq!(step.canonical_dedupe_prunes, step.dedupe_prunes);
         assert_eq!(step.semantic_minimality_prunes, step.minimality_prunes);
-        assert_eq!(step.frontier_window.total_len(), 2);
-        assert_eq!(step.frontier_dedupe_keys.len(), 2);
+        assert_eq!(step.frontier_window.total_len(), 1);
+        assert_eq!(step.frontier_dedupe_keys.len(), 1);
     }
 }

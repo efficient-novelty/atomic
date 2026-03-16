@@ -1,6 +1,6 @@
 use crate::bounds::PrefixBound;
 use crate::branch_bound::{AcceptRank, better_rank};
-use crate::expand::evaluate_checked_candidate;
+use crate::expand::{ExpandedCandidate, evaluate_checked_candidate};
 use anyhow::Result;
 use pen_core::canonical::canonical_key_telescope;
 use pen_core::encode::telescope_bit_cost;
@@ -84,6 +84,7 @@ pub struct PrefixCacheStats {
 pub struct PrefixGroupCandidate {
     pub telescope: Telescope,
     pub accept_rank: Option<AcceptRank>,
+    pub evaluated_candidate: Option<ExpandedCandidate>,
 }
 
 #[derive(Clone, Debug)]
@@ -142,6 +143,7 @@ impl PrefixCache {
             vec![PrefixGroupCandidate {
                 telescope,
                 accept_rank: None,
+                evaluated_candidate: None,
             }],
             bound,
             library,
@@ -412,10 +414,12 @@ mod tests {
                     PrefixGroupCandidate {
                         telescope: telescope_a,
                         accept_rank: None,
+                        evaluated_candidate: None,
                     },
                     PrefixGroupCandidate {
                         telescope: telescope_b,
                         accept_rank: None,
+                        evaluated_candidate: None,
                     },
                 ],
                 PrefixBound {
