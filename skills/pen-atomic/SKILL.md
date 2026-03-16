@@ -84,6 +84,10 @@ The current search-architecture focus has shifted again:
   proved late-step `can_clear_bar` / `cannot_clear_bar` results between the
   early pre-queue subtree walk and later child-prefix checks inside the same
   step
+- realistic shadow now also stores exact one-clause-short terminal-prefix bar
+  decisions in that same `PrefixSignature`-keyed partial-prefix bound cache,
+  so later enqueued terminal prefixes can reuse the exact `can_clear_bar` /
+  `cannot_clear_bar` decision without replaying the terminal-summary lookup
 - realistic shadow now also collapses exact single-continuation late-family
   suffixes in-place once the strengthened family summary plus active-window
   clause filtering leave only one legal child at each remaining position, so
@@ -138,8 +142,11 @@ The current search-architecture focus has shifted again:
   partial-prefix bar decisions are now reused during repeated late-step prefix
   checks
 - stored realistic-shadow step-13 and step-15 artifacts now also show
-  `incremental_terminal_prefix_completion_hits = 3`, confirming that the
-  one-clause-short exact terminal work is now reused instead of replayed
+  `incremental_partial_prefix_bound_hits = 1` and
+  `incremental_terminal_prefix_completion_hits = 2`, confirming that the
+  one-clause-short exact terminal work now reuses the cached partial bar
+  decision on the later enqueue path instead of replaying the same terminal
+  summary lookup
 - fresh realistic-shadow step-13, step-14, and step-15 artifacts now also show
   `incremental_terminal_rank_prunes = 1` and
   `full_telescopes_evaluated = 1`, confirming that dominated late retained
@@ -160,14 +167,14 @@ The current search-architecture focus has shifted again:
   terminal-prefix completion reuse plus the landed exact late terminal
   accept-rank prune plus the landed eager terminal-prefix-group materialization
   and cached full-candidate reuse plus the landed multi-step partial-prefix
-  bar-decision reuse plus the landed exact historical-reanchor connectivity
-  shortcut, then broader non-family admissibility/filter reuse before terminal
-  completion summaries are built beyond the landed trivial-derivability and
-  terminal-admissibility summaries plus the landed cached next-clause reuse,
-  then continuing to use the new timing/memory evidence to retune realistic
-  late-step order past the first continuation-aware queue retune, not "add a
-  frontier for the first time" or "collapse obviously forced late-family
-  suffixes for the first time"
+  bar-decision reuse plus the landed terminal-prefix partial-bound reuse plus
+  the landed exact historical-reanchor connectivity shortcut, then broader
+  non-family admissibility/filter reuse before terminal completion summaries
+  are built beyond the landed trivial-derivability and terminal-admissibility
+  summaries plus the landed cached next-clause reuse, then continuing to use
+  the new timing/memory evidence to retune realistic late-step order past the
+  first continuation-aware queue retune, not "add a frontier for the first
+  time" or "collapse obviously forced late-family suffixes for the first time"
 
 Start with the current architecture doc before diving into donor material:
 
@@ -310,19 +317,21 @@ Focus on:
   terminal-admissibility memo path plus the landed terminal trivial-
   derivability reuse and terminal-prefix bar prune plus the landed exact
   small-tree partial-prefix bound prune plus the landed exact
-  multi-step partial-prefix bar-decision reuse plus the landed exact
-  single-continuation suffix collapse plus the landed exact historical-
-  reanchor connectivity shortcut plus the landed cached next-clause reuse and
-  continuation-aware queue order, and the still-missing broader partial-
-  prefix bound pruning plus broader non-family admissibility reuse
+  multi-step partial-prefix bar-decision reuse plus the landed terminal-prefix
+  partial-bound reuse plus the landed exact single-continuation suffix
+  collapse plus the landed exact historical-reanchor connectivity shortcut
+  plus the landed cached next-clause reuse and continuation-aware queue order,
+  and the still-missing broader partial-prefix bound pruning plus broader
+  non-family admissibility reuse
 - using strengthened `PrefixSignature` state, the landed memo counters, the
   now-persisted timing telemetry, and the deterministic frontier memory
   high-water metrics as the remaining bound/admissibility gaps past the landed
   clause-family pruning, active-window clause filtering, terminal-clause
   filtering, terminal-admissibility cache, exact historical-reanchor
   connectivity shortcut, budgeted small-tree partial-prefix bound prune,
-  cached next-clause reuse, and terminal-prefix bar prune as the starting
-  point for further quantum-inspired search work
+  cached next-clause reuse, terminal-prefix partial-bound reuse, and
+  terminal-prefix bar prune as the starting point for further quantum-inspired
+  search work
 
 ### If you are working on reporting or evidence
 
@@ -400,14 +409,15 @@ Reject designs that:
   small-tree completion-bound prune and exact terminal-prefix bar prune plus
   the landed exact terminal-prefix completion reuse plus the landed exact late
   terminal accept-rank prune plus the landed exact multi-step partial-prefix
-  bar-decision reuse plus the landed exact single-continuation suffix collapse
-  plus the landed exact historical-reanchor connectivity shortcut plus the
-  landed cached next-clause reuse and continuation-aware queue order, then
-  broader non-family admissibility/filter reuse before terminal completion
-  summaries are built beyond the landed legality/connectivity/family/
-  active-window/terminal-clause/trivial-derivability/terminal-admissibility/
-  terminal-prefix-completion/partial-prefix-bound memo layer, then continuing
-  to use the now-persisted timing/memory evidence to retune late-step order.
+  bar-decision reuse plus the landed terminal-prefix partial-bound reuse plus
+  the landed exact single-continuation suffix collapse plus the landed exact
+  historical-reanchor connectivity shortcut plus the landed cached next-clause
+  reuse and continuation-aware queue order, then broader non-family
+  admissibility/filter reuse before terminal completion summaries are built
+  beyond the landed legality/connectivity/family/active-window/terminal-
+  clause/trivial-derivability/terminal-admissibility/terminal-prefix-
+  completion/partial-prefix-bound memo layer, then continuing to use the now-
+  persisted timing/memory evidence to retune late-step order.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.

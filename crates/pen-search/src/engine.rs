@@ -254,6 +254,16 @@ enum ExactPartialPrefixBoundDecision {
     Unknown,
 }
 
+impl ExactPartialPrefixBoundDecision {
+    fn cacheable_partial_decision(self) -> Option<PartialPrefixBoundDecision> {
+        match self {
+            Self::CanClearBar => Some(PartialPrefixBoundDecision::CanClearBar),
+            Self::CannotClearBar => Some(PartialPrefixBoundDecision::CannotClearBar),
+            Self::Unknown => None,
+        }
+    }
+}
+
 pub fn supports_live_atomic_search(until_step: u32) -> bool {
     until_step <= LIVE_BOOTSTRAP_MAX_STEP
 }
@@ -1248,8 +1258,19 @@ fn exact_partial_prefix_bound_decision(
         return ExactPartialPrefixBoundDecision::Unknown;
     }
 
+    if let Some(decision) =
+        prefix_legality_cache.partial_prefix_bound_decision(&work_item.signature)
+    {
+        return match decision {
+            PartialPrefixBoundDecision::CanClearBar => ExactPartialPrefixBoundDecision::CanClearBar,
+            PartialPrefixBoundDecision::CannotClearBar => {
+                ExactPartialPrefixBoundDecision::CannotClearBar
+            }
+        };
+    }
+
     if work_item.remaining_clause_slots == 1 {
-        return exact_terminal_prefix_bound_decision(
+        let decision = exact_terminal_prefix_bound_decision(
             step_index,
             library,
             admissibility,
@@ -1261,17 +1282,11 @@ fn exact_partial_prefix_bound_decision(
             prefix_legality_cache,
             budget,
         );
-    }
-
-    if let Some(decision) =
-        prefix_legality_cache.partial_prefix_bound_decision(&work_item.signature)
-    {
-        return match decision {
-            PartialPrefixBoundDecision::CanClearBar => ExactPartialPrefixBoundDecision::CanClearBar,
-            PartialPrefixBoundDecision::CannotClearBar => {
-                ExactPartialPrefixBoundDecision::CannotClearBar
-            }
-        };
+        if let Some(cacheable) = decision.cacheable_partial_decision() {
+            prefix_legality_cache
+                .store_partial_prefix_bound_decision(work_item.signature.clone(), cacheable);
+        }
+        return decision;
     }
 
     for clause in &work_item.next_clauses {
@@ -2035,7 +2050,7 @@ mod tests {
     use crate::enumerate::{EnumerationContext, build_clause_catalog};
     use crate::expand::evaluate_candidate;
     use crate::prefix_cache::PrefixSignature;
-    use crate::prefix_memo::PrefixLegalityCache;
+    use crate::prefix_memo::{PartialPrefixBoundDecision, PrefixLegalityCache};
     use pen_core::{
         clause::{ClauseRec, ClauseRole},
         expr::Expr,
@@ -2497,6 +2512,98 @@ mod tests {
     }
 
     #[test]
+    fn exact_partial_prefix_bound_decision_reuses_cached_terminal_result() {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::RealisticShadow);
+        let objective_bar = compute_bar(2, 15, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(signature.clone(), 8, &library, &prefix, admissibility));
+
+        let work_item = create_online_prefix_work_item(
+            8,
+            prefix,
+            signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut cache,
+        );
+        assert_eq!(work_item.remaining_clause_slots, 1);
+
+        let mut first_budget = 64;
+        let first = exact_partial_prefix_bound_decision(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog,
+            &work_item,
+            &mut cache,
+            &mut first_budget,
+        );
+        assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
+
+        let cached = cache
+            .partial_prefix_bound_decision(&signature)
+            .expect("terminal decision should be cached after the first exact check");
+        assert_eq!(
+            cached,
+            match first {
+                super::ExactPartialPrefixBoundDecision::CanClearBar => {
+                    PartialPrefixBoundDecision::CanClearBar
+                }
+                super::ExactPartialPrefixBoundDecision::CannotClearBar => {
+                    PartialPrefixBoundDecision::CannotClearBar
+                }
+                super::ExactPartialPrefixBoundDecision::Unknown => unreachable!(),
+            }
+        );
+        let hits_before = cache.stats().partial_prefix_bound_hits;
+        let terminal_summary_hits_before = cache.stats().terminal_prefix_completion_hits;
+
+        let mut second_budget = 1;
+        let second = exact_partial_prefix_bound_decision(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog,
+            &work_item,
+            &mut cache,
+            &mut second_budget,
+        );
+
+        assert_eq!(second, first);
+        assert_eq!(cache.stats().partial_prefix_bound_hits, hits_before + 1);
+        assert_eq!(
+            cache.stats().terminal_prefix_completion_hits,
+            terminal_summary_hits_before
+        );
+    }
+
+    #[test]
     fn realistic_shadow_step_eleven_prunes_impossible_family_hybrids_early() {
         let prefix = reference_prefix(10);
         let realistic = search_bootstrap_from_prefix_for_profile_with_runtime(
@@ -2569,6 +2676,7 @@ mod tests {
         assert!(step.incremental_terminal_admissibility_hits > 0);
         assert!(step.incremental_terminal_prefix_completion_hits > 0);
         assert!(step.incremental_terminal_rank_prunes > 0);
+        assert!(step.incremental_partial_prefix_bound_hits > 0);
         assert!(step.incremental_partial_prefix_bound_checks > 0);
         assert_eq!(step.prefix_states_explored, 2);
         assert!(

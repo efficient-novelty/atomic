@@ -20,7 +20,7 @@ answer two questions:
 
 ## What The Latest Evidence Says
 
-Use `runs/codex-eager-terminal-rank` as the current reference artifact set.
+Use `runs/codex-terminal-bound-reuse` as the current reference artifact set.
 
 Late-step facts that matter for forward work:
 
@@ -34,18 +34,22 @@ Late-step facts that matter for forward work:
   terminal-prefix materialization:
   `incremental_terminal_rank_prunes = 1` and
   `full_telescopes_evaluated = 1` on each of steps 13, 14, and 15
+- steps 13 and 15 now also reuse the exact one-clause-short bar decision on
+  the later enqueue path instead of replaying the same terminal-summary lookup:
+  `incremental_partial_prefix_bound_hits = 1` and
+  `incremental_terminal_prefix_completion_hits = 2`
 - steps 13 and 15 now also shrink the late retained prefix surface:
   `prefix_states_explored = 2` and
   `prefix_frontier_hot_states = 1`
 - step 15 still shows terminal reuse and connectivity reuse are working:
-  `incremental_terminal_prefix_completion_hits = 3`,
+  `incremental_terminal_prefix_completion_hits = 2`,
   `incremental_connectivity_shortcuts = 2`, and
   `incremental_connectivity_fallbacks = 0`
-- the new eager prune removes the dominated late terminal prefix before it is
-  retained, but the surviving late root-to-terminal lane still does the same
-  exact summary work:
+- the new terminal-prefix partial-bound reuse removes one exact summary replay,
+  but the surviving late root-to-terminal lane still does the same number of
+  exact bar checks:
   step 15 still has `incremental_partial_prefix_bound_checks = 3` and
-  `incremental_terminal_prefix_completion_hits = 3`
+  `prefix_states_explored = 2`
 - current late-step wall-clock is already low in absolute terms, so the next
   pass should keep optimizing exact work counts first and timing second
 
@@ -54,8 +58,10 @@ Late-step facts that matter for forward work:
 ### 1. Exact Partial-Prefix Bounds Still Fire After Too Much Prefix Work
 
 The eager exact terminal-rank prune now removes the dominated late terminal
-prefix before it enters the retained frontier, but the surviving root and
-winning terminal prefix still require the same exact bar-clearability work.
+prefix before it enters the retained frontier, and the terminal-prefix
+partial-bound reuse now removes one exact summary replay. But the surviving
+root and winning terminal prefix still require the same exact bar-clearability
+check surface.
 
 Next target:
 
@@ -66,14 +72,16 @@ Evidence to improve against:
 
 - steps 13 and 15 still explore 2 prefix states
 - step 15 still does `incremental_partial_prefix_bound_checks = 3`
-- step 15 still does `incremental_terminal_prefix_completion_hits = 3`
+- the late winning lane still needs a retained terminal-prefix summary hit:
+  step 15 still does `incremental_terminal_prefix_completion_hits = 2`
 
 ### 2. Non-Family Admissibility Reuse Still Arrives Too Late
 
 Family-shaped filtering, terminal admissibility, trivial-derivability, and
-historical-reanchor reuse now clear obvious cases. The eager late
-terminal-rank prune removes the dominated retained terminal prefix, but only
-after exact terminal completion summaries already exist.
+historical-reanchor reuse now clear obvious cases. The new terminal-prefix
+partial-bound reuse removes one exact late replay, but the eager late
+terminal-rank prune still fires only after exact terminal completion summaries
+already exist for multiple plausible continuations.
 
 Next target:
 
@@ -84,7 +92,7 @@ Next target:
 Evidence to improve against:
 
 - step 15 still needs terminal completion reuse hits to finish cleanly:
-  `incremental_terminal_prefix_completion_hits = 3`
+  `incremental_terminal_prefix_completion_hits = 2`
 - steps 13 and 15 still build exact terminal completion summaries for multiple
   plausible late continuations before the new rank prune fires
 
@@ -104,7 +112,8 @@ Next target:
 
 1. Audit the remaining late-step prefixes in the latest realistic artifacts,
    especially the step-13 and step-15 root-to-terminal surfaces that still
-   explore 2 prefix states and spend 3 exact bound checks.
+   explore 2 prefix states and spend 3 exact bound checks after the new
+   terminal-prefix partial-bound reuse removed one summary replay.
 2. Choose one of:
    - a broader exact partial-prefix bound
    - a broader non-family admissibility summary
