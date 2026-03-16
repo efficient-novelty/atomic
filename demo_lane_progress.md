@@ -34,75 +34,91 @@ This file is the forward-facing status snapshot for
   `proof_close_overrun_reason`, so stored summaries and narratives can
   distinguish floor hits, reserve protection, certification sweeps, and
   soft-cap handoffs directly
+- demo step summaries now also persist a first plan-aligned stored funnel
+  surface via `demo_funnel` plus a first closure surface via `demo_closure`,
+  covering `generated_raw_prefixes`, `canonical_prefix_signatures`,
+  `hard_admissible`, `exact_bound_screened`, `exact_bound_pruned`,
+  `bar_clearers`, `semantically_minimal_clearers`, `winner_overshoot`,
+  `frontier_total_seen`, `frontier_certified_nonwinning`, and
+  `closure_percent`
+- stored demo phase data now also carries the configured
+  `generated_floor` and `exact_screened_floor`, so floor targets travel with
+  the step summary rather than only living in config files
+- `pen-cli` narrative rendering, debug reporting, and
+  `scripts/compare_runs.py` now consume that stored demo phase, funnel, and
+  closure evidence directly instead of inferring the story from debug text
+- the newly stored surface makes an important current gap explicit: the demo
+  lane still misses the step-1 `2144` generated floor on the current search
+  path, and the compare tool now reports that miss honestly instead of hiding
+  it behind generic breadth counts
 
 ## What Landed In This Pass
 
-- `BreadthHarvest` now exits early once a configured generated or exact-screened
-  late-step floor is hit after scout sampling, instead of only stopping when
-  the raw discovery deadline expires
-- demo discovery now also records when widening stops to protect the reserved
-  `ProofClose` slice, so late-step breadth exits are no longer a generic
-  "closed discovery" story
-- `pen-search` step summaries now persist explicit
-  `breadth_harvest_exit_reason`, `proof_close_entry_reason`, and
-  `proof_close_overrun_reason` values
-- `ProofClose` reason tracking now distinguishes reserve-protected handoffs,
-  breadth-floor handoffs, certification sweeps, and soft-cap overruns on top
-  of the previously landed full-eval split
-- `pen-cli` narrative rendering now surfaces those persisted reason codes in the
-  demo phase header, and live search-side pulses now say whether breadth
-  harvest stopped on a generated floor, an exact-screened floor, or reserve
-  protection
-- targeted `pen-search` tests now cover generated-floor exits,
-  reserve-protection exits, and soft-cap overrun reasoning in addition to the
-  existing phase-event and narrative coverage
+- `pen-search` now builds and persists the first explicit demo-lane funnel and
+  closure structs on every step summary, instead of leaving that surface
+  implicit inside generic search counters
+- demo phase summaries now persist `generated_floor` and
+  `exact_screened_floor` alongside the already-landed proof-close reason codes
+- `pen-cli` narrative output now renders generated, exact-screened, and
+  full-eval progress from those stored demo counters, adds an explicit closure
+  line, and prints a compact stored demo-funnel line with winner overshoot
+- debug report rendering now also exposes the stored demo funnel and closure
+  counters plus the persisted floor and proof-close reason fields
+- `scripts/compare_runs.py` now emits lane-level demo phase evidence, including
+  floor hits or misses, closure percent, soft-cap status, breadth/proof-close
+  reason codes, and latest-step demo funnel summaries in both text and JSON
+- targeted tests now cover the new narrative rendering, compare-tool demo
+  evidence surface, and the compare-summary schema bump
 
 ## Active Gaps
 
-### 1. Honest Funnel Counters Are Still Only Partially Present
+### 1. Honest Counters Now Exist, But The Breadth Story Still Misses Key Floors
 
-The lane can now explain why `BreadthHarvest` stopped and why `ProofClose`
-started or overran, but the plan-aligned funnel surface is still missing the
-explicit demo counters like `generated_raw_prefixes`, `hard_admissible`,
-`exact_bound_screened`, and `closure_percent`.
-
-Next target:
-
-- add the missing funnel and closure counters to `pen-search`, step summaries,
-  compare tooling, and the narrative renderer
-
-### 2. Compare Tooling Still Lags The Stored Demo Phase Evidence
-
-The stored narrative header now reports the materialize/proof-close split and
-soft-cap overrun directly from persisted step data, and step summaries now also
-carry explicit breadth/proof-close reason codes, but
-`scripts/compare_runs.py` still does not surface closure progress, floor hits
-or misses, or the new demo phase accounting.
+The lane now persists the planned funnel and closure counters, and the compare
+tool can surface floor hits or misses directly from stored data. The remaining
+problem is no longer "missing counters"; it is that the current search path
+still misses some of the intended breadth targets, most visibly the explicit
+step-1 `2144` generated floor.
 
 Next target:
 
-- extend compare tooling and the remaining summary surface so stored runs can
-  report phase progress, floor hits or misses, breadth/proof-close reason codes,
-  and cap overruns without rereading debug text
+- use the new stored evidence to drive actual early-step and late-step
+  widening work until the demo lane can satisfy more of the planned breadth
+  floors honestly
 
-### 3. ProofClose Reserve Usage Is Still Descriptive Rather Than Governed
+### 2. ProofClose Closure Evidence Is Still Post-Hoc Rather Than Governing Runtime
 
-The lane now records why `ProofClose` started or overran, but it still does not
-expose a stronger exact closure-progress or reserve-usage surface beyond those
-reason codes and the existing full-eval split.
+The step summary now exposes `frontier_total_seen`,
+`frontier_certified_nonwinning`, and `closure_percent`, but those numbers are
+still a post-step evidence surface. They do not yet govern how much of the
+reserved `ProofClose` slice is spent or when closure is considered sufficient
+mid-step.
 
 Next target:
 
-- tie the reserved proof-close slice to explicit closure progress and reserve
-  usage evidence, not just handoff reasons
+- tie the reserved proof-close slice to live closure progress and explicit
+  reserve-usage accounting, not just stored after-the-fact counters
+
+### 3. Demo Widening Is Still Mostly A Reporting Surface, Not Yet A Broader Search Surface
+
+The repo can now report the demo lane more honestly, but the underlying search
+semantics are still largely inherited from `realistic_frontier_shadow`. The
+larger unfinished task remains turning the reported generated and exact-screened
+surfaces into genuinely broader live search mass, especially on later steps.
+
+Next target:
+
+- widen the actual demo search schedule and exact-screen pipeline so late-step
+  floors improve because the lane is doing more real search work, not because
+  the reporting surface got richer
 
 ## Immediate Next Steps
 
-1. Add the missing honest funnel counters and closure tracking so the demo
-   narrative can report floor hits or misses from stored data instead of only
-   from derived surface counts.
-2. Extend compare tooling and step summaries to consume the new
-   breadth/proof-close reason codes plus the future funnel and floor evidence
-   directly.
-3. Tighten proof-close reserve accounting from descriptive reason codes into a
-   clearer exact closure-progress and reserve-usage surface.
+1. Use the new stored funnel and floor evidence to close the explicit step-1
+   and early-step breadth gap, rather than leaving the compare tool to report a
+   permanent miss.
+2. Turn the new closure counters into live proof-close governance and reserve
+   usage accounting so the reserved slice is explained and enforced mid-step.
+3. Keep widening the actual demo search surface, especially on steps `10` to
+   `15`, so the newly surfaced generated and exact-screened counters grow for
+   real.

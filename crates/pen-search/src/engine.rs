@@ -185,10 +185,18 @@ impl DemoProofCloseOverrunReason {
     }
 }
 
+fn zero_rational() -> Rational {
+    Rational::zero()
+}
+
 #[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 pub struct DemoPhaseStats {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub full_eval_soft_cap: Option<u64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub generated_floor: Option<u64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub exact_screened_floor: Option<u64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub breadth_harvest_exit_reason: Option<DemoBreadthHarvestExitReason>,
     #[serde(default)]
@@ -203,6 +211,60 @@ pub struct DemoPhaseStats {
     pub proof_close_overrun_reason: Option<DemoProofCloseOverrunReason>,
     #[serde(default)]
     pub materialize_soft_cap_triggered: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct DemoFunnelStats {
+    #[serde(default)]
+    pub generated_raw_prefixes: usize,
+    #[serde(default)]
+    pub canonical_prefix_signatures: usize,
+    #[serde(default)]
+    pub well_formed_terminals: usize,
+    #[serde(default)]
+    pub hard_admissible: usize,
+    #[serde(default)]
+    pub exact_bound_screened: usize,
+    #[serde(default)]
+    pub exact_bound_pruned: usize,
+    #[serde(default)]
+    pub heuristic_dropped: usize,
+    #[serde(default)]
+    pub full_telescopes_evaluated: usize,
+    #[serde(default)]
+    pub bar_clearers: usize,
+    #[serde(default)]
+    pub semantically_minimal_clearers: usize,
+    #[serde(default = "zero_rational")]
+    pub winner_overshoot: Rational,
+}
+
+impl Default for DemoFunnelStats {
+    fn default() -> Self {
+        Self {
+            generated_raw_prefixes: 0,
+            canonical_prefix_signatures: 0,
+            well_formed_terminals: 0,
+            hard_admissible: 0,
+            exact_bound_screened: 0,
+            exact_bound_pruned: 0,
+            heuristic_dropped: 0,
+            full_telescopes_evaluated: 0,
+            bar_clearers: 0,
+            semantically_minimal_clearers: 0,
+            winner_overshoot: Rational::zero(),
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct DemoClosureStats {
+    #[serde(default)]
+    pub frontier_total_seen: usize,
+    #[serde(default)]
+    pub frontier_certified_nonwinning: usize,
+    #[serde(default)]
+    pub closure_percent: u16,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -238,6 +300,8 @@ pub struct AtomicSearchStep {
     pub incremental_partial_prefix_bound_prunes: usize,
     pub incremental_terminal_prefix_bar_prunes: usize,
     pub demo_phase: DemoPhaseStats,
+    pub demo_funnel: DemoFunnelStats,
+    pub demo_closure: DemoClosureStats,
     pub search_timing: SearchTiming,
     pub prefix_frontier_hot_states: usize,
     pub prefix_frontier_cold_states: usize,
@@ -1361,6 +1425,8 @@ fn search_next_step(
     let mut incremental_terminal_prefix_bar_prunes = 0usize;
     let mut demo_phase = DemoPhaseStats {
         full_eval_soft_cap: demo_step_budget.and_then(|budget| budget.full_eval_soft_cap),
+        generated_floor: demo_step_budget.and_then(|budget| budget.generated_floor),
+        exact_screened_floor: demo_step_budget.and_then(|budget| budget.exact_screened_floor),
         ..DemoPhaseStats::default()
     };
     let discovery_start = Instant::now();
@@ -1940,6 +2006,21 @@ fn build_step_result(
         .find(|candidate| candidate.candidate_hash == acceptance.accepted.candidate_hash)
         .cloned()
         .ok_or_else(|| anyhow::anyhow!("accepted candidate vanished during selection"))?;
+    let demo_funnel = build_demo_funnel_stats(
+        objective_bar,
+        prefixes_created,
+        enumerated_candidates,
+        well_formed_candidates,
+        admissibility_rejections,
+        prefix_states_exact_pruned,
+        prefix_states_heuristic_dropped,
+        heuristic_drops,
+        full_telescopes_evaluated,
+        &scored_candidate_distribution,
+        retained,
+        accepted.rho - objective_bar,
+    );
+    let demo_closure = build_demo_closure_stats(&demo_funnel);
 
     let mut step = AtomicSearchStep {
         step_index,
@@ -1973,6 +2054,8 @@ fn build_step_result(
         incremental_partial_prefix_bound_prunes,
         incremental_terminal_prefix_bar_prunes,
         demo_phase,
+        demo_funnel,
+        demo_closure,
         search_timing,
         prefix_frontier_hot_states,
         prefix_frontier_cold_states,
@@ -2006,6 +2089,71 @@ fn build_step_result(
     };
     step.narrative_events = append_step_narrative_events(&step, narrative_events);
     Ok(step)
+}
+
+fn build_demo_funnel_stats(
+    objective_bar: Rational,
+    prefixes_created: usize,
+    enumerated_candidates: usize,
+    well_formed_candidates: usize,
+    admissibility_rejections: usize,
+    prefix_states_exact_pruned: usize,
+    prefix_states_heuristic_dropped: usize,
+    heuristic_drops: usize,
+    full_telescopes_evaluated: usize,
+    scored_candidate_distribution: &CandidateScoreDistribution,
+    retained: &[ExpandedCandidate],
+    winner_overshoot: Rational,
+) -> DemoFunnelStats {
+    DemoFunnelStats {
+        generated_raw_prefixes: usize::try_from(generated_surface_from_counts(
+            prefixes_created,
+            enumerated_candidates,
+        ))
+        .expect("generated surface exceeded usize"),
+        // Prefix creation is already signature-gated on the live path, so the
+        // currently honest canonical-prefix surface is the stored unique
+        // created-prefix count for prefix search and the enumerated count for
+        // early exhaustive steps.
+        canonical_prefix_signatures: if prefixes_created > 0 {
+            prefixes_created
+        } else {
+            enumerated_candidates
+        },
+        well_formed_terminals: well_formed_candidates,
+        hard_admissible: well_formed_candidates.saturating_sub(admissibility_rejections),
+        exact_bound_screened: prefix_states_exact_pruned.saturating_add(full_telescopes_evaluated),
+        exact_bound_pruned: prefix_states_exact_pruned,
+        heuristic_dropped: prefix_states_heuristic_dropped.saturating_add(heuristic_drops),
+        full_telescopes_evaluated,
+        bar_clearers: scored_candidate_distribution.clears_bar,
+        semantically_minimal_clearers: retained
+            .iter()
+            .filter(|candidate| candidate.rho >= objective_bar)
+            .count(),
+        winner_overshoot,
+    }
+}
+
+fn build_demo_closure_stats(funnel: &DemoFunnelStats) -> DemoClosureStats {
+    let frontier_total_seen = funnel.exact_bound_screened;
+    let frontier_certified_nonwinning = funnel.exact_bound_pruned;
+    let closure_percent = if frontier_total_seen == 0 {
+        0
+    } else {
+        u16::try_from(
+            (u128::from(u64::try_from(frontier_certified_nonwinning).expect("usize exceeded u64"))
+                * 100)
+                / u128::from(u64::try_from(frontier_total_seen).expect("usize exceeded u64")),
+        )
+        .expect("closure percent exceeded u16")
+    };
+
+    DemoClosureStats {
+        frontier_total_seen,
+        frontier_certified_nonwinning,
+        closure_percent,
+    }
 }
 
 fn admissibility_mode_for_profile(search_profile: SearchProfile) -> AdmissibilityMode {

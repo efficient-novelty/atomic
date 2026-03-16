@@ -9,8 +9,8 @@ use pen_search::config::{RuntimeConfig, SearchProfile};
 use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
 use pen_search::engine::{
     AtomicSearchStep, CandidateScoreDistribution, DedupePruneEvidence, DemoBudgetSeed,
-    DemoPhaseStats, FrontierRetentionOutcome, MinimalityPruneEvidence,
-    search_bootstrap_from_prefix_for_config_with_runtime_and_seed,
+    DemoClosureStats, DemoFunnelStats, DemoPhaseStats, FrontierRetentionOutcome,
+    MinimalityPruneEvidence, search_bootstrap_from_prefix_for_config_with_runtime_and_seed,
     search_bootstrap_from_prefix_for_profile_with_runtime,
     search_bootstrap_prefix_for_config_with_runtime,
     search_bootstrap_prefix_for_profile_with_runtime, supports_live_atomic_search,
@@ -136,6 +136,10 @@ pub struct StepSearchStats {
     pub incremental_terminal_prefix_bar_prunes: usize,
     #[serde(default)]
     pub demo_phase: DemoPhaseStats,
+    #[serde(default)]
+    pub demo_funnel: DemoFunnelStats,
+    #[serde(default)]
+    pub demo_closure: DemoClosureStats,
     #[serde(default)]
     pub search_timing: SearchTiming,
     #[serde(default)]
@@ -863,6 +867,8 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 incremental_partial_prefix_bound_prunes: 0,
                 incremental_terminal_prefix_bar_prunes: 0,
                 demo_phase: DemoPhaseStats::default(),
+                demo_funnel: DemoFunnelStats::default(),
+                demo_closure: DemoClosureStats::default(),
                 search_timing: SearchTiming::default(),
                 prefix_frontier_hot_states: 0,
                 prefix_frontier_cold_states: 0,
@@ -1098,6 +1104,50 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
             step.search_stats.frontier_hot_states + step.search_stats.frontier_cold_states,
             step.search_stats.frontier_drops
         ));
+        if step.search_stats.demo_funnel.generated_raw_prefixes > 0
+            || step.search_stats.demo_funnel.full_telescopes_evaluated > 0
+            || step.search_stats.demo_phase.generated_floor.is_some()
+            || step.search_stats.demo_phase.exact_screened_floor.is_some()
+        {
+            lines.push(format!(
+                "  demo funnel: generated_raw_prefixes={} canonical_prefix_signatures={} well_formed_terminals={} hard_admissible={} exact_bound_screened={} exact_bound_pruned={} heuristic_dropped={} full_telescopes_evaluated={} bar_clearers={} semantically_minimal_clearers={} winner_overshoot={}",
+                step.search_stats.demo_funnel.generated_raw_prefixes,
+                step.search_stats.demo_funnel.canonical_prefix_signatures,
+                step.search_stats.demo_funnel.well_formed_terminals,
+                step.search_stats.demo_funnel.hard_admissible,
+                step.search_stats.demo_funnel.exact_bound_screened,
+                step.search_stats.demo_funnel.exact_bound_pruned,
+                step.search_stats.demo_funnel.heuristic_dropped,
+                step.search_stats.demo_funnel.full_telescopes_evaluated,
+                step.search_stats.demo_funnel.bar_clearers,
+                step.search_stats.demo_funnel.semantically_minimal_clearers,
+                step.search_stats.demo_funnel.winner_overshoot
+            ));
+            lines.push(format!(
+                "  demo closure: frontier_total_seen={} frontier_certified_nonwinning={} closure_percent={} generated_floor={} exact_screened_floor={} full_eval_soft_cap={} breadth_exit={} proof_close_reason={} overrun_reason={}",
+                step.search_stats.demo_closure.frontier_total_seen,
+                step.search_stats.demo_closure.frontier_certified_nonwinning,
+                step.search_stats.demo_closure.closure_percent,
+                render_optional_count(step.search_stats.demo_phase.generated_floor),
+                render_optional_count(step.search_stats.demo_phase.exact_screened_floor),
+                render_optional_count(step.search_stats.demo_phase.full_eval_soft_cap),
+                step.search_stats
+                    .demo_phase
+                    .breadth_harvest_exit_reason
+                    .map(|reason| reason.as_str())
+                    .unwrap_or("none"),
+                step.search_stats
+                    .demo_phase
+                    .proof_close_entry_reason
+                    .map(|reason| reason.as_str())
+                    .unwrap_or("none"),
+                step.search_stats
+                    .demo_phase
+                    .proof_close_overrun_reason
+                    .map(|reason| reason.as_str())
+                    .unwrap_or("none")
+            ));
+        }
         if step.search_stats.prefix_states_explored > 0 {
             lines.push(format!(
                 "  prefix frontier: created={} explored={} merged={} exact_pruned={} heuristic_dropped={} hot={} cold={}",
@@ -1470,6 +1520,8 @@ fn step_to_report_with_provenance(
             incremental_partial_prefix_bound_prunes: step.incremental_partial_prefix_bound_prunes,
             incremental_terminal_prefix_bar_prunes: step.incremental_terminal_prefix_bar_prunes,
             demo_phase: step.demo_phase,
+            demo_funnel: step.demo_funnel,
+            demo_closure: step.demo_closure,
             search_timing: step.search_timing,
             prefix_frontier_hot_states: step.prefix_frontier_hot_states,
             prefix_frontier_cold_states: step.prefix_frontier_cold_states,
@@ -1786,6 +1838,8 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 incremental_partial_prefix_bound_prunes: 0,
                 incremental_terminal_prefix_bar_prunes: 0,
                 demo_phase: DemoPhaseStats::default(),
+                demo_funnel: DemoFunnelStats::default(),
+                demo_closure: DemoClosureStats::default(),
                 search_timing: SearchTiming::default(),
                 prefix_frontier_hot_states: 0,
                 prefix_frontier_cold_states: 0,
@@ -2074,6 +2128,12 @@ fn frontier_retention_label(retention: FrontierRetention) -> &'static str {
         FrontierRetention::SpillBacked => "spill-backed",
         FrontierRetention::Dropped => "dropped",
     }
+}
+
+fn render_optional_count(value: Option<u64>) -> String {
+    value
+        .map(|count| count.to_string())
+        .unwrap_or_else(|| "none".to_owned())
 }
 
 fn retention_focus_label(focus: pen_type::obligations::RetentionFocus) -> &'static str {

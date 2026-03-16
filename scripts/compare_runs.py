@@ -163,6 +163,7 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
             run_mode = str(event.get("payload", {}).get("mode", "unknown"))
             break
 
+    search_profile = load_search_profile(run_dir, steps, telemetry_events)
     trajectory = [trajectory_entry(step) for step in steps]
     accepted_hashes = [accepted_hash_entry(step) for step in steps]
     search_space_counts = [search_space_count_entry(step) for step in steps]
@@ -171,6 +172,11 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
         late_step_competition_entry(step)
         for step in steps
         if int(step.get("step_index", 0) or 0) >= LATE_STEP_COMPETITION_START
+    ]
+    demo_phase_evidence = [
+        entry
+        for step in steps
+        if (entry := demo_phase_entry(step, search_profile)) is not None
     ]
     provenance_sequence = []
     replay_sequence = []
@@ -226,7 +232,7 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
         "path": str(run_dir),
         "run_id": str(manifest.get("run_id", "")),
         "completed_step": int(manifest.get("position", {}).get("completed_step", len(steps))),
-        "search_profile": load_search_profile(run_dir, steps, telemetry_events),
+        "search_profile": search_profile,
         "run_mode": run_mode,
         "trajectory": trajectory,
         "trajectory_fingerprint": hash_json(trajectory),
@@ -234,6 +240,7 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
         "search_space_counts": search_space_counts,
         "admissibility_diagnostics": admissibility_diagnostics,
         "late_step_competition": late_step_competition,
+        "demo_phase_evidence": demo_phase_evidence,
         "provenance_sequence": provenance_sequence,
         "provenance_summary": summarize_counter(
             Counter(item["value"] for item in provenance_sequence)
@@ -350,6 +357,141 @@ def admissibility_diagnostics_entry(step: dict[str, Any]) -> dict[str, Any]:
             ("top_reasons", top_reasons),
         ]
     )
+
+
+def demo_phase_entry(step: dict[str, Any], search_profile: str) -> dict[str, Any] | None:
+    stats = step.get("search_stats") or {}
+    funnel = stats.get("demo_funnel") or {}
+    closure = stats.get("demo_closure") or {}
+    phase = stats.get("demo_phase") or {}
+    if not has_demo_phase_evidence(search_profile, funnel, closure, phase):
+        return None
+
+    generated_floor = optional_int(phase.get("generated_floor"))
+    exact_screened_floor = optional_int(phase.get("exact_screened_floor"))
+    full_eval_soft_cap = optional_int(phase.get("full_eval_soft_cap"))
+    generated = int(funnel.get("generated_raw_prefixes", 0) or 0)
+    exact_screened = int(funnel.get("exact_bound_screened", 0) or 0)
+    full_evaluated = int(funnel.get("full_telescopes_evaluated", 0) or 0)
+
+    return ordered_dict(
+        [
+            ("step_index", int(step.get("step_index", 0) or 0)),
+            ("generated_raw_prefixes", generated),
+            (
+                "canonical_prefix_signatures",
+                int(funnel.get("canonical_prefix_signatures", 0) or 0),
+            ),
+            ("hard_admissible", int(funnel.get("hard_admissible", 0) or 0)),
+            ("exact_bound_screened", exact_screened),
+            ("exact_bound_pruned", int(funnel.get("exact_bound_pruned", 0) or 0)),
+            ("heuristic_dropped", int(funnel.get("heuristic_dropped", 0) or 0)),
+            ("full_telescopes_evaluated", full_evaluated),
+            ("bar_clearers", int(funnel.get("bar_clearers", 0) or 0)),
+            (
+                "semantically_minimal_clearers",
+                int(funnel.get("semantically_minimal_clearers", 0) or 0),
+            ),
+            ("winner_overshoot", rational_to_string(funnel.get("winner_overshoot"))),
+            ("frontier_total_seen", int(closure.get("frontier_total_seen", 0) or 0)),
+            (
+                "frontier_certified_nonwinning",
+                int(closure.get("frontier_certified_nonwinning", 0) or 0),
+            ),
+            ("closure_percent", int(closure.get("closure_percent", 0) or 0)),
+            ("generated_floor", generated_floor),
+            (
+                "generated_floor_status",
+                floor_status(generated, generated_floor),
+            ),
+            ("exact_screened_floor", exact_screened_floor),
+            (
+                "exact_screened_floor_status",
+                floor_status(exact_screened, exact_screened_floor),
+            ),
+            ("full_eval_soft_cap", full_eval_soft_cap),
+            (
+                "full_eval_soft_cap_status",
+                soft_cap_status(full_evaluated, full_eval_soft_cap),
+            ),
+            (
+                "breadth_harvest_exit_reason",
+                optional_string(phase.get("breadth_harvest_exit_reason")),
+            ),
+            (
+                "proof_close_entry_reason",
+                optional_string(phase.get("proof_close_entry_reason")),
+            ),
+            (
+                "proof_close_overrun_reason",
+                optional_string(phase.get("proof_close_overrun_reason")),
+            ),
+            (
+                "materialize_full_evals",
+                int(phase.get("materialize_full_evals", 0) or 0),
+            ),
+            (
+                "proof_close_full_evals",
+                int(phase.get("proof_close_full_evals", 0) or 0),
+            ),
+            (
+                "proof_close_overrun_full_evals",
+                int(phase.get("proof_close_overrun_full_evals", 0) or 0),
+            ),
+            (
+                "materialize_soft_cap_triggered",
+                bool(phase.get("materialize_soft_cap_triggered", False)),
+            ),
+        ]
+    )
+
+
+def has_demo_phase_evidence(
+    search_profile: str,
+    funnel: dict[str, Any],
+    closure: dict[str, Any],
+    phase: dict[str, Any],
+) -> bool:
+    if search_profile == "demo_breadth_shadow":
+        return True
+    return any(
+        (
+            optional_int(phase.get("generated_floor")) is not None,
+            optional_int(phase.get("exact_screened_floor")) is not None,
+            optional_int(phase.get("full_eval_soft_cap")) is not None,
+            optional_string(phase.get("breadth_harvest_exit_reason")) is not None,
+            optional_string(phase.get("proof_close_entry_reason")) is not None,
+            optional_string(phase.get("proof_close_overrun_reason")) is not None,
+            int(funnel.get("generated_raw_prefixes", 0) or 0) > 0,
+            int(funnel.get("exact_bound_screened", 0) or 0) > 0,
+            int(closure.get("frontier_total_seen", 0) or 0) > 0,
+        )
+    )
+
+
+def optional_int(value: Any) -> int | None:
+    if value is None or value == "":
+        return None
+    return int(value)
+
+
+def optional_string(value: Any) -> str | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    return text or None
+
+
+def floor_status(actual: int, target: int | None) -> str:
+    if target is None:
+        return "not_applicable"
+    return "hit" if actual >= target else "miss"
+
+
+def soft_cap_status(actual: int, target: int | None) -> str:
+    if target is None:
+        return "not_applicable"
+    return "within_cap" if actual <= target else "overrun"
 
 
 def load_search_profile(
@@ -643,7 +785,7 @@ def build_summary(lanes: list[dict[str, Any]], baseline_label: str) -> dict[str,
 
     return ordered_dict(
         [
-            ("comparison_version", 3),
+            ("comparison_version", 4),
             ("baseline_lane", baseline_label),
             ("lane_order", [lane["label"] for lane in lanes]),
             (
@@ -1103,6 +1245,7 @@ def render_lane_summary(lane: dict[str, Any]) -> list[str]:
     provenance_compact = compact_sequence(lane["provenance_sequence"])
     last_retention_delta = lane["frontier_retention_delta_by_step"][-1]["delta"]
     last_retention_step = lane["frontier_retention_delta_by_step"][-1]["step_index"]
+    latest_demo = lane["demo_phase_evidence"][-1] if lane["demo_phase_evidence"] else None
 
     lines = [
         f"Lane {lane['label']}",
@@ -1139,6 +1282,28 @@ def render_lane_summary(lane: dict[str, Any]) -> list[str]:
             f"matches_accepted={str(lane['step15_claim']['matches_accepted']).lower()}"
         ),
     ]
+    if latest_demo is not None:
+        lines.append(
+            "  demo phase latest: "
+            f"step {latest_demo['step_index']} "
+            f"generated_floor={render_floor_result(latest_demo['generated_raw_prefixes'], latest_demo['generated_floor'], latest_demo['generated_floor_status'])} "
+            f"exact_screened_floor={render_floor_result(latest_demo['exact_bound_screened'], latest_demo['exact_screened_floor'], latest_demo['exact_screened_floor_status'])} "
+            f"soft_cap={render_floor_result(latest_demo['full_telescopes_evaluated'], latest_demo['full_eval_soft_cap'], latest_demo['full_eval_soft_cap_status'])} "
+            f"breadth_exit={latest_demo['breadth_harvest_exit_reason'] or 'none'} "
+            f"proof_close_reason={latest_demo['proof_close_entry_reason'] or 'none'} "
+            f"overrun_reason={latest_demo['proof_close_overrun_reason'] or 'none'} "
+            f"overrun_full_evals={latest_demo['proof_close_overrun_full_evals']}"
+        )
+        lines.append(
+            "  demo funnel latest: "
+            f"generated={latest_demo['generated_raw_prefixes']} "
+            f"hard_admissible={latest_demo['hard_admissible']} "
+            f"exact_screened={latest_demo['exact_bound_screened']} "
+            f"exact_pruned={latest_demo['exact_bound_pruned']} "
+            f"full_eval={latest_demo['full_telescopes_evaluated']} "
+            f"closure={latest_demo['closure_percent']}% "
+            f"winner_overshoot={latest_demo['winner_overshoot']}"
+        )
     return lines
 
 
@@ -1191,6 +1356,12 @@ def render_latest_frontier(frontier: dict[str, Any]) -> str:
         f"spill_generation={frontier['spill_generation']} "
         f"cache={frontier['governor_state']}/{frontier['pressure_action']}"
     )
+
+
+def render_floor_result(actual: int, target: int | None, status: str) -> str:
+    if target is None:
+        return "not_applicable"
+    return f"{status} ({actual}/{target})"
 
 
 def compact_sequence(items: list[dict[str, Any]]) -> list[dict[str, Any]]:

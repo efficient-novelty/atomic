@@ -47,9 +47,23 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
         .and_then(|event| event.progress.as_ref())
         .cloned()
         .unwrap_or_else(|| fallback_progress(step));
-    let generated_floor = generated_floor(step.step_index, demo);
-    let exact_screened_floor = exact_screened_floor(step.step_index, demo);
-    let full_eval_soft_cap = full_eval_soft_cap(step.step_index, demo);
+    let funnel = stored_demo_funnel(step);
+    let closure = stored_demo_closure(step);
+    let generated_floor = step
+        .search_stats
+        .demo_phase
+        .generated_floor
+        .or_else(|| generated_floor(step.step_index, demo));
+    let exact_screened_floor = step
+        .search_stats
+        .demo_phase
+        .exact_screened_floor
+        .or_else(|| exact_screened_floor(step.step_index, demo));
+    let full_eval_soft_cap = step
+        .search_stats
+        .demo_phase
+        .full_eval_soft_cap
+        .or_else(|| full_eval_soft_cap(step.step_index, demo));
 
     let mut lines = vec![
         format!("step {:02} demo narrative", step.step_index),
@@ -65,21 +79,27 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
         time_line(step.step_index, progress.elapsed_millis, demo),
         render_goal_line(
             "generated",
-            progress.generated_surface,
+            u64::try_from(funnel.generated_raw_prefixes).expect("generated count exceeded u64"),
             generated_floor,
             "generated",
         ),
         render_goal_line(
             "exact_screen",
-            progress.exact_screened_surface,
+            u64::try_from(funnel.exact_bound_screened).expect("screened count exceeded u64"),
             exact_screened_floor,
             "screened",
         ),
         render_limit_line(
             "full_eval",
-            progress.full_telescopes_evaluated,
+            u64::try_from(funnel.full_telescopes_evaluated).expect("full-eval count exceeded u64"),
             full_eval_soft_cap,
             "evaluated",
+        ),
+        format!(
+            "closure      frontier_total={} certified_nonwinning={} closure={}%",
+            closure.frontier_total_seen,
+            closure.frontier_certified_nonwinning,
+            closure.closure_percent
         ),
         demo_phase_line(step),
         format!(
@@ -105,6 +125,17 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
             step.search_stats.full_telescopes_evaluated,
             step.search_stats.canonical_candidates,
             step.search_stats.semantically_minimal_candidates
+        ),
+        format!(
+            "demo_funnel  raw={} canonical_prefixes={} hard_admissible={} exact_pruned={} heuristic_dropped={} bar_clearers={} semantically_minimal_clearers={} winner_overshoot={}",
+            funnel.generated_raw_prefixes,
+            funnel.canonical_prefix_signatures,
+            funnel.hard_admissible,
+            funnel.exact_bound_pruned,
+            funnel.heuristic_dropped,
+            funnel.bar_clearers,
+            funnel.semantically_minimal_clearers,
+            funnel.winner_overshoot
         ),
     ];
 
@@ -253,6 +284,75 @@ fn fallback_progress(step: &StepReport) -> NarrativeProgressSnapshot {
         exact_screened_surface: (step.search_stats.prefix_states_exact_pruned
             + step.search_stats.full_telescopes_evaluated) as u64,
         full_telescopes_evaluated: step.search_stats.full_telescopes_evaluated as u64,
+    }
+}
+
+fn stored_demo_funnel(step: &StepReport) -> pen_search::engine::DemoFunnelStats {
+    if step.search_stats.demo_funnel.generated_raw_prefixes > 0
+        || step.search_stats.demo_funnel.full_telescopes_evaluated > 0
+        || step.search_stats.demo_funnel.bar_clearers > 0
+        || step.search_stats.demo_funnel.semantically_minimal_clearers > 0
+        || step.search_stats.demo_funnel.exact_bound_screened > 0
+        || step.search_stats.demo_phase.generated_floor.is_some()
+        || step.search_stats.demo_phase.exact_screened_floor.is_some()
+    {
+        return step.search_stats.demo_funnel.clone();
+    }
+
+    pen_search::engine::DemoFunnelStats {
+        generated_raw_prefixes: if step.search_stats.prefix_states_explored > 0 {
+            step.search_stats
+                .prefixes_created
+                .max(step.search_stats.enumerated_candidates)
+        } else {
+            step.search_stats.enumerated_candidates
+        },
+        canonical_prefix_signatures: if step.search_stats.prefixes_created > 0 {
+            step.search_stats.prefixes_created
+        } else {
+            step.search_stats.enumerated_candidates
+        },
+        well_formed_terminals: step.search_stats.well_formed_candidates,
+        hard_admissible: step
+            .search_stats
+            .well_formed_candidates
+            .saturating_sub(step.search_stats.admissibility_rejections),
+        exact_bound_screened: step.search_stats.prefix_states_exact_pruned
+            + step.search_stats.full_telescopes_evaluated,
+        exact_bound_pruned: step.search_stats.prefix_states_exact_pruned,
+        heuristic_dropped: step.search_stats.prefix_states_heuristic_dropped
+            + step.search_stats.heuristic_drops,
+        full_telescopes_evaluated: step.search_stats.full_telescopes_evaluated,
+        bar_clearers: step.search_stats.scored_candidate_distribution.clears_bar,
+        semantically_minimal_clearers: step
+            .candidate_reports
+            .iter()
+            .filter(|candidate| candidate.rho >= step.objective_bar)
+            .count(),
+        winner_overshoot: step.accepted.overshoot,
+    }
+}
+
+fn stored_demo_closure(step: &StepReport) -> pen_search::engine::DemoClosureStats {
+    if step.search_stats.demo_closure.frontier_total_seen > 0
+        || step.search_stats.demo_closure.frontier_certified_nonwinning > 0
+    {
+        return step.search_stats.demo_closure.clone();
+    }
+
+    let funnel = stored_demo_funnel(step);
+    let closure_percent = if funnel.exact_bound_screened == 0 {
+        0
+    } else {
+        u16::try_from(
+            ((funnel.exact_bound_pruned as u128) * 100) / (funnel.exact_bound_screened as u128),
+        )
+        .expect("closure percent exceeded u16")
+    };
+    pen_search::engine::DemoClosureStats {
+        frontier_total_seen: funnel.exact_bound_screened,
+        frontier_certified_nonwinning: funnel.exact_bound_pruned,
+        closure_percent,
     }
 }
 
@@ -414,6 +514,8 @@ mod tests {
         let text = render_step_narrative(steps.last().expect("step should exist"), &config.demo);
 
         assert!(text.contains("events"));
+        assert!(text.contains("closure"));
+        assert!(text.contains("demo_funnel"));
         assert!(text.contains("phase_eval"));
         assert!(text.contains("phase_change"));
         assert!(text.contains("scout"));
