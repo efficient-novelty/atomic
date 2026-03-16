@@ -2,290 +2,112 @@
 
 Last updated: 2026-03-16
 
-This file is the operational status snapshot for
-[`quantum_improvement_plan.md`](./quantum_improvement_plan.md). It is not a
-running journal.
+This file is the forward-facing status snapshot for
+[`quantum_improvement_plan.md`](./quantum_improvement_plan.md). It should
+answer two questions:
 
-## Objective
+- where the remaining late-step cost still is
+- what the next pass should try to remove
 
-Improve the realistic shadow search lane with earlier sound pruning and d = 2
-memoization while preserving the current exact acceptance contract and the
-guarded 15-step canon.
+## Current Position
 
-## Current State
+- `strict_canon_guarded` remains the authoritative executable lane
+- guarded and realistic shadow still preserve the accepted 15-step sequence
+- the current realistic engine already has enough structure to build on:
+  online prefix expansion, exact signature-keyed memoization, exact small-tree
+  and terminal-prefix pruning, and persisted timing/memory telemetry
 
-### Authoritative behavior
+## What The Latest Evidence Says
 
-- `strict_canon_guarded` remains the authoritative executable lane.
-- guarded and realistic lanes both preserve the current accepted 15-step
-  sequence.
-- exact evaluation, semantic minimality, and deterministic acceptance remain
-  downstream of the prefix layer.
+Use `runs/codex-historical-reanchor` as the current reference artifact set.
 
-### What is already implemented
+Late-step facts that matter for forward work:
 
-- `realistic_frontier_shadow` already expands prefixes online through
-  clause-position catalogs.
-- `PrefixBound` exists and is used for exact bound handling and bar pruning at
-  the retained prefix frontier.
-- `PrefixCache` and `PrefixSignature` are real search primitives, not
-  placeholders.
-- `PrefixLegalityCache` now reuses incremental legality/connectivity summaries
-  keyed by `PrefixSignature` during realistic online prefix expansion.
-- realistic shadow now also keeps an exact incremental historical-reanchor
-  summary keyed by `PrefixSignature`, so temporal-shell terminal continuations
-  that already satisfy the modal-to-temporal reanchor pattern can clear
-  connectivity without rebuilding a full fallback telescope.
-- realistic shadow now also keeps an exact incremental clause-family
-  feasibility summary keyed by `PrefixSignature`, pruning mixed late-family
-  prefixes as soon as no admissible structural family remains.
-- realistic shadow now also uses that strengthened family summary for exact
-  active-window clause filtering keyed by `PrefixSignature`, skipping child and
-  terminal clause options that cannot match any still-admissible structural
-  family before child-prefix legality or terminal assembly runs.
-- realistic shadow now also reuses that exact family summary for cached
-  terminal admissibility decisions keyed by `PrefixSignature`, avoiding a full
-  late-family package-match recomputation whenever the summary is available.
-- realistic shadow now also reuses that exact terminal admissibility summary as
-  an explicit terminal-clause filter keyed by `PrefixSignature`, so last-clause
-  options can be rejected before terminal connectivity work or fallback
-  telescope assembly runs.
-- realistic shadow now also memoizes exact terminal-prefix completion
-  summaries keyed by `PrefixSignature`, reusing admitted connected one-clause-
-  short completions and their exact completion bounds between the early
-  terminal-prefix bar check and the later retained-prefix grouping instead of
-  recomputing that exact terminal work twice.
-- realistic shadow now also keeps an exact incremental trivial-derivability
-  summary keyed by `PrefixSignature`, rejecting terminal continuations that are
-  provably trivially derivable before full telescope assembly and before any
-  direct admissibility fallback.
-- realistic shadow now also computes an exact terminal-prefix completion bound
-  per retained one-clause-short prefix and prunes any such prefix group that
-  cannot clear the current bar before retained-prefix frontier planning runs.
-- realistic shadow now also runs a budgeted exact small-tree completion bound
-  on newly created realistic-shadow root and child prefixes and prunes any
-  prefix whose full admissible connected completion set cannot clear the
-  current bar before that prefix ever enters the online work queue.
-- realistic shadow now also memoizes exact multi-step partial-prefix
-  bar-clearability decisions keyed by `PrefixSignature`, reusing already-
-  proved `can_clear_bar` and `cannot_clear_bar` results between the early
-  pre-queue subtree walk and later child-prefix checks inside the same step.
-- realistic shadow now also collapses exact single-continuation late-family
-  suffixes in-place once the strengthened family summary plus active-window
-  clause filtering leave only one legal child at each remaining position,
-  avoiding redundant intermediate prefix frontier pops before terminal-prefix
-  grouping.
-- realistic shadow now also caches the exact next-position active-window
-  clause surface on each online work item and reuses it at pop time, so
-  branching and terminal-prefix expansions do not recompute the same exact
-  filter before child expansion or terminal grouping.
-- realistic shadow now also uses the strengthened family summary plus cached
-  next-clause surface to order online prefix work deterministically by
-  remaining distance to terminal and exact continuation width, favoring
-  tighter continuations without changing exact acceptance.
-- `PrefixSignature` now includes:
-  - clause position
-  - obligation set id
-  - active-window hash
-  - shape/support summary hashes
-  - structural family flags
-  - exact serialized-prefix identity
-- frontier artifacts, reports, and inspect output already expose the main
-  Phase-1 counters:
-  - `prefixes_created`
-  - `prefix_states_explored`
-  - `prefix_states_merged_by_signature`
-  - `prefix_states_exact_pruned`
-  - `full_telescopes_evaluated`
-  - `canonical_dedupe_prunes`
-  - `semantic_minimality_prunes`
-- reports and frontier manifests now also expose the first Phase-2 memoization
-  payoff counters:
-  - `incremental_legality_cache_hits`
-  - `incremental_connectivity_shortcuts`
-  - `incremental_connectivity_fallbacks`
-  - `incremental_connectivity_prunes`
-  - `incremental_clause_family_filter_hits`
-  - `incremental_clause_family_prunes`
-  - `incremental_active_window_clause_filter_hits`
-  - `incremental_active_window_clause_filter_prunes`
-  - `incremental_terminal_clause_filter_hits`
-  - `incremental_terminal_clause_filter_prunes`
-  - `incremental_trivial_derivability_hits`
-  - `incremental_trivial_derivability_prunes`
-  - `incremental_terminal_admissibility_hits`
-  - `incremental_terminal_admissibility_rejections`
-  - `incremental_terminal_prefix_completion_hits`
-  - `incremental_partial_prefix_bound_hits`
-  - `incremental_partial_prefix_bound_checks`
-  - `incremental_partial_prefix_bound_prunes`
-  - `incremental_terminal_prefix_bar_prunes`
-- step telemetry now also carries the first Phase-2 timing counters:
-  - `step_wall_clock_millis`
-  - `candidate_discovery_wall_clock_millis`
-  - `prefix_frontier_planning_wall_clock_millis`
-  - `selection_wall_clock_millis`
-- stored step summaries now also persist `search_timing`, and `pen-cli
-  inspect` step output now renders those per-step timing counters alongside
-  the existing frontier-pressure memory bytes so late-step order retunes can
-  be driven directly from stored run artifacts.
-- deterministic reports, step summaries, and frontier inspect output now also
-  surface the first memory high-water metrics for the retained prefix frontier:
-  - `rss_bytes`
-  - `hot_frontier_bytes`
-  - `cold_frontier_bytes`
-  - `dedupe_bytes`
-  - plus persisted frontier `memory_snapshot` bytes in frontier manifests
-- stored realistic-shadow step-10 artifacts still show the landed earlier
-  exact partial-prefix prune before queue entry via
-  `incremental_partial_prefix_bound_prunes = 1`.
-- fresh realistic-shadow step-11 and step-12 artifacts now also show
-  `incremental_partial_prefix_bound_hits = 1`, confirming the new multi-step
-  partial-prefix bar-decision reuse on repeated late-step prefix checks; the
-  current realistic step-11 artifact now carries its remaining exact late
-  prune as `incremental_terminal_prefix_bar_prunes = 1` while still keeping
-  `full_telescopes_evaluated = 1`.
-- stored realistic-shadow step-13 and step-15 artifacts now also show
-  `incremental_terminal_prefix_completion_hits = 3`, while the repeated
-  terminal clause-filter and terminal-admissibility counters on those steps
-  drop from `5` to `2` because the one-clause-short terminal work is reused
-  instead of replayed during retained-prefix grouping.
-- fresh realistic-shadow step-15 artifacts now also show the landed exact
-  historical-reanchor shortcut: `incremental_connectivity_shortcuts = 2` and
-  `incremental_connectivity_fallbacks = 0`, so temporal-shell terminal
-  continuations no longer rebuild full fallback telescopes just to confirm the
-  already-cached modal-to-temporal reanchor.
-
-## What Is No Longer A Gap
-
-The following work should be treated as complete enough to stop planning around
-it as if it were still missing:
-
-- adding any prefix frontier at all
-- replacing ad hoc prefix grouping with explicit bounds/signature modules
-- making realistic shadow expand prefixes online
-- exposing the core Phase-1 counters in reports/manifests
-- strengthening `PrefixSignature` beyond exact serialized-prefix identity
-- extending the strengthened-signature memo layer into broader exact
-  active-window clause filtering before child-prefix legality and terminal
-  assembly
-- extending the strengthened-signature memo layer into exact terminal trivial-
-  derivability reuse before full telescope assembly
-- extending the strengthened-signature memo layer into cached terminal
-  admissibility decisions for late-family realistic shadow work
-- moving that cached terminal admissibility reuse forward into an explicit
-  terminal-clause filter before terminal connectivity or fallback telescope
-  assembly
-- reusing exact terminal-prefix completion summaries between the early
-  terminal-prefix bar check and the later retained-prefix grouping
-- shortcutting exact historical reanchor terminal connectivity for temporal-
-  shell continuations before full fallback telescope assembly
-- reusing exact multi-step partial-prefix bar decisions between repeated
-  realistic-shadow subtree checks inside the same step
-- landing an earlier exact small-tree partial-prefix bar prune before doomed
-  realistic-shadow prefixes enter the online queue
-- landing an earlier exact terminal-prefix bar prune before retained-prefix
-  frontier planning
-- collapsing exact single-continuation late-family suffixes instead of pushing
-  and popping each forced intermediate prefix state one by one
-- reusing the exact next-position active-window clause surface inside the
-  online work queue instead of recomputing it when the same prefix is popped
-- landing the first continuation-aware deterministic realistic-shadow prefix
-  order retune from exact memoized continuation state
-- adding the first timing telemetry and deterministic frontier memory
-  high-water metrics for the memoized realistic-shadow path
-- persisting and rendering the per-step timing telemetry in stored step
-  summaries and inspect output for realistic-shadow artifact analysis
+- step 10 already has one exact queue-entry prune:
+  `incremental_partial_prefix_bound_prunes = 1`
+- step 11 shows current partial-prefix reuse is real but still narrow:
+  `incremental_partial_prefix_bound_hits = 1`,
+  `incremental_terminal_prefix_bar_prunes = 1`, and
+  `full_telescopes_evaluated = 1`
+- step 15 shows terminal reuse and connectivity reuse are working:
+  `incremental_terminal_prefix_completion_hits = 3`,
+  `incremental_connectivity_shortcuts = 2`, and
+  `incremental_connectivity_fallbacks = 0`
+- step 15 still leaves useful work on the table:
+  `prefix_states_explored = 3` and `full_telescopes_evaluated = 2`
+- current late-step wall-clock is already low in absolute terms, so the next
+  pass should optimize exact work counts first and timing second
 
 ## Active Gaps
 
-### 1. Stronger partial-prefix bounds beyond family-based filtering and the landed small-tree/terminal-prefix bar prunes
+### 1. Exact Partial-Prefix Bounds Are Still Too Local
 
-The realistic lane now has an earlier exact prune for impossible mixed-family
-prefixes, exact active-window clause filtering on child and terminal clause
-options, a budgeted exact small-tree completion-bound prune on newly created
-prefixes, and an exact one-clause-short terminal-prefix bar prune, but its
-strongest general `nu`/bar reasoning is still limited to tiny exact
-continuation trees plus the terminal-prefix frontier. We do not yet have the
-broader sound partial-prefix bound story needed to prune confidently across
-larger late-step continuation surfaces without exact subtree expansion.
+The current exact bound wins are limited to tiny exact completion trees and the
+one-clause-short terminal frontier. Prefixes that survive those cases still
+often run through terminal work before we know they cannot win.
 
-### 2. Broader non-family admissibility reuse beyond the landed filter layer
+Next target:
 
-The strengthened signature is now used for incremental legality/connectivity
-reuse, exact clause-family feasibility pruning, active-window clause filtering,
-cached next-clause reuse inside the online work queue, exact multi-step
-partial-prefix bar-decision reuse, an explicit terminal-clause admissibility
-filter, terminal trivial-derivability pruning, and cached terminal
-admissibility decisions plus exact terminal-prefix completion reuse plus the
-exact historical-reanchor connectivity shortcut for temporal-shell terminals,
-but it is not yet used for:
+- find a sound exact bound that fires earlier on steps 13 to 15 without guessed
+  `nu_upper` logic
 
-- stronger exact reuse of non-family admissibility structure before the full
-  terminal telescope is assembled
-- a more explicit partial-prefix admissibility summary that goes beyond the
-  landed family-shaped filter surface plus trivial-derivability reuse
+Evidence to improve against:
 
-### 3. Using the new timing and memory evidence to continue retuning search order
+- steps 13 and 15 still explore 3 prefix states
+- step 15 still evaluates 2 full telescopes
 
-The timing telemetry and deterministic frontier memory high-water metrics are
-now live, and the first continuation-aware online work-order retune is landed,
-but we have not yet used stored run evidence to explain which retained-prefix
-paths are still too expensive relative to their payoff or to drive a broader
-late-step priority retune past that first deterministic continuation-aware
-ordering pass.
+### 2. Non-Family Admissibility Reuse Is Still Too Thin
 
-## Forward Plan
+Family-shaped filtering, terminal admissibility, trivial-derivability, and
+historical-reanchor reuse now clear obvious cases. The remaining cost comes
+from late continuations that are still structurally plausible but require more
+exact work than we want.
 
-### Now
+Next target:
 
-- define a stronger sound partial-prefix bound beyond exact clause-family
-  impossibility pruning, the landed active-window clause filtering, the landed
-  budgeted small-tree completion-bound prune, and the landed terminal-prefix
-  bar prune
-- use the new `incremental_partial_prefix_bound_hits` counter together with the
-  active-window, terminal-clause, trivial-derivability, terminal-
-  admissibility, and connectivity-shortcut payoff counters plus
-  `incremental_terminal_prefix_completion_hits` and
-  `incremental_terminal_prefix_bar_prunes` to target broader exact
-  admissibility/filter reuse
-- use the current `prefix_states_explored` counts after the landed exact
-  single-continuation suffix collapse plus the landed cached next-clause reuse
-  and continuation-aware queue order and the new multi-step partial-prefix
-  bar-decision reuse to isolate the remaining prefixes that still need
-  stronger partial-prefix bounds or broader non-family admissibility reuse
-- use the now-persisted timing telemetry and deterministic frontier memory
-  high-water metrics from stored step summaries and inspect output to identify
-  which late-step prefix lanes still do redundant work after the landed
-  continuation-aware order retune
-- keep the strengthened-signature caches exact and deterministic
+- add another exact `PrefixSignature`-keyed admissibility summary before full
+  terminal assembly
 
-### Next
+Evidence to improve against:
 
-- continue retuning prefix priority/order once earlier bounds exist and the
-  new timing/memory evidence is stable
+- step 15 still needs terminal completion reuse to finish cleanly
+- late realistic steps still keep more than one plausible terminal surface
+  after the current family filters
 
-### Later
+### 3. Search Order Has Not Yet Been Retuned From The New Evidence
 
-- deterministic continuation profile variants
-- restricted interference/normalization sidecar
-- declarative late-family grammar
+The continuation-aware queue order is only a first pass. It has not yet been
+retuned using the latest timing, memory, and prune counters after the newer
+memoization layers landed.
 
-## Next Concrete Steps
+Next target:
 
-1. Audit the current `nu` and legality pipeline and identify the strongest
-   partial-prefix exact bound that goes beyond the landed clause-family
-   impossibility prunes, active-window clause filtering, the budgeted
-   small-tree completion-bound prune, and the one-clause-short terminal-prefix
-   bar prune without unsound inference.
-2. Extend the landed legality/connectivity/family/active-window/terminal-
-   clause/trivial-derivability/terminal-admissibility/multi-step partial-
-   prefix bar-decision memo path into another exact admissibility summary that
-   fires before the full terminal telescope is assembled.
-3. Use `incremental_partial_prefix_bound_hits` plus the expanded memo counters
-   together with the landed continuation-aware queue order and the now-
-   persisted timing telemetry and frontier memory high-water metrics from
-   stored artifacts to continue retuning late-step prefix priority/order.
+- use current artifacts to explain which late prefixes are still expensive
+  relative to payoff, then retune deterministic order
+
+## Immediate Next Steps
+
+1. Audit the remaining late-step prefixes in the latest realistic artifacts,
+   especially steps 13 to 15.
+2. Choose one of:
+   - a broader exact partial-prefix bound
+   - a broader non-family admissibility summary
+3. Land the smallest exact change that removes a real late-step branch or full
+   telescope evaluation.
+4. Re-run realistic shadow through step 15 and compare:
+   - `prefix_states_explored`
+   - `full_telescopes_evaluated`
+   - relevant cache/prune counters
+   - timing/memory telemetry
+5. Only then retune ordering.
+
+## Things Not Worth Re-Planning
+
+- adding a prefix frontier
+- re-landing the current signature/memo/filter infrastructure
+- changing guarded acceptance semantics
+- speculative interference or grammar work before the bound/admissibility gaps
+  move
 
 ## Guardrails
 
@@ -296,22 +118,7 @@ ordering pass.
 - no over-claim that realistic shadow is already an open-ended online frontier
   explorer
 
-## Verification
-
-Latest relevant verification:
+## Verification Baseline
 
 - `cargo test -p pen-type -p pen-search -p pen-cli -p pen-store`
-- fresh `cargo run -p pen-cli -- run --config
-  configs/realistic_frontier_shadow.toml --root runs --run-id
-  codex-historical-reanchor --until-step 15`
-- inspect-backed `runs/codex-historical-reanchor` artifacts preserve the
-  accepted sequence while keeping the earlier exact queue-entry prune at step
-  10 in `incremental_partial_prefix_bound_prunes = 1`, showing
-  `incremental_partial_prefix_bound_hits = 1` and
-  `incremental_terminal_prefix_bar_prunes = 1` at realistic step 11, and
-  keeping `incremental_terminal_prefix_completion_hits = 3` at realistic step
-  15 while the new historical-reanchor shortcut moves that step to
-  `incremental_connectivity_shortcuts = 2` and
-  `incremental_connectivity_fallbacks = 0`; realistic step 15 still stays at
-  `prefix_states_explored = 3`, `full_telescopes_evaluated = 2`, per-step
-  timing remains at `1` ms, and hot-frontier bytes remain at `128`
+- `cargo run -p pen-cli -- run --config configs/realistic_frontier_shadow.toml --root runs --run-id codex-historical-reanchor --until-step 15`
