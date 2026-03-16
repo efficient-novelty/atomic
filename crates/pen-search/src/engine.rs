@@ -44,6 +44,7 @@ use pen_type::check::{CheckResult, check_telescope};
 use pen_type::connectivity::passes_connectivity;
 use pen_type::obligations::{RetentionClass, RetentionPolicy, summarize_structural_debt};
 use serde::{Deserialize, Serialize};
+use std::cmp::Ordering;
 use std::collections::{BTreeMap, BTreeSet};
 use std::time::{Duration, Instant};
 
@@ -415,6 +416,12 @@ struct OnlinePrefixWorkItem {
 struct MaterializedTerminalPrefixGroup {
     candidates: Vec<PrefixGroupCandidate>,
     bound: Option<PrefixBound>,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum DemoProofCloseOrderMode {
+    PotentialFirst,
+    ClosureFirst,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -1776,12 +1783,29 @@ fn search_next_step(
     let mut demo_proof_close_closed_groups = 0usize;
     if admissibility_mode == AdmissibilityMode::RealisticShadow {
         let mut incumbent_terminal_rank = None;
-        for (group_index, signature) in prefix_frontier
-            .retained_prefix_signatures
-            .iter()
-            .enumerate()
-        {
-            let Some(group) = prefix_cache.get(signature) else {
+        let mut pending_group_signatures = prefix_frontier.retained_prefix_signatures.clone();
+        while !pending_group_signatures.is_empty() {
+            let remaining_groups = pending_group_signatures.len();
+            let remaining_reserve_millis = if demo_proof_close_entered {
+                demo_phase.proof_close_remaining_millis
+            } else {
+                demo_step_budget
+                    .map(|budget| budget.proof_close_reserve_millis)
+                    .unwrap_or(0)
+            };
+            let group_index = if demo_step_budget.is_some() {
+                select_demo_proof_close_group_index(
+                    &pending_group_signatures,
+                    &prefix_cache,
+                    incumbent_terminal_rank.as_ref(),
+                    remaining_reserve_millis,
+                )
+                .unwrap_or(0)
+            } else {
+                0
+            };
+            let signature = pending_group_signatures.remove(group_index);
+            let Some(group) = prefix_cache.get(&signature) else {
                 if demo_proof_close_entered {
                     demo_proof_close_closed_groups += 1;
                     if let (Some(proof_close_started_elapsed), Some(budget)) =
@@ -1834,9 +1858,13 @@ fn search_next_step(
             }
 
             let mut group_candidates = group.candidates.clone();
-            group_candidates.sort_by_key(|candidate| {
-                serde_json::to_string(&candidate.telescope).expect("serialize")
-            });
+            if demo_step_budget.is_some() {
+                sort_terminal_prefix_group_candidates_for_certification(&mut group_candidates);
+            } else {
+                group_candidates.sort_by_key(|candidate| {
+                    serde_json::to_string(&candidate.telescope).expect("serialize")
+                });
+            }
             for group_candidate in group_candidates {
                 if !demo_proof_close_entered {
                     if let Some(full_eval_soft_cap) = demo_phase.full_eval_soft_cap {
@@ -1848,8 +1876,6 @@ fn search_next_step(
                             demo_phase.proof_close_entry_reason =
                                 Some(DemoProofCloseEntryReason::SoftCapHandoff);
                             let proof_close_started_elapsed = elapsed_millis(step_start.elapsed());
-                            let remaining_groups =
-                                retained_prefix_groups.saturating_sub(group_index);
                             demo_proof_close_started_elapsed_millis =
                                 Some(proof_close_started_elapsed);
                             demo_proof_close_total_groups = remaining_groups;
@@ -3624,6 +3650,19 @@ fn materialize_terminal_prefix_group(
     })
 }
 
+fn sort_terminal_prefix_group_candidates_for_certification(
+    candidates: &mut [PrefixGroupCandidate],
+) {
+    candidates.sort_by_key(|candidate| {
+        (
+            candidate.accept_rank.is_none(),
+            candidate.accept_rank.clone(),
+            serde_json::to_string(&candidate.telescope)
+                .expect("terminal group telescope should serialize"),
+        )
+    });
+}
+
 fn best_prefix_group_accept_rank(candidates: &[PrefixGroupCandidate]) -> Option<AcceptRank> {
     let mut best = None;
     for candidate in candidates {
@@ -3649,6 +3688,132 @@ fn cached_terminal_prefix_rank_prune_count(
     (!better_rank(best_rank, incumbent_rank)).then_some(rank_summary.admitted_candidate_count)
 }
 
+fn demo_proof_close_order_mode(
+    remaining_reserve_millis: u64,
+    pending_exact_surface: usize,
+) -> DemoProofCloseOrderMode {
+    let pending_exact_surface =
+        u64::try_from(pending_exact_surface).expect("pending exact surface exceeded u64");
+    // When the reserved slice drops below roughly one second per pending exact
+    // candidate, prioritize fast closure/prune wins over broader incumbent hunting.
+    if pending_exact_surface > 0
+        && remaining_reserve_millis < pending_exact_surface.saturating_mul(1_000)
+    {
+        DemoProofCloseOrderMode::ClosureFirst
+    } else {
+        DemoProofCloseOrderMode::PotentialFirst
+    }
+}
+
+fn demo_group_can_improve_incumbent(
+    group: &PrefixCandidateGroup,
+    incumbent_rank: Option<&AcceptRank>,
+) -> bool {
+    match (group.best_accept_rank.as_ref(), incumbent_rank) {
+        (Some(group_rank), Some(incumbent_rank)) => better_rank(group_rank, incumbent_rank),
+        (Some(_), None) => true,
+        (None, _) => false,
+    }
+}
+
+fn demo_group_is_prune_ready(
+    group: &PrefixCandidateGroup,
+    incumbent_rank: Option<&AcceptRank>,
+) -> bool {
+    match (group.best_accept_rank.as_ref(), incumbent_rank) {
+        (Some(group_rank), Some(incumbent_rank)) => !better_rank(group_rank, incumbent_rank),
+        _ => false,
+    }
+}
+
+fn demo_proof_close_group_order(
+    mode: DemoProofCloseOrderMode,
+    left_signature: &PrefixSignature,
+    left_group: &PrefixCandidateGroup,
+    right_signature: &PrefixSignature,
+    right_group: &PrefixCandidateGroup,
+    incumbent_rank: Option<&AcceptRank>,
+) -> Ordering {
+    let left_improves = demo_group_can_improve_incumbent(left_group, incumbent_rank);
+    let right_improves = demo_group_can_improve_incumbent(right_group, incumbent_rank);
+    let left_prune_ready = demo_group_is_prune_ready(left_group, incumbent_rank);
+    let right_prune_ready = demo_group_is_prune_ready(right_group, incumbent_rank);
+
+    match mode {
+        DemoProofCloseOrderMode::PotentialFirst => (
+            !left_improves,
+            left_group.best_accept_rank.is_none(),
+            left_group.best_accept_rank.clone(),
+            left_group.candidates.len(),
+            std::cmp::Reverse(left_group.bound.rho_upper().unwrap_or(Rational::zero())),
+            left_signature.clone(),
+        )
+            .cmp(&(
+                !right_improves,
+                right_group.best_accept_rank.is_none(),
+                right_group.best_accept_rank.clone(),
+                right_group.candidates.len(),
+                std::cmp::Reverse(right_group.bound.rho_upper().unwrap_or(Rational::zero())),
+                right_signature.clone(),
+            )),
+        DemoProofCloseOrderMode::ClosureFirst => (
+            !left_prune_ready,
+            left_group.candidates.len(),
+            !left_improves,
+            left_group.best_accept_rank.is_none(),
+            left_group.best_accept_rank.clone(),
+            std::cmp::Reverse(left_group.bound.rho_upper().unwrap_or(Rational::zero())),
+            left_signature.clone(),
+        )
+            .cmp(&(
+                !right_prune_ready,
+                right_group.candidates.len(),
+                !right_improves,
+                right_group.best_accept_rank.is_none(),
+                right_group.best_accept_rank.clone(),
+                std::cmp::Reverse(right_group.bound.rho_upper().unwrap_or(Rational::zero())),
+                right_signature.clone(),
+            )),
+    }
+}
+
+fn select_demo_proof_close_group_index(
+    pending_signatures: &[PrefixSignature],
+    prefix_cache: &PrefixCache,
+    incumbent_rank: Option<&AcceptRank>,
+    remaining_reserve_millis: u64,
+) -> Option<usize> {
+    let pending_exact_surface = pending_signatures
+        .iter()
+        .filter_map(|signature| prefix_cache.get(signature))
+        .map(|group| group.candidates.len())
+        .sum::<usize>();
+    let order_mode = demo_proof_close_order_mode(remaining_reserve_millis, pending_exact_surface);
+
+    pending_signatures
+        .iter()
+        .enumerate()
+        .min_by(|(_, left_signature), (_, right_signature)| {
+            match (
+                prefix_cache.get(left_signature),
+                prefix_cache.get(right_signature),
+            ) {
+                (Some(left_group), Some(right_group)) => demo_proof_close_group_order(
+                    order_mode,
+                    left_signature,
+                    left_group,
+                    right_signature,
+                    right_group,
+                    incumbent_rank,
+                ),
+                (None, Some(_)) => Ordering::Less,
+                (Some(_), None) => Ordering::Greater,
+                (None, None) => left_signature.cmp(right_signature),
+            }
+        })
+        .map(|(index, _)| index)
+}
+
 fn cache_evaluated_terminal_prefix_group_candidates(
     step_index: u32,
     objective_bar: Rational,
@@ -3659,10 +3824,7 @@ fn cache_evaluated_terminal_prefix_group_candidates(
     candidates: &mut [PrefixGroupCandidate],
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<()> {
-    candidates.sort_by_key(|candidate| {
-        serde_json::to_string(&candidate.telescope)
-            .expect("terminal group telescope should serialize")
-    });
+    sort_terminal_prefix_group_candidates_for_certification(candidates);
 
     for candidate in candidates {
         let evaluated = match candidate.evaluated_candidate.clone() {
@@ -3987,19 +4149,24 @@ fn elapsed_millis(duration: Duration) -> u64 {
 mod tests {
     use super::{
         AtomicSearchStep, DemoBreadthHarvestExitReason, DemoBudgetController, DemoBudgetSeed,
-        DemoProofCloseEntryReason, DemoProofCloseOverrunReason, LIVE_BOOTSTRAP_MAX_STEP,
-        OnlinePrefixWorkItem, create_online_prefix_work_item, exact_partial_prefix_bound_decision,
-        pop_best_prefix, search_bootstrap_from_prefix,
+        DemoProofCloseEntryReason, DemoProofCloseOrderMode, DemoProofCloseOverrunReason,
+        LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem, create_online_prefix_work_item,
+        demo_proof_close_group_order, demo_proof_close_order_mode,
+        exact_partial_prefix_bound_decision, pop_best_prefix, search_bootstrap_from_prefix,
         search_bootstrap_from_prefix_for_profile_with_runtime, search_bootstrap_prefix,
-        search_bootstrap_prefix_for_config_with_runtime, supports_live_atomic_search,
+        search_bootstrap_prefix_for_config_with_runtime,
+        sort_terminal_prefix_group_candidates_for_certification, supports_live_atomic_search,
     };
+    use crate::bounds::PrefixBound;
+    use crate::branch_bound::AcceptRank;
     use crate::config::{RuntimeConfig, SearchProfile};
     use crate::enumerate::{EnumerationContext, build_clause_catalog};
     use crate::expand::evaluate_candidate;
     use crate::narrative::{NarrativeEventKind, StepPhase};
-    use crate::prefix_cache::PrefixSignature;
+    use crate::prefix_cache::{PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature};
     use crate::prefix_memo::{PartialPrefixBoundDecision, PrefixLegalityCache};
     use pen_core::{
+        canonical::CanonKey,
         clause::{ClauseRec, ClauseRole},
         expr::Expr,
         library::{Library, LibraryEntry},
@@ -4017,7 +4184,9 @@ mod tests {
             strict_admissibility, strict_admissibility_for_mode,
         },
         connectivity::{ConnectivityWitness, analyze_connectivity, passes_connectivity},
+        obligations::RetentionClass,
     };
+    use std::cmp::Reverse;
 
     fn reference_prefix(until_step: u32) -> Vec<Telescope> {
         (1..=until_step).map(Telescope::reference).collect()
@@ -4064,6 +4233,164 @@ mod tests {
             ],
             order_key: order_key.to_owned(),
         }
+    }
+
+    fn test_accept_rank(overshoot_numerator: i64, canonical_key: &str) -> AcceptRank {
+        AcceptRank {
+            overshoot: Rational::new(overshoot_numerator, 10),
+            clause_kappa: 4,
+            descending_eliminator_score: Reverse(2),
+            descending_former_score: Reverse(2),
+            descending_dependent_motive_density: Reverse(1),
+            descending_library_reference_density: Reverse(1),
+            max_var_ref: 2,
+            descending_generic_binder_count: Reverse(2),
+            descending_closure_score: Reverse(2),
+            bit_kappa: 20,
+            descending_nu: Reverse(10),
+            canonical_key: CanonKey(canonical_key.to_owned()),
+        }
+    }
+
+    fn test_prefix_signature(seed: u32) -> PrefixSignature {
+        let prefix = Telescope::new(vec![ClauseRec::new(ClauseRole::Formation, Expr::Var(seed))]);
+        PrefixSignature::new(1, &Library::default(), &prefix)
+    }
+
+    fn test_prefix_group(
+        candidate_count: usize,
+        best_accept_rank: Option<AcceptRank>,
+        nu_upper_bound: u16,
+    ) -> PrefixCandidateGroup {
+        let prefix_telescope =
+            Telescope::new(vec![ClauseRec::new(ClauseRole::Formation, Expr::Var(1))]);
+        let mut candidates = Vec::new();
+        if let Some(rank) = best_accept_rank.clone() {
+            candidates.push(PrefixGroupCandidate {
+                telescope: Telescope::new(vec![ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Var(11),
+                )]),
+                accept_rank: Some(rank),
+                evaluated_candidate: None,
+            });
+        }
+        while candidates.len() < candidate_count {
+            let seed = u32::try_from(candidates.len()).expect("candidate index exceeded u32");
+            candidates.push(PrefixGroupCandidate {
+                telescope: Telescope::new(vec![ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Var(seed + 20),
+                )]),
+                accept_rank: None,
+                evaluated_candidate: None,
+            });
+        }
+        PrefixCandidateGroup {
+            prefix_telescope,
+            retention_class: RetentionClass::GenericMacro,
+            shape_hash64: 0,
+            support_hash64: 0,
+            depth: 1,
+            bound: PrefixBound {
+                nu_lower_bound: 1,
+                nu_upper_bound,
+                clause_kappa_used: 1,
+                bit_kappa_used: 1,
+            },
+            best_accept_rank,
+            candidates,
+        }
+    }
+
+    #[test]
+    fn demo_proof_close_order_mode_switches_under_tight_reserve() {
+        assert_eq!(
+            demo_proof_close_order_mode(2_500, 2),
+            DemoProofCloseOrderMode::PotentialFirst
+        );
+        assert_eq!(
+            demo_proof_close_order_mode(1_500, 2),
+            DemoProofCloseOrderMode::ClosureFirst
+        );
+    }
+
+    #[test]
+    fn demo_proof_close_potential_mode_prefers_incumbent_improvers() {
+        let incumbent = test_accept_rank(2, "incumbent");
+        let prune_ready_group = test_prefix_group(1, Some(test_accept_rank(4, "prune")), 4);
+        let improving_group = test_prefix_group(3, Some(test_accept_rank(1, "improve")), 6);
+        let prune_ready_signature = test_prefix_signature(1);
+        let improving_signature = test_prefix_signature(2);
+
+        assert_eq!(
+            demo_proof_close_group_order(
+                DemoProofCloseOrderMode::PotentialFirst,
+                &prune_ready_signature,
+                &prune_ready_group,
+                &improving_signature,
+                &improving_group,
+                Some(&incumbent),
+            ),
+            std::cmp::Ordering::Greater
+        );
+    }
+
+    #[test]
+    fn demo_proof_close_closure_mode_prefers_fast_prunes() {
+        let incumbent = test_accept_rank(2, "incumbent");
+        let prune_ready_group = test_prefix_group(1, Some(test_accept_rank(4, "prune")), 4);
+        let improving_group = test_prefix_group(3, Some(test_accept_rank(1, "improve")), 6);
+        let prune_ready_signature = test_prefix_signature(3);
+        let improving_signature = test_prefix_signature(4);
+
+        assert_eq!(
+            demo_proof_close_group_order(
+                DemoProofCloseOrderMode::ClosureFirst,
+                &prune_ready_signature,
+                &prune_ready_group,
+                &improving_signature,
+                &improving_group,
+                Some(&incumbent),
+            ),
+            std::cmp::Ordering::Less
+        );
+    }
+
+    #[test]
+    fn certification_sort_prefers_best_accept_rank_before_tiebreaks() {
+        let best_rank = test_accept_rank(1, "best");
+        let worse_rank = test_accept_rank(4, "worse");
+        let best_telescope =
+            Telescope::new(vec![ClauseRec::new(ClauseRole::Formation, Expr::Var(9))]);
+        let worse_telescope =
+            Telescope::new(vec![ClauseRec::new(ClauseRole::Formation, Expr::Var(3))]);
+        let mut candidates = vec![
+            PrefixGroupCandidate {
+                telescope: worse_telescope,
+                accept_rank: Some(worse_rank),
+                evaluated_candidate: None,
+            },
+            PrefixGroupCandidate {
+                telescope: best_telescope.clone(),
+                accept_rank: Some(best_rank.clone()),
+                evaluated_candidate: None,
+            },
+            PrefixGroupCandidate {
+                telescope: Telescope::new(vec![ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Var(12),
+                )]),
+                accept_rank: None,
+                evaluated_candidate: None,
+            },
+        ];
+
+        sort_terminal_prefix_group_candidates_for_certification(&mut candidates);
+
+        assert_eq!(candidates[0].accept_rank, Some(best_rank));
+        assert_eq!(candidates[0].telescope, best_telescope);
+        assert!(candidates[2].accept_rank.is_none());
     }
 
     #[test]

@@ -51,6 +51,14 @@ This file is the forward-facing status snapshot for
   `proof_close_frontier_total_groups`, `proof_close_frontier_groups_closed`,
   `proof_close_frontier_groups_remaining`, and
   `proof_close_closure_percent`
+- demo materialize and proof-close now also spend the retained exact surface in
+  a reserve-aware deterministic order: with healthy reserve they prioritize
+  groups that can tighten the incumbent earliest, and under tight reserve they
+  prioritize prune-ready or low-cost groups that can close the remaining
+  frontier faster
+- candidates inside each retained prefix group are now also processed in exact
+  accept-rank order before stable structural tiebreaks, so later dominated
+  candidates can be skipped once an earlier exact incumbent wins cleanly
 - `pen-cli` narrative rendering, debug reporting, and
   `scripts/compare_runs.py` now consume that stored demo phase, funnel, and
   closure evidence directly instead of inferring the story from debug text
@@ -72,6 +80,13 @@ This file is the forward-facing status snapshot for
 - `pen-search` now also tracks proof-close reserve usage and remaining-group
   closure live while exact certification runs, instead of leaving proof-close
   reserve consumption implicit
+- `pen-search` now uses that live reserve signal to reorder retained
+  certification groups deterministically, switching from incumbent-improvement
+  order to faster closure/prune order when the remaining reserved slice gets
+  tight relative to the pending exact surface
+- retained-group candidate order is now exact accept-rank first with stable
+  structural tiebreaks, so materialize and proof-close tighten incumbents
+  earlier before spending later exact evaluations
 - demo proof-close narratives now emit budget pulses when closure crosses the
   stored frontier milestones and when certification overruns the reserved slice
 - `pen-cli` narrative output now renders generated, exact-screened, and
@@ -105,20 +120,20 @@ Next target:
   widening work until the demo lane can satisfy more of the planned breadth
   floors honestly
 
-### 2. ProofClose Now Has Live Accounting, But It Still Does Not Steer Search Order Enough
+### 2. ProofClose Now Steers Ordering, But It Still Does Not Retune Budget Allocation Enough
 
-The lane now persists live proof-close reserve usage and remaining-group
-closure progress, and the narrative can surface both milestone closure and
-reserve exhaustion directly from the search loop. The remaining gap is that
-this evidence still explains certification after the current ordering is
-chosen; it does not yet retune materialize handoff or proof-close group order
-based on live closure payoff.
+The lane no longer treats proof-close reserve and closure as report-only
+evidence: retained groups and within-group candidates now reorder under live
+reserve pressure so tighter incumbents and cheap exact prunes happen earlier.
+The remaining gap is that this evidence still does not change the broader
+discovery-versus-materialize split or spill allocation early enough in the
+step; it mostly improves how the already-retained exact surface is spent.
 
 Next target:
 
-- let live proof-close reserve and closure counters influence how aggressively
-  materialize spends the soft-cap surface and which retained groups get
-  certified first
+- let live proof-close reserve and closure counters retune materialize handoff,
+  discovery spill, and broader step-budget allocation earlier in the step, not
+  just the order of the retained exact surface
 
 ### 3. Demo Widening Is Still Mostly A Reporting Surface, Not Yet A Broader Search Surface
 
@@ -138,9 +153,9 @@ Next target:
 1. Use the new stored funnel and floor evidence to close the explicit step-1
    and early-step breadth gap, rather than leaving the compare tool to report a
    permanent miss.
-2. Use the new live proof-close reserve and closure counters to steer
-   materialize handoff and retained-group certification order, not just to
-   explain the current certification pass.
+2. Push the landed proof-close ordering retune further upstream so live reserve
+   and closure evidence also changes materialize handoff, spill, and step-level
+   budget allocation.
 3. Keep widening the actual demo search surface, especially on steps `10` to
    `15`, so the newly surfaced generated and exact-screened counters grow for
    real.

@@ -216,9 +216,15 @@ On the demo-lane side:
 - demo runs now also persist live proof-close reserve and closure accounting
   plus proof-close milestone and reserve-exhaustion narrative pulses from the
   search loop itself
+- demo materialize and proof-close now also reorder retained prefix groups from
+  that live reserve/closure evidence, preferring incumbent-improving exact
+  surfaces while reserve is healthy and faster prune/closure payoffs when the
+  reserved slice gets tight, and retained-group candidates now run in exact
+  accept-rank order before stable structural tiebreaks
 - the current demo gap is not "make the lane look broader"; it is meeting the
-  surfaced early and late breadth floors honestly and letting the newly stored
-  proof-close reserve/closure evidence steer scheduling more directly
+  surfaced early and late breadth floors honestly, then pushing the landed
+  proof-close ordering retune further upstream into broader budget allocation
+  and real widening
 
 Start with the current architecture doc before diving into donor material:
 
@@ -405,8 +411,9 @@ Focus on:
   `breadth_harvest_exit_reason`, `proof_close_entry_reason`, and
   `proof_close_overrun_reason` plus the new proof-close reserve and closure
   fields as current stored truth, while remembering that the next gap is
-  broader real widening and stronger closure-aware scheduling rather than
-  "add counters for the first time"
+  broader real widening plus stronger upstream budget allocation beyond the
+  landed proof-close ordering retune, rather than "add counters for the first
+  time"
 
 ### If you are working on reporting or evidence
 
@@ -498,6 +505,6 @@ Reject designs that:
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, the stronger Agda contract, and the demo lane's still-missing
-  honest floor hits plus stronger closure-aware widening.
+  honest floor hits plus stronger closure-aware widening and budget allocation.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) for current
   behavior, then use the theory and donor references only as needed.
