@@ -621,6 +621,9 @@ fn realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_compe
         let prefix_exact_pruned = summary["search_stats"]["prefix_states_exact_pruned"]
             .as_u64()
             .expect("prefix_states_exact_pruned");
+        let terminal_rank_prunes = summary["search_stats"]["incremental_terminal_rank_prunes"]
+            .as_u64()
+            .expect("incremental_terminal_rank_prunes");
         let prefix_heuristic_dropped = summary["search_stats"]["prefix_states_heuristic_dropped"]
             .as_u64()
             .expect("prefix_states_heuristic_dropped");
@@ -631,8 +634,8 @@ fn realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_compe
             .as_u64()
             .expect("prefix_frontier_cold_states");
         assert!(
-            evaluated > 1 || prefix_exact_pruned > 0,
-            "expected realistic shadow step {step} to keep competition or sound-prune a competing prefix, got evaluated={evaluated} exact_pruned={prefix_exact_pruned}",
+            evaluated > 1 || prefix_exact_pruned > 0 || terminal_rank_prunes > 0,
+            "expected realistic shadow step {step} to keep competition or exact-prune a competing late branch, got evaluated={evaluated} exact_pruned={prefix_exact_pruned} terminal_rank_prunes={terminal_rank_prunes}",
         );
         assert!(
             prefix_explored > 0,

@@ -1,5 +1,8 @@
-use crate::accept::{AcceptanceOutcome, select_acceptance};
+use crate::accept::{
+    AcceptanceOutcome, acceptance_rank, acceptance_rank_for_telescope, select_acceptance,
+};
 use crate::bounds::PrefixBound;
+use crate::branch_bound::better_rank;
 use crate::config::SearchProfile;
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{
@@ -7,7 +10,9 @@ use crate::enumerate::{
 };
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
-use crate::prefix_cache::{PrefixCache, PrefixCandidateGroup, PrefixSignature};
+use crate::prefix_cache::{
+    PrefixCache, PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature,
+};
 use crate::prefix_memo::{
     PartialPrefixBoundDecision, PrefixLegalityCache, TerminalConnectivityDecision,
     TerminalPrefixClauseEvaluation, TerminalPrefixCompletion, TerminalPrefixCompletionSummary,
@@ -148,6 +153,7 @@ pub struct AtomicSearchStep {
     pub incremental_terminal_admissibility_hits: usize,
     pub incremental_terminal_admissibility_rejections: usize,
     pub incremental_terminal_prefix_completion_hits: usize,
+    pub incremental_terminal_rank_prunes: usize,
     pub incremental_partial_prefix_bound_hits: usize,
     pub incremental_partial_prefix_bound_checks: usize,
     pub incremental_partial_prefix_bound_prunes: usize,
@@ -395,6 +401,7 @@ fn search_next_step(
     let mut incremental_terminal_admissibility_hits = 0usize;
     let mut incremental_terminal_admissibility_rejections = 0usize;
     let mut incremental_terminal_prefix_completion_hits = 0usize;
+    let mut incremental_terminal_rank_prunes = 0usize;
     let mut incremental_partial_prefix_bound_hits = 0usize;
     let mut incremental_partial_prefix_bound_checks = 0usize;
     let mut incremental_partial_prefix_bound_prunes = 0usize;
@@ -506,15 +513,53 @@ fn search_next_step(
         + incremental_terminal_prefix_bar_prunes;
 
     if admissibility_mode == AdmissibilityMode::RealisticShadow {
+        let mut incumbent_terminal_rank = None;
         for signature in &prefix_frontier.retained_prefix_signatures {
             let Some(group) = prefix_cache.get(signature) else {
                 continue;
             };
-            let mut group_telescopes = group.telescopes.clone();
-            group_telescopes
-                .sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
-            for telescope in group_telescopes {
-                let candidate = evaluate_checked_candidate(library, history, telescope)?;
+            if let (Some(group_best_rank), Some(incumbent_rank)) =
+                (&group.best_accept_rank, &incumbent_terminal_rank)
+            {
+                if !better_rank(group_best_rank, incumbent_rank) {
+                    incremental_terminal_rank_prunes += group.candidates.len();
+                    continue;
+                }
+            }
+
+            let mut group_candidates = group.candidates.clone();
+            group_candidates.sort_by_key(|candidate| {
+                serde_json::to_string(&candidate.telescope).expect("serialize")
+            });
+            for group_candidate in group_candidates {
+                if let (Some(candidate_rank), Some(incumbent_rank)) =
+                    (&group_candidate.accept_rank, &incumbent_terminal_rank)
+                {
+                    if !better_rank(candidate_rank, incumbent_rank) {
+                        incremental_terminal_rank_prunes += 1;
+                        continue;
+                    }
+                }
+
+                let candidate =
+                    evaluate_checked_candidate(library, history, group_candidate.telescope)?;
+                if let Some(rank) = acceptance_rank(objective_bar, &candidate) {
+                    let witness = analyze_semantic_minimality(
+                        step_index,
+                        objective_bar,
+                        admissibility,
+                        &candidate.telescope,
+                        library,
+                        &nu_history,
+                    );
+                    let better_than_incumbent = incumbent_terminal_rank
+                        .as_ref()
+                        .map(|current| better_rank(&rank, current))
+                        .unwrap_or(true);
+                    if witness.is_minimal() && better_than_incumbent {
+                        incumbent_terminal_rank = Some(rank);
+                    }
+                }
                 candidates.push(candidate);
             }
         }
@@ -622,6 +667,7 @@ fn search_next_step(
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
         incremental_terminal_prefix_completion_hits,
+        incremental_terminal_rank_prunes,
         incremental_partial_prefix_bound_hits,
         incremental_partial_prefix_bound_checks,
         incremental_partial_prefix_bound_prunes,
@@ -685,6 +731,7 @@ fn build_step_result(
     incremental_terminal_admissibility_hits: usize,
     incremental_terminal_admissibility_rejections: usize,
     incremental_terminal_prefix_completion_hits: usize,
+    incremental_terminal_rank_prunes: usize,
     incremental_partial_prefix_bound_hits: usize,
     incremental_partial_prefix_bound_checks: usize,
     incremental_partial_prefix_bound_prunes: usize,
@@ -748,6 +795,7 @@ fn build_step_result(
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
         incremental_terminal_prefix_completion_hits,
+        incremental_terminal_rank_prunes,
         incremental_partial_prefix_bound_hits,
         incremental_partial_prefix_bound_checks,
         incremental_partial_prefix_bound_prunes,
@@ -1557,7 +1605,17 @@ fn record_terminal_prefix_group(
                 discovery.enumerated_candidates += 1;
                 discovery.well_formed_candidates += 1;
                 discovery.admissibility_diagnostics.record(&decision);
-                retained_telescopes.push(completion.telescope);
+                let accept_rank = acceptance_rank_for_telescope(
+                    objective_bar,
+                    &completion.telescope,
+                    completion.exact_nu,
+                    completion.bit_kappa_used,
+                    completion.clause_kappa_used,
+                );
+                retained_telescopes.push(PrefixGroupCandidate {
+                    telescope: completion.telescope,
+                    accept_rank,
+                });
             }
         }
     }
@@ -2413,12 +2471,14 @@ mod tests {
         assert!(step.incremental_trivial_derivability_hits > 0);
         assert!(step.incremental_terminal_admissibility_hits > 0);
         assert!(step.incremental_terminal_prefix_completion_hits > 0);
+        assert!(step.incremental_terminal_rank_prunes > 0);
         assert!(step.incremental_partial_prefix_bound_checks > 0);
         assert_eq!(step.prefix_states_explored, 3);
         assert!(
             step.prefix_frontier_hot_states + step.prefix_frontier_cold_states
                 <= step.prefix_states_explored
         );
+        assert_eq!(step.full_telescopes_evaluated, 1);
         assert_eq!(step.full_telescopes_evaluated, step.evaluated_candidates);
         assert_eq!(step.canonical_dedupe_prunes, step.dedupe_prunes);
         assert_eq!(step.semantic_minimality_prunes, step.minimality_prunes);

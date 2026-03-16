@@ -1,6 +1,8 @@
 use crate::branch_bound::AcceptRank;
-use crate::expand::ExpandedCandidate;
+use crate::expand::{ExpandedCandidate, structural_signals_for_telescope};
+use pen_core::canonical::canonical_key_telescope;
 use pen_core::rational::Rational;
+use pen_core::telescope::Telescope;
 use pen_store::manifest::{AcceptedCandidate, NearMiss};
 use std::cmp::Reverse;
 
@@ -41,7 +43,7 @@ pub fn select_acceptance(
     })
 }
 
-fn acceptance_rank(bar: Rational, candidate: &ExpandedCandidate) -> Option<AcceptRank> {
+pub(crate) fn acceptance_rank(bar: Rational, candidate: &ExpandedCandidate) -> Option<AcceptRank> {
     (candidate.rho >= bar).then(|| AcceptRank {
         overshoot: candidate.rho - bar,
         clause_kappa: candidate.clause_kappa,
@@ -61,6 +63,40 @@ fn acceptance_rank(bar: Rational, candidate: &ExpandedCandidate) -> Option<Accep
         bit_kappa: candidate.bit_kappa,
         descending_nu: Reverse(candidate.nu),
         canonical_key: candidate.canonical_key.clone(),
+    })
+}
+
+pub(crate) fn acceptance_rank_for_telescope(
+    bar: Rational,
+    telescope: &Telescope,
+    exact_nu: u16,
+    bit_kappa: u16,
+    clause_kappa: u16,
+) -> Option<AcceptRank> {
+    let rho = Rational::new(i64::from(exact_nu), i64::from(clause_kappa));
+    if rho < bar {
+        return None;
+    }
+
+    let signals = structural_signals_for_telescope(telescope);
+    Some(AcceptRank {
+        overshoot: rho - bar,
+        clause_kappa,
+        descending_eliminator_score: Reverse(signals.eliminator_score),
+        descending_former_score: Reverse(signals.former_score),
+        descending_dependent_motive_density: Reverse(signals.dependent_motive_density),
+        descending_library_reference_density: Reverse(signals.library_reference_density),
+        descending_generic_binder_count: Reverse(signals.generic_binder_count),
+        descending_closure_score: Reverse(signals.closure_score),
+        max_var_ref: telescope
+            .var_refs()
+            .iter()
+            .next_back()
+            .copied()
+            .unwrap_or(0),
+        bit_kappa,
+        descending_nu: Reverse(exact_nu),
+        canonical_key: canonical_key_telescope(telescope),
     })
 }
 

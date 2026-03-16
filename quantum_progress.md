@@ -15,11 +15,12 @@ answer two questions:
 - guarded and realistic shadow still preserve the accepted 15-step sequence
 - the current realistic engine already has enough structure to build on:
   online prefix expansion, exact signature-keyed memoization, exact small-tree
-  and terminal-prefix pruning, and persisted timing/memory telemetry
+  and terminal-prefix pruning, exact late terminal-rank pruning, and
+  persisted timing/memory telemetry
 
 ## What The Latest Evidence Says
 
-Use `runs/codex-historical-reanchor` as the current reference artifact set.
+Use `runs/codex-terminal-rank-prune` as the current reference artifact set.
 
 Late-step facts that matter for forward work:
 
@@ -29,56 +30,67 @@ Late-step facts that matter for forward work:
   `incremental_partial_prefix_bound_hits = 1`,
   `incremental_terminal_prefix_bar_prunes = 1`, and
   `full_telescopes_evaluated = 1`
-- step 15 shows terminal reuse and connectivity reuse are working:
+- steps 13 to 15 now show exact late terminal-rank pruning after retained
+  prefix grouping:
+  `incremental_terminal_rank_prunes = 1` and
+  `full_telescopes_evaluated = 1` on each of steps 13, 14, and 15
+- step 15 still shows terminal reuse and connectivity reuse are working:
   `incremental_terminal_prefix_completion_hits = 3`,
   `incremental_connectivity_shortcuts = 2`, and
   `incremental_connectivity_fallbacks = 0`
-- step 15 still leaves useful work on the table:
-  `prefix_states_explored = 3` and `full_telescopes_evaluated = 2`
+- the new prune removes dominated late full-telescope work, but it does not
+  yet shrink the late prefix search surface:
+  step 13 still has `prefix_states_explored = 3` and
+  step 15 still has `prefix_states_explored = 3`
 - current late-step wall-clock is already low in absolute terms, so the next
-  pass should optimize exact work counts first and timing second
+  pass should keep optimizing exact work counts first and timing second
 
 ## Active Gaps
 
-### 1. Exact Partial-Prefix Bounds Are Still Too Local
+### 1. Exact Partial-Prefix Bounds Still Fire After Too Much Prefix Work
 
-The current exact bound wins are limited to tiny exact completion trees and the
-one-clause-short terminal frontier. Prefixes that survive those cases still
-often run through terminal work before we know they cannot win.
+The new exact terminal-rank prune only fires after retained terminal
+completions are already known. It removes redundant late full-telescope
+evaluation, but it does not yet cut the prefix states that survive into those
+terminal surfaces.
 
 Next target:
 
-- find a sound exact bound that fires earlier on steps 13 to 15 without guessed
-  `nu_upper` logic
+- find a sound exact bound that fires before retained terminal-group assembly
+  on steps 13 to 15 without guessed `nu_upper` logic
 
 Evidence to improve against:
 
 - steps 13 and 15 still explore 3 prefix states
-- step 15 still evaluates 2 full telescopes
+- step 15 still does `incremental_partial_prefix_bound_checks = 3`
+- step 15 still does `incremental_terminal_prefix_completion_hits = 3`
 
-### 2. Non-Family Admissibility Reuse Is Still Too Thin
+### 2. Non-Family Admissibility Reuse Still Arrives Too Late
 
 Family-shaped filtering, terminal admissibility, trivial-derivability, and
-historical-reanchor reuse now clear obvious cases. The remaining cost comes
-from late continuations that are still structurally plausible but require more
-exact work than we want.
+historical-reanchor reuse now clear obvious cases. The new late terminal-rank
+summary removes dominated retained completions, but only after exact terminal
+completion summaries already exist.
 
 Next target:
 
-- add another exact `PrefixSignature`-keyed admissibility summary before full
-  terminal assembly
+- add another exact `PrefixSignature`-keyed admissibility or dominance summary
+  that rejects late continuations before full terminal completion summaries are
+  built
 
 Evidence to improve against:
 
-- step 15 still needs terminal completion reuse to finish cleanly
-- late realistic steps still keep more than one plausible terminal surface
-  after the current family filters
+- step 15 still needs terminal completion reuse hits to finish cleanly:
+  `incremental_terminal_prefix_completion_hits = 3`
+- steps 13 and 15 still explore multiple plausible late prefixes before the
+  new rank prune fires
 
 ### 3. Search Order Has Not Yet Been Retuned From The New Evidence
 
 The continuation-aware queue order is only a first pass. It has not yet been
 retuned using the latest timing, memory, and prune counters after the newer
-memoization layers landed.
+memoization layers landed. The new terminal-rank prune also makes it clearer
+which late prefixes are worth evaluating first.
 
 Next target:
 
@@ -88,15 +100,17 @@ Next target:
 ## Immediate Next Steps
 
 1. Audit the remaining late-step prefixes in the latest realistic artifacts,
-   especially steps 13 to 15.
+   especially the step-13 and step-15 surfaces that still explore 3 prefix
+   states before the new rank prune lands.
 2. Choose one of:
    - a broader exact partial-prefix bound
    - a broader non-family admissibility summary
-3. Land the smallest exact change that removes a real late-step branch or full
-   telescope evaluation.
+3. Land the smallest exact change that removes a real late-step prefix state,
+   not just a final dominated telescope evaluation.
 4. Re-run realistic shadow through step 15 and compare:
    - `prefix_states_explored`
    - `full_telescopes_evaluated`
+   - `incremental_terminal_rank_prunes`
    - relevant cache/prune counters
    - timing/memory telemetry
 5. Only then retune ordering.
@@ -121,4 +135,4 @@ Next target:
 ## Verification Baseline
 
 - `cargo test -p pen-type -p pen-search -p pen-cli -p pen-store`
-- `cargo run -p pen-cli -- run --config configs/realistic_frontier_shadow.toml --root runs --run-id codex-historical-reanchor --until-step 15`
+- `cargo run -p pen-cli -- run --config configs/realistic_frontier_shadow.toml --root runs --run-id codex-terminal-rank-prune --until-step 15`

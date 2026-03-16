@@ -572,6 +572,8 @@ fn write_frontier_snapshots(
                     .search_stats
                     .incremental_terminal_prefix_completion_hits
                     as u64,
+                incremental_terminal_rank_prunes: step.search_stats.incremental_terminal_rank_prunes
+                    as u64,
                 incremental_partial_prefix_bound_hits: step
                     .search_stats
                     .incremental_partial_prefix_bound_hits

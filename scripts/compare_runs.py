@@ -309,6 +309,10 @@ def late_step_competition_entry(step: dict[str, Any]) -> dict[str, Any]:
             ("clears_bar", int(distribution.get("clears_bar", 0) or 0)),
             ("below_bar", int(distribution.get("below_bar", 0) or 0)),
             ("retained", int(stats.get("retained_candidates", 0) or 0)),
+            (
+                "terminal_rank_prunes",
+                int(stats.get("incremental_terminal_rank_prunes", 0) or 0),
+            ),
         ]
     )
 
@@ -1163,7 +1167,8 @@ def render_late_step_competition(
                 "step_index": entry["step_index"],
                 "value": (
                     f"eval={entry['evaluated']} clears={entry['clears_bar']} "
-                    f"below={entry['below_bar']} retained={entry['retained']}"
+                    f"below={entry['below_bar']} retained={entry['retained']} "
+                    f"terminal_rank_prunes={entry['terminal_rank_prunes']}"
                 ),
             }
             for entry in entries

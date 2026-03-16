@@ -102,6 +102,10 @@ pub fn evaluate_checked_candidate(
     build_candidate(telescope, native, library)
 }
 
+pub(crate) fn structural_signals_for_telescope(telescope: &Telescope) -> StructuralSignals {
+    structural_signals(telescope)
+}
+
 fn build_candidate(
     telescope: Telescope,
     native: NativeNuResult,

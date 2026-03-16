@@ -218,6 +218,7 @@ mod tests {
                 incremental_terminal_admissibility_hits: 3,
                 incremental_terminal_admissibility_rejections: 1,
                 incremental_terminal_prefix_completion_hits: 2,
+                incremental_terminal_rank_prunes: 1,
                 incremental_partial_prefix_bound_hits: 1,
                 incremental_partial_prefix_bound_checks: 2,
                 incremental_partial_prefix_bound_prunes: 1,

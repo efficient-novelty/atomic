@@ -1,4 +1,5 @@
 use crate::bounds::PrefixBound;
+use crate::branch_bound::{AcceptRank, better_rank};
 use crate::expand::evaluate_checked_candidate;
 use anyhow::Result;
 use pen_core::canonical::canonical_key_telescope;
@@ -80,6 +81,12 @@ pub struct PrefixCacheStats {
 }
 
 #[derive(Clone, Debug)]
+pub struct PrefixGroupCandidate {
+    pub telescope: Telescope,
+    pub accept_rank: Option<AcceptRank>,
+}
+
+#[derive(Clone, Debug)]
 pub struct PrefixCandidateGroup {
     pub prefix_telescope: Telescope,
     pub retention_class: RetentionClass,
@@ -87,7 +94,8 @@ pub struct PrefixCandidateGroup {
     pub support_hash64: u64,
     pub depth: u16,
     pub bound: PrefixBound,
-    pub telescopes: Vec<Telescope>,
+    pub best_accept_rank: Option<AcceptRank>,
+    pub candidates: Vec<PrefixGroupCandidate>,
 }
 
 #[derive(Clone, Debug, Default)]
@@ -131,7 +139,10 @@ impl PrefixCache {
         self.record_group_with_bound(
             step_index,
             prefix_telescope,
-            vec![telescope],
+            vec![PrefixGroupCandidate {
+                telescope,
+                accept_rank: None,
+            }],
             bound,
             library,
             history,
@@ -143,22 +154,26 @@ impl PrefixCache {
         &mut self,
         step_index: u32,
         prefix_telescope: Telescope,
-        telescopes: Vec<Telescope>,
+        candidates: Vec<PrefixGroupCandidate>,
         bound: PrefixBound,
         library: &Library,
         history: &[DiscoveryRecord],
         retention_policy: RetentionPolicy,
     ) -> Result<()> {
-        if telescopes.is_empty() {
+        if candidates.is_empty() {
             return Ok(());
         }
 
         let signature = PrefixSignature::new(step_index, library, &prefix_telescope);
-        let telescope_count = telescopes.len();
+        let telescope_count = candidates.len();
+        let best_accept_rank = best_accept_rank(&candidates);
 
         if let Some(group) = self.groups.get_mut(&signature) {
             group.bound.absorb_bound(bound);
-            group.telescopes.extend(telescopes);
+            if let Some(rank) = best_accept_rank {
+                merge_best_accept_rank(&mut group.best_accept_rank, rank);
+            }
+            group.candidates.extend(candidates);
             self.stats.merged_by_signature += telescope_count;
             return Ok(());
         }
@@ -172,7 +187,8 @@ impl PrefixCache {
             shape_hash64: signature.shape_hash64,
             support_hash64: signature.support_hash64,
             bound,
-            telescopes,
+            best_accept_rank,
+            candidates,
         };
         self.groups.insert(signature, group);
         self.stats.created += 1;
@@ -192,6 +208,24 @@ fn bound_for_telescope(
         u16::try_from(telescope_bit_cost(telescope)).expect("bit cost exceeded u16");
     let clause_kappa_used = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
     PrefixBound::singleton(exact_nu, clause_kappa_used, bit_kappa_used)
+}
+
+fn best_accept_rank(candidates: &[PrefixGroupCandidate]) -> Option<AcceptRank> {
+    let mut best = None;
+    for candidate in candidates {
+        let Some(rank) = candidate.accept_rank.clone() else {
+            continue;
+        };
+        merge_best_accept_rank(&mut best, rank);
+    }
+    best
+}
+
+fn merge_best_accept_rank(best: &mut Option<AcceptRank>, candidate: AcceptRank) {
+    match best {
+        Some(current) if !better_rank(&candidate, current) => {}
+        _ => *best = Some(candidate),
+    }
 }
 
 fn truncated_hash64(bytes: &[u8]) -> u64 {
@@ -250,7 +284,7 @@ fn structural_family_flags(prefix_telescope: &Telescope, library: &Library) -> u
 
 #[cfg(test)]
 mod tests {
-    use super::{PrefixCache, PrefixSignature};
+    use super::{PrefixCache, PrefixGroupCandidate, PrefixSignature};
     use crate::bounds::PrefixBound;
     use pen_core::clause::{ClauseRec, ClauseRole};
     use pen_core::expr::Expr;
@@ -342,7 +376,7 @@ mod tests {
         assert_eq!(cache.stats().created, 1);
         assert_eq!(cache.stats().merged_by_signature, 1);
         let (_, group) = cache.iter().next().expect("group should exist");
-        assert_eq!(group.telescopes.len(), 2);
+        assert_eq!(group.candidates.len(), 2);
         assert!(group.bound.nu_upper_bound >= group.bound.nu_lower_bound);
     }
 
@@ -374,7 +408,16 @@ mod tests {
             .record_group_with_bound(
                 2,
                 prefix.clone(),
-                vec![telescope_a, telescope_b],
+                vec![
+                    PrefixGroupCandidate {
+                        telescope: telescope_a,
+                        accept_rank: None,
+                    },
+                    PrefixGroupCandidate {
+                        telescope: telescope_b,
+                        accept_rank: None,
+                    },
+                ],
                 PrefixBound {
                     nu_lower_bound: 5,
                     nu_upper_bound: 8,
@@ -392,7 +435,7 @@ mod tests {
         assert_eq!(cache.stats().merged_by_signature, 1);
         let (_, group) = cache.iter().next().expect("group should exist");
         assert_eq!(group.prefix_telescope, prefix);
-        assert_eq!(group.telescopes.len(), 2);
+        assert_eq!(group.candidates.len(), 2);
         assert_eq!(group.bound.nu_lower_bound, 5);
         assert_eq!(group.bound.nu_upper_bound, 8);
     }
