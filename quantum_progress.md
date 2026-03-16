@@ -20,7 +20,8 @@ answer two questions:
 
 ## What The Latest Evidence Says
 
-Use `runs/codex-two-step-surface` as the current reference artifact set.
+Use `runs/codex-two-step-surface-terminal-cache` as the current reference
+artifact set.
 
 Late-step facts that matter for forward work:
 
@@ -53,6 +54,10 @@ Late-step facts that matter for forward work:
   `incremental_terminal_prefix_completion_hits = 2`,
   `incremental_connectivity_shortcuts = 2`, and
   `incremental_connectivity_fallbacks = 0`
+- step 15 now also shows slightly less repeated legality and active-window
+  filtering work on that same surviving lane:
+  `incremental_legality_cache_hits = 19` and
+  `incremental_active_window_clause_filter_hits = 18`
 - the new exact remaining-two collapse proves we can safely eliminate one late
   queued child layer when the surface is isolated, but the surviving step-15
   root-to-terminal lane still does the same number of exact bar checks and
@@ -105,7 +110,11 @@ Evidence to improve against:
 - step 15 still shows the cached rank-summary consult is real:
   `incremental_terminal_prefix_rank_hits = 1`
 - step 15 still builds exact terminal completion summaries for multiple
-  plausible late continuations before the current rank summary can help
+  plausible late continuations before the current rank summary can help,
+  even though the forced-suffix replay underneath that lane now costs a little
+  less supporting legality/filter work:
+  `incremental_legality_cache_hits = 19` and
+  `incremental_active_window_clause_filter_hits = 18`
 
 ### 3. Search Order Has Not Yet Been Retuned From The New Evidence
 
@@ -159,5 +168,5 @@ Next target:
 ## Verification Baseline
 
 - `cargo test -p pen-type -p pen-search -p pen-cli -p pen-store`
-- `cargo run -p pen-cli -- run --config configs/strict_canon_guarded.toml --root runs --run-id codex-two-step-surface-guarded --until-step 15`
-- `cargo run -p pen-cli -- run --config configs/realistic_frontier_shadow.toml --root runs --run-id codex-two-step-surface --until-step 15`
+- `cargo run -p pen-cli -- run --config configs/strict_canon_guarded.toml --root runs --run-id codex-two-step-surface-terminal-cache-guarded --until-step 15`
+- `cargo run -p pen-cli -- run --config configs/realistic_frontier_shadow.toml --root runs --run-id codex-two-step-surface-terminal-cache --until-step 15`

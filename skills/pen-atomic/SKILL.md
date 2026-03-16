@@ -169,6 +169,12 @@ The current search-architecture focus has shifted again:
   surviving temporal-shell root lane is still the next late exact surface to
   collapse or summarize earlier
 - fresh realistic-shadow step-15 artifacts now also show
+  `incremental_legality_cache_hits = 19` and
+  `incremental_active_window_clause_filter_hits = 18`, confirming that the
+  forced-suffix / terminal-summary replay underneath that same temporal-shell
+  lane now costs slightly less supporting legality and active-window filter
+  work even though the primary late exact surface is still present
+- fresh realistic-shadow step-15 artifacts now also show
   `incremental_connectivity_shortcuts = 2` and
   `incremental_connectivity_fallbacks = 0`, confirming that temporal-shell
   terminal connectivity now uses the landed historical-reanchor shortcut

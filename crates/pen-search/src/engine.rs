@@ -988,6 +988,20 @@ fn discover_realistic_shadow_candidates(
                 &clause_catalog,
                 &mut discovery.prefix_legality_cache,
             );
+            if let Some(decision) = cached_terminal_prefix_queue_entry_bound_decision(
+                objective_bar,
+                &work_item,
+                &mut discovery.prefix_legality_cache,
+            ) {
+                match decision {
+                    ExactPartialPrefixBoundDecision::CanClearBar => frontier.push(work_item),
+                    ExactPartialPrefixBoundDecision::CannotClearBar => {
+                        discovery.partial_prefix_bound_prunes += 1;
+                    }
+                    ExactPartialPrefixBoundDecision::Unknown => frontier.push(work_item),
+                }
+                continue;
+            }
             let mut exact_bound_budget = EXACT_PARTIAL_PREFIX_BOUND_BUDGET;
             match exact_partial_prefix_bound_decision(
                 step_index,
@@ -1088,21 +1102,56 @@ fn discover_realistic_shadow_candidates(
             }
 
             discovery.prefix_states_explored += 1;
-            if frontier.is_empty()
-                && work_item.remaining_clause_slots == 2
-                && process_exact_two_step_terminal_surface(
+            if work_item.remaining_clause_slots == 2 {
+                let terminal_prefixes = prepare_exact_two_step_terminal_surface(
                     step_index,
                     library,
-                    history,
                     admissibility,
-                    objective_bar,
-                    nu_history,
-                    retention_policy,
                     &clause_catalog,
                     &work_item,
                     &mut discovery,
-                )?
-            {
+                );
+                if can_process_exact_two_step_terminal_surface_now(&frontier, &terminal_prefixes) {
+                    process_prepared_exact_two_step_terminal_surface(
+                        step_index,
+                        library,
+                        history,
+                        admissibility,
+                        objective_bar,
+                        nu_history,
+                        retention_policy,
+                        terminal_prefixes,
+                        &mut discovery,
+                    )?;
+                    continue;
+                }
+
+                for terminal_prefix in terminal_prefixes {
+                    let mut exact_bound_budget = EXACT_PARTIAL_PREFIX_BOUND_BUDGET;
+                    match exact_partial_prefix_bound_decision(
+                        step_index,
+                        library,
+                        admissibility,
+                        objective_bar,
+                        nu_history,
+                        &clause_catalog,
+                        &terminal_prefix,
+                        &mut discovery.prefix_legality_cache,
+                        &mut exact_bound_budget,
+                    ) {
+                        ExactPartialPrefixBoundDecision::CanClearBar => {
+                            discovery.partial_prefix_bound_checks += 1;
+                            frontier.push(terminal_prefix);
+                        }
+                        ExactPartialPrefixBoundDecision::CannotClearBar => {
+                            discovery.partial_prefix_bound_checks += 1;
+                            discovery.partial_prefix_bound_prunes += 1;
+                        }
+                        ExactPartialPrefixBoundDecision::Unknown => {
+                            frontier.push(terminal_prefix);
+                        }
+                    }
+                }
                 continue;
             }
 
@@ -1129,6 +1178,20 @@ fn discover_realistic_shadow_candidates(
                     &clause_catalog,
                     &mut discovery.prefix_legality_cache,
                 );
+                if let Some(decision) = cached_terminal_prefix_queue_entry_bound_decision(
+                    objective_bar,
+                    &child_work_item,
+                    &mut discovery.prefix_legality_cache,
+                ) {
+                    match decision {
+                        ExactPartialPrefixBoundDecision::CanClearBar => frontier.push(child_work_item),
+                        ExactPartialPrefixBoundDecision::CannotClearBar => {
+                            discovery.partial_prefix_bound_prunes += 1;
+                        }
+                        ExactPartialPrefixBoundDecision::Unknown => frontier.push(child_work_item),
+                    }
+                    continue;
+                }
                 let mut exact_bound_budget = EXACT_PARTIAL_PREFIX_BOUND_BUDGET;
                 match exact_partial_prefix_bound_decision(
                     step_index,
@@ -1160,24 +1223,16 @@ fn discover_realistic_shadow_candidates(
     Ok(discovery)
 }
 
-fn process_exact_two_step_terminal_surface(
+fn prepare_exact_two_step_terminal_surface(
     step_index: u32,
     library: &Library,
-    history: &[DiscoveryRecord],
     admissibility: StrictAdmissibility,
-    objective_bar: Rational,
-    nu_history: &[(u32, u32)],
-    retention_policy: RetentionPolicy,
     clause_catalog: &ClauseCatalog,
     work_item: &OnlinePrefixWorkItem,
     discovery: &mut RealisticShadowDiscovery,
-) -> Result<bool> {
-    if work_item.remaining_clause_slots != 2 {
-        return Ok(false);
-    }
+) -> Vec<OnlinePrefixWorkItem> {
+    debug_assert_eq!(work_item.remaining_clause_slots, 2);
 
-    // When no competing queue item can interleave, process the final two-step
-    // suffix directly instead of replaying one-clause-short child bound checks.
     let mut terminal_prefixes = Vec::new();
     for clause in &work_item.next_clauses {
         let mut child_prefix = work_item.prefix_telescope.clone();
@@ -1203,8 +1258,42 @@ fn process_exact_two_step_terminal_surface(
             &mut discovery.prefix_legality_cache,
         ));
     }
+    terminal_prefixes.sort_by(|left, right| {
+        prefix_frontier_work_key(left).cmp(&prefix_frontier_work_key(right))
+    });
+    terminal_prefixes
+}
 
-    while let Some(terminal_prefix) = pop_best_prefix(&mut terminal_prefixes) {
+fn can_process_exact_two_step_terminal_surface_now(
+    frontier: &[OnlinePrefixWorkItem],
+    terminal_prefixes: &[OnlinePrefixWorkItem],
+) -> bool {
+    let Some(last_terminal_prefix) = terminal_prefixes.last() else {
+        return true;
+    };
+    let Some(frontier_head) = frontier.first() else {
+        return true;
+    };
+
+    // The frontier remains sorted after the current head was popped, so if the
+    // slowest local terminal child still outranks the current frontier head we
+    // can process the exact remaining-two suffix in place without changing the
+    // deterministic pop order.
+    prefix_frontier_work_key(last_terminal_prefix) < prefix_frontier_work_key(frontier_head)
+}
+
+fn process_prepared_exact_two_step_terminal_surface(
+    step_index: u32,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility: StrictAdmissibility,
+    objective_bar: Rational,
+    nu_history: &[(u32, u32)],
+    retention_policy: RetentionPolicy,
+    terminal_prefixes: Vec<OnlinePrefixWorkItem>,
+    discovery: &mut RealisticShadowDiscovery,
+) -> Result<()> {
+    for terminal_prefix in terminal_prefixes {
         debug_assert_eq!(terminal_prefix.remaining_clause_slots, 1);
 
         let mut group = materialize_terminal_prefix_group(
@@ -1264,7 +1353,7 @@ fn process_exact_two_step_terminal_surface(
         )?;
     }
 
-    Ok(true)
+    Ok(())
 }
 
 fn create_online_prefix_work_item(
@@ -1317,7 +1406,7 @@ fn collapse_single_continuation_chain(
     discovery: &mut RealisticShadowDiscovery,
     work_item: OnlinePrefixWorkItem,
 ) -> Option<OnlinePrefixWorkItem> {
-    let (work_item, collapsed_prefixes) = collapse_single_continuation_chain_inner(
+    let (work_item, collapsed_signatures) = collapse_single_continuation_chain_inner(
         step_index,
         library,
         admissibility,
@@ -1325,7 +1414,7 @@ fn collapse_single_continuation_chain(
         &mut discovery.prefix_legality_cache,
         work_item,
     )?;
-    discovery.prefixes_created += collapsed_prefixes;
+    discovery.prefixes_created += collapsed_signatures.len();
     Some(work_item)
 }
 
@@ -1336,16 +1425,16 @@ fn collapse_single_continuation_chain_inner(
     clause_catalog: &ClauseCatalog,
     prefix_legality_cache: &mut PrefixLegalityCache,
     mut work_item: OnlinePrefixWorkItem,
-) -> Option<(OnlinePrefixWorkItem, usize)> {
-    let mut collapsed_prefixes = 0usize;
+) -> Option<(OnlinePrefixWorkItem, Vec<PrefixSignature>)> {
+    let mut collapsed_signatures = Vec::new();
 
     loop {
         if work_item.remaining_clause_slots <= 1 {
-            return Some((work_item, collapsed_prefixes));
+            return Some((work_item, collapsed_signatures));
         }
 
         let [clause] = work_item.next_clauses.as_slice() else {
-            return Some((work_item, collapsed_prefixes));
+            return Some((work_item, collapsed_signatures));
         };
 
         let mut child_prefix = work_item.prefix_telescope.clone();
@@ -1361,7 +1450,7 @@ fn collapse_single_continuation_chain_inner(
             return None;
         }
 
-        collapsed_prefixes += 1;
+        collapsed_signatures.push(work_item.signature.clone());
         work_item = create_online_prefix_work_item(
             work_item.clause_kappa,
             child_prefix,
@@ -1371,6 +1460,16 @@ fn collapse_single_continuation_chain_inner(
             clause_catalog,
             prefix_legality_cache,
         );
+    }
+}
+
+fn store_partial_prefix_bound_decision_for_signatures(
+    prefix_legality_cache: &mut PrefixLegalityCache,
+    signatures: Vec<PrefixSignature>,
+    decision: PartialPrefixBoundDecision,
+) {
+    for signature in signatures {
+        prefix_legality_cache.store_partial_prefix_bound_decision(signature, decision);
     }
 }
 
@@ -1455,7 +1554,8 @@ fn exact_partial_prefix_bound_decision(
             clause_catalog,
             prefix_legality_cache,
         );
-        let Some((child_work_item, collapsed_prefixes)) = collapse_single_continuation_chain_inner(
+        let child_signature = child_work_item.signature.clone();
+        let Some((child_work_item, collapsed_signatures)) = collapse_single_continuation_chain_inner(
             step_index,
             library,
             admissibility,
@@ -1465,11 +1565,11 @@ fn exact_partial_prefix_bound_decision(
         ) else {
             continue;
         };
-        if !spend_exact_partial_prefix_budget(budget, collapsed_prefixes) {
+        if !spend_exact_partial_prefix_budget(budget, collapsed_signatures.len()) {
             return ExactPartialPrefixBoundDecision::Unknown;
         }
 
-        match exact_partial_prefix_bound_decision(
+        let propagated_decision = exact_partial_prefix_bound_decision(
             step_index,
             library,
             admissibility,
@@ -1479,7 +1579,18 @@ fn exact_partial_prefix_bound_decision(
             &child_work_item,
             prefix_legality_cache,
             budget,
-        ) {
+        );
+        if let Some(cacheable) = propagated_decision.cacheable_partial_decision() {
+            let mut signatures = collapsed_signatures;
+            signatures.push(child_signature);
+            store_partial_prefix_bound_decision_for_signatures(
+                prefix_legality_cache,
+                signatures,
+                cacheable,
+            );
+        }
+
+        match propagated_decision {
             ExactPartialPrefixBoundDecision::CanClearBar => {
                 prefix_legality_cache.store_partial_prefix_bound_decision(
                     work_item.signature.clone(),
@@ -1499,6 +1610,24 @@ fn exact_partial_prefix_bound_decision(
         PartialPrefixBoundDecision::CannotClearBar,
     );
     ExactPartialPrefixBoundDecision::CannotClearBar
+}
+
+fn cached_terminal_prefix_queue_entry_bound_decision(
+    objective_bar: Rational,
+    work_item: &OnlinePrefixWorkItem,
+    prefix_legality_cache: &mut PrefixLegalityCache,
+) -> Option<ExactPartialPrefixBoundDecision> {
+    if work_item.remaining_clause_slots != 1 {
+        return None;
+    }
+
+    let summary = prefix_legality_cache.terminal_prefix_completion_summary(&work_item.signature)?;
+    let decision = exact_terminal_prefix_completion_summary_decision(objective_bar, &summary);
+    if let Some(cacheable) = decision.cacheable_partial_decision() {
+        prefix_legality_cache
+            .store_partial_prefix_bound_decision(work_item.signature.clone(), cacheable);
+    }
+    Some(decision)
 }
 
 fn exact_terminal_prefix_bound_decision(
@@ -2942,18 +3071,18 @@ mod tests {
         assert!(step.prefix_states_explored > step.frontier_window.total_len());
         assert_eq!(step.prefix_frontier_hot_states, 1);
         assert_eq!(step.prefix_frontier_cold_states, 0);
-        assert!(step.incremental_legality_cache_hits > 0);
+        assert_eq!(step.incremental_legality_cache_hits, 19);
         assert_eq!(step.incremental_connectivity_fallbacks, 0);
         assert!(step.incremental_clause_family_filter_hits > 0);
-        assert!(step.incremental_active_window_clause_filter_hits > 0);
+        assert_eq!(step.incremental_active_window_clause_filter_hits, 18);
         assert!(step.incremental_terminal_clause_filter_hits > 0);
         assert!(step.incremental_trivial_derivability_hits > 0);
         assert!(step.incremental_terminal_admissibility_hits > 0);
-        assert!(step.incremental_terminal_prefix_completion_hits > 0);
+        assert_eq!(step.incremental_terminal_prefix_completion_hits, 2);
         assert!(step.incremental_terminal_prefix_rank_hits > 0);
         assert!(step.incremental_terminal_rank_prunes > 0);
         assert!(step.incremental_partial_prefix_bound_hits > 0);
-        assert!(step.incremental_partial_prefix_bound_checks > 0);
+        assert_eq!(step.incremental_partial_prefix_bound_checks, 3);
         assert_eq!(step.prefix_states_explored, 2);
         assert!(
             step.prefix_frontier_hot_states + step.prefix_frontier_cold_states
