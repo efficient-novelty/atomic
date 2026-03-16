@@ -568,6 +568,14 @@ fn write_frontier_snapshots(
                     .search_stats
                     .incremental_terminal_admissibility_rejections
                     as u64,
+                incremental_partial_prefix_bound_checks: step
+                    .search_stats
+                    .incremental_partial_prefix_bound_checks
+                    as u64,
+                incremental_partial_prefix_bound_prunes: step
+                    .search_stats
+                    .incremental_partial_prefix_bound_prunes
+                    as u64,
                 incremental_terminal_prefix_bar_prunes: step
                     .search_stats
                     .incremental_terminal_prefix_bar_prunes

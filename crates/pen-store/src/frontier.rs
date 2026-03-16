@@ -217,6 +217,8 @@ mod tests {
                 incremental_trivial_derivability_prunes: 1,
                 incremental_terminal_admissibility_hits: 3,
                 incremental_terminal_admissibility_rejections: 1,
+                incremental_partial_prefix_bound_checks: 2,
+                incremental_partial_prefix_bound_prunes: 1,
                 incremental_terminal_prefix_bar_prunes: 2,
                 hot_states: 2,
                 cold_states: 3,

@@ -612,6 +612,9 @@ fn realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_compe
         let prefix_explored = summary["search_stats"]["prefix_states_explored"]
             .as_u64()
             .expect("prefix_states_explored");
+        let prefixes_created = summary["search_stats"]["prefixes_created"]
+            .as_u64()
+            .expect("prefixes_created");
         let prefix_merged = summary["search_stats"]["prefix_states_merged_by_signature"]
             .as_u64()
             .expect("prefix_states_merged_by_signature");
@@ -641,8 +644,8 @@ fn realistic_shadow_run_preserves_reference_sequence_and_exposes_full_late_compe
         );
         assert!(
             prefix_exact_pruned + prefix_heuristic_dropped + prefix_hot + prefix_cold
-                <= prefix_explored,
-            "expected realistic shadow step {step} retained/pruned prefix accounting to stay within explored prefixes",
+                <= prefixes_created,
+            "expected realistic shadow step {step} retained/pruned prefix accounting to stay within created prefixes",
         );
     }
 

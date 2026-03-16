@@ -53,6 +53,10 @@ guarded 15-step canon.
 - realistic shadow now also computes an exact terminal-prefix completion bound
   per retained one-clause-short prefix and prunes any such prefix group that
   cannot clear the current bar before retained-prefix frontier planning runs.
+- realistic shadow now also runs a budgeted exact small-tree completion bound
+  on newly created realistic-shadow root and child prefixes and prunes any
+  prefix whose full admissible connected completion set cannot clear the
+  current bar before that prefix ever enters the online work queue.
 - realistic shadow now also collapses exact single-continuation late-family
   suffixes in-place once the strengthened family summary plus active-window
   clause filtering leave only one legal child at each remaining position,
@@ -98,6 +102,8 @@ guarded 15-step canon.
   - `incremental_trivial_derivability_prunes`
   - `incremental_terminal_admissibility_hits`
   - `incremental_terminal_admissibility_rejections`
+  - `incremental_partial_prefix_bound_checks`
+  - `incremental_partial_prefix_bound_prunes`
   - `incremental_terminal_prefix_bar_prunes`
 - step telemetry now also carries the first Phase-2 timing counters:
   - `step_wall_clock_millis`
@@ -115,9 +121,10 @@ guarded 15-step canon.
   - `cold_frontier_bytes`
   - `dedupe_bytes`
   - plus persisted frontier `memory_snapshot` bytes in frontier manifests
-- stored realistic-shadow step-11 artifacts now show the first landed earlier
-  exact partial-prefix bar prune via
-  `incremental_terminal_prefix_bar_prunes = 1`.
+- stored realistic-shadow step-10 and step-11 artifacts now show the first
+  landed earlier exact partial-prefix prune before queue entry via
+  `incremental_partial_prefix_bound_prunes = 1`, and the realistic step-11
+  queue now drops to `prefix_states_explored = 1`.
 
 ## What Is No Longer A Gap
 
@@ -139,6 +146,8 @@ it as if it were still missing:
 - moving that cached terminal admissibility reuse forward into an explicit
   terminal-clause filter before terminal connectivity or fallback telescope
   assembly
+- landing an earlier exact small-tree partial-prefix bar prune before doomed
+  realistic-shadow prefixes enter the online queue
 - landing an earlier exact terminal-prefix bar prune before retained-prefix
   frontier planning
 - collapsing exact single-continuation late-family suffixes instead of pushing
@@ -154,14 +163,16 @@ it as if it were still missing:
 
 ## Active Gaps
 
-### 1. Stronger partial-prefix bounds beyond family-based filtering and the landed terminal-prefix bar prune
+### 1. Stronger partial-prefix bounds beyond family-based filtering and the landed small-tree/terminal-prefix bar prunes
 
 The realistic lane now has an earlier exact prune for impossible mixed-family
 prefixes, exact active-window clause filtering on child and terminal clause
-options, and an exact one-clause-short terminal-prefix bar prune, but its
-strongest `nu`/bar reasoning still only fires at the terminal-prefix frontier.
-We do not yet have the stronger sound partial-prefix bound story needed to
-prune confidently earlier than that one-clause-short point.
+options, a budgeted exact small-tree completion-bound prune on newly created
+prefixes, and an exact one-clause-short terminal-prefix bar prune, but its
+strongest general `nu`/bar reasoning is still limited to tiny exact
+continuation trees plus the terminal-prefix frontier. We do not yet have the
+broader sound partial-prefix bound story needed to prune confidently across
+larger late-step continuation surfaces without exact subtree expansion.
 
 ### 2. Broader non-family admissibility reuse beyond the landed filter layer
 
@@ -190,8 +201,9 @@ ordering pass.
 ### Now
 
 - define a stronger sound partial-prefix bound beyond exact clause-family
-  impossibility pruning, the landed active-window clause filtering, and the
-  landed terminal-prefix bar prune
+  impossibility pruning, the landed active-window clause filtering, the landed
+  budgeted small-tree completion-bound prune, and the landed terminal-prefix
+  bar prune
 - use the new active-window, terminal-clause, trivial-derivability, and
   terminal-admissibility payoff counters together with
   `incremental_terminal_prefix_bar_prunes` to target broader exact
@@ -222,8 +234,9 @@ ordering pass.
 
 1. Audit the current `nu` and legality pipeline and identify the strongest
    partial-prefix exact bound that goes beyond the landed clause-family
-   impossibility prunes, active-window clause filtering, and the one-clause-
-   short terminal-prefix bar prune without unsound inference.
+   impossibility prunes, active-window clause filtering, the budgeted
+   small-tree completion-bound prune, and the one-clause-short terminal-prefix
+   bar prune without unsound inference.
 2. Extend the landed legality/connectivity/family/active-window/terminal-
    clause/trivial-derivability/terminal-admissibility memo path into another
    exact admissibility summary that fires before the full terminal telescope is
@@ -249,9 +262,10 @@ Latest relevant verification:
 - `cargo test -p pen-type -p pen-search -p pen-cli -p pen-store`
 - fresh `cargo run -p pen-cli -- run --config
   configs/realistic_frontier_shadow.toml --root runs --run-id
-  codex-order-retune --until-step 15`
-- inspect-backed `runs/codex-order-retune` artifacts preserve the accepted
-  sequence with `prefix_states_explored = 2` at step 11,
-  `prefix_states_explored = 3` at steps 13 and 15, `full_telescopes_evaluated
-  = 1` at step 11, and per-step timing of `0` to `1` ms with hot-frontier
-  bytes between `64` and `128` across those late steps
+  codex-partial-prefix-bound-v3 --until-step 15`
+- inspect-backed `runs/codex-partial-prefix-bound-v3` artifacts preserve the
+  accepted sequence while moving the late doomed branch at steps 10 and 11
+  into `incremental_partial_prefix_bound_prunes = 1`, dropping realistic
+  step-11 `prefix_states_explored` to `1`, keeping steps 13 and 15 at
+  `prefix_states_explored = 3`, and preserving per-step timing of `0` to `1`
+  ms with hot-frontier bytes between `64` and `128` across those late steps

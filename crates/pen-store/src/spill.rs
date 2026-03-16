@@ -55,6 +55,8 @@ pub struct FrontierRuntimeInput<const N: usize> {
     pub incremental_trivial_derivability_prunes: u64,
     pub incremental_terminal_admissibility_hits: u64,
     pub incremental_terminal_admissibility_rejections: u64,
+    pub incremental_partial_prefix_bound_checks: u64,
+    pub incremental_partial_prefix_bound_prunes: u64,
     pub incremental_terminal_prefix_bar_prunes: u64,
     pub worker_count: u16,
     pub priority_heads: Vec<u32>,
@@ -210,6 +212,8 @@ pub fn persist_frontier_runtime<const N: usize>(
             incremental_terminal_admissibility_hits: input.incremental_terminal_admissibility_hits,
             incremental_terminal_admissibility_rejections: input
                 .incremental_terminal_admissibility_rejections,
+            incremental_partial_prefix_bound_checks: input.incremental_partial_prefix_bound_checks,
+            incremental_partial_prefix_bound_prunes: input.incremental_partial_prefix_bound_prunes,
             incremental_terminal_prefix_bar_prunes: input.incremental_terminal_prefix_bar_prunes,
             hot_states: input.hot_records.len() as u64,
             cold_states: input.cold_records.len() as u64,
@@ -348,6 +352,8 @@ mod tests {
             incremental_trivial_derivability_prunes: 2,
             incremental_terminal_admissibility_hits: 7,
             incremental_terminal_admissibility_rejections: 2,
+            incremental_partial_prefix_bound_checks: 4,
+            incremental_partial_prefix_bound_prunes: 1,
             incremental_terminal_prefix_bar_prunes: 3,
             worker_count: 2,
             priority_heads: vec![11, 22],
@@ -422,6 +428,8 @@ mod tests {
                 .incremental_terminal_admissibility_rejections,
             2
         );
+        assert_eq!(artifacts.counts.incremental_partial_prefix_bound_checks, 4);
+        assert_eq!(artifacts.counts.incremental_partial_prefix_bound_prunes, 1);
         assert_eq!(artifacts.counts.incremental_terminal_prefix_bar_prunes, 3);
         assert!(root.join(FRONTIER_CACHE_BLOB_FILE).exists());
 

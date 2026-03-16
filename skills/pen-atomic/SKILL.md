@@ -58,6 +58,10 @@ The current search-architecture focus has shifted again:
 - realistic shadow now also computes exact terminal-prefix completion bounds
   and prunes one-clause-short prefix groups that cannot clear the current bar
   before retained-prefix frontier planning
+- realistic shadow now also runs a budgeted exact small-tree completion bound
+  on newly created root and child prefixes and prunes any prefix whose full
+  admissible connected completion set cannot clear the current bar before that
+  prefix ever enters the online work queue
 - realistic shadow now also collapses exact single-continuation late-family
   suffixes in-place once the strengthened family summary plus active-window
   clause filtering leave only one legal child at each remaining position, so
@@ -85,7 +89,9 @@ The current search-architecture focus has shifted again:
   `incremental_trivial_derivability_hits`,
   `incremental_trivial_derivability_prunes`,
   `incremental_terminal_admissibility_hits`, and
-  `incremental_terminal_admissibility_rejections`, and
+  `incremental_terminal_admissibility_rejections`,
+  `incremental_partial_prefix_bound_checks`,
+  `incremental_partial_prefix_bound_prunes`, and
   `incremental_terminal_prefix_bar_prunes`
 - step telemetry now also carries per-step timing metrics
   `step_wall_clock_millis`,
@@ -99,15 +105,19 @@ The current search-architecture focus has shifted again:
   memory high-water bytes including `rss_bytes`, `hot_frontier_bytes`,
   `cold_frontier_bytes`, `dedupe_bytes`, and persisted frontier
   `memory_snapshot` bytes
+- stored realistic-shadow step-10 and step-11 artifacts now show
+  `incremental_partial_prefix_bound_prunes = 1`, confirming the first landed
+  earlier exact partial-prefix prune before queue entry
 - the next gap is stronger sound bound pruning beyond the landed exact
   clause-family impossibility prunes plus the landed active-window
-  clause filtering plus the landed exact terminal-prefix bar prune, then
-  broader non-family admissibility/filter reuse beyond the landed trivial-
-  derivability and terminal-admissibility summaries plus the landed cached
-  next-clause reuse, then continuing to use the new timing/memory evidence to
-  retune realistic late-step order past the first continuation-aware queue
-  retune, not "add a frontier for the first time" or "collapse obviously
-  forced late-family suffixes for the first time"
+  clause filtering plus the landed budgeted small-tree completion-bound prune
+  plus the landed exact terminal-prefix bar prune, then broader non-family
+  admissibility/filter reuse beyond the landed trivial-derivability and
+  terminal-admissibility summaries plus the landed cached next-clause reuse,
+  then continuing to use the new timing/memory evidence to retune realistic
+  late-step order past the first continuation-aware queue retune, not "add a
+  frontier for the first time" or "collapse obviously forced late-family
+  suffixes for the first time"
 
 Start with the current architecture doc before diving into donor material:
 
@@ -249,16 +259,17 @@ Focus on:
   the landed legality/connectivity/family/active-window/terminal-clause/
   terminal-admissibility memo path plus the landed terminal trivial-
   derivability reuse and terminal-prefix bar prune plus the landed exact
+  small-tree partial-prefix bound prune plus the landed exact
   single-continuation suffix collapse plus the landed cached next-clause
-  reuse and continuation-aware queue order, and the still-missing earlier
+  reuse and continuation-aware queue order, and the still-missing broader
   partial-prefix bound pruning plus broader non-family admissibility reuse
 - using strengthened `PrefixSignature` state, the landed memo counters, the
   now-persisted timing telemetry, and the deterministic frontier memory
   high-water metrics as the remaining bound/admissibility gaps past the landed
   clause-family pruning, active-window clause filtering, terminal-clause
-  filtering, terminal-admissibility cache, cached next-clause reuse, and
-  terminal-prefix bar prune as the starting point for further quantum-inspired
-  search work
+  filtering, terminal-admissibility cache, budgeted small-tree partial-prefix
+  bound prune, cached next-clause reuse, and terminal-prefix bar prune as the
+  starting point for further quantum-inspired search work
 
 ### If you are working on reporting or evidence
 
@@ -332,13 +343,14 @@ Reject designs that:
   selection, and a richer candidate-level evidence surface.
 - The current quantum-focused search gap is stronger partial-prefix bound
   pruning beyond the landed exact clause-family impossibility prunes and
-  active-window clause filtering and terminal-clause filtering and exact
-  terminal-prefix bar prune plus the landed exact single-continuation suffix
-  collapse plus the landed cached next-clause reuse and continuation-aware
-  queue order, then broader non-family admissibility/filter reuse beyond the
-  landed legality/connectivity/family/active-window/terminal-clause/trivial-
-  derivability/terminal-admissibility memo layer, then continuing to use the
-  now-persisted timing/memory evidence to retune late-step order.
+  active-window clause filtering and terminal-clause filtering and budgeted
+  small-tree completion-bound prune and exact terminal-prefix bar prune plus
+  the landed exact single-continuation suffix collapse plus the landed cached
+  next-clause reuse and continuation-aware queue order, then broader non-
+  family admissibility/filter reuse beyond the landed legality/connectivity/
+  family/active-window/terminal-clause/trivial-derivability/terminal-
+  admissibility memo layer, then continuing to use the now-persisted timing/
+  memory evidence to retune late-step order.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.

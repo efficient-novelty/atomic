@@ -115,6 +115,10 @@ pub struct StepSearchStats {
     #[serde(default)]
     pub incremental_terminal_admissibility_rejections: usize,
     #[serde(default)]
+    pub incremental_partial_prefix_bound_checks: usize,
+    #[serde(default)]
+    pub incremental_partial_prefix_bound_prunes: usize,
+    #[serde(default)]
     pub incremental_terminal_prefix_bar_prunes: usize,
     #[serde(default)]
     pub search_timing: SearchTiming,
@@ -716,6 +720,8 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 incremental_trivial_derivability_prunes: 0,
                 incremental_terminal_admissibility_hits: 0,
                 incremental_terminal_admissibility_rejections: 0,
+                incremental_partial_prefix_bound_checks: 0,
+                incremental_partial_prefix_bound_prunes: 0,
                 incremental_terminal_prefix_bar_prunes: 0,
                 search_timing: SearchTiming::default(),
                 prefix_frontier_hot_states: 0,
@@ -985,10 +991,12 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
                     .search_stats
                     .incremental_terminal_admissibility_rejections
                     > 0
+                || step.search_stats.incremental_partial_prefix_bound_checks > 0
+                || step.search_stats.incremental_partial_prefix_bound_prunes > 0
                 || step.search_stats.incremental_terminal_prefix_bar_prunes > 0
             {
                 lines.push(format!(
-                    "  prefix memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} active_window_filter_hits={} active_window_filter_prunes={} terminal_clause_filter_hits={} terminal_clause_filter_prunes={} trivial_derivability_hits={} trivial_derivability_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={} terminal_prefix_bar_prunes={}",
+                    "  prefix memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} active_window_filter_hits={} active_window_filter_prunes={} terminal_clause_filter_hits={} terminal_clause_filter_prunes={} trivial_derivability_hits={} trivial_derivability_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={} partial_prefix_bound_checks={} partial_prefix_bound_prunes={} terminal_prefix_bar_prunes={}",
                     step.search_stats.incremental_legality_cache_hits,
                     step.search_stats.incremental_connectivity_shortcuts,
                     step.search_stats.incremental_connectivity_fallbacks,
@@ -1003,6 +1011,8 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
                     step.search_stats.incremental_trivial_derivability_prunes,
                     step.search_stats.incremental_terminal_admissibility_hits,
                     step.search_stats.incremental_terminal_admissibility_rejections,
+                    step.search_stats.incremental_partial_prefix_bound_checks,
+                    step.search_stats.incremental_partial_prefix_bound_prunes,
                     step.search_stats.incremental_terminal_prefix_bar_prunes
                 ));
             }
@@ -1299,6 +1309,8 @@ fn step_to_report_with_provenance(
             incremental_terminal_admissibility_hits: step.incremental_terminal_admissibility_hits,
             incremental_terminal_admissibility_rejections: step
                 .incremental_terminal_admissibility_rejections,
+            incremental_partial_prefix_bound_checks: step.incremental_partial_prefix_bound_checks,
+            incremental_partial_prefix_bound_prunes: step.incremental_partial_prefix_bound_prunes,
             incremental_terminal_prefix_bar_prunes: step.incremental_terminal_prefix_bar_prunes,
             search_timing: step.search_timing,
             prefix_frontier_hot_states: step.prefix_frontier_hot_states,
@@ -1607,6 +1619,8 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 incremental_trivial_derivability_prunes: 0,
                 incremental_terminal_admissibility_hits: 0,
                 incremental_terminal_admissibility_rejections: 0,
+                incremental_partial_prefix_bound_checks: 0,
+                incremental_partial_prefix_bound_prunes: 0,
                 incremental_terminal_prefix_bar_prunes: 0,
                 search_timing: SearchTiming::default(),
                 prefix_frontier_hot_states: 0,

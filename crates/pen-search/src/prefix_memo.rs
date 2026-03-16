@@ -280,6 +280,11 @@ impl PrefixLegalityCache {
         clause: &ClauseRec,
         admissibility: StrictAdmissibility,
     ) -> bool {
+        if self.summaries.contains_key(&child_signature) {
+            self.stats.legality_hits += 1;
+            return true;
+        }
+
         let Some(parent_summary) = self.summaries.get(parent_signature) else {
             return false;
         };
