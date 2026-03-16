@@ -20,7 +20,7 @@ answer two questions:
 
 ## What The Latest Evidence Says
 
-Use `runs/codex-terminal-bound-reuse` as the current reference artifact set.
+Use `runs/codex-terminal-rank-summary` as the current reference artifact set.
 
 Late-step facts that matter for forward work:
 
@@ -38,6 +38,9 @@ Late-step facts that matter for forward work:
   the later enqueue path instead of replaying the same terminal-summary lookup:
   `incremental_partial_prefix_bound_hits = 1` and
   `incremental_terminal_prefix_completion_hits = 2`
+- steps 13 and 15 now also consult the cached exact terminal-prefix best
+  accept-rank summary before the late dominance check:
+  `incremental_terminal_prefix_rank_hits = 1`
 - steps 13 and 15 now also shrink the late retained prefix surface:
   `prefix_states_explored = 2` and
   `prefix_frontier_hot_states = 1`
@@ -45,10 +48,12 @@ Late-step facts that matter for forward work:
   `incremental_terminal_prefix_completion_hits = 2`,
   `incremental_connectivity_shortcuts = 2`, and
   `incremental_connectivity_fallbacks = 0`
-- the new terminal-prefix partial-bound reuse removes one exact summary replay,
-  but the surviving late root-to-terminal lane still does the same number of
-  exact bar checks:
-  step 15 still has `incremental_partial_prefix_bound_checks = 3` and
+- the new terminal-prefix rank-summary reuse proves the extra exact
+  dominance-summary layer is wired in, but the surviving late root-to-terminal
+  lane still does the same number of exact bar checks and cached terminal
+  completion lookups:
+  step 15 still has `incremental_partial_prefix_bound_checks = 3`,
+  `incremental_terminal_prefix_completion_hits = 2`, and
   `prefix_states_explored = 2`
 - current late-step wall-clock is already low in absolute terms, so the next
   pass should keep optimizing exact work counts first and timing second
@@ -79,9 +84,10 @@ Evidence to improve against:
 
 Family-shaped filtering, terminal admissibility, trivial-derivability, and
 historical-reanchor reuse now clear obvious cases. The new terminal-prefix
-partial-bound reuse removes one exact late replay, but the eager late
-terminal-rank prune still fires only after exact terminal completion summaries
-already exist for multiple plausible continuations.
+partial-bound reuse plus the new cached terminal-prefix best-rank summary now
+remove the later dominance-summary replay, but the eager late terminal-rank
+prune still depends on exact terminal completion summaries that were already
+built for multiple plausible continuations.
 
 Next target:
 
@@ -93,8 +99,10 @@ Evidence to improve against:
 
 - step 15 still needs terminal completion reuse hits to finish cleanly:
   `incremental_terminal_prefix_completion_hits = 2`
+- steps 13 and 15 now show the cached rank-summary consult is real:
+  `incremental_terminal_prefix_rank_hits = 1`
 - steps 13 and 15 still build exact terminal completion summaries for multiple
-  plausible late continuations before the new rank prune fires
+  plausible late continuations before the new rank summary can help
 
 ### 3. Search Order Has Not Yet Been Retuned From The New Evidence
 
@@ -118,8 +126,8 @@ Next target:
    - a broader exact partial-prefix bound
    - a broader non-family admissibility summary
 3. Land the smallest exact change that removes another real late-step prefix
-   state or exact terminal-summary replay, not just a final dominated
-   telescope evaluation.
+   state or exact terminal-completion summary build, not just a later
+   dominance-summary consult.
 4. Re-run realistic shadow through step 15 and compare:
    - `prefix_states_explored`
    - `full_telescopes_evaluated`
@@ -148,5 +156,5 @@ Next target:
 ## Verification Baseline
 
 - `cargo test -p pen-type -p pen-search -p pen-cli -p pen-store`
-- `cargo run -p pen-cli -- run --config configs/strict_canon_guarded.toml --root runs --run-id codex-eager-terminal-rank-guarded --until-step 15`
-- `cargo run -p pen-cli -- run --config configs/realistic_frontier_shadow.toml --root runs --run-id codex-eager-terminal-rank --until-step 15`
+- `cargo run -p pen-cli -- run --config configs/strict_canon_guarded.toml --root runs --run-id codex-terminal-rank-summary-guarded --until-step 15`
+- `cargo run -p pen-cli -- run --config configs/realistic_frontier_shadow.toml --root runs --run-id codex-terminal-rank-summary --until-step 15`

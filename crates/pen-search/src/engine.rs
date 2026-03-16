@@ -153,6 +153,7 @@ pub struct AtomicSearchStep {
     pub incremental_terminal_admissibility_hits: usize,
     pub incremental_terminal_admissibility_rejections: usize,
     pub incremental_terminal_prefix_completion_hits: usize,
+    pub incremental_terminal_prefix_rank_hits: usize,
     pub incremental_terminal_rank_prunes: usize,
     pub incremental_partial_prefix_bound_hits: usize,
     pub incremental_partial_prefix_bound_checks: usize,
@@ -419,6 +420,7 @@ fn search_next_step(
     let mut incremental_terminal_admissibility_hits = 0usize;
     let mut incremental_terminal_admissibility_rejections = 0usize;
     let mut incremental_terminal_prefix_completion_hits = 0usize;
+    let mut incremental_terminal_prefix_rank_hits = 0usize;
     let mut incremental_terminal_rank_prunes = 0usize;
     let mut incremental_partial_prefix_bound_hits = 0usize;
     let mut incremental_partial_prefix_bound_checks = 0usize;
@@ -470,6 +472,7 @@ fn search_next_step(
             legality_stats.terminal_admissibility_rejections;
         incremental_terminal_prefix_completion_hits =
             legality_stats.terminal_prefix_completion_hits;
+        incremental_terminal_prefix_rank_hits = legality_stats.terminal_prefix_rank_hits;
         incremental_terminal_rank_prunes = discovery.terminal_rank_prunes;
         incremental_partial_prefix_bound_hits = legality_stats.partial_prefix_bound_hits;
         incremental_partial_prefix_bound_checks = discovery.partial_prefix_bound_checks;
@@ -692,6 +695,7 @@ fn search_next_step(
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
         incremental_terminal_prefix_completion_hits,
+        incremental_terminal_prefix_rank_hits,
         incremental_terminal_rank_prunes,
         incremental_partial_prefix_bound_hits,
         incremental_partial_prefix_bound_checks,
@@ -756,6 +760,7 @@ fn build_step_result(
     incremental_terminal_admissibility_hits: usize,
     incremental_terminal_admissibility_rejections: usize,
     incremental_terminal_prefix_completion_hits: usize,
+    incremental_terminal_prefix_rank_hits: usize,
     incremental_terminal_rank_prunes: usize,
     incremental_partial_prefix_bound_hits: usize,
     incremental_partial_prefix_bound_checks: usize,
@@ -820,6 +825,7 @@ fn build_step_result(
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
         incremental_terminal_prefix_completion_hits,
+        incremental_terminal_prefix_rank_hits,
         incremental_terminal_rank_prunes,
         incremental_partial_prefix_bound_hits,
         incremental_partial_prefix_bound_checks,
@@ -1038,6 +1044,14 @@ fn discover_realistic_shadow_candidates(
                 };
                 if !retained_bound.can_clear_bar(objective_bar) {
                     discovery.terminal_prefix_bar_prunes += 1;
+                    continue;
+                }
+                if let Some(pruned_candidates) = cached_terminal_prefix_rank_prune_count(
+                    &work_item.signature,
+                    discovery.terminal_rank_incumbent.as_ref(),
+                    &mut discovery.prefix_legality_cache,
+                ) {
+                    discovery.terminal_rank_prunes += pruned_candidates;
                     continue;
                 }
                 if let (Some(group_best_rank), Some(incumbent_rank)) = (
@@ -1393,6 +1407,7 @@ fn exact_terminal_prefix_bound_decision(
             step_index,
             library,
             admissibility,
+            objective_bar,
             nu_history,
             prefix_signature,
             prefix_telescope,
@@ -1515,6 +1530,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     step_index: u32,
     library: &Library,
     admissibility: StrictAdmissibility,
+    objective_bar: Rational,
     nu_history: &[(u32, u32)],
     prefix_signature: &PrefixSignature,
     prefix_telescope: &Telescope,
@@ -1593,6 +1609,19 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
         } else {
             summary.bound = Some(completion_bound);
         }
+        summary.admitted_candidate_count += 1;
+        if let Some(rank) = acceptance_rank_for_telescope(
+            objective_bar,
+            &telescope,
+            exact_nu,
+            bit_kappa_used,
+            clause_kappa_used,
+        ) {
+            match &summary.best_accept_rank {
+                Some(current) if !better_rank(&rank, current) => {}
+                _ => summary.best_accept_rank = Some(rank),
+            }
+        }
         summary
             .evaluations
             .push(TerminalPrefixClauseEvaluation::Admitted {
@@ -1638,6 +1667,7 @@ fn materialize_terminal_prefix_group(
             step_index,
             library,
             admissibility,
+            objective_bar,
             nu_history,
             prefix_signature,
             prefix_telescope,
@@ -1649,7 +1679,9 @@ fn materialize_terminal_prefix_group(
             .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary.clone());
         summary
     };
-    let TerminalPrefixCompletionSummary { evaluations, bound } = summary;
+    let TerminalPrefixCompletionSummary {
+        evaluations, bound, ..
+    } = summary;
     let mut retained_telescopes = Vec::new();
 
     for evaluation in evaluations {
@@ -1702,6 +1734,17 @@ fn best_prefix_group_accept_rank(candidates: &[PrefixGroupCandidate]) -> Option<
         }
     }
     best
+}
+
+fn cached_terminal_prefix_rank_prune_count(
+    prefix_signature: &PrefixSignature,
+    incumbent_rank: Option<&AcceptRank>,
+    prefix_legality_cache: &mut PrefixLegalityCache,
+) -> Option<usize> {
+    let incumbent_rank = incumbent_rank?;
+    let rank_summary = prefix_legality_cache.terminal_prefix_rank_summary(prefix_signature)?;
+    let best_rank = rank_summary.best_accept_rank.as_ref()?;
+    (!better_rank(best_rank, incumbent_rank)).then_some(rank_summary.admitted_candidate_count)
 }
 
 fn cache_evaluated_terminal_prefix_group_candidates(
@@ -2604,6 +2647,87 @@ mod tests {
     }
 
     #[test]
+    fn cached_terminal_prefix_rank_summary_prunes_without_reopening_completion_summary() {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::RealisticShadow);
+        let objective_bar = compute_bar(2, 15, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(signature.clone(), 8, &library, &prefix, admissibility));
+
+        let work_item = create_online_prefix_work_item(
+            8,
+            prefix,
+            signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut cache,
+        );
+        assert_eq!(work_item.remaining_clause_slots, 1);
+
+        let mut budget = 64;
+        let decision = exact_partial_prefix_bound_decision(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog,
+            &work_item,
+            &mut cache,
+            &mut budget,
+        );
+        assert_eq!(
+            decision,
+            super::ExactPartialPrefixBoundDecision::CanClearBar
+        );
+
+        let incumbent = cache
+            .terminal_prefix_rank_summary(&signature)
+            .and_then(|summary| summary.best_accept_rank)
+            .expect("terminal prefix should cache an exact best accept rank");
+        let rank_hits_before = cache.stats().terminal_prefix_rank_hits;
+        let completion_hits_before = cache.stats().terminal_prefix_completion_hits;
+
+        let pruned = super::cached_terminal_prefix_rank_prune_count(
+            &signature,
+            Some(&incumbent),
+            &mut cache,
+        )
+        .expect("equal incumbent should prune the cached terminal prefix");
+
+        assert_eq!(pruned, 1);
+        assert_eq!(
+            cache.stats().terminal_prefix_rank_hits,
+            rank_hits_before + 1
+        );
+        assert_eq!(
+            cache.stats().terminal_prefix_completion_hits,
+            completion_hits_before
+        );
+    }
+
+    #[test]
     fn realistic_shadow_step_eleven_prunes_impossible_family_hybrids_early() {
         let prefix = reference_prefix(10);
         let realistic = search_bootstrap_from_prefix_for_profile_with_runtime(
@@ -2675,6 +2799,7 @@ mod tests {
         assert!(step.incremental_trivial_derivability_hits > 0);
         assert!(step.incremental_terminal_admissibility_hits > 0);
         assert!(step.incremental_terminal_prefix_completion_hits > 0);
+        assert!(step.incremental_terminal_prefix_rank_hits > 0);
         assert!(step.incremental_terminal_rank_prunes > 0);
         assert!(step.incremental_partial_prefix_bound_hits > 0);
         assert!(step.incremental_partial_prefix_bound_checks > 0);

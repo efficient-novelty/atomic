@@ -1,4 +1,5 @@
 use crate::bounds::PrefixBound;
+use crate::branch_bound::AcceptRank;
 use crate::enumerate::{
     EnumerationContext, clause_kappa_can_match_structural_family,
     clause_supports_structural_family_at_position,
@@ -33,6 +34,7 @@ pub struct PrefixLegalityCacheStats {
     pub terminal_admissibility_hits: usize,
     pub terminal_admissibility_rejections: usize,
     pub terminal_prefix_completion_hits: usize,
+    pub terminal_prefix_rank_hits: usize,
     pub partial_prefix_bound_hits: usize,
 }
 
@@ -255,6 +257,14 @@ pub enum TerminalPrefixClauseEvaluation {
 pub struct TerminalPrefixCompletionSummary {
     pub evaluations: Vec<TerminalPrefixClauseEvaluation>,
     pub bound: Option<PrefixBound>,
+    pub best_accept_rank: Option<AcceptRank>,
+    pub admitted_candidate_count: usize,
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct TerminalPrefixRankSummary {
+    pub best_accept_rank: Option<AcceptRank>,
+    pub admitted_candidate_count: usize,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -284,6 +294,18 @@ impl PrefixLegalityCache {
         let summary = self.terminal_prefix_completions.get(signature)?.clone();
         self.stats.terminal_prefix_completion_hits += 1;
         Some(summary)
+    }
+
+    pub fn terminal_prefix_rank_summary(
+        &mut self,
+        signature: &PrefixSignature,
+    ) -> Option<TerminalPrefixRankSummary> {
+        let summary = self.terminal_prefix_completions.get(signature)?;
+        self.stats.terminal_prefix_rank_hits += 1;
+        Some(TerminalPrefixRankSummary {
+            best_accept_rank: summary.best_accept_rank.clone(),
+            admitted_candidate_count: summary.admitted_candidate_count,
+        })
     }
 
     pub fn store_terminal_prefix_completion_summary(
@@ -532,6 +554,7 @@ mod tests {
         TerminalConnectivityDecision, TerminalPrefixClauseEvaluation, TerminalPrefixCompletion,
         TerminalPrefixCompletionSummary,
     };
+    use crate::accept::acceptance_rank_for_telescope;
     use crate::bounds::PrefixBound;
     use crate::enumerate::{EnumerationContext, build_clause_catalog};
     use crate::prefix_cache::PrefixSignature;
@@ -745,15 +768,29 @@ mod tests {
                     },
                 }],
                 bound: Some(PrefixBound::singleton(26, 5, 79)),
+                best_accept_rank: acceptance_rank_for_telescope(
+                    Rational::new(712, 145),
+                    &Telescope::reference(11),
+                    26,
+                    79,
+                    5,
+                ),
+                admitted_candidate_count: 1,
             },
         );
 
         let summary = cache
             .terminal_prefix_completion_summary(&signature)
             .expect("summary should be cached");
+        let rank_summary = cache
+            .terminal_prefix_rank_summary(&signature)
+            .expect("rank summary should be cached");
 
         assert_eq!(summary.bound, Some(PrefixBound::singleton(26, 5, 79)));
         assert_eq!(cache.stats().terminal_prefix_completion_hits, 1);
+        assert_eq!(cache.stats().terminal_prefix_rank_hits, 1);
+        assert_eq!(rank_summary.admitted_candidate_count, 1);
+        assert!(rank_summary.best_accept_rank.is_some());
         match &summary.evaluations[..] {
             [
                 TerminalPrefixClauseEvaluation::Admitted {

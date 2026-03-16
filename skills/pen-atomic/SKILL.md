@@ -67,6 +67,10 @@ The current search-architecture focus has shifted again:
   on retained prefix groups and uses them to skip dominated late full-telescope
   evaluations once an already-seen semantically minimal bar-clear candidate
   cannot be beaten
+- realistic shadow now also stores exact terminal-prefix best accept-rank
+  summaries keyed by `PrefixSignature` and reuses them to test whether a
+  cached late terminal prefix can still beat the current incumbent before
+  reopening the cached terminal completion summary
 - realistic shadow now also materializes retained terminal-prefix groups as
   soon as they are popped, caches those exact full candidates on the retained
   group, and uses the proven semantically minimal incumbent to skip later
@@ -117,6 +121,7 @@ The current search-architecture focus has shifted again:
   `incremental_terminal_admissibility_hits`, and
   `incremental_terminal_admissibility_rejections`,
   `incremental_terminal_prefix_completion_hits`,
+  `incremental_terminal_prefix_rank_hits`,
   `incremental_terminal_rank_prunes`,
   `incremental_partial_prefix_bound_hits`,
   `incremental_partial_prefix_bound_checks`,
@@ -147,6 +152,10 @@ The current search-architecture focus has shifted again:
   one-clause-short exact terminal work now reuses the cached partial bar
   decision on the later enqueue path instead of replaying the same terminal
   summary lookup
+- fresh realistic-shadow step-13 and step-15 artifacts now also show
+  `incremental_terminal_prefix_rank_hits = 1`, confirming that late dominated
+  terminal prefixes now consult the cached exact best accept-rank summary
+  before the later dominance check
 - fresh realistic-shadow step-13, step-14, and step-15 artifacts now also show
   `incremental_terminal_rank_prunes = 1` and
   `full_telescopes_evaluated = 1`, confirming that dominated late retained
@@ -168,13 +177,14 @@ The current search-architecture focus has shifted again:
   accept-rank prune plus the landed eager terminal-prefix-group materialization
   and cached full-candidate reuse plus the landed multi-step partial-prefix
   bar-decision reuse plus the landed terminal-prefix partial-bound reuse plus
-  the landed exact historical-reanchor connectivity shortcut, then broader
-  non-family admissibility/filter reuse before terminal completion summaries
-  are built beyond the landed trivial-derivability and terminal-admissibility
-  summaries plus the landed cached next-clause reuse, then continuing to use
-  the new timing/memory evidence to retune realistic late-step order past the
-  first continuation-aware queue retune, not "add a frontier for the first
-  time" or "collapse obviously forced late-family suffixes for the first time"
+  the landed exact terminal-prefix best-rank summary reuse plus the landed
+  exact historical-reanchor connectivity shortcut, then broader non-family
+  admissibility/filter reuse before terminal completion summaries are built
+  beyond the landed trivial-derivability and terminal-admissibility summaries
+  plus the landed cached next-clause reuse, then continuing to use the new
+  timing/memory evidence to retune realistic late-step order past the first
+  continuation-aware queue retune, not "add a frontier for the first time" or
+  "collapse obviously forced late-family suffixes for the first time"
 
 Start with the current architecture doc before diving into donor material:
 
@@ -410,7 +420,8 @@ Reject designs that:
   the landed exact terminal-prefix completion reuse plus the landed exact late
   terminal accept-rank prune plus the landed exact multi-step partial-prefix
   bar-decision reuse plus the landed terminal-prefix partial-bound reuse plus
-  the landed exact single-continuation suffix collapse plus the landed exact
+  the landed exact terminal-prefix best-rank summary reuse plus the landed
+  exact single-continuation suffix collapse plus the landed exact
   historical-reanchor connectivity shortcut plus the landed cached next-clause
   reuse and continuation-aware queue order, then broader non-family
   admissibility/filter reuse before terminal completion summaries are built
