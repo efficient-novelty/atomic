@@ -102,7 +102,7 @@ with 5-minute and 15-minute variants using the same lane.
       evaluation rate on this computer.
 - [ ] During `BreadthHarvest`, keep widening until breadth floors are met or
       proof-close reserve must be protected.
-- [ ] During `Materialize`, enforce a soft cap on full terminal evaluations.
+- [x] During `Materialize`, enforce a soft cap on full terminal evaluations.
 - [ ] During `ProofClose`, spend reserved budget on exact branch-and-bound
       closure.
 - [ ] During `Seal`, apply semantic minimality and minimal-positive-overshoot
@@ -213,10 +213,10 @@ with 5-minute and 15-minute variants using the same lane.
 - [ ] Record exact-screen reasons separately:
       partial-prefix bar failure, terminal-prefix completion failure,
       incumbent dominance, and legality or connectivity exact rejection.
-- [ ] Add per-step `full_eval_soft_cap` settings.
-- [ ] Permit cap overrun only during `ProofClose` when certification requires
+- [x] Add per-step `full_eval_soft_cap` settings.
+- [x] Permit cap overrun only during `ProofClose` when certification requires
       it.
-- [ ] Surface cap overruns in the narrative with the reason.
+- [x] Surface cap overruns in the narrative with the reason.
 
 ## 9. Narrative And Progress
 

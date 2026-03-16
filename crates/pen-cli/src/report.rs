@@ -9,7 +9,7 @@ use pen_search::config::{RuntimeConfig, SearchProfile};
 use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
 use pen_search::engine::{
     AtomicSearchStep, CandidateScoreDistribution, DedupePruneEvidence, DemoBudgetSeed,
-    FrontierRetentionOutcome, MinimalityPruneEvidence,
+    DemoPhaseStats, FrontierRetentionOutcome, MinimalityPruneEvidence,
     search_bootstrap_from_prefix_for_config_with_runtime_and_seed,
     search_bootstrap_from_prefix_for_profile_with_runtime,
     search_bootstrap_prefix_for_config_with_runtime,
@@ -134,6 +134,8 @@ pub struct StepSearchStats {
     pub incremental_partial_prefix_bound_prunes: usize,
     #[serde(default)]
     pub incremental_terminal_prefix_bar_prunes: usize,
+    #[serde(default)]
+    pub demo_phase: DemoPhaseStats,
     #[serde(default)]
     pub search_timing: SearchTiming,
     #[serde(default)]
@@ -860,6 +862,7 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 incremental_partial_prefix_bound_checks: 0,
                 incremental_partial_prefix_bound_prunes: 0,
                 incremental_terminal_prefix_bar_prunes: 0,
+                demo_phase: DemoPhaseStats::default(),
                 search_timing: SearchTiming::default(),
                 prefix_frontier_hot_states: 0,
                 prefix_frontier_cold_states: 0,
@@ -1466,6 +1469,7 @@ fn step_to_report_with_provenance(
             incremental_partial_prefix_bound_checks: step.incremental_partial_prefix_bound_checks,
             incremental_partial_prefix_bound_prunes: step.incremental_partial_prefix_bound_prunes,
             incremental_terminal_prefix_bar_prunes: step.incremental_terminal_prefix_bar_prunes,
+            demo_phase: step.demo_phase,
             search_timing: step.search_timing,
             prefix_frontier_hot_states: step.prefix_frontier_hot_states,
             prefix_frontier_cold_states: step.prefix_frontier_cold_states,
@@ -1781,6 +1785,7 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 incremental_partial_prefix_bound_checks: 0,
                 incremental_partial_prefix_bound_prunes: 0,
                 incremental_terminal_prefix_bar_prunes: 0,
+                demo_phase: DemoPhaseStats::default(),
                 search_timing: SearchTiming::default(),
                 prefix_frontier_hot_states: 0,
                 prefix_frontier_cold_states: 0,

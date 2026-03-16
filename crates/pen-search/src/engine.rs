@@ -133,6 +133,20 @@ impl Default for RationalDistributionSummary {
     }
 }
 
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct DemoPhaseStats {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub full_eval_soft_cap: Option<u64>,
+    #[serde(default)]
+    pub materialize_full_evals: usize,
+    #[serde(default)]
+    pub proof_close_full_evals: usize,
+    #[serde(default)]
+    pub proof_close_overrun_full_evals: usize,
+    #[serde(default)]
+    pub materialize_soft_cap_triggered: bool,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AtomicSearchStep {
     pub step_index: u32,
@@ -165,6 +179,7 @@ pub struct AtomicSearchStep {
     pub incremental_partial_prefix_bound_checks: usize,
     pub incremental_partial_prefix_bound_prunes: usize,
     pub incremental_terminal_prefix_bar_prunes: usize,
+    pub demo_phase: DemoPhaseStats,
     pub search_timing: SearchTiming,
     pub prefix_frontier_hot_states: usize,
     pub prefix_frontier_cold_states: usize,
@@ -667,10 +682,23 @@ impl DemoNarrativeRuntime {
     }
 
     fn enter_proof_close(&mut self, progress: NarrativeProgressSnapshot, detail: String) {
+        self.enter_proof_close_with_message(
+            progress,
+            "entered proof_close with the reserved certification slice",
+            detail,
+        );
+    }
+
+    fn enter_proof_close_with_message(
+        &mut self,
+        progress: NarrativeProgressSnapshot,
+        message: impl Into<String>,
+        detail: String,
+    ) {
         self.recorder.push(
             NarrativeEventKind::PhaseChange,
             Some(StepPhase::ProofClose),
-            "entered proof_close with the reserved certification slice".to_owned(),
+            message.into(),
             Some(detail.clone()),
             Some(progress.clone()),
         );
@@ -850,6 +878,64 @@ fn demo_surface_status_detail(
         floor_status(generated_surface, budget.generated_floor),
         floor_status(exact_screened_surface, budget.exact_screened_floor),
         cap_status(full_telescopes_evaluated, budget.full_eval_soft_cap)
+    )
+}
+
+fn demo_phase_status_detail(phase: &DemoPhaseStats) -> String {
+    let soft_cap = phase
+        .full_eval_soft_cap
+        .map(|limit| limit.to_string())
+        .unwrap_or_else(|| "none".to_owned());
+    format!(
+        "materialize_full_evals={} proof_close_full_evals={} proof_close_overrun={} soft_cap={} cap_triggered={}",
+        phase.materialize_full_evals,
+        phase.proof_close_full_evals,
+        phase.proof_close_overrun_full_evals,
+        soft_cap,
+        phase.materialize_soft_cap_triggered
+    )
+}
+
+fn demo_materialize_status_detail(
+    budget: DemoStepBudget,
+    generated_surface: u64,
+    exact_screened_surface: u64,
+    full_telescopes_evaluated: u64,
+    retained_prefix_groups: usize,
+    phase: &DemoPhaseStats,
+) -> String {
+    format!(
+        "retained_prefix_groups={} {} {}",
+        retained_prefix_groups,
+        demo_surface_status_detail(
+            budget,
+            generated_surface,
+            exact_screened_surface,
+            full_telescopes_evaluated,
+        ),
+        demo_phase_status_detail(phase)
+    )
+}
+
+fn demo_proof_close_status_detail(
+    budget: DemoStepBudget,
+    generated_surface: u64,
+    exact_screened_surface: u64,
+    full_telescopes_evaluated: u64,
+    remaining_retained_prefix_groups: usize,
+    phase: &DemoPhaseStats,
+) -> String {
+    format!(
+        "proof_close_reserve={} remaining_retained_prefix_groups={} {} {}",
+        format_duration_millis(budget.proof_close_reserve_millis),
+        remaining_retained_prefix_groups,
+        demo_surface_status_detail(
+            budget,
+            generated_surface,
+            exact_screened_surface,
+            full_telescopes_evaluated,
+        ),
+        demo_phase_status_detail(phase)
     )
 }
 
@@ -1137,6 +1223,10 @@ fn search_next_step(
     let mut incremental_partial_prefix_bound_checks = 0usize;
     let mut incremental_partial_prefix_bound_prunes = 0usize;
     let mut incremental_terminal_prefix_bar_prunes = 0usize;
+    let mut demo_phase = DemoPhaseStats {
+        full_eval_soft_cap: demo_step_budget.and_then(|budget| budget.full_eval_soft_cap),
+        ..DemoPhaseStats::default()
+    };
     let discovery_start = Instant::now();
     let nu_history = history
         .iter()
@@ -1282,6 +1372,7 @@ fn search_next_step(
         + incremental_clause_family_prunes
         + incremental_partial_prefix_bound_prunes
         + incremental_terminal_prefix_bar_prunes;
+    let retained_prefix_groups = prefix_frontier.retained_prefix_signatures.len();
     if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
         observer.enter_materialize(
             narrative_progress_snapshot(
@@ -1290,25 +1381,28 @@ fn search_next_step(
                 exact_screened_surface_from_counts(prefix_states_exact_pruned, candidates.len()),
                 candidates.len() as u64,
             ),
-            format!(
-                "retained_prefix_groups={} {}",
-                prefix_frontier.retained_prefix_signatures.len(),
-                demo_surface_status_detail(
-                    budget,
-                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
-                    exact_screened_surface_from_counts(
-                        prefix_states_exact_pruned,
-                        candidates.len()
-                    ),
-                    candidates.len() as u64
-                )
+            demo_materialize_status_detail(
+                budget,
+                generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                exact_screened_surface_from_counts(prefix_states_exact_pruned, candidates.len()),
+                candidates.len() as u64,
+                retained_prefix_groups,
+                &demo_phase,
             ),
         );
     }
+    if demo_step_budget.is_some() {
+        demo_phase.materialize_full_evals = candidates.len();
+    }
 
+    let mut demo_proof_close_entered = false;
     if admissibility_mode == AdmissibilityMode::RealisticShadow {
         let mut incumbent_terminal_rank = None;
-        for signature in &prefix_frontier.retained_prefix_signatures {
+        for (group_index, signature) in prefix_frontier
+            .retained_prefix_signatures
+            .iter()
+            .enumerate()
+        {
             let Some(group) = prefix_cache.get(signature) else {
                 continue;
             };
@@ -1326,6 +1420,53 @@ fn search_next_step(
                 serde_json::to_string(&candidate.telescope).expect("serialize")
             });
             for group_candidate in group_candidates {
+                if !demo_proof_close_entered {
+                    if let Some(full_eval_soft_cap) = demo_phase.full_eval_soft_cap {
+                        if u64::try_from(candidates.len()).expect("candidate count exceeded u64")
+                            >= full_eval_soft_cap
+                        {
+                            demo_phase.materialize_soft_cap_triggered = true;
+                            demo_phase.materialize_full_evals = candidates.len();
+                            if let (Some(observer), Some(budget)) =
+                                (demo_narrative.as_mut(), demo_step_budget)
+                            {
+                                observer.enter_proof_close_with_message(
+                                    narrative_progress_snapshot(
+                                        elapsed_millis(step_start.elapsed()),
+                                        generated_surface_from_counts(
+                                            prefixes_created,
+                                            enumerated_candidates,
+                                        ),
+                                        exact_screened_surface_from_counts(
+                                            prefix_states_exact_pruned,
+                                            candidates.len(),
+                                        ),
+                                        candidates.len() as u64,
+                                    ),
+                                    format!(
+                                        "entered proof_close after materialize hit the full-eval soft cap with {} retained prefix groups still needing exact certification",
+                                        retained_prefix_groups.saturating_sub(group_index)
+                                    ),
+                                    demo_proof_close_status_detail(
+                                        budget,
+                                        generated_surface_from_counts(
+                                            prefixes_created,
+                                            enumerated_candidates,
+                                        ),
+                                        exact_screened_surface_from_counts(
+                                            prefix_states_exact_pruned,
+                                            candidates.len(),
+                                        ),
+                                        candidates.len() as u64,
+                                        retained_prefix_groups.saturating_sub(group_index),
+                                        &demo_phase,
+                                    ),
+                                );
+                            }
+                            demo_proof_close_entered = true;
+                        }
+                    }
+                }
                 if let (Some(candidate_rank), Some(incumbent_rank)) =
                     (&group_candidate.accept_rank, &incumbent_terminal_rank)
                 {
@@ -1361,6 +1502,16 @@ fn search_next_step(
                     }
                 }
                 candidates.push(candidate);
+                if demo_step_budget.is_some() {
+                    if demo_proof_close_entered {
+                        demo_phase.proof_close_full_evals += 1;
+                        if demo_phase.materialize_soft_cap_triggered {
+                            demo_phase.proof_close_overrun_full_evals += 1;
+                        }
+                    } else {
+                        demo_phase.materialize_full_evals = candidates.len();
+                    }
+                }
             }
         }
     }
@@ -1368,35 +1519,36 @@ fn search_next_step(
     if candidates.is_empty() {
         bail!("no atomic candidates were generated for step {step_index}");
     }
-    let selection_start = Instant::now();
-    let evaluated_candidates = candidates.len();
-    let full_telescopes_evaluated = evaluated_candidates;
-    if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
-        observer.enter_proof_close(
-            narrative_progress_snapshot(
-                elapsed_millis(step_start.elapsed()),
-                generated_surface_from_counts(prefixes_created, enumerated_candidates),
-                exact_screened_surface_from_counts(
-                    prefix_states_exact_pruned,
-                    full_telescopes_evaluated,
+    if demo_step_budget.is_some() && !demo_proof_close_entered {
+        demo_phase.materialize_full_evals = candidates.len();
+        if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
+            observer.enter_proof_close(
+                narrative_progress_snapshot(
+                    elapsed_millis(step_start.elapsed()),
+                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                    exact_screened_surface_from_counts(
+                        prefix_states_exact_pruned,
+                        candidates.len(),
+                    ),
+                    candidates.len() as u64,
                 ),
-                full_telescopes_evaluated as u64,
-            ),
-            format!(
-                "proof_close_reserve={} {}",
-                format_duration_millis(budget.proof_close_reserve_millis),
-                demo_surface_status_detail(
+                demo_proof_close_status_detail(
                     budget,
                     generated_surface_from_counts(prefixes_created, enumerated_candidates),
                     exact_screened_surface_from_counts(
                         prefix_states_exact_pruned,
-                        full_telescopes_evaluated,
+                        candidates.len(),
                     ),
-                    full_telescopes_evaluated as u64
-                )
-            ),
-        );
+                    candidates.len() as u64,
+                    0,
+                    &demo_phase,
+                ),
+            );
+        }
     }
+    let selection_start = Instant::now();
+    let evaluated_candidates = candidates.len();
+    let full_telescopes_evaluated = evaluated_candidates;
     let scored_candidate_distribution = candidate_score_distribution(&candidates, objective_bar);
 
     let mut seen_canonical = BTreeMap::new();
@@ -1535,6 +1687,7 @@ fn search_next_step(
         incremental_partial_prefix_bound_checks,
         incremental_partial_prefix_bound_prunes,
         incremental_terminal_prefix_bar_prunes,
+        demo_phase,
         search_timing,
         prefix_frontier.frontier.hot.len(),
         prefix_frontier.frontier.cold.len(),
@@ -1601,6 +1754,7 @@ fn build_step_result(
     incremental_partial_prefix_bound_checks: usize,
     incremental_partial_prefix_bound_prunes: usize,
     incremental_terminal_prefix_bar_prunes: usize,
+    demo_phase: DemoPhaseStats,
     search_timing: SearchTiming,
     prefix_frontier_hot_states: usize,
     prefix_frontier_cold_states: usize,
@@ -1667,6 +1821,7 @@ fn build_step_result(
         incremental_partial_prefix_bound_checks,
         incremental_partial_prefix_bound_prunes,
         incremental_terminal_prefix_bar_prunes,
+        demo_phase,
         search_timing,
         prefix_frontier_hot_states,
         prefix_frontier_cold_states,
@@ -3436,6 +3591,41 @@ mod tests {
                 .iter()
                 .any(|event| event.kind == NarrativeEventKind::BudgetPulse)
         );
+    }
+
+    #[test]
+    fn demo_soft_cap_handoff_counts_proof_close_overrun() {
+        let mut config = demo_runtime_config_10m();
+        config
+            .demo
+            .caps
+            .full_eval_soft_cap
+            .insert("15".to_owned(), 0);
+        let step = search_bootstrap_prefix_for_config_with_runtime(
+            15,
+            2,
+            &config,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("demo steps should build")
+        .into_iter()
+        .last()
+        .expect("step should exist");
+
+        assert_eq!(step.step_index, 15);
+        assert_eq!(step.demo_phase.full_eval_soft_cap, Some(0));
+        assert!(step.demo_phase.materialize_soft_cap_triggered);
+        assert!(step.demo_phase.proof_close_full_evals > 0);
+        assert!(step.demo_phase.proof_close_overrun_full_evals > 0);
+        assert_eq!(
+            step.demo_phase.materialize_full_evals + step.demo_phase.proof_close_full_evals,
+            step.full_telescopes_evaluated
+        );
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::PhaseChange
+                && event.phase == Some(StepPhase::ProofClose)
+                && event.message.contains("soft cap")
+        }));
     }
 
     fn relaxed_shadow_step_from_reference_prefix(step_index: u32) -> AtomicSearchStep {

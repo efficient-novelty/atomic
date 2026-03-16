@@ -26,6 +26,9 @@ This file is the forward-facing status snapshot for
   stream records `Scout`, `BreadthHarvest`, `Materialize`, `ProofClose`, and
   `Seal` transitions from the search loop itself rather than synthesizing only
   post-step summaries
+- demo steps now persist phase-level full-evaluation accounting, including the
+  configured soft cap plus the `Materialize` versus `ProofClose` split and any
+  proof-close-only overrun after the cap handoff
 
 ## What Landed In This Pass
 
@@ -38,26 +41,33 @@ This file is the forward-facing status snapshot for
   budget pulses while the step is running, including a real scout throughput
   sample for prefix generation, admissibility checks, exact-bound checks, and
   full evaluations on this computer
+- the demo materialization loop now enforces the configured
+  `full_eval_soft_cap` as a real `Materialize` to `ProofClose` handoff instead
+  of treating the cap as narrative-only metadata
+- any exact candidates reopened after that handoff are now counted as
+  proof-close-only overrun work and persisted on the step summary as demo phase
+  accounting
 - `pen-cli` now renders and persists those phase-aware events directly instead
-  of depending only on post-step event synthesis
-- targeted `pen-search` and `pen-cli` tests now cover the new phase-aware demo
-  narrative path
+  of depending only on post-step event synthesis, and the demo narrative header
+  now reports the materialize/proof-close split, the configured cap, and the
+  overrun count directly from stored step data
+- targeted `pen-search` and `pen-cli` tests now cover both the original
+  phase-aware narrative path and the new late-step soft-cap handoff into
+  `ProofClose`
 
 ## Active Gaps
 
-### 1. The Phase Machine Is Now Explicit, But Enforcement Is Still Partial
+### 1. BreadthHarvest And ProofClose Budget Rules Are Still Partial
 
-The lane now has an explicit phase surface and emits real search-side phase
-transitions, but `BreadthHarvest`, `Materialize`, and `ProofClose` still mostly
-sit on top of the current realistic-shadow work instead of enforcing
-phase-specific stop rules, soft-cap overruns, or proof-close-only overrun
-reasons.
+The lane now enforces the `Materialize` soft cap and tracks proof-close-only
+overrun honestly, but `BreadthHarvest` still does not exit on floor success or
+reserve pressure, and `ProofClose` still lacks stronger budget and
+certification-state reasons beyond the new soft-cap handoff.
 
 Next target:
 
-- turn the observational phase machine into phase-specific control logic,
-  starting with `Materialize` soft-cap enforcement and proof-close-only
-  overrun accounting
+- add floor-aware `BreadthHarvest` exits plus stronger `ProofClose` reserve and
+  certification overrun reasons on top of the landed soft-cap handoff
 
 ### 2. Honest Funnel Counters Are Still Only Partially Present
 
@@ -73,24 +83,26 @@ Next target:
 - add the missing funnel and closure counters to `pen-search`, step summaries,
   compare tooling, and the narrative renderer
 
-### 3. Compare Tooling And Closure Reporting Still Lag The New Events
+### 3. Compare Tooling Still Lags The Stored Demo Phase Evidence
 
-The stored event stream is richer now, but `scripts/compare_runs.py` and the
-step narrative header still do not report closure progress, floor hits or
-misses, or soft-cap overruns directly from persisted artifacts.
+The stored narrative header now reports the materialize/proof-close split and
+soft-cap overrun directly from persisted step data, but `scripts/compare_runs.py`
+still does not surface closure progress, floor hits or misses, or the new demo
+phase accounting.
 
 Next target:
 
-- extend step summaries and compare tooling so stored runs can report phase
-  progress, floor hits or misses, and cap overruns without rereading debug text
+- extend compare tooling and the remaining summary surface so stored runs can
+  report phase progress, floor hits or misses, and cap overruns without
+  rereading debug text
 
 ## Immediate Next Steps
 
-1. Turn the new phase observer into real phase-specific enforcement:
-   `BreadthHarvest` floor exits, `Materialize` soft caps, and `ProofClose`
-   overrun rules.
+1. Turn `BreadthHarvest` into a real floor-aware exit stage that protects the
+   proof-close reserve instead of only observing discovery progress.
 2. Add the missing honest funnel counters and closure tracking so the demo
    narrative can report floor hits or misses from stored data instead of only
    from derived surface counts.
-3. Extend compare tooling and step summaries to consume the new phase/floor/cap
-   evidence directly.
+3. Extend compare tooling and step summaries to consume the new
+   materialize/proof-close cap accounting plus the future floor evidence
+   directly.

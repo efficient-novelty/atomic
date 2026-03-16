@@ -81,6 +81,7 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
             full_eval_soft_cap,
             "evaluated",
         ),
+        demo_phase_line(step),
         format!(
             "timing       discovery={} frontier_plan={} selection={}",
             format_millis(
@@ -279,6 +280,22 @@ fn full_eval_soft_cap(step_index: u32, demo: &DemoConfig) -> Option<u64> {
         .copied()
 }
 
+fn demo_phase_line(step: &StepReport) -> String {
+    let phase = &step.search_stats.demo_phase;
+    let soft_cap = phase
+        .full_eval_soft_cap
+        .map(|limit| limit.to_string())
+        .unwrap_or_else(|| "none".to_owned());
+    format!(
+        "phase_eval   materialize={} proof_close={} overrun={} cap={} cap_triggered={}",
+        phase.materialize_full_evals,
+        phase.proof_close_full_evals,
+        phase.proof_close_overrun_full_evals,
+        soft_cap,
+        phase.materialize_soft_cap_triggered
+    )
+}
+
 fn time_line(step_index: u32, elapsed_millis: u64, demo: &DemoConfig) -> String {
     if step_index <= 4 {
         return format!(
@@ -382,6 +399,7 @@ mod tests {
         let text = render_step_narrative(steps.last().expect("step should exist"), &config.demo);
 
         assert!(text.contains("events"));
+        assert!(text.contains("phase_eval"));
         assert!(text.contains("phase_change"));
         assert!(text.contains("scout"));
         assert!(text.contains("retained candidates"));
