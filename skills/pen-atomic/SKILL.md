@@ -1,6 +1,6 @@
 ---
 name: pen-atomic
-description: Current-state architecture and donor guide for the `pen-atomic` Rust workspace. Use when working on live strict search, MBTT/kernel design, admissibility, exact selection, reporting, checkpoints, Agda export, or when you need to reconcile the current Rust implementation with older donor theory and Haskell provenance.
+description: Current-state architecture and donor guide for the `pen-atomic` Rust workspace. Use when working on live strict search, `realistic_frontier_shadow`, `demo_breadth_shadow`, MBTT/kernel design, admissibility, exact selection, reporting, checkpoints, Agda export, or when you need to reconcile current Rust behavior with donor theory and Haskell provenance.
 ---
 
 # PEN Atomic
@@ -14,6 +14,9 @@ The repo now has a real bounded live-search lane:
 
 - `pen-cli run` and `pen-cli resume` perform live atomic strict search through
   step 15
+- `demo_breadth_shadow` now exists as a comparison-backed child of realistic
+  shadow with runnable `5m`, `10m`, and `15m` profiles plus stored per-step
+  narrative artifacts
 - the accepted executable late-step canon is now the current Rust truth,
   including step 15 / `DCT` at `nu = 103`
 - the CLI writes real run manifests, step checkpoints, reports, and telemetry
@@ -26,7 +29,13 @@ What is still incomplete:
 - the anti-junk frontier engine is not yet the full long-range design
 - the Agda bridge is still lighter than the final proof-facing target
 
-The current search-architecture focus has shifted again:
+The current search-architecture focus is now split between two active
+comparison-backed tracks:
+
+- stronger exact late-step pruning and ordering on `realistic_frontier_shadow`
+- honest breadth, budget, and evidence surfacing on `demo_breadth_shadow`
+
+On the realistic-shadow side:
 
 - `realistic_frontier_shadow` already has real prefix-frontier retention and
   persisted frontier evidence
@@ -197,6 +206,17 @@ The current search-architecture focus has shifted again:
   continuation-aware queue retune, not "add a frontier for the first time" or
   "collapse obviously forced late-family suffixes for the first time"
 
+On the demo-lane side:
+
+- the demo controller now plans real `Scout`, `BreadthHarvest`,
+  `Materialize`, `ProofClose`, and `Seal` slices inside each step budget
+- demo runs now persist per-step narratives, event streams, and phase-level
+  full-evaluation accounting plus `breadth_harvest_exit_reason`,
+  `proof_close_entry_reason`, and `proof_close_overrun_reason`
+- the current demo gap is not "make the lane look broader"; it is adding the
+  missing funnel/closure counters, compare-tool consumption of the stored demo
+  phase evidence, and stronger proof-close reserve/closure accounting
+
 Start with the current architecture doc before diving into donor material:
 
 - [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
@@ -231,7 +251,9 @@ For most tasks, read in this order:
 2. [../../overall_plan.md](../../overall_plan.md)
 3. [../../quantum_progress.md](../../quantum_progress.md) when the task touches
    prefix search, bounds, caching, or the quantum plan
-4. [theory/README.md](theory/README.md)
+4. [../../demo_lane_progress.md](../../demo_lane_progress.md) when the task
+   touches `demo_breadth_shadow` budgets, narratives, or comparison evidence
+5. [theory/README.md](theory/README.md)
 
 Then branch based on the task.
 
@@ -246,6 +268,10 @@ Then branch based on the task.
   status, deliverables, and immediate next priorities.
 - Read [../../quantum_progress.md](../../quantum_progress.md) for the current
   delta between the quantum improvement plan and the live Rust codebase.
+- Read [../../demo_lane_progress.md](../../demo_lane_progress.md) and
+  [../../demo_lane_plan.md](../../demo_lane_plan.md) when the task touches
+  `demo_breadth_shadow` budgets, narrative artifacts, breadth claims, or demo
+  compare/reporting work.
 - Read [theory/README.md](theory/README.md) when you need the theorem map or
   manuscript map.
 - Read [theory/genesis.md](theory/genesis.md) when you need the exact strict
@@ -354,6 +380,29 @@ Focus on:
   terminal-prefix bar prune as the starting point for further quantum-inspired
   search work
 
+### If you are working on `demo_breadth_shadow`
+
+Read:
+
+- [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
+- [../../demo_lane_progress.md](../../demo_lane_progress.md)
+- [../../demo_lane_plan.md](../../demo_lane_plan.md)
+- [references/08-evidence-and-invariants.md](references/08-evidence-and-invariants.md)
+
+Focus on:
+
+- keeping `demo_breadth_shadow` comparison-backed rather than authoritative
+- treating breadth as real generated or exactly screened search mass, not
+  inflated full-evaluation counts
+- preserving the explicit phase machine
+  `Scout -> BreadthHarvest -> Materialize -> ProofClose -> Seal`
+- persisting honest demo evidence in step summaries, narratives, and event
+  streams rather than reconstructing it from debug text
+- using the new phase reason fields
+  `breadth_harvest_exit_reason`, `proof_close_entry_reason`, and
+  `proof_close_overrun_reason` as current stored truth, while remembering that
+  funnel/closure counters and compare-tool parity are still the next gap
+
 ### If you are working on reporting or evidence
 
 Read:
@@ -443,6 +492,7 @@ Reject designs that:
   timing/memory evidence to retune late-step order.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
-  governor, and the stronger Agda contract.
+  governor, the stronger Agda contract, and the demo lane's missing
+  funnel/closure counters plus compare-tool parity.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) for current
   behavior, then use the theory and donor references only as needed.
