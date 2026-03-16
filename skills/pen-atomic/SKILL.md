@@ -58,6 +58,10 @@ The current search-architecture focus has shifted again:
 - realistic shadow now also computes exact terminal-prefix completion bounds
   and prunes one-clause-short prefix groups that cannot clear the current bar
   before retained-prefix frontier planning
+- realistic shadow now also collapses exact single-continuation late-family
+  suffixes in-place once the strengthened family summary plus active-window
+  clause filtering leave only one legal child at each remaining position, so
+  the engine no longer pushes and pops every forced intermediate prefix state
 - reports and frontier manifests now expose the plan-aligned counters
   `prefixes_created`, `full_telescopes_evaluated`,
   `canonical_dedupe_prunes`, and `semantic_minimality_prunes`
@@ -94,7 +98,8 @@ The current search-architecture focus has shifted again:
   broader non-family admissibility/filter reuse beyond the landed trivial-
   derivability and terminal-admissibility summaries, plus using the new
   timing/memory evidence to retune realistic late-step order, not "add a
-  frontier for the first time"
+  frontier for the first time" or "collapse obviously forced late-family
+  suffixes for the first time"
 
 Start with the current architecture doc before diving into donor material:
 
@@ -235,9 +240,9 @@ Focus on:
 - the remaining difference between the current realistic online prefix engine,
   the landed legality/connectivity/family/active-window/terminal-clause/
   terminal-admissibility memo path plus the landed terminal trivial-
-  derivability reuse and terminal-prefix bar prune, and the still-missing
-  earlier partial-prefix bound pruning plus broader non-family admissibility
-  reuse
+  derivability reuse and terminal-prefix bar prune plus the landed exact
+  single-continuation suffix collapse, and the still-missing earlier partial-
+  prefix bound pruning plus broader non-family admissibility reuse
 - using strengthened `PrefixSignature` state, the landed memo counters, the
   now-persisted timing telemetry, and the deterministic frontier memory
   high-water metrics as the remaining bound/admissibility gaps past the landed
@@ -318,10 +323,11 @@ Reject designs that:
 - The current quantum-focused search gap is stronger partial-prefix bound
   pruning beyond the landed exact clause-family impossibility prunes and
   active-window clause filtering and terminal-clause filtering and exact
-  terminal-prefix bar prune plus broader non-family admissibility/filter reuse
-  beyond the landed legality/connectivity/family/active-window/terminal-
-  clause/trivial-derivability/terminal-admissibility memo layer, then using
-  the now-persisted timing/memory evidence to retune late-step order.
+  terminal-prefix bar prune plus the landed exact single-continuation suffix
+  collapse, then broader non-family admissibility/filter reuse beyond the
+  landed legality/connectivity/family/active-window/terminal-clause/trivial-
+  derivability/terminal-admissibility memo layer, then using the
+  now-persisted timing/memory evidence to retune late-step order.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.

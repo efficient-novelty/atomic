@@ -53,6 +53,11 @@ guarded 15-step canon.
 - realistic shadow now also computes an exact terminal-prefix completion bound
   per retained one-clause-short prefix and prunes any such prefix group that
   cannot clear the current bar before retained-prefix frontier planning runs.
+- realistic shadow now also collapses exact single-continuation late-family
+  suffixes in-place once the strengthened family summary plus active-window
+  clause filtering leave only one legal child at each remaining position,
+  avoiding redundant intermediate prefix frontier pops before terminal-prefix
+  grouping.
 - `PrefixSignature` now includes:
   - clause position
   - obligation set id
@@ -128,6 +133,8 @@ it as if it were still missing:
   assembly
 - landing an earlier exact terminal-prefix bar prune before retained-prefix
   frontier planning
+- collapsing exact single-continuation late-family suffixes instead of pushing
+  and popping each forced intermediate prefix state one by one
 - adding the first timing telemetry and deterministic frontier memory
   high-water metrics for the memoized realistic-shadow path
 - persisting and rendering the per-step timing telemetry in stored step
@@ -175,6 +182,10 @@ expensive relative to their payoff.
   terminal-admissibility payoff counters together with
   `incremental_terminal_prefix_bar_prunes` to target broader exact
   admissibility/filter reuse
+- use the now-lower `prefix_states_explored` counts from the landed exact
+  single-continuation suffix collapse to isolate the remaining prefixes that
+  still need stronger partial-prefix bounds or broader non-family
+  admissibility reuse
 - use the now-persisted timing telemetry and deterministic frontier memory
   high-water metrics from stored step summaries and inspect output to identify
   the late-step prefix lanes that still do redundant work
@@ -219,3 +230,7 @@ expensive relative to their payoff.
 Latest relevant verification:
 
 - `cargo test -p pen-type -p pen-search -p pen-cli -p pen-store`
+- fresh `realistic_frontier_shadow` verification preserves the accepted
+  sequence while reducing redundant late-prefix exploration, including
+  `prefix_states_explored = 2` at step 11 and `prefix_states_explored = 3` at
+  steps 13 and 15

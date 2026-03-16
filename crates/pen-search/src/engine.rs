@@ -2,7 +2,7 @@ use crate::accept::{AcceptanceOutcome, select_acceptance};
 use crate::bounds::PrefixBound;
 use crate::config::SearchProfile;
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
-use crate::enumerate::{EnumerationContext, build_clause_catalog, enumerate_telescopes};
+use crate::enumerate::{ClauseCatalog, EnumerationContext, build_clause_catalog, enumerate_telescopes};
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
 use crate::prefix_cache::{PrefixCache, PrefixCandidateGroup, PrefixSignature};
@@ -864,6 +864,16 @@ fn discover_realistic_shadow_candidates(
 
         while let Some(work_item) = pop_best_prefix(&mut frontier) {
             discovery.prefix_states_explored += 1;
+            let Some(work_item) = collapse_single_continuation_chain(
+                step_index,
+                library,
+                admissibility,
+                &clause_catalog,
+                &mut discovery,
+                work_item,
+            ) else {
+                continue;
+            };
             let prefix_len = work_item.prefix_telescope.clauses.len();
 
             if prefix_len + 1 == usize::from(work_item.clause_kappa) {
@@ -918,6 +928,64 @@ fn discover_realistic_shadow_candidates(
     }
 
     Ok(discovery)
+}
+
+fn collapse_single_continuation_chain(
+    step_index: u32,
+    library: &Library,
+    admissibility: StrictAdmissibility,
+    clause_catalog: &ClauseCatalog,
+    discovery: &mut RealisticShadowDiscovery,
+    work_item: OnlinePrefixWorkItem,
+) -> Option<OnlinePrefixWorkItem> {
+    let mut prefix_telescope = work_item.prefix_telescope;
+    let mut signature = work_item.signature;
+
+    loop {
+        let prefix_len = prefix_telescope.clauses.len();
+        if prefix_len + 1 >= usize::from(work_item.clause_kappa) {
+            return Some(OnlinePrefixWorkItem {
+                clause_kappa: work_item.clause_kappa,
+                prefix_telescope,
+                signature,
+            });
+        }
+
+        let filtered_clauses = discovery
+            .prefix_legality_cache
+            .filter_active_window_clauses(
+                &signature,
+                prefix_len,
+                library,
+                admissibility,
+                clause_catalog.clauses_at(prefix_len),
+            )
+            .unwrap_or_else(|| clause_catalog.clauses_at(prefix_len).iter().collect::<Vec<_>>());
+        let [clause] = filtered_clauses.as_slice() else {
+            return Some(OnlinePrefixWorkItem {
+                clause_kappa: work_item.clause_kappa,
+                prefix_telescope,
+                signature,
+            });
+        };
+
+        let mut child_prefix = prefix_telescope.clone();
+        child_prefix.clauses.push((*clause).clone());
+        let child_signature = PrefixSignature::new(step_index, library, &child_prefix);
+        if !discovery.prefix_legality_cache.insert_child(
+            &signature,
+            child_signature.clone(),
+            library,
+            clause,
+            admissibility,
+        ) {
+            return None;
+        }
+
+        discovery.prefixes_created += 1;
+        prefix_telescope = child_prefix;
+        signature = child_signature;
+    }
 }
 
 fn record_terminal_prefix_group(
@@ -1675,6 +1743,7 @@ mod tests {
                 + step.incremental_active_window_clause_filter_prunes
                 > 0
         );
+        assert_eq!(step.prefix_states_explored, 2);
         assert_eq!(step.full_telescopes_evaluated, 1);
     }
 
@@ -1704,6 +1773,7 @@ mod tests {
         assert!(step.incremental_terminal_clause_filter_hits > 0);
         assert!(step.incremental_trivial_derivability_hits > 0);
         assert!(step.incremental_terminal_admissibility_hits > 0);
+        assert_eq!(step.prefix_states_explored, 3);
         assert!(
             step.prefix_frontier_hot_states + step.prefix_frontier_cold_states
                 <= step.prefix_states_explored
