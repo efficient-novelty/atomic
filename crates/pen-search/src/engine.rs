@@ -53,6 +53,8 @@ const MAX_PRUNE_SAMPLES: usize = 3;
 const EXACT_PARTIAL_PREFIX_BOUND_BUDGET: usize = 32;
 const DEMO_LATE_FLOOR_START_STEP: u32 = 10;
 const DEMO_LATE_SPILL_START_STEP: u32 = 13;
+const DEMO_LIVE_RETUNE_COOLDOWN_MILLIS: u64 = 1_000;
+const DEMO_LIVE_RETUNE_MIN_ADJUSTMENT_MILLIS: u64 = 1_000;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct FrontierRetentionOutcome {
@@ -534,7 +536,9 @@ struct DemoStepBudget {
     generated_floor: Option<u64>,
     exact_screened_floor: Option<u64>,
     full_eval_soft_cap: Option<u64>,
-    scout_rebalance_applied: bool,
+    live_rebalance_borrowed_millis: u64,
+    max_live_rebalance_borrow_millis: u64,
+    next_live_retune_check_millis: u64,
 }
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
@@ -614,10 +618,33 @@ impl DemoStepBudget {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-struct DemoScoutBudgetRebalance {
-    borrowed_millis: u64,
+struct DemoBudgetRetune {
+    action: DemoBudgetRetuneAction,
+    adjustment_millis: u64,
     projected_generated_surface: u64,
     projected_exact_screened_surface: u64,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum DemoBudgetRetuneAction {
+    BorrowFromProofClose,
+    ReturnToProofClose,
+}
+
+impl DemoBudgetRetuneAction {
+    const fn verb(self) -> &'static str {
+        match self {
+            Self::BorrowFromProofClose => "borrowed",
+            Self::ReturnToProofClose => "returned",
+        }
+    }
+
+    const fn counterparty(self) -> &'static str {
+        match self {
+            Self::BorrowFromProofClose => "from proof_close reserve",
+            Self::ReturnToProofClose => "to proof_close reserve",
+        }
+    }
 }
 
 fn projected_surface(current: u64, rate_per_sec: u64, remaining_millis: u64) -> u64 {
@@ -640,11 +667,18 @@ fn additional_floor_budget_millis(
     target: Option<u64>,
     remaining_millis: u64,
 ) -> u64 {
+    required_floor_budget_millis(current, rate_per_sec, target).saturating_sub(remaining_millis)
+}
+
+fn required_floor_budget_millis(current: u64, rate_per_sec: u64, target: Option<u64>) -> u64 {
     let Some(target) = target else {
         return 0;
     };
-    if current >= target || rate_per_sec == 0 {
+    if current >= target {
         return 0;
+    }
+    if rate_per_sec == 0 {
+        return u64::MAX;
     }
 
     let deficit = u128::from(target - current);
@@ -652,18 +686,15 @@ fn additional_floor_budget_millis(
         deficit.saturating_mul(u128::from(1_000_u64)),
         u128::from(rate_per_sec),
     );
-    u64::try_from(millis_needed)
-        .expect("floor budget exceeded u64")
-        .saturating_sub(remaining_millis)
+    u64::try_from(millis_needed).expect("floor budget exceeded u64")
 }
 
-fn maybe_rebalance_demo_budget_after_scout(
+fn maybe_retune_demo_budget_live(
     budget: &mut DemoStepBudget,
     progress: &NarrativeProgressSnapshot,
-) -> Option<DemoScoutBudgetRebalance> {
-    if budget.scout_rebalance_applied
-        || budget.proof_close_reserve_millis == 0
-        || progress.elapsed_millis < budget.scout_budget_millis
+) -> Option<DemoBudgetRetune> {
+    if progress.elapsed_millis < budget.scout_budget_millis
+        || progress.elapsed_millis < budget.next_live_retune_check_millis
     {
         return None;
     }
@@ -672,6 +703,9 @@ fn maybe_rebalance_demo_budget_after_scout(
         .discovery_budget_millis
         .saturating_sub(progress.elapsed_millis);
     if remaining_discovery_millis == 0 {
+        budget.next_live_retune_check_millis = progress
+            .elapsed_millis
+            .saturating_add(DEMO_LIVE_RETUNE_COOLDOWN_MILLIS);
         return None;
     }
 
@@ -690,43 +724,107 @@ fn maybe_rebalance_demo_budget_after_scout(
         remaining_discovery_millis,
     );
     let requested_borrow_millis = generated_extra_millis.max(exact_screened_extra_millis);
-    if requested_borrow_millis == 0 {
-        return None;
+    if requested_borrow_millis > 0
+        && budget.max_live_rebalance_borrow_millis > budget.live_rebalance_borrowed_millis
+        && budget.proof_close_reserve_millis > 0
+    {
+        let max_borrow_millis = budget
+            .max_live_rebalance_borrow_millis
+            .saturating_sub(budget.live_rebalance_borrowed_millis)
+            .min(budget.proof_close_reserve_millis);
+        let adjustment_millis = requested_borrow_millis.min(max_borrow_millis);
+        if adjustment_millis >= DEMO_LIVE_RETUNE_MIN_ADJUSTMENT_MILLIS {
+            budget.discovery_budget_millis = budget
+                .discovery_budget_millis
+                .saturating_add(adjustment_millis);
+            budget.breadth_harvest_budget_millis = budget
+                .breadth_harvest_budget_millis
+                .saturating_add(adjustment_millis);
+            budget.proof_close_reserve_millis = budget
+                .proof_close_reserve_millis
+                .saturating_sub(adjustment_millis);
+            budget.live_rebalance_borrowed_millis = budget
+                .live_rebalance_borrowed_millis
+                .saturating_add(adjustment_millis);
+            budget.next_live_retune_check_millis = progress
+                .elapsed_millis
+                .saturating_add(DEMO_LIVE_RETUNE_COOLDOWN_MILLIS);
+
+            let remaining_discovery_after_retune = budget
+                .discovery_budget_millis
+                .saturating_sub(progress.elapsed_millis);
+            return Some(DemoBudgetRetune {
+                action: DemoBudgetRetuneAction::BorrowFromProofClose,
+                adjustment_millis,
+                projected_generated_surface: projected_surface(
+                    progress.generated_surface,
+                    generated_rate,
+                    remaining_discovery_after_retune,
+                ),
+                projected_exact_screened_surface: projected_surface(
+                    progress.exact_screened_surface,
+                    exact_screened_rate,
+                    remaining_discovery_after_retune,
+                ),
+            });
+        }
     }
 
-    let max_borrow_millis = budget.proof_close_reserve_millis / 2;
-    if max_borrow_millis == 0 {
-        return None;
+    let generated_required_millis = required_floor_budget_millis(
+        progress.generated_surface,
+        generated_rate,
+        budget.generated_floor,
+    );
+    let exact_screened_required_millis = required_floor_budget_millis(
+        progress.exact_screened_surface,
+        exact_screened_rate,
+        budget.exact_screened_floor,
+    );
+    let required_remaining_millis = generated_required_millis.max(exact_screened_required_millis);
+    if budget.live_rebalance_borrowed_millis > 0 && required_remaining_millis != u64::MAX {
+        let slack_millis = remaining_discovery_millis.saturating_sub(required_remaining_millis);
+        let adjustment_millis = budget.live_rebalance_borrowed_millis.min(slack_millis / 2);
+        if adjustment_millis >= DEMO_LIVE_RETUNE_MIN_ADJUSTMENT_MILLIS {
+            budget.discovery_budget_millis = budget
+                .discovery_budget_millis
+                .saturating_sub(adjustment_millis);
+            budget.breadth_harvest_budget_millis = budget
+                .breadth_harvest_budget_millis
+                .saturating_sub(adjustment_millis);
+            budget.proof_close_reserve_millis = budget
+                .proof_close_reserve_millis
+                .saturating_add(adjustment_millis);
+            budget.live_rebalance_borrowed_millis = budget
+                .live_rebalance_borrowed_millis
+                .saturating_sub(adjustment_millis);
+            budget.next_live_retune_check_millis = progress
+                .elapsed_millis
+                .saturating_add(DEMO_LIVE_RETUNE_COOLDOWN_MILLIS);
+
+            let remaining_discovery_after_retune = budget
+                .discovery_budget_millis
+                .saturating_sub(progress.elapsed_millis);
+            return Some(DemoBudgetRetune {
+                action: DemoBudgetRetuneAction::ReturnToProofClose,
+                adjustment_millis,
+                projected_generated_surface: projected_surface(
+                    progress.generated_surface,
+                    generated_rate,
+                    remaining_discovery_after_retune,
+                ),
+                projected_exact_screened_surface: projected_surface(
+                    progress.exact_screened_surface,
+                    exact_screened_rate,
+                    remaining_discovery_after_retune,
+                ),
+            });
+        }
     }
 
-    let borrowed_millis = requested_borrow_millis.min(max_borrow_millis);
-    budget.discovery_budget_millis = budget
-        .discovery_budget_millis
-        .saturating_add(borrowed_millis);
-    budget.breadth_harvest_budget_millis = budget
-        .breadth_harvest_budget_millis
-        .saturating_add(borrowed_millis);
-    budget.proof_close_reserve_millis = budget
-        .proof_close_reserve_millis
-        .saturating_sub(borrowed_millis);
-    budget.scout_rebalance_applied = true;
-
-    let remaining_discovery_after_rebalance = budget
-        .discovery_budget_millis
-        .saturating_sub(progress.elapsed_millis);
-    Some(DemoScoutBudgetRebalance {
-        borrowed_millis,
-        projected_generated_surface: projected_surface(
-            progress.generated_surface,
-            generated_rate,
-            remaining_discovery_after_rebalance,
-        ),
-        projected_exact_screened_surface: projected_surface(
-            progress.exact_screened_surface,
-            exact_screened_rate,
-            remaining_discovery_after_rebalance,
-        ),
-    })
+    budget.next_live_retune_check_millis = progress
+        .elapsed_millis
+        .saturating_add(DEMO_LIVE_RETUNE_COOLDOWN_MILLIS);
+    None
 }
 
 #[derive(Clone, Debug)]
@@ -793,7 +891,9 @@ impl DemoBudgetController {
                 generated_floor,
                 exact_screened_floor,
                 full_eval_soft_cap,
-                scout_rebalance_applied: false,
+                live_rebalance_borrowed_millis: 0,
+                max_live_rebalance_borrow_millis: 0,
+                next_live_retune_check_millis: scout_budget_millis,
             };
         }
 
@@ -826,7 +926,9 @@ impl DemoBudgetController {
             generated_floor,
             exact_screened_floor,
             full_eval_soft_cap,
-            scout_rebalance_applied: false,
+            live_rebalance_borrowed_millis: 0,
+            max_live_rebalance_borrow_millis: proof_close_reserve_millis / 2,
+            next_live_retune_check_millis: scout_budget_millis,
         }
     }
 
@@ -1052,11 +1154,13 @@ impl DemoNarrativeRuntime {
         scout_detail: String,
         harvest_detail: String,
     ) {
-        if self.scout_sample_recorded || elapsed_millis < self.budget.scout_budget_millis {
+        if self.breadth_harvest_entered || elapsed_millis < self.budget.scout_budget_millis {
             return;
         }
 
-        self.record_scout_sample(progress.clone(), scout_detail);
+        if !self.scout_sample_recorded {
+            self.record_scout_sample(progress.clone(), scout_detail);
+        }
         if self.budget.breadth_harvest_budget_millis == 0 {
             return;
         }
@@ -1086,20 +1190,72 @@ impl DemoNarrativeRuntime {
         progress: NarrativeProgressSnapshot,
         scout_detail: String,
         budget: DemoStepBudget,
-        rebalance: DemoScoutBudgetRebalance,
+        rebalance: DemoBudgetRetune,
     ) {
         self.record_scout_sample(progress.clone(), scout_detail);
         self.budget = budget;
+        let message = match rebalance.action {
+            DemoBudgetRetuneAction::BorrowFromProofClose => format!(
+                "scout borrowed {} from proof_close reserve after the live floor projection stayed underwater",
+                format_duration_millis(rebalance.adjustment_millis)
+            ),
+            DemoBudgetRetuneAction::ReturnToProofClose => format!(
+                "scout returned {} to proof_close reserve after the live floor projection recovered",
+                format_duration_millis(rebalance.adjustment_millis)
+            ),
+        };
         self.recorder.push(
             NarrativeEventKind::BudgetPulse,
             Some(StepPhase::Scout),
-            format!(
-                "scout borrowed {} from proof_close reserve after projecting a breadth-floor miss",
-                format_duration_millis(rebalance.borrowed_millis)
-            ),
+            message,
             Some(format!(
-                "{} projected_generated={} projected_exact_screened={}",
+                "{} outstanding_borrow={} max_live_borrow={} projected_generated={} projected_exact_screened={}",
                 demo_budget_plan_detail(budget),
+                format_duration_millis(budget.live_rebalance_borrowed_millis),
+                format_duration_millis(budget.max_live_rebalance_borrow_millis),
+                floor_status(
+                    rebalance.projected_generated_surface,
+                    budget.generated_floor
+                ),
+                floor_status(
+                    rebalance.projected_exact_screened_surface,
+                    budget.exact_screened_floor
+                )
+            )),
+            Some(progress),
+        );
+    }
+
+    fn record_breadth_harvest_budget_retune(
+        &mut self,
+        progress: NarrativeProgressSnapshot,
+        budget: DemoStepBudget,
+        rebalance: DemoBudgetRetune,
+    ) {
+        self.budget = budget;
+        let message = match rebalance.action {
+            DemoBudgetRetuneAction::BorrowFromProofClose => format!(
+                "breadth_harvest {} {} {} after live floor projections stayed underwater",
+                rebalance.action.verb(),
+                format_duration_millis(rebalance.adjustment_millis),
+                rebalance.action.counterparty()
+            ),
+            DemoBudgetRetuneAction::ReturnToProofClose => format!(
+                "breadth_harvest {} {} {} after live floor projections recovered",
+                rebalance.action.verb(),
+                format_duration_millis(rebalance.adjustment_millis),
+                rebalance.action.counterparty()
+            ),
+        };
+        self.recorder.push(
+            NarrativeEventKind::BudgetPulse,
+            Some(StepPhase::BreadthHarvest),
+            message,
+            Some(format!(
+                "{} outstanding_borrow={} max_live_borrow={} projected_generated={} projected_exact_screened={}",
+                demo_budget_plan_detail(budget),
+                format_duration_millis(budget.live_rebalance_borrowed_millis),
+                format_duration_millis(budget.max_live_rebalance_borrow_millis),
                 floor_status(
                     rebalance.projected_generated_surface,
                     budget.generated_floor
@@ -3200,14 +3356,22 @@ fn demo_discovery_budget_exhausted(
 
     let mut demo_narrative = demo_narrative;
     if let Some(budget) = demo_step_budget.as_mut() {
-        if let Some(rebalance) = maybe_rebalance_demo_budget_after_scout(budget, &progress) {
+        if let Some(rebalance) = maybe_retune_demo_budget_live(budget, &progress) {
             if let Some(observer) = demo_narrative.as_mut() {
-                observer.record_scout_budget_rebalance(
-                    progress.clone(),
-                    scout_detail.clone(),
-                    *budget,
-                    rebalance,
-                );
+                if observer.breadth_harvest_entered {
+                    observer.record_breadth_harvest_budget_retune(
+                        progress.clone(),
+                        *budget,
+                        rebalance,
+                    );
+                } else {
+                    observer.record_scout_budget_rebalance(
+                        progress.clone(),
+                        scout_detail.clone(),
+                        *budget,
+                        rebalance,
+                    );
+                }
             }
         }
     }
@@ -4538,14 +4702,13 @@ fn elapsed_millis(duration: Duration) -> u64 {
 mod tests {
     use super::{
         AtomicSearchStep, DemoBreadthHarvestExitReason, DemoBudgetController, DemoBudgetFeedback,
-        DemoBudgetSeed, DemoProofCloseEntryReason, DemoProofCloseOrderMode,
+        DemoBudgetRetuneAction, DemoBudgetSeed, DemoProofCloseEntryReason, DemoProofCloseOrderMode,
         DemoProofCloseOverrunReason, DemoStepBudget, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
         create_online_prefix_work_item, demo_proof_close_group_order, demo_proof_close_order_mode,
         demo_should_handoff_materialize_to_proof_close_for_surface,
-        exact_partial_prefix_bound_decision, maybe_rebalance_demo_budget_after_scout,
-        pop_best_prefix, search_bootstrap_from_prefix,
-        search_bootstrap_from_prefix_for_profile_with_runtime, search_bootstrap_prefix,
-        search_bootstrap_prefix_for_config_with_runtime,
+        exact_partial_prefix_bound_decision, maybe_retune_demo_budget_live, pop_best_prefix,
+        search_bootstrap_from_prefix, search_bootstrap_from_prefix_for_profile_with_runtime,
+        search_bootstrap_prefix, search_bootstrap_prefix_for_config_with_runtime,
         sort_terminal_prefix_group_candidates_for_certification, supports_live_atomic_search,
     };
     use crate::bounds::PrefixBound;
@@ -4938,18 +5101,24 @@ mod tests {
             breadth_harvest_budget_millis: 25_000,
             proof_close_reserve_millis: 30_000,
             generated_floor: Some(5_000),
+            max_live_rebalance_borrow_millis: 15_000,
+            next_live_retune_check_millis: 5_000,
             ..DemoStepBudget::default()
         };
         let progress = narrative_progress_snapshot(5_000, 400, 100, 0);
 
-        let rebalance = maybe_rebalance_demo_budget_after_scout(&mut budget, &progress)
+        let rebalance = maybe_retune_demo_budget_live(&mut budget, &progress)
             .expect("floor pressure should borrow from proof_close reserve");
 
-        assert_eq!(rebalance.borrowed_millis, 15_000);
+        assert_eq!(
+            rebalance.action,
+            DemoBudgetRetuneAction::BorrowFromProofClose
+        );
+        assert_eq!(rebalance.adjustment_millis, 15_000);
         assert_eq!(budget.discovery_budget_millis, 45_000);
         assert_eq!(budget.breadth_harvest_budget_millis, 40_000);
         assert_eq!(budget.proof_close_reserve_millis, 15_000);
-        assert!(budget.scout_rebalance_applied);
+        assert_eq!(budget.live_rebalance_borrowed_millis, 15_000);
         assert!(rebalance.projected_generated_surface > progress.generated_surface);
     }
 
@@ -4963,11 +5132,13 @@ mod tests {
             breadth_harvest_budget_millis: 25_000,
             proof_close_reserve_millis: 30_000,
             generated_floor: Some(5_000),
+            max_live_rebalance_borrow_millis: 15_000,
+            next_live_retune_check_millis: 5_000,
             ..DemoStepBudget::default()
         };
 
         assert!(
-            maybe_rebalance_demo_budget_after_scout(
+            maybe_retune_demo_budget_live(
                 &mut budget,
                 &narrative_progress_snapshot(4_999, 400, 100, 0),
             )
@@ -4975,7 +5146,82 @@ mod tests {
         );
         assert_eq!(budget.discovery_budget_millis, 30_000);
         assert_eq!(budget.proof_close_reserve_millis, 30_000);
-        assert!(!budget.scout_rebalance_applied);
+        assert_eq!(budget.live_rebalance_borrowed_millis, 0);
+    }
+
+    #[test]
+    fn demo_breadth_harvest_live_retune_can_borrow_again_when_floor_pressure_worsens() {
+        let mut budget = DemoStepBudget {
+            step_index: 13,
+            total_budget_millis: 60_000,
+            discovery_budget_millis: 30_000,
+            scout_budget_millis: 5_000,
+            breadth_harvest_budget_millis: 25_000,
+            proof_close_reserve_millis: 30_000,
+            generated_floor: Some(4_700),
+            max_live_rebalance_borrow_millis: 15_000,
+            next_live_retune_check_millis: 5_000,
+            ..DemoStepBudget::default()
+        };
+
+        let first = maybe_retune_demo_budget_live(
+            &mut budget,
+            &narrative_progress_snapshot(5_000, 700, 100, 0),
+        )
+        .expect("first live retune should borrow from proof_close reserve");
+        assert_eq!(first.action, DemoBudgetRetuneAction::BorrowFromProofClose);
+        assert!(first.adjustment_millis >= 1_000);
+        let first_borrow = first.adjustment_millis;
+
+        let second = maybe_retune_demo_budget_live(
+            &mut budget,
+            &narrative_progress_snapshot(12_000, 1_200, 200, 0),
+        )
+        .expect("later breadth-harvest pulse should borrow again when projections worsen");
+        assert_eq!(second.action, DemoBudgetRetuneAction::BorrowFromProofClose);
+        assert!(second.adjustment_millis >= 1_000);
+        assert_eq!(
+            budget.live_rebalance_borrowed_millis,
+            first_borrow + second.adjustment_millis
+        );
+        assert_eq!(
+            budget.live_rebalance_borrowed_millis,
+            budget.max_live_rebalance_borrow_millis
+        );
+        assert_eq!(
+            budget.proof_close_reserve_millis,
+            30_000 - budget.live_rebalance_borrowed_millis
+        );
+    }
+
+    #[test]
+    fn demo_breadth_harvest_live_retune_can_return_time_to_proof_close_after_recovery() {
+        let mut budget = DemoStepBudget {
+            step_index: 13,
+            total_budget_millis: 60_000,
+            discovery_budget_millis: 40_000,
+            scout_budget_millis: 5_000,
+            breadth_harvest_budget_millis: 35_000,
+            proof_close_reserve_millis: 20_000,
+            generated_floor: Some(5_000),
+            live_rebalance_borrowed_millis: 10_000,
+            max_live_rebalance_borrow_millis: 15_000,
+            next_live_retune_check_millis: 6_000,
+            ..DemoStepBudget::default()
+        };
+
+        let retune = maybe_retune_demo_budget_live(
+            &mut budget,
+            &narrative_progress_snapshot(12_000, 3_600, 500, 0),
+        )
+        .expect("recovered floor projection should return time to proof_close reserve");
+
+        assert_eq!(retune.action, DemoBudgetRetuneAction::ReturnToProofClose);
+        assert_eq!(retune.adjustment_millis, 10_000);
+        assert_eq!(budget.discovery_budget_millis, 30_000);
+        assert_eq!(budget.breadth_harvest_budget_millis, 25_000);
+        assert_eq!(budget.proof_close_reserve_millis, 30_000);
+        assert_eq!(budget.live_rebalance_borrowed_millis, 0);
     }
 
     #[test]
@@ -5008,6 +5254,10 @@ mod tests {
             event.kind == NarrativeEventKind::BudgetPulse
                 && event.phase == Some(StepPhase::Scout)
                 && event.message.contains("borrowed")
+        }));
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::PhaseChange
+                && event.phase == Some(StepPhase::BreadthHarvest)
         }));
     }
 

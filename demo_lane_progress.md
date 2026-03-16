@@ -56,10 +56,11 @@ This file is the forward-facing status snapshot for
   reserve profiles, frontloading more spill and discovery toward the next
   late step after misses while preserving explicit out-of-band reserve override
   configs such as `0.00` and `1.00` literally
-- the demo controller now also uses current-step scout throughput to retune
-  discovery versus proof-close reserve inside the same step, borrowing up to
-  half of the reserved certification slice when projected breadth floors are
-  still out of reach and surfacing that rebalance in the stored narrative
+- the demo controller now also keeps retuning discovery versus proof-close
+  reserve throughout `BreadthHarvest`, not just once at scout exit: it can
+  borrow up to half of the reserved certification slice when live generated or
+  exact-screened projections stay behind, return borrowed time when those
+  projections recover, and persist those live pulses in the event stream
 - demo materialize and proof-close now also spend the retained exact surface in
   a reserve-aware deterministic order: with healthy reserve they prioritize
   groups that can tighten the incumbent earliest, and under tight reserve they
@@ -78,6 +79,10 @@ This file is the forward-facing status snapshot for
 - demo proof-close narratives now also emit live closure milestone and
   reserve-exhaustion pulses from the search loop itself, so the reserved
   certification slice is no longer only a final report surface
+- scout-side budget retunes no longer suppress the later
+  `BreadthHarvest` phase transition: the stored narrative now keeps the phase
+  machine visible even when scout already emitted a live reserve adjustment at
+  the handoff boundary
 - the newly stored surface makes an important current gap explicit: the demo
   lane still misses the step-1 `2144` generated floor on the current search
   path, and the compare tool now reports that miss honestly instead of hiding
@@ -101,10 +106,14 @@ This file is the forward-facing status snapshot for
   reserve exhaustion or slack to retune later spill and effective proof-close
   reserve sizing inside the standard `25` to `40` percent profiles, instead of
   treating every late step as the same fixed spill split
-- `pen-search` now also performs a first scout-driven within-step rebalance of
-  discovery versus proof-close reserve, borrowing from the reserved
-  certification slice when the sampled generated or exact-screened throughput
-  still projects a breadth-floor miss under the original split
+- `pen-search` now also keeps retuning discovery versus proof-close reserve
+  throughout `BreadthHarvest`, borrowing from the reserved certification slice
+  when live generated or exact-screened throughput still projects a
+  breadth-floor miss and returning borrowed time when the projection recovers
+- scout-side reserve pulses no longer hide the later `BreadthHarvest` phase
+  transition, so the stored event stream stays aligned with the explicit
+  `Scout -> BreadthHarvest -> Materialize -> ProofClose -> Seal` machine even
+  when the controller adjusts budget at the scout boundary
 - `pen-search` can now also enter `ProofClose` from `Materialize` with the new
   `materialize_reserve_handoff` reason when a tightened incumbent already
   exists and the pending exact surface has flipped into closure-first reserve
@@ -146,26 +155,25 @@ Next target:
   widening work until the demo lane can satisfy more of the planned breadth
   floors honestly
 
-### 2. Current-Step Retuning Exists Now, But The Feedback Loop Is Still Shallow
+### 2. The Within-Step Controller Is Richer Now, But Closure Still Mostly Reorders Rather Than Replans
 
 The lane no longer treats current-step feedback as report-only evidence:
 late-step spill still reacts to stored floor misses and reserve pressure or
-slack, scout throughput can now borrow time from proof-close reserve inside the
-same step when projected breadth floors are still underwater, retained groups
-and within-group candidates reorder under live reserve pressure so tighter
-incumbents and cheap exact prunes happen earlier, and materialize can hand off
-early once the pending exact surface has already become closure-first. The
-remaining gap is that this is still a first scout-time rebalance plus later
-proof-close ordering and one reserve-pressure handoff, not a richer repeated
-within-step loop driven by live closure progress and evolving discovery
-throughput.
+slack, live `BreadthHarvest` throughput can now keep borrowing from or
+returning time to proof-close reserve while the step is still running, retained
+groups and within-group candidates reorder under live reserve pressure so
+tighter incumbents and cheap exact prunes happen earlier, and materialize can
+hand off early once the pending exact surface has already become
+closure-first. The remaining gap is that proof-close closure still mostly
+changes ordering and handoff timing; it does not yet reopen or reshape the
+earlier widening plan with a richer closure-aware replanning loop.
 
 Next target:
 
-- let live discovery pressure and proof-close closure keep retuning the
-  discovery, materialize, and certification split repeatedly throughout the
-  step, not just once from scout throughput and later from a single
-  reserve-pressure handoff
+- let proof-close closure and remaining late-step exact surface drive a richer
+  replanning loop for materialize and certification, building on the now-landed
+  repeated discovery-side reserve retunes instead of stopping at ordering and a
+  single reserve-pressure handoff
 
 ### 3. Demo Widening Is Still Mostly A Reporting Surface, Not Yet A Broader Search Surface
 
@@ -185,9 +193,9 @@ Next target:
 1. Use the new stored funnel and floor evidence to close the explicit step-1
    and early-step breadth gap, rather than leaving the compare tool to report a
    permanent miss.
-2. Extend the new scout-driven within-step rebalance into a richer live
-   controller so discovery pressure and proof-close closure keep moving budget
-   while the step is still running.
+2. Extend the now-repeated discovery-side reserve retunes into a stronger
+   closure-aware replanning loop so materialize and certification react more
+   aggressively once the remaining exact surface changes shape.
 3. Keep widening the actual demo search surface, especially on steps `10` to
    `15`, so the newly surfaced generated and exact-screened counters grow for
    real.

@@ -221,9 +221,10 @@ On the demo-lane side:
   inside the standard `25` to `40` percent profiles, while explicit out-of-band
   reserve overrides such as `0.00` and `1.00` still remain literal
 - demo search now also uses current-step scout throughput to rebalance
-  discovery versus proof-close reserve inside the same step, borrowing from
-  the reserved certification slice when the sampled floor projection is still
-  behind and surfacing that retune in the narrative
+  discovery versus proof-close reserve inside the same step, and
+  `BreadthHarvest` can now keep borrowing from or returning time to the
+  reserved certification slice while the live floor projection changes,
+  surfacing those repeated retunes directly in the narrative
 - demo materialize and proof-close now also reorder retained prefix groups from
   that live reserve/closure evidence, preferring incumbent-improving exact
   surfaces while reserve is healthy and faster prune/closure payoffs when the
@@ -233,11 +234,14 @@ On the demo-lane side:
   `materialize_reserve_handoff` reason once an incumbent exists and the
   remaining exact surface has already flipped into closure-first reserve
   pressure, instead of waiting only for the soft cap or the end of materialize
+- scout-side reserve retunes no longer suppress the later `BreadthHarvest`
+  phase change, so the stored event stream now keeps the explicit phase
+  machine visible even when scout already adjusted budget at the handoff
 - the current demo gap is not "make the lane look broader"; it is meeting the
   surfaced early and late breadth floors honestly, then turning the landed
-  spill/reserve feedback plus the landed scout-time discovery/proof-close
-  rebalance plus the landed reserve-pressure materialize handoff into a richer
-  repeated within-step controller and real widening
+  spill/reserve feedback plus the landed repeated discovery-side reserve
+  retunes plus the landed reserve-pressure materialize handoff into stronger
+  closure-aware replanning and real widening
 
 Start with the current architecture doc before diving into donor material:
 
@@ -424,11 +428,11 @@ Focus on:
   `breadth_harvest_exit_reason`, `proof_close_entry_reason`, and
   `proof_close_overrun_reason` plus the new proof-close reserve and closure
   fields as current stored truth, while remembering that the next gap is
-  broader real widening plus a richer within-step controller beyond the landed
-  proof-close ordering retune, the landed adaptive spill/reserve feedback, the
-  landed scout-time discovery/proof-close rebalance, and the landed
-  reserve-pressure materialize handoff, rather than "add counters for the
-  first time"
+  broader real widening plus stronger closure-aware replanning beyond the
+  landed proof-close ordering retune, the landed adaptive spill/reserve
+  feedback, the landed repeated discovery/proof-close reserve retunes, and the
+  landed reserve-pressure materialize handoff, rather than "add counters for
+  the first time"
 
 ### If you are working on reporting or evidence
 
