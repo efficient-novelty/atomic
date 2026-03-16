@@ -66,6 +66,11 @@ The current search-architecture focus has shifted again:
   on newly created root and child prefixes and prunes any prefix whose full
   admissible connected completion set cannot clear the current bar before that
   prefix ever enters the online work queue
+- realistic shadow now also memoizes exact multi-step partial-prefix
+  bar-clearability decisions keyed by `PrefixSignature`, reusing already-
+  proved late-step `can_clear_bar` / `cannot_clear_bar` results between the
+  early pre-queue subtree walk and later child-prefix checks inside the same
+  step
 - realistic shadow now also collapses exact single-continuation late-family
   suffixes in-place once the strengthened family summary plus active-window
   clause filtering leave only one legal child at each remaining position, so
@@ -95,6 +100,7 @@ The current search-architecture focus has shifted again:
   `incremental_terminal_admissibility_hits`, and
   `incremental_terminal_admissibility_rejections`,
   `incremental_terminal_prefix_completion_hits`,
+  `incremental_partial_prefix_bound_hits`,
   `incremental_partial_prefix_bound_checks`,
   `incremental_partial_prefix_bound_prunes`, and
   `incremental_terminal_prefix_bar_prunes`
@@ -110,9 +116,13 @@ The current search-architecture focus has shifted again:
   memory high-water bytes including `rss_bytes`, `hot_frontier_bytes`,
   `cold_frontier_bytes`, `dedupe_bytes`, and persisted frontier
   `memory_snapshot` bytes
-- stored realistic-shadow step-10 and step-11 artifacts now show
-  `incremental_partial_prefix_bound_prunes = 1`, confirming the first landed
-  earlier exact partial-prefix prune before queue entry
+- stored realistic-shadow step-10 artifacts still show
+  `incremental_partial_prefix_bound_prunes = 1`, confirming the landed earlier
+  exact partial-prefix prune before queue entry
+- fresh realistic-shadow step-11 and step-12 artifacts now also show
+  `incremental_partial_prefix_bound_hits = 1`, confirming that multi-step
+  partial-prefix bar decisions are now reused during repeated late-step prefix
+  checks
 - stored realistic-shadow step-13 and step-15 artifacts now also show
   `incremental_terminal_prefix_completion_hits = 3`, confirming that the
   one-clause-short exact terminal work is now reused instead of replayed
@@ -120,13 +130,13 @@ The current search-architecture focus has shifted again:
   clause-family impossibility prunes plus the landed active-window
   clause filtering plus the landed budgeted small-tree completion-bound prune
   plus the landed exact terminal-prefix bar prune plus the landed exact
-  terminal-prefix completion reuse, then broader non-family admissibility/
-  filter reuse beyond the landed trivial-derivability and terminal-
-  admissibility summaries plus the landed cached next-clause reuse, then
-  continuing to use the new timing/memory evidence to retune realistic
-  late-step order past the first continuation-aware queue retune, not "add a
-  frontier for the first time" or "collapse obviously forced late-family
-  suffixes for the first time"
+  terminal-prefix completion reuse plus the landed multi-step partial-prefix
+  bar-decision reuse, then broader non-family admissibility/filter reuse
+  beyond the landed trivial-derivability and terminal-admissibility summaries
+  plus the landed cached next-clause reuse, then continuing to use the new
+  timing/memory evidence to retune realistic late-step order past the first
+  continuation-aware queue retune, not "add a frontier for the first time" or
+  "collapse obviously forced late-family suffixes for the first time"
 
 Start with the current architecture doc before diving into donor material:
 
@@ -269,6 +279,7 @@ Focus on:
   terminal-admissibility memo path plus the landed terminal trivial-
   derivability reuse and terminal-prefix bar prune plus the landed exact
   small-tree partial-prefix bound prune plus the landed exact
+  multi-step partial-prefix bar-decision reuse plus the landed exact
   single-continuation suffix collapse plus the landed cached next-clause
   reuse and continuation-aware queue order, and the still-missing broader
   partial-prefix bound pruning plus broader non-family admissibility reuse
@@ -355,12 +366,13 @@ Reject designs that:
   active-window clause filtering and terminal-clause filtering and budgeted
   small-tree completion-bound prune and exact terminal-prefix bar prune plus
   the landed exact terminal-prefix completion reuse plus the landed exact
+  multi-step partial-prefix bar-decision reuse plus the landed exact
   single-continuation suffix collapse plus the landed cached next-clause
   reuse and continuation-aware queue order, then broader non-family
   admissibility/filter reuse beyond the landed legality/connectivity/family/
   active-window/terminal-clause/trivial-derivability/terminal-admissibility/
-  terminal-prefix-completion memo layer, then continuing to use the now-
-  persisted timing/memory evidence to retune late-step order.
+  terminal-prefix-completion/partial-prefix-bound memo layer, then continuing
+  to use the now-persisted timing/memory evidence to retune late-step order.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.

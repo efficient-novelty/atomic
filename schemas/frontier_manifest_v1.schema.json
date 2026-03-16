@@ -131,6 +131,12 @@
           "default": 0,
           "minimum": 0
         },
+        "incremental_partial_prefix_bound_hits": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
         "incremental_partial_prefix_bound_prunes": {
           "type": "integer",
           "format": "uint64",

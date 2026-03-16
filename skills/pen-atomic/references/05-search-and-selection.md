@@ -25,6 +25,10 @@ Before following donor material, anchor on the current Rust engine:
   summaries keyed by `PrefixSignature`, reusing admitted connected one-clause-
   short completions plus their exact completion bounds between the early
   terminal-prefix bar check and the later retained-prefix grouping
+- realistic shadow now also memoizes exact multi-step partial-prefix
+  bar-clearability decisions keyed by `PrefixSignature`, reusing already-
+  proved late-step `can_clear_bar` / `cannot_clear_bar` results between the
+  early pre-queue subtree walk and later child-prefix checks
 - reports and frontier manifests now surface
   `prefix_states_merged_by_signature` plus the plan-aligned counters
   `prefixes_created`, `full_telescopes_evaluated`,
@@ -38,14 +42,16 @@ Before following donor material, anchor on the current Rust engine:
   `incremental_clause_family_prunes`,
   `incremental_active_window_clause_filter_hits`,
   `incremental_active_window_clause_filter_prunes`,
-  `incremental_terminal_prefix_completion_hits`
+  `incremental_terminal_prefix_completion_hits`,
+  `incremental_partial_prefix_bound_hits`
 
 The important remaining gap is no longer "make prefixes first-class online
 states" because that control-flow shift has happened. The next search step is
 to move stronger sound bound reasoning beyond the landed exact clause-family
 impossibility prunes and active-window clause filtering, then extend memoized
 legality/connectivity/family reuse beyond the landed terminal admissibility
-cache plus the landed terminal-prefix completion reuse into stronger non-family
+cache plus the landed terminal-prefix completion reuse plus the landed
+multi-step partial-prefix bar-decision reuse into stronger non-family
 admissibility summaries.
 
 ## Core Strict Loop

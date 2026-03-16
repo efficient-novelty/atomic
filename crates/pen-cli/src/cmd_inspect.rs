@@ -135,6 +135,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                     .search_stats
                     .incremental_terminal_prefix_completion_hits
                     == 0
+                && step.search_stats.incremental_partial_prefix_bound_hits == 0
                 && step.search_stats.incremental_partial_prefix_bound_checks == 0
                 && step.search_stats.incremental_partial_prefix_bound_prunes == 0
                 && step.search_stats.incremental_terminal_prefix_bar_prunes == 0
@@ -142,7 +143,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 String::new()
             } else {
                 format!(
-                    "\nprefix_memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} active_window_filter_hits={} active_window_filter_prunes={} terminal_clause_filter_hits={} terminal_clause_filter_prunes={} trivial_derivability_hits={} trivial_derivability_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={} terminal_prefix_completion_hits={} partial_prefix_bound_checks={} partial_prefix_bound_prunes={} terminal_prefix_bar_prunes={}",
+                    "\nprefix_memo: legality_hits={} connectivity_shortcuts={} connectivity_fallbacks={} connectivity_prunes={} clause_family_hits={} clause_family_prunes={} active_window_filter_hits={} active_window_filter_prunes={} terminal_clause_filter_hits={} terminal_clause_filter_prunes={} trivial_derivability_hits={} trivial_derivability_prunes={} terminal_admissibility_hits={} terminal_admissibility_rejections={} terminal_prefix_completion_hits={} partial_prefix_bound_hits={} partial_prefix_bound_checks={} partial_prefix_bound_prunes={} terminal_prefix_bar_prunes={}",
                     step.search_stats.incremental_legality_cache_hits,
                     step.search_stats.incremental_connectivity_shortcuts,
                     step.search_stats.incremental_connectivity_fallbacks,
@@ -162,6 +163,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                         .incremental_terminal_admissibility_rejections,
                     step.search_stats
                         .incremental_terminal_prefix_completion_hits,
+                    step.search_stats.incremental_partial_prefix_bound_hits,
                     step.search_stats.incremental_partial_prefix_bound_checks,
                     step.search_stats.incremental_partial_prefix_bound_prunes,
                     step.search_stats.incremental_terminal_prefix_bar_prunes
@@ -232,7 +234,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 )
             });
         return Ok(format!(
-            "frontier step {} band {}\nprefix_created: {}\nprefix_explored: {}\nprefix_merged: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nlegality_hits: {}\nconnectivity_shortcuts: {}\nconnectivity_fallbacks: {}\nconnectivity_prunes: {}\nclause_family_hits: {}\nclause_family_prunes: {}\nactive_window_filter_hits: {}\nactive_window_filter_prunes: {}\nterminal_clause_filter_hits: {}\nterminal_clause_filter_prunes: {}\ntrivial_derivability_hits: {}\ntrivial_derivability_prunes: {}\nterminal_admissibility_hits: {}\nterminal_admissibility_rejections: {}\nterminal_prefix_completion_hits: {}\npartial_prefix_bound_checks: {}\npartial_prefix_bound_prunes: {}\nterminal_prefix_bar_prunes: {}\nmemory_snapshot: rss_bytes={} hot_frontier_bytes={} interner_bytes={} dedupe_bytes={} cache_bytes={}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
+            "frontier step {} band {}\nprefix_created: {}\nprefix_explored: {}\nprefix_merged: {}\nprefix_exact_pruned: {}\nprefix_heuristic_dropped: {}\nlegality_hits: {}\nconnectivity_shortcuts: {}\nconnectivity_fallbacks: {}\nconnectivity_prunes: {}\nclause_family_hits: {}\nclause_family_prunes: {}\nactive_window_filter_hits: {}\nactive_window_filter_prunes: {}\nterminal_clause_filter_hits: {}\nterminal_clause_filter_prunes: {}\ntrivial_derivability_hits: {}\ntrivial_derivability_prunes: {}\nterminal_admissibility_hits: {}\nterminal_admissibility_rejections: {}\nterminal_prefix_completion_hits: {}\npartial_prefix_bound_hits: {}\npartial_prefix_bound_checks: {}\npartial_prefix_bound_prunes: {}\nterminal_prefix_bar_prunes: {}\nmemory_snapshot: rss_bytes={} hot_frontier_bytes={} interner_bytes={} dedupe_bytes={} cache_bytes={}\nhot_states: {}\ncold_states: {}\ndedupe_keys: {}\nresume_decision: {:?}{}",
             frontier.step_index,
             frontier.band_index,
             frontier.counts.prefixes_created,
@@ -259,6 +261,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 .counts
                 .incremental_terminal_admissibility_rejections,
             frontier.counts.incremental_terminal_prefix_completion_hits,
+            frontier.counts.incremental_partial_prefix_bound_hits,
             frontier.counts.incremental_partial_prefix_bound_checks,
             frontier.counts.incremental_partial_prefix_bound_prunes,
             frontier.counts.incremental_terminal_prefix_bar_prunes,

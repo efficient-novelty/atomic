@@ -245,6 +245,8 @@ pub struct FrontierCounts {
     #[serde(default)]
     pub incremental_terminal_prefix_completion_hits: u64,
     #[serde(default)]
+    pub incremental_partial_prefix_bound_hits: u64,
+    #[serde(default)]
     pub incremental_partial_prefix_bound_checks: u64,
     #[serde(default)]
     pub incremental_partial_prefix_bound_prunes: u64,
@@ -448,6 +450,7 @@ mod tests {
                 incremental_terminal_admissibility_hits: 2_104_331,
                 incremental_terminal_admissibility_rejections: 74_220,
                 incremental_terminal_prefix_completion_hits: 184_991,
+                incremental_partial_prefix_bound_hits: 62_114,
                 incremental_partial_prefix_bound_checks: 182_440,
                 incremental_partial_prefix_bound_prunes: 41_208,
                 incremental_terminal_prefix_bar_prunes: 51_803,

@@ -33,6 +33,7 @@ pub struct PrefixLegalityCacheStats {
     pub terminal_admissibility_hits: usize,
     pub terminal_admissibility_rejections: usize,
     pub terminal_prefix_completion_hits: usize,
+    pub partial_prefix_bound_hits: usize,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -253,11 +254,18 @@ pub struct TerminalPrefixCompletionSummary {
     pub bound: Option<PrefixBound>,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum PartialPrefixBoundDecision {
+    CanClearBar,
+    CannotClearBar,
+}
+
 #[derive(Clone, Debug, Default)]
 pub struct PrefixLegalityCache {
     summaries: BTreeMap<PrefixSignature, PrefixLegalitySummary>,
     family_filters: BTreeMap<PrefixSignature, PrefixFamilyFilterSummary>,
     terminal_prefix_completions: BTreeMap<PrefixSignature, TerminalPrefixCompletionSummary>,
+    partial_prefix_bounds: BTreeMap<PrefixSignature, PartialPrefixBoundDecision>,
     stats: PrefixLegalityCacheStats,
 }
 
@@ -281,6 +289,23 @@ impl PrefixLegalityCache {
         summary: TerminalPrefixCompletionSummary,
     ) {
         self.terminal_prefix_completions.insert(signature, summary);
+    }
+
+    pub fn partial_prefix_bound_decision(
+        &mut self,
+        signature: &PrefixSignature,
+    ) -> Option<PartialPrefixBoundDecision> {
+        let decision = *self.partial_prefix_bounds.get(signature)?;
+        self.stats.partial_prefix_bound_hits += 1;
+        Some(decision)
+    }
+
+    pub fn store_partial_prefix_bound_decision(
+        &mut self,
+        signature: PrefixSignature,
+        decision: PartialPrefixBoundDecision,
+    ) {
+        self.partial_prefix_bounds.insert(signature, decision);
     }
 
     pub fn family_option_count(&self, signature: &PrefixSignature) -> Option<u8> {
@@ -498,8 +523,9 @@ impl PrefixLegalityCache {
 #[cfg(test)]
 mod tests {
     use super::{
-        PrefixAdmissibilitySummary, PrefixLegalityCache, TerminalConnectivityDecision,
-        TerminalPrefixClauseEvaluation, TerminalPrefixCompletion, TerminalPrefixCompletionSummary,
+        PartialPrefixBoundDecision, PrefixAdmissibilitySummary, PrefixLegalityCache,
+        TerminalConnectivityDecision, TerminalPrefixClauseEvaluation, TerminalPrefixCompletion,
+        TerminalPrefixCompletionSummary,
     };
     use crate::bounds::PrefixBound;
     use crate::enumerate::{EnumerationContext, build_clause_catalog};
@@ -747,5 +773,24 @@ mod tests {
                 .expect("bound should exist")
                 .can_clear_bar(Rational::new(5, 1))
         );
+    }
+
+    #[test]
+    fn partial_prefix_bound_decision_reuses_cached_exact_result() {
+        let library = library_until(10);
+        let prefix = Telescope::new(Telescope::reference(11).clauses[..3].to_vec());
+        let signature = PrefixSignature::new(11, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        cache.store_partial_prefix_bound_decision(
+            signature.clone(),
+            PartialPrefixBoundDecision::CanClearBar,
+        );
+
+        assert_eq!(
+            cache.partial_prefix_bound_decision(&signature),
+            Some(PartialPrefixBoundDecision::CanClearBar)
+        );
+        assert_eq!(cache.stats().partial_prefix_bound_hits, 1);
     }
 }

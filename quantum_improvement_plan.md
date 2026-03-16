@@ -68,6 +68,10 @@ The repo is already past the original "just add a prefix frontier" stage.
   expose:
   - `incremental_trivial_derivability_hits`
   - `incremental_trivial_derivability_prunes`
+- realistic shadow now also memoizes exact multi-step partial-prefix
+  bar-clearability decisions keyed by `PrefixSignature`, and stored artifacts
+  expose:
+  - `incremental_partial_prefix_bound_hits`
 - realistic shadow now also exposes the first exact partial-prefix
   completion-bound payoff counters from stored artifacts:
   - `incremental_partial_prefix_bound_checks`
@@ -188,6 +192,7 @@ Primary:
 - `full_telescopes_evaluated`
 - `canonical_dedupe_prunes`
 - `semantic_minimality_prunes`
+- `incremental_partial_prefix_bound_hits`
 - `incremental_partial_prefix_bound_checks`
 - `incremental_partial_prefix_bound_prunes`
 - `incremental_terminal_prefix_bar_prunes`
@@ -215,10 +220,11 @@ Next metrics to add:
    small-tree completion-bound prune and the landed one-clause-short
    terminal-prefix bar prune, without inventing unsound `nu_upper` logic.
 2. Extend the landed legality/connectivity/family/active-window/terminal-
-   clause/trivial-derivability/terminal-admissibility memo layer into further
-   exact admissibility and late-family filter reuse keyed by strengthened
-   `PrefixSignature` state.
-3. Use `incremental_partial_prefix_bound_checks`,
+   clause/trivial-derivability/terminal-admissibility/multi-step partial-
+   prefix bar-decision memo layer into further exact admissibility and late-
+   family filter reuse keyed by strengthened `PrefixSignature` state.
+3. Use `incremental_partial_prefix_bound_hits`,
+   `incremental_partial_prefix_bound_checks`,
    `incremental_partial_prefix_bound_prunes`,
    `incremental_terminal_prefix_bar_prunes`, and the persisted timing/memory
    telemetry to retune late-step prefix priority/order.

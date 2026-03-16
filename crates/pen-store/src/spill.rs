@@ -56,6 +56,7 @@ pub struct FrontierRuntimeInput<const N: usize> {
     pub incremental_terminal_admissibility_hits: u64,
     pub incremental_terminal_admissibility_rejections: u64,
     pub incremental_terminal_prefix_completion_hits: u64,
+    pub incremental_partial_prefix_bound_hits: u64,
     pub incremental_partial_prefix_bound_checks: u64,
     pub incremental_partial_prefix_bound_prunes: u64,
     pub incremental_terminal_prefix_bar_prunes: u64,
@@ -215,6 +216,7 @@ pub fn persist_frontier_runtime<const N: usize>(
                 .incremental_terminal_admissibility_rejections,
             incremental_terminal_prefix_completion_hits: input
                 .incremental_terminal_prefix_completion_hits,
+            incremental_partial_prefix_bound_hits: input.incremental_partial_prefix_bound_hits,
             incremental_partial_prefix_bound_checks: input.incremental_partial_prefix_bound_checks,
             incremental_partial_prefix_bound_prunes: input.incremental_partial_prefix_bound_prunes,
             incremental_terminal_prefix_bar_prunes: input.incremental_terminal_prefix_bar_prunes,
@@ -356,6 +358,7 @@ mod tests {
             incremental_terminal_admissibility_hits: 7,
             incremental_terminal_admissibility_rejections: 2,
             incremental_terminal_prefix_completion_hits: 5,
+            incremental_partial_prefix_bound_hits: 3,
             incremental_partial_prefix_bound_checks: 4,
             incremental_partial_prefix_bound_prunes: 1,
             incremental_terminal_prefix_bar_prunes: 3,
@@ -436,6 +439,7 @@ mod tests {
             artifacts.counts.incremental_terminal_prefix_completion_hits,
             5
         );
+        assert_eq!(artifacts.counts.incremental_partial_prefix_bound_hits, 3);
         assert_eq!(artifacts.counts.incremental_partial_prefix_bound_checks, 4);
         assert_eq!(artifacts.counts.incremental_partial_prefix_bound_prunes, 1);
         assert_eq!(artifacts.counts.incremental_terminal_prefix_bar_prunes, 3);

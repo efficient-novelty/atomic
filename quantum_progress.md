@@ -62,6 +62,10 @@ guarded 15-step canon.
   on newly created realistic-shadow root and child prefixes and prunes any
   prefix whose full admissible connected completion set cannot clear the
   current bar before that prefix ever enters the online work queue.
+- realistic shadow now also memoizes exact multi-step partial-prefix
+  bar-clearability decisions keyed by `PrefixSignature`, reusing already-
+  proved `can_clear_bar` and `cannot_clear_bar` results between the early
+  pre-queue subtree walk and later child-prefix checks inside the same step.
 - realistic shadow now also collapses exact single-continuation late-family
   suffixes in-place once the strengthened family summary plus active-window
   clause filtering leave only one legal child at each remaining position,
@@ -108,6 +112,7 @@ guarded 15-step canon.
   - `incremental_terminal_admissibility_hits`
   - `incremental_terminal_admissibility_rejections`
   - `incremental_terminal_prefix_completion_hits`
+  - `incremental_partial_prefix_bound_hits`
   - `incremental_partial_prefix_bound_checks`
   - `incremental_partial_prefix_bound_prunes`
   - `incremental_terminal_prefix_bar_prunes`
@@ -127,10 +132,15 @@ guarded 15-step canon.
   - `cold_frontier_bytes`
   - `dedupe_bytes`
   - plus persisted frontier `memory_snapshot` bytes in frontier manifests
-- stored realistic-shadow step-10 and step-11 artifacts now show the first
-  landed earlier exact partial-prefix prune before queue entry via
-  `incremental_partial_prefix_bound_prunes = 1`, and the realistic step-11
-  queue now drops to `prefix_states_explored = 1`.
+- stored realistic-shadow step-10 artifacts still show the landed earlier
+  exact partial-prefix prune before queue entry via
+  `incremental_partial_prefix_bound_prunes = 1`.
+- fresh realistic-shadow step-11 and step-12 artifacts now also show
+  `incremental_partial_prefix_bound_hits = 1`, confirming the new multi-step
+  partial-prefix bar-decision reuse on repeated late-step prefix checks; the
+  current realistic step-11 artifact now carries its remaining exact late
+  prune as `incremental_terminal_prefix_bar_prunes = 1` while still keeping
+  `full_telescopes_evaluated = 1`.
 - stored realistic-shadow step-13 and step-15 artifacts now also show
   `incremental_terminal_prefix_completion_hits = 3`, while the repeated
   terminal clause-filter, terminal-admissibility, and terminal-connectivity
@@ -159,6 +169,8 @@ it as if it were still missing:
   assembly
 - reusing exact terminal-prefix completion summaries between the early
   terminal-prefix bar check and the later retained-prefix grouping
+- reusing exact multi-step partial-prefix bar decisions between repeated
+  realistic-shadow subtree checks inside the same step
 - landing an earlier exact small-tree partial-prefix bar prune before doomed
   realistic-shadow prefixes enter the online queue
 - landing an earlier exact terminal-prefix bar prune before retained-prefix
@@ -191,9 +203,10 @@ larger late-step continuation surfaces without exact subtree expansion.
 
 The strengthened signature is now used for incremental legality/connectivity
 reuse, exact clause-family feasibility pruning, active-window clause filtering,
-cached next-clause reuse inside the online work queue, an explicit terminal-
-clause admissibility filter, terminal trivial-derivability pruning, and cached
-terminal admissibility decisions plus exact terminal-prefix completion reuse,
+cached next-clause reuse inside the online work queue, exact multi-step
+partial-prefix bar-decision reuse, an explicit terminal-clause admissibility
+filter, terminal trivial-derivability pruning, and cached terminal
+admissibility decisions plus exact terminal-prefix completion reuse,
 but it is not yet used for:
 
 - stronger exact reuse of non-family admissibility structure before the full
@@ -218,16 +231,17 @@ ordering pass.
   impossibility pruning, the landed active-window clause filtering, the landed
   budgeted small-tree completion-bound prune, and the landed terminal-prefix
   bar prune
-- use the new active-window, terminal-clause, trivial-derivability, and
-  terminal-admissibility payoff counters together with
+- use the new `incremental_partial_prefix_bound_hits` counter together with the
+  active-window, terminal-clause, trivial-derivability, and terminal-
+  admissibility payoff counters plus
   `incremental_terminal_prefix_completion_hits` and
   `incremental_terminal_prefix_bar_prunes` to target broader exact
   admissibility/filter reuse
-- use the now-lower `prefix_states_explored` counts from the landed exact
+- use the current `prefix_states_explored` counts after the landed exact
   single-continuation suffix collapse plus the landed cached next-clause reuse
-  and continuation-aware queue order to isolate the remaining prefixes that
-  still need stronger partial-prefix bounds or broader non-family
-  admissibility reuse
+  and continuation-aware queue order and the new multi-step partial-prefix
+  bar-decision reuse to isolate the remaining prefixes that still need
+  stronger partial-prefix bounds or broader non-family admissibility reuse
 - use the now-persisted timing telemetry and deterministic frontier memory
   high-water metrics from stored step summaries and inspect output to identify
   which late-step prefix lanes still do redundant work after the landed
@@ -253,13 +267,13 @@ ordering pass.
    small-tree completion-bound prune, and the one-clause-short terminal-prefix
    bar prune without unsound inference.
 2. Extend the landed legality/connectivity/family/active-window/terminal-
-   clause/trivial-derivability/terminal-admissibility memo path into another
-   exact admissibility summary that fires before the full terminal telescope is
-   assembled.
-3. Use the expanded memo counters together with the landed continuation-aware
-   queue order and the now-persisted timing telemetry and frontier memory
-   high-water metrics from stored artifacts to continue retuning late-step
-   prefix priority/order.
+   clause/trivial-derivability/terminal-admissibility/multi-step partial-
+   prefix bar-decision memo path into another exact admissibility summary that
+   fires before the full terminal telescope is assembled.
+3. Use `incremental_partial_prefix_bound_hits` plus the expanded memo counters
+   together with the landed continuation-aware queue order and the now-
+   persisted timing telemetry and frontier memory high-water metrics from
+   stored artifacts to continue retuning late-step prefix priority/order.
 
 ## Guardrails
 
@@ -277,12 +291,14 @@ Latest relevant verification:
 - `cargo test -p pen-type -p pen-search -p pen-cli -p pen-store`
 - fresh `cargo run -p pen-cli -- run --config
   configs/realistic_frontier_shadow.toml --root runs --run-id
-  codex-terminal-prefix-completion --until-step 15`
-- inspect-backed `runs/codex-terminal-prefix-completion` artifacts preserve
-  the accepted sequence while keeping the landed late doomed branch at steps
-  10 and 11 in `incremental_partial_prefix_bound_prunes = 1`, and now also
-  show `incremental_terminal_prefix_completion_hits = 3` at realistic steps 13
-  and 15 while the repeated terminal clause-filter, terminal-admissibility,
-  and terminal-connectivity counters on those steps drop to `2`; steps 13 and
-  15 still stay at `prefix_states_explored = 3`, with per-step timing at `1`
-  to `2` ms and hot-frontier bytes at `128`
+  codex-partial-prefix-bound-hits --until-step 15`
+- inspect-backed `runs/codex-partial-prefix-bound-hits` artifacts preserve the
+  accepted sequence while showing `incremental_partial_prefix_bound_hits = 1`
+  at realistic steps 11 and 12, keeping the earlier exact queue-entry prune at
+  step 10 in `incremental_partial_prefix_bound_prunes = 1`, and still showing
+  `incremental_terminal_prefix_completion_hits = 3` at realistic steps 13 and
+  15; the current realistic step-11 artifact now carries its remaining exact
+  late prune as `incremental_terminal_prefix_bar_prunes = 1` with
+  `full_telescopes_evaluated = 1`, while steps 13 and 15 still stay at
+  `prefix_states_explored = 3`, per-step timing remains at `0` to `2` ms, and
+  hot-frontier bytes remain at `128`
