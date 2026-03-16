@@ -2406,7 +2406,7 @@ mod tests {
         assert_eq!(step.prefix_frontier_hot_states, 2);
         assert_eq!(step.prefix_frontier_cold_states, 0);
         assert!(step.incremental_legality_cache_hits > 0);
-        assert!(step.incremental_connectivity_fallbacks > 0);
+        assert_eq!(step.incremental_connectivity_fallbacks, 0);
         assert!(step.incremental_clause_family_filter_hits > 0);
         assert!(step.incremental_active_window_clause_filter_hits > 0);
         assert!(step.incremental_terminal_clause_filter_hits > 0);

@@ -13,7 +13,7 @@ use pen_type::admissibility::{
     StructuralFamilyMatchMask, assess_strict_admissibility_from_terminal_summary,
 };
 use pen_type::check::CheckSummary;
-use pen_type::connectivity::ConnectivitySummary;
+use pen_type::connectivity::{ConnectivitySummary, HistoricalReanchorSummary};
 use std::collections::BTreeMap;
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
@@ -41,6 +41,7 @@ struct PrefixLegalitySummary {
     check: CheckSummary,
     connectivity: ConnectivitySummary,
     admissibility: PrefixAdmissibilitySummary,
+    reanchor: HistoricalReanchorSummary,
 }
 
 impl PrefixLegalitySummary {
@@ -49,6 +50,7 @@ impl PrefixLegalitySummary {
             check: CheckSummary::from_telescope(library, prefix_telescope).ok()?,
             connectivity: ConnectivitySummary::from_telescope(library, prefix_telescope),
             admissibility: PrefixAdmissibilitySummary::from_telescope(prefix_telescope),
+            reanchor: HistoricalReanchorSummary::from_telescope(library, prefix_telescope),
         })
     }
 
@@ -57,6 +59,7 @@ impl PrefixLegalitySummary {
             check: self.check.extend_clause(library.len(), clause).ok()?,
             connectivity: self.connectivity.clone().extend(library, clause),
             admissibility: self.admissibility.extend(clause),
+            reanchor: self.reanchor.extend(clause),
         })
     }
 }
@@ -398,7 +401,9 @@ impl PrefixLegalityCache {
             self.stats.connectivity_prunes += 1;
             return Some(TerminalConnectivityDecision::PruneDisconnected);
         }
-        if terminal_summary.connectivity.passes_without_reanchor() {
+        if terminal_summary.connectivity.passes_without_reanchor()
+            || terminal_summary.reanchor.allows_historical_reanchor()
+        {
             self.stats.connectivity_shortcuts += 1;
             return Some(TerminalConnectivityDecision::KeepWithoutFallback);
         }
@@ -591,7 +596,7 @@ mod tests {
     }
 
     #[test]
-    fn temporal_shell_terminal_summary_flags_reanchor_fallback() {
+    fn temporal_shell_terminal_summary_shortcuts_historical_reanchor() {
         let library = library_until(14);
         let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
         let last_clause = Telescope::reference(15)
@@ -607,10 +612,11 @@ mod tests {
         assert!(cache.insert_root(signature.clone(), 8, &library, &prefix, admissibility));
         assert_eq!(
             cache.terminal_connectivity(&signature, &library, &last_clause),
-            Some(TerminalConnectivityDecision::NeedsFallback)
+            Some(TerminalConnectivityDecision::KeepWithoutFallback)
         );
         assert_eq!(cache.stats().legality_hits, 1);
-        assert_eq!(cache.stats().connectivity_fallbacks, 1);
+        assert_eq!(cache.stats().connectivity_shortcuts, 1);
+        assert_eq!(cache.stats().connectivity_fallbacks, 0);
     }
 
     #[test]

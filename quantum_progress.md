@@ -32,6 +32,10 @@ guarded 15-step canon.
   placeholders.
 - `PrefixLegalityCache` now reuses incremental legality/connectivity summaries
   keyed by `PrefixSignature` during realistic online prefix expansion.
+- realistic shadow now also keeps an exact incremental historical-reanchor
+  summary keyed by `PrefixSignature`, so temporal-shell terminal continuations
+  that already satisfy the modal-to-temporal reanchor pattern can clear
+  connectivity without rebuilding a full fallback telescope.
 - realistic shadow now also keeps an exact incremental clause-family
   feasibility summary keyed by `PrefixSignature`, pruning mixed late-family
   prefixes as soon as no admissible structural family remains.
@@ -143,9 +147,14 @@ guarded 15-step canon.
   `full_telescopes_evaluated = 1`.
 - stored realistic-shadow step-13 and step-15 artifacts now also show
   `incremental_terminal_prefix_completion_hits = 3`, while the repeated
-  terminal clause-filter, terminal-admissibility, and terminal-connectivity
-  counters on those steps drop from `5` to `2` because the one-clause-short
-  terminal work is reused instead of replayed during retained-prefix grouping.
+  terminal clause-filter and terminal-admissibility counters on those steps
+  drop from `5` to `2` because the one-clause-short terminal work is reused
+  instead of replayed during retained-prefix grouping.
+- fresh realistic-shadow step-15 artifacts now also show the landed exact
+  historical-reanchor shortcut: `incremental_connectivity_shortcuts = 2` and
+  `incremental_connectivity_fallbacks = 0`, so temporal-shell terminal
+  continuations no longer rebuild full fallback telescopes just to confirm the
+  already-cached modal-to-temporal reanchor.
 
 ## What Is No Longer A Gap
 
@@ -169,6 +178,8 @@ it as if it were still missing:
   assembly
 - reusing exact terminal-prefix completion summaries between the early
   terminal-prefix bar check and the later retained-prefix grouping
+- shortcutting exact historical reanchor terminal connectivity for temporal-
+  shell continuations before full fallback telescope assembly
 - reusing exact multi-step partial-prefix bar decisions between repeated
   realistic-shadow subtree checks inside the same step
 - landing an earlier exact small-tree partial-prefix bar prune before doomed
@@ -206,7 +217,8 @@ reuse, exact clause-family feasibility pruning, active-window clause filtering,
 cached next-clause reuse inside the online work queue, exact multi-step
 partial-prefix bar-decision reuse, an explicit terminal-clause admissibility
 filter, terminal trivial-derivability pruning, and cached terminal
-admissibility decisions plus exact terminal-prefix completion reuse,
+admissibility decisions plus exact terminal-prefix completion reuse plus the
+exact historical-reanchor connectivity shortcut for temporal-shell terminals,
 but it is not yet used for:
 
 - stronger exact reuse of non-family admissibility structure before the full
@@ -232,8 +244,8 @@ ordering pass.
   budgeted small-tree completion-bound prune, and the landed terminal-prefix
   bar prune
 - use the new `incremental_partial_prefix_bound_hits` counter together with the
-  active-window, terminal-clause, trivial-derivability, and terminal-
-  admissibility payoff counters plus
+  active-window, terminal-clause, trivial-derivability, terminal-
+  admissibility, and connectivity-shortcut payoff counters plus
   `incremental_terminal_prefix_completion_hits` and
   `incremental_terminal_prefix_bar_prunes` to target broader exact
   admissibility/filter reuse
@@ -291,14 +303,15 @@ Latest relevant verification:
 - `cargo test -p pen-type -p pen-search -p pen-cli -p pen-store`
 - fresh `cargo run -p pen-cli -- run --config
   configs/realistic_frontier_shadow.toml --root runs --run-id
-  codex-partial-prefix-bound-hits --until-step 15`
-- inspect-backed `runs/codex-partial-prefix-bound-hits` artifacts preserve the
-  accepted sequence while showing `incremental_partial_prefix_bound_hits = 1`
-  at realistic steps 11 and 12, keeping the earlier exact queue-entry prune at
-  step 10 in `incremental_partial_prefix_bound_prunes = 1`, and still showing
-  `incremental_terminal_prefix_completion_hits = 3` at realistic steps 13 and
-  15; the current realistic step-11 artifact now carries its remaining exact
-  late prune as `incremental_terminal_prefix_bar_prunes = 1` with
-  `full_telescopes_evaluated = 1`, while steps 13 and 15 still stay at
-  `prefix_states_explored = 3`, per-step timing remains at `0` to `2` ms, and
-  hot-frontier bytes remain at `128`
+  codex-historical-reanchor --until-step 15`
+- inspect-backed `runs/codex-historical-reanchor` artifacts preserve the
+  accepted sequence while keeping the earlier exact queue-entry prune at step
+  10 in `incremental_partial_prefix_bound_prunes = 1`, showing
+  `incremental_partial_prefix_bound_hits = 1` and
+  `incremental_terminal_prefix_bar_prunes = 1` at realistic step 11, and
+  keeping `incremental_terminal_prefix_completion_hits = 3` at realistic step
+  15 while the new historical-reanchor shortcut moves that step to
+  `incremental_connectivity_shortcuts = 2` and
+  `incremental_connectivity_fallbacks = 0`; realistic step 15 still stays at
+  `prefix_states_explored = 3`, `full_telescopes_evaluated = 2`, per-step
+  timing remains at `1` ms, and hot-frontier bytes remain at `128`

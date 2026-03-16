@@ -38,6 +38,10 @@ The current search-architecture focus has shifted again:
   and structural family flags for future d = 2 memoization
 - realistic shadow now has a real `PrefixLegalityCache` that reuses
   incremental legality/connectivity summaries keyed by `PrefixSignature`
+- realistic shadow now also keeps an exact incremental historical-reanchor
+  summary keyed by `PrefixSignature`, shortcutting temporal-shell terminal
+  connectivity when the cached prefix already proves the modal-to-temporal
+  reanchor shape
 - realistic shadow now also keeps an exact incremental clause-family
   feasibility summary keyed by `PrefixSignature`, pruning mixed late-family
   prefixes before they reach terminal admissibility
@@ -126,14 +130,20 @@ The current search-architecture focus has shifted again:
 - stored realistic-shadow step-13 and step-15 artifacts now also show
   `incremental_terminal_prefix_completion_hits = 3`, confirming that the
   one-clause-short exact terminal work is now reused instead of replayed
+- fresh realistic-shadow step-15 artifacts now also show
+  `incremental_connectivity_shortcuts = 2` and
+  `incremental_connectivity_fallbacks = 0`, confirming that temporal-shell
+  terminal connectivity now uses the landed historical-reanchor shortcut
+  instead of rebuilding fallback telescopes
 - the next gap is stronger sound bound pruning beyond the landed exact
   clause-family impossibility prunes plus the landed active-window
   clause filtering plus the landed budgeted small-tree completion-bound prune
   plus the landed exact terminal-prefix bar prune plus the landed exact
   terminal-prefix completion reuse plus the landed multi-step partial-prefix
-  bar-decision reuse, then broader non-family admissibility/filter reuse
-  beyond the landed trivial-derivability and terminal-admissibility summaries
-  plus the landed cached next-clause reuse, then continuing to use the new
+  bar-decision reuse plus the landed exact historical-reanchor connectivity
+  shortcut, then broader non-family admissibility/filter reuse beyond the
+  landed trivial-derivability and terminal-admissibility summaries plus the
+  landed cached next-clause reuse, then continuing to use the new
   timing/memory evidence to retune realistic late-step order past the first
   continuation-aware queue retune, not "add a frontier for the first time" or
   "collapse obviously forced late-family suffixes for the first time"
@@ -280,16 +290,18 @@ Focus on:
   derivability reuse and terminal-prefix bar prune plus the landed exact
   small-tree partial-prefix bound prune plus the landed exact
   multi-step partial-prefix bar-decision reuse plus the landed exact
-  single-continuation suffix collapse plus the landed cached next-clause
-  reuse and continuation-aware queue order, and the still-missing broader
-  partial-prefix bound pruning plus broader non-family admissibility reuse
+  single-continuation suffix collapse plus the landed exact historical-
+  reanchor connectivity shortcut plus the landed cached next-clause reuse and
+  continuation-aware queue order, and the still-missing broader partial-
+  prefix bound pruning plus broader non-family admissibility reuse
 - using strengthened `PrefixSignature` state, the landed memo counters, the
   now-persisted timing telemetry, and the deterministic frontier memory
   high-water metrics as the remaining bound/admissibility gaps past the landed
   clause-family pruning, active-window clause filtering, terminal-clause
-  filtering, terminal-admissibility cache, budgeted small-tree partial-prefix
-  bound prune, cached next-clause reuse, and terminal-prefix bar prune as the
-  starting point for further quantum-inspired search work
+  filtering, terminal-admissibility cache, exact historical-reanchor
+  connectivity shortcut, budgeted small-tree partial-prefix bound prune,
+  cached next-clause reuse, and terminal-prefix bar prune as the starting
+  point for further quantum-inspired search work
 
 ### If you are working on reporting or evidence
 
@@ -367,10 +379,11 @@ Reject designs that:
   small-tree completion-bound prune and exact terminal-prefix bar prune plus
   the landed exact terminal-prefix completion reuse plus the landed exact
   multi-step partial-prefix bar-decision reuse plus the landed exact
-  single-continuation suffix collapse plus the landed cached next-clause
-  reuse and continuation-aware queue order, then broader non-family
-  admissibility/filter reuse beyond the landed legality/connectivity/family/
-  active-window/terminal-clause/trivial-derivability/terminal-admissibility/
+  single-continuation suffix collapse plus the landed exact historical-
+  reanchor connectivity shortcut plus the landed cached next-clause reuse and
+  continuation-aware queue order, then broader non-family admissibility/
+  filter reuse beyond the landed legality/connectivity/family/active-window/
+  terminal-clause/trivial-derivability/terminal-admissibility/
   terminal-prefix-completion/partial-prefix-bound memo layer, then continuing
   to use the now-persisted timing/memory evidence to retune late-step order.
 - Other big unfinished areas remain broader anti-junk frontier design,
