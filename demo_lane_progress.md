@@ -56,6 +56,10 @@ This file is the forward-facing status snapshot for
   reserve profiles, frontloading more spill and discovery toward the next
   late step after misses while preserving explicit out-of-band reserve override
   configs such as `0.00` and `1.00` literally
+- the demo controller now also uses current-step scout throughput to retune
+  discovery versus proof-close reserve inside the same step, borrowing up to
+  half of the reserved certification slice when projected breadth floors are
+  still out of reach and surfacing that rebalance in the stored narrative
 - demo materialize and proof-close now also spend the retained exact surface in
   a reserve-aware deterministic order: with healthy reserve they prioritize
   groups that can tighten the incumbent earliest, and under tight reserve they
@@ -97,6 +101,10 @@ This file is the forward-facing status snapshot for
   reserve exhaustion or slack to retune later spill and effective proof-close
   reserve sizing inside the standard `25` to `40` percent profiles, instead of
   treating every late step as the same fixed spill split
+- `pen-search` now also performs a first scout-driven within-step rebalance of
+  discovery versus proof-close reserve, borrowing from the reserved
+  certification slice when the sampled generated or exact-screened throughput
+  still projects a breadth-floor miss under the original split
 - `pen-search` can now also enter `ProofClose` from `Materialize` with the new
   `materialize_reserve_handoff` reason when a tightened incumbent already
   exists and the pending exact surface has flipped into closure-first reserve
@@ -138,24 +146,26 @@ Next target:
   widening work until the demo lane can satisfy more of the planned breadth
   floors honestly
 
-### 2. ProofClose Now Retunes Planning, But The Current-Step Feedback Loop Is Still Shallow
+### 2. Current-Step Retuning Exists Now, But The Feedback Loop Is Still Shallow
 
-The lane no longer treats proof-close reserve and closure as report-only
-evidence: retained groups and within-group candidates now reorder under live
-reserve pressure so tighter incumbents and cheap exact prunes happen earlier,
-later late-step spill now reacts to stored floor misses and reserve pressure or
-slack, and materialize can hand off early once the pending exact surface has
-already become closure-first. The remaining gap is that this is still mostly a
-step-to-step retune plus a single handoff trigger, not a richer within-step
-feedback loop driven by current-step scout throughput and live closure
-progress.
+The lane no longer treats current-step feedback as report-only evidence:
+late-step spill still reacts to stored floor misses and reserve pressure or
+slack, scout throughput can now borrow time from proof-close reserve inside the
+same step when projected breadth floors are still underwater, retained groups
+and within-group candidates reorder under live reserve pressure so tighter
+incumbents and cheap exact prunes happen earlier, and materialize can hand off
+early once the pending exact surface has already become closure-first. The
+remaining gap is that this is still a first scout-time rebalance plus later
+proof-close ordering and one reserve-pressure handoff, not a richer repeated
+within-step loop driven by live closure progress and evolving discovery
+throughput.
 
 Next target:
 
-- let current-step scout throughput plus live proof-close reserve and closure
-  counters keep reallocating discovery, materialize, and proof-close budget
-  throughout the step, not just between steps or at one reserve-pressure
-  handoff
+- let live discovery pressure and proof-close closure keep retuning the
+  discovery, materialize, and certification split repeatedly throughout the
+  step, not just once from scout throughput and later from a single
+  reserve-pressure handoff
 
 ### 3. Demo Widening Is Still Mostly A Reporting Surface, Not Yet A Broader Search Surface
 
@@ -175,9 +185,9 @@ Next target:
 1. Use the new stored funnel and floor evidence to close the explicit step-1
    and early-step breadth gap, rather than leaving the compare tool to report a
    permanent miss.
-2. Push the new adaptive spill, reserve, and handoff retune deeper into a real
-   within-step controller so scout throughput and live closure keep moving
-   budget while the step is still running.
+2. Extend the new scout-driven within-step rebalance into a richer live
+   controller so discovery pressure and proof-close closure keep moving budget
+   while the step is still running.
 3. Keep widening the actual demo search surface, especially on steps `10` to
    `15`, so the newly surfaced generated and exact-screened counters grow for
    real.

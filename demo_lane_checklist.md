@@ -100,6 +100,9 @@ with 5-minute and 15-minute variants using the same lane.
 - [x] During `Scout`, measure:
       prefix generation rate, admissibility rate, exact-bound rate, and full
       evaluation rate on this computer.
+- [x] After `Scout`, let sampled throughput retune discovery versus
+      proof-close reserve when the current-step floor projection is still under
+      pressure.
 - [x] During `BreadthHarvest`, keep widening until breadth floors are met or
       proof-close reserve must be protected.
 - [x] During `Materialize`, enforce a soft cap on full terminal evaluations.
