@@ -5,11 +5,14 @@ use pen_core::library::{Library, LibraryEntry};
 use pen_core::rational::Rational;
 use pen_core::telescope::{Telescope, TelescopeClass};
 use pen_eval::bar::{DiscoveryRecord, compute_bar};
-use pen_search::config::SearchProfile;
+use pen_search::config::{RuntimeConfig, SearchProfile};
 use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
 use pen_search::engine::{
-    AtomicSearchStep, CandidateScoreDistribution, DedupePruneEvidence, FrontierRetentionOutcome,
-    MinimalityPruneEvidence, search_bootstrap_from_prefix_for_profile_with_runtime,
+    AtomicSearchStep, CandidateScoreDistribution, DedupePruneEvidence, DemoBudgetSeed,
+    FrontierRetentionOutcome, MinimalityPruneEvidence,
+    search_bootstrap_from_prefix_for_config_with_runtime_and_seed,
+    search_bootstrap_from_prefix_for_profile_with_runtime,
+    search_bootstrap_prefix_for_config_with_runtime,
     search_bootstrap_prefix_for_profile_with_runtime, supports_live_atomic_search,
 };
 use pen_search::expand::evaluate_candidate;
@@ -477,6 +480,33 @@ pub fn generate_steps_with_runtime(
     )
 }
 
+pub fn generate_steps_with_config_and_runtime(
+    until_step: u32,
+    config: &RuntimeConfig,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<GeneratedSteps> {
+    if supports_live_atomic_search(until_step) {
+        let steps = search_bootstrap_prefix_for_config_with_runtime(
+            until_step,
+            config.objective.window_depth,
+            config,
+            retention_runtime,
+        )?
+        .into_iter()
+        .map(step_to_report)
+        .collect();
+        return Ok(GeneratedSteps {
+            mode: StepGenerationMode::AtomicBootstrapSearch,
+            steps: finalize_step_reports(steps, config.objective.window_depth)?,
+        });
+    }
+
+    Ok(GeneratedSteps {
+        mode: StepGenerationMode::ReferenceReplay,
+        steps: replay_reference_steps(until_step, config.objective.window_depth)?,
+    })
+}
+
 pub fn generate_steps_for_profile_with_runtime(
     until_step: u32,
     window_depth: u16,
@@ -528,6 +558,53 @@ pub fn extend_steps_from_reports_with_runtime(
         SearchProfile::StrictCanonGuarded,
         retention_runtime,
     )
+}
+
+pub fn extend_steps_from_reports_with_config_and_runtime(
+    existing_steps: &[StepReport],
+    until_step: u32,
+    config: &RuntimeConfig,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<GeneratedSteps> {
+    let completed_step = existing_steps
+        .last()
+        .map(|step| step.step_index)
+        .unwrap_or(0);
+    if completed_step >= until_step {
+        let mut steps = existing_steps.to_vec();
+        steps.truncate(until_step as usize);
+        return Ok(GeneratedSteps {
+            mode: StepGenerationMode::StepCheckpointResume,
+            steps: finalize_step_reports(steps, config.objective.window_depth)?,
+        });
+    }
+
+    ensure_contiguous_steps(existing_steps)?;
+
+    if supports_live_atomic_search(until_step) {
+        let mut steps = existing_steps.to_vec();
+        let telescopes = existing_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let resumed = search_bootstrap_from_prefix_for_config_with_runtime_and_seed(
+            &telescopes,
+            until_step,
+            config.objective.window_depth,
+            config,
+            retention_runtime,
+            demo_budget_seed(existing_steps),
+        )?
+        .into_iter()
+        .map(|step| step_to_report_with_provenance(step, StepProvenance::StepCheckpointResume));
+        steps.extend(resumed);
+        return Ok(GeneratedSteps {
+            mode: StepGenerationMode::StepCheckpointResume,
+            steps: finalize_step_reports(steps, config.objective.window_depth)?,
+        });
+    }
+
+    generate_steps_with_config_and_runtime(until_step, config, retention_runtime)
 }
 
 pub fn extend_steps_from_reports_for_profile_with_runtime(
@@ -609,6 +686,51 @@ pub fn reevaluate_steps_from_reports_with_runtime(
         SearchProfile::StrictCanonGuarded,
         retention_runtime,
     )
+}
+
+pub fn reevaluate_steps_from_reports_with_config_and_runtime(
+    existing_steps: &[StepReport],
+    until_step: u32,
+    config: &RuntimeConfig,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<GeneratedSteps> {
+    ensure_contiguous_steps(existing_steps)?;
+
+    let prefix_len = existing_steps.len().min(until_step as usize);
+    let prefix_telescopes = existing_steps
+        .iter()
+        .take(prefix_len)
+        .map(|step| step.telescope.clone())
+        .collect::<Vec<_>>();
+    let mut steps = reevaluate_prefix_steps(&prefix_telescopes, config.objective.window_depth)?;
+    preserve_search_timing(existing_steps, &mut steps);
+
+    if u32::try_from(prefix_len).expect("prefix length exceeded u32") >= until_step {
+        return Ok(GeneratedSteps {
+            mode: StepGenerationMode::StepCheckpointReevaluate,
+            steps: finalize_step_reports(steps, config.objective.window_depth)?,
+        });
+    }
+
+    if supports_live_atomic_search(until_step) {
+        let resumed = search_bootstrap_from_prefix_for_config_with_runtime_and_seed(
+            &prefix_telescopes,
+            until_step,
+            config.objective.window_depth,
+            config,
+            retention_runtime,
+            demo_budget_seed(existing_steps),
+        )?
+        .into_iter()
+        .map(|step| step_to_report_with_provenance(step, StepProvenance::StepCheckpointReevaluate));
+        steps.extend(resumed);
+        return Ok(GeneratedSteps {
+            mode: StepGenerationMode::StepCheckpointReevaluate,
+            steps: finalize_step_reports(steps, config.objective.window_depth)?,
+        });
+    }
+
+    generate_steps_with_config_and_runtime(until_step, config, retention_runtime)
 }
 
 pub fn reevaluate_steps_from_reports_for_profile_with_runtime(
@@ -1698,6 +1820,26 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
     }
 
     Ok(steps)
+}
+
+fn demo_budget_seed(existing_steps: &[StepReport]) -> DemoBudgetSeed {
+    DemoBudgetSeed {
+        consumed_total_millis: existing_steps
+            .iter()
+            .map(|step| step.search_stats.search_timing.step_wall_clock_millis)
+            .sum(),
+        consumed_early_millis: existing_steps
+            .iter()
+            .filter(|step| step.step_index <= 4)
+            .map(|step| step.search_stats.search_timing.step_wall_clock_millis)
+            .sum(),
+    }
+}
+
+fn preserve_search_timing(existing_steps: &[StepReport], reevaluated_steps: &mut [StepReport]) {
+    for (reevaluated, existing) in reevaluated_steps.iter_mut().zip(existing_steps.iter()) {
+        reevaluated.search_stats.search_timing = existing.search_stats.search_timing;
+    }
 }
 
 fn ensure_contiguous_steps(existing_steps: &[StepReport]) -> Result<()> {

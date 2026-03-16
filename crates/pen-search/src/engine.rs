@@ -3,7 +3,7 @@ use crate::accept::{
 };
 use crate::bounds::PrefixBound;
 use crate::branch_bound::{AcceptRank, better_rank};
-use crate::config::SearchProfile;
+use crate::config::{DemoConfig, RuntimeConfig, SearchProfile};
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{
     ClauseCatalog, EnumerationContext, build_clause_catalog, enumerate_telescopes,
@@ -46,6 +46,7 @@ use std::time::{Duration, Instant};
 pub const LIVE_BOOTSTRAP_MAX_STEP: u32 = 15;
 const MAX_PRUNE_SAMPLES: usize = 3;
 const EXACT_PARTIAL_PREFIX_BOUND_BUDGET: usize = 32;
+const DEMO_LATE_SPILL_START_STEP: u32 = 13;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct FrontierRetentionOutcome {
@@ -231,6 +232,12 @@ struct RealisticShadowDiscovery {
     terminal_prefix_bar_prunes: usize,
 }
 
+impl RealisticShadowDiscovery {
+    fn can_stop_for_budget(&self) -> bool {
+        !self.candidates.is_empty() || !self.prefix_cache.is_empty()
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 struct OnlinePrefixWorkItem {
     clause_kappa: u16,
@@ -267,6 +274,207 @@ impl ExactPartialPrefixBoundDecision {
     }
 }
 
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub struct DemoBudgetSeed {
+    pub consumed_total_millis: u64,
+    pub consumed_early_millis: u64,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct DemoBudgetFraction {
+    numerator: u64,
+    denominator: u64,
+}
+
+impl DemoBudgetFraction {
+    fn parse(value: &str) -> Result<Self> {
+        let value = value.trim();
+        if value.is_empty() {
+            bail!("demo budget fraction must not be empty");
+        }
+        if value.starts_with('-') {
+            bail!("demo budget fraction must be non-negative");
+        }
+
+        let mut parts = value.split('.');
+        let whole = parts
+            .next()
+            .expect("split always yields at least one part")
+            .parse::<u64>()?;
+        let fractional = parts.next().unwrap_or("");
+        if parts.next().is_some() {
+            bail!("demo budget fraction '{value}' contained more than one decimal point");
+        }
+
+        let denominator = 10_u64
+            .checked_pow(u32::try_from(fractional.len()).expect("fractional length exceeded u32"))
+            .expect("fraction denominator exceeded u64");
+        let numerator = whole
+            .checked_mul(denominator)
+            .and_then(|scaled| {
+                let fractional = if fractional.is_empty() {
+                    0
+                } else {
+                    fractional.parse::<u64>().ok()?
+                };
+                scaled.checked_add(fractional)
+            })
+            .ok_or_else(|| anyhow::anyhow!("demo budget fraction '{value}' exceeded u64"))?;
+        if numerator > denominator {
+            bail!("demo budget fraction '{value}' must be between 0 and 1");
+        }
+
+        Ok(Self {
+            numerator,
+            denominator,
+        })
+    }
+
+    fn apply(self, amount: u64) -> u64 {
+        let scaled = u128::from(amount) * u128::from(self.numerator);
+        let divided = scaled / u128::from(self.denominator);
+        u64::try_from(divided).expect("fraction application exceeded u64")
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+struct DemoStepBudget {
+    step_index: u32,
+    total_budget_millis: u64,
+    discovery_budget_millis: u64,
+    proof_close_reserve_millis: u64,
+    baseline_budget_millis: u64,
+    spill_budget_millis: u64,
+    shared_early_window_remaining_millis: u64,
+}
+
+impl DemoStepBudget {
+    fn discovery_deadline(self, step_start: Instant) -> Option<Instant> {
+        step_start.checked_add(Duration::from_millis(self.discovery_budget_millis))
+    }
+}
+
+#[derive(Clone, Debug)]
+struct DemoBudgetController {
+    demo: DemoConfig,
+    until_step: u32,
+    proof_close_reserve_fraction: DemoBudgetFraction,
+    consumed_total_millis: u64,
+    consumed_early_millis: u64,
+}
+
+impl DemoBudgetController {
+    fn maybe_new(
+        config: &RuntimeConfig,
+        until_step: u32,
+        seed: DemoBudgetSeed,
+    ) -> Result<Option<Self>> {
+        if config.mode.search_profile != SearchProfile::DemoBreadthShadow || !config.demo.enabled {
+            return Ok(None);
+        }
+
+        Ok(Some(Self {
+            demo: config.demo.clone(),
+            until_step: until_step.min(LIVE_BOOTSTRAP_MAX_STEP),
+            proof_close_reserve_fraction: DemoBudgetFraction::parse(
+                &config.demo.proof_close_reserve_fraction,
+            )?,
+            consumed_total_millis: seed.consumed_total_millis,
+            consumed_early_millis: seed.consumed_early_millis,
+        }))
+    }
+
+    fn plan_step(&self, step_index: u32) -> DemoStepBudget {
+        let remaining_total_millis = self.remaining_total_millis();
+        if step_index <= 4 {
+            let shared_early_window_remaining_millis = self.remaining_early_millis();
+            let total_budget_millis =
+                remaining_total_millis.min(shared_early_window_remaining_millis);
+            return DemoStepBudget {
+                step_index,
+                total_budget_millis,
+                discovery_budget_millis: total_budget_millis,
+                proof_close_reserve_millis: 0,
+                baseline_budget_millis: total_budget_millis,
+                spill_budget_millis: 0,
+                shared_early_window_remaining_millis,
+            };
+        }
+
+        let baseline_budget_millis = demo_step_floor_millis(&self.demo, step_index);
+        let spill_budget_millis = if step_index >= DEMO_LATE_SPILL_START_STEP {
+            let discretionary_budget_millis = remaining_total_millis
+                .saturating_sub(self.remaining_late_baseline_budget_millis_from(step_index));
+            discretionary_budget_millis / self.remaining_spill_steps(step_index)
+        } else {
+            0
+        };
+        let total_budget_millis = baseline_budget_millis
+            .saturating_add(spill_budget_millis)
+            .min(remaining_total_millis);
+        let proof_close_reserve_millis =
+            self.proof_close_reserve_fraction.apply(total_budget_millis);
+
+        DemoStepBudget {
+            step_index,
+            total_budget_millis,
+            discovery_budget_millis: total_budget_millis.saturating_sub(proof_close_reserve_millis),
+            proof_close_reserve_millis,
+            baseline_budget_millis,
+            spill_budget_millis,
+            shared_early_window_remaining_millis: 0,
+        }
+    }
+
+    fn record_step(&mut self, step_index: u32, elapsed_millis: u64) {
+        self.consumed_total_millis = self.consumed_total_millis.saturating_add(elapsed_millis);
+        if step_index <= 4 {
+            self.consumed_early_millis = self.consumed_early_millis.saturating_add(elapsed_millis);
+        }
+    }
+
+    fn remaining_total_millis(&self) -> u64 {
+        u64::from(self.demo.total_budget_sec)
+            .saturating_mul(1_000)
+            .saturating_sub(self.consumed_total_millis)
+    }
+
+    fn remaining_early_millis(&self) -> u64 {
+        u64::from(self.demo.early_exhaustive_budget_sec)
+            .saturating_mul(1_000)
+            .saturating_sub(self.consumed_early_millis)
+    }
+
+    fn remaining_late_baseline_budget_millis_from(&self, step_index: u32) -> u64 {
+        let start = step_index.max(5);
+        if start > self.until_step {
+            return 0;
+        }
+
+        (start..=self.until_step)
+            .map(|late_step| demo_step_floor_millis(&self.demo, late_step))
+            .sum()
+    }
+
+    fn remaining_spill_steps(&self, step_index: u32) -> u64 {
+        let start = step_index.max(DEMO_LATE_SPILL_START_STEP);
+        if start > self.until_step {
+            return 1;
+        }
+        u64::from(self.until_step - start + 1)
+    }
+}
+
+fn demo_step_floor_millis(demo: &DemoConfig, step_index: u32) -> u64 {
+    demo.floors
+        .step_floor_sec
+        .get(&step_index.to_string())
+        .copied()
+        .map(u64::from)
+        .unwrap_or(0)
+        .saturating_mul(1_000)
+}
+
 pub fn supports_live_atomic_search(until_step: u32) -> bool {
     until_step <= LIVE_BOOTSTRAP_MAX_STEP
 }
@@ -301,12 +509,29 @@ pub fn search_bootstrap_prefix_for_profile_with_runtime(
     search_profile: SearchProfile,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<Vec<AtomicSearchStep>> {
-    search_bootstrap_from_prefix_for_profile_with_runtime(
+    search_bootstrap_from_prefix_internal(
         &[],
         until_step,
         window_depth,
         search_profile,
         retention_runtime,
+        None,
+    )
+}
+
+pub fn search_bootstrap_prefix_for_config_with_runtime(
+    until_step: u32,
+    window_depth: u16,
+    config: &RuntimeConfig,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<Vec<AtomicSearchStep>> {
+    search_bootstrap_from_prefix_for_config_with_runtime_and_seed(
+        &[],
+        until_step,
+        window_depth,
+        config,
+        retention_runtime,
+        DemoBudgetSeed::default(),
     )
 }
 
@@ -345,6 +570,42 @@ pub fn search_bootstrap_from_prefix_for_profile_with_runtime(
     search_profile: SearchProfile,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<Vec<AtomicSearchStep>> {
+    search_bootstrap_from_prefix_internal(
+        accepted_prefix,
+        until_step,
+        window_depth,
+        search_profile,
+        retention_runtime,
+        None,
+    )
+}
+
+pub fn search_bootstrap_from_prefix_for_config_with_runtime_and_seed(
+    accepted_prefix: &[Telescope],
+    until_step: u32,
+    window_depth: u16,
+    config: &RuntimeConfig,
+    retention_runtime: FrontierRuntimeLimits,
+    demo_budget_seed: DemoBudgetSeed,
+) -> Result<Vec<AtomicSearchStep>> {
+    search_bootstrap_from_prefix_internal(
+        accepted_prefix,
+        until_step,
+        window_depth,
+        config.mode.search_profile,
+        retention_runtime,
+        DemoBudgetController::maybe_new(config, until_step, demo_budget_seed)?,
+    )
+}
+
+fn search_bootstrap_from_prefix_internal(
+    accepted_prefix: &[Telescope],
+    until_step: u32,
+    window_depth: u16,
+    search_profile: SearchProfile,
+    retention_runtime: FrontierRuntimeLimits,
+    mut demo_budget_controller: Option<DemoBudgetController>,
+) -> Result<Vec<AtomicSearchStep>> {
     let mut library: Library = Vec::new();
     let mut history: Vec<DiscoveryRecord> = Vec::new();
     let mut steps = Vec::new();
@@ -363,6 +624,9 @@ pub fn search_bootstrap_from_prefix_for_profile_with_runtime(
 
     let start_step = u32::try_from(accepted_prefix.len()).expect("prefix length exceeded u32") + 1;
     for step_index in start_step..=until_step.min(LIVE_BOOTSTRAP_MAX_STEP) {
+        let demo_step_budget = demo_budget_controller
+            .as_ref()
+            .map(|controller| controller.plan_step(step_index));
         let outcome = search_next_step(
             step_index,
             window_depth,
@@ -370,7 +634,11 @@ pub fn search_bootstrap_from_prefix_for_profile_with_runtime(
             &history,
             admissibility_mode,
             retention_runtime,
+            demo_step_budget,
         )?;
+        if let Some(controller) = demo_budget_controller.as_mut() {
+            controller.record_step(step_index, outcome.search_timing.step_wall_clock_millis);
+        }
         history.push(DiscoveryRecord::new(
             step_index,
             u32::from(outcome.accepted.nu),
@@ -390,6 +658,7 @@ fn search_next_step(
     history: &[DiscoveryRecord],
     admissibility_mode: AdmissibilityMode,
     retention_runtime: FrontierRuntimeLimits,
+    demo_step_budget: Option<DemoStepBudget>,
 ) -> Result<AtomicSearchStep> {
     let step_start = Instant::now();
     let structural_debt = summarize_structural_debt(library, window_depth);
@@ -443,6 +712,7 @@ fn search_next_step(
             retention_policy,
             objective_bar,
             &nu_history,
+            demo_step_budget.and_then(|budget| budget.discovery_deadline(step_start)),
         )?;
         prefix_cache = discovery.prefix_cache;
         candidates = discovery.candidates;
@@ -940,15 +1210,22 @@ fn discover_realistic_shadow_candidates(
     retention_policy: RetentionPolicy,
     objective_bar: Rational,
     nu_history: &[(u32, u32)],
+    discovery_deadline: Option<Instant>,
 ) -> Result<RealisticShadowDiscovery> {
     let mut discovery = RealisticShadowDiscovery::default();
     let enumeration_context = EnumerationContext::from_admissibility(library, admissibility);
 
     for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+        if demo_discovery_budget_exhausted(discovery_deadline, &discovery) {
+            break;
+        }
         if clause_kappa <= 1 {
             let telescopes = enumerate_telescopes(library, enumeration_context, clause_kappa);
             discovery.enumerated_candidates += telescopes.len();
             for telescope in telescopes {
+                if demo_discovery_budget_exhausted(discovery_deadline, &discovery) {
+                    break;
+                }
                 discovery.well_formed_candidates += 1;
                 let admissibility_decision =
                     assess_strict_admissibility(step_index, library, &telescope, admissibility);
@@ -973,6 +1250,9 @@ fn discover_realistic_shadow_candidates(
 
         let mut frontier = Vec::new();
         for clause in clause_catalog.clauses_at(0) {
+            if demo_discovery_budget_exhausted(discovery_deadline, &discovery) {
+                break;
+            }
             let prefix_telescope = Telescope::new(vec![clause.clone()]);
             let signature = PrefixSignature::new(step_index, library, &prefix_telescope);
             if !discovery.prefix_legality_cache.insert_root(
@@ -1035,7 +1315,13 @@ fn discover_realistic_shadow_candidates(
             }
         }
 
-        while let Some(work_item) = pop_best_prefix(&mut frontier) {
+        while !frontier.is_empty() {
+            if demo_discovery_budget_exhausted(discovery_deadline, &discovery) {
+                break;
+            }
+            let Some(work_item) = pop_best_prefix(&mut frontier) else {
+                break;
+            };
             let Some(work_item) = collapse_single_continuation_chain(
                 step_index,
                 library,
@@ -1163,6 +1449,9 @@ fn discover_realistic_shadow_candidates(
             }
 
             for clause in &work_item.next_clauses {
+                if demo_discovery_budget_exhausted(discovery_deadline, &discovery) {
+                    break;
+                }
                 let mut child_prefix = work_item.prefix_telescope.clone();
                 child_prefix.clauses.push(clause.clone());
                 let child_signature = PrefixSignature::new(step_index, library, &child_prefix);
@@ -1230,6 +1519,20 @@ fn discover_realistic_shadow_candidates(
     }
 
     Ok(discovery)
+}
+
+fn demo_discovery_budget_exhausted(
+    discovery_deadline: Option<Instant>,
+    discovery: &RealisticShadowDiscovery,
+) -> bool {
+    let Some(discovery_deadline) = discovery_deadline else {
+        return false;
+    };
+    if !discovery.can_stop_for_budget() {
+        return false;
+    }
+
+    Instant::now() >= discovery_deadline
 }
 
 fn prepare_exact_two_step_terminal_surface(
@@ -2349,12 +2652,13 @@ fn elapsed_millis(duration: Duration) -> u64 {
 #[cfg(test)]
 mod tests {
     use super::{
-        AtomicSearchStep, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
-        create_online_prefix_work_item, exact_partial_prefix_bound_decision, pop_best_prefix,
-        search_bootstrap_from_prefix, search_bootstrap_from_prefix_for_profile_with_runtime,
-        search_bootstrap_prefix, supports_live_atomic_search,
+        AtomicSearchStep, DemoBudgetController, DemoBudgetSeed, LIVE_BOOTSTRAP_MAX_STEP,
+        OnlinePrefixWorkItem, create_online_prefix_work_item, exact_partial_prefix_bound_decision,
+        pop_best_prefix, search_bootstrap_from_prefix,
+        search_bootstrap_from_prefix_for_profile_with_runtime, search_bootstrap_prefix,
+        supports_live_atomic_search,
     };
-    use crate::config::SearchProfile;
+    use crate::config::{RuntimeConfig, SearchProfile};
     use crate::enumerate::{EnumerationContext, build_clause_catalog};
     use crate::expand::evaluate_candidate;
     use crate::prefix_cache::PrefixSignature;
@@ -2392,6 +2696,13 @@ mod tests {
         library
     }
 
+    fn demo_runtime_config_10m() -> RuntimeConfig {
+        RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/demo_breadth_shadow_10m.toml"
+        ))
+        .expect("demo config should parse")
+    }
+
     fn dummy_work_item(
         remaining_clause_slots: usize,
         next_clause_count: usize,
@@ -2417,6 +2728,69 @@ mod tests {
             ],
             order_key: order_key.to_owned(),
         }
+    }
+
+    #[test]
+    fn demo_budget_controller_shares_early_window_and_late_spill() {
+        let config = demo_runtime_config_10m();
+        let mut controller =
+            DemoBudgetController::maybe_new(&config, 15, DemoBudgetSeed::default())
+                .expect("demo budget controller should build")
+                .expect("demo profile should enable the budget controller");
+
+        let step_one = controller.plan_step(1);
+        assert_eq!(step_one.total_budget_millis, 90_000);
+        assert_eq!(step_one.discovery_budget_millis, 90_000);
+        assert_eq!(step_one.shared_early_window_remaining_millis, 90_000);
+
+        controller.record_step(1, 30_000);
+        let step_two = controller.plan_step(2);
+        assert_eq!(step_two.total_budget_millis, 60_000);
+        assert_eq!(step_two.discovery_budget_millis, 60_000);
+        assert_eq!(step_two.shared_early_window_remaining_millis, 60_000);
+
+        controller.record_step(2, 10_000);
+        controller.record_step(3, 10_000);
+        controller.record_step(4, 10_000);
+        for (step_index, step_budget_millis) in [
+            (5, 12_000),
+            (6, 14_000),
+            (7, 18_000),
+            (8, 24_000),
+            (9, 32_000),
+            (10, 15_000),
+            (11, 25_000),
+            (12, 35_000),
+        ] {
+            controller.record_step(step_index, step_budget_millis);
+        }
+
+        let step_thirteen = controller.plan_step(13);
+        assert_eq!(step_thirteen.baseline_budget_millis, 55_000);
+        assert_eq!(step_thirteen.spill_budget_millis, 50_000);
+        assert_eq!(step_thirteen.total_budget_millis, 105_000);
+        assert_eq!(step_thirteen.proof_close_reserve_millis, 31_500);
+        assert_eq!(step_thirteen.discovery_budget_millis, 73_500);
+    }
+
+    #[test]
+    fn demo_budget_controller_respects_seeded_resume_timing() {
+        let config = demo_runtime_config_10m();
+        let controller = DemoBudgetController::maybe_new(
+            &config,
+            15,
+            DemoBudgetSeed {
+                consumed_total_millis: 235_000,
+                consumed_early_millis: 60_000,
+            },
+        )
+        .expect("demo budget controller should build")
+        .expect("demo profile should enable the budget controller");
+
+        let resumed_step_thirteen = controller.plan_step(13);
+        assert_eq!(resumed_step_thirteen.total_budget_millis, 105_000);
+        assert_eq!(resumed_step_thirteen.proof_close_reserve_millis, 31_500);
+        assert_eq!(resumed_step_thirteen.discovery_budget_millis, 73_500);
     }
 
     fn relaxed_shadow_step_from_reference_prefix(step_index: u32) -> AtomicSearchStep {

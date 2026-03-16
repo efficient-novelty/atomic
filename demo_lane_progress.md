@@ -17,38 +17,47 @@ This file is the forward-facing status snapshot for
 - demo runs now also persist first-pass per-step narrative artifacts:
   `reports/steps/step-XX-narrative.txt` and
   `reports/steps/step-XX-events.ndjson`
+- demo runs and resumes now route the full `RuntimeConfig` into `pen-search`,
+  so a real `DemoBudgetController` can enforce the shared early `90s` window,
+  late-step baseline budgets, proof-close reserve fractions, and adaptive spill
+  toward steps `13` to `15`
 
 ## What Landed In This Pass
 
-- `pen-search` now attaches a structured `NarrativeEvent` stream to each live
-  `AtomicSearchStep`
-- `pen-cli` now renders and persists per-step demo narrative text plus NDJSON
-  event streams for `demo_breadth_shadow` runs
-- the persisted narrative now surfaces current timing, generated-surface
-  progress, exact-screen progress, and full-evaluation soft-cap progress using
-  the existing demo budget metadata
-- the new narrative remains honest about the current milestone: it summarizes
-  completed step evidence after search rather than pretending the full demo
-  step-phase observer already exists
+- `pen-search` now has a real `DemoBudgetController` seeded from runtime config
+  and prior completed-step timing when resuming
+- the controller applies the shared early `90s` budget across steps `1` to `4`
+  instead of treating that metadata as narrative-only
+- late steps now receive explicit baseline budgets plus deterministic adaptive
+  spill allocation toward steps `13` to `15`, with per-step proof-close reserve
+  slices derived from the config fraction
+- the realistic-shadow discovery loop now stops widening once the discovery
+  slice is exhausted and some real candidate surface has already been
+  materialized, keeping the stop condition honest instead of post-hoc
+- `pen-cli` run and resume flows now preserve enough prior timing context for
+  the demo controller to keep budget accounting consistent across checkpoint
+  continuation
 
 ## Active Gaps
 
-### 1. The Budget Controller Still Is Not Enforced
+### 1. The Budget Controller Is Coarse, Not Yet A Full Phase Machine
 
-The configs now carry the right budget metadata and the narrative renders
-progress against it, but the engine still does not enforce the shared early
-`90s` window, step-level reserves, or adaptive reserve spill.
+The engine now enforces real demo budgets during discovery, but it still does
+not run an explicit `Scout` / `BreadthHarvest` / `Materialize` / `ProofClose` /
+`Seal` state machine. The current reserve split is a coarse search-time cutoff,
+not a true phase-aware controller with proof-close-only overrun reasons.
 
 Next target:
 
-- add a real `DemoBudgetController` and wire the budget model into search-time
-  control flow
+- promote the coarse controller into an explicit step-phase machine with
+  dedicated proof-close accounting and phase-specific narrative pulses
 
-### 2. The Narrative Is Post-Step, Not Yet Live Phase Observation
+### 2. The Narrative Is Still Post-Step, Not Yet Live Phase Observation
 
 The new artifacts are useful and honest, but they are still derived from the
-completed step summary. They do not yet emit live `Scout`, `BreadthHarvest`,
-`Materialize`, `ProofClose`, and `Seal` transitions during the search itself.
+completed step summary. They still do not emit live `Scout`,
+`BreadthHarvest`, `Materialize`, `ProofClose`, and `Seal` transitions during
+the search itself.
 
 Next target:
 
@@ -70,10 +79,12 @@ Next target:
 
 ## Immediate Next Steps
 
-1. Land the real demo budget controller with the shared early `90s` window and
-   late adaptive reserve spill.
+1. Turn the new coarse demo budget controller into a real step-phase machine
+   with explicit `Scout`, `BreadthHarvest`, `Materialize`, `ProofClose`, and
+   `Seal` transitions.
 2. Promote the current post-step narrative stream into a live observer with
-   explicit phase transitions and pulse cadence.
-3. Add the missing honest funnel counters and closure tracking so the new
+   phase changes, budget pulses, and proof-close progress updates emitted from
+   the search loop itself.
+3. Add the missing honest funnel counters and closure tracking so the demo
    narrative and comparison tooling can report floor hits or misses directly
    from stored artifacts.

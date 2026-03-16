@@ -59,44 +59,44 @@ with 5-minute and 15-minute variants using the same lane.
 ## 2. Budget Model
 
 - [x] Make the default target the 10-minute profile.
-- [ ] Use a shared `90s` exhaustive or near-exhaustive early window for steps 1
+- [x] Use a shared `90s` exhaustive or near-exhaustive early window for steps 1
       to 4.
 - [ ] Keep `2144` as the explicit step-1 raw breadth floor.
-- [ ] Reserve 25 to 40 percent of each step's usable budget for proof-close.
-- [ ] Add an adaptive reserve that can spill toward steps 13 to 15.
+- [x] Reserve 25 to 40 percent of each step's usable budget for proof-close.
+- [x] Add an adaptive reserve that can spill toward steps 13 to 15.
 
 ### 5-Minute Profile
 
-- [ ] Total budget: `300s`
-- [ ] Early exhaustive window: `90s`
-- [ ] Step budgets:
+- [x] Total budget: `300s`
+- [x] Early exhaustive window: `90s`
+- [x] Step budgets:
       `5=8s`, `6=10s`, `7=11s`, `8=12s`, `9=14s`, `10=10s`, `11=12s`,
       `12=16s`, `13=22s`, `14=28s`, `15=37s`
-- [ ] Adaptive reserve: `30s`
+- [x] Adaptive reserve: `30s`
 
 ### 10-Minute Profile
 
-- [ ] Total budget: `600s`
-- [ ] Early exhaustive window: `90s`
-- [ ] Step budgets:
+- [x] Total budget: `600s`
+- [x] Early exhaustive window: `90s`
+- [x] Step budgets:
       `5=12s`, `6=14s`, `7=18s`, `8=24s`, `9=32s`, `10=15s`, `11=25s`,
       `12=35s`, `13=55s`, `14=70s`, `15=90s`
-- [ ] Adaptive reserve: `120s`
+- [x] Adaptive reserve: `120s`
 
 ### 15-Minute Profile
 
-- [ ] Total budget: `900s`
-- [ ] Early exhaustive window: `90s`
-- [ ] Keep the proposed late-step floors:
+- [x] Total budget: `900s`
+- [x] Early exhaustive window: `90s`
+- [x] Keep the proposed late-step floors:
       `10=10s`, `11=20s`, `12=30s`, `13=50s`, `14=80s`, `15=130s`
-- [ ] Use baseline middle-step floors:
+- [x] Use baseline middle-step floors:
       `5=20s`, `6=24s`, `7=28s`, `8=34s`, `9=44s`
-- [ ] Adaptive reserve: `340s`
+- [x] Adaptive reserve: `340s`
 
 ## 3. Step Phase Machine
 
 - [ ] Add `StepPhase::{Scout, BreadthHarvest, Materialize, ProofClose, Seal}`.
-- [ ] Add a `DemoBudgetController` in `crates/pen-search/src/engine.rs`.
+- [x] Add a `DemoBudgetController` in `crates/pen-search/src/engine.rs`.
 - [ ] During `Scout`, measure:
       prefix generation rate, admissibility rate, exact-bound rate, and full
       evaluation rate on this computer.

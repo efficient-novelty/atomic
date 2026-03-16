@@ -2,7 +2,7 @@ use crate::cli::RunArgs;
 use crate::narrative::write_demo_step_artifacts;
 use crate::output::{OutputStyle, render_run_output};
 use crate::report::{
-    GeneratedSteps, StepReport, annotate_search_profile, generate_steps_for_profile_with_runtime,
+    GeneratedSteps, StepReport, annotate_search_profile, generate_steps_with_config_and_runtime,
     write_step_reports,
 };
 use anyhow::{Context, Result, bail};
@@ -48,10 +48,9 @@ pub fn run(args: RunArgs) -> Result<String> {
 
     let until_step = args.until_step.unwrap_or(config.search.until_step);
     let worker_count = resolved_worker_count(&config);
-    let GeneratedSteps { mode, mut steps } = generate_steps_for_profile_with_runtime(
+    let GeneratedSteps { mode, mut steps } = generate_steps_with_config_and_runtime(
         until_step,
-        config.objective.window_depth,
-        config.mode.search_profile,
+        &config,
         frontier_runtime_limits(&config, worker_count),
     )?;
     annotate_search_profile(&mut steps, config.mode.search_profile);
