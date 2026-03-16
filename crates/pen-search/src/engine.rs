@@ -51,6 +51,7 @@ use std::time::{Duration, Instant};
 pub const LIVE_BOOTSTRAP_MAX_STEP: u32 = 15;
 const MAX_PRUNE_SAMPLES: usize = 3;
 const EXACT_PARTIAL_PREFIX_BOUND_BUDGET: usize = 32;
+const DEMO_LATE_FLOOR_START_STEP: u32 = 10;
 const DEMO_LATE_SPILL_START_STEP: u32 = 13;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
@@ -157,6 +158,7 @@ impl DemoBreadthHarvestExitReason {
 pub enum DemoProofCloseEntryReason {
     BreadthFloorHit,
     ReserveProtected,
+    MaterializeReserveHandoff,
     SoftCapHandoff,
     CertificationSweep,
 }
@@ -166,6 +168,7 @@ impl DemoProofCloseEntryReason {
         match self {
             Self::BreadthFloorHit => "breadth_floor_hit",
             Self::ReserveProtected => "reserve_protected",
+            Self::MaterializeReserveHandoff => "materialize_reserve_handoff",
             Self::SoftCapHandoff => "soft_cap_handoff",
             Self::CertificationSweep => "certification_sweep",
         }
@@ -502,6 +505,19 @@ impl DemoBudgetFraction {
         let divided = scaled / u128::from(self.denominator);
         u64::try_from(divided).expect("fraction application exceeded u64")
     }
+
+    fn to_basis_points(self) -> u64 {
+        let scaled = u128::from(self.numerator) * 10_000;
+        let divided = scaled / u128::from(self.denominator);
+        u64::try_from(divided).expect("basis points exceeded u64")
+    }
+
+    fn from_basis_points(basis_points: u64) -> Self {
+        Self {
+            numerator: basis_points,
+            denominator: 10_000,
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
@@ -518,6 +534,55 @@ struct DemoStepBudget {
     generated_floor: Option<u64>,
     exact_screened_floor: Option<u64>,
     full_eval_soft_cap: Option<u64>,
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+struct DemoBudgetFeedback {
+    late_floor_miss: bool,
+    reserve_pressure: bool,
+    reserve_slack: bool,
+}
+
+impl DemoBudgetFeedback {
+    fn from_step(step: &AtomicSearchStep) -> Option<Self> {
+        if step.step_index < DEMO_LATE_FLOOR_START_STEP {
+            return None;
+        }
+
+        let generated_surface =
+            u64::try_from(step.demo_funnel.generated_raw_prefixes).expect("usize exceeded u64");
+        let exact_screened_surface =
+            u64::try_from(step.demo_funnel.exact_bound_screened).expect("usize exceeded u64");
+        let generated_miss = step
+            .demo_phase
+            .generated_floor
+            .map(|target| generated_surface < target)
+            .unwrap_or(false);
+        let exact_screened_miss = step
+            .demo_phase
+            .exact_screened_floor
+            .map(|target| exact_screened_surface < target)
+            .unwrap_or(false);
+        let reserve_pressure = step.demo_phase.proof_close_reserved_millis > 0
+            && (step.demo_phase.proof_close_reserve_exhausted
+                || step.demo_phase.proof_close_reserve_overrun_millis > 0
+                || (step.demo_phase.proof_close_frontier_total_groups > 0
+                    && step.demo_phase.proof_close_frontier_groups_remaining > 0));
+        let reserve_slack = step.demo_phase.proof_close_reserved_millis > 0
+            && !step.demo_phase.proof_close_reserve_exhausted
+            && step.demo_phase.proof_close_closure_percent == 100
+            && step
+                .demo_phase
+                .proof_close_remaining_millis
+                .saturating_mul(2)
+                >= step.demo_phase.proof_close_reserved_millis;
+
+        Some(Self {
+            late_floor_miss: generated_miss || exact_screened_miss,
+            reserve_pressure,
+            reserve_slack,
+        })
+    }
 }
 
 impl DemoStepBudget {
@@ -555,6 +620,8 @@ struct DemoBudgetController {
     scout_fraction: DemoBudgetFraction,
     consumed_total_millis: u64,
     consumed_early_millis: u64,
+    late_floor_pressure: u8,
+    late_reserve_pressure: u8,
 }
 
 impl DemoBudgetController {
@@ -576,6 +643,8 @@ impl DemoBudgetController {
             scout_fraction: DemoBudgetFraction::parse(&config.demo.scout_fraction)?,
             consumed_total_millis: seed.consumed_total_millis,
             consumed_early_millis: seed.consumed_early_millis,
+            late_floor_pressure: 0,
+            late_reserve_pressure: 0,
         }))
     }
 
@@ -611,18 +680,13 @@ impl DemoBudgetController {
         }
 
         let baseline_budget_millis = demo_step_floor_millis(&self.demo, step_index);
-        let spill_budget_millis = if step_index >= DEMO_LATE_SPILL_START_STEP {
-            let discretionary_budget_millis = remaining_total_millis
-                .saturating_sub(self.remaining_late_baseline_budget_millis_from(step_index));
-            discretionary_budget_millis / self.remaining_spill_steps(step_index)
-        } else {
-            0
-        };
+        let spill_budget_millis = self.spill_budget_millis(step_index, remaining_total_millis);
         let total_budget_millis = baseline_budget_millis
             .saturating_add(spill_budget_millis)
             .min(remaining_total_millis);
-        let proof_close_reserve_millis =
-            self.proof_close_reserve_fraction.apply(total_budget_millis);
+        let proof_close_reserve_millis = self
+            .effective_proof_close_reserve_fraction()
+            .apply(total_budget_millis);
         let discovery_budget_millis =
             total_budget_millis.saturating_sub(proof_close_reserve_millis);
         let scout_budget_millis = self
@@ -654,6 +718,13 @@ impl DemoBudgetController {
         }
     }
 
+    fn record_step_outcome(&mut self, step: &AtomicSearchStep) {
+        self.record_step(step.step_index, step.search_timing.step_wall_clock_millis);
+        if let Some(feedback) = DemoBudgetFeedback::from_step(step) {
+            self.record_feedback(feedback);
+        }
+    }
+
     fn remaining_total_millis(&self) -> u64 {
         u64::from(self.demo.total_budget_sec)
             .saturating_mul(1_000)
@@ -677,12 +748,84 @@ impl DemoBudgetController {
             .sum()
     }
 
-    fn remaining_spill_steps(&self, step_index: u32) -> u64 {
-        let start = step_index.max(DEMO_LATE_SPILL_START_STEP);
-        if start > self.until_step {
-            return 1;
+    fn effective_proof_close_reserve_fraction(&self) -> DemoBudgetFraction {
+        let base_basis_points = self.proof_close_reserve_fraction.to_basis_points();
+        if !(2_500..=4_000).contains(&base_basis_points) {
+            return self.proof_close_reserve_fraction;
         }
-        u64::from(self.until_step - start + 1)
+        let min_basis_points = base_basis_points.min(2_500);
+        let max_basis_points = base_basis_points.max(4_000);
+        let adjusted_basis_points = i64::try_from(base_basis_points)
+            .expect("basis points exceeded i64")
+            .saturating_add(i64::from(self.late_reserve_pressure) * 250)
+            .saturating_sub(i64::from(self.late_floor_pressure) * 250);
+        DemoBudgetFraction::from_basis_points(
+            u64::try_from(adjusted_basis_points.clamp(
+                i64::try_from(min_basis_points).expect("min basis points exceeded i64"),
+                i64::try_from(max_basis_points).expect("max basis points exceeded i64"),
+            ))
+            .expect("basis points became negative"),
+        )
+    }
+
+    fn spill_budget_millis(&self, step_index: u32, remaining_total_millis: u64) -> u64 {
+        if step_index < DEMO_LATE_SPILL_START_STEP {
+            return 0;
+        }
+
+        let discretionary_budget_millis = remaining_total_millis
+            .saturating_sub(self.remaining_late_baseline_budget_millis_from(step_index));
+        if discretionary_budget_millis == 0 {
+            return 0;
+        }
+
+        let total_weight = (step_index..=self.until_step)
+            .map(|candidate_step| self.spill_weight(step_index, candidate_step))
+            .sum::<u64>();
+        if total_weight == 0 {
+            return 0;
+        }
+
+        let current_weight = self.spill_weight(step_index, step_index);
+        u64::try_from(
+            (u128::from(discretionary_budget_millis) * u128::from(current_weight))
+                / u128::from(total_weight),
+        )
+        .expect("spill budget exceeded u64")
+    }
+
+    fn spill_weight(&self, planning_step_index: u32, candidate_step_index: u32) -> u64 {
+        let generated_weight =
+            demo_generated_floor(&self.demo, candidate_step_index).unwrap_or(0) / 750;
+        let exact_weight =
+            demo_exact_screened_floor(&self.demo, candidate_step_index).unwrap_or(0) / 300;
+        let late_bias =
+            u64::from(candidate_step_index.saturating_sub(DEMO_LATE_SPILL_START_STEP)) + 1;
+        let base_weight = 1 + generated_weight + exact_weight + late_bias;
+
+        if candidate_step_index == planning_step_index {
+            base_weight.saturating_mul(1 + u64::from(self.late_floor_pressure))
+        } else {
+            base_weight
+        }
+    }
+
+    fn record_feedback(&mut self, feedback: DemoBudgetFeedback) {
+        if feedback.late_floor_miss {
+            self.late_floor_pressure = self.late_floor_pressure.saturating_add(1).min(3);
+        } else {
+            self.late_floor_pressure = self.late_floor_pressure.saturating_sub(1);
+        }
+
+        if feedback.reserve_pressure {
+            self.late_reserve_pressure = self.late_reserve_pressure.saturating_add(1).min(4);
+        } else {
+            self.late_reserve_pressure = self.late_reserve_pressure.saturating_sub(1);
+        }
+
+        if feedback.late_floor_miss && feedback.reserve_slack {
+            self.late_reserve_pressure = self.late_reserve_pressure.saturating_sub(1);
+        }
     }
 }
 
@@ -1259,6 +1402,9 @@ fn demo_proof_close_entry_message(reason: DemoProofCloseEntryReason) -> &'static
         DemoProofCloseEntryReason::ReserveProtected => {
             "entered proof_close after breadth_harvest yielded to protect the reserved certification slice"
         }
+        DemoProofCloseEntryReason::MaterializeReserveHandoff => {
+            "entered proof_close after materialize yielded to protect the reserved certification slice"
+        }
         DemoProofCloseEntryReason::SoftCapHandoff => {
             "entered proof_close after materialize hit the full-eval soft cap"
         }
@@ -1308,6 +1454,65 @@ fn demo_proof_close_status_detail(
         ),
         demo_phase_status_detail(phase)
     )
+}
+
+fn begin_demo_proof_close(
+    demo_phase: &mut DemoPhaseStats,
+    demo_narrative: &mut Option<DemoNarrativeRuntime>,
+    budget: DemoStepBudget,
+    entry_reason: DemoProofCloseEntryReason,
+    remaining_groups: usize,
+    step_start: Instant,
+    prefixes_created: usize,
+    enumerated_candidates: usize,
+    prefix_states_exact_pruned: usize,
+    full_telescopes_evaluated: usize,
+) -> u64 {
+    let proof_close_started_elapsed = elapsed_millis(step_start.elapsed());
+    demo_phase.proof_close_entry_reason = Some(entry_reason);
+    sync_demo_proof_close_accounting(
+        demo_phase,
+        budget,
+        proof_close_started_elapsed,
+        proof_close_started_elapsed,
+        remaining_groups,
+        0,
+    );
+    if let Some(observer) = demo_narrative.as_mut() {
+        let progress = narrative_progress_snapshot(
+            proof_close_started_elapsed,
+            generated_surface_from_counts(prefixes_created, enumerated_candidates),
+            exact_screened_surface_from_counts(
+                prefix_states_exact_pruned,
+                full_telescopes_evaluated,
+            ),
+            full_telescopes_evaluated as u64,
+        );
+        let detail = demo_proof_close_status_detail(
+            budget,
+            generated_surface_from_counts(prefixes_created, enumerated_candidates),
+            exact_screened_surface_from_counts(
+                prefix_states_exact_pruned,
+                full_telescopes_evaluated,
+            ),
+            full_telescopes_evaluated as u64,
+            remaining_groups,
+            demo_phase,
+        );
+        let message = if remaining_groups > 0 {
+            format!(
+                "{} with {} retained prefix groups still needing exact certification",
+                demo_proof_close_entry_message(entry_reason),
+                remaining_groups
+            )
+        } else {
+            demo_proof_close_entry_message(entry_reason).to_owned()
+        };
+        observer.enter_proof_close_with_message(progress.clone(), message, detail.clone());
+        observer.maybe_record_proof_close_progress(progress, detail, demo_phase);
+    }
+
+    proof_close_started_elapsed
 }
 
 fn discovery_progress_snapshot(
@@ -1532,7 +1737,7 @@ fn search_bootstrap_from_prefix_internal(
             demo_step_budget,
         )?;
         if let Some(controller) = demo_budget_controller.as_mut() {
-            controller.record_step(step_index, outcome.search_timing.step_wall_clock_millis);
+            controller.record_step_outcome(&outcome);
         }
         history.push(DiscoveryRecord::new(
             step_index,
@@ -1625,12 +1830,18 @@ fn search_next_step(
             step_start,
             &mut demo_narrative,
         )?;
+        let discovery_stop_reason = discovery.stop_reason.or_else(|| {
+            demo_step_budget.and_then(|budget| {
+                (budget.discovery_budget_millis == 0 && budget.proof_close_reserve_millis > 0)
+                    .then_some(DemoBreadthHarvestExitReason::ProofCloseReserveProtected)
+            })
+        });
         if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
             observer.close_discovery(
                 discovery_progress_snapshot(step_start, &discovery),
                 discovery_scout_detail(&discovery, elapsed_millis(step_start.elapsed())),
                 discovery_harvest_detail(budget, &discovery),
-                discovery.stop_reason,
+                discovery_stop_reason,
             );
         }
         prefix_cache = discovery.prefix_cache;
@@ -1669,7 +1880,7 @@ fn search_next_step(
         incremental_partial_prefix_bound_checks = discovery.partial_prefix_bound_checks;
         incremental_partial_prefix_bound_prunes = discovery.partial_prefix_bound_prunes;
         incremental_terminal_prefix_bar_prunes = discovery.terminal_prefix_bar_prunes;
-        demo_phase.breadth_harvest_exit_reason = discovery.stop_reason;
+        demo_phase.breadth_harvest_exit_reason = discovery_stop_reason;
     } else {
         for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
             let telescopes = enumerate_telescopes(
@@ -1786,6 +1997,33 @@ fn search_next_step(
         let mut pending_group_signatures = prefix_frontier.retained_prefix_signatures.clone();
         while !pending_group_signatures.is_empty() {
             let remaining_groups = pending_group_signatures.len();
+            if !demo_proof_close_entered {
+                if let Some(budget) = demo_step_budget {
+                    if demo_should_handoff_materialize_to_proof_close(
+                        budget,
+                        &pending_group_signatures,
+                        &prefix_cache,
+                        incumbent_terminal_rank.as_ref(),
+                        demo_phase.materialize_full_evals,
+                    ) {
+                        demo_proof_close_started_elapsed_millis = Some(begin_demo_proof_close(
+                            &mut demo_phase,
+                            &mut demo_narrative,
+                            budget,
+                            DemoProofCloseEntryReason::MaterializeReserveHandoff,
+                            remaining_groups,
+                            step_start,
+                            prefixes_created,
+                            enumerated_candidates,
+                            prefix_states_exact_pruned,
+                            candidates.len(),
+                        ));
+                        demo_proof_close_total_groups = remaining_groups;
+                        demo_proof_close_closed_groups = 0;
+                        demo_proof_close_entered = true;
+                    }
+                }
+            }
             let remaining_reserve_millis = if demo_proof_close_entered {
                 demo_phase.proof_close_remaining_millis
             } else {
@@ -1873,69 +2111,23 @@ fn search_next_step(
                         {
                             demo_phase.materialize_soft_cap_triggered = true;
                             demo_phase.materialize_full_evals = candidates.len();
-                            demo_phase.proof_close_entry_reason =
-                                Some(DemoProofCloseEntryReason::SoftCapHandoff);
-                            let proof_close_started_elapsed = elapsed_millis(step_start.elapsed());
                             demo_proof_close_started_elapsed_millis =
-                                Some(proof_close_started_elapsed);
+                                demo_step_budget.map(|budget| {
+                                    begin_demo_proof_close(
+                                        &mut demo_phase,
+                                        &mut demo_narrative,
+                                        budget,
+                                        DemoProofCloseEntryReason::SoftCapHandoff,
+                                        remaining_groups,
+                                        step_start,
+                                        prefixes_created,
+                                        enumerated_candidates,
+                                        prefix_states_exact_pruned,
+                                        candidates.len(),
+                                    )
+                                });
                             demo_proof_close_total_groups = remaining_groups;
                             demo_proof_close_closed_groups = 0;
-                            if let Some(budget) = demo_step_budget {
-                                sync_demo_proof_close_accounting(
-                                    &mut demo_phase,
-                                    budget,
-                                    proof_close_started_elapsed,
-                                    proof_close_started_elapsed,
-                                    remaining_groups,
-                                    demo_proof_close_closed_groups,
-                                );
-                            }
-                            if let (Some(observer), Some(budget)) =
-                                (demo_narrative.as_mut(), demo_step_budget)
-                            {
-                                let progress = narrative_progress_snapshot(
-                                    proof_close_started_elapsed,
-                                    generated_surface_from_counts(
-                                        prefixes_created,
-                                        enumerated_candidates,
-                                    ),
-                                    exact_screened_surface_from_counts(
-                                        prefix_states_exact_pruned,
-                                        candidates.len(),
-                                    ),
-                                    candidates.len() as u64,
-                                );
-                                let detail = demo_proof_close_status_detail(
-                                    budget,
-                                    generated_surface_from_counts(
-                                        prefixes_created,
-                                        enumerated_candidates,
-                                    ),
-                                    exact_screened_surface_from_counts(
-                                        prefix_states_exact_pruned,
-                                        candidates.len(),
-                                    ),
-                                    candidates.len() as u64,
-                                    remaining_groups,
-                                    &demo_phase,
-                                );
-                                observer.enter_proof_close_with_message(
-                                    progress.clone(),
-                                    format!(
-                                        "{} with {} retained prefix groups still needing exact certification",
-                                        demo_proof_close_entry_message(
-                                            DemoProofCloseEntryReason::SoftCapHandoff
-                                        ),
-                                        remaining_groups
-                                    ),
-                                    detail.clone(),
-                                );
-                                observer.maybe_record_proof_close_progress(
-                                    progress,
-                                    detail,
-                                    &demo_phase,
-                                );
-                            }
                             demo_proof_close_entered = true;
                         }
                     }
@@ -2019,37 +2211,18 @@ fn search_next_step(
         demo_phase.materialize_full_evals = candidates.len();
         let proof_close_entry_reason =
             demo_proof_close_entry_reason(demo_phase.breadth_harvest_exit_reason);
-        demo_phase.proof_close_entry_reason = Some(proof_close_entry_reason);
-        let proof_close_started_elapsed = elapsed_millis(step_start.elapsed());
         if let Some(budget) = demo_step_budget {
-            sync_demo_proof_close_accounting(
+            begin_demo_proof_close(
                 &mut demo_phase,
+                &mut demo_narrative,
                 budget,
-                proof_close_started_elapsed,
-                proof_close_started_elapsed,
+                proof_close_entry_reason,
                 0,
-                0,
-            );
-        }
-        if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
-            let progress = narrative_progress_snapshot(
-                proof_close_started_elapsed,
-                generated_surface_from_counts(prefixes_created, enumerated_candidates),
-                exact_screened_surface_from_counts(prefix_states_exact_pruned, candidates.len()),
-                candidates.len() as u64,
-            );
-            let detail = demo_proof_close_status_detail(
-                budget,
-                generated_surface_from_counts(prefixes_created, enumerated_candidates),
-                exact_screened_surface_from_counts(prefix_states_exact_pruned, candidates.len()),
-                candidates.len() as u64,
-                0,
-                &demo_phase,
-            );
-            observer.enter_proof_close_with_message(
-                progress,
-                demo_proof_close_entry_message(proof_close_entry_reason),
-                detail,
+                step_start,
+                prefixes_created,
+                enumerated_candidates,
+                prefix_states_exact_pruned,
+                candidates.len(),
             );
         }
     }
@@ -3777,17 +3950,57 @@ fn demo_proof_close_group_order(
     }
 }
 
+fn demo_pending_exact_surface(
+    pending_signatures: &[PrefixSignature],
+    prefix_cache: &PrefixCache,
+) -> usize {
+    pending_signatures
+        .iter()
+        .filter_map(|signature| prefix_cache.get(signature))
+        .map(|group| group.candidates.len())
+        .sum::<usize>()
+}
+
+fn demo_should_handoff_materialize_to_proof_close(
+    budget: DemoStepBudget,
+    pending_signatures: &[PrefixSignature],
+    prefix_cache: &PrefixCache,
+    incumbent_rank: Option<&AcceptRank>,
+    materialize_full_evals: usize,
+) -> bool {
+    demo_should_handoff_materialize_to_proof_close_for_surface(
+        budget,
+        demo_pending_exact_surface(pending_signatures, prefix_cache),
+        incumbent_rank,
+        materialize_full_evals,
+    )
+}
+
+fn demo_should_handoff_materialize_to_proof_close_for_surface(
+    budget: DemoStepBudget,
+    pending_exact_surface: usize,
+    incumbent_rank: Option<&AcceptRank>,
+    materialize_full_evals: usize,
+) -> bool {
+    if budget.proof_close_reserve_millis == 0
+        || pending_exact_surface == 0
+        || incumbent_rank.is_none()
+        || materialize_full_evals == 0
+    {
+        return false;
+    }
+
+    demo_proof_close_order_mode(budget.proof_close_reserve_millis, pending_exact_surface)
+        == DemoProofCloseOrderMode::ClosureFirst
+}
+
 fn select_demo_proof_close_group_index(
     pending_signatures: &[PrefixSignature],
     prefix_cache: &PrefixCache,
     incumbent_rank: Option<&AcceptRank>,
     remaining_reserve_millis: u64,
 ) -> Option<usize> {
-    let pending_exact_surface = pending_signatures
-        .iter()
-        .filter_map(|signature| prefix_cache.get(signature))
-        .map(|group| group.candidates.len())
-        .sum::<usize>();
+    let pending_exact_surface = demo_pending_exact_surface(pending_signatures, prefix_cache);
     let order_mode = demo_proof_close_order_mode(remaining_reserve_millis, pending_exact_surface);
 
     pending_signatures
@@ -4148,10 +4361,11 @@ fn elapsed_millis(duration: Duration) -> u64 {
 #[cfg(test)]
 mod tests {
     use super::{
-        AtomicSearchStep, DemoBreadthHarvestExitReason, DemoBudgetController, DemoBudgetSeed,
-        DemoProofCloseEntryReason, DemoProofCloseOrderMode, DemoProofCloseOverrunReason,
-        LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem, create_online_prefix_work_item,
-        demo_proof_close_group_order, demo_proof_close_order_mode,
+        AtomicSearchStep, DemoBreadthHarvestExitReason, DemoBudgetController, DemoBudgetFeedback,
+        DemoBudgetSeed, DemoProofCloseEntryReason, DemoProofCloseOrderMode,
+        DemoProofCloseOverrunReason, DemoStepBudget, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
+        create_online_prefix_work_item, demo_proof_close_group_order, demo_proof_close_order_mode,
+        demo_should_handoff_materialize_to_proof_close_for_surface,
         exact_partial_prefix_bound_decision, pop_best_prefix, search_bootstrap_from_prefix,
         search_bootstrap_from_prefix_for_profile_with_runtime, search_bootstrap_prefix,
         search_bootstrap_prefix_for_config_with_runtime,
@@ -4434,12 +4648,12 @@ mod tests {
 
         let step_thirteen = controller.plan_step(13);
         assert_eq!(step_thirteen.baseline_budget_millis, 55_000);
-        assert_eq!(step_thirteen.spill_budget_millis, 50_000);
-        assert_eq!(step_thirteen.total_budget_millis, 105_000);
-        assert_eq!(step_thirteen.proof_close_reserve_millis, 31_500);
-        assert_eq!(step_thirteen.discovery_budget_millis, 73_500);
-        assert_eq!(step_thirteen.scout_budget_millis, 7_350);
-        assert_eq!(step_thirteen.breadth_harvest_budget_millis, 66_150);
+        assert_eq!(step_thirteen.spill_budget_millis, 28_125);
+        assert_eq!(step_thirteen.total_budget_millis, 83_125);
+        assert_eq!(step_thirteen.proof_close_reserve_millis, 24_937);
+        assert_eq!(step_thirteen.discovery_budget_millis, 58_188);
+        assert_eq!(step_thirteen.scout_budget_millis, 5_818);
+        assert_eq!(step_thirteen.breadth_harvest_budget_millis, 52_370);
     }
 
     #[test]
@@ -4457,10 +4671,84 @@ mod tests {
         .expect("demo profile should enable the budget controller");
 
         let resumed_step_thirteen = controller.plan_step(13);
-        assert_eq!(resumed_step_thirteen.total_budget_millis, 105_000);
-        assert_eq!(resumed_step_thirteen.proof_close_reserve_millis, 31_500);
-        assert_eq!(resumed_step_thirteen.discovery_budget_millis, 73_500);
-        assert_eq!(resumed_step_thirteen.scout_budget_millis, 7_350);
+        assert_eq!(resumed_step_thirteen.total_budget_millis, 83_125);
+        assert_eq!(resumed_step_thirteen.proof_close_reserve_millis, 24_937);
+        assert_eq!(resumed_step_thirteen.discovery_budget_millis, 58_188);
+        assert_eq!(resumed_step_thirteen.scout_budget_millis, 5_818);
+    }
+
+    #[test]
+    fn demo_budget_controller_frontloads_more_spill_after_floor_miss_with_slack() {
+        let config = demo_runtime_config_10m();
+        let mut controller =
+            DemoBudgetController::maybe_new(&config, 15, DemoBudgetSeed::default())
+                .expect("demo budget controller should build")
+                .expect("demo profile should enable the budget controller");
+        for (step_index, step_budget_millis) in [
+            (1, 30_000),
+            (2, 10_000),
+            (3, 10_000),
+            (4, 10_000),
+            (5, 12_000),
+            (6, 14_000),
+            (7, 18_000),
+            (8, 24_000),
+            (9, 32_000),
+            (10, 15_000),
+            (11, 25_000),
+            (12, 35_000),
+        ] {
+            controller.record_step(step_index, step_budget_millis);
+        }
+
+        let baseline = controller.plan_step(13);
+        controller.record_feedback(DemoBudgetFeedback {
+            late_floor_miss: true,
+            reserve_pressure: false,
+            reserve_slack: true,
+        });
+        let adaptive = controller.plan_step(13);
+
+        assert!(adaptive.spill_budget_millis > baseline.spill_budget_millis);
+        assert!(adaptive.total_budget_millis > baseline.total_budget_millis);
+        assert!(adaptive.discovery_budget_millis > baseline.discovery_budget_millis);
+    }
+
+    #[test]
+    fn demo_budget_controller_protects_more_reserve_after_reserve_pressure() {
+        let config = demo_runtime_config_10m();
+        let mut controller =
+            DemoBudgetController::maybe_new(&config, 15, DemoBudgetSeed::default())
+                .expect("demo budget controller should build")
+                .expect("demo profile should enable the budget controller");
+        for (step_index, step_budget_millis) in [
+            (1, 30_000),
+            (2, 10_000),
+            (3, 10_000),
+            (4, 10_000),
+            (5, 12_000),
+            (6, 14_000),
+            (7, 18_000),
+            (8, 24_000),
+            (9, 32_000),
+            (10, 15_000),
+            (11, 25_000),
+            (12, 35_000),
+        ] {
+            controller.record_step(step_index, step_budget_millis);
+        }
+
+        let baseline = controller.plan_step(13);
+        controller.record_feedback(DemoBudgetFeedback {
+            late_floor_miss: false,
+            reserve_pressure: true,
+            reserve_slack: false,
+        });
+        let adaptive = controller.plan_step(13);
+
+        assert_eq!(adaptive.spill_budget_millis, baseline.spill_budget_millis);
+        assert!(adaptive.proof_close_reserve_millis > baseline.proof_close_reserve_millis);
+        assert!(adaptive.discovery_budget_millis < baseline.discovery_budget_millis);
     }
 
     #[test]
@@ -4546,6 +4834,37 @@ mod tests {
                 && event.phase == Some(StepPhase::ProofClose)
                 && event.message.contains("soft cap")
         }));
+    }
+
+    #[test]
+    fn demo_materialize_handoff_switches_on_when_reserve_is_tighter_than_pending_surface() {
+        let incumbent = test_accept_rank(1, "incumbent");
+        let budget = DemoStepBudget {
+            proof_close_reserve_millis: 900,
+            ..DemoStepBudget::default()
+        };
+
+        assert!(demo_should_handoff_materialize_to_proof_close_for_surface(
+            budget,
+            2,
+            Some(&incumbent),
+            1,
+        ));
+        assert!(!demo_should_handoff_materialize_to_proof_close_for_surface(
+            budget,
+            0,
+            Some(&incumbent),
+            1,
+        ));
+        assert!(!demo_should_handoff_materialize_to_proof_close_for_surface(
+            budget, 2, None, 1,
+        ));
+        assert!(!demo_should_handoff_materialize_to_proof_close_for_surface(
+            budget,
+            2,
+            Some(&incumbent),
+            0,
+        ));
     }
 
     #[test]

@@ -51,11 +51,20 @@ This file is the forward-facing status snapshot for
   `proof_close_frontier_total_groups`, `proof_close_frontier_groups_closed`,
   `proof_close_frontier_groups_remaining`, and
   `proof_close_closure_percent`
+- late-step demo planning now also feeds stored floor misses plus proof-close
+  reserve pressure or slack back into the standard `25` to `40` percent
+  reserve profiles, frontloading more spill and discovery toward the next
+  late step after misses while preserving explicit out-of-band reserve override
+  configs such as `0.00` and `1.00` literally
 - demo materialize and proof-close now also spend the retained exact surface in
   a reserve-aware deterministic order: with healthy reserve they prioritize
   groups that can tighten the incumbent earliest, and under tight reserve they
   prioritize prune-ready or low-cost groups that can close the remaining
   frontier faster
+- demo materialize can now also yield into `ProofClose` with an explicit
+  `materialize_reserve_handoff` reason once an incumbent exists and the
+  remaining exact surface is already in closure-first reserve-pressure mode,
+  instead of waiting only for the soft cap or the end of materialize
 - candidates inside each retained prefix group are now also processed in exact
   accept-rank order before stable structural tiebreaks, so later dominated
   candidates can be skipped once an earlier exact incumbent wins cleanly
@@ -84,6 +93,14 @@ This file is the forward-facing status snapshot for
   certification groups deterministically, switching from incumbent-improvement
   order to faster closure/prune order when the remaining reserved slice gets
   tight relative to the pending exact surface
+- the demo budget controller now also uses stored late-step floor misses plus
+  reserve exhaustion or slack to retune later spill and effective proof-close
+  reserve sizing inside the standard `25` to `40` percent profiles, instead of
+  treating every late step as the same fixed spill split
+- `pen-search` can now also enter `ProofClose` from `Materialize` with the new
+  `materialize_reserve_handoff` reason when a tightened incumbent already
+  exists and the pending exact surface has flipped into closure-first reserve
+  pressure, rather than waiting only for a soft cap or the end of materialize
 - retained-group candidate order is now exact accept-rank first with stable
   structural tiebreaks, so materialize and proof-close tighten incumbents
   earlier before spending later exact evaluations
@@ -100,9 +117,10 @@ This file is the forward-facing status snapshot for
   floor hits or misses, closure percent, soft-cap status, breadth/proof-close
   reason codes, proof-close reserve usage, proof-close closure progress, and
   latest-step demo funnel summaries in both text and JSON
-- targeted tests now cover the new narrative rendering, compare-tool demo
-  evidence surface, reserve-exhaustion accounting, and the compare-summary
-  schema bump
+- targeted tests now also cover adaptive spill and reserve retuning, the new
+  materialize-to-proof-close handoff trigger, zero-discovery reserve
+  protection, the new narrative rendering, compare-tool demo evidence surface,
+  reserve-exhaustion accounting, and the compare-summary schema bump
 
 ## Active Gaps
 
@@ -120,20 +138,24 @@ Next target:
   widening work until the demo lane can satisfy more of the planned breadth
   floors honestly
 
-### 2. ProofClose Now Steers Ordering, But It Still Does Not Retune Budget Allocation Enough
+### 2. ProofClose Now Retunes Planning, But The Current-Step Feedback Loop Is Still Shallow
 
 The lane no longer treats proof-close reserve and closure as report-only
 evidence: retained groups and within-group candidates now reorder under live
-reserve pressure so tighter incumbents and cheap exact prunes happen earlier.
-The remaining gap is that this evidence still does not change the broader
-discovery-versus-materialize split or spill allocation early enough in the
-step; it mostly improves how the already-retained exact surface is spent.
+reserve pressure so tighter incumbents and cheap exact prunes happen earlier,
+later late-step spill now reacts to stored floor misses and reserve pressure or
+slack, and materialize can hand off early once the pending exact surface has
+already become closure-first. The remaining gap is that this is still mostly a
+step-to-step retune plus a single handoff trigger, not a richer within-step
+feedback loop driven by current-step scout throughput and live closure
+progress.
 
 Next target:
 
-- let live proof-close reserve and closure counters retune materialize handoff,
-  discovery spill, and broader step-budget allocation earlier in the step, not
-  just the order of the retained exact surface
+- let current-step scout throughput plus live proof-close reserve and closure
+  counters keep reallocating discovery, materialize, and proof-close budget
+  throughout the step, not just between steps or at one reserve-pressure
+  handoff
 
 ### 3. Demo Widening Is Still Mostly A Reporting Surface, Not Yet A Broader Search Surface
 
@@ -153,9 +175,9 @@ Next target:
 1. Use the new stored funnel and floor evidence to close the explicit step-1
    and early-step breadth gap, rather than leaving the compare tool to report a
    permanent miss.
-2. Push the landed proof-close ordering retune further upstream so live reserve
-   and closure evidence also changes materialize handoff, spill, and step-level
-   budget allocation.
+2. Push the new adaptive spill, reserve, and handoff retune deeper into a real
+   within-step controller so scout throughput and live closure keep moving
+   budget while the step is still running.
 3. Keep widening the actual demo search surface, especially on steps `10` to
    `15`, so the newly surfaced generated and exact-screened counters grow for
    real.
