@@ -92,6 +92,10 @@ The current search-architecture focus has shifted again:
   decisions in that same `PrefixSignature`-keyed partial-prefix bound cache,
   so later enqueued terminal prefixes can reuse the exact `can_clear_bar` /
   `cannot_clear_bar` decision without replaying the terminal-summary lookup
+- realistic shadow now also directly materializes isolated exact remaining-two
+  late surfaces when no competing queue item can interleave, so the engine can
+  skip replaying the queued one-clause-short child bound check on those
+  collapsed late suffixes
 - realistic shadow now also collapses exact single-continuation late-family
   suffixes in-place once the strengthened family summary plus active-window
   clause filtering leave only one legal child at each remaining position, so
@@ -146,24 +150,24 @@ The current search-architecture focus has shifted again:
   `incremental_partial_prefix_bound_hits = 1`, confirming that multi-step
   partial-prefix bar decisions are now reused during repeated late-step prefix
   checks
-- stored realistic-shadow step-13 and step-15 artifacts now also show
-  `incremental_partial_prefix_bound_hits = 1` and
-  `incremental_terminal_prefix_completion_hits = 2`, confirming that the
-  one-clause-short exact terminal work now reuses the cached partial bar
-  decision on the later enqueue path instead of replaying the same terminal
-  summary lookup
-- fresh realistic-shadow step-13 and step-15 artifacts now also show
-  `incremental_terminal_prefix_rank_hits = 1`, confirming that late dominated
-  terminal prefixes now consult the cached exact best accept-rank summary
-  before the later dominance check
-- fresh realistic-shadow step-13, step-14, and step-15 artifacts now also show
+- stored realistic-shadow step-13 artifacts now also show
+  `prefix_states_explored = 1`,
+  `incremental_partial_prefix_bound_checks = 1`,
+  `incremental_partial_prefix_bound_hits = 0`,
+  `incremental_terminal_prefix_completion_hits = 1`, and
+  `incremental_terminal_prefix_rank_hits = 1`, confirming that the isolated
+  exact remaining-two surface now skips the later queued child bound replay
+- fresh realistic-shadow step-14 and step-15 artifacts now also show
   `incremental_terminal_rank_prunes = 1` and
   `full_telescopes_evaluated = 1`, confirming that dominated late retained
   terminal surfaces are now skipped before final candidate evaluation
-- fresh realistic-shadow step-13 and step-15 artifacts now also show
-  `prefix_states_explored = 2` and
-  `prefix_frontier_hot_states = 1`, confirming that the dominated late
-  terminal prefix is now pruned before retained frontier planning
+- fresh realistic-shadow step-15 artifacts still show
+  `prefix_states_explored = 2`,
+  `incremental_partial_prefix_bound_hits = 1`,
+  `incremental_partial_prefix_bound_checks = 3`, and
+  `incremental_terminal_prefix_completion_hits = 2`, confirming that the
+  surviving temporal-shell root lane is still the next late exact surface to
+  collapse or summarize earlier
 - fresh realistic-shadow step-15 artifacts now also show
   `incremental_connectivity_shortcuts = 2` and
   `incremental_connectivity_fallbacks = 0`, confirming that temporal-shell
@@ -178,7 +182,8 @@ The current search-architecture focus has shifted again:
   and cached full-candidate reuse plus the landed multi-step partial-prefix
   bar-decision reuse plus the landed terminal-prefix partial-bound reuse plus
   the landed exact terminal-prefix best-rank summary reuse plus the landed
-  exact historical-reanchor connectivity shortcut, then broader non-family
+  exact historical-reanchor connectivity shortcut plus the landed isolated
+  exact remaining-two suffix collapse, then broader non-family
   admissibility/filter reuse before terminal completion summaries are built
   beyond the landed trivial-derivability and terminal-admissibility summaries
   plus the landed cached next-clause reuse, then continuing to use the new
@@ -421,14 +426,15 @@ Reject designs that:
   terminal accept-rank prune plus the landed exact multi-step partial-prefix
   bar-decision reuse plus the landed terminal-prefix partial-bound reuse plus
   the landed exact terminal-prefix best-rank summary reuse plus the landed
-  exact single-continuation suffix collapse plus the landed exact
-  historical-reanchor connectivity shortcut plus the landed cached next-clause
-  reuse and continuation-aware queue order, then broader non-family
-  admissibility/filter reuse before terminal completion summaries are built
-  beyond the landed legality/connectivity/family/active-window/terminal-
-  clause/trivial-derivability/terminal-admissibility/terminal-prefix-
-  completion/partial-prefix-bound memo layer, then continuing to use the now-
-  persisted timing/memory evidence to retune late-step order.
+  exact single-continuation suffix collapse plus the landed isolated exact
+  remaining-two suffix collapse plus the landed exact historical-reanchor
+  connectivity shortcut plus the landed cached next-clause reuse and
+  continuation-aware queue order, then broader non-family admissibility/filter
+  reuse before terminal completion summaries are built beyond the landed
+  legality/connectivity/family/active-window/terminal-clause/trivial-
+  derivability/terminal-admissibility/terminal-prefix-completion/partial-
+  prefix-bound memo layer, then continuing to use the now-persisted
+  timing/memory evidence to retune late-step order.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.

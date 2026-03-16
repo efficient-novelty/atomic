@@ -1088,6 +1088,24 @@ fn discover_realistic_shadow_candidates(
             }
 
             discovery.prefix_states_explored += 1;
+            if frontier.is_empty()
+                && work_item.remaining_clause_slots == 2
+                && process_exact_two_step_terminal_surface(
+                    step_index,
+                    library,
+                    history,
+                    admissibility,
+                    objective_bar,
+                    nu_history,
+                    retention_policy,
+                    &clause_catalog,
+                    &work_item,
+                    &mut discovery,
+                )?
+            {
+                continue;
+            }
+
             for clause in &work_item.next_clauses {
                 let mut child_prefix = work_item.prefix_telescope.clone();
                 child_prefix.clauses.push(clause.clone());
@@ -1140,6 +1158,113 @@ fn discover_realistic_shadow_candidates(
     }
 
     Ok(discovery)
+}
+
+fn process_exact_two_step_terminal_surface(
+    step_index: u32,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility: StrictAdmissibility,
+    objective_bar: Rational,
+    nu_history: &[(u32, u32)],
+    retention_policy: RetentionPolicy,
+    clause_catalog: &ClauseCatalog,
+    work_item: &OnlinePrefixWorkItem,
+    discovery: &mut RealisticShadowDiscovery,
+) -> Result<bool> {
+    if work_item.remaining_clause_slots != 2 {
+        return Ok(false);
+    }
+
+    // When no competing queue item can interleave, process the final two-step
+    // suffix directly instead of replaying one-clause-short child bound checks.
+    let mut terminal_prefixes = Vec::new();
+    for clause in &work_item.next_clauses {
+        let mut child_prefix = work_item.prefix_telescope.clone();
+        child_prefix.clauses.push(clause.clone());
+        let child_signature = PrefixSignature::new(step_index, library, &child_prefix);
+        if !discovery.prefix_legality_cache.insert_child(
+            &work_item.signature,
+            child_signature.clone(),
+            library,
+            clause,
+            admissibility,
+        ) {
+            continue;
+        }
+        discovery.prefixes_created += 1;
+        terminal_prefixes.push(create_online_prefix_work_item(
+            work_item.clause_kappa,
+            child_prefix,
+            child_signature,
+            library,
+            admissibility,
+            clause_catalog,
+            &mut discovery.prefix_legality_cache,
+        ));
+    }
+
+    while let Some(terminal_prefix) = pop_best_prefix(&mut terminal_prefixes) {
+        debug_assert_eq!(terminal_prefix.remaining_clause_slots, 1);
+
+        let mut group = materialize_terminal_prefix_group(
+            step_index,
+            library,
+            admissibility,
+            objective_bar,
+            nu_history,
+            &terminal_prefix.signature,
+            &terminal_prefix.prefix_telescope,
+            &terminal_prefix.next_clauses,
+            discovery,
+        )?;
+        let Some(retained_bound) = group.bound else {
+            continue;
+        };
+        if !retained_bound.can_clear_bar(objective_bar) {
+            discovery.terminal_prefix_bar_prunes += 1;
+            continue;
+        }
+        if let Some(pruned_candidates) = cached_terminal_prefix_rank_prune_count(
+            &terminal_prefix.signature,
+            discovery.terminal_rank_incumbent.as_ref(),
+            &mut discovery.prefix_legality_cache,
+        ) {
+            discovery.terminal_rank_prunes += pruned_candidates;
+            continue;
+        }
+        if let (Some(group_best_rank), Some(incumbent_rank)) = (
+            best_prefix_group_accept_rank(&group.candidates),
+            discovery.terminal_rank_incumbent.as_ref(),
+        ) {
+            if !better_rank(&group_best_rank, incumbent_rank) {
+                discovery.terminal_rank_prunes += group.candidates.len();
+                continue;
+            }
+        }
+
+        cache_evaluated_terminal_prefix_group_candidates(
+            step_index,
+            objective_bar,
+            library,
+            history,
+            admissibility,
+            nu_history,
+            &mut group.candidates,
+            discovery,
+        )?;
+        discovery.prefix_cache.record_group_with_bound(
+            step_index,
+            terminal_prefix.prefix_telescope.clone(),
+            group.candidates,
+            retained_bound,
+            library,
+            history,
+            retention_policy,
+        )?;
+    }
+
+    Ok(true)
 }
 
 fn create_online_prefix_work_item(
@@ -2770,6 +2895,32 @@ mod tests {
         );
         assert!(step.prefix_states_explored <= 2);
         assert_eq!(step.full_telescopes_evaluated, 1);
+    }
+
+    #[test]
+    fn realistic_shadow_step_thirteen_collapses_exact_remaining_two_surface() {
+        let prefix = reference_prefix(12);
+        let realistic = search_bootstrap_from_prefix_for_profile_with_runtime(
+            &prefix,
+            13,
+            2,
+            SearchProfile::RealisticFrontierShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("realistic bootstrap step should succeed");
+        let step = realistic.last().expect("realistic step");
+
+        assert_eq!(step.step_index, 13);
+        assert_eq!(step.telescope, Telescope::reference(13));
+        assert_eq!(step.prefix_states_explored, 1);
+        assert_eq!(step.incremental_partial_prefix_bound_checks, 1);
+        assert_eq!(step.incremental_partial_prefix_bound_hits, 0);
+        assert_eq!(step.incremental_terminal_prefix_completion_hits, 1);
+        assert_eq!(step.incremental_terminal_prefix_rank_hits, 1);
+        assert_eq!(step.incremental_terminal_rank_prunes, 1);
+        assert_eq!(step.full_telescopes_evaluated, 1);
+        assert_eq!(step.prefix_frontier_hot_states, 1);
+        assert_eq!(step.frontier_window.total_len(), 1);
     }
 
     #[test]
