@@ -8,7 +8,10 @@ use crate::enumerate::{
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
 use crate::prefix_cache::{PrefixCache, PrefixCandidateGroup, PrefixSignature};
-use crate::prefix_memo::{PrefixLegalityCache, TerminalConnectivityDecision};
+use crate::prefix_memo::{
+    PrefixLegalityCache, TerminalConnectivityDecision, TerminalPrefixClauseEvaluation,
+    TerminalPrefixCompletion, TerminalPrefixCompletionSummary,
+};
 use crate::priority::{PriorityInputs, build_priority_key};
 use crate::scheduler::build_schedule;
 use crate::state::{FrontierStateRecV1, PrefixState};
@@ -144,6 +147,7 @@ pub struct AtomicSearchStep {
     pub incremental_trivial_derivability_prunes: usize,
     pub incremental_terminal_admissibility_hits: usize,
     pub incremental_terminal_admissibility_rejections: usize,
+    pub incremental_terminal_prefix_completion_hits: usize,
     pub incremental_partial_prefix_bound_checks: usize,
     pub incremental_partial_prefix_bound_prunes: usize,
     pub incremental_terminal_prefix_bar_prunes: usize,
@@ -389,6 +393,7 @@ fn search_next_step(
     let mut incremental_trivial_derivability_prunes = 0usize;
     let mut incremental_terminal_admissibility_hits = 0usize;
     let mut incremental_terminal_admissibility_rejections = 0usize;
+    let mut incremental_terminal_prefix_completion_hits = 0usize;
     let mut incremental_partial_prefix_bound_checks = 0usize;
     let mut incremental_partial_prefix_bound_prunes = 0usize;
     let mut incremental_terminal_prefix_bar_prunes = 0usize;
@@ -436,6 +441,8 @@ fn search_next_step(
         incremental_terminal_admissibility_hits = legality_stats.terminal_admissibility_hits;
         incremental_terminal_admissibility_rejections =
             legality_stats.terminal_admissibility_rejections;
+        incremental_terminal_prefix_completion_hits =
+            legality_stats.terminal_prefix_completion_hits;
         incremental_partial_prefix_bound_checks = discovery.partial_prefix_bound_checks;
         incremental_partial_prefix_bound_prunes = discovery.partial_prefix_bound_prunes;
         incremental_terminal_prefix_bar_prunes = discovery.terminal_prefix_bar_prunes;
@@ -611,6 +618,7 @@ fn search_next_step(
         incremental_trivial_derivability_prunes,
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
+        incremental_terminal_prefix_completion_hits,
         incremental_partial_prefix_bound_checks,
         incremental_partial_prefix_bound_prunes,
         incremental_terminal_prefix_bar_prunes,
@@ -672,6 +680,7 @@ fn build_step_result(
     incremental_trivial_derivability_prunes: usize,
     incremental_terminal_admissibility_hits: usize,
     incremental_terminal_admissibility_rejections: usize,
+    incremental_terminal_prefix_completion_hits: usize,
     incremental_partial_prefix_bound_checks: usize,
     incremental_partial_prefix_bound_prunes: usize,
     incremental_terminal_prefix_bar_prunes: usize,
@@ -733,6 +742,7 @@ fn build_step_result(
         incremental_trivial_derivability_prunes,
         incremental_terminal_admissibility_hits,
         incremental_terminal_admissibility_rejections,
+        incremental_terminal_prefix_completion_hits,
         incremental_partial_prefix_bound_checks,
         incremental_partial_prefix_bound_prunes,
         incremental_terminal_prefix_bar_prunes,
@@ -1226,26 +1236,35 @@ fn exact_terminal_prefix_bound_decision(
     prefix_legality_cache: &mut PrefixLegalityCache,
     budget: &mut usize,
 ) -> ExactPartialPrefixBoundDecision {
-    let terminal_clauses = prefix_legality_cache
-        .filter_terminal_clauses(
+    if let Some(summary) =
+        prefix_legality_cache.terminal_prefix_completion_summary(prefix_signature)
+    {
+        return exact_terminal_prefix_completion_summary_decision(objective_bar, &summary);
+    }
+
+    let terminal_clauses = terminal_prefix_clause_candidates(
+        step_index,
+        library,
+        admissibility,
+        prefix_signature,
+        filtered_last_clause_options,
+        prefix_legality_cache,
+    );
+    if spend_exact_partial_prefix_budget(budget, terminal_clauses.len()) {
+        let summary = compute_terminal_prefix_completion_summary_from_candidates(
             step_index,
-            prefix_signature,
             library,
             admissibility,
-            &filtered_last_clause_options.iter().collect::<Vec<_>>(),
-        )
-        .map(|clauses| {
-            clauses
-                .into_iter()
-                .map(|clause| (clause.clause, Some(clause.admissibility_decision)))
-                .collect::<Vec<_>>()
-        })
-        .unwrap_or_else(|| {
-            filtered_last_clause_options
-                .iter()
-                .map(|clause| (clause, None))
-                .collect::<Vec<_>>()
-        });
+            nu_history,
+            prefix_signature,
+            prefix_telescope,
+            terminal_clauses,
+            prefix_legality_cache,
+        );
+        prefix_legality_cache
+            .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary.clone());
+        return exact_terminal_prefix_completion_summary_decision(objective_bar, &summary);
+    }
 
     for (clause, cached_admissibility_decision) in terminal_clauses {
         if !spend_exact_partial_prefix_budget(budget, 1) {
@@ -1307,21 +1326,32 @@ fn exact_terminal_prefix_bound_decision(
     ExactPartialPrefixBoundDecision::CannotClearBar
 }
 
-fn record_terminal_prefix_group(
+fn exact_terminal_prefix_completion_summary_decision(
+    objective_bar: Rational,
+    summary: &TerminalPrefixCompletionSummary,
+) -> ExactPartialPrefixBoundDecision {
+    let Some(bound) = summary.bound else {
+        return ExactPartialPrefixBoundDecision::CannotClearBar;
+    };
+    if bound.can_clear_bar(objective_bar) {
+        ExactPartialPrefixBoundDecision::CanClearBar
+    } else {
+        ExactPartialPrefixBoundDecision::CannotClearBar
+    }
+}
+
+fn terminal_prefix_clause_candidates<'a>(
     step_index: u32,
     library: &Library,
-    history: &[DiscoveryRecord],
     admissibility: StrictAdmissibility,
-    retention_policy: RetentionPolicy,
-    objective_bar: Rational,
-    nu_history: &[(u32, u32)],
     prefix_signature: &PrefixSignature,
-    prefix_telescope: &Telescope,
-    filtered_last_clause_options: &[pen_core::clause::ClauseRec],
-    discovery: &mut RealisticShadowDiscovery,
-) -> Result<()> {
-    let terminal_clauses = discovery
-        .prefix_legality_cache
+    filtered_last_clause_options: &'a [pen_core::clause::ClauseRec],
+    prefix_legality_cache: &mut PrefixLegalityCache,
+) -> Vec<(
+    &'a pen_core::clause::ClauseRec,
+    Option<pen_type::admissibility::AdmissibilityDecision>,
+)> {
+    prefix_legality_cache
         .filter_terminal_clauses(
             step_index,
             prefix_signature,
@@ -1337,25 +1367,40 @@ fn record_terminal_prefix_group(
         })
         .unwrap_or_else(|| {
             filtered_last_clause_options
-                .into_iter()
+                .iter()
                 .map(|clause| (clause, None))
-                .collect()
-        });
-    let mut retained_telescopes = Vec::new();
-    let mut retained_bound: Option<PrefixBound> = None;
+                .collect::<Vec<_>>()
+        })
+}
+
+fn compute_terminal_prefix_completion_summary_from_candidates(
+    step_index: u32,
+    library: &Library,
+    admissibility: StrictAdmissibility,
+    nu_history: &[(u32, u32)],
+    prefix_signature: &PrefixSignature,
+    prefix_telescope: &Telescope,
+    terminal_clauses: Vec<(
+        &pen_core::clause::ClauseRec,
+        Option<pen_type::admissibility::AdmissibilityDecision>,
+    )>,
+    prefix_legality_cache: &mut PrefixLegalityCache,
+) -> TerminalPrefixCompletionSummary {
+    let mut summary = TerminalPrefixCompletionSummary::default();
 
     for (clause, cached_admissibility_decision) in terminal_clauses {
-        let Some(connectivity_decision) = discovery.prefix_legality_cache.terminal_connectivity(
-            prefix_signature,
-            library,
-            clause,
-        ) else {
+        let Some(connectivity_decision) =
+            prefix_legality_cache.terminal_connectivity(prefix_signature, library, clause)
+        else {
             continue;
         };
         if matches!(
             connectivity_decision,
             TerminalConnectivityDecision::PruneDisconnected
         ) {
+            summary
+                .evaluations
+                .push(TerminalPrefixClauseEvaluation::Disconnected);
             continue;
         }
 
@@ -1367,13 +1412,14 @@ fn record_terminal_prefix_group(
             let mut fallback_telescope = prefix_telescope.clone();
             fallback_telescope.clauses.push(clause.clone());
             if !passes_connectivity(library, &fallback_telescope) {
+                summary
+                    .evaluations
+                    .push(TerminalPrefixClauseEvaluation::Disconnected);
                 continue;
             }
             telescope = Some(fallback_telescope);
         }
 
-        discovery.enumerated_candidates += 1;
-        discovery.well_formed_candidates += 1;
         let admissibility_decision = if let Some(decision) = cached_admissibility_decision {
             decision
         } else {
@@ -1384,11 +1430,12 @@ fn record_terminal_prefix_group(
             });
             assess_strict_admissibility(step_index, library, fallback_telescope, admissibility)
         };
-        discovery
-            .admissibility_diagnostics
-            .record(&admissibility_decision);
         if !admissibility_decision.is_admitted() {
-            discovery.admissibility_rejections += 1;
+            summary
+                .evaluations
+                .push(TerminalPrefixClauseEvaluation::AdmissibilityRejected {
+                    decision: admissibility_decision,
+                });
             continue;
         }
 
@@ -1403,15 +1450,94 @@ fn record_terminal_prefix_group(
             u16::try_from(telescope_bit_cost(&telescope)).expect("bit cost exceeded u16");
         let clause_kappa_used = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
         let completion_bound = PrefixBound::singleton(exact_nu, clause_kappa_used, bit_kappa_used);
-        if let Some(bound) = retained_bound.as_mut() {
+        if let Some(bound) = summary.bound.as_mut() {
             bound.absorb_bound(completion_bound);
         } else {
-            retained_bound = Some(completion_bound);
+            summary.bound = Some(completion_bound);
         }
-        retained_telescopes.push(telescope);
+        summary
+            .evaluations
+            .push(TerminalPrefixClauseEvaluation::Admitted {
+                decision: admissibility_decision,
+                completion: TerminalPrefixCompletion {
+                    telescope,
+                    exact_nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
+                },
+            });
     }
 
-    let Some(retained_bound) = retained_bound else {
+    summary
+}
+
+fn record_terminal_prefix_group(
+    step_index: u32,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility: StrictAdmissibility,
+    retention_policy: RetentionPolicy,
+    objective_bar: Rational,
+    nu_history: &[(u32, u32)],
+    prefix_signature: &PrefixSignature,
+    prefix_telescope: &Telescope,
+    filtered_last_clause_options: &[pen_core::clause::ClauseRec],
+    discovery: &mut RealisticShadowDiscovery,
+) -> Result<()> {
+    let summary = if let Some(summary) = discovery
+        .prefix_legality_cache
+        .terminal_prefix_completion_summary(prefix_signature)
+    {
+        summary
+    } else {
+        let terminal_clauses = terminal_prefix_clause_candidates(
+            step_index,
+            library,
+            admissibility,
+            prefix_signature,
+            filtered_last_clause_options,
+            &mut discovery.prefix_legality_cache,
+        );
+        let summary = compute_terminal_prefix_completion_summary_from_candidates(
+            step_index,
+            library,
+            admissibility,
+            nu_history,
+            prefix_signature,
+            prefix_telescope,
+            terminal_clauses,
+            &mut discovery.prefix_legality_cache,
+        );
+        discovery
+            .prefix_legality_cache
+            .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary.clone());
+        summary
+    };
+    let TerminalPrefixCompletionSummary { evaluations, bound } = summary;
+    let mut retained_telescopes = Vec::new();
+
+    for evaluation in evaluations {
+        match evaluation {
+            TerminalPrefixClauseEvaluation::Disconnected => {}
+            TerminalPrefixClauseEvaluation::AdmissibilityRejected { decision } => {
+                discovery.enumerated_candidates += 1;
+                discovery.well_formed_candidates += 1;
+                discovery.admissibility_diagnostics.record(&decision);
+                discovery.admissibility_rejections += 1;
+            }
+            TerminalPrefixClauseEvaluation::Admitted {
+                decision,
+                completion,
+            } => {
+                discovery.enumerated_candidates += 1;
+                discovery.well_formed_candidates += 1;
+                discovery.admissibility_diagnostics.record(&decision);
+                retained_telescopes.push(completion.telescope);
+            }
+        }
+    }
+
+    let Some(retained_bound) = bound else {
         return Ok(());
     };
     if !retained_bound.can_clear_bar(objective_bar) {
@@ -2186,6 +2312,7 @@ mod tests {
         assert!(step.incremental_terminal_clause_filter_hits > 0);
         assert!(step.incremental_trivial_derivability_hits > 0);
         assert!(step.incremental_terminal_admissibility_hits > 0);
+        assert!(step.incremental_terminal_prefix_completion_hits > 0);
         assert!(step.incremental_partial_prefix_bound_checks > 0);
         assert_eq!(step.prefix_states_explored, 3);
         assert!(

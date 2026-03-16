@@ -76,9 +76,147 @@
           "type": "integer",
           "format": "uint64",
           "minimum": 0
+        },
+        "incremental_active_window_clause_filter_hits": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_active_window_clause_filter_prunes": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_clause_family_filter_hits": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_clause_family_prunes": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_connectivity_fallbacks": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_connectivity_prunes": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_connectivity_shortcuts": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_legality_cache_hits": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_partial_prefix_bound_checks": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_partial_prefix_bound_prunes": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_terminal_admissibility_hits": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_terminal_admissibility_rejections": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_terminal_clause_filter_hits": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_terminal_clause_filter_prunes": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_terminal_prefix_bar_prunes": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_terminal_prefix_completion_hits": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_trivial_derivability_hits": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_trivial_derivability_prunes": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "prefix_states_exact_pruned": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "prefix_states_explored": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "prefix_states_heuristic_dropped": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "prefix_states_merged_by_signature": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "prefixes_created": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
         }
       },
       "required": [
+        "prefix_states_explored",
+        "prefix_states_merged_by_signature",
+        "prefix_states_exact_pruned",
+        "prefix_states_heuristic_dropped",
         "hot_states",
         "cold_states",
         "dedupe_keys"

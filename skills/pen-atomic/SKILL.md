@@ -55,6 +55,10 @@ The current search-architecture focus has shifted again:
   as an explicit terminal-clause filter keyed by `PrefixSignature`, so
   impossible last-clause options can be rejected before terminal connectivity
   or fallback telescope assembly runs
+- realistic shadow now also memoizes exact terminal-prefix completion
+  summaries keyed by `PrefixSignature` and reuses those admitted connected
+  one-clause-short completions plus their exact completion bounds between the
+  early terminal-prefix bar check and the later retained-prefix grouping
 - realistic shadow now also computes exact terminal-prefix completion bounds
   and prunes one-clause-short prefix groups that cannot clear the current bar
   before retained-prefix frontier planning
@@ -90,6 +94,7 @@ The current search-architecture focus has shifted again:
   `incremental_trivial_derivability_prunes`,
   `incremental_terminal_admissibility_hits`, and
   `incremental_terminal_admissibility_rejections`,
+  `incremental_terminal_prefix_completion_hits`,
   `incremental_partial_prefix_bound_checks`,
   `incremental_partial_prefix_bound_prunes`, and
   `incremental_terminal_prefix_bar_prunes`
@@ -108,13 +113,17 @@ The current search-architecture focus has shifted again:
 - stored realistic-shadow step-10 and step-11 artifacts now show
   `incremental_partial_prefix_bound_prunes = 1`, confirming the first landed
   earlier exact partial-prefix prune before queue entry
+- stored realistic-shadow step-13 and step-15 artifacts now also show
+  `incremental_terminal_prefix_completion_hits = 3`, confirming that the
+  one-clause-short exact terminal work is now reused instead of replayed
 - the next gap is stronger sound bound pruning beyond the landed exact
   clause-family impossibility prunes plus the landed active-window
   clause filtering plus the landed budgeted small-tree completion-bound prune
-  plus the landed exact terminal-prefix bar prune, then broader non-family
-  admissibility/filter reuse beyond the landed trivial-derivability and
-  terminal-admissibility summaries plus the landed cached next-clause reuse,
-  then continuing to use the new timing/memory evidence to retune realistic
+  plus the landed exact terminal-prefix bar prune plus the landed exact
+  terminal-prefix completion reuse, then broader non-family admissibility/
+  filter reuse beyond the landed trivial-derivability and terminal-
+  admissibility summaries plus the landed cached next-clause reuse, then
+  continuing to use the new timing/memory evidence to retune realistic
   late-step order past the first continuation-aware queue retune, not "add a
   frontier for the first time" or "collapse obviously forced late-family
   suffixes for the first time"
@@ -345,12 +354,13 @@ Reject designs that:
   pruning beyond the landed exact clause-family impossibility prunes and
   active-window clause filtering and terminal-clause filtering and budgeted
   small-tree completion-bound prune and exact terminal-prefix bar prune plus
-  the landed exact single-continuation suffix collapse plus the landed cached
-  next-clause reuse and continuation-aware queue order, then broader non-
-  family admissibility/filter reuse beyond the landed legality/connectivity/
-  family/active-window/terminal-clause/trivial-derivability/terminal-
-  admissibility memo layer, then continuing to use the now-persisted timing/
-  memory evidence to retune late-step order.
+  the landed exact terminal-prefix completion reuse plus the landed exact
+  single-continuation suffix collapse plus the landed cached next-clause
+  reuse and continuation-aware queue order, then broader non-family
+  admissibility/filter reuse beyond the landed legality/connectivity/family/
+  active-window/terminal-clause/trivial-derivability/terminal-admissibility/
+  terminal-prefix-completion memo layer, then continuing to use the now-
+  persisted timing/memory evidence to retune late-step order.
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, and the stronger Agda contract.

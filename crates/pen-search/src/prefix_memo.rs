@@ -1,3 +1,4 @@
+use crate::bounds::PrefixBound;
 use crate::enumerate::{
     EnumerationContext, clause_kappa_can_match_structural_family,
     clause_supports_structural_family_at_position,
@@ -31,6 +32,7 @@ pub struct PrefixLegalityCacheStats {
     pub trivial_derivability_prunes: usize,
     pub terminal_admissibility_hits: usize,
     pub terminal_admissibility_rejections: usize,
+    pub terminal_prefix_completion_hits: usize,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -225,16 +227,60 @@ pub struct FilteredTerminalClause<'a> {
     pub admissibility_decision: AdmissibilityDecision,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct TerminalPrefixCompletion {
+    pub telescope: Telescope,
+    pub exact_nu: u16,
+    pub bit_kappa_used: u16,
+    pub clause_kappa_used: u16,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum TerminalPrefixClauseEvaluation {
+    Disconnected,
+    AdmissibilityRejected {
+        decision: AdmissibilityDecision,
+    },
+    Admitted {
+        decision: AdmissibilityDecision,
+        completion: TerminalPrefixCompletion,
+    },
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct TerminalPrefixCompletionSummary {
+    pub evaluations: Vec<TerminalPrefixClauseEvaluation>,
+    pub bound: Option<PrefixBound>,
+}
+
 #[derive(Clone, Debug, Default)]
 pub struct PrefixLegalityCache {
     summaries: BTreeMap<PrefixSignature, PrefixLegalitySummary>,
     family_filters: BTreeMap<PrefixSignature, PrefixFamilyFilterSummary>,
+    terminal_prefix_completions: BTreeMap<PrefixSignature, TerminalPrefixCompletionSummary>,
     stats: PrefixLegalityCacheStats,
 }
 
 impl PrefixLegalityCache {
     pub fn stats(&self) -> PrefixLegalityCacheStats {
         self.stats
+    }
+
+    pub fn terminal_prefix_completion_summary(
+        &mut self,
+        signature: &PrefixSignature,
+    ) -> Option<TerminalPrefixCompletionSummary> {
+        let summary = self.terminal_prefix_completions.get(signature)?.clone();
+        self.stats.terminal_prefix_completion_hits += 1;
+        Some(summary)
+    }
+
+    pub fn store_terminal_prefix_completion_summary(
+        &mut self,
+        signature: PrefixSignature,
+        summary: TerminalPrefixCompletionSummary,
+    ) {
+        self.terminal_prefix_completions.insert(signature, summary);
     }
 
     pub fn family_option_count(&self, signature: &PrefixSignature) -> Option<u8> {
@@ -451,16 +497,21 @@ impl PrefixLegalityCache {
 
 #[cfg(test)]
 mod tests {
-    use super::{PrefixAdmissibilitySummary, PrefixLegalityCache, TerminalConnectivityDecision};
+    use super::{
+        PrefixAdmissibilitySummary, PrefixLegalityCache, TerminalConnectivityDecision,
+        TerminalPrefixClauseEvaluation, TerminalPrefixCompletion, TerminalPrefixCompletionSummary,
+    };
+    use crate::bounds::PrefixBound;
     use crate::enumerate::{EnumerationContext, build_clause_catalog};
     use crate::prefix_cache::PrefixSignature;
     use pen_core::clause::{ClauseRec, ClauseRole};
     use pen_core::expr::Expr;
     use pen_core::library::{Library, LibraryEntry};
+    use pen_core::rational::Rational;
     use pen_core::telescope::Telescope;
     use pen_type::admissibility::{
-        AdmissibilityMode, assess_strict_admissibility, strict_admissibility,
-        strict_admissibility_for_mode,
+        AdmissibilityDecisionClass, AdmissibilityMode, assess_strict_admissibility,
+        strict_admissibility, strict_admissibility_for_mode,
     };
 
     fn library_until(step: u32) -> Library {
@@ -634,5 +685,67 @@ mod tests {
 
         assert!(cache.insert_root(signature.clone(), 5, &library, &prefix, admissibility));
         assert_eq!(cache.family_option_count(&signature), Some(1));
+    }
+
+    #[test]
+    fn terminal_prefix_completion_summary_reuses_cached_exact_results() {
+        let library = library_until(10);
+        let prefix = Telescope::new(Telescope::reference(11).clauses[..4].to_vec());
+        let signature = PrefixSignature::new(11, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        let decision = assess_strict_admissibility(
+            11,
+            &library,
+            &Telescope::reference(11),
+            strict_admissibility_for_mode(11, 2, &library, AdmissibilityMode::RealisticShadow),
+        );
+        cache.store_terminal_prefix_completion_summary(
+            signature.clone(),
+            TerminalPrefixCompletionSummary {
+                evaluations: vec![TerminalPrefixClauseEvaluation::Admitted {
+                    decision: decision.clone(),
+                    completion: TerminalPrefixCompletion {
+                        telescope: Telescope::reference(11),
+                        exact_nu: 26,
+                        bit_kappa_used: 79,
+                        clause_kappa_used: 5,
+                    },
+                }],
+                bound: Some(PrefixBound::singleton(26, 5, 79)),
+            },
+        );
+
+        let summary = cache
+            .terminal_prefix_completion_summary(&signature)
+            .expect("summary should be cached");
+
+        assert_eq!(summary.bound, Some(PrefixBound::singleton(26, 5, 79)));
+        assert_eq!(cache.stats().terminal_prefix_completion_hits, 1);
+        match &summary.evaluations[..] {
+            [
+                TerminalPrefixClauseEvaluation::Admitted {
+                    decision,
+                    completion,
+                },
+            ] => {
+                assert_eq!(
+                    decision.class,
+                    AdmissibilityDecisionClass::AdmittedFocusAligned
+                );
+                assert_eq!(decision.reason, "focus_connection_shell");
+                assert_eq!(completion.exact_nu, 26);
+                assert_eq!(completion.clause_kappa_used, 5);
+                assert_eq!(completion.bit_kappa_used, 79);
+                assert_eq!(completion.telescope, Telescope::reference(11));
+            }
+            other => panic!("unexpected cached summary shape: {other:?}"),
+        }
+        assert!(
+            summary
+                .bound
+                .expect("bound should exist")
+                .can_clear_bar(Rational::new(5, 1))
+        );
     }
 }

@@ -46,6 +46,11 @@ guarded 15-step canon.
   an explicit terminal-clause filter keyed by `PrefixSignature`, so last-clause
   options can be rejected before terminal connectivity work or fallback
   telescope assembly runs.
+- realistic shadow now also memoizes exact terminal-prefix completion
+  summaries keyed by `PrefixSignature`, reusing admitted connected one-clause-
+  short completions and their exact completion bounds between the early
+  terminal-prefix bar check and the later retained-prefix grouping instead of
+  recomputing that exact terminal work twice.
 - realistic shadow now also keeps an exact incremental trivial-derivability
   summary keyed by `PrefixSignature`, rejecting terminal continuations that are
   provably trivially derivable before full telescope assembly and before any
@@ -102,6 +107,7 @@ guarded 15-step canon.
   - `incremental_trivial_derivability_prunes`
   - `incremental_terminal_admissibility_hits`
   - `incremental_terminal_admissibility_rejections`
+  - `incremental_terminal_prefix_completion_hits`
   - `incremental_partial_prefix_bound_checks`
   - `incremental_partial_prefix_bound_prunes`
   - `incremental_terminal_prefix_bar_prunes`
@@ -125,6 +131,11 @@ guarded 15-step canon.
   landed earlier exact partial-prefix prune before queue entry via
   `incremental_partial_prefix_bound_prunes = 1`, and the realistic step-11
   queue now drops to `prefix_states_explored = 1`.
+- stored realistic-shadow step-13 and step-15 artifacts now also show
+  `incremental_terminal_prefix_completion_hits = 3`, while the repeated
+  terminal clause-filter, terminal-admissibility, and terminal-connectivity
+  counters on those steps drop from `5` to `2` because the one-clause-short
+  terminal work is reused instead of replayed during retained-prefix grouping.
 
 ## What Is No Longer A Gap
 
@@ -146,6 +157,8 @@ it as if it were still missing:
 - moving that cached terminal admissibility reuse forward into an explicit
   terminal-clause filter before terminal connectivity or fallback telescope
   assembly
+- reusing exact terminal-prefix completion summaries between the early
+  terminal-prefix bar check and the later retained-prefix grouping
 - landing an earlier exact small-tree partial-prefix bar prune before doomed
   realistic-shadow prefixes enter the online queue
 - landing an earlier exact terminal-prefix bar prune before retained-prefix
@@ -180,7 +193,8 @@ The strengthened signature is now used for incremental legality/connectivity
 reuse, exact clause-family feasibility pruning, active-window clause filtering,
 cached next-clause reuse inside the online work queue, an explicit terminal-
 clause admissibility filter, terminal trivial-derivability pruning, and cached
-terminal admissibility decisions, but it is not yet used for:
+terminal admissibility decisions plus exact terminal-prefix completion reuse,
+but it is not yet used for:
 
 - stronger exact reuse of non-family admissibility structure before the full
   terminal telescope is assembled
@@ -206,6 +220,7 @@ ordering pass.
   bar prune
 - use the new active-window, terminal-clause, trivial-derivability, and
   terminal-admissibility payoff counters together with
+  `incremental_terminal_prefix_completion_hits` and
   `incremental_terminal_prefix_bar_prunes` to target broader exact
   admissibility/filter reuse
 - use the now-lower `prefix_states_explored` counts from the landed exact
@@ -262,10 +277,12 @@ Latest relevant verification:
 - `cargo test -p pen-type -p pen-search -p pen-cli -p pen-store`
 - fresh `cargo run -p pen-cli -- run --config
   configs/realistic_frontier_shadow.toml --root runs --run-id
-  codex-partial-prefix-bound-v3 --until-step 15`
-- inspect-backed `runs/codex-partial-prefix-bound-v3` artifacts preserve the
-  accepted sequence while moving the late doomed branch at steps 10 and 11
-  into `incremental_partial_prefix_bound_prunes = 1`, dropping realistic
-  step-11 `prefix_states_explored` to `1`, keeping steps 13 and 15 at
-  `prefix_states_explored = 3`, and preserving per-step timing of `0` to `1`
-  ms with hot-frontier bytes between `64` and `128` across those late steps
+  codex-terminal-prefix-completion --until-step 15`
+- inspect-backed `runs/codex-terminal-prefix-completion` artifacts preserve
+  the accepted sequence while keeping the landed late doomed branch at steps
+  10 and 11 in `incremental_partial_prefix_bound_prunes = 1`, and now also
+  show `incremental_terminal_prefix_completion_hits = 3` at realistic steps 13
+  and 15 while the repeated terminal clause-filter, terminal-admissibility,
+  and terminal-connectivity counters on those steps drop to `2`; steps 13 and
+  15 still stay at `prefix_states_explored = 3`, with per-step timing at `1`
+  to `2` ms and hot-frontier bytes at `128`
