@@ -29,80 +29,80 @@ This file is the forward-facing status snapshot for
 - demo steps now persist phase-level full-evaluation accounting, including the
   configured soft cap plus the `Materialize` versus `ProofClose` split and any
   proof-close-only overrun after the cap handoff
+- demo phase accounting now also persists
+  `breadth_harvest_exit_reason`, `proof_close_entry_reason`, and
+  `proof_close_overrun_reason`, so stored summaries and narratives can
+  distinguish floor hits, reserve protection, certification sweeps, and
+  soft-cap handoffs directly
 
 ## What Landed In This Pass
 
-- `pen-search` now has an explicit `StepPhase` surface for
-  `Scout`, `BreadthHarvest`, `Materialize`, `ProofClose`, and `Seal`
-- the demo budget controller now derives per-step scout and
-  breadth-harvest slices on top of the existing shared early window,
-  late-step baselines, proof-close reserve, and adaptive spill accounting
-- the realistic-shadow search loop now emits search-side phase changes and
-  budget pulses while the step is running, including a real scout throughput
-  sample for prefix generation, admissibility checks, exact-bound checks, and
-  full evaluations on this computer
-- the demo materialization loop now enforces the configured
-  `full_eval_soft_cap` as a real `Materialize` to `ProofClose` handoff instead
-  of treating the cap as narrative-only metadata
-- any exact candidates reopened after that handoff are now counted as
-  proof-close-only overrun work and persisted on the step summary as demo phase
-  accounting
-- `pen-cli` now renders and persists those phase-aware events directly instead
-  of depending only on post-step event synthesis, and the demo narrative header
-  now reports the materialize/proof-close split, the configured cap, and the
-  overrun count directly from stored step data
-- targeted `pen-search` and `pen-cli` tests now cover both the original
-  phase-aware narrative path and the new late-step soft-cap handoff into
-  `ProofClose`
+- `BreadthHarvest` now exits early once a configured generated or exact-screened
+  late-step floor is hit after scout sampling, instead of only stopping when
+  the raw discovery deadline expires
+- demo discovery now also records when widening stops to protect the reserved
+  `ProofClose` slice, so late-step breadth exits are no longer a generic
+  "closed discovery" story
+- `pen-search` step summaries now persist explicit
+  `breadth_harvest_exit_reason`, `proof_close_entry_reason`, and
+  `proof_close_overrun_reason` values
+- `ProofClose` reason tracking now distinguishes reserve-protected handoffs,
+  breadth-floor handoffs, certification sweeps, and soft-cap overruns on top
+  of the previously landed full-eval split
+- `pen-cli` narrative rendering now surfaces those persisted reason codes in the
+  demo phase header, and live search-side pulses now say whether breadth
+  harvest stopped on a generated floor, an exact-screened floor, or reserve
+  protection
+- targeted `pen-search` tests now cover generated-floor exits,
+  reserve-protection exits, and soft-cap overrun reasoning in addition to the
+  existing phase-event and narrative coverage
 
 ## Active Gaps
 
-### 1. BreadthHarvest And ProofClose Budget Rules Are Still Partial
+### 1. Honest Funnel Counters Are Still Only Partially Present
 
-The lane now enforces the `Materialize` soft cap and tracks proof-close-only
-overrun honestly, but `BreadthHarvest` still does not exit on floor success or
-reserve pressure, and `ProofClose` still lacks stronger budget and
-certification-state reasons beyond the new soft-cap handoff.
-
-Next target:
-
-- add floor-aware `BreadthHarvest` exits plus stronger `ProofClose` reserve and
-  certification overrun reasons on top of the landed soft-cap handoff
-
-### 2. Honest Funnel Counters Are Still Only Partially Present
-
-The phase-aware narrative can now show generated surface, exact-screened
-surface, and full-evaluation usage at real phase boundaries, but the
-plan-aligned funnel surface is still missing the explicit demo-lane counters
-like
-`generated_raw_prefixes`, `hard_admissible`, `exact_bound_screened`, and
-`closure_percent`.
+The lane can now explain why `BreadthHarvest` stopped and why `ProofClose`
+started or overran, but the plan-aligned funnel surface is still missing the
+explicit demo counters like `generated_raw_prefixes`, `hard_admissible`,
+`exact_bound_screened`, and `closure_percent`.
 
 Next target:
 
 - add the missing funnel and closure counters to `pen-search`, step summaries,
   compare tooling, and the narrative renderer
 
-### 3. Compare Tooling Still Lags The Stored Demo Phase Evidence
+### 2. Compare Tooling Still Lags The Stored Demo Phase Evidence
 
 The stored narrative header now reports the materialize/proof-close split and
-soft-cap overrun directly from persisted step data, but `scripts/compare_runs.py`
-still does not surface closure progress, floor hits or misses, or the new demo
-phase accounting.
+soft-cap overrun directly from persisted step data, and step summaries now also
+carry explicit breadth/proof-close reason codes, but
+`scripts/compare_runs.py` still does not surface closure progress, floor hits
+or misses, or the new demo phase accounting.
 
 Next target:
 
 - extend compare tooling and the remaining summary surface so stored runs can
-  report phase progress, floor hits or misses, and cap overruns without
-  rereading debug text
+  report phase progress, floor hits or misses, breadth/proof-close reason codes,
+  and cap overruns without rereading debug text
+
+### 3. ProofClose Reserve Usage Is Still Descriptive Rather Than Governed
+
+The lane now records why `ProofClose` started or overran, but it still does not
+expose a stronger exact closure-progress or reserve-usage surface beyond those
+reason codes and the existing full-eval split.
+
+Next target:
+
+- tie the reserved proof-close slice to explicit closure progress and reserve
+  usage evidence, not just handoff reasons
 
 ## Immediate Next Steps
 
-1. Turn `BreadthHarvest` into a real floor-aware exit stage that protects the
-   proof-close reserve instead of only observing discovery progress.
-2. Add the missing honest funnel counters and closure tracking so the demo
+1. Add the missing honest funnel counters and closure tracking so the demo
    narrative can report floor hits or misses from stored data instead of only
    from derived surface counts.
-3. Extend compare tooling and step summaries to consume the new
-   materialize/proof-close cap accounting plus the future floor evidence
+2. Extend compare tooling and step summaries to consume the new
+   breadth/proof-close reason codes plus the future funnel and floor evidence
    directly.
+3. Tighten proof-close reserve accounting from descriptive reason codes into a
+   clearer exact closure-progress and reserve-usage surface.

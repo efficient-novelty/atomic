@@ -286,13 +286,28 @@ fn demo_phase_line(step: &StepReport) -> String {
         .full_eval_soft_cap
         .map(|limit| limit.to_string())
         .unwrap_or_else(|| "none".to_owned());
+    let breadth_exit = phase
+        .breadth_harvest_exit_reason
+        .map(|reason| reason.as_str())
+        .unwrap_or("none");
+    let proof_close_reason = phase
+        .proof_close_entry_reason
+        .map(|reason| reason.as_str())
+        .unwrap_or("none");
+    let proof_close_overrun_reason = phase
+        .proof_close_overrun_reason
+        .map(|reason| reason.as_str())
+        .unwrap_or("none");
     format!(
-        "phase_eval   materialize={} proof_close={} overrun={} cap={} cap_triggered={}",
+        "phase_eval   materialize={} proof_close={} overrun={} cap={} cap_triggered={} breadth_exit={} proof_close_reason={} overrun_reason={}",
         phase.materialize_full_evals,
         phase.proof_close_full_evals,
         phase.proof_close_overrun_full_evals,
         soft_cap,
-        phase.materialize_soft_cap_triggered
+        phase.materialize_soft_cap_triggered,
+        breadth_exit,
+        proof_close_reason,
+        proof_close_overrun_reason
     )
 }
 

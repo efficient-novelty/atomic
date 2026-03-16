@@ -133,16 +133,74 @@ impl Default for RationalDistributionSummary {
     }
 }
 
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DemoBreadthHarvestExitReason {
+    GeneratedFloorHit,
+    ExactScreenedFloorHit,
+    ProofCloseReserveProtected,
+}
+
+impl DemoBreadthHarvestExitReason {
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::GeneratedFloorHit => "generated_floor_hit",
+            Self::ExactScreenedFloorHit => "exact_screened_floor_hit",
+            Self::ProofCloseReserveProtected => "proof_close_reserve_protected",
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DemoProofCloseEntryReason {
+    BreadthFloorHit,
+    ReserveProtected,
+    SoftCapHandoff,
+    CertificationSweep,
+}
+
+impl DemoProofCloseEntryReason {
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::BreadthFloorHit => "breadth_floor_hit",
+            Self::ReserveProtected => "reserve_protected",
+            Self::SoftCapHandoff => "soft_cap_handoff",
+            Self::CertificationSweep => "certification_sweep",
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DemoProofCloseOverrunReason {
+    SoftCapHandoff,
+}
+
+impl DemoProofCloseOverrunReason {
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::SoftCapHandoff => "soft_cap_handoff",
+        }
+    }
+}
+
 #[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 pub struct DemoPhaseStats {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub full_eval_soft_cap: Option<u64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub breadth_harvest_exit_reason: Option<DemoBreadthHarvestExitReason>,
     #[serde(default)]
     pub materialize_full_evals: usize,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub proof_close_entry_reason: Option<DemoProofCloseEntryReason>,
     #[serde(default)]
     pub proof_close_full_evals: usize,
     #[serde(default)]
     pub proof_close_overrun_full_evals: usize,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub proof_close_overrun_reason: Option<DemoProofCloseOverrunReason>,
     #[serde(default)]
     pub materialize_soft_cap_triggered: bool,
 }
@@ -236,6 +294,7 @@ struct RealisticShadowDiscovery {
     prefix_cache: PrefixCache,
     prefix_legality_cache: PrefixLegalityCache,
     candidates: Vec<ExpandedCandidate>,
+    stop_reason: Option<DemoBreadthHarvestExitReason>,
     terminal_rank_incumbent: Option<AcceptRank>,
     terminal_rank_prunes: usize,
     prefixes_created: usize,
@@ -375,6 +434,27 @@ struct DemoStepBudget {
 impl DemoStepBudget {
     fn discovery_deadline(self, step_start: Instant) -> Option<Instant> {
         step_start.checked_add(Duration::from_millis(self.discovery_budget_millis))
+    }
+
+    fn breadth_harvest_floor_hit(
+        self,
+        elapsed_millis: u64,
+        progress: &NarrativeProgressSnapshot,
+    ) -> Option<DemoBreadthHarvestExitReason> {
+        if self.proof_close_reserve_millis == 0 || elapsed_millis < self.scout_budget_millis {
+            return None;
+        }
+        if let Some(target) = self.exact_screened_floor {
+            if progress.exact_screened_surface >= target {
+                return Some(DemoBreadthHarvestExitReason::ExactScreenedFloorHit);
+            }
+        }
+        if let Some(target) = self.generated_floor {
+            if progress.generated_surface >= target {
+                return Some(DemoBreadthHarvestExitReason::GeneratedFloorHit);
+            }
+        }
+        None
     }
 }
 
@@ -651,14 +731,31 @@ impl DemoNarrativeRuntime {
         progress: NarrativeProgressSnapshot,
         scout_detail: String,
         harvest_detail: String,
+        exit_reason: Option<DemoBreadthHarvestExitReason>,
     ) {
         self.record_scout_sample(progress.clone(), scout_detail);
         if self.breadth_harvest_entered {
+            let message = match exit_reason {
+                Some(DemoBreadthHarvestExitReason::GeneratedFloorHit) => {
+                    "breadth harvest hit the generated floor and closed the widening slice"
+                }
+                Some(DemoBreadthHarvestExitReason::ExactScreenedFloorHit) => {
+                    "breadth harvest hit the exact-screened floor and closed the widening slice"
+                }
+                Some(DemoBreadthHarvestExitReason::ProofCloseReserveProtected) => {
+                    "breadth harvest yielded to protect the proof-close reserve"
+                }
+                None => "breadth harvest closed the widening slice",
+            };
+            let detail = match exit_reason {
+                Some(reason) => format!("{harvest_detail} exit_reason={}", reason.as_str()),
+                None => harvest_detail,
+            };
             self.recorder.push(
                 NarrativeEventKind::BudgetPulse,
                 Some(StepPhase::BreadthHarvest),
-                "breadth harvest closed the widening slice".to_owned(),
-                Some(harvest_detail),
+                message.to_owned(),
+                Some(detail),
                 Some(progress),
             );
         }
@@ -678,14 +775,6 @@ impl DemoNarrativeRuntime {
             "materializing retained prefixes under exact screening".to_owned(),
             Some(detail),
             Some(progress),
-        );
-    }
-
-    fn enter_proof_close(&mut self, progress: NarrativeProgressSnapshot, detail: String) {
-        self.enter_proof_close_with_message(
-            progress,
-            "entered proof_close with the reserved certification slice",
-            detail,
         );
     }
 
@@ -886,14 +975,61 @@ fn demo_phase_status_detail(phase: &DemoPhaseStats) -> String {
         .full_eval_soft_cap
         .map(|limit| limit.to_string())
         .unwrap_or_else(|| "none".to_owned());
+    let breadth_exit = phase
+        .breadth_harvest_exit_reason
+        .map(|reason| reason.as_str())
+        .unwrap_or("none");
+    let proof_close_reason = phase
+        .proof_close_entry_reason
+        .map(|reason| reason.as_str())
+        .unwrap_or("none");
+    let proof_close_overrun_reason = phase
+        .proof_close_overrun_reason
+        .map(|reason| reason.as_str())
+        .unwrap_or("none");
     format!(
-        "materialize_full_evals={} proof_close_full_evals={} proof_close_overrun={} soft_cap={} cap_triggered={}",
+        "materialize_full_evals={} proof_close_full_evals={} proof_close_overrun={} soft_cap={} cap_triggered={} breadth_exit={} proof_close_reason={} proof_close_overrun_reason={}",
         phase.materialize_full_evals,
         phase.proof_close_full_evals,
         phase.proof_close_overrun_full_evals,
         soft_cap,
-        phase.materialize_soft_cap_triggered
+        phase.materialize_soft_cap_triggered,
+        breadth_exit,
+        proof_close_reason,
+        proof_close_overrun_reason
     )
+}
+
+fn demo_proof_close_entry_reason(
+    breadth_exit_reason: Option<DemoBreadthHarvestExitReason>,
+) -> DemoProofCloseEntryReason {
+    match breadth_exit_reason {
+        Some(
+            DemoBreadthHarvestExitReason::GeneratedFloorHit
+            | DemoBreadthHarvestExitReason::ExactScreenedFloorHit,
+        ) => DemoProofCloseEntryReason::BreadthFloorHit,
+        Some(DemoBreadthHarvestExitReason::ProofCloseReserveProtected) => {
+            DemoProofCloseEntryReason::ReserveProtected
+        }
+        None => DemoProofCloseEntryReason::CertificationSweep,
+    }
+}
+
+fn demo_proof_close_entry_message(reason: DemoProofCloseEntryReason) -> &'static str {
+    match reason {
+        DemoProofCloseEntryReason::BreadthFloorHit => {
+            "entered proof_close after breadth_harvest hit the late-step breadth floor"
+        }
+        DemoProofCloseEntryReason::ReserveProtected => {
+            "entered proof_close after breadth_harvest yielded to protect the reserved certification slice"
+        }
+        DemoProofCloseEntryReason::SoftCapHandoff => {
+            "entered proof_close after materialize hit the full-eval soft cap"
+        }
+        DemoProofCloseEntryReason::CertificationSweep => {
+            "entered proof_close to certify the remaining exact surface"
+        }
+    }
 }
 
 fn demo_materialize_status_detail(
@@ -1251,6 +1387,7 @@ fn search_next_step(
                 discovery_progress_snapshot(step_start, &discovery),
                 discovery_scout_detail(&discovery, elapsed_millis(step_start.elapsed())),
                 discovery_harvest_detail(budget, &discovery),
+                discovery.stop_reason,
             );
         }
         prefix_cache = discovery.prefix_cache;
@@ -1289,6 +1426,7 @@ fn search_next_step(
         incremental_partial_prefix_bound_checks = discovery.partial_prefix_bound_checks;
         incremental_partial_prefix_bound_prunes = discovery.partial_prefix_bound_prunes;
         incremental_terminal_prefix_bar_prunes = discovery.terminal_prefix_bar_prunes;
+        demo_phase.breadth_harvest_exit_reason = discovery.stop_reason;
     } else {
         for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
             let telescopes = enumerate_telescopes(
@@ -1348,6 +1486,7 @@ fn search_next_step(
                     exact_screened_surface_from_counts(0, candidates.len()),
                     candidates.len() as u64,
                 ),
+                None,
             );
         }
     }
@@ -1427,6 +1566,8 @@ fn search_next_step(
                         {
                             demo_phase.materialize_soft_cap_triggered = true;
                             demo_phase.materialize_full_evals = candidates.len();
+                            demo_phase.proof_close_entry_reason =
+                                Some(DemoProofCloseEntryReason::SoftCapHandoff);
                             if let (Some(observer), Some(budget)) =
                                 (demo_narrative.as_mut(), demo_step_budget)
                             {
@@ -1444,7 +1585,10 @@ fn search_next_step(
                                         candidates.len() as u64,
                                     ),
                                     format!(
-                                        "entered proof_close after materialize hit the full-eval soft cap with {} retained prefix groups still needing exact certification",
+                                        "{} with {} retained prefix groups still needing exact certification",
+                                        demo_proof_close_entry_message(
+                                            DemoProofCloseEntryReason::SoftCapHandoff
+                                        ),
                                         retained_prefix_groups.saturating_sub(group_index)
                                     ),
                                     demo_proof_close_status_detail(
@@ -1507,6 +1651,9 @@ fn search_next_step(
                         demo_phase.proof_close_full_evals += 1;
                         if demo_phase.materialize_soft_cap_triggered {
                             demo_phase.proof_close_overrun_full_evals += 1;
+                            demo_phase
+                                .proof_close_overrun_reason
+                                .get_or_insert(DemoProofCloseOverrunReason::SoftCapHandoff);
                         }
                     } else {
                         demo_phase.materialize_full_evals = candidates.len();
@@ -1521,8 +1668,11 @@ fn search_next_step(
     }
     if demo_step_budget.is_some() && !demo_proof_close_entered {
         demo_phase.materialize_full_evals = candidates.len();
+        let proof_close_entry_reason =
+            demo_proof_close_entry_reason(demo_phase.breadth_harvest_exit_reason);
+        demo_phase.proof_close_entry_reason = Some(proof_close_entry_reason);
         if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
-            observer.enter_proof_close(
+            observer.enter_proof_close_with_message(
                 narrative_progress_snapshot(
                     elapsed_millis(step_start.elapsed()),
                     generated_surface_from_counts(prefixes_created, enumerated_candidates),
@@ -1532,6 +1682,7 @@ fn search_next_step(
                     ),
                     candidates.len() as u64,
                 ),
+                demo_proof_close_entry_message(proof_close_entry_reason),
                 demo_proof_close_status_detail(
                     budget,
                     generated_surface_from_counts(prefixes_created, enumerated_candidates),
@@ -1939,7 +2090,7 @@ fn discover_realistic_shadow_candidates(
     for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
         if demo_discovery_budget_exhausted(
             discovery_deadline,
-            &discovery,
+            &mut discovery,
             step_start,
             demo_narrative.as_mut(),
         ) {
@@ -1951,7 +2102,7 @@ fn discover_realistic_shadow_candidates(
             for telescope in telescopes {
                 if demo_discovery_budget_exhausted(
                     discovery_deadline,
-                    &discovery,
+                    &mut discovery,
                     step_start,
                     demo_narrative.as_mut(),
                 ) {
@@ -1983,7 +2134,7 @@ fn discover_realistic_shadow_candidates(
         for clause in clause_catalog.clauses_at(0) {
             if demo_discovery_budget_exhausted(
                 discovery_deadline,
-                &discovery,
+                &mut discovery,
                 step_start,
                 demo_narrative.as_mut(),
             ) {
@@ -2054,7 +2205,7 @@ fn discover_realistic_shadow_candidates(
         while !frontier.is_empty() {
             if demo_discovery_budget_exhausted(
                 discovery_deadline,
-                &discovery,
+                &mut discovery,
                 step_start,
                 demo_narrative.as_mut(),
             ) {
@@ -2192,7 +2343,7 @@ fn discover_realistic_shadow_candidates(
             for clause in &work_item.next_clauses {
                 if demo_discovery_budget_exhausted(
                     discovery_deadline,
-                    &discovery,
+                    &mut discovery,
                     step_start,
                     demo_narrative.as_mut(),
                 ) {
@@ -2269,19 +2420,27 @@ fn discover_realistic_shadow_candidates(
 
 fn demo_discovery_budget_exhausted(
     discovery_deadline: Option<Instant>,
-    discovery: &RealisticShadowDiscovery,
+    discovery: &mut RealisticShadowDiscovery,
     step_start: Instant,
     demo_narrative: Option<&mut DemoNarrativeRuntime>,
 ) -> bool {
+    let elapsed = elapsed_millis(step_start.elapsed());
+    let progress = discovery_progress_snapshot(step_start, discovery);
+    let budget = demo_narrative.as_ref().map(|observer| observer.budget);
     if let Some(observer) = demo_narrative {
-        let elapsed = elapsed_millis(step_start.elapsed());
-        let progress = discovery_progress_snapshot(step_start, discovery);
         observer.maybe_enter_breadth_harvest(
             elapsed,
-            progress,
+            progress.clone(),
             discovery_scout_detail(discovery, elapsed),
             discovery_harvest_detail(observer.budget, discovery),
         );
+    }
+    if let Some(reason) = budget
+        .and_then(|budget| budget.breadth_harvest_floor_hit(elapsed, &progress))
+        .filter(|_| discovery.can_stop_for_budget())
+    {
+        discovery.stop_reason = Some(reason);
+        return true;
     }
 
     let Some(discovery_deadline) = discovery_deadline else {
@@ -2290,8 +2449,12 @@ fn demo_discovery_budget_exhausted(
     if !discovery.can_stop_for_budget() {
         return false;
     }
+    if Instant::now() >= discovery_deadline {
+        discovery.stop_reason = Some(DemoBreadthHarvestExitReason::ProofCloseReserveProtected);
+        return true;
+    }
 
-    Instant::now() >= discovery_deadline
+    false
 }
 
 fn prepare_exact_two_step_terminal_surface(
@@ -3411,7 +3574,8 @@ fn elapsed_millis(duration: Duration) -> u64 {
 #[cfg(test)]
 mod tests {
     use super::{
-        AtomicSearchStep, DemoBudgetController, DemoBudgetSeed, LIVE_BOOTSTRAP_MAX_STEP,
+        AtomicSearchStep, DemoBreadthHarvestExitReason, DemoBudgetController, DemoBudgetSeed,
+        DemoProofCloseEntryReason, DemoProofCloseOverrunReason, LIVE_BOOTSTRAP_MAX_STEP,
         OnlinePrefixWorkItem, create_online_prefix_work_item, exact_partial_prefix_bound_decision,
         pop_best_prefix, search_bootstrap_from_prefix,
         search_bootstrap_from_prefix_for_profile_with_runtime, search_bootstrap_prefix,
@@ -3615,8 +3779,16 @@ mod tests {
         assert_eq!(step.step_index, 15);
         assert_eq!(step.demo_phase.full_eval_soft_cap, Some(0));
         assert!(step.demo_phase.materialize_soft_cap_triggered);
+        assert_eq!(
+            step.demo_phase.proof_close_entry_reason,
+            Some(DemoProofCloseEntryReason::SoftCapHandoff)
+        );
         assert!(step.demo_phase.proof_close_full_evals > 0);
         assert!(step.demo_phase.proof_close_overrun_full_evals > 0);
+        assert_eq!(
+            step.demo_phase.proof_close_overrun_reason,
+            Some(DemoProofCloseOverrunReason::SoftCapHandoff)
+        );
         assert_eq!(
             step.demo_phase.materialize_full_evals + step.demo_phase.proof_close_full_evals,
             step.full_telescopes_evaluated
@@ -3625,6 +3797,85 @@ mod tests {
             event.kind == NarrativeEventKind::PhaseChange
                 && event.phase == Some(StepPhase::ProofClose)
                 && event.message.contains("soft cap")
+        }));
+    }
+
+    #[test]
+    fn demo_floor_hit_reason_is_persisted_into_proof_close() {
+        let mut config = demo_runtime_config_10m();
+        config.demo.scout_fraction = "0.00".to_owned();
+        config
+            .demo
+            .floors
+            .generated_floor
+            .insert("15".to_owned(), 1);
+        config.demo.floors.exact_screened_floor.remove("15");
+        config
+            .demo
+            .caps
+            .full_eval_soft_cap
+            .insert("15".to_owned(), 10_000);
+        let step = search_bootstrap_prefix_for_config_with_runtime(
+            15,
+            2,
+            &config,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("demo steps should build")
+        .into_iter()
+        .last()
+        .expect("step should exist");
+
+        assert_eq!(
+            step.demo_phase.breadth_harvest_exit_reason,
+            Some(DemoBreadthHarvestExitReason::GeneratedFloorHit)
+        );
+        assert_eq!(
+            step.demo_phase.proof_close_entry_reason,
+            Some(DemoProofCloseEntryReason::BreadthFloorHit)
+        );
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::BudgetPulse
+                && event.phase == Some(StepPhase::BreadthHarvest)
+                && event.message.contains("generated floor")
+        }));
+    }
+
+    #[test]
+    fn demo_reserve_protection_reason_is_persisted_into_proof_close() {
+        let mut config = demo_runtime_config_10m();
+        config.demo.scout_fraction = "0.00".to_owned();
+        config.demo.proof_close_reserve_fraction = "1.00".to_owned();
+        config.demo.floors.generated_floor.remove("15");
+        config.demo.floors.exact_screened_floor.remove("15");
+        config
+            .demo
+            .caps
+            .full_eval_soft_cap
+            .insert("15".to_owned(), 10_000);
+        let step = search_bootstrap_prefix_for_config_with_runtime(
+            15,
+            2,
+            &config,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("demo steps should build")
+        .into_iter()
+        .last()
+        .expect("step should exist");
+
+        assert_eq!(
+            step.demo_phase.breadth_harvest_exit_reason,
+            Some(DemoBreadthHarvestExitReason::ProofCloseReserveProtected)
+        );
+        assert_eq!(
+            step.demo_phase.proof_close_entry_reason,
+            Some(DemoProofCloseEntryReason::ReserveProtected)
+        );
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::PhaseChange
+                && event.phase == Some(StepPhase::ProofClose)
+                && event.message.contains("reserved certification slice")
         }));
     }
 
