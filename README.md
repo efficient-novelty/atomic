@@ -153,6 +153,9 @@ For rollout and comparison work, use the dedicated search-profile configs:
 - `configs/demo_breadth_shadow_15m.toml`: experimental broad demo profile with
   a shared 90-second early exhaustive window and a 15-minute total budget
 
+Demo runs now also write first-pass per-step narrative artifacts in
+`reports/steps/step-XX-narrative.txt` and `reports/steps/step-XX-events.ndjson`.
+
 ## Quick Start
 
 ### 1. Verify the workspace builds

@@ -13,6 +13,7 @@ use pen_search::engine::{
     search_bootstrap_prefix_for_profile_with_runtime, supports_live_atomic_search,
 };
 use pen_search::expand::evaluate_candidate;
+use pen_search::narrative::NarrativeEvent;
 use pen_search::state::FrontierStateRecV1;
 use pen_store::manifest::{AcceptedCandidate, NearMiss, SearchTiming};
 use pen_type::admissibility::AdmissibilityDiagnostics;
@@ -52,6 +53,8 @@ pub struct StepReport {
     pub canon_evidence: CanonEvidence,
     #[serde(default)]
     pub replay_ablation: ReplayAblation,
+    #[serde(default)]
+    pub narrative_events: Vec<NarrativeEvent>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
@@ -762,6 +765,7 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
             provenance: StepProvenance::ReferenceReplay,
             canon_evidence,
             replay_ablation: ReplayAblation::default(),
+            narrative_events: Vec::new(),
         });
 
         history.push(DiscoveryRecord::new(
@@ -1375,6 +1379,7 @@ fn step_to_report_with_provenance(
         provenance,
         canon_evidence,
         replay_ablation: ReplayAblation::default(),
+        narrative_events: step.narrative_events,
     }
 }
 
@@ -1681,6 +1686,7 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
             provenance: StepProvenance::StepCheckpointReevaluate,
             canon_evidence,
             replay_ablation: ReplayAblation::default(),
+            narrative_events: Vec::new(),
         });
 
         history.push(DiscoveryRecord::new(
@@ -2194,6 +2200,7 @@ mod tests {
         assert!(debug.contains("class: Former"));
         assert!(debug.contains("c01 [introduction]"));
         assert!(debug.contains("fun x1 ->"));
+        assert!(!step.narrative_events.is_empty());
     }
 
     #[test]

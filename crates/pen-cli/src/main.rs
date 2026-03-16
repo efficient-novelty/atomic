@@ -4,7 +4,9 @@ mod cmd_inspect;
 mod cmd_resume;
 mod cmd_run;
 mod human;
+mod narrative;
 mod output;
+mod progress;
 mod report;
 
 use clap::Parser;

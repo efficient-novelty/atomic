@@ -15,7 +15,8 @@ pretending there is only one live claim surface.
 - `demo_breadth_shadow`: experimental comparison-backed demo lane scaffold with
   explicit 5-minute, 10-minute, and 15-minute budget metadata; in the current
   milestone it still reuses realistic-shadow search semantics while the
-  dedicated demo scheduler, funnel counters, and narrative pipeline land
+  dedicated demo scheduler, funnel counters, and live phase observer land;
+  demo runs now also persist first-pass narrative text and event artifacts
 
 The realistic lane is real runtime behavior, not a paper placeholder, but it is
 still rollout-gated by parity evidence rather than promoted to default truth.
@@ -26,8 +27,8 @@ The current CLI path can honestly claim all of the following:
 
 - live search is used through step 15 in both the guarded and realistic lanes
 - the CLI can also run the experimental `demo_breadth_shadow` profile configs,
-  which currently carry demo budget metadata while reusing realistic-shadow
-  search semantics
+  which currently carry demo budget metadata, persist demo narrative artifacts,
+  and still reuse realistic-shadow search semantics for the actual search work
 - deterministic reference replay is no longer needed for the current 15-step
   corpus, except when the CLI is explicitly asked to extend beyond the live
   range

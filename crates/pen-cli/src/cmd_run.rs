@@ -1,4 +1,5 @@
 use crate::cli::RunArgs;
+use crate::narrative::write_demo_step_artifacts;
 use crate::output::{OutputStyle, render_run_output};
 use crate::report::{
     GeneratedSteps, StepReport, annotate_search_profile, generate_steps_for_profile_with_runtime,
@@ -126,6 +127,7 @@ pub(crate) fn write_run_artifacts(
 
     write_json_file(&run_dir.join("run.json"), manifest)?;
     write_step_reports(run_dir, steps)?;
+    write_demo_step_artifacts(run_dir, steps, config)?;
     write_step_checkpoints(run_dir, manifest, steps, config.objective.window_depth)?;
     write_frontier_snapshots(run_dir, manifest, steps, worker_count, config, &metadata)?;
     write_telemetry(run_dir, manifest, steps, mode, search_profile)?;
@@ -866,6 +868,25 @@ mod tests {
                 .join("step-03-summary.json")
                 .exists()
         );
+
+        fs::remove_dir_all(root).ok();
+    }
+
+    #[test]
+    fn demo_run_writes_narrative_and_event_artifacts() {
+        let root = temp_dir("demo-run");
+        run(RunArgs {
+            config: "configs/demo_breadth_shadow_10m.toml".into(),
+            root: root.clone(),
+            run_id: Some("demo-test-run".to_owned()),
+            until_step: Some(3),
+            debug: false,
+        })
+        .expect("demo run should succeed");
+
+        let run_dir = root.join("demo-test-run").join("reports").join("steps");
+        assert!(run_dir.join("step-03-narrative.txt").exists());
+        assert!(run_dir.join("step-03-events.ndjson").exists());
 
         fs::remove_dir_all(root).ok();
     }

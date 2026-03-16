@@ -10,6 +10,7 @@ use crate::enumerate::{
 };
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
+use crate::narrative::{NarrativeEvent, build_step_narrative_events};
 use crate::prefix_cache::{
     PrefixCache, PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature,
 };
@@ -167,6 +168,7 @@ pub struct AtomicSearchStep {
     pub frontier_retention: FrontierRetentionOutcome,
     pub frontier_window: FrontierWindow,
     pub frontier_dedupe_keys: BTreeSet<String>,
+    pub narrative_events: Vec<NarrativeEvent>,
     pub telescope: Telescope,
     pub accepted: ExpandedCandidate,
     pub retained_candidates: Vec<ExpandedCandidate>,
@@ -800,7 +802,7 @@ fn build_step_result(
         .cloned()
         .ok_or_else(|| anyhow::anyhow!("accepted candidate vanished during selection"))?;
 
-    Ok(AtomicSearchStep {
+    let mut step = AtomicSearchStep {
         step_index,
         objective_bar,
         admissibility,
@@ -839,6 +841,7 @@ fn build_step_result(
         frontier_retention,
         frontier_window,
         frontier_dedupe_keys,
+        narrative_events: Vec::new(),
         telescope: accepted.telescope.clone(),
         accepted,
         retained_candidates: retained.to_vec(),
@@ -860,7 +863,9 @@ fn build_step_result(
         heuristic_drops,
         dedupe_pruned_candidates,
         minimality_pruned_candidates,
-    })
+    };
+    step.narrative_events = build_step_narrative_events(&step);
+    Ok(step)
 }
 
 fn admissibility_mode_for_profile(search_profile: SearchProfile) -> AdmissibilityMode {
@@ -1186,7 +1191,9 @@ fn discover_realistic_shadow_candidates(
                     &mut discovery.prefix_legality_cache,
                 ) {
                     match decision {
-                        ExactPartialPrefixBoundDecision::CanClearBar => frontier.push(child_work_item),
+                        ExactPartialPrefixBoundDecision::CanClearBar => {
+                            frontier.push(child_work_item)
+                        }
                         ExactPartialPrefixBoundDecision::CannotClearBar => {
                             discovery.partial_prefix_bound_prunes += 1;
                         }
@@ -1557,14 +1564,16 @@ fn exact_partial_prefix_bound_decision(
             prefix_legality_cache,
         );
         let child_signature = child_work_item.signature.clone();
-        let Some((child_work_item, collapsed_signatures)) = collapse_single_continuation_chain_inner(
-            step_index,
-            library,
-            admissibility,
-            clause_catalog,
-            prefix_legality_cache,
-            child_work_item,
-        ) else {
+        let Some((child_work_item, collapsed_signatures)) =
+            collapse_single_continuation_chain_inner(
+                step_index,
+                library,
+                admissibility,
+                clause_catalog,
+                prefix_legality_cache,
+                child_work_item,
+            )
+        else {
             continue;
         };
         if !spend_exact_partial_prefix_budget(budget, collapsed_signatures.len()) {

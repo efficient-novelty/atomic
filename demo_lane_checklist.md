@@ -18,6 +18,9 @@ with 5-minute and 15-minute variants using the same lane.
 - [x] Updated [`README.md`](./README.md) and
       [`docs/SEARCH_CONTRACT.md`](./docs/SEARCH_CONTRACT.md) to document the
       current scaffold and its honesty boundary.
+- [x] Added first-pass structured demo narrative events to live step reports.
+- [x] Added persisted demo narrative artifacts in `reports/steps/` for demo
+      runs.
 
 ## 0. Invariants
 
@@ -218,8 +221,8 @@ with 5-minute and 15-minute variants using the same lane.
 ## 9. Narrative And Progress
 
 - [ ] Add a search-side observer and a `NarrativeEvent` stream.
-- [ ] Add `crates/pen-cli/src/narrative.rs`.
-- [ ] Add `crates/pen-cli/src/progress.rs`.
+- [x] Add `crates/pen-cli/src/narrative.rs`.
+- [x] Add `crates/pen-cli/src/progress.rs`.
 - [ ] Add `--narrative` support in `pen-cli`.
 - [ ] Render a time bar and a closure bar.
 - [ ] Keep narrative output between 30 and 200 lines per step.
@@ -229,7 +232,7 @@ with 5-minute and 15-minute variants using the same lane.
       ranked clearer list.
 - [ ] Rate-limit live pulses to roughly 250 to 1000 ms depending on step
       class.
-- [ ] Persist:
+- [x] Persist:
       `reports/steps/step-XX-narrative.txt` and
       `reports/steps/step-XX-events.ndjson`.
 

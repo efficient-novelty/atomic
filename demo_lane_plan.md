@@ -10,7 +10,8 @@ step-1 raw breadth story, and broaden late-step search mass without changing
 acceptance truth.
 
 Implementation sequencing lives in
-[`demo_line_checklist.md`](./demo_line_checklist.md).
+[`demo_lane_checklist.md`](./demo_lane_checklist.md). Current forward status
+lives in [`demo_lane_progress.md`](./demo_lane_progress.md).
 
 ## Objective
 

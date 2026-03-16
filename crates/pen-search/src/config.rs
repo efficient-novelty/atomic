@@ -492,15 +492,21 @@ mod tests {
             SearchProfile::RealisticFrontierShadow
         );
         assert_eq!(
-            load_config("demo_breadth_shadow_5m.toml").mode.search_profile,
+            load_config("demo_breadth_shadow_5m.toml")
+                .mode
+                .search_profile,
             SearchProfile::DemoBreadthShadow
         );
         assert_eq!(
-            load_config("demo_breadth_shadow_10m.toml").mode.search_profile,
+            load_config("demo_breadth_shadow_10m.toml")
+                .mode
+                .search_profile,
             SearchProfile::DemoBreadthShadow
         );
         assert_eq!(
-            load_config("demo_breadth_shadow_15m.toml").mode.search_profile,
+            load_config("demo_breadth_shadow_15m.toml")
+                .mode
+                .search_profile,
             SearchProfile::DemoBreadthShadow
         );
     }
