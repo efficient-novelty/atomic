@@ -131,9 +131,14 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
     lines.push(String::new());
     lines.push("events".to_owned());
     for event in &events {
+        let phase = event
+            .phase
+            .map(|phase| format!(" {}", phase.as_str()))
+            .unwrap_or_default();
         lines.push(format!(
-            "  [{}] {}",
+            "  [{}{}] {}",
             event_kind_label(event.kind),
+            phase,
             event.message
         ));
         if let Some(detail) = &event.detail {
@@ -208,6 +213,7 @@ fn step_events(step: &StepReport) -> Vec<NarrativeEvent> {
             step_index: step.step_index,
             ordinal: 1,
             kind: NarrativeEventKind::StepOpen,
+            phase: None,
             message: format!(
                 "opened step {} with bar {}",
                 step.step_index, step.objective_bar
@@ -219,6 +225,7 @@ fn step_events(step: &StepReport) -> Vec<NarrativeEvent> {
             step_index: step.step_index,
             ordinal: 2,
             kind: NarrativeEventKind::AcceptanceSummary,
+            phase: None,
             message: format!(
                 "accepted {} with overshoot {}",
                 step.accepted.candidate_hash, step.accepted.overshoot
@@ -306,6 +313,8 @@ fn step_events_file_name(step_index: u32) -> String {
 fn event_kind_label(kind: NarrativeEventKind) -> &'static str {
     match kind {
         NarrativeEventKind::StepOpen => "step_open",
+        NarrativeEventKind::PhaseChange => "phase_change",
+        NarrativeEventKind::BudgetPulse => "budget_pulse",
         NarrativeEventKind::SurfaceSummary => "surface_summary",
         NarrativeEventKind::PrefixSummary => "prefix_summary",
         NarrativeEventKind::MemoSummary => "memo_summary",
@@ -344,8 +353,8 @@ fn prune_class_label(prune_class: PruneReportClass) -> &'static str {
 #[cfg(test)]
 mod tests {
     use super::{render_step_narrative, write_demo_step_artifacts};
-    use crate::report::search_atomic_bootstrap_steps_for_profile_with_runtime;
-    use pen_search::config::{RuntimeConfig, SearchProfile};
+    use crate::report::generate_steps_with_config_and_runtime;
+    use pen_search::config::RuntimeConfig;
     use pen_search::diversify::FrontierRuntimeLimits;
     use std::fs;
     use std::time::{SystemTime, UNIX_EPOCH};
@@ -362,37 +371,33 @@ mod tests {
 
     #[test]
     fn demo_narrative_renders_budget_and_event_sections() {
-        let steps = search_atomic_bootstrap_steps_for_profile_with_runtime(
-            3,
-            2,
-            SearchProfile::DemoBreadthShadow,
-            FrontierRuntimeLimits::unlimited(),
-        )
-        .expect("demo steps should build");
         let config = RuntimeConfig::from_toml_str(include_str!(
             "../../../configs/demo_breadth_shadow_10m.toml"
         ))
         .expect("demo config should parse");
+        let steps =
+            generate_steps_with_config_and_runtime(3, &config, FrontierRuntimeLimits::unlimited())
+                .expect("demo steps should build")
+                .steps;
         let text = render_step_narrative(steps.last().expect("step should exist"), &config.demo);
 
         assert!(text.contains("events"));
+        assert!(text.contains("phase_change"));
+        assert!(text.contains("scout"));
         assert!(text.contains("retained candidates"));
         assert!(text.contains("accepted trace"));
     }
 
     #[test]
     fn demo_narrative_writer_persists_text_and_ndjson() {
-        let steps = search_atomic_bootstrap_steps_for_profile_with_runtime(
-            2,
-            2,
-            SearchProfile::DemoBreadthShadow,
-            FrontierRuntimeLimits::unlimited(),
-        )
-        .expect("demo steps should build");
         let config = RuntimeConfig::from_toml_str(include_str!(
             "../../../configs/demo_breadth_shadow_10m.toml"
         ))
         .expect("demo config should parse");
+        let steps =
+            generate_steps_with_config_and_runtime(2, &config, FrontierRuntimeLimits::unlimited())
+                .expect("demo steps should build")
+                .steps;
         let run_dir = temp_dir("demo-narrative");
 
         write_demo_step_artifacts(&run_dir, &steps, &config)

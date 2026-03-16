@@ -10,7 +10,11 @@ use crate::enumerate::{
 };
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
-use crate::narrative::{NarrativeEvent, build_step_narrative_events};
+use crate::narrative::{
+    NarrativeEvent, NarrativeEventKind, NarrativeProgressSnapshot, NarrativeRecorder, StepPhase,
+    append_step_narrative_events, exact_screened_surface_from_counts,
+    generated_surface_from_counts, narrative_progress_snapshot,
+};
 use crate::prefix_cache::{
     PrefixCache, PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature,
 };
@@ -342,10 +346,15 @@ struct DemoStepBudget {
     step_index: u32,
     total_budget_millis: u64,
     discovery_budget_millis: u64,
+    scout_budget_millis: u64,
+    breadth_harvest_budget_millis: u64,
     proof_close_reserve_millis: u64,
     baseline_budget_millis: u64,
     spill_budget_millis: u64,
     shared_early_window_remaining_millis: u64,
+    generated_floor: Option<u64>,
+    exact_screened_floor: Option<u64>,
+    full_eval_soft_cap: Option<u64>,
 }
 
 impl DemoStepBudget {
@@ -359,6 +368,7 @@ struct DemoBudgetController {
     demo: DemoConfig,
     until_step: u32,
     proof_close_reserve_fraction: DemoBudgetFraction,
+    scout_fraction: DemoBudgetFraction,
     consumed_total_millis: u64,
     consumed_early_millis: u64,
 }
@@ -379,6 +389,7 @@ impl DemoBudgetController {
             proof_close_reserve_fraction: DemoBudgetFraction::parse(
                 &config.demo.proof_close_reserve_fraction,
             )?,
+            scout_fraction: DemoBudgetFraction::parse(&config.demo.scout_fraction)?,
             consumed_total_millis: seed.consumed_total_millis,
             consumed_early_millis: seed.consumed_early_millis,
         }))
@@ -386,18 +397,32 @@ impl DemoBudgetController {
 
     fn plan_step(&self, step_index: u32) -> DemoStepBudget {
         let remaining_total_millis = self.remaining_total_millis();
+        let generated_floor = demo_generated_floor(&self.demo, step_index);
+        let exact_screened_floor = demo_exact_screened_floor(&self.demo, step_index);
+        let full_eval_soft_cap = demo_full_eval_soft_cap(&self.demo, step_index);
         if step_index <= 4 {
             let shared_early_window_remaining_millis = self.remaining_early_millis();
             let total_budget_millis =
                 remaining_total_millis.min(shared_early_window_remaining_millis);
+            let discovery_budget_millis = total_budget_millis;
+            let scout_budget_millis = self
+                .scout_fraction
+                .apply(discovery_budget_millis)
+                .min(discovery_budget_millis);
             return DemoStepBudget {
                 step_index,
                 total_budget_millis,
-                discovery_budget_millis: total_budget_millis,
+                discovery_budget_millis,
+                scout_budget_millis,
+                breadth_harvest_budget_millis: discovery_budget_millis
+                    .saturating_sub(scout_budget_millis),
                 proof_close_reserve_millis: 0,
                 baseline_budget_millis: total_budget_millis,
                 spill_budget_millis: 0,
                 shared_early_window_remaining_millis,
+                generated_floor,
+                exact_screened_floor,
+                full_eval_soft_cap,
             };
         }
 
@@ -414,15 +439,27 @@ impl DemoBudgetController {
             .min(remaining_total_millis);
         let proof_close_reserve_millis =
             self.proof_close_reserve_fraction.apply(total_budget_millis);
+        let discovery_budget_millis =
+            total_budget_millis.saturating_sub(proof_close_reserve_millis);
+        let scout_budget_millis = self
+            .scout_fraction
+            .apply(discovery_budget_millis)
+            .min(discovery_budget_millis);
 
         DemoStepBudget {
             step_index,
             total_budget_millis,
-            discovery_budget_millis: total_budget_millis.saturating_sub(proof_close_reserve_millis),
+            discovery_budget_millis,
+            scout_budget_millis,
+            breadth_harvest_budget_millis: discovery_budget_millis
+                .saturating_sub(scout_budget_millis),
             proof_close_reserve_millis,
             baseline_budget_millis,
             spill_budget_millis,
             shared_early_window_remaining_millis: 0,
+            generated_floor,
+            exact_screened_floor,
+            full_eval_soft_cap,
         }
     }
 
@@ -473,6 +510,407 @@ fn demo_step_floor_millis(demo: &DemoConfig, step_index: u32) -> u64 {
         .map(u64::from)
         .unwrap_or(0)
         .saturating_mul(1_000)
+}
+
+fn demo_generated_floor(demo: &DemoConfig, step_index: u32) -> Option<u64> {
+    if step_index == 1 {
+        return Some(2144);
+    }
+    demo.floors
+        .generated_floor
+        .get(&step_index.to_string())
+        .copied()
+}
+
+fn demo_exact_screened_floor(demo: &DemoConfig, step_index: u32) -> Option<u64> {
+    demo.floors
+        .exact_screened_floor
+        .get(&step_index.to_string())
+        .copied()
+}
+
+fn demo_full_eval_soft_cap(demo: &DemoConfig, step_index: u32) -> Option<u64> {
+    demo.caps
+        .full_eval_soft_cap
+        .get(&step_index.to_string())
+        .copied()
+}
+
+#[derive(Clone, Debug)]
+struct DemoNarrativeRuntime {
+    budget: DemoStepBudget,
+    recorder: NarrativeRecorder,
+    scout_sample_recorded: bool,
+    breadth_harvest_entered: bool,
+}
+
+impl DemoNarrativeRuntime {
+    fn new(
+        step_index: u32,
+        objective_bar: Rational,
+        admissibility: StrictAdmissibility,
+        budget: DemoStepBudget,
+    ) -> Self {
+        let mut recorder = NarrativeRecorder::new(step_index);
+        let zero_progress = narrative_progress_snapshot(0, 0, 0, 0);
+        recorder.push(
+            NarrativeEventKind::StepOpen,
+            None,
+            format!(
+                "opened demo step {} with bar {} and clause band {}..{}",
+                step_index,
+                objective_bar,
+                admissibility.min_clause_kappa,
+                admissibility.max_clause_kappa
+            ),
+            Some(format!(
+                "mode={} {}",
+                admissibility_mode_name(admissibility.mode),
+                demo_budget_plan_detail(budget)
+            )),
+            Some(zero_progress.clone()),
+        );
+        recorder.push(
+            NarrativeEventKind::PhaseChange,
+            Some(StepPhase::Scout),
+            format!(
+                "entered scout with {} reserved for throughput sampling",
+                format_duration_millis(budget.scout_budget_millis)
+            ),
+            Some(demo_budget_plan_detail(budget)),
+            Some(zero_progress.clone()),
+        );
+        recorder.push(
+            NarrativeEventKind::BudgetPulse,
+            Some(StepPhase::Scout),
+            "scout baselining started".to_owned(),
+            Some(demo_budget_plan_detail(budget)),
+            Some(zero_progress),
+        );
+        Self {
+            budget,
+            recorder,
+            scout_sample_recorded: false,
+            breadth_harvest_entered: false,
+        }
+    }
+
+    fn maybe_enter_breadth_harvest(
+        &mut self,
+        elapsed_millis: u64,
+        progress: NarrativeProgressSnapshot,
+        scout_detail: String,
+        harvest_detail: String,
+    ) {
+        if self.scout_sample_recorded || elapsed_millis < self.budget.scout_budget_millis {
+            return;
+        }
+
+        self.record_scout_sample(progress.clone(), scout_detail);
+        if self.budget.breadth_harvest_budget_millis == 0 {
+            return;
+        }
+
+        self.recorder.push(
+            NarrativeEventKind::PhaseChange,
+            Some(StepPhase::BreadthHarvest),
+            format!(
+                "entered breadth_harvest with {} of widening budget remaining",
+                format_duration_millis(self.budget.breadth_harvest_budget_millis)
+            ),
+            Some(harvest_detail.clone()),
+            Some(progress.clone()),
+        );
+        self.recorder.push(
+            NarrativeEventKind::BudgetPulse,
+            Some(StepPhase::BreadthHarvest),
+            "breadth harvest is widening under the remaining discovery slice".to_owned(),
+            Some(harvest_detail),
+            Some(progress),
+        );
+        self.breadth_harvest_entered = true;
+    }
+
+    fn close_discovery(
+        &mut self,
+        progress: NarrativeProgressSnapshot,
+        scout_detail: String,
+        harvest_detail: String,
+    ) {
+        self.record_scout_sample(progress.clone(), scout_detail);
+        if self.breadth_harvest_entered {
+            self.recorder.push(
+                NarrativeEventKind::BudgetPulse,
+                Some(StepPhase::BreadthHarvest),
+                "breadth harvest closed the widening slice".to_owned(),
+                Some(harvest_detail),
+                Some(progress),
+            );
+        }
+    }
+
+    fn enter_materialize(&mut self, progress: NarrativeProgressSnapshot, detail: String) {
+        self.recorder.push(
+            NarrativeEventKind::PhaseChange,
+            Some(StepPhase::Materialize),
+            "entered materialize to reopen the retained exact surface".to_owned(),
+            Some(detail.clone()),
+            Some(progress.clone()),
+        );
+        self.recorder.push(
+            NarrativeEventKind::BudgetPulse,
+            Some(StepPhase::Materialize),
+            "materializing retained prefixes under exact screening".to_owned(),
+            Some(detail),
+            Some(progress),
+        );
+    }
+
+    fn enter_proof_close(&mut self, progress: NarrativeProgressSnapshot, detail: String) {
+        self.recorder.push(
+            NarrativeEventKind::PhaseChange,
+            Some(StepPhase::ProofClose),
+            "entered proof_close with the reserved certification slice".to_owned(),
+            Some(detail.clone()),
+            Some(progress.clone()),
+        );
+        self.recorder.push(
+            NarrativeEventKind::BudgetPulse,
+            Some(StepPhase::ProofClose),
+            "proof-close is certifying the incumbent under exact comparison".to_owned(),
+            Some(detail),
+            Some(progress),
+        );
+    }
+
+    fn enter_seal(
+        &mut self,
+        progress: NarrativeProgressSnapshot,
+        detail: String,
+        accepted_hash: &str,
+        overshoot: Rational,
+    ) {
+        self.recorder.push(
+            NarrativeEventKind::PhaseChange,
+            Some(StepPhase::Seal),
+            format!(
+                "entered seal with incumbent {} ready for deterministic acceptance",
+                accepted_hash
+            ),
+            Some(detail.clone()),
+            Some(progress.clone()),
+        );
+        self.recorder.push(
+            NarrativeEventKind::BudgetPulse,
+            Some(StepPhase::Seal),
+            format!(
+                "seal fixed overshoot {} for candidate {}",
+                overshoot, accepted_hash
+            ),
+            Some(detail),
+            Some(progress),
+        );
+    }
+
+    fn finish(self) -> Vec<NarrativeEvent> {
+        self.recorder.finish()
+    }
+
+    fn record_scout_sample(&mut self, progress: NarrativeProgressSnapshot, detail: String) {
+        if self.scout_sample_recorded {
+            return;
+        }
+        self.recorder.push(
+            NarrativeEventKind::BudgetPulse,
+            Some(StepPhase::Scout),
+            "scout sample captured throughput on this machine".to_owned(),
+            Some(detail),
+            Some(progress),
+        );
+        self.scout_sample_recorded = true;
+    }
+}
+
+fn admissibility_mode_name(mode: AdmissibilityMode) -> &'static str {
+    match mode {
+        AdmissibilityMode::Guarded => "guarded",
+        AdmissibilityMode::RelaxedShadow => "relaxed_shadow",
+        AdmissibilityMode::RealisticShadow => "realistic_shadow",
+    }
+}
+
+fn demo_budget_plan_detail(budget: DemoStepBudget) -> String {
+    let mut parts = vec![
+        format!(
+            "total={}",
+            format_duration_millis(budget.total_budget_millis)
+        ),
+        format!(
+            "discovery={}",
+            format_duration_millis(budget.discovery_budget_millis)
+        ),
+        format!(
+            "scout={}",
+            format_duration_millis(budget.scout_budget_millis)
+        ),
+        format!(
+            "breadth={}",
+            format_duration_millis(budget.breadth_harvest_budget_millis)
+        ),
+        format!(
+            "proof_close_reserve={}",
+            format_duration_millis(budget.proof_close_reserve_millis)
+        ),
+    ];
+    if budget.baseline_budget_millis > 0 {
+        parts.push(format!(
+            "baseline={}",
+            format_duration_millis(budget.baseline_budget_millis)
+        ));
+    }
+    if budget.spill_budget_millis > 0 {
+        parts.push(format!(
+            "spill={}",
+            format_duration_millis(budget.spill_budget_millis)
+        ));
+    }
+    if budget.shared_early_window_remaining_millis > 0 {
+        parts.push(format!(
+            "shared_early_remaining={}",
+            format_duration_millis(budget.shared_early_window_remaining_millis)
+        ));
+    }
+    if let Some(generated_floor) = budget.generated_floor {
+        parts.push(format!("generated_floor={generated_floor}"));
+    }
+    if let Some(exact_screened_floor) = budget.exact_screened_floor {
+        parts.push(format!("exact_screened_floor={exact_screened_floor}"));
+    }
+    if let Some(full_eval_soft_cap) = budget.full_eval_soft_cap {
+        parts.push(format!("full_eval_soft_cap={full_eval_soft_cap}"));
+    }
+    parts.join(" ")
+}
+
+fn format_duration_millis(millis: u64) -> String {
+    if millis < 1_000 {
+        return format!("{millis}ms");
+    }
+    if millis < 60_000 {
+        let whole = millis / 1_000;
+        let tenths = (millis % 1_000) / 100;
+        return format!("{whole}.{tenths}s");
+    }
+
+    let total_seconds = millis / 1_000;
+    let minutes = total_seconds / 60;
+    let seconds = total_seconds % 60;
+    format!("{minutes}m{seconds:02}s")
+}
+
+fn per_second(count: u64, elapsed_millis: u64) -> u64 {
+    if elapsed_millis == 0 {
+        return count;
+    }
+    count.saturating_mul(1_000) / elapsed_millis
+}
+
+fn floor_status(current: u64, target: Option<u64>) -> String {
+    match target {
+        Some(target) => {
+            let status = if current >= target { "hit" } else { "miss" };
+            format!("{current}/{target}({status})")
+        }
+        None => current.to_string(),
+    }
+}
+
+fn cap_status(current: u64, limit: Option<u64>) -> String {
+    match limit {
+        Some(limit) => {
+            let status = if current <= limit {
+                "within_limit"
+            } else {
+                "over_limit"
+            };
+            format!("{current}/{limit}({status})")
+        }
+        None => current.to_string(),
+    }
+}
+
+fn demo_surface_status_detail(
+    budget: DemoStepBudget,
+    generated_surface: u64,
+    exact_screened_surface: u64,
+    full_telescopes_evaluated: u64,
+) -> String {
+    format!(
+        "generated={} exact_screened={} full_evals={}",
+        floor_status(generated_surface, budget.generated_floor),
+        floor_status(exact_screened_surface, budget.exact_screened_floor),
+        cap_status(full_telescopes_evaluated, budget.full_eval_soft_cap)
+    )
+}
+
+fn discovery_progress_snapshot(
+    step_start: Instant,
+    discovery: &RealisticShadowDiscovery,
+) -> NarrativeProgressSnapshot {
+    narrative_progress_snapshot(
+        elapsed_millis(step_start.elapsed()),
+        generated_surface_from_counts(discovery.prefixes_created, discovery.enumerated_candidates),
+        discovery_exact_screened_surface(discovery),
+        discovery.candidates.len() as u64,
+    )
+}
+
+fn discovery_exact_screened_surface(discovery: &RealisticShadowDiscovery) -> u64 {
+    (discovery.partial_prefix_bound_checks
+        + discovery.partial_prefix_bound_prunes
+        + discovery.terminal_prefix_bar_prunes
+        + discovery.candidates.len()) as u64
+}
+
+fn discovery_scout_detail(discovery: &RealisticShadowDiscovery, elapsed_millis: u64) -> String {
+    format!(
+        "generated_per_sec={} admissibility_per_sec={} exact_bound_per_sec={} full_eval_per_sec={} generated={} admissibility_checks={} exact_bound_checks={} full_evals={}",
+        per_second(
+            generated_surface_from_counts(
+                discovery.prefixes_created,
+                discovery.enumerated_candidates
+            ),
+            elapsed_millis
+        ),
+        per_second(discovery.well_formed_candidates as u64, elapsed_millis),
+        per_second(discovery.partial_prefix_bound_checks as u64, elapsed_millis),
+        per_second(discovery.candidates.len() as u64, elapsed_millis),
+        generated_surface_from_counts(discovery.prefixes_created, discovery.enumerated_candidates),
+        discovery.well_formed_candidates,
+        discovery.partial_prefix_bound_checks,
+        discovery.candidates.len()
+    )
+}
+
+fn discovery_harvest_detail(
+    budget: DemoStepBudget,
+    discovery: &RealisticShadowDiscovery,
+) -> String {
+    let generated_surface =
+        generated_surface_from_counts(discovery.prefixes_created, discovery.enumerated_candidates);
+    let exact_screened_surface = discovery_exact_screened_surface(discovery);
+    format!(
+        "{} admissibility_rejections={} partial_prefix_prunes={} terminal_prefix_bar_prunes={}",
+        demo_surface_status_detail(
+            budget,
+            generated_surface,
+            exact_screened_surface,
+            discovery.candidates.len() as u64
+        ),
+        discovery.admissibility_rejections,
+        discovery.partial_prefix_bound_prunes,
+        discovery.terminal_prefix_bar_prunes
+    )
 }
 
 pub fn supports_live_atomic_search(until_step: u32) -> bool {
@@ -666,6 +1104,8 @@ fn search_next_step(
         strict_admissibility_for_mode(step_index, window_depth, library, admissibility_mode);
     let retention_policy = structural_debt.retention_policy();
     let objective_bar = compute_bar(window_depth as usize, step_index, history).bar;
+    let mut demo_narrative = demo_step_budget
+        .map(|budget| DemoNarrativeRuntime::new(step_index, objective_bar, admissibility, budget));
     let mut candidates = Vec::new();
     let mut prefix_cache = PrefixCache::default();
     let mut prefixes_created = 0usize;
@@ -713,7 +1153,16 @@ fn search_next_step(
             objective_bar,
             &nu_history,
             demo_step_budget.and_then(|budget| budget.discovery_deadline(step_start)),
+            step_start,
+            &mut demo_narrative,
         )?;
+        if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
+            observer.close_discovery(
+                discovery_progress_snapshot(step_start, &discovery),
+                discovery_scout_detail(&discovery, elapsed_millis(step_start.elapsed())),
+                discovery_harvest_detail(budget, &discovery),
+            );
+        }
         prefix_cache = discovery.prefix_cache;
         candidates = discovery.candidates;
         prefixes_created = discovery.prefixes_created;
@@ -783,6 +1232,34 @@ fn search_next_step(
                 candidates.push(candidate);
             }
         }
+        if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
+            observer.close_discovery(
+                narrative_progress_snapshot(
+                    elapsed_millis(step_start.elapsed()),
+                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                    exact_screened_surface_from_counts(0, candidates.len()),
+                    candidates.len() as u64,
+                ),
+                format!(
+                    "generated_per_sec={} admissibility_per_sec={} exact_bound_per_sec=0 full_eval_per_sec={} generated={} admissibility_checks={} exact_bound_checks=0 full_evals={}",
+                    per_second(
+                        generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                        elapsed_millis(step_start.elapsed())
+                    ),
+                    per_second(well_formed_candidates as u64, elapsed_millis(step_start.elapsed())),
+                    per_second(candidates.len() as u64, elapsed_millis(step_start.elapsed())),
+                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                    well_formed_candidates,
+                    candidates.len()
+                ),
+                demo_surface_status_detail(
+                    budget,
+                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                    exact_screened_surface_from_counts(0, candidates.len()),
+                    candidates.len() as u64,
+                ),
+            );
+        }
     }
     let candidate_discovery_wall_clock_millis = elapsed_millis(discovery_start.elapsed());
 
@@ -805,6 +1282,29 @@ fn search_next_step(
         + incremental_clause_family_prunes
         + incremental_partial_prefix_bound_prunes
         + incremental_terminal_prefix_bar_prunes;
+    if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
+        observer.enter_materialize(
+            narrative_progress_snapshot(
+                elapsed_millis(step_start.elapsed()),
+                generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                exact_screened_surface_from_counts(prefix_states_exact_pruned, candidates.len()),
+                candidates.len() as u64,
+            ),
+            format!(
+                "retained_prefix_groups={} {}",
+                prefix_frontier.retained_prefix_signatures.len(),
+                demo_surface_status_detail(
+                    budget,
+                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                    exact_screened_surface_from_counts(
+                        prefix_states_exact_pruned,
+                        candidates.len()
+                    ),
+                    candidates.len() as u64
+                )
+            ),
+        );
+    }
 
     if admissibility_mode == AdmissibilityMode::RealisticShadow {
         let mut incumbent_terminal_rank = None;
@@ -871,6 +1371,32 @@ fn search_next_step(
     let selection_start = Instant::now();
     let evaluated_candidates = candidates.len();
     let full_telescopes_evaluated = evaluated_candidates;
+    if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
+        observer.enter_proof_close(
+            narrative_progress_snapshot(
+                elapsed_millis(step_start.elapsed()),
+                generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                exact_screened_surface_from_counts(
+                    prefix_states_exact_pruned,
+                    full_telescopes_evaluated,
+                ),
+                full_telescopes_evaluated as u64,
+            ),
+            format!(
+                "proof_close_reserve={} {}",
+                format_duration_millis(budget.proof_close_reserve_millis),
+                demo_surface_status_detail(
+                    budget,
+                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                    exact_screened_surface_from_counts(
+                        prefix_states_exact_pruned,
+                        full_telescopes_evaluated,
+                    ),
+                    full_telescopes_evaluated as u64
+                )
+            ),
+        );
+    }
     let scored_candidate_distribution = candidate_score_distribution(&candidates, objective_bar);
 
     let mut seen_canonical = BTreeMap::new();
@@ -934,6 +1460,39 @@ fn search_next_step(
         &retained,
         retention_runtime,
     );
+    if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
+        let bar_clearers = retained
+            .iter()
+            .filter(|candidate| candidate.rho >= objective_bar)
+            .count();
+        observer.enter_seal(
+            narrative_progress_snapshot(
+                elapsed_millis(step_start.elapsed()),
+                generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                exact_screened_surface_from_counts(
+                    prefix_states_exact_pruned,
+                    full_telescopes_evaluated,
+                ),
+                full_telescopes_evaluated as u64,
+            ),
+            format!(
+                "bar_clearers={} near_misses={} {}",
+                bar_clearers,
+                acceptance.near_misses.len(),
+                demo_surface_status_detail(
+                    budget,
+                    generated_surface_from_counts(prefixes_created, enumerated_candidates),
+                    exact_screened_surface_from_counts(
+                        prefix_states_exact_pruned,
+                        full_telescopes_evaluated,
+                    ),
+                    full_telescopes_evaluated as u64
+                )
+            ),
+            &acceptance.accepted.candidate_hash,
+            acceptance.accepted.rho - objective_bar,
+        );
+    }
     let heuristic_drops = frontier_retention.dropped_candidates.len();
     let search_timing = SearchTiming {
         step_wall_clock_millis: elapsed_millis(step_start.elapsed()),
@@ -941,6 +1500,9 @@ fn search_next_step(
         prefix_frontier_planning_wall_clock_millis,
         selection_wall_clock_millis: elapsed_millis(selection_start.elapsed()),
     };
+    let narrative_events = demo_narrative
+        .map(DemoNarrativeRuntime::finish)
+        .unwrap_or_default();
 
     build_step_result(
         step_index,
@@ -1004,6 +1566,7 @@ fn search_next_step(
         dedupe_pruned_candidates,
         minimality_pruned_candidates,
         &retained,
+        narrative_events,
     )
 }
 
@@ -1065,6 +1628,7 @@ fn build_step_result(
     dedupe_pruned_candidates: Vec<DedupePruneEvidence>,
     minimality_pruned_candidates: Vec<MinimalityPruneEvidence>,
     retained: &[ExpandedCandidate],
+    narrative_events: Vec<NarrativeEvent>,
 ) -> Result<AtomicSearchStep> {
     let accepted = retained
         .iter()
@@ -1134,7 +1698,7 @@ fn build_step_result(
         dedupe_pruned_candidates,
         minimality_pruned_candidates,
     };
-    step.narrative_events = build_step_narrative_events(&step);
+    step.narrative_events = append_step_narrative_events(&step, narrative_events);
     Ok(step)
 }
 
@@ -1211,19 +1775,31 @@ fn discover_realistic_shadow_candidates(
     objective_bar: Rational,
     nu_history: &[(u32, u32)],
     discovery_deadline: Option<Instant>,
+    step_start: Instant,
+    demo_narrative: &mut Option<DemoNarrativeRuntime>,
 ) -> Result<RealisticShadowDiscovery> {
     let mut discovery = RealisticShadowDiscovery::default();
     let enumeration_context = EnumerationContext::from_admissibility(library, admissibility);
 
     for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
-        if demo_discovery_budget_exhausted(discovery_deadline, &discovery) {
+        if demo_discovery_budget_exhausted(
+            discovery_deadline,
+            &discovery,
+            step_start,
+            demo_narrative.as_mut(),
+        ) {
             break;
         }
         if clause_kappa <= 1 {
             let telescopes = enumerate_telescopes(library, enumeration_context, clause_kappa);
             discovery.enumerated_candidates += telescopes.len();
             for telescope in telescopes {
-                if demo_discovery_budget_exhausted(discovery_deadline, &discovery) {
+                if demo_discovery_budget_exhausted(
+                    discovery_deadline,
+                    &discovery,
+                    step_start,
+                    demo_narrative.as_mut(),
+                ) {
                     break;
                 }
                 discovery.well_formed_candidates += 1;
@@ -1250,7 +1826,12 @@ fn discover_realistic_shadow_candidates(
 
         let mut frontier = Vec::new();
         for clause in clause_catalog.clauses_at(0) {
-            if demo_discovery_budget_exhausted(discovery_deadline, &discovery) {
+            if demo_discovery_budget_exhausted(
+                discovery_deadline,
+                &discovery,
+                step_start,
+                demo_narrative.as_mut(),
+            ) {
                 break;
             }
             let prefix_telescope = Telescope::new(vec![clause.clone()]);
@@ -1316,7 +1897,12 @@ fn discover_realistic_shadow_candidates(
         }
 
         while !frontier.is_empty() {
-            if demo_discovery_budget_exhausted(discovery_deadline, &discovery) {
+            if demo_discovery_budget_exhausted(
+                discovery_deadline,
+                &discovery,
+                step_start,
+                demo_narrative.as_mut(),
+            ) {
                 break;
             }
             let Some(work_item) = pop_best_prefix(&mut frontier) else {
@@ -1449,7 +2035,12 @@ fn discover_realistic_shadow_candidates(
             }
 
             for clause in &work_item.next_clauses {
-                if demo_discovery_budget_exhausted(discovery_deadline, &discovery) {
+                if demo_discovery_budget_exhausted(
+                    discovery_deadline,
+                    &discovery,
+                    step_start,
+                    demo_narrative.as_mut(),
+                ) {
                     break;
                 }
                 let mut child_prefix = work_item.prefix_telescope.clone();
@@ -1524,7 +2115,20 @@ fn discover_realistic_shadow_candidates(
 fn demo_discovery_budget_exhausted(
     discovery_deadline: Option<Instant>,
     discovery: &RealisticShadowDiscovery,
+    step_start: Instant,
+    demo_narrative: Option<&mut DemoNarrativeRuntime>,
 ) -> bool {
+    if let Some(observer) = demo_narrative {
+        let elapsed = elapsed_millis(step_start.elapsed());
+        let progress = discovery_progress_snapshot(step_start, discovery);
+        observer.maybe_enter_breadth_harvest(
+            elapsed,
+            progress,
+            discovery_scout_detail(discovery, elapsed),
+            discovery_harvest_detail(observer.budget, discovery),
+        );
+    }
+
     let Some(discovery_deadline) = discovery_deadline else {
         return false;
     };
@@ -2656,11 +3260,12 @@ mod tests {
         OnlinePrefixWorkItem, create_online_prefix_work_item, exact_partial_prefix_bound_decision,
         pop_best_prefix, search_bootstrap_from_prefix,
         search_bootstrap_from_prefix_for_profile_with_runtime, search_bootstrap_prefix,
-        supports_live_atomic_search,
+        search_bootstrap_prefix_for_config_with_runtime, supports_live_atomic_search,
     };
     use crate::config::{RuntimeConfig, SearchProfile};
     use crate::enumerate::{EnumerationContext, build_clause_catalog};
     use crate::expand::evaluate_candidate;
+    use crate::narrative::{NarrativeEventKind, StepPhase};
     use crate::prefix_cache::PrefixSignature;
     use crate::prefix_memo::{PartialPrefixBoundDecision, PrefixLegalityCache};
     use pen_core::{
@@ -2741,12 +3346,16 @@ mod tests {
         let step_one = controller.plan_step(1);
         assert_eq!(step_one.total_budget_millis, 90_000);
         assert_eq!(step_one.discovery_budget_millis, 90_000);
+        assert_eq!(step_one.scout_budget_millis, 9_000);
+        assert_eq!(step_one.breadth_harvest_budget_millis, 81_000);
         assert_eq!(step_one.shared_early_window_remaining_millis, 90_000);
 
         controller.record_step(1, 30_000);
         let step_two = controller.plan_step(2);
         assert_eq!(step_two.total_budget_millis, 60_000);
         assert_eq!(step_two.discovery_budget_millis, 60_000);
+        assert_eq!(step_two.scout_budget_millis, 6_000);
+        assert_eq!(step_two.breadth_harvest_budget_millis, 54_000);
         assert_eq!(step_two.shared_early_window_remaining_millis, 60_000);
 
         controller.record_step(2, 10_000);
@@ -2771,6 +3380,8 @@ mod tests {
         assert_eq!(step_thirteen.total_budget_millis, 105_000);
         assert_eq!(step_thirteen.proof_close_reserve_millis, 31_500);
         assert_eq!(step_thirteen.discovery_budget_millis, 73_500);
+        assert_eq!(step_thirteen.scout_budget_millis, 7_350);
+        assert_eq!(step_thirteen.breadth_harvest_budget_millis, 66_150);
     }
 
     #[test]
@@ -2791,6 +3402,40 @@ mod tests {
         assert_eq!(resumed_step_thirteen.total_budget_millis, 105_000);
         assert_eq!(resumed_step_thirteen.proof_close_reserve_millis, 31_500);
         assert_eq!(resumed_step_thirteen.discovery_budget_millis, 73_500);
+        assert_eq!(resumed_step_thirteen.scout_budget_millis, 7_350);
+    }
+
+    #[test]
+    fn demo_steps_emit_search_side_phase_events() {
+        let config = demo_runtime_config_10m();
+        let steps = search_bootstrap_prefix_for_config_with_runtime(
+            3,
+            2,
+            &config,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("demo steps should build");
+        let step = steps.last().expect("step should exist");
+
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::PhaseChange && event.phase == Some(StepPhase::Scout)
+        }));
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::PhaseChange
+                && event.phase == Some(StepPhase::Materialize)
+        }));
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::PhaseChange
+                && event.phase == Some(StepPhase::ProofClose)
+        }));
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::PhaseChange && event.phase == Some(StepPhase::Seal)
+        }));
+        assert!(
+            step.narrative_events
+                .iter()
+                .any(|event| event.kind == NarrativeEventKind::BudgetPulse)
+        );
     }
 
     fn relaxed_shadow_step_from_reference_prefix(step_index: u32) -> AtomicSearchStep {

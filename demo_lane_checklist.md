@@ -95,9 +95,9 @@ with 5-minute and 15-minute variants using the same lane.
 
 ## 3. Step Phase Machine
 
-- [ ] Add `StepPhase::{Scout, BreadthHarvest, Materialize, ProofClose, Seal}`.
+- [x] Add `StepPhase::{Scout, BreadthHarvest, Materialize, ProofClose, Seal}`.
 - [x] Add a `DemoBudgetController` in `crates/pen-search/src/engine.rs`.
-- [ ] During `Scout`, measure:
+- [x] During `Scout`, measure:
       prefix generation rate, admissibility rate, exact-bound rate, and full
       evaluation rate on this computer.
 - [ ] During `BreadthHarvest`, keep widening until breadth floors are met or
@@ -220,7 +220,7 @@ with 5-minute and 15-minute variants using the same lane.
 
 ## 9. Narrative And Progress
 
-- [ ] Add a search-side observer and a `NarrativeEvent` stream.
+- [x] Add a search-side observer and a `NarrativeEvent` stream.
 - [x] Add `crates/pen-cli/src/narrative.rs`.
 - [x] Add `crates/pen-cli/src/progress.rs`.
 - [ ] Add `--narrative` support in `pen-cli`.
