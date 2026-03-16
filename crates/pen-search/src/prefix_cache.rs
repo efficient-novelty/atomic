@@ -72,6 +72,34 @@ impl PrefixSignature {
     pub fn has_temporal_family(&self) -> bool {
         self.family_flags & FAMILY_FLAG_TEMPORAL != 0
     }
+
+    pub fn has_path_space_family(&self) -> bool {
+        self.family_flags & FAMILY_FLAG_PATH_SPACE != 0
+    }
+
+    pub fn has_differential_family(&self) -> bool {
+        self.family_flags & FAMILY_FLAG_DIFFERENTIAL != 0
+    }
+
+    pub fn has_curvature_family(&self) -> bool {
+        self.family_flags & FAMILY_FLAG_CURVATURE != 0
+    }
+
+    pub fn has_metric_family(&self) -> bool {
+        self.family_flags & FAMILY_FLAG_METRIC != 0
+    }
+
+    pub fn has_hilbert_family(&self) -> bool {
+        self.family_flags & FAMILY_FLAG_HILBERT != 0
+    }
+
+    pub fn has_temporal_shell_family(&self) -> bool {
+        self.family_flags & FAMILY_FLAG_TEMPORAL_SHELL != 0
+    }
+
+    pub fn has_dependent_family(&self) -> bool {
+        self.family_flags & FAMILY_FLAG_DEPENDENT != 0
+    }
 }
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]

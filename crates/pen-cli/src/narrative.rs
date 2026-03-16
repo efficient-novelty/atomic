@@ -157,6 +157,12 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
             step.search_stats.incremental_terminal_rank_prunes
         ));
     }
+    if !step.search_stats.demo_bucket_stats.is_empty() {
+        lines.push(format!(
+            "demo_buckets {}",
+            render_demo_bucket_summary(&step.search_stats.demo_bucket_stats)
+        ));
+    }
 
     lines.push(String::new());
     lines.push("events".to_owned());
@@ -433,6 +439,43 @@ fn proof_close_line(step: &StepReport) -> String {
         phase.proof_close_frontier_groups_remaining,
         phase.proof_close_closure_percent
     )
+}
+
+fn render_demo_bucket_summary(buckets: &[pen_search::engine::DemoBucketReport]) -> String {
+    let mut buckets = buckets.to_vec();
+    buckets.sort_by_key(|bucket| {
+        (
+            std::cmp::Reverse(bucket.stats.exact_screened_terminal_candidates),
+            std::cmp::Reverse(bucket.stats.fully_scored_terminal_candidates),
+            bucket.bucket_label.clone(),
+        )
+    });
+    let bucket_count = buckets.len();
+
+    let mut rendered = buckets
+        .into_iter()
+        .take(3)
+        .map(|bucket| {
+            format!(
+                "{} gen={} adm={} screen={} pruned={} scored={} best={}",
+                bucket.bucket_label,
+                bucket.stats.generated_terminal_candidates,
+                bucket.stats.admissible_terminal_candidates,
+                bucket.stats.exact_screened_terminal_candidates,
+                bucket.stats.pruned_terminal_candidates,
+                bucket.stats.fully_scored_terminal_candidates,
+                bucket
+                    .stats
+                    .best_overshoot
+                    .map(|value| value.to_string())
+                    .unwrap_or_else(|| "none".to_owned())
+            )
+        })
+        .collect::<Vec<_>>();
+    if bucket_count > 3 {
+        rendered.push(format!("... {} more", bucket_count - 3));
+    }
+    rendered.join(" | ")
 }
 
 fn time_line(step_index: u32, elapsed_millis: u64, demo: &DemoConfig) -> String {

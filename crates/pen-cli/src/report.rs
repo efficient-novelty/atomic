@@ -8,8 +8,8 @@ use pen_eval::bar::{DiscoveryRecord, compute_bar};
 use pen_search::config::{RuntimeConfig, SearchProfile};
 use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
 use pen_search::engine::{
-    AtomicSearchStep, CandidateScoreDistribution, DedupePruneEvidence, DemoBudgetSeed,
-    DemoClosureStats, DemoFunnelStats, DemoPhaseStats, FrontierRetentionOutcome,
+    AtomicSearchStep, CandidateScoreDistribution, DedupePruneEvidence, DemoBucketReport,
+    DemoBudgetSeed, DemoClosureStats, DemoFunnelStats, DemoPhaseStats, FrontierRetentionOutcome,
     MinimalityPruneEvidence, search_bootstrap_from_prefix_for_config_with_runtime_and_seed,
     search_bootstrap_from_prefix_for_profile_with_runtime,
     search_bootstrap_prefix_for_config_with_runtime,
@@ -140,6 +140,8 @@ pub struct StepSearchStats {
     pub demo_funnel: DemoFunnelStats,
     #[serde(default)]
     pub demo_closure: DemoClosureStats,
+    #[serde(default)]
+    pub demo_bucket_stats: Vec<DemoBucketReport>,
     #[serde(default)]
     pub search_timing: SearchTiming,
     #[serde(default)]
@@ -869,6 +871,7 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 demo_phase: DemoPhaseStats::default(),
                 demo_funnel: DemoFunnelStats::default(),
                 demo_closure: DemoClosureStats::default(),
+                demo_bucket_stats: Vec::new(),
                 search_timing: SearchTiming::default(),
                 prefix_frontier_hot_states: 0,
                 prefix_frontier_cold_states: 0,
@@ -1159,6 +1162,13 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
                 step.search_stats.demo_phase.proof_close_frontier_groups_remaining,
                 step.search_stats.demo_phase.proof_close_closure_percent
             ));
+            if !step.search_stats.demo_bucket_stats.is_empty() {
+                lines.push(format!(
+                    "  demo buckets: total={} {}",
+                    step.search_stats.demo_bucket_stats.len(),
+                    render_demo_bucket_summary(&step.search_stats.demo_bucket_stats)
+                ));
+            }
         }
         if step.search_stats.prefix_states_explored > 0 {
             lines.push(format!(
@@ -1534,6 +1544,7 @@ fn step_to_report_with_provenance(
             demo_phase: step.demo_phase,
             demo_funnel: step.demo_funnel,
             demo_closure: step.demo_closure,
+            demo_bucket_stats: step.demo_bucket_stats,
             search_timing: step.search_timing,
             prefix_frontier_hot_states: step.prefix_frontier_hot_states,
             prefix_frontier_cold_states: step.prefix_frontier_cold_states,
@@ -1852,6 +1863,7 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 demo_phase: DemoPhaseStats::default(),
                 demo_funnel: DemoFunnelStats::default(),
                 demo_closure: DemoClosureStats::default(),
+                demo_bucket_stats: Vec::new(),
                 search_timing: SearchTiming::default(),
                 prefix_frontier_hot_states: 0,
                 prefix_frontier_cold_states: 0,
@@ -2148,6 +2160,43 @@ fn render_optional_count(value: Option<u64>) -> String {
         .unwrap_or_else(|| "none".to_owned())
 }
 
+fn render_demo_bucket_summary(buckets: &[DemoBucketReport]) -> String {
+    let mut buckets = buckets.to_vec();
+    buckets.sort_by_key(|bucket| {
+        (
+            std::cmp::Reverse(bucket.stats.exact_screened_terminal_candidates),
+            std::cmp::Reverse(bucket.stats.fully_scored_terminal_candidates),
+            bucket.bucket_label.clone(),
+        )
+    });
+    let bucket_count = buckets.len();
+
+    let mut rendered = buckets
+        .into_iter()
+        .take(3)
+        .map(|bucket| {
+            format!(
+                "{} gen={} adm={} screen={} pruned={} scored={} best={}",
+                bucket.bucket_label,
+                bucket.stats.generated_terminal_candidates,
+                bucket.stats.admissible_terminal_candidates,
+                bucket.stats.exact_screened_terminal_candidates,
+                bucket.stats.pruned_terminal_candidates,
+                bucket.stats.fully_scored_terminal_candidates,
+                bucket
+                    .stats
+                    .best_overshoot
+                    .map(|value| value.to_string())
+                    .unwrap_or_else(|| "none".to_owned())
+            )
+        })
+        .collect::<Vec<_>>();
+    if bucket_count > 3 {
+        rendered.push(format!("... {} more", bucket_count - 3));
+    }
+    rendered.join(" | ")
+}
+
 fn retention_focus_label(focus: pen_type::obligations::RetentionFocus) -> &'static str {
     match focus {
         pen_type::obligations::RetentionFocus::OpenBand => "open_band",
@@ -2291,6 +2340,7 @@ mod tests {
         render_debug_report, render_standard_report, replay_reference_steps,
         search_atomic_bootstrap_steps, search_atomic_bootstrap_steps_with_runtime,
     };
+    use pen_search::config::RuntimeConfig;
     use pen_search::diversify::FrontierRuntimeLimits;
     use pen_store::{
         memory::{GovernorConfig, PressureAction},
@@ -2420,6 +2470,33 @@ mod tests {
         assert!(debug.contains("c01 [introduction]"));
         assert!(debug.contains("fun x1 ->"));
         assert!(!step.narrative_events.is_empty());
+    }
+
+    #[test]
+    fn demo_debug_report_surfaces_bucket_summary() {
+        let config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/demo_breadth_shadow_10m.toml"
+        ))
+        .expect("demo config should parse");
+        let generated = super::generate_steps_with_config_and_runtime(
+            15,
+            &config,
+            FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("demo steps should build");
+        let debug = render_debug_report("run-1", &generated.steps);
+
+        assert!(
+            generated
+                .steps
+                .last()
+                .expect("latest demo step")
+                .search_stats
+                .demo_bucket_stats
+                .len()
+                > 0
+        );
+        assert!(debug.contains("demo buckets:"));
     }
 
     #[test]

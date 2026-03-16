@@ -233,6 +233,11 @@ On the demo-lane side:
   surfaces while reserve is healthy and faster prune/closure payoffs when the
   reserved slice gets tight, and retained-group candidates now run in exact
   accept-rank order before stable structural tiebreaks
+- demo materialize and proof-close now also assign deterministic structural
+  bucket keys to retained exact surfaces, persist per-bucket generated,
+  admissible, exact-screened, pruned, fully scored, and best-overshoot stats,
+  and use those bucket stats plus retention-class bridge potential and low-
+  redundancy cues to order proof-close work without changing acceptance truth
 - demo materialize can now also yield into `ProofClose` with the explicit
   `materialize_reserve_handoff` reason once an incumbent exists and the
   remaining exact surface has already flipped into closure-first reserve
@@ -240,11 +245,14 @@ On the demo-lane side:
 - scout-side reserve retunes no longer suppress the later `BreadthHarvest`
   phase change, so the stored event stream now keeps the explicit phase
   machine visible even when scout already adjusted budget at the handoff
+- `pen-cli` debug output, `--narrative`, and `scripts/compare_runs.py` now
+  also surface compact demo bucket summaries from stored step artifacts
 - the current demo gap is not "make the lane look broader"; it is meeting the
   surfaced early and late breadth floors honestly, then turning the landed
   spill/reserve feedback plus the landed repeated discovery-side reserve
-  retunes plus the landed reserve-pressure materialize handoff into stronger
-  closure-aware replanning and real widening
+  retunes plus the landed reserve-pressure materialize handoff plus the landed
+  structural bucket scheduler into stronger closure-aware replanning and real
+  widening
 
 Start with the current architecture doc before diving into donor material:
 

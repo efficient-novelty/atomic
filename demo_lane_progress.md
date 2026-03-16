@@ -16,6 +16,11 @@ retuning during `BreadthHarvest`.
   `realistic_frontier_shadow` for the underlying search semantics.
 - The lane now reports its misses honestly instead of hiding them behind
   generic breadth counts or debug text.
+- The lane now has a deterministic demo bucket scheduler keyed only by
+  structural/runtime-local evidence, with stored per-bucket generated,
+  admissible, exact-screened, pruned, fully scored, and best-overshoot stats.
+- CLI debug output, `--narrative`, and `scripts/compare_runs.py` now surface
+  compact bucket summaries so the ordering story is visible in stored evidence.
 - The main remaining problem is no longer "missing demo evidence." The main
   problem is that the live search surface is still not broad enough in the
   places the plan cares about.
@@ -36,8 +41,8 @@ retuning during `BreadthHarvest`.
   surface
 - configured late-step generated and exact-screened floors are now stored and
   reported, but they are not yet being hit consistently
-- the demo lane still lacks a demo-specific structural bucket scheduler and
-  per-bucket stats
+- the landed demo-specific structural bucket scheduler still needs broader real
+  widening underneath it so late buckets actually reach their honest floors
 
 ### 3. The Within-Step Controller Still Needs Closure-Aware Replanning
 
@@ -62,7 +67,7 @@ retuning during `BreadthHarvest`.
 
 1. Restore the honest early breadth story, starting with step 1 at `2144` and
    the shared early `90s` window.
-2. Add demo-specific structural scheduling and use it to widen the real search
+2. Use the landed demo-specific structural scheduling to widen the real search
    surface on steps `10` to `15`.
 3. Extend the current reserve retunes into stronger closure-aware replanning
    across `Materialize` and `ProofClose`.

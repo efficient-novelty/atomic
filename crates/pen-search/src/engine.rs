@@ -291,6 +291,120 @@ pub struct DemoClosureStats {
     pub closure_percent: u16,
 }
 
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DemoBucketFamily {
+    TemporalShell,
+    Temporal,
+    Modal,
+    Hilbert,
+    Curvature,
+    Differential,
+    Metric,
+    Dependent,
+    PathSpace,
+    LibraryRefs,
+    Generic,
+}
+
+impl DemoBucketFamily {
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::TemporalShell => "temporal_shell",
+            Self::Temporal => "temporal",
+            Self::Modal => "modal",
+            Self::Hilbert => "hilbert",
+            Self::Curvature => "curvature",
+            Self::Differential => "differential",
+            Self::Metric => "metric",
+            Self::Dependent => "dependent",
+            Self::PathSpace => "path_space",
+            Self::LibraryRefs => "library_refs",
+            Self::Generic => "generic",
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DemoBucketSupportProfile {
+    LocalOnly,
+    LibraryBacked,
+}
+
+impl DemoBucketSupportProfile {
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::LocalOnly => "local_only",
+            Self::LibraryBacked => "library_backed",
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DemoBucketWidth {
+    Single,
+    Pair,
+    SmallCluster,
+    Broad,
+}
+
+impl DemoBucketWidth {
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::Single => "single",
+            Self::Pair => "pair",
+            Self::SmallCluster => "small_cluster",
+            Self::Broad => "broad",
+        }
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub struct DemoBucketKey {
+    pub clause_kappa: u16,
+    pub family: DemoBucketFamily,
+    pub support_profile: DemoBucketSupportProfile,
+    pub width: DemoBucketWidth,
+}
+
+impl DemoBucketKey {
+    pub fn label(&self) -> String {
+        format!(
+            "k{}:{}:{}:{}",
+            self.clause_kappa,
+            self.family.as_str(),
+            self.support_profile.as_str(),
+            self.width.as_str()
+        )
+    }
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct DemoBucketStats {
+    #[serde(default)]
+    pub generated_terminal_candidates: usize,
+    #[serde(default)]
+    pub admissible_terminal_candidates: usize,
+    #[serde(default)]
+    pub exact_screened_terminal_candidates: usize,
+    #[serde(default)]
+    pub pruned_terminal_candidates: usize,
+    #[serde(default)]
+    pub fully_scored_terminal_candidates: usize,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub best_overshoot: Option<Rational>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct DemoBucketReport {
+    pub bucket_label: String,
+    pub bucket_key: DemoBucketKey,
+    #[serde(flatten)]
+    pub stats: DemoBucketStats,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AtomicSearchStep {
     pub step_index: u32,
@@ -326,6 +440,7 @@ pub struct AtomicSearchStep {
     pub demo_phase: DemoPhaseStats,
     pub demo_funnel: DemoFunnelStats,
     pub demo_closure: DemoClosureStats,
+    pub demo_bucket_stats: Vec<DemoBucketReport>,
     pub search_timing: SearchTiming,
     pub prefix_frontier_hot_states: usize,
     pub prefix_frontier_cold_states: usize,
@@ -381,6 +496,7 @@ struct PrefixFrontierItem {
 struct RealisticShadowDiscovery {
     prefix_cache: PrefixCache,
     prefix_legality_cache: PrefixLegalityCache,
+    demo_bucket_stats: BTreeMap<DemoBucketKey, DemoBucketStats>,
     candidates: Vec<ExpandedCandidate>,
     stop_reason: Option<DemoBreadthHarvestExitReason>,
     terminal_rank_incumbent: Option<AcceptRank>,
@@ -402,6 +518,120 @@ impl RealisticShadowDiscovery {
     fn can_stop_for_budget(&self) -> bool {
         !self.candidates.is_empty() || !self.prefix_cache.is_empty()
     }
+
+    fn demo_bucket_stats_mut(&mut self, bucket_key: DemoBucketKey) -> &mut DemoBucketStats {
+        self.demo_bucket_stats.entry(bucket_key).or_default()
+    }
+
+    fn record_demo_bucket_surface(
+        &mut self,
+        bucket_key: DemoBucketKey,
+        generated_terminal_candidates: usize,
+        admissible_terminal_candidates: usize,
+    ) {
+        let stats = self.demo_bucket_stats_mut(bucket_key);
+        stats.generated_terminal_candidates += generated_terminal_candidates;
+        stats.admissible_terminal_candidates += admissible_terminal_candidates;
+    }
+
+    fn record_demo_bucket_exact_screened(
+        &mut self,
+        bucket_key: DemoBucketKey,
+        exact_screened_terminal_candidates: usize,
+    ) {
+        self.demo_bucket_stats_mut(bucket_key)
+            .exact_screened_terminal_candidates += exact_screened_terminal_candidates;
+    }
+
+    fn record_demo_bucket_pruned(
+        &mut self,
+        bucket_key: DemoBucketKey,
+        pruned_terminal_candidates: usize,
+    ) {
+        self.demo_bucket_stats_mut(bucket_key)
+            .pruned_terminal_candidates += pruned_terminal_candidates;
+    }
+}
+
+fn demo_bucket_width(surface_count: usize) -> DemoBucketWidth {
+    match surface_count {
+        0 | 1 => DemoBucketWidth::Single,
+        2 => DemoBucketWidth::Pair,
+        3 | 4 => DemoBucketWidth::SmallCluster,
+        _ => DemoBucketWidth::Broad,
+    }
+}
+
+fn demo_bucket_family(signature: &PrefixSignature) -> DemoBucketFamily {
+    if signature.has_temporal_shell_family() {
+        DemoBucketFamily::TemporalShell
+    } else if signature.has_temporal_family() {
+        DemoBucketFamily::Temporal
+    } else if signature.has_modal_family() {
+        DemoBucketFamily::Modal
+    } else if signature.has_hilbert_family() {
+        DemoBucketFamily::Hilbert
+    } else if signature.has_curvature_family() {
+        DemoBucketFamily::Curvature
+    } else if signature.has_differential_family() {
+        DemoBucketFamily::Differential
+    } else if signature.has_metric_family() {
+        DemoBucketFamily::Metric
+    } else if signature.has_dependent_family() {
+        DemoBucketFamily::Dependent
+    } else if signature.has_path_space_family() {
+        DemoBucketFamily::PathSpace
+    } else if signature.has_library_refs() {
+        DemoBucketFamily::LibraryRefs
+    } else {
+        DemoBucketFamily::Generic
+    }
+}
+
+fn demo_bucket_key(
+    signature: &PrefixSignature,
+    clause_kappa: u16,
+    generated_terminal_candidates: usize,
+    admissible_terminal_candidates: usize,
+) -> DemoBucketKey {
+    let surface_count = generated_terminal_candidates
+        .max(admissible_terminal_candidates)
+        .max(1);
+    DemoBucketKey {
+        clause_kappa,
+        family: demo_bucket_family(signature),
+        support_profile: if signature.has_library_refs() {
+            DemoBucketSupportProfile::LibraryBacked
+        } else {
+            DemoBucketSupportProfile::LocalOnly
+        },
+        width: demo_bucket_width(surface_count),
+    }
+}
+
+fn demo_bucket_key_for_group(
+    signature: &PrefixSignature,
+    group: &PrefixCandidateGroup,
+) -> DemoBucketKey {
+    demo_bucket_key(
+        signature,
+        group.bound.clause_kappa_used,
+        group.candidates.len(),
+        group.candidates.len(),
+    )
+}
+
+fn demo_bucket_reports(
+    bucket_stats: &BTreeMap<DemoBucketKey, DemoBucketStats>,
+) -> Vec<DemoBucketReport> {
+    bucket_stats
+        .iter()
+        .map(|(bucket_key, stats)| DemoBucketReport {
+            bucket_label: bucket_key.label(),
+            bucket_key: bucket_key.clone(),
+            stats: stats.clone(),
+        })
+        .collect()
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -421,6 +651,8 @@ struct OnlinePrefixWorkItem {
 struct MaterializedTerminalPrefixGroup {
     candidates: Vec<PrefixGroupCandidate>,
     bound: Option<PrefixBound>,
+    generated_terminal_candidates: usize,
+    admissible_terminal_candidates: usize,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -2124,6 +2356,7 @@ fn search_next_step(
         .iter()
         .map(|record| (record.step_index, record.nu))
         .collect::<Vec<_>>();
+    let mut demo_bucket_stats = BTreeMap::new();
 
     if admissibility_mode == AdmissibilityMode::RealisticShadow {
         let discovery = discover_realistic_shadow_candidates(
@@ -2154,6 +2387,7 @@ fn search_next_step(
         }
         prefix_cache = discovery.prefix_cache;
         candidates = discovery.candidates;
+        demo_bucket_stats = discovery.demo_bucket_stats;
         prefixes_created = discovery.prefixes_created;
         prefix_states_explored = discovery.prefix_states_explored;
         enumerated_candidates = discovery.enumerated_candidates;
@@ -2350,6 +2584,7 @@ fn search_next_step(
                 select_demo_proof_close_group_index(
                     &pending_group_signatures,
                     &prefix_cache,
+                    &demo_bucket_stats,
                     incumbent_terminal_rank.as_ref(),
                     remaining_reserve_millis,
                 )
@@ -2381,11 +2616,16 @@ fn search_next_step(
                 }
                 continue;
             };
+            let bucket_key = demo_bucket_key_for_group(&signature, group);
             if let (Some(group_best_rank), Some(incumbent_rank)) =
                 (&group.best_accept_rank, &incumbent_terminal_rank)
             {
                 if !better_rank(group_best_rank, incumbent_rank) {
                     incremental_terminal_rank_prunes += group.candidates.len();
+                    demo_bucket_stats
+                        .entry(bucket_key.clone())
+                        .or_default()
+                        .pruned_terminal_candidates += group.candidates.len();
                     if demo_proof_close_entered {
                         demo_proof_close_closed_groups += 1;
                         if let (Some(proof_close_started_elapsed), Some(budget)) =
@@ -2452,6 +2692,10 @@ fn search_next_step(
                 {
                     if !better_rank(candidate_rank, incumbent_rank) {
                         incremental_terminal_rank_prunes += 1;
+                        demo_bucket_stats
+                            .entry(bucket_key.clone())
+                            .or_default()
+                            .pruned_terminal_candidates += 1;
                         continue;
                     }
                 }
@@ -2479,6 +2723,15 @@ fn search_next_step(
                         .unwrap_or(true);
                     if witness.is_minimal() && better_than_incumbent {
                         incumbent_terminal_rank = Some(rank);
+                    }
+                }
+                let bucket_stats = demo_bucket_stats.entry(bucket_key.clone()).or_default();
+                bucket_stats.fully_scored_terminal_candidates += 1;
+                if candidate.rho >= objective_bar {
+                    let overshoot = candidate.rho - objective_bar;
+                    match bucket_stats.best_overshoot {
+                        Some(current) if current <= overshoot => {}
+                        _ => bucket_stats.best_overshoot = Some(overshoot),
                     }
                 }
                 candidates.push(candidate);
@@ -2683,6 +2936,7 @@ fn search_next_step(
         incremental_partial_prefix_bound_prunes,
         incremental_terminal_prefix_bar_prunes,
         demo_phase,
+        demo_bucket_stats,
         search_timing,
         prefix_frontier.frontier.hot.len(),
         prefix_frontier.frontier.cold.len(),
@@ -2750,6 +3004,7 @@ fn build_step_result(
     incremental_partial_prefix_bound_prunes: usize,
     incremental_terminal_prefix_bar_prunes: usize,
     demo_phase: DemoPhaseStats,
+    demo_bucket_stats: BTreeMap<DemoBucketKey, DemoBucketStats>,
     search_timing: SearchTiming,
     prefix_frontier_hot_states: usize,
     prefix_frontier_cold_states: usize,
@@ -2834,6 +3089,7 @@ fn build_step_result(
         demo_phase,
         demo_funnel,
         demo_closure,
+        demo_bucket_stats: demo_bucket_reports(&demo_bucket_stats),
         search_timing,
         prefix_frontier_hot_states,
         prefix_frontier_cold_states,
@@ -3164,11 +3420,30 @@ fn discover_realistic_shadow_candidates(
                     &work_item.next_clauses,
                     &mut discovery,
                 )?;
+                let bucket_key = demo_bucket_key(
+                    &work_item.signature,
+                    work_item.clause_kappa,
+                    group.generated_terminal_candidates,
+                    group.admissible_terminal_candidates,
+                );
+                discovery.record_demo_bucket_surface(
+                    bucket_key.clone(),
+                    group.generated_terminal_candidates,
+                    group.admissible_terminal_candidates,
+                );
                 let Some(retained_bound) = group.bound else {
                     continue;
                 };
+                discovery.record_demo_bucket_exact_screened(
+                    bucket_key.clone(),
+                    group.admissible_terminal_candidates,
+                );
                 if !retained_bound.can_clear_bar(objective_bar) {
                     discovery.terminal_prefix_bar_prunes += 1;
+                    discovery.record_demo_bucket_pruned(
+                        bucket_key.clone(),
+                        group.admissible_terminal_candidates,
+                    );
                     continue;
                 }
                 if let Some(pruned_candidates) = cached_terminal_prefix_rank_prune_count(
@@ -3177,6 +3452,7 @@ fn discover_realistic_shadow_candidates(
                     &mut discovery.prefix_legality_cache,
                 ) {
                     discovery.terminal_rank_prunes += pruned_candidates;
+                    discovery.record_demo_bucket_pruned(bucket_key.clone(), pruned_candidates);
                     continue;
                 }
                 if let (Some(group_best_rank), Some(incumbent_rank)) = (
@@ -3185,6 +3461,8 @@ fn discover_realistic_shadow_candidates(
                 ) {
                     if !better_rank(&group_best_rank, incumbent_rank) {
                         discovery.terminal_rank_prunes += group.candidates.len();
+                        discovery
+                            .record_demo_bucket_pruned(bucket_key.clone(), group.candidates.len());
                         continue;
                     }
                 }
@@ -3492,11 +3770,30 @@ fn process_prepared_exact_two_step_terminal_surface(
             &terminal_prefix.next_clauses,
             discovery,
         )?;
+        let bucket_key = demo_bucket_key(
+            &terminal_prefix.signature,
+            terminal_prefix.clause_kappa,
+            group.generated_terminal_candidates,
+            group.admissible_terminal_candidates,
+        );
+        discovery.record_demo_bucket_surface(
+            bucket_key.clone(),
+            group.generated_terminal_candidates,
+            group.admissible_terminal_candidates,
+        );
         let Some(retained_bound) = group.bound else {
             continue;
         };
+        discovery.record_demo_bucket_exact_screened(
+            bucket_key.clone(),
+            group.admissible_terminal_candidates,
+        );
         if !retained_bound.can_clear_bar(objective_bar) {
             discovery.terminal_prefix_bar_prunes += 1;
+            discovery.record_demo_bucket_pruned(
+                bucket_key.clone(),
+                group.admissible_terminal_candidates,
+            );
             continue;
         }
         if let Some(pruned_candidates) = cached_terminal_prefix_rank_prune_count(
@@ -3505,6 +3802,7 @@ fn process_prepared_exact_two_step_terminal_surface(
             &mut discovery.prefix_legality_cache,
         ) {
             discovery.terminal_rank_prunes += pruned_candidates;
+            discovery.record_demo_bucket_pruned(bucket_key.clone(), pruned_candidates);
             continue;
         }
         if let (Some(group_best_rank), Some(incumbent_rank)) = (
@@ -3513,6 +3811,7 @@ fn process_prepared_exact_two_step_terminal_surface(
         ) {
             if !better_rank(&group_best_rank, incumbent_rank) {
                 discovery.terminal_rank_prunes += group.candidates.len();
+                discovery.record_demo_bucket_pruned(bucket_key.clone(), group.candidates.len());
                 continue;
             }
         }
@@ -4120,9 +4419,11 @@ fn materialize_terminal_prefix_group(
             .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary.clone());
         summary
     };
+    let admitted_terminal_candidates = summary.admitted_candidate_count;
     let TerminalPrefixCompletionSummary {
         evaluations, bound, ..
     } = summary;
+    let generated_terminal_candidates = evaluations.len();
     let mut retained_telescopes = Vec::new();
 
     for evaluation in evaluations {
@@ -4160,6 +4461,8 @@ fn materialize_terminal_prefix_group(
     Ok(MaterializedTerminalPrefixGroup {
         candidates: retained_telescopes,
         bound,
+        generated_terminal_candidates,
+        admissible_terminal_candidates: admitted_terminal_candidates,
     })
 }
 
@@ -4239,39 +4542,112 @@ fn demo_group_is_prune_ready(
     }
 }
 
+#[derive(Clone, Debug, Default)]
+struct DemoBucketSelectionContext {
+    shape_counts: BTreeMap<(DemoBucketKey, u64), usize>,
+    support_counts: BTreeMap<(DemoBucketKey, u64), usize>,
+}
+
+impl DemoBucketSelectionContext {
+    fn from_pending(pending_signatures: &[PrefixSignature], prefix_cache: &PrefixCache) -> Self {
+        let mut context = Self::default();
+        for signature in pending_signatures {
+            let Some(group) = prefix_cache.get(signature) else {
+                continue;
+            };
+            let bucket_key = demo_bucket_key_for_group(signature, group);
+            *context
+                .shape_counts
+                .entry((bucket_key.clone(), group.shape_hash64))
+                .or_insert(0) += 1;
+            *context
+                .support_counts
+                .entry((bucket_key, group.support_hash64))
+                .or_insert(0) += 1;
+        }
+        context
+    }
+
+    fn redundancy_key(
+        &self,
+        bucket_key: &DemoBucketKey,
+        group: &PrefixCandidateGroup,
+    ) -> (usize, usize) {
+        (
+            self.shape_counts
+                .get(&(bucket_key.clone(), group.shape_hash64))
+                .copied()
+                .unwrap_or(0),
+            self.support_counts
+                .get(&(bucket_key.clone(), group.support_hash64))
+                .copied()
+                .unwrap_or(0),
+        )
+    }
+}
+
+fn demo_bucket_progress_key(
+    bucket_stats: &BTreeMap<DemoBucketKey, DemoBucketStats>,
+    bucket_key: &DemoBucketKey,
+) -> (usize, usize, usize) {
+    let stats = bucket_stats.get(bucket_key).cloned().unwrap_or_default();
+    (
+        stats.fully_scored_terminal_candidates + stats.pruned_terminal_candidates,
+        stats.fully_scored_terminal_candidates,
+        stats.exact_screened_terminal_candidates,
+    )
+}
+
 fn demo_proof_close_group_order(
     mode: DemoProofCloseOrderMode,
     left_signature: &PrefixSignature,
     left_group: &PrefixCandidateGroup,
     right_signature: &PrefixSignature,
     right_group: &PrefixCandidateGroup,
+    bucket_stats: &BTreeMap<DemoBucketKey, DemoBucketStats>,
+    selection_context: &DemoBucketSelectionContext,
     incumbent_rank: Option<&AcceptRank>,
 ) -> Ordering {
     let left_improves = demo_group_can_improve_incumbent(left_group, incumbent_rank);
     let right_improves = demo_group_can_improve_incumbent(right_group, incumbent_rank);
     let left_prune_ready = demo_group_is_prune_ready(left_group, incumbent_rank);
     let right_prune_ready = demo_group_is_prune_ready(right_group, incumbent_rank);
+    let left_bucket_key = demo_bucket_key_for_group(left_signature, left_group);
+    let right_bucket_key = demo_bucket_key_for_group(right_signature, right_group);
+    let left_progress = demo_bucket_progress_key(bucket_stats, &left_bucket_key);
+    let right_progress = demo_bucket_progress_key(bucket_stats, &right_bucket_key);
+    let left_redundancy = selection_context.redundancy_key(&left_bucket_key, left_group);
+    let right_redundancy = selection_context.redundancy_key(&right_bucket_key, right_group);
 
     match mode {
         DemoProofCloseOrderMode::PotentialFirst => (
             !left_improves,
             left_group.best_accept_rank.is_none(),
-            left_group.best_accept_rank.clone(),
+            left_group.retention_class.priority_rank(),
+            left_progress,
+            left_redundancy,
             left_group.candidates.len(),
+            left_group.best_accept_rank.clone(),
             std::cmp::Reverse(left_group.bound.rho_upper().unwrap_or(Rational::zero())),
             left_signature.clone(),
         )
             .cmp(&(
                 !right_improves,
                 right_group.best_accept_rank.is_none(),
-                right_group.best_accept_rank.clone(),
+                right_group.retention_class.priority_rank(),
+                right_progress,
+                right_redundancy,
                 right_group.candidates.len(),
+                right_group.best_accept_rank.clone(),
                 std::cmp::Reverse(right_group.bound.rho_upper().unwrap_or(Rational::zero())),
                 right_signature.clone(),
             )),
         DemoProofCloseOrderMode::ClosureFirst => (
             !left_prune_ready,
             left_group.candidates.len(),
+            left_group.retention_class.priority_rank(),
+            left_progress,
+            left_redundancy,
             !left_improves,
             left_group.best_accept_rank.is_none(),
             left_group.best_accept_rank.clone(),
@@ -4281,6 +4657,9 @@ fn demo_proof_close_group_order(
             .cmp(&(
                 !right_prune_ready,
                 right_group.candidates.len(),
+                right_group.retention_class.priority_rank(),
+                right_progress,
+                right_redundancy,
                 !right_improves,
                 right_group.best_accept_rank.is_none(),
                 right_group.best_accept_rank.clone(),
@@ -4337,11 +4716,14 @@ fn demo_should_handoff_materialize_to_proof_close_for_surface(
 fn select_demo_proof_close_group_index(
     pending_signatures: &[PrefixSignature],
     prefix_cache: &PrefixCache,
+    bucket_stats: &BTreeMap<DemoBucketKey, DemoBucketStats>,
     incumbent_rank: Option<&AcceptRank>,
     remaining_reserve_millis: u64,
 ) -> Option<usize> {
     let pending_exact_surface = demo_pending_exact_surface(pending_signatures, prefix_cache);
     let order_mode = demo_proof_close_order_mode(remaining_reserve_millis, pending_exact_surface);
+    let selection_context =
+        DemoBucketSelectionContext::from_pending(pending_signatures, prefix_cache);
 
     pending_signatures
         .iter()
@@ -4357,6 +4739,8 @@ fn select_demo_proof_close_group_index(
                     left_group,
                     right_signature,
                     right_group,
+                    bucket_stats,
+                    &selection_context,
                     incumbent_rank,
                 ),
                 (None, Some(_)) => Ordering::Less,
@@ -4701,9 +5085,10 @@ fn elapsed_millis(duration: Duration) -> u64 {
 #[cfg(test)]
 mod tests {
     use super::{
-        AtomicSearchStep, DemoBreadthHarvestExitReason, DemoBudgetController, DemoBudgetFeedback,
-        DemoBudgetRetuneAction, DemoBudgetSeed, DemoProofCloseEntryReason, DemoProofCloseOrderMode,
-        DemoProofCloseOverrunReason, DemoStepBudget, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
+        AtomicSearchStep, DemoBreadthHarvestExitReason, DemoBucketSelectionContext,
+        DemoBudgetController, DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed,
+        DemoProofCloseEntryReason, DemoProofCloseOrderMode, DemoProofCloseOverrunReason,
+        DemoStepBudget, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
         create_online_prefix_work_item, demo_proof_close_group_order, demo_proof_close_order_mode,
         demo_should_handoff_materialize_to_proof_close_for_surface,
         exact_partial_prefix_bound_decision, maybe_retune_demo_budget_live, pop_best_prefix,
@@ -4741,6 +5126,7 @@ mod tests {
         obligations::RetentionClass,
     };
     use std::cmp::Reverse;
+    use std::collections::BTreeMap;
 
     fn reference_prefix(until_step: u32) -> Vec<Telescope> {
         (1..=until_step).map(Telescope::reference).collect()
@@ -4876,6 +5262,8 @@ mod tests {
         let improving_group = test_prefix_group(3, Some(test_accept_rank(1, "improve")), 6);
         let prune_ready_signature = test_prefix_signature(1);
         let improving_signature = test_prefix_signature(2);
+        let bucket_stats = BTreeMap::new();
+        let selection_context = DemoBucketSelectionContext::default();
 
         assert_eq!(
             demo_proof_close_group_order(
@@ -4884,6 +5272,8 @@ mod tests {
                 &prune_ready_group,
                 &improving_signature,
                 &improving_group,
+                &bucket_stats,
+                &selection_context,
                 Some(&incumbent),
             ),
             std::cmp::Ordering::Greater
@@ -4897,6 +5287,8 @@ mod tests {
         let improving_group = test_prefix_group(3, Some(test_accept_rank(1, "improve")), 6);
         let prune_ready_signature = test_prefix_signature(3);
         let improving_signature = test_prefix_signature(4);
+        let bucket_stats = BTreeMap::new();
+        let selection_context = DemoBucketSelectionContext::default();
 
         assert_eq!(
             demo_proof_close_group_order(
@@ -4905,7 +5297,34 @@ mod tests {
                 &prune_ready_group,
                 &improving_signature,
                 &improving_group,
+                &bucket_stats,
+                &selection_context,
                 Some(&incumbent),
+            ),
+            std::cmp::Ordering::Less
+        );
+    }
+
+    #[test]
+    fn demo_proof_close_potential_mode_prefers_bridge_potential_when_survivability_ties() {
+        let mut bridge_group = test_prefix_group(2, Some(test_accept_rank(1, "bridge")), 6);
+        bridge_group.retention_class = RetentionClass::RareBridgeHead;
+        let generic_group = test_prefix_group(2, Some(test_accept_rank(1, "generic")), 6);
+        let bridge_signature = test_prefix_signature(5);
+        let generic_signature = test_prefix_signature(6);
+        let bucket_stats = BTreeMap::new();
+        let selection_context = DemoBucketSelectionContext::default();
+
+        assert_eq!(
+            demo_proof_close_group_order(
+                DemoProofCloseOrderMode::PotentialFirst,
+                &bridge_signature,
+                &bridge_group,
+                &generic_signature,
+                &generic_group,
+                &bucket_stats,
+                &selection_context,
+                None,
             ),
             std::cmp::Ordering::Less
         );

@@ -366,6 +366,7 @@ def demo_phase_entry(step: dict[str, Any], search_profile: str) -> dict[str, Any
     funnel = stats.get("demo_funnel") or {}
     closure = stats.get("demo_closure") or {}
     phase = stats.get("demo_phase") or {}
+    bucket_summary = demo_bucket_summary(stats.get("demo_bucket_stats") or [])
     if not has_demo_phase_evidence(search_profile, funnel, closure, phase):
         return None
 
@@ -480,6 +481,7 @@ def demo_phase_entry(step: dict[str, Any], search_profile: str) -> dict[str, Any
                 "materialize_soft_cap_triggered",
                 bool(phase.get("materialize_soft_cap_triggered", False)),
             ),
+            ("bucket_summary", bucket_summary),
         ]
     )
 
@@ -508,6 +510,38 @@ def has_demo_phase_evidence(
             int(closure.get("frontier_total_seen", 0) or 0) > 0,
         )
     )
+
+
+def demo_bucket_summary(buckets: list[dict[str, Any]]) -> str:
+    if not buckets:
+        return "none"
+
+    ordered = sorted(
+        buckets,
+        key=lambda bucket: (
+            -int(bucket.get("exact_screened_terminal_candidates", 0) or 0),
+            -int(bucket.get("fully_scored_terminal_candidates", 0) or 0),
+            str(bucket.get("bucket_label", "")),
+        ),
+    )
+    rendered = []
+    for bucket in ordered[:3]:
+        rendered.append(
+            "{} gen={} adm={} screen={} pruned={} scored={} best={}".format(
+                str(bucket.get("bucket_label", "")),
+                int(bucket.get("generated_terminal_candidates", 0) or 0),
+                int(bucket.get("admissible_terminal_candidates", 0) or 0),
+                int(bucket.get("exact_screened_terminal_candidates", 0) or 0),
+                int(bucket.get("pruned_terminal_candidates", 0) or 0),
+                int(bucket.get("fully_scored_terminal_candidates", 0) or 0),
+                "none"
+                if bucket.get("best_overshoot") is None
+                else rational_to_string(bucket.get("best_overshoot")),
+            )
+        )
+    if len(ordered) > 3:
+        rendered.append(f"... {len(ordered) - 3} more")
+    return " | ".join(rendered)
 
 
 def narrative_artifact_entry(
@@ -1401,6 +1435,7 @@ def render_lane_summary(lane: dict[str, Any]) -> list[str]:
             f"closure={latest_demo['closure_percent']}% "
             f"winner_overshoot={latest_demo['winner_overshoot']}"
         )
+        lines.append(f"  demo buckets latest: {latest_demo['bucket_summary']}")
     if lane["narrative_artifacts"]["status"] != "not_applicable":
         lines.append(
             "  narrative artifacts: "

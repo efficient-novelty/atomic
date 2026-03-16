@@ -19,11 +19,11 @@ discovery-side reserve retuning is intentionally omitted here.
 
 ## 2. Structural Scheduling
 
-- [ ] Add a deterministic demo bucket key.
-- [ ] Track per-bucket stats for generated, admissible, exact-screened,
+- [x] Add a deterministic demo bucket key.
+- [x] Track per-bucket stats for generated, admissible, exact-screened,
       pruned, fully scored, and best-overshoot outcomes.
-- [ ] Add a demo-specific structural priority tuple.
-- [ ] Keep heuristics structural/runtime-local and acceptance-independent.
+- [x] Add a demo-specific structural priority tuple.
+- [x] Keep heuristics structural/runtime-local and acceptance-independent.
 
 ## 3. Real Search Widening
 
