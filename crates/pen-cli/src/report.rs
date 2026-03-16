@@ -977,10 +977,7 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
                     .incremental_active_window_clause_filter_prunes
                     > 0
                 || step.search_stats.incremental_terminal_clause_filter_hits > 0
-                || step
-                    .search_stats
-                    .incremental_terminal_clause_filter_prunes
-                    > 0
+                || step.search_stats.incremental_terminal_clause_filter_prunes > 0
                 || step.search_stats.incremental_trivial_derivability_hits > 0
                 || step.search_stats.incremental_trivial_derivability_prunes > 0
                 || step.search_stats.incremental_terminal_admissibility_hits > 0
@@ -1294,8 +1291,7 @@ fn step_to_report_with_provenance(
                 .incremental_active_window_clause_filter_hits,
             incremental_active_window_clause_filter_prunes: step
                 .incremental_active_window_clause_filter_prunes,
-            incremental_terminal_clause_filter_hits: step
-                .incremental_terminal_clause_filter_hits,
+            incremental_terminal_clause_filter_hits: step.incremental_terminal_clause_filter_hits,
             incremental_terminal_clause_filter_prunes: step
                 .incremental_terminal_clause_filter_prunes,
             incremental_trivial_derivability_hits: step.incremental_trivial_derivability_hits,

@@ -2,7 +2,9 @@ use crate::accept::{AcceptanceOutcome, select_acceptance};
 use crate::bounds::PrefixBound;
 use crate::config::SearchProfile;
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
-use crate::enumerate::{ClauseCatalog, EnumerationContext, build_clause_catalog, enumerate_telescopes};
+use crate::enumerate::{
+    ClauseCatalog, EnumerationContext, build_clause_catalog, enumerate_telescopes,
+};
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
 use crate::prefix_cache::{PrefixCache, PrefixCandidateGroup, PrefixSignature};
@@ -213,6 +215,12 @@ struct OnlinePrefixWorkItem {
     clause_kappa: u16,
     prefix_telescope: Telescope,
     signature: PrefixSignature,
+    remaining_clause_slots: usize,
+    remaining_family_options: u8,
+    bit_cost: u32,
+    clause_count: usize,
+    next_clauses: Vec<pen_core::clause::ClauseRec>,
+    order_key: String,
 }
 
 pub fn supports_live_atomic_search(until_step: u32) -> bool {
@@ -844,20 +852,25 @@ fn discover_realistic_shadow_candidates(
             .filter_map(|clause| {
                 let prefix_telescope = Telescope::new(vec![clause.clone()]);
                 let signature = PrefixSignature::new(step_index, library, &prefix_telescope);
-                discovery
-                    .prefix_legality_cache
-                    .insert_root(
-                        signature.clone(),
-                        clause_kappa,
-                        library,
-                        &prefix_telescope,
-                        admissibility,
-                    )
-                    .then_some(OnlinePrefixWorkItem {
-                        clause_kappa,
-                        prefix_telescope,
-                        signature,
-                    })
+                if !discovery.prefix_legality_cache.insert_root(
+                    signature.clone(),
+                    clause_kappa,
+                    library,
+                    &prefix_telescope,
+                    admissibility,
+                ) {
+                    return None;
+                }
+
+                Some(create_online_prefix_work_item(
+                    clause_kappa,
+                    prefix_telescope,
+                    signature,
+                    library,
+                    admissibility,
+                    &clause_catalog,
+                    &mut discovery.prefix_legality_cache,
+                ))
             })
             .collect::<Vec<_>>();
         discovery.prefixes_created += frontier.len();
@@ -887,24 +900,13 @@ fn discover_realistic_shadow_candidates(
                     nu_history,
                     &work_item.signature,
                     &work_item.prefix_telescope,
-                    clause_catalog.clauses_at(prefix_len),
+                    &work_item.next_clauses,
                     &mut discovery,
                 )?;
                 continue;
             }
 
-            let filtered_clauses = discovery
-                .prefix_legality_cache
-                .filter_active_window_clauses(
-                    &work_item.signature,
-                    prefix_len,
-                    library,
-                    admissibility,
-                    clause_catalog.clauses_at(prefix_len),
-                )
-                .unwrap_or_else(|| clause_catalog.clauses_at(prefix_len).iter().collect());
-
-            for clause in filtered_clauses {
+            for clause in &work_item.next_clauses {
                 let mut child_prefix = work_item.prefix_telescope.clone();
                 child_prefix.clauses.push(clause.clone());
                 let child_signature = PrefixSignature::new(step_index, library, &child_prefix);
@@ -918,16 +920,62 @@ fn discover_realistic_shadow_candidates(
                     continue;
                 }
                 discovery.prefixes_created += 1;
-                frontier.push(OnlinePrefixWorkItem {
-                    clause_kappa: work_item.clause_kappa,
-                    prefix_telescope: child_prefix,
-                    signature: child_signature,
-                });
+                frontier.push(create_online_prefix_work_item(
+                    work_item.clause_kappa,
+                    child_prefix,
+                    child_signature,
+                    library,
+                    admissibility,
+                    &clause_catalog,
+                    &mut discovery.prefix_legality_cache,
+                ));
             }
         }
     }
 
     Ok(discovery)
+}
+
+fn create_online_prefix_work_item(
+    clause_kappa: u16,
+    prefix_telescope: Telescope,
+    signature: PrefixSignature,
+    library: &Library,
+    admissibility: StrictAdmissibility,
+    clause_catalog: &ClauseCatalog,
+    prefix_legality_cache: &mut PrefixLegalityCache,
+) -> OnlinePrefixWorkItem {
+    let prefix_len = prefix_telescope.clauses.len();
+    let remaining_clause_slots = usize::from(clause_kappa).saturating_sub(prefix_len);
+    let next_clauses = if remaining_clause_slots == 0 {
+        Vec::new()
+    } else {
+        prefix_legality_cache
+            .filter_active_window_clauses(
+                &signature,
+                prefix_len,
+                library,
+                admissibility,
+                clause_catalog.clauses_at(prefix_len),
+            )
+            .map(|clauses| clauses.into_iter().cloned().collect())
+            .unwrap_or_else(|| clause_catalog.clauses_at(prefix_len).to_vec())
+    };
+
+    OnlinePrefixWorkItem {
+        clause_kappa,
+        remaining_clause_slots,
+        remaining_family_options: prefix_legality_cache
+            .family_option_count(&signature)
+            .unwrap_or(u8::MAX),
+        bit_cost: prefix_telescope.bit_cost(),
+        clause_count: prefix_telescope.kappa(),
+        next_clauses,
+        order_key: serde_json::to_string(&prefix_telescope)
+            .expect("prefix telescope should serialize"),
+        prefix_telescope,
+        signature,
+    }
 }
 
 fn collapse_single_continuation_chain(
@@ -936,44 +984,22 @@ fn collapse_single_continuation_chain(
     admissibility: StrictAdmissibility,
     clause_catalog: &ClauseCatalog,
     discovery: &mut RealisticShadowDiscovery,
-    work_item: OnlinePrefixWorkItem,
+    mut work_item: OnlinePrefixWorkItem,
 ) -> Option<OnlinePrefixWorkItem> {
-    let mut prefix_telescope = work_item.prefix_telescope;
-    let mut signature = work_item.signature;
-
     loop {
-        let prefix_len = prefix_telescope.clauses.len();
-        if prefix_len + 1 >= usize::from(work_item.clause_kappa) {
-            return Some(OnlinePrefixWorkItem {
-                clause_kappa: work_item.clause_kappa,
-                prefix_telescope,
-                signature,
-            });
+        if work_item.remaining_clause_slots <= 1 {
+            return Some(work_item);
         }
 
-        let filtered_clauses = discovery
-            .prefix_legality_cache
-            .filter_active_window_clauses(
-                &signature,
-                prefix_len,
-                library,
-                admissibility,
-                clause_catalog.clauses_at(prefix_len),
-            )
-            .unwrap_or_else(|| clause_catalog.clauses_at(prefix_len).iter().collect::<Vec<_>>());
-        let [clause] = filtered_clauses.as_slice() else {
-            return Some(OnlinePrefixWorkItem {
-                clause_kappa: work_item.clause_kappa,
-                prefix_telescope,
-                signature,
-            });
+        let [clause] = work_item.next_clauses.as_slice() else {
+            return Some(work_item);
         };
 
-        let mut child_prefix = prefix_telescope.clone();
-        child_prefix.clauses.push((*clause).clone());
+        let mut child_prefix = work_item.prefix_telescope.clone();
+        child_prefix.clauses.push(clause.clone());
         let child_signature = PrefixSignature::new(step_index, library, &child_prefix);
         if !discovery.prefix_legality_cache.insert_child(
-            &signature,
+            &work_item.signature,
             child_signature.clone(),
             library,
             clause,
@@ -983,8 +1009,15 @@ fn collapse_single_continuation_chain(
         }
 
         discovery.prefixes_created += 1;
-        prefix_telescope = child_prefix;
-        signature = child_signature;
+        work_item = create_online_prefix_work_item(
+            work_item.clause_kappa,
+            child_prefix,
+            child_signature,
+            library,
+            admissibility,
+            clause_catalog,
+            &mut discovery.prefix_legality_cache,
+        );
     }
 }
 
@@ -998,19 +1031,9 @@ fn record_terminal_prefix_group(
     nu_history: &[(u32, u32)],
     prefix_signature: &PrefixSignature,
     prefix_telescope: &Telescope,
-    last_clause_options: &[pen_core::clause::ClauseRec],
+    filtered_last_clause_options: &[pen_core::clause::ClauseRec],
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<()> {
-    let filtered_clauses = discovery
-        .prefix_legality_cache
-        .filter_active_window_clauses(
-            prefix_signature,
-            prefix_telescope.clauses.len(),
-            library,
-            admissibility,
-            last_clause_options,
-        )
-        .unwrap_or_else(|| last_clause_options.iter().collect());
     let terminal_clauses = discovery
         .prefix_legality_cache
         .filter_terminal_clauses(
@@ -1018,7 +1041,7 @@ fn record_terminal_prefix_group(
             prefix_signature,
             library,
             admissibility,
-            &filtered_clauses,
+            &filtered_last_clause_options.iter().collect::<Vec<_>>(),
         )
         .map(|clauses| {
             clauses
@@ -1027,7 +1050,7 @@ fn record_terminal_prefix_group(
                 .collect::<Vec<_>>()
         })
         .unwrap_or_else(|| {
-            filtered_clauses
+            filtered_last_clause_options
                 .into_iter()
                 .map(|clause| (clause, None))
                 .collect()
@@ -1134,12 +1157,14 @@ fn pop_best_prefix(frontier: &mut Vec<OnlinePrefixWorkItem>) -> Option<OnlinePre
     Some(frontier.remove(0))
 }
 
-fn prefix_frontier_work_key(item: &OnlinePrefixWorkItem) -> (u16, u32, usize, String) {
+fn prefix_frontier_work_key(item: &OnlinePrefixWorkItem) -> (usize, usize, u8, u32, usize, &str) {
     (
-        item.clause_kappa,
-        item.prefix_telescope.bit_cost(),
-        item.prefix_telescope.kappa(),
-        serde_json::to_string(&item.prefix_telescope).expect("prefix telescope should serialize"),
+        item.remaining_clause_slots,
+        item.next_clauses.len(),
+        item.remaining_family_options,
+        item.bit_cost,
+        item.clause_count,
+        item.order_key.as_str(),
     )
 }
 
@@ -1409,13 +1434,19 @@ fn elapsed_millis(duration: Duration) -> u64 {
 #[cfg(test)]
 mod tests {
     use super::{
-        AtomicSearchStep, LIVE_BOOTSTRAP_MAX_STEP, search_bootstrap_from_prefix,
+        AtomicSearchStep, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
+        create_online_prefix_work_item, pop_best_prefix, search_bootstrap_from_prefix,
         search_bootstrap_from_prefix_for_profile_with_runtime, search_bootstrap_prefix,
         supports_live_atomic_search,
     };
     use crate::config::SearchProfile;
+    use crate::enumerate::{EnumerationContext, build_clause_catalog};
     use crate::expand::evaluate_candidate;
+    use crate::prefix_cache::PrefixSignature;
+    use crate::prefix_memo::PrefixLegalityCache;
     use pen_core::{
+        clause::{ClauseRec, ClauseRole},
+        expr::Expr,
         library::{Library, LibraryEntry},
         rational::Rational,
         telescope::{Telescope, TelescopeClass},
@@ -1435,6 +1466,42 @@ mod tests {
 
     fn reference_prefix(until_step: u32) -> Vec<Telescope> {
         (1..=until_step).map(Telescope::reference).collect()
+    }
+
+    fn library_until(until_step: u32) -> Library {
+        let mut library = Vec::new();
+        for step in 1..=until_step {
+            let telescope = Telescope::reference(step);
+            library.push(LibraryEntry::from_telescope(&telescope, &library));
+        }
+        library
+    }
+
+    fn dummy_work_item(
+        remaining_clause_slots: usize,
+        next_clause_count: usize,
+        remaining_family_options: u8,
+        bit_cost: u32,
+        clause_count: usize,
+        order_key: &str,
+    ) -> OnlinePrefixWorkItem {
+        let prefix_telescope =
+            Telescope::new(vec![ClauseRec::new(ClauseRole::Formation, Expr::Univ)]);
+        let signature = PrefixSignature::new(1, &Library::default(), &prefix_telescope);
+        OnlinePrefixWorkItem {
+            clause_kappa: 4,
+            prefix_telescope,
+            signature,
+            remaining_clause_slots,
+            remaining_family_options,
+            bit_cost,
+            clause_count,
+            next_clauses: vec![
+                ClauseRec::new(ClauseRole::Introduction, Expr::Var(1));
+                next_clause_count
+            ],
+            order_key: order_key.to_owned(),
+        }
     }
 
     fn relaxed_shadow_step_from_reference_prefix(step_index: u32) -> AtomicSearchStep {
@@ -1705,6 +1772,64 @@ mod tests {
         assert!(
             step.admissibility_diagnostics.admitted_deprioritized > 0,
             "expected relaxed shadow step 12 to admit de-prioritized competition"
+        );
+    }
+
+    #[test]
+    fn online_work_items_cache_exact_filtered_next_clauses() {
+        let library = library_until(10);
+        let admissibility =
+            strict_admissibility_for_mode(11, 2, &library, AdmissibilityMode::RealisticShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 5);
+        let prefix = Telescope::new(Telescope::reference(11).clauses[..4].to_vec());
+        let signature = PrefixSignature::new(11, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(signature.clone(), 5, &library, &prefix, admissibility));
+
+        let work_item = create_online_prefix_work_item(
+            5,
+            prefix,
+            signature,
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut cache,
+        );
+
+        assert_eq!(work_item.remaining_clause_slots, 1);
+        assert_eq!(usize::from(work_item.remaining_family_options), 1);
+        assert!(!work_item.next_clauses.is_empty());
+        assert!(work_item.next_clauses.len() < clause_catalog.clauses_at(4).len());
+        assert_eq!(cache.stats().active_window_clause_filter_hits, 1);
+    }
+
+    #[test]
+    fn prefix_queue_prefers_nearer_terminal_and_tighter_cached_continuations() {
+        let mut frontier = vec![
+            dummy_work_item(2, 1, 1, 10, 2, "c"),
+            dummy_work_item(1, 3, 2, 12, 3, "b"),
+            dummy_work_item(1, 1, 1, 14, 3, "a"),
+        ];
+
+        assert_eq!(
+            pop_best_prefix(&mut frontier)
+                .expect("first work item should exist")
+                .order_key,
+            "a"
+        );
+        assert_eq!(
+            pop_best_prefix(&mut frontier)
+                .expect("second work item should exist")
+                .order_key,
+            "b"
+        );
+        assert_eq!(
+            pop_best_prefix(&mut frontier)
+                .expect("third work item should exist")
+                .order_key,
+            "c"
         );
     }
 

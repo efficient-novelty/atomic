@@ -58,6 +58,14 @@ guarded 15-step canon.
   clause filtering leave only one legal child at each remaining position,
   avoiding redundant intermediate prefix frontier pops before terminal-prefix
   grouping.
+- realistic shadow now also caches the exact next-position active-window
+  clause surface on each online work item and reuses it at pop time, so
+  branching and terminal-prefix expansions do not recompute the same exact
+  filter before child expansion or terminal grouping.
+- realistic shadow now also uses the strengthened family summary plus cached
+  next-clause surface to order online prefix work deterministically by
+  remaining distance to terminal and exact continuation width, favoring
+  tighter continuations without changing exact acceptance.
 - `PrefixSignature` now includes:
   - clause position
   - obligation set id
@@ -135,6 +143,10 @@ it as if it were still missing:
   frontier planning
 - collapsing exact single-continuation late-family suffixes instead of pushing
   and popping each forced intermediate prefix state one by one
+- reusing the exact next-position active-window clause surface inside the
+  online work queue instead of recomputing it when the same prefix is popped
+- landing the first continuation-aware deterministic realistic-shadow prefix
+  order retune from exact memoized continuation state
 - adding the first timing telemetry and deterministic frontier memory
   high-water metrics for the memoized realistic-shadow path
 - persisting and rendering the per-step timing telemetry in stored step
@@ -155,21 +167,23 @@ prune confidently earlier than that one-clause-short point.
 
 The strengthened signature is now used for incremental legality/connectivity
 reuse, exact clause-family feasibility pruning, active-window clause filtering,
-an explicit terminal-clause admissibility filter, terminal trivial-
-derivability pruning, and cached terminal admissibility decisions, but it is
-not yet used for:
+cached next-clause reuse inside the online work queue, an explicit terminal-
+clause admissibility filter, terminal trivial-derivability pruning, and cached
+terminal admissibility decisions, but it is not yet used for:
 
 - stronger exact reuse of non-family admissibility structure before the full
   terminal telescope is assembled
 - a more explicit partial-prefix admissibility summary that goes beyond the
   landed family-shaped filter surface plus trivial-derivability reuse
 
-### 3. Using the new timing and memory evidence to retune search order
+### 3. Using the new timing and memory evidence to continue retuning search order
 
 The timing telemetry and deterministic frontier memory high-water metrics are
-now live, but we have not yet used them to retune realistic late-step prefix
-priority/order or to explain which retained-prefix paths are still too
-expensive relative to their payoff.
+now live, and the first continuation-aware online work-order retune is landed,
+but we have not yet used stored run evidence to explain which retained-prefix
+paths are still too expensive relative to their payoff or to drive a broader
+late-step priority retune past that first deterministic continuation-aware
+ordering pass.
 
 ## Forward Plan
 
@@ -183,18 +197,20 @@ expensive relative to their payoff.
   `incremental_terminal_prefix_bar_prunes` to target broader exact
   admissibility/filter reuse
 - use the now-lower `prefix_states_explored` counts from the landed exact
-  single-continuation suffix collapse to isolate the remaining prefixes that
+  single-continuation suffix collapse plus the landed cached next-clause reuse
+  and continuation-aware queue order to isolate the remaining prefixes that
   still need stronger partial-prefix bounds or broader non-family
   admissibility reuse
 - use the now-persisted timing telemetry and deterministic frontier memory
   high-water metrics from stored step summaries and inspect output to identify
-  the late-step prefix lanes that still do redundant work
+  which late-step prefix lanes still do redundant work after the landed
+  continuation-aware order retune
 - keep the strengthened-signature caches exact and deterministic
 
 ### Next
 
-- retune prefix priority/order once earlier bounds exist and the new timing/
-  memory evidence is stable
+- continue retuning prefix priority/order once earlier bounds exist and the
+  new timing/memory evidence is stable
 
 ### Later
 
@@ -212,9 +228,10 @@ expensive relative to their payoff.
    clause/trivial-derivability/terminal-admissibility memo path into another
    exact admissibility summary that fires before the full terminal telescope is
    assembled.
-3. Use the expanded memo counters together with the now-persisted timing
-   telemetry and frontier memory high-water metrics from stored artifacts to
-   retune late-step prefix priority/order.
+3. Use the expanded memo counters together with the landed continuation-aware
+   queue order and the now-persisted timing telemetry and frontier memory
+   high-water metrics from stored artifacts to continue retuning late-step
+   prefix priority/order.
 
 ## Guardrails
 
@@ -230,7 +247,11 @@ expensive relative to their payoff.
 Latest relevant verification:
 
 - `cargo test -p pen-type -p pen-search -p pen-cli -p pen-store`
-- fresh `realistic_frontier_shadow` verification preserves the accepted
-  sequence while reducing redundant late-prefix exploration, including
-  `prefix_states_explored = 2` at step 11 and `prefix_states_explored = 3` at
-  steps 13 and 15
+- fresh `cargo run -p pen-cli -- run --config
+  configs/realistic_frontier_shadow.toml --root runs --run-id
+  codex-order-retune --until-step 15`
+- inspect-backed `runs/codex-order-retune` artifacts preserve the accepted
+  sequence with `prefix_states_explored = 2` at step 11,
+  `prefix_states_explored = 3` at steps 13 and 15, `full_telescopes_evaluated
+  = 1` at step 11, and per-step timing of `0` to `1` ms with hot-frontier
+  bytes between `64` and `128` across those late steps

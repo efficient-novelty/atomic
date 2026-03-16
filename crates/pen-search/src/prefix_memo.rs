@@ -179,6 +179,11 @@ impl PrefixFamilyFilterSummary {
         self.possible_families_mask == 0
     }
 
+    fn family_count(self) -> u8 {
+        u8::try_from(self.possible_families_mask.count_ones())
+            .expect("structural family count exceeded u8")
+    }
+
     fn match_mask(self) -> StructuralFamilyMatchMask {
         let mut mask = StructuralFamilyMatchMask::empty();
         for family in StructuralFamily::ALL {
@@ -230,6 +235,13 @@ pub struct PrefixLegalityCache {
 impl PrefixLegalityCache {
     pub fn stats(&self) -> PrefixLegalityCacheStats {
         self.stats
+    }
+
+    pub fn family_option_count(&self, signature: &PrefixSignature) -> Option<u8> {
+        self.family_filters
+            .get(signature)
+            .copied()
+            .map(|summary| summary.family_count())
     }
 
     pub fn insert_root(
@@ -434,9 +446,7 @@ impl PrefixLegalityCache {
 
 #[cfg(test)]
 mod tests {
-    use super::{
-        PrefixAdmissibilitySummary, PrefixLegalityCache, TerminalConnectivityDecision,
-    };
+    use super::{PrefixAdmissibilitySummary, PrefixLegalityCache, TerminalConnectivityDecision};
     use crate::enumerate::{EnumerationContext, build_clause_catalog};
     use crate::prefix_cache::PrefixSignature;
     use pen_core::clause::{ClauseRec, ClauseRole};
@@ -606,5 +616,18 @@ mod tests {
         assert_eq!(cache.stats().terminal_clause_filter_hits, 1);
         assert!(cache.stats().terminal_clause_filter_prunes > 0);
         assert!(cache.stats().terminal_admissibility_hits > 0);
+    }
+
+    #[test]
+    fn family_option_count_exposes_remaining_exact_family_surface() {
+        let library = library_until(10);
+        let admissibility =
+            strict_admissibility_for_mode(11, 2, &library, AdmissibilityMode::RealisticShadow);
+        let prefix = Telescope::new(Telescope::reference(11).clauses[..4].to_vec());
+        let signature = PrefixSignature::new(11, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(signature.clone(), 5, &library, &prefix, admissibility));
+        assert_eq!(cache.family_option_count(&signature), Some(1));
     }
 }

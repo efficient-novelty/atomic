@@ -409,7 +409,10 @@ mod tests {
             3
         );
         assert_eq!(artifacts.counts.incremental_terminal_clause_filter_hits, 3);
-        assert_eq!(artifacts.counts.incremental_terminal_clause_filter_prunes, 2);
+        assert_eq!(
+            artifacts.counts.incremental_terminal_clause_filter_prunes,
+            2
+        );
         assert_eq!(artifacts.counts.incremental_trivial_derivability_hits, 6);
         assert_eq!(artifacts.counts.incremental_trivial_derivability_prunes, 2);
         assert_eq!(artifacts.counts.incremental_terminal_admissibility_hits, 7);

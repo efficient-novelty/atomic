@@ -123,10 +123,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                     .incremental_active_window_clause_filter_prunes
                     == 0
                 && step.search_stats.incremental_terminal_clause_filter_hits == 0
-                && step
-                    .search_stats
-                    .incremental_terminal_clause_filter_prunes
-                    == 0
+                && step.search_stats.incremental_terminal_clause_filter_prunes == 0
                 && step.search_stats.incremental_trivial_derivability_hits == 0
                 && step.search_stats.incremental_trivial_derivability_prunes == 0
                 && step.search_stats.incremental_terminal_admissibility_hits == 0
