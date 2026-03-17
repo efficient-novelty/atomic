@@ -406,6 +406,43 @@ pub struct DemoBucketReport {
     pub stats: DemoBucketStats,
 }
 
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct ExactScreenReasonStats {
+    #[serde(default)]
+    pub partial_prefix_bar_failure: usize,
+    #[serde(default)]
+    pub terminal_prefix_completion_failure: usize,
+    #[serde(default)]
+    pub incumbent_dominance: usize,
+    #[serde(default)]
+    pub legality_connectivity_exact_rejection: usize,
+}
+
+impl ExactScreenReasonStats {
+    pub fn from_incremental_counters(
+        incremental_connectivity_prunes: usize,
+        incremental_terminal_clause_filter_prunes: usize,
+        incremental_terminal_rank_prunes: usize,
+        incremental_partial_prefix_bound_prunes: usize,
+        incremental_terminal_prefix_bar_prunes: usize,
+    ) -> Self {
+        Self {
+            partial_prefix_bar_failure: incremental_partial_prefix_bound_prunes,
+            terminal_prefix_completion_failure: incremental_terminal_prefix_bar_prunes,
+            incumbent_dominance: incremental_terminal_rank_prunes,
+            legality_connectivity_exact_rejection: incremental_connectivity_prunes
+                .saturating_add(incremental_terminal_clause_filter_prunes),
+        }
+    }
+
+    pub const fn is_empty(&self) -> bool {
+        self.partial_prefix_bar_failure == 0
+            && self.terminal_prefix_completion_failure == 0
+            && self.incumbent_dominance == 0
+            && self.legality_connectivity_exact_rejection == 0
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AtomicSearchStep {
     pub step_index: u32,
@@ -438,6 +475,7 @@ pub struct AtomicSearchStep {
     pub incremental_partial_prefix_bound_checks: usize,
     pub incremental_partial_prefix_bound_prunes: usize,
     pub incremental_terminal_prefix_bar_prunes: usize,
+    pub exact_screen_reasons: ExactScreenReasonStats,
     pub demo_phase: DemoPhaseStats,
     pub demo_funnel: DemoFunnelStats,
     pub demo_closure: DemoClosureStats,
@@ -2977,6 +3015,13 @@ fn search_next_step(
         incremental_partial_prefix_bound_checks,
         incremental_partial_prefix_bound_prunes,
         incremental_terminal_prefix_bar_prunes,
+        ExactScreenReasonStats::from_incremental_counters(
+            incremental_connectivity_prunes,
+            incremental_terminal_clause_filter_prunes,
+            incremental_terminal_rank_prunes,
+            incremental_partial_prefix_bound_prunes,
+            incremental_terminal_prefix_bar_prunes,
+        ),
         demo_phase,
         demo_bucket_stats,
         search_timing,
@@ -3049,6 +3094,7 @@ fn build_step_result(
     incremental_partial_prefix_bound_checks: usize,
     incremental_partial_prefix_bound_prunes: usize,
     incremental_terminal_prefix_bar_prunes: usize,
+    exact_screen_reasons: ExactScreenReasonStats,
     demo_phase: DemoPhaseStats,
     demo_bucket_stats: BTreeMap<DemoBucketKey, DemoBucketStats>,
     search_timing: SearchTiming,
@@ -3133,6 +3179,7 @@ fn build_step_result(
         incremental_partial_prefix_bound_checks,
         incremental_partial_prefix_bound_prunes,
         incremental_terminal_prefix_bar_prunes,
+        exact_screen_reasons,
         demo_phase,
         demo_funnel,
         demo_closure,

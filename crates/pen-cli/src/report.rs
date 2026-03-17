@@ -9,8 +9,9 @@ use pen_search::config::{RuntimeConfig, SearchProfile};
 use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
 use pen_search::engine::{
     AtomicSearchStep, CandidateScoreDistribution, DedupePruneEvidence, DemoBucketReport,
-    DemoBudgetSeed, DemoClosureStats, DemoFunnelStats, DemoPhaseStats, FrontierRetentionOutcome,
-    MinimalityPruneEvidence, search_bootstrap_from_prefix_for_config_with_runtime_and_seed,
+    DemoBudgetSeed, DemoClosureStats, DemoFunnelStats, DemoPhaseStats, ExactScreenReasonStats,
+    FrontierRetentionOutcome, MinimalityPruneEvidence,
+    search_bootstrap_from_prefix_for_config_with_runtime_and_seed,
     search_bootstrap_from_prefix_for_profile_with_runtime,
     search_bootstrap_prefix_for_config_with_runtime,
     search_bootstrap_prefix_for_profile_with_runtime, supports_live_atomic_search,
@@ -134,6 +135,8 @@ pub struct StepSearchStats {
     pub incremental_partial_prefix_bound_prunes: usize,
     #[serde(default)]
     pub incremental_terminal_prefix_bar_prunes: usize,
+    #[serde(default)]
+    pub exact_screen_reasons: ExactScreenReasonStats,
     #[serde(default)]
     pub demo_phase: DemoPhaseStats,
     #[serde(default)]
@@ -868,6 +871,7 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 incremental_partial_prefix_bound_checks: 0,
                 incremental_partial_prefix_bound_prunes: 0,
                 incremental_terminal_prefix_bar_prunes: 0,
+                exact_screen_reasons: ExactScreenReasonStats::default(),
                 demo_phase: DemoPhaseStats::default(),
                 demo_funnel: DemoFunnelStats::default(),
                 demo_closure: DemoClosureStats::default(),
@@ -1112,6 +1116,7 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
             || step.search_stats.demo_phase.generated_floor.is_some()
             || step.search_stats.demo_phase.exact_screened_floor.is_some()
         {
+            let exact_screen_reasons = stored_exact_screen_reasons(step);
             lines.push(format!(
                 "  demo funnel: generated_raw_prefixes={} canonical_prefix_signatures={} well_formed_terminals={} hard_admissible={} exact_bound_screened={} exact_bound_pruned={} heuristic_dropped={} full_telescopes_evaluated={} bar_clearers={} semantically_minimal_clearers={} winner_overshoot={}",
                 step.search_stats.demo_funnel.generated_raw_prefixes,
@@ -1150,6 +1155,15 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
                     .map(|reason| reason.as_str())
                     .unwrap_or("none")
             ));
+            if !exact_screen_reasons.is_empty() {
+                lines.push(format!(
+                    "  exact-screen reasons: partial_prefix_bar_failure={} terminal_prefix_completion_failure={} incumbent_dominance={} legality_connectivity_exact_rejection={}",
+                    exact_screen_reasons.partial_prefix_bar_failure,
+                    exact_screen_reasons.terminal_prefix_completion_failure,
+                    exact_screen_reasons.incumbent_dominance,
+                    exact_screen_reasons.legality_connectivity_exact_rejection
+                ));
+            }
             lines.push(format!(
                 "  demo proof_close: reserve_millis={} elapsed_millis={} remaining_millis={} reserve_overrun_millis={} reserve_exhausted={} groups_closed={} groups_total={} groups_remaining={} closure_percent={}",
                 step.search_stats.demo_phase.proof_close_reserved_millis,
@@ -1541,6 +1555,7 @@ fn step_to_report_with_provenance(
             incremental_partial_prefix_bound_checks: step.incremental_partial_prefix_bound_checks,
             incremental_partial_prefix_bound_prunes: step.incremental_partial_prefix_bound_prunes,
             incremental_terminal_prefix_bar_prunes: step.incremental_terminal_prefix_bar_prunes,
+            exact_screen_reasons: step.exact_screen_reasons,
             demo_phase: step.demo_phase,
             demo_funnel: step.demo_funnel,
             demo_closure: step.demo_closure,
@@ -1860,6 +1875,7 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 incremental_partial_prefix_bound_checks: 0,
                 incremental_partial_prefix_bound_prunes: 0,
                 incremental_terminal_prefix_bar_prunes: 0,
+                exact_screen_reasons: ExactScreenReasonStats::default(),
                 demo_phase: DemoPhaseStats::default(),
                 demo_funnel: DemoFunnelStats::default(),
                 demo_closure: DemoClosureStats::default(),
@@ -2158,6 +2174,20 @@ fn render_optional_count(value: Option<u64>) -> String {
     value
         .map(|count| count.to_string())
         .unwrap_or_else(|| "none".to_owned())
+}
+
+fn stored_exact_screen_reasons(step: &StepReport) -> ExactScreenReasonStats {
+    if !step.search_stats.exact_screen_reasons.is_empty() {
+        return step.search_stats.exact_screen_reasons.clone();
+    }
+
+    ExactScreenReasonStats::from_incremental_counters(
+        step.search_stats.incremental_connectivity_prunes,
+        step.search_stats.incremental_terminal_clause_filter_prunes,
+        step.search_stats.incremental_terminal_rank_prunes,
+        step.search_stats.incremental_partial_prefix_bound_prunes,
+        step.search_stats.incremental_terminal_prefix_bar_prunes,
+    )
 }
 
 fn render_demo_bucket_summary(buckets: &[DemoBucketReport]) -> String {
@@ -2478,12 +2508,18 @@ mod tests {
             "../../../configs/demo_breadth_shadow_10m.toml"
         ))
         .expect("demo config should parse");
-        let generated = super::generate_steps_with_config_and_runtime(
+        let mut generated = super::generate_steps_with_config_and_runtime(
             15,
             &config,
             FrontierRuntimeLimits::unlimited(),
         )
         .expect("demo steps should build");
+        generated
+            .steps
+            .last_mut()
+            .expect("latest demo step")
+            .search_stats
+            .exact_screen_reasons = pen_search::engine::ExactScreenReasonStats::default();
         let debug = render_debug_report("run-1", &generated.steps);
 
         assert!(
@@ -2497,6 +2533,7 @@ mod tests {
                 > 0
         );
         assert!(debug.contains("demo buckets:"));
+        assert!(debug.contains("exact-screen reasons:"));
     }
 
     #[test]

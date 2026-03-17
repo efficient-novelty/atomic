@@ -67,10 +67,15 @@ Default `10m` signoff targets:
 
 - [ ] Extend the within-step controller beyond current reserve retunes,
       ordering, and handoff logic into stronger closure-aware replanning.
-- [ ] Record exact-screen reasons separately:
+- [x] Record exact-screen reasons separately:
       partial-prefix bar failure, terminal-prefix completion failure,
       incumbent dominance, and legality/connectivity exact rejection.
 - [ ] Label every prune as sound, quotient/dedupe, or heuristic shaping.
+
+Latest code evidence: stored step summaries, debug output, and
+`pen-cli --narrative` now persist these four exact-screen reason totals
+explicitly, while older artifacts derive the same labels backward-compatibly
+from the underlying incremental counters.
 
 ## 6. Narrative And Tooling
 

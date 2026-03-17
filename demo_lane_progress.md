@@ -30,6 +30,11 @@ retuning during `BreadthHarvest`.
   admissible, exact-screened, pruned, fully scored, and best-overshoot stats.
 - CLI debug output, `--narrative`, and `scripts/compare_runs.py` now surface
   compact bucket summaries so the ordering story is visible in stored evidence.
+- Stored step summaries, CLI debug output, and `pen-cli --narrative` now also
+  separate the mandatory exact-screen reason codes into partial-prefix bar
+  failure, terminal-prefix completion failure, incumbent dominance, and
+  legality/connectivity exact rejection, with backward-compatible derivation
+  from older incremental counters when needed.
 - `pen-cli --narrative` now enforces the configured per-step line budget by
   trimming low-priority event, retained-candidate, prune, and trace tails with
   explicit omission markers instead of letting long sections grow without
@@ -81,7 +86,6 @@ retuning during `BreadthHarvest`.
 
 - prune labeling is not yet fully separated into sound, quotient/dedupe, and
   heuristic shaping
-- exact-screen reason codes are not yet fully persisted and surfaced
 - `pen-cli` now supports `--narrative` for appending stored per-step demo
   narrative output, including explicit time and closure bars
 - `scripts/compare_runs.py` now flags missing step narrative and event
@@ -98,5 +102,4 @@ retuning during `BreadthHarvest`.
    real search surface on steps `10` to `15`.
 3. Extend the current reserve retunes into stronger closure-aware replanning
    across `Materialize` and `ProofClose`.
-4. Finish prune taxonomy, exact-screen reason reporting, and the remaining
-   mandatory live-event closeout.
+4. Finish prune taxonomy and the remaining mandatory live-event closeout.

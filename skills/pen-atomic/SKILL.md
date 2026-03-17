@@ -259,6 +259,11 @@ On the demo-lane side:
   machine visible even when scout already adjusted budget at the handoff
 - `pen-cli` debug output, `--narrative`, and `scripts/compare_runs.py` now
   also surface compact demo bucket summaries from stored step artifacts
+- stored demo step summaries, CLI debug output, and `pen-cli --narrative` now
+  also persist the four mandatory exact-screen reason codes:
+  partial-prefix bar failure, terminal-prefix completion failure, incumbent
+  dominance, and legality/connectivity exact rejection, with backward-
+  compatible derivation from older artifacts when those fields are absent
 - demo generated-surface reporting now also counts raw root prefixes, raw
   child prefixes, forced single-continuation collapses, and raw terminal
   completions instead of using

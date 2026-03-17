@@ -136,6 +136,16 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
             funnel.winner_overshoot
         ),
     ];
+    let exact_screen_reasons = stored_exact_screen_reasons(step);
+    if !exact_screen_reasons.is_empty() {
+        lines.push(format!(
+            "exact_reasons partial_prefix_bar={} terminal_completion={} incumbent_dominance={} legality_connectivity={}",
+            exact_screen_reasons.partial_prefix_bar_failure,
+            exact_screen_reasons.terminal_prefix_completion_failure,
+            exact_screen_reasons.incumbent_dominance,
+            exact_screen_reasons.legality_connectivity_exact_rejection
+        ));
+    }
 
     if step.search_stats.prefix_states_explored > 0 {
         lines.push(format!(
@@ -479,6 +489,20 @@ fn stored_demo_closure(step: &StepReport) -> pen_search::engine::DemoClosureStat
     }
 }
 
+fn stored_exact_screen_reasons(step: &StepReport) -> pen_search::engine::ExactScreenReasonStats {
+    if !step.search_stats.exact_screen_reasons.is_empty() {
+        return step.search_stats.exact_screen_reasons.clone();
+    }
+
+    pen_search::engine::ExactScreenReasonStats::from_incremental_counters(
+        step.search_stats.incremental_connectivity_prunes,
+        step.search_stats.incremental_terminal_clause_filter_prunes,
+        step.search_stats.incremental_terminal_rank_prunes,
+        step.search_stats.incremental_partial_prefix_bound_prunes,
+        step.search_stats.incremental_terminal_prefix_bar_prunes,
+    )
+}
+
 fn generated_floor(step_index: u32, demo: &DemoConfig) -> Option<u64> {
     if step_index == 1 {
         return Some(2144);
@@ -809,5 +833,26 @@ mod tests {
         );
         assert!(text.contains("more event lines"));
         assert!(text.contains("more trace lines"));
+    }
+
+    #[test]
+    fn demo_narrative_surfaces_exact_screen_reason_codes() {
+        let config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/demo_breadth_shadow_10m.toml"
+        ))
+        .expect("demo config should parse");
+        let mut steps =
+            generate_steps_with_config_and_runtime(15, &config, FrontierRuntimeLimits::unlimited())
+                .expect("demo steps should build")
+                .steps;
+        let mut step = steps.pop().expect("step should exist");
+        step.search_stats.exact_screen_reasons =
+            pen_search::engine::ExactScreenReasonStats::default();
+
+        let text = render_step_narrative(&step, &config.demo);
+
+        assert!(text.contains("exact_reasons"));
+        assert!(text.contains("partial_prefix_bar="));
+        assert!(text.contains("incumbent_dominance="));
     }
 }
