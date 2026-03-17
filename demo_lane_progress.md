@@ -47,6 +47,11 @@ retuning during `BreadthHarvest`.
 - Repeated live scout and breadth-harvest budget-retune pulses now honor the
   configured `pulse_interval_millis` while mandatory phase-entry, milestone,
   reserve-exhaustion, and seal pulses still emit immediately.
+- Demo materialize can now also hand off into `ProofClose` with the explicit
+  `closure_pressure_handoff` reason once a live incumbent makes most pending
+  retained exact surface prune-ready, and the same closure-pressure summary now
+  flips proof-close ordering into closure-first even before reserve tightness
+  alone would force that mode change.
 - Fresh stored evidence in `runs/codex-demo-midlate-widening` still preserves
   accepted parity through step `15` (`matches_reference_replay x15`) and
   finishes far under the default `600s` ceiling on this computer.
@@ -94,15 +99,10 @@ retuning during `BreadthHarvest`.
   demo-versus-realistic enumeration evidence more than the stored live demo
   funnel, so the next gap is turning that widened static surface into honest
   raw or exact-screened counts during the online prefix search
+- the new closure-pressure handoff improves the within-step split, but it does
+  not yet turn the widened late surface into stored live breadth on its own
 
-### 3. The Within-Step Controller Still Needs Closure-Aware Replanning
-
-- discovery-side reserve retunes now repeat during `BreadthHarvest`
-- proof-close still mostly changes ordering and handoff timing rather than
-  replanning the earlier widening and materialize split from live closure
-  state
-
-### 4. Reporting Closeout Is Still Incomplete
+### 3. Reporting Closeout Is Still Incomplete
 
 - `pen-cli` now supports `--narrative` for appending stored per-step demo
   narrative output, including explicit time and closure bars
@@ -120,6 +120,4 @@ retuning during `BreadthHarvest`.
    real search surface on steps `10` to `15`, especially by turning the new
    step-`15` exhaustive temporal-shell variants into stored live breadth rather
    than extra active-window filter prunes.
-3. Extend the current reserve retunes into stronger closure-aware replanning
-   across `Materialize` and `ProofClose`.
-4. Finish the remaining mandatory live-event closeout.
+3. Finish the remaining mandatory live-event closeout.

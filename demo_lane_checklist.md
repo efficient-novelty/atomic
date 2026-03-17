@@ -70,20 +70,25 @@ Default `10m` signoff targets:
 
 ## 5. Closure-Aware Replanning And Reason Codes
 
-- [ ] Extend the within-step controller beyond current reserve retunes,
+- [x] Extend the within-step controller beyond current reserve retunes,
       ordering, and handoff logic into stronger closure-aware replanning.
 - [x] Record exact-screen reasons separately:
       partial-prefix bar failure, terminal-prefix completion failure,
       incumbent dominance, and legality/connectivity exact rejection.
 - [x] Label every prune as sound, quotient/dedupe, or heuristic shaping.
 
-Latest code evidence: stored step summaries now also persist prune-class totals
-for quotient/dedupe, sound/minimality, and heuristic shaping, while CLI debug
-output, `pen-cli inspect`, `pen-cli --narrative`, and
-`scripts/compare_runs.py` all backfill the same labeled totals from stored
-search stats when older artifacts predate the explicit field. The four
-mandatory exact-screen reason totals remain explicit and continue to derive
-backward-compatibly from the underlying incremental counters when needed.
+Latest code evidence: the demo controller now promotes `Materialize` into
+`ProofClose` with the explicit `closure_pressure_handoff` reason once a live
+incumbent turns most pending exact surface into prune-ready certification work,
+and the same closure signal now flips proof-close ordering into closure-first
+before reserve tightness alone would force it. Stored step summaries still also
+persist prune-class totals for quotient/dedupe, sound/minimality, and
+heuristic shaping, while CLI debug output, `pen-cli inspect`,
+`pen-cli --narrative`, and `scripts/compare_runs.py` all backfill the same
+labeled totals from stored search stats when older artifacts predate the
+explicit field. The four mandatory exact-screen reason totals remain explicit
+and continue to derive backward-compatibly from the underlying incremental
+counters when needed.
 
 ## 6. Narrative And Tooling
 

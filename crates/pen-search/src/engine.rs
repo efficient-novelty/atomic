@@ -162,6 +162,7 @@ pub enum DemoProofCloseEntryReason {
     BreadthFloorHit,
     ReserveProtected,
     MaterializeReserveHandoff,
+    ClosurePressureHandoff,
     SoftCapHandoff,
     CertificationSweep,
 }
@@ -172,6 +173,7 @@ impl DemoProofCloseEntryReason {
             Self::BreadthFloorHit => "breadth_floor_hit",
             Self::ReserveProtected => "reserve_protected",
             Self::MaterializeReserveHandoff => "materialize_reserve_handoff",
+            Self::ClosurePressureHandoff => "closure_pressure_handoff",
             Self::SoftCapHandoff => "soft_cap_handoff",
             Self::CertificationSweep => "certification_sweep",
         }
@@ -699,6 +701,23 @@ struct MaterializedTerminalPrefixGroup {
 enum DemoProofCloseOrderMode {
     PotentialFirst,
     ClosureFirst,
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+struct DemoClosurePressure {
+    pending_exact_surface: usize,
+    prune_ready_exact_surface: usize,
+    pending_groups: usize,
+    prune_ready_groups: usize,
+}
+
+impl DemoClosurePressure {
+    fn prefers_closure(self) -> bool {
+        self.pending_groups >= 2
+            && self.prune_ready_groups > 0
+            && self.prune_ready_groups.saturating_mul(3) >= self.pending_groups.saturating_mul(2)
+            && self.prune_ready_exact_surface.saturating_mul(2) >= self.pending_exact_surface
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -2021,6 +2040,9 @@ fn demo_proof_close_entry_message(reason: DemoProofCloseEntryReason) -> &'static
         DemoProofCloseEntryReason::MaterializeReserveHandoff => {
             "entered proof_close after materialize yielded to protect the reserved certification slice"
         }
+        DemoProofCloseEntryReason::ClosurePressureHandoff => {
+            "entered proof_close after live closure pressure turned the remaining exact surface into certification work"
+        }
         DemoProofCloseEntryReason::SoftCapHandoff => {
             "entered proof_close after materialize hit the full-eval soft cap"
         }
@@ -2633,18 +2655,20 @@ fn search_next_step(
             let remaining_groups = pending_group_signatures.len();
             if !demo_proof_close_entered {
                 if let Some(budget) = demo_step_budget {
-                    if demo_should_handoff_materialize_to_proof_close(
-                        budget,
-                        &pending_group_signatures,
-                        &prefix_cache,
-                        incumbent_terminal_rank.as_ref(),
-                        demo_phase.materialize_full_evals,
-                    ) {
+                    if let Some(proof_close_entry_reason) =
+                        demo_materialize_to_proof_close_handoff_reason(
+                            budget,
+                            &pending_group_signatures,
+                            &prefix_cache,
+                            incumbent_terminal_rank.as_ref(),
+                            demo_phase.materialize_full_evals,
+                        )
+                    {
                         demo_proof_close_started_elapsed_millis = Some(begin_demo_proof_close(
                             &mut demo_phase,
                             &mut demo_narrative,
                             budget,
-                            DemoProofCloseEntryReason::MaterializeReserveHandoff,
+                            proof_close_entry_reason,
                             remaining_groups,
                             step_start,
                             generated_raw_surface as u64,
@@ -4621,6 +4645,40 @@ fn demo_proof_close_order_mode(
     }
 }
 
+fn demo_pending_closure_pressure(
+    pending_signatures: &[PrefixSignature],
+    prefix_cache: &PrefixCache,
+    incumbent_rank: Option<&AcceptRank>,
+) -> DemoClosurePressure {
+    let mut pressure = DemoClosurePressure::default();
+    for signature in pending_signatures {
+        let Some(group) = prefix_cache.get(signature) else {
+            continue;
+        };
+        pressure.pending_groups += 1;
+        pressure.pending_exact_surface += group.candidates.len();
+        if demo_group_is_prune_ready(group, incumbent_rank) {
+            pressure.prune_ready_groups += 1;
+            pressure.prune_ready_exact_surface += group.candidates.len();
+        }
+    }
+    pressure
+}
+
+fn demo_proof_close_order_mode_with_closure_pressure(
+    remaining_reserve_millis: u64,
+    closure_pressure: DemoClosurePressure,
+) -> DemoProofCloseOrderMode {
+    if closure_pressure.prefers_closure() {
+        DemoProofCloseOrderMode::ClosureFirst
+    } else {
+        demo_proof_close_order_mode(
+            remaining_reserve_millis,
+            closure_pressure.pending_exact_surface,
+        )
+    }
+}
+
 fn demo_group_can_improve_incumbent(
     group: &PrefixCandidateGroup,
     incumbent_rank: Option<&AcceptRank>,
@@ -4769,48 +4827,46 @@ fn demo_proof_close_group_order(
     }
 }
 
-fn demo_pending_exact_surface(
-    pending_signatures: &[PrefixSignature],
-    prefix_cache: &PrefixCache,
-) -> usize {
-    pending_signatures
-        .iter()
-        .filter_map(|signature| prefix_cache.get(signature))
-        .map(|group| group.candidates.len())
-        .sum::<usize>()
-}
-
-fn demo_should_handoff_materialize_to_proof_close(
+fn demo_materialize_to_proof_close_handoff_reason_for_pressure(
     budget: DemoStepBudget,
-    pending_signatures: &[PrefixSignature],
-    prefix_cache: &PrefixCache,
+    closure_pressure: DemoClosurePressure,
     incumbent_rank: Option<&AcceptRank>,
     materialize_full_evals: usize,
-) -> bool {
-    demo_should_handoff_materialize_to_proof_close_for_surface(
-        budget,
-        demo_pending_exact_surface(pending_signatures, prefix_cache),
-        incumbent_rank,
-        materialize_full_evals,
-    )
-}
-
-fn demo_should_handoff_materialize_to_proof_close_for_surface(
-    budget: DemoStepBudget,
-    pending_exact_surface: usize,
-    incumbent_rank: Option<&AcceptRank>,
-    materialize_full_evals: usize,
-) -> bool {
+) -> Option<DemoProofCloseEntryReason> {
     if budget.proof_close_reserve_millis == 0
-        || pending_exact_surface == 0
+        || closure_pressure.pending_exact_surface == 0
         || incumbent_rank.is_none()
         || materialize_full_evals == 0
     {
-        return false;
+        return None;
     }
 
-    demo_proof_close_order_mode(budget.proof_close_reserve_millis, pending_exact_surface)
-        == DemoProofCloseOrderMode::ClosureFirst
+    if demo_proof_close_order_mode(
+        budget.proof_close_reserve_millis,
+        closure_pressure.pending_exact_surface,
+    ) == DemoProofCloseOrderMode::ClosureFirst
+    {
+        return Some(DemoProofCloseEntryReason::MaterializeReserveHandoff);
+    }
+
+    closure_pressure
+        .prefers_closure()
+        .then_some(DemoProofCloseEntryReason::ClosurePressureHandoff)
+}
+
+fn demo_materialize_to_proof_close_handoff_reason(
+    budget: DemoStepBudget,
+    pending_signatures: &[PrefixSignature],
+    prefix_cache: &PrefixCache,
+    incumbent_rank: Option<&AcceptRank>,
+    materialize_full_evals: usize,
+) -> Option<DemoProofCloseEntryReason> {
+    demo_materialize_to_proof_close_handoff_reason_for_pressure(
+        budget,
+        demo_pending_closure_pressure(pending_signatures, prefix_cache, incumbent_rank),
+        incumbent_rank,
+        materialize_full_evals,
+    )
 }
 
 fn select_demo_proof_close_group_index(
@@ -4820,8 +4876,12 @@ fn select_demo_proof_close_group_index(
     incumbent_rank: Option<&AcceptRank>,
     remaining_reserve_millis: u64,
 ) -> Option<usize> {
-    let pending_exact_surface = demo_pending_exact_surface(pending_signatures, prefix_cache);
-    let order_mode = demo_proof_close_order_mode(remaining_reserve_millis, pending_exact_surface);
+    let closure_pressure =
+        demo_pending_closure_pressure(pending_signatures, prefix_cache, incumbent_rank);
+    let order_mode = demo_proof_close_order_mode_with_closure_pressure(
+        remaining_reserve_millis,
+        closure_pressure,
+    );
     let selection_context =
         DemoBucketSelectionContext::from_pending(pending_signatures, prefix_cache);
 
@@ -5187,10 +5247,11 @@ mod tests {
     use super::{
         AtomicSearchStep, DemoBreadthHarvestExitReason, DemoBucketSelectionContext,
         DemoBudgetController, DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed,
-        DemoNarrativeRuntime, DemoProofCloseEntryReason, DemoProofCloseOrderMode,
-        DemoProofCloseOverrunReason, DemoStepBudget, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
-        create_online_prefix_work_item, demo_proof_close_group_order, demo_proof_close_order_mode,
-        demo_should_handoff_materialize_to_proof_close_for_surface,
+        DemoClosurePressure, DemoNarrativeRuntime, DemoProofCloseEntryReason,
+        DemoProofCloseOrderMode, DemoProofCloseOverrunReason, DemoStepBudget,
+        LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem, create_online_prefix_work_item,
+        demo_materialize_to_proof_close_handoff_reason_for_pressure, demo_proof_close_group_order,
+        demo_proof_close_order_mode, demo_proof_close_order_mode_with_closure_pressure,
         exact_partial_prefix_bound_decision, maybe_retune_demo_budget_live, pop_best_prefix,
         search_bootstrap_from_prefix, search_bootstrap_from_prefix_for_profile_with_runtime,
         search_bootstrap_prefix, search_bootstrap_prefix_for_config_with_runtime,
@@ -5356,6 +5417,22 @@ mod tests {
     }
 
     #[test]
+    fn demo_proof_close_order_mode_switches_when_closure_pressure_dominates() {
+        assert_eq!(
+            demo_proof_close_order_mode_with_closure_pressure(
+                20_000,
+                DemoClosurePressure {
+                    pending_exact_surface: 4,
+                    prune_ready_exact_surface: 2,
+                    pending_groups: 3,
+                    prune_ready_groups: 2,
+                },
+            ),
+            DemoProofCloseOrderMode::ClosureFirst
+        );
+    }
+
+    #[test]
     fn demo_proof_close_potential_mode_prefers_incumbent_improvers() {
         let incumbent = test_accept_rank(2, "incumbent");
         let prune_ready_group = test_prefix_group(1, Some(test_accept_rank(4, "prune")), 4);
@@ -5427,6 +5504,28 @@ mod tests {
                 None,
             ),
             std::cmp::Ordering::Less
+        );
+    }
+
+    #[test]
+    fn demo_materialize_handoff_can_switch_on_from_closure_pressure_before_reserve_tightens() {
+        let incumbent = test_accept_rank(2, "incumbent");
+        assert_eq!(
+            demo_materialize_to_proof_close_handoff_reason_for_pressure(
+                DemoStepBudget {
+                    proof_close_reserve_millis: 10_000,
+                    ..DemoStepBudget::default()
+                },
+                DemoClosurePressure {
+                    pending_exact_surface: 4,
+                    prune_ready_exact_surface: 2,
+                    pending_groups: 3,
+                    prune_ready_groups: 2,
+                },
+                Some(&incumbent),
+                1,
+            ),
+            Some(DemoProofCloseEntryReason::ClosurePressureHandoff)
         );
     }
 
@@ -5964,27 +6063,51 @@ mod tests {
             ..DemoStepBudget::default()
         };
 
-        assert!(demo_should_handoff_materialize_to_proof_close_for_surface(
-            budget,
-            2,
-            Some(&incumbent),
-            1,
-        ));
-        assert!(!demo_should_handoff_materialize_to_proof_close_for_surface(
-            budget,
-            0,
-            Some(&incumbent),
-            1,
-        ));
-        assert!(!demo_should_handoff_materialize_to_proof_close_for_surface(
-            budget, 2, None, 1,
-        ));
-        assert!(!demo_should_handoff_materialize_to_proof_close_for_surface(
-            budget,
-            2,
-            Some(&incumbent),
-            0,
-        ));
+        assert_eq!(
+            demo_materialize_to_proof_close_handoff_reason_for_pressure(
+                budget,
+                DemoClosurePressure {
+                    pending_exact_surface: 2,
+                    ..DemoClosurePressure::default()
+                },
+                Some(&incumbent),
+                1,
+            ),
+            Some(DemoProofCloseEntryReason::MaterializeReserveHandoff)
+        );
+        assert_eq!(
+            demo_materialize_to_proof_close_handoff_reason_for_pressure(
+                budget,
+                DemoClosurePressure::default(),
+                Some(&incumbent),
+                1,
+            ),
+            None
+        );
+        assert_eq!(
+            demo_materialize_to_proof_close_handoff_reason_for_pressure(
+                budget,
+                DemoClosurePressure {
+                    pending_exact_surface: 2,
+                    ..DemoClosurePressure::default()
+                },
+                None,
+                1,
+            ),
+            None
+        );
+        assert_eq!(
+            demo_materialize_to_proof_close_handoff_reason_for_pressure(
+                budget,
+                DemoClosurePressure {
+                    pending_exact_surface: 2,
+                    ..DemoClosurePressure::default()
+                },
+                Some(&incumbent),
+                0,
+            ),
+            None
+        );
     }
 
     #[test]

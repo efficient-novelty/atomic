@@ -262,6 +262,11 @@ On the demo-lane side:
   `materialize_reserve_handoff` reason once an incumbent exists and the
   remaining exact surface has already flipped into closure-first reserve
   pressure, instead of waiting only for the soft cap or the end of materialize
+- demo materialize can now also yield into `ProofClose` with the explicit
+  `closure_pressure_handoff` reason once a live incumbent turns most pending
+  retained exact surface into prune-ready certification work, and proof-close
+  ordering now uses that same closure-pressure summary even before reserve
+  tightness alone would force closure-first mode
 - scout-side reserve retunes no longer suppress the later `BreadthHarvest`
   phase change, so the stored event stream now keeps the explicit phase
   machine visible even when scout already adjusted budget at the handoff
@@ -288,9 +293,10 @@ On the demo-lane side:
 - the current demo gap is not "make the lane look broader"; it is meeting the
   surfaced early and late breadth floors honestly, then turning the landed
   spill/reserve feedback plus the landed repeated discovery-side reserve
-  retunes plus the landed reserve-pressure materialize handoff plus the landed
-  structural bucket scheduler into stronger closure-aware replanning and real
-  widening
+  retunes plus the landed reserve-pressure and closure-pressure materialize
+  handoffs plus the landed structural bucket scheduler into stronger real
+  widening and floor attainment, while still finishing the remaining mandatory
+  live-event closeout
 
 Start with the current architecture doc before diving into donor material:
 
@@ -477,11 +483,11 @@ Focus on:
   `breadth_harvest_exit_reason`, `proof_close_entry_reason`, and
   `proof_close_overrun_reason` plus the new proof-close reserve and closure
   fields as current stored truth, while remembering that the next gap is
-  broader real widening plus stronger closure-aware replanning beyond the
-  landed proof-close ordering retune, the landed adaptive spill/reserve
-  feedback, the landed repeated discovery/proof-close reserve retunes, and the
-  landed reserve-pressure materialize handoff, rather than "add counters for
-  the first time"
+  broader real widening plus the remaining mandatory live-event closeout,
+  building on the landed proof-close ordering retune, the landed adaptive
+  spill/reserve feedback, the landed repeated discovery/proof-close reserve
+  retunes, and the landed reserve-pressure plus closure-pressure materialize
+  handoffs, rather than "add counters for the first time"
 
 ### If you are working on reporting or evidence
 
@@ -573,7 +579,6 @@ Reject designs that:
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, the stronger Agda contract, and the demo lane's still-missing
-  honest floor hits plus stronger repeated within-step closure-aware widening
-  and budget allocation.
+  honest floor hits plus remaining mandatory live-event closeout.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) for current
   behavior, then use the theory and donor references only as needed.
