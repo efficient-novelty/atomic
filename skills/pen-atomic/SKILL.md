@@ -216,9 +216,15 @@ On the demo-lane side:
 - `pen-cli run|resume --narrative` can now append that stored per-step demo
   narrative to terminal output, and `scripts/compare_runs.py` now also flags
   missing demo narrative or event artifacts explicitly
+- demo narrative rendering now also enforces the configured per-step line
+  budget, trimming low-priority tails with explicit omission markers instead of
+  letting events or traces grow without bound
 - demo runs now also persist live proof-close reserve and closure accounting
   plus proof-close milestone and reserve-exhaustion narrative pulses from the
   search loop itself
+- repeated live scout and breadth-harvest budget-retune pulses now also obey
+  the configured pulse interval, while mandatory phase-entry, milestone,
+  reserve-exhaustion, and seal pulses still emit immediately
 - late-step demo planning now also feeds stored floor misses plus proof-close
   reserve pressure or slack back into later spill and effective reserve sizing
   inside the standard `25` to `40` percent profiles, while explicit out-of-band

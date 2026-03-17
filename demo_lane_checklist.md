@@ -76,13 +76,21 @@ Default `10m` signoff targets:
 
 - [x] Add `--narrative` support in `pen-cli`.
 - [x] Render a time bar and a closure bar.
-- [ ] Keep narrative output inside the intended per-step line budgets.
-- [ ] Add the remaining mandatory live events and pulse rate limiting.
+- [x] Keep narrative output inside the intended per-step line budgets.
+- [x] Rate-limit repeated live narrative budget pulses using the configured
+      interval.
+- [ ] Add the remaining mandatory live events.
 - [x] Report missing narrative artifacts explicitly in
       `scripts/compare_runs.py`.
 - [x] State the honesty boundary explicitly in docs:
       no fake discoveries, no fake breadth, no silent replay fallback, and no
       claims beyond comparison-backed evidence.
+
+Latest code evidence: `pen-cli` now clips demo narrative sections to
+`demo.narrative.max_lines_per_step` with explicit omission markers, and live
+demo budget-retune pulses now obey `demo.narrative.pulse_interval_millis`
+without hiding mandatory phase/milestone pulses. Fresh stored run artifacts are
+still needed for the remaining mandatory-event closeout.
 
 ## 7. Signoff Gates
 

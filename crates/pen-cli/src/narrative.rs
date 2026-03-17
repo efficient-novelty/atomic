@@ -164,53 +164,63 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
         ));
     }
 
-    lines.push(String::new());
-    lines.push("events".to_owned());
+    let mut sections = Vec::new();
+
+    let mut event_lines = Vec::new();
     for event in &events {
         let phase = event
             .phase
             .map(|phase| format!(" {}", phase.as_str()))
             .unwrap_or_default();
-        lines.push(format!(
+        event_lines.push(format!(
             "  [{}{}] {}",
             event_kind_label(event.kind),
             phase,
             event.message
         ));
         if let Some(detail) = &event.detail {
-            lines.push(format!("    {detail}"));
+            event_lines.push(format!("    {detail}"));
         }
     }
+    sections.push(NarrativeSection::new("events", event_lines, "event lines"));
 
-    lines.push(String::new());
-    lines.push("retained candidates".to_owned());
-    if step.candidate_reports.is_empty() {
-        lines.push("  none".to_owned());
+    let retained_lines = if step.candidate_reports.is_empty() {
+        vec!["  none".to_owned()]
     } else {
-        for candidate in step.candidate_reports.iter().take(8) {
-            lines.push(format!(
-                "  {} {} rho={} distance={} frontier={} headline={}",
-                candidate_status_label(candidate.status),
-                candidate.candidate_hash,
-                candidate.rho,
-                candidate.distance_to_bar,
-                frontier_retention_label(candidate.frontier_retention),
-                candidate.headline
-            ));
-        }
+        let mut lines = step
+            .candidate_reports
+            .iter()
+            .take(8)
+            .map(|candidate| {
+                format!(
+                    "  {} {} rho={} distance={} frontier={} headline={}",
+                    candidate_status_label(candidate.status),
+                    candidate.candidate_hash,
+                    candidate.rho,
+                    candidate.distance_to_bar,
+                    frontier_retention_label(candidate.frontier_retention),
+                    candidate.headline
+                )
+            })
+            .collect::<Vec<_>>();
         if step.candidate_reports.len() > 8 {
             lines.push(format!(
                 "  ... {} more retained candidates",
                 step.candidate_reports.len() - 8
             ));
         }
-    }
+        lines
+    };
+    sections.push(NarrativeSection::new(
+        "retained candidates",
+        retained_lines,
+        "retained candidate lines",
+    ));
 
-    lines.push(String::new());
-    lines.push("prunes".to_owned());
-    if step.prune_reports.is_empty() {
-        lines.push("  none".to_owned());
+    let prune_lines = if step.prune_reports.is_empty() {
+        vec!["  none".to_owned()]
     } else {
+        let mut lines = Vec::new();
         for prune in &step.prune_reports {
             lines.push(format!(
                 "  [{}] {} rho={} delta={} {}",
@@ -224,19 +234,25 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
                 lines.push(format!("    {}", prune.note));
             }
         }
-    }
+        lines
+    };
+    sections.push(NarrativeSection::new("prunes", prune_lines, "prune lines"));
 
-    lines.push(String::new());
-    lines.push("accepted trace".to_owned());
-    if step.trace.is_empty() {
-        lines.push("  none".to_owned());
+    let trace_lines = if step.trace.is_empty() {
+        vec!["  none".to_owned()]
     } else {
-        for trace in &step.trace {
-            lines.push(format!("  {trace}"));
-        }
-    }
+        step.trace
+            .iter()
+            .map(|trace| format!("  {trace}"))
+            .collect()
+    };
+    sections.push(NarrativeSection::new(
+        "accepted trace",
+        trace_lines,
+        "trace lines",
+    ));
 
-    lines.join("\n")
+    apply_step_line_budget(lines, sections, demo).join("\n")
 }
 
 pub fn render_run_narrative(steps: &[StepReport], demo: &DemoConfig) -> String {
@@ -247,6 +263,99 @@ pub fn render_run_narrative(steps: &[StepReport], demo: &DemoConfig) -> String {
     let mut sections = vec!["demo narrative".to_owned()];
     sections.extend(steps.iter().map(|step| render_step_narrative(step, demo)));
     sections.join("\n\n")
+}
+
+#[derive(Clone, Debug)]
+struct NarrativeSection {
+    title: &'static str,
+    lines: Vec<String>,
+    omission_label: &'static str,
+    omitted_lines: usize,
+}
+
+impl NarrativeSection {
+    fn new(title: &'static str, lines: Vec<String>, omission_label: &'static str) -> Self {
+        Self {
+            title,
+            lines,
+            omission_label,
+            omitted_lines: 0,
+        }
+    }
+
+    fn rendered_line_count(&self) -> usize {
+        2 + self.lines.len()
+    }
+
+    fn trim_one_line(&mut self) -> bool {
+        if self.lines.len() <= 1 {
+            return false;
+        }
+        self.lines.pop();
+        self.omitted_lines += 1;
+        true
+    }
+
+    fn finalize_omission_line(&mut self) {
+        if self.omitted_lines == 0 {
+            return;
+        }
+        let summary = format!("  ... {} more {}", self.omitted_lines, self.omission_label);
+        if let Some(last) = self.lines.last_mut() {
+            *last = summary;
+        } else {
+            self.lines.push(summary);
+        }
+    }
+}
+
+fn apply_step_line_budget(
+    header_lines: Vec<String>,
+    mut sections: Vec<NarrativeSection>,
+    demo: &DemoConfig,
+) -> Vec<String> {
+    let max_lines = usize::from(
+        demo.narrative
+            .max_lines_per_step
+            .max(demo.narrative.min_lines_per_step),
+    );
+    if max_lines == 0 {
+        return header_lines;
+    }
+
+    let mut total_lines = header_lines.len()
+        + sections
+            .iter()
+            .map(NarrativeSection::rendered_line_count)
+            .sum::<usize>();
+
+    // Trim the least critical trailing detail first so the per-step narrative
+    // stays within the configured line budget without dropping the headline.
+    let trim_order = [3usize, 2, 1, 0];
+    while total_lines > max_lines {
+        let mut trimmed = false;
+        for section_index in trim_order {
+            while total_lines > max_lines && sections[section_index].trim_one_line() {
+                total_lines -= 1;
+                trimmed = true;
+            }
+        }
+        if !trimmed {
+            break;
+        }
+    }
+
+    for section in &mut sections {
+        section.finalize_omission_line();
+    }
+
+    let mut lines = header_lines;
+    for section in sections {
+        lines.push(String::new());
+        lines.push(section.title.to_owned());
+        lines.extend(section.lines);
+    }
+    lines
 }
 
 fn step_events(step: &StepReport) -> Vec<NarrativeEvent> {
@@ -591,6 +700,7 @@ mod tests {
     use crate::report::generate_steps_with_config_and_runtime;
     use pen_search::config::RuntimeConfig;
     use pen_search::diversify::FrontierRuntimeLimits;
+    use pen_search::narrative::NarrativeEventKind;
     use std::fs;
     use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -660,5 +770,44 @@ mod tests {
         );
 
         fs::remove_dir_all(run_dir).ok();
+    }
+
+    #[test]
+    fn demo_narrative_respects_the_configured_step_line_budget() {
+        let mut config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/demo_breadth_shadow_10m.toml"
+        ))
+        .expect("demo config should parse");
+        config.demo.narrative.max_lines_per_step = 40;
+        let mut steps =
+            generate_steps_with_config_and_runtime(3, &config, FrontierRuntimeLimits::unlimited())
+                .expect("demo steps should build")
+                .steps;
+        let mut step = steps.pop().expect("step should exist");
+        let last_event = step
+            .narrative_events
+            .last()
+            .cloned()
+            .expect("demo step should have events");
+        for offset in 0..24_u16 {
+            let mut event = last_event.clone();
+            event.ordinal = 200 + offset;
+            event.kind = NarrativeEventKind::BudgetPulse;
+            event.message = format!("extra live pulse {offset}");
+            event.detail = Some(format!("detail {offset}"));
+            step.narrative_events.push(event);
+        }
+        step.trace = (0..40).map(|index| format!("trace line {index}")).collect();
+
+        let text = render_step_narrative(&step, &config.demo);
+
+        assert!(
+            text.lines().count() <= usize::from(config.demo.narrative.max_lines_per_step),
+            "expected narrative to stay within {} lines, got {}",
+            config.demo.narrative.max_lines_per_step,
+            text.lines().count()
+        );
+        assert!(text.contains("more event lines"));
+        assert!(text.contains("more trace lines"));
     }
 }

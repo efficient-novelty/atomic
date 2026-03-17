@@ -30,6 +30,13 @@ retuning during `BreadthHarvest`.
   admissible, exact-screened, pruned, fully scored, and best-overshoot stats.
 - CLI debug output, `--narrative`, and `scripts/compare_runs.py` now surface
   compact bucket summaries so the ordering story is visible in stored evidence.
+- `pen-cli --narrative` now enforces the configured per-step line budget by
+  trimming low-priority event, retained-candidate, prune, and trace tails with
+  explicit omission markers instead of letting long sections grow without
+  bound.
+- Repeated live scout and breadth-harvest budget-retune pulses now honor the
+  configured `pulse_interval_millis` while mandatory phase-entry, milestone,
+  reserve-exhaustion, and seal pulses still emit immediately.
 - Fresh stored evidence in `runs/codex-demo-midlate-widening` still preserves
   accepted parity through step `15` (`matches_reference_replay x15`) and
   finishes far under the default `600s` ceiling on this computer.
@@ -79,8 +86,8 @@ retuning during `BreadthHarvest`.
   narrative output, including explicit time and closure bars
 - `scripts/compare_runs.py` now flags missing step narrative and event
   artifacts explicitly for demo lanes
-- the remaining narrative/tooling gap is line-budget discipline plus the still-
-  missing mandatory live events and pulse-rate closeout
+- the remaining narrative/tooling gap is now the still-missing mandatory live
+  events rather than line-budget discipline or pulse-rate limiting
 
 ## Next Priorities
 
@@ -91,5 +98,5 @@ retuning during `BreadthHarvest`.
    real search surface on steps `10` to `15`.
 3. Extend the current reserve retunes into stronger closure-aware replanning
    across `Materialize` and `ProofClose`.
-4. Finish prune taxonomy, exact-screen reason reporting, and remaining
-   narrative/tooling gaps.
+4. Finish prune taxonomy, exact-screen reason reporting, and the remaining
+   mandatory live-event closeout.

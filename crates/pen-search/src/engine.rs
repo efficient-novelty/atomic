@@ -770,6 +770,7 @@ struct DemoStepBudget {
     generated_floor: Option<u64>,
     exact_screened_floor: Option<u64>,
     full_eval_soft_cap: Option<u64>,
+    pulse_interval_millis: u32,
     live_rebalance_borrowed_millis: u64,
     max_live_rebalance_borrow_millis: u64,
     next_live_retune_check_millis: u64,
@@ -1125,6 +1126,7 @@ impl DemoBudgetController {
                 generated_floor,
                 exact_screened_floor,
                 full_eval_soft_cap,
+                pulse_interval_millis: self.demo.narrative.pulse_interval_millis,
                 live_rebalance_borrowed_millis: 0,
                 max_live_rebalance_borrow_millis: 0,
                 next_live_retune_check_millis: scout_budget_millis,
@@ -1160,6 +1162,7 @@ impl DemoBudgetController {
             generated_floor,
             exact_screened_floor,
             full_eval_soft_cap,
+            pulse_interval_millis: self.demo.narrative.pulse_interval_millis,
             live_rebalance_borrowed_millis: 0,
             max_live_rebalance_borrow_millis: proof_close_reserve_millis / 2,
             next_live_retune_check_millis: scout_budget_millis,
@@ -1322,6 +1325,8 @@ fn demo_full_eval_soft_cap(demo: &DemoConfig, step_index: u32) -> Option<u64> {
 struct DemoNarrativeRuntime {
     budget: DemoStepBudget,
     recorder: NarrativeRecorder,
+    pulse_interval_millis: u64,
+    last_budget_pulse_elapsed_millis: [Option<u64>; 5],
     scout_sample_recorded: bool,
     breadth_harvest_entered: bool,
     proof_close_last_reported_closure_percent: u16,
@@ -1364,21 +1369,24 @@ impl DemoNarrativeRuntime {
             Some(demo_budget_plan_detail(budget)),
             Some(zero_progress.clone()),
         );
-        recorder.push(
-            NarrativeEventKind::BudgetPulse,
-            Some(StepPhase::Scout),
-            "scout baselining started".to_owned(),
-            Some(demo_budget_plan_detail(budget)),
-            Some(zero_progress),
-        );
-        Self {
+        let mut runtime = Self {
             budget,
             recorder,
+            pulse_interval_millis: u64::from(budget.pulse_interval_millis),
+            last_budget_pulse_elapsed_millis: [None; 5],
             scout_sample_recorded: false,
             breadth_harvest_entered: false,
             proof_close_last_reported_closure_percent: 0,
             proof_close_reserve_exhausted_reported: false,
-        }
+        };
+        runtime.push_budget_pulse(
+            StepPhase::Scout,
+            "scout baselining started".to_owned(),
+            Some(demo_budget_plan_detail(budget)),
+            zero_progress,
+            true,
+        );
+        runtime
     }
 
     fn maybe_enter_breadth_harvest(
@@ -1409,12 +1417,12 @@ impl DemoNarrativeRuntime {
             Some(harvest_detail.clone()),
             Some(progress.clone()),
         );
-        self.recorder.push(
-            NarrativeEventKind::BudgetPulse,
-            Some(StepPhase::BreadthHarvest),
+        self.push_budget_pulse(
+            StepPhase::BreadthHarvest,
             "breadth harvest is widening under the remaining discovery slice".to_owned(),
             Some(harvest_detail),
-            Some(progress),
+            progress,
+            true,
         );
         self.breadth_harvest_entered = true;
     }
@@ -1438,9 +1446,8 @@ impl DemoNarrativeRuntime {
                 format_duration_millis(rebalance.adjustment_millis)
             ),
         };
-        self.recorder.push(
-            NarrativeEventKind::BudgetPulse,
-            Some(StepPhase::Scout),
+        self.push_budget_pulse(
+            StepPhase::Scout,
             message,
             Some(format!(
                 "{} outstanding_borrow={} max_live_borrow={} projected_generated={} projected_exact_screened={}",
@@ -1456,7 +1463,8 @@ impl DemoNarrativeRuntime {
                     budget.exact_screened_floor
                 )
             )),
-            Some(progress),
+            progress,
+            false,
         );
     }
 
@@ -1481,9 +1489,8 @@ impl DemoNarrativeRuntime {
                 rebalance.action.counterparty()
             ),
         };
-        self.recorder.push(
-            NarrativeEventKind::BudgetPulse,
-            Some(StepPhase::BreadthHarvest),
+        self.push_budget_pulse(
+            StepPhase::BreadthHarvest,
             message,
             Some(format!(
                 "{} outstanding_borrow={} max_live_borrow={} projected_generated={} projected_exact_screened={}",
@@ -1499,7 +1506,8 @@ impl DemoNarrativeRuntime {
                     budget.exact_screened_floor
                 )
             )),
-            Some(progress),
+            progress,
+            false,
         );
     }
 
@@ -1528,12 +1536,12 @@ impl DemoNarrativeRuntime {
                 Some(reason) => format!("{harvest_detail} exit_reason={}", reason.as_str()),
                 None => harvest_detail,
             };
-            self.recorder.push(
-                NarrativeEventKind::BudgetPulse,
-                Some(StepPhase::BreadthHarvest),
+            self.push_budget_pulse(
+                StepPhase::BreadthHarvest,
                 message.to_owned(),
                 Some(detail),
-                Some(progress),
+                progress,
+                true,
             );
         }
     }
@@ -1546,12 +1554,12 @@ impl DemoNarrativeRuntime {
             Some(detail.clone()),
             Some(progress.clone()),
         );
-        self.recorder.push(
-            NarrativeEventKind::BudgetPulse,
-            Some(StepPhase::Materialize),
+        self.push_budget_pulse(
+            StepPhase::Materialize,
             "materializing retained prefixes under exact screening".to_owned(),
             Some(detail),
-            Some(progress),
+            progress,
+            true,
         );
     }
 
@@ -1568,12 +1576,12 @@ impl DemoNarrativeRuntime {
             Some(detail.clone()),
             Some(progress.clone()),
         );
-        self.recorder.push(
-            NarrativeEventKind::BudgetPulse,
-            Some(StepPhase::ProofClose),
+        self.push_budget_pulse(
+            StepPhase::ProofClose,
             "proof-close is certifying the incumbent under exact comparison".to_owned(),
             Some(detail),
-            Some(progress),
+            progress,
+            true,
         );
     }
 
@@ -1604,24 +1612,24 @@ impl DemoNarrativeRuntime {
                 None
             };
             if let Some(milestone) = milestone {
-                self.recorder.push(
-                    NarrativeEventKind::BudgetPulse,
-                    Some(StepPhase::ProofClose),
+                self.push_budget_pulse(
+                    StepPhase::ProofClose,
                     format!("proof_close certified {milestone}% of the retained frontier groups"),
                     Some(detail.clone()),
-                    Some(progress.clone()),
+                    progress.clone(),
+                    true,
                 );
                 self.proof_close_last_reported_closure_percent = milestone;
             }
         }
         if phase.proof_close_reserve_exhausted && !self.proof_close_reserve_exhausted_reported {
-            self.recorder.push(
-                NarrativeEventKind::BudgetPulse,
-                Some(StepPhase::ProofClose),
+            self.push_budget_pulse(
+                StepPhase::ProofClose,
                 "proof_close exhausted the reserved certification slice and is overrunning to finish exact closure"
                     .to_owned(),
                 Some(detail),
-                Some(progress),
+                progress,
+                true,
             );
             self.proof_close_reserve_exhausted_reported = true;
         }
@@ -1644,15 +1652,15 @@ impl DemoNarrativeRuntime {
             Some(detail.clone()),
             Some(progress.clone()),
         );
-        self.recorder.push(
-            NarrativeEventKind::BudgetPulse,
-            Some(StepPhase::Seal),
+        self.push_budget_pulse(
+            StepPhase::Seal,
             format!(
                 "seal fixed overshoot {} for candidate {}",
                 overshoot, accepted_hash
             ),
             Some(detail),
-            Some(progress),
+            progress,
+            true,
         );
     }
 
@@ -1664,14 +1672,43 @@ impl DemoNarrativeRuntime {
         if self.scout_sample_recorded {
             return;
         }
-        self.recorder.push(
-            NarrativeEventKind::BudgetPulse,
-            Some(StepPhase::Scout),
+        self.push_budget_pulse(
+            StepPhase::Scout,
             "scout sample captured throughput on this machine".to_owned(),
             Some(detail),
-            Some(progress),
+            progress,
+            true,
         );
         self.scout_sample_recorded = true;
+    }
+
+    fn push_budget_pulse(
+        &mut self,
+        phase: StepPhase,
+        message: String,
+        detail: Option<String>,
+        progress: NarrativeProgressSnapshot,
+        force: bool,
+    ) {
+        let slot = phase.pulse_slot();
+        let elapsed_millis = progress.elapsed_millis;
+        if !force {
+            if let Some(last_elapsed) = self.last_budget_pulse_elapsed_millis[slot] {
+                if elapsed_millis.saturating_sub(last_elapsed) < self.pulse_interval_millis {
+                    return;
+                }
+            }
+        }
+        self.recorder.push(
+            NarrativeEventKind::BudgetPulse,
+            Some(phase),
+            message,
+            detail,
+            Some(progress),
+        );
+        if !force {
+            self.last_budget_pulse_elapsed_millis[slot] = Some(elapsed_millis);
+        }
     }
 }
 
@@ -5103,8 +5140,8 @@ mod tests {
     use super::{
         AtomicSearchStep, DemoBreadthHarvestExitReason, DemoBucketSelectionContext,
         DemoBudgetController, DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed,
-        DemoProofCloseEntryReason, DemoProofCloseOrderMode, DemoProofCloseOverrunReason,
-        DemoStepBudget, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
+        DemoNarrativeRuntime, DemoProofCloseEntryReason, DemoProofCloseOrderMode,
+        DemoProofCloseOverrunReason, DemoStepBudget, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
         create_online_prefix_work_item, demo_proof_close_group_order, demo_proof_close_order_mode,
         demo_should_handoff_materialize_to_proof_close_for_surface,
         exact_partial_prefix_bound_decision, maybe_retune_demo_budget_live, pop_best_prefix,
@@ -5694,6 +5731,97 @@ mod tests {
             event.kind == NarrativeEventKind::PhaseChange
                 && event.phase == Some(StepPhase::BreadthHarvest)
         }));
+    }
+
+    #[test]
+    fn demo_live_budget_pulses_rate_limit_repeated_scout_rebalances() {
+        let library = library_until(9);
+        let admissibility =
+            strict_admissibility_for_mode(10, 2, &library, AdmissibilityMode::DemoBreadthShadow);
+        let mut runtime = DemoNarrativeRuntime::new(
+            10,
+            Rational::zero(),
+            admissibility,
+            DemoStepBudget {
+                step_index: 10,
+                total_budget_millis: 60_000,
+                discovery_budget_millis: 30_000,
+                scout_budget_millis: 5_000,
+                breadth_harvest_budget_millis: 25_000,
+                proof_close_reserve_millis: 30_000,
+                pulse_interval_millis: 500,
+                ..DemoStepBudget::default()
+            },
+        );
+        let budget = DemoStepBudget {
+            step_index: 10,
+            total_budget_millis: 60_000,
+            discovery_budget_millis: 45_000,
+            scout_budget_millis: 5_000,
+            breadth_harvest_budget_millis: 40_000,
+            proof_close_reserve_millis: 15_000,
+            pulse_interval_millis: 500,
+            live_rebalance_borrowed_millis: 15_000,
+            max_live_rebalance_borrow_millis: 15_000,
+            ..DemoStepBudget::default()
+        };
+        let rebalance = super::DemoBudgetRetune {
+            action: DemoBudgetRetuneAction::BorrowFromProofClose,
+            adjustment_millis: 15_000,
+            projected_generated_surface: 4_700,
+            projected_exact_screened_surface: 700,
+        };
+
+        runtime.record_scout_budget_rebalance(
+            narrative_progress_snapshot(5_000, 400, 100, 0),
+            "generated_per_sec=80 admissibility_per_sec=20 exact_bound_per_sec=10 full_eval_per_sec=0 generated=400 admissibility_checks=100 exact_bound_checks=50 full_evals=0".to_owned(),
+            budget,
+            rebalance,
+        );
+        let pulse_count_after_first = runtime
+            .recorder
+            .events()
+            .iter()
+            .filter(|event| {
+                event.kind == NarrativeEventKind::BudgetPulse
+                    && event.phase == Some(StepPhase::Scout)
+            })
+            .count();
+
+        runtime.record_scout_budget_rebalance(
+            narrative_progress_snapshot(5_200, 420, 110, 0),
+            "generated_per_sec=81 admissibility_per_sec=21 exact_bound_per_sec=10 full_eval_per_sec=0 generated=420 admissibility_checks=110 exact_bound_checks=55 full_evals=0".to_owned(),
+            budget,
+            rebalance,
+        );
+        let pulse_count_after_second = runtime
+            .recorder
+            .events()
+            .iter()
+            .filter(|event| {
+                event.kind == NarrativeEventKind::BudgetPulse
+                    && event.phase == Some(StepPhase::Scout)
+            })
+            .count();
+
+        runtime.record_scout_budget_rebalance(
+            narrative_progress_snapshot(5_600, 450, 120, 0),
+            "generated_per_sec=82 admissibility_per_sec=22 exact_bound_per_sec=11 full_eval_per_sec=0 generated=450 admissibility_checks=120 exact_bound_checks=60 full_evals=0".to_owned(),
+            budget,
+            rebalance,
+        );
+        let pulse_count_after_third = runtime
+            .recorder
+            .events()
+            .iter()
+            .filter(|event| {
+                event.kind == NarrativeEventKind::BudgetPulse
+                    && event.phase == Some(StepPhase::Scout)
+            })
+            .count();
+
+        assert_eq!(pulse_count_after_second, pulse_count_after_first);
+        assert_eq!(pulse_count_after_third, pulse_count_after_first + 1);
     }
 
     #[test]

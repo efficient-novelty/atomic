@@ -21,6 +21,16 @@ impl StepPhase {
             Self::Seal => "seal",
         }
     }
+
+    pub const fn pulse_slot(self) -> usize {
+        match self {
+            Self::Scout => 0,
+            Self::BreadthHarvest => 1,
+            Self::Materialize => 2,
+            Self::ProofClose => 3,
+            Self::Seal => 4,
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -124,6 +134,10 @@ impl NarrativeRecorder {
 
     pub fn finish(self) -> Vec<NarrativeEvent> {
         self.events
+    }
+
+    pub fn events(&self) -> &[NarrativeEvent] {
+        &self.events
     }
 }
 
