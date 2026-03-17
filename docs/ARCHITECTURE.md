@@ -175,7 +175,8 @@ a speculative template or replay shortcut:
   SCC subbundles
 - exact acceptance chooses the candidate with minimal positive overshoot, then
   applies deterministic structural tie-breakers
-- retained valid candidates, prune samples, and frontier pressure metadata are
+- retained valid candidates, prune class totals plus sample evidence, and
+  frontier pressure metadata are
   persisted for the bounded lane
 
 The bounded frontier runtime is real for these lanes: hot and cold shards,

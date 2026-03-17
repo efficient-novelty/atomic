@@ -62,6 +62,19 @@ pub struct StepReport {
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PruneClassStats {
+    pub quotient_dedupe: usize,
+    pub sound_minimality: usize,
+    pub heuristic_shaping: usize,
+}
+
+impl PruneClassStats {
+    pub fn is_empty(&self) -> bool {
+        self.quotient_dedupe == 0 && self.sound_minimality == 0 && self.heuristic_shaping == 0
+    }
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 pub struct StepSearchStats {
     pub enumerated_candidates: usize,
     pub well_formed_candidates: usize,
@@ -135,6 +148,8 @@ pub struct StepSearchStats {
     pub incremental_partial_prefix_bound_prunes: usize,
     #[serde(default)]
     pub incremental_terminal_prefix_bar_prunes: usize,
+    #[serde(default)]
+    pub prune_classes: PruneClassStats,
     #[serde(default)]
     pub exact_screen_reasons: ExactScreenReasonStats,
     #[serde(default)]
@@ -363,6 +378,30 @@ impl PruneReportClass {
             Self::HeuristicShaping => "heuristic_shaping",
         }
     }
+}
+
+fn derive_prune_class_stats(search_stats: &StepSearchStats) -> PruneClassStats {
+    PruneClassStats {
+        quotient_dedupe: search_stats.dedupe_prunes,
+        sound_minimality: search_stats.minimality_prunes
+            + search_stats.prefix_states_exact_pruned
+            + search_stats.incremental_connectivity_prunes
+            + search_stats.incremental_active_window_clause_filter_prunes
+            + search_stats.incremental_terminal_clause_filter_prunes
+            + search_stats.incremental_trivial_derivability_prunes
+            + search_stats.incremental_terminal_admissibility_rejections
+            + search_stats.incremental_terminal_rank_prunes,
+        heuristic_shaping: search_stats.prefix_states_heuristic_dropped
+            + search_stats.heuristic_drops,
+    }
+}
+
+pub(crate) fn stored_prune_class_stats(step: &StepReport) -> PruneClassStats {
+    if !step.search_stats.prune_classes.is_empty() {
+        return step.search_stats.prune_classes.clone();
+    }
+
+    derive_prune_class_stats(&step.search_stats)
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -871,6 +910,7 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
                 incremental_partial_prefix_bound_checks: 0,
                 incremental_partial_prefix_bound_prunes: 0,
                 incremental_terminal_prefix_bar_prunes: 0,
+                prune_classes: PruneClassStats::default(),
                 exact_screen_reasons: ExactScreenReasonStats::default(),
                 demo_phase: DemoPhaseStats::default(),
                 demo_funnel: DemoFunnelStats::default(),
@@ -1362,11 +1402,12 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
             step.frontier_pressure.spill_backed_cold_records,
             step.frontier_pressure.dropped_cold_records
         ));
+        let prune_classes = stored_prune_class_stats(step);
         lines.push(format!(
             "  prune classes: quotient_dedupe={} sound_minimality={} heuristic_shaping={}",
-            step.search_stats.dedupe_prunes,
-            step.search_stats.minimality_prunes,
-            step.search_stats.heuristic_drops
+            prune_classes.quotient_dedupe,
+            prune_classes.sound_minimality,
+            prune_classes.heuristic_shaping
         ));
         let prune_samples = step
             .prune_reports
@@ -1555,6 +1596,18 @@ fn step_to_report_with_provenance(
             incremental_partial_prefix_bound_checks: step.incremental_partial_prefix_bound_checks,
             incremental_partial_prefix_bound_prunes: step.incremental_partial_prefix_bound_prunes,
             incremental_terminal_prefix_bar_prunes: step.incremental_terminal_prefix_bar_prunes,
+            prune_classes: PruneClassStats {
+                quotient_dedupe: step.dedupe_prunes,
+                sound_minimality: step.minimality_prunes
+                    + step.prefix_states_exact_pruned
+                    + step.incremental_connectivity_prunes
+                    + step.incremental_active_window_clause_filter_prunes
+                    + step.incremental_terminal_clause_filter_prunes
+                    + step.incremental_trivial_derivability_prunes
+                    + step.incremental_terminal_admissibility_rejections
+                    + step.incremental_terminal_rank_prunes,
+                heuristic_shaping: step.prefix_states_heuristic_dropped + step.heuristic_drops,
+            },
             exact_screen_reasons: step.exact_screen_reasons,
             demo_phase: step.demo_phase,
             demo_funnel: step.demo_funnel,
@@ -1875,6 +1928,7 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 incremental_partial_prefix_bound_checks: 0,
                 incremental_partial_prefix_bound_prunes: 0,
                 incremental_terminal_prefix_bar_prunes: 0,
+                prune_classes: PruneClassStats::default(),
                 exact_screen_reasons: ExactScreenReasonStats::default(),
                 demo_phase: DemoPhaseStats::default(),
                 demo_funnel: DemoFunnelStats::default(),
@@ -2365,10 +2419,11 @@ struct RetentionClassCounts {
 #[cfg(test)]
 mod tests {
     use super::{
-        CandidateStatus, FrontierRetention, StepGenerationMode, StepProvenance,
+        CandidateStatus, FrontierRetention, PruneClassStats, StepGenerationMode, StepProvenance,
         extend_steps_from_reports, generate_steps, reevaluate_steps_from_reports,
         render_debug_report, render_standard_report, replay_reference_steps,
         search_atomic_bootstrap_steps, search_atomic_bootstrap_steps_with_runtime,
+        stored_prune_class_stats,
     };
     use pen_search::config::RuntimeConfig;
     use pen_search::diversify::FrontierRuntimeLimits;
@@ -2466,6 +2521,37 @@ mod tests {
         assert!(
             render_debug_report("run-1", &steps)
                 .contains("ACCEPTED clears bar with minimal overshoot")
+        );
+    }
+
+    #[test]
+    fn prune_class_totals_include_exact_and_heuristic_counters() {
+        let mut steps = replay_reference_steps(1, 2).expect("reference replay should succeed");
+        let step = steps.first_mut().expect("step should exist");
+        step.search_stats.dedupe_prunes = 2;
+        step.search_stats.minimality_prunes = 3;
+        step.search_stats.prefix_states_exact_pruned = 5;
+        step.search_stats.incremental_connectivity_prunes = 7;
+        step.search_stats
+            .incremental_active_window_clause_filter_prunes = 11;
+        step.search_stats.incremental_terminal_clause_filter_prunes = 13;
+        step.search_stats.incremental_trivial_derivability_prunes = 17;
+        step.search_stats
+            .incremental_terminal_admissibility_rejections = 19;
+        step.search_stats.incremental_terminal_rank_prunes = 23;
+        step.search_stats.prefix_states_heuristic_dropped = 29;
+        step.search_stats.heuristic_drops = 31;
+        step.search_stats.prune_classes = PruneClassStats::default();
+
+        let prune_classes = stored_prune_class_stats(step);
+
+        assert_eq!(prune_classes.quotient_dedupe, 2);
+        assert_eq!(prune_classes.sound_minimality, 98);
+        assert_eq!(prune_classes.heuristic_shaping, 60);
+        assert!(
+            render_debug_report("run-1", &steps).contains(
+                "prune classes: quotient_dedupe=2 sound_minimality=98 heuristic_shaping=60"
+            )
         );
     }
 

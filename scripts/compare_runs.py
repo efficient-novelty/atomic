@@ -251,6 +251,9 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
         "replay_ablation_summary": summarize_counter(
             Counter(item["value"] for item in replay_sequence)
         ),
+        "prune_class_totals": ordered_dict(
+            [(key, int(prune_totals.get(key, 0))) for key in PRUNE_KEYS]
+        ),
         "prune_sample_totals": ordered_dict(
             [(key, int(prune_totals.get(key, 0))) for key in PRUNE_KEYS]
         ),
@@ -665,6 +668,41 @@ def trajectory_entry(step: dict[str, Any]) -> dict[str, Any]:
 
 def prune_counts(step: dict[str, Any], telemetry_step: dict[str, Any]) -> Counter:
     counts = Counter({key: 0 for key in PRUNE_KEYS})
+    search_stats = step.get("search_stats") or {}
+    prune_classes = (
+        search_stats.get("prune_classes")
+        or telemetry_step.get("prune_classes")
+        or {}
+    )
+    if prune_classes:
+        for key in PRUNE_KEYS:
+            counts[key] += int(prune_classes.get(key, 0) or 0)
+        return counts
+
+    if search_stats:
+        counts["quotient_dedupe"] += int(search_stats.get("dedupe_prunes", 0) or 0)
+        counts["sound_minimality"] += (
+            int(search_stats.get("minimality_prunes", 0) or 0)
+            + int(search_stats.get("prefix_states_exact_pruned", 0) or 0)
+            + int(search_stats.get("incremental_connectivity_prunes", 0) or 0)
+            + int(
+                search_stats.get("incremental_active_window_clause_filter_prunes", 0) or 0
+            )
+            + int(search_stats.get("incremental_terminal_clause_filter_prunes", 0) or 0)
+            + int(search_stats.get("incremental_trivial_derivability_prunes", 0) or 0)
+            + int(
+                search_stats.get(
+                    "incremental_terminal_admissibility_rejections", 0
+                )
+                or 0
+            )
+            + int(search_stats.get("incremental_terminal_rank_prunes", 0) or 0)
+        )
+        counts["heuristic_shaping"] += int(
+            search_stats.get("prefix_states_heuristic_dropped", 0) or 0
+        ) + int(search_stats.get("heuristic_drops", 0) or 0)
+        return counts
+
     prune_reports = step.get("prune_reports") or []
     if prune_reports:
         for report in prune_reports:
@@ -1388,7 +1426,7 @@ def render_lane_summary(lane: dict[str, Any]) -> list[str]:
         ),
         f"  provenance sequence: {render_compact_sequence(provenance_compact)}",
         f"  replay ablation: {render_compact_sequence(replay_compact)}",
-        f"  prune samples: {render_prune_totals(lane['prune_sample_totals'])}",
+        f"  prune classes: {render_prune_totals(lane['prune_class_totals'])}",
         (
             "  frontier retention delta: "
             f"total={lane['frontier_retention_delta_total']} "

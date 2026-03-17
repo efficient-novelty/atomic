@@ -3,7 +3,7 @@ use crate::narrative::write_demo_step_artifacts;
 use crate::output::{OutputStyle, render_run_output};
 use crate::report::{
     GeneratedSteps, StepReport, annotate_search_profile, generate_steps_with_config_and_runtime,
-    write_step_reports,
+    stored_prune_class_stats, write_step_reports,
 };
 use anyhow::{Context, Result, bail};
 use pen_core::hash::blake3_hex;
@@ -354,6 +354,7 @@ fn write_telemetry(
                 report.prune_class == crate::report::PruneReportClass::HeuristicShaping
             }).count(),
         });
+        let prune_class_totals = stored_prune_class_stats(step);
         lines.push(serde_json::to_string(&TelemetryEventV1 {
             schema_version: SCHEMA_VERSION_V1,
             run_id: manifest.run_id.clone(),
@@ -370,6 +371,11 @@ fn write_telemetry(
                 "candidate_hash": step.accepted.candidate_hash,
                 "late_step_claim": late_step_claim,
                 "replay_ablation": replay_ablation,
+                "prune_classes": {
+                    "quotient_dedupe": prune_class_totals.quotient_dedupe,
+                    "sound_minimality": prune_class_totals.sound_minimality,
+                    "heuristic_shaping": prune_class_totals.heuristic_shaping,
+                },
                 "prune_samples": prune_sample_counts,
                 "frontier_pressure": {
                     "governor_state": step.frontier_pressure.governor_state.as_str(),

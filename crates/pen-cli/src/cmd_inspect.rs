@@ -2,7 +2,8 @@ use crate::cli::InspectArgs;
 use crate::cmd_run::current_search_compat;
 use crate::report::{
     LateStepClaimStatus, StepReport, load_step_reports, render_debug_report,
-    render_replay_ablation, render_standard_report, summarize_prune_reports,
+    render_replay_ablation, render_standard_report, stored_prune_class_stats,
+    summarize_prune_reports,
 };
 use anyhow::{Context, Result, bail};
 use pen_search::resume::decide_resume;
@@ -97,7 +98,8 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 step.search_stats.search_timing.selection_wall_clock_millis
             )
         };
-        let prune_summary = if step.prune_reports.is_empty() {
+        let prune_classes = stored_prune_class_stats(&step);
+        let prune_samples = if step.prune_reports.is_empty() {
             String::new()
         } else {
             format!(
@@ -105,6 +107,13 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 summarize_prune_reports(&step.prune_reports)
             )
         };
+        let prune_summary = format!(
+            "\nprune_classes: quotient_dedupe={} sound_minimality={} heuristic_shaping={}{}",
+            prune_classes.quotient_dedupe,
+            prune_classes.sound_minimality,
+            prune_classes.heuristic_shaping,
+            prune_samples
+        );
         let prefix_frontier = if step.search_stats.prefix_states_explored == 0 {
             String::new()
         } else {

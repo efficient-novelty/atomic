@@ -35,6 +35,11 @@ retuning during `BreadthHarvest`.
   failure, terminal-prefix completion failure, incumbent dominance, and
   legality/connectivity exact rejection, with backward-compatible derivation
   from older incremental counters when needed.
+- Stored step summaries now also persist prune-class totals for
+  quotient/dedupe, sound/minimality, and heuristic shaping, while CLI debug
+  output, `pen-cli inspect`, `pen-cli --narrative`, and
+  `scripts/compare_runs.py` backfill the same labeled totals from stored
+  search stats when older artifacts predate the explicit field.
 - `pen-cli --narrative` now enforces the configured per-step line budget by
   trimming low-priority event, retained-candidate, prune, and trace tails with
   explicit omission markers instead of letting long sections grow without
@@ -99,8 +104,6 @@ retuning during `BreadthHarvest`.
 
 ### 4. Reporting Closeout Is Still Incomplete
 
-- prune labeling is not yet fully separated into sound, quotient/dedupe, and
-  heuristic shaping
 - `pen-cli` now supports `--narrative` for appending stored per-step demo
   narrative output, including explicit time and closure bars
 - `scripts/compare_runs.py` now flags missing step narrative and event
@@ -119,4 +122,4 @@ retuning during `BreadthHarvest`.
    than extra active-window filter prunes.
 3. Extend the current reserve retunes into stronger closure-aware replanning
    across `Materialize` and `ProofClose`.
-4. Finish prune taxonomy and the remaining mandatory live-event closeout.
+4. Finish the remaining mandatory live-event closeout.

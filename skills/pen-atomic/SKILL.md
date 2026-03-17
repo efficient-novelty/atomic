@@ -272,6 +272,11 @@ On the demo-lane side:
   partial-prefix bar failure, terminal-prefix completion failure, incumbent
   dominance, and legality/connectivity exact rejection, with backward-
   compatible derivation from older artifacts when those fields are absent
+- stored demo step summaries now also persist prune-class totals for
+  quotient/dedupe, sound/minimality, and heuristic shaping, while
+  `pen-cli` debug output, `pen-cli inspect`, `pen-cli --narrative`, and
+  `scripts/compare_runs.py` backfill the same labeled totals from stored
+  search stats when older artifacts predate the explicit field
 - demo generated-surface reporting now also counts raw root prefixes, raw
   child prefixes, forced single-continuation collapses, and raw terminal
   completions instead of using

@@ -51,7 +51,7 @@ bounded rollout surface. It reads existing run directories and compares:
 - late-step competition deltas
 - per-step provenance sequences
 - replay-ablation summaries
-- prune sample totals
+- prune class totals
 - frontier-retention deltas
 - governor state and pressure-action sequences
 - missing demo narrative and event artifacts when a demo lane should have

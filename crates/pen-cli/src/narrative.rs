@@ -1,7 +1,9 @@
 use crate::progress::{
     format_millis, format_seconds, render_bar, render_goal_line, render_limit_line,
 };
-use crate::report::{CandidateStatus, FrontierRetention, PruneReportClass, StepReport};
+use crate::report::{
+    CandidateStatus, FrontierRetention, PruneReportClass, StepReport, stored_prune_class_stats,
+};
 use anyhow::Result;
 use pen_search::config::{DemoConfig, RuntimeConfig, SearchProfile};
 use pen_search::narrative::{NarrativeEvent, NarrativeEventKind, NarrativeProgressSnapshot};
@@ -137,6 +139,7 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
         ),
     ];
     let exact_screen_reasons = stored_exact_screen_reasons(step);
+    let prune_classes = stored_prune_class_stats(step);
     if !exact_screen_reasons.is_empty() {
         lines.push(format!(
             "exact_reasons partial_prefix_bar={} terminal_completion={} incumbent_dominance={} legality_connectivity={}",
@@ -146,6 +149,12 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
             exact_screen_reasons.legality_connectivity_exact_rejection
         ));
     }
+    lines.push(format!(
+        "prune_totals quotient_dedupe={} sound_minimality={} heuristic_shaping={}",
+        prune_classes.quotient_dedupe,
+        prune_classes.sound_minimality,
+        prune_classes.heuristic_shaping
+    ));
 
     if step.search_stats.prefix_states_explored > 0 {
         lines.push(format!(
@@ -227,21 +236,29 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
         "retained candidate lines",
     ));
 
-    let prune_lines = if step.prune_reports.is_empty() {
-        vec!["  none".to_owned()]
-    } else {
-        let mut lines = Vec::new();
-        for prune in &step.prune_reports {
-            lines.push(format!(
-                "  [{}] {} rho={} delta={} {}",
-                prune_class_label(prune.prune_class),
-                prune.candidate_hash,
-                prune.rho,
-                prune.bar_delta,
-                prune.headline
-            ));
-            if !prune.note.is_empty() {
-                lines.push(format!("    {}", prune.note));
+    let prune_lines = {
+        let mut lines = vec![format!(
+            "  totals quotient_dedupe={} sound_minimality={} heuristic_shaping={}",
+            prune_classes.quotient_dedupe,
+            prune_classes.sound_minimality,
+            prune_classes.heuristic_shaping
+        )];
+        if step.prune_reports.is_empty() {
+            lines.push("  sampled: none".to_owned());
+        } else {
+            lines.push("  sampled:".to_owned());
+            for prune in &step.prune_reports {
+                lines.push(format!(
+                    "  [{}] {} rho={} delta={} {}",
+                    prune_class_label(prune.prune_class),
+                    prune.candidate_hash,
+                    prune.rho,
+                    prune.bar_delta,
+                    prune.headline
+                ));
+                if !prune.note.is_empty() {
+                    lines.push(format!("    {}", prune.note));
+                }
             }
         }
         lines
@@ -854,5 +871,7 @@ mod tests {
         assert!(text.contains("exact_reasons"));
         assert!(text.contains("partial_prefix_bar="));
         assert!(text.contains("incumbent_dominance="));
+        assert!(text.contains("prune_totals"));
+        assert!(text.contains("sound_minimality="));
     }
 }
