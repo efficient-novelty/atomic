@@ -38,8 +38,8 @@ use pen_eval::minimality::analyze_semantic_minimality;
 use pen_eval::nu::structural_nu;
 use pen_store::manifest::{NearMiss, SearchTiming};
 use pen_type::admissibility::{
-    AdmissibilityDiagnostics, AdmissibilityMode, StrictAdmissibility, assess_strict_admissibility,
-    strict_admissibility_for_mode,
+    AdmissibilityDecisionClass, AdmissibilityDiagnostics, AdmissibilityMode, StrictAdmissibility,
+    assess_strict_admissibility, strict_admissibility_for_mode,
 };
 use pen_type::check::{CheckResult, check_telescope};
 use pen_type::connectivity::passes_connectivity;
@@ -4553,16 +4553,23 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
             summary.bound = Some(completion_bound);
         }
         summary.admitted_candidate_count += 1;
-        if let Some(rank) = acceptance_rank_for_telescope(
-            objective_bar,
-            &telescope,
-            exact_nu,
-            bit_kappa_used,
-            clause_kappa_used,
+        if terminal_completion_can_compete_for_acceptance(
+            prefix_signature,
+            admissibility,
+            prefix_legality_cache,
+            &admissibility_decision,
         ) {
-            match &summary.best_accept_rank {
-                Some(current) if !better_rank(&rank, current) => {}
-                _ => summary.best_accept_rank = Some(rank),
+            if let Some(rank) = acceptance_rank_for_telescope(
+                objective_bar,
+                &telescope,
+                exact_nu,
+                bit_kappa_used,
+                clause_kappa_used,
+            ) {
+                match &summary.best_accept_rank {
+                    Some(current) if !better_rank(&rank, current) => {}
+                    _ => summary.best_accept_rank = Some(rank),
+                }
             }
         }
         summary
@@ -4579,6 +4586,29 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     }
 
     summary
+}
+
+fn demo_focus_aligned_competitors_only(
+    prefix_signature: &PrefixSignature,
+    admissibility: StrictAdmissibility,
+    prefix_legality_cache: &PrefixLegalityCache,
+) -> bool {
+    matches!(prefix_signature.obligation_set_id.get(), 10 | 11 | 12 | 14)
+        && prefix_legality_cache
+            .uses_family_surface_override_for_signature(prefix_signature, admissibility)
+}
+
+fn terminal_completion_can_compete_for_acceptance(
+    prefix_signature: &PrefixSignature,
+    admissibility: StrictAdmissibility,
+    prefix_legality_cache: &PrefixLegalityCache,
+    admissibility_decision: &pen_type::admissibility::AdmissibilityDecision,
+) -> bool {
+    !demo_focus_aligned_competitors_only(prefix_signature, admissibility, prefix_legality_cache)
+        || !matches!(
+            admissibility_decision.class,
+            AdmissibilityDecisionClass::AdmittedDeprioritized
+        )
 }
 
 fn materialize_terminal_prefix_group(
@@ -4646,6 +4676,14 @@ fn materialize_terminal_prefix_group(
                 discovery.enumerated_candidates += 1;
                 discovery.well_formed_candidates += 1;
                 discovery.admissibility_diagnostics.record(&decision);
+                if !terminal_completion_can_compete_for_acceptance(
+                    prefix_signature,
+                    admissibility,
+                    &discovery.prefix_legality_cache,
+                    &decision,
+                ) {
+                    continue;
+                }
                 let accept_rank = acceptance_rank_for_telescope(
                     objective_bar,
                     &completion.telescope,
@@ -6124,6 +6162,18 @@ mod tests {
             crate::diversify::FrontierRuntimeLimits::unlimited(),
         )
         .expect("demo steps should build");
+        let step10 = steps
+            .iter()
+            .find(|step| step.step_index == 10)
+            .expect("step 10 should exist");
+        let step11 = steps
+            .iter()
+            .find(|step| step.step_index == 11)
+            .expect("step 11 should exist");
+        let step12 = steps
+            .iter()
+            .find(|step| step.step_index == 12)
+            .expect("step 12 should exist");
         let step13 = steps
             .iter()
             .find(|step| step.step_index == 13)
@@ -6137,14 +6187,32 @@ mod tests {
             .find(|step| step.step_index == 15)
             .expect("step 15 should exist");
 
+        assert_eq!(step10.telescope, Telescope::reference(10));
+        assert_eq!(step11.telescope, Telescope::reference(11));
+        assert_eq!(step12.telescope, Telescope::reference(12));
         assert_eq!(step13.telescope, Telescope::reference(13));
         assert_eq!(step14.telescope, Telescope::reference(14));
         assert_eq!(step15.telescope, Telescope::reference(15));
 
+        assert_eq!(step10.full_telescopes_evaluated, 1);
+        assert_eq!(step11.full_telescopes_evaluated, 1);
+        assert_eq!(step12.full_telescopes_evaluated, 1);
         assert_eq!(step13.full_telescopes_evaluated, 1);
         assert_eq!(step14.full_telescopes_evaluated, 1);
         assert_eq!(step15.full_telescopes_evaluated, 1);
 
+        assert!(
+            step10.demo_funnel.generated_raw_prefixes >= 500,
+            "step 10 should keep the generated floor hit"
+        );
+        assert!(
+            step11.demo_funnel.generated_raw_prefixes >= 800,
+            "step 11 should keep the generated floor hit"
+        );
+        assert!(
+            step11.demo_funnel.exact_bound_screened >= 220,
+            "step 11 should keep the exact-screened floor hit"
+        );
         assert!(
             step13.demo_funnel.generated_raw_prefixes >= 3_500,
             "step 13 should keep the widened live surface"

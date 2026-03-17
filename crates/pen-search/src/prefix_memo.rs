@@ -377,19 +377,25 @@ impl PrefixLegalityCache {
         let Some(summary) = PrefixLegalitySummary::from_telescope(library, prefix_telescope) else {
             return false;
         };
-        if let Some(filter_summary) = PrefixFamilyFilterSummary::from_prefix(
+        if !should_skip_demo_family_filter(
+            signature.obligation_set_id.get(),
             clause_kappa,
-            prefix_telescope,
-            library,
-            admissibility,
             late_family_surface,
         ) {
-            if filter_summary.is_empty() {
-                self.stats.clause_family_prunes += 1;
-                return false;
+            if let Some(filter_summary) = PrefixFamilyFilterSummary::from_prefix(
+                clause_kappa,
+                prefix_telescope,
+                library,
+                admissibility,
+                late_family_surface,
+            ) {
+                if filter_summary.is_empty() {
+                    self.stats.clause_family_prunes += 1;
+                    return false;
+                }
+                self.family_filters
+                    .insert(signature.clone(), filter_summary);
             }
-            self.family_filters
-                .insert(signature.clone(), filter_summary);
         }
         self.family_surfaces
             .insert(signature.clone(), late_family_surface);
@@ -594,6 +600,14 @@ impl PrefixLegalityCache {
         Some(decision)
     }
 
+    pub fn uses_family_surface_override_for_signature(
+        &self,
+        signature: &PrefixSignature,
+        admissibility: StrictAdmissibility,
+    ) -> bool {
+        self.uses_family_surface_override(signature, admissibility)
+    }
+
     fn family_surface(
         &self,
         signature: &PrefixSignature,
@@ -613,6 +627,15 @@ impl PrefixLegalityCache {
         self.family_surface(signature, admissibility)
             != late_family_surface_for_admissibility(admissibility)
     }
+}
+
+fn should_skip_demo_family_filter(
+    step_index: u32,
+    clause_kappa: u16,
+    late_family_surface: LateFamilySurface,
+) -> bool {
+    late_family_surface == LateFamilySurface::DemoBreadthShadow
+        && matches!((step_index, clause_kappa), (10, 4) | (11, 5))
 }
 
 #[cfg(test)]
