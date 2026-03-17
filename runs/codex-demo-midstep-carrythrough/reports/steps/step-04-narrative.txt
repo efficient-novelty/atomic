@@ -1,0 +1,84 @@
+step 04 demo narrative
+label        Pi
+profile      10m
+accepted     blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407 nu=5 kappa=3 overshoot=1/6
+time         [#...............] 24ms / 1m30s (within limit; shared early window across steps 1-4)
+generated    72 generated
+exact_screen 24 screened
+full_eval    24 evaluated
+closure      [................] 0% frontier_total=24 certified_nonwinning=0
+phase_eval   materialize=24 proof_close=0 overrun=0 cap=none cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep overrun_reason=none
+proof_close  reserve=0ms elapsed=0ms remaining=0ms reserve_overrun=0ms exhausted=false groups_closed=0/0 groups_remaining=0 closure=100%
+timing       discovery=24ms frontier_plan=0ms selection=0ms
+funnel       enumerated=24 well_formed=24 malformed=48 admissibility_rejected=0 scored=24 canonical=24 semantically_minimal=24
+demo_funnel  raw=72 canonical_prefixes=24 hard_admissible=24 exact_pruned=0 heuristic_dropped=0 bar_clearers=24 semantically_minimal_clearers=24 winner_overshoot=1/6
+prune_totals quotient_dedupe=0 sound_minimality=0 heuristic_shaping=0
+
+events
+  [step_open] opened demo step 4 with bar 3/2 and clause band 3..3
+    mode=realistic_shadow total=1m29s discovery=1m29s scout=8.9s breadth=1m20s proof_close_reserve=0ms baseline=1m29s shared_early_remaining=1m29s
+  [phase_change scout] entered scout with 8.9s reserved for throughput sampling
+    total=1m29s discovery=1m29s scout=8.9s breadth=1m20s proof_close_reserve=0ms baseline=1m29s shared_early_remaining=1m29s
+  [budget_pulse scout] scout baselining started
+    total=1m29s discovery=1m29s scout=8.9s breadth=1m20s proof_close_reserve=0ms baseline=1m29s shared_early_remaining=1m29s
+  [budget_pulse scout] scout sample captured throughput on this machine
+    generated_per_sec=3000 admissibility_per_sec=1000 exact_bound_per_sec=0 full_eval_per_sec=1000 generated=72 admissibility_checks=24 exact_bound_checks=0 full_evals=24
+  [phase_change materialize] entered materialize to reopen the retained exact surface
+    retained_prefix_groups=0 generated=72 exact_screened=24 full_evals=24 materialize_full_evals=0 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=none proof_close_overrun_reason=none proof_close_reserve=0ms proof_close_elapsed=0ms proof_close_remaining=0ms proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=0%
+  [budget_pulse materialize] materializing retained prefixes under exact screening
+    retained_prefix_groups=0 generated=72 exact_screened=24 full_evals=24 materialize_full_evals=0 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=none proof_close_overrun_reason=none proof_close_reserve=0ms proof_close_elapsed=0ms proof_close_remaining=0ms proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=0%
+  [phase_change proof_close] entered proof_close to certify the remaining exact surface
+    remaining_retained_prefix_groups=0 generated=72 exact_screened=24 full_evals=24 materialize_full_evals=24 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep proof_close_overrun_reason=none proof_close_reserve=0ms proof_close_elapsed=0ms proof_close_remaining=0ms proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=100%
+  [budget_pulse proof_close] proof-close is certifying the incumbent under exact comparison
+    remaining_retained_prefix_groups=0 generated=72 exact_screened=24 full_evals=24 materialize_full_evals=24 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep proof_close_overrun_reason=none proof_close_reserve=0ms proof_close_elapsed=0ms proof_close_remaining=0ms proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=100%
+  [phase_change seal] entered seal with incumbent blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407 ready for deterministic acceptance
+    bar_clearers=24 near_misses=3 generated=72 exact_screened=24 full_evals=24
+  [budget_pulse seal] seal fixed overshoot 1/6 for candidate blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407
+    bar_clearers=24 near_misses=3 generated=72 exact_screened=24 full_evals=24
+  [surface_summary] generated 72 structural candidates; 24 were well formed and 0 were rejected by admissibility
+    malformed=48 full_evaluated=24 canonical=24 semantically_minimal=24
+  [frontier_summary] retained 24 candidates with frontier hot=0 cold=0 dropped=0
+    pressure_state=green pressure_action=none resident_cold=0 spill_backed=0
+  [acceptance_summary seal] accepted blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407 with overshoot 1/6 (nu=5 kappa=3)
+    bar_clearers=24 near_misses=3 candidate_hash=blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407 canonical_hash=blake3:c7a99c10bbc01197aec9fa0c4605b4763dda6dc22ea95310fae37e9ff5ee65a1
+  [step_complete seal] completed step 4 in 24 ms
+    discovery_ms=24 frontier_plan_ms=0 selection_ms=0
+
+retained candidates
+  accepted blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407 rho=5/3 distance=1/6 frontier=hot headline=Former candidate with 3 clauses; uses only the current local scope.
+  bar_clearer blake3:97e5d92ee107e3c7da052d25eda3a53740c244d64ba54a0292fec32cdd33a578 rho=5/3 distance=1/6 frontier=hot headline=Former candidate with 3 clauses; uses only the current local scope.
+  bar_clearer blake3:6e313e12469292c77beb2b1390824569bb05cc63c5e055adf5e827212e2e7150 rho=5/3 distance=1/6 frontier=hot headline=Former candidate with 3 clauses; uses only the current local scope.
+  bar_clearer blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308 rho=5/3 distance=1/6 frontier=hot headline=Former candidate with 3 clauses; uses only the current local scope.
+  bar_clearer blake3:ec5da725db1cc602c03cef5a3a175f9007052e135987c28cbd9adb68e57ee0e1 rho=5/3 distance=1/6 frontier=hot headline=Former candidate with 3 clauses; uses only the current local scope.
+  bar_clearer blake3:a2609c644fb7f4d7056033c8b3ad553c20fff46cc1d1d2c9bac87899ad21a684 rho=5/3 distance=1/6 frontier=hot headline=Former candidate with 3 clauses; uses only the current local scope.
+  bar_clearer blake3:e80f1b97ffc005ecf1634be09a8d38f384eb3574eebd84d6a5b58f1349a15e8f rho=5/3 distance=1/6 frontier=hot headline=Former candidate with 3 clauses; uses only the current local scope.
+  bar_clearer blake3:6d05faeb2cb5d76bb5945b97ce029e56c2dd236da8efb270d3b483999001a145 rho=5/3 distance=1/6 frontier=hot headline=Former candidate with 3 clauses; uses only the current local scope.
+  ... 16 more retained candidates
+
+prunes
+  totals quotient_dedupe=0 sound_minimality=0 heuristic_shaping=0
+  sampled: none
+
+accepted trace
+  source=structural-ast
+  nu_g=2
+  nu_h=0
+  nu_c=3
+  bonus_distributive=0
+  bonus_universe_poly=0
+  bonus_infinitesimal_shift=0
+  nu_total=5
+  node_trace_count=13
+  node=entry1|ctor=Lam
+  node=entry1/0|ctor=Pi
+  node=entry1/0/0|ctor=Var
+  node=entry1/0/1|ctor=Var
+  node=entry2|ctor=App
+  node=entry2/0|ctor=App
+  node=entry2/0/0|ctor=Var
+  node=entry2/0/1|ctor=Var
+  node=entry2/1|ctor=Var
+  node=entry3|ctor=App
+  node=entry3/0|ctor=Lam
+  node=entry3/0/0|ctor=Var
+  node=entry3/1|ctor=Var

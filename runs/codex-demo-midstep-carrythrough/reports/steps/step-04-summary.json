@@ -1,0 +1,1168 @@
+{
+  "step_index": 4,
+  "label": "Pi",
+  "search_profile": "demo_breadth_shadow",
+  "objective_bar": {
+    "num": 3,
+    "den": 2
+  },
+  "accepted": {
+    "candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+    "canonical_hash": "blake3:c7a99c10bbc01197aec9fa0c4605b4763dda6dc22ea95310fae37e9ff5ee65a1",
+    "bit_kappa": 49,
+    "clause_kappa": 3,
+    "nu": 5,
+    "rho": {
+      "num": 5,
+      "den": 3
+    },
+    "overshoot": {
+      "num": 1,
+      "den": 6
+    },
+    "shape_fingerprint": "0xfd47801ec06d6c37",
+    "support_fingerprint": "0xf6144ff1106fac0d"
+  },
+  "telescope": {
+    "clauses": [
+      {
+        "role": "introduction",
+        "expr": {
+          "Lam": {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "role": "introduction",
+        "expr": {
+          "App": [
+            {
+              "App": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            },
+            {
+              "Var": 3
+            }
+          ]
+        }
+      },
+      {
+        "role": "elimination",
+        "expr": {
+          "App": [
+            {
+              "Lam": {
+                "Var": 1
+              }
+            },
+            {
+              "Var": 2
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "trace": [
+    "source=structural-ast",
+    "nu_g=2",
+    "nu_h=0",
+    "nu_c=3",
+    "bonus_distributive=0",
+    "bonus_universe_poly=0",
+    "bonus_infinitesimal_shift=0",
+    "nu_total=5",
+    "node_trace_count=13",
+    "node=entry1|ctor=Lam",
+    "node=entry1/0|ctor=Pi",
+    "node=entry1/0/0|ctor=Var",
+    "node=entry1/0/1|ctor=Var",
+    "node=entry2|ctor=App",
+    "node=entry2/0|ctor=App",
+    "node=entry2/0/0|ctor=Var",
+    "node=entry2/0/1|ctor=Var",
+    "node=entry2/1|ctor=Var",
+    "node=entry3|ctor=App",
+    "node=entry3/0|ctor=Lam",
+    "node=entry3/0/0|ctor=Var",
+    "node=entry3/1|ctor=Var"
+  ],
+  "near_misses": [
+    {
+      "candidate_hash": "blake3:e80f1b97ffc005ecf1634be09a8d38f384eb3574eebd84d6a5b58f1349a15e8f",
+      "canonical_hash": "blake3:45cf7046afca0a242d766054336b613bb16f19be49233fac8aa97cc20e344f0e",
+      "bit_kappa": 53,
+      "clause_kappa": 3,
+      "nu": 5,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:f2f8e24cdeb39fe90c5fce7ab42c2dbdd73556707f0362777d7358a6c10c7ef1",
+      "canonical_hash": "blake3:dfbcb35d49d92f61fb5c1ace256a1bfa7b8469fb8270fde1ecee0d9fc6c95793",
+      "bit_kappa": 52,
+      "clause_kappa": 3,
+      "nu": 5,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:6d05faeb2cb5d76bb5945b97ce029e56c2dd236da8efb270d3b483999001a145",
+      "canonical_hash": "blake3:6c7d786f1b947c22b3cb3df4cb3945958f1dce5c517d74208deaeabd0f09693e",
+      "bit_kappa": 50,
+      "clause_kappa": 3,
+      "nu": 5,
+      "status": "bar_clear_higher_overshoot"
+    }
+  ],
+  "search_stats": {
+    "enumerated_candidates": 24,
+    "well_formed_candidates": 24,
+    "malformed_rejections": 48,
+    "malformed_rejection_reasons": {
+      "ambient_context_too_large": 48
+    },
+    "admissibility_rejections": 0,
+    "admissibility_diagnostics": {
+      "exact_legality_rejections": 0,
+      "structural_debt_cap_rejections": 0,
+      "admitted_deprioritized": 0,
+      "admitted_focus_aligned": 24,
+      "reason_counts": {
+        "focus_former_eliminator": 24
+      }
+    },
+    "full_telescopes_evaluated": 24,
+    "evaluated_candidates": 24,
+    "canonical_candidates": 24,
+    "semantically_minimal_candidates": 24,
+    "canonical_dedupe_prunes": 0,
+    "semantic_minimality_prunes": 0,
+    "dedupe_prunes": 0,
+    "minimality_prunes": 0,
+    "heuristic_drops": 0,
+    "prefixes_created": 0,
+    "prefix_states_explored": 0,
+    "prefix_states_merged_by_signature": 0,
+    "prefix_states_exact_pruned": 0,
+    "prefix_states_heuristic_dropped": 0,
+    "incremental_legality_cache_hits": 0,
+    "incremental_connectivity_shortcuts": 0,
+    "incremental_connectivity_fallbacks": 0,
+    "incremental_connectivity_prunes": 0,
+    "incremental_clause_family_filter_hits": 0,
+    "incremental_clause_family_prunes": 0,
+    "incremental_active_window_clause_filter_hits": 0,
+    "incremental_active_window_clause_filter_prunes": 0,
+    "incremental_terminal_clause_filter_hits": 0,
+    "incremental_terminal_clause_filter_prunes": 0,
+    "incremental_trivial_derivability_hits": 0,
+    "incremental_trivial_derivability_prunes": 0,
+    "incremental_terminal_admissibility_hits": 0,
+    "incremental_terminal_admissibility_rejections": 0,
+    "incremental_terminal_prefix_completion_hits": 0,
+    "incremental_terminal_prefix_rank_hits": 0,
+    "incremental_terminal_rank_prunes": 0,
+    "incremental_partial_prefix_bound_hits": 0,
+    "incremental_partial_prefix_bound_checks": 0,
+    "incremental_partial_prefix_bound_prunes": 0,
+    "incremental_terminal_prefix_bar_prunes": 0,
+    "prune_classes": {
+      "quotient_dedupe": 0,
+      "sound_minimality": 0,
+      "heuristic_shaping": 0
+    },
+    "exact_screen_reasons": {
+      "partial_prefix_bar_failure": 0,
+      "terminal_prefix_completion_failure": 0,
+      "incumbent_dominance": 0,
+      "legality_connectivity_exact_rejection": 0
+    },
+    "demo_phase": {
+      "materialize_full_evals": 24,
+      "proof_close_entry_reason": "certification_sweep",
+      "proof_close_reserved_millis": 0,
+      "proof_close_elapsed_millis": 0,
+      "proof_close_remaining_millis": 0,
+      "proof_close_reserve_overrun_millis": 0,
+      "proof_close_reserve_exhausted": false,
+      "proof_close_frontier_total_groups": 0,
+      "proof_close_frontier_groups_closed": 0,
+      "proof_close_frontier_groups_remaining": 0,
+      "proof_close_closure_percent": 100,
+      "proof_close_full_evals": 0,
+      "proof_close_overrun_full_evals": 0,
+      "materialize_soft_cap_triggered": false
+    },
+    "demo_funnel": {
+      "generated_raw_prefixes": 72,
+      "canonical_prefix_signatures": 24,
+      "well_formed_terminals": 24,
+      "hard_admissible": 24,
+      "exact_bound_screened": 24,
+      "exact_bound_pruned": 0,
+      "heuristic_dropped": 0,
+      "full_telescopes_evaluated": 24,
+      "bar_clearers": 24,
+      "semantically_minimal_clearers": 24,
+      "winner_overshoot": {
+        "num": 1,
+        "den": 6
+      }
+    },
+    "demo_closure": {
+      "frontier_total_seen": 24,
+      "frontier_certified_nonwinning": 0,
+      "closure_percent": 0
+    },
+    "demo_bucket_stats": [],
+    "search_timing": {
+      "step_wall_clock_millis": 24,
+      "candidate_discovery_wall_clock_millis": 24,
+      "prefix_frontier_planning_wall_clock_millis": 0,
+      "selection_wall_clock_millis": 0
+    },
+    "prefix_frontier_hot_states": 0,
+    "prefix_frontier_cold_states": 0,
+    "retained_candidates": 24,
+    "frontier_hot_states": 24,
+    "frontier_cold_states": 0,
+    "frontier_resident_cold_states": 0,
+    "frontier_spill_states": 0,
+    "frontier_drops": 0,
+    "scored_candidate_distribution": {
+      "candidate_count": 24,
+      "clears_bar": 24,
+      "below_bar": 0,
+      "clause_kappa_counts": {
+        "3": 24
+      },
+      "nu_summary": {
+        "min": 5,
+        "median": 5,
+        "max": 5,
+        "average": {
+          "num": 5,
+          "den": 1
+        }
+      },
+      "rho_summary": {
+        "min": {
+          "num": 5,
+          "den": 3
+        },
+        "median": {
+          "num": 5,
+          "den": 3
+        },
+        "max": {
+          "num": 5,
+          "den": 3
+        },
+        "average": {
+          "num": 5,
+          "den": 3
+        }
+      }
+    }
+  },
+  "candidate_reports": [
+    {
+      "status": "accepted_minimal_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "canonical_hash": "blake3:c7a99c10bbc01197aec9fa0c4605b4763dda6dc22ea95310fae37e9ff5ee65a1",
+      "bit_kappa": 49,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c02 [introduction] ((x1 x2) x3)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:97e5d92ee107e3c7da052d25eda3a53740c244d64ba54a0292fec32cdd33a578",
+      "canonical_hash": "blake3:070d717082680936e5e3b6b56de2051fb1fc553e93636dce4aea9447fc388768",
+      "bit_kappa": 49,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> ((x2 : x1) -> x3))",
+        "c02 [introduction] ((x1 x3) x2)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:6e313e12469292c77beb2b1390824569bb05cc63c5e055adf5e827212e2e7150",
+      "canonical_hash": "blake3:28f8ab2a24d52eb3f9b81f917d0084adf69a113762cf4b8b500763bb9acca17d",
+      "bit_kappa": 51,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> ((x2 : x2) -> x3))",
+        "c02 [introduction] ((x1 x3) x2)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "canonical_hash": "blake3:3175457b196b6173b1741362f4e7ed92913b52297b135d68d4ceb8e831e470d8",
+      "bit_kappa": 49,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c02 [introduction] ((x1 x3) x2)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:ec5da725db1cc602c03cef5a3a175f9007052e135987c28cbd9adb68e57ee0e1",
+      "canonical_hash": "blake3:4290e848cfef3e50c4259af947077da1478e4f2b421942f2b2d17aeafcf553c0",
+      "bit_kappa": 54,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> (Sigma x3 (fun x2 -> x4)))",
+        "c02 [introduction] ((x1 x3) x2)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:a2609c644fb7f4d7056033c8b3ad553c20fff46cc1d1d2c9bac87899ad21a684",
+      "canonical_hash": "blake3:43244f07334637ce09acaaf8d4ab6467bd5eace33298d4d5e1f96a1644b2d41b",
+      "bit_kappa": 50,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x3)))",
+        "c02 [introduction] ((x1 x2) x3)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:e80f1b97ffc005ecf1634be09a8d38f384eb3574eebd84d6a5b58f1349a15e8f",
+      "canonical_hash": "blake3:45cf7046afca0a242d766054336b613bb16f19be49233fac8aa97cc20e344f0e",
+      "bit_kappa": 53,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> ((x2 : x2) -> x4))",
+        "c02 [introduction] ((x1 x2) x3)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:6d05faeb2cb5d76bb5945b97ce029e56c2dd236da8efb270d3b483999001a145",
+      "canonical_hash": "blake3:6c7d786f1b947c22b3cb3df4cb3945958f1dce5c517d74208deaeabd0f09693e",
+      "bit_kappa": 50,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x3)))",
+        "c02 [introduction] ((x1 x3) x2)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:9dbc73edf2e2fd7a5d0affb204bb01315f7dac2b0639e8c19eb12e21300d30d0",
+      "canonical_hash": "blake3:77e3812243fa1af36f41125b76a950652b0146596ded07053fea89b1b665b4f6",
+      "bit_kappa": 51,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> ((x2 : x1) -> x4))",
+        "c02 [introduction] ((x1 x3) x2)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:ce34431cf7568489a5ac1c92b89c92ed8531de542e6f1a9822c86c1ce8856908",
+      "canonical_hash": "blake3:7a0519c95dff5440fe4501fe592954e71bf5a3154eccc2ead3c56bc4ab6cbbcd",
+      "bit_kappa": 53,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> ((x2 : x3) -> x4))",
+        "c02 [introduction] ((x1 x2) x3)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:83ea031164178c0feda192bc0af8d1adfa941fc24141b558b9525a50f7070df9",
+      "canonical_hash": "blake3:7af7fca39405f00496ba9066522eeff9d6819ae35e33e75a4613e4f7fed88202",
+      "bit_kappa": 54,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> (Sigma x3 (fun x2 -> x4)))",
+        "c02 [introduction] ((x1 x2) x3)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:d39500e60af8f12fee430800ac4d3fc4af1f34293154d4d87ab544fb79530878",
+      "canonical_hash": "blake3:88fbeda6a56ffe3e5f9f7ddd8f4e08376ca09efaf2f8fa41347e873a49b61425",
+      "bit_kappa": 51,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> ((x2 : x1) -> x4))",
+        "c02 [introduction] ((x1 x2) x3)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:f71f9c07ed085a1a87e0c5d9a6fdb9e8e994e5b4cba3a90586e77bc1129ad3c0",
+      "canonical_hash": "blake3:8d79914634d55424abcc183f5f3d502f18aaa12678279b60e0073bb5f2c63758",
+      "bit_kappa": 51,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> ((x2 : x2) -> x3))",
+        "c02 [introduction] ((x1 x2) x3)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:de0b8e57f50ee88fd9fbaf93df535429e142c65a686c8edac73cf3852ef90405",
+      "canonical_hash": "blake3:914764446e7c71a8cbddc95838a9086e771aa7332f87a52e34c187e0f9dd3300",
+      "bit_kappa": 53,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> ((x2 : x2) -> x4))",
+        "c02 [introduction] ((x1 x3) x2)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:19b01c6b725e5d386030809ba5f3d9aa0b32b6a4cca152c09ef65bbb2a08099c",
+      "canonical_hash": "blake3:94dcd8a9f155ee32a20dc4b972e6f336c76d959749be9f710a32836b74c8184d",
+      "bit_kappa": 54,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> (Sigma x2 (fun x2 -> x4)))",
+        "c02 [introduction] ((x1 x3) x2)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "canonical_hash": "blake3:cf189a29634c411c49ccb310a2cf931ca9e6e8811a81789869df6cadc0d05616",
+      "bit_kappa": 50,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c02 [introduction] ((x1 x3) x2)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:ed88ea1888a4610be5cf07c53b42361dd125ac6facb6411c42e958d549fd3e25",
+      "canonical_hash": "blake3:d061c06acb359b612b0837cd94b7e9392e9918e3d7d725afaad71d5bb9bfe9eb",
+      "bit_kappa": 49,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> ((x2 : x1) -> x3))",
+        "c02 [introduction] ((x1 x2) x3)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "canonical_hash": "blake3:d3db73c297742f962b7afc4b9e7db6b53b0131c14c6657ea46a27cf52917ebcf",
+      "bit_kappa": 50,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c02 [introduction] ((x1 x2) x3)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:c5e00cdb5c6391f4db69e27792d717ccd36e91e33ac5fee26e152a9d86922df3",
+      "canonical_hash": "blake3:d509a1ef700af334b324c15bc6f67cad72e5df191bb1564a464bae828e8d7c29",
+      "bit_kappa": 52,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> (Sigma x2 (fun x2 -> x3)))",
+        "c02 [introduction] ((x1 x3) x2)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:833b59ac1b47154a078c72418a9977c264876a5cefca5b0abcffe9ec5515557c",
+      "canonical_hash": "blake3:d70184bd7e266746580f4e8ae83d95ce84b68c4e482bd20b7b5a7f09527e81b1",
+      "bit_kappa": 52,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x4)))",
+        "c02 [introduction] ((x1 x2) x3)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:f2f8e24cdeb39fe90c5fce7ab42c2dbdd73556707f0362777d7358a6c10c7ef1",
+      "canonical_hash": "blake3:dfbcb35d49d92f61fb5c1ace256a1bfa7b8469fb8270fde1ecee0d9fc6c95793",
+      "bit_kappa": 52,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> (Sigma x2 (fun x2 -> x3)))",
+        "c02 [introduction] ((x1 x2) x3)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:9f18b0757b4b9b38a49729dc04259ca2f68de0022e3a98762942a868f81f1bc1",
+      "canonical_hash": "blake3:e4846c0b94eadfea97932d66c6acff37bd5a7b62877e74e0b56f8e6ab386bfba",
+      "bit_kappa": 52,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x4)))",
+        "c02 [introduction] ((x1 x3) x2)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:da2f380d7f89a6f8b1c5c721cc70974c8b575d8bfa10b11751f6b13f613ebfda",
+      "canonical_hash": "blake3:e865dff23dee233ae8bd30412f17c003a8eadc9c4420e493cb5c76b1386a3614",
+      "bit_kappa": 54,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> (Sigma x2 (fun x2 -> x4)))",
+        "c02 [introduction] ((x1 x2) x3)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:b96c3c67f65459bb4a8394ef58be0f2650d4c674c660e3b78641027d86124e08",
+      "canonical_hash": "blake3:f85c7070b9a3c875ce7a3a9a465b904932cb0038a32378c44869892a445233f0",
+      "bit_kappa": 53,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Former",
+      "headline": "Former candidate with 3 clauses; uses only the current local scope.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [introduction] (fun x1 -> ((x2 : x3) -> x4))",
+        "c02 [introduction] ((x1 x3) x2)",
+        "c03 [elimination] ((fun x1 -> x1) x2)"
+      ]
+    }
+  ],
+  "prune_reports": [],
+  "frontier_policy": {
+    "focus": "former",
+    "focus_quota": 1,
+    "bridge_quota": 1,
+    "support_quota": 1,
+    "macro_quota": 0,
+    "cold_limit": 4
+  },
+  "frontier_pressure": {
+    "governor_state": "green",
+    "pressure_action": "none",
+    "rss_bytes": 0,
+    "hot_frontier_bytes": 0,
+    "cold_frontier_bytes": 0,
+    "dedupe_bytes": 0,
+    "hot_count": 0,
+    "cold_candidate_count": 0,
+    "requested_cold_limit": 0,
+    "retained_cold_limit": 0,
+    "resident_cold_limit": 0,
+    "spill_backed_cold_records": 0,
+    "dropped_cold_records": 0
+  },
+  "prefix_frontier": {
+    "hot_states": [],
+    "cold_states": [],
+    "dedupe_keys": []
+  },
+  "provenance": "atomic_bootstrap_search",
+  "canon_evidence": {
+    "charged_clause_kappa": 3,
+    "bar_distance": {
+      "num": 1,
+      "den": 6
+    },
+    "clears_bar": true,
+    "late_step_claim": {
+      "status": "not_applicable",
+      "adopted_step": 0,
+      "adopted_label": "",
+      "adopted_nu": 0,
+      "matches_accepted": false,
+      "note": ""
+    }
+  },
+  "replay_ablation": {
+    "status": "matches_reference_replay",
+    "reference_candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+    "reference_canonical_hash": "blake3:c7a99c10bbc01197aec9fa0c4605b4763dda6dc22ea95310fae37e9ff5ee65a1",
+    "rho_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "objective_bar_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "overshoot_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "nu_delta": 0,
+    "clause_kappa_delta": 0,
+    "note": "matches reference replay baseline"
+  },
+  "narrative_events": [
+    {
+      "step_index": 4,
+      "ordinal": 1,
+      "kind": "step_open",
+      "message": "opened demo step 4 with bar 3/2 and clause band 3..3",
+      "detail": "mode=realistic_shadow total=1m29s discovery=1m29s scout=8.9s breadth=1m20s proof_close_reserve=0ms baseline=1m29s shared_early_remaining=1m29s",
+      "progress": {
+        "elapsed_millis": 0,
+        "generated_surface": 0,
+        "exact_screened_surface": 0,
+        "full_telescopes_evaluated": 0
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 2,
+      "kind": "phase_change",
+      "phase": "scout",
+      "message": "entered scout with 8.9s reserved for throughput sampling",
+      "detail": "total=1m29s discovery=1m29s scout=8.9s breadth=1m20s proof_close_reserve=0ms baseline=1m29s shared_early_remaining=1m29s",
+      "progress": {
+        "elapsed_millis": 0,
+        "generated_surface": 0,
+        "exact_screened_surface": 0,
+        "full_telescopes_evaluated": 0
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 3,
+      "kind": "budget_pulse",
+      "phase": "scout",
+      "message": "scout baselining started",
+      "detail": "total=1m29s discovery=1m29s scout=8.9s breadth=1m20s proof_close_reserve=0ms baseline=1m29s shared_early_remaining=1m29s",
+      "progress": {
+        "elapsed_millis": 0,
+        "generated_surface": 0,
+        "exact_screened_surface": 0,
+        "full_telescopes_evaluated": 0
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 4,
+      "kind": "budget_pulse",
+      "phase": "scout",
+      "message": "scout sample captured throughput on this machine",
+      "detail": "generated_per_sec=3000 admissibility_per_sec=1000 exact_bound_per_sec=0 full_eval_per_sec=1000 generated=72 admissibility_checks=24 exact_bound_checks=0 full_evals=24",
+      "progress": {
+        "elapsed_millis": 24,
+        "generated_surface": 72,
+        "exact_screened_surface": 24,
+        "full_telescopes_evaluated": 24
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 5,
+      "kind": "phase_change",
+      "phase": "materialize",
+      "message": "entered materialize to reopen the retained exact surface",
+      "detail": "retained_prefix_groups=0 generated=72 exact_screened=24 full_evals=24 materialize_full_evals=0 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=none proof_close_overrun_reason=none proof_close_reserve=0ms proof_close_elapsed=0ms proof_close_remaining=0ms proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=0%",
+      "progress": {
+        "elapsed_millis": 24,
+        "generated_surface": 72,
+        "exact_screened_surface": 24,
+        "full_telescopes_evaluated": 24
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 6,
+      "kind": "budget_pulse",
+      "phase": "materialize",
+      "message": "materializing retained prefixes under exact screening",
+      "detail": "retained_prefix_groups=0 generated=72 exact_screened=24 full_evals=24 materialize_full_evals=0 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=none proof_close_overrun_reason=none proof_close_reserve=0ms proof_close_elapsed=0ms proof_close_remaining=0ms proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=0%",
+      "progress": {
+        "elapsed_millis": 24,
+        "generated_surface": 72,
+        "exact_screened_surface": 24,
+        "full_telescopes_evaluated": 24
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 7,
+      "kind": "phase_change",
+      "phase": "proof_close",
+      "message": "entered proof_close to certify the remaining exact surface",
+      "detail": "remaining_retained_prefix_groups=0 generated=72 exact_screened=24 full_evals=24 materialize_full_evals=24 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep proof_close_overrun_reason=none proof_close_reserve=0ms proof_close_elapsed=0ms proof_close_remaining=0ms proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=100%",
+      "progress": {
+        "elapsed_millis": 24,
+        "generated_surface": 72,
+        "exact_screened_surface": 24,
+        "full_telescopes_evaluated": 24
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 8,
+      "kind": "budget_pulse",
+      "phase": "proof_close",
+      "message": "proof-close is certifying the incumbent under exact comparison",
+      "detail": "remaining_retained_prefix_groups=0 generated=72 exact_screened=24 full_evals=24 materialize_full_evals=24 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep proof_close_overrun_reason=none proof_close_reserve=0ms proof_close_elapsed=0ms proof_close_remaining=0ms proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=100%",
+      "progress": {
+        "elapsed_millis": 24,
+        "generated_surface": 72,
+        "exact_screened_surface": 24,
+        "full_telescopes_evaluated": 24
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 9,
+      "kind": "phase_change",
+      "phase": "seal",
+      "message": "entered seal with incumbent blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407 ready for deterministic acceptance",
+      "detail": "bar_clearers=24 near_misses=3 generated=72 exact_screened=24 full_evals=24",
+      "progress": {
+        "elapsed_millis": 24,
+        "generated_surface": 72,
+        "exact_screened_surface": 24,
+        "full_telescopes_evaluated": 24
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 10,
+      "kind": "budget_pulse",
+      "phase": "seal",
+      "message": "seal fixed overshoot 1/6 for candidate blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "detail": "bar_clearers=24 near_misses=3 generated=72 exact_screened=24 full_evals=24",
+      "progress": {
+        "elapsed_millis": 24,
+        "generated_surface": 72,
+        "exact_screened_surface": 24,
+        "full_telescopes_evaluated": 24
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 11,
+      "kind": "surface_summary",
+      "message": "generated 72 structural candidates; 24 were well formed and 0 were rejected by admissibility",
+      "detail": "malformed=48 full_evaluated=24 canonical=24 semantically_minimal=24",
+      "progress": {
+        "elapsed_millis": 24,
+        "generated_surface": 72,
+        "exact_screened_surface": 24,
+        "full_telescopes_evaluated": 24
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 12,
+      "kind": "frontier_summary",
+      "message": "retained 24 candidates with frontier hot=0 cold=0 dropped=0",
+      "detail": "pressure_state=green pressure_action=none resident_cold=0 spill_backed=0",
+      "progress": {
+        "elapsed_millis": 24,
+        "generated_surface": 72,
+        "exact_screened_surface": 24,
+        "full_telescopes_evaluated": 24
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 13,
+      "kind": "acceptance_summary",
+      "phase": "seal",
+      "message": "accepted blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407 with overshoot 1/6 (nu=5 kappa=3)",
+      "detail": "bar_clearers=24 near_misses=3 candidate_hash=blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407 canonical_hash=blake3:c7a99c10bbc01197aec9fa0c4605b4763dda6dc22ea95310fae37e9ff5ee65a1",
+      "progress": {
+        "elapsed_millis": 24,
+        "generated_surface": 72,
+        "exact_screened_surface": 24,
+        "full_telescopes_evaluated": 24
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 14,
+      "kind": "step_complete",
+      "phase": "seal",
+      "message": "completed step 4 in 24 ms",
+      "detail": "discovery_ms=24 frontier_plan_ms=0 selection_ms=0",
+      "progress": {
+        "elapsed_millis": 24,
+        "generated_surface": 72,
+        "exact_screened_surface": 24,
+        "full_telescopes_evaluated": 24
+      }
+    }
+  ]
+}

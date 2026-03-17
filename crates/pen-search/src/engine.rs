@@ -6337,6 +6337,44 @@ mod tests {
         }));
     }
 
+    #[test]
+    fn demo_mandatory_proof_close_and_seal_pulses_ignore_rate_limiting() {
+        let mut config = demo_runtime_config_10m();
+        config.demo.narrative.pulse_interval_millis = 60_000;
+        config.demo.scout_fraction = "0.00".to_owned();
+        config.demo.floors.generated_floor.remove("15");
+        config.demo.floors.exact_screened_floor.remove("15");
+        config
+            .demo
+            .caps
+            .full_eval_soft_cap
+            .insert("15".to_owned(), 0);
+        let step = search_bootstrap_prefix_for_config_with_runtime(
+            15,
+            2,
+            &config,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("demo steps should build")
+        .into_iter()
+        .last()
+        .expect("step should exist");
+
+        assert!(step.demo_phase.proof_close_frontier_total_groups > 0);
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::BudgetPulse
+                && event.phase == Some(StepPhase::ProofClose)
+                && event
+                    .message
+                    .contains("100% of the retained frontier groups")
+        }));
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::BudgetPulse
+                && event.phase == Some(StepPhase::Seal)
+                && event.message.contains("seal fixed overshoot")
+        }));
+    }
+
     fn relaxed_shadow_step_from_reference_prefix(step_index: u32) -> AtomicSearchStep {
         assert!(step_index >= 1);
         let prefix = if step_index == 1 {

@@ -1,0 +1,633 @@
+{
+  "step_index": 9,
+  "label": "Hopf",
+  "search_profile": "demo_breadth_shadow",
+  "objective_bar": {
+    "num": 1768,
+    "den": 441
+  },
+  "accepted": {
+    "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+    "canonical_hash": "blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+    "bit_kappa": 78,
+    "clause_kappa": 4,
+    "nu": 17,
+    "rho": {
+      "num": 17,
+      "den": 4
+    },
+    "overshoot": {
+      "num": 425,
+      "den": 1764
+    },
+    "shape_fingerprint": "0x7673f0b547538a8d",
+    "support_fingerprint": "0xa8a6d8be9494884e"
+  },
+  "telescope": {
+    "clauses": [
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Lib": 8
+            },
+            {
+              "Lib": 7
+            }
+          ]
+        }
+      },
+      {
+        "role": "introduction",
+        "expr": {
+          "App": [
+            {
+              "Lib": 5
+            },
+            {
+              "Var": 1
+            }
+          ]
+        }
+      },
+      {
+        "role": "introduction",
+        "expr": {
+          "Lam": {
+            "App": [
+              {
+                "Lib": 8
+              },
+              {
+                "Lib": 7
+              }
+            ]
+          }
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Lib": 7
+            },
+            {
+              "Lib": 8
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "trace": [
+    "source=structural-ast",
+    "nu_g=0",
+    "nu_h=0",
+    "nu_c=17",
+    "bonus_distributive=0",
+    "bonus_universe_poly=0",
+    "bonus_infinitesimal_shift=0",
+    "nu_total=17",
+    "node_trace_count=13",
+    "node=entry1|ctor=Pi",
+    "node=entry1/0|ctor=Lib",
+    "node=entry1/1|ctor=Lib",
+    "node=entry2|ctor=App",
+    "node=entry2/0|ctor=Lib",
+    "node=entry2/1|ctor=Var",
+    "node=entry3|ctor=Lam",
+    "node=entry3/0|ctor=App",
+    "node=entry3/0/0|ctor=Lib",
+    "node=entry3/0/1|ctor=Lib",
+    "node=entry4|ctor=Pi",
+    "node=entry4/0|ctor=Lib",
+    "node=entry4/1|ctor=Lib"
+  ],
+  "near_misses": [],
+  "search_stats": {
+    "enumerated_candidates": 9,
+    "well_formed_candidates": 9,
+    "malformed_rejections": 0,
+    "malformed_rejection_reasons": {},
+    "admissibility_rejections": 8,
+    "admissibility_diagnostics": {
+      "exact_legality_rejections": 0,
+      "structural_debt_cap_rejections": 8,
+      "admitted_deprioritized": 0,
+      "admitted_focus_aligned": 1,
+      "reason_counts": {
+        "focus_axiomatic_bundle": 1,
+        "no_allowed_structural_family": 8
+      }
+    },
+    "full_telescopes_evaluated": 1,
+    "evaluated_candidates": 1,
+    "canonical_candidates": 1,
+    "semantically_minimal_candidates": 1,
+    "canonical_dedupe_prunes": 0,
+    "semantic_minimality_prunes": 0,
+    "dedupe_prunes": 0,
+    "minimality_prunes": 0,
+    "heuristic_drops": 0,
+    "prefixes_created": 15,
+    "prefix_states_explored": 4,
+    "prefix_states_merged_by_signature": 0,
+    "prefix_states_exact_pruned": 8,
+    "prefix_states_heuristic_dropped": 0,
+    "incremental_legality_cache_hits": 131,
+    "incremental_connectivity_shortcuts": 81,
+    "incremental_connectivity_fallbacks": 0,
+    "incremental_connectivity_prunes": 0,
+    "incremental_clause_family_filter_hits": 36,
+    "incremental_clause_family_prunes": 0,
+    "incremental_active_window_clause_filter_hits": 53,
+    "incremental_active_window_clause_filter_prunes": 0,
+    "incremental_terminal_clause_filter_hits": 0,
+    "incremental_terminal_clause_filter_prunes": 0,
+    "incremental_trivial_derivability_hits": 0,
+    "incremental_trivial_derivability_prunes": 0,
+    "incremental_terminal_admissibility_hits": 0,
+    "incremental_terminal_admissibility_rejections": 0,
+    "incremental_terminal_prefix_completion_hits": 3,
+    "incremental_terminal_prefix_rank_hits": 0,
+    "incremental_terminal_rank_prunes": 0,
+    "incremental_partial_prefix_bound_hits": 7,
+    "incremental_partial_prefix_bound_checks": 10,
+    "incremental_partial_prefix_bound_prunes": 8,
+    "incremental_terminal_prefix_bar_prunes": 0,
+    "prune_classes": {
+      "quotient_dedupe": 0,
+      "sound_minimality": 8,
+      "heuristic_shaping": 0
+    },
+    "exact_screen_reasons": {
+      "partial_prefix_bar_failure": 8,
+      "terminal_prefix_completion_failure": 0,
+      "incumbent_dominance": 0,
+      "legality_connectivity_exact_rejection": 0
+    },
+    "demo_phase": {
+      "materialize_full_evals": 1,
+      "proof_close_entry_reason": "certification_sweep",
+      "proof_close_reserved_millis": 9600,
+      "proof_close_elapsed_millis": 0,
+      "proof_close_remaining_millis": 9600,
+      "proof_close_reserve_overrun_millis": 0,
+      "proof_close_reserve_exhausted": false,
+      "proof_close_frontier_total_groups": 0,
+      "proof_close_frontier_groups_closed": 0,
+      "proof_close_frontier_groups_remaining": 0,
+      "proof_close_closure_percent": 100,
+      "proof_close_full_evals": 0,
+      "proof_close_overrun_full_evals": 0,
+      "materialize_soft_cap_triggered": false
+    },
+    "demo_funnel": {
+      "generated_raw_prefixes": 24,
+      "canonical_prefix_signatures": 15,
+      "well_formed_terminals": 9,
+      "hard_admissible": 1,
+      "exact_bound_screened": 9,
+      "exact_bound_pruned": 8,
+      "heuristic_dropped": 0,
+      "full_telescopes_evaluated": 1,
+      "bar_clearers": 1,
+      "semantically_minimal_clearers": 1,
+      "winner_overshoot": {
+        "num": 425,
+        "den": 1764
+      }
+    },
+    "demo_closure": {
+      "frontier_total_seen": 9,
+      "frontier_certified_nonwinning": 8,
+      "closure_percent": 88
+    },
+    "demo_bucket_stats": [
+      {
+        "bucket_label": "k4:library_refs:library_backed:single",
+        "bucket_key": {
+          "clause_kappa": 4,
+          "family": "library_refs",
+          "support_profile": "library_backed",
+          "width": "single"
+        },
+        "generated_terminal_candidates": 0,
+        "admissible_terminal_candidates": 0,
+        "exact_screened_terminal_candidates": 0,
+        "pruned_terminal_candidates": 0,
+        "fully_scored_terminal_candidates": 1,
+        "best_overshoot": {
+          "num": 425,
+          "den": 1764
+        }
+      },
+      {
+        "bucket_label": "k4:library_refs:library_backed:small_cluster",
+        "bucket_key": {
+          "clause_kappa": 4,
+          "family": "library_refs",
+          "support_profile": "library_backed",
+          "width": "small_cluster"
+        },
+        "generated_terminal_candidates": 9,
+        "admissible_terminal_candidates": 1,
+        "exact_screened_terminal_candidates": 1,
+        "pruned_terminal_candidates": 0,
+        "fully_scored_terminal_candidates": 0
+      }
+    ],
+    "search_timing": {
+      "step_wall_clock_millis": 4,
+      "candidate_discovery_wall_clock_millis": 3,
+      "prefix_frontier_planning_wall_clock_millis": 0,
+      "selection_wall_clock_millis": 0
+    },
+    "prefix_frontier_hot_states": 1,
+    "prefix_frontier_cold_states": 0,
+    "retained_candidates": 1,
+    "frontier_hot_states": 1,
+    "frontier_cold_states": 0,
+    "frontier_resident_cold_states": 0,
+    "frontier_spill_states": 0,
+    "frontier_drops": 0,
+    "scored_candidate_distribution": {
+      "candidate_count": 1,
+      "clears_bar": 1,
+      "below_bar": 0,
+      "clause_kappa_counts": {
+        "4": 1
+      },
+      "nu_summary": {
+        "min": 17,
+        "median": 17,
+        "max": 17,
+        "average": {
+          "num": 17,
+          "den": 1
+        }
+      },
+      "rho_summary": {
+        "min": {
+          "num": 17,
+          "den": 4
+        },
+        "median": {
+          "num": 17,
+          "den": 4
+        },
+        "max": {
+          "num": 17,
+          "den": 4
+        },
+        "average": {
+          "num": 17,
+          "den": 4
+        }
+      }
+    }
+  },
+  "candidate_reports": [
+    {
+      "status": "accepted_minimal_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+      "canonical_hash": "blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    }
+  ],
+  "prune_reports": [],
+  "frontier_policy": {
+    "focus": "axiomatic",
+    "focus_quota": 2,
+    "bridge_quota": 2,
+    "support_quota": 1,
+    "macro_quota": 0,
+    "cold_limit": 6
+  },
+  "frontier_pressure": {
+    "governor_state": "green",
+    "pressure_action": "none",
+    "rss_bytes": 1476395104,
+    "hot_frontier_bytes": 64,
+    "cold_frontier_bytes": 0,
+    "dedupe_bytes": 32,
+    "hot_count": 1,
+    "cold_candidate_count": 0,
+    "requested_cold_limit": 0,
+    "retained_cold_limit": 0,
+    "resident_cold_limit": 0,
+    "spill_backed_cold_records": 0,
+    "dropped_cold_records": 0
+  },
+  "prefix_frontier": {
+    "hot_states": [
+      {
+        "state_id": 38654705664,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 15994631411607928418,
+        "support_hash64": 9479219635465631955,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 78,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074875971,
+        "worker_hint": 0
+      }
+    ],
+    "cold_states": [],
+    "dedupe_keys": [
+      "blake3:04c86b6fbf4d5c60531d6ebda495710f688846dfef311269007fe1f1e3084f75"
+    ]
+  },
+  "provenance": "atomic_bootstrap_search",
+  "canon_evidence": {
+    "charged_clause_kappa": 4,
+    "bar_distance": {
+      "num": 425,
+      "den": 1764
+    },
+    "clears_bar": true,
+    "late_step_claim": {
+      "status": "not_applicable",
+      "adopted_step": 0,
+      "adopted_label": "",
+      "adopted_nu": 0,
+      "matches_accepted": false,
+      "note": ""
+    }
+  },
+  "replay_ablation": {
+    "status": "matches_reference_replay",
+    "reference_candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+    "reference_canonical_hash": "blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+    "rho_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "objective_bar_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "overshoot_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "nu_delta": 0,
+    "clause_kappa_delta": 0,
+    "note": "matches reference replay baseline"
+  },
+  "narrative_events": [
+    {
+      "step_index": 9,
+      "ordinal": 1,
+      "kind": "step_open",
+      "message": "opened demo step 9 with bar 1768/441 and clause band 4..4",
+      "detail": "mode=realistic_shadow total=32.0s discovery=22.4s scout=2.2s breadth=20.1s proof_close_reserve=9.6s baseline=32.0s",
+      "progress": {
+        "elapsed_millis": 0,
+        "generated_surface": 0,
+        "exact_screened_surface": 0,
+        "full_telescopes_evaluated": 0
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 2,
+      "kind": "phase_change",
+      "phase": "scout",
+      "message": "entered scout with 2.2s reserved for throughput sampling",
+      "detail": "total=32.0s discovery=22.4s scout=2.2s breadth=20.1s proof_close_reserve=9.6s baseline=32.0s",
+      "progress": {
+        "elapsed_millis": 0,
+        "generated_surface": 0,
+        "exact_screened_surface": 0,
+        "full_telescopes_evaluated": 0
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 3,
+      "kind": "budget_pulse",
+      "phase": "scout",
+      "message": "scout baselining started",
+      "detail": "total=32.0s discovery=22.4s scout=2.2s breadth=20.1s proof_close_reserve=9.6s baseline=32.0s",
+      "progress": {
+        "elapsed_millis": 0,
+        "generated_surface": 0,
+        "exact_screened_surface": 0,
+        "full_telescopes_evaluated": 0
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 4,
+      "kind": "budget_pulse",
+      "phase": "scout",
+      "message": "scout sample captured throughput on this machine",
+      "detail": "generated_per_sec=8000 admissibility_per_sec=3000 exact_bound_per_sec=3333 full_eval_per_sec=0 generated=24 admissibility_checks=9 exact_bound_checks=10 full_evals=0",
+      "progress": {
+        "elapsed_millis": 3,
+        "generated_surface": 24,
+        "exact_screened_surface": 18,
+        "full_telescopes_evaluated": 0
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 5,
+      "kind": "phase_change",
+      "phase": "materialize",
+      "message": "entered materialize to reopen the retained exact surface",
+      "detail": "retained_prefix_groups=1 generated=24 exact_screened=8 full_evals=0 materialize_full_evals=0 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=none proof_close_overrun_reason=none proof_close_reserve=9.6s proof_close_elapsed=0ms proof_close_remaining=9.6s proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=0%",
+      "progress": {
+        "elapsed_millis": 4,
+        "generated_surface": 24,
+        "exact_screened_surface": 8,
+        "full_telescopes_evaluated": 0
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 6,
+      "kind": "budget_pulse",
+      "phase": "materialize",
+      "message": "materializing retained prefixes under exact screening",
+      "detail": "retained_prefix_groups=1 generated=24 exact_screened=8 full_evals=0 materialize_full_evals=0 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=none proof_close_overrun_reason=none proof_close_reserve=9.6s proof_close_elapsed=0ms proof_close_remaining=9.6s proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=0%",
+      "progress": {
+        "elapsed_millis": 4,
+        "generated_surface": 24,
+        "exact_screened_surface": 8,
+        "full_telescopes_evaluated": 0
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 7,
+      "kind": "phase_change",
+      "phase": "proof_close",
+      "message": "entered proof_close to certify the remaining exact surface",
+      "detail": "remaining_retained_prefix_groups=0 generated=24 exact_screened=9 full_evals=1 materialize_full_evals=1 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep proof_close_overrun_reason=none proof_close_reserve=9.6s proof_close_elapsed=0ms proof_close_remaining=9.6s proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=100%",
+      "progress": {
+        "elapsed_millis": 4,
+        "generated_surface": 24,
+        "exact_screened_surface": 9,
+        "full_telescopes_evaluated": 1
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 8,
+      "kind": "budget_pulse",
+      "phase": "proof_close",
+      "message": "proof-close is certifying the incumbent under exact comparison",
+      "detail": "remaining_retained_prefix_groups=0 generated=24 exact_screened=9 full_evals=1 materialize_full_evals=1 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep proof_close_overrun_reason=none proof_close_reserve=9.6s proof_close_elapsed=0ms proof_close_remaining=9.6s proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=100%",
+      "progress": {
+        "elapsed_millis": 4,
+        "generated_surface": 24,
+        "exact_screened_surface": 9,
+        "full_telescopes_evaluated": 1
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 9,
+      "kind": "phase_change",
+      "phase": "seal",
+      "message": "entered seal with incumbent blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491 ready for deterministic acceptance",
+      "detail": "bar_clearers=1 near_misses=0 generated=24 exact_screened=9 full_evals=1",
+      "progress": {
+        "elapsed_millis": 4,
+        "generated_surface": 24,
+        "exact_screened_surface": 9,
+        "full_telescopes_evaluated": 1
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 10,
+      "kind": "budget_pulse",
+      "phase": "seal",
+      "message": "seal fixed overshoot 425/1764 for candidate blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+      "detail": "bar_clearers=1 near_misses=0 generated=24 exact_screened=9 full_evals=1",
+      "progress": {
+        "elapsed_millis": 4,
+        "generated_surface": 24,
+        "exact_screened_surface": 9,
+        "full_telescopes_evaluated": 1
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 11,
+      "kind": "surface_summary",
+      "message": "generated 24 structural candidates; 9 were well formed and 8 were rejected by admissibility",
+      "detail": "malformed=0 full_evaluated=1 canonical=1 semantically_minimal=1",
+      "progress": {
+        "elapsed_millis": 4,
+        "generated_surface": 24,
+        "exact_screened_surface": 9,
+        "full_telescopes_evaluated": 1
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 12,
+      "kind": "prefix_summary",
+      "message": "prefix frontier created=15 explored=4 merged=0 exact_pruned=8 heuristic_dropped=0",
+      "detail": "hot_states=1 cold_states=0 frontier_window=1",
+      "progress": {
+        "elapsed_millis": 4,
+        "generated_surface": 24,
+        "exact_screened_surface": 9,
+        "full_telescopes_evaluated": 1
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 13,
+      "kind": "memo_summary",
+      "message": "memo path hits: legality=131 active_window=53 terminal_completion=3 partial_bounds=7",
+      "detail": "connectivity_shortcuts=81 clause_family_prunes=0 terminal_rank_prunes=0 terminal_prefix_bar_prunes=0",
+      "progress": {
+        "elapsed_millis": 4,
+        "generated_surface": 24,
+        "exact_screened_surface": 9,
+        "full_telescopes_evaluated": 1
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 14,
+      "kind": "frontier_summary",
+      "message": "retained 1 candidates with frontier hot=1 cold=0 dropped=0",
+      "detail": "pressure_state=green pressure_action=none resident_cold=0 spill_backed=0",
+      "progress": {
+        "elapsed_millis": 4,
+        "generated_surface": 24,
+        "exact_screened_surface": 9,
+        "full_telescopes_evaluated": 1
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 15,
+      "kind": "acceptance_summary",
+      "phase": "seal",
+      "message": "accepted blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491 with overshoot 425/1764 (nu=17 kappa=4)",
+      "detail": "bar_clearers=1 near_misses=0 candidate_hash=blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491 canonical_hash=blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+      "progress": {
+        "elapsed_millis": 4,
+        "generated_surface": 24,
+        "exact_screened_surface": 9,
+        "full_telescopes_evaluated": 1
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 16,
+      "kind": "step_complete",
+      "phase": "seal",
+      "message": "completed step 9 in 4 ms",
+      "detail": "discovery_ms=3 frontier_plan_ms=0 selection_ms=0",
+      "progress": {
+        "elapsed_millis": 4,
+        "generated_surface": 24,
+        "exact_screened_surface": 9,
+        "full_telescopes_evaluated": 1
+      }
+    }
+  ]
+}

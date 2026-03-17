@@ -1,0 +1,15 @@
+run codex-realistic-midstep-baseline
+completed_step: 15
+search_profile: realistic_frontier_shadow
+latest: step 15 (DCT)
+nu: 103
+kappa: 8
+charged_kappa: 8
+rho: 103/8
+bar: 19520/2639
+bar_distance: +115657/21112
+provenance: atomic_bootstrap_search
+run_provenance: atomic_bootstrap_search x15
+replay_ablation: matches_reference_replay x15
+minimal_overshoot: 115657/21112
+late_step_claim: executable_canon step 15 DCT nu=103 matches_current_acceptance=true (Historical late-step alternatives remain provenance only.)

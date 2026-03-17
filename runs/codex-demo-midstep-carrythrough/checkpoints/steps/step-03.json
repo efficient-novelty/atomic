@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "run_id": "codex-demo-midstep-carrythrough",
+  "step_index": 3,
+  "accepted_utc": "2026-03-17T19:20:20.5415465Z",
+  "compat": {
+    "ast_schema_hash": "blake3:fc9be9ae20ab7277941ba7c98fcb9b7b0a78f699e595d3268656144a3f0b21bf",
+    "type_rules_hash": "blake3:39c261a0e90bde0cfa2affee542db9a2519e4b8cd95c008e3fa0ed59cd38ac2e",
+    "evaluator_hash": "blake3:dc3ad0d7c757a4b498bd4cfc56446e05af84df38049161883ab8592b18df4792",
+    "search_semantics_hash": "blake3:f3572c8c8c9e01202de7df3840fda6eb4458c2f10104b509a36610d2f6dc80ea"
+  },
+  "objective": {
+    "bar": {
+      "num": 4,
+      "den": 3
+    },
+    "exact_clause_kappa": 1,
+    "bit_band": {
+      "min": 12,
+      "max": 12
+    }
+  },
+  "accepted": {
+    "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+    "canonical_hash": "blake3:2e85e04d43f4ef6ae6c9b00f4460ba7b8507b8c371743c97b7262ca014fd2987",
+    "bit_kappa": 12,
+    "clause_kappa": 1,
+    "nu": 2,
+    "rho": {
+      "num": 2,
+      "den": 1
+    },
+    "overshoot": {
+      "num": 2,
+      "den": 3
+    },
+    "shape_fingerprint": "0x9b14b9e375665a72",
+    "support_fingerprint": "0xcb4b3ffc26cb41a0"
+  },
+  "library_snapshot": {
+    "window_depth": 2,
+    "entries": [
+      {
+        "step": 1,
+        "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": "Univ"
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "step": 2,
+        "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "near_misses": [],
+  "stats": {
+    "frontier_scanned": 1,
+    "typed_prefixes": 1,
+    "sound_prunes": 0,
+    "heuristic_drops": 0
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "run_id": "codex-demo-midstep-carrythrough",
+  "status": "completed",
+  "created_utc": "2026-03-17T19:20:20.5415465Z",
+  "updated_utc": "2026-03-17T19:20:20.5415465Z",
+  "workspace_version": "0.1.0",
+  "compat": {
+    "ast_schema_hash": "blake3:fc9be9ae20ab7277941ba7c98fcb9b7b0a78f699e595d3268656144a3f0b21bf",
+    "type_rules_hash": "blake3:39c261a0e90bde0cfa2affee542db9a2519e4b8cd95c008e3fa0ed59cd38ac2e",
+    "evaluator_hash": "blake3:dc3ad0d7c757a4b498bd4cfc56446e05af84df38049161883ab8592b18df4792",
+    "search_semantics_hash": "blake3:f3572c8c8c9e01202de7df3840fda6eb4458c2f10104b509a36610d2f6dc80ea",
+    "store_schema_hash": "blake3:26406715da9464e22b5d786dfef50f4e93eeb8a42a52e1ad8feeb62248b82143"
+  },
+  "host": {
+    "os": "windows",
+    "arch": "x86_64",
+    "logical_cpus": 12,
+    "ram_bytes": 0
+  },
+  "config": {
+    "path": "config.toml",
+    "sha256": "854ea5fa09049a71b317eeeddab61f839382774ac9a441c1b3eb21d70f2095cf"
+  },
+  "position": {
+    "completed_step": 15,
+    "active_step": 16,
+    "active_band": 8,
+    "frontier_epoch": 12
+  },
+  "artifacts": {
+    "telemetry": "telemetry.ndjson",
+    "reports_dir": "reports",
+    "checkpoints_dir": "checkpoints"
+  }
+}

@@ -302,6 +302,14 @@ On the demo-lane side:
   axiomatic variants, and unit coverage now shows those raw demo catalogs
   exceed realistic shadow on each step from `5` to `9` while step acceptance
   through step `9` still matches realistic shadow
+- fresh paired `runs/codex-realistic-midstep-baseline` and
+  `runs/codex-demo-midstep-carrythrough` artifacts now show that the widened
+  step-`5` to `9` surface also carries through the live prefix engine:
+  generated counts move from realistic `3/3/3/5/4` to demo
+  `27/15/15/45/24`, exact-screened counts move from `1/1/1/1/1` to
+  `1/3/2/13/9`, `full_telescopes_evaluated` stays `1` on every step, accepted
+  parity still holds through step `15`, and stored narrative/event artifacts
+  stay complete (`15/15`)
 - fresh `runs/codex-demo-early-catalog` artifacts now show step-`1`
   `generated_raw_prefixes = 1296` and step timings `95/1/1/25 ms` through
   step `4` (`122 ms` total), so the shared early-window story is now backed by
@@ -311,16 +319,14 @@ On the demo-lane side:
   `18/82/83/178/1521/707`, so the lane is no longer just more honest about
   breadth; it is materially broader live search while still missing several of
   the intended late generated and exact floors
-- the current demo gap is not "make the lane look broader"; it is carrying the
-  new step-`5` to `9` raw package-catalog widening through live prefix
-  discovery, where the current probe still reports the same
-  `generated_raw_prefixes` counts as realistic shadow (`3/3/3/5/4`), then
-  meeting the remaining surfaced early and late breadth floors honestly, with
-  the shared early-window evidence now restored and the remaining early gap
-  narrowed to pushing step `1` from `1296` toward `2144`, then pushing the
-  remaining late generated and exact floors from the newly broadened live
-  surface, especially on step `13` and step `15`, while still finishing the
-  remaining mandatory live-event closeout
+- the current demo gap is not "make the lane look broader"; it is meeting the
+  remaining surfaced early and late breadth floors honestly from the now-
+  broadened live surface, with the shared early-window evidence already
+  restored and the remaining early gap narrowed to pushing step `1` from
+  `1296` toward `2144`, then pushing the remaining late generated and exact
+  floors, especially on step `13` and step `15`, while keeping the newly
+  stored step-`5` to `9` live carry-through and mandatory live-event coverage
+  from regressing
 
 Start with the current architecture doc before diving into donor material:
 
@@ -507,11 +513,12 @@ Focus on:
   `breadth_harvest_exit_reason`, `proof_close_entry_reason`, and
   `proof_close_overrun_reason` plus the new proof-close reserve and closure
   fields as current stored truth, while remembering that the next gap is
-  broader real widening plus the remaining mandatory live-event closeout,
-  building on the landed proof-close ordering retune, the landed adaptive
-  spill/reserve feedback, the landed repeated discovery/proof-close reserve
-  retunes, and the landed reserve-pressure plus closure-pressure materialize
-  handoffs, rather than "add counters for the first time"
+  broader real widening plus the remaining floor-attainment and exact-bound
+  work, building on the landed proof-close ordering retune, the landed
+  adaptive spill/reserve feedback, the landed repeated discovery/proof-close
+  reserve retunes, the landed reserve-pressure plus closure-pressure
+  materialize handoffs, and the now-landed mandatory live-event coverage,
+  rather than "add counters for the first time"
 
 ### If you are working on reporting or evidence
 
@@ -603,6 +610,6 @@ Reject designs that:
 - Other big unfinished areas remain broader anti-junk frontier design,
   storage/runtime hardening beyond the current bounded resume lanes, the memory
   governor, the stronger Agda contract, and the demo lane's still-missing
-  honest floor hits plus remaining mandatory live-event closeout.
+  honest floor hits plus remaining late exact-bound work.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) for current
   behavior, then use the theory and donor references only as needed.

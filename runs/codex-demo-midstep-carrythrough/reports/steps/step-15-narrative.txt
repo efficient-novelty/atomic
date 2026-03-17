@@ -1,0 +1,110 @@
+step 15 demo narrative
+label        DCT
+profile      10m
+accepted     blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4 nu=103 kappa=8 overshoot=115657/21112
+time         [#...............] 543ms / 1m30s (within limit)
+generated    [####............] 1007 / 5000 generated (miss)
+exact_screen [#######.........] 707 / 1800 screened (miss)
+full_eval    [#...............] 1 / 120 evaluated (within limit)
+closure      [################] 99% frontier_total=707 certified_nonwinning=706
+phase_eval   materialize=1 proof_close=0 overrun=0 cap=120 cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep overrun_reason=none
+proof_close  reserve=2m29s elapsed=0ms remaining=2m29s reserve_overrun=0ms exhausted=false groups_closed=0/0 groups_remaining=0 closure=100%
+timing       discovery=543ms frontier_plan=0ms selection=0ms
+funnel       enumerated=2 well_formed=2 malformed=0 admissibility_rejected=0 scored=1 canonical=1 semantically_minimal=1
+demo_funnel  raw=1007 canonical_prefixes=989 hard_admissible=2 exact_pruned=706 heuristic_dropped=0 bar_clearers=1 semantically_minimal_clearers=1 winner_overshoot=115657/21112
+exact_reasons partial_prefix_bar=706 terminal_completion=0 incumbent_dominance=1 legality_connectivity=0
+prune_totals quotient_dedupe=0 sound_minimality=707 heuristic_shaping=0
+prefixes     created=989 explored=277 merged=0 exact_pruned=706 heuristic_dropped=0 hot=1 cold=0
+memo         legality_hits=14423 active_window_hits=5622 terminal_completion_hits=2 partial_bound_hits=733 terminal_rank_prunes=1
+demo_buckets k8:temporal:library_backed:small_cluster gen=18 adm=2 screen=2 pruned=1 scored=0 best=none | k8:temporal:library_backed:single gen=0 adm=0 screen=0 pruned=0 scored=1 best=115657/21112
+
+events
+  [step_open] opened demo step 15 with bar 19520/2639 and clause band 8..8
+    mode=realistic_shadow total=9m58s discovery=7m28s scout=44.8s breadth=6m43s proof_close_reserve=2m29s baseline=1m30s spill=8m28s generated_floor=5000 exact_screened_floor=1800 full_eval_soft_cap=120
+  [phase_change scout] entered scout with 44.8s reserved for throughput sampling
+    total=9m58s discovery=7m28s scout=44.8s breadth=6m43s proof_close_reserve=2m29s baseline=1m30s spill=8m28s generated_floor=5000 exact_screened_floor=1800 full_eval_soft_cap=120
+  [budget_pulse scout] scout baselining started
+    total=9m58s discovery=7m28s scout=44.8s breadth=6m43s proof_close_reserve=2m29s baseline=1m30s spill=8m28s generated_floor=5000 exact_screened_floor=1800 full_eval_soft_cap=120
+  [budget_pulse scout] scout sample captured throughput on this machine
+    generated_per_sec=1871 admissibility_per_sec=3 exact_bound_per_sec=1327 full_eval_per_sec=0 generated=1007 admissibility_checks=2 exact_bound_checks=714 full_evals=0
+  [phase_change materialize] entered materialize to reopen the retained exact surface
+    retained_prefix_groups=1 generated=1007/5000(miss) exact_screened=706/1800(miss) full_evals=0/120(within_limit) materialize_full_evals=0 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=120 cap_triggered=false breadth_exit=none proof_close_reason=none proof_close_overrun_reason=none proof_close_reserve=2m29s proof_close_elapsed=0ms proof_close_remaining=2m29s proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=0%
+  [budget_pulse materialize] materializing retained prefixes under exact screening
+    retained_prefix_groups=1 generated=1007/5000(miss) exact_screened=706/1800(miss) full_evals=0/120(within_limit) materialize_full_evals=0 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=120 cap_triggered=false breadth_exit=none proof_close_reason=none proof_close_overrun_reason=none proof_close_reserve=2m29s proof_close_elapsed=0ms proof_close_remaining=2m29s proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=0%
+  [phase_change proof_close] entered proof_close to certify the remaining exact surface
+    remaining_retained_prefix_groups=0 generated=1007/5000(miss) exact_screened=707/1800(miss) full_evals=1/120(within_limit) materialize_full_evals=1 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=120 cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep proof_close_overrun_reason=none proof_close_reserve=2m29s proof_close_elapsed=0ms proof_close_remaining=2m29s proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=100%
+  [budget_pulse proof_close] proof-close is certifying the incumbent under exact comparison
+    remaining_retained_prefix_groups=0 generated=1007/5000(miss) exact_screened=707/1800(miss) full_evals=1/120(within_limit) materialize_full_evals=1 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=120 cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep proof_close_overrun_reason=none proof_close_reserve=2m29s proof_close_elapsed=0ms proof_close_remaining=2m29s proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=100%
+  [phase_change seal] entered seal with incumbent blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4 ready for deterministic acceptance
+    bar_clearers=1 near_misses=0 generated=1007/5000(miss) exact_screened=707/1800(miss) full_evals=1/120(within_limit)
+  [budget_pulse seal] seal fixed overshoot 115657/21112 for candidate blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4
+    bar_clearers=1 near_misses=0 generated=1007/5000(miss) exact_screened=707/1800(miss) full_evals=1/120(within_limit)
+  [surface_summary] generated 1007 structural candidates; 2 were well formed and 0 were rejected by admissibility
+    malformed=0 full_evaluated=1 canonical=1 semantically_minimal=1
+  [prefix_summary] prefix frontier created=989 explored=277 merged=0 exact_pruned=706 heuristic_dropped=0
+    hot_states=1 cold_states=0 frontier_window=1
+  [memo_summary] memo path hits: legality=14423 active_window=5622 terminal_completion=2 partial_bounds=733
+    connectivity_shortcuts=6 clause_family_prunes=0 terminal_rank_prunes=1 terminal_prefix_bar_prunes=0
+  [frontier_summary] retained 1 candidates with frontier hot=1 cold=0 dropped=0
+    pressure_state=green pressure_action=none resident_cold=0 spill_backed=0
+  [acceptance_summary seal] accepted blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4 with overshoot 115657/21112 (nu=103 kappa=8)
+    bar_clearers=1 near_misses=0 candidate_hash=blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4 canonical_hash=blake3:6f4b65c28060999af4bac3fa46a9da3bd8e1bbdbc99f41ecc94291012a0573a4
+  [step_complete seal] completed step 15 in 543 ms
+    discovery_ms=543 frontier_plan_ms=0 selection_ms=0
+
+retained candidates
+  accepted blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4 rho=103/8 distance=115657/21112 frontier=hot headline=Synthesis candidate with 8 clauses; reuses Step10 (Cohesion); contains temporal structure.
+
+prunes
+  totals quotient_dedupe=0 sound_minimality=707 heuristic_shaping=0
+  sampled: none
+
+accepted trace
+  source=structural-ast
+  nu_g=2
+  nu_h=15
+  nu_c=86
+  bonus_distributive=38
+  bonus_universe_poly=42
+  bonus_infinitesimal_shift=15
+  nu_total=103
+  node_trace_count=39
+  node=entry1|ctor=Next
+  node=entry1/0|ctor=Var
+  node=entry2|ctor=Eventually
+  node=entry2/0|ctor=Var
+  node=entry3|ctor=Pi
+  node=entry3/0|ctor=Next
+  node=entry3/0/0|ctor=Var
+  node=entry3/1|ctor=Eventually
+  node=entry3/1/0|ctor=Var
+  node=entry4|ctor=Lam
+  node=entry4/0|ctor=App
+  node=entry4/0/0|ctor=Lib
+  node=entry4/0/1|ctor=Next
+  node=entry4/0/1/0|ctor=Var
+  node=entry5|ctor=Pi
+  node=entry5/0|ctor=Flat
+  node=entry5/0/0|ctor=Next
+  node=entry5/0/0/0|ctor=Var
+  node=entry5/1|ctor=Next
+  node=entry5/1/0|ctor=Flat
+  node=entry5/1/0/0|ctor=Var
+  node=entry6|ctor=Pi
+  node=entry6/0|ctor=Sharp
+  node=entry6/0/0|ctor=Eventually
+  node=entry6/0/0/0|ctor=Var
+  node=entry6/1|ctor=Eventually
+  node=entry6/1/0|ctor=Sharp
+  node=entry6/1/0/0|ctor=Var
+  node=entry7|ctor=Lam
+  node=entry7/0|ctor=App
+  node=entry7/0/0|ctor=Eventually
+  node=entry7/0/0/0|ctor=Var
+  node=entry7/0/1|ctor=Var
+  node=entry8|ctor=Pi
+  node=entry8/0|ctor=Next
+  node=entry8/0/0|ctor=Next
+  node=entry8/0/0/0|ctor=Var
+  node=entry8/1|ctor=Next
+  node=entry8/1/0|ctor=Var

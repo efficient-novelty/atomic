@@ -1,6 +1,6 @@
 # Demo Lane Plan
 
-Last updated: 2026-03-16
+Last updated: 2026-03-17
 
 This plan now covers only the remaining work for `demo_breadth_shadow`.
 
@@ -49,39 +49,24 @@ parity.
 - validate the early-window behavior from stored run evidence rather than from
   config alone
 
-### 2. Demo-Specific Structural Scheduling
+### 2. Late Search-Surface Widening
 
-- add a deterministic bucket key and per-bucket stats
-- prioritize exact survivability, obligation closure, bridge/completion
-  potential, underexplored buckets, and low redundancy
-- keep all heuristics structural and runtime-local so they influence ordering
-  only, never acceptance
+- build on the now-stored step-`5` to `9` live carry-through rather than
+  re-opening raw-catalog-only widening
+- keep pushing steps `10` to `12` toward their configured generated and
+  exact-screened floors
+- keep pushing steps `13` to `15` toward their configured generated and
+  exact-screened floors, especially step `13` and step `15`
+- preserve accepted parity, moderate `full_telescopes_evaluated`, the landed
+  bucket scheduler, and the landed closure-aware proof-close ordering while
+  widening further
 
-### 3. Real Search-Surface Widening
+### 3. Exact-Bound Tightening
 
-- steps `5` to `9`: widen `kappa`, support-form, and bridge-head variety while
-  keeping near-exhaustive behavior where cheap
-- steps `10` to `12`: widen family unions, reference patterns, nested `Pi` and
-  `Sigma`, bridge heads, and reanchor variants
-- steps `13` to `15`: widen operator, Hilbert, and temporal mixtures, mixed
-  shells, historical reanchors, clause unions, and positional filters
 - strengthen exact prefix bounds so widening increases honest search mass
   without exploding full terminal work
-
-### 4. Closure-Aware Replanning
-
-- build on the landed scout and `BreadthHarvest` reserve retunes
-- let live closure progress reshape the `Materialize` versus `ProofClose`
-  split, not only retained-group ordering and handoff timing
-- keep reserve usage, closure progress, and replanning reasons explicit in
-  stored artifacts
-
-### 5. Reporting Closeout
-
-- label prune classes as sound, quotient/dedupe, or heuristic shaping
-- persist explicit exact-screen reason codes
-- keep `--narrative` output inside the intended line budgets
-- finish the remaining mandatory live-event and pulse-rate-limiting story
+- keep exact-screen reasons, prune classes, narrative artifacts, and mandatory
+  live-event coverage stable while the late bounds move
 
 ## Primary Touch Points
 

@@ -33,7 +33,7 @@ evidence, but the explicit `2144` target is still open.
 
 ## 3. Real Search Widening
 
-- [ ] Widen steps `5` to `9` with more `kappa`, support-form, and bridge-head
+- [x] Widen steps `5` to `9` with more `kappa`, support-form, and bridge-head
       variety.
 - [x] Widen steps `10` to `12` with more family unions, reference patterns,
       nested `Pi` and `Sigma`, bridge heads, and reanchor variants.
@@ -43,24 +43,20 @@ evidence, but the explicit `2144` target is still open.
 - [ ] Strengthen exact prefix bounds so widening does not explode full
       terminal work.
 
-Latest stored evidence: fresh `runs/codex-demo-family-surface` artifacts keep
-accepted parity through step `15`, preserve the demo late-family surface
-through the online prefix-family and active-window filters, and move late
-generated counts to `36/132/147/291/2292/1007` plus exact-screened counts to
-`18/82/83/178/1521/707` on steps `10` to `15`. That finally turns the landed
-step-`13` to `15` widening into stored live breadth instead of extra
-active-window filter pressure, although the configured late floors are still
-not yet hit consistently.
-
-Latest code evidence for the still-open step-`5` to `9` item: `pen-search`
-now widens the raw demo clause catalogs on steps `5` to `9` with demo-only
-initial-hit, truncation-hit, higher-hit, sphere-lift, and axiomatic variants,
-and new unit coverage shows those raw surfaces exceed realistic shadow on
-every step from `5` to `9` while step acceptance through step `9` still
-matches realistic shadow. The remaining gap is live evidence: the current
-engine probe still reports identical `generated_raw_prefixes` counts of
-`3/3/3/5/4` on steps `5` to `9`, so fresh stored artifacts would not yet close
-this item.
+Latest stored evidence: fresh paired
+`runs/codex-realistic-midstep-baseline` and
+`runs/codex-demo-midstep-carrythrough` artifacts keep accepted parity through
+step `15`, keep demo narrative artifacts complete (`text=15/15`, `events=15/15`),
+and finally turn the landed step-`5` to `9` widening into stored live breadth:
+generated raw counts move from realistic `3/3/3/5/4` to demo
+`27/15/15/45/24`, exact-screened counts move from `1/1/1/1/1` to
+`1/3/2/13/9`, and `full_telescopes_evaluated` stays `1` on every step from
+`5` to `9`. Fresh `runs/codex-demo-family-surface` late-step artifacts remain
+the current `10m` floor reference, preserving accepted parity through step
+`15` while moving generated counts to `36/132/147/291/2292/1007` and
+exact-screened counts to `18/82/83/178/1521/707` on steps `10` to `15`. The
+remaining widening gap is no longer mid-step carry-through; it is the still-
+open late generated and exact-screened floors plus the exact-prefix-bound work.
 
 ## 4. Floor Attainment
 
@@ -112,18 +108,24 @@ counters when needed.
 - [x] Keep narrative output inside the intended per-step line budgets.
 - [x] Rate-limit repeated live narrative budget pulses using the configured
       interval.
-- [ ] Add the remaining mandatory live events.
+- [x] Add the remaining mandatory live events.
 - [x] Report missing narrative artifacts explicitly in
       `scripts/compare_runs.py`.
 - [x] State the honesty boundary explicitly in docs:
       no fake discoveries, no fake breadth, no silent replay fallback, and no
       claims beyond comparison-backed evidence.
 
-Latest code evidence: `pen-cli` now clips demo narrative sections to
-`demo.narrative.max_lines_per_step` with explicit omission markers, and live
-demo budget-retune pulses now obey `demo.narrative.pulse_interval_millis`
-without hiding mandatory phase/milestone pulses. Fresh stored run artifacts are
-still needed for the remaining mandatory-event closeout.
+Latest code and stored evidence: `pen-cli` still clips demo narrative sections
+to `demo.narrative.max_lines_per_step` with explicit omission markers, and live
+demo budget-retune pulses still obey `demo.narrative.pulse_interval_millis`.
+`pen-search` now also has regression coverage that forces a `60s` pulse
+interval and still emits the mandatory `proof_close` `100%` certification
+milestone and final seal overshoot pulses under a step-`15` soft-cap handoff,
+while earlier demo tests already keep phase-entry, floor-hit, reserve-
+protection, and reserve-exhaustion events explicit. Fresh
+`runs/codex-demo-midstep-carrythrough` artifacts also keep per-step narrative
+and event artifacts complete across all `15` steps (`text=15/15`,
+`events=15/15`).
 
 ## 7. Signoff Gates
 

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "run_id": "codex-realistic-midstep-baseline",
+  "step_index": 13,
+  "band_index": 7,
+  "frontier_epoch": 10,
+  "base_step_checkpoint": "../../../steps/step-13.json",
+  "resume_compatible": {
+    "ast_schema_hash": "blake3:fc9be9ae20ab7277941ba7c98fcb9b7b0a78f699e595d3268656144a3f0b21bf",
+    "type_rules_hash": "blake3:39c261a0e90bde0cfa2affee542db9a2519e4b8cd95c008e3fa0ed59cd38ac2e",
+    "evaluator_hash": "blake3:dc3ad0d7c757a4b498bd4cfc56446e05af84df38049161883ab8592b18df4792",
+    "search_semantics_hash": "blake3:f3572c8c8c9e01202de7df3840fda6eb4458c2f10104b509a36610d2f6dc80ea",
+    "record_layout_id": "frontier_state_v1"
+  },
+  "counts": {
+    "prefixes_created": 7,
+    "prefix_states_explored": 1,
+    "prefix_states_merged_by_signature": 0,
+    "prefix_states_exact_pruned": 0,
+    "prefix_states_heuristic_dropped": 0,
+    "incremental_legality_cache_hits": 13,
+    "incremental_connectivity_shortcuts": 2,
+    "incremental_connectivity_fallbacks": 0,
+    "incremental_connectivity_prunes": 0,
+    "incremental_clause_family_filter_hits": 6,
+    "incremental_clause_family_prunes": 0,
+    "incremental_active_window_clause_filter_hits": 12,
+    "incremental_active_window_clause_filter_prunes": 0,
+    "incremental_terminal_clause_filter_hits": 2,
+    "incremental_terminal_clause_filter_prunes": 0,
+    "incremental_trivial_derivability_hits": 2,
+    "incremental_trivial_derivability_prunes": 0,
+    "incremental_terminal_admissibility_hits": 2,
+    "incremental_terminal_admissibility_rejections": 0,
+    "incremental_terminal_prefix_completion_hits": 1,
+    "incremental_terminal_prefix_rank_hits": 1,
+    "incremental_terminal_rank_prunes": 1,
+    "incremental_partial_prefix_bound_hits": 0,
+    "incremental_partial_prefix_bound_checks": 1,
+    "incremental_partial_prefix_bound_prunes": 0,
+    "incremental_terminal_prefix_bar_prunes": 0,
+    "hot_states": 1,
+    "cold_states": 0,
+    "dedupe_keys": 1
+  },
+  "files": {
+    "hot_shards": [
+      "hot-000.bin"
+    ],
+    "cold_shards": [],
+    "dedupe_segments": [
+      "dedupe-000.txt"
+    ],
+    "cache_blob": "frontier-runtime.json"
+  },
+  "memory_snapshot": {
+    "rss_bytes": 1476395797,
+    "hot_frontier_bytes": 64,
+    "interner_bytes": 0,
+    "dedupe_bytes": 72,
+    "cache_bytes": 653
+  },
+  "scheduler": {
+    "worker_count": 10,
+    "priority_heads": [
+      1882098294
+    ],
+    "spill_generation": 0
+  }
+}

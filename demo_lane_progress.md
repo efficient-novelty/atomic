@@ -24,6 +24,14 @@ retuning during `BreadthHarvest`.
   axiomatic variants, and exhaustive `pen-search` coverage now shows those raw
   demo catalogs exceed realistic-shadow enumeration on every step from `5` to
   `9` while step acceptance through step `9` still matches realistic shadow.
+- Fresh stored evidence in paired
+  `runs/codex-realistic-midstep-baseline` and
+  `runs/codex-demo-midstep-carrythrough` artifacts now shows that widening
+  carrying through the live prefix engine as well: generated raw counts move
+  from realistic `3/3/3/5/4` to demo `27/15/15/45/24`, exact-screened counts
+  move from `1/1/1/1/1` to `1/3/2/13/9`, `full_telescopes_evaluated` stays
+  `1` on every step from `5` to `9`, accepted parity still holds through step
+  `15`, and stored narrative/event artifacts stay complete (`15/15`).
 - The lane now reports its misses honestly instead of hiding them behind
   generic breadth counts or debug text.
 - Demo generated-surface reporting and live narrative progress now count raw
@@ -55,6 +63,10 @@ retuning during `BreadthHarvest`.
 - Repeated live scout and breadth-harvest budget-retune pulses now honor the
   configured `pulse_interval_millis` while mandatory phase-entry, milestone,
   reserve-exhaustion, and seal pulses still emit immediately.
+- New `pen-search` regression coverage now forces a `60s` pulse interval and
+  still observes the mandatory `proof_close` `100%` certification milestone
+  plus the final seal overshoot pulse under a step-`15` soft-cap handoff, so
+  the live-event closeout is now backed by tests rather than inference.
 - Demo materialize can now also hand off into `ProofClose` with the explicit
   `closure_pressure_handoff` reason once a live incumbent makes most pending
   retained exact surface prune-ready, and the same closure-pressure summary now
@@ -86,10 +98,11 @@ retuning during `BreadthHarvest`.
   `18`, `82`, `83`, `178`, `1521`, and `707`, every late step still keeps
   `full_telescopes_evaluated = 1`, and step `14` now hits the configured
   exact-screened floor (`1521 >= 1100`).
-- The main remaining problem is no longer "missing demo evidence." The main
-  problem is now carrying the new raw mid-step widening through live prefix
-  discovery and then pushing the remaining surfaced late floors from this much
-  stronger base while the mandatory live-event closeout is still unfinished.
+- The main remaining problems are now narrower: pushing step `1` from `1296`
+  toward the explicit `2144` floor, and pushing the remaining late generated
+  plus exact-screened floors from the already-broader honest live surface
+  without regressing the newly stored mid-step carry-through or mandatory
+  live-event coverage.
 
 ## What Still Blocks Signoff
 
@@ -104,17 +117,14 @@ retuning during `BreadthHarvest`.
   total, so the remaining early-breadth gap is now the step-`1` floor itself
   rather than missing shared-window evidence
 
-### 2. Real Widening Is Still Missing
+### 2. Late Floors Still Miss Signoff
 
-- steps `5` to `9` no longer reuse only the reference raw clause catalogs:
-  demo-only initial-hit, truncation-hit, higher-hit, sphere-lift, and
-  axiomatic variants now widen raw enumeration and still preserve realistic
-  acceptance through step `9`
-- the remaining mid-step gap is live carry-through rather than raw catalog
-  shape: the current code probe still reports the same
-  `generated_raw_prefixes` counts as realistic shadow on steps `5` to `9`
-  (`3/3/3/5/4`), so no fresh stored live mid-step breadth evidence has landed
-  yet
+- fresh paired `runs/codex-realistic-midstep-baseline` and
+  `runs/codex-demo-midstep-carrythrough` artifacts now close the former
+  mid-step carry-through gap: generated raw counts on steps `5` to `9` move
+  from realistic `3/3/3/5/4` to demo `27/15/15/45/24`, exact-screened counts
+  move from `1/1/1/1/1` to `1/3/2/13/9`, `full_telescopes_evaluated` stays `1`
+  on every step, and accepted parity still holds through step `15`
 - configured late-step generated and exact-screened floors are now stored and
   reported, but they are not yet being hit consistently
 - the latest stored `10m` run now raises generated raw surface to
@@ -130,24 +140,14 @@ retuning during `BreadthHarvest`.
 - the new closure-pressure handoff improves the within-step split, but it still
   needs the remaining widening and bound work to hit the last late floors
 
-### 3. Reporting Closeout Is Still Incomplete
-
-- `pen-cli` now supports `--narrative` for appending stored per-step demo
-  narrative output, including explicit time and closure bars
-- `scripts/compare_runs.py` now flags missing step narrative and event
-  artifacts explicitly for demo lanes
-- the remaining narrative/tooling gap is now the still-missing mandatory live
-  events rather than line-budget discipline or pulse-rate limiting
-
 ## Next Priorities
 
 1. Push the honest early breadth story from the current step-`1` `1296`
    toward `2144` without regressing the newly restored full candidate-list
    generation and shared early-window evidence on steps `1` to `4`.
-2. Carry the new step-`5` to `9` raw package-catalog widening through the live
-   prefix engine, then build on the landed demo-only step-`10` to `12`
-   widening plus the earlier late-family widening, the preserved demo
-   family-surface override, and the honest raw-surface counting to keep
-   pushing steps `10` to `15` toward the remaining generated and
+2. Build on the now-stored step-`5` to `9` live carry-through plus the landed
+   step-`10` to `15` widening to keep pushing the remaining generated and
    exact-screened floors, especially step `13` and step `15`.
-3. Finish the remaining mandatory live-event closeout.
+3. Strengthen the remaining exact-prefix-bound story so that further late-step
+   widening keeps `full_telescopes_evaluated` moderate while those floor
+   targets move upward.
