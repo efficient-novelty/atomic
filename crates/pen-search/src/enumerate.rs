@@ -855,7 +855,7 @@ fn demo_temporal_shell_clauses(position: usize, context: EnumerationContext) -> 
                 )))))),
             ),
             Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Flat(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Next(
                     Box::new(Expr::Var(1)),
                 )))))),
                 Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
@@ -878,6 +878,14 @@ fn demo_temporal_shell_clauses(position: usize, context: EnumerationContext) -> 
                 ))))),
                 Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
                     Expr::Var(1),
+                ))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    Expr::Var(1),
+                ))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
                 ))))),
             ),
             Expr::Pi(
@@ -3834,6 +3842,36 @@ mod tests {
     }
 
     #[test]
+    fn demo_breadth_shadow_step_thirteen_enumeration_exposes_more_surface_than_realistic_shadow() {
+        let library = library_until(12);
+        let admissibility =
+            strict_admissibility_for_mode(13, 2, &library, AdmissibilityMode::RealisticShadow);
+        let realistic_context = context_from_admissibility(&library, admissibility);
+        let mut demo_context = realistic_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let mut realistic_count = 0usize;
+        let mut demo_count = 0usize;
+        let mut contains_reference = false;
+
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let realistic = enumerate_telescopes(&library, realistic_context, clause_kappa);
+            realistic_count += realistic.len();
+
+            let demo = enumerate_telescopes(&library, demo_context, clause_kappa);
+            demo_count += demo.len();
+            contains_reference |= demo.contains(&Telescope::reference(13));
+        }
+
+        assert!(contains_reference);
+        assert!(
+            demo_count > realistic_count,
+            "expected demo breadth shadow step 13 enumeration to widen the realistic surface, got demo={} vs realistic={}",
+            demo_count,
+            realistic_count
+        );
+    }
+
+    #[test]
     fn step_thirteen_enumeration_contains_the_reference_operator_bundle() {
         let library = library_until(12);
         let admissibility = strict_admissibility(13, 2, &library);
@@ -3893,6 +3931,36 @@ mod tests {
     }
 
     #[test]
+    fn demo_breadth_shadow_step_fourteen_enumeration_exposes_more_surface_than_realistic_shadow() {
+        let library = library_until(13);
+        let admissibility =
+            strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::RealisticShadow);
+        let realistic_context = context_from_admissibility(&library, admissibility);
+        let mut demo_context = realistic_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let mut realistic_count = 0usize;
+        let mut demo_count = 0usize;
+        let mut contains_reference = false;
+
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let realistic = enumerate_telescopes(&library, realistic_context, clause_kappa);
+            realistic_count += realistic.len();
+
+            let demo = enumerate_telescopes(&library, demo_context, clause_kappa);
+            demo_count += demo.len();
+            contains_reference |= demo.contains(&Telescope::reference(14));
+        }
+
+        assert!(contains_reference);
+        assert!(
+            demo_count > realistic_count,
+            "expected demo breadth shadow step 14 enumeration to widen the realistic surface, got demo={} vs realistic={}",
+            demo_count,
+            realistic_count
+        );
+    }
+
+    #[test]
     fn step_fourteen_enumeration_contains_the_reference_hilbert_functional_shell() {
         let library = library_until(13);
         let admissibility = strict_admissibility(14, 2, &library);
@@ -3948,6 +4016,36 @@ mod tests {
             telescopes.len() > 1,
             "expected realistic shadow step 14 enumeration to expose competition, got {} telescope(s)",
             telescopes.len()
+        );
+    }
+
+    #[test]
+    fn demo_breadth_shadow_step_fifteen_enumeration_exposes_more_surface_than_realistic_shadow() {
+        let library = library_until(14);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::RealisticShadow);
+        let realistic_context = context_from_admissibility(&library, admissibility);
+        let mut demo_context = realistic_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let mut realistic_count = 0usize;
+        let mut demo_count = 0usize;
+        let mut contains_reference = false;
+
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let realistic = enumerate_telescopes(&library, realistic_context, clause_kappa);
+            realistic_count += realistic.len();
+
+            let demo = enumerate_telescopes(&library, demo_context, clause_kappa);
+            demo_count += demo.len();
+            contains_reference |= demo.contains(&Telescope::reference(15));
+        }
+
+        assert!(contains_reference);
+        assert!(
+            demo_count > realistic_count,
+            "expected demo breadth shadow step 15 enumeration to widen the realistic surface, got demo={} vs realistic={}",
+            demo_count,
+            realistic_count
         );
     }
 

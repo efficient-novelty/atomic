@@ -1,0 +1,64 @@
+step 02 demo narrative
+label        Unit
+profile      10m
+accepted     blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555 nu=1 kappa=1 overshoot=1/2
+time         [................] 0ms / 1m30s (within limit; shared early window across steps 1-4)
+generated    33 generated
+exact_screen 1 screened
+full_eval    1 evaluated
+closure      [................] 0% frontier_total=1 certified_nonwinning=0
+phase_eval   materialize=1 proof_close=0 overrun=0 cap=none cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep overrun_reason=none
+proof_close  reserve=0ms elapsed=0ms remaining=0ms reserve_overrun=0ms exhausted=false groups_closed=0/0 groups_remaining=0 closure=100%
+timing       discovery=0ms frontier_plan=0ms selection=0ms
+funnel       enumerated=33 well_formed=33 malformed=0 admissibility_rejected=32 scored=1 canonical=1 semantically_minimal=1
+demo_funnel  raw=33 canonical_prefixes=33 hard_admissible=1 exact_pruned=0 heuristic_dropped=0 bar_clearers=1 semantically_minimal_clearers=1 winner_overshoot=1/2
+
+events
+  [step_open] opened demo step 2 with bar 1/2 and clause band 1..1
+    mode=realistic_shadow total=1m29s discovery=1m29s scout=8.9s breadth=1m20s proof_close_reserve=0ms baseline=1m29s shared_early_remaining=1m29s
+  [phase_change scout] entered scout with 8.9s reserved for throughput sampling
+    total=1m29s discovery=1m29s scout=8.9s breadth=1m20s proof_close_reserve=0ms baseline=1m29s shared_early_remaining=1m29s
+  [budget_pulse scout] scout baselining started
+    total=1m29s discovery=1m29s scout=8.9s breadth=1m20s proof_close_reserve=0ms baseline=1m29s shared_early_remaining=1m29s
+  [budget_pulse scout] scout sample captured throughput on this machine
+    generated_per_sec=33 admissibility_per_sec=33 exact_bound_per_sec=0 full_eval_per_sec=1 generated=33 admissibility_checks=33 exact_bound_checks=0 full_evals=1
+  [phase_change materialize] entered materialize to reopen the retained exact surface
+    retained_prefix_groups=0 generated=33 exact_screened=1 full_evals=1 materialize_full_evals=0 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=none proof_close_overrun_reason=none proof_close_reserve=0ms proof_close_elapsed=0ms proof_close_remaining=0ms proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=0%
+  [budget_pulse materialize] materializing retained prefixes under exact screening
+    retained_prefix_groups=0 generated=33 exact_screened=1 full_evals=1 materialize_full_evals=0 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=none proof_close_overrun_reason=none proof_close_reserve=0ms proof_close_elapsed=0ms proof_close_remaining=0ms proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=0%
+  [phase_change proof_close] entered proof_close to certify the remaining exact surface
+    remaining_retained_prefix_groups=0 generated=33 exact_screened=1 full_evals=1 materialize_full_evals=1 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep proof_close_overrun_reason=none proof_close_reserve=0ms proof_close_elapsed=0ms proof_close_remaining=0ms proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=100%
+  [budget_pulse proof_close] proof-close is certifying the incumbent under exact comparison
+    remaining_retained_prefix_groups=0 generated=33 exact_screened=1 full_evals=1 materialize_full_evals=1 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=none cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep proof_close_overrun_reason=none proof_close_reserve=0ms proof_close_elapsed=0ms proof_close_remaining=0ms proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=100%
+  [phase_change seal] entered seal with incumbent blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555 ready for deterministic acceptance
+    bar_clearers=1 near_misses=0 generated=33 exact_screened=1 full_evals=1
+  [budget_pulse seal] seal fixed overshoot 1/2 for candidate blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555
+    bar_clearers=1 near_misses=0 generated=33 exact_screened=1 full_evals=1
+  [surface_summary] generated 33 structural candidates; 33 were well formed and 32 were rejected by admissibility
+    malformed=0 full_evaluated=1 canonical=1 semantically_minimal=1
+  [frontier_summary] retained 1 candidates with frontier hot=0 cold=0 dropped=0
+    pressure_state=green pressure_action=none resident_cold=0 spill_backed=0
+  [acceptance_summary seal] accepted blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555 with overshoot 1/2 (nu=1 kappa=1)
+    bar_clearers=1 near_misses=0 candidate_hash=blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555 canonical_hash=blake3:cd72c5935198d40c0ef48ae172c9ccba1ef9c90435494569121c8dccd3466476
+  [step_complete seal] completed step 2 in 0 ms
+    discovery_ms=0 frontier_plan_ms=0 selection_ms=0
+
+retained candidates
+  accepted blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555 rho=1/1 distance=1/2 frontier=hot headline=Foundation candidate with 1 clauses; uses only the current local scope.
+
+prunes
+  none
+
+accepted trace
+  source=structural-ast
+  nu_g=1
+  nu_h=0
+  nu_c=0
+  bonus_distributive=0
+  bonus_universe_poly=0
+  bonus_infinitesimal_shift=0
+  nu_total=1
+  node_trace_count=3
+  node=entry1|ctor=App
+  node=entry1/0|ctor=Univ
+  node=entry1/1|ctor=Var

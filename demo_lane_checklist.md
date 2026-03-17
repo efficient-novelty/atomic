@@ -45,8 +45,13 @@ Latest stored evidence: fresh `runs/codex-demo-midlate-widening` artifacts keep
 accepted parity through step `15` while the landed demo-only step-`10` to `12`
 surface widening plus the earlier operator/Hilbert/temporal widening move late
 generated counts to `9/15/15/11/12/14` and exact-screened counts to
-`6/6/5/3/3/3`, so this workstream is improving but still far short of the
-configured floors.
+`6/6/5/3/3/3`. Fresh `runs/codex-demo-step15-bridge-widening` artifacts keep
+the same accepted parity through step `15` and add a demo-only step-`15`
+temporal exchange variant plus exhaustive demo-vs-realistic widening tests
+through steps `13` to `15`, but the stored live step-`15` counts still hold at
+`generated_raw_prefixes = 14` and `exact_bound_screened = 3`, so this
+workstream is improving structurally while still far short of the configured
+floors.
 
 ## 4. Floor Attainment
 

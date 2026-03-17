@@ -250,6 +250,14 @@ On the demo-lane side:
   clause surfaces only for `demo_breadth_shadow`, while still mapping the demo
   profile back to realistic-shadow admissibility so guarded acceptance parity
   stays unchanged
+- exhaustive `pen-search` coverage now also confirms that those demo-only
+  late-family enumerators beat realistic-shadow enumeration on steps `13` to
+  `15`, and step `15` now has an extra demo-only temporal exchange variant
+  that preserves the reference acceptance, although fresh stored
+  `runs/codex-demo-step15-bridge-widening` evidence still shows the live
+  step-`15` demo funnel unchanged at `generated_raw_prefixes = 14` and
+  `exact_bound_screened = 3`, with the extra surface currently appearing only
+  as higher active-window filter prunes
 - demo materialize can now also yield into `ProofClose` with the explicit
   `materialize_reserve_handoff` reason once an incumbent exists and the
   remaining exact surface has already flipped into closure-first reserve

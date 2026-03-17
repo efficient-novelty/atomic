@@ -1,0 +1,77 @@
+step 10 demo narrative
+label        Cohesion
+profile      10m
+accepted     blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e nu=19 kappa=4 overshoot=97/340
+time         [................] 0ms / 15.0s (within limit)
+generated    [#...............] 9 / 500 generated (miss)
+exact_screen [#...............] 6 / 120 screened (miss)
+full_eval    [#...............] 1 / 25 evaluated (within limit)
+closure      [##############..] 83% frontier_total=6 certified_nonwinning=5
+phase_eval   materialize=1 proof_close=0 overrun=0 cap=25 cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep overrun_reason=none
+proof_close  reserve=4.5s elapsed=0ms remaining=4.5s reserve_overrun=0ms exhausted=false groups_closed=0/0 groups_remaining=0 closure=100%
+timing       discovery=0ms frontier_plan=0ms selection=0ms
+funnel       enumerated=1 well_formed=1 malformed=0 admissibility_rejected=0 scored=1 canonical=1 semantically_minimal=1
+demo_funnel  raw=9 canonical_prefixes=4 hard_admissible=1 exact_pruned=5 heuristic_dropped=0 bar_clearers=1 semantically_minimal_clearers=1 winner_overshoot=97/340
+exact_reasons partial_prefix_bar=1 terminal_completion=0 incumbent_dominance=0 legality_connectivity=0
+prefixes     created=4 explored=1 merged=0 exact_pruned=5 heuristic_dropped=0 hot=1 cold=0
+memo         legality_hits=8 active_window_hits=8 terminal_completion_hits=1 partial_bound_hits=0 terminal_rank_prunes=0
+demo_buckets k4:modal:local_only:single gen=1 adm=1 screen=1 pruned=0 scored=1 best=97/340
+
+events
+  [step_open] opened demo step 10 with bar 759/170 and clause band 4..4
+    mode=realistic_shadow total=15.0s discovery=10.5s scout=1.0s breadth=9.4s proof_close_reserve=4.5s baseline=15.0s generated_floor=500 exact_screened_floor=120 full_eval_soft_cap=25
+  [phase_change scout] entered scout with 1.0s reserved for throughput sampling
+    total=15.0s discovery=10.5s scout=1.0s breadth=9.4s proof_close_reserve=4.5s baseline=15.0s generated_floor=500 exact_screened_floor=120 full_eval_soft_cap=25
+  [budget_pulse scout] scout baselining started
+    total=15.0s discovery=10.5s scout=1.0s breadth=9.4s proof_close_reserve=4.5s baseline=15.0s generated_floor=500 exact_screened_floor=120 full_eval_soft_cap=25
+  [budget_pulse scout] scout sample captured throughput on this machine
+    generated_per_sec=9 admissibility_per_sec=1 exact_bound_per_sec=2 full_eval_per_sec=0 generated=9 admissibility_checks=1 exact_bound_checks=2 full_evals=0
+  [phase_change materialize] entered materialize to reopen the retained exact surface
+    retained_prefix_groups=1 generated=9/500(miss) exact_screened=5/120(miss) full_evals=0/25(within_limit) materialize_full_evals=0 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=25 cap_triggered=false breadth_exit=none proof_close_reason=none proof_close_overrun_reason=none proof_close_reserve=4.5s proof_close_elapsed=0ms proof_close_remaining=4.5s proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=0%
+  [budget_pulse materialize] materializing retained prefixes under exact screening
+    retained_prefix_groups=1 generated=9/500(miss) exact_screened=5/120(miss) full_evals=0/25(within_limit) materialize_full_evals=0 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=25 cap_triggered=false breadth_exit=none proof_close_reason=none proof_close_overrun_reason=none proof_close_reserve=4.5s proof_close_elapsed=0ms proof_close_remaining=4.5s proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=0%
+  [phase_change proof_close] entered proof_close to certify the remaining exact surface
+    remaining_retained_prefix_groups=0 generated=9/500(miss) exact_screened=6/120(miss) full_evals=1/25(within_limit) materialize_full_evals=1 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=25 cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep proof_close_overrun_reason=none proof_close_reserve=4.5s proof_close_elapsed=0ms proof_close_remaining=4.5s proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=100%
+  [budget_pulse proof_close] proof-close is certifying the incumbent under exact comparison
+    remaining_retained_prefix_groups=0 generated=9/500(miss) exact_screened=6/120(miss) full_evals=1/25(within_limit) materialize_full_evals=1 proof_close_full_evals=0 proof_close_overrun=0 soft_cap=25 cap_triggered=false breadth_exit=none proof_close_reason=certification_sweep proof_close_overrun_reason=none proof_close_reserve=4.5s proof_close_elapsed=0ms proof_close_remaining=4.5s proof_close_reserve_overrun=0ms proof_close_reserve_exhausted=false proof_close_groups_closed=0/0 proof_close_groups_remaining=0 proof_close_closure=100%
+  [phase_change seal] entered seal with incumbent blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e ready for deterministic acceptance
+    bar_clearers=1 near_misses=0 generated=9/500(miss) exact_screened=6/120(miss) full_evals=1/25(within_limit)
+  [budget_pulse seal] seal fixed overshoot 97/340 for candidate blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e
+    bar_clearers=1 near_misses=0 generated=9/500(miss) exact_screened=6/120(miss) full_evals=1/25(within_limit)
+  [surface_summary] generated 4 structural candidates; 1 were well formed and 0 were rejected by admissibility
+    malformed=0 full_evaluated=1 canonical=1 semantically_minimal=1
+  [prefix_summary] prefix frontier created=4 explored=1 merged=0 exact_pruned=5 heuristic_dropped=0
+    hot_states=1 cold_states=0 frontier_window=1
+  [memo_summary] memo path hits: legality=8 active_window=8 terminal_completion=1 partial_bounds=0
+    connectivity_shortcuts=2 clause_family_prunes=44 terminal_rank_prunes=0 terminal_prefix_bar_prunes=0
+  [frontier_summary] retained 1 candidates with frontier hot=1 cold=0 dropped=0
+    pressure_state=green pressure_action=none resident_cold=0 spill_backed=0
+  [acceptance_summary seal] accepted blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e with overshoot 97/340 (nu=19 kappa=4)
+    bar_clearers=1 near_misses=0 candidate_hash=blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e canonical_hash=blake3:09bed8af6371d3ac8be4c5d4bd59321753f2a027ff9685808b8bab6ce8ac4ef5
+  [step_complete seal] completed step 10 in 0 ms
+    discovery_ms=0 frontier_plan_ms=0 selection_ms=0
+
+retained candidates
+  accepted blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e rho=19/4 distance=97/340 frontier=hot headline=Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.
+
+prunes
+  none
+
+accepted trace
+  source=structural-ast
+  nu_g=2
+  nu_h=0
+  nu_c=17
+  bonus_distributive=0
+  bonus_universe_poly=0
+  bonus_infinitesimal_shift=0
+  nu_total=19
+  node_trace_count=8
+  node=entry1|ctor=Flat
+  node=entry1/0|ctor=Var
+  node=entry2|ctor=Sharp
+  node=entry2/0|ctor=Var
+  node=entry3|ctor=Disc
+  node=entry3/0|ctor=Var
+  node=entry4|ctor=Shape
+  node=entry4/0|ctor=Var

@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "run_id": "codex-demo-step15-bridge-widening",
+  "step_index": 11,
+  "accepted_utc": "2026-03-17T15:27:29.2398253Z",
+  "compat": {
+    "ast_schema_hash": "blake3:fc9be9ae20ab7277941ba7c98fcb9b7b0a78f699e595d3268656144a3f0b21bf",
+    "type_rules_hash": "blake3:39c261a0e90bde0cfa2affee542db9a2519e4b8cd95c008e3fa0ed59cd38ac2e",
+    "evaluator_hash": "blake3:dc3ad0d7c757a4b498bd4cfc56446e05af84df38049161883ab8592b18df4792",
+    "search_semantics_hash": "blake3:f3572c8c8c9e01202de7df3840fda6eb4458c2f10104b509a36610d2f6dc80ea"
+  },
+  "objective": {
+    "bar": {
+      "num": 712,
+      "den": 145
+    },
+    "exact_clause_kappa": 5,
+    "bit_band": {
+      "min": 79,
+      "max": 79
+    }
+  },
+  "accepted": {
+    "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+    "canonical_hash": "blake3:0b747d5eea40ef4cece4f40b64c7dbdff0db9ed74f209e5c6c79346f7165ae27",
+    "bit_kappa": 79,
+    "clause_kappa": 5,
+    "nu": 26,
+    "rho": {
+      "num": 26,
+      "den": 5
+    },
+    "overshoot": {
+      "num": 42,
+      "den": 145
+    },
+    "shape_fingerprint": "0x527926034486e22b",
+    "support_fingerprint": "0x8c09e88b411da1f8"
+  },
+  "library_snapshot": {
+    "window_depth": 2,
+    "entries": [
+      {
+        "step": 9,
+        "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 8
+                  },
+                  {
+                    "Lib": 7
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Lib": 5
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 8
+                    },
+                    {
+                      "Lib": 7
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 7
+                  },
+                  {
+                    "Lib": 8
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "step": 10,
+        "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Flat": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Sharp": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Disc": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Shape": {
+                  "Var": 1
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "near_misses": [],
+  "stats": {
+    "frontier_scanned": 1,
+    "typed_prefixes": 1,
+    "sound_prunes": 5,
+    "heuristic_drops": 0
+  }
+}

@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "run_id": "codex-demo-step15-bridge-widening",
+  "step_index": 15,
+  "accepted_utc": "2026-03-17T15:27:29.2398253Z",
+  "compat": {
+    "ast_schema_hash": "blake3:fc9be9ae20ab7277941ba7c98fcb9b7b0a78f699e595d3268656144a3f0b21bf",
+    "type_rules_hash": "blake3:39c261a0e90bde0cfa2affee542db9a2519e4b8cd95c008e3fa0ed59cd38ac2e",
+    "evaluator_hash": "blake3:dc3ad0d7c757a4b498bd4cfc56446e05af84df38049161883ab8592b18df4792",
+    "search_semantics_hash": "blake3:f3572c8c8c9e01202de7df3840fda6eb4458c2f10104b509a36610d2f6dc80ea"
+  },
+  "objective": {
+    "bar": {
+      "num": 19520,
+      "den": 2639
+    },
+    "exact_clause_kappa": 8,
+    "bit_band": {
+      "min": 229,
+      "max": 229
+    }
+  },
+  "accepted": {
+    "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+    "canonical_hash": "blake3:6f4b65c28060999af4bac3fa46a9da3bd8e1bbdbc99f41ecc94291012a0573a4",
+    "bit_kappa": 229,
+    "clause_kappa": 8,
+    "nu": 103,
+    "rho": {
+      "num": 103,
+      "den": 8
+    },
+    "overshoot": {
+      "num": 115657,
+      "den": 21112
+    },
+    "shape_fingerprint": "0x64229a9ab09dadab",
+    "support_fingerprint": "0xdde93d45ff253f5f"
+  },
+  "library_snapshot": {
+    "window_depth": 2,
+    "entries": [
+      {
+        "step": 13,
+        "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  },
+                  {
+                    "Lib": 11
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Lib": 12
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 1
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "step": 14,
+        "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Pi": [
+                          {
+                            "Var": 1
+                          },
+                          "Univ"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lam": {
+                      "Var": 1
+                    }
+                  },
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 13
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 11
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    "Univ"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "near_misses": [],
+  "stats": {
+    "frontier_scanned": 2,
+    "typed_prefixes": 1,
+    "sound_prunes": 2,
+    "heuristic_drops": 0
+  }
+}

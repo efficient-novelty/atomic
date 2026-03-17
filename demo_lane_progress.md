@@ -45,6 +45,17 @@ retuning during `BreadthHarvest`.
 - Fresh stored evidence in `runs/codex-demo-midlate-widening` still preserves
   accepted parity through step `15` (`matches_reference_replay x15`) and
   finishes far under the default `600s` ceiling on this computer.
+- Exhaustive `pen-search` coverage now confirms that the demo-only late-family
+  enumerators beat realistic-shadow enumeration on steps `13` to `15`, and the
+  step-`15` demo lane now includes an extra temporal exchange bridge variant
+  that still preserves the reference acceptance under exact comparison.
+- Fresh stored evidence in `runs/codex-demo-step15-bridge-widening` still
+  preserves accepted parity through step `15` (`matches_reference_replay x15`)
+  but leaves the live step-`15` demo funnel at
+  `generated_raw_prefixes = 14` and `exact_bound_screened = 3`; the extra
+  temporal-shell surface currently shows up only as higher exact active-window
+  filter pressure (`incremental_active_window_clause_filter_prunes = 37`, up
+  from `34`) rather than as broader stored live breadth.
 - The main remaining problem is no longer "missing demo evidence." The main
   problem is that the live search surface is still not broad enough in the
   places the plan cares about.
@@ -74,6 +85,10 @@ retuning during `BreadthHarvest`.
   of the configured floors
 - the landed demo-specific structural bucket scheduler still needs broader real
   widening underneath it so late buckets actually reach their honest floors
+- the new step-`15` temporal exchange variant currently improves exhaustive
+  demo-versus-realistic enumeration evidence more than the stored live demo
+  funnel, so the next gap is turning that widened static surface into honest
+  raw or exact-screened counts during the online prefix search
 
 ### 3. The Within-Step Controller Still Needs Closure-Aware Replanning
 
@@ -99,7 +114,9 @@ retuning during `BreadthHarvest`.
    at `2144`, then show the shared early `90s` window honestly.
 2. Build on the landed demo-only step-`10` to `12` widening plus the earlier
    late-family widening and honest raw-surface counting to keep widening the
-   real search surface on steps `10` to `15`.
+   real search surface on steps `10` to `15`, especially by turning the new
+   step-`15` exhaustive temporal-shell variants into stored live breadth rather
+   than extra active-window filter prunes.
 3. Extend the current reserve retunes into stronger closure-aware replanning
    across `Materialize` and `ProofClose`.
 4. Finish prune taxonomy and the remaining mandatory live-event closeout.

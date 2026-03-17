@@ -458,7 +458,13 @@ fn matches_temporal_shell_clause(position: usize, expr: &Expr, anchor: u32) -> b
                     Expr::Eventually(body)
                         if matches!(
                             body.as_ref(),
-                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                            Expr::Sharp(inner)
+                                if matches!(inner.as_ref(), Expr::Var(1))
+                                    || matches!(
+                                        inner.as_ref(),
+                                        Expr::Eventually(deeper)
+                                            if matches!(deeper.as_ref(), Expr::Var(1))
+                                    )
                         )
                 )
         ),
@@ -497,13 +503,27 @@ fn matches_temporal_flat_next_bridge(expr: &Expr) -> bool {
     matches!(
         expr,
         Expr::Pi(domain, codomain)
-            if matches!(
-                domain.as_ref(),
-                Expr::Flat(body)
-                    if matches!(
-                        body.as_ref(),
-                        Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                    )
+            if (
+                matches!(
+                    domain.as_ref(),
+                    Expr::Flat(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+                || matches!(
+                    domain.as_ref(),
+                    Expr::Flat(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                )
             ) && (
                 matches!(
                     codomain.as_ref(),
@@ -790,6 +810,35 @@ mod tests {
         let mut telescope = Telescope::reference(15);
         telescope.clauses[4].expr = Expr::Pi(
             Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
+                Box::new(Expr::Var(1)),
+            )))))),
+        );
+
+        let witness = analyze_connectivity(&library, &telescope);
+        let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+        assert_eq!(
+            witness,
+            ConnectivityWitness {
+                connected: true,
+                references_active_window: false,
+                self_contained: false,
+                max_lib_ref: 10,
+                historical_reanchor: true,
+            }
+        );
+        assert!(reanchor.allows_historical_reanchor());
+        assert!(passes_connectivity(&library, &telescope));
+    }
+
+    #[test]
+    fn connectivity_accepts_demo_temporal_exchange_variants() {
+        let library = library_until(14);
+        let mut telescope = Telescope::reference(15);
+        telescope.clauses[4].expr = Expr::Pi(
+            Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Next(
+                Box::new(Expr::Var(1)),
+            )))))),
             Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
                 Box::new(Expr::Var(1)),
             )))))),
