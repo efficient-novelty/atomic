@@ -6246,12 +6246,20 @@ mod tests {
             "step 11 should keep the exact-screened floor hit"
         );
         assert!(
+            step12.demo_funnel.exact_bound_screened >= 400,
+            "step 12 should now hit the exact-screened floor"
+        );
+        assert!(
             step13.demo_funnel.generated_raw_prefixes >= 3_500,
             "step 13 should keep the widened live surface"
         );
         assert!(
             step13.demo_funnel.exact_bound_screened >= 3_000,
             "step 13 should keep the widened exact-screened surface"
+        );
+        assert!(
+            step14.demo_funnel.generated_raw_prefixes >= 3_500,
+            "step 14 should now hit the generated floor"
         );
         assert!(
             step14.demo_funnel.exact_bound_screened >= 1_100,

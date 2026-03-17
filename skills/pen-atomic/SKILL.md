@@ -7,343 +7,48 @@ description: Current-state architecture and donor guide for the `pen-atomic` Rus
 
 ## Overview
 
-Use this skill as the current working memory pack for the repository as it exists
-today, not as a description of an aspirational future rewrite.
+Use this skill as the current working memory pack for the repository as it
+exists today, not as a description of an aspirational rewrite.
 
-The repo now has a real bounded live-search lane:
+Treat these as current repo truths:
 
 - `pen-cli run` and `pen-cli resume` perform live atomic strict search through
-  step 15
-- `demo_breadth_shadow` now exists as a comparison-backed child of realistic
-  shadow with runnable `5m`, `10m`, and `15m` profiles plus stored per-step
-  narrative artifacts
-- the accepted executable late-step canon is now the current Rust truth,
-  including step 15 / `DCT` at `nu = 103`
-- the CLI writes real run manifests, step checkpoints, reports, and telemetry
-- debug reporting now includes retained valid candidates and human-readable
-  telescope translations
+  step `15`
+- `strict_canon_guarded` remains the authoritative executable lane
+- `realistic_frontier_shadow` is a live comparison-backed lane with real online
+  prefix search, persisted frontier evidence, and detailed reporting
+- `demo_breadth_shadow` is a comparison-backed child of realistic shadow with
+  runnable `5m`, `10m`, and `15m` profiles plus stored narrative/event
+  artifacts
+- the accepted executable late-step canon is the current Rust truth, including
+  step `15` / `DCT` at `nu = 103`
 
-What is still incomplete:
+Treat these as still incomplete:
 
 - `pen-store` is still partly contract-first
 - the anti-junk frontier engine is not yet the full long-range design
 - the Agda bridge is still lighter than the final proof-facing target
 
-The current search-architecture focus is now split between two active
-comparison-backed tracks:
+The current architecture focus is split between two active tracks:
 
-- stronger exact late-step pruning and ordering on `realistic_frontier_shadow`
+- stronger exact late-step pruning and ordering on
+  `realistic_frontier_shadow`
 - honest breadth, budget, and evidence surfacing on `demo_breadth_shadow`
 
-On the realistic-shadow side:
+## Current-State References
 
-- `realistic_frontier_shadow` already has real prefix-frontier retention and
-  persisted frontier evidence
-- `pen-search` now has explicit `bounds.rs` and `prefix_cache.rs` primitives
-  for quantum-inspired prefix work
-- `realistic_frontier_shadow` now expands prefixes online through
-  clause-position catalogs instead of enumerating all full telescopes first
-- `PrefixSignature` now carries active-window hashing, shape/support summaries,
-  and structural family flags for future d = 2 memoization
-- realistic shadow now has a real `PrefixLegalityCache` that reuses
-  incremental legality/connectivity summaries keyed by `PrefixSignature`
-- realistic shadow now also keeps an exact incremental historical-reanchor
-  summary keyed by `PrefixSignature`, shortcutting temporal-shell terminal
-  connectivity when the cached prefix already proves the modal-to-temporal
-  reanchor shape
-- realistic shadow now also keeps an exact incremental clause-family
-  feasibility summary keyed by `PrefixSignature`, pruning mixed late-family
-  prefixes before they reach terminal admissibility
-- realistic shadow now also uses that strengthened family summary for exact
-  active-window clause filtering keyed by `PrefixSignature`, skipping child and
-  terminal clause options that cannot match any still-admissible structural
-  family before child-prefix legality or terminal assembly
-- realistic shadow now also keeps an exact incremental terminal
-  trivial-derivability summary keyed by `PrefixSignature`, pruning terminal
-  continuations that are provably trivially derivable before full telescope
-  assembly
-- realistic shadow now also reuses that exact family summary for cached
-  terminal admissibility decisions keyed by `PrefixSignature`
-- realistic shadow now also reuses that exact terminal admissibility summary
-  as an explicit terminal-clause filter keyed by `PrefixSignature`, so
-  impossible last-clause options can be rejected before terminal connectivity
-  or fallback telescope assembly runs
-- realistic shadow now also memoizes exact terminal-prefix completion
-  summaries keyed by `PrefixSignature` and reuses those admitted connected
-  one-clause-short completions plus their exact completion bounds between the
-  early terminal-prefix bar check and the later retained-prefix grouping
-- realistic shadow now also carries exact late terminal accept-rank summaries
-  on retained prefix groups and uses them to skip dominated late full-telescope
-  evaluations once an already-seen semantically minimal bar-clear candidate
-  cannot be beaten
-- realistic shadow now also stores exact terminal-prefix best accept-rank
-  summaries keyed by `PrefixSignature` and reuses them to test whether a
-  cached late terminal prefix can still beat the current incumbent before
-  reopening the cached terminal completion summary
-- realistic shadow now also materializes retained terminal-prefix groups as
-  soon as they are popped, caches those exact full candidates on the retained
-  group, and uses the proven semantically minimal incumbent to skip later
-  dominated late terminal prefixes before they count as explored or enter the
-  retained frontier
-- realistic shadow now also computes exact terminal-prefix completion bounds
-  and prunes one-clause-short prefix groups that cannot clear the current bar
-  before retained-prefix frontier planning
-- realistic shadow now also runs a budgeted exact small-tree completion bound
-  on newly created root and child prefixes and prunes any prefix whose full
-  admissible connected completion set cannot clear the current bar before that
-  prefix ever enters the online work queue
-- realistic shadow now also memoizes exact multi-step partial-prefix
-  bar-clearability decisions keyed by `PrefixSignature`, reusing already-
-  proved late-step `can_clear_bar` / `cannot_clear_bar` results between the
-  early pre-queue subtree walk and later child-prefix checks inside the same
-  step
-- realistic shadow now also stores exact one-clause-short terminal-prefix bar
-  decisions in that same `PrefixSignature`-keyed partial-prefix bound cache,
-  so later enqueued terminal prefixes can reuse the exact `can_clear_bar` /
-  `cannot_clear_bar` decision without replaying the terminal-summary lookup
-- realistic shadow now also directly materializes isolated exact remaining-two
-  late surfaces when no competing queue item can interleave, so the engine can
-  skip replaying the queued one-clause-short child bound check on those
-  collapsed late suffixes
-- realistic shadow now also collapses exact single-continuation late-family
-  suffixes in-place once the strengthened family summary plus active-window
-  clause filtering leave only one legal child at each remaining position, so
-  the engine no longer pushes and pops every forced intermediate prefix state
-- realistic shadow now also caches the exact next-position active-window
-  clause surface on each online work item and reuses it when that prefix is
-  popped, so branching and terminal-prefix expansion do not recompute the same
-  exact filter
-- realistic shadow now also uses that cached next-clause surface plus the
-  strengthened family summary to order online prefix work deterministically by
-  remaining distance to terminal and exact continuation width
-- reports and frontier manifests now expose the plan-aligned counters
-  `prefixes_created`, `full_telescopes_evaluated`,
-  `canonical_dedupe_prunes`, and `semantic_minimality_prunes`
-- reports, manifests, and inspect output now also expose the first memoization
-  payoff counters `incremental_legality_cache_hits`,
-  `incremental_connectivity_shortcuts`,
-  `incremental_connectivity_fallbacks`, and
-  `incremental_connectivity_prunes`, `incremental_clause_family_filter_hits`,
-  `incremental_clause_family_prunes`,
-  `incremental_active_window_clause_filter_hits`,
-  `incremental_active_window_clause_filter_prunes`,
-  `incremental_terminal_clause_filter_hits`,
-  `incremental_terminal_clause_filter_prunes`,
-  `incremental_trivial_derivability_hits`,
-  `incremental_trivial_derivability_prunes`,
-  `incremental_terminal_admissibility_hits`, and
-  `incremental_terminal_admissibility_rejections`,
-  `incremental_terminal_prefix_completion_hits`,
-  `incremental_terminal_prefix_rank_hits`,
-  `incremental_terminal_rank_prunes`,
-  `incremental_partial_prefix_bound_hits`,
-  `incremental_partial_prefix_bound_checks`,
-  `incremental_partial_prefix_bound_prunes`, and
-  `incremental_terminal_prefix_bar_prunes`
-- step telemetry now also carries per-step timing metrics
-  `step_wall_clock_millis`,
-  `candidate_discovery_wall_clock_millis`,
-  `prefix_frontier_planning_wall_clock_millis`, and
-  `selection_wall_clock_millis`
-- stored step summaries now also persist `search_timing`, and inspect output
-  renders those timing counters alongside the existing frontier memory bytes so
-  late-step order tuning can be driven from stored run artifacts
-- deterministic reports and frontier inspect output now also expose frontier
-  memory high-water bytes including `rss_bytes`, `hot_frontier_bytes`,
-  `cold_frontier_bytes`, `dedupe_bytes`, and persisted frontier
-  `memory_snapshot` bytes
-- stored realistic-shadow step-10 artifacts still show
-  `incremental_partial_prefix_bound_prunes = 1`, confirming the landed earlier
-  exact partial-prefix prune before queue entry
-- fresh realistic-shadow step-11 and step-12 artifacts now also show
-  `incremental_partial_prefix_bound_hits = 1`, confirming that multi-step
-  partial-prefix bar decisions are now reused during repeated late-step prefix
-  checks
-- stored realistic-shadow step-13 artifacts now also show
-  `prefix_states_explored = 1`,
-  `incremental_partial_prefix_bound_checks = 1`,
-  `incremental_partial_prefix_bound_hits = 0`,
-  `incremental_terminal_prefix_completion_hits = 1`, and
-  `incremental_terminal_prefix_rank_hits = 1`, confirming that the isolated
-  exact remaining-two surface now skips the later queued child bound replay
-- fresh realistic-shadow step-14 and step-15 artifacts now also show
-  `incremental_terminal_rank_prunes = 1` and
-  `full_telescopes_evaluated = 1`, confirming that dominated late retained
-  terminal surfaces are now skipped before final candidate evaluation
-- fresh realistic-shadow step-15 artifacts still show
-  `prefix_states_explored = 2`,
-  `incremental_partial_prefix_bound_hits = 1`,
-  `incremental_partial_prefix_bound_checks = 3`, and
-  `incremental_terminal_prefix_completion_hits = 2`, confirming that the
-  surviving temporal-shell root lane is still the next late exact surface to
-  collapse or summarize earlier
-- fresh realistic-shadow step-15 artifacts now also show
-  `incremental_legality_cache_hits = 19` and
-  `incremental_active_window_clause_filter_hits = 18`, confirming that the
-  forced-suffix / terminal-summary replay underneath that same temporal-shell
-  lane now costs slightly less supporting legality and active-window filter
-  work even though the primary late exact surface is still present
-- fresh realistic-shadow step-15 artifacts now also show
-  `incremental_connectivity_shortcuts = 2` and
-  `incremental_connectivity_fallbacks = 0`, confirming that temporal-shell
-  terminal connectivity now uses the landed historical-reanchor shortcut
-  instead of rebuilding fallback telescopes
-- the next gap is stronger sound bound pruning beyond the landed exact
-  clause-family impossibility prunes plus the landed active-window
-  clause filtering plus the landed budgeted small-tree completion-bound prune
-  plus the landed exact terminal-prefix bar prune plus the landed exact
-  terminal-prefix completion reuse plus the landed exact late terminal
-  accept-rank prune plus the landed eager terminal-prefix-group materialization
-  and cached full-candidate reuse plus the landed multi-step partial-prefix
-  bar-decision reuse plus the landed terminal-prefix partial-bound reuse plus
-  the landed exact terminal-prefix best-rank summary reuse plus the landed
-  exact historical-reanchor connectivity shortcut plus the landed isolated
-  exact remaining-two suffix collapse, then broader non-family
-  admissibility/filter reuse before terminal completion summaries are built
-  beyond the landed trivial-derivability and terminal-admissibility summaries
-  plus the landed cached next-clause reuse, then continuing to use the new
-  timing/memory evidence to retune realistic late-step order past the first
-  continuation-aware queue retune, not "add a frontier for the first time" or
-  "collapse obviously forced late-family suffixes for the first time"
+Read only the track-specific detail you need:
 
-On the demo-lane side:
-
-- the demo controller now plans real `Scout`, `BreadthHarvest`,
-  `Materialize`, `ProofClose`, and `Seal` slices inside each step budget
-- demo runs now persist per-step narratives, event streams, and phase-level
-  full-evaluation accounting plus `breadth_harvest_exit_reason`,
-  `proof_close_entry_reason`, and `proof_close_overrun_reason`
-- `pen-cli run|resume --narrative` can now append that stored per-step demo
-  narrative to terminal output, and `scripts/compare_runs.py` now also flags
-  missing demo narrative or event artifacts explicitly
-- demo narrative rendering now also enforces the configured per-step line
-  budget, trimming low-priority tails with explicit omission markers instead of
-  letting events or traces grow without bound
-- demo runs now also persist live proof-close reserve and closure accounting
-  plus proof-close milestone and reserve-exhaustion narrative pulses from the
-  search loop itself
-- repeated live scout and breadth-harvest budget-retune pulses now also obey
-  the configured pulse interval, while mandatory phase-entry, milestone,
-  reserve-exhaustion, and seal pulses still emit immediately
-- late-step demo planning now also feeds stored floor misses plus proof-close
-  reserve pressure or slack back into later spill and effective reserve sizing
-  inside the standard `25` to `40` percent profiles, while explicit out-of-band
-  reserve overrides such as `0.00` and `1.00` still remain literal
-- demo search now also uses current-step scout throughput to rebalance
-  discovery versus proof-close reserve inside the same step, and
-  `BreadthHarvest` can now keep borrowing from or returning time to the
-  reserved certification slice while the live floor projection changes,
-  surfacing those repeated retunes directly in the narrative
-- demo prefix-family summaries and active-window clause filtering now also
-  preserve the live demo late-family surface override instead of snapping those
-  prefixes back to realistic-shadow family matching before the online queue can
-  widen honestly, while demo terminal admissibility falls back to the direct
-  realistic-shadow check whenever that override is active so accepted parity
-  remains authoritative
-- demo materialize and proof-close now also reorder retained prefix groups from
-  that live reserve/closure evidence, preferring incumbent-improving exact
-  surfaces while reserve is healthy and faster prune/closure payoffs when the
-  reserved slice gets tight, and retained-group candidates now run in exact
-  accept-rank order before stable structural tiebreaks
-- demo materialize and proof-close now also assign deterministic structural
-  bucket keys to retained exact surfaces, persist per-bucket generated,
-  admissible, exact-screened, pruned, fully scored, and best-overshoot stats,
-  and use those bucket stats plus retention-class bridge potential and low-
-  redundancy cues to order proof-close work without changing acceptance truth
-- demo discovery now also widens the step-`10` to `12`
-  modal-shell/axiomatic-bridge and connection/curvature clause surfaces plus
-  the operator-bundle, Hilbert-functional, and temporal-shell late-family
-  clause surfaces only for `demo_breadth_shadow`, while still mapping the demo
-  profile back to realistic-shadow admissibility so guarded acceptance parity
-  stays unchanged
-- exhaustive `pen-search` coverage now also confirms that those demo-only
-  late-family enumerators beat realistic-shadow enumeration on steps `13` to
-  `15`, and step `15` now has an extra demo-only temporal exchange variant
-  that preserves the reference acceptance; fresh
-  `runs/codex-demo-late-surface-v4` evidence, compared against
-  `runs/codex-realistic-late-baseline-v2`, now also shows that the preserved
-  demo family surface plus the targeted step-`10` / `11` family-filter bypass
-  turns those landed late widenings into materially broader live breadth,
-  moving generated counts to `1344/4191/147/3995/2292/22715` and
-  exact-screened counts to `7/253/83/3123/1521/18749` on steps `10` to `15`
-  while still keeping `full_telescopes_evaluated = 1` on each late step,
-  hitting generated floors on steps `10`, `11`, `13`, and `15`, hitting
-  exact-screened floors on step `11` plus steps `13` to `15`, and still
-  hitting the step-`14` exact-screened floor
-- `pen-search` now also has config-backed demo coverage that runs the default
-  `10m` profile through step `15` and asserts that steps `10` to `15` keep the
-  reference telescopes while step `10` keeps its generated floor hit, step
-  `11` keeps its generated and exact-screened floor hits, and steps `13` to
-  `15` preserve the widened live generated and exact-screened surfaces with
-  `full_telescopes_evaluated = 1`
-- demo late-family override roots now also selectively skip the cached family-
-  filter summary on the step-`10` / `kappa = 4` and step-`11` / `kappa = 5`
-  demo override surfaces, and late terminal acceptance competition now ignores
-  admitted-but-deprioritized completions on those same override surfaces so
-  the wider live queue can stay honest without changing accepted truth
-- demo materialize can now also yield into `ProofClose` with the explicit
-  `materialize_reserve_handoff` reason once an incumbent exists and the
-  remaining exact surface has already flipped into closure-first reserve
-  pressure, instead of waiting only for the soft cap or the end of materialize
-- demo materialize can now also yield into `ProofClose` with the explicit
-  `closure_pressure_handoff` reason once a live incumbent turns most pending
-  retained exact surface into prune-ready certification work, and proof-close
-  ordering now uses that same closure-pressure summary even before reserve
-  tightness alone would force closure-first mode
-- scout-side reserve retunes no longer suppress the later `BreadthHarvest`
-  phase change, so the stored event stream now keeps the explicit phase
-  machine visible even when scout already adjusted budget at the handoff
-- `pen-cli` debug output, `--narrative`, and `scripts/compare_runs.py` now
-  also surface compact demo bucket summaries from stored step artifacts
-- stored demo step summaries, CLI debug output, and `pen-cli --narrative` now
-  also persist the four mandatory exact-screen reason codes:
-  partial-prefix bar failure, terminal-prefix completion failure, incumbent
-  dominance, and legality/connectivity exact rejection, with backward-
-  compatible derivation from older artifacts when those fields are absent
-- stored demo step summaries now also persist prune-class totals for
-  quotient/dedupe, sound/minimality, and heuristic shaping, while
-  `pen-cli` debug output, `pen-cli inspect`, `pen-cli --narrative`, and
-  `scripts/compare_runs.py` backfill the same labeled totals from stored
-  search stats when older artifacts predate the explicit field
-- demo generated-surface reporting now also counts raw root prefixes, raw
-  child prefixes, forced single-continuation collapses, and raw terminal
-  completions instead of using
-  `max(prefixes_created, enumerated_candidates)`, while demo steps `1` to `4`
-  can now also restore full clause-catalog candidate-list generation where it
-  remains affordable instead of only exposing the realistic prefix-frontier
-  shadow
-- demo raw clause-catalog widening now also covers steps `5` to `9` with
-  demo-only initial-hit, truncation-hit, higher-hit, sphere-lift, and
-  axiomatic variants, and unit coverage now shows those raw demo catalogs
-  exceed realistic shadow on each step from `5` to `9` while step acceptance
-  through step `9` still matches realistic shadow
-- fresh paired `runs/codex-realistic-midstep-baseline` and
-  `runs/codex-demo-midstep-carrythrough` artifacts now show that the widened
-  step-`5` to `9` surface also carries through the live prefix engine:
-  generated counts move from realistic `3/3/3/5/4` to demo
-  `27/15/15/45/24`, exact-screened counts move from `1/1/1/1/1` to
-  `1/3/2/13/9`, `full_telescopes_evaluated` stays `1` on every step, accepted
-  parity still holds through step `15`, and stored narrative/event artifacts
-  stay complete (`15/15`)
-- fresh `runs/codex-demo-early-catalog` artifacts now show step-`1`
-  `generated_raw_prefixes = 1296` and step timings `95/1/1/25 ms` through
-  step `4` (`122 ms` total), so the shared early-window story is now backed by
-  stored evidence even though the explicit `2144` target is still open
-- fresh `runs/codex-demo-late-surface-v4` artifacts now show late-step
-  generated counts `1344/4191/147/3995/2292/22715` and exact-screened counts
-  `7/253/83/3123/1521/18749`, so the lane is no longer just more honest about
-  breadth; it now also hits the step-`10`, step-`11`, step-`13`, and
-  step-`15` generated floors plus the step-`11` and step-`13` to `15`
-  exact-screened floors while still missing the step-`10` exact-screened
-  floor, step-`12` both floors, and the step-`14` generated floor
-- the current demo gap is not "make the lane look broader"; it is meeting the
-  remaining surfaced early and late breadth floors honestly from the now-
-  broadened live surface, with the shared early-window evidence already
-  restored and the remaining early gap narrowed to pushing step `1` from
-  `1296` toward `2144`, then closing the remaining step-`10` exact floor, the
-  remaining step-`12` generated and exact floors, and the remaining
-  step-`14` generated floor, while keeping the newly stored step-`5` to `9`
-  live carry-through and mandatory live-event coverage from regressing
+- For the current realistic-shadow capability inventory, evidence snapshot, and
+  remaining search gap, read
+  [references/11-current-realistic-shadow.md](references/11-current-realistic-shadow.md).
+- For the current demo-lane stable mechanisms, evidence baselines, and open
+  gaps, read
+  [references/12-current-demo-lane.md](references/12-current-demo-lane.md).
+- For live demo-lane targets and signoff criteria, read
+  [../../demo_lane_progress.md](../../demo_lane_progress.md),
+  [../../demo_lane_plan.md](../../demo_lane_plan.md), and
+  [../../demo_lane_checklist.md](../../demo_lane_checklist.md).
 
 Start with the current architecture doc before diving into donor material:
 
@@ -355,21 +60,23 @@ Start with the current architecture doc before diving into donor material:
 
 1. Treat the current Rust workspace and its tests as the source of truth for
    present executable behavior.
-2. Use [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) first when you need the
-   current crate boundaries, runtime flow, reporting surface, or honesty
+2. Use [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) first when you need
+   current crate boundaries, runtime flow, reporting surface, or the honesty
    boundary.
 3. Treat `engine/src/*.hs` as donor provenance for unresolved semantics, not as
    automatically newer or truer than the current Rust implementation.
-4. Keep the hot path name-free. Semantic labels belong in CLI reporting and Agda
-   export layers only.
+4. Keep the hot path name-free. Semantic labels belong in CLI reporting and
+   Agda export layers only.
 5. Separate three targets the repo still risks conflating:
    - the current strict executable Rust canon
    - paper-facing or aspirational targets
    - older historical 16-step or alternate late-shell variants
-6. Do not mistake the existence of compatibility structs, manifest schemas, or
-   placeholder storage modules for fully implemented runtime behavior.
-7. Do not regress the repo back toward replay-or-template logic when the current
-   bounded live atomic lane already works through step 15.
+6. Do not mistake compatibility structs, manifest schemas, or placeholder
+   storage modules for fully implemented runtime behavior.
+7. Do not regress the repo back toward replay-or-template logic when the
+   current bounded live atomic lane already works through step `15`.
+8. Use the operational repo docs for live open work and use the bundled
+   references for stable current-state detail.
 
 ## First Reads
 
@@ -377,44 +84,55 @@ For most tasks, read in this order:
 
 1. [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
 2. [../../overall_plan.md](../../overall_plan.md)
-3. [../../quantum_progress.md](../../quantum_progress.md) when the task touches
-   prefix search, bounds, caching, or the quantum plan
-4. [../../demo_lane_progress.md](../../demo_lane_progress.md) when the task
-   touches `demo_breadth_shadow` budgets, narratives, or comparison evidence
-5. [theory/README.md](theory/README.md)
+3. One of these track-specific current-state references, depending on the task:
+   - [references/11-current-realistic-shadow.md](references/11-current-realistic-shadow.md)
+   - [references/12-current-demo-lane.md](references/12-current-demo-lane.md)
+4. [../../quantum_progress.md](../../quantum_progress.md) when the task
+   touches prefix search, bounds, caching, or realistic late-step tuning
+5. [../../demo_lane_progress.md](../../demo_lane_progress.md) and
+   [../../demo_lane_plan.md](../../demo_lane_plan.md) when the task touches
+   `demo_breadth_shadow`
+6. [theory/README.md](theory/README.md) when you need the theorem or manuscript
+   map
 
 Then branch based on the task.
 
 ## Reference Map
 
 - Read [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) for the current crate
-  graph, runtime flow, reporting architecture, artifact model, and current
-  honesty boundary.
+  graph, runtime flow, reporting architecture, artifact model, and honesty
+  boundary.
 - Read [../../README.md](../../README.md) for the current user-facing commands
   and smoke-test commands.
 - Read [../../overall_plan.md](../../overall_plan.md) for current completion
   status, deliverables, and immediate next priorities.
 - Read [../../quantum_progress.md](../../quantum_progress.md) for the current
   delta between the quantum improvement plan and the live Rust codebase.
-- Read [../../demo_lane_progress.md](../../demo_lane_progress.md) and
-  [../../demo_lane_plan.md](../../demo_lane_plan.md) when the task touches
-  `demo_breadth_shadow` budgets, narrative artifacts, breadth claims, or demo
-  compare/reporting work.
+- Read [references/11-current-realistic-shadow.md](references/11-current-realistic-shadow.md)
+  for the current realistic-shadow capability inventory, evidence snapshot, and
+  remaining search gap.
+- Read [../../demo_lane_progress.md](../../demo_lane_progress.md),
+  [../../demo_lane_plan.md](../../demo_lane_plan.md), and
+  [../../demo_lane_checklist.md](../../demo_lane_checklist.md) for live
+  `demo_breadth_shadow` status, targets, and signoff tasks.
+- Read [references/12-current-demo-lane.md](references/12-current-demo-lane.md)
+  for the stable current demo-lane mechanisms and evidence baselines that
+  should remain true while the open targets move.
 - Read [theory/README.md](theory/README.md) when you need the theorem map or
   manuscript map.
 - Read [theory/genesis.md](theory/genesis.md) when you need the exact strict
-  15-step target.
+  `15`-step target.
 - Read [theory/pen-model.md](theory/pen-model.md),
   [theory/coherence-and-scaling.md](theory/coherence-and-scaling.md), and
   [theory/novelty-selection-and-rejection.md](theory/novelty-selection-and-rejection.md)
   for the mathematical contract behind the search objective.
 - Read [theory/late-framework-abstraction.md](theory/late-framework-abstraction.md)
   and [theory/terminal-dct.md](theory/terminal-dct.md) before making claims
-  about steps 10 to 15.
+  about steps `10` to `15`.
 - Read [references/01-project-brief.md](references/01-project-brief.md) for
   scope, donor priorities, and stale-doc warnings.
 - Read [references/02-target-sequence.md](references/02-target-sequence.md) for
-  the canonical 15-step target, current strict values, and bar arithmetic.
+  the canonical `15`-step target, current strict values, and bar arithmetic.
 - Read [references/03-repo-donor-map.md](references/03-repo-donor-map.md) when
   deciding what to port, what to demote to reporting, and what not to copy.
 - Read [references/04-mbtt-kernel.md](references/04-mbtt-kernel.md) before
@@ -428,8 +146,8 @@ Then branch based on the task.
 - Read [references/07-agda-validation.md](references/07-agda-validation.md)
   before building export payloads, witness modules, or verification scripts.
 - Read [references/08-evidence-and-invariants.md](references/08-evidence-and-invariants.md)
-  when you need test or CI contracts, evidence requirements, or non-interference
-  rules.
+  when you need test or CI contracts, evidence requirements, or
+  non-interference rules.
 - Read [references/09-rust-rewrite-blueprint.md](references/09-rust-rewrite-blueprint.md)
   when working on schemas, checkpoints, memory limits, or unfinished runtime
   infrastructure.
@@ -476,6 +194,7 @@ Read:
 
 - [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
 - [../../quantum_progress.md](../../quantum_progress.md)
+- [references/11-current-realistic-shadow.md](references/11-current-realistic-shadow.md)
 - [theory/genesis.md](theory/genesis.md)
 - [theory/novelty-selection-and-rejection.md](theory/novelty-selection-and-rejection.md)
 - [references/05-search-and-selection.md](references/05-search-and-selection.md)
@@ -487,34 +206,21 @@ Focus on:
 - exact-band search and bar semantics
 - admissibility from structural debt, not names
 - deterministic dedupe and SCC minimality
-- the remaining difference between the current realistic online prefix engine,
-  the landed legality/connectivity/family/active-window/terminal-clause/
-  terminal-admissibility memo path plus the landed terminal trivial-
-  derivability reuse and terminal-prefix bar prune plus the landed exact
-  small-tree partial-prefix bound prune plus the landed exact
-  multi-step partial-prefix bar-decision reuse plus the landed terminal-prefix
-  partial-bound reuse plus the landed exact single-continuation suffix
-  collapse plus the landed exact historical-reanchor connectivity shortcut
-  plus the landed cached next-clause reuse and continuation-aware queue order,
-  and the still-missing broader partial-prefix bound pruning plus broader
-  non-family admissibility reuse
-- using strengthened `PrefixSignature` state, the landed memo counters, the
-  now-persisted timing telemetry, and the deterministic frontier memory
-  high-water metrics as the remaining bound/admissibility gaps past the landed
-  clause-family pruning, active-window clause filtering, terminal-clause
-  filtering, terminal-admissibility cache, exact historical-reanchor
-  connectivity shortcut, budgeted small-tree partial-prefix bound prune,
-  cached next-clause reuse, terminal-prefix partial-bound reuse, and
-  terminal-prefix bar prune as the starting point for further quantum-inspired
-  search work
+- the remaining difference between the current realistic online prefix engine
+  and the still-missing stronger sound bounds plus broader non-family
+  admissibility reuse
+- using `PrefixSignature`, memo counters, timing telemetry, and frontier
+  memory evidence to drive the next realistic late-step improvements
 
 ### If you are working on `demo_breadth_shadow`
 
 Read:
 
 - [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
+- [references/12-current-demo-lane.md](references/12-current-demo-lane.md)
 - [../../demo_lane_progress.md](../../demo_lane_progress.md)
 - [../../demo_lane_plan.md](../../demo_lane_plan.md)
+- [../../demo_lane_checklist.md](../../demo_lane_checklist.md)
 - [references/08-evidence-and-invariants.md](references/08-evidence-and-invariants.md)
 
 Focus on:
@@ -526,16 +232,8 @@ Focus on:
   `Scout -> BreadthHarvest -> Materialize -> ProofClose -> Seal`
 - persisting honest demo evidence in step summaries, narratives, and event
   streams rather than reconstructing it from debug text
-- using the new phase reason fields
-  `breadth_harvest_exit_reason`, `proof_close_entry_reason`, and
-  `proof_close_overrun_reason` plus the new proof-close reserve and closure
-  fields as current stored truth, while remembering that the next gap is
-  broader real widening plus the remaining floor-attainment and exact-bound
-  work, building on the landed proof-close ordering retune, the landed
-  adaptive spill/reserve feedback, the landed repeated discovery/proof-close
-  reserve retunes, the landed reserve-pressure plus closure-pressure
-  materialize handoffs, and the now-landed mandatory live-event coverage,
-  rather than "add counters for the first time"
+- moving only the still-open floors and early-breadth gaps without regressing
+  accepted parity, narrative/event coverage, or the honesty boundary
 
 ### If you are working on reporting or evidence
 
@@ -604,29 +302,10 @@ Reject designs that:
 ## Quick Summary
 
 - The current Rust workspace is already the primary executable truth for the
-  strict 15-step lane.
-- The repo now has real live atomic search through step 15, exact deterministic
-  selection, and a richer candidate-level evidence surface.
-- The current quantum-focused search gap is stronger partial-prefix bound
-  pruning beyond the landed exact clause-family impossibility prunes and
-  active-window clause filtering and terminal-clause filtering and budgeted
-  small-tree completion-bound prune and exact terminal-prefix bar prune plus
-  the landed exact terminal-prefix completion reuse plus the landed exact late
-  terminal accept-rank prune plus the landed exact multi-step partial-prefix
-  bar-decision reuse plus the landed terminal-prefix partial-bound reuse plus
-  the landed exact terminal-prefix best-rank summary reuse plus the landed
-  exact single-continuation suffix collapse plus the landed isolated exact
-  remaining-two suffix collapse plus the landed exact historical-reanchor
-  connectivity shortcut plus the landed cached next-clause reuse and
-  continuation-aware queue order, then broader non-family admissibility/filter
-  reuse before terminal completion summaries are built beyond the landed
-  legality/connectivity/family/active-window/terminal-clause/trivial-
-  derivability/terminal-admissibility/terminal-prefix-completion/partial-
-  prefix-bound memo layer, then continuing to use the now-persisted
-  timing/memory evidence to retune late-step order.
-- Other big unfinished areas remain broader anti-junk frontier design,
-  storage/runtime hardening beyond the current bounded resume lanes, the memory
-  governor, the stronger Agda contract, and the demo lane's still-missing
-  honest floor hits plus remaining late exact-bound work.
-- Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) for current
-  behavior, then use the theory and donor references only as needed.
+  strict `15`-step lane.
+- The main realistic-search gap is stronger sound bound pruning plus broader
+  non-family admissibility reuse on top of the already-landed memo/bound path.
+- The main demo-lane gap is the remaining early and late floor work tracked in
+  the repo-level demo-lane docs.
+- Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
+  the track-specific references you actually need.

@@ -9,9 +9,12 @@ This checklist covers only the remaining tasks needed for
 
 - Step `1` generated raw: `1296 / 2144`
 - Step `10` exact-screened: `7 / 120`
-- Step `12` generated raw: `147 / 1200`
-- Step `12` exact-screened: `83 / 400`
-- Step `14` generated raw: `2292 / 3500`
+- Step `12` generated raw: `995 / 1200`
+
+Closed this round from `runs/codex-demo-late-surface-v5`:
+
+- Step `12` exact-screened: `749 / 400`
+- Step `14` generated raw: `5135 / 3500`
 
 ## 1. Step-1 Recovery
 
@@ -44,9 +47,14 @@ Done when:
 
 ## 3. Step-12 Floor Closure
 
-- [ ] Raise step `12` generated raw from `147` to `1200+`.
-- [ ] Raise step `12` exact-screened surface from `83` to `400+`.
-- [ ] Preserve the reference acceptance while doing it.
+- [ ] Raise step `12` generated raw from `995` to `1200+`.
+- [x] Raise step `12` exact-screened surface from `83` to `400+`.
+- [x] Preserve the reference acceptance while doing it.
+
+Current evidence:
+`runs/codex-demo-late-surface-v5` now shows step `12` generated `995`,
+exact-screened `749`, `full_telescopes_evaluated = 1`, and accepted parity
+through step `15`.
 
 Done when:
 
@@ -56,9 +64,14 @@ Done when:
 
 ## 4. Step-14 Generated Floor
 
-- [ ] Raise step `14` generated raw from `2292` to `3500+`.
-- [ ] Keep step `14` exact-screened at `1100+`.
-- [ ] Preserve accepted parity and keep `full_telescopes_evaluated` moderate.
+- [x] Raise step `14` generated raw from `2292` to `3500+`.
+- [x] Keep step `14` exact-screened at `1100+`.
+- [x] Preserve accepted parity and keep `full_telescopes_evaluated` moderate.
+
+Current evidence:
+`runs/codex-demo-late-surface-v5` now shows step `14` generated `5135`,
+exact-screened `3807`, `full_telescopes_evaluated = 1`, and accepted parity
+through step `15`.
 
 Done when:
 
@@ -82,8 +95,8 @@ Done when:
 
 ## 6. Final Signoff Package
 
-- [ ] The default `10m` run finishes within `600s`.
-- [ ] Compare output still reports accepted parity through step `15`.
-- [ ] Config-backed tests cover the currently closed floors.
-- [ ] `demo_lane_progress.md`, `demo_lane_plan.md`, and
+- [x] The default `10m` run finishes within `600s`.
+- [x] Compare output still reports accepted parity through step `15`.
+- [x] Config-backed tests cover the currently closed floors.
+- [x] `demo_lane_progress.md`, `demo_lane_plan.md`, and
       `demo_lane_checklist.md` reflect the latest stored evidence.

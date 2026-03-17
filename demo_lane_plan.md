@@ -14,22 +14,22 @@ comparison-backed honesty boundary.
 ## Working Baseline
 
 - Early reference: `runs/codex-demo-early-catalog-v2`
-- Late reference: `runs/codex-demo-late-surface-v4`
+- Late reference: `runs/codex-demo-late-surface-v5`
 - Guarded comparison baseline: `runs/codex-realistic-late-baseline-v2`
 - Current known open deltas:
   - step `1` generated raw: `1296 -> 2144`
   - step `10` exact-screened: `7 -> 120+`
-  - step `12` generated raw: `147 -> 1200+`
-  - step `12` exact-screened: `83 -> 400+`
-  - step `14` generated raw: `2292 -> 3500+`
+  - remaining late generated gap: step `12` `995 -> 1200+`
+- Fresh closures in `v5`:
+  - step `12` exact-screened: `749 >= 400`
+  - step `14` generated: `5135 >= 3500`
 
 ## Execution Order
 
 1. Recover step-`1` generated breadth.
 2. Raise step-`10` exact-screened mass.
-3. Re-open step-`12` generated and exact-screened breadth.
-4. Raise step-`14` generated mass.
-5. Re-run the default `10m` signoff evidence and refresh docs/tests.
+3. Finish the remaining step-`12` generated breadth.
+4. Re-run the default `10m` signoff evidence and refresh docs/tests.
 
 ## Workstreams
 
@@ -48,8 +48,10 @@ Done when:
 
 ### 2. Late Floor Closure
 
-- Treat step `10` exact-screened, step `12` generated/exact-screened, and step
-  `14` generated as separate targets with separate evidence.
+- Treat step `10` exact-screened and step `12` generated as the remaining open
+  late targets with separate evidence.
+- Keep the newly landed step-`12` exact-screened and step-`14` generated floors
+  from regressing while the remaining late work moves.
 - Prefer changes that survive live prefix search over raw-catalog-only
   widening.
 - Keep accepted parity and `full_telescopes_evaluated` stable while moving the
@@ -59,15 +61,16 @@ Done when:
 
 - step `10` exact-screened reaches `120+`
 - step `12` generated reaches `1200+`
-- step `12` exact-screened reaches `400+`
-- step `14` generated reaches `3500+`
+- step `12` exact-screened stays `>= 400`
+- step `14` generated stays `>= 3500`
 - the default `10m` profile still preserves accepted parity through step `15`
 
 ### 3. Exact-Bound Tightening
 
 - Strengthen exact prefix and terminal-prefix bounds so extra honest breadth
   turns into honest exact-screened mass rather than extra full evaluations.
-- Use the open late floors as the scorecard for whether a bound change helped.
+- Use the remaining step-`10` and step-`12` floors as the scorecard for
+  whether a bound change helped.
 - Keep exact-screen reasons, prune classes, and stored narrative/event
   coverage stable while the bounds move.
 

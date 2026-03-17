@@ -12,7 +12,7 @@ This file is a short operational status page for the remaining
 - Steps `5` to `9` already carry widened live search mass through the prefix
   engine and are no longer the active problem.
 - The current early reference is `runs/codex-demo-early-catalog-v2`.
-- The current late reference is `runs/codex-demo-late-surface-v4`, compared
+- The current late reference is `runs/codex-demo-late-surface-v5`, compared
   against `runs/codex-realistic-late-baseline-v2`.
 
 ## Remaining Signoff Gaps
@@ -21,16 +21,16 @@ This file is a short operational status page for the remaining
 | --- | --- | --- | --- |
 | Step `1` generated raw | `1296` | `2144` | open |
 | Step `10` exact-screened | `7` | `120+` | open |
-| Step `12` generated raw | `147` | `1200+` | open |
-| Step `12` exact-screened | `83` | `400+` | open |
-| Step `14` generated raw | `2292` | `3500+` | open |
+| Step `12` generated raw | `995` | `1200+` | open |
 
 ## What Is Already Good Enough
 
 - Step `10` generated floor is hit: `1344 >= 500`.
 - Step `11` hits both floor families: `4191 >= 800`, `253 >= 220`.
+- Step `12` now hits its exact-screened floor: `749 >= 400`.
 - Step `13` and step `15` hit both generated and exact-screened floors.
-- Step `14` already hits its exact-screened floor: `1521 >= 1100`.
+- Step `14` now hits both late floors: generated `5135 >= 3500`,
+  exact-screened `3807 >= 1100`.
 - `full_telescopes_evaluated` stays `1` on every late step in the current
   `10m` reference run.
 - Steps `1` to `4` finish in `140 ms` total in the current early reference
@@ -39,7 +39,9 @@ This file is a short operational status page for the remaining
 - Step `1` now persists an explicit early audit in the current stored scout
   narrative: `raw_clause_widths=36x36`, `raw_telescopes=1296`.
 - Accepted parity still holds through step `15`
-  (`matches_reference_replay x15`).
+  (`matches_reference_replay x15`), and
+  `scripts/compare_runs.py` reports `Comparison Signoff: ready` for the
+  current late reference against the realistic baseline.
 
 ## Current Read Of The Problem
 
@@ -50,10 +52,13 @@ This file is a short operational status page for the remaining
   missing `848` surface absent from the live enumerator rather than hidden by
   the budget controller.
 - The remaining late gap is no longer step-`5` to `9` carry-through or broad
-  late-family exposure. It is concentrated in step `10` exact-screen mass,
-  step `12` generated and exact-screened mass, and step `14` generated mass.
-- Further progress likely needs tighter exact prefix and terminal-prefix
-  bounds, not just more raw catalog widening.
+  late-family exposure. The current `v5` widening closed the step-`12`
+  exact-screened floor and the step-`14` generated floor, leaving only
+  step `10` exact-screen mass and the last `205` raw generated candidates on
+  step `12` still open.
+- Further progress likely needs a narrower step-`10` exact-screen fix plus a
+  more selective step-`12` generated widening, not another broad late-surface
+  explosion.
 - Any change that alters accepted hashes, drives `full_telescopes_evaluated`
   materially upward, or leans on silent fallback is a regression.
 
@@ -63,12 +68,10 @@ This file is a short operational status page for the remaining
    ceiling without breaking the shared early-window story.
 2. Instrument step `10` to find where honest exact-screen opportunities are
    being lost before the `120` floor.
-3. Re-open step `12` widening only with parity checks in place, since the last
-   broader attempt either changed acceptance or collapsed generation entirely.
-4. Push step `14` generated breadth upward without disturbing the already-good
-   exact-screened surface.
-5. Keep the default `10m` config-backed test and stored run evidence aligned
-   with the latest accepted reference.
+3. Push step `12` generated from `995` to `1200+` without giving back the
+   newly landed `749` exact-screened surface.
+4. Keep the default `10m` config-backed test and stored run evidence aligned
+   with the current `v5` reference.
 
 ## Guardrails
 

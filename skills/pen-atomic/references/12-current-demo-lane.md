@@ -55,13 +55,14 @@ first:
   - steps `5` to `9` generated = `27/15/15/45/24`
   - steps `5` to `9` exact-screened = `1/3/2/13/9`
   - `full_telescopes_evaluated = 1` on every step
-- Late reference: `runs/codex-demo-late-surface-v4`
+- Late reference: `runs/codex-demo-late-surface-v5`
   compared against `runs/codex-realistic-late-baseline-v2`
-  - steps `10` to `15` generated = `1344/4191/147/3995/2292/22715`
-  - steps `10` to `15` exact-screened = `7/253/83/3123/1521/18749`
+  - steps `10` to `15` generated = `1344/4191/995/3995/5135/22715`
+  - steps `10` to `15` exact-screened = `7/253/749/3123/3807/18749`
   - `full_telescopes_evaluated = 1` on every late step
   - accepted parity still holds through step `15`
     (`matches_reference_replay x15`)
+  - `scripts/compare_runs.py` reports `Comparison Signoff: ready`
 
 ## Current Open Gaps
 
@@ -69,9 +70,7 @@ first:
 | --- | --- | --- |
 | Step `1` generated raw | `1296` | `2144` |
 | Step `10` exact-screened | `7` | `120+` |
-| Step `12` generated raw | `147` | `1200+` |
-| Step `12` exact-screened | `83` | `400+` |
-| Step `14` generated raw | `2292` | `3500+` |
+| Step `12` generated raw | `995` | `1200+` |
 
 ## Guardrails
 

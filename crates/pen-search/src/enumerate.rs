@@ -443,62 +443,132 @@ fn demo_connection_shell_clauses(position: usize, context: EnumerationContext) -
         .checked_sub(1)
         .filter(|index| *index > 0)
         .unwrap_or(latest);
+    let widen = context.library_size >= 11;
     match position {
-        0 => vec![
-            Expr::Pi(
-                Box::new(Expr::Lib(latest)),
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-            ),
-            Expr::Pi(
-                Box::new(Expr::Lib(previous)),
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-            ),
-            Expr::Pi(
-                Box::new(Expr::Lib(latest)),
-                Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
-            ),
-        ],
-        1 => vec![
-            Expr::Lam(Box::new(Expr::Pi(
-                Box::new(Expr::Var(1)),
-                Box::new(Expr::Var(2)),
-            ))),
-            Expr::Lam(Box::new(Expr::Pi(
-                Box::new(Expr::Var(2)),
-                Box::new(Expr::Var(1)),
-            ))),
-            Expr::Lam(Box::new(Expr::Sigma(
-                Box::new(Expr::Var(1)),
-                Box::new(Expr::Var(2)),
-            ))),
-        ],
-        2 => vec![
-            Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
-                Box::new(Expr::Var(1)),
-            ),
-            Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Var(2)))),
-                Box::new(Expr::Var(1)),
-            ),
-            Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
-                Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
-            ),
-        ],
-        3 => vec![
-            Expr::App(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
-            Expr::App(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
-            Expr::App(
-                Box::new(Expr::Lib(latest)),
-                Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
-            ),
-        ],
-        4 => vec![
-            Expr::Lam(Box::new(Expr::Var(1))),
-            Expr::Lam(Box::new(Expr::Var(2))),
-            Expr::Lam(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
-        ],
+        0 => {
+            let mut clauses = vec![
+                Expr::Pi(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                ),
+                Expr::Pi(
+                    Box::new(Expr::Lib(previous)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                ),
+                Expr::Pi(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                ),
+            ];
+            if widen {
+                clauses.extend([
+                    Expr::Pi(
+                        Box::new(Expr::Lib(latest)),
+                        Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+                    ),
+                    Expr::Pi(
+                        Box::new(Expr::Lib(previous)),
+                        Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                    ),
+                ]);
+            }
+            clauses
+        }
+        1 => {
+            let mut clauses = vec![
+                Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Var(2)),
+                ))),
+                Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(2)),
+                    Box::new(Expr::Var(1)),
+                ))),
+                Expr::Lam(Box::new(Expr::Sigma(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Var(2)),
+                ))),
+            ];
+            if widen {
+                clauses.extend([
+                    Expr::Lam(Box::new(Expr::Pi(
+                        Box::new(Expr::Var(1)),
+                        Box::new(Expr::Var(1)),
+                    ))),
+                    Expr::Lam(Box::new(Expr::Sigma(
+                        Box::new(Expr::Var(2)),
+                        Box::new(Expr::Var(1)),
+                    ))),
+                ]);
+            }
+            clauses
+        }
+        2 => {
+            let mut clauses = vec![
+                Expr::Pi(
+                    Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+                    Box::new(Expr::Var(1)),
+                ),
+                Expr::Pi(
+                    Box::new(Expr::Flat(Box::new(Expr::Var(2)))),
+                    Box::new(Expr::Var(1)),
+                ),
+                Expr::Pi(
+                    Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+                    Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+                ),
+            ];
+            if widen {
+                clauses.extend([
+                    Expr::Pi(
+                        Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Var(2)),
+                    ),
+                    Expr::Pi(
+                        Box::new(Expr::Flat(Box::new(Expr::Var(2)))),
+                        Box::new(Expr::Var(2)),
+                    ),
+                ]);
+            }
+            clauses
+        }
+        3 => {
+            let mut clauses = vec![
+                Expr::App(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+                Expr::App(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
+                Expr::App(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+                ),
+            ];
+            if widen {
+                clauses.extend([
+                    Expr::App(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(2))),
+                    Expr::App(
+                        Box::new(Expr::Lib(previous)),
+                        Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+                    ),
+                ]);
+            }
+            clauses
+        }
+        4 => {
+            let mut clauses = vec![
+                Expr::Lam(Box::new(Expr::Var(1))),
+                Expr::Lam(Box::new(Expr::Var(2))),
+                Expr::Lam(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+            ];
+            if widen {
+                clauses.extend([
+                    Expr::Lam(Box::new(Expr::Flat(Box::new(Expr::Var(2))))),
+                    Expr::Lam(Box::new(Expr::Pi(
+                        Box::new(Expr::Var(1)),
+                        Box::new(Expr::Var(1)),
+                    ))),
+                ]);
+            }
+            clauses
+        }
         _ => Vec::new(),
     }
 }
@@ -513,76 +583,158 @@ fn demo_curvature_shell_clauses(position: usize, context: EnumerationContext) ->
         .checked_sub(1)
         .filter(|index| *index > 0)
         .unwrap_or(latest);
+    let widen = context.library_size >= 11;
     match position {
-        0 => vec![
-            Expr::Pi(
-                Box::new(Expr::Lib(latest)),
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-            ),
-            Expr::Pi(
-                Box::new(Expr::Lib(previous)),
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-            ),
-            Expr::Pi(
-                Box::new(Expr::Lib(latest)),
-                Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
-            ),
-        ],
-        1 => vec![
-            Expr::Lam(Box::new(Expr::App(
-                Box::new(Expr::Lib(latest)),
-                Box::new(Expr::Var(1)),
-            ))),
-            Expr::Lam(Box::new(Expr::App(
-                Box::new(Expr::Lib(previous)),
-                Box::new(Expr::Var(1)),
-            ))),
-            Expr::Lam(Box::new(Expr::App(
-                Box::new(Expr::Lib(latest)),
-                Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
-            ))),
-        ],
-        2 => vec![
-            Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Lib(latest))),
-            Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Lib(latest))),
-            Expr::Pi(
-                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
-                Box::new(Expr::Lib(latest)),
-            ),
-        ],
-        3 => vec![
-            Expr::App(
-                Box::new(Expr::Lib(latest)),
-                Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
-            ),
-            Expr::App(
-                Box::new(Expr::Lib(previous)),
-                Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
-            ),
-            Expr::App(
-                Box::new(Expr::Lib(latest)),
-                Box::new(Expr::App(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
-            ),
-        ],
-        4 => vec![
-            Expr::Lam(Box::new(Expr::Pi(
-                Box::new(Expr::Var(1)),
-                Box::new(Expr::Var(2)),
-            ))),
-            Expr::Lam(Box::new(Expr::Pi(
-                Box::new(Expr::Var(2)),
-                Box::new(Expr::Var(1)),
-            ))),
-            Expr::Lam(Box::new(Expr::Pi(
-                Box::new(Expr::Var(1)),
-                Box::new(Expr::Lib(latest)),
-            ))),
-        ],
-        5 => vec![
-            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
-            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(latest))),
-            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(previous))),
-        ],
+        0 => {
+            let mut clauses = vec![
+                Expr::Pi(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                ),
+                Expr::Pi(
+                    Box::new(Expr::Lib(previous)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                ),
+                Expr::Pi(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                ),
+            ];
+            if widen {
+                clauses.extend([
+                    Expr::Pi(
+                        Box::new(Expr::Lib(latest)),
+                        Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+                    ),
+                    Expr::Pi(
+                        Box::new(Expr::Lib(previous)),
+                        Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                    ),
+                ]);
+            }
+            clauses
+        }
+        1 => {
+            let mut clauses = vec![
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::Var(1)),
+                ))),
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(previous)),
+                    Box::new(Expr::Var(1)),
+                ))),
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+                ))),
+            ];
+            if widen {
+                clauses.extend([
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(previous)),
+                        Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+                    ))),
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(latest)),
+                        Box::new(Expr::Var(2)),
+                    ))),
+                ]);
+            }
+            clauses
+        }
+        2 => {
+            let mut clauses = vec![
+                Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Lib(latest))),
+                Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Lib(latest))),
+                Expr::Pi(
+                    Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+                    Box::new(Expr::Lib(latest)),
+                ),
+            ];
+            if widen {
+                clauses.extend([
+                    Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Lib(previous))),
+                    Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Lib(previous))),
+                ]);
+            }
+            clauses
+        }
+        3 => {
+            let mut clauses = vec![
+                Expr::App(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+                ),
+                Expr::App(
+                    Box::new(Expr::Lib(previous)),
+                    Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+                ),
+                Expr::App(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::App(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                ),
+            ];
+            if widen {
+                clauses.extend([
+                    Expr::App(
+                        Box::new(Expr::Lib(previous)),
+                        Box::new(Expr::App(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                    ),
+                    Expr::App(
+                        Box::new(Expr::Lib(latest)),
+                        Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                    ),
+                ]);
+            }
+            clauses
+        }
+        4 => {
+            let mut clauses = vec![
+                Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Var(2)),
+                ))),
+                Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(2)),
+                    Box::new(Expr::Var(1)),
+                ))),
+                Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Lib(latest)),
+                ))),
+            ];
+            if widen {
+                clauses.extend([
+                    Expr::Lam(Box::new(Expr::Pi(
+                        Box::new(Expr::Var(1)),
+                        Box::new(Expr::Var(1)),
+                    ))),
+                    Expr::Lam(Box::new(Expr::Pi(
+                        Box::new(Expr::Var(2)),
+                        Box::new(Expr::Var(2)),
+                    ))),
+                ]);
+            }
+            clauses
+        }
+        5 => {
+            let mut clauses = vec![
+                Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
+                Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(latest))),
+                Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(previous))),
+            ];
+            if widen {
+                clauses.extend([
+                    Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(previous))),
+                    Expr::Pi(
+                        Box::new(Expr::Lib(previous)),
+                        Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                    ),
+                ]);
+            }
+            clauses
+        }
         _ => Vec::new(),
     }
 }
@@ -829,6 +981,7 @@ fn demo_hilbert_functional_clauses(position: usize, context: EnumerationContext)
     let latest = context.library_size;
     let previous = latest - 1;
     let older = latest - 2;
+    let widen = context.library_size >= 13;
     match position {
         0 => vec![
             Expr::Sigma(
@@ -909,44 +1062,80 @@ fn demo_hilbert_functional_clauses(position: usize, context: EnumerationContext)
                 Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
             ),
         ],
-        5 => vec![
-            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
-            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
-            Expr::Pi(
-                Box::new(Expr::Lib(latest)),
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-            ),
-        ],
-        6 => vec![
-            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
-            Expr::Pi(Box::new(Expr::Lib(older)), Box::new(Expr::Var(1))),
-            Expr::Pi(
-                Box::new(Expr::Lib(previous)),
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-            ),
-        ],
-        7 => vec![
-            Expr::Pi(Box::new(Expr::Lib(older)), Box::new(Expr::Var(1))),
-            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
-            Expr::Pi(
-                Box::new(Expr::Lib(older)),
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-            ),
-        ],
-        8 => vec![
-            Expr::Lam(Box::new(Expr::Pi(
-                Box::new(Expr::Var(1)),
-                Box::new(Expr::Univ),
-            ))),
-            Expr::Lam(Box::new(Expr::Pi(
-                Box::new(Expr::Var(2)),
-                Box::new(Expr::Univ),
-            ))),
-            Expr::Lam(Box::new(Expr::Pi(
-                Box::new(Expr::Var(1)),
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
-            ))),
-        ],
+        5 => {
+            let mut clauses = vec![
+                Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+                Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
+                Expr::Pi(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                ),
+            ];
+            if widen {
+                clauses.push(Expr::Pi(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                ));
+            }
+            clauses
+        }
+        6 => {
+            let mut clauses = vec![
+                Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
+                Expr::Pi(Box::new(Expr::Lib(older)), Box::new(Expr::Var(1))),
+                Expr::Pi(
+                    Box::new(Expr::Lib(previous)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                ),
+            ];
+            if widen {
+                clauses.push(Expr::Pi(
+                    Box::new(Expr::Lib(previous)),
+                    Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                ));
+            }
+            clauses
+        }
+        7 => {
+            let mut clauses = vec![
+                Expr::Pi(Box::new(Expr::Lib(older)), Box::new(Expr::Var(1))),
+                Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+                Expr::Pi(
+                    Box::new(Expr::Lib(older)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                ),
+            ];
+            if widen {
+                clauses.push(Expr::Pi(
+                    Box::new(Expr::Lib(older)),
+                    Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                ));
+            }
+            clauses
+        }
+        8 => {
+            let mut clauses = vec![
+                Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Univ),
+                ))),
+                Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(2)),
+                    Box::new(Expr::Univ),
+                ))),
+                Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
+                ))),
+            ];
+            if widen {
+                clauses.push(Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(2)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
+                ))));
+            }
+            clauses
+        }
         _ => Vec::new(),
     }
 }
