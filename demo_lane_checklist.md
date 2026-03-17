@@ -1,6 +1,6 @@
 # Demo Lane Checklist
 
-Last updated: 2026-03-16
+Last updated: 2026-03-17
 
 This checklist contains only the still-open work for `demo_breadth_shadow`.
 
@@ -91,3 +91,16 @@ Default `10m` signoff targets:
 - [ ] Late steps show large honest breadth with moderate full evaluations.
 - [x] No silent guarded or replay fallback is used when the demo lane misses
       budget or certification.
+
+
+## 8. Immediate Execution Slice
+
+- [ ] Run an early-window recovery pass that first restores step `1` toward
+      `2144`, then revalidates steps `2` to `4` inside the shared `90s` window
+      with parity preserved.
+- [ ] Run a late-step widening pass for steps `10` to `15` that increases both
+      generated and exact-screened breadth before further scheduler retuning.
+- [ ] Close controller/reporting integration by emitting closure-aware
+      replanning decisions plus exact-screen reason and prune-taxonomy labels
+      in the same stored evidence consumed by `--narrative` and
+      `scripts/compare_runs.py`.

@@ -1,6 +1,6 @@
 # Demo Lane Progress
 
-Last updated: 2026-03-16
+Last updated: 2026-03-17
 
 This file tracks only the open status of `demo_breadth_shadow`.
 
@@ -89,3 +89,22 @@ retuning during `BreadthHarvest`.
    across `Materialize` and `ProofClose`.
 4. Finish prune taxonomy, exact-screen reason reporting, and remaining
    narrative/tooling gaps.
+
+## Immediate Execution Slice
+
+1. **Early-window recovery pass**
+   - prioritize step `1` enumeration restoration first, then recheck steps
+     `2` to `4` under the same `90s` envelope
+   - keep acceptance parity fixed while raising generated and exact-screened
+     surface so early breadth is genuinely recovered instead of narratively
+     repackaged
+2. **Late-step widening pass**
+   - broaden real step `10` to `15` discovery before further scheduler tuning
+     so structural buckets have enough candidate mass to rank
+   - validate widening by showing joint movement in generated and
+     exact-screened counts (not generated-only spikes)
+3. **Controller and reporting closeout pass**
+   - wire closure-aware replanning decisions into earlier within-step
+     widening/materialize actions
+   - persist exact-screen reason codes and prune taxonomy in the same run
+     evidence path used by `--narrative` and `compare_runs.py`
