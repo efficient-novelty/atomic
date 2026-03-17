@@ -1,7 +1,7 @@
 use crate::bounds::PrefixBound;
 use crate::branch_bound::AcceptRank;
 use crate::enumerate::{
-    EnumerationContext, clause_kappa_can_match_structural_family,
+    EnumerationContext, LateFamilySurface, clause_kappa_can_match_structural_family,
     clause_supports_structural_family_at_position,
 };
 use crate::prefix_cache::PrefixSignature;
@@ -125,9 +125,10 @@ impl PrefixFamilyFilterSummary {
         prefix_telescope: &Telescope,
         library: &Library,
         admissibility: StrictAdmissibility,
+        late_family_surface: LateFamilySurface,
     ) -> Option<Self> {
         let mut summary = Self::for_admissibility(clause_kappa, admissibility)?;
-        let context = EnumerationContext::from_admissibility(library, admissibility);
+        let context = family_filter_context(library, admissibility, late_family_surface);
         for (position, clause) in prefix_telescope.clauses.iter().enumerate() {
             summary = summary.retain_matching(position, clause, context);
             if summary.is_empty() {
@@ -220,6 +221,29 @@ fn structural_family_bit(family: StructuralFamily) -> u16 {
     }
 }
 
+fn late_family_surface_for_admissibility(admissibility: StrictAdmissibility) -> LateFamilySurface {
+    match admissibility.mode {
+        pen_type::admissibility::AdmissibilityMode::Guarded
+        | pen_type::admissibility::AdmissibilityMode::RelaxedShadow => LateFamilySurface::None,
+        pen_type::admissibility::AdmissibilityMode::RealisticShadow => {
+            LateFamilySurface::RealisticShadow
+        }
+        pen_type::admissibility::AdmissibilityMode::DemoBreadthShadow => {
+            LateFamilySurface::DemoBreadthShadow
+        }
+    }
+}
+
+fn family_filter_context(
+    library: &Library,
+    admissibility: StrictAdmissibility,
+    late_family_surface: LateFamilySurface,
+) -> EnumerationContext {
+    let mut context = EnumerationContext::from_admissibility(library, admissibility);
+    context.late_family_surface = late_family_surface;
+    context
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum TerminalConnectivityDecision {
     PruneDisconnected,
@@ -277,6 +301,7 @@ pub enum PartialPrefixBoundDecision {
 pub struct PrefixLegalityCache {
     summaries: BTreeMap<PrefixSignature, PrefixLegalitySummary>,
     family_filters: BTreeMap<PrefixSignature, PrefixFamilyFilterSummary>,
+    family_surfaces: BTreeMap<PrefixSignature, LateFamilySurface>,
     terminal_prefix_completions: BTreeMap<PrefixSignature, TerminalPrefixCompletionSummary>,
     partial_prefix_bounds: BTreeMap<PrefixSignature, PartialPrefixBoundDecision>,
     stats: PrefixLegalityCacheStats,
@@ -347,6 +372,7 @@ impl PrefixLegalityCache {
         library: &Library,
         prefix_telescope: &Telescope,
         admissibility: StrictAdmissibility,
+        late_family_surface: LateFamilySurface,
     ) -> bool {
         let Some(summary) = PrefixLegalitySummary::from_telescope(library, prefix_telescope) else {
             return false;
@@ -356,6 +382,7 @@ impl PrefixLegalityCache {
             prefix_telescope,
             library,
             admissibility,
+            late_family_surface,
         ) {
             if filter_summary.is_empty() {
                 self.stats.clause_family_prunes += 1;
@@ -364,6 +391,8 @@ impl PrefixLegalityCache {
             self.family_filters
                 .insert(signature.clone(), filter_summary);
         }
+        self.family_surfaces
+            .insert(signature.clone(), late_family_surface);
         self.summaries.insert(signature, summary);
         true
     }
@@ -388,12 +417,17 @@ impl PrefixLegalityCache {
         let Some(child_summary) = parent_summary.extend(library, clause) else {
             return false;
         };
+        let late_family_surface = self
+            .family_surfaces
+            .get(parent_signature)
+            .copied()
+            .unwrap_or_else(|| late_family_surface_for_admissibility(admissibility));
         if let Some(parent_filter) = self.family_filters.get(parent_signature).copied() {
             self.stats.clause_family_filter_hits += 1;
             let child_filter = parent_filter.retain_matching(
                 usize::from(child_signature.clause_position.saturating_sub(1)),
                 clause,
-                EnumerationContext::from_admissibility(library, admissibility),
+                family_filter_context(library, admissibility, late_family_surface),
             );
             if child_filter.is_empty() {
                 self.stats.clause_family_prunes += 1;
@@ -402,6 +436,8 @@ impl PrefixLegalityCache {
             self.family_filters
                 .insert(child_signature.clone(), child_filter);
         }
+        self.family_surfaces
+            .insert(child_signature.clone(), late_family_surface);
         self.summaries.insert(child_signature, child_summary);
         true
     }
@@ -444,7 +480,11 @@ impl PrefixLegalityCache {
     ) -> Option<Vec<&'a ClauseRec>> {
         let parent_filter = self.family_filters.get(parent_signature).copied()?;
         self.stats.active_window_clause_filter_hits += 1;
-        let context = EnumerationContext::from_admissibility(library, admissibility);
+        let context = family_filter_context(
+            library,
+            admissibility,
+            self.family_surface(parent_signature, admissibility),
+        );
         let mut filtered = Vec::with_capacity(clauses.len());
         for clause in clauses {
             if parent_filter
@@ -470,6 +510,7 @@ impl PrefixLegalityCache {
         if step_index <= 3
             || !self.summaries.contains_key(parent_signature)
             || !self.family_filters.contains_key(parent_signature)
+            || self.uses_family_surface_override(parent_signature, admissibility)
         {
             return None;
         }
@@ -509,6 +550,9 @@ impl PrefixLegalityCache {
         if step_index <= 3 {
             return None;
         }
+        if self.uses_family_surface_override(parent_signature, admissibility) {
+            return None;
+        }
         let clause_kappa = parent_signature.clause_position.saturating_add(1);
         self.stats.trivial_derivability_hits += 1;
         if parent_summary
@@ -531,7 +575,11 @@ impl PrefixLegalityCache {
         let terminal_filter = parent_filter.retain_matching(
             usize::from(parent_signature.clause_position),
             clause,
-            EnumerationContext::from_admissibility(library, admissibility),
+            family_filter_context(
+                library,
+                admissibility,
+                self.family_surface(parent_signature, admissibility),
+            ),
         );
         let decision = assess_strict_admissibility_from_terminal_summary(
             step_index,
@@ -545,6 +593,26 @@ impl PrefixLegalityCache {
         }
         Some(decision)
     }
+
+    fn family_surface(
+        &self,
+        signature: &PrefixSignature,
+        admissibility: StrictAdmissibility,
+    ) -> LateFamilySurface {
+        self.family_surfaces
+            .get(signature)
+            .copied()
+            .unwrap_or_else(|| late_family_surface_for_admissibility(admissibility))
+    }
+
+    fn uses_family_surface_override(
+        &self,
+        signature: &PrefixSignature,
+        admissibility: StrictAdmissibility,
+    ) -> bool {
+        self.family_surface(signature, admissibility)
+            != late_family_surface_for_admissibility(admissibility)
+    }
 }
 
 #[cfg(test)]
@@ -556,7 +624,7 @@ mod tests {
     };
     use crate::accept::acceptance_rank_for_telescope;
     use crate::bounds::PrefixBound;
-    use crate::enumerate::{EnumerationContext, build_clause_catalog};
+    use crate::enumerate::{EnumerationContext, LateFamilySurface, build_clause_catalog};
     use crate::prefix_cache::PrefixSignature;
     use pen_core::clause::{ClauseRec, ClauseRole};
     use pen_core::expr::Expr;
@@ -592,7 +660,14 @@ mod tests {
         let mut cache = PrefixLegalityCache::default();
         let admissibility = strict_admissibility(1, 2, &library);
 
-        assert!(cache.insert_root(root_signature.clone(), 2, &library, &root, admissibility));
+        assert!(cache.insert_root(
+            root_signature.clone(),
+            2,
+            &library,
+            &root,
+            admissibility,
+            LateFamilySurface::None
+        ));
         assert!(cache.insert_child(
             &root_signature,
             child_signature,
@@ -632,7 +707,14 @@ mod tests {
         let admissibility =
             strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::RealisticShadow);
 
-        assert!(cache.insert_root(signature.clone(), 8, &library, &prefix, admissibility));
+        assert!(cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::RealisticShadow
+        ));
         assert_eq!(
             cache.terminal_connectivity(&signature, &library, &last_clause),
             Some(TerminalConnectivityDecision::KeepWithoutFallback)
@@ -653,7 +735,14 @@ mod tests {
         let signature = PrefixSignature::new(15, &library, &prefix);
         let mut cache = PrefixLegalityCache::default();
 
-        assert!(cache.insert_root(signature.clone(), 8, &library, &prefix, admissibility));
+        assert!(cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::RealisticShadow
+        ));
 
         for clause in clause_catalog.clauses_at(7) {
             let mut telescope = prefix.clone();
@@ -681,7 +770,14 @@ mod tests {
         let signature = PrefixSignature::new(11, &library, &prefix);
         let mut cache = PrefixLegalityCache::default();
 
-        assert!(cache.insert_root(signature.clone(), 5, &library, &prefix, admissibility));
+        assert!(cache.insert_root(
+            signature.clone(),
+            5,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::RealisticShadow
+        ));
 
         let filtered = cache
             .filter_active_window_clauses(
@@ -710,7 +806,14 @@ mod tests {
         let signature = PrefixSignature::new(11, &library, &prefix);
         let mut cache = PrefixLegalityCache::default();
 
-        assert!(cache.insert_root(signature.clone(), 5, &library, &prefix, admissibility));
+        assert!(cache.insert_root(
+            signature.clone(),
+            5,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::RealisticShadow
+        ));
 
         let terminal_filtered = cache
             .filter_terminal_clauses(
@@ -738,8 +841,74 @@ mod tests {
         let signature = PrefixSignature::new(11, &library, &prefix);
         let mut cache = PrefixLegalityCache::default();
 
-        assert!(cache.insert_root(signature.clone(), 5, &library, &prefix, admissibility));
+        assert!(cache.insert_root(
+            signature.clone(),
+            5,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::RealisticShadow
+        ));
         assert_eq!(cache.family_option_count(&signature), Some(1));
+    }
+
+    #[test]
+    fn demo_surface_override_keeps_demo_only_terminal_clause_in_active_window_filter() {
+        let library = library_until(14);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::RealisticShadow);
+        let realistic_context = EnumerationContext::from_admissibility(&library, admissibility);
+        let realistic_catalog = build_clause_catalog(realistic_context, 8);
+        let mut demo_context = realistic_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let demo_catalog = build_clause_catalog(demo_context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let demo_only_clause = demo_catalog
+            .clauses_at(7)
+            .iter()
+            .find(|clause| !realistic_catalog.clauses_at(7).contains(*clause))
+            .expect("demo surface should expose an extra terminal clause")
+            .clone();
+        let demo_only_slice = [demo_only_clause.clone()];
+
+        let mut realistic_cache = PrefixLegalityCache::default();
+        assert!(realistic_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::RealisticShadow
+        ));
+        let realistic_filtered = realistic_cache
+            .filter_active_window_clauses(&signature, 7, &library, admissibility, &demo_only_slice)
+            .expect("realistic family summary should enable filtering");
+        assert!(realistic_filtered.is_empty());
+
+        let mut demo_cache = PrefixLegalityCache::default();
+        assert!(demo_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::DemoBreadthShadow
+        ));
+        let demo_filtered = demo_cache
+            .filter_active_window_clauses(&signature, 7, &library, admissibility, &demo_only_slice)
+            .expect("demo family summary should enable filtering");
+        assert_eq!(demo_filtered, vec![&demo_only_clause]);
+        assert_eq!(
+            demo_cache.filter_terminal_clauses(
+                15,
+                &signature,
+                &library,
+                admissibility,
+                &[&demo_only_clause],
+            ),
+            None
+        );
     }
 
     #[test]

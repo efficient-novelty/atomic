@@ -234,6 +234,12 @@ On the demo-lane side:
   `BreadthHarvest` can now keep borrowing from or returning time to the
   reserved certification slice while the live floor projection changes,
   surfacing those repeated retunes directly in the narrative
+- demo prefix-family summaries and active-window clause filtering now also
+  preserve the live demo late-family surface override instead of snapping those
+  prefixes back to realistic-shadow family matching before the online queue can
+  widen honestly, while demo terminal admissibility falls back to the direct
+  realistic-shadow check whenever that override is active so accepted parity
+  remains authoritative
 - demo materialize and proof-close now also reorder retained prefix groups from
   that live reserve/closure evidence, preferring incumbent-improving exact
   surfaces while reserve is healthy and faster prune/closure payoffs when the
@@ -253,11 +259,13 @@ On the demo-lane side:
 - exhaustive `pen-search` coverage now also confirms that those demo-only
   late-family enumerators beat realistic-shadow enumeration on steps `13` to
   `15`, and step `15` now has an extra demo-only temporal exchange variant
-  that preserves the reference acceptance, although fresh stored
-  `runs/codex-demo-step15-bridge-widening` evidence still shows the live
-  step-`15` demo funnel unchanged at `generated_raw_prefixes = 14` and
-  `exact_bound_screened = 3`, with the extra surface currently appearing only
-  as higher active-window filter prunes
+  that preserves the reference acceptance; fresh stored
+  `runs/codex-demo-family-surface` evidence now also shows that the preserved
+  demo family surface turns those landed late widenings into materially broader
+  live breadth, moving generated counts to `36/132/147/291/2292/1007` and
+  exact-screened counts to `18/82/83/178/1521/707` on steps `10` to `15`
+  while still keeping `full_telescopes_evaluated = 1` on each late step and
+  hitting the step-`14` exact-screened floor
 - demo materialize can now also yield into `ProofClose` with the explicit
   `materialize_reserve_handoff` reason once an incumbent exists and the
   remaining exact surface has already flipped into closure-first reserve
@@ -293,17 +301,17 @@ On the demo-lane side:
   `generated_raw_prefixes = 1296` and step timings `95/1/1/25 ms` through
   step `4` (`122 ms` total), so the shared early-window story is now backed by
   stored evidence even though the explicit `2144` target is still open
-- fresh `runs/codex-demo-midlate-widening` artifacts still show late-step
-  generated counts `9/15/15/11/12/14`, so the lane is more honest about
-  breadth while still missing the intended late floors
+- fresh `runs/codex-demo-family-surface` artifacts now show late-step
+  generated counts `36/132/147/291/2292/1007` and exact-screened counts
+  `18/82/83/178/1521/707`, so the lane is no longer just more honest about
+  breadth; it is materially broader live search while still missing several of
+  the intended late generated and exact floors
 - the current demo gap is not "make the lane look broader"; it is meeting the
   remaining surfaced early and late breadth floors honestly, with the shared
   early-window evidence now restored and the remaining early gap narrowed to
-  pushing step `1` from `1296` toward `2144`, then turning the landed
-  spill/reserve feedback plus the landed repeated discovery-side reserve
-  retunes plus the landed reserve-pressure and closure-pressure materialize
-  handoffs plus the landed structural bucket scheduler into stronger real
-  widening and floor attainment, while still finishing the remaining mandatory
+  pushing step `1` from `1296` toward `2144`, then pushing the remaining late
+  generated and exact floors from the newly broadened live surface, especially
+  on step `13` and step `15`, while still finishing the remaining mandatory
   live-event closeout
 
 Start with the current architecture doc before diving into donor material:

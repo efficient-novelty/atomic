@@ -3464,6 +3464,7 @@ fn discover_realistic_shadow_candidates(
                 library,
                 &prefix_telescope,
                 admissibility,
+                enumeration_context.late_family_surface,
             ) {
                 continue;
             }
@@ -5339,7 +5340,7 @@ mod tests {
     use crate::bounds::PrefixBound;
     use crate::branch_bound::AcceptRank;
     use crate::config::{RuntimeConfig, SearchProfile};
-    use crate::enumerate::{EnumerationContext, build_clause_catalog};
+    use crate::enumerate::{EnumerationContext, LateFamilySurface, build_clause_catalog};
     use crate::expand::evaluate_candidate;
     use crate::narrative::{NarrativeEventKind, StepPhase, narrative_progress_snapshot};
     use crate::prefix_cache::{PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature};
@@ -6626,7 +6627,14 @@ mod tests {
         let signature = PrefixSignature::new(11, &library, &prefix);
         let mut cache = PrefixLegalityCache::default();
 
-        assert!(cache.insert_root(signature.clone(), 5, &library, &prefix, admissibility));
+        assert!(cache.insert_root(
+            signature.clone(),
+            5,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::RealisticShadow
+        ));
 
         let work_item = create_online_prefix_work_item(
             5,
@@ -6699,7 +6707,14 @@ mod tests {
         let signature = PrefixSignature::new(15, &library, &prefix);
         let mut cache = PrefixLegalityCache::default();
 
-        assert!(cache.insert_root(signature.clone(), 8, &library, &prefix, admissibility));
+        assert!(cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::RealisticShadow
+        ));
 
         let work_item = create_online_prefix_work_item(
             8,
@@ -6770,7 +6785,14 @@ mod tests {
         let signature = PrefixSignature::new(15, &library, &prefix);
         let mut cache = PrefixLegalityCache::default();
 
-        assert!(cache.insert_root(signature.clone(), 8, &library, &prefix, admissibility));
+        assert!(cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::RealisticShadow
+        ));
 
         let work_item = create_online_prefix_work_item(
             8,
@@ -6862,7 +6884,14 @@ mod tests {
         let signature = PrefixSignature::new(15, &library, &prefix);
         let mut cache = PrefixLegalityCache::default();
 
-        assert!(cache.insert_root(signature.clone(), 8, &library, &prefix, admissibility));
+        assert!(cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::RealisticShadow
+        ));
 
         let work_item = create_online_prefix_work_item(
             8,

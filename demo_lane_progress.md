@@ -67,16 +67,23 @@ retuning during `BreadthHarvest`.
   enumerators beat realistic-shadow enumeration on steps `13` to `15`, and the
   step-`15` demo lane now includes an extra temporal exchange bridge variant
   that still preserves the reference acceptance under exact comparison.
-- Fresh stored evidence in `runs/codex-demo-step15-bridge-widening` still
-  preserves accepted parity through step `15` (`matches_reference_replay x15`)
-  but leaves the live step-`15` demo funnel at
-  `generated_raw_prefixes = 14` and `exact_bound_screened = 3`; the extra
-  temporal-shell surface currently shows up only as higher exact active-window
-  filter pressure (`incremental_active_window_clause_filter_prunes = 37`, up
-  from `34`) rather than as broader stored live breadth.
+- Demo prefix-family summaries and active-window clause filtering now preserve
+  the live demo late-family surface override instead of snapping those prefixes
+  back to realistic-shadow family matching before the online queue can widen
+  honestly, while demo terminal admissibility still falls back to the direct
+  realistic-shadow check whenever that override is active so accepted parity
+  stays authoritative.
+- Fresh stored evidence in `runs/codex-demo-family-surface` still preserves
+  accepted parity through step `15` (`matches_reference_replay x15`) and now
+  turns the landed late-family widening into materially broader stored live
+  breadth: generated raw surface moves to `36`, `132`, `147`, `291`, `2292`,
+  and `1007` on steps `10` to `15`, exact-screened counts move to
+  `18`, `82`, `83`, `178`, `1521`, and `707`, every late step still keeps
+  `full_telescopes_evaluated = 1`, and step `14` now hits the configured
+  exact-screened floor (`1521 >= 1100`).
 - The main remaining problem is no longer "missing demo evidence." The main
-  problem is that the live search surface is still not broad enough in the
-  places the plan cares about.
+  problem is now pushing the remaining surfaced late floors from this much
+  stronger base while the mandatory live-event closeout is still unfinished.
 
 ## What Still Blocks Signoff
 
@@ -93,23 +100,22 @@ retuning during `BreadthHarvest`.
 
 ### 2. Real Widening Is Still Missing
 
-- steps `5` to `15` still inherit too much of the current realistic-shadow
+- steps `5` to `9` still inherit too much of the current realistic-shadow
   surface
 - configured late-step generated and exact-screened floors are now stored and
   reported, but they are not yet being hit consistently
-- the latest stored `10m` run raises generated raw surface to
-  `9`, `15`, `15`, `11`, `12`, and `14` on steps `10` to `15`, with
-  exact-screened counts of `6`, `6`, `5`, `3`, `3`, and `3`, so the honest
-  late breadth story is improving on steps `10` to `12` but still far short
-  of the configured floors
-- the landed demo-specific structural bucket scheduler still needs broader real
-  widening underneath it so late buckets actually reach their honest floors
-- the new step-`15` temporal exchange variant currently improves exhaustive
-  demo-versus-realistic enumeration evidence more than the stored live demo
-  funnel, so the next gap is turning that widened static surface into honest
-  raw or exact-screened counts during the online prefix search
-- the new closure-pressure handoff improves the within-step split, but it does
-  not yet turn the widened late surface into stored live breadth on its own
+- the latest stored `10m` run now raises generated raw surface to
+  `36`, `132`, `147`, `291`, `2292`, and `1007` on steps `10` to `15`, with
+  exact-screened counts of `18`, `82`, `83`, `178`, `1521`, and `707`, so the
+  live late breadth story is no longer "barely above realistic shadow" even
+  though most configured generated floors and all but one exact-screened floor
+  are still open
+- the landed demo-specific structural bucket scheduler plus the preserved demo
+  family surface now have enough honest breadth underneath them to show real
+  widening, but the next gap is pushing that wider late surface through the
+  remaining configured floors, especially step `13` and step `15`
+- the new closure-pressure handoff improves the within-step split, but it still
+  needs the remaining widening and bound work to hit the last late floors
 
 ### 3. Reporting Closeout Is Still Incomplete
 
@@ -126,8 +132,8 @@ retuning during `BreadthHarvest`.
    toward `2144` without regressing the newly restored full candidate-list
    generation and shared early-window evidence on steps `1` to `4`.
 2. Build on the landed demo-only step-`10` to `12` widening plus the earlier
-   late-family widening and honest raw-surface counting to keep widening the
-   real search surface on steps `10` to `15`, especially by turning the new
-   step-`15` exhaustive temporal-shell variants into stored live breadth rather
-   than extra active-window filter prunes.
+   late-family widening, the preserved demo family-surface override, and the
+   honest raw-surface counting to keep pushing steps `10` to `15` toward the
+   remaining generated and exact-screened floors, especially step `13` and
+   step `15`.
 3. Finish the remaining mandatory live-event closeout.

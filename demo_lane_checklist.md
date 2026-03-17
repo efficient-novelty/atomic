@@ -37,29 +37,26 @@ evidence, but the explicit `2144` target is still open.
       variety.
 - [x] Widen steps `10` to `12` with more family unions, reference patterns,
       nested `Pi` and `Sigma`, bridge heads, and reanchor variants.
-- [ ] Widen steps `13` to `15` with more operator, Hilbert, and temporal
+- [x] Widen steps `13` to `15` with more operator, Hilbert, and temporal
       mixtures, mixed shells, historical reanchors, clause unions, and
       positional filters.
 - [ ] Strengthen exact prefix bounds so widening does not explode full
       terminal work.
 
-Latest stored evidence: fresh `runs/codex-demo-midlate-widening` artifacts keep
-accepted parity through step `15` while the landed demo-only step-`10` to `12`
-surface widening plus the earlier operator/Hilbert/temporal widening move late
-generated counts to `9/15/15/11/12/14` and exact-screened counts to
-`6/6/5/3/3/3`. Fresh `runs/codex-demo-step15-bridge-widening` artifacts keep
-the same accepted parity through step `15` and add a demo-only step-`15`
-temporal exchange variant plus exhaustive demo-vs-realistic widening tests
-through steps `13` to `15`, but the stored live step-`15` counts still hold at
-`generated_raw_prefixes = 14` and `exact_bound_screened = 3`, so this
-workstream is improving structurally while still far short of the configured
-floors.
+Latest stored evidence: fresh `runs/codex-demo-family-surface` artifacts keep
+accepted parity through step `15`, preserve the demo late-family surface
+through the online prefix-family and active-window filters, and move late
+generated counts to `36/132/147/291/2292/1007` plus exact-screened counts to
+`18/82/83/178/1521/707` on steps `10` to `15`. That finally turns the landed
+step-`13` to `15` widening into stored live breadth instead of extra
+active-window filter pressure, although the configured late floors are still
+not yet hit consistently.
 
 ## 4. Floor Attainment
 
 - [ ] Start hitting the configured late-step generated or exact-screened floors
       consistently, beginning with the default `10m` profile.
-- [ ] Keep `full_telescopes_evaluated` moderate relative to generated breadth.
+- [x] Keep `full_telescopes_evaluated` moderate relative to generated breadth.
 
 Default `10m` signoff targets:
 
@@ -69,6 +66,12 @@ Default `10m` signoff targets:
 - [ ] Step `13`: `2200+`
 - [ ] Step `14`: `3500+`
 - [ ] Step `15`: `5000+`
+
+Latest stored evidence: fresh `runs/codex-demo-family-surface` artifacts still
+miss the generated floors, but they now hit the step-`14`
+`exact_screened_floor` (`1521 >= 1100`) and keep
+`full_telescopes_evaluated = 1` on every late step while generated raw surface
+improves to `36/132/147/291/2292/1007`.
 
 ## 5. Closure-Aware Replanning And Reason Codes
 
