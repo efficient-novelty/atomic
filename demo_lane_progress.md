@@ -25,6 +25,9 @@ retuning during `BreadthHarvest`.
   root prefixes, raw child prefixes, forced single-continuation collapses, and
   raw terminal completions instead of falling back to
   `max(prefixes_created, enumerated_candidates)`.
+- Demo steps `1` to `4` now also restore full clause-catalog candidate-list
+  generation where it remains affordable instead of only exposing the current
+  realistic prefix-frontier shadow on those early steps.
 - The lane now has a deterministic demo bucket scheduler keyed only by
   structural/runtime-local evidence, with stored per-bucket generated,
   admissible, exact-screened, pruned, fully scored, and best-overshoot stats.
@@ -52,6 +55,11 @@ retuning during `BreadthHarvest`.
   retained exact surface prune-ready, and the same closure-pressure summary now
   flips proof-close ordering into closure-first even before reserve tightness
   alone would force that mode change.
+- Fresh stored evidence in `runs/codex-demo-early-catalog` now shows that
+  restored early candidate-list generation directly: step `1` reports
+  `generated_raw_prefixes = 1296`, steps `1` to `4` finish in `122 ms` total
+  (`95/1/1/25 ms`), and the stored step summaries plus appended narrative
+  progress both reflect those raw early counts.
 - Fresh stored evidence in `runs/codex-demo-midlate-widening` still preserves
   accepted parity through step `15` (`matches_reference_replay x15`) and
   finishes far under the default `600s` ceiling on this computer.
@@ -72,15 +80,16 @@ retuning during `BreadthHarvest`.
 
 ## What Still Blocks Signoff
 
-### 1. Early Breadth Is Still Short
+### 1. Early Breadth Still Misses The Step-1 Floor
 
-- step 1 now reports `546` generated raw surface in
-  `runs/codex-demo-rawcount`, up from `288`, but it still misses the explicit
-  `2144` floor
-- steps 1 to 4 are not yet shown to stay exhaustive or near-exhaustive inside
-  the shared `90s` window on this computer
-- early full candidate-list generation is still not restored wherever it is
-  supposed to remain affordable
+- step 1 now reports `1296` generated raw surface in
+  `runs/codex-demo-early-catalog`, up from `546` in
+  `runs/codex-demo-rawcount` and `288` before honest raw counting, but it
+  still misses the explicit `2144` floor
+- the same stored run now restores full early candidate-list generation
+  through step `4` where affordable and finishes steps `1` to `4` in `122 ms`
+  total, so the remaining early-breadth gap is now the step-`1` floor itself
+  rather than missing shared-window evidence
 
 ### 2. Real Widening Is Still Missing
 
@@ -113,8 +122,9 @@ retuning during `BreadthHarvest`.
 
 ## Next Priorities
 
-1. Restore the honest early breadth story from the current `546` toward step 1
-   at `2144`, then show the shared early `90s` window honestly.
+1. Push the honest early breadth story from the current step-`1` `1296`
+   toward `2144` without regressing the newly restored full candidate-list
+   generation and shared early-window evidence on steps `1` to `4`.
 2. Build on the landed demo-only step-`10` to `12` widening plus the earlier
    late-family widening and honest raw-surface counting to keep widening the
    real search surface on steps `10` to `15`, especially by turning the new

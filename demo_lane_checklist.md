@@ -12,14 +12,16 @@ discovery-side reserve retuning is intentionally omitted here.
 ## 1. Honest Early Breadth
 
 - [ ] Restore step 1 to `2144` generated raw candidates.
-- [ ] Show that steps `1` to `4` stay exhaustive or near-exhaustive inside the
+- [x] Show that steps `1` to `4` stay exhaustive or near-exhaustive inside the
       shared `90s` early window on this computer.
-- [ ] Keep full candidate-list generation on early steps wherever it remains
+- [x] Keep full candidate-list generation on early steps wherever it remains
       affordable.
 
-Latest stored evidence: `runs/codex-demo-rawcount` raises step `1` to `546`
-generated raw surface, up from `288`, but the explicit `2144` target is still
-far away.
+Latest stored evidence: fresh `runs/codex-demo-early-catalog` artifacts
+restore full early candidate-list generation through step `4`, raise step `1`
+to `1296` generated raw surface, and finish steps `1` to `4` in `122 ms`
+total (`95/1/1/25 ms`). The shared early-window story is now backed by stored
+evidence, but the explicit `2144` target is still open.
 
 ## 2. Structural Scheduling
 
@@ -114,7 +116,7 @@ still needed for the remaining mandatory-event closeout.
 
 - [x] `demo_breadth_shadow` preserves accepted-hash parity with guarded.
 - [ ] Step 1 reports `2144`.
-- [ ] Steps `1` to `4` fit the shared early `90s` budget honestly.
+- [x] Steps `1` to `4` fit the shared early `90s` budget honestly.
 - [x] The default `10m` profile completes within `600s` on this computer.
 - [ ] Late steps show large honest breadth with moderate full evaluations.
 - [x] No silent guarded or replay fallback is used when the demo lane misses

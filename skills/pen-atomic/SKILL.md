@@ -285,13 +285,21 @@ On the demo-lane side:
 - demo generated-surface reporting now also counts raw root prefixes, raw
   child prefixes, forced single-continuation collapses, and raw terminal
   completions instead of using
-  `max(prefixes_created, enumerated_candidates)`, and fresh
-  `runs/codex-demo-rawcount` artifacts now show step-1
-  `generated_raw_prefixes = 546` plus late-step generated counts
-  `5/11/11/11/12/14`, so the lane is more honest about breadth while still
-  missing the intended floors
+  `max(prefixes_created, enumerated_candidates)`, while demo steps `1` to `4`
+  can now also restore full clause-catalog candidate-list generation where it
+  remains affordable instead of only exposing the realistic prefix-frontier
+  shadow
+- fresh `runs/codex-demo-early-catalog` artifacts now show step-`1`
+  `generated_raw_prefixes = 1296` and step timings `95/1/1/25 ms` through
+  step `4` (`122 ms` total), so the shared early-window story is now backed by
+  stored evidence even though the explicit `2144` target is still open
+- fresh `runs/codex-demo-midlate-widening` artifacts still show late-step
+  generated counts `9/15/15/11/12/14`, so the lane is more honest about
+  breadth while still missing the intended late floors
 - the current demo gap is not "make the lane look broader"; it is meeting the
-  surfaced early and late breadth floors honestly, then turning the landed
+  remaining surfaced early and late breadth floors honestly, with the shared
+  early-window evidence now restored and the remaining early gap narrowed to
+  pushing step `1` from `1296` toward `2144`, then turning the landed
   spill/reserve feedback plus the landed repeated discovery-side reserve
   retunes plus the landed reserve-pressure and closure-pressure materialize
   handoffs plus the landed structural bucket scheduler into stronger real

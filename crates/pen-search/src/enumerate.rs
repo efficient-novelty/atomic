@@ -130,6 +130,32 @@ pub fn enumerate_next_clauses(context: EnumerationContext) -> Vec<ClauseRec> {
         .collect()
 }
 
+fn enumerate_raw_next_clauses(context: EnumerationContext) -> Vec<ClauseRec> {
+    enumerate_exprs_raw(context)
+        .into_iter()
+        .filter(|expr| {
+            (!context.require_former_eliminator_clauses || supports_former_eliminator_clause(expr))
+                && (!context.require_initial_hit_clauses || supports_initial_hit_clause(expr))
+                && (!context.require_truncation_hit_clauses || supports_truncation_hit_clause(expr))
+                && (!context.require_higher_hit_clauses || supports_higher_hit_clause(expr))
+                && (!context.require_sphere_lift_clauses || supports_sphere_lift_clause(expr))
+                && (!context.require_axiomatic_bundle_clauses
+                    || supports_axiomatic_bundle_clause(expr))
+                && (!context.require_modal_shell_clauses || supports_modal_shell_clause(expr))
+                && (!context.require_connection_shell_clauses
+                    || supports_connection_shell_clause(expr))
+                && (!context.require_curvature_shell_clauses
+                    || supports_curvature_shell_clause(expr))
+                && (!context.require_operator_bundle_clauses
+                    || supports_operator_bundle_clause(expr))
+                && (!context.require_hilbert_functional_clauses
+                    || supports_hilbert_functional_clause(expr))
+                && (!context.require_temporal_shell_clauses || supports_temporal_shell_clause(expr))
+        })
+        .map(|expr| ClauseRec::new(primary_role(&expr), expr))
+        .collect()
+}
+
 fn dedupe_sorted_clauses(clauses: Vec<ClauseRec>) -> Vec<ClauseRec> {
     let mut keyed = BTreeMap::new();
     for clause in clauses {
@@ -1114,6 +1140,29 @@ pub fn enumerate_telescopes(
     enumerate_telescopes_with_terminal_prefixes(library, base_context, clause_kappa).telescopes
 }
 
+pub fn enumerate_raw_telescopes(
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+) -> Vec<Telescope> {
+    let options_by_position = (0..usize::from(clause_kappa))
+        .map(|position| raw_clauses_for_position(base_context, clause_kappa, position))
+        .collect::<Vec<_>>();
+    if options_by_position.iter().any(Vec::is_empty) {
+        return Vec::new();
+    }
+
+    let mut telescopes = Vec::new();
+    let mut prefix = Vec::new();
+    enumerate_raw_telescopes_dfs(
+        clause_kappa,
+        &options_by_position,
+        &mut prefix,
+        &mut telescopes,
+    );
+    telescopes.sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
+    telescopes
+}
+
 pub fn enumerate_telescopes_with_terminal_prefixes(
     library: &Library,
     base_context: EnumerationContext,
@@ -1255,6 +1304,104 @@ fn clauses_for_position(
     dedupe_sorted_clauses(clauses)
 }
 
+fn raw_clauses_for_position(
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+    position: usize,
+) -> Vec<ClauseRec> {
+    let clause_context = EnumerationContext {
+        scope_size: base_context
+            .scope_size
+            .saturating_add(u32::from(clause_kappa).saturating_sub(1)),
+        ..base_context
+    };
+    let mut clauses = late_clause_options(position, clause_context, clause_kappa)
+        .unwrap_or_else(|| enumerate_raw_next_clauses(clause_context));
+    if base_context.require_former_eliminator_clauses {
+        clauses.retain(|clause| supports_former_package_clause_at_position(position, &clause.expr));
+    }
+    if base_context.require_initial_hit_clauses {
+        clauses.retain(|clause| supports_initial_hit_clause_at_position(position, &clause.expr));
+    }
+    if base_context.require_truncation_hit_clauses {
+        clauses.retain(|clause| supports_truncation_hit_clause_at_position(position, &clause.expr));
+    }
+    if base_context.require_higher_hit_clauses {
+        clauses.retain(|clause| supports_higher_hit_clause_at_position(position, &clause.expr));
+    }
+    if base_context.require_sphere_lift_clauses {
+        clauses.retain(|clause| supports_sphere_lift_clause_at_position(position, &clause.expr));
+    }
+    if base_context.require_axiomatic_bundle_clauses {
+        clauses.retain(|clause| {
+            supports_axiomatic_bundle_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.library_size,
+                base_context.historical_anchor_ref,
+            )
+        });
+    }
+    if base_context.require_modal_shell_clauses {
+        clauses.retain(|clause| supports_modal_shell_clause_at_position(position, &clause.expr));
+    }
+    if base_context.require_connection_shell_clauses {
+        clauses.retain(|clause| {
+            supports_connection_shell_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.library_size,
+            )
+        });
+    }
+    if base_context.require_curvature_shell_clauses {
+        clauses.retain(|clause| {
+            supports_curvature_shell_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.library_size,
+            )
+        });
+    }
+    if base_context.require_operator_bundle_clauses
+        || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 7)
+    {
+        clauses.retain(|clause| {
+            supports_operator_bundle_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.library_size,
+                base_context.late_family_surface,
+            )
+        });
+    }
+    if base_context.require_hilbert_functional_clauses
+        || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 9)
+    {
+        clauses.retain(|clause| {
+            supports_hilbert_functional_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.library_size,
+                base_context.late_family_surface,
+            )
+        });
+    }
+    if base_context.require_temporal_shell_clauses
+        || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 8)
+    {
+        clauses.retain(|clause| {
+            supports_temporal_shell_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.historical_anchor_ref,
+                base_context.late_family_surface,
+            )
+        });
+    }
+    clauses
+}
+
 pub(crate) fn clause_kappa_can_match_structural_family(
     family: StructuralFamily,
     clause_kappa: u16,
@@ -1374,6 +1521,15 @@ pub fn enumerate_exprs(context: EnumerationContext) -> Vec<Expr> {
     unique_sorted_exprs(all)
 }
 
+fn enumerate_exprs_raw(context: EnumerationContext) -> Vec<Expr> {
+    let mut cache = BTreeMap::new();
+    let mut all = Vec::new();
+    for nodes in 1..=context.max_expr_nodes {
+        all.extend(enumerate_exprs_exact_raw(context, nodes, &mut cache));
+    }
+    all
+}
+
 fn enumerate_telescopes_dfs(
     library: &Library,
     remaining: u16,
@@ -1409,6 +1565,25 @@ fn enumerate_telescopes_dfs(
                 terminal_prefixes,
             );
         }
+        prefix.pop();
+    }
+}
+
+fn enumerate_raw_telescopes_dfs(
+    remaining: u16,
+    clause_options_by_position: &[Vec<ClauseRec>],
+    prefix: &mut Vec<ClauseRec>,
+    out: &mut Vec<Telescope>,
+) {
+    if remaining == 0 {
+        out.push(Telescope::new(prefix.clone()));
+        return;
+    }
+
+    let position = prefix.len();
+    for clause in &clause_options_by_position[position] {
+        prefix.push(clause.clone());
+        enumerate_raw_telescopes_dfs(remaining - 1, clause_options_by_position, prefix, out);
         prefix.pop();
     }
 }
@@ -1487,6 +1662,81 @@ fn enumerate_exprs_exact(
     let unique = unique_sorted_exprs(exprs);
     cache.insert(nodes, unique.clone());
     unique
+}
+
+fn enumerate_exprs_exact_raw(
+    context: EnumerationContext,
+    nodes: u8,
+    cache: &mut BTreeMap<u8, Vec<Expr>>,
+) -> Vec<Expr> {
+    if let Some(cached) = cache.get(&nodes) {
+        return cached.clone();
+    }
+
+    let mut exprs = Vec::new();
+
+    if nodes == 1 {
+        exprs.push(Expr::Univ);
+        for index in 1..=context.scope_size {
+            exprs.push(Expr::Var(index));
+        }
+        if context.library_size > 0 {
+            let start = context.library_size.saturating_sub(1).max(1);
+            let mut refs = BTreeSet::new();
+            for index in start..=context.library_size {
+                refs.insert(index);
+            }
+            if let Some(anchor) = context.historical_anchor_ref {
+                if (1..=context.library_size).contains(&anchor) {
+                    refs.insert(anchor);
+                }
+            }
+            for index in refs {
+                exprs.push(Expr::Lib(index));
+            }
+        }
+        for dimension in 1..=context.max_path_dimension {
+            exprs.push(Expr::PathCon(dimension));
+        }
+    }
+
+    if nodes >= 2 {
+        let subexprs = enumerate_exprs_exact_raw(context, nodes - 1, cache);
+        for body in subexprs {
+            exprs.push(Expr::Lam(Box::new(body.clone())));
+            if context.include_trunc {
+                exprs.push(Expr::Trunc(Box::new(body.clone())));
+            }
+            if context.include_modal {
+                exprs.push(Expr::Flat(Box::new(body.clone())));
+                exprs.push(Expr::Sharp(Box::new(body.clone())));
+                exprs.push(Expr::Disc(Box::new(body.clone())));
+                exprs.push(Expr::Shape(Box::new(body.clone())));
+            }
+            if context.include_temporal {
+                exprs.push(Expr::Next(Box::new(body.clone())));
+                exprs.push(Expr::Eventually(Box::new(body)));
+            }
+        }
+    }
+
+    if nodes >= 3 {
+        for left_nodes in 1..=nodes - 2 {
+            let right_nodes = nodes - 1 - left_nodes;
+            let left_exprs = enumerate_exprs_exact_raw(context, left_nodes, cache);
+            let right_exprs = enumerate_exprs_exact_raw(context, right_nodes, cache);
+            for left in &left_exprs {
+                for right in &right_exprs {
+                    exprs.push(Expr::App(Box::new(left.clone()), Box::new(right.clone())));
+                    exprs.push(Expr::Pi(Box::new(left.clone()), Box::new(right.clone())));
+                    exprs.push(Expr::Sigma(Box::new(left.clone()), Box::new(right.clone())));
+                }
+            }
+        }
+    }
+
+    cache.insert(nodes, exprs.clone());
+    exprs
 }
 
 fn unique_sorted_exprs(exprs: Vec<Expr>) -> Vec<Expr> {
@@ -2714,13 +2964,13 @@ fn contains_eliminator_expr(expr: &Expr) -> bool {
 mod tests {
     use super::{
         EnumerationContext, LateFamilySurface, enumerate_exprs, enumerate_next_clauses,
-        enumerate_telescopes, supports_axiomatic_bundle_clause_at_position,
-        supports_connection_shell_clause_at_position, supports_curvature_shell_clause_at_position,
-        supports_former_package_clause_at_position, supports_higher_hit_clause_at_position,
-        supports_hilbert_functional_clause_at_position, supports_initial_hit_clause_at_position,
-        supports_modal_shell_clause_at_position, supports_operator_bundle_clause_at_position,
-        supports_sphere_lift_clause_at_position, supports_temporal_shell_clause_at_position,
-        supports_truncation_hit_clause_at_position,
+        enumerate_raw_telescopes, enumerate_telescopes,
+        supports_axiomatic_bundle_clause_at_position, supports_connection_shell_clause_at_position,
+        supports_curvature_shell_clause_at_position, supports_former_package_clause_at_position,
+        supports_higher_hit_clause_at_position, supports_hilbert_functional_clause_at_position,
+        supports_initial_hit_clause_at_position, supports_modal_shell_clause_at_position,
+        supports_operator_bundle_clause_at_position, supports_sphere_lift_clause_at_position,
+        supports_temporal_shell_clause_at_position, supports_truncation_hit_clause_at_position,
     };
     use pen_core::library::{Library, LibraryEntry};
     use pen_core::telescope::Telescope;
@@ -3598,6 +3848,24 @@ mod tests {
             "enumerated {} step-10 telescopes, but not the reference modal shell",
             telescopes.len()
         );
+    }
+
+    #[test]
+    fn step_one_raw_enumeration_counts_the_full_clause_catalog_surface() {
+        let library = library_until(0);
+        let admissibility = strict_admissibility(1, 2, &library);
+        let raw_telescopes = enumerate_raw_telescopes(
+            context_from_admissibility(&library, admissibility),
+            admissibility.min_clause_kappa,
+        );
+        let telescopes = enumerate_telescopes(
+            &library,
+            context_from_admissibility(&library, admissibility),
+            admissibility.min_clause_kappa,
+        );
+
+        assert_eq!(raw_telescopes.len(), 1296);
+        assert_eq!(telescopes.len(), 288);
     }
 
     #[test]

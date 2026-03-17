@@ -7,7 +7,7 @@ use crate::config::{DemoConfig, RuntimeConfig, SearchProfile};
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{
     ClauseCatalog, EnumerationContext, LateFamilySurface, build_clause_catalog,
-    enumerate_telescopes,
+    enumerate_raw_telescopes, enumerate_telescopes,
 };
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
@@ -551,6 +551,7 @@ struct RealisticShadowDiscovery {
     malformed_rejection_reasons: BTreeMap<String, usize>,
     admissibility_rejections: usize,
     admissibility_diagnostics: AdmissibilityDiagnostics,
+    connectivity_prunes: usize,
     partial_prefix_bound_checks: usize,
     partial_prefix_bound_prunes: usize,
     terminal_prefix_bar_prunes: usize,
@@ -2496,7 +2497,8 @@ fn search_next_step(
         incremental_legality_cache_hits = legality_stats.legality_hits;
         incremental_connectivity_shortcuts = legality_stats.connectivity_shortcuts;
         incremental_connectivity_fallbacks = legality_stats.connectivity_fallbacks;
-        incremental_connectivity_prunes = legality_stats.connectivity_prunes;
+        incremental_connectivity_prunes =
+            legality_stats.connectivity_prunes + discovery.connectivity_prunes;
         incremental_clause_family_filter_hits = legality_stats.clause_family_filter_hits;
         incremental_clause_family_prunes = legality_stats.clause_family_prunes;
         incremental_active_window_clause_filter_hits =
@@ -3381,6 +3383,18 @@ fn discover_realistic_shadow_candidates(
     step_start: Instant,
     demo_narrative: &mut Option<DemoNarrativeRuntime>,
 ) -> Result<RealisticShadowDiscovery> {
+    if demo_step_budget.is_some() && step_index <= 4 {
+        return discover_demo_early_exhaustive_candidates(
+            step_index,
+            library,
+            history,
+            admissibility,
+            step_start,
+            demo_step_budget,
+            demo_narrative,
+        );
+    }
+
     let mut discovery = RealisticShadowDiscovery::default();
     let mut enumeration_context = EnumerationContext::from_admissibility(library, admissibility);
     if demo_step_budget.is_some() {
@@ -3737,6 +3751,71 @@ fn discover_realistic_shadow_candidates(
                     }
                 }
             }
+        }
+    }
+
+    Ok(discovery)
+}
+
+fn discover_demo_early_exhaustive_candidates(
+    step_index: u32,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility: StrictAdmissibility,
+    step_start: Instant,
+    demo_step_budget: &mut Option<DemoStepBudget>,
+    demo_narrative: &mut Option<DemoNarrativeRuntime>,
+) -> Result<RealisticShadowDiscovery> {
+    let mut discovery = RealisticShadowDiscovery::default();
+    let enumeration_context = EnumerationContext::from_admissibility(library, admissibility);
+
+    'clause_band: for clause_kappa in
+        admissibility.min_clause_kappa..=admissibility.max_clause_kappa
+    {
+        let raw_telescopes = enumerate_raw_telescopes(enumeration_context, clause_kappa);
+        for telescope in raw_telescopes {
+            if demo_discovery_budget_exhausted(
+                demo_step_budget,
+                &mut discovery,
+                step_start,
+                demo_narrative.as_mut(),
+            ) {
+                break 'clause_band;
+            }
+
+            discovery.raw_generated_surface += 1;
+            match check_telescope(library, &telescope) {
+                CheckResult::Ok => {}
+                CheckResult::Err(error) => {
+                    discovery.malformed_rejections += 1;
+                    *discovery
+                        .malformed_rejection_reasons
+                        .entry(error.kind_label().to_owned())
+                        .or_insert(0) += 1;
+                    continue;
+                }
+            }
+
+            if !passes_connectivity(library, &telescope) {
+                discovery.connectivity_prunes += 1;
+                continue;
+            }
+
+            discovery.enumerated_candidates += 1;
+            discovery.well_formed_candidates += 1;
+            let admissibility_decision =
+                assess_strict_admissibility(step_index, library, &telescope, admissibility);
+            discovery
+                .admissibility_diagnostics
+                .record(&admissibility_decision);
+            if !admissibility_decision.is_admitted() {
+                discovery.admissibility_rejections += 1;
+                continue;
+            }
+
+            discovery
+                .candidates
+                .push(evaluate_checked_candidate(library, history, telescope)?);
         }
     }
 
@@ -6001,6 +6080,37 @@ mod tests {
                 .iter()
                 .any(|event| event.kind == NarrativeEventKind::BudgetPulse)
         );
+    }
+
+    #[test]
+    fn demo_early_steps_restore_full_clause_catalog_generation() {
+        let config = demo_runtime_config_10m();
+        let step = search_bootstrap_prefix_for_config_with_runtime(
+            1,
+            2,
+            &config,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("demo steps should build")
+        .into_iter()
+        .last()
+        .expect("step should exist");
+
+        assert_eq!(step.step_index, 1);
+        assert_eq!(step.demo_funnel.generated_raw_prefixes, 1296);
+        assert_eq!(step.enumerated_candidates, 594);
+        assert!(
+            step.search_timing.step_wall_clock_millis
+                <= u64::from(config.demo.early_exhaustive_budget_sec) * 1_000
+        );
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::SurfaceSummary
+                && event
+                    .progress
+                    .as_ref()
+                    .map(|progress| progress.generated_surface == 1296)
+                    .unwrap_or(false)
+        }));
     }
 
     #[test]

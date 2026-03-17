@@ -312,13 +312,24 @@ pub(crate) fn exact_screened_surface_from_counts(
 }
 
 fn step_progress(step: &AtomicSearchStep) -> NarrativeProgressSnapshot {
-    narrative_progress_snapshot(
-        step.search_timing.step_wall_clock_millis,
-        generated_surface_from_counts(step.prefixes_created, step.enumerated_candidates),
+    let generated_surface = if step.demo_funnel.generated_raw_prefixes > 0 {
+        step.demo_funnel.generated_raw_prefixes as u64
+    } else {
+        generated_surface_from_counts(step.prefixes_created, step.enumerated_candidates)
+    };
+    let exact_screened_surface = if step.demo_funnel.exact_bound_screened > 0 {
+        step.demo_funnel.exact_bound_screened as u64
+    } else {
         exact_screened_surface_from_counts(
             step.prefix_states_exact_pruned,
             step.full_telescopes_evaluated,
-        ),
+        )
+    };
+
+    narrative_progress_snapshot(
+        step.search_timing.step_wall_clock_millis,
+        generated_surface,
+        exact_screened_surface,
         step.full_telescopes_evaluated as u64,
     )
 }
