@@ -6115,6 +6115,63 @@ mod tests {
     }
 
     #[test]
+    fn demo_late_surface_carries_through_live_config_runs() {
+        let config = demo_runtime_config_10m();
+        let steps = search_bootstrap_prefix_for_config_with_runtime(
+            15,
+            2,
+            &config,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("demo steps should build");
+        let step13 = steps
+            .iter()
+            .find(|step| step.step_index == 13)
+            .expect("step 13 should exist");
+        let step14 = steps
+            .iter()
+            .find(|step| step.step_index == 14)
+            .expect("step 14 should exist");
+        let step15 = steps
+            .iter()
+            .find(|step| step.step_index == 15)
+            .expect("step 15 should exist");
+
+        assert_eq!(step13.telescope, Telescope::reference(13));
+        assert_eq!(step14.telescope, Telescope::reference(14));
+        assert_eq!(step15.telescope, Telescope::reference(15));
+
+        assert_eq!(step13.full_telescopes_evaluated, 1);
+        assert_eq!(step14.full_telescopes_evaluated, 1);
+        assert_eq!(step15.full_telescopes_evaluated, 1);
+
+        assert!(
+            step13.demo_funnel.generated_raw_prefixes >= 3_500,
+            "step 13 should keep the widened live surface"
+        );
+        assert!(
+            step13.demo_funnel.exact_bound_screened >= 3_000,
+            "step 13 should keep the widened exact-screened surface"
+        );
+        assert!(
+            step14.demo_funnel.exact_bound_screened >= 1_100,
+            "step 14 should still hit the configured exact-screened floor"
+        );
+        assert!(
+            step15.demo_funnel.generated_raw_prefixes >= 20_000,
+            "step 15 should keep the widened live surface"
+        );
+        assert!(
+            step15.demo_funnel.exact_bound_screened >= 18_000,
+            "step 15 should keep the widened exact-screened surface"
+        );
+
+        assert_eq!(step13.demo_phase.proof_close_closure_percent, 100);
+        assert_eq!(step14.demo_phase.proof_close_closure_percent, 100);
+        assert_eq!(step15.demo_phase.proof_close_closure_percent, 100);
+    }
+
+    #[test]
     fn demo_soft_cap_handoff_counts_proof_close_overrun() {
         let mut config = demo_runtime_config_10m();
         config

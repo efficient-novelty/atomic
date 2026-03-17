@@ -90,19 +90,27 @@ retuning during `BreadthHarvest`.
   honestly, while demo terminal admissibility still falls back to the direct
   realistic-shadow check whenever that override is active so accepted parity
   stays authoritative.
-- Fresh stored evidence in `runs/codex-demo-family-surface` still preserves
-  accepted parity through step `15` (`matches_reference_replay x15`) and now
-  turns the landed late-family widening into materially broader stored live
-  breadth: generated raw surface moves to `36`, `132`, `147`, `291`, `2292`,
-  and `1007` on steps `10` to `15`, exact-screened counts move to
-  `18`, `82`, `83`, `178`, `1521`, and `707`, every late step still keeps
-  `full_telescopes_evaluated = 1`, and step `14` now hits the configured
+- Fresh paired `runs/codex-realistic-late-baseline-v2` and
+  `runs/codex-demo-late-surface-v2` artifacts still preserve accepted parity
+  through step `15` (`matches_reference_replay x15`) and now turn the landed
+  late-family widening into materially broader stored live breadth: generated
+  raw surface moves to `36`, `132`, `147`, `3995`, `2292`, and `22715` on
+  steps `10` to `15`, exact-screened counts move to `18`, `82`, `83`, `3123`,
+  `1521`, and `18749`, every late step still keeps
+  `full_telescopes_evaluated = 1`, steps `13` and `15` now hit both configured
+  generated and exact-screened floors, and step `14` still hits the configured
   exact-screened floor (`1521 >= 1100`).
+- New config-backed `pen-search` coverage now runs the default `10m` demo
+  profile through step `15` and asserts that steps `13` to `15` keep the
+  reference telescopes while step `13` and step `15` preserve the widened live
+  generated and exact-screened surfaces with `full_telescopes_evaluated = 1`
+  and `proof_close_closure_percent = 100`.
 - The main remaining problems are now narrower: pushing step `1` from `1296`
-  toward the explicit `2144` floor, and pushing the remaining late generated
-  plus exact-screened floors from the already-broader honest live surface
-  without regressing the newly stored mid-step carry-through or mandatory
-  live-event coverage.
+  toward the explicit `2144` floor, then pushing the still-open late generated
+  floors on steps `10` to `12` plus step `14` and the still-open
+  exact-screened floors on steps `10` to `12` from the already-broader honest
+  live surface without regressing the newly stored mid-step carry-through or
+  mandatory live-event coverage.
 
 ## What Still Blocks Signoff
 
@@ -126,17 +134,18 @@ retuning during `BreadthHarvest`.
   move from `1/1/1/1/1` to `1/3/2/13/9`, `full_telescopes_evaluated` stays `1`
   on every step, and accepted parity still holds through step `15`
 - configured late-step generated and exact-screened floors are now stored and
-  reported, but they are not yet being hit consistently
-- the latest stored `10m` run now raises generated raw surface to
-  `36`, `132`, `147`, `291`, `2292`, and `1007` on steps `10` to `15`, with
-  exact-screened counts of `18`, `82`, `83`, `178`, `1521`, and `707`, so the
-  live late breadth story is no longer "barely above realistic shadow" even
-  though most configured generated floors and all but one exact-screened floor
-  are still open
+  partially hit on the default `10m` profile, but step `10` to `12` still miss
+  both floor families and step `14` still misses its generated floor
+- the latest paired `10m` run now raises generated raw surface to
+  `36`, `132`, `147`, `3995`, `2292`, and `22715` on steps `10` to `15`, with
+  exact-screened counts of `18`, `82`, `83`, `3123`, `1521`, and `18749`, so
+  the live late breadth story is no longer "barely above realistic shadow" or
+  "only slightly broader" even though the earlier late generated and exact
+  floors are still open
 - the landed demo-specific structural bucket scheduler plus the preserved demo
   family surface now have enough honest breadth underneath them to show real
   widening, but the next gap is pushing that wider late surface through the
-  remaining configured floors, especially step `13` and step `15`
+  remaining configured floors on steps `10` to `12` plus step `14`
 - the new closure-pressure handoff improves the within-step split, but it still
   needs the remaining widening and bound work to hit the last late floors
 
@@ -147,7 +156,8 @@ retuning during `BreadthHarvest`.
    generation and shared early-window evidence on steps `1` to `4`.
 2. Build on the now-stored step-`5` to `9` live carry-through plus the landed
    step-`10` to `15` widening to keep pushing the remaining generated and
-   exact-screened floors, especially step `13` and step `15`.
+   exact-screened floors, especially steps `10` to `12` and the step-`14`
+   generated floor.
 3. Strengthen the remaining exact-prefix-bound story so that further late-step
    widening keeps `full_telescopes_evaluated` moderate while those floor
    targets move upward.

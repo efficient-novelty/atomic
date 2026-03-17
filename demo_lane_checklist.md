@@ -51,16 +51,21 @@ and finally turn the landed step-`5` to `9` widening into stored live breadth:
 generated raw counts move from realistic `3/3/3/5/4` to demo
 `27/15/15/45/24`, exact-screened counts move from `1/1/1/1/1` to
 `1/3/2/13/9`, and `full_telescopes_evaluated` stays `1` on every step from
-`5` to `9`. Fresh `runs/codex-demo-family-surface` late-step artifacts remain
-the current `10m` floor reference, preserving accepted parity through step
-`15` while moving generated counts to `36/132/147/291/2292/1007` and
-exact-screened counts to `18/82/83/178/1521/707` on steps `10` to `15`. The
-remaining widening gap is no longer mid-step carry-through; it is the still-
-open late generated and exact-screened floors plus the exact-prefix-bound work.
+`5` to `9`. Fresh paired `runs/codex-realistic-late-baseline-v2` and
+`runs/codex-demo-late-surface-v2` late-step artifacts are now the current
+`10m` floor reference, preserving accepted parity through step `15` while
+moving generated counts to `36/132/147/3995/2292/22715` and exact-screened
+counts to `18/82/83/3123/1521/18749` on steps `10` to `15`. New
+`pen-search` coverage now also runs the default `10m` config through step
+`15` and keeps the widened step-`13` and step-`15` live surfaces pinned in
+tests. The remaining widening gap is no longer mid-step carry-through; it is
+the still-open late generated floors on steps `10` to `12` plus step `14`,
+the still-open exact-screened floors on steps `10` to `12`, and the
+exact-prefix-bound work.
 
 ## 4. Floor Attainment
 
-- [ ] Start hitting the configured late-step generated or exact-screened floors
+- [x] Start hitting the configured late-step generated or exact-screened floors
       consistently, beginning with the default `10m` profile.
 - [x] Keep `full_telescopes_evaluated` moderate relative to generated breadth.
 
@@ -69,15 +74,18 @@ Default `10m` signoff targets:
 - [ ] Step `10`: `500+`
 - [ ] Step `11`: `800+`
 - [ ] Step `12`: `1200+`
-- [ ] Step `13`: `2200+`
+- [x] Step `13`: `2200+`
 - [ ] Step `14`: `3500+`
-- [ ] Step `15`: `5000+`
+- [x] Step `15`: `5000+`
 
-Latest stored evidence: fresh `runs/codex-demo-family-surface` artifacts still
-miss the generated floors, but they now hit the step-`14`
-`exact_screened_floor` (`1521 >= 1100`) and keep
+Latest stored evidence: fresh `runs/codex-demo-late-surface-v2` artifacts now
+hit the step-`13` and step-`15` generated floors (`3995 >= 2200`,
+`22715 >= 5000`), hit the step-`13` to `15` exact-screened floors
+(`3123 >= 700`, `1521 >= 1100`, `18749 >= 1800`), and keep
 `full_telescopes_evaluated = 1` on every late step while generated raw surface
-improves to `36/132/147/291/2292/1007`.
+improves to `36/132/147/3995/2292/22715`. The still-open floor gaps are now
+generated on steps `10` to `12` plus step `14`, and exact-screened on
+steps `10` to `12`.
 
 ## 5. Closure-Aware Replanning And Reason Codes
 
@@ -133,6 +141,6 @@ and event artifacts complete across all `15` steps (`text=15/15`,
 - [ ] Step 1 reports `2144`.
 - [x] Steps `1` to `4` fit the shared early `90s` budget honestly.
 - [x] The default `10m` profile completes within `600s` on this computer.
-- [ ] Late steps show large honest breadth with moderate full evaluations.
+- [x] Late steps show large honest breadth with moderate full evaluations.
 - [x] No silent guarded or replay fallback is used when the demo lane misses
       budget or certification.

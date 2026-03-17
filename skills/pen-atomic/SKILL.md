@@ -260,12 +260,19 @@ On the demo-lane side:
   late-family enumerators beat realistic-shadow enumeration on steps `13` to
   `15`, and step `15` now has an extra demo-only temporal exchange variant
   that preserves the reference acceptance; fresh stored
-  `runs/codex-demo-family-surface` evidence now also shows that the preserved
+  paired `runs/codex-realistic-late-baseline-v2` and
+  `runs/codex-demo-late-surface-v2` evidence now also shows that the preserved
   demo family surface turns those landed late widenings into materially broader
-  live breadth, moving generated counts to `36/132/147/291/2292/1007` and
-  exact-screened counts to `18/82/83/178/1521/707` on steps `10` to `15`
-  while still keeping `full_telescopes_evaluated = 1` on each late step and
-  hitting the step-`14` exact-screened floor
+  live breadth, moving generated counts to `36/132/147/3995/2292/22715` and
+  exact-screened counts to `18/82/83/3123/1521/18749` on steps `10` to `15`
+  while still keeping `full_telescopes_evaluated = 1` on each late step,
+  hitting both generated and exact-screened floors on steps `13` and `15`,
+  and still hitting the step-`14` exact-screened floor
+- `pen-search` now also has config-backed demo coverage that runs the default
+  `10m` profile through step `15` and asserts that steps `13` to `15` keep the
+  reference telescopes while step `13` and step `15` preserve the widened live
+  generated and exact-screened surfaces with
+  `full_telescopes_evaluated = 1`
 - demo materialize can now also yield into `ProofClose` with the explicit
   `materialize_reserve_handoff` reason once an incumbent exists and the
   remaining exact surface has already flipped into closure-first reserve
@@ -314,19 +321,22 @@ On the demo-lane side:
   `generated_raw_prefixes = 1296` and step timings `95/1/1/25 ms` through
   step `4` (`122 ms` total), so the shared early-window story is now backed by
   stored evidence even though the explicit `2144` target is still open
-- fresh `runs/codex-demo-family-surface` artifacts now show late-step
-  generated counts `36/132/147/291/2292/1007` and exact-screened counts
-  `18/82/83/178/1521/707`, so the lane is no longer just more honest about
-  breadth; it is materially broader live search while still missing several of
-  the intended late generated and exact floors
+- fresh paired `runs/codex-realistic-late-baseline-v2` and
+  `runs/codex-demo-late-surface-v2` artifacts now show late-step generated
+  counts `36/132/147/3995/2292/22715` and exact-screened counts
+  `18/82/83/3123/1521/18749`, so the lane is no longer just more honest about
+  breadth; it is materially broader live search and now hits the step-`13`
+  and step-`15` generated floors plus the step-`13` to `15`
+  exact-screened floors while still missing the earlier late generated and
+  exact floors
 - the current demo gap is not "make the lane look broader"; it is meeting the
   remaining surfaced early and late breadth floors honestly from the now-
   broadened live surface, with the shared early-window evidence already
   restored and the remaining early gap narrowed to pushing step `1` from
-  `1296` toward `2144`, then pushing the remaining late generated and exact
-  floors, especially on step `13` and step `15`, while keeping the newly
-  stored step-`5` to `9` live carry-through and mandatory live-event coverage
-  from regressing
+  `1296` toward `2144`, then pushing the remaining late generated floors on
+  steps `10` to `12` plus step `14` and the remaining exact floors on
+  steps `10` to `12`, while keeping the newly stored step-`5` to `9` live
+  carry-through and mandatory live-event coverage from regressing
 
 Start with the current architecture doc before diving into donor material:
 

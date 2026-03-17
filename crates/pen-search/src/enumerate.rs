@@ -645,6 +645,17 @@ fn demo_operator_bundle_clauses(position: usize, context: EnumerationContext) ->
                 )),
                 Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
             ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                )),
+            ),
         ],
         1 => vec![
             Expr::Pi(
@@ -658,6 +669,14 @@ fn demo_operator_bundle_clauses(position: usize, context: EnumerationContext) ->
             Expr::Pi(
                 Box::new(Expr::Sigma(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
                 Box::new(Expr::Lib(latest)),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+                Box::new(Expr::Lib(latest)),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Sigma(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Lib(previous)),
             ),
         ],
         2 => vec![
@@ -673,6 +692,14 @@ fn demo_operator_bundle_clauses(position: usize, context: EnumerationContext) ->
                 Box::new(Expr::Var(2)),
                 Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
             ),
+            Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
         ],
         3 => vec![
             Expr::Lam(Box::new(Expr::App(
@@ -687,11 +714,27 @@ fn demo_operator_bundle_clauses(position: usize, context: EnumerationContext) ->
                 Box::new(Expr::Var(1)),
                 Box::new(Expr::App(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
             ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+            ))),
         ],
         4 => vec![
             Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
             Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(latest))),
             Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(previous))),
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(previous))),
+            Expr::Pi(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Lib(previous)),
+                    Box::new(Expr::Lib(latest)),
+                )),
+            ),
         ],
         5 => vec![
             Expr::Lam(Box::new(Expr::Pi(
@@ -706,6 +749,14 @@ fn demo_operator_bundle_clauses(position: usize, context: EnumerationContext) ->
                 Box::new(Expr::Var(1)),
                 Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
             ))),
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ))),
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ))),
         ],
         6 => vec![
             Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
@@ -713,6 +764,14 @@ fn demo_operator_bundle_clauses(position: usize, context: EnumerationContext) ->
             Expr::Pi(
                 Box::new(Expr::Lib(latest)),
                 Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Lib(previous)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
             ),
         ],
         _ => Vec::new(),
@@ -940,11 +999,15 @@ fn demo_temporal_shell_clauses(position: usize, context: EnumerationContext) -> 
             Expr::Next(Box::new(Expr::Var(1))),
             Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
             Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+            Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+            Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
         ],
         1 => vec![
             Expr::Eventually(Box::new(Expr::Var(1))),
             Expr::Eventually(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
             Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+            Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
+            Expr::Eventually(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
         ],
         2 => vec![
             Expr::Pi(
@@ -961,6 +1024,16 @@ fn demo_temporal_shell_clauses(position: usize, context: EnumerationContext) -> 
                     Expr::Var(1),
                 ))))),
             ),
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
         ],
         3 => vec![
             Expr::Lam(Box::new(Expr::App(
@@ -974,6 +1047,16 @@ fn demo_temporal_shell_clauses(position: usize, context: EnumerationContext) -> 
             Expr::Lam(Box::new(Expr::App(
                 Box::new(Expr::Lib(anchor)),
                 Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
             ))),
         ],
         4 => vec![
@@ -992,6 +1075,20 @@ fn demo_temporal_shell_clauses(position: usize, context: EnumerationContext) -> 
                     Box::new(Expr::Var(1)),
                 )))))),
                 Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Sharp(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Sharp(
+                    Box::new(Expr::Var(1)),
+                )))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Flat(
                     Box::new(Expr::Var(1)),
                 )))))),
             ),
@@ -1029,6 +1126,22 @@ fn demo_temporal_shell_clauses(position: usize, context: EnumerationContext) -> 
                     Expr::Next(Box::new(Expr::Var(1))),
                 ))))),
             ),
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Var(1),
+                ))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    Expr::Var(1),
+                ))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                ))))),
+            ),
         ],
         6 => vec![
             Expr::Lam(Box::new(Expr::App(
@@ -1045,6 +1158,18 @@ fn demo_temporal_shell_clauses(position: usize, context: EnumerationContext) -> 
                 Box::new(Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(
                     1,
                 )))))),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(
+                    1,
+                )))))),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Next(Box::new(Expr::Var(1))),
+                ))))),
                 Box::new(Expr::Var(2)),
             ))),
         ],
@@ -1064,6 +1189,20 @@ fn demo_temporal_shell_clauses(position: usize, context: EnumerationContext) -> 
                     Box::new(Expr::Var(1)),
                 )))))),
                 Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
             ),
         ],
         _ => Vec::new(),
