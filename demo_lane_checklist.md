@@ -1,6 +1,6 @@
 # Demo Lane Checklist
 
-Last updated: 2026-03-16
+Last updated: 2026-03-17
 
 This checklist contains only the still-open work for `demo_breadth_shadow`.
 
@@ -33,7 +33,7 @@ far away.
 
 - [ ] Widen steps `5` to `9` with more `kappa`, support-form, and bridge-head
       variety.
-- [ ] Widen steps `10` to `12` with more family unions, reference patterns,
+- [x] Widen steps `10` to `12` with more family unions, reference patterns,
       nested `Pi` and `Sigma`, bridge heads, and reanchor variants.
 - [ ] Widen steps `13` to `15` with more operator, Hilbert, and temporal
       mixtures, mixed shells, historical reanchors, clause unions, and
@@ -41,10 +41,12 @@ far away.
 - [ ] Strengthen exact prefix bounds so widening does not explode full
       terminal work.
 
-Latest stored evidence: the landed demo-only operator/Hilbert/temporal surface
-widening plus raw generated-surface counting moves steps `10` to `15` only to
-generated counts `5/11/11/11/12/14` and exact-screened counts `2/2/1/3/3/3`,
-so this workstream remains open.
+Latest stored evidence: fresh `runs/codex-demo-midlate-widening` artifacts keep
+accepted parity through step `15` while the landed demo-only step-`10` to `12`
+surface widening plus the earlier operator/Hilbert/temporal widening move late
+generated counts to `9/15/15/11/12/14` and exact-screened counts to
+`6/6/5/3/3/3`, so this workstream is improving but still far short of the
+configured floors.
 
 ## 4. Floor Attainment
 

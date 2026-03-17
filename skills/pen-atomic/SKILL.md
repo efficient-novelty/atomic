@@ -238,10 +238,12 @@ On the demo-lane side:
   admissible, exact-screened, pruned, fully scored, and best-overshoot stats,
   and use those bucket stats plus retention-class bridge potential and low-
   redundancy cues to order proof-close work without changing acceptance truth
-- demo discovery now also widens the operator-bundle, Hilbert-functional, and
-  temporal-shell late-family clause surfaces only for `demo_breadth_shadow`,
-  while still mapping the demo profile back to realistic-shadow admissibility
-  so guarded acceptance parity stays unchanged
+- demo discovery now also widens the step-`10` to `12`
+  modal-shell/axiomatic-bridge and connection/curvature clause surfaces plus
+  the operator-bundle, Hilbert-functional, and temporal-shell late-family
+  clause surfaces only for `demo_breadth_shadow`, while still mapping the demo
+  profile back to realistic-shadow admissibility so guarded acceptance parity
+  stays unchanged
 - demo materialize can now also yield into `ProofClose` with the explicit
   `materialize_reserve_handoff` reason once an incumbent exists and the
   remaining exact surface has already flipped into closure-first reserve

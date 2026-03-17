@@ -230,6 +230,230 @@ fn relaxed_curvature_shell_clause(position: usize, context: EnumerationContext) 
     })
 }
 
+fn demo_modal_shell_clauses(position: usize) -> Vec<Expr> {
+    match position {
+        0 => vec![
+            Expr::Flat(Box::new(Expr::Var(1))),
+            Expr::Flat(Box::new(Expr::Var(2))),
+            Expr::Flat(Box::new(Expr::Shape(Box::new(Expr::Var(1))))),
+        ],
+        1 => vec![
+            Expr::Sharp(Box::new(Expr::Var(1))),
+            Expr::Sharp(Box::new(Expr::Var(2))),
+            Expr::Sharp(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+        ],
+        2 => vec![
+            Expr::Disc(Box::new(Expr::Var(1))),
+            Expr::Disc(Box::new(Expr::Var(2))),
+            Expr::Disc(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+        ],
+        3 => vec![
+            Expr::Shape(Box::new(Expr::Var(1))),
+            Expr::Shape(Box::new(Expr::Var(2))),
+            Expr::Shape(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+        ],
+        _ => Vec::new(),
+    }
+}
+
+fn demo_axiomatic_bridge_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
+    let Some(anchor) = context.historical_anchor_ref else {
+        return Vec::new();
+    };
+    if context.library_size < 2 {
+        return Vec::new();
+    }
+
+    let latest = context.library_size;
+    let previous = latest - 1;
+    match position {
+        0 => vec![
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(previous))),
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
+        ],
+        1 => vec![
+            Expr::App(Box::new(Expr::Lib(anchor)), Box::new(Expr::Var(1))),
+            Expr::App(Box::new(Expr::Lib(anchor)), Box::new(Expr::Var(2))),
+            Expr::App(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
+        ],
+        2 => vec![
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Lib(previous)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(previous)),
+                Box::new(Expr::Lib(latest)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Var(1)),
+            ))),
+        ],
+        3 => vec![
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(previous))),
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(previous))),
+        ],
+        _ => Vec::new(),
+    }
+}
+
+fn demo_connection_shell_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
+    if context.library_size == 0 {
+        return Vec::new();
+    }
+
+    let latest = context.library_size;
+    let previous = latest
+        .checked_sub(1)
+        .filter(|index| *index > 0)
+        .unwrap_or(latest);
+    match position {
+        0 => vec![
+            Expr::Pi(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Lib(previous)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        1 => vec![
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Var(1)),
+            ))),
+            Expr::Lam(Box::new(Expr::Sigma(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Var(2)),
+            ))),
+        ],
+        2 => vec![
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Var(1)),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Var(2)))),
+                Box::new(Expr::Var(1)),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+            ),
+        ],
+        3 => vec![
+            Expr::App(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+            Expr::App(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
+            Expr::App(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+            ),
+        ],
+        4 => vec![
+            Expr::Lam(Box::new(Expr::Var(1))),
+            Expr::Lam(Box::new(Expr::Var(2))),
+            Expr::Lam(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+        ],
+        _ => Vec::new(),
+    }
+}
+
+fn demo_curvature_shell_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
+    if context.library_size == 0 {
+        return Vec::new();
+    }
+
+    let latest = context.library_size;
+    let previous = latest
+        .checked_sub(1)
+        .filter(|index| *index > 0)
+        .unwrap_or(latest);
+    match position {
+        0 => vec![
+            Expr::Pi(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Lib(previous)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        1 => vec![
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Var(1)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(previous)),
+                Box::new(Expr::Var(1)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+            ))),
+        ],
+        2 => vec![
+            Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+                Box::new(Expr::Lib(latest)),
+            ),
+        ],
+        3 => vec![
+            Expr::App(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+            ),
+            Expr::App(
+                Box::new(Expr::Lib(previous)),
+                Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+            ),
+            Expr::App(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::App(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        4 => vec![
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Var(1)),
+            ))),
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Lib(latest)),
+            ))),
+        ],
+        5 => vec![
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(previous))),
+        ],
+        _ => Vec::new(),
+    }
+}
+
 fn operator_bundle_reference_clause(position: usize, context: EnumerationContext) -> Option<Expr> {
     if context.library_size < 2 {
         return None;
@@ -772,7 +996,13 @@ fn late_clause_options(
         && context.historical_anchor_ref.is_some()
     {
         let mut clauses = Vec::new();
-        if let Some(expr) = relaxed_axiomatic_bridge_clause(position, context) {
+        if context.late_family_surface == LateFamilySurface::DemoBreadthShadow {
+            clauses.extend(
+                demo_axiomatic_bridge_clauses(position, context)
+                    .into_iter()
+                    .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+            );
+        } else if let Some(expr) = relaxed_axiomatic_bridge_clause(position, context) {
             clauses.push(ClauseRec::new(primary_role(&expr), expr));
         }
         return Some(dedupe_sorted_clauses(clauses));
@@ -784,11 +1014,24 @@ fn late_clause_options(
         && context.historical_anchor_ref.is_some()
     {
         let mut clauses = Vec::new();
-        if let Some(expr) = relaxed_modal_shell_clause(position) {
-            clauses.push(ClauseRec::new(primary_role(&expr), expr));
-        }
-        if let Some(expr) = relaxed_axiomatic_bridge_clause(position, context) {
-            clauses.push(ClauseRec::new(primary_role(&expr), expr));
+        if context.late_family_surface == LateFamilySurface::DemoBreadthShadow {
+            clauses.extend(
+                demo_modal_shell_clauses(position)
+                    .into_iter()
+                    .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+            );
+            clauses.extend(
+                demo_axiomatic_bridge_clauses(position, context)
+                    .into_iter()
+                    .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+            );
+        } else {
+            if let Some(expr) = relaxed_modal_shell_clause(position) {
+                clauses.push(ClauseRec::new(primary_role(&expr), expr));
+            }
+            if let Some(expr) = relaxed_axiomatic_bridge_clause(position, context) {
+                clauses.push(ClauseRec::new(primary_role(&expr), expr));
+            }
         }
         return Some(dedupe_sorted_clauses(clauses));
     }
@@ -800,11 +1043,24 @@ fn late_clause_options(
         && context.max_expr_nodes == 5
     {
         let mut clauses = Vec::new();
-        if let Some(expr) = relaxed_connection_shell_clause(position, context) {
-            clauses.push(ClauseRec::new(primary_role(&expr), expr));
-        }
-        if let Some(expr) = relaxed_curvature_shell_clause(position, context) {
-            clauses.push(ClauseRec::new(primary_role(&expr), expr));
+        if context.late_family_surface == LateFamilySurface::DemoBreadthShadow {
+            clauses.extend(
+                demo_connection_shell_clauses(position, context)
+                    .into_iter()
+                    .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+            );
+            clauses.extend(
+                demo_curvature_shell_clauses(position, context)
+                    .into_iter()
+                    .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+            );
+        } else {
+            if let Some(expr) = relaxed_connection_shell_clause(position, context) {
+                clauses.push(ClauseRec::new(primary_role(&expr), expr));
+            }
+            if let Some(expr) = relaxed_curvature_shell_clause(position, context) {
+                clauses.push(ClauseRec::new(primary_role(&expr), expr));
+            }
         }
         return Some(dedupe_sorted_clauses(clauses));
     }
@@ -1031,25 +1287,55 @@ pub(crate) fn clause_supports_structural_family_at_position(
         StructuralFamily::SphereLift => {
             supports_sphere_lift_clause_at_position(position, &clause.expr)
         }
-        StructuralFamily::AxiomaticBundle => supports_axiomatic_bundle_clause_at_position(
-            position,
-            &clause.expr,
-            context.library_size,
-            context.historical_anchor_ref,
-        ),
-        StructuralFamily::ModalShell => {
-            supports_modal_shell_clause_at_position(position, &clause.expr)
+        StructuralFamily::AxiomaticBundle => {
+            if context.late_family_surface == LateFamilySurface::DemoBreadthShadow {
+                demo_axiomatic_bridge_clauses(position, context)
+                    .into_iter()
+                    .any(|candidate| candidate == clause.expr)
+            } else {
+                supports_axiomatic_bundle_clause_at_position(
+                    position,
+                    &clause.expr,
+                    context.library_size,
+                    context.historical_anchor_ref,
+                )
+            }
         }
-        StructuralFamily::ConnectionShell => supports_connection_shell_clause_at_position(
-            position,
-            &clause.expr,
-            context.library_size,
-        ),
-        StructuralFamily::CurvatureShell => supports_curvature_shell_clause_at_position(
-            position,
-            &clause.expr,
-            context.library_size,
-        ),
+        StructuralFamily::ModalShell => {
+            if context.late_family_surface == LateFamilySurface::DemoBreadthShadow {
+                demo_modal_shell_clauses(position)
+                    .into_iter()
+                    .any(|candidate| candidate == clause.expr)
+            } else {
+                supports_modal_shell_clause_at_position(position, &clause.expr)
+            }
+        }
+        StructuralFamily::ConnectionShell => {
+            if context.late_family_surface == LateFamilySurface::DemoBreadthShadow {
+                demo_connection_shell_clauses(position, context)
+                    .into_iter()
+                    .any(|candidate| candidate == clause.expr)
+            } else {
+                supports_connection_shell_clause_at_position(
+                    position,
+                    &clause.expr,
+                    context.library_size,
+                )
+            }
+        }
+        StructuralFamily::CurvatureShell => {
+            if context.late_family_surface == LateFamilySurface::DemoBreadthShadow {
+                demo_curvature_shell_clauses(position, context)
+                    .into_iter()
+                    .any(|candidate| candidate == clause.expr)
+            } else {
+                supports_curvature_shell_clause_at_position(
+                    position,
+                    &clause.expr,
+                    context.library_size,
+                )
+            }
+        }
         StructuralFamily::OperatorBundle => supports_operator_bundle_clause_at_position(
             position,
             &clause.expr,
@@ -3454,6 +3740,96 @@ mod tests {
             telescope_count > 1,
             "expected relaxed shadow step 12 enumeration to expose competition, got {} telescope(s)",
             telescope_count
+        );
+    }
+
+    #[test]
+    fn demo_breadth_shadow_step_ten_enumeration_exposes_more_surface_than_realistic_shadow() {
+        let library = library_until(9);
+        let admissibility =
+            strict_admissibility_for_mode(10, 2, &library, AdmissibilityMode::RealisticShadow);
+        let realistic_context = context_from_admissibility(&library, admissibility);
+        let mut demo_context = realistic_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let mut realistic_count = 0usize;
+        let mut demo_count = 0usize;
+        let mut contains_reference = false;
+
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let realistic = enumerate_telescopes(&library, realistic_context, clause_kappa);
+            realistic_count += realistic.len();
+
+            let demo = enumerate_telescopes(&library, demo_context, clause_kappa);
+            demo_count += demo.len();
+            contains_reference |= demo.contains(&Telescope::reference(10));
+        }
+
+        assert!(contains_reference);
+        assert!(
+            demo_count > realistic_count,
+            "expected demo breadth shadow step 10 enumeration to widen the realistic surface, got demo={} vs realistic={}",
+            demo_count,
+            realistic_count
+        );
+    }
+
+    #[test]
+    fn demo_breadth_shadow_step_eleven_enumeration_exposes_more_surface_than_realistic_shadow() {
+        let library = library_until(10);
+        let admissibility =
+            strict_admissibility_for_mode(11, 2, &library, AdmissibilityMode::RealisticShadow);
+        let realistic_context = context_from_admissibility(&library, admissibility);
+        let mut demo_context = realistic_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let mut realistic_count = 0usize;
+        let mut demo_count = 0usize;
+        let mut contains_reference = false;
+
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let realistic = enumerate_telescopes(&library, realistic_context, clause_kappa);
+            realistic_count += realistic.len();
+
+            let demo = enumerate_telescopes(&library, demo_context, clause_kappa);
+            demo_count += demo.len();
+            contains_reference |= demo.contains(&Telescope::reference(11));
+        }
+
+        assert!(contains_reference);
+        assert!(
+            demo_count > realistic_count,
+            "expected demo breadth shadow step 11 enumeration to widen the realistic surface, got demo={} vs realistic={}",
+            demo_count,
+            realistic_count
+        );
+    }
+
+    #[test]
+    fn demo_breadth_shadow_step_twelve_enumeration_exposes_more_surface_than_realistic_shadow() {
+        let library = library_until(11);
+        let admissibility =
+            strict_admissibility_for_mode(12, 2, &library, AdmissibilityMode::RealisticShadow);
+        let realistic_context = context_from_admissibility(&library, admissibility);
+        let mut demo_context = realistic_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let mut realistic_count = 0usize;
+        let mut demo_count = 0usize;
+        let mut contains_reference = false;
+
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let realistic = enumerate_telescopes(&library, realistic_context, clause_kappa);
+            realistic_count += realistic.len();
+
+            let demo = enumerate_telescopes(&library, demo_context, clause_kappa);
+            demo_count += demo.len();
+            contains_reference |= demo.contains(&Telescope::reference(12));
+        }
+
+        assert!(contains_reference);
+        assert!(
+            demo_count > realistic_count,
+            "expected demo breadth shadow step 12 enumeration to widen the realistic surface, got demo={} vs realistic={}",
+            demo_count,
+            realistic_count
         );
     }
 

@@ -1,6 +1,6 @@
 # Demo Lane Progress
 
-Last updated: 2026-03-16
+Last updated: 2026-03-17
 
 This file tracks only the open status of `demo_breadth_shadow`.
 
@@ -14,9 +14,11 @@ retuning during `BreadthHarvest`.
 
 - `demo_breadth_shadow` remains comparison-backed and still reuses
   `realistic_frontier_shadow` for the underlying search semantics.
-- `demo_breadth_shadow` now widens the operator-bundle, Hilbert-functional,
-  and temporal-shell late-family clause surfaces during demo discovery while
-  still reusing realistic-shadow admissibility for acceptance parity.
+- `demo_breadth_shadow` now widens the step-`10` to `12`
+  modal-shell/axiomatic-bridge and connection/curvature clause surfaces plus
+  the operator-bundle, Hilbert-functional, and temporal-shell late-family
+  clause surfaces during demo discovery while still reusing realistic-shadow
+  admissibility for acceptance parity.
 - The lane now reports its misses honestly instead of hiding them behind
   generic breadth counts or debug text.
 - Demo generated-surface reporting and live narrative progress now count raw
@@ -28,9 +30,9 @@ retuning during `BreadthHarvest`.
   admissible, exact-screened, pruned, fully scored, and best-overshoot stats.
 - CLI debug output, `--narrative`, and `scripts/compare_runs.py` now surface
   compact bucket summaries so the ordering story is visible in stored evidence.
-- Fresh stored evidence in `runs/codex-demo-rawcount` still preserves accepted
-  parity through step `15` (`matches_reference_replay x15`) and finishes far
-  under the default `600s` ceiling on this computer.
+- Fresh stored evidence in `runs/codex-demo-midlate-widening` still preserves
+  accepted parity through step `15` (`matches_reference_replay x15`) and
+  finishes far under the default `600s` ceiling on this computer.
 - The main remaining problem is no longer "missing demo evidence." The main
   problem is that the live search surface is still not broad enough in the
   places the plan cares about.
@@ -53,10 +55,11 @@ retuning during `BreadthHarvest`.
   surface
 - configured late-step generated and exact-screened floors are now stored and
   reported, but they are not yet being hit consistently
-- the latest stored `10m` run raises generated raw surface only to
-  `5`, `11`, `11`, `11`, `12`, and `14` on steps `10` to `15`, with
-  exact-screened counts of `2`, `2`, `1`, `3`, `3`, and `3`, so the honest
-  late breadth story is still far short of the configured floors
+- the latest stored `10m` run raises generated raw surface to
+  `9`, `15`, `15`, `11`, `12`, and `14` on steps `10` to `15`, with
+  exact-screened counts of `6`, `6`, `5`, `3`, `3`, and `3`, so the honest
+  late breadth story is improving on steps `10` to `12` but still far short
+  of the configured floors
 - the landed demo-specific structural bucket scheduler still needs broader real
   widening underneath it so late buckets actually reach their honest floors
 
@@ -83,8 +86,9 @@ retuning during `BreadthHarvest`.
 
 1. Restore the honest early breadth story from the current `546` toward step 1
    at `2144`, then show the shared early `90s` window honestly.
-2. Build on the landed demo-only late-family widening plus honest raw-surface
-   counting to widen the real search surface on steps `10` to `15`.
+2. Build on the landed demo-only step-`10` to `12` widening plus the earlier
+   late-family widening and honest raw-surface counting to keep widening the
+   real search surface on steps `10` to `15`.
 3. Extend the current reserve retunes into stronger closure-aware replanning
    across `Materialize` and `ProofClose`.
 4. Finish prune taxonomy, exact-screen reason reporting, and remaining
