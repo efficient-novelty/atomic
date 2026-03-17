@@ -13,7 +13,7 @@ comparison-backed honesty boundary.
 
 ## Working Baseline
 
-- Early reference: `runs/codex-demo-early-catalog`
+- Early reference: `runs/codex-demo-early-catalog-v2`
 - Late reference: `runs/codex-demo-late-surface-v4`
 - Guarded comparison baseline: `runs/codex-realistic-late-baseline-v2`
 - Current known open deltas:

@@ -7,7 +7,7 @@ use crate::config::{DemoConfig, RuntimeConfig, SearchProfile};
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{
     ClauseCatalog, EnumerationContext, LateFamilySurface, build_clause_catalog,
-    enumerate_raw_telescopes, enumerate_telescopes,
+    enumerate_raw_telescopes, enumerate_telescopes, raw_clause_catalog_widths,
 };
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
@@ -3758,6 +3758,14 @@ fn discover_realistic_shadow_candidates(
     Ok(discovery)
 }
 
+fn format_demo_clause_widths(widths: &[usize]) -> String {
+    widths
+        .iter()
+        .map(|width| width.to_string())
+        .collect::<Vec<_>>()
+        .join("x")
+}
+
 fn discover_demo_early_exhaustive_candidates(
     step_index: u32,
     library: &Library,
@@ -3773,7 +3781,22 @@ fn discover_demo_early_exhaustive_candidates(
     'clause_band: for clause_kappa in
         admissibility.min_clause_kappa..=admissibility.max_clause_kappa
     {
+        let raw_clause_widths = raw_clause_catalog_widths(enumeration_context, clause_kappa);
         let raw_telescopes = enumerate_raw_telescopes(enumeration_context, clause_kappa);
+        if let Some(observer) = demo_narrative.as_mut() {
+            observer.push_budget_pulse(
+                StepPhase::Scout,
+                "early exhaustive replay is using the restored raw clause catalog".to_owned(),
+                Some(format!(
+                    "clause_kappa={} raw_clause_widths={} raw_telescopes={}",
+                    clause_kappa,
+                    format_demo_clause_widths(&raw_clause_widths),
+                    raw_telescopes.len()
+                )),
+                discovery_progress_snapshot(step_start, &discovery),
+                true,
+            );
+        }
         for telescope in raw_telescopes {
             if demo_discovery_budget_exhausted(
                 demo_step_budget,
@@ -6148,6 +6171,15 @@ mod tests {
                     .progress
                     .as_ref()
                     .map(|progress| progress.generated_surface == 1296)
+                    .unwrap_or(false)
+        }));
+        assert!(step.narrative_events.iter().any(|event| {
+            event.kind == NarrativeEventKind::BudgetPulse
+                && event.phase == Some(StepPhase::Scout)
+                && event
+                    .detail
+                    .as_deref()
+                    .map(|detail| detail.contains("raw_clause_widths=36x36"))
                     .unwrap_or(false)
         }));
     }

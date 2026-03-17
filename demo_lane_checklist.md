@@ -15,10 +15,15 @@ This checklist covers only the remaining tasks needed for
 
 ## 1. Step-1 Recovery
 
-- [ ] Explain where the missing `848` generated raw surface went.
+- [x] Explain where the missing `848` generated raw surface went.
 - [ ] Raise step `1` generated raw from `1296` to `2144`.
 - [ ] Reconfirm that steps `1` to `4` still fit honestly inside the shared
       `90s` early window after the step-`1` change.
+
+Current audit evidence:
+`runs/codex-demo-early-catalog-v2` now persists
+`raw_clause_widths=36x36`, so the live step-`1` path honestly tops out at
+`1296` raw telescopes until the clause catalog itself widens again.
 
 Done when:
 

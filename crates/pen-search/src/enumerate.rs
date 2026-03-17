@@ -1390,9 +1390,7 @@ pub fn enumerate_raw_telescopes(
     base_context: EnumerationContext,
     clause_kappa: u16,
 ) -> Vec<Telescope> {
-    let options_by_position = (0..usize::from(clause_kappa))
-        .map(|position| raw_clauses_for_position(base_context, clause_kappa, position))
-        .collect::<Vec<_>>();
+    let options_by_position = raw_clause_options_by_position(base_context, clause_kappa);
     if options_by_position.iter().any(Vec::is_empty) {
         return Vec::new();
     }
@@ -1407,6 +1405,16 @@ pub fn enumerate_raw_telescopes(
     );
     telescopes.sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
     telescopes
+}
+
+pub(crate) fn raw_clause_catalog_widths(
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+) -> Vec<usize> {
+    raw_clause_options_by_position(base_context, clause_kappa)
+        .into_iter()
+        .map(|clauses| clauses.len())
+        .collect()
 }
 
 pub fn enumerate_telescopes_with_terminal_prefixes(
@@ -1696,6 +1704,15 @@ fn raw_clauses_for_position(
         });
     }
     clauses
+}
+
+fn raw_clause_options_by_position(
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+) -> Vec<Vec<ClauseRec>> {
+    (0..usize::from(clause_kappa))
+        .map(|position| raw_clauses_for_position(base_context, clause_kappa, position))
+        .collect::<Vec<_>>()
 }
 
 pub(crate) fn clause_kappa_can_match_structural_family(
@@ -3363,7 +3380,7 @@ fn contains_eliminator_expr(expr: &Expr) -> bool {
 mod tests {
     use super::{
         EnumerationContext, LateFamilySurface, enumerate_exprs, enumerate_next_clauses,
-        enumerate_raw_telescopes, enumerate_telescopes,
+        enumerate_raw_telescopes, enumerate_telescopes, raw_clause_catalog_widths,
         supports_axiomatic_bundle_clause_at_position, supports_connection_shell_clause_at_position,
         supports_curvature_shell_clause_at_position, supports_former_package_clause_at_position,
         supports_higher_hit_clause_at_position, supports_hilbert_functional_clause_at_position,
@@ -4421,16 +4438,12 @@ mod tests {
     fn step_one_raw_enumeration_counts_the_full_clause_catalog_surface() {
         let library = library_until(0);
         let admissibility = strict_admissibility(1, 2, &library);
-        let raw_telescopes = enumerate_raw_telescopes(
-            context_from_admissibility(&library, admissibility),
-            admissibility.min_clause_kappa,
-        );
-        let telescopes = enumerate_telescopes(
-            &library,
-            context_from_admissibility(&library, admissibility),
-            admissibility.min_clause_kappa,
-        );
+        let context = context_from_admissibility(&library, admissibility);
+        let widths = raw_clause_catalog_widths(context, admissibility.min_clause_kappa);
+        let raw_telescopes = enumerate_raw_telescopes(context, admissibility.min_clause_kappa);
+        let telescopes = enumerate_telescopes(&library, context, admissibility.min_clause_kappa);
 
+        assert_eq!(widths, vec![36, 36]);
         assert_eq!(raw_telescopes.len(), 1296);
         assert_eq!(telescopes.len(), 288);
     }
