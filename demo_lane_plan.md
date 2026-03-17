@@ -2,78 +2,92 @@
 
 Last updated: 2026-03-17
 
-This plan now covers only the remaining work for `demo_breadth_shadow`.
+This plan tracks only the remaining work needed to sign off
+`demo_breadth_shadow`.
 
-Landed baseline such as config profiles, the phase machine, demo budget
-control, stored demo funnel/closure evidence, narrative artifacts, compare-tool
-support, and repeated discovery-side reserve retunes is no longer restated
-here.
+## Goal
 
-## Remaining Objective
+Close the remaining early and late demo-lane gaps without losing accepted-hash
+parity, without inflating full telescope evaluations, and without weakening the
+comparison-backed honesty boundary.
 
-Turn `demo_breadth_shadow` from an honest demo evidence surface into an
-honestly broader live search lane that still preserves guarded acceptance
-parity.
+## Working Baseline
 
-## Fixed Constraints
+- Early reference: `runs/codex-demo-early-catalog`
+- Late reference: `runs/codex-demo-late-surface-v4`
+- Guarded comparison baseline: `runs/codex-realistic-late-baseline-v2`
+- Current known open deltas:
+  - step `1` generated raw: `1296 -> 2144`
+  - step `10` exact-screened: `7 -> 120+`
+  - step `12` generated raw: `147 -> 1200+`
+  - step `12` exact-screened: `83 -> 400+`
+  - step `14` generated raw: `2292 -> 3500+`
 
-- `strict_canon_guarded` stays unchanged and authoritative
-- `demo_breadth_shadow` stays comparison-backed only
-- exact rational `rho`, `bar`, and overshoot comparisons remain authoritative
-- semantic minimality and deterministic tie-breaking remain unchanged
-- no semantic names or target IDs enter hot-path search or evaluation
-- no stochastic acceptance or float-based ranking is introduced
-- no fake breadth, fake discoveries, or silent guarded fallback
-- if the lane misses a floor, budget, or certification target, it must say so
-  plainly and persist partial evidence
+## Execution Order
 
-## Remaining Success Criteria
+1. Recover step-`1` generated breadth.
+2. Raise step-`10` exact-screened mass.
+3. Re-open step-`12` generated and exact-screened breadth.
+4. Raise step-`14` generated mass.
+5. Re-run the default `10m` signoff evidence and refresh docs/tests.
 
-- step 1 reports the current `2144` generated raw candidates
-- steps `1` to `4` stay exhaustive or near-exhaustive inside the shared `90s`
-  early window on this computer
-- `demo_breadth_shadow` preserves accepted-hash parity with guarded
-- the default `10m` profile completes within `600s` on this computer
-- late steps show materially broader honest generated or exact-screened search
-  mass while `full_telescopes_evaluated` stays moderate
-- every prune is labeled by type and exact-screen reasons are separated where
-  applicable
+## Workstreams
 
-## Remaining Workstreams
+### 1. Step-1 Recovery
 
-### 1. Early Breadth Recovery
+- Audit which families or prefixes still fail to appear between the current
+  `1296` and the target `2144`.
+- Preserve full early candidate-list generation through step `4`.
+- Re-validate the shared early-window story from stored run evidence, not just
+  from config settings.
 
-- restore step-1 generated breadth to `2144`
-- keep full candidate-list generation on steps `1` to `4` wherever that still
-  fits the shared early window
-- validate the early-window behavior from stored run evidence rather than from
-  config alone
+Done when:
 
-### 2. Late Search-Surface Widening
+- step `1` reports `2144` generated raw candidates in a stored run
+- steps `1` to `4` still fit comfortably inside the shared `90s` early window
 
-- build on the now-stored step-`5` to `9` live carry-through rather than
-  re-opening raw-catalog-only widening
-- keep pushing steps `10` to `12` toward their configured generated and
-  exact-screened floors
-- keep pushing steps `13` to `15` toward their configured generated and
-  exact-screened floors, especially step `13` and step `15`
-- preserve accepted parity, moderate `full_telescopes_evaluated`, the landed
-  bucket scheduler, and the landed closure-aware proof-close ordering while
-  widening further
+### 2. Late Floor Closure
+
+- Treat step `10` exact-screened, step `12` generated/exact-screened, and step
+  `14` generated as separate targets with separate evidence.
+- Prefer changes that survive live prefix search over raw-catalog-only
+  widening.
+- Keep accepted parity and `full_telescopes_evaluated` stable while moving the
+  open floors.
+
+Done when:
+
+- step `10` exact-screened reaches `120+`
+- step `12` generated reaches `1200+`
+- step `12` exact-screened reaches `400+`
+- step `14` generated reaches `3500+`
+- the default `10m` profile still preserves accepted parity through step `15`
 
 ### 3. Exact-Bound Tightening
 
-- strengthen exact prefix bounds so widening increases honest search mass
-  without exploding full terminal work
-- keep exact-screen reasons, prune classes, narrative artifacts, and mandatory
-  live-event coverage stable while the late bounds move
+- Strengthen exact prefix and terminal-prefix bounds so extra honest breadth
+  turns into honest exact-screened mass rather than extra full evaluations.
+- Use the open late floors as the scorecard for whether a bound change helped.
+- Keep exact-screen reasons, prune classes, and stored narrative/event
+  coverage stable while the bounds move.
 
-## Primary Touch Points
+Done when:
+
+- the remaining late floors close without a large rise in
+  `full_telescopes_evaluated`
+- the lane still reports exact-screen reasons and prune classes cleanly
+
+## What Not To Reopen
+
+- step-`5` to `9` live carry-through
+- generic narrative/tooling cleanup
+- raw-catalog-only widening that does not survive the live prefix engine
+- changes that improve breadth only by evaluating many more full telescopes
+
+## Likely Touch Points
 
 - `crates/pen-search/src/engine.rs`
+- `crates/pen-search/src/prefix_memo.rs`
 - `crates/pen-search/src/scheduler.rs`
 - `crates/pen-search/src/diversify.rs`
 - `crates/pen-search/src/frontier.rs`
-- `crates/pen-cli/src/narrative.rs`
-- `crates/pen-cli/src/report.rs`
-- `scripts/compare_runs.py`

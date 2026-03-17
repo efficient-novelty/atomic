@@ -2,147 +2,83 @@
 
 Last updated: 2026-03-17
 
-This checklist contains only the still-open work for `demo_breadth_shadow`.
+This checklist covers only the remaining tasks needed for
+`demo_breadth_shadow` signoff.
 
-Landed baseline such as config parsing, demo profiles, the phase machine,
-persisted narratives/events, demo funnel and closure reporting, proof-close
-reserve accounting, compare-tool demo evidence, and repeated
-discovery-side reserve retuning is intentionally omitted here.
+## Current Open Numbers
 
-## 1. Honest Early Breadth
+- Step `1` generated raw: `1296 / 2144`
+- Step `10` exact-screened: `7 / 120`
+- Step `12` generated raw: `147 / 1200`
+- Step `12` exact-screened: `83 / 400`
+- Step `14` generated raw: `2292 / 3500`
 
-- [ ] Restore step 1 to `2144` generated raw candidates.
-- [x] Show that steps `1` to `4` stay exhaustive or near-exhaustive inside the
-      shared `90s` early window on this computer.
-- [x] Keep full candidate-list generation on early steps wherever it remains
-      affordable.
+## 1. Step-1 Recovery
 
-Latest stored evidence: fresh `runs/codex-demo-early-catalog` artifacts
-restore full early candidate-list generation through step `4`, raise step `1`
-to `1296` generated raw surface, and finish steps `1` to `4` in `122 ms`
-total (`95/1/1/25 ms`). The shared early-window story is now backed by stored
-evidence, but the explicit `2144` target is still open.
+- [ ] Explain where the missing `848` generated raw surface went.
+- [ ] Raise step `1` generated raw from `1296` to `2144`.
+- [ ] Reconfirm that steps `1` to `4` still fit honestly inside the shared
+      `90s` early window after the step-`1` change.
 
-## 2. Structural Scheduling
+Done when:
 
-- [x] Add a deterministic demo bucket key.
-- [x] Track per-bucket stats for generated, admissible, exact-screened,
-      pruned, fully scored, and best-overshoot outcomes.
-- [x] Add a demo-specific structural priority tuple.
-- [x] Keep heuristics structural/runtime-local and acceptance-independent.
+- a stored early run shows step `1 = 2144`
+- the same run keeps steps `1` to `4` comfortably inside the early window
 
-## 3. Real Search Widening
+## 2. Step-10 Exact-Screened Floor
 
-- [x] Widen steps `5` to `9` with more `kappa`, support-form, and bridge-head
-      variety.
-- [x] Widen steps `10` to `12` with more family unions, reference patterns,
-      nested `Pi` and `Sigma`, bridge heads, and reanchor variants.
-- [x] Widen steps `13` to `15` with more operator, Hilbert, and temporal
-      mixtures, mixed shells, historical reanchors, clause unions, and
-      positional filters.
-- [ ] Strengthen exact prefix bounds so widening does not explode full
-      terminal work.
+- [ ] Raise step `10` exact-screened surface from `7` to `120+`.
+- [ ] Keep the already-landed step-`10` generated floor hit.
+- [ ] Preserve accepted parity and keep `full_telescopes_evaluated` moderate.
 
-Latest stored evidence: fresh paired
-`runs/codex-realistic-midstep-baseline` and
-`runs/codex-demo-midstep-carrythrough` artifacts keep accepted parity through
-step `15`, keep demo narrative artifacts complete (`text=15/15`, `events=15/15`),
-and finally turn the landed step-`5` to `9` widening into stored live breadth:
-generated raw counts move from realistic `3/3/3/5/4` to demo
-`27/15/15/45/24`, exact-screened counts move from `1/1/1/1/1` to
-`1/3/2/13/9`, and `full_telescopes_evaluated` stays `1` on every step from
-`5` to `9`. Fresh `runs/codex-demo-late-surface-v4` late-step artifacts,
-compared against `runs/codex-realistic-late-baseline-v2`, now preserve
-accepted parity through step `15` while moving generated counts to
-`1344/4191/147/3995/2292/22715` and exact-screened counts to
-`7/253/83/3123/1521/18749` on steps `10` to `15`, with
-`full_telescopes_evaluated = 1` on every late step. New `pen-search` coverage
-now also runs the default `10m` config through step `15` and keeps the
-step-`10` generated floor hit, the step-`11` generated and exact-screened
-floor hits, and the widened step-`13` to `15` live surfaces pinned in tests.
-The remaining widening gap is no longer mid-step carry-through; it is the
-still-open step-`10` exact-screened floor, the still-open step-`12`
-generated and exact-screened floors, the still-open step-`14` generated
-floor, and the exact-prefix-bound work.
+Done when:
 
-## 4. Floor Attainment
+- a stored default `10m` run shows step `10` generated `>= 500`
+- the same run shows step `10` exact-screened `>= 120`
+- accepted parity still holds
 
-- [x] Start hitting the configured late-step generated or exact-screened floors
-      consistently, beginning with the default `10m` profile.
-- [x] Keep `full_telescopes_evaluated` moderate relative to generated breadth.
+## 3. Step-12 Floor Closure
 
-Default `10m` signoff targets:
+- [ ] Raise step `12` generated raw from `147` to `1200+`.
+- [ ] Raise step `12` exact-screened surface from `83` to `400+`.
+- [ ] Preserve the reference acceptance while doing it.
 
-- [x] Step `10`: `500+`
-- [x] Step `11`: `800+`
-- [ ] Step `12`: `1200+`
-- [x] Step `13`: `2200+`
-- [ ] Step `14`: `3500+`
-- [x] Step `15`: `5000+`
+Done when:
 
-Latest stored evidence: fresh `runs/codex-demo-late-surface-v4` artifacts now
-hit the step-`10`, step-`11`, step-`13`, and step-`15` generated floors
-(`1344 >= 500`, `4191 >= 800`, `3995 >= 2200`, `22715 >= 5000`), hit the
-step-`11` and step-`13` to `15` exact-screened floors
-(`253 >= 220`, `3123 >= 700`, `1521 >= 1100`, `18749 >= 1800`), and keep
-`full_telescopes_evaluated = 1` on every late step. The still-open floor gaps
-are now the step-`10` exact-screened floor, the step-`12` generated and
-exact-screened floors, and the step-`14` generated floor.
+- a stored default `10m` run shows step `12` generated `>= 1200`
+- the same run shows step `12` exact-screened `>= 400`
+- accepted parity still holds
 
-## 5. Closure-Aware Replanning And Reason Codes
+## 4. Step-14 Generated Floor
 
-- [x] Extend the within-step controller beyond current reserve retunes,
-      ordering, and handoff logic into stronger closure-aware replanning.
-- [x] Record exact-screen reasons separately:
-      partial-prefix bar failure, terminal-prefix completion failure,
-      incumbent dominance, and legality/connectivity exact rejection.
-- [x] Label every prune as sound, quotient/dedupe, or heuristic shaping.
+- [ ] Raise step `14` generated raw from `2292` to `3500+`.
+- [ ] Keep step `14` exact-screened at `1100+`.
+- [ ] Preserve accepted parity and keep `full_telescopes_evaluated` moderate.
 
-Latest code evidence: the demo controller now promotes `Materialize` into
-`ProofClose` with the explicit `closure_pressure_handoff` reason once a live
-incumbent turns most pending exact surface into prune-ready certification work,
-and the same closure signal now flips proof-close ordering into closure-first
-before reserve tightness alone would force it. Stored step summaries still also
-persist prune-class totals for quotient/dedupe, sound/minimality, and
-heuristic shaping, while CLI debug output, `pen-cli inspect`,
-`pen-cli --narrative`, and `scripts/compare_runs.py` all backfill the same
-labeled totals from stored search stats when older artifacts predate the
-explicit field. The four mandatory exact-screen reason totals remain explicit
-and continue to derive backward-compatibly from the underlying incremental
-counters when needed.
+Done when:
 
-## 6. Narrative And Tooling
+- a stored default `10m` run shows step `14` generated `>= 3500`
+- the same run still shows step `14` exact-screened `>= 1100`
+- accepted parity still holds
 
-- [x] Add `--narrative` support in `pen-cli`.
-- [x] Render a time bar and a closure bar.
-- [x] Keep narrative output inside the intended per-step line budgets.
-- [x] Rate-limit repeated live narrative budget pulses using the configured
-      interval.
-- [x] Add the remaining mandatory live events.
-- [x] Report missing narrative artifacts explicitly in
-      `scripts/compare_runs.py`.
-- [x] State the honesty boundary explicitly in docs:
-      no fake discoveries, no fake breadth, no silent replay fallback, and no
-      claims beyond comparison-backed evidence.
+## 5. Exact-Bound Tightening
 
-Latest code and stored evidence: `pen-cli` still clips demo narrative sections
-to `demo.narrative.max_lines_per_step` with explicit omission markers, and live
-demo budget-retune pulses still obey `demo.narrative.pulse_interval_millis`.
-`pen-search` now also has regression coverage that forces a `60s` pulse
-interval and still emits the mandatory `proof_close` `100%` certification
-milestone and final seal overshoot pulses under a step-`15` soft-cap handoff,
-while earlier demo tests already keep phase-entry, floor-hit, reserve-
-protection, and reserve-exhaustion events explicit. Fresh
-`runs/codex-demo-midstep-carrythrough` artifacts also keep per-step narrative
-and event artifacts complete across all `15` steps (`text=15/15`,
-`events=15/15`).
+- [ ] Add or retune exact prefix / terminal-prefix bounds that convert widened
+      honest breadth into honest exact-screened mass.
+- [ ] Preserve exact-screen reasons, prune classes, and narrative/event
+      artifacts while the bounds move.
+- [ ] Avoid solving the open late floors by evaluating many more full
+      telescopes.
 
-## 7. Signoff Gates
+Done when:
 
-- [x] `demo_breadth_shadow` preserves accepted-hash parity with guarded.
-- [ ] Step 1 reports `2144`.
-- [x] Steps `1` to `4` fit the shared early `90s` budget honestly.
-- [x] The default `10m` profile completes within `600s` on this computer.
-- [x] Late steps show large honest breadth with moderate full evaluations.
-- [x] No silent guarded or replay fallback is used when the demo lane misses
-      budget or certification.
+- the remaining late floors close without a large rise in
+  `full_telescopes_evaluated`
+
+## 6. Final Signoff Package
+
+- [ ] The default `10m` run finishes within `600s`.
+- [ ] Compare output still reports accepted parity through step `15`.
+- [ ] Config-backed tests cover the currently closed floors.
+- [ ] `demo_lane_progress.md`, `demo_lane_plan.md`, and
+      `demo_lane_checklist.md` reflect the latest stored evidence.

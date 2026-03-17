@@ -2,174 +2,71 @@
 
 Last updated: 2026-03-17
 
-This file tracks only the open status of `demo_breadth_shadow`.
+This file is a short operational status page for the remaining
+`demo_breadth_shadow` work.
 
-Landed baseline is no longer repeated here in detail. The repo already has the
-demo config profiles, phase machine, budget controller, persisted
-narratives/events, demo funnel and closure stats, proof-close reserve
-accounting, compare-tool demo evidence, and repeated discovery-side reserve
-retuning during `BreadthHarvest`.
+## Current Baseline
 
-## Current Status
+- `demo_breadth_shadow` is still comparison-backed. Guarded acceptance remains
+  authoritative.
+- Steps `5` to `9` already carry widened live search mass through the prefix
+  engine and are no longer the active problem.
+- The current early reference is `runs/codex-demo-early-catalog`.
+- The current late reference is `runs/codex-demo-late-surface-v4`, compared
+  against `runs/codex-realistic-late-baseline-v2`.
 
-- `demo_breadth_shadow` remains comparison-backed and still reuses
-  `realistic_frontier_shadow` for the underlying search semantics.
-- `demo_breadth_shadow` now widens the step-`10` to `12`
-  modal-shell/axiomatic-bridge and connection/curvature clause surfaces plus
-  the operator-bundle, Hilbert-functional, and temporal-shell late-family
-  clause surfaces during demo discovery while still reusing realistic-shadow
-  admissibility for acceptance parity.
-- Demo raw clause-catalog widening now also reaches steps `5` to `9` with
-  demo-only initial-hit, truncation-hit, higher-hit, sphere-lift, and
-  axiomatic variants, and exhaustive `pen-search` coverage now shows those raw
-  demo catalogs exceed realistic-shadow enumeration on every step from `5` to
-  `9` while step acceptance through step `9` still matches realistic shadow.
-- Fresh stored evidence in paired
-  `runs/codex-realistic-midstep-baseline` and
-  `runs/codex-demo-midstep-carrythrough` artifacts now shows that widening
-  carrying through the live prefix engine as well: generated raw counts move
-  from realistic `3/3/3/5/4` to demo `27/15/15/45/24`, exact-screened counts
-  move from `1/1/1/1/1` to `1/3/2/13/9`, `full_telescopes_evaluated` stays
-  `1` on every step from `5` to `9`, accepted parity still holds through step
-  `15`, and stored narrative/event artifacts stay complete (`15/15`).
-- The lane now reports its misses honestly instead of hiding them behind
-  generic breadth counts or debug text.
-- Demo generated-surface reporting and live narrative progress now count raw
-  root prefixes, raw child prefixes, forced single-continuation collapses, and
-  raw terminal completions instead of falling back to
-  `max(prefixes_created, enumerated_candidates)`.
-- Demo steps `1` to `4` now also restore full clause-catalog candidate-list
-  generation where it remains affordable instead of only exposing the current
-  realistic prefix-frontier shadow on those early steps.
-- The lane now has a deterministic demo bucket scheduler keyed only by
-  structural/runtime-local evidence, with stored per-bucket generated,
-  admissible, exact-screened, pruned, fully scored, and best-overshoot stats.
-- CLI debug output, `--narrative`, and `scripts/compare_runs.py` now surface
-  compact bucket summaries so the ordering story is visible in stored evidence.
-- Stored step summaries, CLI debug output, and `pen-cli --narrative` now also
-  separate the mandatory exact-screen reason codes into partial-prefix bar
-  failure, terminal-prefix completion failure, incumbent dominance, and
-  legality/connectivity exact rejection, with backward-compatible derivation
-  from older incremental counters when needed.
-- Stored step summaries now also persist prune-class totals for
-  quotient/dedupe, sound/minimality, and heuristic shaping, while CLI debug
-  output, `pen-cli inspect`, `pen-cli --narrative`, and
-  `scripts/compare_runs.py` backfill the same labeled totals from stored
-  search stats when older artifacts predate the explicit field.
-- `pen-cli --narrative` now enforces the configured per-step line budget by
-  trimming low-priority event, retained-candidate, prune, and trace tails with
-  explicit omission markers instead of letting long sections grow without
-  bound.
-- Repeated live scout and breadth-harvest budget-retune pulses now honor the
-  configured `pulse_interval_millis` while mandatory phase-entry, milestone,
-  reserve-exhaustion, and seal pulses still emit immediately.
-- New `pen-search` regression coverage now forces a `60s` pulse interval and
-  still observes the mandatory `proof_close` `100%` certification milestone
-  plus the final seal overshoot pulse under a step-`15` soft-cap handoff, so
-  the live-event closeout is now backed by tests rather than inference.
-- Demo materialize can now also hand off into `ProofClose` with the explicit
-  `closure_pressure_handoff` reason once a live incumbent makes most pending
-  retained exact surface prune-ready, and the same closure-pressure summary now
-  flips proof-close ordering into closure-first even before reserve tightness
-  alone would force that mode change.
-- Fresh stored evidence in `runs/codex-demo-early-catalog` now shows that
-  restored early candidate-list generation directly: step `1` reports
-  `generated_raw_prefixes = 1296`, steps `1` to `4` finish in `122 ms` total
-  (`95/1/1/25 ms`), and the stored step summaries plus appended narrative
-  progress both reflect those raw early counts.
-- Fresh stored evidence in `runs/codex-demo-midlate-widening` still preserves
-  accepted parity through step `15` (`matches_reference_replay x15`) and
-  finishes far under the default `600s` ceiling on this computer.
-- Exhaustive `pen-search` coverage now confirms that the demo-only late-family
-  enumerators beat realistic-shadow enumeration on steps `13` to `15`, and the
-  step-`15` demo lane now includes an extra temporal exchange bridge variant
-  that still preserves the reference acceptance under exact comparison.
-- Demo prefix-family summaries and active-window clause filtering now preserve
-  the live demo late-family surface override instead of snapping those prefixes
-  back to realistic-shadow family matching before the online queue can widen
-  honestly, while demo terminal admissibility still falls back to the direct
-  realistic-shadow check whenever that override is active so accepted parity
-  stays authoritative.
-- Demo late-family override roots now also selectively skip the cached family-
-  filter summary on the step-`10` / `kappa = 4` and step-`11` / `kappa = 5`
-  demo override surfaces, while late terminal acceptance competition now
-  ignores admitted-but-deprioritized completions on those same override
-  surfaces so the wider live queue can stay honest without regressing accepted
-  parity.
-- Fresh `runs/codex-demo-late-surface-v4` artifacts, compared against
-  `runs/codex-realistic-late-baseline-v2`, still preserve accepted parity
-  through step `15` (`matches_reference_replay x15`) and now turn that narrowed
-  step-`10` / `11` late-family widening into materially broader stored live
-  breadth: generated raw surface moves to `1344`, `4191`, `147`, `3995`,
-  `2292`, and `22715` on steps `10` to `15`, exact-screened counts move to
-  `7`, `253`, `83`, `3123`, `1521`, and `18749`, every late step still keeps
-  `full_telescopes_evaluated = 1`, steps `10`, `11`, `13`, and `15` now hit
-  their configured generated floors, step `11` now also hits its configured
-  exact-screened floor, and step `14` still hits the configured exact-screened
-  floor (`1521 >= 1100`).
-- New config-backed `pen-search` coverage now runs the default `10m` demo
-  profile through step `15` and asserts that steps `10` to `15` keep the
-  reference telescopes while step `10` keeps its generated floor hit, step
-  `11` keeps its generated and exact-screened floor hits, and steps `13` to
-  `15` preserve the widened live generated and exact-screened surfaces with
-  `full_telescopes_evaluated = 1` and `proof_close_closure_percent = 100`.
-- The main remaining problems are now narrower: pushing step `1` from `1296`
-  toward the explicit `2144` floor, then closing the still-open step-`10`
-  exact-screened floor, the still-open step-`12` generated and exact-screened
-  floors, and the still-open step-`14` generated floor from the already-
-  broader honest live surface without regressing the newly stored mid-step
-  carry-through or mandatory live-event coverage.
+## Remaining Signoff Gaps
 
-## What Still Blocks Signoff
+| Area | Current evidence | Target | Status |
+| --- | --- | --- | --- |
+| Step `1` generated raw | `1296` | `2144` | open |
+| Step `10` exact-screened | `7` | `120+` | open |
+| Step `12` generated raw | `147` | `1200+` | open |
+| Step `12` exact-screened | `83` | `400+` | open |
+| Step `14` generated raw | `2292` | `3500+` | open |
 
-### 1. Early Breadth Still Misses The Step-1 Floor
+## What Is Already Good Enough
 
-- step 1 now reports `1296` generated raw surface in
-  `runs/codex-demo-early-catalog`, up from `546` in
-  `runs/codex-demo-rawcount` and `288` before honest raw counting, but it
-  still misses the explicit `2144` floor
-- the same stored run now restores full early candidate-list generation
-  through step `4` where affordable and finishes steps `1` to `4` in `122 ms`
-  total, so the remaining early-breadth gap is now the step-`1` floor itself
-  rather than missing shared-window evidence
+- Step `10` generated floor is hit: `1344 >= 500`.
+- Step `11` hits both floor families: `4191 >= 800`, `253 >= 220`.
+- Step `13` and step `15` hit both generated and exact-screened floors.
+- Step `14` already hits its exact-screened floor: `1521 >= 1100`.
+- `full_telescopes_evaluated` stays `1` on every late step in the current
+  `10m` reference run.
+- Steps `1` to `4` finish in `122 ms` total in the current early reference
+  run, so the shared `90s` early window is no longer a blocker.
+- Accepted parity still holds through step `15`
+  (`matches_reference_replay x15`).
 
-### 2. Late Floors Still Miss Signoff
+## Current Read Of The Problem
 
-- fresh paired `runs/codex-realistic-midstep-baseline` and
-  `runs/codex-demo-midstep-carrythrough` artifacts now close the former
-  mid-step carry-through gap: generated raw counts on steps `5` to `9` move
-  from realistic `3/3/3/5/4` to demo `27/15/15/45/24`, exact-screened counts
-  move from `1/1/1/1/1` to `1/3/2/13/9`, `full_telescopes_evaluated` stays `1`
-  on every step, and accepted parity still holds through step `15`
-- configured late-step generated and exact-screened floors are now stored and
-  partially hit on the default `10m` profile: step `10` now hits its generated
-  floor, step `11` now hits both floor families, but step `10` still misses
-  the exact-screened floor, step `12` still misses both floor families, and
-  step `14` still misses its generated floor
-- the latest paired `10m` run now raises generated raw surface to
-  `1344`, `4191`, `147`, `3995`, `2292`, and `22715` on steps `10` to `15`,
-  with exact-screened counts of `7`, `253`, `83`, `3123`, `1521`, and
-  `18749`, so
-  the live late breadth story is no longer "barely above realistic shadow" or
-  "only slightly broader" even though the earlier late generated and exact
-  floors are still open
-- the landed demo-specific structural bucket scheduler plus the preserved demo
-  family surface now have enough honest breadth underneath them to show real
-  widening, but the next gap is pushing that wider late surface through the
-  remaining step-`10` exact floor, the step-`12` generated and exact floors,
-  and the step-`14` generated floor
-- the new closure-pressure handoff improves the within-step split, but it still
-  needs the remaining widening and bound work to hit the last late floors
+- The remaining early gap is no longer about budget, reporting, or candidate-
+  list restoration. It is specifically missing step-`1` generated surface.
+- The remaining late gap is no longer step-`5` to `9` carry-through or broad
+  late-family exposure. It is concentrated in step `10` exact-screen mass,
+  step `12` generated and exact-screened mass, and step `14` generated mass.
+- Further progress likely needs tighter exact prefix and terminal-prefix
+  bounds, not just more raw catalog widening.
+- Any change that alters accepted hashes, drives `full_telescopes_evaluated`
+  materially upward, or leans on silent fallback is a regression.
 
-## Next Priorities
+## Immediate Next Actions
 
-1. Push the honest early breadth story from the current step-`1` `1296`
-   toward `2144` without regressing the newly restored full candidate-list
-   generation and shared early-window evidence on steps `1` to `4`.
-2. Build on the now-stored step-`5` to `9` live carry-through plus the landed
-   step-`10` to `15` widening to keep pushing the remaining generated and
-   exact-screened floors, especially the step-`10` exact-screened floor,
-   step `12`, and the step-`14` generated floor.
-3. Strengthen the remaining exact-prefix-bound story so that further late-step
-   widening keeps `full_telescopes_evaluated` moderate while those floor
-   targets move upward.
+1. Audit step `1` enumeration and prefix admission to explain the missing
+   `2144 - 1296 = 848` generated surface.
+2. Instrument step `10` to find where honest exact-screen opportunities are
+   being lost before the `120` floor.
+3. Re-open step `12` widening only with parity checks in place, since the last
+   broader attempt either changed acceptance or collapsed generation entirely.
+4. Push step `14` generated breadth upward without disturbing the already-good
+   exact-screened surface.
+5. Keep the default `10m` config-backed test and stored run evidence aligned
+   with the latest accepted reference.
+
+## Guardrails
+
+- Keep `demo_breadth_shadow` comparison-backed.
+- Keep guarded acceptance authoritative.
+- Count only honest generated and honest exact-screened mass.
+- Prefer stored run evidence over config intent when deciding whether a gap is
+  closed.
