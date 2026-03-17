@@ -265,6 +265,9 @@ On the demo-lane side:
   retunes plus the landed reserve-pressure materialize handoff plus the landed
   structural bucket scheduler into stronger closure-aware replanning and real
   widening
+- planning trackers `demo_lane_progress.md` and `demo_lane_checklist.md` were
+  refreshed on `2026-03-17` with an immediate execution slice: early-window
+  recovery, late-step widening, then closure-aware controller/reporting closeout
 
 Start with the current architecture doc before diving into donor material:
 
