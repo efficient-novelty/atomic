@@ -19,6 +19,11 @@ retuning during `BreadthHarvest`.
   the operator-bundle, Hilbert-functional, and temporal-shell late-family
   clause surfaces during demo discovery while still reusing realistic-shadow
   admissibility for acceptance parity.
+- Demo raw clause-catalog widening now also reaches steps `5` to `9` with
+  demo-only initial-hit, truncation-hit, higher-hit, sphere-lift, and
+  axiomatic variants, and exhaustive `pen-search` coverage now shows those raw
+  demo catalogs exceed realistic-shadow enumeration on every step from `5` to
+  `9` while step acceptance through step `9` still matches realistic shadow.
 - The lane now reports its misses honestly instead of hiding them behind
   generic breadth counts or debug text.
 - Demo generated-surface reporting and live narrative progress now count raw
@@ -82,7 +87,8 @@ retuning during `BreadthHarvest`.
   `full_telescopes_evaluated = 1`, and step `14` now hits the configured
   exact-screened floor (`1521 >= 1100`).
 - The main remaining problem is no longer "missing demo evidence." The main
-  problem is now pushing the remaining surfaced late floors from this much
+  problem is now carrying the new raw mid-step widening through live prefix
+  discovery and then pushing the remaining surfaced late floors from this much
   stronger base while the mandatory live-event closeout is still unfinished.
 
 ## What Still Blocks Signoff
@@ -100,8 +106,15 @@ retuning during `BreadthHarvest`.
 
 ### 2. Real Widening Is Still Missing
 
-- steps `5` to `9` still inherit too much of the current realistic-shadow
-  surface
+- steps `5` to `9` no longer reuse only the reference raw clause catalogs:
+  demo-only initial-hit, truncation-hit, higher-hit, sphere-lift, and
+  axiomatic variants now widen raw enumeration and still preserve realistic
+  acceptance through step `9`
+- the remaining mid-step gap is live carry-through rather than raw catalog
+  shape: the current code probe still reports the same
+  `generated_raw_prefixes` counts as realistic shadow on steps `5` to `9`
+  (`3/3/3/5/4`), so no fresh stored live mid-step breadth evidence has landed
+  yet
 - configured late-step generated and exact-screened floors are now stored and
   reported, but they are not yet being hit consistently
 - the latest stored `10m` run now raises generated raw surface to
@@ -131,9 +144,10 @@ retuning during `BreadthHarvest`.
 1. Push the honest early breadth story from the current step-`1` `1296`
    toward `2144` without regressing the newly restored full candidate-list
    generation and shared early-window evidence on steps `1` to `4`.
-2. Build on the landed demo-only step-`10` to `12` widening plus the earlier
-   late-family widening, the preserved demo family-surface override, and the
-   honest raw-surface counting to keep pushing steps `10` to `15` toward the
-   remaining generated and exact-screened floors, especially step `13` and
-   step `15`.
+2. Carry the new step-`5` to `9` raw package-catalog widening through the live
+   prefix engine, then build on the landed demo-only step-`10` to `12`
+   widening plus the earlier late-family widening, the preserved demo
+   family-surface override, and the honest raw-surface counting to keep
+   pushing steps `10` to `15` toward the remaining generated and
+   exact-screened floors, especially step `13` and step `15`.
 3. Finish the remaining mandatory live-event closeout.

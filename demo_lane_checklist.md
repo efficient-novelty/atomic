@@ -52,6 +52,16 @@ step-`13` to `15` widening into stored live breadth instead of extra
 active-window filter pressure, although the configured late floors are still
 not yet hit consistently.
 
+Latest code evidence for the still-open step-`5` to `9` item: `pen-search`
+now widens the raw demo clause catalogs on steps `5` to `9` with demo-only
+initial-hit, truncation-hit, higher-hit, sphere-lift, and axiomatic variants,
+and new unit coverage shows those raw surfaces exceed realistic shadow on
+every step from `5` to `9` while step acceptance through step `9` still
+matches realistic shadow. The remaining gap is live evidence: the current
+engine probe still reports identical `generated_raw_prefixes` counts of
+`3/3/3/5/4` on steps `5` to `9`, so fresh stored artifacts would not yet close
+this item.
+
 ## 4. Floor Attainment
 
 - [ ] Start hitting the configured late-step generated or exact-screened floors

@@ -297,6 +297,11 @@ On the demo-lane side:
   can now also restore full clause-catalog candidate-list generation where it
   remains affordable instead of only exposing the realistic prefix-frontier
   shadow
+- demo raw clause-catalog widening now also covers steps `5` to `9` with
+  demo-only initial-hit, truncation-hit, higher-hit, sphere-lift, and
+  axiomatic variants, and unit coverage now shows those raw demo catalogs
+  exceed realistic shadow on each step from `5` to `9` while step acceptance
+  through step `9` still matches realistic shadow
 - fresh `runs/codex-demo-early-catalog` artifacts now show step-`1`
   `generated_raw_prefixes = 1296` and step timings `95/1/1/25 ms` through
   step `4` (`122 ms` total), so the shared early-window story is now backed by
@@ -306,13 +311,16 @@ On the demo-lane side:
   `18/82/83/178/1521/707`, so the lane is no longer just more honest about
   breadth; it is materially broader live search while still missing several of
   the intended late generated and exact floors
-- the current demo gap is not "make the lane look broader"; it is meeting the
-  remaining surfaced early and late breadth floors honestly, with the shared
-  early-window evidence now restored and the remaining early gap narrowed to
-  pushing step `1` from `1296` toward `2144`, then pushing the remaining late
-  generated and exact floors from the newly broadened live surface, especially
-  on step `13` and step `15`, while still finishing the remaining mandatory
-  live-event closeout
+- the current demo gap is not "make the lane look broader"; it is carrying the
+  new step-`5` to `9` raw package-catalog widening through live prefix
+  discovery, where the current probe still reports the same
+  `generated_raw_prefixes` counts as realistic shadow (`3/3/3/5/4`), then
+  meeting the remaining surfaced early and late breadth floors honestly, with
+  the shared early-window evidence now restored and the remaining early gap
+  narrowed to pushing step `1` from `1296` toward `2144`, then pushing the
+  remaining late generated and exact floors from the newly broadened live
+  surface, especially on step `13` and step `15`, while still finishing the
+  remaining mandatory live-event closeout
 
 Start with the current architecture doc before diving into donor material:
 

@@ -6357,6 +6357,29 @@ mod tests {
         .expect("relaxed shadow step")
     }
 
+    fn profile_step_from_reference_prefix(
+        step_index: u32,
+        profile: SearchProfile,
+    ) -> AtomicSearchStep {
+        assert!(step_index >= 1);
+        let prefix = if step_index == 1 {
+            Vec::new()
+        } else {
+            reference_prefix(step_index - 1)
+        };
+        search_bootstrap_from_prefix_for_profile_with_runtime(
+            &prefix,
+            step_index,
+            2,
+            profile,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("profile step should succeed")
+        .into_iter()
+        .last()
+        .expect("profile step")
+    }
+
     #[test]
     fn live_search_support_is_honest_about_current_bootstrap_range() {
         assert!(supports_live_atomic_search(LIVE_BOOTSTRAP_MAX_STEP));
@@ -6369,6 +6392,25 @@ mod tests {
             super::admissibility_mode_for_profile(SearchProfile::DemoBreadthShadow),
             AdmissibilityMode::RealisticShadow
         );
+    }
+
+    #[test]
+    fn demo_breadth_shadow_midstep_search_preserves_realistic_shadow_acceptance() {
+        for step_index in 5..=9 {
+            let realistic_step = profile_step_from_reference_prefix(
+                step_index,
+                SearchProfile::RealisticFrontierShadow,
+            );
+            let demo_step =
+                profile_step_from_reference_prefix(step_index, SearchProfile::DemoBreadthShadow);
+
+            assert_eq!(realistic_step.telescope, Telescope::reference(step_index));
+            assert_eq!(demo_step.telescope, Telescope::reference(step_index));
+            assert_eq!(
+                demo_step.accepted.canonical_hash,
+                realistic_step.accepted.canonical_hash
+            );
+        }
     }
 
     #[test]

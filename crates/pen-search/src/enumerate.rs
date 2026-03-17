@@ -109,10 +109,14 @@ pub fn enumerate_next_clauses(context: EnumerationContext) -> Vec<ClauseRec> {
         .into_iter()
         .filter(|expr| {
             (!context.require_former_eliminator_clauses || supports_former_eliminator_clause(expr))
-                && (!context.require_initial_hit_clauses || supports_initial_hit_clause(expr))
-                && (!context.require_truncation_hit_clauses || supports_truncation_hit_clause(expr))
-                && (!context.require_higher_hit_clauses || supports_higher_hit_clause(expr))
-                && (!context.require_sphere_lift_clauses || supports_sphere_lift_clause(expr))
+                && (!context.require_initial_hit_clauses
+                    || supports_initial_hit_clause(expr, context.late_family_surface))
+                && (!context.require_truncation_hit_clauses
+                    || supports_truncation_hit_clause(expr, context.late_family_surface))
+                && (!context.require_higher_hit_clauses
+                    || supports_higher_hit_clause(expr, context.late_family_surface))
+                && (!context.require_sphere_lift_clauses
+                    || supports_sphere_lift_clause(expr, context.late_family_surface))
                 && (!context.require_axiomatic_bundle_clauses
                     || supports_axiomatic_bundle_clause(expr))
                 && (!context.require_modal_shell_clauses || supports_modal_shell_clause(expr))
@@ -135,10 +139,14 @@ fn enumerate_raw_next_clauses(context: EnumerationContext) -> Vec<ClauseRec> {
         .into_iter()
         .filter(|expr| {
             (!context.require_former_eliminator_clauses || supports_former_eliminator_clause(expr))
-                && (!context.require_initial_hit_clauses || supports_initial_hit_clause(expr))
-                && (!context.require_truncation_hit_clauses || supports_truncation_hit_clause(expr))
-                && (!context.require_higher_hit_clauses || supports_higher_hit_clause(expr))
-                && (!context.require_sphere_lift_clauses || supports_sphere_lift_clause(expr))
+                && (!context.require_initial_hit_clauses
+                    || supports_initial_hit_clause(expr, context.late_family_surface))
+                && (!context.require_truncation_hit_clauses
+                    || supports_truncation_hit_clause(expr, context.late_family_surface))
+                && (!context.require_higher_hit_clauses
+                    || supports_higher_hit_clause(expr, context.late_family_surface))
+                && (!context.require_sphere_lift_clauses
+                    || supports_sphere_lift_clause(expr, context.late_family_surface))
                 && (!context.require_axiomatic_bundle_clauses
                     || supports_axiomatic_bundle_clause(expr))
                 && (!context.require_modal_shell_clauses || supports_modal_shell_clause(expr))
@@ -254,6 +262,105 @@ fn relaxed_curvature_shell_clause(position: usize, context: EnumerationContext) 
         5 => Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
         _ => return None,
     })
+}
+
+fn demo_initial_hit_clauses(position: usize) -> Vec<Expr> {
+    match position {
+        0 => vec![
+            Expr::App(Box::new(Expr::Univ), Box::new(Expr::Var(1))),
+            Expr::App(Box::new(Expr::Univ), Box::new(Expr::Univ)),
+            Expr::App(Box::new(Expr::Univ), Box::new(Expr::PathCon(1))),
+        ],
+        1 => vec![
+            Expr::Var(1),
+            Expr::Var(2),
+            Expr::App(Box::new(Expr::Univ), Box::new(Expr::Var(1))),
+        ],
+        2 => vec![
+            Expr::PathCon(1),
+            Expr::Var(1),
+            Expr::Lam(Box::new(Expr::PathCon(1))),
+        ],
+        _ => Vec::new(),
+    }
+}
+
+fn demo_truncation_hit_clauses(position: usize) -> Vec<Expr> {
+    match position {
+        0 => vec![
+            Expr::Trunc(Box::new(Expr::Var(1))),
+            Expr::Trunc(Box::new(Expr::Univ)),
+            Expr::Trunc(Box::new(Expr::PathCon(1))),
+        ],
+        1 => vec![
+            Expr::App(
+                Box::new(Expr::Trunc(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Var(2)),
+            ),
+            Expr::App(
+                Box::new(Expr::Trunc(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Var(1)),
+            ),
+            Expr::App(
+                Box::new(Expr::Trunc(Box::new(Expr::Univ))),
+                Box::new(Expr::Var(1)),
+            ),
+        ],
+        2 => vec![
+            Expr::PathCon(1),
+            Expr::Var(1),
+            Expr::Lam(Box::new(Expr::PathCon(1))),
+        ],
+        _ => Vec::new(),
+    }
+}
+
+fn demo_higher_hit_clauses(position: usize) -> Vec<Expr> {
+    match position {
+        0 => vec![
+            Expr::App(Box::new(Expr::Univ), Box::new(Expr::Var(1))),
+            Expr::App(Box::new(Expr::Univ), Box::new(Expr::Univ)),
+            Expr::App(Box::new(Expr::Univ), Box::new(Expr::PathCon(2))),
+        ],
+        1 => vec![
+            Expr::Var(1),
+            Expr::Var(2),
+            Expr::App(Box::new(Expr::Univ), Box::new(Expr::Var(1))),
+        ],
+        2 => vec![
+            Expr::PathCon(2),
+            Expr::PathCon(1),
+            Expr::Lam(Box::new(Expr::PathCon(2))),
+        ],
+        _ => Vec::new(),
+    }
+}
+
+fn demo_sphere_lift_clauses(position: usize) -> Vec<Expr> {
+    match position {
+        0 => vec![
+            Expr::App(Box::new(Expr::Univ), Box::new(Expr::Var(1))),
+            Expr::App(Box::new(Expr::Univ), Box::new(Expr::Univ)),
+            Expr::App(Box::new(Expr::Univ), Box::new(Expr::PathCon(3))),
+        ],
+        1 => vec![
+            Expr::Var(1),
+            Expr::Var(2),
+            Expr::App(Box::new(Expr::Univ), Box::new(Expr::Var(1))),
+        ],
+        2 => vec![Expr::PathCon(3), Expr::PathCon(2), Expr::PathCon(1)],
+        3 => vec![
+            Expr::Lam(Box::new(Expr::Var(1))),
+            Expr::Lam(Box::new(Expr::Var(2))),
+            Expr::Lam(Box::new(Expr::PathCon(1))),
+        ],
+        4 => vec![
+            Expr::Lam(Box::new(Expr::Var(2))),
+            Expr::Lam(Box::new(Expr::Var(1))),
+            Expr::Lam(Box::new(Expr::PathCon(2))),
+        ],
+        _ => Vec::new(),
+    }
 }
 
 fn demo_modal_shell_clauses(position: usize) -> Vec<Expr> {
@@ -1223,16 +1330,40 @@ fn clauses_for_position(
         clauses.retain(|clause| supports_former_package_clause_at_position(position, &clause.expr));
     }
     if base_context.require_initial_hit_clauses {
-        clauses.retain(|clause| supports_initial_hit_clause_at_position(position, &clause.expr));
+        clauses.retain(|clause| {
+            supports_initial_hit_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.late_family_surface,
+            )
+        });
     }
     if base_context.require_truncation_hit_clauses {
-        clauses.retain(|clause| supports_truncation_hit_clause_at_position(position, &clause.expr));
+        clauses.retain(|clause| {
+            supports_truncation_hit_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.late_family_surface,
+            )
+        });
     }
     if base_context.require_higher_hit_clauses {
-        clauses.retain(|clause| supports_higher_hit_clause_at_position(position, &clause.expr));
+        clauses.retain(|clause| {
+            supports_higher_hit_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.late_family_surface,
+            )
+        });
     }
     if base_context.require_sphere_lift_clauses {
-        clauses.retain(|clause| supports_sphere_lift_clause_at_position(position, &clause.expr));
+        clauses.retain(|clause| {
+            supports_sphere_lift_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.late_family_surface,
+            )
+        });
     }
     if base_context.require_axiomatic_bundle_clauses {
         clauses.retain(|clause| {
@@ -1241,6 +1372,7 @@ fn clauses_for_position(
                 &clause.expr,
                 base_context.library_size,
                 base_context.historical_anchor_ref,
+                base_context.late_family_surface,
             )
         });
     }
@@ -1321,16 +1453,40 @@ fn raw_clauses_for_position(
         clauses.retain(|clause| supports_former_package_clause_at_position(position, &clause.expr));
     }
     if base_context.require_initial_hit_clauses {
-        clauses.retain(|clause| supports_initial_hit_clause_at_position(position, &clause.expr));
+        clauses.retain(|clause| {
+            supports_initial_hit_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.late_family_surface,
+            )
+        });
     }
     if base_context.require_truncation_hit_clauses {
-        clauses.retain(|clause| supports_truncation_hit_clause_at_position(position, &clause.expr));
+        clauses.retain(|clause| {
+            supports_truncation_hit_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.late_family_surface,
+            )
+        });
     }
     if base_context.require_higher_hit_clauses {
-        clauses.retain(|clause| supports_higher_hit_clause_at_position(position, &clause.expr));
+        clauses.retain(|clause| {
+            supports_higher_hit_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.late_family_surface,
+            )
+        });
     }
     if base_context.require_sphere_lift_clauses {
-        clauses.retain(|clause| supports_sphere_lift_clause_at_position(position, &clause.expr));
+        clauses.retain(|clause| {
+            supports_sphere_lift_clause_at_position(
+                position,
+                &clause.expr,
+                base_context.late_family_surface,
+            )
+        });
     }
     if base_context.require_axiomatic_bundle_clauses {
         clauses.retain(|clause| {
@@ -1339,6 +1495,7 @@ fn raw_clauses_for_position(
                 &clause.expr,
                 base_context.library_size,
                 base_context.historical_anchor_ref,
+                base_context.late_family_surface,
             )
         });
     }
@@ -1430,32 +1587,33 @@ pub(crate) fn clause_supports_structural_family_at_position(
         StructuralFamily::FormerEliminator => {
             supports_former_package_clause_at_position(position, &clause.expr)
         }
-        StructuralFamily::InitialHit => {
-            supports_initial_hit_clause_at_position(position, &clause.expr)
-        }
-        StructuralFamily::TruncationHit => {
-            supports_truncation_hit_clause_at_position(position, &clause.expr)
-        }
-        StructuralFamily::HigherHit => {
-            supports_higher_hit_clause_at_position(position, &clause.expr)
-        }
-        StructuralFamily::SphereLift => {
-            supports_sphere_lift_clause_at_position(position, &clause.expr)
-        }
-        StructuralFamily::AxiomaticBundle => {
-            if context.late_family_surface == LateFamilySurface::DemoBreadthShadow {
-                demo_axiomatic_bridge_clauses(position, context)
-                    .into_iter()
-                    .any(|candidate| candidate == clause.expr)
-            } else {
-                supports_axiomatic_bundle_clause_at_position(
-                    position,
-                    &clause.expr,
-                    context.library_size,
-                    context.historical_anchor_ref,
-                )
-            }
-        }
+        StructuralFamily::InitialHit => supports_initial_hit_clause_at_position(
+            position,
+            &clause.expr,
+            context.late_family_surface,
+        ),
+        StructuralFamily::TruncationHit => supports_truncation_hit_clause_at_position(
+            position,
+            &clause.expr,
+            context.late_family_surface,
+        ),
+        StructuralFamily::HigherHit => supports_higher_hit_clause_at_position(
+            position,
+            &clause.expr,
+            context.late_family_surface,
+        ),
+        StructuralFamily::SphereLift => supports_sphere_lift_clause_at_position(
+            position,
+            &clause.expr,
+            context.late_family_surface,
+        ),
+        StructuralFamily::AxiomaticBundle => supports_axiomatic_bundle_clause_at_position(
+            position,
+            &clause.expr,
+            context.library_size,
+            context.historical_anchor_ref,
+            context.late_family_surface,
+        ),
         StructuralFamily::ModalShell => {
             if context.late_family_surface == LateFamilySurface::DemoBreadthShadow {
                 demo_modal_shell_clauses(position)
@@ -1795,13 +1953,29 @@ fn supports_former_eliminator_clause(expr: &Expr) -> bool {
             || contains_eliminator_expr(expr))
 }
 
-fn supports_initial_hit_clause(expr: &Expr) -> bool {
+fn supports_initial_hit_clause(expr: &Expr, late_family_surface: LateFamilySurface) -> bool {
+    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
+        return (0..=2).any(|position| {
+            demo_initial_hit_clauses(position)
+                .into_iter()
+                .any(|candidate| candidate == *expr)
+        });
+    }
+
     matches!(expr, Expr::App(left, right) if matches!(left.as_ref(), Expr::Univ) && matches!(right.as_ref(), Expr::Var(_)))
         || matches!(expr, Expr::Var(_))
         || matches!(expr, Expr::PathCon(1))
 }
 
-fn supports_truncation_hit_clause(expr: &Expr) -> bool {
+fn supports_truncation_hit_clause(expr: &Expr, late_family_surface: LateFamilySurface) -> bool {
+    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
+        return (0..=2).any(|position| {
+            demo_truncation_hit_clauses(position)
+                .into_iter()
+                .any(|candidate| candidate == *expr)
+        });
+    }
+
     matches!(expr, Expr::Trunc(inner) if matches!(inner.as_ref(), Expr::Var(_)))
         || matches!(
             expr,
@@ -1812,13 +1986,29 @@ fn supports_truncation_hit_clause(expr: &Expr) -> bool {
         || matches!(expr, Expr::PathCon(1))
 }
 
-fn supports_higher_hit_clause(expr: &Expr) -> bool {
+fn supports_higher_hit_clause(expr: &Expr, late_family_surface: LateFamilySurface) -> bool {
+    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
+        return (0..=2).any(|position| {
+            demo_higher_hit_clauses(position)
+                .into_iter()
+                .any(|candidate| candidate == *expr)
+        });
+    }
+
     matches!(expr, Expr::App(left, right) if matches!(left.as_ref(), Expr::Univ) && matches!(right.as_ref(), Expr::Var(_)))
         || matches!(expr, Expr::Var(_))
         || matches!(expr, Expr::PathCon(2))
 }
 
-fn supports_sphere_lift_clause(expr: &Expr) -> bool {
+fn supports_sphere_lift_clause(expr: &Expr, late_family_surface: LateFamilySurface) -> bool {
+    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
+        return (0..=4).any(|position| {
+            demo_sphere_lift_clauses(position)
+                .into_iter()
+                .any(|candidate| candidate == *expr)
+        });
+    }
+
     matches!(expr, Expr::App(left, right) if matches!(left.as_ref(), Expr::Univ) && matches!(right.as_ref(), Expr::Var(_)))
         || matches!(expr, Expr::Var(_))
         || matches!(expr, Expr::PathCon(3))
@@ -2151,7 +2341,17 @@ fn supports_temporal_shell_clause(expr: &Expr) -> bool {
     )
 }
 
-fn supports_initial_hit_clause_at_position(position: usize, expr: &Expr) -> bool {
+fn supports_initial_hit_clause_at_position(
+    position: usize,
+    expr: &Expr,
+    late_family_surface: LateFamilySurface,
+) -> bool {
+    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
+        return demo_initial_hit_clauses(position)
+            .into_iter()
+            .any(|candidate| candidate == *expr);
+    }
+
     match position {
         0 => {
             matches!(expr, Expr::App(left, right) if matches!(left.as_ref(), Expr::Univ) && matches!(right.as_ref(), Expr::Var(1)))
@@ -2169,7 +2369,17 @@ fn supports_former_package_clause_at_position(position: usize, expr: &Expr) -> b
     }
 }
 
-fn supports_truncation_hit_clause_at_position(position: usize, expr: &Expr) -> bool {
+fn supports_truncation_hit_clause_at_position(
+    position: usize,
+    expr: &Expr,
+    late_family_surface: LateFamilySurface,
+) -> bool {
+    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
+        return demo_truncation_hit_clauses(position)
+            .into_iter()
+            .any(|candidate| candidate == *expr);
+    }
+
     match position {
         0 => matches!(expr, Expr::Trunc(inner) if matches!(inner.as_ref(), Expr::Var(1))),
         1 => matches!(
@@ -2182,7 +2392,17 @@ fn supports_truncation_hit_clause_at_position(position: usize, expr: &Expr) -> b
     }
 }
 
-fn supports_higher_hit_clause_at_position(position: usize, expr: &Expr) -> bool {
+fn supports_higher_hit_clause_at_position(
+    position: usize,
+    expr: &Expr,
+    late_family_surface: LateFamilySurface,
+) -> bool {
+    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
+        return demo_higher_hit_clauses(position)
+            .into_iter()
+            .any(|candidate| candidate == *expr);
+    }
+
     match position {
         0 => {
             matches!(expr, Expr::App(left, right) if matches!(left.as_ref(), Expr::Univ) && matches!(right.as_ref(), Expr::Var(1)))
@@ -2192,7 +2412,17 @@ fn supports_higher_hit_clause_at_position(position: usize, expr: &Expr) -> bool 
     }
 }
 
-fn supports_sphere_lift_clause_at_position(position: usize, expr: &Expr) -> bool {
+fn supports_sphere_lift_clause_at_position(
+    position: usize,
+    expr: &Expr,
+    late_family_surface: LateFamilySurface,
+) -> bool {
+    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
+        return demo_sphere_lift_clauses(position)
+            .into_iter()
+            .any(|candidate| candidate == *expr);
+    }
+
     match position {
         0 => {
             matches!(expr, Expr::App(left, right) if matches!(left.as_ref(), Expr::Univ) && matches!(right.as_ref(), Expr::Var(1)))
@@ -2209,7 +2439,37 @@ fn supports_axiomatic_bundle_clause_at_position(
     expr: &Expr,
     library_size: u32,
     historical_anchor_ref: Option<u32>,
+    late_family_surface: LateFamilySurface,
 ) -> bool {
+    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
+        let context = EnumerationContext {
+            library_size,
+            scope_size: 0,
+            max_path_dimension: 0,
+            include_trunc: false,
+            include_modal: false,
+            include_temporal: false,
+            max_expr_nodes: 0,
+            require_former_eliminator_clauses: false,
+            require_initial_hit_clauses: false,
+            require_truncation_hit_clauses: false,
+            require_higher_hit_clauses: false,
+            require_sphere_lift_clauses: false,
+            require_axiomatic_bundle_clauses: false,
+            require_modal_shell_clauses: false,
+            require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
+            historical_anchor_ref,
+            late_family_surface,
+        };
+        return demo_axiomatic_bridge_clauses(position, context)
+            .into_iter()
+            .any(|candidate| candidate == *expr);
+    }
+
     let Some(anchor) = historical_anchor_ref else {
         return false;
     };
@@ -3179,15 +3439,18 @@ mod tests {
             &pen_core::expr::Expr::App(
                 Box::new(pen_core::expr::Expr::Univ),
                 Box::new(pen_core::expr::Expr::Var(1)),
-            )
+            ),
+            LateFamilySurface::None,
         ));
         assert!(supports_initial_hit_clause_at_position(
             1,
-            &pen_core::expr::Expr::Var(1)
+            &pen_core::expr::Expr::Var(1),
+            LateFamilySurface::None,
         ));
         assert!(supports_initial_hit_clause_at_position(
             2,
-            &pen_core::expr::Expr::PathCon(1)
+            &pen_core::expr::Expr::PathCon(1),
+            LateFamilySurface::None,
         ));
     }
 
@@ -3195,7 +3458,8 @@ mod tests {
     fn truncation_hit_filters_accept_the_reference_shell_and_path_package() {
         assert!(supports_truncation_hit_clause_at_position(
             0,
-            &pen_core::expr::Expr::Trunc(Box::new(pen_core::expr::Expr::Var(1)))
+            &pen_core::expr::Expr::Trunc(Box::new(pen_core::expr::Expr::Var(1))),
+            LateFamilySurface::None,
         ));
         assert!(supports_truncation_hit_clause_at_position(
             1,
@@ -3204,11 +3468,13 @@ mod tests {
                     pen_core::expr::Expr::Var(1),
                 ))),
                 Box::new(pen_core::expr::Expr::Var(2)),
-            )
+            ),
+            LateFamilySurface::None,
         ));
         assert!(supports_truncation_hit_clause_at_position(
             2,
-            &pen_core::expr::Expr::PathCon(1)
+            &pen_core::expr::Expr::PathCon(1),
+            LateFamilySurface::None,
         ));
     }
 
@@ -3219,15 +3485,18 @@ mod tests {
             &pen_core::expr::Expr::App(
                 Box::new(pen_core::expr::Expr::Univ),
                 Box::new(pen_core::expr::Expr::Var(1)),
-            )
+            ),
+            LateFamilySurface::None,
         ));
         assert!(supports_higher_hit_clause_at_position(
             1,
-            &pen_core::expr::Expr::Var(1)
+            &pen_core::expr::Expr::Var(1),
+            LateFamilySurface::None,
         ));
         assert!(supports_higher_hit_clause_at_position(
             2,
-            &pen_core::expr::Expr::PathCon(2)
+            &pen_core::expr::Expr::PathCon(2),
+            LateFamilySurface::None,
         ));
     }
 
@@ -3238,23 +3507,28 @@ mod tests {
             &pen_core::expr::Expr::App(
                 Box::new(pen_core::expr::Expr::Univ),
                 Box::new(pen_core::expr::Expr::Var(1)),
-            )
+            ),
+            LateFamilySurface::None,
         ));
         assert!(supports_sphere_lift_clause_at_position(
             1,
-            &pen_core::expr::Expr::Var(1)
+            &pen_core::expr::Expr::Var(1),
+            LateFamilySurface::None,
         ));
         assert!(supports_sphere_lift_clause_at_position(
             2,
-            &pen_core::expr::Expr::PathCon(3)
+            &pen_core::expr::Expr::PathCon(3),
+            LateFamilySurface::None,
         ));
         assert!(supports_sphere_lift_clause_at_position(
             3,
-            &pen_core::expr::Expr::Lam(Box::new(pen_core::expr::Expr::Var(1)))
+            &pen_core::expr::Expr::Lam(Box::new(pen_core::expr::Expr::Var(1))),
+            LateFamilySurface::None,
         ));
         assert!(supports_sphere_lift_clause_at_position(
             4,
-            &pen_core::expr::Expr::Lam(Box::new(pen_core::expr::Expr::Var(2)))
+            &pen_core::expr::Expr::Lam(Box::new(pen_core::expr::Expr::Var(2))),
+            LateFamilySurface::None,
         ));
     }
 
@@ -3268,6 +3542,7 @@ mod tests {
             ),
             8,
             Some(5),
+            LateFamilySurface::None,
         ));
         assert!(supports_axiomatic_bundle_clause_at_position(
             1,
@@ -3277,6 +3552,7 @@ mod tests {
             ),
             8,
             Some(5),
+            LateFamilySurface::None,
         ));
         assert!(supports_axiomatic_bundle_clause_at_position(
             2,
@@ -3286,6 +3562,7 @@ mod tests {
             ))),
             8,
             Some(5),
+            LateFamilySurface::None,
         ));
         assert!(supports_axiomatic_bundle_clause_at_position(
             3,
@@ -3295,6 +3572,7 @@ mod tests {
             ),
             8,
             Some(5),
+            LateFamilySurface::None,
         ));
     }
 
@@ -3807,6 +4085,156 @@ mod tests {
             telescopes.contains(&Telescope::reference(9)),
             "enumerated {} step-9 telescopes, but not the reference bundle",
             telescopes.len()
+        );
+    }
+
+    #[test]
+    fn demo_breadth_shadow_step_five_enumeration_exposes_more_surface_than_realistic_shadow() {
+        let library = library_until(4);
+        let admissibility =
+            strict_admissibility_for_mode(5, 2, &library, AdmissibilityMode::RealisticShadow);
+        let realistic_context = context_from_admissibility(&library, admissibility);
+        let mut demo_context = realistic_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let mut realistic_count = 0usize;
+        let mut demo_count = 0usize;
+        let mut contains_reference = false;
+
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let realistic = enumerate_raw_telescopes(realistic_context, clause_kappa);
+            realistic_count += realistic.len();
+
+            let demo = enumerate_raw_telescopes(demo_context, clause_kappa);
+            demo_count += demo.len();
+            contains_reference |= demo.contains(&Telescope::reference(5));
+        }
+
+        assert!(contains_reference);
+        assert!(
+            demo_count > realistic_count,
+            "expected demo breadth shadow step 5 enumeration to widen the realistic surface, got demo={} vs realistic={}",
+            demo_count,
+            realistic_count
+        );
+    }
+
+    #[test]
+    fn demo_breadth_shadow_step_six_enumeration_exposes_more_surface_than_realistic_shadow() {
+        let library = library_until(5);
+        let admissibility =
+            strict_admissibility_for_mode(6, 2, &library, AdmissibilityMode::RealisticShadow);
+        let realistic_context = context_from_admissibility(&library, admissibility);
+        let mut demo_context = realistic_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let mut realistic_count = 0usize;
+        let mut demo_count = 0usize;
+        let mut contains_reference = false;
+
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let realistic = enumerate_raw_telescopes(realistic_context, clause_kappa);
+            realistic_count += realistic.len();
+
+            let demo = enumerate_raw_telescopes(demo_context, clause_kappa);
+            demo_count += demo.len();
+            contains_reference |= demo.contains(&Telescope::reference(6));
+        }
+
+        assert!(contains_reference);
+        assert!(
+            demo_count > realistic_count,
+            "expected demo breadth shadow step 6 enumeration to widen the realistic surface, got demo={} vs realistic={}",
+            demo_count,
+            realistic_count
+        );
+    }
+
+    #[test]
+    fn demo_breadth_shadow_step_seven_enumeration_exposes_more_surface_than_realistic_shadow() {
+        let library = library_until(6);
+        let admissibility =
+            strict_admissibility_for_mode(7, 2, &library, AdmissibilityMode::RealisticShadow);
+        let realistic_context = context_from_admissibility(&library, admissibility);
+        let mut demo_context = realistic_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let mut realistic_count = 0usize;
+        let mut demo_count = 0usize;
+        let mut contains_reference = false;
+
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let realistic = enumerate_raw_telescopes(realistic_context, clause_kappa);
+            realistic_count += realistic.len();
+
+            let demo = enumerate_raw_telescopes(demo_context, clause_kappa);
+            demo_count += demo.len();
+            contains_reference |= demo.contains(&Telescope::reference(7));
+        }
+
+        assert!(contains_reference);
+        assert!(
+            demo_count > realistic_count,
+            "expected demo breadth shadow step 7 enumeration to widen the realistic surface, got demo={} vs realistic={}",
+            demo_count,
+            realistic_count
+        );
+    }
+
+    #[test]
+    fn demo_breadth_shadow_step_eight_enumeration_exposes_more_surface_than_realistic_shadow() {
+        let library = library_until(7);
+        let admissibility =
+            strict_admissibility_for_mode(8, 2, &library, AdmissibilityMode::RealisticShadow);
+        let realistic_context = context_from_admissibility(&library, admissibility);
+        let mut demo_context = realistic_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let mut realistic_count = 0usize;
+        let mut demo_count = 0usize;
+        let mut contains_reference = false;
+
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let realistic = enumerate_raw_telescopes(realistic_context, clause_kappa);
+            realistic_count += realistic.len();
+
+            let demo = enumerate_raw_telescopes(demo_context, clause_kappa);
+            demo_count += demo.len();
+            contains_reference |= demo.contains(&Telescope::reference(8));
+        }
+
+        assert!(contains_reference);
+        assert!(
+            demo_count > realistic_count,
+            "expected demo breadth shadow step 8 enumeration to widen the realistic surface, got demo={} vs realistic={}",
+            demo_count,
+            realistic_count
+        );
+    }
+
+    #[test]
+    fn demo_breadth_shadow_step_nine_enumeration_exposes_more_surface_than_realistic_shadow() {
+        let library = library_until(8);
+        let admissibility =
+            strict_admissibility_for_mode(9, 2, &library, AdmissibilityMode::RealisticShadow);
+        let realistic_context = context_from_admissibility(&library, admissibility);
+        let mut demo_context = realistic_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let mut realistic_count = 0usize;
+        let mut demo_count = 0usize;
+        let mut contains_reference = false;
+
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let realistic = enumerate_raw_telescopes(realistic_context, clause_kappa);
+            realistic_count += realistic.len();
+
+            let demo = enumerate_raw_telescopes(demo_context, clause_kappa);
+            demo_count += demo.len();
+            contains_reference |= demo.contains(&Telescope::reference(9));
+        }
+
+        assert!(contains_reference);
+        assert!(
+            demo_count > realistic_count,
+            "expected demo breadth shadow step 9 enumeration to widen the realistic surface, got demo={} vs realistic={}",
+            demo_count,
+            realistic_count
         );
     }
 
