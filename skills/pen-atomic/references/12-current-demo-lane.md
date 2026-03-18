@@ -18,8 +18,9 @@ first:
   `Scout -> BreadthHarvest -> Materialize -> ProofClose -> Seal`.
 - Demo runs persist per-step narratives, event streams, reserve/closure
   accounting, and phase handoff reasons.
-- Early exhaustive scout narratives now persist the restored raw clause-catalog
-  widths for step-audit work.
+- Early exhaustive scout narratives now persist the step-specific raw
+  clause-width and exclusion audit needed to explain the stored step-`1`
+  surface.
 - Narrative rendering honors the configured line budget and pulse interval.
 - The controller rebalances discovery versus proof-close reserve inside a step
   using live throughput and floor projections.
@@ -50,16 +51,17 @@ first:
 
 ## Current Stored Baselines
 
-- Early reference: `runs/codex-demo-early-catalog-v2`
-  - step `1` generated raw = `1296`
-  - step `1` raw clause widths = `36x36`
-  - steps `1` to `4` complete in `140 ms` total (`96/1/1/42 ms`)
+- Early reference: `runs/codex-demo-early-catalog-v3`
+  - step `1` generated raw = `2144`
+  - step `1` raw clause widths = `18x120`
+  - step `1` excluded exact-clause echoes = `16`
+  - steps `1` to `4` complete in `93 ms` total (`46/1/1/45 ms`)
 - Mid-step carry-through reference:
   `runs/codex-demo-midstep-carrythrough`
   - steps `5` to `9` generated = `27/15/15/45/24`
   - steps `5` to `9` exact-screened = `1/3/2/13/9`
   - `full_telescopes_evaluated = 1` on every step
-- Late reference: `runs/codex-demo-late-surface-v9`
+- Late reference: `runs/codex-demo-late-surface-v10`
   compared against `runs/codex-realistic-late-baseline-v2`
   - steps `10` to `15` generated = `1344/4191/1330/3995/5135/22715`
   - steps `10` to `15` exact-screened = `638/1423/12204/48367/3808/18750`
@@ -70,9 +72,8 @@ first:
 
 ## Current Open Gaps
 
-| Area | Current | Target |
-| --- | --- | --- |
-| Step `1` generated raw | `1296` | `2144` |
+- None in the tracked signoff lane. Reopen only for new scope or a
+  regression against the stored early or late references.
 
 ## Guardrails
 

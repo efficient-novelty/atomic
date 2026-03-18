@@ -2,23 +2,25 @@
 
 Last updated: 2026-03-18
 
-This plan tracks only the remaining work needed to sign off
-`demo_breadth_shadow`.
+This plan tracked the remaining work needed to sign off
+`demo_breadth_shadow`. The tracked signoff work is now complete.
 
 ## Goal
 
-Close the remaining early demo-lane gap without losing accepted-hash parity,
-without inflating full telescope evaluations, and without weakening the
-comparison-backed honesty boundary.
+Hold the current signed-off demo-lane state without losing accepted-hash
+parity, without inflating full telescope evaluations, and without weakening
+the comparison-backed honesty boundary.
 
 ## Working Baseline
 
-- Early reference: `runs/codex-demo-early-catalog-v2`
-- Late reference: `runs/codex-demo-late-surface-v9`
+- Early reference: `runs/codex-demo-early-catalog-v3`
+- Late reference: `runs/codex-demo-late-surface-v10`
 - Guarded comparison baseline: `runs/codex-realistic-late-baseline-v2`
 - Current known open deltas:
-  - step `1` generated raw: `1296 -> 2144`
-- Fresh closures in `v9`:
+  - none
+- Current stored closures:
+  - step `1` generated raw: `2144`
+  - steps `1` to `4`: `93 ms` total (`46/1/1/45 ms`)
   - step `10` exact-screened: `638 >= 120`
   - step `12` generated raw: `1330 >= 1200`
   - step `12` exact-screened: `12204 >= 400`
@@ -28,19 +30,19 @@ comparison-backed honesty boundary.
 
 ## Execution Order
 
-1. Recover step-`1` generated breadth.
-2. Re-run the default `10m` signoff evidence and refresh docs/tests once the
-   step-`1` change lands.
+1. Preserve the stored step-`1` recovery and early-window evidence.
+2. Preserve the default `10m` signoff evidence, accepted parity, and
+   comparison-backed accounting on later demo-lane changes.
 
 ## Workstreams
 
 ### 1. Step-1 Recovery
 
-- Audit which families or prefixes still fail to appear between the current
-  `1296` and the target `2144`.
-- Preserve full early candidate-list generation through step `4`.
-- Re-validate the shared early-window story from stored run evidence, not just
-  from config settings.
+- Completed in `runs/codex-demo-early-catalog-v3`.
+- Step `1` now reports `2144` generated raw candidates.
+- The stored scout audit records
+  `clause_kappa=2 raw_clause_widths=18x120 raw_telescopes=2144 excluded_exact_clause_echoes=16`.
+- Steps `1` to `4` still fit comfortably inside the shared early window.
 
 Done when:
 
@@ -49,12 +51,11 @@ Done when:
 
 ### 2. Signoff Refresh
 
-- Keep the landed late floors from regressing while the remaining step-`1`
-  work moves.
-- Preserve accepted parity, `full_telescopes_evaluated = 1` on the late
-  steps, and the current exact-screen reason / phase-detail accounting.
-- Prefer changes that survive live prefix search over raw-catalog-only
-  widening.
+- Completed in `runs/codex-demo-late-surface-v10`.
+- The default `10m` profile preserves accepted parity through step `15`.
+- `full_telescopes_evaluated = 1` still holds on every late step.
+- Exact-screen reason accounting and `materialize/proof_close/seal` phase
+  detail alignment remain intact.
 
 Done when:
 

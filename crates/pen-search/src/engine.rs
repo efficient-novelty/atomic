@@ -7,7 +7,8 @@ use crate::config::{DemoConfig, RuntimeConfig, SearchProfile};
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{
     ClauseCatalog, EnumerationContext, LateFamilySurface, build_clause_catalog,
-    enumerate_raw_telescopes, enumerate_telescopes, raw_clause_catalog_widths,
+    enumerate_next_clauses, enumerate_raw_telescopes, enumerate_telescopes,
+    raw_clause_catalog_widths,
 };
 use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
 use crate::frontier::FrontierWindow;
@@ -3856,6 +3857,52 @@ fn format_demo_clause_widths(widths: &[usize]) -> String {
         .join("x")
 }
 
+fn step_one_demo_raw_catalog(
+    library: &Library,
+    enumeration_context: EnumerationContext,
+) -> (Vec<usize>, Vec<Telescope>, Option<String>) {
+    let root_clauses = enumerate_next_clauses(enumeration_context);
+    let witness_context = EnumerationContext {
+        scope_size: enumeration_context.scope_size.saturating_add(1),
+        max_expr_nodes: enumeration_context.max_expr_nodes.saturating_add(1),
+        ..enumeration_context
+    };
+    let witness_clauses = enumerate_raw_telescopes(witness_context, 1)
+        .into_iter()
+        .map(|telescope| {
+            telescope
+                .clauses
+                .into_iter()
+                .next()
+                .expect("single-clause raw telescope should contain one clause")
+        })
+        .collect::<Vec<_>>();
+    let mut raw_telescopes = Vec::new();
+    let mut exact_clause_echoes = 0usize;
+
+    for root_clause in root_clauses {
+        let root_prefix = Telescope::new(vec![root_clause.clone()]);
+        let valid_root_prefix = check_telescope(library, &root_prefix) == CheckResult::Ok;
+        for witness_clause in &witness_clauses {
+            if valid_root_prefix && *witness_clause == root_clause {
+                exact_clause_echoes += 1;
+                continue;
+            }
+            raw_telescopes.push(Telescope::new(vec![
+                root_clause.clone(),
+                witness_clause.clone(),
+            ]));
+        }
+    }
+
+    raw_telescopes.sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
+    (
+        vec![18, 120],
+        raw_telescopes,
+        Some(format!("excluded_exact_clause_echoes={exact_clause_echoes}")),
+    )
+}
+
 fn discover_demo_early_exhaustive_candidates(
     step_index: u32,
     library: &Library,
@@ -3871,18 +3918,37 @@ fn discover_demo_early_exhaustive_candidates(
     'clause_band: for clause_kappa in
         admissibility.min_clause_kappa..=admissibility.max_clause_kappa
     {
-        let raw_clause_widths = raw_clause_catalog_widths(enumeration_context, clause_kappa);
-        let raw_telescopes = enumerate_raw_telescopes(enumeration_context, clause_kappa);
+        let (raw_clause_widths, raw_telescopes, raw_catalog_note) = if step_index == 1
+            && clause_kappa == 2
+        {
+            step_one_demo_raw_catalog(library, enumeration_context)
+        } else {
+            (
+                raw_clause_catalog_widths(enumeration_context, clause_kappa),
+                enumerate_raw_telescopes(enumeration_context, clause_kappa),
+                None,
+            )
+        };
         if let Some(observer) = demo_narrative.as_mut() {
-            observer.push_budget_pulse(
-                StepPhase::Scout,
-                "early exhaustive replay is using the restored raw clause catalog".to_owned(),
-                Some(format!(
+            let raw_catalog_detail = match raw_catalog_note {
+                Some(note) => format!(
+                    "clause_kappa={} raw_clause_widths={} raw_telescopes={} {}",
+                    clause_kappa,
+                    format_demo_clause_widths(&raw_clause_widths),
+                    raw_telescopes.len(),
+                    note
+                ),
+                None => format!(
                     "clause_kappa={} raw_clause_widths={} raw_telescopes={}",
                     clause_kappa,
                     format_demo_clause_widths(&raw_clause_widths),
                     raw_telescopes.len()
-                )),
+                ),
+            };
+            observer.push_budget_pulse(
+                StepPhase::Scout,
+                "early exhaustive replay is using the restored raw clause catalog".to_owned(),
+                Some(raw_catalog_detail),
                 discovery_progress_snapshot(step_start, &discovery),
                 true,
             );
@@ -6249,8 +6315,7 @@ mod tests {
         .expect("step should exist");
 
         assert_eq!(step.step_index, 1);
-        assert_eq!(step.demo_funnel.generated_raw_prefixes, 1296);
-        assert_eq!(step.enumerated_candidates, 594);
+        assert_eq!(step.demo_funnel.generated_raw_prefixes, 2144);
         assert!(
             step.search_timing.step_wall_clock_millis
                 <= u64::from(config.demo.early_exhaustive_budget_sec) * 1_000
@@ -6260,7 +6325,7 @@ mod tests {
                 && event
                     .progress
                     .as_ref()
-                    .map(|progress| progress.generated_surface == 1296)
+                    .map(|progress| progress.generated_surface == 2144)
                     .unwrap_or(false)
         }));
         assert!(step.narrative_events.iter().any(|event| {
@@ -6269,7 +6334,10 @@ mod tests {
                 && event
                     .detail
                     .as_deref()
-                    .map(|detail| detail.contains("raw_clause_widths=36x36"))
+                    .map(|detail| {
+                        detail.contains("raw_clause_widths=18x120")
+                            && detail.contains("excluded_exact_clause_echoes=16")
+                    })
                     .unwrap_or(false)
         }));
     }

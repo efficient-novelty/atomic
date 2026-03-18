@@ -921,7 +921,7 @@ fn compare_runs_reports_demo_phase_floor_and_closure_evidence() {
         demo_evidence
             .first()
             .and_then(|step| step["generated_floor_status"].as_str()),
-        Some("miss")
+        Some("hit")
     );
     assert!(
         demo_evidence

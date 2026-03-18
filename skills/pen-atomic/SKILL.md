@@ -42,8 +42,8 @@ Read only the track-specific detail you need:
 - For the current realistic-shadow capability inventory, evidence snapshot, and
   remaining search gap, read
   [references/11-current-realistic-shadow.md](references/11-current-realistic-shadow.md).
-- For the current demo-lane stable mechanisms, evidence baselines, and open
-  gaps, read
+- For the current demo-lane stable mechanisms, evidence baselines, and signoff
+  status, read
   [references/12-current-demo-lane.md](references/12-current-demo-lane.md).
 - For live demo-lane targets and signoff criteria, read
   [../../demo_lane_progress.md](../../demo_lane_progress.md),
@@ -117,7 +117,7 @@ Then branch based on the task.
   `demo_breadth_shadow` status, targets, and signoff tasks.
 - Read [references/12-current-demo-lane.md](references/12-current-demo-lane.md)
   for the stable current demo-lane mechanisms and evidence baselines that
-  should remain true while the open targets move.
+  should remain true while later demo-lane changes move.
 - Read [theory/README.md](theory/README.md) when you need the theorem map or
   manuscript map.
 - Read [theory/genesis.md](theory/genesis.md) when you need the exact strict
@@ -232,9 +232,8 @@ Focus on:
   `Scout -> BreadthHarvest -> Materialize -> ProofClose -> Seal`
 - persisting honest demo evidence in step summaries, narratives, and event
   streams rather than reconstructing it from debug text
-- moving only the remaining early-breadth gap while holding the already-closed
-  late floors without regressing accepted parity, narrative/event coverage, or
-  the honesty boundary
+- holding the closed early and late signoff baselines without regressing
+  accepted parity, narrative/event coverage, or the honesty boundary
 
 ### If you are working on reporting or evidence
 
@@ -306,7 +305,8 @@ Reject designs that:
   strict `15`-step lane.
 - The main realistic-search gap is stronger sound bound pruning plus broader
   non-family admissibility reuse on top of the already-landed memo/bound path.
-- The main demo-lane gap is the remaining step-`1` early-breadth recovery
-  tracked in the repo-level demo-lane docs.
+- The tracked demo-lane signoff set is currently closed; use the repo-level
+  demo-lane docs and `references/12-current-demo-lane.md` as the regression
+  baseline for future work.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
   the track-specific references you actually need.

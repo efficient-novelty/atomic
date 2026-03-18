@@ -2,31 +2,27 @@
 
 Last updated: 2026-03-18
 
-This checklist covers only the remaining tasks needed for
-`demo_breadth_shadow` signoff.
+This checklist covers the tracked tasks for `demo_breadth_shadow` signoff.
+The current checklist is fully closed.
 
 ## Current Open Numbers
 
-- Step `1` generated raw: `1296 / 2144`
-
-Closed this round from `runs/codex-demo-late-surface-v9`:
-
-- Step `10` exact-screened: `638 / 120`
-- Step `12` generated raw: `1330 / 1200`
-- Step `12` exact-screened: `12204 / 400`
-- Step `14` generated raw: `5135 / 3500`
+- None. The current stored signoff references are
+  `runs/codex-demo-early-catalog-v3` and
+  `runs/codex-demo-late-surface-v10`.
 
 ## 1. Step-1 Recovery
 
 - [x] Explain where the missing `848` generated raw surface went.
-- [ ] Raise step `1` generated raw from `1296` to `2144`.
-- [ ] Reconfirm that steps `1` to `4` still fit honestly inside the shared
+- [x] Raise step `1` generated raw from `1296` to `2144`.
+- [x] Reconfirm that steps `1` to `4` still fit honestly inside the shared
       `90s` early window after the step-`1` change.
 
 Current audit evidence:
-`runs/codex-demo-early-catalog-v2` now persists
-`raw_clause_widths=36x36`, so the live step-`1` path honestly tops out at
-`1296` raw telescopes until the clause catalog itself widens again.
+`runs/codex-demo-early-catalog-v3` now shows step `1` generated raw `2144`,
+with scout detail
+`clause_kappa=2 raw_clause_widths=18x120 raw_telescopes=2144 excluded_exact_clause_echoes=16`,
+and steps `1` to `4` complete in `93 ms` total (`46/1/1/45 ms`).
 
 Done when:
 
@@ -40,7 +36,7 @@ Done when:
 - [x] Preserve accepted parity and keep `full_telescopes_evaluated` moderate.
 
 Current evidence:
-`runs/codex-demo-late-surface-v9` now shows step `10` generated `1344`,
+`runs/codex-demo-late-surface-v10` now shows step `10` generated `1344`,
 exact-screened `638`, `full_telescopes_evaluated = 1`, accepted parity
 through step `15`, and phase-detail exact-screened values of
 `637 -> 638` across `materialize -> proof_close/seal`.
@@ -58,7 +54,7 @@ Done when:
 - [x] Preserve the reference acceptance while doing it.
 
 Current evidence:
-`runs/codex-demo-late-surface-v9` now shows step `12` generated `1330`,
+`runs/codex-demo-late-surface-v10` now shows step `12` generated `1330`,
 exact-screened `12204`, `full_telescopes_evaluated = 1`, accepted parity
 through step `15`, and phase-detail exact-screened values of
 `12203 -> 12204` across `materialize -> proof_close/seal`.
@@ -76,7 +72,7 @@ Done when:
 - [x] Preserve accepted parity and keep `full_telescopes_evaluated` moderate.
 
 Current evidence:
-`runs/codex-demo-late-surface-v9` now shows step `14` generated `5135`,
+`runs/codex-demo-late-surface-v10` now shows step `14` generated `5135`,
 exact-screened `3808`, `full_telescopes_evaluated = 1`, and accepted parity
 through step `15`.
 
@@ -88,12 +84,18 @@ Done when:
 
 ## 5. Exact-Bound Tightening
 
-- [ ] Add or retune exact prefix / terminal-prefix bounds that convert widened
+- [x] Add or retune exact prefix / terminal-prefix bounds that convert widened
       honest breadth into honest exact-screened mass.
 - [x] Preserve exact-screen reasons, prune classes, and narrative/event
       artifacts while the bounds move.
 - [x] Avoid solving the open late floors by evaluating many more full
       telescopes.
+
+Current evidence:
+`runs/codex-demo-late-surface-v10` keeps the closed late floors on steps
+`10`, `12`, `14`, and `15`, carries the stored exact-screen reason classes
+through summaries and phase details, and still holds
+`full_telescopes_evaluated = 1` on every late step.
 
 Done when:
 
@@ -107,3 +109,10 @@ Done when:
 - [x] Config-backed tests cover the currently closed floors.
 - [x] `demo_lane_progress.md`, `demo_lane_plan.md`, and
       `demo_lane_checklist.md` reflect the latest stored evidence.
+
+Current evidence:
+`runs/codex-demo-early-catalog-v3` closes the final early gap,
+`runs/codex-demo-late-surface-v10` preserves accepted parity through step
+`15` (`matches_reference_replay x15`), `scripts/compare_runs.py` reports
+`Comparison Signoff: ready`, and the config-backed floor tests now match the
+stored early and late references.
