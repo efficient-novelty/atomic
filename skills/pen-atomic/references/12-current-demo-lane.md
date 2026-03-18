@@ -26,6 +26,10 @@ first:
 - Materialize and proof-close use deterministic structural bucket ordering and
   closure-aware handoffs.
 - Stored step summaries persist exact-screen reason codes and prune classes.
+- Late exact-screened totals on floor-carrying demo steps now include the
+  persisted exact-screen reason classes, not just prefix-bound prunes, and the
+  stored `materialize` / `proof_close` / `seal` phase details use that same
+  accounting surface.
 - Demo generated-surface reporting counts raw roots, raw children, forced
   single-continuation collapses, and raw terminal completions.
 
@@ -55,10 +59,10 @@ first:
   - steps `5` to `9` generated = `27/15/15/45/24`
   - steps `5` to `9` exact-screened = `1/3/2/13/9`
   - `full_telescopes_evaluated = 1` on every step
-- Late reference: `runs/codex-demo-late-surface-v5`
+- Late reference: `runs/codex-demo-late-surface-v8`
   compared against `runs/codex-realistic-late-baseline-v2`
   - steps `10` to `15` generated = `1344/4191/995/3995/5135/22715`
-  - steps `10` to `15` exact-screened = `7/253/749/3123/3807/18749`
+  - steps `10` to `15` exact-screened = `638/1423/8629/48367/3808/18750`
   - `full_telescopes_evaluated = 1` on every late step
   - accepted parity still holds through step `15`
     (`matches_reference_replay x15`)
@@ -69,7 +73,6 @@ first:
 | Area | Current | Target |
 | --- | --- | --- |
 | Step `1` generated raw | `1296` | `2144` |
-| Step `10` exact-screened | `7` | `120+` |
 | Step `12` generated raw | `995` | `1200+` |
 
 ## Guardrails

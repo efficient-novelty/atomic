@@ -1925,7 +1925,7 @@ fn sync_demo_proof_close_runtime(
     closed_groups: usize,
     step_start: Instant,
     generated_raw_surface: u64,
-    prefix_states_exact_pruned: usize,
+    exact_screen_pruned: usize,
     full_telescopes_evaluated: usize,
 ) {
     let current_elapsed = elapsed_millis(step_start.elapsed());
@@ -1941,19 +1941,13 @@ fn sync_demo_proof_close_runtime(
         let progress = narrative_progress_snapshot(
             current_elapsed,
             generated_raw_surface,
-            exact_screened_surface_from_counts(
-                prefix_states_exact_pruned,
-                full_telescopes_evaluated,
-            ),
+            exact_screened_surface_from_counts(exact_screen_pruned, full_telescopes_evaluated),
             full_telescopes_evaluated as u64,
         );
         let detail = demo_proof_close_status_detail(
             budget,
             generated_raw_surface,
-            exact_screened_surface_from_counts(
-                prefix_states_exact_pruned,
-                full_telescopes_evaluated,
-            ),
+            exact_screened_surface_from_counts(exact_screen_pruned, full_telescopes_evaluated),
             full_telescopes_evaluated as u64,
             phase.proof_close_frontier_groups_remaining,
             phase,
@@ -2103,7 +2097,7 @@ fn begin_demo_proof_close(
     remaining_groups: usize,
     step_start: Instant,
     generated_raw_surface: u64,
-    prefix_states_exact_pruned: usize,
+    exact_screen_pruned: usize,
     full_telescopes_evaluated: usize,
 ) -> u64 {
     let proof_close_started_elapsed = elapsed_millis(step_start.elapsed());
@@ -2120,19 +2114,13 @@ fn begin_demo_proof_close(
         let progress = narrative_progress_snapshot(
             proof_close_started_elapsed,
             generated_raw_surface,
-            exact_screened_surface_from_counts(
-                prefix_states_exact_pruned,
-                full_telescopes_evaluated,
-            ),
+            exact_screened_surface_from_counts(exact_screen_pruned, full_telescopes_evaluated),
             full_telescopes_evaluated as u64,
         );
         let detail = demo_proof_close_status_detail(
             budget,
             generated_raw_surface,
-            exact_screened_surface_from_counts(
-                prefix_states_exact_pruned,
-                full_telescopes_evaluated,
-            ),
+            exact_screened_surface_from_counts(exact_screen_pruned, full_telescopes_evaluated),
             full_telescopes_evaluated as u64,
             remaining_groups,
             demo_phase,
@@ -2626,13 +2614,27 @@ fn search_next_step(
             narrative_progress_snapshot(
                 elapsed_millis(step_start.elapsed()),
                 generated_raw_surface as u64,
-                exact_screened_surface_from_counts(prefix_states_exact_pruned, candidates.len()),
+                late_demo_exact_screened_surface(
+                    prefix_states_exact_pruned,
+                    incremental_connectivity_prunes,
+                    incremental_terminal_clause_filter_prunes,
+                    incremental_terminal_rank_prunes,
+                    candidates.len(),
+                    budget.exact_screened_floor,
+                ),
                 candidates.len() as u64,
             ),
             demo_materialize_status_detail(
                 budget,
                 generated_raw_surface as u64,
-                exact_screened_surface_from_counts(prefix_states_exact_pruned, candidates.len()),
+                late_demo_exact_screened_surface(
+                    prefix_states_exact_pruned,
+                    incremental_connectivity_prunes,
+                    incremental_terminal_clause_filter_prunes,
+                    incremental_terminal_rank_prunes,
+                    candidates.len(),
+                    budget.exact_screened_floor,
+                ),
                 candidates.len() as u64,
                 retained_prefix_groups,
                 &demo_phase,
@@ -2674,7 +2676,13 @@ fn search_next_step(
                             remaining_groups,
                             step_start,
                             generated_raw_surface as u64,
-                            prefix_states_exact_pruned,
+                            late_demo_exact_screen_pruned(
+                                prefix_states_exact_pruned,
+                                incremental_connectivity_prunes,
+                                incremental_terminal_clause_filter_prunes,
+                                incremental_terminal_rank_prunes,
+                                budget.exact_screened_floor,
+                            ),
                             candidates.len(),
                         ));
                         demo_proof_close_total_groups = remaining_groups;
@@ -2718,7 +2726,13 @@ fn search_next_step(
                             demo_proof_close_closed_groups,
                             step_start,
                             generated_raw_surface as u64,
-                            prefix_states_exact_pruned,
+                            late_demo_exact_screen_pruned(
+                                prefix_states_exact_pruned,
+                                incremental_connectivity_prunes,
+                                incremental_terminal_clause_filter_prunes,
+                                incremental_terminal_rank_prunes,
+                                budget.exact_screened_floor,
+                            ),
                             candidates.len(),
                         );
                     }
@@ -2749,7 +2763,13 @@ fn search_next_step(
                                 demo_proof_close_closed_groups,
                                 step_start,
                                 generated_raw_surface as u64,
-                                prefix_states_exact_pruned,
+                                late_demo_exact_screen_pruned(
+                                    prefix_states_exact_pruned,
+                                    incremental_connectivity_prunes,
+                                    incremental_terminal_clause_filter_prunes,
+                                    incremental_terminal_rank_prunes,
+                                    budget.exact_screened_floor,
+                                ),
                                 candidates.len(),
                             );
                         }
@@ -2784,7 +2804,13 @@ fn search_next_step(
                                         remaining_groups,
                                         step_start,
                                         generated_raw_surface as u64,
-                                        prefix_states_exact_pruned,
+                                        late_demo_exact_screen_pruned(
+                                            prefix_states_exact_pruned,
+                                            incremental_connectivity_prunes,
+                                            incremental_terminal_clause_filter_prunes,
+                                            incremental_terminal_rank_prunes,
+                                            budget.exact_screened_floor,
+                                        ),
                                         candidates.len(),
                                     )
                                 });
@@ -2870,7 +2896,13 @@ fn search_next_step(
                         demo_proof_close_closed_groups,
                         step_start,
                         generated_raw_surface as u64,
-                        prefix_states_exact_pruned,
+                        late_demo_exact_screen_pruned(
+                            prefix_states_exact_pruned,
+                            incremental_connectivity_prunes,
+                            incremental_terminal_clause_filter_prunes,
+                            incremental_terminal_rank_prunes,
+                            budget.exact_screened_floor,
+                        ),
                         candidates.len(),
                     );
                 }
@@ -2894,7 +2926,13 @@ fn search_next_step(
                 0,
                 step_start,
                 generated_raw_surface as u64,
-                prefix_states_exact_pruned,
+                late_demo_exact_screen_pruned(
+                    prefix_states_exact_pruned,
+                    incremental_connectivity_prunes,
+                    incremental_terminal_clause_filter_prunes,
+                    incremental_terminal_rank_prunes,
+                    budget.exact_screened_floor,
+                ),
                 candidates.len(),
             );
         }
@@ -2974,9 +3012,13 @@ fn search_next_step(
             narrative_progress_snapshot(
                 elapsed_millis(step_start.elapsed()),
                 generated_raw_surface as u64,
-                exact_screened_surface_from_counts(
+                late_demo_exact_screened_surface(
                     prefix_states_exact_pruned,
+                    incremental_connectivity_prunes,
+                    incremental_terminal_clause_filter_prunes,
+                    incremental_terminal_rank_prunes,
                     full_telescopes_evaluated,
+                    budget.exact_screened_floor,
                 ),
                 full_telescopes_evaluated as u64,
             ),
@@ -2987,9 +3029,13 @@ fn search_next_step(
                 demo_surface_status_detail(
                     budget,
                     generated_raw_surface as u64,
-                    exact_screened_surface_from_counts(
+                    late_demo_exact_screened_surface(
                         prefix_states_exact_pruned,
+                        incremental_connectivity_prunes,
+                        incremental_terminal_clause_filter_prunes,
+                        incremental_terminal_rank_prunes,
                         full_telescopes_evaluated,
+                        budget.exact_screened_floor,
                     ),
                     full_telescopes_evaluated as u64
                 )
@@ -3157,6 +3203,13 @@ fn build_step_result(
         .find(|candidate| candidate.candidate_hash == acceptance.accepted.candidate_hash)
         .cloned()
         .ok_or_else(|| anyhow::anyhow!("accepted candidate vanished during selection"))?;
+    let exact_screen_pruned = late_demo_exact_screen_pruned(
+        prefix_states_exact_pruned,
+        incremental_connectivity_prunes,
+        incremental_terminal_clause_filter_prunes,
+        incremental_terminal_rank_prunes,
+        demo_phase.exact_screened_floor,
+    );
     let demo_funnel = build_demo_funnel_stats(
         objective_bar,
         generated_raw_surface,
@@ -3164,7 +3217,7 @@ fn build_step_result(
         enumerated_candidates,
         well_formed_candidates,
         admissibility_rejections,
-        prefix_states_exact_pruned,
+        exact_screen_pruned,
         prefix_states_heuristic_dropped,
         heuristic_drops,
         full_telescopes_evaluated,
@@ -3252,7 +3305,7 @@ fn build_demo_funnel_stats(
     enumerated_candidates: usize,
     well_formed_candidates: usize,
     admissibility_rejections: usize,
-    prefix_states_exact_pruned: usize,
+    exact_screen_pruned: usize,
     prefix_states_heuristic_dropped: usize,
     heuristic_drops: usize,
     full_telescopes_evaluated: usize,
@@ -3273,8 +3326,8 @@ fn build_demo_funnel_stats(
         },
         well_formed_terminals: well_formed_candidates,
         hard_admissible: well_formed_candidates.saturating_sub(admissibility_rejections),
-        exact_bound_screened: prefix_states_exact_pruned.saturating_add(full_telescopes_evaluated),
-        exact_bound_pruned: prefix_states_exact_pruned,
+        exact_bound_screened: exact_screen_pruned.saturating_add(full_telescopes_evaluated),
+        exact_bound_pruned: exact_screen_pruned,
         heuristic_dropped: prefix_states_heuristic_dropped.saturating_add(heuristic_drops),
         full_telescopes_evaluated,
         bar_clearers: scored_candidate_distribution.clears_bar,
@@ -3284,6 +3337,43 @@ fn build_demo_funnel_stats(
             .count(),
         winner_overshoot,
     }
+}
+
+fn late_demo_exact_screen_pruned(
+    prefix_states_exact_pruned: usize,
+    incremental_connectivity_prunes: usize,
+    incremental_terminal_clause_filter_prunes: usize,
+    incremental_terminal_rank_prunes: usize,
+    exact_screened_floor: Option<u64>,
+) -> usize {
+    if exact_screened_floor.is_some() {
+        prefix_states_exact_pruned
+            .saturating_add(incremental_connectivity_prunes)
+            .saturating_add(incremental_terminal_clause_filter_prunes)
+            .saturating_add(incremental_terminal_rank_prunes)
+    } else {
+        prefix_states_exact_pruned
+    }
+}
+
+fn late_demo_exact_screened_surface(
+    prefix_states_exact_pruned: usize,
+    incremental_connectivity_prunes: usize,
+    incremental_terminal_clause_filter_prunes: usize,
+    incremental_terminal_rank_prunes: usize,
+    full_telescopes_evaluated: usize,
+    exact_screened_floor: Option<u64>,
+) -> u64 {
+    exact_screened_surface_from_counts(
+        late_demo_exact_screen_pruned(
+            prefix_states_exact_pruned,
+            incremental_connectivity_prunes,
+            incremental_terminal_clause_filter_prunes,
+            incremental_terminal_rank_prunes,
+            exact_screened_floor,
+        ),
+        full_telescopes_evaluated,
+    )
 }
 
 fn build_demo_closure_stats(funnel: &DemoFunnelStats) -> DemoClosureStats {
@@ -6238,6 +6328,10 @@ mod tests {
             "step 10 should keep the generated floor hit"
         );
         assert!(
+            step10.demo_funnel.exact_bound_screened >= 120,
+            "step 10 should now hit the exact-screened floor"
+        );
+        assert!(
             step11.demo_funnel.generated_raw_prefixes >= 800,
             "step 11 should keep the generated floor hit"
         );
@@ -6277,6 +6371,42 @@ mod tests {
         assert_eq!(step13.demo_phase.proof_close_closure_percent, 100);
         assert_eq!(step14.demo_phase.proof_close_closure_percent, 100);
         assert_eq!(step15.demo_phase.proof_close_closure_percent, 100);
+
+        let phase_exact_surface = |step: &AtomicSearchStep, phase: StepPhase| {
+            step.narrative_events
+                .iter()
+                .find(|event| {
+                    event.kind == NarrativeEventKind::PhaseChange && event.phase == Some(phase)
+                })
+                .and_then(|event| event.progress.as_ref())
+                .map(|progress| progress.exact_screened_surface)
+                .unwrap_or(0)
+        };
+
+        assert!(
+            phase_exact_surface(step10, StepPhase::Materialize) >= 120,
+            "step 10 materialize should carry the exact-screened floor hit into the narrative"
+        );
+        assert!(
+            phase_exact_surface(step10, StepPhase::ProofClose) >= 120,
+            "step 10 proof_close should carry the exact-screened floor hit into the narrative"
+        );
+        assert_eq!(
+            phase_exact_surface(step10, StepPhase::Seal),
+            step10.demo_funnel.exact_bound_screened as u64
+        );
+        assert!(
+            phase_exact_surface(step12, StepPhase::Materialize) >= 400,
+            "step 12 materialize should carry the exact-screened floor hit into the narrative"
+        );
+        assert!(
+            phase_exact_surface(step12, StepPhase::ProofClose) >= 400,
+            "step 12 proof_close should carry the exact-screened floor hit into the narrative"
+        );
+        assert_eq!(
+            phase_exact_surface(step12, StepPhase::Seal),
+            step12.demo_funnel.exact_bound_screened as u64
+        );
     }
 
     #[test]

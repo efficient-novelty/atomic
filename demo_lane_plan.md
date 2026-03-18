@@ -1,6 +1,6 @@
 # Demo Lane Plan
 
-Last updated: 2026-03-17
+Last updated: 2026-03-18
 
 This plan tracks only the remaining work needed to sign off
 `demo_breadth_shadow`.
@@ -14,22 +14,23 @@ comparison-backed honesty boundary.
 ## Working Baseline
 
 - Early reference: `runs/codex-demo-early-catalog-v2`
-- Late reference: `runs/codex-demo-late-surface-v5`
+- Late reference: `runs/codex-demo-late-surface-v8`
 - Guarded comparison baseline: `runs/codex-realistic-late-baseline-v2`
 - Current known open deltas:
   - step `1` generated raw: `1296 -> 2144`
-  - step `10` exact-screened: `7 -> 120+`
   - remaining late generated gap: step `12` `995 -> 1200+`
-- Fresh closures in `v5`:
-  - step `12` exact-screened: `749 >= 400`
+- Fresh closures in `v8`:
+  - step `10` exact-screened: `638 >= 120`
+  - step `12` exact-screened: `8629 >= 400`
   - step `14` generated: `5135 >= 3500`
+  - late phase-event detail alignment: `materialize/proof_close/seal` now use
+    the stored exact-screen totals on floor-carrying steps
 
 ## Execution Order
 
 1. Recover step-`1` generated breadth.
-2. Raise step-`10` exact-screened mass.
-3. Finish the remaining step-`12` generated breadth.
-4. Re-run the default `10m` signoff evidence and refresh docs/tests.
+2. Finish the remaining step-`12` generated breadth.
+3. Re-run the default `10m` signoff evidence and refresh docs/tests.
 
 ## Workstreams
 
@@ -48,10 +49,10 @@ Done when:
 
 ### 2. Late Floor Closure
 
-- Treat step `10` exact-screened and step `12` generated as the remaining open
-  late targets with separate evidence.
-- Keep the newly landed step-`12` exact-screened and step-`14` generated floors
-  from regressing while the remaining late work moves.
+- Treat step `12` generated as the remaining open late target.
+- Keep the newly landed step-`10` exact-screened, step-`12`
+  exact-screened, and step-`14` generated floors from regressing while the
+  remaining late work moves.
 - Prefer changes that survive live prefix search over raw-catalog-only
   widening.
 - Keep accepted parity and `full_telescopes_evaluated` stable while moving the
@@ -59,7 +60,6 @@ Done when:
 
 Done when:
 
-- step `10` exact-screened reaches `120+`
 - step `12` generated reaches `1200+`
 - step `12` exact-screened stays `>= 400`
 - step `14` generated stays `>= 3500`
@@ -73,6 +73,8 @@ Done when:
   whether a bound change helped.
 - Keep exact-screen reasons, prune classes, and stored narrative/event
   coverage stable while the bounds move.
+- Keep the phase-event exact-screen detail path on the same accounting
+  surface as the persisted demo funnel totals.
 
 Done when:
 

@@ -1,6 +1,6 @@
 # Demo Lane Checklist
 
-Last updated: 2026-03-17
+Last updated: 2026-03-18
 
 This checklist covers only the remaining tasks needed for
 `demo_breadth_shadow` signoff.
@@ -8,12 +8,12 @@ This checklist covers only the remaining tasks needed for
 ## Current Open Numbers
 
 - Step `1` generated raw: `1296 / 2144`
-- Step `10` exact-screened: `7 / 120`
 - Step `12` generated raw: `995 / 1200`
 
-Closed this round from `runs/codex-demo-late-surface-v5`:
+Closed this round from `runs/codex-demo-late-surface-v8`:
 
-- Step `12` exact-screened: `749 / 400`
+- Step `10` exact-screened: `638 / 120`
+- Step `12` exact-screened: `8629 / 400`
 - Step `14` generated raw: `5135 / 3500`
 
 ## 1. Step-1 Recovery
@@ -35,9 +35,15 @@ Done when:
 
 ## 2. Step-10 Exact-Screened Floor
 
-- [ ] Raise step `10` exact-screened surface from `7` to `120+`.
-- [ ] Keep the already-landed step-`10` generated floor hit.
-- [ ] Preserve accepted parity and keep `full_telescopes_evaluated` moderate.
+- [x] Raise step `10` exact-screened surface from `7` to `120+`.
+- [x] Keep the already-landed step-`10` generated floor hit.
+- [x] Preserve accepted parity and keep `full_telescopes_evaluated` moderate.
+
+Current evidence:
+`runs/codex-demo-late-surface-v8` now shows step `10` generated `1344`,
+exact-screened `638`, `full_telescopes_evaluated = 1`, accepted parity
+through step `15`, and phase-detail exact-screened values of
+`637 -> 638` across `materialize -> proof_close/seal`.
 
 Done when:
 
@@ -52,9 +58,10 @@ Done when:
 - [x] Preserve the reference acceptance while doing it.
 
 Current evidence:
-`runs/codex-demo-late-surface-v5` now shows step `12` generated `995`,
-exact-screened `749`, `full_telescopes_evaluated = 1`, and accepted parity
-through step `15`.
+`runs/codex-demo-late-surface-v8` now shows step `12` generated `995`,
+exact-screened `8629`, `full_telescopes_evaluated = 1`, accepted parity
+through step `15`, and phase-detail exact-screened values of
+`8628 -> 8629` across `materialize -> proof_close/seal`.
 
 Done when:
 
@@ -69,8 +76,8 @@ Done when:
 - [x] Preserve accepted parity and keep `full_telescopes_evaluated` moderate.
 
 Current evidence:
-`runs/codex-demo-late-surface-v5` now shows step `14` generated `5135`,
-exact-screened `3807`, `full_telescopes_evaluated = 1`, and accepted parity
+`runs/codex-demo-late-surface-v8` now shows step `14` generated `5135`,
+exact-screened `3808`, `full_telescopes_evaluated = 1`, and accepted parity
 through step `15`.
 
 Done when:
@@ -83,7 +90,7 @@ Done when:
 
 - [ ] Add or retune exact prefix / terminal-prefix bounds that convert widened
       honest breadth into honest exact-screened mass.
-- [ ] Preserve exact-screen reasons, prune classes, and narrative/event
+- [x] Preserve exact-screen reasons, prune classes, and narrative/event
       artifacts while the bounds move.
 - [ ] Avoid solving the open late floors by evaluating many more full
       telescopes.
