@@ -7,21 +7,21 @@ This plan tracks only the remaining work needed to sign off
 
 ## Goal
 
-Close the remaining early and late demo-lane gaps without losing accepted-hash
-parity, without inflating full telescope evaluations, and without weakening the
+Close the remaining early demo-lane gap without losing accepted-hash parity,
+without inflating full telescope evaluations, and without weakening the
 comparison-backed honesty boundary.
 
 ## Working Baseline
 
 - Early reference: `runs/codex-demo-early-catalog-v2`
-- Late reference: `runs/codex-demo-late-surface-v8`
+- Late reference: `runs/codex-demo-late-surface-v9`
 - Guarded comparison baseline: `runs/codex-realistic-late-baseline-v2`
 - Current known open deltas:
   - step `1` generated raw: `1296 -> 2144`
-  - remaining late generated gap: step `12` `995 -> 1200+`
-- Fresh closures in `v8`:
+- Fresh closures in `v9`:
   - step `10` exact-screened: `638 >= 120`
-  - step `12` exact-screened: `8629 >= 400`
+  - step `12` generated raw: `1330 >= 1200`
+  - step `12` exact-screened: `12204 >= 400`
   - step `14` generated: `5135 >= 3500`
   - late phase-event detail alignment: `materialize/proof_close/seal` now use
     the stored exact-screen totals on floor-carrying steps
@@ -29,8 +29,8 @@ comparison-backed honesty boundary.
 ## Execution Order
 
 1. Recover step-`1` generated breadth.
-2. Finish the remaining step-`12` generated breadth.
-3. Re-run the default `10m` signoff evidence and refresh docs/tests.
+2. Re-run the default `10m` signoff evidence and refresh docs/tests once the
+   step-`1` change lands.
 
 ## Workstreams
 
@@ -47,39 +47,19 @@ Done when:
 - step `1` reports `2144` generated raw candidates in a stored run
 - steps `1` to `4` still fit comfortably inside the shared `90s` early window
 
-### 2. Late Floor Closure
+### 2. Signoff Refresh
 
-- Treat step `12` generated as the remaining open late target.
-- Keep the newly landed step-`10` exact-screened, step-`12`
-  exact-screened, and step-`14` generated floors from regressing while the
-  remaining late work moves.
+- Keep the landed late floors from regressing while the remaining step-`1`
+  work moves.
+- Preserve accepted parity, `full_telescopes_evaluated = 1` on the late
+  steps, and the current exact-screen reason / phase-detail accounting.
 - Prefer changes that survive live prefix search over raw-catalog-only
   widening.
-- Keep accepted parity and `full_telescopes_evaluated` stable while moving the
-  open floors.
 
 Done when:
 
-- step `12` generated reaches `1200+`
-- step `12` exact-screened stays `>= 400`
-- step `14` generated stays `>= 3500`
+- step `1` reports `2144` generated raw candidates in a stored run
 - the default `10m` profile still preserves accepted parity through step `15`
-
-### 3. Exact-Bound Tightening
-
-- Strengthen exact prefix and terminal-prefix bounds so extra honest breadth
-  turns into honest exact-screened mass rather than extra full evaluations.
-- Use the remaining step-`10` and step-`12` floors as the scorecard for
-  whether a bound change helped.
-- Keep exact-screen reasons, prune classes, and stored narrative/event
-  coverage stable while the bounds move.
-- Keep the phase-event exact-screen detail path on the same accounting
-  surface as the persisted demo funnel totals.
-
-Done when:
-
-- the remaining late floors close without a large rise in
-  `full_telescopes_evaluated`
 - the lane still reports exact-screen reasons and prune classes cleanly
 
 ## What Not To Reopen

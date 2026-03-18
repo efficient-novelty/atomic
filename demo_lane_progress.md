@@ -12,7 +12,7 @@ This file is a short operational status page for the remaining
 - Steps `5` to `9` already carry widened live search mass through the prefix
   engine and are no longer the active problem.
 - The current early reference is `runs/codex-demo-early-catalog-v2`.
-- The current late reference is `runs/codex-demo-late-surface-v8`, compared
+- The current late reference is `runs/codex-demo-late-surface-v9`, compared
   against `runs/codex-realistic-late-baseline-v2`.
 
 ## Remaining Signoff Gaps
@@ -20,14 +20,14 @@ This file is a short operational status page for the remaining
 | Area | Current evidence | Target | Status |
 | --- | --- | --- | --- |
 | Step `1` generated raw | `1296` | `2144` | open |
-| Step `12` generated raw | `995` | `1200+` | open |
 
 ## What Is Already Good Enough
 
 - Step `10` now hits its exact-screened floor: `638 >= 120`.
 - Step `10` generated floor is hit: `1344 >= 500`.
-- Step `11` hits both floor families: `4191 >= 800`, `253 >= 220`.
-- Step `12` now hits its exact-screened floor: `8629 >= 400`.
+- Step `11` hits both floor families: `4191 >= 800`, `1423 >= 220`.
+- Step `12` now hits both late floors: generated `1330 >= 1200`,
+  exact-screened `12204 >= 400`.
 - Step `13` and step `15` hit both generated and exact-screened floors.
 - Step `14` now hits both late floors: generated `5135 >= 3500`,
   exact-screened `3808 >= 1100`.
@@ -58,13 +58,10 @@ This file is a short operational status page for the remaining
   therefore honestly tops out at `1296` generated telescopes, leaving the
   missing `848` surface absent from the live enumerator rather than hidden by
   the budget controller.
-- The remaining late gap is no longer step-`5` to `9` carry-through, broad
-  late-family exposure, or step-`10` exact-screen mass. The current `v8`
-  reference closes step `10` by promoting the already persisted exact-screen
-  reason surface into the late exact-screened total, leaving only the last
-  `205` raw generated candidates on step `12` still open.
-- Further progress likely needs a more selective step-`12` generated widening,
-  not another broad late-surface explosion.
+- The late lane no longer has an open generated-floor gap. The current `v9`
+  reference closes step `12` with a selective curvature-shell widening that
+  survives live prefix search, lifting generated raw from `995` to `1330`
+  while keeping accepted parity and `full_telescopes_evaluated = 1`.
 - Any change that alters accepted hashes, drives `full_telescopes_evaluated`
   materially upward, or leans on silent fallback is a regression.
 
@@ -72,10 +69,9 @@ This file is a short operational status page for the remaining
 
 1. Raise step `1` beyond the current `36 x 36 => 1296` raw clause-catalog
    ceiling without breaking the shared early-window story.
-2. Push step `12` generated from `995` to `1200+` without giving back the
-   newly landed `8629` exact-screened surface.
-3. Keep the default `10m` config-backed test and stored run evidence aligned
-   with the current `v8` reference.
+2. Keep the current `v9` late reference and config-backed tests aligned while
+   the remaining step-`1` recovery work moves.
+3. Refresh the stored default `10m` evidence after the step-`1` change lands.
 
 ## Guardrails
 

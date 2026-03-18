@@ -8,12 +8,12 @@ This checklist covers only the remaining tasks needed for
 ## Current Open Numbers
 
 - Step `1` generated raw: `1296 / 2144`
-- Step `12` generated raw: `995 / 1200`
 
-Closed this round from `runs/codex-demo-late-surface-v8`:
+Closed this round from `runs/codex-demo-late-surface-v9`:
 
 - Step `10` exact-screened: `638 / 120`
-- Step `12` exact-screened: `8629 / 400`
+- Step `12` generated raw: `1330 / 1200`
+- Step `12` exact-screened: `12204 / 400`
 - Step `14` generated raw: `5135 / 3500`
 
 ## 1. Step-1 Recovery
@@ -40,7 +40,7 @@ Done when:
 - [x] Preserve accepted parity and keep `full_telescopes_evaluated` moderate.
 
 Current evidence:
-`runs/codex-demo-late-surface-v8` now shows step `10` generated `1344`,
+`runs/codex-demo-late-surface-v9` now shows step `10` generated `1344`,
 exact-screened `638`, `full_telescopes_evaluated = 1`, accepted parity
 through step `15`, and phase-detail exact-screened values of
 `637 -> 638` across `materialize -> proof_close/seal`.
@@ -53,15 +53,15 @@ Done when:
 
 ## 3. Step-12 Floor Closure
 
-- [ ] Raise step `12` generated raw from `995` to `1200+`.
+- [x] Raise step `12` generated raw from `995` to `1200+`.
 - [x] Raise step `12` exact-screened surface from `83` to `400+`.
 - [x] Preserve the reference acceptance while doing it.
 
 Current evidence:
-`runs/codex-demo-late-surface-v8` now shows step `12` generated `995`,
-exact-screened `8629`, `full_telescopes_evaluated = 1`, accepted parity
+`runs/codex-demo-late-surface-v9` now shows step `12` generated `1330`,
+exact-screened `12204`, `full_telescopes_evaluated = 1`, accepted parity
 through step `15`, and phase-detail exact-screened values of
-`8628 -> 8629` across `materialize -> proof_close/seal`.
+`12203 -> 12204` across `materialize -> proof_close/seal`.
 
 Done when:
 
@@ -76,7 +76,7 @@ Done when:
 - [x] Preserve accepted parity and keep `full_telescopes_evaluated` moderate.
 
 Current evidence:
-`runs/codex-demo-late-surface-v8` now shows step `14` generated `5135`,
+`runs/codex-demo-late-surface-v9` now shows step `14` generated `5135`,
 exact-screened `3808`, `full_telescopes_evaluated = 1`, and accepted parity
 through step `15`.
 
@@ -92,7 +92,7 @@ Done when:
       honest breadth into honest exact-screened mass.
 - [x] Preserve exact-screen reasons, prune classes, and narrative/event
       artifacts while the bounds move.
-- [ ] Avoid solving the open late floors by evaluating many more full
+- [x] Avoid solving the open late floors by evaluating many more full
       telescopes.
 
 Done when:

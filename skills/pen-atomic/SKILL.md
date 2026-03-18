@@ -232,8 +232,9 @@ Focus on:
   `Scout -> BreadthHarvest -> Materialize -> ProofClose -> Seal`
 - persisting honest demo evidence in step summaries, narratives, and event
   streams rather than reconstructing it from debug text
-- moving only the still-open floors and early-breadth gaps without regressing
-  accepted parity, narrative/event coverage, or the honesty boundary
+- moving only the remaining early-breadth gap while holding the already-closed
+  late floors without regressing accepted parity, narrative/event coverage, or
+  the honesty boundary
 
 ### If you are working on reporting or evidence
 
@@ -305,7 +306,7 @@ Reject designs that:
   strict `15`-step lane.
 - The main realistic-search gap is stronger sound bound pruning plus broader
   non-family admissibility reuse on top of the already-landed memo/bound path.
-- The main demo-lane gap is the remaining early and late floor work tracked in
-  the repo-level demo-lane docs.
+- The main demo-lane gap is the remaining step-`1` early-breadth recovery
+  tracked in the repo-level demo-lane docs.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
   the track-specific references you actually need.

@@ -639,6 +639,10 @@ fn demo_curvature_shell_clauses(position: usize, context: EnumerationContext) ->
                         Box::new(Expr::Lib(latest)),
                         Box::new(Expr::Var(2)),
                     ))),
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(previous)),
+                        Box::new(Expr::Var(2)),
+                    ))),
                 ]);
             }
             clauses
@@ -656,6 +660,10 @@ fn demo_curvature_shell_clauses(position: usize, context: EnumerationContext) ->
                 clauses.extend([
                     Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Lib(previous))),
                     Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Lib(previous))),
+                    Expr::Pi(
+                        Box::new(Expr::Sigma(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Lib(previous)),
+                    ),
                 ]);
             }
             clauses
