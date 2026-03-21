@@ -19,7 +19,12 @@ intentionally short and forward-looking; use
   - `bucket_policy = structural_generic`
 - the lane is still mixed-mode at the evidence/certification layer:
   - `kappa 7-9` now have claim-specific later-band mutator packs
-  - stored breadth/floor evidence and certification are still open
+  - `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
+    reason coverage, prune-class coverage, fallback evidence, and step-15
+    claim-run coverage
+  - `scripts/certify_claim_lane.py` now emits a stored pass/fail certificate
+    from claim artifacts
+  - stored breadth/floor evidence and certification pass status are still open
 - the lane is not yet certification-ready and it is still not honest to call
   it `unguided`
 
@@ -42,18 +47,21 @@ intentionally short and forward-looking; use
 - The next blockers are stored late-step breadth/floor evidence, stored parity
   signoff evidence on the claim lane itself, and the still-incomplete
   certification surfaces.
-- Reporting already carries much of the exact-screen reason plumbing, but the
-  compare, provenance, benchmark, and certification surfaces are still not
-  strong enough for the paper sentence.
+- Reporting now pushes exact-screen reasons into telemetry and the compare
+  script, and the certification script can already fail honestly on missing
+  parity, breadth, runtime, or manifest evidence.
+- The remaining blockers are no longer the existence of compare/certification
+  tools; they are the missing step-15 claim bundle, the still-open breadth
+  floors, and the missing provenance/build fields in `run.json`.
 
 ## Immediate Next Slice
 
-1. Convert the widened late surface into stored breadth/floor evidence on the
-   claim lane itself.
-2. Recheck stored parity and fallback honesty on the live claim lane rather
-   than only through unit tests.
-3. Then harden the compare, benchmark, provenance, and certification bundle on
-   top of the claim-generic, structural-generic lane.
+1. Produce a stored step-15 claim bundle and run the new compare/certification
+   scripts on that real evidence.
+2. Fill the missing manifest provenance/build fingerprints that the
+   certification script now reports.
+3. Then close the remaining breadth/floor misses and benchmark the certified
+   runtime threshold on the claim lane itself.
 
 ## After That
 
@@ -66,6 +74,8 @@ intentionally short and forward-looking; use
 - `cargo test -p pen-type --lib`
 - `cargo test -p pen-search --lib`
 - `cargo test -p pen-cli claim_run_writes_policy_metadata_and_claim_narrative`
+- `cargo test -p pen-cli --test atomic_bootstrap compare_runs_reports_claim_lane_policy_and_reason_audit`
+- `cargo test -p pen-cli --test atomic_bootstrap claim_certification_script_emits_failing_certificate_for_incomplete_smoke_run`
 
 ## Guardrails
 

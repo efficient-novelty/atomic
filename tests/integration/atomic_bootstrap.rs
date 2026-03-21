@@ -5,8 +5,8 @@ use std::fs;
 use support::{
     assert_success, compact_search_space_stats, compact_step_summaries, fixtures_root,
     load_search_space_fixture, load_trajectory_fixture, mutate_latest_frontier_manifest,
-    normalize_checkpoint, read_json, read_text, run_compare_runs, run_pen_cli, temp_dir,
-    workspace_root, write_pressure_config,
+    normalize_checkpoint, read_json, read_text, run_claim_certify, run_compare_runs,
+    run_pen_cli, temp_dir, workspace_root, write_pressure_config,
 };
 
 #[test]
@@ -1071,6 +1071,186 @@ fn compare_runs_reports_missing_demo_narrative_artifacts_explicitly() {
         demo_lane["narrative_artifacts"]["missing_event_steps"].as_array(),
         Some(&vec![serde_json::Value::from(1)])
     );
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn compare_runs_reports_claim_lane_policy_and_reason_audit() {
+    let root = temp_dir("claim-compare");
+    let guarded_dir = root.join("guarded");
+    let claim_dir = root.join("claim");
+
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("strict_canon_guarded.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "guarded",
+        "--until-step",
+        "2",
+    ]));
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("desktop_claim_shadow_smoke.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "claim",
+        "--until-step",
+        "2",
+    ]));
+
+    let json_out = root.join("claim-compare.json");
+    let stdout = assert_success(run_compare_runs([
+        "--baseline",
+        "guarded",
+        "--lane",
+        &format!("guarded={}", guarded_dir.to_string_lossy()),
+        "--lane",
+        &format!("claim={}", claim_dir.to_string_lossy()),
+        "--json-out",
+        &json_out.to_string_lossy(),
+    ]));
+
+    assert!(stdout.contains("claim lane audit: attention (claim)"));
+    assert!(stdout.contains(
+        "search policy: honest guidance_style=claim_debt_guided late_expansion_policy=claim_generic bucket_policy=structural_generic"
+    ));
+    assert!(stdout.contains("exact-screen reasons: complete"));
+    assert!(stdout.contains("prune class coverage: complete"));
+
+    let summary = read_json(&json_out);
+    assert_eq!(summary["signoff"]["status"].as_str(), Some("attention"));
+    assert_eq!(summary["claim_lane_audit"]["status"].as_str(), Some("attention"));
+
+    let claim_lane = summary["lanes"]
+        .as_array()
+        .expect("lanes")
+        .iter()
+        .find(|lane| lane["label"].as_str() == Some("claim"))
+        .expect("claim lane");
+    assert_eq!(
+        claim_lane["claim_lane_audit"]["search_policy"]["status"].as_str(),
+        Some("honest")
+    );
+    assert_eq!(
+        claim_lane["claim_lane_audit"]["exact_screen_reasons"]["status"].as_str(),
+        Some("complete")
+    );
+    assert_eq!(
+        claim_lane["claim_lane_audit"]["prune_classes"]["status"].as_str(),
+        Some("complete")
+    );
+    assert_eq!(
+        claim_lane["claim_lane_audit"]["fallback_honesty"]["status"].as_str(),
+        Some("clear")
+    );
+    assert!(
+        claim_lane["claim_lane_audit"]["reasons"]
+            .as_array()
+            .expect("claim reasons")
+            .iter()
+            .any(|reason| reason.as_str() == Some("incomplete_step_coverage"))
+    );
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn claim_certification_script_emits_failing_certificate_for_incomplete_smoke_run() {
+    let root = temp_dir("claim-certification");
+    let guarded_dir = root.join("guarded");
+    let claim_dir = root.join("claim");
+
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("strict_canon_guarded.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "guarded",
+        "--until-step",
+        "2",
+    ]));
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("desktop_claim_shadow_smoke.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "claim",
+        "--until-step",
+        "2",
+    ]));
+
+    let json_out = root.join("claim-certificate.json");
+    let text_out = root.join("claim-certificate.txt");
+    let output = run_claim_certify([
+        "--guarded-run",
+        &guarded_dir.to_string_lossy(),
+        "--claim-run",
+        &claim_dir.to_string_lossy(),
+        "--runtime-threshold-ms",
+        "1000",
+        "--json-out",
+        &json_out.to_string_lossy(),
+        "--text-out",
+        &text_out.to_string_lossy(),
+    ]);
+    let stdout = String::from_utf8_lossy(&output.stdout).to_string()
+        + &String::from_utf8_lossy(&output.stderr);
+
+    assert!(
+        !output.status.success(),
+        "expected certification to fail for the incomplete smoke run\nstdout:\n{}",
+        stdout
+    );
+    assert!(stdout.contains("Claim Certification: attention"));
+    assert!(stdout.contains("accepted_hash_parity: fail"));
+    assert!(stdout.contains("search_policy: pass"));
+    assert!(stdout.contains("manifest_completeness: fail"));
+
+    let certificate = read_json(&json_out);
+    assert_eq!(certificate["status"].as_str(), Some("attention"));
+    assert_eq!(
+        certificate["checks"]["search_policy"]["status"].as_str(),
+        Some("pass")
+    );
+    assert_eq!(
+        certificate["checks"]["early_breadth"]["status"].as_str(),
+        Some("fail")
+    );
+    assert_eq!(
+        certificate["checks"]["late_generated_floors"]["status"].as_str(),
+        Some("fail")
+    );
+    assert_eq!(
+        certificate["checks"]["manifest_completeness"]["status"].as_str(),
+        Some("fail")
+    );
+    assert_eq!(
+        certificate["checks"]["runtime_threshold"]["status"].as_str(),
+        Some("pass")
+    );
+    assert!(read_text(&text_out).contains("Claim Certification: attention"));
 
     fs::remove_dir_all(root).ok();
 }

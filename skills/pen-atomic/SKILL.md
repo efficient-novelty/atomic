@@ -24,8 +24,9 @@ Treat these as current repo truths:
   own configs, narratives, and policy metadata; it now uses claim-debt
   admissibility plus a claim-generic late surface, and it now uses a
   structural-generic claim bucket taxonomy; later `kappa 7-9` mutator packs
-  and claim-path exactness rechecks are now landed in code/tests, while
-  breadth evidence, parity signoff, and certification still remain open
+  and claim-path exactness rechecks are now landed in code/tests; the repo now
+  also has claim-specific compare/certification tooling, while breadth
+  evidence, parity signoff, and certification pass status still remain open
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -296,7 +297,9 @@ Focus on:
   claim-debt admissibility, claim-generic late expansion, and
   structural-generic bucket scheduling are real; `kappa 7-9` mutators and
   claim-path exactness rechecks are landed, while breadth evidence, stored
-  parity signoff, and certification are still open
+  parity signoff, and certification pass status are still open; use
+  `scripts/compare_runs.py` and `scripts/certify_claim_lane.py` as the current
+  evidence surfaces before changing more search code
 - treating the remaining breadth evidence, stored parity signoff, and
   certification work as the next real bottlenecks rather than continuing to tune
   already-landed admissibility, claim-path exactness tests, or bucket labels
@@ -380,11 +383,14 @@ Reject designs that:
 - The claim lane now exists as a separate scaffold, but its policy metadata
   now honestly reports that claim-debt admissibility, a claim-generic late
   surface, and structural-generic bucket scheduling are landed; later `kappa
-  7-9` mutators and claim-path exactness rechecks are now also landed, while
-  breadth evidence, stored parity signoff, and certification are still open.
+  7-9` mutators and claim-path exactness rechecks are now also landed; the
+  repo also now has a claim-lane compare audit and a failing-until-earned
+  certification script, while breadth evidence, stored parity signoff, and
+  certification pass status are still open.
 - The next operational claim-lane work should focus on stored breadth
-  evidence, stored parity signoff, and certification rather than on
-  already-landed profile, admissibility, bucket scheduling separation, or the
-  now-covered claim-path exactness rechecks.
+  evidence, stored parity signoff, and the missing manifest/build fingerprints
+  revealed by certification rather than on already-landed profile,
+  admissibility, bucket scheduling separation, or the now-covered claim-path
+  exactness rechecks.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
   the track-specific references you actually need.

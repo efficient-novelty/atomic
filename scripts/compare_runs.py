@@ -18,6 +18,17 @@ CLAIM_KEYS = (
     "adopted_nu",
     "matches_accepted",
 )
+SEARCH_POLICY_KEYS = (
+    "guidance_style",
+    "late_expansion_policy",
+    "bucket_policy",
+)
+EXACT_SCREEN_REASON_KEYS = (
+    "partial_prefix_bar_failure",
+    "terminal_prefix_completion_failure",
+    "incumbent_dominance",
+    "legality_connectivity_exact_rejection",
+)
 SEARCH_SPACE_COUNT_KEYS = (
     "enumerated",
     "well_formed",
@@ -36,6 +47,19 @@ WORKSTREAM4_RESUME_REQUIRED_MODES = (
     "step_checkpoint_resume",
     "step_checkpoint_reevaluate",
 )
+CLAIM_SEARCH_PROFILE = "desktop_claim_shadow"
+CLAIM_REQUIRED_COMPLETED_STEP = 15
+CLAIM_REQUIRED_SEARCH_POLICY = {
+    "guidance_style": "claim_debt_guided",
+    "late_expansion_policy": "claim_generic",
+    "bucket_policy": "structural_generic",
+}
+CLAIM_ALLOWED_PROVENANCE = {
+    "atomic_bootstrap_search",
+    "frontier_checkpoint_resume",
+    "step_checkpoint_resume",
+    "step_checkpoint_reevaluate",
+}
 NEUTRAL_GOVERNOR_STATES = {"green", "unknown"}
 NEUTRAL_PRESSURE_ACTIONS = {"none", "unknown"}
 
@@ -164,6 +188,7 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
             break
 
     search_profile = load_search_profile(run_dir, steps, telemetry_events)
+    search_policy = load_search_policy(manifest, telemetry_events)
     trajectory = [trajectory_entry(step) for step in steps]
     accepted_hashes = [accepted_hash_entry(step) for step in steps]
     search_space_counts = [search_space_count_entry(step) for step in steps]
@@ -183,6 +208,8 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
     replay_sequence = []
     governor_sequence = []
     prune_totals = Counter({key: 0 for key in PRUNE_KEYS})
+    exact_screen_entries = []
+    prune_class_entries = []
     frontier_deltas = []
     frontier_retention_totals = Counter()
 
@@ -203,6 +230,10 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
 
         provenance_sequence.append({"step_index": step_index, "value": provenance})
         replay_sequence.append({"step_index": step_index, "value": replay_status})
+        exact_screen_entry = exact_screen_reason_entry(step, telemetry_step)
+        prune_class_entry_value = prune_class_entry(step, telemetry_step)
+        exact_screen_entries.append(exact_screen_entry)
+        prune_class_entries.append(prune_class_entry_value)
         governor_sequence.append(
             {
                 "step_index": step_index,
@@ -234,6 +265,7 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
         "run_id": str(manifest.get("run_id", "")),
         "completed_step": int(manifest.get("position", {}).get("completed_step", len(steps))),
         "search_profile": search_profile,
+        "search_policy": search_policy,
         "run_mode": run_mode,
         "trajectory": trajectory,
         "trajectory_fingerprint": hash_json(trajectory),
@@ -243,6 +275,10 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
         "late_step_competition": late_step_competition,
         "demo_phase_evidence": demo_phase_evidence,
         "narrative_artifacts": narrative_artifacts,
+        "exact_screen_reason_coverage": coverage_summary(
+            exact_screen_entries,
+            EXACT_SCREEN_REASON_KEYS,
+        ),
         "provenance_sequence": provenance_sequence,
         "provenance_summary": summarize_counter(
             Counter(item["value"] for item in provenance_sequence)
@@ -253,6 +289,10 @@ def load_lane(label: str, run_dir: Path) -> dict[str, Any]:
         ),
         "prune_class_totals": ordered_dict(
             [(key, int(prune_totals.get(key, 0))) for key in PRUNE_KEYS]
+        ),
+        "prune_class_coverage": coverage_summary(
+            prune_class_entries,
+            PRUNE_KEYS,
         ),
         "prune_sample_totals": ordered_dict(
             [(key, int(prune_totals.get(key, 0))) for key in PRUNE_KEYS]
@@ -648,6 +688,34 @@ def load_search_profile(
     return "unknown"
 
 
+def load_search_policy(
+    manifest: dict[str, Any], telemetry_events: list[dict[str, Any]]
+) -> dict[str, str]:
+    manifest_policy = manifest.get("search_policy")
+    if has_all_keys(manifest_policy, SEARCH_POLICY_KEYS):
+        return ordered_dict(
+            (key, str(manifest_policy.get(key, ""))) for key in SEARCH_POLICY_KEYS
+        )
+
+    for event in telemetry_events:
+        if event.get("event") != "run_started":
+            continue
+        payload = event.get("payload", {})
+        telemetry_policy = payload.get("search_policy")
+        if has_all_keys(telemetry_policy, SEARCH_POLICY_KEYS):
+            return ordered_dict(
+                (key, str(telemetry_policy.get(key, "")))
+                for key in SEARCH_POLICY_KEYS
+            )
+        break
+
+    return ordered_dict((key, "") for key in SEARCH_POLICY_KEYS)
+
+
+def has_all_keys(value: Any, keys: tuple[str, ...]) -> bool:
+    return isinstance(value, dict) and all(key in value for key in keys)
+
+
 def trajectory_entry(step: dict[str, Any]) -> dict[str, Any]:
     accepted = step.get("accepted", {})
     return ordered_dict(
@@ -715,6 +783,139 @@ def prune_counts(step: dict[str, Any], telemetry_step: dict[str, Any]) -> Counte
     for key in PRUNE_KEYS:
         counts[key] += int(telemetry_counts.get(key, 0) or 0)
     return counts
+
+
+def derive_exact_screen_reasons(search_stats: dict[str, Any]) -> dict[str, int]:
+    return ordered_dict(
+        [
+            (
+                "partial_prefix_bar_failure",
+                int(search_stats.get("incremental_partial_prefix_bound_prunes", 0) or 0),
+            ),
+            (
+                "terminal_prefix_completion_failure",
+                int(search_stats.get("incremental_terminal_prefix_bar_prunes", 0) or 0),
+            ),
+            (
+                "incumbent_dominance",
+                int(search_stats.get("incremental_terminal_rank_prunes", 0) or 0),
+            ),
+            (
+                "legality_connectivity_exact_rejection",
+                int(search_stats.get("incremental_connectivity_prunes", 0) or 0)
+                + int(search_stats.get("incremental_terminal_clause_filter_prunes", 0) or 0),
+            ),
+        ]
+    )
+
+
+def exact_screen_reason_entry(
+    step: dict[str, Any], telemetry_step: dict[str, Any]
+) -> dict[str, Any]:
+    step_index = int(step.get("step_index", 0) or 0)
+    search_stats = step.get("search_stats") or {}
+    summary_counts = search_stats.get("exact_screen_reasons")
+    telemetry_counts = telemetry_step.get("exact_screen_reasons")
+
+    if has_all_keys(summary_counts, EXACT_SCREEN_REASON_KEYS):
+        source = "summary"
+        counts = ordered_dict(
+            (key, int(summary_counts.get(key, 0) or 0)) for key in EXACT_SCREEN_REASON_KEYS
+        )
+    elif has_all_keys(telemetry_counts, EXACT_SCREEN_REASON_KEYS):
+        source = "telemetry"
+        counts = ordered_dict(
+            (key, int(telemetry_counts.get(key, 0) or 0)) for key in EXACT_SCREEN_REASON_KEYS
+        )
+    elif search_stats:
+        source = "derived"
+        counts = derive_exact_screen_reasons(search_stats)
+    else:
+        source = "missing"
+        counts = ordered_dict((key, 0) for key in EXACT_SCREEN_REASON_KEYS)
+
+    return ordered_dict(
+        [
+            ("step_index", step_index),
+            ("source", source),
+            ("counts", counts),
+        ]
+    )
+
+
+def prune_class_entry(step: dict[str, Any], telemetry_step: dict[str, Any]) -> dict[str, Any]:
+    step_index = int(step.get("step_index", 0) or 0)
+    search_stats = step.get("search_stats") or {}
+    summary_counts = search_stats.get("prune_classes")
+    telemetry_counts = telemetry_step.get("prune_classes")
+    counts = Counter({key: 0 for key in PRUNE_KEYS})
+
+    if has_all_keys(summary_counts, PRUNE_KEYS):
+        source = "summary"
+        for key in PRUNE_KEYS:
+            counts[key] += int(summary_counts.get(key, 0) or 0)
+    elif has_all_keys(telemetry_counts, PRUNE_KEYS):
+        source = "telemetry"
+        for key in PRUNE_KEYS:
+            counts[key] += int(telemetry_counts.get(key, 0) or 0)
+    elif search_stats or step.get("prune_reports"):
+        source = "derived"
+        counts = prune_counts(step, telemetry_step)
+    else:
+        source = "missing"
+
+    return ordered_dict(
+        [
+            ("step_index", step_index),
+            ("source", source),
+            ("counts", ordered_dict((key, int(counts.get(key, 0))) for key in PRUNE_KEYS)),
+        ]
+    )
+
+
+def coverage_summary(
+    entries: list[dict[str, Any]], keys: tuple[str, ...]
+) -> dict[str, Any]:
+    totals = Counter({key: 0 for key in keys})
+    source_counts = Counter()
+    persisted_steps = []
+    derived_steps = []
+    missing_steps = []
+
+    for entry in entries:
+        step_index = int(entry.get("step_index", 0) or 0)
+        source = str(entry.get("source", "missing") or "missing")
+        counts = entry.get("counts") or {}
+
+        source_counts[source] += 1
+        for key in keys:
+            totals[key] += int(counts.get(key, 0) or 0)
+
+        if source in {"summary", "telemetry"}:
+            persisted_steps.append(step_index)
+        elif source == "missing":
+            missing_steps.append(step_index)
+        else:
+            derived_steps.append(step_index)
+
+    if missing_steps:
+        status = "missing"
+    elif derived_steps:
+        status = "derived"
+    else:
+        status = "complete"
+
+    return ordered_dict(
+        [
+            ("status", status),
+            ("expected_steps", len(entries)),
+            ("persisted_steps", persisted_steps),
+            ("derived_steps", derived_steps),
+            ("missing_steps", missing_steps),
+            ("source_counts", summarize_counter(source_counts)),
+            ("totals", ordered_dict((key, int(totals.get(key, 0))) for key in keys)),
+        ]
+    )
 
 
 def frontier_retention_delta(step: dict[str, Any]) -> int:
@@ -938,17 +1139,21 @@ def build_summary(lanes: list[dict[str, Any]], baseline_label: str) -> dict[str,
         baseline_label,
         baseline_claim,
     )
+    for lane in lanes:
+        lane["claim_lane_audit"] = build_claim_lane_audit(lane, baseline, baseline_label)
+    claim_lane_audit = summarize_claim_lane_audit(lanes)
     signoff_status = (
         "ready"
         if trajectory_status == "all_match_baseline"
         and claim_status == "consistent"
         and workstream4_rollout["status"] != "attention"
+        and claim_lane_audit["status"] != "attention"
         else "attention"
     )
 
     return ordered_dict(
         [
-            ("comparison_version", 4),
+            ("comparison_version", 5),
             ("baseline_lane", baseline_label),
             ("lane_order", [lane["label"] for lane in lanes]),
             (
@@ -1011,6 +1216,7 @@ def build_summary(lanes: list[dict[str, Any]], baseline_label: str) -> dict[str,
                 ),
             ),
             ("workstream4_rollout", workstream4_rollout),
+            ("claim_lane_audit", claim_lane_audit),
             (
                 "signoff",
                 ordered_dict(
@@ -1023,6 +1229,7 @@ def build_summary(lanes: list[dict[str, Any]], baseline_label: str) -> dict[str,
                                 baseline_label,
                                 len(lanes),
                                 baseline["step15_claim"],
+                                claim_lane_audit["status"],
                             ),
                         ),
                     ]
@@ -1223,13 +1430,208 @@ def workstream4_rollout_status(
     return "ready"
 
 
+def claim_policy_honesty(lane: dict[str, Any]) -> dict[str, Any]:
+    actual = lane.get("search_policy") or {}
+    mismatches = []
+    for key, expected in CLAIM_REQUIRED_SEARCH_POLICY.items():
+        value = str(actual.get(key, ""))
+        if value != expected:
+            mismatches.append(
+                ordered_dict(
+                    [
+                        ("field", key),
+                        ("expected", expected),
+                        ("actual", value),
+                    ]
+                )
+            )
+
+    return ordered_dict(
+        [
+            ("status", "honest" if not mismatches else "mismatch"),
+            ("expected", CLAIM_REQUIRED_SEARCH_POLICY),
+            (
+                "actual",
+                ordered_dict((key, str(actual.get(key, ""))) for key in SEARCH_POLICY_KEYS),
+            ),
+            ("mismatches", mismatches),
+        ]
+    )
+
+
+def claim_accepted_hash_parity(
+    lane: dict[str, Any], baseline: dict[str, Any]
+) -> dict[str, Any]:
+    lane_missing_steps = missing_step_coverage(
+        lane.get("accepted_hashes") or [], CLAIM_REQUIRED_COMPLETED_STEP
+    )
+    baseline_missing_steps = missing_step_coverage(
+        baseline.get("accepted_hashes") or [], CLAIM_REQUIRED_COMPLETED_STEP
+    )
+    matches_baseline = bool(
+        (lane.get("accepted_hashes_vs_baseline") or {}).get("matches", False)
+    )
+    status = (
+        "ready"
+        if matches_baseline and not lane_missing_steps and not baseline_missing_steps
+        else "attention"
+    )
+    return ordered_dict(
+        [
+            ("status", status),
+            ("matches_baseline", matches_baseline),
+            ("lane_missing_steps", lane_missing_steps),
+            ("baseline_missing_steps", baseline_missing_steps),
+        ]
+    )
+
+
+def missing_step_coverage(entries: list[dict[str, Any]], step_limit: int) -> list[int]:
+    covered_steps = {int(entry.get("step_index", 0) or 0) for entry in entries}
+    return [step for step in range(1, step_limit + 1) if step not in covered_steps]
+
+
+def claim_fallback_honesty(lane: dict[str, Any]) -> dict[str, Any]:
+    reference_replay_steps = []
+    resume_steps = []
+    unexpected_provenance = []
+
+    for item in lane.get("provenance_sequence") or []:
+        step_index = int(item.get("step_index", 0) or 0)
+        value = str(item.get("value", "unknown") or "unknown")
+        if value == "reference_replay":
+            reference_replay_steps.append(step_index)
+        elif value in {"frontier_checkpoint_resume", "step_checkpoint_resume", "step_checkpoint_reevaluate"}:
+            resume_steps.append(step_index)
+        elif value not in CLAIM_ALLOWED_PROVENANCE:
+            unexpected_provenance.append(
+                ordered_dict(
+                    [
+                        ("step_index", step_index),
+                        ("value", value),
+                    ]
+                )
+            )
+
+    run_mode = str(lane.get("run_mode", "unknown") or "unknown")
+    run_mode_fallback = run_mode == "reference_replay"
+    status = (
+        "clear"
+        if lane.get("search_profile") == CLAIM_SEARCH_PROFILE
+        and not reference_replay_steps
+        and not unexpected_provenance
+        and not run_mode_fallback
+        else "fallback_detected"
+    )
+    return ordered_dict(
+        [
+            ("status", status),
+            ("run_mode", run_mode),
+            ("run_mode_fallback", run_mode_fallback),
+            ("resume_steps", resume_steps),
+            ("reference_replay_steps", reference_replay_steps),
+            ("unexpected_provenance", unexpected_provenance),
+        ]
+    )
+
+
+def build_claim_lane_audit(
+    lane: dict[str, Any], baseline: dict[str, Any], baseline_label: str
+) -> dict[str, Any]:
+    if lane.get("search_profile") != CLAIM_SEARCH_PROFILE:
+        return ordered_dict(
+            [
+                ("status", "not_applicable"),
+                ("label", lane["label"]),
+                ("baseline_label", baseline_label),
+            ]
+        )
+
+    policy_honesty = claim_policy_honesty(lane)
+    accepted_hash_parity = claim_accepted_hash_parity(lane, baseline)
+    exact_screen_reasons = lane.get("exact_screen_reason_coverage") or coverage_summary(
+        [], EXACT_SCREEN_REASON_KEYS
+    )
+    prune_classes = lane.get("prune_class_coverage") or coverage_summary([], PRUNE_KEYS)
+    fallback_honesty = claim_fallback_honesty(lane)
+    reasons = []
+
+    if accepted_hash_parity["status"] != "ready":
+        reasons.append("accepted_hash_parity_through_step_15_open")
+    if int(lane.get("completed_step", 0) or 0) < CLAIM_REQUIRED_COMPLETED_STEP:
+        reasons.append("incomplete_step_coverage")
+    if policy_honesty["status"] != "honest":
+        reasons.append("policy_mismatch")
+    if exact_screen_reasons["status"] != "complete":
+        reasons.append("exact_screen_reasons_not_fully_persisted")
+    if prune_classes["status"] != "complete":
+        reasons.append("prune_class_counts_not_fully_persisted")
+    if fallback_honesty["status"] != "clear":
+        reasons.append("fallback_evidence_detected")
+    if lane.get("narrative_artifacts", {}).get("status") != "complete":
+        reasons.append("narrative_artifacts_incomplete")
+
+    return ordered_dict(
+        [
+            ("status", "ready" if not reasons else "attention"),
+            ("label", lane["label"]),
+            ("baseline_label", baseline_label),
+            ("completed_step", int(lane.get("completed_step", 0) or 0)),
+            ("search_policy", policy_honesty),
+            ("accepted_hash_parity", accepted_hash_parity),
+            ("exact_screen_reasons", exact_screen_reasons),
+            ("prune_classes", prune_classes),
+            ("fallback_honesty", fallback_honesty),
+            ("narrative_artifacts", lane.get("narrative_artifacts", {}).get("status", "unknown")),
+            ("reasons", reasons),
+        ]
+    )
+
+
+def summarize_claim_lane_audit(lanes: list[dict[str, Any]]) -> dict[str, Any]:
+    claim_rows = [
+        lane["claim_lane_audit"]
+        for lane in lanes
+        if (lane.get("claim_lane_audit") or {}).get("status") != "not_applicable"
+    ]
+    if not claim_rows:
+        return ordered_dict(
+            [
+                ("status", "not_present"),
+                ("ready_lanes", []),
+                ("attention_lanes", []),
+                ("lanes", []),
+            ]
+        )
+
+    ready_lanes = [row["label"] for row in claim_rows if row["status"] == "ready"]
+    attention_lanes = [row["label"] for row in claim_rows if row["status"] != "ready"]
+    return ordered_dict(
+        [
+            ("status", "ready" if not attention_lanes else "attention"),
+            ("ready_lanes", ready_lanes),
+            ("attention_lanes", attention_lanes),
+            ("lanes", claim_rows),
+        ]
+    )
+
+
 def signoff_summary(
-    status: str, baseline_label: str, lane_count: int, baseline_claim: dict[str, Any]
+    status: str,
+    baseline_label: str,
+    lane_count: int,
+    baseline_claim: dict[str, Any],
+    claim_lane_audit_status: str,
 ) -> str:
     if status == "ready":
         return (
             f"all {lane_count} lanes preserve baseline {baseline_label} and the "
             f"step-15 {baseline_claim['adopted_label']} claim boundary"
+        )
+    if claim_lane_audit_status == "attention":
+        return (
+            f"one or more lanes diverge from baseline {baseline_label}, the step-15 "
+            "claim boundary, or the claim-lane evidence audit remains open"
         )
     return f"one or more lanes diverge from baseline {baseline_label} or the step-15 claim"
 
@@ -1306,6 +1708,7 @@ def has_pressure_evidence(lane: dict[str, Any]) -> bool:
 
 def render_text_summary(summary: dict[str, Any]) -> str:
     workstream4_rollout = summary["workstream4_rollout"]
+    claim_lane_audit = summary["claim_lane_audit"]
     lines = [
         f"Comparison Signoff: {summary['signoff']['status']}",
         f"baseline: {summary['baseline_lane']}",
@@ -1326,6 +1729,7 @@ def render_text_summary(summary: dict[str, Any]) -> str:
         ),
         f"step15 claim boundary: {render_claim_status(summary['step15_claim_boundary'])}",
         f"workstream4 rollout: {workstream4_rollout['status']}",
+        f"claim lane audit: {render_claim_lane_audit(claim_lane_audit)}",
         (
             "workstream4 parity set: "
             f"{render_workstream4_set(workstream4_rollout['parity_set'])}"
@@ -1387,6 +1791,15 @@ def render_workstream4_set(rollout_set: dict[str, Any]) -> str:
         return f"ready ({', '.join(rollout_set['ready_lanes'])})"
 
     return f"attention ({', '.join(rollout_set['attention_lanes'])})"
+
+
+def render_claim_lane_audit(claim_lane_audit: dict[str, Any]) -> str:
+    status = claim_lane_audit["status"]
+    if status == "not_present":
+        return "not present"
+    if status == "ready":
+        return f"ready ({', '.join(claim_lane_audit['ready_lanes'])})"
+    return f"attention ({', '.join(claim_lane_audit['attention_lanes'])})"
 
 
 def render_lane_summary(lane: dict[str, Any]) -> list[str]:
@@ -1479,6 +1892,36 @@ def render_lane_summary(lane: dict[str, Any]) -> list[str]:
             "  narrative artifacts: "
             f"{render_narrative_artifacts(lane['narrative_artifacts'])}"
         )
+    claim_audit = lane.get("claim_lane_audit") or {}
+    if claim_audit.get("status") != "not_applicable":
+        policy = claim_audit["search_policy"]
+        fallback = claim_audit["fallback_honesty"]
+        lines.append(
+            "  claim audit: "
+            f"{claim_audit['status']} ({render_reason_list(claim_audit['reasons'])})"
+        )
+        lines.append(
+            "  search policy: "
+            f"{policy['status']} guidance_style={policy['actual']['guidance_style']} "
+            f"late_expansion_policy={policy['actual']['late_expansion_policy']} "
+            f"bucket_policy={policy['actual']['bucket_policy']}"
+        )
+        lines.append(
+            "  exact-screen reasons: "
+            f"{claim_audit['exact_screen_reasons']['status']} "
+            f"{render_exact_screen_totals(claim_audit['exact_screen_reasons']['totals'])}"
+        )
+        lines.append(
+            "  prune class coverage: "
+            f"{claim_audit['prune_classes']['status']} "
+            f"{render_prune_totals(claim_audit['prune_classes']['totals'])}"
+        )
+        lines.append(
+            "  fallback honesty: "
+            f"{fallback['status']} run_mode={fallback['run_mode']} "
+            f"resume_steps={render_step_list_or_none(fallback['resume_steps'])} "
+            f"reference_replay_steps={render_step_list_or_none(fallback['reference_replay_steps'])}"
+        )
     return lines
 
 
@@ -1521,6 +1964,12 @@ def render_prune_totals(prune_totals: dict[str, int]) -> str:
     return ", ".join(f"{key}={prune_totals.get(key, 0)}" for key in PRUNE_KEYS)
 
 
+def render_exact_screen_totals(exact_screen_totals: dict[str, int]) -> str:
+    return ", ".join(
+        f"{key}={exact_screen_totals.get(key, 0)}" for key in EXACT_SCREEN_REASON_KEYS
+    )
+
+
 def render_latest_frontier(frontier: dict[str, Any]) -> str:
     if not frontier.get("present"):
         return "not present"
@@ -1560,6 +2009,18 @@ def render_narrative_artifacts(narrative_artifacts: dict[str, Any]) -> str:
 
 def render_step_list(steps: list[int]) -> str:
     return ", ".join(f"step {step}" for step in steps)
+
+
+def render_step_list_or_none(steps: list[int]) -> str:
+    if not steps:
+        return "none"
+    return render_step_list(steps)
+
+
+def render_reason_list(reasons: list[str]) -> str:
+    if not reasons:
+        return "none"
+    return ", ".join(reasons)
 
 
 def compact_sequence(items: list[dict[str, Any]]) -> list[dict[str, Any]]:

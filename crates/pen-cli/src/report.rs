@@ -2385,7 +2385,7 @@ fn render_optional_count(value: Option<u64>) -> String {
         .unwrap_or_else(|| "none".to_owned())
 }
 
-fn stored_exact_screen_reasons(step: &StepReport) -> ExactScreenReasonStats {
+pub(crate) fn stored_exact_screen_reasons(step: &StepReport) -> ExactScreenReasonStats {
     if !step.search_stats.exact_screen_reasons.is_empty() {
         return step.search_stats.exact_screen_reasons.clone();
     }

@@ -49,6 +49,8 @@ comparison-backed rather than default.
 - `scripts/compare_runs.py` compares stored guarded, realistic, rerun, resume,
   pressure, and reference lanes and emits deterministic text and JSON summaries
   including the current Workstream 4 parity and pressure rollout view
+- `scripts/certify_claim_lane.py` audits a stored `desktop_claim_shadow` run
+  against a guarded baseline and emits a claim-certificate summary plus JSON
 
 ## Prerequisites
 
@@ -57,7 +59,8 @@ Rust toolchain.
 
 - Install Rust and Cargo: [https://rustup.rs](https://rustup.rs)
 - Open a shell in the repository root
-- Optional: install Python 3 if you want to use `scripts/compare_runs.py`
+- Optional: install Python 3 if you want to use `scripts/compare_runs.py` or
+  `scripts/certify_claim_lane.py`
 - Optional: install Agda if you want `pen-cli export-agda --verify` to invoke
   the external `agda` executable
 
@@ -255,6 +258,22 @@ python scripts/compare_runs.py --baseline guarded --lane guarded=runs/guarded --
 
 For demo lanes, the compare output now also calls out missing
 `step-XX-narrative.txt` and `step-XX-events.ndjson` artifacts explicitly.
+
+For claim lanes, the compare output now also includes a claim-lane audit that
+checks claim-policy honesty, exact-screen reason coverage, prune-class
+coverage, fallback evidence, and whether the stored run reaches the step-15
+claim signoff surface.
+
+To audit a stored claim run directly against a guarded baseline and emit a
+certificate:
+
+```powershell
+python scripts/certify_claim_lane.py --guarded-run runs/guarded --claim-run runs/claim --runtime-threshold-ms 600000 --json-out runs/claim/claim_certificate.json --text-out runs/claim/claim_certificate.txt
+```
+
+The current smoke claim config is expected to fail that certification honestly
+until the repo has a full step-15 claim bundle, breadth floors, and the
+remaining manifest provenance fields.
 
 For the full Workstream 4 rollout matrix, also compare:
 

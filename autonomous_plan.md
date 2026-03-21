@@ -10,9 +10,10 @@ lane that can support a certified desktop appendix.
 
 Until the certification gate passes, keep the paper wording in the safer
 `bounded live recovery` form. The remaining problem is no longer profile
-plumbing or admissibility naming. The remaining problem is that the claim lane
-still inherits realistic late expansion, semantic-family scheduling, and
-incomplete certification evidence after the admissibility step.
+plumbing, admissibility naming, or bucket-family coupling. The remaining
+problem is that the claim lane still lacks the stored breadth, parity, and
+provenance evidence needed for a passing certification bundle after the
+claim-specific admissibility, late-surface, and scheduler split.
 
 ## Current Baseline
 
@@ -26,15 +27,21 @@ What is already true and should now be treated as baseline, not as open work:
   - `guidance_style = claim_debt_guided`
   - `late_expansion_policy = claim_generic`
   - `bucket_policy = structural_generic`
+- `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
+  reason coverage, prune-class coverage, narrative artifacts, fallback
+  evidence, and whether the stored run reaches the step-15 claim signoff
+  surface
+- `scripts/certify_claim_lane.py` now exists and emits a stored
+  pass-or-fail claim certificate from persisted artifacts
 
 What this means operationally:
 
 - the admissibility split is no longer the bottleneck
 - claim mode no longer routes through inherited realistic late-family surfaces
 - the scheduler/bucket coupling is now removed on the claim path
-- the next meaningful work is to broaden the later claim-generic bands,
-  recheck exact prefix completion under the new claim scheduler surface, and
-  then bind the paper sentence to stored evidence
+- the next meaningful work is to feed a full stored step-15 claim bundle
+  through the new compare/certification surface and then close the remaining
+  breadth and provenance failures that the certificate reports
 
 ## What Still Blocks The Stronger Claim
 
@@ -45,8 +52,11 @@ What this means operationally:
   structural-generic bucket surface
 - breadth widening and within-step retuning are not yet claim-specific enough
   to support an autonomy claim
-- manifest, benchmark, compare, and certification surfaces are not yet strong
-  enough to bind the paper sentence to stored evidence
+- the certification surface now exists, but it still fails honestly on missing
+  breadth gates, missing step-15 signoff evidence, and incomplete manifest
+  provenance/build fingerprints
+- benchmark and appendix-ready manifest surfaces are still not strong enough to
+  bind the paper sentence to stored evidence
 
 ## Success Condition
 
@@ -268,9 +278,11 @@ Done when:
 
 ## Immediate Next Step
 
-Implement the remaining late-surface and evidence follow-up directly:
+Drive the new evidence surface against a real claim bundle:
 
-1. turn the widened later-band surface into stored breadth/floor evidence on
-   the structural-generic claim lane
-2. recheck stored parity and fallback honesty on that widened claim lane
-3. then earn the certification bundle on the updated claim lane
+1. produce and store a full step-15 `desktop_claim_shadow` run, compare it
+   against the guarded baseline, and run `scripts/certify_claim_lane.py`
+2. extend `run.json` provenance/build fingerprints until certification no
+   longer fails on manifest completeness
+3. then close the remaining breadth/floor misses and freeze the benchmark and
+   runtime threshold on the updated claim lane

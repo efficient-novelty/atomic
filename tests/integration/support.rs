@@ -75,23 +75,15 @@ where
     I: IntoIterator<Item = S>,
     S: AsRef<OsStr>,
 {
-    let script = workspace_root().join("scripts").join("compare_runs.py");
-    let args = args
-        .into_iter()
-        .map(|arg| arg.as_ref().to_os_string())
-        .collect::<Vec<OsString>>();
+    run_python_script("compare_runs.py", args)
+}
 
-    for (program, prefix) in python_invocations() {
-        let mut command = Command::new(program);
-        command.args(prefix).arg(&script).args(&args);
-        match command.output() {
-            Ok(output) => return output,
-            Err(error) if error.kind() == ErrorKind::NotFound => continue,
-            Err(error) => panic!("failed to run {}: {error}", script.display()),
-        }
-    }
-
-    panic!("no Python interpreter found for {}", script.display());
+pub fn run_claim_certify<I, S>(args: I) -> Output
+where
+    I: IntoIterator<Item = S>,
+    S: AsRef<OsStr>,
+{
+    run_python_script("certify_claim_lane.py", args)
 }
 
 pub fn assert_success(output: Output) -> String {
@@ -279,6 +271,30 @@ fn pressure_config() -> String {
             "checkpoint_buffers_gib = 0.0000001",
         )
         .replace("worker_arena_mib = 32", "worker_arena_mib = 0")
+}
+
+fn run_python_script<I, S>(script_name: &str, args: I) -> Output
+where
+    I: IntoIterator<Item = S>,
+    S: AsRef<OsStr>,
+{
+    let script = workspace_root().join("scripts").join(script_name);
+    let args = args
+        .into_iter()
+        .map(|arg| arg.as_ref().to_os_string())
+        .collect::<Vec<OsString>>();
+
+    for (program, prefix) in python_invocations() {
+        let mut command = Command::new(program);
+        command.args(prefix).arg(&script).args(&args);
+        match command.output() {
+            Ok(output) => return output,
+            Err(error) if error.kind() == ErrorKind::NotFound => continue,
+            Err(error) => panic!("failed to run {}: {error}", script.display()),
+        }
+    }
+
+    panic!("no Python interpreter found for {}", script.display());
 }
 
 fn python_invocations() -> Vec<(&'static str, Vec<&'static str>)> {

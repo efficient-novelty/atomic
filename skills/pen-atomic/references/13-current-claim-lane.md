@@ -19,6 +19,12 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - `guidance_style = claim_debt_guided`
   - `late_expansion_policy = claim_generic`
   - `bucket_policy = structural_generic`
+- `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
+  reason coverage, prune-class coverage, narrative artifacts, and whether the
+  stored run reaches the step-15 claim signoff surface.
+- `scripts/certify_claim_lane.py` now emits a stored pass/fail certificate from
+  claim artifacts and currently fails honestly on missing breadth, missing
+  step-15 parity evidence, and incomplete manifest provenance.
 
 ## Current Operational Blockers
 
@@ -27,15 +33,16 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - claim-path parity still needs stored signoff evidence even though direct
   exact prefix-completion behavior is now rechecked by tests under the new
   structural-generic scheduler surface
-- provenance, benchmark, compare, and certification surfaces are still not
-  strong enough for the stronger paper sentence
+- manifest provenance/build fingerprints and benchmark evidence are still too
+  weak for a passing claim certificate
 
 ## Immediate Next Slice
 
-1. Turn the widened late surface into stored breadth/floor evidence on the
-   claim lane itself.
-2. Recheck stored parity and fallback honesty on the widened claim lane.
-3. Then harden the certification-facing evidence bundle.
+1. Produce a stored step-15 claim bundle and run the compare/certification
+   scripts against it.
+2. Fill the missing manifest provenance/build fields that certification now
+   reports.
+3. Then close the remaining breadth/floor misses on the live claim lane.
 
 ## First Reads
 

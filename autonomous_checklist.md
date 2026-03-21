@@ -178,7 +178,7 @@ Done when:
       actual claim policies used.
 - [ ] Ensure claim artifacts make any guarded, replay, realistic-shadow, or
       demo-only fallback impossible to miss.
-- [ ] Update `scripts/compare_runs.py` so claim runs are checked for exact
+- [x] Update `scripts/compare_runs.py` so claim runs are checked for exact
       reason completeness and policy honesty, not just parity.
 
 Done when:
@@ -217,21 +217,21 @@ Done when:
 
 ## 8. Certification Gate
 
-- [ ] Add `scripts/certify_claim_lane.py`.
-- [ ] Check accepted hashes match guarded through step `15`.
-- [ ] Check `guidance_style == claim_debt_guided`.
-- [ ] Check `late_expansion_policy == claim_generic`.
-- [ ] Check `bucket_policy == structural_generic`.
+- [x] Add `scripts/certify_claim_lane.py`.
+- [x] Check accepted hashes match guarded through step `15`.
+- [x] Check `guidance_style == claim_debt_guided`.
+- [x] Check `late_expansion_policy == claim_generic`.
+- [x] Check `bucket_policy == structural_generic`.
 - [ ] Check the claim path used no silent guarded, replay, realistic-shadow, or
       demo-only fallback.
-- [ ] Check early breadth gates from stored evidence.
-- [ ] Check late generated floors from stored evidence.
-- [ ] Check the certified runtime threshold.
-- [ ] Check exact-screen reason completeness.
-- [ ] Check prune-class completeness.
-- [ ] Check manifest completeness.
-- [ ] Emit `claim_certificate.json`.
-- [ ] Emit a compact human-readable certification summary.
+- [x] Check early breadth gates from stored evidence.
+- [x] Check late generated floors from stored evidence.
+- [x] Check the certified runtime threshold.
+- [x] Check exact-screen reason completeness.
+- [x] Check prune-class completeness.
+- [x] Check manifest completeness.
+- [x] Emit `claim_certificate.json`.
+- [x] Emit a compact human-readable certification summary.
 - [ ] Pass the certification gate on the intended claim-lane evidence bundle.
 
 Done when:

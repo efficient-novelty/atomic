@@ -5,7 +5,7 @@ use crate::progress::TerminalStepProgress;
 use crate::report::{
     GeneratedSteps, StepProgressObserver, StepReport, annotate_search_profile,
     generate_steps_with_config_and_runtime_and_progress, stored_prune_class_stats,
-    write_step_reports,
+    stored_exact_screen_reasons, write_step_reports,
 };
 use anyhow::{Context, Result, bail};
 use pen_core::hash::blake3_hex;
@@ -373,6 +373,7 @@ fn write_telemetry(
             }).count(),
         });
         let prune_class_totals = stored_prune_class_stats(step);
+        let exact_screen_reason_totals = stored_exact_screen_reasons(step);
         lines.push(serde_json::to_string(&TelemetryEventV1 {
             schema_version: SCHEMA_VERSION_V1,
             run_id: manifest.run_id.clone(),
@@ -393,6 +394,12 @@ fn write_telemetry(
                     "quotient_dedupe": prune_class_totals.quotient_dedupe,
                     "sound_minimality": prune_class_totals.sound_minimality,
                     "heuristic_shaping": prune_class_totals.heuristic_shaping,
+                },
+                "exact_screen_reasons": {
+                    "partial_prefix_bar_failure": exact_screen_reason_totals.partial_prefix_bar_failure,
+                    "terminal_prefix_completion_failure": exact_screen_reason_totals.terminal_prefix_completion_failure,
+                    "incumbent_dominance": exact_screen_reason_totals.incumbent_dominance,
+                    "legality_connectivity_exact_rejection": exact_screen_reason_totals.legality_connectivity_exact_rejection,
                 },
                 "prune_samples": prune_sample_counts,
                 "frontier_pressure": {
@@ -994,6 +1001,8 @@ mod tests {
         assert!(telemetry.contains("\"search_profile\":\"desktop_claim_shadow\""));
         assert!(telemetry.contains("\"guidance_style\":\"claim_debt_guided\""));
         assert!(telemetry.contains("\"late_expansion_policy\":\"claim_generic\""));
+        assert!(telemetry.contains("\"bucket_policy\":\"structural_generic\""));
+        assert!(telemetry.contains("\"exact_screen_reasons\""));
 
         let steps_dir = run_dir.join("reports").join("steps");
         assert!(steps_dir.join("step-03-narrative.txt").exists());
