@@ -10,22 +10,42 @@ use pen_search::narrative::{NarrativeEvent, NarrativeEventKind, NarrativeProgres
 use std::fs;
 use std::path::Path;
 
-pub fn write_demo_step_artifacts(
+#[derive(Clone, Copy, Debug)]
+pub struct NarrativeOutputConfig<'a> {
+    pub demo: &'a DemoConfig,
+    pub search_profile: SearchProfile,
+}
+
+impl<'a> NarrativeOutputConfig<'a> {
+    pub fn from_runtime(config: &'a RuntimeConfig) -> Self {
+        Self {
+            demo: &config.demo,
+            search_profile: config.mode.search_profile,
+        }
+    }
+
+    pub const fn lane_label(self) -> &'static str {
+        self.search_profile.narrative_label()
+    }
+}
+
+pub fn write_step_narrative_artifacts(
     run_dir: &Path,
     steps: &[StepReport],
     config: &RuntimeConfig,
 ) -> Result<()> {
-    if config.mode.search_profile != SearchProfile::DemoBreadthShadow || !config.demo.enabled {
+    if !config.mode.search_profile.supports_narrative_artifacts() || !config.demo.enabled {
         return Ok(());
     }
 
+    let narrative = NarrativeOutputConfig::from_runtime(config);
     let steps_dir = run_dir.join("reports").join("steps");
     fs::create_dir_all(&steps_dir)?;
 
     for step in steps {
         fs::write(
             steps_dir.join(step_narrative_file_name(step.step_index)),
-            format!("{}\n", render_step_narrative(step, &config.demo)),
+            format!("{}\n", render_step_narrative(step, narrative)),
         )?;
 
         let events_path = steps_dir.join(step_events_file_name(step.step_index));
@@ -44,7 +64,8 @@ pub fn write_demo_step_artifacts(
     Ok(())
 }
 
-pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
+pub fn render_step_narrative(step: &StepReport, narrative: NarrativeOutputConfig<'_>) -> String {
+    let demo = narrative.demo;
     let events = step_events(step);
     let progress = events
         .last()
@@ -70,7 +91,11 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
         .or_else(|| full_eval_soft_cap(step.step_index, demo));
 
     let mut lines = vec![
-        format!("step {:02} demo narrative", step.step_index),
+        format!(
+            "step {:02} {} narrative",
+            step.step_index,
+            narrative.lane_label()
+        ),
         format!("label        {}", step.label),
         format!("profile      {}", demo.profile),
         format!(
@@ -282,13 +307,17 @@ pub fn render_step_narrative(step: &StepReport, demo: &DemoConfig) -> String {
     apply_step_line_budget(lines, sections, demo).join("\n")
 }
 
-pub fn render_run_narrative(steps: &[StepReport], demo: &DemoConfig) -> String {
+pub fn render_run_narrative(steps: &[StepReport], narrative: NarrativeOutputConfig<'_>) -> String {
     if steps.is_empty() {
-        return "demo narrative\n  none".to_owned();
+        return format!("{} narrative\n  none", narrative.lane_label());
     }
 
-    let mut sections = vec!["demo narrative".to_owned()];
-    sections.extend(steps.iter().map(|step| render_step_narrative(step, demo)));
+    let mut sections = vec![format!("{} narrative", narrative.lane_label())];
+    sections.extend(
+        steps
+            .iter()
+            .map(|step| render_step_narrative(step, narrative)),
+    );
     sections.join("\n\n")
 }
 
@@ -737,7 +766,7 @@ fn prune_class_label(prune_class: PruneReportClass) -> &'static str {
 
 #[cfg(test)]
 mod tests {
-    use super::{render_step_narrative, write_demo_step_artifacts};
+    use super::{NarrativeOutputConfig, render_step_narrative, write_step_narrative_artifacts};
     use crate::report::generate_steps_with_config_and_runtime;
     use pen_search::config::RuntimeConfig;
     use pen_search::diversify::FrontierRuntimeLimits;
@@ -765,7 +794,10 @@ mod tests {
             generate_steps_with_config_and_runtime(3, &config, FrontierRuntimeLimits::unlimited())
                 .expect("demo steps should build")
                 .steps;
-        let text = render_step_narrative(steps.last().expect("step should exist"), &config.demo);
+        let text = render_step_narrative(
+            steps.last().expect("step should exist"),
+            NarrativeOutputConfig::from_runtime(&config),
+        );
 
         assert!(text.contains("events"));
         assert!(text.contains("closure"));
@@ -792,7 +824,7 @@ mod tests {
                 .steps;
         let run_dir = temp_dir("demo-narrative");
 
-        write_demo_step_artifacts(&run_dir, &steps, &config)
+        write_step_narrative_artifacts(&run_dir, &steps, &config)
             .expect("demo artifacts should persist");
 
         assert!(
@@ -840,7 +872,7 @@ mod tests {
         }
         step.trace = (0..40).map(|index| format!("trace line {index}")).collect();
 
-        let text = render_step_narrative(&step, &config.demo);
+        let text = render_step_narrative(&step, NarrativeOutputConfig::from_runtime(&config));
 
         assert!(
             text.lines().count() <= usize::from(config.demo.narrative.max_lines_per_step),
@@ -866,12 +898,32 @@ mod tests {
         step.search_stats.exact_screen_reasons =
             pen_search::engine::ExactScreenReasonStats::default();
 
-        let text = render_step_narrative(&step, &config.demo);
+        let text = render_step_narrative(&step, NarrativeOutputConfig::from_runtime(&config));
 
         assert!(text.contains("exact_reasons"));
         assert!(text.contains("partial_prefix_bar="));
         assert!(text.contains("incumbent_dominance="));
         assert!(text.contains("prune_totals"));
         assert!(text.contains("sound_minimality="));
+    }
+
+    #[test]
+    fn claim_narrative_uses_claim_headline() {
+        let config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/desktop_claim_shadow_smoke.toml"
+        ))
+        .expect("claim config should parse");
+        let steps =
+            generate_steps_with_config_and_runtime(2, &config, FrontierRuntimeLimits::unlimited())
+                .expect("claim steps should build")
+                .steps;
+
+        let text = render_step_narrative(
+            steps.last().expect("step should exist"),
+            NarrativeOutputConfig::from_runtime(&config),
+        );
+
+        assert!(text.contains("claim narrative"));
+        assert!(!text.contains("demo narrative"));
     }
 }

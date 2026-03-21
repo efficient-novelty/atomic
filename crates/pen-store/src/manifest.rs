@@ -16,6 +16,8 @@ pub struct RunManifestV1 {
     pub compat: RunCompat,
     pub host: HostInfo,
     pub config: ConfigFingerprint,
+    #[serde(default)]
+    pub search_policy: SearchPolicyInfo,
     pub position: RunPosition,
     pub artifacts: RunArtifacts,
 }
@@ -32,6 +34,7 @@ impl Default for RunManifestV1 {
             compat: RunCompat::default(),
             host: HostInfo::default(),
             config: ConfigFingerprint::default(),
+            search_policy: SearchPolicyInfo::default(),
             position: RunPosition::default(),
             artifacts: RunArtifacts::default(),
         }
@@ -145,6 +148,13 @@ pub struct HostInfo {
 pub struct ConfigFingerprint {
     pub path: String,
     pub sha256: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
+pub struct SearchPolicyInfo {
+    pub guidance_style: String,
+    pub late_expansion_policy: String,
+    pub bucket_policy: String,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
@@ -300,7 +310,7 @@ mod tests {
         AcceptedCandidate, BitBand, CheckpointCompat, ConfigFingerprint, FrontierCounts,
         FrontierFiles, FrontierManifestV1, FrontierScheduler, HostInfo, MemorySnapshot, NearMiss,
         ResumeCompatible, RunArtifacts, RunCompat, RunManifestV1, RunPosition, RunStatus,
-        StepCheckpointV1, StepObjective, StepStats,
+        SearchPolicyInfo, StepCheckpointV1, StepObjective, StepStats,
     };
     use crate::layout::{FRONTIER_RECORD_LAYOUT_ID, SCHEMA_VERSION_V1};
     use pen_core::library::{LibrarySnapshot, LibrarySnapshotEntry};
@@ -333,6 +343,11 @@ mod tests {
                 path: "config.toml".to_owned(),
                 sha256: "sha".to_owned(),
             },
+            search_policy: SearchPolicyInfo {
+                guidance_style: "legacy_family_guided".to_owned(),
+                late_expansion_policy: "realistic_shadow".to_owned(),
+                bucket_policy: "semantic_family_runtime_local".to_owned(),
+            },
             position: RunPosition {
                 completed_step: 9,
                 active_step: 10,
@@ -349,6 +364,7 @@ mod tests {
         let json = serde_json::to_string_pretty(&manifest).expect("serialize run manifest");
         assert!(json.contains("\"schema_version\": 1"));
         assert!(json.contains("\"store_schema_hash\": \"blake3:store\""));
+        assert!(json.contains("\"guidance_style\": \"legacy_family_guided\""));
 
         let round_trip: RunManifestV1 =
             serde_json::from_str(&json).expect("deserialize run manifest");

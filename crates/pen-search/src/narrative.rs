@@ -340,6 +340,7 @@ fn admissibility_mode_label(step: &AtomicSearchStep) -> &'static str {
         pen_type::admissibility::AdmissibilityMode::RelaxedShadow => "relaxed_shadow",
         pen_type::admissibility::AdmissibilityMode::RealisticShadow => "realistic_shadow",
         pen_type::admissibility::AdmissibilityMode::DemoBreadthShadow => "demo_breadth_shadow",
+        pen_type::admissibility::AdmissibilityMode::DesktopClaimShadow => "desktop_claim_shadow",
     }
 }
 

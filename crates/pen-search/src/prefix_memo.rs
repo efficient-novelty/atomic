@@ -231,6 +231,9 @@ fn late_family_surface_for_admissibility(admissibility: StrictAdmissibility) -> 
         pen_type::admissibility::AdmissibilityMode::DemoBreadthShadow => {
             LateFamilySurface::DemoBreadthShadow
         }
+        pen_type::admissibility::AdmissibilityMode::DesktopClaimShadow => {
+            LateFamilySurface::RealisticShadow
+        }
     }
 }
 

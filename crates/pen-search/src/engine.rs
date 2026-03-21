@@ -515,6 +515,11 @@ pub struct AtomicSearchStep {
     pub minimality_pruned_candidates: Vec<MinimalityPruneEvidence>,
 }
 
+pub trait AtomicSearchProgressObserver {
+    fn on_step_started(&mut self, step_index: u32);
+    fn on_step_completed(&mut self, step: &AtomicSearchStep);
+}
+
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 struct PrefixFrontierPlan {
     frontier: FrontierWindow,
@@ -1777,6 +1782,7 @@ fn admissibility_mode_name(mode: AdmissibilityMode) -> &'static str {
         AdmissibilityMode::RelaxedShadow => "relaxed_shadow",
         AdmissibilityMode::RealisticShadow => "realistic_shadow",
         AdmissibilityMode::DemoBreadthShadow => "demo_breadth_shadow",
+        AdmissibilityMode::DesktopClaimShadow => "desktop_claim_shadow",
     }
 }
 
@@ -2229,6 +2235,22 @@ pub fn search_bootstrap_prefix_for_profile_with_runtime(
     search_profile: SearchProfile,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<Vec<AtomicSearchStep>> {
+    search_bootstrap_prefix_for_profile_with_runtime_and_observer(
+        until_step,
+        window_depth,
+        search_profile,
+        retention_runtime,
+        None,
+    )
+}
+
+pub fn search_bootstrap_prefix_for_profile_with_runtime_and_observer(
+    until_step: u32,
+    window_depth: u16,
+    search_profile: SearchProfile,
+    retention_runtime: FrontierRuntimeLimits,
+    progress_observer: Option<&mut dyn AtomicSearchProgressObserver>,
+) -> Result<Vec<AtomicSearchStep>> {
     search_bootstrap_from_prefix_internal(
         &[],
         until_step,
@@ -2236,6 +2258,7 @@ pub fn search_bootstrap_prefix_for_profile_with_runtime(
         search_profile,
         retention_runtime,
         None,
+        progress_observer,
     )
 }
 
@@ -2245,13 +2268,14 @@ pub fn search_bootstrap_prefix_for_config_with_runtime(
     config: &RuntimeConfig,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<Vec<AtomicSearchStep>> {
-    search_bootstrap_from_prefix_for_config_with_runtime_and_seed(
+    search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observer(
         &[],
         until_step,
         window_depth,
         config,
         retention_runtime,
         DemoBudgetSeed::default(),
+        None,
     )
 }
 
@@ -2290,6 +2314,24 @@ pub fn search_bootstrap_from_prefix_for_profile_with_runtime(
     search_profile: SearchProfile,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<Vec<AtomicSearchStep>> {
+    search_bootstrap_from_prefix_for_profile_with_runtime_and_observer(
+        accepted_prefix,
+        until_step,
+        window_depth,
+        search_profile,
+        retention_runtime,
+        None,
+    )
+}
+
+pub fn search_bootstrap_from_prefix_for_profile_with_runtime_and_observer(
+    accepted_prefix: &[Telescope],
+    until_step: u32,
+    window_depth: u16,
+    search_profile: SearchProfile,
+    retention_runtime: FrontierRuntimeLimits,
+    progress_observer: Option<&mut dyn AtomicSearchProgressObserver>,
+) -> Result<Vec<AtomicSearchStep>> {
     search_bootstrap_from_prefix_internal(
         accepted_prefix,
         until_step,
@@ -2297,6 +2339,7 @@ pub fn search_bootstrap_from_prefix_for_profile_with_runtime(
         search_profile,
         retention_runtime,
         None,
+        progress_observer,
     )
 }
 
@@ -2308,6 +2351,26 @@ pub fn search_bootstrap_from_prefix_for_config_with_runtime_and_seed(
     retention_runtime: FrontierRuntimeLimits,
     demo_budget_seed: DemoBudgetSeed,
 ) -> Result<Vec<AtomicSearchStep>> {
+    search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observer(
+        accepted_prefix,
+        until_step,
+        window_depth,
+        config,
+        retention_runtime,
+        demo_budget_seed,
+        None,
+    )
+}
+
+pub fn search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observer(
+    accepted_prefix: &[Telescope],
+    until_step: u32,
+    window_depth: u16,
+    config: &RuntimeConfig,
+    retention_runtime: FrontierRuntimeLimits,
+    demo_budget_seed: DemoBudgetSeed,
+    progress_observer: Option<&mut dyn AtomicSearchProgressObserver>,
+) -> Result<Vec<AtomicSearchStep>> {
     search_bootstrap_from_prefix_internal(
         accepted_prefix,
         until_step,
@@ -2315,6 +2378,7 @@ pub fn search_bootstrap_from_prefix_for_config_with_runtime_and_seed(
         config.mode.search_profile,
         retention_runtime,
         DemoBudgetController::maybe_new(config, until_step, demo_budget_seed)?,
+        progress_observer,
     )
 }
 
@@ -2325,6 +2389,7 @@ fn search_bootstrap_from_prefix_internal(
     search_profile: SearchProfile,
     retention_runtime: FrontierRuntimeLimits,
     mut demo_budget_controller: Option<DemoBudgetController>,
+    mut progress_observer: Option<&mut dyn AtomicSearchProgressObserver>,
 ) -> Result<Vec<AtomicSearchStep>> {
     let mut library: Library = Vec::new();
     let mut history: Vec<DiscoveryRecord> = Vec::new();
@@ -2344,6 +2409,9 @@ fn search_bootstrap_from_prefix_internal(
 
     let start_step = u32::try_from(accepted_prefix.len()).expect("prefix length exceeded u32") + 1;
     for step_index in start_step..=until_step.min(LIVE_BOOTSTRAP_MAX_STEP) {
+        if let Some(observer) = progress_observer.as_deref_mut() {
+            observer.on_step_started(step_index);
+        }
         let demo_step_budget = demo_budget_controller
             .as_ref()
             .map(|controller| controller.plan_step(step_index));
@@ -2358,6 +2426,9 @@ fn search_bootstrap_from_prefix_internal(
         )?;
         if let Some(controller) = demo_budget_controller.as_mut() {
             controller.record_step_outcome(&outcome);
+        }
+        if let Some(observer) = progress_observer.as_deref_mut() {
+            observer.on_step_completed(&outcome);
         }
         history.push(DiscoveryRecord::new(
             step_index,
@@ -2442,7 +2513,9 @@ fn search_next_step(
 
     if matches!(
         admissibility_mode,
-        AdmissibilityMode::RealisticShadow | AdmissibilityMode::DemoBreadthShadow
+        AdmissibilityMode::RealisticShadow
+            | AdmissibilityMode::DemoBreadthShadow
+            | AdmissibilityMode::DesktopClaimShadow
     ) {
         let discovery = discover_realistic_shadow_candidates(
             step_index,
@@ -2590,7 +2663,9 @@ fn search_next_step(
     let prefix_frontier_planning_start = Instant::now();
     let prefix_frontier = if matches!(
         admissibility_mode,
-        AdmissibilityMode::RealisticShadow | AdmissibilityMode::DemoBreadthShadow
+        AdmissibilityMode::RealisticShadow
+            | AdmissibilityMode::DemoBreadthShadow
+            | AdmissibilityMode::DesktopClaimShadow
     ) {
         build_prefix_frontier_plan(
             prefix_states_explored,
@@ -2652,7 +2727,9 @@ fn search_next_step(
     let mut demo_proof_close_closed_groups = 0usize;
     if matches!(
         admissibility_mode,
-        AdmissibilityMode::RealisticShadow | AdmissibilityMode::DemoBreadthShadow
+        AdmissibilityMode::RealisticShadow
+            | AdmissibilityMode::DemoBreadthShadow
+            | AdmissibilityMode::DesktopClaimShadow
     ) {
         let mut incumbent_terminal_rank = None;
         let mut pending_group_signatures = prefix_frontier.retained_prefix_signatures.clone();
@@ -3103,7 +3180,9 @@ fn search_next_step(
         retention_policy,
         if matches!(
             admissibility_mode,
-            AdmissibilityMode::RealisticShadow | AdmissibilityMode::DemoBreadthShadow
+            AdmissibilityMode::RealisticShadow
+                | AdmissibilityMode::DemoBreadthShadow
+                | AdmissibilityMode::DesktopClaimShadow
         ) {
             prefix_frontier.pressure
         } else {
@@ -3402,6 +3481,7 @@ fn admissibility_mode_for_profile(search_profile: SearchProfile) -> Admissibilit
     match search_profile {
         SearchProfile::StrictCanonGuarded | SearchProfile::Unknown => AdmissibilityMode::Guarded,
         SearchProfile::RelaxedShadow => AdmissibilityMode::RelaxedShadow,
+        SearchProfile::DesktopClaimShadow => AdmissibilityMode::DesktopClaimShadow,
         SearchProfile::RealisticFrontierShadow | SearchProfile::DemoBreadthShadow => {
             AdmissibilityMode::RealisticShadow
         }
@@ -3899,7 +3979,9 @@ fn step_one_demo_raw_catalog(
     (
         vec![18, 120],
         raw_telescopes,
-        Some(format!("excluded_exact_clause_echoes={exact_clause_echoes}")),
+        Some(format!(
+            "excluded_exact_clause_echoes={exact_clause_echoes}"
+        )),
     )
 }
 
@@ -3918,17 +4000,16 @@ fn discover_demo_early_exhaustive_candidates(
     'clause_band: for clause_kappa in
         admissibility.min_clause_kappa..=admissibility.max_clause_kappa
     {
-        let (raw_clause_widths, raw_telescopes, raw_catalog_note) = if step_index == 1
-            && clause_kappa == 2
-        {
-            step_one_demo_raw_catalog(library, enumeration_context)
-        } else {
-            (
-                raw_clause_catalog_widths(enumeration_context, clause_kappa),
-                enumerate_raw_telescopes(enumeration_context, clause_kappa),
-                None,
-            )
-        };
+        let (raw_clause_widths, raw_telescopes, raw_catalog_note) =
+            if step_index == 1 && clause_kappa == 2 {
+                step_one_demo_raw_catalog(library, enumeration_context)
+            } else {
+                (
+                    raw_clause_catalog_widths(enumeration_context, clause_kappa),
+                    enumerate_raw_telescopes(enumeration_context, clause_kappa),
+                    None,
+                )
+            };
         if let Some(observer) = demo_narrative.as_mut() {
             let raw_catalog_detail = match raw_catalog_note {
                 Some(note) => format!(
@@ -6796,6 +6877,14 @@ mod tests {
         assert_eq!(
             super::admissibility_mode_for_profile(SearchProfile::DemoBreadthShadow),
             AdmissibilityMode::RealisticShadow
+        );
+    }
+
+    #[test]
+    fn desktop_claim_shadow_has_a_distinct_admissibility_mode() {
+        assert_eq!(
+            super::admissibility_mode_for_profile(SearchProfile::DesktopClaimShadow),
+            AdmissibilityMode::DesktopClaimShadow
         );
     }
 

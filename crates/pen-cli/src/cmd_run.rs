@@ -1,15 +1,17 @@
 use crate::cli::RunArgs;
-use crate::narrative::write_demo_step_artifacts;
+use crate::narrative::{NarrativeOutputConfig, write_step_narrative_artifacts};
 use crate::output::{OutputStyle, render_run_output};
+use crate::progress::TerminalStepProgress;
 use crate::report::{
-    GeneratedSteps, StepReport, annotate_search_profile, generate_steps_with_config_and_runtime,
-    stored_prune_class_stats, write_step_reports,
+    GeneratedSteps, StepProgressObserver, StepReport, annotate_search_profile,
+    generate_steps_with_config_and_runtime_and_progress, stored_prune_class_stats,
+    write_step_reports,
 };
 use anyhow::{Context, Result, bail};
 use pen_core::hash::blake3_hex;
 use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{LibrarySnapshot, LibrarySnapshotEntry};
-use pen_search::config::RuntimeConfig;
+use pen_search::config::{RuntimeConfig, SearchProfile};
 use pen_search::diversify::FrontierRuntimeLimits;
 use pen_search::frontier::FrontierWindow;
 use pen_search::priority::{PriorityInputs, build_priority_key};
@@ -21,7 +23,7 @@ use pen_store::layout::{FRONTIER_RECORD_LAYOUT_ID, SCHEMA_VERSION_V1};
 use pen_store::manifest::{
     BitBand, CheckpointCompat, ConfigFingerprint, FrontierManifestV1, HostInfo, NearMiss,
     ResumeCompatible, RunArtifacts, RunCompat, RunManifestV1, RunPosition, RunStatus,
-    StepCheckpointV1, StepObjective, StepStats,
+    SearchPolicyInfo, StepCheckpointV1, StepObjective, StepStats,
 };
 use pen_store::memory::GovernorConfig;
 use pen_store::spill::{FrontierRuntimeInput, SpillConfig, persist_frontier_runtime};
@@ -48,15 +50,26 @@ pub fn run(args: RunArgs) -> Result<String> {
 
     let until_step = args.until_step.unwrap_or(config.search.until_step);
     let worker_count = resolved_worker_count(&config);
-    let GeneratedSteps { mode, mut steps } = generate_steps_with_config_and_runtime(
+    let mut progress = TerminalStepProgress::stderr(until_step);
+    let GeneratedSteps { mode, mut steps } = generate_steps_with_config_and_runtime_and_progress(
         until_step,
         &config,
         frontier_runtime_limits(&config, worker_count),
+        progress
+            .as_mut()
+            .map(|observer| observer as &mut dyn StepProgressObserver),
     )?;
     annotate_search_profile(&mut steps, config.mode.search_profile);
     let created_utc = now_utc()?;
     let updated_utc = created_utc.clone();
-    let manifest = build_run_manifest(&run_id, &config_text, &steps, created_utc, updated_utc);
+    let manifest = build_run_manifest(
+        &run_id,
+        &config_text,
+        &steps,
+        &config,
+        created_utc,
+        updated_utc,
+    );
 
     write_run_artifacts(
         &run_dir,
@@ -79,12 +92,10 @@ pub fn run(args: RunArgs) -> Result<String> {
 pub(crate) fn terminal_narrative_config<'a>(
     config: &'a RuntimeConfig,
     requested: bool,
-) -> Option<&'a pen_search::config::DemoConfig> {
-    if requested
-        && config.mode.search_profile == pen_search::config::SearchProfile::DemoBreadthShadow
-        && config.demo.enabled
+) -> Option<NarrativeOutputConfig<'a>> {
+    if requested && config.mode.search_profile.supports_narrative_artifacts() && config.demo.enabled
     {
-        Some(&config.demo)
+        Some(NarrativeOutputConfig::from_runtime(config))
     } else {
         None
     }
@@ -141,7 +152,7 @@ pub(crate) fn write_run_artifacts(
 
     write_json_file(&run_dir.join("run.json"), manifest)?;
     write_step_reports(run_dir, steps)?;
-    write_demo_step_artifacts(run_dir, steps, config)?;
+    write_step_narrative_artifacts(run_dir, steps, config)?;
     write_step_checkpoints(run_dir, manifest, steps, config.objective.window_depth)?;
     write_frontier_snapshots(run_dir, manifest, steps, worker_count, config, &metadata)?;
     write_telemetry(run_dir, manifest, steps, mode, search_profile)?;
@@ -162,6 +173,7 @@ pub(crate) fn build_run_manifest(
     run_id: &str,
     config_text: &str,
     steps: &[StepReport],
+    config: &RuntimeConfig,
     created_utc: String,
     updated_utc: String,
 ) -> RunManifestV1 {
@@ -189,6 +201,7 @@ pub(crate) fn build_run_manifest(
             path: "config.toml".to_owned(),
             sha256: sha256_hex(config_text.as_bytes()),
         },
+        search_policy: search_policy_info(config.mode.search_profile),
         position: RunPosition {
             completed_step,
             active_step: completed_step.saturating_add(1),
@@ -312,6 +325,11 @@ fn write_telemetry(
             "created_utc": manifest.created_utc,
             "mode": mode,
             "search_profile": search_profile,
+            "search_policy": {
+                "guidance_style": manifest.search_policy.guidance_style,
+                "late_expansion_policy": manifest.search_policy.late_expansion_policy,
+                "bucket_policy": manifest.search_policy.bucket_policy,
+            },
         }),
     })?);
 
@@ -422,6 +440,36 @@ fn write_json_file<T: serde::Serialize>(path: &Path, value: &T) -> Result<()> {
     let json = serde_json::to_string_pretty(value)?;
     fs::write(path, format!("{json}\n")).with_context(|| format!("write {}", path.display()))?;
     Ok(())
+}
+
+pub(crate) fn search_policy_info(search_profile: SearchProfile) -> SearchPolicyInfo {
+    match search_profile {
+        SearchProfile::Unknown | SearchProfile::StrictCanonGuarded => SearchPolicyInfo {
+            guidance_style: "legacy_family_guided".to_owned(),
+            late_expansion_policy: "guarded_exact".to_owned(),
+            bucket_policy: "guarded_structural".to_owned(),
+        },
+        SearchProfile::RelaxedShadow => SearchPolicyInfo {
+            guidance_style: "legacy_family_guided".to_owned(),
+            late_expansion_policy: "relaxed_shadow".to_owned(),
+            bucket_policy: "semantic_family_runtime_local".to_owned(),
+        },
+        SearchProfile::RealisticFrontierShadow => SearchPolicyInfo {
+            guidance_style: "legacy_family_guided".to_owned(),
+            late_expansion_policy: "realistic_shadow".to_owned(),
+            bucket_policy: "semantic_family_runtime_local".to_owned(),
+        },
+        SearchProfile::DemoBreadthShadow => SearchPolicyInfo {
+            guidance_style: "legacy_family_guided".to_owned(),
+            late_expansion_policy: "demo_breadth_shadow".to_owned(),
+            bucket_policy: "semantic_family_runtime_local".to_owned(),
+        },
+        SearchProfile::DesktopClaimShadow => SearchPolicyInfo {
+            guidance_style: "legacy_family_guided".to_owned(),
+            late_expansion_policy: "realistic_shadow_inherited".to_owned(),
+            bucket_policy: "semantic_family_runtime_local".to_owned(),
+        },
+    }
 }
 
 fn absolute_from_repo(path: &Path) -> Result<PathBuf> {
@@ -854,6 +902,7 @@ fn truncated_hash64(bytes: &[u8]) -> u64 {
 mod tests {
     use super::run;
     use crate::cli::RunArgs;
+    use pen_store::manifest::RunManifestV1;
     use std::fs;
     use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -909,6 +958,51 @@ mod tests {
         let run_dir = root.join("demo-test-run").join("reports").join("steps");
         assert!(run_dir.join("step-03-narrative.txt").exists());
         assert!(run_dir.join("step-03-events.ndjson").exists());
+
+        fs::remove_dir_all(root).ok();
+    }
+
+    #[test]
+    fn claim_run_writes_policy_metadata_and_claim_narrative() {
+        let root = temp_dir("claim-run");
+        let output = run(RunArgs {
+            config: "configs/desktop_claim_shadow_smoke.toml".into(),
+            root: root.clone(),
+            run_id: Some("claim-test-run".to_owned()),
+            until_step: Some(3),
+            debug: false,
+            narrative: true,
+        })
+        .expect("claim run should succeed");
+
+        assert!(output.contains("claim narrative"));
+
+        let run_dir = root.join("claim-test-run");
+        let manifest: RunManifestV1 = serde_json::from_str(
+            &fs::read_to_string(run_dir.join("run.json")).expect("run manifest should exist"),
+        )
+        .expect("run manifest should parse");
+        assert_eq!(
+            manifest.search_policy.guidance_style,
+            "legacy_family_guided"
+        );
+        assert_eq!(
+            manifest.search_policy.late_expansion_policy,
+            "realistic_shadow_inherited"
+        );
+        assert_eq!(
+            manifest.search_policy.bucket_policy,
+            "semantic_family_runtime_local"
+        );
+
+        let telemetry =
+            fs::read_to_string(run_dir.join("telemetry.ndjson")).expect("telemetry should exist");
+        assert!(telemetry.contains("\"search_profile\":\"desktop_claim_shadow\""));
+        assert!(telemetry.contains("\"late_expansion_policy\":\"realistic_shadow_inherited\""));
+
+        let steps_dir = run_dir.join("reports").join("steps");
+        assert!(steps_dir.join("step-03-narrative.txt").exists());
+        assert!(steps_dir.join("step-03-events.ndjson").exists());
 
         fs::remove_dir_all(root).ok();
     }

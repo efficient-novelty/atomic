@@ -550,7 +550,7 @@ def demo_bucket_summary(buckets: list[dict[str, Any]]) -> str:
 def narrative_artifact_entry(
     steps_dir: Path, steps: list[dict[str, Any]], search_profile: str
 ) -> dict[str, Any]:
-    if search_profile != "demo_breadth_shadow":
+    if search_profile not in {"demo_breadth_shadow", "desktop_claim_shadow"}:
         return ordered_dict(
             [
                 ("status", "not_applicable"),

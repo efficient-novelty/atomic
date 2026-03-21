@@ -13,6 +13,7 @@ pub enum AdmissibilityMode {
     RelaxedShadow,
     RealisticShadow,
     DemoBreadthShadow,
+    DesktopClaimShadow,
 }
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
@@ -693,7 +694,9 @@ fn can_relax_focus_family(mode: AdmissibilityMode, family: StructuralFamily) -> 
                 | StructuralFamily::ConnectionShell
                 | StructuralFamily::CurvatureShell
         ),
-        AdmissibilityMode::RealisticShadow | AdmissibilityMode::DemoBreadthShadow => matches!(
+        AdmissibilityMode::RealisticShadow
+        | AdmissibilityMode::DemoBreadthShadow
+        | AdmissibilityMode::DesktopClaimShadow => matches!(
             family,
             StructuralFamily::AxiomaticBundle
                 | StructuralFamily::ModalShell
@@ -726,6 +729,7 @@ fn clause_band_for_mode(
                 AdmissibilityMode::RelaxedShadow
                     | AdmissibilityMode::RealisticShadow
                     | AdmissibilityMode::DemoBreadthShadow
+                    | AdmissibilityMode::DesktopClaimShadow
             ) =>
         {
             (5, 6)
@@ -777,7 +781,8 @@ fn max_expr_nodes_for_mode(
         (
             AdmissibilityMode::RelaxedShadow
             | AdmissibilityMode::RealisticShadow
-            | AdmissibilityMode::DemoBreadthShadow,
+            | AdmissibilityMode::DemoBreadthShadow
+            | AdmissibilityMode::DesktopClaimShadow,
             Some(StructuralFamily::AxiomaticBundle),
         ) => focused_cap.max(4),
         _ => focused_cap,
@@ -847,7 +852,8 @@ fn historical_anchor_ref_for_focus(
         (
             AdmissibilityMode::RelaxedShadow
             | AdmissibilityMode::RealisticShadow
-            | AdmissibilityMode::DemoBreadthShadow,
+            | AdmissibilityMode::DemoBreadthShadow
+            | AdmissibilityMode::DesktopClaimShadow,
             Some(StructuralFamily::ModalShell),
         ) => loop_anchor,
         (_, Some(StructuralFamily::AxiomaticBundle)) => loop_anchor,
@@ -1206,7 +1212,10 @@ fn matches_operator_bundle_package(
     }
     let previous = latest - 1;
 
-    if mode == AdmissibilityMode::RealisticShadow {
+    if matches!(
+        mode,
+        AdmissibilityMode::RealisticShadow | AdmissibilityMode::DesktopClaimShadow
+    ) {
         return telescope.path_dimensions().is_empty()
             && telescope.clauses.len() == 7
             && matches!(
@@ -1363,7 +1372,10 @@ fn matches_hilbert_functional_package(
     let previous = latest - 1;
     let older = latest - 2;
 
-    if mode == AdmissibilityMode::RealisticShadow {
+    if matches!(
+        mode,
+        AdmissibilityMode::RealisticShadow | AdmissibilityMode::DesktopClaimShadow
+    ) {
         return telescope.path_dimensions().is_empty()
             && telescope.clauses.len() == 9
             && matches!(
@@ -1559,7 +1571,10 @@ fn matches_temporal_shell_package(
         return false;
     }
 
-    if mode == AdmissibilityMode::RealisticShadow {
+    if matches!(
+        mode,
+        AdmissibilityMode::RealisticShadow | AdmissibilityMode::DesktopClaimShadow
+    ) {
         return telescope.path_dimensions().is_empty()
             && telescope.clauses.len() == 8
             && matches!(

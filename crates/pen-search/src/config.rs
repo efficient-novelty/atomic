@@ -79,6 +79,7 @@ pub enum SearchProfile {
     RelaxedShadow,
     RealisticFrontierShadow,
     DemoBreadthShadow,
+    DesktopClaimShadow,
 }
 
 impl SearchProfile {
@@ -89,6 +90,19 @@ impl SearchProfile {
             Self::RelaxedShadow => "relaxed_shadow",
             Self::RealisticFrontierShadow => "realistic_frontier_shadow",
             Self::DemoBreadthShadow => "demo_breadth_shadow",
+            Self::DesktopClaimShadow => "desktop_claim_shadow",
+        }
+    }
+
+    pub const fn supports_narrative_artifacts(self) -> bool {
+        matches!(self, Self::DemoBreadthShadow | Self::DesktopClaimShadow)
+    }
+
+    pub const fn narrative_label(self) -> &'static str {
+        match self {
+            Self::DemoBreadthShadow => "demo",
+            Self::DesktopClaimShadow => "claim",
+            _ => "lane",
         }
     }
 }
@@ -509,6 +523,24 @@ mod tests {
                 .search_profile,
             SearchProfile::DemoBreadthShadow
         );
+        assert_eq!(
+            load_config("desktop_claim_shadow_smoke.toml")
+                .mode
+                .search_profile,
+            SearchProfile::DesktopClaimShadow
+        );
+        assert_eq!(
+            load_config("desktop_claim_shadow_1h.toml")
+                .mode
+                .search_profile,
+            SearchProfile::DesktopClaimShadow
+        );
+        assert_eq!(
+            load_config("desktop_claim_shadow_10h.toml")
+                .mode
+                .search_profile,
+            SearchProfile::DesktopClaimShadow
+        );
     }
 
     #[test]
@@ -558,5 +590,32 @@ mod tests {
         assert_eq!(fifteen.demo.early_exhaustive_budget_sec, 90);
         assert_eq!(fifteen.demo.adaptive_reserve_sec, 340);
         assert_eq!(fifteen.demo.floors.generated_floor.get("15"), Some(&6500));
+    }
+
+    #[test]
+    fn claim_profiles_parse_with_expected_budget_metadata() {
+        let smoke = load_config("desktop_claim_shadow_smoke.toml");
+        assert_eq!(smoke.search.until_step, 6);
+        assert_eq!(smoke.demo.profile, "claim-smoke");
+        assert_eq!(smoke.demo.total_budget_sec, 120);
+        assert_eq!(smoke.demo.early_exhaustive_budget_sec, 30);
+        assert_eq!(smoke.demo.adaptive_reserve_sec, 30);
+        assert!(smoke.mode.search_profile.supports_narrative_artifacts());
+
+        let one_hour = load_config("desktop_claim_shadow_1h.toml");
+        assert_eq!(one_hour.search.until_step, 15);
+        assert_eq!(one_hour.demo.profile, "claim-1h");
+        assert_eq!(one_hour.demo.total_budget_sec, 3600);
+        assert_eq!(one_hour.demo.early_exhaustive_budget_sec, 90);
+        assert_eq!(one_hour.demo.adaptive_reserve_sec, 900);
+        assert_eq!(one_hour.demo.floors.generated_floor.get("15"), Some(&5000));
+
+        let ten_hour = load_config("desktop_claim_shadow_10h.toml");
+        assert_eq!(ten_hour.search.until_step, 15);
+        assert_eq!(ten_hour.demo.profile, "claim-10h");
+        assert_eq!(ten_hour.demo.total_budget_sec, 36_000);
+        assert_eq!(ten_hour.demo.early_exhaustive_budget_sec, 90);
+        assert_eq!(ten_hour.demo.adaptive_reserve_sec, 5_400);
+        assert_eq!(ten_hour.demo.floors.generated_floor.get("15"), Some(&5000));
     }
 }

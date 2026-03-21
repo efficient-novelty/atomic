@@ -1,6 +1,6 @@
 ---
 name: pen-atomic
-description: Current-state architecture and donor guide for the `pen-atomic` Rust workspace. Use when working on live strict search, `realistic_frontier_shadow`, `demo_breadth_shadow`, MBTT/kernel design, admissibility, exact selection, reporting, checkpoints, Agda export, or when you need to reconcile current Rust behavior with donor theory and Haskell provenance.
+description: Current-state architecture and donor guide for the `pen-atomic` Rust workspace. Use when working on live strict search, `realistic_frontier_shadow`, `demo_breadth_shadow`, `desktop_claim_shadow`, MBTT/kernel design, admissibility, exact selection, reporting, checkpoints, Agda export, or when you need to reconcile current Rust behavior with donor theory and Haskell provenance.
 ---
 
 # PEN Atomic
@@ -20,6 +20,9 @@ Treat these as current repo truths:
 - `demo_breadth_shadow` is a comparison-backed child of realistic shadow with
   runnable `5m`, `10m`, and `15m` profiles plus stored narrative/event
   artifacts
+- `desktop_claim_shadow` now exists as a separate claim-lane scaffold with its
+  own configs, narratives, and policy metadata, but it still inherits
+  realistic-shadow search behavior where claim-specific logic has not landed
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -29,11 +32,13 @@ Treat these as still incomplete:
 - the anti-junk frontier engine is not yet the full long-range design
 - the Agda bridge is still lighter than the final proof-facing target
 
-The current architecture focus is split between two active tracks:
+The current architecture focus is split between three active tracks:
 
 - stronger exact late-step pruning and ordering on
   `realistic_frontier_shadow`
 - honest breadth, budget, and evidence surfacing on `demo_breadth_shadow`
+- claim-lane separation and later family-agnostic guidance work on
+  `desktop_claim_shadow`
 
 ## Current-State References
 
@@ -45,10 +50,15 @@ Read only the track-specific detail you need:
 - For the current demo-lane stable mechanisms, evidence baselines, and signoff
   status, read
   [references/12-current-demo-lane.md](references/12-current-demo-lane.md).
+- For the current claim-lane scaffold state, read
+  [references/13-current-claim-lane.md](references/13-current-claim-lane.md).
 - For live demo-lane targets and signoff criteria, read
   [../../demo_lane_progress.md](../../demo_lane_progress.md),
   [../../demo_lane_plan.md](../../demo_lane_plan.md), and
   [../../demo_lane_checklist.md](../../demo_lane_checklist.md).
+- For the active autonomy workstream, read
+  [../../autonomous_plan.md](../../autonomous_plan.md) and
+  [../../autonomous_progress.md](../../autonomous_progress.md).
 
 Start with the current architecture doc before diving into donor material:
 
@@ -87,12 +97,15 @@ For most tasks, read in this order:
 3. One of these track-specific current-state references, depending on the task:
    - [references/11-current-realistic-shadow.md](references/11-current-realistic-shadow.md)
    - [references/12-current-demo-lane.md](references/12-current-demo-lane.md)
+   - [references/13-current-claim-lane.md](references/13-current-claim-lane.md)
 4. [../../quantum_progress.md](../../quantum_progress.md) when the task
    touches prefix search, bounds, caching, or realistic late-step tuning
 5. [../../demo_lane_progress.md](../../demo_lane_progress.md) and
    [../../demo_lane_plan.md](../../demo_lane_plan.md) when the task touches
    `demo_breadth_shadow`
-6. [theory/README.md](theory/README.md) when you need the theorem or manuscript
+6. [../../autonomous_progress.md](../../autonomous_progress.md) when the task
+   touches `desktop_claim_shadow`
+7. [theory/README.md](theory/README.md) when you need the theorem or manuscript
    map
 
 Then branch based on the task.
@@ -118,6 +131,10 @@ Then branch based on the task.
 - Read [references/12-current-demo-lane.md](references/12-current-demo-lane.md)
   for the stable current demo-lane mechanisms and evidence baselines that
   should remain true while later demo-lane changes move.
+- Read [references/13-current-claim-lane.md](references/13-current-claim-lane.md)
+  plus [../../autonomous_plan.md](../../autonomous_plan.md) and
+  [../../autonomous_progress.md](../../autonomous_progress.md) for the current
+  claim-lane scaffold, honesty boundary, and remaining autonomy work.
 - Read [theory/README.md](theory/README.md) when you need the theorem map or
   manuscript map.
 - Read [theory/genesis.md](theory/genesis.md) when you need the exact strict
@@ -235,6 +252,25 @@ Focus on:
 - holding the closed early and late signoff baselines without regressing
   accepted parity, narrative/event coverage, or the honesty boundary
 
+### If you are working on `desktop_claim_shadow`
+
+Read:
+
+- [references/13-current-claim-lane.md](references/13-current-claim-lane.md)
+- [../../autonomous_plan.md](../../autonomous_plan.md)
+- [../../autonomous_progress.md](../../autonomous_progress.md)
+- [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
+- [references/08-evidence-and-invariants.md](references/08-evidence-and-invariants.md)
+
+Focus on:
+
+- keeping the claim lane separate from demo-only behavior
+- recording inherited behavior honestly in policy metadata until the claim
+  logic is real
+- moving admissibility, mutation, scheduling, and certification toward
+  family-agnostic structural evidence
+- not using stronger words like `unguided` before the certification gate lands
+
 ### If you are working on reporting or evidence
 
 Read:
@@ -308,5 +344,8 @@ Reject designs that:
 - The tracked demo-lane signoff set is currently closed; use the repo-level
   demo-lane docs and `references/12-current-demo-lane.md` as the regression
   baseline for future work.
+- The claim lane now exists as a separate scaffold, but its policy metadata
+  still honestly reports inherited realistic-shadow behavior until the later
+  claim-specific workstreams land.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
   the track-specific references you actually need.

@@ -8,10 +8,11 @@ use pen_eval::bar::{DiscoveryRecord, compute_bar};
 use pen_search::config::{RuntimeConfig, SearchProfile};
 use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
 use pen_search::engine::{
-    AtomicSearchStep, CandidateScoreDistribution, DedupePruneEvidence, DemoBucketReport,
-    DemoBudgetSeed, DemoClosureStats, DemoFunnelStats, DemoPhaseStats, ExactScreenReasonStats,
-    FrontierRetentionOutcome, MinimalityPruneEvidence,
+    AtomicSearchProgressObserver, AtomicSearchStep, CandidateScoreDistribution,
+    DedupePruneEvidence, DemoBucketReport, DemoBudgetSeed, DemoClosureStats, DemoFunnelStats,
+    DemoPhaseStats, ExactScreenReasonStats, FrontierRetentionOutcome, MinimalityPruneEvidence,
     search_bootstrap_from_prefix_for_config_with_runtime_and_seed,
+    search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observer,
     search_bootstrap_from_prefix_for_profile_with_runtime,
     search_bootstrap_prefix_for_config_with_runtime,
     search_bootstrap_prefix_for_profile_with_runtime, supports_live_atomic_search,
@@ -512,6 +513,28 @@ pub struct GeneratedSteps {
     pub steps: Vec<StepReport>,
 }
 
+pub trait StepProgressObserver {
+    fn on_step_started(&mut self, step_index: u32, label: &str);
+    fn on_step_completed(&mut self, step: &StepReport);
+}
+
+struct LiveSearchProgressAdapter<'a> {
+    observer: &'a mut dyn StepProgressObserver,
+    provenance: StepProvenance,
+}
+
+impl AtomicSearchProgressObserver for LiveSearchProgressAdapter<'_> {
+    fn on_step_started(&mut self, step_index: u32) {
+        self.observer
+            .on_step_started(step_index, step_label(step_index));
+    }
+
+    fn on_step_completed(&mut self, step: &AtomicSearchStep) {
+        let report = step_to_report_with_provenance(step.clone(), self.provenance);
+        self.observer.on_step_completed(&report);
+    }
+}
+
 #[cfg_attr(not(test), allow(dead_code))]
 pub fn generate_steps(until_step: u32, window_depth: u16) -> Result<GeneratedSteps> {
     generate_steps_with_runtime(until_step, window_depth, FrontierRuntimeLimits::unlimited())
@@ -530,21 +553,45 @@ pub fn generate_steps_with_runtime(
     )
 }
 
+#[allow(dead_code)]
 pub fn generate_steps_with_config_and_runtime(
     until_step: u32,
     config: &RuntimeConfig,
     retention_runtime: FrontierRuntimeLimits,
 ) -> Result<GeneratedSteps> {
+    generate_steps_with_config_and_runtime_and_progress(until_step, config, retention_runtime, None)
+}
+
+pub fn generate_steps_with_config_and_runtime_and_progress(
+    until_step: u32,
+    config: &RuntimeConfig,
+    retention_runtime: FrontierRuntimeLimits,
+    mut progress: Option<&mut dyn StepProgressObserver>,
+) -> Result<GeneratedSteps> {
     if supports_live_atomic_search(until_step) {
-        let steps = search_bootstrap_prefix_for_config_with_runtime(
-            until_step,
-            config.objective.window_depth,
-            config,
-            retention_runtime,
-        )?
-        .into_iter()
-        .map(step_to_report)
-        .collect();
+        let raw_steps = if let Some(observer) = progress.as_deref_mut() {
+            let mut live_progress = LiveSearchProgressAdapter {
+                observer,
+                provenance: StepProvenance::AtomicBootstrapSearch,
+            };
+            search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observer(
+                &[],
+                until_step,
+                config.objective.window_depth,
+                config,
+                retention_runtime,
+                DemoBudgetSeed::default(),
+                Some(&mut live_progress),
+            )?
+        } else {
+            search_bootstrap_prefix_for_config_with_runtime(
+                until_step,
+                config.objective.window_depth,
+                config,
+                retention_runtime,
+            )?
+        };
+        let steps = raw_steps.into_iter().map(step_to_report).collect();
         return Ok(GeneratedSteps {
             mode: StepGenerationMode::AtomicBootstrapSearch,
             steps: finalize_step_reports(steps, config.objective.window_depth)?,
@@ -553,7 +600,12 @@ pub fn generate_steps_with_config_and_runtime(
 
     Ok(GeneratedSteps {
         mode: StepGenerationMode::ReferenceReplay,
-        steps: replay_reference_steps(until_step, config.objective.window_depth)?,
+        steps: replay_reference_steps_raw_with_progress(
+            until_step,
+            config.objective.window_depth,
+            progress,
+        )
+        .and_then(|steps| finalize_step_reports(steps, config.objective.window_depth))?,
     })
 }
 
@@ -610,11 +662,28 @@ pub fn extend_steps_from_reports_with_runtime(
     )
 }
 
+#[allow(dead_code)]
 pub fn extend_steps_from_reports_with_config_and_runtime(
     existing_steps: &[StepReport],
     until_step: u32,
     config: &RuntimeConfig,
     retention_runtime: FrontierRuntimeLimits,
+) -> Result<GeneratedSteps> {
+    extend_steps_from_reports_with_config_and_runtime_and_progress(
+        existing_steps,
+        until_step,
+        config,
+        retention_runtime,
+        None,
+    )
+}
+
+pub fn extend_steps_from_reports_with_config_and_runtime_and_progress(
+    existing_steps: &[StepReport],
+    until_step: u32,
+    config: &RuntimeConfig,
+    retention_runtime: FrontierRuntimeLimits,
+    mut progress: Option<&mut dyn StepProgressObserver>,
 ) -> Result<GeneratedSteps> {
     let completed_step = existing_steps
         .last()
@@ -637,16 +706,33 @@ pub fn extend_steps_from_reports_with_config_and_runtime(
             .iter()
             .map(|step| step.telescope.clone())
             .collect::<Vec<_>>();
-        let resumed = search_bootstrap_from_prefix_for_config_with_runtime_and_seed(
-            &telescopes,
-            until_step,
-            config.objective.window_depth,
-            config,
-            retention_runtime,
-            demo_budget_seed(existing_steps),
-        )?
-        .into_iter()
-        .map(|step| step_to_report_with_provenance(step, StepProvenance::StepCheckpointResume));
+        let resumed_raw = if let Some(observer) = progress.as_deref_mut() {
+            let mut live_progress = LiveSearchProgressAdapter {
+                observer,
+                provenance: StepProvenance::StepCheckpointResume,
+            };
+            search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observer(
+                &telescopes,
+                until_step,
+                config.objective.window_depth,
+                config,
+                retention_runtime,
+                demo_budget_seed(existing_steps),
+                Some(&mut live_progress),
+            )?
+        } else {
+            search_bootstrap_from_prefix_for_config_with_runtime_and_seed(
+                &telescopes,
+                until_step,
+                config.objective.window_depth,
+                config,
+                retention_runtime,
+                demo_budget_seed(existing_steps),
+            )?
+        };
+        let resumed = resumed_raw
+            .into_iter()
+            .map(|step| step_to_report_with_provenance(step, StepProvenance::StepCheckpointResume));
         steps.extend(resumed);
         return Ok(GeneratedSteps {
             mode: StepGenerationMode::StepCheckpointResume,
@@ -654,7 +740,12 @@ pub fn extend_steps_from_reports_with_config_and_runtime(
         });
     }
 
-    generate_steps_with_config_and_runtime(until_step, config, retention_runtime)
+    generate_steps_with_config_and_runtime_and_progress(
+        until_step,
+        config,
+        retention_runtime,
+        progress,
+    )
 }
 
 pub fn extend_steps_from_reports_for_profile_with_runtime(
@@ -738,11 +829,28 @@ pub fn reevaluate_steps_from_reports_with_runtime(
     )
 }
 
+#[allow(dead_code)]
 pub fn reevaluate_steps_from_reports_with_config_and_runtime(
     existing_steps: &[StepReport],
     until_step: u32,
     config: &RuntimeConfig,
     retention_runtime: FrontierRuntimeLimits,
+) -> Result<GeneratedSteps> {
+    reevaluate_steps_from_reports_with_config_and_runtime_and_progress(
+        existing_steps,
+        until_step,
+        config,
+        retention_runtime,
+        None,
+    )
+}
+
+pub fn reevaluate_steps_from_reports_with_config_and_runtime_and_progress(
+    existing_steps: &[StepReport],
+    until_step: u32,
+    config: &RuntimeConfig,
+    retention_runtime: FrontierRuntimeLimits,
+    mut progress: Option<&mut dyn StepProgressObserver>,
 ) -> Result<GeneratedSteps> {
     ensure_contiguous_steps(existing_steps)?;
 
@@ -754,6 +862,9 @@ pub fn reevaluate_steps_from_reports_with_config_and_runtime(
         .collect::<Vec<_>>();
     let mut steps = reevaluate_prefix_steps(&prefix_telescopes, config.objective.window_depth)?;
     preserve_search_timing(existing_steps, &mut steps);
+    if let Some(observer) = progress.as_deref_mut() {
+        emit_step_progress(observer, &steps);
+    }
 
     if u32::try_from(prefix_len).expect("prefix length exceeded u32") >= until_step {
         return Ok(GeneratedSteps {
@@ -763,16 +874,33 @@ pub fn reevaluate_steps_from_reports_with_config_and_runtime(
     }
 
     if supports_live_atomic_search(until_step) {
-        let resumed = search_bootstrap_from_prefix_for_config_with_runtime_and_seed(
-            &prefix_telescopes,
-            until_step,
-            config.objective.window_depth,
-            config,
-            retention_runtime,
-            demo_budget_seed(existing_steps),
-        )?
-        .into_iter()
-        .map(|step| step_to_report_with_provenance(step, StepProvenance::StepCheckpointReevaluate));
+        let resumed_raw = if let Some(observer) = progress.as_deref_mut() {
+            let mut live_progress = LiveSearchProgressAdapter {
+                observer,
+                provenance: StepProvenance::StepCheckpointReevaluate,
+            };
+            search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observer(
+                &prefix_telescopes,
+                until_step,
+                config.objective.window_depth,
+                config,
+                retention_runtime,
+                demo_budget_seed(existing_steps),
+                Some(&mut live_progress),
+            )?
+        } else {
+            search_bootstrap_from_prefix_for_config_with_runtime_and_seed(
+                &prefix_telescopes,
+                until_step,
+                config.objective.window_depth,
+                config,
+                retention_runtime,
+                demo_budget_seed(existing_steps),
+            )?
+        };
+        let resumed = resumed_raw.into_iter().map(|step| {
+            step_to_report_with_provenance(step, StepProvenance::StepCheckpointReevaluate)
+        });
         steps.extend(resumed);
         return Ok(GeneratedSteps {
             mode: StepGenerationMode::StepCheckpointReevaluate,
@@ -780,7 +908,12 @@ pub fn reevaluate_steps_from_reports_with_config_and_runtime(
         });
     }
 
-    generate_steps_with_config_and_runtime(until_step, config, retention_runtime)
+    generate_steps_with_config_and_runtime_and_progress(
+        until_step,
+        config,
+        retention_runtime,
+        progress,
+    )
 }
 
 pub fn reevaluate_steps_from_reports_for_profile_with_runtime(
@@ -833,16 +966,27 @@ pub fn reevaluate_steps_from_reports_for_profile_with_runtime(
 }
 
 pub fn replay_reference_steps(until_step: u32, window_depth: u16) -> Result<Vec<StepReport>> {
-    let steps = replay_reference_steps_raw(until_step, window_depth)?;
+    let steps = replay_reference_steps_raw_with_progress(until_step, window_depth, None)?;
     finalize_step_reports(steps, window_depth)
 }
 
 fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<StepReport>> {
+    replay_reference_steps_raw_with_progress(until_step, window_depth, None)
+}
+
+fn replay_reference_steps_raw_with_progress(
+    until_step: u32,
+    window_depth: u16,
+    mut progress: Option<&mut dyn StepProgressObserver>,
+) -> Result<Vec<StepReport>> {
     let mut library: Library = Vec::new();
     let mut history: Vec<DiscoveryRecord> = Vec::new();
     let mut steps = Vec::new();
 
     for step_index in 1..=until_step.min(15) {
+        if let Some(observer) = progress.as_deref_mut() {
+            observer.on_step_started(step_index, step_label(step_index));
+        }
         let telescope = Telescope::reference(step_index);
         let objective_bar = compute_bar(window_depth as usize, step_index, &history).bar;
         let evaluated = evaluate_candidate(&library, &history, telescope.clone())?;
@@ -859,7 +1003,7 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
         };
         let canon_evidence = step_canon_evidence(step_index, &accepted, objective_bar);
 
-        steps.push(StepReport {
+        let step = StepReport {
             step_index,
             label: step_label(step_index).to_owned(),
             search_profile: SearchProfile::Unknown,
@@ -944,7 +1088,11 @@ fn replay_reference_steps_raw(until_step: u32, window_depth: u16) -> Result<Vec<
             canon_evidence,
             replay_ablation: ReplayAblation::default(),
             narrative_events: Vec::new(),
-        });
+        };
+        if let Some(observer) = progress.as_deref_mut() {
+            observer.on_step_completed(&step);
+        }
+        steps.push(step);
 
         history.push(DiscoveryRecord::new(
             step_index,
@@ -1995,6 +2143,13 @@ fn preserve_search_timing(existing_steps: &[StepReport], reevaluated_steps: &mut
     }
 }
 
+fn emit_step_progress(observer: &mut dyn StepProgressObserver, steps: &[StepReport]) {
+    for step in steps {
+        observer.on_step_started(step.step_index, &step.label);
+        observer.on_step_completed(step);
+    }
+}
+
 fn ensure_contiguous_steps(existing_steps: &[StepReport]) -> Result<()> {
     for (offset, step) in existing_steps.iter().enumerate() {
         let expected = u32::try_from(offset + 1).expect("step count exceeded u32");
@@ -2419,8 +2574,9 @@ struct RetentionClassCounts {
 #[cfg(test)]
 mod tests {
     use super::{
-        CandidateStatus, FrontierRetention, PruneClassStats, StepGenerationMode, StepProvenance,
-        extend_steps_from_reports, generate_steps, reevaluate_steps_from_reports,
+        CandidateStatus, FrontierRetention, PruneClassStats, StepGenerationMode,
+        StepProgressObserver, StepProvenance, extend_steps_from_reports, generate_steps,
+        generate_steps_with_config_and_runtime_and_progress, reevaluate_steps_from_reports,
         render_debug_report, render_standard_report, replay_reference_steps,
         search_atomic_bootstrap_steps, search_atomic_bootstrap_steps_with_runtime,
         stored_prune_class_stats,
@@ -2431,6 +2587,25 @@ mod tests {
         memory::{GovernorConfig, PressureAction},
         spill::SpillConfig,
     };
+
+    #[derive(Default)]
+    struct RecordingProgress {
+        started: Vec<(u32, String)>,
+        completed: Vec<(u32, usize)>,
+    }
+
+    impl StepProgressObserver for RecordingProgress {
+        fn on_step_started(&mut self, step_index: u32, label: &str) {
+            self.started.push((step_index, label.to_owned()));
+        }
+
+        fn on_step_completed(&mut self, step: &super::StepReport) {
+            self.completed.push((
+                step.step_index,
+                step.search_stats.demo_funnel.generated_raw_prefixes,
+            ));
+        }
+    }
 
     #[test]
     fn replay_reference_steps_matches_expected_sequence_length() {
@@ -2620,6 +2795,38 @@ mod tests {
         );
         assert!(debug.contains("demo buckets:"));
         assert!(debug.contains("exact-screen reasons:"));
+    }
+
+    #[test]
+    fn live_demo_generation_reports_step_progress() {
+        let config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/demo_breadth_shadow_10m.toml"
+        ))
+        .expect("demo config should parse");
+        let mut progress = RecordingProgress::default();
+
+        let generated = generate_steps_with_config_and_runtime_and_progress(
+            4,
+            &config,
+            FrontierRuntimeLimits::unlimited(),
+            Some(&mut progress),
+        )
+        .expect("demo steps should build");
+
+        assert_eq!(generated.steps.len(), 4);
+        assert_eq!(
+            progress.started,
+            vec![
+                (1, "Universe".to_owned()),
+                (2, "Unit".to_owned()),
+                (3, "Witness".to_owned()),
+                (4, "Pi".to_owned())
+            ]
+        );
+        assert_eq!(
+            progress.completed,
+            vec![(1, 2144), (2, 36), (3, 60), (4, 72)]
+        );
     }
 
     #[test]

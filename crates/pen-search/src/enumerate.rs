@@ -96,6 +96,7 @@ impl EnumerationContext {
             late_family_surface: match admissibility.mode {
                 AdmissibilityMode::RealisticShadow => LateFamilySurface::RealisticShadow,
                 AdmissibilityMode::DemoBreadthShadow => LateFamilySurface::DemoBreadthShadow,
+                AdmissibilityMode::DesktopClaimShadow => LateFamilySurface::RealisticShadow,
                 AdmissibilityMode::Guarded | AdmissibilityMode::RelaxedShadow => {
                     LateFamilySurface::None
                 }
@@ -3605,6 +3606,20 @@ mod tests {
         admissibility: StrictAdmissibility,
     ) -> EnumerationContext {
         EnumerationContext::from_admissibility(library, admissibility)
+    }
+
+    #[test]
+    fn claim_shadow_currently_reuses_realistic_late_surface() {
+        let library = library_until(9);
+        let admissibility =
+            strict_admissibility_for_mode(10, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        let context = context_from_admissibility(&library, admissibility);
+
+        assert_eq!(
+            context.late_family_surface,
+            LateFamilySurface::RealisticShadow
+        );
     }
 
     #[test]

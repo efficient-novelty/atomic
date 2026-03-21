@@ -4,10 +4,11 @@ use crate::cmd_run::{
     resolved_worker_count, terminal_narrative_config, write_run_artifacts,
 };
 use crate::output::{OutputStyle, render_run_output};
+use crate::progress::TerminalStepProgress;
 use crate::report::{
-    GeneratedSteps, StepGenerationMode, StepProvenance, StepReport, annotate_search_profile,
-    extend_steps_from_reports_with_config_and_runtime, load_step_reports,
-    reevaluate_steps_from_reports_with_config_and_runtime,
+    GeneratedSteps, StepGenerationMode, StepProgressObserver, StepProvenance, StepReport,
+    annotate_search_profile, extend_steps_from_reports_with_config_and_runtime_and_progress,
+    load_step_reports, reevaluate_steps_from_reports_with_config_and_runtime_and_progress,
 };
 use anyhow::{Context, Result, bail};
 use pen_search::config::RuntimeConfig;
@@ -52,16 +53,27 @@ pub fn resume(args: ResumeArgs) -> Result<String> {
 
     let mut existing_steps = load_step_reports(&run_dir)?;
     annotate_search_profile(&mut existing_steps, config.mode.search_profile);
+    let mut progress = TerminalStepProgress::stderr(target);
     let PreparedResume {
         generated: GeneratedSteps { mode, mut steps },
         worker_count,
-    } = prepare_resume(&run_dir, &manifest, &config, target, &existing_steps)?;
+    } = prepare_resume(
+        &run_dir,
+        &manifest,
+        &config,
+        target,
+        &existing_steps,
+        progress
+            .as_mut()
+            .map(|observer| observer as &mut dyn StepProgressObserver),
+    )?;
     annotate_search_profile(&mut steps, config.mode.search_profile);
     let updated = now_utc()?;
     let new_manifest = build_run_manifest(
         &manifest.run_id,
         &config_text,
         &steps,
+        &config,
         manifest.created_utc,
         updated,
     );
@@ -95,6 +107,7 @@ fn prepare_resume(
     config: &RuntimeConfig,
     target: u32,
     existing_steps: &[StepReport],
+    progress: Option<&mut dyn StepProgressObserver>,
 ) -> Result<PreparedResume> {
     let current_compat = current_search_compat();
     let latest_step_decision = latest_step_resume_decision(run_dir, manifest)?;
@@ -106,12 +119,24 @@ fn prepare_resume(
             ResumeDecision::FrontierCheckpoint => {
                 validate_frontier_checkpoint(run_dir, manifest, existing_steps, &frontier)?;
                 let frontier_worker_count = frontier.manifest.scheduler.worker_count.max(1);
-                let mut generated = extend_steps_from_reports_with_config_and_runtime(
-                    existing_steps,
-                    target,
-                    config,
-                    frontier_runtime_limits(config, frontier_worker_count),
-                )?;
+                let mut generated = match progress {
+                    Some(observer) => {
+                        extend_steps_from_reports_with_config_and_runtime_and_progress(
+                            existing_steps,
+                            target,
+                            config,
+                            frontier_runtime_limits(config, frontier_worker_count),
+                            Some(observer),
+                        )?
+                    }
+                    None => extend_steps_from_reports_with_config_and_runtime_and_progress(
+                        existing_steps,
+                        target,
+                        config,
+                        frontier_runtime_limits(config, frontier_worker_count),
+                        None,
+                    )?,
+                };
                 for step in generated.steps.iter_mut().skip(existing_steps.len()) {
                     step.provenance = StepProvenance::FrontierCheckpointResume;
                 }
@@ -127,6 +152,7 @@ fn prepare_resume(
                 config,
                 target,
                 worker_count,
+                progress,
             ),
             ResumeDecision::StepCheckpointReevaluate => match latest_step_decision {
                 ResumeDecision::MigrationRequired => bail!(
@@ -135,12 +161,24 @@ fn prepare_resume(
                 ResumeDecision::FrontierCheckpoint
                 | ResumeDecision::StepCheckpoint
                 | ResumeDecision::StepCheckpointReevaluate => Ok(PreparedResume {
-                    generated: reevaluate_steps_from_reports_with_config_and_runtime(
-                        existing_steps,
-                        target,
-                        config,
-                        frontier_runtime_limits(config, worker_count),
-                    )?,
+                    generated: match progress {
+                        Some(observer) => {
+                            reevaluate_steps_from_reports_with_config_and_runtime_and_progress(
+                                existing_steps,
+                                target,
+                                config,
+                                frontier_runtime_limits(config, worker_count),
+                                Some(observer),
+                            )?
+                        }
+                        None => reevaluate_steps_from_reports_with_config_and_runtime_and_progress(
+                            existing_steps,
+                            target,
+                            config,
+                            frontier_runtime_limits(config, worker_count),
+                            None,
+                        )?,
+                    },
                     worker_count,
                 }),
             },
@@ -154,6 +192,7 @@ fn prepare_resume(
             config,
             target,
             worker_count,
+            progress,
         ),
     }
 }
@@ -164,14 +203,16 @@ fn prepare_step_resume(
     config: &RuntimeConfig,
     target: u32,
     worker_count: u16,
+    progress: Option<&mut dyn StepProgressObserver>,
 ) -> Result<PreparedResume> {
     match decision {
         ResumeDecision::FrontierCheckpoint | ResumeDecision::StepCheckpoint => {
-            let mut generated = extend_steps_from_reports_with_config_and_runtime(
+            let mut generated = extend_steps_from_reports_with_config_and_runtime_and_progress(
                 existing_steps,
                 target,
                 config,
                 frontier_runtime_limits(config, worker_count),
+                progress,
             )?;
             generated.mode = StepGenerationMode::StepCheckpointResume;
             Ok(PreparedResume {
@@ -180,11 +221,12 @@ fn prepare_step_resume(
             })
         }
         ResumeDecision::StepCheckpointReevaluate => Ok(PreparedResume {
-            generated: reevaluate_steps_from_reports_with_config_and_runtime(
+            generated: reevaluate_steps_from_reports_with_config_and_runtime_and_progress(
                 existing_steps,
                 target,
                 config,
                 frontier_runtime_limits(config, worker_count),
+                progress,
             )?,
             worker_count,
         }),
