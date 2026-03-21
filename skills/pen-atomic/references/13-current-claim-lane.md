@@ -10,34 +10,37 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   `bounded live recovery` wording.
 - Claim admissibility now uses structural claim debt and anchor hints, without
   named-family focus progression.
-- The lane still reuses realistic-shadow late-surface behavior and
-  semantic-family bucket scheduling after admissibility.
+- Claim late expansion now uses a claim-specific late surface with the first
+  structural mutators landed for kappa `4-6`.
+- The lane still reuses semantic-family bucket scheduling after late
+  expansion.
 - The current mixed state is recorded explicitly in run metadata:
   - `guidance_style = claim_debt_guided`
-  - `late_expansion_policy = realistic_shadow_inherited`
+  - `late_expansion_policy = claim_generic`
   - `bucket_policy = semantic_family_runtime_local`
 
 ## Current Operational Blockers
 
-- claim mode still maps to `LateFamilySurface::RealisticShadow` in enumeration
-  and prefix memoization
-- claim enumeration still depends on named relaxed/family helpers rather than a
-  claim-generic mutator surface
+- later claim bands `7-9` are still conservative reference-first surfaces
+  rather than richer claim-specific mutator packs
 - claim-run artifacts still serialize semantic-family bucket names
 - provenance, benchmark, compare, and certification surfaces are still not
   strong enough for the stronger paper sentence
 
 ## Immediate Next Slice
 
-1. Add a claim-specific late expansion policy.
-2. Stop routing claim mode through realistic late-family surfaces.
-3. Land the first claim-generic mutators for kappa `4-6`.
-4. Switch `late_expansion_policy` only after that code path is real.
+1. Replace semantic-family claim buckets with runtime-local structural labels.
+2. Switch `bucket_policy` only after the scheduler path is genuinely claim
+   specific.
+3. Broaden the later `kappa 7-9` claim-generic bands without regressing
+   accepted parity.
+4. Then harden the certification-facing evidence bundle.
 
 ## First Reads
 
 - [../../autonomous_plan.md](../../autonomous_plan.md)
 - [../../autonomous_progress.md](../../autonomous_progress.md)
+- [../../autonomous_checklist.md](../../autonomous_checklist.md)
 - [../../README.md](../../README.md)
 - [../../docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
 
@@ -55,5 +58,5 @@ Do:
 Do not:
 
 - claim that the whole lane is already family-agnostic end-to-end
-- switch `late_expansion_policy` or `bucket_policy` early
+- switch `bucket_policy` early
 - call the lane `unguided` yet

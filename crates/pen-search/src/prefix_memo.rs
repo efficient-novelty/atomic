@@ -232,7 +232,7 @@ fn late_family_surface_for_admissibility(admissibility: StrictAdmissibility) -> 
             LateFamilySurface::DemoBreadthShadow
         }
         pen_type::admissibility::AdmissibilityMode::DesktopClaimShadow => {
-            LateFamilySurface::RealisticShadow
+            LateFamilySurface::ClaimGeneric
         }
     }
 }
@@ -646,7 +646,7 @@ mod tests {
     use super::{
         PartialPrefixBoundDecision, PrefixAdmissibilitySummary, PrefixLegalityCache,
         TerminalConnectivityDecision, TerminalPrefixClauseEvaluation, TerminalPrefixCompletion,
-        TerminalPrefixCompletionSummary,
+        TerminalPrefixCompletionSummary, late_family_surface_for_admissibility,
     };
     use crate::accept::acceptance_rank_for_telescope;
     use crate::bounds::PrefixBound;
@@ -702,6 +702,18 @@ mod tests {
             admissibility,
         ));
         assert_eq!(cache.stats().legality_hits, 1);
+    }
+
+    #[test]
+    fn claim_shadow_defaults_to_claim_generic_family_surface() {
+        let library = library_until(9);
+        let admissibility =
+            strict_admissibility_for_mode(10, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert_eq!(
+            late_family_surface_for_admissibility(admissibility),
+            LateFamilySurface::ClaimGeneric
+        );
     }
 
     #[test]

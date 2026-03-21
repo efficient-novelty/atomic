@@ -41,9 +41,9 @@ compression = "zstd"
 backend = "auto"
 verify_on_cpu = true
 
-# This first scaffolding milestone keeps desktop_claim_shadow comparison-backed
-# and reuses the current realistic-shadow admissibility and late-search
-# semantics while the dedicated claim guidance, mutators, and scheduler land.
+# This claim-lane milestone keeps desktop_claim_shadow comparison-backed while
+# using claim-debt admissibility and claim-generic late mutators. Structural
+# bucket scheduling and certification still remain to land.
 # The shared [demo] block still carries narrative and floor metadata for the
 # claim lane until the reporting surface is renamed.
 [demo]

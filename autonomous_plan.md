@@ -24,25 +24,21 @@ What is already true and should now be treated as baseline, not as open work:
 - claim mode no longer requires a named `focus_family`
 - stored policy metadata is intentionally mixed and honest:
   - `guidance_style = claim_debt_guided`
-  - `late_expansion_policy = realistic_shadow_inherited`
+  - `late_expansion_policy = claim_generic`
   - `bucket_policy = semantic_family_runtime_local`
 
 What this means operationally:
 
 - the admissibility split is no longer the bottleneck
-- accepted parity on the claim lane is still being carried by inherited
-  realistic-shadow late search after admissibility
-- the next meaningful work must remove those inherited late-surface and bucket
-  couplings before any stronger language is justified
+- claim mode no longer routes through inherited realistic late-family surfaces
+- the next meaningful work must remove the remaining scheduler/bucket coupling,
+  then broaden the later claim-generic bands and bind the paper sentence to
+  stored evidence
 
 ## What Still Blocks The Stronger Claim
 
-- `crates/pen-search/src/enumerate.rs` still maps claim mode to
-  `LateFamilySurface::RealisticShadow`
-- `crates/pen-search/src/prefix_memo.rs` still reasons about claim prefixes
-  through the realistic late-family surface
-- claim enumeration still depends on named relaxed/family helpers instead of a
-  claim-generic mutator surface
+- later claim bands `7-9` are still thin reference-first surfaces rather than
+  richer claim-specific mutator packs
 - scheduler buckets and stored labels still use semantic-family names
 - breadth widening and within-step retuning are not yet claim-specific enough
   to support an autonomy claim
@@ -269,11 +265,10 @@ Done when:
 
 ## Immediate Next Step
 
-Implement slice `1` directly:
+Implement slice `2` directly:
 
-1. introduce a claim-specific late expansion policy
-2. stop mapping claim mode to `LateFamilySurface::RealisticShadow` in
-   `enumerate.rs` and `prefix_memo.rs`
-3. land the first claim-generic mutators for kappa `4-6`
-4. switch `late_expansion_policy` only after the code path is genuinely claim
+1. replace semantic-family claim buckets with runtime-local structural labels
+2. make the claim scheduler explainable without semantic-family names
+3. switch `bucket_policy` only after the scheduler path is genuinely claim
    specific
+4. then return to the later `kappa 7-9` claim-generic bands and certification

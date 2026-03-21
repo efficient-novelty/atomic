@@ -466,7 +466,7 @@ pub(crate) fn search_policy_info(search_profile: SearchProfile) -> SearchPolicyI
         },
         SearchProfile::DesktopClaimShadow => SearchPolicyInfo {
             guidance_style: "claim_debt_guided".to_owned(),
-            late_expansion_policy: "realistic_shadow_inherited".to_owned(),
+            late_expansion_policy: "claim_generic".to_owned(),
             bucket_policy: "semantic_family_runtime_local".to_owned(),
         },
     }
@@ -985,7 +985,7 @@ mod tests {
         assert_eq!(manifest.search_policy.guidance_style, "claim_debt_guided");
         assert_eq!(
             manifest.search_policy.late_expansion_policy,
-            "realistic_shadow_inherited"
+            "claim_generic"
         );
         assert_eq!(
             manifest.search_policy.bucket_policy,
@@ -996,7 +996,7 @@ mod tests {
             fs::read_to_string(run_dir.join("telemetry.ndjson")).expect("telemetry should exist");
         assert!(telemetry.contains("\"search_profile\":\"desktop_claim_shadow\""));
         assert!(telemetry.contains("\"guidance_style\":\"claim_debt_guided\""));
-        assert!(telemetry.contains("\"late_expansion_policy\":\"realistic_shadow_inherited\""));
+        assert!(telemetry.contains("\"late_expansion_policy\":\"claim_generic\""));
 
         let steps_dir = run_dir.join("reports").join("steps");
         assert!(steps_dir.join("step-03-narrative.txt").exists());

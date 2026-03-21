@@ -22,8 +22,9 @@ Treat these as current repo truths:
   artifacts
 - `desktop_claim_shadow` now exists as a separate claim-lane scaffold with its
   own configs, narratives, and policy metadata; it now uses claim-debt
-  admissibility, but it still inherits realistic-shadow late-surface and
-  bucket behavior where later claim-specific logic has not landed
+  admissibility plus a claim-generic late surface, but it still inherits
+  semantic-family bucket behavior where later claim-specific scheduler logic
+  has not landed
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -38,8 +39,8 @@ The current architecture focus is split between three active tracks:
 - stronger exact late-step pruning and ordering on
   `realistic_frontier_shadow`
 - honest breadth, budget, and evidence surfacing on `demo_breadth_shadow`
-- claim-generic late expansion, structural bucket scheduling, and
-  certification work on `desktop_claim_shadow`
+- structural bucket scheduling, later-band claim mutators, and certification
+  work on `desktop_claim_shadow`
 
 ## Current-State References
 
@@ -59,7 +60,8 @@ Read only the track-specific detail you need:
   [../../demo_lane_checklist.md](../../demo_lane_checklist.md).
 - For the active autonomy workstream, read
   [../../autonomous_plan.md](../../autonomous_plan.md) and
-  [../../autonomous_progress.md](../../autonomous_progress.md).
+  [../../autonomous_progress.md](../../autonomous_progress.md), plus
+  [../../autonomous_checklist.md](../../autonomous_checklist.md).
   These are the operational docs for remaining claim-lane work and
   intentionally omit old rollout history.
 
@@ -136,8 +138,10 @@ Then branch based on the task.
   should remain true while later demo-lane changes move.
 - Read [references/13-current-claim-lane.md](references/13-current-claim-lane.md)
   plus [../../autonomous_plan.md](../../autonomous_plan.md) and
-  [../../autonomous_progress.md](../../autonomous_progress.md) for the current
-  claim-lane mixed state, honesty boundary, and remaining autonomy work.
+  [../../autonomous_progress.md](../../autonomous_progress.md), plus
+  [../../autonomous_checklist.md](../../autonomous_checklist.md) for the
+  current claim-lane mixed state, honesty boundary, and remaining autonomy
+  work.
 - Read [theory/README.md](theory/README.md) when you need the theorem map or
   manuscript map.
 - Read [theory/genesis.md](theory/genesis.md) when you need the exact strict
@@ -262,6 +266,7 @@ Read:
 - [references/13-current-claim-lane.md](references/13-current-claim-lane.md)
 - [../../autonomous_plan.md](../../autonomous_plan.md)
 - [../../autonomous_progress.md](../../autonomous_progress.md)
+- [../../autonomous_checklist.md](../../autonomous_checklist.md)
 - [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
 - [references/08-evidence-and-invariants.md](references/08-evidence-and-invariants.md)
 
@@ -269,11 +274,11 @@ Focus on:
 
 - keeping the claim lane separate from demo-only behavior
 - recording the mixed current state honestly in policy metadata:
-  claim-debt admissibility is real, while late expansion and bucket scheduling
-  are still inherited
-- treating enumeration, prefix memo, and scheduler coupling as the next real
-  bottlenecks rather than continuing to tune already-landed admissibility
-  labels
+  claim-debt admissibility and claim-generic late expansion are real, while
+  bucket scheduling is still inherited
+- treating scheduler coupling, later-band mutator breadth, and certification as
+  the next real bottlenecks rather than continuing to tune already-landed
+  admissibility and first-pass late-expansion labels
 - moving admissibility, mutation, scheduling, and certification toward
   family-agnostic structural evidence
 - not using stronger words like `unguided` before the certification gate lands
@@ -352,10 +357,11 @@ Reject designs that:
   demo-lane docs and `references/12-current-demo-lane.md` as the regression
   baseline for future work.
 - The claim lane now exists as a separate scaffold, but its policy metadata
-  now honestly reports a mixed state: claim-debt admissibility is landed, while
-  late expansion and bucket scheduling still inherit realistic-shadow behavior.
-- The next operational claim-lane work should focus on generic mutators,
-  structural bucket scheduling, and certification evidence rather than on
-  already-landed profile or admissibility separation.
+  now honestly reports a mixed state: claim-debt admissibility and a
+  claim-generic late surface are landed, while bucket scheduling still
+  inherits semantic-family behavior.
+- The next operational claim-lane work should focus on structural bucket
+  scheduling, later-band claim mutators, and certification evidence rather than
+  on already-landed profile or admissibility separation.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
   the track-specific references you actually need.

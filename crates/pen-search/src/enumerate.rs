@@ -13,6 +13,7 @@ use std::collections::{BTreeMap, BTreeSet};
 pub enum LateFamilySurface {
     None,
     RealisticShadow,
+    ClaimGeneric,
     DemoBreadthShadow,
 }
 
@@ -96,7 +97,7 @@ impl EnumerationContext {
             late_family_surface: match admissibility.mode {
                 AdmissibilityMode::RealisticShadow => LateFamilySurface::RealisticShadow,
                 AdmissibilityMode::DemoBreadthShadow => LateFamilySurface::DemoBreadthShadow,
-                AdmissibilityMode::DesktopClaimShadow => LateFamilySurface::RealisticShadow,
+                AdmissibilityMode::DesktopClaimShadow => LateFamilySurface::ClaimGeneric,
                 AdmissibilityMode::Guarded | AdmissibilityMode::RelaxedShadow => {
                     LateFamilySurface::None
                 }
@@ -263,6 +264,169 @@ fn relaxed_curvature_shell_clause(position: usize, context: EnumerationContext) 
         5 => Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
         _ => return None,
     })
+}
+
+fn claim_bridge_reanchor_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
+    let Some(anchor) = context.historical_anchor_ref else {
+        return Vec::new();
+    };
+    if context.library_size < 2 {
+        return Vec::new();
+    }
+
+    let latest = context.library_size;
+    let previous = latest - 1;
+    match position {
+        0 => vec![
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(previous))),
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
+        ],
+        1 => vec![
+            Expr::App(Box::new(Expr::Lib(anchor)), Box::new(Expr::Var(1))),
+            Expr::App(Box::new(Expr::Lib(anchor)), Box::new(Expr::Var(2))),
+            Expr::App(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
+        ],
+        2 => vec![
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Lib(previous)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(previous)),
+                Box::new(Expr::Lib(latest)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Var(1)),
+            ))),
+        ],
+        3 => vec![
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(previous))),
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(previous))),
+        ],
+        _ => Vec::new(),
+    }
+}
+
+fn claim_modal_lift_clauses(position: usize) -> Vec<Expr> {
+    match position {
+        0 => vec![
+            Expr::Flat(Box::new(Expr::Var(1))),
+            Expr::Flat(Box::new(Expr::Var(2))),
+            Expr::Flat(Box::new(Expr::Shape(Box::new(Expr::Var(1))))),
+        ],
+        1 => vec![
+            Expr::Sharp(Box::new(Expr::Var(1))),
+            Expr::Sharp(Box::new(Expr::Var(2))),
+            Expr::Sharp(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+        ],
+        2 => vec![
+            Expr::Disc(Box::new(Expr::Var(1))),
+            Expr::Disc(Box::new(Expr::Var(2))),
+            Expr::Disc(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+        ],
+        3 => vec![
+            Expr::Shape(Box::new(Expr::Var(1))),
+            Expr::Shape(Box::new(Expr::Var(2))),
+            Expr::Shape(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+        ],
+        _ => Vec::new(),
+    }
+}
+
+fn claim_structural_shell_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
+    if context.library_size == 0 {
+        return Vec::new();
+    }
+
+    let latest = context.library_size;
+    let previous = latest
+        .checked_sub(1)
+        .filter(|index| *index > 0)
+        .unwrap_or(latest);
+    match position {
+        0 => vec![
+            Expr::Pi(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Lib(previous)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        1 => vec![
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::Var(1)),
+            ))),
+            Expr::Lam(Box::new(Expr::Sigma(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Var(2)),
+            ))),
+        ],
+        2 => vec![
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Var(1)),
+            ),
+            Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Var(2)))),
+                Box::new(Expr::Var(1)),
+            ),
+        ],
+        3 => vec![
+            Expr::App(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+            Expr::App(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
+            Expr::App(
+                Box::new(Expr::Lib(latest)),
+                Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+            ),
+        ],
+        4 => vec![
+            Expr::Lam(Box::new(Expr::Var(1))),
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+        ],
+        5 => vec![
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(previous))),
+        ],
+        _ => Vec::new(),
+    }
+}
+
+fn claim_generic_band7_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
+    operator_bundle_reference_clause(position, context)
+        .into_iter()
+        .collect()
+}
+
+fn claim_generic_band8_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
+    temporal_shell_reference_clause(position, context)
+        .into_iter()
+        .collect()
+}
+
+fn claim_generic_band9_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
+    hilbert_functional_reference_clause(position, context)
+        .into_iter()
+        .collect()
 }
 
 fn demo_initial_hit_clauses(position: usize) -> Vec<Expr> {
@@ -1421,6 +1585,7 @@ fn operator_bundle_family_clauses(position: usize, context: EnumerationContext) 
             ))),
         ],
         LateFamilySurface::RealisticShadow => vec![reference],
+        LateFamilySurface::ClaimGeneric => claim_generic_band7_clauses(position, context),
         LateFamilySurface::DemoBreadthShadow => demo_operator_bundle_clauses(position, context),
     }
 }
@@ -1439,6 +1604,7 @@ fn hilbert_functional_family_clauses(position: usize, context: EnumerationContex
             ))),
         ],
         LateFamilySurface::RealisticShadow => vec![reference],
+        LateFamilySurface::ClaimGeneric => claim_generic_band9_clauses(position, context),
         LateFamilySurface::DemoBreadthShadow => demo_hilbert_functional_clauses(position, context),
     }
 }
@@ -1459,6 +1625,7 @@ fn temporal_shell_family_clauses(position: usize, context: EnumerationContext) -
             ),
         ],
         LateFamilySurface::RealisticShadow => vec![reference],
+        LateFamilySurface::ClaimGeneric => claim_generic_band8_clauses(position, context),
         LateFamilySurface::DemoBreadthShadow => demo_temporal_shell_clauses(position, context),
     }
 }
@@ -1474,14 +1641,26 @@ fn late_clause_options(
         && context.historical_anchor_ref.is_some()
     {
         let mut clauses = Vec::new();
-        if context.late_family_surface == LateFamilySurface::DemoBreadthShadow {
-            clauses.extend(
-                demo_axiomatic_bridge_clauses(position, context)
-                    .into_iter()
-                    .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
-            );
-        } else if let Some(expr) = relaxed_axiomatic_bridge_clause(position, context) {
-            clauses.push(ClauseRec::new(primary_role(&expr), expr));
+        match context.late_family_surface {
+            LateFamilySurface::DemoBreadthShadow => {
+                clauses.extend(
+                    demo_axiomatic_bridge_clauses(position, context)
+                        .into_iter()
+                        .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+                );
+            }
+            LateFamilySurface::ClaimGeneric => {
+                clauses.extend(
+                    claim_bridge_reanchor_clauses(position, context)
+                        .into_iter()
+                        .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+                );
+            }
+            LateFamilySurface::None | LateFamilySurface::RealisticShadow => {
+                if let Some(expr) = relaxed_axiomatic_bridge_clause(position, context) {
+                    clauses.push(ClauseRec::new(primary_role(&expr), expr));
+                }
+            }
         }
         return Some(dedupe_sorted_clauses(clauses));
     }
@@ -1492,23 +1671,38 @@ fn late_clause_options(
         && context.historical_anchor_ref.is_some()
     {
         let mut clauses = Vec::new();
-        if context.late_family_surface == LateFamilySurface::DemoBreadthShadow {
-            clauses.extend(
-                demo_modal_shell_clauses(position)
-                    .into_iter()
-                    .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
-            );
-            clauses.extend(
-                demo_axiomatic_bridge_clauses(position, context)
-                    .into_iter()
-                    .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
-            );
-        } else {
-            if let Some(expr) = relaxed_modal_shell_clause(position) {
-                clauses.push(ClauseRec::new(primary_role(&expr), expr));
+        match context.late_family_surface {
+            LateFamilySurface::DemoBreadthShadow => {
+                clauses.extend(
+                    demo_modal_shell_clauses(position)
+                        .into_iter()
+                        .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+                );
+                clauses.extend(
+                    demo_axiomatic_bridge_clauses(position, context)
+                        .into_iter()
+                        .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+                );
             }
-            if let Some(expr) = relaxed_axiomatic_bridge_clause(position, context) {
-                clauses.push(ClauseRec::new(primary_role(&expr), expr));
+            LateFamilySurface::ClaimGeneric => {
+                clauses.extend(
+                    claim_modal_lift_clauses(position)
+                        .into_iter()
+                        .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+                );
+                clauses.extend(
+                    claim_bridge_reanchor_clauses(position, context)
+                        .into_iter()
+                        .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+                );
+            }
+            LateFamilySurface::None | LateFamilySurface::RealisticShadow => {
+                if let Some(expr) = relaxed_modal_shell_clause(position) {
+                    clauses.push(ClauseRec::new(primary_role(&expr), expr));
+                }
+                if let Some(expr) = relaxed_axiomatic_bridge_clause(position, context) {
+                    clauses.push(ClauseRec::new(primary_role(&expr), expr));
+                }
             }
         }
         return Some(dedupe_sorted_clauses(clauses));
@@ -1521,41 +1715,57 @@ fn late_clause_options(
         && context.max_expr_nodes == 5
     {
         let mut clauses = Vec::new();
-        if context.late_family_surface == LateFamilySurface::DemoBreadthShadow {
-            clauses.extend(
-                demo_connection_shell_clauses(position, context)
-                    .into_iter()
-                    .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
-            );
-            clauses.extend(
-                demo_curvature_shell_clauses(position, context)
-                    .into_iter()
-                    .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
-            );
-        } else {
-            if let Some(expr) = relaxed_connection_shell_clause(position, context) {
-                clauses.push(ClauseRec::new(primary_role(&expr), expr));
+        match context.late_family_surface {
+            LateFamilySurface::DemoBreadthShadow => {
+                clauses.extend(
+                    demo_connection_shell_clauses(position, context)
+                        .into_iter()
+                        .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+                );
+                clauses.extend(
+                    demo_curvature_shell_clauses(position, context)
+                        .into_iter()
+                        .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+                );
             }
-            if let Some(expr) = relaxed_curvature_shell_clause(position, context) {
-                clauses.push(ClauseRec::new(primary_role(&expr), expr));
+            LateFamilySurface::ClaimGeneric => {
+                clauses.extend(
+                    claim_structural_shell_clauses(position, context)
+                        .into_iter()
+                        .map(|expr| ClauseRec::new(primary_role(&expr), expr)),
+                );
+            }
+            LateFamilySurface::None | LateFamilySurface::RealisticShadow => {
+                if let Some(expr) = relaxed_connection_shell_clause(position, context) {
+                    clauses.push(ClauseRec::new(primary_role(&expr), expr));
+                }
+                if let Some(expr) = relaxed_curvature_shell_clause(position, context) {
+                    clauses.push(ClauseRec::new(primary_role(&expr), expr));
+                }
             }
         }
         return Some(dedupe_sorted_clauses(clauses));
     }
 
     if clause_kappa == 7 && context.max_expr_nodes >= 7 && context.max_path_dimension == 0 {
-        let clauses = operator_bundle_family_clauses(position, context)
-            .into_iter()
-            .map(|expr| ClauseRec::new(primary_role(&expr), expr))
-            .collect();
+        let clauses = match context.late_family_surface {
+            LateFamilySurface::ClaimGeneric => claim_generic_band7_clauses(position, context),
+            _ => operator_bundle_family_clauses(position, context),
+        }
+        .into_iter()
+        .map(|expr| ClauseRec::new(primary_role(&expr), expr))
+        .collect();
         return Some(dedupe_sorted_clauses(clauses));
     }
 
     if clause_kappa == 9 && context.max_expr_nodes >= 7 && context.max_path_dimension == 0 {
-        let clauses = hilbert_functional_family_clauses(position, context)
-            .into_iter()
-            .map(|expr| ClauseRec::new(primary_role(&expr), expr))
-            .collect();
+        let clauses = match context.late_family_surface {
+            LateFamilySurface::ClaimGeneric => claim_generic_band9_clauses(position, context),
+            _ => hilbert_functional_family_clauses(position, context),
+        }
+        .into_iter()
+        .map(|expr| ClauseRec::new(primary_role(&expr), expr))
+        .collect();
         return Some(dedupe_sorted_clauses(clauses));
     }
 
@@ -1566,10 +1776,13 @@ fn late_clause_options(
         && context.include_temporal
         && context.historical_anchor_ref.is_some()
     {
-        let clauses = temporal_shell_family_clauses(position, context)
-            .into_iter()
-            .map(|expr| ClauseRec::new(primary_role(&expr), expr))
-            .collect();
+        let clauses = match context.late_family_surface {
+            LateFamilySurface::ClaimGeneric => claim_generic_band8_clauses(position, context),
+            _ => temporal_shell_family_clauses(position, context),
+        }
+        .into_iter()
+        .map(|expr| ClauseRec::new(primary_role(&expr), expr))
+        .collect();
         return Some(dedupe_sorted_clauses(clauses));
     }
 
@@ -3033,7 +3246,7 @@ fn supports_operator_bundle_clause_at_position(
 
     let latest = library_size;
     let previous = latest - 1;
-    if late_family_surface != LateFamilySurface::None && position == 5 {
+    if late_family_surface == LateFamilySurface::RealisticShadow && position == 5 {
         return matches!(
             expr,
             Expr::Lam(body)
@@ -3161,7 +3374,7 @@ fn supports_hilbert_functional_clause_at_position(
     let latest = library_size;
     let previous = latest - 1;
     let older = latest - 2;
-    if late_family_surface != LateFamilySurface::None && position == 8 {
+    if late_family_surface == LateFamilySurface::RealisticShadow && position == 8 {
         return matches!(
             expr,
             Expr::Lam(body)
@@ -3304,7 +3517,7 @@ fn supports_temporal_shell_clause_at_position(
             .any(|candidate| candidate == *expr);
     }
 
-    if late_family_surface != LateFamilySurface::None && position == 4 {
+    if late_family_surface == LateFamilySurface::RealisticShadow && position == 4 {
         return matches!(
             expr,
             Expr::Pi(domain, codomain)
@@ -3577,15 +3790,18 @@ fn contains_eliminator_expr(expr: &Expr) -> bool {
 #[cfg(test)]
 mod tests {
     use super::{
-        EnumerationContext, LateFamilySurface, enumerate_exprs, enumerate_next_clauses,
-        enumerate_raw_telescopes, enumerate_telescopes, raw_clause_catalog_widths,
-        supports_axiomatic_bundle_clause_at_position, supports_connection_shell_clause_at_position,
-        supports_curvature_shell_clause_at_position, supports_former_package_clause_at_position,
-        supports_higher_hit_clause_at_position, supports_hilbert_functional_clause_at_position,
-        supports_initial_hit_clause_at_position, supports_modal_shell_clause_at_position,
-        supports_operator_bundle_clause_at_position, supports_sphere_lift_clause_at_position,
-        supports_temporal_shell_clause_at_position, supports_truncation_hit_clause_at_position,
+        EnumerationContext, LateFamilySurface, build_clause_catalog, enumerate_exprs,
+        enumerate_next_clauses, enumerate_raw_telescopes, enumerate_telescopes,
+        raw_clause_catalog_widths, supports_axiomatic_bundle_clause_at_position,
+        supports_connection_shell_clause_at_position, supports_curvature_shell_clause_at_position,
+        supports_former_package_clause_at_position, supports_higher_hit_clause_at_position,
+        supports_hilbert_functional_clause_at_position, supports_initial_hit_clause_at_position,
+        supports_modal_shell_clause_at_position, supports_operator_bundle_clause_at_position,
+        supports_sphere_lift_clause_at_position, supports_temporal_shell_clause_at_position,
+        supports_truncation_hit_clause_at_position,
     };
+    use pen_core::clause::{ClauseRec, ClauseRole};
+    use pen_core::expr::Expr;
     use pen_core::library::{Library, LibraryEntry};
     use pen_core::telescope::Telescope;
     use pen_type::admissibility::{
@@ -3609,16 +3825,159 @@ mod tests {
     }
 
     #[test]
-    fn claim_shadow_currently_reuses_realistic_late_surface() {
+    fn claim_shadow_uses_claim_generic_late_surface() {
         let library = library_until(9);
         let admissibility =
             strict_admissibility_for_mode(10, 2, &library, AdmissibilityMode::DesktopClaimShadow);
 
         let context = context_from_admissibility(&library, admissibility);
 
-        assert_eq!(
-            context.late_family_surface,
-            LateFamilySurface::RealisticShadow
+        assert_eq!(context.late_family_surface, LateFamilySurface::ClaimGeneric);
+    }
+
+    #[test]
+    fn claim_generic_kappa_four_catalog_adds_claim_only_bridge_variants() {
+        let library = library_until(9);
+        let admissibility =
+            strict_admissibility_for_mode(10, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = context_from_admissibility(&library, admissibility);
+        let mut realistic_context = claim_context;
+        realistic_context.late_family_surface = LateFamilySurface::RealisticShadow;
+
+        let claim_catalog = build_clause_catalog(claim_context, 4);
+        let realistic_catalog = build_clause_catalog(realistic_context, 4);
+        let claim_only = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::App(Box::new(Expr::Lib(7)), Box::new(Expr::Var(2))),
+        );
+
+        assert!(claim_catalog.clauses_at(1).contains(&claim_only));
+        assert!(!realistic_catalog.clauses_at(1).contains(&claim_only));
+    }
+
+    #[test]
+    fn claim_generic_kappa_six_catalog_adds_structural_shell_variants() {
+        let library = library_until(11);
+        let admissibility =
+            strict_admissibility_for_mode(12, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = context_from_admissibility(&library, admissibility);
+        let mut realistic_context = claim_context;
+        realistic_context.late_family_surface = LateFamilySurface::RealisticShadow;
+
+        let claim_catalog = build_clause_catalog(claim_context, 6);
+        let realistic_catalog = build_clause_catalog(realistic_context, 6);
+        let claim_only = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::Sigma(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Var(2)),
+            ))),
+        );
+
+        assert!(claim_catalog.clauses_at(1).contains(&claim_only));
+        assert!(!realistic_catalog.clauses_at(1).contains(&claim_only));
+    }
+
+    #[test]
+    fn claim_generic_late_bands_drop_realistic_only_variants() {
+        let step_thirteen_library = library_until(12);
+        let step_thirteen = strict_admissibility_for_mode(
+            13,
+            2,
+            &step_thirteen_library,
+            AdmissibilityMode::DesktopClaimShadow,
+        );
+        let claim_thirteen = build_clause_catalog(
+            context_from_admissibility(&step_thirteen_library, step_thirteen),
+            7,
+        );
+        let mut realistic_thirteen =
+            context_from_admissibility(&step_thirteen_library, step_thirteen);
+        realistic_thirteen.late_family_surface = LateFamilySurface::RealisticShadow;
+        let realistic_thirteen = build_clause_catalog(realistic_thirteen, 7);
+        let realistic_operator_extra = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Var(1)),
+            ))),
+        );
+        assert!(
+            !claim_thirteen
+                .clauses_at(5)
+                .contains(&realistic_operator_extra)
+        );
+        assert!(
+            realistic_thirteen
+                .clauses_at(5)
+                .contains(&realistic_operator_extra)
+        );
+
+        let step_fourteen_library = library_until(13);
+        let step_fourteen = strict_admissibility_for_mode(
+            14,
+            2,
+            &step_fourteen_library,
+            AdmissibilityMode::DesktopClaimShadow,
+        );
+        let claim_fourteen = build_clause_catalog(
+            context_from_admissibility(&step_fourteen_library, step_fourteen),
+            9,
+        );
+        let mut realistic_fourteen =
+            context_from_admissibility(&step_fourteen_library, step_fourteen);
+        realistic_fourteen.late_family_surface = LateFamilySurface::RealisticShadow;
+        let realistic_fourteen = build_clause_catalog(realistic_fourteen, 9);
+        let realistic_hilbert_extra = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Univ),
+            ))),
+        );
+        assert!(
+            !claim_fourteen
+                .clauses_at(8)
+                .contains(&realistic_hilbert_extra)
+        );
+        assert!(
+            realistic_fourteen
+                .clauses_at(8)
+                .contains(&realistic_hilbert_extra)
+        );
+
+        let step_fifteen_library = library_until(14);
+        let step_fifteen = strict_admissibility_for_mode(
+            15,
+            2,
+            &step_fifteen_library,
+            AdmissibilityMode::DesktopClaimShadow,
+        );
+        let claim_fifteen = build_clause_catalog(
+            context_from_admissibility(&step_fifteen_library, step_fifteen),
+            8,
+        );
+        let mut realistic_fifteen = context_from_admissibility(&step_fifteen_library, step_fifteen);
+        realistic_fifteen.late_family_surface = LateFamilySurface::RealisticShadow;
+        let realistic_fifteen = build_clause_catalog(realistic_fifteen, 8);
+        let realistic_temporal_extra = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+            ),
+        );
+        assert!(
+            !claim_fifteen
+                .clauses_at(4)
+                .contains(&realistic_temporal_extra)
+        );
+        assert!(
+            realistic_fifteen
+                .clauses_at(4)
+                .contains(&realistic_temporal_extra)
         );
     }
 
