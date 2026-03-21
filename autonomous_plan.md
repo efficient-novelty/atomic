@@ -38,8 +38,8 @@ What this means operationally:
 
 ## What Still Blocks The Stronger Claim
 
-- the remaining claim band `9` is still a thin reference-first surface rather
-  than a richer claim-specific mutator pack
+- the widened claim band `9` still lacks stored breadth/floor evidence and
+  signoff artifacts on the claim lane itself
 - claim-path parity still needs stored signoff evidence even though direct
   prefix/completion exactness is now rechecked by tests under the
   structural-generic bucket surface
@@ -270,8 +270,7 @@ Done when:
 
 Implement the remaining late-surface and evidence follow-up directly:
 
-1. finish the remaining `kappa 9` claim-generic widening without reintroducing
-   realistic-shadow or demo-only helpers
-2. turn the widened later-band surface into stored breadth/floor evidence on
+1. turn the widened later-band surface into stored breadth/floor evidence on
    the structural-generic claim lane
+2. recheck stored parity and fallback honesty on that widened claim lane
 3. then earn the certification bundle on the updated claim lane

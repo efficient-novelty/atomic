@@ -42,8 +42,9 @@ backend = "auto"
 verify_on_cpu = true
 
 # This claim-lane milestone keeps desktop_claim_shadow comparison-backed while
-# using claim-debt admissibility and claim-generic late mutators. Structural
-# bucket scheduling and certification still remain to land.
+# using claim-debt admissibility, claim-generic late mutators, and
+# structural-generic claim bucket scheduling. Stored breadth evidence and
+# certification still remain to land.
 # The shared [demo] block still carries narrative and floor metadata for the
 # claim lane until the reporting surface is renamed.
 [demo]

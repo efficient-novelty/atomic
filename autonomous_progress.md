@@ -17,9 +17,9 @@ intentionally short and forward-looking; use
   - `late_expansion_policy = claim_generic`
 - claim bucket scheduling is now claim-specific:
   - `bucket_policy = structural_generic`
-- the lane is still mixed-mode at the later-band/certification layer:
-  - `kappa 7-8` now have claim-specific later-band mutator packs
-  - `kappa 9` still remains conservative and reference-first
+- the lane is still mixed-mode at the evidence/certification layer:
+  - `kappa 7-9` now have claim-specific later-band mutator packs
+  - stored breadth/floor evidence and certification are still open
 - the lane is not yet certification-ready and it is still not honest to call
   it `unguided`
 
@@ -30,26 +30,28 @@ intentionally short and forward-looking; use
 - Claim mode now has its own `ClaimGeneric` late surface in
   `crates/pen-search/src/enumerate.rs` and
   `crates/pen-search/src/prefix_memo.rs`.
-- Claim-generic mutator packs are now real for kappa `4-8`; the remaining
-  conservative reference-first late band is kappa `9`.
+- Claim-generic mutator packs are now real for kappa `4-9`, with the new
+  kappa `9` widening still preserving guarded acceptance through the existing
+  claim-lane tests.
 - The scheduler taxonomy blocker is now closed in code and policy metadata:
   claim runs use structural-generic bucket keys instead of semantic-family
   labels.
 - Claim-path terminal-prefix completion and cached exact-bound reuse are now
   directly rechecked by tests under the structural-generic claim scheduler
   surface.
-- The next blockers are the remaining conservative kappa `9` claim band, the
-  late-step breadth floors, and the still-incomplete certification surfaces.
+- The next blockers are stored late-step breadth/floor evidence, stored parity
+  signoff evidence on the claim lane itself, and the still-incomplete
+  certification surfaces.
 - Reporting already carries much of the exact-screen reason plumbing, but the
   compare, provenance, benchmark, and certification surfaces are still not
   strong enough for the paper sentence.
 
 ## Immediate Next Slice
 
-1. Finish the remaining `kappa 9` claim-generic widening without regressing
-   accepted parity.
-2. Convert the widened late surface into stored breadth/floor evidence on the
+1. Convert the widened late surface into stored breadth/floor evidence on the
    claim lane itself.
+2. Recheck stored parity and fallback honesty on the live claim lane rather
+   than only through unit tests.
 3. Then harden the compare, benchmark, provenance, and certification bundle on
    top of the claim-generic, structural-generic lane.
 

@@ -604,9 +604,75 @@ fn claim_generic_band8_clauses(position: usize, context: EnumerationContext) -> 
 }
 
 fn claim_generic_band9_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
-    hilbert_functional_reference_clause(position, context)
-        .into_iter()
-        .collect()
+    if context.library_size < 3 {
+        return Vec::new();
+    }
+
+    let latest = context.library_size;
+    let previous = latest - 1;
+    let older = latest - 2;
+    match position {
+        0 => vec![Expr::Sigma(
+            Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
+            )),
+            Box::new(Expr::Var(1)),
+        )],
+        1 => vec![
+            Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1))),
+            Expr::Pi(
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Var(1)),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Var(1)),
+            ),
+        ],
+        2 => vec![Expr::Pi(
+            Box::new(Expr::Var(1)),
+            Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+        )],
+        3 => vec![Expr::Pi(
+            Box::new(Expr::Lam(Box::new(Expr::Var(1)))),
+            Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+        )],
+        4 => vec![Expr::Sigma(
+            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+        )],
+        5 => vec![
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(previous))),
+        ],
+        6 => vec![
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Var(1))),
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(previous)), Box::new(Expr::Lib(older))),
+        ],
+        7 => vec![
+            Expr::Pi(Box::new(Expr::Lib(older)), Box::new(Expr::Var(1))),
+            Expr::Pi(Box::new(Expr::Lib(older)), Box::new(Expr::Lib(latest))),
+            Expr::Pi(Box::new(Expr::Lib(older)), Box::new(Expr::Lib(previous))),
+        ],
+        8 => vec![
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Univ),
+            ))),
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Lib(latest)),
+            ))),
+            Expr::Lam(Box::new(Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Lib(previous)),
+            ))),
+        ],
+        _ => Vec::new(),
+    }
 }
 
 fn demo_initial_hit_clauses(position: usize) -> Vec<Expr> {
@@ -4189,6 +4255,59 @@ mod tests {
 
         assert!(claim_catalog.clauses_at(0).contains(&claim_only));
         assert!(!realistic_catalog.clauses_at(0).contains(&claim_only));
+    }
+
+    #[test]
+    fn claim_generic_kappa_nine_catalog_adds_higher_order_binder_variants() {
+        let library = library_until(13);
+        let admissibility =
+            strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = context_from_admissibility(&library, admissibility);
+        let mut realistic_context = claim_context;
+        realistic_context.late_family_surface = LateFamilySurface::RealisticShadow;
+        let mut demo_context = claim_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+
+        let claim_catalog = build_clause_catalog(claim_context, 9);
+        let realistic_catalog = build_clause_catalog(realistic_context, 9);
+        let demo_catalog = build_clause_catalog(demo_context, 9);
+        let claim_only = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(Box::new(Expr::Lib(13)), Box::new(Expr::Lib(12))),
+        );
+
+        assert!(claim_catalog.clauses_at(5).contains(&claim_only));
+        assert!(!realistic_catalog.clauses_at(5).contains(&claim_only));
+        assert!(!demo_catalog.clauses_at(5).contains(&claim_only));
+    }
+
+    #[test]
+    fn claim_generic_step_fourteen_raw_catalog_is_wider_than_realistic_shadow() {
+        let library = library_until(13);
+        let admissibility =
+            strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = context_from_admissibility(&library, admissibility);
+        let mut realistic_context = claim_context;
+        realistic_context.late_family_surface = LateFamilySurface::RealisticShadow;
+
+        let claim_widths = raw_clause_catalog_widths(claim_context, 9);
+        let realistic_widths = raw_clause_catalog_widths(realistic_context, 9);
+        let claim_raw = enumerate_raw_telescopes(claim_context, 9);
+        let realistic_raw = enumerate_raw_telescopes(realistic_context, 9);
+
+        assert_eq!(claim_widths, vec![1, 3, 1, 1, 1, 3, 3, 3, 3]);
+        assert!(
+            claim_widths
+                .iter()
+                .zip(realistic_widths.iter())
+                .all(|(claim, realistic)| claim >= realistic)
+        );
+        assert!(
+            claim_raw.len() > realistic_raw.len(),
+            "expected claim kappa-9 raw surface to widen beyond realistic shadow, got claim={} vs realistic={}",
+            claim_raw.len(),
+            realistic_raw.len()
+        );
     }
 
     #[test]

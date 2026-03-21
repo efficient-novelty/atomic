@@ -22,9 +22,9 @@ every section below is closed and a passing claim certificate exists.
   claim-specific:
   - `late_expansion_policy = claim_generic`
   - `bucket_policy = structural_generic`
-- `kappa 7-8` now use claim-specific later-band mutator packs.
-- `kappa 9` is still conservative and accepted-hash parity through step `15`
-  is still an open claim-lane gate.
+- `kappa 7-9` now use claim-specific later-band mutator packs in code/tests.
+- Accepted-hash parity through step `15` and stored breadth evidence are still
+  open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
   - step `1` generated raw `= 2144`
   - step `10` generated `>= 500`
@@ -51,7 +51,7 @@ every section below is closed and a passing claim certificate exists.
       shell-mixture variants.
 - [x] Add claim-generic mutators for kappa `8` modal-temporal exchange and
       history-reanchor variants.
-- [ ] Add claim-generic mutators for kappa `9` higher-order and binder-heavy
+- [x] Add claim-generic mutators for kappa `9` higher-order and binder-heavy
       variants.
 - [ ] Ensure the claim path does not call:
       `relaxed_axiomatic_bridge_clause()`,
