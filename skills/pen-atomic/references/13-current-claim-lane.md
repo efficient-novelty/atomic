@@ -25,6 +25,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - `pen-cli run` and `pen-cli resume` now write `run.json`, step summaries,
   step checkpoints, frontier snapshots, claim narratives/events, and failure
   status incrementally, so failed long claim runs remain auditable from disk.
+- claim runs now record observed process RSS alongside governor-accounted RSS
+  in stored step pressure data, so the model gap is visible from artifacts.
+- claim auto-worker resolution is now memory-aware on
+  `desktop_claim_shadow`, and claim proof-close now drops cached evaluated
+  terminal payloads after ranking so the live prefix cache stays smaller.
 - `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
   reason coverage, prune-class coverage, narrative artifacts, and whether the
   stored run reaches the step-15 claim signoff surface.
@@ -46,12 +51,15 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - a full `desktop_claim_shadow_1h` auto-worker run still aborts before
   step-15 completion on the disclosed machine; the latest attempt failed with
   `memory allocation of 1212416 bytes failed`
+- the repo can now store the observed-versus-accounted RSS gap for claim steps,
+  but there is still no full-profile stored run showing whether the new worker
+  cap and cache compaction fully remove the live spike
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice
 
-1. Make the intended `desktop_claim_shadow_1h` profile memory-stable on the
-   disclosed machine.
+1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
+   machine and inspect the stored RSS-gap data.
 2. Once that bundle exists, run the compare/certification scripts against it.
 3. Then close the remaining breadth/floor and parity misses.
 

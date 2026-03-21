@@ -122,6 +122,10 @@ pub struct FrontierPressure {
     pub pressure_action: PressureAction,
     pub rss_bytes: u64,
     #[serde(default)]
+    pub observed_process_rss_bytes: u64,
+    #[serde(default)]
+    pub rss_gap_bytes: i64,
+    #[serde(default)]
     pub hot_frontier_bytes: u64,
     #[serde(default)]
     pub cold_frontier_bytes: u64,
@@ -142,6 +146,8 @@ impl Default for FrontierPressure {
             governor_state: GovernorState::Green,
             pressure_action: PressureAction::None,
             rss_bytes: 0,
+            observed_process_rss_bytes: 0,
+            rss_gap_bytes: 0,
             hot_frontier_bytes: 0,
             cold_frontier_bytes: 0,
             dedupe_bytes: 0,
@@ -225,6 +231,8 @@ where
             governor_state: governor_decision.state,
             pressure_action: governor_decision.action,
             rss_bytes: governor_decision.rss_bytes,
+            observed_process_rss_bytes: 0,
+            rss_gap_bytes: 0,
             hot_frontier_bytes: memory_usage.hot_frontier_bytes,
             cold_frontier_bytes: memory_usage.cold_frontier_bytes,
             dedupe_bytes: memory_usage.dedupe_bytes,

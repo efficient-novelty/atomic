@@ -1546,10 +1546,12 @@ pub fn render_debug_report(run_id: &str, steps: &[StepReport]) -> String {
             step.frontier_policy.cold_limit
         ));
         lines.push(format!(
-            "  frontier pressure: state={} action={} rss_bytes={} hot_bytes={} cold_bytes={} dedupe_bytes={} requested_cold={} retained_cold={} resident_cold={} spill_backed={} dropped={}",
+            "  frontier pressure: state={} action={} rss_bytes={} observed_rss_bytes={} rss_gap_bytes={} hot_bytes={} cold_bytes={} dedupe_bytes={} requested_cold={} retained_cold={} resident_cold={} spill_backed={} dropped={}",
             step.frontier_pressure.governor_state.as_str(),
             step.frontier_pressure.pressure_action.as_str(),
             step.frontier_pressure.rss_bytes,
+            step.frontier_pressure.observed_process_rss_bytes,
+            step.frontier_pressure.rss_gap_bytes,
             step.frontier_pressure.hot_frontier_bytes,
             step.frontier_pressure.cold_frontier_bytes,
             step.frontier_pressure.dedupe_bytes,

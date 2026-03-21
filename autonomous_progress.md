@@ -24,13 +24,22 @@ intentionally short and forward-looking; use
 - `pen-cli run` and `pen-cli resume` now persist `run.json`, step summaries,
   step checkpoints, frontier snapshots, claim narratives/events, and failure
   status incrementally so interrupted claim runs stay auditable from disk
+- claim auto-worker resolution is now memory-aware for
+  `desktop_claim_shadow`, so the intended auto setting is capped by the
+  available soft-over-target RSS headroom instead of raw logical CPU count
+- claim step summaries and telemetry now persist both governor-accounted
+  frontier RSS and sampled process RSS so stored claim bundles can show the
+  live gap directly
+- claim proof-close now drops cached evaluated terminal-prefix payloads after
+  recording accept ranks, trading recomputation for a smaller live prefix-cache
+  footprint on the claim lane
 - the lane is still not certification-ready because the intended full-profile
   run is not yet stable enough to produce a stored step-15 claim bundle
 
 ## Current Read
 
-- The main blocker is now full-profile memory stability, not claim-policy
-  separation or failed-run evidence preservation.
+- The main blocker is still full-profile memory stability, but the live memory
+  work is now in the code path itself rather than only in planning docs.
 - The intended `desktop_claim_shadow_1h` auto-worker profile still aborts on
   the disclosed machine before step-15 completion with
   `memory allocation of 1212416 bytes failed`.
@@ -38,20 +47,23 @@ intentionally short and forward-looking; use
   step-specific artifacts, and late frontier state, so the next pressure or
   allocator failure can be debugged from stored evidence instead of terminal
   output alone.
+- Claim runs now also expose observed-versus-accounted RSS gap data and keep a
+  smaller proof-close cache, but there is still no stored full-profile bundle
+  proving that those changes are sufficient on the disclosed machine.
 - Manifest completeness and failed-run survivability are no longer the gating
-  issue; memory-aware execution on the intended auto-worker profile is.
+  issue; rerunning the intended profile with the new memory controls is.
 - Breadth, parity, fallback honesty, and certification remain open, but they
   cannot move from tests into stored evidence until the full-profile claim run
   completes reliably enough to leave a bundle.
 
 ## Immediate Next Slice
 
-1. Make worker resolution and memory-pressure handling claim-aware enough for
-   the intended `desktop_claim_shadow_1h` profile to finish on the disclosed
-   machine.
-2. Rerun the full claim profile and compare it against guarded from stored
-   artifacts.
-3. Use that bundle to close the remaining parity, breadth, benchmark, and
+1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
+   machine and inspect the stored observed-versus-accounted RSS gap.
+2. If the run still fails, use that stored gap plus the latest completed step
+   to identify the remaining untracked allocation site honestly.
+3. Once the run finishes, compare it against guarded from stored artifacts and
+   use that bundle to close the remaining parity, breadth, benchmark, and
    certification gaps.
 
 ## After That
@@ -68,6 +80,10 @@ intentionally short and forward-looking; use
 - `cargo test -p pen-cli claim_run_writes_policy_metadata_and_claim_narrative`
 - `cargo test -p pen-cli --bin pen-cli cmd_run::tests::failed_partial_claim_run_still_leaves_manifest_and_narrative_artifacts -- --exact`
 - `cargo test -p pen-cli --bin pen-cli cmd_run::tests::failed_partial_late_run_still_leaves_frontier_snapshot -- --exact`
+- `cargo test -p pen-search --lib claim_lane_drops_cached_terminal_payloads_after_ranking`
+- `cargo test -p pen-cli --bin pen-cli cmd_run::tests::`
+- `cargo test -p pen-cli --test deterministic_replay repeated_runs_with_the_same_inputs_are_deterministic -- --exact`
+- `cargo test -p pen-cli --test resume_roundtrip resume_roundtrip_keeps_the_reference_sequence_and_inspect_output -- --exact`
 - `cargo test -p pen-cli --test atomic_bootstrap compare_runs_reports_claim_lane_policy_and_reason_audit`
 - `cargo test -p pen-cli --test atomic_bootstrap claim_certification_script_emits_failing_certificate_for_incomplete_smoke_run`
 - `cargo test -p pen-cli --test deterministic_replay compare_runs_script_emits_a_deterministic_evidence_signoff`

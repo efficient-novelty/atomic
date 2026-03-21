@@ -22,6 +22,9 @@ every section below is closed and a passing claim certificate exists.
 - Failed long runs now leave auditable `run.json`, step, checkpoint, frontier,
   and claim-narrative artifacts; the open issue is finishing the full profile,
   not preserving the failure bundle.
+- Claim step artifacts now persist observed process RSS and the gap versus the
+  governor-accounted RSS model, but no full-profile stored claim run exists yet
+  to interpret those numbers on the disclosed machine.
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
@@ -35,16 +38,18 @@ every section below is closed and a passing claim certificate exists.
 
 ## 1. Memory Stability On The Intended Claim Profile
 
-- [ ] Measure the gap between real process RSS and the governor-accounted
-      memory model during claim runs.
-- [ ] Make worker resolution memory-aware for `desktop_claim_shadow` instead of
-      relying only on logical CPU count.
-- [ ] Reduce or cap worker scratch/frontier residency enough for the intended
-      `desktop_claim_shadow_1h` profile to complete on the disclosed machine.
-- [ ] Spill or compact earlier when the claim lane approaches pressure instead
-      of waiting for allocator failure.
-- [ ] Confirm and close any claim-path allocation spike not currently covered
-      by the tracked memory model.
+- [ ] Capture and review the observed process RSS versus governor-accounted RSS
+      gap from a stored `desktop_claim_shadow` run now that claim artifacts
+      persist both numbers.
+- [ ] Verify that the new memory-aware auto-worker cap is sufficient for the
+      intended `desktop_claim_shadow_1h` profile on the disclosed machine.
+- [ ] Verify that claim-lane proof-close cache compaction removes the remaining
+      live allocation spike; if not, identify the next resident hot spot.
+- [ ] Reduce or cap any remaining worker scratch/frontier residency enough for
+      the intended `desktop_claim_shadow_1h` profile to complete on the
+      disclosed machine.
+- [ ] Spill or compact earlier again if the new claim-only memory controls are
+      still insufficient before the run reaches step-15 completion.
 - [ ] Eliminate the `memory allocation of 1212416 bytes failed` abort on the
       disclosed desktop under the intended full profile.
 

@@ -56,7 +56,7 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
             String::new()
         } else {
             format!(
-                "\nretention_focus: {}\nfrontier_pressure: state={} action={} rss_bytes={} hot_bytes={} cold_bytes={} dedupe_bytes={} requested_cold={} retained_cold={} resident_cold={} spill_backed={} dropped={}",
+                "\nretention_focus: {}\nfrontier_pressure: state={} action={} rss_bytes={} observed_rss_bytes={} rss_gap_bytes={} hot_bytes={} cold_bytes={} dedupe_bytes={} requested_cold={} retained_cold={} resident_cold={} spill_backed={} dropped={}",
                 match step.frontier_policy.focus {
                     pen_type::obligations::RetentionFocus::OpenBand => "open_band",
                     pen_type::obligations::RetentionFocus::Former => "former",
@@ -68,6 +68,8 @@ pub fn inspect(args: InspectArgs) -> Result<String> {
                 step.frontier_pressure.governor_state.as_str(),
                 step.frontier_pressure.pressure_action.as_str(),
                 step.frontier_pressure.rss_bytes,
+                step.frontier_pressure.observed_process_rss_bytes,
+                step.frontier_pressure.rss_gap_bytes,
                 step.frontier_pressure.hot_frontier_bytes,
                 step.frontier_pressure.cold_frontier_bytes,
                 step.frontier_pressure.dedupe_bytes,

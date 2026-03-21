@@ -5419,7 +5419,7 @@ fn cache_evaluated_terminal_prefix_group_candidates(
 ) -> Result<()> {
     sort_terminal_prefix_group_candidates_for_certification(candidates);
 
-    for candidate in candidates {
+    for candidate in candidates.iter_mut() {
         let evaluated = match candidate.evaluated_candidate.clone() {
             Some(evaluated) => evaluated,
             None => evaluate_checked_candidate(library, history, candidate.telescope.clone())?,
@@ -5449,8 +5449,23 @@ fn cache_evaluated_terminal_prefix_group_candidates(
         candidate.accept_rank = candidate_rank;
         candidate.evaluated_candidate = Some(evaluated);
     }
+    if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
+        // Claim runs prefer bounded live memory over caching every evaluated
+        // terminal payload inside the prefix cache.
+        compact_terminal_prefix_group_candidates(candidates);
+    }
 
     Ok(())
+}
+
+fn should_compact_terminal_prefix_group_candidates(mode: AdmissibilityMode) -> bool {
+    matches!(mode, AdmissibilityMode::DesktopClaimShadow)
+}
+
+fn compact_terminal_prefix_group_candidates(candidates: &mut [PrefixGroupCandidate]) {
+    for candidate in candidates {
+        candidate.evaluated_candidate = None;
+    }
 }
 
 fn pop_best_prefix(frontier: &mut Vec<OnlinePrefixWorkItem>) -> Option<OnlinePrefixWorkItem> {
@@ -5758,7 +5773,7 @@ mod tests {
     use crate::branch_bound::AcceptRank;
     use crate::config::{RuntimeConfig, SearchProfile};
     use crate::enumerate::{EnumerationContext, LateFamilySurface, build_clause_catalog};
-    use crate::expand::evaluate_candidate;
+    use crate::expand::{evaluate_candidate, evaluate_checked_candidate};
     use crate::narrative::{NarrativeEventKind, StepPhase, narrative_progress_snapshot};
     use crate::prefix_cache::{PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature};
     use crate::prefix_memo::{
@@ -5791,6 +5806,14 @@ mod tests {
 
     fn reference_prefix(until_step: u32) -> Vec<Telescope> {
         (1..=until_step).map(Telescope::reference).collect()
+    }
+
+    fn reference_library(until_step: u32) -> Library {
+        let mut library = Vec::new();
+        for telescope in reference_prefix(until_step) {
+            library.push(LibraryEntry::from_telescope(&telescope, &library));
+        }
+        library
     }
 
     fn library_until(until_step: u32) -> Library {
@@ -5956,6 +5979,49 @@ mod tests {
             ),
             std::cmp::Ordering::Greater
         );
+    }
+
+    #[test]
+    fn claim_lane_drops_cached_terminal_payloads_after_ranking() {
+        let mut candidates = vec![PrefixGroupCandidate {
+            telescope: Telescope::reference(2),
+            accept_rank: Some(test_accept_rank(1, "claim")),
+            evaluated_candidate: Some(
+                evaluate_checked_candidate(
+                    &reference_library(1),
+                    &[DiscoveryRecord::new(1, 2, 2)],
+                    Telescope::reference(2),
+                )
+                .expect("reference candidate should evaluate"),
+            ),
+        }];
+
+        if super::should_compact_terminal_prefix_group_candidates(
+            AdmissibilityMode::DesktopClaimShadow,
+        ) {
+            super::compact_terminal_prefix_group_candidates(&mut candidates);
+        }
+        assert!(candidates[0].accept_rank.is_some());
+        assert!(candidates[0].evaluated_candidate.is_none());
+
+        let mut realistic_candidates = vec![PrefixGroupCandidate {
+            telescope: Telescope::reference(2),
+            accept_rank: Some(test_accept_rank(1, "realistic")),
+            evaluated_candidate: Some(
+                evaluate_checked_candidate(
+                    &reference_library(1),
+                    &[DiscoveryRecord::new(1, 2, 2)],
+                    Telescope::reference(2),
+                )
+                .expect("reference candidate should evaluate"),
+            ),
+        }];
+        if super::should_compact_terminal_prefix_group_candidates(
+            AdmissibilityMode::RealisticShadow,
+        ) {
+            super::compact_terminal_prefix_group_candidates(&mut realistic_candidates);
+        }
+        assert!(realistic_candidates[0].evaluated_candidate.is_some());
     }
 
     #[test]

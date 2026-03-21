@@ -34,6 +34,12 @@ These are now baseline truths, not forward work:
 - `pen-cli run` and `pen-cli resume` now persist `run.json`, step summaries,
   step checkpoints, frontier snapshots, claim narratives/events, and failure
   status incrementally so failed long runs remain auditable
+- claim auto-worker resolution is now memory-aware for
+  `desktop_claim_shadow`
+- claim step artifacts now persist observed process RSS alongside the
+  governor-accounted RSS model
+- claim proof-close now drops cached evaluated terminal-prefix payloads after
+  ranking so the live claim cache stays smaller
 
 ## Active Blocker
 
@@ -98,17 +104,18 @@ Files:
 
 Concrete tasks:
 
-- measure the gap between real process RSS and the governor-accounted memory
-  model on claim runs
-- make resolved worker count memory-aware for the claim profile instead of
-  relying on raw logical CPU count alone
-- reduce or cap worker scratch, resident cold frontier, and checkpoint/spill
-  buffers when the claim lane would otherwise exceed the disclosed desktop
-  envelope
-- spill and compact earlier on the claim path when pressure rises instead of
-  waiting for allocator failure
-- confirm whether the allocator abort comes from tracked frontier structures or
-  from an untracked claim-path allocation spike, then close the specific gap
+- capture and review the newly stored observed-versus-accounted RSS gap from a
+  full claim run on the disclosed machine
+- verify that the new memory-aware auto-worker cap is sufficient for the
+  intended claim profile instead of merely changing the modeled worker count
+- reduce or cap any remaining worker scratch, resident cold frontier, and
+  checkpoint/spill buffers when the claim lane would otherwise exceed the
+  disclosed desktop envelope
+- spill and compact earlier again if the new claim-only controls still wait too
+  long before allocator pressure turns into failure
+- confirm whether any remaining allocator abort comes from tracked frontier
+  structures or from another untracked claim-path allocation spike, then close
+  the specific gap
 
 Done when:
 
@@ -210,11 +217,11 @@ Done when:
 
 ## Immediate Next Step
 
-Use the newly survivable claim bundle to attack the remaining live blocker:
+Use the new memory controls and stored RSS-gap evidence to attack the remaining
+live blocker:
 
-1. make auto-worker resolution and pressure handling memory-aware enough for
-   the disclosed desktop
-2. rerun `desktop_claim_shadow_1h` and compare it against guarded from stored
-   artifacts
+1. rerun `desktop_claim_shadow_1h` on the disclosed desktop and inspect the
+   stored observed-versus-accounted RSS gap
+2. compare that run against guarded from stored artifacts
 3. use that bundle to drive the remaining parity, breadth, benchmark, and
    certification fixes

@@ -5,17 +5,16 @@ use crate::narrative::{
 use crate::output::{OutputStyle, render_run_output};
 use crate::progress::TerminalStepProgress;
 use crate::report::{
-    GeneratedSteps, StepGenerationMode, StepProgressObserver, StepReport,
-    annotate_search_profile, annotate_single_step_replay_ablation,
-    generate_steps_with_config_and_runtime_and_progress, stored_exact_screen_reasons,
-    stored_prune_class_stats, write_step_report, write_step_reports,
+    GeneratedSteps, StepGenerationMode, StepProgressObserver, StepReport, annotate_search_profile,
+    annotate_single_step_replay_ablation, generate_steps_with_config_and_runtime_and_progress,
+    stored_exact_screen_reasons, stored_prune_class_stats, write_step_report, write_step_reports,
 };
 use anyhow::{Context, Result, bail};
 use pen_core::hash::blake3_hex;
 use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{LibrarySnapshot, LibrarySnapshotEntry};
-use pen_search::config::{RuntimeConfig, SearchProfile};
-use pen_search::diversify::FrontierRuntimeLimits;
+use pen_search::config::{RuntimeConfig, SearchProfile, WorkerSetting};
+use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
 use pen_search::engine::supports_live_atomic_search;
 use pen_search::frontier::FrontierWindow;
 use pen_search::priority::{PriorityInputs, build_priority_key};
@@ -39,7 +38,7 @@ use std::collections::BTreeSet;
 use std::fs::{self, OpenOptions};
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use sysinfo::System;
+use sysinfo::{ProcessRefreshKind, ProcessesToUpdate, System, get_current_pid};
 use time::OffsetDateTime;
 use time::format_description::well_known::Rfc3339;
 
@@ -57,8 +56,13 @@ pub fn run(args: RunArgs) -> Result<String> {
     let until_step = args.until_step.unwrap_or(config.search.until_step);
     let worker_count = resolved_worker_count(&config);
     let created_utc = now_utc()?;
-    let manifest_base =
-        build_run_manifest_base(&run_id, &config_text, &config, worker_count, created_utc.clone())?;
+    let manifest_base = build_run_manifest_base(
+        &run_id,
+        &config_text,
+        &config,
+        worker_count,
+        created_utc.clone(),
+    )?;
     let writer = RunArtifactWriter::start(
         &run_dir,
         &config_text,
@@ -319,10 +323,14 @@ impl<'a> RunArtifactWriter<'a> {
             persisted_steps,
             error: None,
         };
-        let manifest = writer.build_manifest(initial_updated_utc, RunStatus::Running, String::new());
+        let manifest =
+            writer.build_manifest(initial_updated_utc, RunStatus::Running, String::new());
         write_json_file(&writer.run_dir.join("run.json"), &manifest)?;
         write_latest_reports(&writer.run_dir, &manifest.run_id, &writer.persisted_steps)?;
-        append_telemetry_event(&writer.run_dir, &run_started_event(&manifest, mode, search_profile))?;
+        append_telemetry_event(
+            &writer.run_dir,
+            &run_started_event(&manifest, mode, search_profile),
+        )?;
         Ok(writer)
     }
 
@@ -365,6 +373,9 @@ impl<'a> RunArtifactWriter<'a> {
     fn persist_step(&mut self, step: &StepReport) -> Result<()> {
         let mut persisted = step.clone();
         persisted.search_profile = self.config.mode.search_profile;
+        if self.config.mode.search_profile == SearchProfile::DesktopClaimShadow {
+            annotate_observed_process_rss(&mut persisted.frontier_pressure);
+        }
         if let Some((provenance, min_step_index)) = self.provenance_override {
             if persisted.step_index >= min_step_index {
                 persisted.provenance = provenance;
@@ -399,8 +410,8 @@ impl<'a> RunArtifactWriter<'a> {
     }
 
     fn upsert_step(&mut self, step: StepReport) -> Result<usize> {
-        let index = usize::try_from(step.step_index.saturating_sub(1))
-            .expect("step index exceeded usize");
+        let index =
+            usize::try_from(step.step_index.saturating_sub(1)).expect("step index exceeded usize");
         if index < self.persisted_steps.len() {
             self.persisted_steps[index] = step;
             return Ok(index);
@@ -434,7 +445,6 @@ impl<'a> RunArtifactWriter<'a> {
             failure_note,
         )
     }
-
 }
 
 pub(crate) fn finalize_failed_run(
@@ -642,7 +652,10 @@ fn write_telemetry(
         lines.push(serde_json::to_string(&step_accepted_event(manifest, step))?);
     }
     lines.push(serde_json::to_string(&run_status_event(manifest))?);
-    fs::write(run_dir.join("telemetry.ndjson"), format!("{}\n", lines.join("\n")))?;
+    fs::write(
+        run_dir.join("telemetry.ndjson"),
+        format!("{}\n", lines.join("\n")),
+    )?;
     Ok(())
 }
 
@@ -657,7 +670,11 @@ fn append_telemetry_event(run_dir: &Path, event: &TelemetryEventV1) -> Result<()
     Ok(())
 }
 
-fn run_started_event(manifest: &RunManifestV1, mode: &str, search_profile: &str) -> TelemetryEventV1 {
+fn run_started_event(
+    manifest: &RunManifestV1,
+    mode: &str,
+    search_profile: &str,
+) -> TelemetryEventV1 {
     TelemetryEventV1 {
         schema_version: SCHEMA_VERSION_V1,
         run_id: manifest.run_id.clone(),
@@ -750,6 +767,8 @@ fn step_accepted_event(manifest: &RunManifestV1, step: &StepReport) -> Telemetry
                 "governor_state": step.frontier_pressure.governor_state.as_str(),
                 "pressure_action": step.frontier_pressure.pressure_action.as_str(),
                 "rss_bytes": step.frontier_pressure.rss_bytes,
+                "observed_process_rss_bytes": step.frontier_pressure.observed_process_rss_bytes,
+                "rss_gap_bytes": step.frontier_pressure.rss_gap_bytes,
                 "hot_frontier_bytes": step.frontier_pressure.hot_frontier_bytes,
                 "cold_frontier_bytes": step.frontier_pressure.cold_frontier_bytes,
                 "dedupe_bytes": step.frontier_pressure.dedupe_bytes,
@@ -965,7 +984,9 @@ pub(crate) fn resolved_worker_count(config: &RuntimeConfig) -> u16 {
     let logical_cpus = std::thread::available_parallelism()
         .map(|count| count.get() as u16)
         .unwrap_or(1);
-    config.search.resolve_workers(logical_cpus)
+    let mut system = System::new();
+    system.refresh_memory();
+    resolve_worker_count_for_host(config, logical_cpus, system.total_memory())
 }
 
 pub(crate) fn frontier_runtime_limits(
@@ -1058,63 +1079,76 @@ fn write_frontier_snapshot(
                 as u64,
             incremental_legality_cache_hits: step.search_stats.incremental_legality_cache_hits
                 as u64,
-            incremental_connectivity_shortcuts: step
-                .search_stats
-                .incremental_connectivity_shortcuts as u64,
-            incremental_connectivity_fallbacks: step
-                .search_stats
-                .incremental_connectivity_fallbacks as u64,
+            incremental_connectivity_shortcuts: step.search_stats.incremental_connectivity_shortcuts
+                as u64,
+            incremental_connectivity_fallbacks: step.search_stats.incremental_connectivity_fallbacks
+                as u64,
             incremental_connectivity_prunes: step.search_stats.incremental_connectivity_prunes
                 as u64,
             incremental_clause_family_filter_hits: step
                 .search_stats
-                .incremental_clause_family_filter_hits as u64,
+                .incremental_clause_family_filter_hits
+                as u64,
             incremental_clause_family_prunes: step.search_stats.incremental_clause_family_prunes
                 as u64,
             incremental_active_window_clause_filter_hits: step
                 .search_stats
-                .incremental_active_window_clause_filter_hits as u64,
+                .incremental_active_window_clause_filter_hits
+                as u64,
             incremental_active_window_clause_filter_prunes: step
                 .search_stats
-                .incremental_active_window_clause_filter_prunes as u64,
+                .incremental_active_window_clause_filter_prunes
+                as u64,
             incremental_terminal_clause_filter_hits: step
                 .search_stats
-                .incremental_terminal_clause_filter_hits as u64,
+                .incremental_terminal_clause_filter_hits
+                as u64,
             incremental_terminal_clause_filter_prunes: step
                 .search_stats
-                .incremental_terminal_clause_filter_prunes as u64,
+                .incremental_terminal_clause_filter_prunes
+                as u64,
             incremental_trivial_derivability_hits: step
                 .search_stats
-                .incremental_trivial_derivability_hits as u64,
+                .incremental_trivial_derivability_hits
+                as u64,
             incremental_trivial_derivability_prunes: step
                 .search_stats
-                .incremental_trivial_derivability_prunes as u64,
+                .incremental_trivial_derivability_prunes
+                as u64,
             incremental_terminal_admissibility_hits: step
                 .search_stats
-                .incremental_terminal_admissibility_hits as u64,
+                .incremental_terminal_admissibility_hits
+                as u64,
             incremental_terminal_admissibility_rejections: step
                 .search_stats
-                .incremental_terminal_admissibility_rejections as u64,
+                .incremental_terminal_admissibility_rejections
+                as u64,
             incremental_terminal_prefix_completion_hits: step
                 .search_stats
-                .incremental_terminal_prefix_completion_hits as u64,
+                .incremental_terminal_prefix_completion_hits
+                as u64,
             incremental_terminal_prefix_rank_hits: step
                 .search_stats
-                .incremental_terminal_prefix_rank_hits as u64,
+                .incremental_terminal_prefix_rank_hits
+                as u64,
             incremental_terminal_rank_prunes: step.search_stats.incremental_terminal_rank_prunes
                 as u64,
             incremental_partial_prefix_bound_hits: step
                 .search_stats
-                .incremental_partial_prefix_bound_hits as u64,
+                .incremental_partial_prefix_bound_hits
+                as u64,
             incremental_partial_prefix_bound_checks: step
                 .search_stats
-                .incremental_partial_prefix_bound_checks as u64,
+                .incremental_partial_prefix_bound_checks
+                as u64,
             incremental_partial_prefix_bound_prunes: step
                 .search_stats
-                .incremental_partial_prefix_bound_prunes as u64,
+                .incremental_partial_prefix_bound_prunes
+                as u64,
             incremental_terminal_prefix_bar_prunes: step
                 .search_stats
-                .incremental_terminal_prefix_bar_prunes as u64,
+                .incremental_terminal_prefix_bar_prunes
+                as u64,
             worker_count: frontier_worker_count,
             priority_heads: window.priority_heads(8),
             interner_bytes: 0,
@@ -1193,6 +1227,63 @@ fn checkpoint_buffer_bytes(config: &RuntimeConfig) -> u64 {
 
 fn spill_buffer_bytes(config: &RuntimeConfig) -> u64 {
     gib_to_bytes(config.memory.spill_buffers_gib)
+}
+
+fn resolve_worker_count_for_host(
+    config: &RuntimeConfig,
+    logical_cpus: u16,
+    host_ram_bytes: u64,
+) -> u16 {
+    let cpu_based_workers = config.search.resolve_workers(logical_cpus);
+    if config.search.workers != WorkerSetting::Auto
+        || config.mode.search_profile != SearchProfile::DesktopClaimShadow
+        || host_ram_bytes == 0
+    {
+        return cpu_based_workers;
+    }
+
+    let arena_bytes = u64::from(config.memory.worker_arena_mib.max(1)) * 1024 * 1024;
+    let host_claim_budget =
+        host_ram_bytes.saturating_sub(gib_to_bytes(config.memory.reserve_for_os_gib));
+    let steady_target = gib_to_bytes(config.memory.target_rss_gib).min(host_claim_budget);
+    let soft_target = gib_to_bytes(config.memory.soft_rss_gib).min(host_claim_budget);
+    let worker_headroom = soft_target.saturating_sub(steady_target);
+    let memory_based_workers = u16::try_from((worker_headroom / arena_bytes).max(1))
+        .unwrap_or(u16::MAX)
+        .min(config.search.max_workers.max(1));
+
+    cpu_based_workers.min(memory_based_workers.max(1))
+}
+
+fn annotate_observed_process_rss(frontier_pressure: &mut FrontierPressure) {
+    if frontier_pressure.rss_bytes == 0 {
+        return;
+    }
+    let Some(observed_process_rss_bytes) = current_process_rss_bytes() else {
+        return;
+    };
+    frontier_pressure.observed_process_rss_bytes = observed_process_rss_bytes;
+    frontier_pressure.rss_gap_bytes =
+        signed_byte_delta(observed_process_rss_bytes, frontier_pressure.rss_bytes);
+}
+
+fn current_process_rss_bytes() -> Option<u64> {
+    let pid = get_current_pid().ok()?;
+    let mut system = System::new();
+    system.refresh_processes_specifics(
+        ProcessesToUpdate::Some(&[pid]),
+        false,
+        ProcessRefreshKind::nothing().with_memory(),
+    );
+    system.process(pid).map(|process| process.memory())
+}
+
+fn signed_byte_delta(observed_bytes: u64, accounted_bytes: u64) -> i64 {
+    if observed_bytes >= accounted_bytes {
+        i64::try_from(observed_bytes - accounted_bytes).unwrap_or(i64::MAX)
+    } else {
+        -i64::try_from(accounted_bytes - observed_bytes).unwrap_or(i64::MAX)
+    }
 }
 
 fn gib_to_bytes(value: f64) -> u64 {
@@ -1467,6 +1558,36 @@ mod tests {
     }
 
     #[test]
+    fn claim_auto_worker_resolution_uses_memory_headroom() {
+        let config_text = include_str!("../../../configs/desktop_claim_shadow_1h.toml");
+        let config = pen_search::config::RuntimeConfig::from_toml_str(config_text)
+            .expect("config should parse");
+
+        assert_eq!(
+            super::resolve_worker_count_for_host(&config, 16, super::gib_to_bytes(16.0)),
+            8
+        );
+    }
+
+    #[test]
+    fn non_claim_auto_worker_resolution_stays_cpu_bound() {
+        let config_text = include_str!("../../../configs/strict_canon_guarded.toml");
+        let config = pen_search::config::RuntimeConfig::from_toml_str(config_text)
+            .expect("config should parse");
+
+        assert_eq!(
+            super::resolve_worker_count_for_host(&config, 16, super::gib_to_bytes(16.0)),
+            12
+        );
+    }
+
+    #[test]
+    fn signed_byte_delta_tracks_observed_gap_direction() {
+        assert_eq!(super::signed_byte_delta(1_536, 1_024), 512);
+        assert_eq!(super::signed_byte_delta(1_024, 1_536), -512);
+    }
+
+    #[test]
     fn failed_partial_claim_run_still_leaves_manifest_and_narrative_artifacts() {
         let root = temp_dir("partial-claim-failure");
         let run_dir = root.join("partial-claim");
@@ -1495,12 +1616,9 @@ mod tests {
             None,
         )
         .expect("writer should initialize");
-        let generated = generate_steps_with_config_and_runtime(
-            3,
-            &config,
-            FrontierRuntimeLimits::unlimited(),
-        )
-        .expect("claim steps should generate");
+        let generated =
+            generate_steps_with_config_and_runtime(3, &config, FrontierRuntimeLimits::unlimited())
+                .expect("claim steps should generate");
         for step in &generated.steps {
             writer.persist_step(step).expect("step should persist");
         }
@@ -1521,7 +1639,13 @@ mod tests {
         assert!(steps_dir.join("step-03-summary.json").exists());
         assert!(steps_dir.join("step-03-narrative.txt").exists());
         assert!(steps_dir.join("step-03-events.ndjson").exists());
-        assert!(run_dir.join("checkpoints").join("steps").join("step-03.json").exists());
+        assert!(
+            run_dir
+                .join("checkpoints")
+                .join("steps")
+                .join("step-03.json")
+                .exists()
+        );
 
         let latest =
             fs::read_to_string(run_dir.join("reports").join("latest.txt")).expect("latest report");
@@ -1565,12 +1689,9 @@ mod tests {
             None,
         )
         .expect("writer should initialize");
-        let generated = generate_steps_with_config_and_runtime(
-            4,
-            &config,
-            FrontierRuntimeLimits::unlimited(),
-        )
-        .expect("debug steps should generate");
+        let generated =
+            generate_steps_with_config_and_runtime(4, &config, FrontierRuntimeLimits::unlimited())
+                .expect("debug steps should generate");
         for step in &generated.steps {
             writer.persist_step(step).expect("step should persist");
         }

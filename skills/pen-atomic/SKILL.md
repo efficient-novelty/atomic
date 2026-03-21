@@ -27,10 +27,12 @@ Treat these as current repo truths:
   and claim-path exactness rechecks are now landed in code/tests; the repo now
   also has claim-specific compare/certification tooling plus richer
   CPU/build/git/binary manifest fingerprints; failed-run evidence preservation
-  is now landed via incremental run/step/frontier/narrative persistence, while
-  breadth evidence, parity signoff, runtime stability on the intended
-  `claim-1h` auto-worker profile, and certification pass status still remain
-  open
+  is now landed via incremental run/step/frontier/narrative persistence; claim
+  runs now also record observed-versus-accounted RSS gap data, claim
+  auto-worker resolution is now memory-aware, and claim proof-close now drops
+  cached evaluated terminal payloads to reduce live RSS; breadth evidence,
+  parity signoff, full-profile runtime stability on the intended `claim-1h`
+  auto-worker profile, and certification pass status still remain open
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
