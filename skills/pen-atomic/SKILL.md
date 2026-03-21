@@ -27,8 +27,9 @@ Treat these as current repo truths:
   and claim-path exactness rechecks are now landed in code/tests; the repo now
   also has claim-specific compare/certification tooling plus richer
   CPU/build/git/binary manifest fingerprints, while breadth evidence, parity
-  signoff, runtime stability on the intended `claim-1h` auto-worker profile,
-  and certification pass status still remain open
+  signoff, failed-run evidence preservation, runtime stability on the intended
+  `claim-1h` auto-worker profile, and certification pass status still remain
+  open
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -302,11 +303,13 @@ Focus on:
   parity signoff, and certification pass status are still open; manifest
   completeness is now landed in code/tests, but the intended
   `desktop_claim_shadow_1h` auto-worker profile still aborts before artifact
-  flush; use `scripts/compare_runs.py` and `scripts/certify_claim_lane.py` as
-  the current evidence surfaces before changing more search code
+  flush and failed long runs still need better on-disk evidence preservation;
+  use `scripts/compare_runs.py` and `scripts/certify_claim_lane.py` as the
+  current evidence surfaces before changing more search code
 - treating the remaining breadth evidence, stored parity signoff, and
-  certification work as the next real bottlenecks rather than continuing to tune
-  already-landed admissibility, claim-path exactness tests, or bucket labels
+  certification work as downstream of the current survivability problem rather
+  than continuing to tune already-landed admissibility, claim-path exactness
+  tests, or bucket labels
 - moving admissibility, mutation, scheduling, and certification toward
   family-agnostic structural evidence
 - not using stronger words like `unguided` before the certification gate lands
@@ -390,13 +393,13 @@ Reject designs that:
   7-9` mutators and claim-path exactness rechecks are now also landed; the
   repo also now has a claim-lane compare audit, a failing-until-earned
   certification script, and richer manifest provenance/build fingerprints,
-  while breadth evidence, stored parity signoff, runtime stability on the
-  intended auto-worker claim profile, and certification pass status are still
-  open.
+  while breadth evidence, stored parity signoff, failed-run evidence
+  preservation, runtime stability on the intended auto-worker claim profile,
+  and certification pass status are still open.
 - The next operational claim-lane work should focus on stored breadth
-  evidence, stored parity signoff, and stabilizing a full-profile stored claim
-  bundle on the disclosed machine rather than on already-landed profile,
-  manifest-field, admissibility, bucket scheduling separation, or the
-  now-covered claim-path exactness rechecks.
+  evidence and stored parity signoff only after stabilizing full-profile claim
+  execution and preserving failed-run artifacts on the disclosed machine,
+  rather than on already-landed profile, manifest-field, admissibility, bucket
+  scheduling separation, or the now-covered claim-path exactness rechecks.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
   the track-specific references you actually need.

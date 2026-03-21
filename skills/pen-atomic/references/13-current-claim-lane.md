@@ -29,6 +29,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   claim artifacts and currently fails honestly on missing breadth, missing
   step-15 parity evidence, and the still-missing full-profile stored claim
   bundle on the intended auto-worker desktop config.
+- the repo-level autonomy docs now treat claim-policy separation as baseline;
+  the live bottleneck is full-profile claim-run survivability plus failure
+  evidence preservation
 
 ## Current Operational Blockers
 
@@ -40,15 +43,18 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - a full `desktop_claim_shadow_1h` auto-worker run still aborts before writing
   artifacts on the disclosed machine; the latest attempt failed with
   `memory allocation of 1212416 bytes failed`
+- failed long claim runs still do not leave enough incremental artifacts to
+  debug the failure comfortably from disk
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice
 
-1. Stabilize a stored step-15 claim bundle on the intended
-   `desktop_claim_shadow_1h` profile; the latest auto-worker attempt still
-   aborts before `run.json` flush.
-2. Once that bundle exists, run the compare/certification scripts against it.
-3. Then close the remaining breadth/floor misses on the live claim lane.
+1. Persist `run.json` and step artifacts incrementally so failed long claim
+   runs remain auditable.
+2. Make the intended `desktop_claim_shadow_1h` profile memory-stable on the
+   disclosed machine.
+3. Once that bundle exists, run the compare/certification scripts against it,
+   then close the remaining breadth/floor misses.
 
 ## First Reads
 
@@ -67,10 +73,13 @@ Do:
   changes
 - prefer structural explanations over family-name explanations in new claim
   code
-- focus next on stored breadth evidence, parity signoff, and certification
+- focus next on failed-run evidence preservation, memory stability, and then
+  stored breadth/parity/certification
 
 Do not:
 
 - claim that the whole lane is already family-agnostic end-to-end
 - switch `bucket_policy` early
+- spend time reopening already-landed claim-policy split work unless a memory
+  or evidence bug forces it
 - call the lane `unguided` yet

@@ -10,71 +10,50 @@ intentionally short and forward-looking; use
 
 - `desktop_claim_shadow` is a distinct profile with its own configs,
   narratives, and run metadata
-- claim admissibility is now structurally guided:
+- claim policy metadata is now honest and claim-specific:
   - `guidance_style = claim_debt_guided`
-  - claim mode does not use a named `focus_family`
-- claim late expansion is now claim-specific:
   - `late_expansion_policy = claim_generic`
-- claim bucket scheduling is now claim-specific:
   - `bucket_policy = structural_generic`
-- the lane is still mixed-mode at the evidence/certification layer:
-  - `kappa 7-9` now have claim-specific later-band mutator packs
-  - `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
-    reason coverage, prune-class coverage, fallback evidence, and step-15
-    claim-run coverage
-  - `scripts/certify_claim_lane.py` now emits a stored pass/fail certificate
-    from claim artifacts
-  - `run.json` now records CPU, worker-count, build-profile, target, git,
-    `Cargo.lock`, and binary fingerprints for claim certification
-  - stored breadth/floor evidence and certification pass status are still open
-- the lane is not yet certification-ready and it is still not honest to call
-  it `unguided`
+- claim-path mutator packs and exactness rechecks are landed for the current
+  late bands
+- `scripts/compare_runs.py` and `scripts/certify_claim_lane.py` are real and
+  already enforce manifest completeness, policy honesty, fallback visibility,
+  breadth gates, and runtime threshold checks
+- `run.json` now carries CPU/build/git/binary fingerprints needed for claim
+  certification
+- the lane is still not certification-ready because the intended full-profile
+  run is not yet stable enough to produce a stored step-15 claim bundle
 
 ## Current Read
 
-- The main blocker is no longer admissibility tuning or inherited late-surface
-  routing.
-- Claim mode now has its own `ClaimGeneric` late surface in
-  `crates/pen-search/src/enumerate.rs` and
-  `crates/pen-search/src/prefix_memo.rs`.
-- Claim-generic mutator packs are now real for kappa `4-9`, with the new
-  kappa `9` widening still preserving guarded acceptance through the existing
-  claim-lane tests.
-- The scheduler taxonomy blocker is now closed in code and policy metadata:
-  claim runs use structural-generic bucket keys instead of semantic-family
-  labels.
-- Claim-path terminal-prefix completion and cached exact-bound reuse are now
-  directly rechecked by tests under the structural-generic claim scheduler
-  surface.
-- The next blockers are stored late-step breadth/floor evidence, stored parity
-  signoff evidence on the claim lane itself, and the still-incomplete
-  certification surfaces.
-- Reporting now pushes exact-screen reasons into telemetry and the compare
-  script, and the certification script can already fail honestly on missing
-  parity, breadth, runtime, or manifest evidence.
-- Manifest completeness is now closed in code/tests, including the smoke
-  certification path.
-- The remaining blockers are no longer missing provenance/build fields in
-  `run.json`; they are the missing step-15 claim bundle, the still-open
-  breadth floors, and runtime stability on the intended
-  `desktop_claim_shadow_1h` auto-worker profile, which currently aborts before
-  artifact flush with `memory allocation of 1212416 bytes failed`.
+- The main blocker is now runtime survivability, not claim-policy separation.
+- The intended `desktop_claim_shadow_1h` auto-worker profile still aborts on
+  the disclosed machine before artifact flush with
+  `memory allocation of 1212416 bytes failed`.
+- Because the CLI still writes `run.json` and step artifacts only after the
+  full run returns, that failure currently destroys the evidence we most need
+  to debug it.
+- Manifest completeness is no longer the gating issue; failed-run evidence
+  preservation and memory-aware execution are.
+- Breadth, parity, fallback honesty, and certification remain open, but they
+  cannot move from tests into stored evidence until the full-profile claim run
+  completes reliably enough to leave a bundle.
 
 ## Immediate Next Slice
 
-1. Stabilize a stored step-15 claim bundle on the disclosed machine under the
-   intended `desktop_claim_shadow_1h` profile; the latest auto-worker attempt
-   still aborted before writing `run.json`.
-2. Once that bundle exists, run the compare/certification scripts on the real
-   evidence and record the remaining parity/breadth failures.
-3. Then close the remaining breadth/floor misses and benchmark the certified
-   runtime threshold on the claim lane itself.
+1. Persist `run.json` and step artifacts incrementally so failed long claim
+   runs are still auditable.
+2. Make worker resolution and memory-pressure handling claim-aware enough for
+   the intended `desktop_claim_shadow_1h` profile to finish on the disclosed
+   machine.
+3. Then rerun the full claim profile, compare it against guarded, and use the
+   resulting bundle to close the remaining parity/breadth/certification gaps.
 
 ## After That
 
-- earn honest breadth and floor evidence under the claim-specific mutator path
-- make retuning change search shape, not just time allocation
-- harden manifest, benchmarking, compare output, and certification
+- re-earn honest breadth and parity from stored claim-lane evidence
+- freeze a benchmark/runtime threshold from the intended full profile
+- produce one canonical compare report plus a passing certificate
 
 ## Verification Baseline
 
@@ -89,7 +68,8 @@ intentionally short and forward-looking; use
 
 - Keep `strict_canon_guarded`, `realistic_frontier_shadow`, and
   `demo_breadth_shadow` behavior unchanged while the claim lane evolves.
-- Do not switch policy metadata ahead of the real behavior.
+- Treat completed claim-policy split work as baseline, not as the active
+  bottleneck.
 - Do not claim autonomy from labels alone.
 - Do not mark the lane `unguided` before the certification gate exists and
   passes.
