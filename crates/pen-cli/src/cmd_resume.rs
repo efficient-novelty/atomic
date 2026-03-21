@@ -1,10 +1,10 @@
 use crate::cli::ResumeArgs;
 use crate::cmd_run::{
-    build_run_manifest, current_search_compat, frontier_runtime_limits, now_utc,
-    resolved_worker_count, terminal_narrative_config, write_run_artifacts,
+    RunArtifactWriter, RunStepObserver, build_run_manifest_base, current_search_compat,
+    finalize_failed_run, frontier_runtime_limits, now_utc, resolved_worker_count,
+    terminal_narrative_config,
 };
 use crate::output::{OutputStyle, render_run_output};
-use crate::progress::TerminalStepProgress;
 use crate::report::{
     GeneratedSteps, StepGenerationMode, StepProgressObserver, StepProvenance, StepReport,
     annotate_search_profile, extend_steps_from_reports_with_config_and_runtime_and_progress,
@@ -53,42 +53,52 @@ pub fn resume(args: ResumeArgs) -> Result<String> {
 
     let mut existing_steps = load_step_reports(&run_dir)?;
     annotate_search_profile(&mut existing_steps, config.mode.search_profile);
-    let mut progress = TerminalStepProgress::stderr(target);
-    let PreparedResume {
-        generated: GeneratedSteps { mode, mut steps },
-        worker_count,
-    } = prepare_resume(
+    let plan = plan_resume(&run_dir, &manifest, &config, &existing_steps)?;
+    let manifest_base = build_run_manifest_base(
+        &manifest.run_id,
+        &config_text,
+        &config,
+        plan.worker_count(),
+        manifest.created_utc.clone(),
+    )?;
+    let writer = RunArtifactWriter::start(
         &run_dir,
-        &manifest,
+        &config_text,
+        manifest_base,
+        &config,
+        plan.worker_count(),
+        plan.mode().as_str(),
+        config.mode.search_profile.as_str(),
+        now_utc()?,
+        existing_steps.clone(),
+        match plan {
+            ResumeExecutionPlan::FrontierCheckpoint { .. } => Some((
+                StepProvenance::FrontierCheckpointResume,
+                manifest.position.completed_step.saturating_add(1),
+            )),
+            ResumeExecutionPlan::StepCheckpoint { .. }
+            | ResumeExecutionPlan::StepCheckpointReevaluate { .. } => None,
+        },
+    )?;
+    let mut observer = RunStepObserver::new(writer, target);
+    let generated = execute_resume(
+        &plan,
         &config,
         target,
         &existing_steps,
-        progress
-            .as_mut()
-            .map(|observer| observer as &mut dyn StepProgressObserver),
-    )?;
-    annotate_search_profile(&mut steps, config.mode.search_profile);
-    let updated = now_utc()?;
-    let new_manifest = build_run_manifest(
-        &manifest.run_id,
-        &config_text,
-        &steps,
-        &config,
-        worker_count,
-        manifest.created_utc,
-        updated,
-    )?;
+        Some(&mut observer as &mut dyn StepProgressObserver),
+    );
+    let mut writer = observer.into_writer();
+    let GeneratedSteps { mode, mut steps } = match generated {
+        Ok(generated) => generated,
+        Err(error) => return Err(finalize_failed_run(writer, error)),
+    };
+    if let Some(error) = writer.take_error() {
+        return Err(finalize_failed_run(writer, error));
+    }
 
-    write_run_artifacts(
-        &run_dir,
-        &config_text,
-        &new_manifest,
-        &steps,
-        worker_count,
-        &config,
-        mode.as_str(),
-        config.mode.search_profile.as_str(),
-    )?;
+    annotate_search_profile(&mut steps, config.mode.search_profile);
+    writer.finalize_success(mode.as_str())?;
     Ok(render_run_output(
         OutputStyle::from_debug(args.debug),
         &manifest.run_id,
@@ -97,19 +107,36 @@ pub fn resume(args: ResumeArgs) -> Result<String> {
     ))
 }
 
-struct PreparedResume {
-    generated: GeneratedSteps,
-    worker_count: u16,
+enum ResumeExecutionPlan {
+    FrontierCheckpoint { worker_count: u16 },
+    StepCheckpoint { worker_count: u16 },
+    StepCheckpointReevaluate { worker_count: u16 },
 }
 
-fn prepare_resume(
+impl ResumeExecutionPlan {
+    fn mode(&self) -> StepGenerationMode {
+        match self {
+            Self::FrontierCheckpoint { .. } => StepGenerationMode::FrontierCheckpointResume,
+            Self::StepCheckpoint { .. } => StepGenerationMode::StepCheckpointResume,
+            Self::StepCheckpointReevaluate { .. } => StepGenerationMode::StepCheckpointReevaluate,
+        }
+    }
+
+    fn worker_count(&self) -> u16 {
+        match self {
+            Self::FrontierCheckpoint { worker_count }
+            | Self::StepCheckpoint { worker_count }
+            | Self::StepCheckpointReevaluate { worker_count } => *worker_count,
+        }
+    }
+}
+
+fn plan_resume(
     run_dir: &Path,
     manifest: &RunManifestV1,
     config: &RuntimeConfig,
-    target: u32,
     existing_steps: &[StepReport],
-    progress: Option<&mut dyn StepProgressObserver>,
-) -> Result<PreparedResume> {
+) -> Result<ResumeExecutionPlan> {
     let current_compat = current_search_compat();
     let latest_step_decision = latest_step_resume_decision(run_dir, manifest)?;
     let frontier = latest_frontier_generation(run_dir, manifest)?;
@@ -119,121 +146,94 @@ fn prepare_resume(
         Some(frontier) => match decide_resume(&current_compat, &frontier.manifest) {
             ResumeDecision::FrontierCheckpoint => {
                 validate_frontier_checkpoint(run_dir, manifest, existing_steps, &frontier)?;
-                let frontier_worker_count = frontier.manifest.scheduler.worker_count.max(1);
-                let mut generated = match progress {
-                    Some(observer) => {
-                        extend_steps_from_reports_with_config_and_runtime_and_progress(
-                            existing_steps,
-                            target,
-                            config,
-                            frontier_runtime_limits(config, frontier_worker_count),
-                            Some(observer),
-                        )?
-                    }
-                    None => extend_steps_from_reports_with_config_and_runtime_and_progress(
-                        existing_steps,
-                        target,
-                        config,
-                        frontier_runtime_limits(config, frontier_worker_count),
-                        None,
-                    )?,
-                };
-                for step in generated.steps.iter_mut().skip(existing_steps.len()) {
-                    step.provenance = StepProvenance::FrontierCheckpointResume;
-                }
-                generated.mode = StepGenerationMode::FrontierCheckpointResume;
-                Ok(PreparedResume {
-                    generated,
-                    worker_count: frontier_worker_count,
+                Ok(ResumeExecutionPlan::FrontierCheckpoint {
+                    worker_count: frontier.manifest.scheduler.worker_count.max(1),
                 })
             }
-            ResumeDecision::StepCheckpoint => prepare_step_resume(
-                latest_step_decision,
-                existing_steps,
-                config,
-                target,
-                worker_count,
-                progress,
-            ),
-            ResumeDecision::StepCheckpointReevaluate => match latest_step_decision {
-                ResumeDecision::MigrationRequired => bail!(
-                    "migration required: stored step checkpoint is not compatible with the current AST/type schema"
-                ),
-                ResumeDecision::FrontierCheckpoint
-                | ResumeDecision::StepCheckpoint
-                | ResumeDecision::StepCheckpointReevaluate => Ok(PreparedResume {
-                    generated: match progress {
-                        Some(observer) => {
-                            reevaluate_steps_from_reports_with_config_and_runtime_and_progress(
-                                existing_steps,
-                                target,
-                                config,
-                                frontier_runtime_limits(config, worker_count),
-                                Some(observer),
-                            )?
-                        }
-                        None => reevaluate_steps_from_reports_with_config_and_runtime_and_progress(
-                            existing_steps,
-                            target,
-                            config,
-                            frontier_runtime_limits(config, worker_count),
-                            None,
-                        )?,
-                    },
-                    worker_count,
-                }),
-            },
+            ResumeDecision::StepCheckpoint => plan_step_resume(latest_step_decision, worker_count),
+            ResumeDecision::StepCheckpointReevaluate => {
+                plan_step_reevaluate(latest_step_decision, worker_count)
+            }
             ResumeDecision::MigrationRequired => bail!(
                 "migration required: stored frontier artifacts are not compatible with the current AST/type schema"
             ),
         },
-        None => prepare_step_resume(
-            latest_step_decision,
-            existing_steps,
-            config,
-            target,
-            worker_count,
-            progress,
-        ),
+        None => plan_step_resume(latest_step_decision, worker_count),
     }
 }
 
-fn prepare_step_resume(
-    decision: ResumeDecision,
-    existing_steps: &[StepReport],
+fn execute_resume(
+    plan: &ResumeExecutionPlan,
     config: &RuntimeConfig,
     target: u32,
-    worker_count: u16,
+    existing_steps: &[StepReport],
     progress: Option<&mut dyn StepProgressObserver>,
-) -> Result<PreparedResume> {
-    match decision {
-        ResumeDecision::FrontierCheckpoint | ResumeDecision::StepCheckpoint => {
+) -> Result<GeneratedSteps> {
+    match plan {
+        ResumeExecutionPlan::FrontierCheckpoint { worker_count } => {
             let mut generated = extend_steps_from_reports_with_config_and_runtime_and_progress(
                 existing_steps,
                 target,
                 config,
-                frontier_runtime_limits(config, worker_count),
+                frontier_runtime_limits(config, *worker_count),
                 progress,
             )?;
-            generated.mode = StepGenerationMode::StepCheckpointResume;
-            Ok(PreparedResume {
-                generated,
-                worker_count,
-            })
+            for step in generated.steps.iter_mut().skip(existing_steps.len()) {
+                step.provenance = StepProvenance::FrontierCheckpointResume;
+            }
+            generated.mode = StepGenerationMode::FrontierCheckpointResume;
+            Ok(generated)
         }
-        ResumeDecision::StepCheckpointReevaluate => Ok(PreparedResume {
-            generated: reevaluate_steps_from_reports_with_config_and_runtime_and_progress(
+        ResumeExecutionPlan::StepCheckpoint { worker_count } => {
+            let mut generated = extend_steps_from_reports_with_config_and_runtime_and_progress(
                 existing_steps,
                 target,
                 config,
-                frontier_runtime_limits(config, worker_count),
+                frontier_runtime_limits(config, *worker_count),
                 progress,
-            )?,
-            worker_count,
-        }),
+            )?;
+            generated.mode = StepGenerationMode::StepCheckpointResume;
+            Ok(generated)
+        }
+        ResumeExecutionPlan::StepCheckpointReevaluate { worker_count } => {
+            reevaluate_steps_from_reports_with_config_and_runtime_and_progress(
+                existing_steps,
+                target,
+                config,
+                frontier_runtime_limits(config, *worker_count),
+                progress,
+            )
+        }
+    }
+}
+
+fn plan_step_resume(decision: ResumeDecision, worker_count: u16) -> Result<ResumeExecutionPlan> {
+    match decision {
+        ResumeDecision::FrontierCheckpoint | ResumeDecision::StepCheckpoint => {
+            Ok(ResumeExecutionPlan::StepCheckpoint { worker_count })
+        }
+        ResumeDecision::StepCheckpointReevaluate => {
+            Ok(ResumeExecutionPlan::StepCheckpointReevaluate { worker_count })
+        }
         ResumeDecision::MigrationRequired => bail!(
             "migration required: stored step checkpoint is not compatible with the current AST/type schema"
         ),
+    }
+}
+
+fn plan_step_reevaluate(
+    decision: ResumeDecision,
+    worker_count: u16,
+) -> Result<ResumeExecutionPlan> {
+    match decision {
+        ResumeDecision::MigrationRequired => bail!(
+            "migration required: stored step checkpoint is not compatible with the current AST/type schema"
+        ),
+        ResumeDecision::FrontierCheckpoint
+        | ResumeDecision::StepCheckpoint
+        | ResumeDecision::StepCheckpointReevaluate => {
+            Ok(ResumeExecutionPlan::StepCheckpointReevaluate { worker_count })
+        }
     }
 }
 

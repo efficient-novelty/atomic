@@ -1148,16 +1148,25 @@ pub fn search_atomic_bootstrap_steps_for_profile_with_runtime(
     finalize_step_reports(steps, window_depth)
 }
 
+#[allow(dead_code)]
 pub fn write_step_reports(run_dir: &Path, steps: &[StepReport]) -> Result<()> {
     let steps_dir = run_dir.join("reports").join("steps");
     fs::create_dir_all(&steps_dir)?;
 
     for step in steps {
-        let path = steps_dir.join(step_summary_file_name(step.step_index));
-        let json = serde_json::to_string_pretty(step)?;
-        fs::write(path, format!("{json}\n"))?;
+        write_step_report(run_dir, step)?;
     }
 
+    Ok(())
+}
+
+pub fn write_step_report(run_dir: &Path, step: &StepReport) -> Result<()> {
+    let steps_dir = run_dir.join("reports").join("steps");
+    fs::create_dir_all(&steps_dir)?;
+
+    let path = steps_dir.join(step_summary_file_name(step.step_index));
+    let json = serde_json::to_string_pretty(step)?;
+    fs::write(path, format!("{json}\n"))?;
     Ok(())
 }
 
@@ -2257,8 +2266,15 @@ fn render_late_step_claim(claim: &LateStepClaim) -> Option<String> {
 }
 
 fn finalize_step_reports(mut steps: Vec<StepReport>, window_depth: u16) -> Result<Vec<StepReport>> {
-    annotate_replay_ablation(&mut steps, window_depth)?;
+    finalize_step_reports_in_place(&mut steps, window_depth)?;
     Ok(steps)
+}
+
+pub(crate) fn finalize_step_reports_in_place(
+    steps: &mut [StepReport],
+    window_depth: u16,
+) -> Result<()> {
+    annotate_replay_ablation(steps, window_depth)
 }
 
 fn annotate_replay_ablation(steps: &mut [StepReport], window_depth: u16) -> Result<()> {
@@ -2272,51 +2288,71 @@ fn annotate_replay_ablation(steps: &mut [StepReport], window_depth: u16) -> Resu
         .collect::<BTreeMap<_, _>>();
 
     for step in steps {
-        let Some(reference) = reference_by_step.get(&step.step_index) else {
-            step.replay_ablation = ReplayAblation {
-                status: ReplayAblationStatus::NotApplicable,
-                note: "reference replay baseline unavailable beyond the current 15-step corpus"
-                    .to_owned(),
-                ..ReplayAblation::default()
-            };
-            continue;
-        };
-
-        let status = if step.accepted.candidate_hash == reference.accepted.candidate_hash
-            && step.accepted.canonical_hash == reference.accepted.canonical_hash
-            && step.accepted.nu == reference.accepted.nu
-            && step.accepted.clause_kappa == reference.accepted.clause_kappa
-            && step.accepted.rho == reference.accepted.rho
-            && step.objective_bar == reference.objective_bar
-            && step.accepted.overshoot == reference.accepted.overshoot
-        {
-            ReplayAblationStatus::MatchesReferenceReplay
-        } else {
-            ReplayAblationStatus::DivergesFromReferenceReplay
-        };
-
-        step.replay_ablation = ReplayAblation {
-            status,
-            reference_candidate_hash: reference.accepted.candidate_hash.clone(),
-            reference_canonical_hash: reference.accepted.canonical_hash.clone(),
-            rho_delta: step.accepted.rho - reference.accepted.rho,
-            objective_bar_delta: step.objective_bar - reference.objective_bar,
-            overshoot_delta: step.accepted.overshoot - reference.accepted.overshoot,
-            nu_delta: i32::from(step.accepted.nu) - i32::from(reference.accepted.nu),
-            clause_kappa_delta: i32::from(step.accepted.clause_kappa)
-                - i32::from(reference.accepted.clause_kappa),
-            note: if status == ReplayAblationStatus::MatchesReferenceReplay {
-                "matches reference replay baseline".to_owned()
-            } else {
-                format!(
-                    "current provenance {} diverges from reference replay",
-                    step.provenance.as_str()
-                )
-            },
-        };
+        annotate_step_replay_ablation(step, &reference_by_step);
     }
 
     Ok(())
+}
+
+pub(crate) fn annotate_single_step_replay_ablation(
+    step: &mut StepReport,
+    window_depth: u16,
+) -> Result<()> {
+    let reference_steps = replay_reference_steps_raw(step.step_index.min(15), window_depth)?;
+    let reference_by_step = reference_steps
+        .into_iter()
+        .map(|reference| (reference.step_index, reference))
+        .collect::<BTreeMap<_, _>>();
+    annotate_step_replay_ablation(step, &reference_by_step);
+    Ok(())
+}
+
+fn annotate_step_replay_ablation(
+    step: &mut StepReport,
+    reference_by_step: &BTreeMap<u32, StepReport>,
+) {
+    let Some(reference) = reference_by_step.get(&step.step_index) else {
+        step.replay_ablation = ReplayAblation {
+            status: ReplayAblationStatus::NotApplicable,
+            note: "reference replay baseline unavailable beyond the current 15-step corpus"
+                .to_owned(),
+            ..ReplayAblation::default()
+        };
+        return;
+    };
+
+    let status = if step.accepted.candidate_hash == reference.accepted.candidate_hash
+        && step.accepted.canonical_hash == reference.accepted.canonical_hash
+        && step.accepted.nu == reference.accepted.nu
+        && step.accepted.clause_kappa == reference.accepted.clause_kappa
+        && step.accepted.rho == reference.accepted.rho
+        && step.objective_bar == reference.objective_bar
+        && step.accepted.overshoot == reference.accepted.overshoot
+    {
+        ReplayAblationStatus::MatchesReferenceReplay
+    } else {
+        ReplayAblationStatus::DivergesFromReferenceReplay
+    };
+
+    step.replay_ablation = ReplayAblation {
+        status,
+        reference_candidate_hash: reference.accepted.candidate_hash.clone(),
+        reference_canonical_hash: reference.accepted.canonical_hash.clone(),
+        rho_delta: step.accepted.rho - reference.accepted.rho,
+        objective_bar_delta: step.objective_bar - reference.objective_bar,
+        overshoot_delta: step.accepted.overshoot - reference.accepted.overshoot,
+        nu_delta: i32::from(step.accepted.nu) - i32::from(reference.accepted.nu),
+        clause_kappa_delta: i32::from(step.accepted.clause_kappa)
+            - i32::from(reference.accepted.clause_kappa),
+        note: if status == ReplayAblationStatus::MatchesReferenceReplay {
+            "matches reference replay baseline".to_owned()
+        } else {
+            format!(
+                "current provenance {} diverges from reference replay",
+                step.provenance.as_str()
+            )
+        },
+    };
 }
 
 pub(crate) fn render_replay_ablation(ablation: &ReplayAblation) -> Option<String> {

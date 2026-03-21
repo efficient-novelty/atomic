@@ -31,6 +31,9 @@ These are now baseline truths, not forward work:
   breadth gates, runtime threshold, and manifest completeness
 - `run.json` now records CPU, worker-count, build-profile, target, git,
   `Cargo.lock`, and binary fingerprints needed for certification
+- `pen-cli run` and `pen-cli resume` now persist `run.json`, step summaries,
+  step checkpoints, frontier snapshots, claim narratives/events, and failure
+  status incrementally so failed long runs remain auditable
 
 ## Active Blocker
 
@@ -39,9 +42,9 @@ is that the intended full-profile claim run is not yet operationally stable on
 the disclosed machine:
 
 - `desktop_claim_shadow_1h` with `workers = "auto"` still aborts before
-  artifact flush with `memory allocation of 1212416 bytes failed`
-- because `run.json` and step artifacts are still written only after the full
-  run returns, that abort leaves no auditable claim bundle
+  step-15 completion with `memory allocation of 1212416 bytes failed`
+- failed runs now leave an auditable bundle, but there is still no stored
+  full-profile step-15 claim run on the disclosed machine
 - without a stored bundle, parity, breadth, fallback honesty, and runtime
   certification cannot advance from code/tests to real evidence
 
@@ -74,41 +77,7 @@ Only after those conditions pass should the paper wording move beyond
 3. Re-earn stored parity and breadth on the stabilized claim lane.
 4. Freeze benchmarking and certification on the intended profile.
 
-## 1. Preserve Failure Evidence
-
-Why this is first:
-
-- the current failure mode destroys the evidence we most need to debug
-- a failed long claim run should still tell us the machine, build, profile,
-  completed step, and latest persisted search state
-
-Files:
-
-- `crates/pen-cli/src/cmd_run.rs`
-- `crates/pen-cli/src/cmd_resume.rs`
-- `crates/pen-cli/src/report.rs`
-- `crates/pen-store/src/manifest.rs`
-
-Concrete tasks:
-
-- write `run.json` at run start with a live status instead of waiting for full
-  completion
-- update manifest position/status as steps are accepted so `completed_step`
-  survives mid-run failure
-- persist step summaries/checkpoints/narrative artifacts incrementally instead
-  of only after the full run returns
-- record failure status and failure note whenever the CLI can still write on an
-  early exit or controlled error path
-- add focused tests proving incomplete runs still leave auditable artifacts
-
-Done when:
-
-- a failed or interrupted claim run still leaves a readable manifest
-- the latest accepted step survives a mid-run failure
-- debugging the next allocator or pressure failure no longer depends on live
-  console output
-
-## 2. Stabilize Memory And Worker Use
+## 1. Stabilize Memory And Worker Use
 
 Why this is second:
 
@@ -148,7 +117,7 @@ Done when:
 - the claim lane no longer depends on luck in auto-worker selection
 - governor/pressure evidence explains the observed memory behavior honestly
 
-## 3. Re-Earn Stored Claim Evidence
+## 2. Re-Earn Stored Claim Evidence
 
 Why this is third:
 
@@ -191,7 +160,7 @@ Done when:
 - reporting is explicit enough for compare/certification to judge the lane
   without caveats
 
-## 4. Benchmarking And Certification
+## 3. Benchmarking And Certification
 
 Why this is last:
 
@@ -241,11 +210,11 @@ Done when:
 
 ## Immediate Next Step
 
-Make the claim lane survivable under failure before tuning breadth again:
+Use the newly survivable claim bundle to attack the remaining live blocker:
 
-1. persist `run.json` and step artifacts incrementally so failed long runs are
-   still auditable
-2. make auto-worker resolution and pressure handling memory-aware enough for
+1. make auto-worker resolution and pressure handling memory-aware enough for
    the disclosed desktop
-3. then rerun `desktop_claim_shadow_1h`, compare it against guarded, and use
-   the resulting artifacts to drive the remaining parity/breadth fixes
+2. rerun `desktop_claim_shadow_1h` and compare it against guarded from stored
+   artifacts
+3. use that bundle to drive the remaining parity, breadth, benchmark, and
+   certification fixes

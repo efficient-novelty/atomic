@@ -10,6 +10,8 @@ pub struct RunManifestV1 {
     pub schema_version: u32,
     pub run_id: String,
     pub status: RunStatus,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub failure_note: String,
     pub created_utc: String,
     pub updated_utc: String,
     pub workspace_version: String,
@@ -32,6 +34,7 @@ impl Default for RunManifestV1 {
             schema_version: SCHEMA_VERSION_V1,
             run_id: String::new(),
             status: RunStatus::Running,
+            failure_note: String::new(),
             created_utc: String::new(),
             updated_utc: String::new(),
             workspace_version: String::new(),
@@ -94,7 +97,7 @@ impl Default for FrontierManifestV1 {
     }
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum RunStatus {
     #[default]
@@ -102,6 +105,17 @@ pub enum RunStatus {
     Paused,
     Completed,
     Failed,
+}
+
+impl RunStatus {
+    pub const fn as_str(&self) -> &'static str {
+        match self {
+            Self::Running => "running",
+            Self::Paused => "paused",
+            Self::Completed => "completed",
+            Self::Failed => "failed",
+        }
+    }
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
@@ -350,6 +364,7 @@ mod tests {
             schema_version: SCHEMA_VERSION_V1,
             run_id: "2026-03-13T14-32-21Z-desktop16".to_owned(),
             status: RunStatus::Running,
+            failure_note: String::new(),
             created_utc: "2026-03-13T14:32:21Z".to_owned(),
             updated_utc: "2026-03-13T17:05:09Z".to_owned(),
             workspace_version: "0.1.0".to_owned(),

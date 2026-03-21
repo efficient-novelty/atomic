@@ -29,9 +29,22 @@ impl<'a> NarrativeOutputConfig<'a> {
     }
 }
 
+#[allow(dead_code)]
 pub fn write_step_narrative_artifacts(
     run_dir: &Path,
     steps: &[StepReport],
+    config: &RuntimeConfig,
+) -> Result<()> {
+    for step in steps {
+        write_step_narrative_artifact(run_dir, step, config)?;
+    }
+
+    Ok(())
+}
+
+pub fn write_step_narrative_artifact(
+    run_dir: &Path,
+    step: &StepReport,
     config: &RuntimeConfig,
 ) -> Result<()> {
     if !config.mode.search_profile.supports_narrative_artifacts() || !config.demo.enabled {
@@ -41,24 +54,21 @@ pub fn write_step_narrative_artifacts(
     let narrative = NarrativeOutputConfig::from_runtime(config);
     let steps_dir = run_dir.join("reports").join("steps");
     fs::create_dir_all(&steps_dir)?;
+    fs::write(
+        steps_dir.join(step_narrative_file_name(step.step_index)),
+        format!("{}\n", render_step_narrative(step, narrative)),
+    )?;
 
-    for step in steps {
-        fs::write(
-            steps_dir.join(step_narrative_file_name(step.step_index)),
-            format!("{}\n", render_step_narrative(step, narrative)),
-        )?;
-
-        let events_path = steps_dir.join(step_events_file_name(step.step_index));
-        if config.demo.narrative.persist_step_events {
-            let body = step_events(step)
-                .iter()
-                .map(serde_json::to_string)
-                .collect::<std::result::Result<Vec<_>, _>>()?
-                .join("\n");
-            fs::write(events_path, format!("{body}\n"))?;
-        } else if events_path.exists() {
-            fs::remove_file(events_path)?;
-        }
+    let events_path = steps_dir.join(step_events_file_name(step.step_index));
+    if config.demo.narrative.persist_step_events {
+        let body = step_events(step)
+            .iter()
+            .map(serde_json::to_string)
+            .collect::<std::result::Result<Vec<_>, _>>()?
+            .join("\n");
+        fs::write(events_path, format!("{body}\n"))?;
+    } else if events_path.exists() {
+        fs::remove_file(events_path)?;
     }
 
     Ok(())

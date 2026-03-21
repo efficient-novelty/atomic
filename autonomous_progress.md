@@ -21,33 +21,38 @@ intentionally short and forward-looking; use
   breadth gates, and runtime threshold checks
 - `run.json` now carries CPU/build/git/binary fingerprints needed for claim
   certification
+- `pen-cli run` and `pen-cli resume` now persist `run.json`, step summaries,
+  step checkpoints, frontier snapshots, claim narratives/events, and failure
+  status incrementally so interrupted claim runs stay auditable from disk
 - the lane is still not certification-ready because the intended full-profile
   run is not yet stable enough to produce a stored step-15 claim bundle
 
 ## Current Read
 
-- The main blocker is now runtime survivability, not claim-policy separation.
+- The main blocker is now full-profile memory stability, not claim-policy
+  separation or failed-run evidence preservation.
 - The intended `desktop_claim_shadow_1h` auto-worker profile still aborts on
-  the disclosed machine before artifact flush with
+  the disclosed machine before step-15 completion with
   `memory allocation of 1212416 bytes failed`.
-- Because the CLI still writes `run.json` and step artifacts only after the
-  full run returns, that failure currently destroys the evidence we most need
-  to debug it.
-- Manifest completeness is no longer the gating issue; failed-run evidence
-  preservation and memory-aware execution are.
+- Failed runs now keep a readable manifest, latest completed step,
+  step-specific artifacts, and late frontier state, so the next pressure or
+  allocator failure can be debugged from stored evidence instead of terminal
+  output alone.
+- Manifest completeness and failed-run survivability are no longer the gating
+  issue; memory-aware execution on the intended auto-worker profile is.
 - Breadth, parity, fallback honesty, and certification remain open, but they
   cannot move from tests into stored evidence until the full-profile claim run
   completes reliably enough to leave a bundle.
 
 ## Immediate Next Slice
 
-1. Persist `run.json` and step artifacts incrementally so failed long claim
-   runs are still auditable.
-2. Make worker resolution and memory-pressure handling claim-aware enough for
+1. Make worker resolution and memory-pressure handling claim-aware enough for
    the intended `desktop_claim_shadow_1h` profile to finish on the disclosed
    machine.
-3. Then rerun the full claim profile, compare it against guarded, and use the
-   resulting bundle to close the remaining parity/breadth/certification gaps.
+2. Rerun the full claim profile and compare it against guarded from stored
+   artifacts.
+3. Use that bundle to close the remaining parity, breadth, benchmark, and
+   certification gaps.
 
 ## After That
 
@@ -61,8 +66,11 @@ intentionally short and forward-looking; use
 - `cargo test -p pen-search --lib`
 - `cargo test -p pen-store --lib manifest::tests::run_manifest_round_trip_preserves_frozen_keys`
 - `cargo test -p pen-cli claim_run_writes_policy_metadata_and_claim_narrative`
+- `cargo test -p pen-cli --bin pen-cli cmd_run::tests::failed_partial_claim_run_still_leaves_manifest_and_narrative_artifacts -- --exact`
+- `cargo test -p pen-cli --bin pen-cli cmd_run::tests::failed_partial_late_run_still_leaves_frontier_snapshot -- --exact`
 - `cargo test -p pen-cli --test atomic_bootstrap compare_runs_reports_claim_lane_policy_and_reason_audit`
 - `cargo test -p pen-cli --test atomic_bootstrap claim_certification_script_emits_failing_certificate_for_incomplete_smoke_run`
+- `cargo test -p pen-cli --test deterministic_replay compare_runs_script_emits_a_deterministic_evidence_signoff`
 
 ## Guardrails
 

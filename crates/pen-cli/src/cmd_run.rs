@@ -1,11 +1,14 @@
 use crate::cli::RunArgs;
-use crate::narrative::{NarrativeOutputConfig, write_step_narrative_artifacts};
+use crate::narrative::{
+    NarrativeOutputConfig, write_step_narrative_artifact, write_step_narrative_artifacts,
+};
 use crate::output::{OutputStyle, render_run_output};
 use crate::progress::TerminalStepProgress;
 use crate::report::{
-    GeneratedSteps, StepProgressObserver, StepReport, annotate_search_profile,
+    GeneratedSteps, StepGenerationMode, StepProgressObserver, StepReport,
+    annotate_search_profile, annotate_single_step_replay_ablation,
     generate_steps_with_config_and_runtime_and_progress, stored_exact_screen_reasons,
-    stored_prune_class_stats, write_step_reports,
+    stored_prune_class_stats, write_step_report, write_step_reports,
 };
 use anyhow::{Context, Result, bail};
 use pen_core::hash::blake3_hex;
@@ -13,6 +16,7 @@ use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{LibrarySnapshot, LibrarySnapshotEntry};
 use pen_search::config::{RuntimeConfig, SearchProfile};
 use pen_search::diversify::FrontierRuntimeLimits;
+use pen_search::engine::supports_live_atomic_search;
 use pen_search::frontier::FrontierWindow;
 use pen_search::priority::{PriorityInputs, build_priority_key};
 use pen_search::resume::CurrentCompat;
@@ -32,7 +36,7 @@ use pen_store::telemetry::TelemetryEventV1;
 use serde_json::json;
 use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
-use std::fs;
+use std::fs::{self, OpenOptions};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use sysinfo::System;
@@ -52,38 +56,39 @@ pub fn run(args: RunArgs) -> Result<String> {
 
     let until_step = args.until_step.unwrap_or(config.search.until_step);
     let worker_count = resolved_worker_count(&config);
-    let mut progress = TerminalStepProgress::stderr(until_step);
-    let GeneratedSteps { mode, mut steps } = generate_steps_with_config_and_runtime_and_progress(
+    let created_utc = now_utc()?;
+    let manifest_base =
+        build_run_manifest_base(&run_id, &config_text, &config, worker_count, created_utc.clone())?;
+    let writer = RunArtifactWriter::start(
+        &run_dir,
+        &config_text,
+        manifest_base,
+        &config,
+        worker_count,
+        planned_run_mode(until_step).as_str(),
+        config.mode.search_profile.as_str(),
+        created_utc.clone(),
+        Vec::new(),
+        None,
+    )?;
+    let mut observer = RunStepObserver::new(writer, until_step);
+    let generated = generate_steps_with_config_and_runtime_and_progress(
         until_step,
         &config,
         frontier_runtime_limits(&config, worker_count),
-        progress
-            .as_mut()
-            .map(|observer| observer as &mut dyn StepProgressObserver),
-    )?;
-    annotate_search_profile(&mut steps, config.mode.search_profile);
-    let created_utc = now_utc()?;
-    let updated_utc = created_utc.clone();
-    let manifest = build_run_manifest(
-        &run_id,
-        &config_text,
-        &steps,
-        &config,
-        worker_count,
-        created_utc,
-        updated_utc,
-    )?;
+        Some(&mut observer as &mut dyn StepProgressObserver),
+    );
+    let mut writer = observer.into_writer();
+    let GeneratedSteps { mode, mut steps } = match generated {
+        Ok(generated) => generated,
+        Err(error) => return Err(finalize_failed_run(writer, error)),
+    };
+    if let Some(error) = writer.take_error() {
+        return Err(finalize_failed_run(writer, error));
+    }
 
-    write_run_artifacts(
-        &run_dir,
-        &config_text,
-        &manifest,
-        &steps,
-        worker_count,
-        &config,
-        mode.as_str(),
-        config.mode.search_profile.as_str(),
-    )?;
+    annotate_search_profile(&mut steps, config.mode.search_profile);
+    writer.finalize_success(mode.as_str())?;
     Ok(render_run_output(
         OutputStyle::from_debug(args.debug),
         &run_id,
@@ -134,6 +139,66 @@ pub(crate) fn checkpoint_compat() -> CheckpointCompat {
     }
 }
 
+#[derive(Clone)]
+pub(crate) struct RunManifestBase {
+    pub run_id: String,
+    pub created_utc: String,
+    pub workspace_version: String,
+    pub compat: RunCompat,
+    pub host: HostInfo,
+    pub runtime: RuntimeInfo,
+    pub config: ConfigFingerprint,
+    pub search_policy: SearchPolicyInfo,
+    pub build: BuildInfo,
+    pub artifacts: RunArtifacts,
+}
+
+pub(crate) struct RunArtifactWriter<'a> {
+    run_dir: PathBuf,
+    manifest_base: RunManifestBase,
+    config: &'a RuntimeConfig,
+    worker_count: u16,
+    provenance_override: Option<(crate::report::StepProvenance, u32)>,
+    search_profile: String,
+    metadata: MetadataDb,
+    persisted_steps: Vec<StepReport>,
+    error: Option<anyhow::Error>,
+}
+
+pub(crate) struct RunStepObserver<'a> {
+    terminal: Option<TerminalStepProgress<std::io::Stderr>>,
+    writer: RunArtifactWriter<'a>,
+}
+
+impl<'a> RunStepObserver<'a> {
+    pub(crate) fn new(writer: RunArtifactWriter<'a>, until_step: u32) -> Self {
+        Self {
+            terminal: TerminalStepProgress::stderr(until_step),
+            writer,
+        }
+    }
+
+    pub(crate) fn into_writer(self) -> RunArtifactWriter<'a> {
+        self.writer
+    }
+}
+
+impl StepProgressObserver for RunStepObserver<'_> {
+    fn on_step_started(&mut self, step_index: u32, label: &str) {
+        if let Some(terminal) = self.terminal.as_mut() {
+            terminal.on_step_started(step_index, label);
+        }
+    }
+
+    fn on_step_completed(&mut self, step: &StepReport) {
+        if let Some(terminal) = self.terminal.as_mut() {
+            terminal.on_step_completed(step);
+        }
+        self.writer.on_step_completed(step);
+    }
+}
+
+#[allow(dead_code)]
 pub(crate) fn write_run_artifacts(
     run_dir: &Path,
     config_text: &str,
@@ -144,14 +209,7 @@ pub(crate) fn write_run_artifacts(
     mode: &str,
     search_profile: &str,
 ) -> Result<()> {
-    fs::create_dir_all(run_dir).with_context(|| format!("create {}", run_dir.display()))?;
-    fs::create_dir_all(run_dir.join("reports").join("steps"))?;
-    fs::create_dir_all(run_dir.join("checkpoints").join("steps"))?;
-    fs::create_dir_all(run_dir.join("checkpoints").join("frontier"))?;
-
-    fs::write(run_dir.join("config.toml"), config_text)
-        .with_context(|| format!("write {}", run_dir.join("config.toml").display()))?;
-    let metadata = MetadataDb::open(&run_dir.join("meta.sqlite3"))?;
+    let metadata = prepare_run_directory(run_dir, config_text)?;
 
     write_json_file(&run_dir.join("run.json"), manifest)?;
     write_step_reports(run_dir, steps)?;
@@ -159,46 +217,21 @@ pub(crate) fn write_run_artifacts(
     write_step_checkpoints(run_dir, manifest, steps, config.objective.window_depth)?;
     write_frontier_snapshots(run_dir, manifest, steps, worker_count, config, &metadata)?;
     write_telemetry(run_dir, manifest, steps, mode, search_profile)?;
-
-    fs::write(
-        run_dir.join("reports").join("latest.txt"),
-        crate::report::render_standard_report(&manifest.run_id, steps),
-    )?;
-    fs::write(
-        run_dir.join("reports").join("latest.debug.txt"),
-        crate::report::render_debug_report(&manifest.run_id, steps),
-    )?;
-
+    write_latest_reports(run_dir, &manifest.run_id, steps)?;
     Ok(())
 }
 
-pub(crate) fn build_run_manifest(
+pub(crate) fn build_run_manifest_base(
     run_id: &str,
     config_text: &str,
-    steps: &[StepReport],
     config: &RuntimeConfig,
     worker_count: u16,
     created_utc: String,
-    updated_utc: String,
-) -> Result<RunManifestV1> {
-    let completed_step = steps.last().map(|step| step.step_index).unwrap_or(0);
-    let active_band = steps
-        .last()
-        .map(|step| u32::from(step.accepted.clause_kappa))
-        .unwrap_or(0);
-    let frontier_epoch = steps
-        .iter()
-        .filter(|step| step.step_index >= 4)
-        .count()
-        .try_into()
-        .expect("frontier epoch exceeded u32");
+) -> Result<RunManifestBase> {
     let workspace_root = workspace_root();
-    Ok(RunManifestV1 {
-        schema_version: SCHEMA_VERSION_V1,
+    Ok(RunManifestBase {
         run_id: run_id.to_owned(),
-        status: RunStatus::Completed,
         created_utc,
-        updated_utc,
         workspace_version: env!("CARGO_PKG_VERSION").to_owned(),
         compat: current_run_compat(),
         host: host_info(),
@@ -211,12 +244,6 @@ pub(crate) fn build_run_manifest(
         },
         search_policy: search_policy_info(config.mode.search_profile),
         build: build_info(&workspace_root)?,
-        position: RunPosition {
-            completed_step,
-            active_step: completed_step.saturating_add(1),
-            active_band,
-            frontier_epoch,
-        },
         artifacts: RunArtifacts {
             telemetry: "telemetry.ndjson".to_owned(),
             reports_dir: "reports".to_owned(),
@@ -225,6 +252,252 @@ pub(crate) fn build_run_manifest(
     })
 }
 
+pub(crate) fn build_run_manifest(
+    manifest_base: &RunManifestBase,
+    steps: &[StepReport],
+    updated_utc: String,
+    status: RunStatus,
+    failure_note: String,
+) -> RunManifestV1 {
+    let completed_step = steps.last().map(|step| step.step_index).unwrap_or(0);
+    let active_band = steps
+        .last()
+        .map(|step| u32::from(step.accepted.clause_kappa))
+        .unwrap_or(0);
+    let frontier_epoch = steps
+        .iter()
+        .filter(|step| step.step_index >= 4)
+        .count()
+        .try_into()
+        .expect("frontier epoch exceeded u32");
+    RunManifestV1 {
+        schema_version: SCHEMA_VERSION_V1,
+        run_id: manifest_base.run_id.clone(),
+        status,
+        failure_note,
+        created_utc: manifest_base.created_utc.clone(),
+        updated_utc,
+        workspace_version: manifest_base.workspace_version.clone(),
+        compat: manifest_base.compat.clone(),
+        host: manifest_base.host.clone(),
+        runtime: manifest_base.runtime.clone(),
+        config: manifest_base.config.clone(),
+        search_policy: manifest_base.search_policy.clone(),
+        build: manifest_base.build.clone(),
+        position: RunPosition {
+            completed_step,
+            active_step: completed_step.saturating_add(1),
+            active_band,
+            frontier_epoch,
+        },
+        artifacts: manifest_base.artifacts.clone(),
+    }
+}
+
+impl<'a> RunArtifactWriter<'a> {
+    pub(crate) fn start(
+        run_dir: &Path,
+        config_text: &str,
+        manifest_base: RunManifestBase,
+        config: &'a RuntimeConfig,
+        worker_count: u16,
+        mode: &str,
+        search_profile: &str,
+        initial_updated_utc: String,
+        persisted_steps: Vec<StepReport>,
+        provenance_override: Option<(crate::report::StepProvenance, u32)>,
+    ) -> Result<Self> {
+        let metadata = prepare_run_directory(run_dir, config_text)?;
+        let writer = Self {
+            run_dir: run_dir.to_path_buf(),
+            manifest_base,
+            config,
+            worker_count,
+            provenance_override,
+            search_profile: search_profile.to_owned(),
+            metadata,
+            persisted_steps,
+            error: None,
+        };
+        let manifest = writer.build_manifest(initial_updated_utc, RunStatus::Running, String::new());
+        write_json_file(&writer.run_dir.join("run.json"), &manifest)?;
+        write_latest_reports(&writer.run_dir, &manifest.run_id, &writer.persisted_steps)?;
+        append_telemetry_event(&writer.run_dir, &run_started_event(&manifest, mode, search_profile))?;
+        Ok(writer)
+    }
+
+    fn on_step_completed(&mut self, step: &StepReport) {
+        if self.error.is_some() {
+            return;
+        }
+        if let Err(error) = self.persist_step(step) {
+            self.error = Some(error);
+        }
+    }
+
+    pub(crate) fn take_error(&mut self) -> Option<anyhow::Error> {
+        self.error.take()
+    }
+
+    pub(crate) fn finalize_success(&mut self, mode: &str) -> Result<()> {
+        let manifest = self.current_manifest(RunStatus::Completed, String::new())?;
+        write_json_file(&self.run_dir.join("run.json"), &manifest)?;
+        write_latest_reports(&self.run_dir, &manifest.run_id, &self.persisted_steps)?;
+        write_telemetry(
+            &self.run_dir,
+            &manifest,
+            &self.persisted_steps,
+            mode,
+            &self.search_profile,
+        )?;
+        Ok(())
+    }
+
+    fn finalize_failed(&mut self, error: &anyhow::Error) -> Result<()> {
+        let failure_note = render_failure_note(error);
+        let manifest = self.current_manifest(RunStatus::Failed, failure_note)?;
+        write_json_file(&self.run_dir.join("run.json"), &manifest)?;
+        write_latest_reports(&self.run_dir, &manifest.run_id, &self.persisted_steps)?;
+        append_telemetry_event(&self.run_dir, &run_status_event(&manifest))?;
+        Ok(())
+    }
+
+    fn persist_step(&mut self, step: &StepReport) -> Result<()> {
+        let mut persisted = step.clone();
+        persisted.search_profile = self.config.mode.search_profile;
+        if let Some((provenance, min_step_index)) = self.provenance_override {
+            if persisted.step_index >= min_step_index {
+                persisted.provenance = provenance;
+            }
+        }
+        annotate_single_step_replay_ablation(&mut persisted, self.config.objective.window_depth)?;
+        let index = self.upsert_step(persisted.clone())?;
+        let updated_utc = now_utc()?;
+        let manifest = self.build_manifest(updated_utc, RunStatus::Running, String::new());
+        write_json_file(&self.run_dir.join("run.json"), &manifest)?;
+        write_step_report(&self.run_dir, &persisted)?;
+        write_step_narrative_artifact(&self.run_dir, &persisted, self.config)?;
+        write_step_checkpoint(
+            &self.run_dir,
+            &manifest,
+            &self.persisted_steps[..index],
+            &persisted,
+            self.config.objective.window_depth,
+        )?;
+        write_frontier_snapshot(
+            &self.run_dir,
+            &manifest,
+            &persisted,
+            frontier_epoch_for_prefix(&self.persisted_steps[..=index]),
+            self.worker_count,
+            self.config,
+            &self.metadata,
+        )?;
+        append_telemetry_event(&self.run_dir, &step_accepted_event(&manifest, &persisted))?;
+        write_latest_reports(&self.run_dir, &manifest.run_id, &self.persisted_steps)?;
+        Ok(())
+    }
+
+    fn upsert_step(&mut self, step: StepReport) -> Result<usize> {
+        let index = usize::try_from(step.step_index.saturating_sub(1))
+            .expect("step index exceeded usize");
+        if index < self.persisted_steps.len() {
+            self.persisted_steps[index] = step;
+            return Ok(index);
+        }
+        if index == self.persisted_steps.len() {
+            self.persisted_steps.push(step);
+            return Ok(index);
+        }
+        bail!(
+            "step persistence skipped from {} to {}",
+            self.persisted_steps.len() + 1,
+            index + 1
+        );
+    }
+
+    fn current_manifest(&self, status: RunStatus, failure_note: String) -> Result<RunManifestV1> {
+        Ok(self.build_manifest(now_utc()?, status, failure_note))
+    }
+
+    fn build_manifest(
+        &self,
+        updated_utc: String,
+        status: RunStatus,
+        failure_note: String,
+    ) -> RunManifestV1 {
+        build_run_manifest(
+            &self.manifest_base,
+            &self.persisted_steps,
+            updated_utc,
+            status,
+            failure_note,
+        )
+    }
+
+}
+
+pub(crate) fn finalize_failed_run(
+    mut writer: RunArtifactWriter<'_>,
+    error: anyhow::Error,
+) -> anyhow::Error {
+    match writer.finalize_failed(&error) {
+        Ok(()) => error,
+        Err(persist_error) => error.context(format!(
+            "also failed to persist failed-run artifacts: {persist_error:#}"
+        )),
+    }
+}
+
+fn planned_run_mode(until_step: u32) -> StepGenerationMode {
+    if supports_live_atomic_search(until_step) {
+        StepGenerationMode::AtomicBootstrapSearch
+    } else {
+        StepGenerationMode::ReferenceReplay
+    }
+}
+
+fn prepare_run_directory(run_dir: &Path, config_text: &str) -> Result<MetadataDb> {
+    fs::create_dir_all(run_dir).with_context(|| format!("create {}", run_dir.display()))?;
+    fs::create_dir_all(run_dir.join("reports").join("steps"))?;
+    fs::create_dir_all(run_dir.join("checkpoints").join("steps"))?;
+    fs::create_dir_all(run_dir.join("checkpoints").join("frontier"))?;
+    fs::write(run_dir.join("config.toml"), config_text)
+        .with_context(|| format!("write {}", run_dir.join("config.toml").display()))?;
+    MetadataDb::open(&run_dir.join("meta.sqlite3"))
+}
+
+fn write_latest_reports(run_dir: &Path, run_id: &str, steps: &[StepReport]) -> Result<()> {
+    fs::create_dir_all(run_dir.join("reports"))?;
+    fs::write(
+        run_dir.join("reports").join("latest.txt"),
+        crate::report::render_standard_report(run_id, steps),
+    )?;
+    fs::write(
+        run_dir.join("reports").join("latest.debug.txt"),
+        crate::report::render_debug_report(run_id, steps),
+    )?;
+    Ok(())
+}
+
+fn render_failure_note(error: &anyhow::Error) -> String {
+    error
+        .chain()
+        .map(std::string::ToString::to_string)
+        .collect::<Vec<_>>()
+        .join(": ")
+}
+
+fn frontier_epoch_for_prefix(steps: &[StepReport]) -> u32 {
+    steps
+        .iter()
+        .filter(|step| step.step_index >= 4)
+        .count()
+        .try_into()
+        .expect("frontier epoch exceeded u32")
+}
+
+#[allow(dead_code)]
 fn write_step_checkpoints(
     run_dir: &Path,
     manifest: &RunManifestV1,
@@ -260,6 +533,41 @@ fn write_step_checkpoints(
         )?;
     }
     Ok(())
+}
+
+fn write_step_checkpoint(
+    run_dir: &Path,
+    manifest: &RunManifestV1,
+    previous_steps: &[StepReport],
+    step: &StepReport,
+    window_depth: u16,
+) -> Result<()> {
+    let checkpoint = StepCheckpointV1 {
+        schema_version: SCHEMA_VERSION_V1,
+        run_id: manifest.run_id.clone(),
+        step_index: step.step_index,
+        accepted_utc: manifest.updated_utc.clone(),
+        compat: checkpoint_compat(),
+        objective: StepObjective {
+            bar: step.objective_bar,
+            exact_clause_kappa: step.accepted.clause_kappa,
+            bit_band: BitBand {
+                min: step.accepted.bit_kappa,
+                max: step.accepted.bit_kappa,
+            },
+        },
+        accepted: step.accepted.clone(),
+        library_snapshot: library_snapshot(previous_steps, window_depth),
+        near_misses: checkpoint_near_misses(step),
+        stats: checkpoint_stats(step),
+    };
+    write_json_file(
+        &run_dir
+            .join("checkpoints")
+            .join("steps")
+            .join(format!("step-{:02}.json", step.step_index)),
+        &checkpoint,
+    )
 }
 
 fn checkpoint_near_misses(step: &StepReport) -> Vec<NearMiss> {
@@ -324,8 +632,33 @@ fn write_telemetry(
     mode: &str,
     search_profile: &str,
 ) -> Result<()> {
-    let mut lines = Vec::new();
-    lines.push(serde_json::to_string(&TelemetryEventV1 {
+    let mut lines = Vec::with_capacity(steps.len() + 2);
+    lines.push(serde_json::to_string(&run_started_event(
+        manifest,
+        mode,
+        search_profile,
+    ))?);
+    for step in steps {
+        lines.push(serde_json::to_string(&step_accepted_event(manifest, step))?);
+    }
+    lines.push(serde_json::to_string(&run_status_event(manifest))?);
+    fs::write(run_dir.join("telemetry.ndjson"), format!("{}\n", lines.join("\n")))?;
+    Ok(())
+}
+
+fn append_telemetry_event(run_dir: &Path, event: &TelemetryEventV1) -> Result<()> {
+    let mut file = OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(run_dir.join("telemetry.ndjson"))
+        .with_context(|| format!("open {}", run_dir.join("telemetry.ndjson").display()))?;
+    use std::io::Write;
+    writeln!(file, "{}", serde_json::to_string(event)?).context("append telemetry event")?;
+    Ok(())
+}
+
+fn run_started_event(manifest: &RunManifestV1, mode: &str, search_profile: &str) -> TelemetryEventV1 {
+    TelemetryEventV1 {
         schema_version: SCHEMA_VERSION_V1,
         run_id: manifest.run_id.clone(),
         event: "run_started".to_owned(),
@@ -340,116 +673,132 @@ fn write_telemetry(
                 "bucket_policy": manifest.search_policy.bucket_policy,
             },
         }),
-    })?);
-
-    for step in steps {
-        let late_step_claim = match step.canon_evidence.late_step_claim.status {
-            crate::report::LateStepClaimStatus::NotApplicable => serde_json::Value::Null,
-            crate::report::LateStepClaimStatus::ExecutableCanon => json!({
-                "status": "executable_canon",
-                "adopted_step": step.canon_evidence.late_step_claim.adopted_step,
-                "adopted_label": step.canon_evidence.late_step_claim.adopted_label,
-                "adopted_nu": step.canon_evidence.late_step_claim.adopted_nu,
-                "matches_accepted": step.canon_evidence.late_step_claim.matches_accepted,
-            }),
-            crate::report::LateStepClaimStatus::HistoricalProvenanceOnly => json!({
-                "status": "historical_provenance_only",
-                "adopted_step": step.canon_evidence.late_step_claim.adopted_step,
-                "adopted_label": step.canon_evidence.late_step_claim.adopted_label,
-                "adopted_nu": step.canon_evidence.late_step_claim.adopted_nu,
-                "matches_accepted": step.canon_evidence.late_step_claim.matches_accepted,
-            }),
-        };
-        let replay_ablation = json!({
-            "status": step.replay_ablation.status.as_str(),
-            "reference_candidate_hash": step.replay_ablation.reference_candidate_hash,
-            "reference_canonical_hash": step.replay_ablation.reference_canonical_hash,
-            "rho_delta": step.replay_ablation.rho_delta.to_string(),
-            "objective_bar_delta": step.replay_ablation.objective_bar_delta.to_string(),
-            "overshoot_delta": step.replay_ablation.overshoot_delta.to_string(),
-            "nu_delta": step.replay_ablation.nu_delta,
-            "clause_kappa_delta": step.replay_ablation.clause_kappa_delta,
-        });
-        let prune_sample_counts = json!({
-            "quotient_dedupe": step.prune_reports.iter().filter(|report| {
-                report.prune_class == crate::report::PruneReportClass::QuotientDedupe
-            }).count(),
-            "sound_minimality": step.prune_reports.iter().filter(|report| {
-                report.prune_class == crate::report::PruneReportClass::SoundMinimality
-            }).count(),
-            "heuristic_shaping": step.prune_reports.iter().filter(|report| {
-                report.prune_class == crate::report::PruneReportClass::HeuristicShaping
-            }).count(),
-        });
-        let prune_class_totals = stored_prune_class_stats(step);
-        let exact_screen_reason_totals = stored_exact_screen_reasons(step);
-        lines.push(serde_json::to_string(&TelemetryEventV1 {
-            schema_version: SCHEMA_VERSION_V1,
-            run_id: manifest.run_id.clone(),
-            event: "step_accepted".to_owned(),
-            step_index: Some(step.step_index),
-            payload: json!({
-                "label": step.label,
-                "nu": step.accepted.nu,
-                "kappa": step.accepted.clause_kappa,
-                "charged_kappa": step.canon_evidence.charged_clause_kappa,
-                "rho": step.accepted.rho.to_string(),
-                "bar": step.objective_bar.to_string(),
-                "bar_distance": step.canon_evidence.bar_distance.to_string(),
-                "candidate_hash": step.accepted.candidate_hash,
-                "late_step_claim": late_step_claim,
-                "replay_ablation": replay_ablation,
-                "prune_classes": {
-                    "quotient_dedupe": prune_class_totals.quotient_dedupe,
-                    "sound_minimality": prune_class_totals.sound_minimality,
-                    "heuristic_shaping": prune_class_totals.heuristic_shaping,
-                },
-                "exact_screen_reasons": {
-                    "partial_prefix_bar_failure": exact_screen_reason_totals.partial_prefix_bar_failure,
-                    "terminal_prefix_completion_failure": exact_screen_reason_totals.terminal_prefix_completion_failure,
-                    "incumbent_dominance": exact_screen_reason_totals.incumbent_dominance,
-                    "legality_connectivity_exact_rejection": exact_screen_reason_totals.legality_connectivity_exact_rejection,
-                },
-                "prune_samples": prune_sample_counts,
-                "frontier_pressure": {
-                    "governor_state": step.frontier_pressure.governor_state.as_str(),
-                    "pressure_action": step.frontier_pressure.pressure_action.as_str(),
-                    "rss_bytes": step.frontier_pressure.rss_bytes,
-                    "hot_frontier_bytes": step.frontier_pressure.hot_frontier_bytes,
-                    "cold_frontier_bytes": step.frontier_pressure.cold_frontier_bytes,
-                    "dedupe_bytes": step.frontier_pressure.dedupe_bytes,
-                    "requested_cold_limit": step.frontier_pressure.requested_cold_limit,
-                    "retained_cold_limit": step.frontier_pressure.retained_cold_limit,
-                    "resident_cold_limit": step.frontier_pressure.resident_cold_limit,
-                    "spill_backed_cold_records": step.frontier_pressure.spill_backed_cold_records,
-                    "dropped_cold_records": step.frontier_pressure.dropped_cold_records,
-                },
-                "search_timing": {
-                    "step_wall_clock_millis": step.search_stats.search_timing.step_wall_clock_millis,
-                    "candidate_discovery_wall_clock_millis": step.search_stats.search_timing.candidate_discovery_wall_clock_millis,
-                    "prefix_frontier_planning_wall_clock_millis": step.search_stats.search_timing.prefix_frontier_planning_wall_clock_millis,
-                    "selection_wall_clock_millis": step.search_stats.search_timing.selection_wall_clock_millis,
-                },
-            }),
-        })?);
     }
+}
 
-    lines.push(serde_json::to_string(&TelemetryEventV1 {
+fn step_accepted_event(manifest: &RunManifestV1, step: &StepReport) -> TelemetryEventV1 {
+    let late_step_claim = match step.canon_evidence.late_step_claim.status {
+        crate::report::LateStepClaimStatus::NotApplicable => serde_json::Value::Null,
+        crate::report::LateStepClaimStatus::ExecutableCanon => json!({
+            "status": "executable_canon",
+            "adopted_step": step.canon_evidence.late_step_claim.adopted_step,
+            "adopted_label": step.canon_evidence.late_step_claim.adopted_label,
+            "adopted_nu": step.canon_evidence.late_step_claim.adopted_nu,
+            "matches_accepted": step.canon_evidence.late_step_claim.matches_accepted,
+        }),
+        crate::report::LateStepClaimStatus::HistoricalProvenanceOnly => json!({
+            "status": "historical_provenance_only",
+            "adopted_step": step.canon_evidence.late_step_claim.adopted_step,
+            "adopted_label": step.canon_evidence.late_step_claim.adopted_label,
+            "adopted_nu": step.canon_evidence.late_step_claim.adopted_nu,
+            "matches_accepted": step.canon_evidence.late_step_claim.matches_accepted,
+        }),
+    };
+    let replay_ablation = json!({
+        "status": step.replay_ablation.status.as_str(),
+        "reference_candidate_hash": step.replay_ablation.reference_candidate_hash,
+        "reference_canonical_hash": step.replay_ablation.reference_canonical_hash,
+        "rho_delta": step.replay_ablation.rho_delta.to_string(),
+        "objective_bar_delta": step.replay_ablation.objective_bar_delta.to_string(),
+        "overshoot_delta": step.replay_ablation.overshoot_delta.to_string(),
+        "nu_delta": step.replay_ablation.nu_delta,
+        "clause_kappa_delta": step.replay_ablation.clause_kappa_delta,
+    });
+    let prune_sample_counts = json!({
+        "quotient_dedupe": step.prune_reports.iter().filter(|report| {
+            report.prune_class == crate::report::PruneReportClass::QuotientDedupe
+        }).count(),
+        "sound_minimality": step.prune_reports.iter().filter(|report| {
+            report.prune_class == crate::report::PruneReportClass::SoundMinimality
+        }).count(),
+        "heuristic_shaping": step.prune_reports.iter().filter(|report| {
+            report.prune_class == crate::report::PruneReportClass::HeuristicShaping
+        }).count(),
+    });
+    let prune_class_totals = stored_prune_class_stats(step);
+    let exact_screen_reason_totals = stored_exact_screen_reasons(step);
+
+    TelemetryEventV1 {
         schema_version: SCHEMA_VERSION_V1,
         run_id: manifest.run_id.clone(),
-        event: "run_completed".to_owned(),
-        step_index: manifest.position.completed_step.checked_add(1),
+        event: "step_accepted".to_owned(),
+        step_index: Some(step.step_index),
         payload: json!({
-            "completed_step": manifest.position.completed_step,
-            "status": "completed",
+            "label": step.label,
+            "nu": step.accepted.nu,
+            "kappa": step.accepted.clause_kappa,
+            "charged_kappa": step.canon_evidence.charged_clause_kappa,
+            "rho": step.accepted.rho.to_string(),
+            "bar": step.objective_bar.to_string(),
+            "bar_distance": step.canon_evidence.bar_distance.to_string(),
+            "candidate_hash": step.accepted.candidate_hash,
+            "late_step_claim": late_step_claim,
+            "replay_ablation": replay_ablation,
+            "prune_classes": {
+                "quotient_dedupe": prune_class_totals.quotient_dedupe,
+                "sound_minimality": prune_class_totals.sound_minimality,
+                "heuristic_shaping": prune_class_totals.heuristic_shaping,
+            },
+            "exact_screen_reasons": {
+                "partial_prefix_bar_failure": exact_screen_reason_totals.partial_prefix_bar_failure,
+                "terminal_prefix_completion_failure": exact_screen_reason_totals.terminal_prefix_completion_failure,
+                "incumbent_dominance": exact_screen_reason_totals.incumbent_dominance,
+                "legality_connectivity_exact_rejection": exact_screen_reason_totals.legality_connectivity_exact_rejection,
+            },
+            "prune_samples": prune_sample_counts,
+            "frontier_pressure": {
+                "governor_state": step.frontier_pressure.governor_state.as_str(),
+                "pressure_action": step.frontier_pressure.pressure_action.as_str(),
+                "rss_bytes": step.frontier_pressure.rss_bytes,
+                "hot_frontier_bytes": step.frontier_pressure.hot_frontier_bytes,
+                "cold_frontier_bytes": step.frontier_pressure.cold_frontier_bytes,
+                "dedupe_bytes": step.frontier_pressure.dedupe_bytes,
+                "requested_cold_limit": step.frontier_pressure.requested_cold_limit,
+                "retained_cold_limit": step.frontier_pressure.retained_cold_limit,
+                "resident_cold_limit": step.frontier_pressure.resident_cold_limit,
+                "spill_backed_cold_records": step.frontier_pressure.spill_backed_cold_records,
+                "dropped_cold_records": step.frontier_pressure.dropped_cold_records,
+            },
+            "search_timing": {
+                "step_wall_clock_millis": step.search_stats.search_timing.step_wall_clock_millis,
+                "candidate_discovery_wall_clock_millis": step.search_stats.search_timing.candidate_discovery_wall_clock_millis,
+                "prefix_frontier_planning_wall_clock_millis": step.search_stats.search_timing.prefix_frontier_planning_wall_clock_millis,
+                "selection_wall_clock_millis": step.search_stats.search_timing.selection_wall_clock_millis,
+            },
         }),
-    })?);
+    }
+}
 
-    fs::write(
-        run_dir.join("telemetry.ndjson"),
-        format!("{}\n", lines.join("\n")),
-    )?;
-    Ok(())
+fn run_status_event(manifest: &RunManifestV1) -> TelemetryEventV1 {
+    let event = match manifest.status {
+        RunStatus::Completed => "run_completed",
+        RunStatus::Failed => "run_failed",
+        RunStatus::Paused => "run_paused",
+        RunStatus::Running => "run_running",
+    };
+    let mut payload = serde_json::Map::from_iter([
+        (
+            "completed_step".to_owned(),
+            serde_json::Value::from(manifest.position.completed_step),
+        ),
+        (
+            "status".to_owned(),
+            serde_json::Value::from(manifest.status.as_str()),
+        ),
+    ]);
+    if !manifest.failure_note.is_empty() {
+        payload.insert(
+            "failure_note".to_owned(),
+            serde_json::Value::from(manifest.failure_note.clone()),
+        );
+    }
+    TelemetryEventV1 {
+        schema_version: SCHEMA_VERSION_V1,
+        run_id: manifest.run_id.clone(),
+        event: event.to_owned(),
+        step_index: manifest.position.completed_step.checked_add(1),
+        payload: serde_json::Value::Object(payload),
+    }
 }
 
 fn write_json_file<T: serde::Serialize>(path: &Path, value: &T) -> Result<()> {
@@ -635,6 +984,7 @@ pub(crate) fn frontier_runtime_limits(
     }
 }
 
+#[allow(dead_code)]
 fn write_frontier_snapshots(
     run_dir: &Path,
     run_manifest: &RunManifestV1,
@@ -644,166 +994,170 @@ fn write_frontier_snapshots(
     metadata: &MetadataDb,
 ) -> Result<()> {
     for (frontier_epoch, step) in steps.iter().filter(|step| step.step_index >= 4).enumerate() {
-        let band_index = u32::from(step.accepted.clause_kappa);
-        let frontier_epoch =
-            u32::try_from(frontier_epoch + 1).expect("frontier epoch exceeded u32");
-        let frontier_dir = frontier_checkpoint_dir(run_dir, step.step_index, band_index);
-        let (mut window, dedupe_keys) = frontier_window_for_step(step, worker_count);
-        if window.total_len() == 0 {
-            continue;
-        }
-        let schedule = build_schedule(&window, worker_count);
-        apply_schedule_to_window(&mut window, &schedule);
-        let frontier_worker_count = schedule.assignments.len() as u16;
-
-        let hot_records = window
-            .hot
-            .iter()
-            .map(|record| record.to_le_bytes())
-            .collect::<Vec<_>>();
-        let cold_records = window
-            .cold
-            .iter()
-            .map(|record| record.to_le_bytes())
-            .collect::<Vec<_>>();
-        let compat = current_search_compat();
-        let runtime = persist_frontier_runtime(
-            &frontier_dir,
-            &FrontierRuntimeInput {
-                frontier_epoch,
-                hot_records,
-                cold_records,
-                dedupe_keys: dedupe_keys.into_iter().collect(),
-                prefixes_created: step.search_stats.prefixes_created as u64,
-                prefix_states_explored: step.search_stats.prefix_states_explored as u64,
-                prefix_states_merged_by_signature: step
-                    .search_stats
-                    .prefix_states_merged_by_signature
-                    as u64,
-                prefix_states_exact_pruned: step.search_stats.prefix_states_exact_pruned as u64,
-                prefix_states_heuristic_dropped: step.search_stats.prefix_states_heuristic_dropped
-                    as u64,
-                incremental_legality_cache_hits: step.search_stats.incremental_legality_cache_hits
-                    as u64,
-                incremental_connectivity_shortcuts: step
-                    .search_stats
-                    .incremental_connectivity_shortcuts
-                    as u64,
-                incremental_connectivity_fallbacks: step
-                    .search_stats
-                    .incremental_connectivity_fallbacks
-                    as u64,
-                incremental_connectivity_prunes: step.search_stats.incremental_connectivity_prunes
-                    as u64,
-                incremental_clause_family_filter_hits: step
-                    .search_stats
-                    .incremental_clause_family_filter_hits
-                    as u64,
-                incremental_clause_family_prunes: step.search_stats.incremental_clause_family_prunes
-                    as u64,
-                incremental_active_window_clause_filter_hits: step
-                    .search_stats
-                    .incremental_active_window_clause_filter_hits
-                    as u64,
-                incremental_active_window_clause_filter_prunes: step
-                    .search_stats
-                    .incremental_active_window_clause_filter_prunes
-                    as u64,
-                incremental_terminal_clause_filter_hits: step
-                    .search_stats
-                    .incremental_terminal_clause_filter_hits
-                    as u64,
-                incremental_terminal_clause_filter_prunes: step
-                    .search_stats
-                    .incremental_terminal_clause_filter_prunes
-                    as u64,
-                incremental_trivial_derivability_hits: step
-                    .search_stats
-                    .incremental_trivial_derivability_hits
-                    as u64,
-                incremental_trivial_derivability_prunes: step
-                    .search_stats
-                    .incremental_trivial_derivability_prunes
-                    as u64,
-                incremental_terminal_admissibility_hits: step
-                    .search_stats
-                    .incremental_terminal_admissibility_hits
-                    as u64,
-                incremental_terminal_admissibility_rejections: step
-                    .search_stats
-                    .incremental_terminal_admissibility_rejections
-                    as u64,
-                incremental_terminal_prefix_completion_hits: step
-                    .search_stats
-                    .incremental_terminal_prefix_completion_hits
-                    as u64,
-                incremental_terminal_prefix_rank_hits: step
-                    .search_stats
-                    .incremental_terminal_prefix_rank_hits
-                    as u64,
-                incremental_terminal_rank_prunes: step.search_stats.incremental_terminal_rank_prunes
-                    as u64,
-                incremental_partial_prefix_bound_hits: step
-                    .search_stats
-                    .incremental_partial_prefix_bound_hits
-                    as u64,
-                incremental_partial_prefix_bound_checks: step
-                    .search_stats
-                    .incremental_partial_prefix_bound_checks
-                    as u64,
-                incremental_partial_prefix_bound_prunes: step
-                    .search_stats
-                    .incremental_partial_prefix_bound_prunes
-                    as u64,
-                incremental_terminal_prefix_bar_prunes: step
-                    .search_stats
-                    .incremental_terminal_prefix_bar_prunes
-                    as u64,
-                worker_count: frontier_worker_count,
-                priority_heads: window.priority_heads(8),
-                interner_bytes: 0,
-                worker_scratch_bytes: worker_scratch_bytes(frontier_worker_count, config),
-                checkpoint_bytes: checkpoint_buffer_bytes(config),
-                spill_buffer_bytes: spill_buffer_bytes(config),
-            },
-            governor_config(config),
-            spill_config(config),
+        write_frontier_snapshot(
+            run_dir,
+            run_manifest,
+            step,
+            u32::try_from(frontier_epoch + 1).expect("frontier epoch exceeded u32"),
+            worker_count,
+            config,
+            metadata,
         )?;
-        let frontier_manifest = FrontierManifestV1 {
-            schema_version: SCHEMA_VERSION_V1,
-            run_id: run_manifest.run_id.clone(),
-            step_index: step.step_index,
-            band_index,
-            frontier_epoch,
-            base_step_checkpoint: format!("../../../steps/step-{:02}.json", step.step_index),
-            resume_compatible: ResumeCompatible {
-                ast_schema_hash: compat.ast_schema_hash,
-                type_rules_hash: compat.type_rules_hash,
-                evaluator_hash: compat.evaluator_hash,
-                search_semantics_hash: compat.search_semantics_hash,
-                record_layout_id: compat.record_layout_id,
-            },
-            counts: runtime.counts,
-            files: runtime.files,
-            memory_snapshot: runtime.memory_snapshot,
-            scheduler: runtime.scheduler,
-        };
-        write_frontier_manifest(&frontier_dir, &frontier_manifest)?;
-        metadata.record_frontier_generation(&FrontierGenerationRow {
-            run_id: run_manifest.run_id.clone(),
-            step_index: step.step_index,
-            band_index,
-            frontier_epoch,
-            worker_count: frontier_manifest.scheduler.worker_count,
-            spill_generation: frontier_manifest.scheduler.spill_generation,
-            hot_states: frontier_manifest.counts.hot_states,
-            cold_states: frontier_manifest.counts.cold_states,
-            governor_state: runtime.governor_state.as_str().to_owned(),
-            pressure_action: runtime.pressure_action.as_str().to_owned(),
-            rss_bytes: frontier_manifest.memory_snapshot.rss_bytes,
-        })?;
     }
 
+    Ok(())
+}
+
+fn write_frontier_snapshot(
+    run_dir: &Path,
+    run_manifest: &RunManifestV1,
+    step: &StepReport,
+    frontier_epoch: u32,
+    worker_count: u16,
+    config: &RuntimeConfig,
+    metadata: &MetadataDb,
+) -> Result<()> {
+    if step.step_index < 4 {
+        return Ok(());
+    }
+
+    let band_index = u32::from(step.accepted.clause_kappa);
+    let frontier_dir = frontier_checkpoint_dir(run_dir, step.step_index, band_index);
+    let (mut window, dedupe_keys) = frontier_window_for_step(step, worker_count);
+    if window.total_len() == 0 {
+        return Ok(());
+    }
+    let schedule = build_schedule(&window, worker_count);
+    apply_schedule_to_window(&mut window, &schedule);
+    let frontier_worker_count = schedule.assignments.len() as u16;
+
+    let hot_records = window
+        .hot
+        .iter()
+        .map(|record| record.to_le_bytes())
+        .collect::<Vec<_>>();
+    let cold_records = window
+        .cold
+        .iter()
+        .map(|record| record.to_le_bytes())
+        .collect::<Vec<_>>();
+    let compat = current_search_compat();
+    let runtime = persist_frontier_runtime(
+        &frontier_dir,
+        &FrontierRuntimeInput {
+            frontier_epoch,
+            hot_records,
+            cold_records,
+            dedupe_keys: dedupe_keys.into_iter().collect(),
+            prefixes_created: step.search_stats.prefixes_created as u64,
+            prefix_states_explored: step.search_stats.prefix_states_explored as u64,
+            prefix_states_merged_by_signature: step.search_stats.prefix_states_merged_by_signature
+                as u64,
+            prefix_states_exact_pruned: step.search_stats.prefix_states_exact_pruned as u64,
+            prefix_states_heuristic_dropped: step.search_stats.prefix_states_heuristic_dropped
+                as u64,
+            incremental_legality_cache_hits: step.search_stats.incremental_legality_cache_hits
+                as u64,
+            incremental_connectivity_shortcuts: step
+                .search_stats
+                .incremental_connectivity_shortcuts as u64,
+            incremental_connectivity_fallbacks: step
+                .search_stats
+                .incremental_connectivity_fallbacks as u64,
+            incremental_connectivity_prunes: step.search_stats.incremental_connectivity_prunes
+                as u64,
+            incremental_clause_family_filter_hits: step
+                .search_stats
+                .incremental_clause_family_filter_hits as u64,
+            incremental_clause_family_prunes: step.search_stats.incremental_clause_family_prunes
+                as u64,
+            incremental_active_window_clause_filter_hits: step
+                .search_stats
+                .incremental_active_window_clause_filter_hits as u64,
+            incremental_active_window_clause_filter_prunes: step
+                .search_stats
+                .incremental_active_window_clause_filter_prunes as u64,
+            incremental_terminal_clause_filter_hits: step
+                .search_stats
+                .incremental_terminal_clause_filter_hits as u64,
+            incremental_terminal_clause_filter_prunes: step
+                .search_stats
+                .incremental_terminal_clause_filter_prunes as u64,
+            incremental_trivial_derivability_hits: step
+                .search_stats
+                .incremental_trivial_derivability_hits as u64,
+            incremental_trivial_derivability_prunes: step
+                .search_stats
+                .incremental_trivial_derivability_prunes as u64,
+            incremental_terminal_admissibility_hits: step
+                .search_stats
+                .incremental_terminal_admissibility_hits as u64,
+            incremental_terminal_admissibility_rejections: step
+                .search_stats
+                .incremental_terminal_admissibility_rejections as u64,
+            incremental_terminal_prefix_completion_hits: step
+                .search_stats
+                .incremental_terminal_prefix_completion_hits as u64,
+            incremental_terminal_prefix_rank_hits: step
+                .search_stats
+                .incremental_terminal_prefix_rank_hits as u64,
+            incremental_terminal_rank_prunes: step.search_stats.incremental_terminal_rank_prunes
+                as u64,
+            incremental_partial_prefix_bound_hits: step
+                .search_stats
+                .incremental_partial_prefix_bound_hits as u64,
+            incremental_partial_prefix_bound_checks: step
+                .search_stats
+                .incremental_partial_prefix_bound_checks as u64,
+            incremental_partial_prefix_bound_prunes: step
+                .search_stats
+                .incremental_partial_prefix_bound_prunes as u64,
+            incremental_terminal_prefix_bar_prunes: step
+                .search_stats
+                .incremental_terminal_prefix_bar_prunes as u64,
+            worker_count: frontier_worker_count,
+            priority_heads: window.priority_heads(8),
+            interner_bytes: 0,
+            worker_scratch_bytes: worker_scratch_bytes(frontier_worker_count, config),
+            checkpoint_bytes: checkpoint_buffer_bytes(config),
+            spill_buffer_bytes: spill_buffer_bytes(config),
+        },
+        governor_config(config),
+        spill_config(config),
+    )?;
+    let frontier_manifest = FrontierManifestV1 {
+        schema_version: SCHEMA_VERSION_V1,
+        run_id: run_manifest.run_id.clone(),
+        step_index: step.step_index,
+        band_index,
+        frontier_epoch,
+        base_step_checkpoint: format!("../../../steps/step-{:02}.json", step.step_index),
+        resume_compatible: ResumeCompatible {
+            ast_schema_hash: compat.ast_schema_hash,
+            type_rules_hash: compat.type_rules_hash,
+            evaluator_hash: compat.evaluator_hash,
+            search_semantics_hash: compat.search_semantics_hash,
+            record_layout_id: compat.record_layout_id,
+        },
+        counts: runtime.counts,
+        files: runtime.files,
+        memory_snapshot: runtime.memory_snapshot,
+        scheduler: runtime.scheduler,
+    };
+    write_frontier_manifest(&frontier_dir, &frontier_manifest)?;
+    metadata.record_frontier_generation(&FrontierGenerationRow {
+        run_id: run_manifest.run_id.clone(),
+        step_index: step.step_index,
+        band_index,
+        frontier_epoch,
+        worker_count: frontier_manifest.scheduler.worker_count,
+        spill_generation: frontier_manifest.scheduler.spill_generation,
+        hot_states: frontier_manifest.counts.hot_states,
+        cold_states: frontier_manifest.counts.cold_states,
+        governor_state: runtime.governor_state.as_str().to_owned(),
+        pressure_action: runtime.pressure_action.as_str().to_owned(),
+        rss_bytes: frontier_manifest.memory_snapshot.rss_bytes,
+    })?;
     Ok(())
 }
 
@@ -995,9 +1349,12 @@ fn truncated_hash64(bytes: &[u8]) -> u64 {
 
 #[cfg(test)]
 mod tests {
-    use super::run;
+    use super::{RunArtifactWriter, build_run_manifest_base, planned_run_mode, run};
     use crate::cli::RunArgs;
-    use pen_store::manifest::RunManifestV1;
+    use crate::report::generate_steps_with_config_and_runtime;
+    use pen_search::diversify::FrontierRuntimeLimits;
+    use pen_store::frontier::frontier_checkpoint_dir;
+    use pen_store::manifest::{RunManifestV1, RunStatus};
     use std::fs;
     use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -1105,6 +1462,136 @@ mod tests {
         let steps_dir = run_dir.join("reports").join("steps");
         assert!(steps_dir.join("step-03-narrative.txt").exists());
         assert!(steps_dir.join("step-03-events.ndjson").exists());
+
+        fs::remove_dir_all(root).ok();
+    }
+
+    #[test]
+    fn failed_partial_claim_run_still_leaves_manifest_and_narrative_artifacts() {
+        let root = temp_dir("partial-claim-failure");
+        let run_dir = root.join("partial-claim");
+        let config_text = include_str!("../../../configs/desktop_claim_shadow_smoke.toml");
+        let config = pen_search::config::RuntimeConfig::from_toml_str(config_text)
+            .expect("claim config should parse");
+        let worker_count = super::resolved_worker_count(&config);
+        let manifest_base = build_run_manifest_base(
+            "partial-claim",
+            config_text,
+            &config,
+            worker_count,
+            super::now_utc().expect("timestamp should render"),
+        )
+        .expect("manifest base should build");
+        let mut writer = RunArtifactWriter::start(
+            &run_dir,
+            config_text,
+            manifest_base,
+            &config,
+            worker_count,
+            planned_run_mode(4).as_str(),
+            config.mode.search_profile.as_str(),
+            super::now_utc().expect("timestamp should render"),
+            Vec::new(),
+            None,
+        )
+        .expect("writer should initialize");
+        let generated = generate_steps_with_config_and_runtime(
+            3,
+            &config,
+            FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim steps should generate");
+        for step in &generated.steps {
+            writer.persist_step(step).expect("step should persist");
+        }
+        writer
+            .finalize_failed(&anyhow::anyhow!("simulated allocator abort"))
+            .expect("failure status should persist");
+
+        let manifest: RunManifestV1 = serde_json::from_str(
+            &fs::read_to_string(run_dir.join("run.json")).expect("manifest should exist"),
+        )
+        .expect("manifest should parse");
+        assert_eq!(manifest.status, RunStatus::Failed);
+        assert!(manifest.failure_note.contains("simulated allocator abort"));
+        assert_eq!(manifest.position.completed_step, 3);
+        assert_eq!(manifest.position.frontier_epoch, 0);
+
+        let steps_dir = run_dir.join("reports").join("steps");
+        assert!(steps_dir.join("step-03-summary.json").exists());
+        assert!(steps_dir.join("step-03-narrative.txt").exists());
+        assert!(steps_dir.join("step-03-events.ndjson").exists());
+        assert!(run_dir.join("checkpoints").join("steps").join("step-03.json").exists());
+
+        let latest =
+            fs::read_to_string(run_dir.join("reports").join("latest.txt")).expect("latest report");
+        assert!(latest.contains("completed_step: 3"));
+
+        let telemetry =
+            fs::read_to_string(run_dir.join("telemetry.ndjson")).expect("telemetry should exist");
+        assert!(telemetry.contains("\"event\":\"run_started\""));
+        assert!(telemetry.contains("\"event\":\"step_accepted\""));
+        assert!(telemetry.contains("\"event\":\"run_failed\""));
+
+        fs::remove_dir_all(root).ok();
+    }
+
+    #[test]
+    fn failed_partial_late_run_still_leaves_frontier_snapshot() {
+        let root = temp_dir("partial-frontier-failure");
+        let run_dir = root.join("partial-frontier");
+        let config_text = include_str!("../../../configs/debug.toml");
+        let config =
+            pen_search::config::RuntimeConfig::from_toml_str(config_text).expect("debug config");
+        let worker_count = super::resolved_worker_count(&config);
+        let manifest_base = build_run_manifest_base(
+            "partial-frontier",
+            config_text,
+            &config,
+            worker_count,
+            super::now_utc().expect("timestamp should render"),
+        )
+        .expect("manifest base should build");
+        let mut writer = RunArtifactWriter::start(
+            &run_dir,
+            config_text,
+            manifest_base,
+            &config,
+            worker_count,
+            planned_run_mode(4).as_str(),
+            config.mode.search_profile.as_str(),
+            super::now_utc().expect("timestamp should render"),
+            Vec::new(),
+            None,
+        )
+        .expect("writer should initialize");
+        let generated = generate_steps_with_config_and_runtime(
+            4,
+            &config,
+            FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("debug steps should generate");
+        for step in &generated.steps {
+            writer.persist_step(step).expect("step should persist");
+        }
+        writer
+            .finalize_failed(&anyhow::anyhow!("simulated allocator abort"))
+            .expect("failure status should persist");
+
+        let manifest: RunManifestV1 = serde_json::from_str(
+            &fs::read_to_string(run_dir.join("run.json")).expect("manifest should exist"),
+        )
+        .expect("manifest should parse");
+        assert_eq!(manifest.status, RunStatus::Failed);
+        assert_eq!(manifest.position.completed_step, 4);
+        assert_eq!(manifest.position.frontier_epoch, 1);
+
+        let band_index = u32::from(generated.steps[3].accepted.clause_kappa);
+        assert!(
+            frontier_checkpoint_dir(&run_dir, 4, band_index)
+                .join("frontier.manifest.json")
+                .exists()
+        );
 
         fs::remove_dir_all(root).ok();
     }

@@ -22,6 +22,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - `run.json` now captures CPU, worker-count, build-profile, target, git,
   `Cargo.lock`, and binary fingerprints for claim certification, and the smoke
   certification path now passes the manifest-completeness gate.
+- `pen-cli run` and `pen-cli resume` now write `run.json`, step summaries,
+  step checkpoints, frontier snapshots, claim narratives/events, and failure
+  status incrementally, so failed long claim runs remain auditable from disk.
 - `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
   reason coverage, prune-class coverage, narrative artifacts, and whether the
   stored run reaches the step-15 claim signoff surface.
@@ -29,9 +32,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   claim artifacts and currently fails honestly on missing breadth, missing
   step-15 parity evidence, and the still-missing full-profile stored claim
   bundle on the intended auto-worker desktop config.
-- the repo-level autonomy docs now treat claim-policy separation as baseline;
-  the live bottleneck is full-profile claim-run survivability plus failure
-  evidence preservation
+- the repo-level autonomy docs now treat claim-policy separation and failed-run
+  evidence preservation as baseline; the live bottleneck is full-profile
+  claim-run memory stability on the intended auto-worker profile
 
 ## Current Operational Blockers
 
@@ -40,21 +43,17 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - claim-path parity still needs stored signoff evidence even though direct
   exact prefix-completion behavior is now rechecked by tests under the new
   structural-generic scheduler surface
-- a full `desktop_claim_shadow_1h` auto-worker run still aborts before writing
-  artifacts on the disclosed machine; the latest attempt failed with
+- a full `desktop_claim_shadow_1h` auto-worker run still aborts before
+  step-15 completion on the disclosed machine; the latest attempt failed with
   `memory allocation of 1212416 bytes failed`
-- failed long claim runs still do not leave enough incremental artifacts to
-  debug the failure comfortably from disk
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice
 
-1. Persist `run.json` and step artifacts incrementally so failed long claim
-   runs remain auditable.
-2. Make the intended `desktop_claim_shadow_1h` profile memory-stable on the
+1. Make the intended `desktop_claim_shadow_1h` profile memory-stable on the
    disclosed machine.
-3. Once that bundle exists, run the compare/certification scripts against it,
-   then close the remaining breadth/floor misses.
+2. Once that bundle exists, run the compare/certification scripts against it.
+3. Then close the remaining breadth/floor and parity misses.
 
 ## First Reads
 
@@ -73,8 +72,7 @@ Do:
   changes
 - prefer structural explanations over family-name explanations in new claim
   code
-- focus next on failed-run evidence preservation, memory stability, and then
-  stored breadth/parity/certification
+- focus next on memory stability, then stored breadth/parity/certification
 
 Do not:
 

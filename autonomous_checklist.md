@@ -18,7 +18,10 @@ every section below is closed and a passing claim certificate exists.
 
 - No stored full-profile claim-lane signoff bundle yet.
 - The intended `desktop_claim_shadow_1h` auto-worker run still aborts before
-  writing `run.json` with `memory allocation of 1212416 bytes failed`.
+  step-15 completion with `memory allocation of 1212416 bytes failed`.
+- Failed long runs now leave auditable `run.json`, step, checkpoint, frontier,
+  and claim-narrative artifacts; the open issue is finishing the full profile,
+  not preserving the failure bundle.
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
@@ -30,25 +33,7 @@ every section below is closed and a passing claim certificate exists.
   - step `14` generated `>= 3500`
   - step `15` generated `>= 5000`
 
-## 1. Run Survivability And Failure Evidence
-
-- [ ] Write `run.json` at run start instead of only at successful completion.
-- [ ] Update manifest status/position as steps are accepted so the latest
-      completed step survives an early exit.
-- [ ] Persist step summaries, checkpoints, and claim narrative artifacts
-      incrementally during the run.
-- [ ] Record failure status and failure note whenever the CLI exits early but
-      still has time to write.
-- [ ] Ensure a failed long claim run still leaves enough manifest/build/profile
-      evidence to debug the machine-specific failure.
-- [ ] Add tests proving incomplete runs still leave auditable artifacts.
-
-Done when:
-
-- failed or interrupted claim runs are still inspectable from disk
-- the next allocator or pressure failure no longer erases the evidence we need
-
-## 2. Memory Stability On The Intended Claim Profile
+## 1. Memory Stability On The Intended Claim Profile
 
 - [ ] Measure the gap between real process RSS and the governor-accounted
       memory model during claim runs.
@@ -68,7 +53,7 @@ Done when:
 - the intended full-profile claim run completes without allocator abort
 - pressure/governor evidence explains the observed memory behavior honestly
 
-## 3. Stored Claim Evidence
+## 2. Stored Claim Evidence
 
 - [ ] Preserve accepted-hash parity through step `15` on the stabilized claim
       lane.
@@ -101,7 +86,7 @@ Done when:
 - parity and breadth both pass from stored claim-lane evidence
 - a reviewer can inspect the stored bundle and understand what the lane did
 
-## 4. Benchmark And Certification Bundle
+## 3. Benchmark And Certification Bundle
 
 - [ ] Check the claim path used no silent guarded, replay, realistic-shadow, or
       demo-only fallback on the intended stored bundle.
@@ -126,7 +111,7 @@ Done when:
 - another reviewer can open one stable claim bundle and audit the whole claim
   end to end
 
-## 5. Language Gate
+## 4. Language Gate
 
 - [ ] Keep user-facing and paper-facing wording at `bounded live recovery`
       until every section above is closed.

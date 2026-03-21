@@ -328,7 +328,7 @@ fn compare_runs_script_emits_a_deterministic_evidence_signoff() {
 
     let summary = read_json(&json_a);
     assert_eq!(summary["signoff"]["status"].as_str(), Some("ready"));
-    assert_eq!(summary["comparison_version"].as_u64(), Some(4));
+    assert_eq!(summary["comparison_version"].as_u64(), Some(5));
     assert_eq!(
         summary["trajectory_consistency"]["status"].as_str(),
         Some("all_match_baseline")
