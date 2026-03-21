@@ -179,6 +179,28 @@ pub struct StructuralDebt {
     pub has_temporal_ops: bool,
 }
 
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub struct ClaimDebtAxes {
+    pub kappa_min: u16,
+    pub kappa_max: u16,
+    pub path_pressure: u8,
+    pub trunc_pressure: u8,
+    pub coupling_pressure: u8,
+    pub support_pressure: u8,
+    pub modal_pressure: u8,
+    pub temporal_pressure: u8,
+    pub reanchor_pressure: u8,
+    pub closure_pressure: u8,
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub enum ClaimAnchorPolicy {
+    #[default]
+    None,
+    Loop,
+    Modal,
+}
+
 impl StructuralDebt {
     pub fn requires_former_eliminator_package(self) -> bool {
         self.max_path_dimension == 0
@@ -369,6 +391,55 @@ impl StructuralDebt {
         usize::from(self.active_entries.max(2))
     }
 
+    pub fn claim_exact_cap_hint(self) -> u16 {
+        self.exact_kappa_cap().max(3)
+    }
+
+    pub fn claim_clause_band_hint(self) -> (u16, u16) {
+        let exact_cap = self.claim_exact_cap_hint();
+        match exact_cap {
+            3 => (3, 3),
+            4 => (4, 4),
+            5 if self.claim_path_pressure() == 0
+                && (self.claim_modal_pressure() > 0 || self.claim_coupling_pressure() > 0) =>
+            {
+                (5, 6)
+            }
+            5 => (5, 5),
+            6 => (5, 6),
+            7 => (7, 7),
+            8 => (8, 8),
+            _ => (9, 9),
+        }
+    }
+
+    pub fn claim_anchor_policy(self) -> ClaimAnchorPolicy {
+        let axes = self.claim_debt_axes();
+        if axes.temporal_pressure > 0 {
+            ClaimAnchorPolicy::Modal
+        } else if axes.reanchor_pressure > 0 && axes.kappa_min <= 4 && axes.kappa_max >= 4 {
+            ClaimAnchorPolicy::Loop
+        } else {
+            ClaimAnchorPolicy::None
+        }
+    }
+
+    pub fn claim_debt_axes(self) -> ClaimDebtAxes {
+        let (kappa_min, kappa_max) = self.claim_clause_band_hint();
+        ClaimDebtAxes {
+            kappa_min,
+            kappa_max,
+            path_pressure: self.claim_path_pressure(),
+            trunc_pressure: u8::from(self.max_path_dimension > 0 || self.truncated_entries > 0),
+            coupling_pressure: self.claim_coupling_pressure(),
+            support_pressure: self.claim_support_pressure(),
+            modal_pressure: self.claim_modal_pressure(),
+            temporal_pressure: self.claim_temporal_pressure(),
+            reanchor_pressure: self.claim_reanchor_pressure(),
+            closure_pressure: self.claim_closure_pressure(),
+        }
+    }
+
     pub fn retention_focus(self) -> RetentionFocus {
         if self.requires_former_eliminator_package() || self.requires_initial_hit_package() {
             return RetentionFocus::Former;
@@ -436,6 +507,75 @@ impl StructuralDebt {
             cold_limit,
         }
     }
+
+    fn claim_path_pressure(self) -> u8 {
+        if self.max_path_dimension == 0 && self.dependent_entries > 0 {
+            1
+        } else if self.max_path_dimension > 0 && self.truncated_entries > 0 {
+            u8::try_from(self.max_path_dimension.saturating_add(1).min(3))
+                .expect("claim path pressure exceeded u8")
+        } else {
+            u8::try_from(self.max_path_dimension.min(3)).expect("claim path pressure exceeded u8")
+        }
+    }
+
+    fn claim_coupling_pressure(self) -> u8 {
+        u8::try_from(
+            self.modal_coupled_entries
+                .saturating_add(self.differential_coupled_entries)
+                .min(3),
+        )
+        .expect("claim coupling pressure exceeded u8")
+    }
+
+    fn claim_support_pressure(self) -> u8 {
+        u8::try_from(
+            self.active_exports
+                .saturating_add(self.foundation_entries)
+                .min(3),
+        )
+        .expect("claim support pressure exceeded u8")
+    }
+
+    fn claim_modal_pressure(self) -> u8 {
+        if self.has_temporal_ops || self.temporal_shell_entries > 0 {
+            2
+        } else if self.has_modal_ops
+            || self.modal_entries > 0
+            || self.modal_coupled_entries > 0
+            || self.active_exports >= 4
+        {
+            1
+        } else {
+            0
+        }
+    }
+
+    fn claim_temporal_pressure(self) -> u8 {
+        if self.has_temporal_ops || self.temporal_shell_entries > 0 {
+            2
+        } else if self.operator_bundle_entries > 0 && self.hilbert_shell_entries > 0 {
+            1
+        } else {
+            0
+        }
+    }
+
+    fn claim_reanchor_pressure(self) -> u8 {
+        if self.claim_temporal_pressure() > 0 {
+            2
+        } else if self.max_path_dimension >= 3 || self.active_exports >= 4 {
+            1
+        } else {
+            0
+        }
+    }
+
+    fn claim_closure_pressure(self) -> u8 {
+        u8::from(self.active_entries >= 2)
+            + u8::from(self.active_exports >= 2)
+            + u8::from(self.constructor_entries == 0)
+    }
 }
 
 pub fn summarize_structural_debt(library: &Library, window_depth: u16) -> StructuralDebt {
@@ -499,8 +639,8 @@ pub fn summarize_structural_debt(library: &Library, window_depth: u16) -> Struct
 #[cfg(test)]
 mod tests {
     use super::{
-        RetentionClass, RetentionFocus, RetentionPolicy, RetentionSignals, StructuralDebt,
-        summarize_structural_debt,
+        ClaimAnchorPolicy, ClaimDebtAxes, RetentionClass, RetentionFocus, RetentionPolicy,
+        RetentionSignals, StructuralDebt, summarize_structural_debt,
     };
     use pen_core::library::{Library, LibraryEntry};
     use pen_core::telescope::{Telescope, TelescopeClass};
@@ -598,6 +738,79 @@ mod tests {
         assert_eq!(debt.truncated_entries, 0);
         assert_eq!(debt.active_exports, 6);
         assert!(debt.requires_axiomatic_bundle_package());
+    }
+
+    #[test]
+    fn claim_axes_open_structural_bands_without_named_family_progression() {
+        let former = StructuralDebt {
+            active_entries: 2,
+            constructor_entries: 2,
+            ..StructuralDebt::default()
+        };
+        assert_eq!(
+            former.claim_debt_axes(),
+            ClaimDebtAxes {
+                kappa_min: 3,
+                kappa_max: 3,
+                path_pressure: 0,
+                trunc_pressure: 0,
+                coupling_pressure: 0,
+                support_pressure: 0,
+                modal_pressure: 0,
+                temporal_pressure: 0,
+                reanchor_pressure: 0,
+                closure_pressure: 1,
+            }
+        );
+        assert_eq!(former.claim_anchor_policy(), ClaimAnchorPolicy::None);
+
+        let modal_bridge = StructuralDebt {
+            active_entries: 2,
+            active_exports: 4,
+            constructor_entries: 1,
+            max_path_dimension: 3,
+            ..StructuralDebt::default()
+        };
+        assert_eq!(
+            modal_bridge.claim_debt_axes(),
+            ClaimDebtAxes {
+                kappa_min: 4,
+                kappa_max: 4,
+                path_pressure: 3,
+                trunc_pressure: 1,
+                coupling_pressure: 0,
+                support_pressure: 3,
+                modal_pressure: 1,
+                temporal_pressure: 0,
+                reanchor_pressure: 1,
+                closure_pressure: 2,
+            }
+        );
+        assert_eq!(modal_bridge.claim_anchor_policy(), ClaimAnchorPolicy::Loop);
+
+        let temporal = StructuralDebt {
+            active_entries: 2,
+            active_exports: 2,
+            operator_bundle_entries: 1,
+            hilbert_shell_entries: 1,
+            ..StructuralDebt::default()
+        };
+        assert_eq!(
+            temporal.claim_debt_axes(),
+            ClaimDebtAxes {
+                kappa_min: 8,
+                kappa_max: 8,
+                path_pressure: 0,
+                trunc_pressure: 0,
+                coupling_pressure: 0,
+                support_pressure: 2,
+                modal_pressure: 0,
+                temporal_pressure: 1,
+                reanchor_pressure: 2,
+                closure_pressure: 3,
+            }
+        );
+        assert_eq!(temporal.claim_anchor_policy(), ClaimAnchorPolicy::Modal);
     }
 
     #[test]

@@ -1,4 +1,6 @@
-use crate::obligations::summarize_structural_debt;
+use crate::obligations::{
+    ClaimAnchorPolicy, ClaimDebtAxes, StructuralDebt, summarize_structural_debt,
+};
 use pen_core::expr::Expr;
 use pen_core::library::Library;
 use pen_core::telescope::{Telescope, TelescopeClass};
@@ -595,6 +597,9 @@ pub fn strict_admissibility_for_mode(
             let debt = summarize_structural_debt(library, window_depth);
             let loop_anchor = historical_loop_anchor_ref(library, window_depth);
             let modal_anchor = historical_modal_shell_anchor_ref(library, window_depth);
+            if mode == AdmissibilityMode::DesktopClaimShadow {
+                return claim_strict_admissibility(mode, debt, loop_anchor, modal_anchor);
+            }
             let focus_family = focus_family_from_debt(debt, loop_anchor, modal_anchor);
             let focus_policy = focus_policy_for_mode(mode, focus_family);
             let package_policies = PackagePolicies::with_focus(focus_family, focus_policy);
@@ -859,6 +864,101 @@ fn historical_anchor_ref_for_focus(
         (_, Some(StructuralFamily::AxiomaticBundle)) => loop_anchor,
         (_, Some(StructuralFamily::TemporalShell)) => modal_anchor,
         (_, Some(_)) | (_, None) => None,
+    }
+}
+
+fn claim_strict_admissibility(
+    mode: AdmissibilityMode,
+    debt: StructuralDebt,
+    loop_anchor: Option<u32>,
+    modal_anchor: Option<u32>,
+) -> StrictAdmissibility {
+    debug_assert_eq!(mode, AdmissibilityMode::DesktopClaimShadow);
+    let claim_axes = debt.claim_debt_axes();
+
+    StrictAdmissibility {
+        mode,
+        min_clause_kappa: claim_axes.kappa_min,
+        max_clause_kappa: claim_axes.kappa_max,
+        ambient_depth: 2,
+        max_expr_nodes: claim_max_expr_nodes(debt, claim_axes),
+        max_path_dimension: claim_max_path_dimension(debt, claim_axes),
+        include_trunc: claim_include_trunc(debt),
+        include_modal: claim_include_modal(debt, claim_axes),
+        include_temporal: claim_include_temporal(claim_axes),
+        quota_per_bucket: debt.quota_per_bucket(),
+        require_former_eliminator_package: false,
+        require_initial_hit_package: false,
+        require_truncation_hit_package: false,
+        require_higher_hit_package: false,
+        require_sphere_lift_package: false,
+        require_axiomatic_bundle_package: false,
+        require_modal_shell_package: false,
+        require_connection_shell_package: false,
+        require_curvature_shell_package: false,
+        require_operator_bundle_package: false,
+        require_hilbert_functional_package: false,
+        require_temporal_shell_package: false,
+        package_policies: PackagePolicies::default(),
+        focus_family: None,
+        historical_anchor_ref: claim_historical_anchor_ref(debt, loop_anchor, modal_anchor),
+    }
+}
+
+fn claim_max_expr_nodes(debt: StructuralDebt, claim_axes: ClaimDebtAxes) -> u8 {
+    match claim_axes.kappa_max {
+        3 if debt.max_path_dimension == 0
+            && debt.dependent_entries == 0
+            && debt.constructor_entries >= 2 =>
+        {
+            5
+        }
+        3 if debt.max_path_dimension == 1 && debt.truncated_entries == 0 => 4,
+        3 => 3,
+        4 => 4,
+        5 if claim_axes.path_pressure > 0 => 3,
+        5 | 6 => 5,
+        _ => 7,
+    }
+}
+
+fn claim_max_path_dimension(debt: StructuralDebt, claim_axes: ClaimDebtAxes) -> u32 {
+    if debt.max_path_dimension >= 3 && debt.truncated_entries == 0 {
+        0
+    } else {
+        u32::from(claim_axes.path_pressure)
+    }
+}
+
+fn claim_include_trunc(debt: StructuralDebt) -> bool {
+    debt.max_path_dimension == 1 && debt.truncated_entries == 0
+}
+
+fn claim_include_modal(debt: StructuralDebt, claim_axes: ClaimDebtAxes) -> bool {
+    if claim_axes.temporal_pressure > 0 {
+        return true;
+    }
+
+    match claim_axes.kappa_max {
+        4 => debt.active_exports < 6 || debt.modal_entries > 0 || debt.has_modal_ops,
+        5 | 6 => claim_axes.path_pressure == 0,
+        _ => false,
+    }
+}
+
+fn claim_include_temporal(claim_axes: ClaimDebtAxes) -> bool {
+    claim_axes.temporal_pressure > 0
+}
+
+fn claim_historical_anchor_ref(
+    debt: StructuralDebt,
+    loop_anchor: Option<u32>,
+    modal_anchor: Option<u32>,
+) -> Option<u32> {
+    match debt.claim_anchor_policy() {
+        ClaimAnchorPolicy::None => None,
+        ClaimAnchorPolicy::Loop => loop_anchor,
+        ClaimAnchorPolicy::Modal => modal_anchor,
     }
 }
 
@@ -2115,6 +2215,97 @@ mod tests {
         assert_eq!(admissibility.min_clause_kappa, 5);
         assert_eq!(admissibility.max_clause_kappa, 6);
         assert!(admissibility.include_modal);
+    }
+
+    #[test]
+    fn claim_shadow_uses_structural_claim_debt_without_named_focus_family() {
+        let cases = [
+            (4, 3, 3, 0, false, false, None),
+            (5, 3, 3, 1, false, false, None),
+            (6, 3, 3, 1, false, false, None),
+            (7, 3, 3, 2, false, false, None),
+            (8, 5, 5, 3, false, false, None),
+            (9, 4, 4, 0, false, false, Some(5)),
+            (10, 4, 4, 0, true, false, Some(7)),
+            (11, 5, 6, 0, true, false, None),
+            (12, 5, 6, 0, true, false, None),
+            (13, 7, 7, 0, false, false, None),
+            (14, 9, 9, 0, false, false, None),
+            (15, 8, 8, 0, true, true, Some(10)),
+        ];
+
+        for (
+            step,
+            min_clause_kappa,
+            max_clause_kappa,
+            max_path_dimension,
+            include_modal,
+            include_temporal,
+            historical_anchor_ref,
+        ) in cases
+        {
+            let library = library_until(step - 1);
+            let admissibility = strict_admissibility_for_mode(
+                step,
+                2,
+                &library,
+                AdmissibilityMode::DesktopClaimShadow,
+            );
+
+            assert_eq!(admissibility.focus_family, None, "step {step}");
+            assert_eq!(
+                admissibility.min_clause_kappa, min_clause_kappa,
+                "step {step}"
+            );
+            assert_eq!(
+                admissibility.max_clause_kappa, max_clause_kappa,
+                "step {step}"
+            );
+            assert_eq!(
+                admissibility.max_path_dimension, max_path_dimension,
+                "step {step}"
+            );
+            assert_eq!(admissibility.include_modal, include_modal, "step {step}");
+            assert_eq!(
+                admissibility.include_temporal, include_temporal,
+                "step {step}"
+            );
+            assert_eq!(
+                admissibility.historical_anchor_ref, historical_anchor_ref,
+                "step {step}"
+            );
+            assert_eq!(admissibility.package_policies, PackagePolicies::default());
+            assert!(
+                !admissibility.require_former_eliminator_package,
+                "step {step}"
+            );
+            assert!(!admissibility.require_initial_hit_package, "step {step}");
+            assert!(!admissibility.require_truncation_hit_package, "step {step}");
+            assert!(!admissibility.require_higher_hit_package, "step {step}");
+            assert!(!admissibility.require_sphere_lift_package, "step {step}");
+            assert!(
+                !admissibility.require_axiomatic_bundle_package,
+                "step {step}"
+            );
+            assert!(!admissibility.require_modal_shell_package, "step {step}");
+            assert!(
+                !admissibility.require_connection_shell_package,
+                "step {step}"
+            );
+            assert!(
+                !admissibility.require_curvature_shell_package,
+                "step {step}"
+            );
+            assert!(
+                !admissibility.require_operator_bundle_package,
+                "step {step}"
+            );
+            assert!(
+                !admissibility.require_hilbert_functional_package,
+                "step {step}"
+            );
+            assert!(!admissibility.require_temporal_shell_package, "step {step}");
+        }
     }
 
     #[test]

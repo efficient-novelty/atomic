@@ -21,8 +21,9 @@ Treat these as current repo truths:
   runnable `5m`, `10m`, and `15m` profiles plus stored narrative/event
   artifacts
 - `desktop_claim_shadow` now exists as a separate claim-lane scaffold with its
-  own configs, narratives, and policy metadata, but it still inherits
-  realistic-shadow search behavior where claim-specific logic has not landed
+  own configs, narratives, and policy metadata; it now uses claim-debt
+  admissibility, but it still inherits realistic-shadow late-surface and
+  bucket behavior where later claim-specific logic has not landed
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -265,8 +266,9 @@ Read:
 Focus on:
 
 - keeping the claim lane separate from demo-only behavior
-- recording inherited behavior honestly in policy metadata until the claim
-  logic is real
+- recording the mixed current state honestly in policy metadata:
+  claim-debt admissibility is real, while late expansion and bucket scheduling
+  are still inherited
 - moving admissibility, mutation, scheduling, and certification toward
   family-agnostic structural evidence
 - not using stronger words like `unguided` before the certification gate lands
@@ -345,7 +347,8 @@ Reject designs that:
   demo-lane docs and `references/12-current-demo-lane.md` as the regression
   baseline for future work.
 - The claim lane now exists as a separate scaffold, but its policy metadata
-  still honestly reports inherited realistic-shadow behavior until the later
-  claim-specific workstreams land.
+  now honestly reports a mixed state: claim-debt admissibility is landed, while
+  late expansion and bucket scheduling still inherit realistic-shadow behavior
+  until the later claim-specific workstreams land.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
   the track-specific references you actually need.
