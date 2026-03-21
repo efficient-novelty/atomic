@@ -25,21 +25,23 @@ What is already true and should now be treated as baseline, not as open work:
 - stored policy metadata is intentionally mixed and honest:
   - `guidance_style = claim_debt_guided`
   - `late_expansion_policy = claim_generic`
-  - `bucket_policy = semantic_family_runtime_local`
+  - `bucket_policy = structural_generic`
 
 What this means operationally:
 
 - the admissibility split is no longer the bottleneck
 - claim mode no longer routes through inherited realistic late-family surfaces
-- the next meaningful work must remove the remaining scheduler/bucket coupling,
-  then broaden the later claim-generic bands and bind the paper sentence to
-  stored evidence
+- the scheduler/bucket coupling is now removed on the claim path
+- the next meaningful work is to broaden the later claim-generic bands,
+  recheck exact prefix completion under the new claim scheduler surface, and
+  then bind the paper sentence to stored evidence
 
 ## What Still Blocks The Stronger Claim
 
 - later claim bands `7-9` are still thin reference-first surfaces rather than
   richer claim-specific mutator packs
-- scheduler buckets and stored labels still use semantic-family names
+- claim-path parity and exact prefix/completion behavior still need a direct
+  recheck under the structural-generic bucket surface
 - breadth widening and within-step retuning are not yet claim-specific enough
   to support an autonomy claim
 - manifest, benchmark, compare, and certification surfaces are not yet strong
@@ -265,10 +267,11 @@ Done when:
 
 ## Immediate Next Step
 
-Implement slice `2` directly:
+Implement the remaining late-surface and evidence follow-up directly:
 
-1. replace semantic-family claim buckets with runtime-local structural labels
-2. make the claim scheduler explainable without semantic-family names
-3. switch `bucket_policy` only after the scheduler path is genuinely claim
-   specific
-4. then return to the later `kappa 7-9` claim-generic bands and certification
+1. broaden the later `kappa 7-9` claim-generic bands without reintroducing
+   realistic-shadow or demo-only helpers
+2. recheck prefix-summary pruning and terminal completion exactness under the
+   structural-generic claim scheduler surface
+3. then earn the late breadth floors and certification bundle on the updated
+   claim lane

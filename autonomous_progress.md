@@ -15,8 +15,10 @@ intentionally short and forward-looking; use
   - claim mode does not use a named `focus_family`
 - claim late expansion is now claim-specific:
   - `late_expansion_policy = claim_generic`
-- the lane is still mixed-mode at the scheduler/reporting layer:
-  - `bucket_policy = semantic_family_runtime_local`
+- claim bucket scheduling is now claim-specific:
+  - `bucket_policy = structural_generic`
+- the lane is still mixed-mode at the later-band/certification layer:
+  - later `kappa 7-9` claim bands remain conservative
 - the lane is not yet certification-ready and it is still not honest to call
   it `unguided`
 
@@ -29,22 +31,24 @@ intentionally short and forward-looking; use
   `crates/pen-search/src/prefix_memo.rs`.
 - The first claim-generic mutator pass is now real for kappa `4-6`, while the
   later `7-9` claim bands are still conservative reference-first surfaces.
-- The next blocker is scheduler taxonomy: claim-run artifacts still carry
-  semantic-family bucket names.
+- The scheduler taxonomy blocker is now closed in code and policy metadata:
+  claim runs use structural-generic bucket keys instead of semantic-family
+  labels.
+- The next blockers are the conservative later `kappa 7-9` claim bands, the
+  claim-path prefix/exact-completion recheck under the new bucket taxonomy, and
+  the still-incomplete certification surfaces.
 - Reporting already carries much of the exact-screen reason plumbing, but the
   compare, provenance, benchmark, and certification surfaces are still not
   strong enough for the paper sentence.
 
 ## Immediate Next Slice
 
-1. Replace semantic-family claim buckets with runtime-local structural bucket
-   labels and ordering.
-2. Preserve accepted-hash parity while switching `bucket_policy` to
-   `structural_generic`.
-3. Broaden the later `kappa 7-9` claim-generic bands without reintroducing
-   realistic-shadow fallback.
-4. Then earn the breadth/floor evidence and certification bundle on top of the
-   claim-generic lane.
+1. Broaden the later `kappa 7-9` claim-generic bands without reintroducing
+   realistic-shadow or demo-only fallback.
+2. Recheck prefix-summary pruning and terminal completion exactness under the
+   structural-generic claim bucket taxonomy.
+3. Then earn the breadth/floor evidence and certification bundle on top of the
+   claim-generic, structural-generic lane.
 
 ## After That
 

@@ -467,7 +467,7 @@ pub(crate) fn search_policy_info(search_profile: SearchProfile) -> SearchPolicyI
         SearchProfile::DesktopClaimShadow => SearchPolicyInfo {
             guidance_style: "claim_debt_guided".to_owned(),
             late_expansion_policy: "claim_generic".to_owned(),
-            bucket_policy: "semantic_family_runtime_local".to_owned(),
+            bucket_policy: "structural_generic".to_owned(),
         },
     }
 }
@@ -987,10 +987,7 @@ mod tests {
             manifest.search_policy.late_expansion_policy,
             "claim_generic"
         );
-        assert_eq!(
-            manifest.search_policy.bucket_policy,
-            "semantic_family_runtime_local"
-        );
+        assert_eq!(manifest.search_policy.bucket_policy, "structural_generic");
 
         let telemetry =
             fs::read_to_string(run_dir.join("telemetry.ndjson")).expect("telemetry should exist");

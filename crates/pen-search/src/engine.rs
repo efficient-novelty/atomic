@@ -10,7 +10,10 @@ use crate::enumerate::{
     enumerate_next_clauses, enumerate_raw_telescopes, enumerate_telescopes,
     raw_clause_catalog_widths,
 };
-use crate::expand::{ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate};
+use crate::expand::{
+    ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate,
+    structural_signals_for_telescope,
+};
 use crate::frontier::FrontierWindow;
 use crate::narrative::{
     NarrativeEvent, NarrativeEventKind, NarrativeProgressSnapshot, NarrativeRecorder, StepPhase,
@@ -297,7 +300,23 @@ pub struct DemoClosureStats {
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(rename_all = "snake_case")]
-pub enum DemoBucketFamily {
+pub enum SearchBucketTaxonomy {
+    SemanticFamily,
+    StructuralGeneric,
+}
+
+impl SearchBucketTaxonomy {
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::SemanticFamily => "semantic_family",
+            Self::StructuralGeneric => "structural_generic",
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SearchBucketCategory {
     TemporalShell,
     Temporal,
     Modal,
@@ -309,9 +328,17 @@ pub enum DemoBucketFamily {
     PathSpace,
     LibraryRefs,
     Generic,
+    LocalPlain,
+    ReferenceSupport,
+    BridgeReanchor,
+    SupportForm,
+    ModalOperator,
+    TemporalOperator,
+    ModalTemporalMix,
+    BinderHeavy,
 }
 
-impl DemoBucketFamily {
+impl SearchBucketCategory {
     pub const fn as_str(self) -> &'static str {
         match self {
             Self::TemporalShell => "temporal_shell",
@@ -325,6 +352,14 @@ impl DemoBucketFamily {
             Self::PathSpace => "path_space",
             Self::LibraryRefs => "library_refs",
             Self::Generic => "generic",
+            Self::LocalPlain => "local_plain",
+            Self::ReferenceSupport => "reference_support",
+            Self::BridgeReanchor => "bridge_reanchor",
+            Self::SupportForm => "support_form",
+            Self::ModalOperator => "modal_operator",
+            Self::TemporalOperator => "temporal_operator",
+            Self::ModalTemporalMix => "modal_temporal_mix",
+            Self::BinderHeavy => "binder_heavy",
         }
     }
 }
@@ -368,20 +403,31 @@ impl DemoBucketWidth {
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct DemoBucketKey {
     pub clause_kappa: u16,
-    pub family: DemoBucketFamily,
+    pub taxonomy: SearchBucketTaxonomy,
+    pub category: SearchBucketCategory,
     pub support_profile: DemoBucketSupportProfile,
     pub width: DemoBucketWidth,
 }
 
 impl DemoBucketKey {
     pub fn label(&self) -> String {
-        format!(
-            "k{}:{}:{}:{}",
-            self.clause_kappa,
-            self.family.as_str(),
-            self.support_profile.as_str(),
-            self.width.as_str()
-        )
+        match self.taxonomy {
+            SearchBucketTaxonomy::SemanticFamily => format!(
+                "k{}:{}:{}:{}",
+                self.clause_kappa,
+                self.category.as_str(),
+                self.support_profile.as_str(),
+                self.width.as_str()
+            ),
+            SearchBucketTaxonomy::StructuralGeneric => format!(
+                "k{}:{}:{}:{}:{}",
+                self.clause_kappa,
+                self.taxonomy.as_str(),
+                self.category.as_str(),
+                self.support_profile.as_str(),
+                self.width.as_str()
+            ),
+        }
     }
 }
 
@@ -611,34 +657,80 @@ fn demo_bucket_width(surface_count: usize) -> DemoBucketWidth {
     }
 }
 
-fn demo_bucket_family(signature: &PrefixSignature) -> DemoBucketFamily {
+fn demo_bucket_taxonomy(admissibility_mode: AdmissibilityMode) -> SearchBucketTaxonomy {
+    match admissibility_mode {
+        AdmissibilityMode::DesktopClaimShadow => SearchBucketTaxonomy::StructuralGeneric,
+        _ => SearchBucketTaxonomy::SemanticFamily,
+    }
+}
+
+fn semantic_bucket_category(signature: &PrefixSignature) -> SearchBucketCategory {
     if signature.has_temporal_shell_family() {
-        DemoBucketFamily::TemporalShell
+        SearchBucketCategory::TemporalShell
     } else if signature.has_temporal_family() {
-        DemoBucketFamily::Temporal
+        SearchBucketCategory::Temporal
     } else if signature.has_modal_family() {
-        DemoBucketFamily::Modal
+        SearchBucketCategory::Modal
     } else if signature.has_hilbert_family() {
-        DemoBucketFamily::Hilbert
+        SearchBucketCategory::Hilbert
     } else if signature.has_curvature_family() {
-        DemoBucketFamily::Curvature
+        SearchBucketCategory::Curvature
     } else if signature.has_differential_family() {
-        DemoBucketFamily::Differential
+        SearchBucketCategory::Differential
     } else if signature.has_metric_family() {
-        DemoBucketFamily::Metric
+        SearchBucketCategory::Metric
     } else if signature.has_dependent_family() {
-        DemoBucketFamily::Dependent
+        SearchBucketCategory::Dependent
     } else if signature.has_path_space_family() {
-        DemoBucketFamily::PathSpace
+        SearchBucketCategory::PathSpace
     } else if signature.has_library_refs() {
-        DemoBucketFamily::LibraryRefs
+        SearchBucketCategory::LibraryRefs
     } else {
-        DemoBucketFamily::Generic
+        SearchBucketCategory::Generic
+    }
+}
+
+fn claim_bucket_category(
+    signature: &PrefixSignature,
+    prefix_telescope: &Telescope,
+) -> SearchBucketCategory {
+    let signals = structural_signals_for_telescope(prefix_telescope);
+    let has_modal_ops = prefix_telescope
+        .clauses
+        .iter()
+        .any(|clause| clause.expr.is_modal());
+    let has_temporal_ops = prefix_telescope
+        .clauses
+        .iter()
+        .any(|clause| clause.expr.is_temporal());
+
+    if has_modal_ops && has_temporal_ops {
+        SearchBucketCategory::ModalTemporalMix
+    } else if has_temporal_ops {
+        SearchBucketCategory::TemporalOperator
+    } else if signals.generic_binder_count >= 4 || signals.dependent_motive_density > 0 {
+        SearchBucketCategory::BinderHeavy
+    } else if prefix_telescope.has_loop()
+        || (signature.has_library_refs()
+            && signals.eliminator_score > 0
+            && signals.closure_score > 0)
+    {
+        SearchBucketCategory::BridgeReanchor
+    } else if has_modal_ops {
+        SearchBucketCategory::ModalOperator
+    } else if signals.former_score > 0 || signals.closure_score > 1 {
+        SearchBucketCategory::SupportForm
+    } else if signature.has_library_refs() {
+        SearchBucketCategory::ReferenceSupport
+    } else {
+        SearchBucketCategory::LocalPlain
     }
 }
 
 fn demo_bucket_key(
+    admissibility_mode: AdmissibilityMode,
     signature: &PrefixSignature,
+    prefix_telescope: &Telescope,
     clause_kappa: u16,
     generated_terminal_candidates: usize,
     admissible_terminal_candidates: usize,
@@ -646,9 +738,16 @@ fn demo_bucket_key(
     let surface_count = generated_terminal_candidates
         .max(admissible_terminal_candidates)
         .max(1);
+    let taxonomy = demo_bucket_taxonomy(admissibility_mode);
     DemoBucketKey {
         clause_kappa,
-        family: demo_bucket_family(signature),
+        taxonomy,
+        category: match taxonomy {
+            SearchBucketTaxonomy::SemanticFamily => semantic_bucket_category(signature),
+            SearchBucketTaxonomy::StructuralGeneric => {
+                claim_bucket_category(signature, prefix_telescope)
+            }
+        },
         support_profile: if signature.has_library_refs() {
             DemoBucketSupportProfile::LibraryBacked
         } else {
@@ -659,11 +758,14 @@ fn demo_bucket_key(
 }
 
 fn demo_bucket_key_for_group(
+    admissibility_mode: AdmissibilityMode,
     signature: &PrefixSignature,
     group: &PrefixCandidateGroup,
 ) -> DemoBucketKey {
     demo_bucket_key(
+        admissibility_mode,
         signature,
+        &group.prefix_telescope,
         group.bound.clause_kappa_used,
         group.candidates.len(),
         group.candidates.len(),
@@ -2780,6 +2882,7 @@ fn search_next_step(
                 select_demo_proof_close_group_index(
                     &pending_group_signatures,
                     &prefix_cache,
+                    admissibility.mode,
                     &demo_bucket_stats,
                     incumbent_terminal_rank.as_ref(),
                     remaining_reserve_millis,
@@ -2817,7 +2920,7 @@ fn search_next_step(
                 }
                 continue;
             };
-            let bucket_key = demo_bucket_key_for_group(&signature, group);
+            let bucket_key = demo_bucket_key_for_group(admissibility.mode, &signature, group);
             if let (Some(group_best_rank), Some(incumbent_rank)) =
                 (&group.best_accept_rank, &incumbent_terminal_rank)
             {
@@ -3727,7 +3830,9 @@ fn discover_realistic_shadow_candidates(
                     &mut discovery,
                 )?;
                 let bucket_key = demo_bucket_key(
+                    admissibility.mode,
                     &work_item.signature,
+                    &work_item.prefix_telescope,
                     work_item.clause_kappa,
                     group.generated_terminal_candidates,
                     group.admissible_terminal_candidates,
@@ -4233,7 +4338,9 @@ fn process_prepared_exact_two_step_terminal_surface(
             discovery,
         )?;
         let bucket_key = demo_bucket_key(
+            admissibility.mode,
             &terminal_prefix.signature,
+            &terminal_prefix.prefix_telescope,
             terminal_prefix.clause_kappa,
             group.generated_terminal_candidates,
             group.admissible_terminal_candidates,
@@ -5085,13 +5192,17 @@ struct DemoBucketSelectionContext {
 }
 
 impl DemoBucketSelectionContext {
-    fn from_pending(pending_signatures: &[PrefixSignature], prefix_cache: &PrefixCache) -> Self {
+    fn from_pending(
+        pending_signatures: &[PrefixSignature],
+        prefix_cache: &PrefixCache,
+        admissibility_mode: AdmissibilityMode,
+    ) -> Self {
         let mut context = Self::default();
         for signature in pending_signatures {
             let Some(group) = prefix_cache.get(signature) else {
                 continue;
             };
-            let bucket_key = demo_bucket_key_for_group(signature, group);
+            let bucket_key = demo_bucket_key_for_group(admissibility_mode, signature, group);
             *context
                 .shape_counts
                 .entry((bucket_key.clone(), group.shape_hash64))
@@ -5136,6 +5247,7 @@ fn demo_bucket_progress_key(
 
 fn demo_proof_close_group_order(
     mode: DemoProofCloseOrderMode,
+    admissibility_mode: AdmissibilityMode,
     left_signature: &PrefixSignature,
     left_group: &PrefixCandidateGroup,
     right_signature: &PrefixSignature,
@@ -5148,8 +5260,9 @@ fn demo_proof_close_group_order(
     let right_improves = demo_group_can_improve_incumbent(right_group, incumbent_rank);
     let left_prune_ready = demo_group_is_prune_ready(left_group, incumbent_rank);
     let right_prune_ready = demo_group_is_prune_ready(right_group, incumbent_rank);
-    let left_bucket_key = demo_bucket_key_for_group(left_signature, left_group);
-    let right_bucket_key = demo_bucket_key_for_group(right_signature, right_group);
+    let left_bucket_key = demo_bucket_key_for_group(admissibility_mode, left_signature, left_group);
+    let right_bucket_key =
+        demo_bucket_key_for_group(admissibility_mode, right_signature, right_group);
     let left_progress = demo_bucket_progress_key(bucket_stats, &left_bucket_key);
     let right_progress = demo_bucket_progress_key(bucket_stats, &right_bucket_key);
     let left_redundancy = selection_context.redundancy_key(&left_bucket_key, left_group);
@@ -5250,6 +5363,7 @@ fn demo_materialize_to_proof_close_handoff_reason(
 fn select_demo_proof_close_group_index(
     pending_signatures: &[PrefixSignature],
     prefix_cache: &PrefixCache,
+    admissibility_mode: AdmissibilityMode,
     bucket_stats: &BTreeMap<DemoBucketKey, DemoBucketStats>,
     incumbent_rank: Option<&AcceptRank>,
     remaining_reserve_millis: u64,
@@ -5260,8 +5374,11 @@ fn select_demo_proof_close_group_index(
         remaining_reserve_millis,
         closure_pressure,
     );
-    let selection_context =
-        DemoBucketSelectionContext::from_pending(pending_signatures, prefix_cache);
+    let selection_context = DemoBucketSelectionContext::from_pending(
+        pending_signatures,
+        prefix_cache,
+        admissibility_mode,
+    );
 
     pending_signatures
         .iter()
@@ -5273,6 +5390,7 @@ fn select_demo_proof_close_group_index(
             ) {
                 (Some(left_group), Some(right_group)) => demo_proof_close_group_order(
                     order_mode,
+                    admissibility_mode,
                     left_signature,
                     left_group,
                     right_signature,
@@ -5627,7 +5745,8 @@ mod tests {
         DemoBudgetController, DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed,
         DemoClosurePressure, DemoNarrativeRuntime, DemoProofCloseEntryReason,
         DemoProofCloseOrderMode, DemoProofCloseOverrunReason, DemoStepBudget,
-        LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem, create_online_prefix_work_item,
+        LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem, SearchBucketTaxonomy,
+        create_online_prefix_work_item,
         demo_materialize_to_proof_close_handoff_reason_for_pressure, demo_proof_close_group_order,
         demo_proof_close_order_mode, demo_proof_close_order_mode_with_closure_pressure,
         exact_partial_prefix_bound_decision, maybe_retune_demo_budget_live, pop_best_prefix,
@@ -5823,6 +5942,7 @@ mod tests {
         assert_eq!(
             demo_proof_close_group_order(
                 DemoProofCloseOrderMode::PotentialFirst,
+                AdmissibilityMode::RealisticShadow,
                 &prune_ready_signature,
                 &prune_ready_group,
                 &improving_signature,
@@ -5848,6 +5968,7 @@ mod tests {
         assert_eq!(
             demo_proof_close_group_order(
                 DemoProofCloseOrderMode::ClosureFirst,
+                AdmissibilityMode::RealisticShadow,
                 &prune_ready_signature,
                 &prune_ready_group,
                 &improving_signature,
@@ -5873,6 +5994,7 @@ mod tests {
         assert_eq!(
             demo_proof_close_group_order(
                 DemoProofCloseOrderMode::PotentialFirst,
+                AdmissibilityMode::RealisticShadow,
                 &bridge_signature,
                 &bridge_group,
                 &generic_signature,
@@ -6885,6 +7007,47 @@ mod tests {
         assert_eq!(
             super::admissibility_mode_for_profile(SearchProfile::DesktopClaimShadow),
             AdmissibilityMode::DesktopClaimShadow
+        );
+    }
+
+    #[test]
+    fn desktop_claim_shadow_switches_late_bucket_taxonomy_to_structural_generic() {
+        let claim_step = profile_step_from_reference_prefix(10, SearchProfile::DesktopClaimShadow);
+        assert_eq!(claim_step.telescope, Telescope::reference(10));
+        assert!(!claim_step.demo_bucket_stats.is_empty());
+        assert!(claim_step.demo_bucket_stats.iter().all(|bucket| {
+            bucket.bucket_key.taxonomy == SearchBucketTaxonomy::StructuralGeneric
+        }));
+        assert!(
+            claim_step
+                .demo_bucket_stats
+                .iter()
+                .all(|bucket| bucket.bucket_label.contains("structural_generic"))
+        );
+
+        let serialized =
+            serde_json::to_string(&claim_step.demo_bucket_stats).expect("bucket stats serialize");
+        assert!(serialized.contains("\"taxonomy\":\"structural_generic\""));
+        assert!(!serialized.contains("temporal_shell"));
+        assert!(!serialized.contains("hilbert"));
+        assert!(!serialized.contains("curvature"));
+    }
+
+    #[test]
+    fn realistic_shadow_keeps_semantic_family_bucket_taxonomy() {
+        let realistic_step =
+            profile_step_from_reference_prefix(10, SearchProfile::RealisticFrontierShadow);
+        assert!(!realistic_step.demo_bucket_stats.is_empty());
+        assert!(
+            realistic_step.demo_bucket_stats.iter().all(|bucket| {
+                bucket.bucket_key.taxonomy == SearchBucketTaxonomy::SemanticFamily
+            })
+        );
+        assert!(
+            realistic_step
+                .demo_bucket_stats
+                .iter()
+                .any(|bucket| !bucket.bucket_label.contains("structural_generic"))
         );
     }
 

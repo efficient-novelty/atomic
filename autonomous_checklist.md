@@ -18,10 +18,12 @@ every section below is closed and a passing claim certificate exists.
 ## Current Open Numbers
 
 - No stored claim-lane signoff bundle yet.
-- `guidance_style` and `late_expansion_policy` are now claim-specific:
+- `guidance_style`, `late_expansion_policy`, and `bucket_policy` are now
+  claim-specific:
   - `late_expansion_policy = claim_generic`
-- `bucket_policy` is still inherited:
-  - `bucket_policy = semantic_family_runtime_local`
+  - `bucket_policy = structural_generic`
+- Later `kappa 7-9` claim bands are still conservative and accepted-hash
+  parity through step `15` is still an open claim-lane gate.
 - Minimum breadth floors that must be earned honestly on the claim lane:
   - step `1` generated raw `= 2144`
   - step `10` generated `>= 500`
@@ -93,20 +95,20 @@ Done when:
 
 ## 3. Structural Bucket Scheduling
 
-- [ ] Define a neutral claim bucket taxonomy from runtime-local structural
+- [x] Define a neutral claim bucket taxonomy from runtime-local structural
       features only.
-- [ ] Replace semantic-family bucket labels for claim runs in
+- [x] Replace semantic-family bucket labels for claim runs in
       `crates/pen-search/src/engine.rs`.
-- [ ] Ensure claim bucket keys can be computed from syntax, prefix-local
+- [x] Ensure claim bucket keys can be computed from syntax, prefix-local
       evidence, and local runtime state only.
-- [ ] Keep existing bucket behavior unchanged for guarded, realistic, and demo
+- [x] Keep existing bucket behavior unchanged for guarded, realistic, and demo
       lanes.
-- [ ] Update stored claim artifacts so they no longer serialize semantic-family
+- [x] Update stored claim artifacts so they no longer serialize semantic-family
       names such as `TemporalShell`, `Hilbert`, `Curvature`, or
       `Differential`.
 - [ ] Update any reporting or compare logic that currently assumes the old
       semantic-family bucket names for claim runs.
-- [ ] Switch `bucket_policy` to `structural_generic` only after the live
+- [x] Switch `bucket_policy` to `structural_generic` only after the live
       scheduler and stored evidence both use the neutral taxonomy.
 
 Done when:
