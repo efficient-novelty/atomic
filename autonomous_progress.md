@@ -18,7 +18,8 @@ intentionally short and forward-looking; use
 - claim bucket scheduling is now claim-specific:
   - `bucket_policy = structural_generic`
 - the lane is still mixed-mode at the later-band/certification layer:
-  - later `kappa 7-9` claim bands remain conservative
+  - `kappa 7-8` now have claim-specific later-band mutator packs
+  - `kappa 9` still remains conservative and reference-first
 - the lane is not yet certification-ready and it is still not honest to call
   it `unguided`
 
@@ -29,26 +30,28 @@ intentionally short and forward-looking; use
 - Claim mode now has its own `ClaimGeneric` late surface in
   `crates/pen-search/src/enumerate.rs` and
   `crates/pen-search/src/prefix_memo.rs`.
-- The first claim-generic mutator pass is now real for kappa `4-6`, while the
-  later `7-9` claim bands are still conservative reference-first surfaces.
+- Claim-generic mutator packs are now real for kappa `4-8`; the remaining
+  conservative reference-first late band is kappa `9`.
 - The scheduler taxonomy blocker is now closed in code and policy metadata:
   claim runs use structural-generic bucket keys instead of semantic-family
   labels.
-- The next blockers are the conservative later `kappa 7-9` claim bands, the
-  claim-path prefix/exact-completion recheck under the new bucket taxonomy, and
-  the still-incomplete certification surfaces.
+- Claim-path terminal-prefix completion and cached exact-bound reuse are now
+  directly rechecked by tests under the structural-generic claim scheduler
+  surface.
+- The next blockers are the remaining conservative kappa `9` claim band, the
+  late-step breadth floors, and the still-incomplete certification surfaces.
 - Reporting already carries much of the exact-screen reason plumbing, but the
   compare, provenance, benchmark, and certification surfaces are still not
   strong enough for the paper sentence.
 
 ## Immediate Next Slice
 
-1. Broaden the later `kappa 7-9` claim-generic bands without reintroducing
-   realistic-shadow or demo-only fallback.
-2. Recheck prefix-summary pruning and terminal completion exactness under the
-   structural-generic claim bucket taxonomy.
-3. Then earn the breadth/floor evidence and certification bundle on top of the
-   claim-generic, structural-generic lane.
+1. Finish the remaining `kappa 9` claim-generic widening without regressing
+   accepted parity.
+2. Convert the widened late surface into stored breadth/floor evidence on the
+   claim lane itself.
+3. Then harden the compare, benchmark, provenance, and certification bundle on
+   top of the claim-generic, structural-generic lane.
 
 ## After That
 

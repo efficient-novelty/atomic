@@ -10,8 +10,8 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   `bounded live recovery` wording.
 - Claim admissibility now uses structural claim debt and anchor hints, without
   named-family focus progression.
-- Claim late expansion now uses a claim-specific late surface with the first
-  structural mutators landed for kappa `4-6`.
+- Claim late expansion now uses a claim-specific late surface with structural
+  mutators landed for kappa `4-8`; kappa `9` is still conservative.
 - Claim bucket scheduling now uses a structural-generic taxonomy derived from
   prefix-local syntax and runtime evidence.
 - The current mixed state is recorded explicitly in run metadata:
@@ -21,19 +21,19 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 
 ## Current Operational Blockers
 
-- later claim bands `7-9` are still conservative reference-first surfaces
-  rather than richer claim-specific mutator packs
-- claim-path parity and exact prefix-completion behavior still need a direct
-  recheck under the new structural-generic scheduler surface
+- the remaining claim band `9` is still conservative and reference-first
+- claim-path parity still needs stored signoff evidence even though direct
+  exact prefix-completion behavior is now rechecked by tests under the new
+  structural-generic scheduler surface
 - provenance, benchmark, compare, and certification surfaces are still not
   strong enough for the stronger paper sentence
 
 ## Immediate Next Slice
 
-1. Broaden the later `kappa 7-9` claim-generic bands without regressing
+1. Finish the remaining `kappa 9` claim-generic widening without regressing
    accepted parity.
-2. Recheck prefix-summary pruning and terminal completion exactness under the
-   structural-generic claim scheduler.
+2. Turn the widened late surface into stored breadth/floor evidence on the
+   claim lane itself.
 3. Then harden the certification-facing evidence bundle.
 
 ## First Reads

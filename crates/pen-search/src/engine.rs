@@ -5761,7 +5761,10 @@ mod tests {
     use crate::expand::evaluate_candidate;
     use crate::narrative::{NarrativeEventKind, StepPhase, narrative_progress_snapshot};
     use crate::prefix_cache::{PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature};
-    use crate::prefix_memo::{PartialPrefixBoundDecision, PrefixLegalityCache};
+    use crate::prefix_memo::{
+        PartialPrefixBoundDecision, PrefixLegalityCache, TerminalPrefixClauseEvaluation,
+        TerminalPrefixCompletion,
+    };
     use pen_core::{
         canonical::CanonKey,
         clause::{ClauseRec, ClauseRole},
@@ -7031,6 +7034,213 @@ mod tests {
         assert!(!serialized.contains("temporal_shell"));
         assert!(!serialized.contains("hilbert"));
         assert!(!serialized.contains("curvature"));
+    }
+
+    #[test]
+    fn desktop_claim_shadow_late_steps_keep_reference_acceptance() {
+        for step_index in 13..=15 {
+            let claim_step =
+                profile_step_from_reference_prefix(step_index, SearchProfile::DesktopClaimShadow);
+
+            assert_eq!(claim_step.telescope, Telescope::reference(step_index));
+            assert!(claim_step.demo_bucket_stats.iter().all(|bucket| {
+                bucket.bucket_key.taxonomy == SearchBucketTaxonomy::StructuralGeneric
+            }));
+            assert!(
+                claim_step
+                    .demo_bucket_stats
+                    .iter()
+                    .all(|bucket| { bucket.bucket_label.contains("structural_generic") })
+            );
+        }
+    }
+
+    #[test]
+    fn claim_terminal_prefix_completion_summary_matches_direct_exact_assessment() {
+        let strict_steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &strict_steps {
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        let terminal_clauses = super::terminal_prefix_clause_candidates(
+            15,
+            &library,
+            admissibility,
+            &signature,
+            clause_catalog.clauses_at(7),
+            &mut cache,
+        );
+        assert!(terminal_clauses.iter().all(|entry| entry.1.is_none()));
+
+        let summary = super::compute_terminal_prefix_completion_summary_from_candidates(
+            15,
+            &library,
+            admissibility,
+            Rational::zero(),
+            &nu_history,
+            &signature,
+            &prefix,
+            terminal_clauses,
+            &mut cache,
+        );
+
+        let mut direct_evaluations = Vec::new();
+        let mut direct_admitted = 0usize;
+        for clause in clause_catalog.clauses_at(7) {
+            let mut telescope = prefix.clone();
+            telescope.clauses.push(clause.clone());
+
+            if !passes_connectivity(&library, &telescope) {
+                direct_evaluations.push(TerminalPrefixClauseEvaluation::Disconnected);
+                continue;
+            }
+
+            let decision = assess_strict_admissibility(15, &library, &telescope, admissibility);
+            if !decision.is_admitted() {
+                direct_evaluations
+                    .push(TerminalPrefixClauseEvaluation::AdmissibilityRejected { decision });
+                continue;
+            }
+
+            direct_admitted += 1;
+            direct_evaluations.push(TerminalPrefixClauseEvaluation::Admitted {
+                decision,
+                completion: TerminalPrefixCompletion {
+                    exact_nu: u16::try_from(
+                        pen_eval::nu::structural_nu(&telescope, &library, &nu_history).total,
+                    )
+                    .expect("nu exceeded u16"),
+                    bit_kappa_used: u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                        .expect("bit cost exceeded u16"),
+                    clause_kappa_used: u16::try_from(telescope.kappa())
+                        .expect("kappa exceeded u16"),
+                    telescope,
+                },
+            });
+        }
+
+        assert_eq!(summary.evaluations, direct_evaluations);
+        assert_eq!(summary.admitted_candidate_count, direct_admitted);
+    }
+
+    #[test]
+    fn claim_exact_partial_prefix_bound_decision_reuses_cached_terminal_result() {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = compute_bar(2, 15, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        let work_item = create_online_prefix_work_item(
+            8,
+            prefix,
+            signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut cache,
+        );
+        assert_eq!(work_item.remaining_clause_slots, 1);
+
+        let mut first_budget = 64;
+        let first = exact_partial_prefix_bound_decision(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog,
+            &work_item,
+            &mut cache,
+            &mut first_budget,
+        );
+        assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
+
+        let cached = cache
+            .partial_prefix_bound_decision(&signature)
+            .expect("claim terminal decision should be cached after the first exact check");
+        assert_eq!(
+            cached,
+            match first {
+                super::ExactPartialPrefixBoundDecision::CanClearBar => {
+                    PartialPrefixBoundDecision::CanClearBar
+                }
+                super::ExactPartialPrefixBoundDecision::CannotClearBar => {
+                    PartialPrefixBoundDecision::CannotClearBar
+                }
+                super::ExactPartialPrefixBoundDecision::Unknown => unreachable!(),
+            }
+        );
+        let hits_before = cache.stats().partial_prefix_bound_hits;
+        let terminal_summary_hits_before = cache.stats().terminal_prefix_completion_hits;
+
+        let mut second_budget = 1;
+        let second = exact_partial_prefix_bound_decision(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog,
+            &work_item,
+            &mut cache,
+            &mut second_budget,
+        );
+
+        assert_eq!(second, first);
+        assert_eq!(cache.stats().partial_prefix_bound_hits, hits_before + 1);
+        assert_eq!(
+            cache.stats().terminal_prefix_completion_hits,
+            terminal_summary_hits_before
+        );
     }
 
     #[test]

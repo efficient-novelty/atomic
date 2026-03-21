@@ -412,15 +412,195 @@ fn claim_structural_shell_clauses(position: usize, context: EnumerationContext) 
 }
 
 fn claim_generic_band7_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
-    operator_bundle_reference_clause(position, context)
-        .into_iter()
-        .collect()
+    if context.library_size < 2 {
+        return Vec::new();
+    }
+
+    let latest = context.library_size;
+    let previous = latest - 1;
+    match position {
+        0 => vec![
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                )),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                )),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        1 => vec![Expr::Pi(
+            Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+            Box::new(Expr::Lib(previous)),
+        )],
+        2 => vec![Expr::Pi(
+            Box::new(Expr::Var(1)),
+            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+        )],
+        3 => vec![Expr::Lam(Box::new(Expr::App(
+            Box::new(Expr::Var(1)),
+            Box::new(Expr::Var(2)),
+        )))],
+        4 => vec![Expr::Pi(
+            Box::new(Expr::Lib(latest)),
+            Box::new(Expr::Lib(latest)),
+        )],
+        5 => vec![Expr::Lam(Box::new(Expr::Pi(
+            Box::new(Expr::Var(1)),
+            Box::new(Expr::Var(1)),
+        )))],
+        6 => vec![Expr::Pi(
+            Box::new(Expr::Lib(latest)),
+            Box::new(Expr::Var(1)),
+        )],
+        _ => Vec::new(),
+    }
 }
 
 fn claim_generic_band8_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
-    temporal_shell_reference_clause(position, context)
-        .into_iter()
-        .collect()
+    let Some(anchor) = context.historical_anchor_ref else {
+        return Vec::new();
+    };
+
+    match position {
+        0 => vec![
+            Expr::Next(Box::new(Expr::Var(1))),
+            Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+            Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+        ],
+        1 => vec![
+            Expr::Eventually(Box::new(Expr::Var(1))),
+            Expr::Eventually(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+            Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
+        ],
+        2 => vec![
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Var(1),
+                ))))),
+            ),
+        ],
+        3 => vec![
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ))),
+        ],
+        4 => vec![
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
+                    Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                )))))),
+            ),
+        ],
+        5 => vec![
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    Expr::Var(1),
+                ))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Var(1),
+                ))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    Expr::Var(1),
+                ))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Next(Box::new(Expr::Var(1))),
+                ))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Var(1),
+                ))))),
+            ),
+        ],
+        6 => vec![
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Var(1),
+                ))))),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(
+                    1,
+                )))))),
+                Box::new(Expr::Var(2)),
+            ))),
+        ],
+        7 => vec![
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        ],
+        _ => Vec::new(),
+    }
 }
 
 fn claim_generic_band9_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
@@ -3244,6 +3424,35 @@ fn supports_operator_bundle_clause_at_position(
             .any(|candidate| candidate == *expr);
     }
 
+    if late_family_surface == LateFamilySurface::ClaimGeneric {
+        let context = EnumerationContext {
+            library_size,
+            scope_size: 0,
+            max_path_dimension: 0,
+            include_trunc: false,
+            include_modal: false,
+            include_temporal: false,
+            max_expr_nodes: 0,
+            require_former_eliminator_clauses: false,
+            require_initial_hit_clauses: false,
+            require_truncation_hit_clauses: false,
+            require_higher_hit_clauses: false,
+            require_sphere_lift_clauses: false,
+            require_axiomatic_bundle_clauses: false,
+            require_modal_shell_clauses: false,
+            require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
+            historical_anchor_ref: None,
+            late_family_surface,
+        };
+        return claim_generic_band7_clauses(position, context)
+            .into_iter()
+            .any(|candidate| candidate == *expr);
+    }
+
     let latest = library_size;
     let previous = latest - 1;
     if late_family_surface == LateFamilySurface::RealisticShadow && position == 5 {
@@ -3367,6 +3576,35 @@ fn supports_hilbert_functional_clause_at_position(
             late_family_surface,
         };
         return demo_hilbert_functional_clauses(position, context)
+            .into_iter()
+            .any(|candidate| candidate == *expr);
+    }
+
+    if late_family_surface == LateFamilySurface::ClaimGeneric {
+        let context = EnumerationContext {
+            library_size,
+            scope_size: 0,
+            max_path_dimension: 0,
+            include_trunc: false,
+            include_modal: false,
+            include_temporal: false,
+            max_expr_nodes: 0,
+            require_former_eliminator_clauses: false,
+            require_initial_hit_clauses: false,
+            require_truncation_hit_clauses: false,
+            require_higher_hit_clauses: false,
+            require_sphere_lift_clauses: false,
+            require_axiomatic_bundle_clauses: false,
+            require_modal_shell_clauses: false,
+            require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
+            historical_anchor_ref: None,
+            late_family_surface,
+        };
+        return claim_generic_band9_clauses(position, context)
             .into_iter()
             .any(|candidate| candidate == *expr);
     }
@@ -3513,6 +3751,35 @@ fn supports_temporal_shell_clause_at_position(
             late_family_surface,
         };
         return demo_temporal_shell_clauses(position, context)
+            .into_iter()
+            .any(|candidate| candidate == *expr);
+    }
+
+    if late_family_surface == LateFamilySurface::ClaimGeneric {
+        let context = EnumerationContext {
+            library_size: anchor.max(1),
+            scope_size: 0,
+            max_path_dimension: 0,
+            include_trunc: false,
+            include_modal: true,
+            include_temporal: true,
+            max_expr_nodes: 0,
+            require_former_eliminator_clauses: false,
+            require_initial_hit_clauses: false,
+            require_truncation_hit_clauses: false,
+            require_higher_hit_clauses: false,
+            require_sphere_lift_clauses: false,
+            require_axiomatic_bundle_clauses: false,
+            require_modal_shell_clauses: false,
+            require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
+            historical_anchor_ref: Some(anchor),
+            late_family_surface,
+        };
+        return claim_generic_band8_clauses(position, context)
             .into_iter()
             .any(|candidate| candidate == *expr);
     }
@@ -3879,6 +4146,52 @@ mod tests {
     }
 
     #[test]
+    fn claim_generic_kappa_seven_catalog_adds_operator_wrapper_variants() {
+        let library = library_until(12);
+        let admissibility =
+            strict_admissibility_for_mode(13, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = context_from_admissibility(&library, admissibility);
+        let mut realistic_context = claim_context;
+        realistic_context.late_family_surface = LateFamilySurface::RealisticShadow;
+
+        let claim_catalog = build_clause_catalog(claim_context, 7);
+        let realistic_catalog = build_clause_catalog(realistic_context, 7);
+        let claim_only = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                )),
+            ),
+        );
+
+        assert!(claim_catalog.clauses_at(0).contains(&claim_only));
+        assert!(!realistic_catalog.clauses_at(0).contains(&claim_only));
+    }
+
+    #[test]
+    fn claim_generic_kappa_eight_catalog_adds_modal_temporal_exchange_variants() {
+        let library = library_until(14);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = context_from_admissibility(&library, admissibility);
+        let mut realistic_context = claim_context;
+        realistic_context.late_family_surface = LateFamilySurface::RealisticShadow;
+
+        let claim_catalog = build_clause_catalog(claim_context, 8);
+        let realistic_catalog = build_clause_catalog(realistic_context, 8);
+        let claim_only = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+        );
+
+        assert!(claim_catalog.clauses_at(0).contains(&claim_only));
+        assert!(!realistic_catalog.clauses_at(0).contains(&claim_only));
+    }
+
+    #[test]
     fn claim_generic_late_bands_drop_realistic_only_variants() {
         let step_thirteen_library = library_until(12);
         let step_thirteen = strict_admissibility_for_mode(
@@ -3979,6 +4292,81 @@ mod tests {
                 .clauses_at(4)
                 .contains(&realistic_temporal_extra)
         );
+    }
+
+    #[test]
+    fn claim_generic_late_bands_drop_demo_only_variants() {
+        let step_thirteen_library = library_until(12);
+        let step_thirteen = strict_admissibility_for_mode(
+            13,
+            2,
+            &step_thirteen_library,
+            AdmissibilityMode::DesktopClaimShadow,
+        );
+        let claim_thirteen = build_clause_catalog(
+            context_from_admissibility(&step_thirteen_library, step_thirteen),
+            7,
+        );
+        let mut demo_thirteen = context_from_admissibility(&step_thirteen_library, step_thirteen);
+        demo_thirteen.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let demo_thirteen = build_clause_catalog(demo_thirteen, 7);
+        let demo_only_operator = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        );
+        assert!(!claim_thirteen.clauses_at(0).contains(&demo_only_operator));
+        assert!(demo_thirteen.clauses_at(0).contains(&demo_only_operator));
+
+        let step_fifteen_library = library_until(14);
+        let step_fifteen = strict_admissibility_for_mode(
+            15,
+            2,
+            &step_fifteen_library,
+            AdmissibilityMode::DesktopClaimShadow,
+        );
+        let claim_fifteen = build_clause_catalog(
+            context_from_admissibility(&step_fifteen_library, step_fifteen),
+            8,
+        );
+        let mut demo_fifteen = context_from_admissibility(&step_fifteen_library, step_fifteen);
+        demo_fifteen.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let demo_fifteen = build_clause_catalog(demo_fifteen, 8);
+        let demo_only_temporal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+        );
+        assert!(!claim_fifteen.clauses_at(1).contains(&demo_only_temporal));
+        assert!(demo_fifteen.clauses_at(1).contains(&demo_only_temporal));
+
+        let step_fourteen_library = library_until(13);
+        let step_fourteen = strict_admissibility_for_mode(
+            14,
+            2,
+            &step_fourteen_library,
+            AdmissibilityMode::DesktopClaimShadow,
+        );
+        let claim_fourteen = build_clause_catalog(
+            context_from_admissibility(&step_fourteen_library, step_fourteen),
+            9,
+        );
+        let mut demo_fourteen = context_from_admissibility(&step_fourteen_library, step_fourteen);
+        demo_fourteen.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let demo_fourteen = build_clause_catalog(demo_fourteen, 9);
+        let demo_only_hilbert = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Sigma(
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(2)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
+                )),
+                Box::new(Expr::Var(1)),
+            ),
+        );
+        assert!(!claim_fourteen.clauses_at(0).contains(&demo_only_hilbert));
+        assert!(demo_fourteen.clauses_at(0).contains(&demo_only_hilbert));
     }
 
     #[test]

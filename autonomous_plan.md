@@ -38,10 +38,11 @@ What this means operationally:
 
 ## What Still Blocks The Stronger Claim
 
-- later claim bands `7-9` are still thin reference-first surfaces rather than
-  richer claim-specific mutator packs
-- claim-path parity and exact prefix/completion behavior still need a direct
-  recheck under the structural-generic bucket surface
+- the remaining claim band `9` is still a thin reference-first surface rather
+  than a richer claim-specific mutator pack
+- claim-path parity still needs stored signoff evidence even though direct
+  prefix/completion exactness is now rechecked by tests under the
+  structural-generic bucket surface
 - breadth widening and within-step retuning are not yet claim-specific enough
   to support an autonomy claim
 - manifest, benchmark, compare, and certification surfaces are not yet strong
@@ -269,9 +270,8 @@ Done when:
 
 Implement the remaining late-surface and evidence follow-up directly:
 
-1. broaden the later `kappa 7-9` claim-generic bands without reintroducing
+1. finish the remaining `kappa 9` claim-generic widening without reintroducing
    realistic-shadow or demo-only helpers
-2. recheck prefix-summary pruning and terminal completion exactness under the
-   structural-generic claim scheduler surface
-3. then earn the late breadth floors and certification bundle on the updated
-   claim lane
+2. turn the widened later-band surface into stored breadth/floor evidence on
+   the structural-generic claim lane
+3. then earn the certification bundle on the updated claim lane

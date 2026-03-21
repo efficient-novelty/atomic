@@ -22,8 +22,9 @@ every section below is closed and a passing claim certificate exists.
   claim-specific:
   - `late_expansion_policy = claim_generic`
   - `bucket_policy = structural_generic`
-- Later `kappa 7-9` claim bands are still conservative and accepted-hash
-  parity through step `15` is still an open claim-lane gate.
+- `kappa 7-8` now use claim-specific later-band mutator packs.
+- `kappa 9` is still conservative and accepted-hash parity through step `15`
+  is still an open claim-lane gate.
 - Minimum breadth floors that must be earned honestly on the claim lane:
   - step `1` generated raw `= 2144`
   - step `10` generated `>= 500`
@@ -46,9 +47,9 @@ every section below is closed and a passing claim certificate exists.
       modal-lift variants.
 - [x] Add claim-generic mutators for kappa `5-6` support-form, bridge-head,
       and shell-shape variants.
-- [ ] Add claim-generic mutators for kappa `7` operator-style wrapper and
+- [x] Add claim-generic mutators for kappa `7` operator-style wrapper and
       shell-mixture variants.
-- [ ] Add claim-generic mutators for kappa `8` modal-temporal exchange and
+- [x] Add claim-generic mutators for kappa `8` modal-temporal exchange and
       history-reanchor variants.
 - [ ] Add claim-generic mutators for kappa `9` higher-order and binder-heavy
       variants.
@@ -63,7 +64,7 @@ every section below is closed and a passing claim certificate exists.
       or any `demo_*_clauses()` helpers.
 - [x] Add tests proving the claim lane no longer reaches realistic late-family
       helpers.
-- [ ] Add tests proving the claim lane no longer reaches demo late-family
+- [x] Add tests proving the claim lane no longer reaches demo late-family
       helpers.
 - [ ] Preserve accepted-hash parity through step `15` while switching the claim
       late path.
@@ -79,11 +80,11 @@ Done when:
 
 ## 2. Claim-Specific Prefix Filtering And Exact Completion
 
-- [ ] Recheck prefix-summary pruning logic under the claim-generic mutator
+- [x] Recheck prefix-summary pruning logic under the claim-generic mutator
       surface.
-- [ ] Confirm terminal-prefix completion summaries still match direct exact
+- [x] Confirm terminal-prefix completion summaries still match direct exact
       assessment under the claim policy.
-- [ ] Confirm cached prefix summaries remain deterministic and parity-safe
+- [x] Confirm cached prefix summaries remain deterministic and parity-safe
       after removing realistic late-family inheritance.
 - [ ] Persist any new claim-specific exact-screen reasons or prefix-prune
       distinctions needed to explain the new late path.
