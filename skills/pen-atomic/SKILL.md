@@ -38,8 +38,8 @@ The current architecture focus is split between three active tracks:
 - stronger exact late-step pruning and ordering on
   `realistic_frontier_shadow`
 - honest breadth, budget, and evidence surfacing on `demo_breadth_shadow`
-- claim-lane separation and later family-agnostic guidance work on
-  `desktop_claim_shadow`
+- claim-generic late expansion, structural bucket scheduling, and
+  certification work on `desktop_claim_shadow`
 
 ## Current-State References
 
@@ -60,6 +60,8 @@ Read only the track-specific detail you need:
 - For the active autonomy workstream, read
   [../../autonomous_plan.md](../../autonomous_plan.md) and
   [../../autonomous_progress.md](../../autonomous_progress.md).
+  These are the operational docs for remaining claim-lane work and
+  intentionally omit old rollout history.
 
 Start with the current architecture doc before diving into donor material:
 
@@ -135,7 +137,7 @@ Then branch based on the task.
 - Read [references/13-current-claim-lane.md](references/13-current-claim-lane.md)
   plus [../../autonomous_plan.md](../../autonomous_plan.md) and
   [../../autonomous_progress.md](../../autonomous_progress.md) for the current
-  claim-lane scaffold, honesty boundary, and remaining autonomy work.
+  claim-lane mixed state, honesty boundary, and remaining autonomy work.
 - Read [theory/README.md](theory/README.md) when you need the theorem map or
   manuscript map.
 - Read [theory/genesis.md](theory/genesis.md) when you need the exact strict
@@ -269,6 +271,9 @@ Focus on:
 - recording the mixed current state honestly in policy metadata:
   claim-debt admissibility is real, while late expansion and bucket scheduling
   are still inherited
+- treating enumeration, prefix memo, and scheduler coupling as the next real
+  bottlenecks rather than continuing to tune already-landed admissibility
+  labels
 - moving admissibility, mutation, scheduling, and certification toward
   family-agnostic structural evidence
 - not using stronger words like `unguided` before the certification gate lands
@@ -348,7 +353,9 @@ Reject designs that:
   baseline for future work.
 - The claim lane now exists as a separate scaffold, but its policy metadata
   now honestly reports a mixed state: claim-debt admissibility is landed, while
-  late expansion and bucket scheduling still inherit realistic-shadow behavior
-  until the later claim-specific workstreams land.
+  late expansion and bucket scheduling still inherit realistic-shadow behavior.
+- The next operational claim-lane work should focus on generic mutators,
+  structural bucket scheduling, and certification evidence rather than on
+  already-landed profile or admissibility separation.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
   the track-specific references you actually need.
