@@ -93,6 +93,24 @@ Start with the current architecture doc before diving into donor material:
 8. Use the operational repo docs for live open work and use the bundled
    references for stable current-state detail.
 
+## Session Cleanup
+
+Before ending a session:
+
+1. Check for residual processes started during the session, especially
+   `cargo`, `pen-cli.exe`, long-running `cargo test`, `cargo run`, benchmark,
+   export, and validation commands.
+2. Do not assume a timed-out Codex command killed its child processes.
+   Inspect the live process table and confirm whether the spawned workload is
+   still running.
+3. If a residual process was started for the current session and is no longer
+   needed, terminate both the child workload and its wrapper process.
+4. Do not terminate unrelated user-owned workloads. If ownership is unclear,
+   inspect the command line, start time, parent process, and output path before
+   deciding.
+5. Report any residual processes found or terminated in the final handoff so
+   the session closes with an explicit cleanup status.
+
 ## First Reads
 
 For most tasks, read in this order:
