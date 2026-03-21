@@ -37,6 +37,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   claim artifacts and currently fails honestly on missing breadth, missing
   step-15 parity evidence, and the still-missing full-profile stored claim
   bundle on the intended auto-worker desktop config.
+- `scripts/benchmark_claim_lane.py` now aggregates stored claim runs into a
+  benchmark bundle with runtime percentiles, parity counts, breadth-floor hit
+  counts, and manifest snapshots; it still needs a real full-profile claim
+  bundle before those numbers can justify a stronger sentence.
 - the repo-level autonomy docs now treat claim-policy separation and failed-run
   evidence preservation as baseline; the live bottleneck is full-profile
   claim-run memory stability on the intended auto-worker profile
@@ -60,7 +64,8 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
    machine and inspect the stored RSS-gap data.
-2. Once that bundle exists, run the compare/certification scripts against it.
+2. Once that bundle exists, run the compare, benchmark, and certification
+   scripts against it.
 3. Then close the remaining breadth/floor and parity misses.
 
 ## First Reads

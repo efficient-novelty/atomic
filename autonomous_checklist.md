@@ -95,7 +95,8 @@ Done when:
 
 - [ ] Check the claim path used no silent guarded, replay, realistic-shadow, or
       demo-only fallback on the intended stored bundle.
-- [ ] Add a repeatable benchmark harness for the intended claim config.
+- [x] Add a repeatable benchmark harness for the intended claim config
+      (`scripts/benchmark_claim_lane.py`).
 - [ ] Record benchmark median wall time.
 - [ ] Record benchmark p90 wall time.
 - [ ] Record benchmark max wall time.

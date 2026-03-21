@@ -275,6 +275,18 @@ The current smoke claim config is expected to fail that certification honestly
 until the repo has a full step-15 claim bundle, breadth floors, and the
 remaining manifest provenance fields.
 
+To aggregate multiple stored claim runs into a repeatable benchmark bundle with
+median/p90/max runtime, parity success counts, breadth-floor hit counts, and
+manifest snapshots:
+
+```powershell
+python scripts/benchmark_claim_lane.py --guarded-run runs/guarded --claim-run runs/claim-a --claim-run runs/claim-b --runtime-threshold-ms 600000 --json-out runs/claim-benchmark.json --text-out runs/claim-benchmark.txt
+```
+
+The benchmark script summarizes stored claim-lane evidence only. It does not
+hide incomplete breadth or parity evidence; instead it records how many stored
+runs actually satisfy those gates.
+
 For the full Workstream 4 rollout matrix, also compare:
 
 - a realistic frontier-resume lane

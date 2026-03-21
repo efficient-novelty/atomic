@@ -86,6 +86,14 @@ where
     run_python_script("certify_claim_lane.py", args)
 }
 
+pub fn run_claim_benchmark<I, S>(args: I) -> Output
+where
+    I: IntoIterator<Item = S>,
+    S: AsRef<OsStr>,
+{
+    run_python_script("benchmark_claim_lane.py", args)
+}
+
 pub fn assert_success(output: Output) -> String {
     let stdout = String::from_utf8_lossy(&output.stdout).to_string();
     let stderr = String::from_utf8_lossy(&output.stderr).to_string();
