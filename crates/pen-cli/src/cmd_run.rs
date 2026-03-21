@@ -4,8 +4,8 @@ use crate::output::{OutputStyle, render_run_output};
 use crate::progress::TerminalStepProgress;
 use crate::report::{
     GeneratedSteps, StepProgressObserver, StepReport, annotate_search_profile,
-    generate_steps_with_config_and_runtime_and_progress, stored_prune_class_stats,
-    stored_exact_screen_reasons, write_step_reports,
+    generate_steps_with_config_and_runtime_and_progress, stored_exact_screen_reasons,
+    stored_prune_class_stats, write_step_reports,
 };
 use anyhow::{Context, Result, bail};
 use pen_core::hash::blake3_hex;
@@ -21,9 +21,9 @@ use pen_search::state::{FrontierStateRecV1, PrefixState};
 use pen_store::frontier::{frontier_checkpoint_dir, write_frontier_manifest};
 use pen_store::layout::{FRONTIER_RECORD_LAYOUT_ID, SCHEMA_VERSION_V1};
 use pen_store::manifest::{
-    BitBand, CheckpointCompat, ConfigFingerprint, FrontierManifestV1, HostInfo, NearMiss,
-    ResumeCompatible, RunArtifacts, RunCompat, RunManifestV1, RunPosition, RunStatus,
-    SearchPolicyInfo, StepCheckpointV1, StepObjective, StepStats,
+    BitBand, BuildInfo, CheckpointCompat, ConfigFingerprint, FrontierManifestV1, HostInfo,
+    NearMiss, ResumeCompatible, RunArtifacts, RunCompat, RunManifestV1, RunPosition, RunStatus,
+    RuntimeInfo, SearchPolicyInfo, StepCheckpointV1, StepObjective, StepStats,
 };
 use pen_store::memory::GovernorConfig;
 use pen_store::spill::{FrontierRuntimeInput, SpillConfig, persist_frontier_runtime};
@@ -34,6 +34,8 @@ use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::process::Command;
+use sysinfo::System;
 use time::OffsetDateTime;
 use time::format_description::well_known::Rfc3339;
 
@@ -67,9 +69,10 @@ pub fn run(args: RunArgs) -> Result<String> {
         &config_text,
         &steps,
         &config,
+        worker_count,
         created_utc,
         updated_utc,
-    );
+    )?;
 
     write_run_artifacts(
         &run_dir,
@@ -174,9 +177,10 @@ pub(crate) fn build_run_manifest(
     config_text: &str,
     steps: &[StepReport],
     config: &RuntimeConfig,
+    worker_count: u16,
     created_utc: String,
     updated_utc: String,
-) -> RunManifestV1 {
+) -> Result<RunManifestV1> {
     let completed_step = steps.last().map(|step| step.step_index).unwrap_or(0);
     let active_band = steps
         .last()
@@ -188,7 +192,8 @@ pub(crate) fn build_run_manifest(
         .count()
         .try_into()
         .expect("frontier epoch exceeded u32");
-    RunManifestV1 {
+    let workspace_root = workspace_root();
+    Ok(RunManifestV1 {
         schema_version: SCHEMA_VERSION_V1,
         run_id: run_id.to_owned(),
         status: RunStatus::Completed,
@@ -197,11 +202,15 @@ pub(crate) fn build_run_manifest(
         workspace_version: env!("CARGO_PKG_VERSION").to_owned(),
         compat: current_run_compat(),
         host: host_info(),
+        runtime: RuntimeInfo {
+            resolved_worker_count: worker_count,
+        },
         config: ConfigFingerprint {
             path: "config.toml".to_owned(),
             sha256: sha256_hex(config_text.as_bytes()),
         },
         search_policy: search_policy_info(config.mode.search_profile),
+        build: build_info(&workspace_root)?,
         position: RunPosition {
             completed_step,
             active_step: completed_step.saturating_add(1),
@@ -213,7 +222,7 @@ pub(crate) fn build_run_manifest(
             reports_dir: "reports".to_owned(),
             checkpoints_dir: "checkpoints".to_owned(),
         },
-    }
+    })
 }
 
 fn write_step_checkpoints(
@@ -483,12 +492,16 @@ fn absolute_from_repo(path: &Path) -> Result<PathBuf> {
     if path.is_absolute() {
         Ok(path.to_path_buf())
     } else {
-        Ok(Path::new(env!("CARGO_MANIFEST_DIR"))
-            .ancestors()
-            .nth(2)
-            .expect("workspace root")
-            .join(path))
+        Ok(workspace_root().join(path))
     }
+}
+
+fn workspace_root() -> PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .ancestors()
+        .nth(2)
+        .expect("workspace root")
+        .to_path_buf()
 }
 
 fn default_run_id() -> Result<String> {
@@ -516,12 +529,87 @@ fn host_info() -> HostInfo {
     let logical_cpus = std::thread::available_parallelism()
         .map(|count| count.get() as u32)
         .unwrap_or(1);
+    let mut system = System::new_all();
+    system.refresh_all();
+    let cpu_model = system
+        .cpus()
+        .first()
+        .map(|cpu| cpu.brand().trim().to_owned())
+        .filter(|brand| !brand.is_empty())
+        .unwrap_or_else(|| "unknown".to_owned());
+    let physical_core_count = System::physical_core_count().unwrap_or(logical_cpus as usize) as u32;
     HostInfo {
         os: std::env::consts::OS.to_owned(),
         arch: std::env::consts::ARCH.to_owned(),
         logical_cpus,
-        ram_bytes: 0,
+        ram_bytes: system.total_memory(),
+        cpu_model,
+        physical_core_count,
     }
+}
+
+fn build_info(workspace_root: &Path) -> Result<BuildInfo> {
+    let cargo_lock_path = workspace_root.join("Cargo.lock");
+    let binary_path = std::env::current_exe().context("locate current executable")?;
+    let cargo_lock_sha256 = sha256_hex(
+        &fs::read(&cargo_lock_path)
+            .with_context(|| format!("read {}", cargo_lock_path.display()))?,
+    );
+    let binary_sha256 = sha256_hex(
+        &fs::read(&binary_path).with_context(|| format!("read {}", binary_path.display()))?,
+    );
+
+    Ok(BuildInfo {
+        profile: option_env!("PEN_BUILD_PROFILE")
+            .unwrap_or("unknown")
+            .to_owned(),
+        target_triple: option_env!("PEN_TARGET_TRIPLE")
+            .unwrap_or("unknown")
+            .to_owned(),
+        target_cpu: option_env!("PEN_TARGET_CPU")
+            .unwrap_or("default")
+            .to_owned(),
+        git_commit_sha: git_stdout(workspace_root, &["rev-parse", "HEAD"])?,
+        dirty_tree: git_dirty_tree(workspace_root)?,
+        cargo_lock_sha256,
+        binary_sha256,
+    })
+}
+
+fn git_stdout(workspace_root: &Path, args: &[&str]) -> Result<String> {
+    let output = Command::new("git")
+        .args(args)
+        .current_dir(workspace_root)
+        .output()
+        .with_context(|| format!("run git {}", args.join(" ")))?;
+    if !output.status.success() {
+        bail!(
+            "git {} failed with status {:?}",
+            args.join(" "),
+            output.status.code()
+        );
+    }
+
+    let stdout = String::from_utf8(output.stdout).context("decode git stdout")?;
+    let trimmed = stdout.trim();
+    if trimmed.is_empty() {
+        bail!("git {} returned empty stdout", args.join(" "));
+    }
+    Ok(trimmed.to_owned())
+}
+
+fn git_dirty_tree(workspace_root: &Path) -> Result<bool> {
+    let output = Command::new("git")
+        .args(["status", "--porcelain", "--untracked-files=no"])
+        .current_dir(workspace_root)
+        .output()
+        .context("run git status --porcelain --untracked-files=no")?;
+    if !output.status.success() {
+        bail!("git status --porcelain --untracked-files=no failed");
+    }
+
+    let stdout = String::from_utf8(output.stdout).context("decode git status stdout")?;
+    Ok(!stdout.trim().is_empty())
 }
 
 pub(crate) fn resolved_worker_count(config: &RuntimeConfig) -> u16 {
@@ -995,6 +1083,16 @@ mod tests {
             "claim_generic"
         );
         assert_eq!(manifest.search_policy.bucket_policy, "structural_generic");
+        assert!(manifest.host.ram_bytes > 0);
+        assert!(manifest.host.physical_core_count > 0);
+        assert!(!manifest.host.cpu_model.is_empty());
+        assert!(manifest.runtime.resolved_worker_count > 0);
+        assert!(!manifest.build.profile.is_empty());
+        assert!(!manifest.build.target_triple.is_empty());
+        assert!(!manifest.build.target_cpu.is_empty());
+        assert!(!manifest.build.git_commit_sha.is_empty());
+        assert!(!manifest.build.cargo_lock_sha256.is_empty());
+        assert!(!manifest.build.binary_sha256.is_empty());
 
         let telemetry =
             fs::read_to_string(run_dir.join("telemetry.ndjson")).expect("telemetry should exist");

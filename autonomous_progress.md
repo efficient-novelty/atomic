@@ -24,6 +24,8 @@ intentionally short and forward-looking; use
     claim-run coverage
   - `scripts/certify_claim_lane.py` now emits a stored pass/fail certificate
     from claim artifacts
+  - `run.json` now records CPU, worker-count, build-profile, target, git,
+    `Cargo.lock`, and binary fingerprints for claim certification
   - stored breadth/floor evidence and certification pass status are still open
 - the lane is not yet certification-ready and it is still not honest to call
   it `unguided`
@@ -50,16 +52,21 @@ intentionally short and forward-looking; use
 - Reporting now pushes exact-screen reasons into telemetry and the compare
   script, and the certification script can already fail honestly on missing
   parity, breadth, runtime, or manifest evidence.
-- The remaining blockers are no longer the existence of compare/certification
-  tools; they are the missing step-15 claim bundle, the still-open breadth
-  floors, and the missing provenance/build fields in `run.json`.
+- Manifest completeness is now closed in code/tests, including the smoke
+  certification path.
+- The remaining blockers are no longer missing provenance/build fields in
+  `run.json`; they are the missing step-15 claim bundle, the still-open
+  breadth floors, and runtime stability on the intended
+  `desktop_claim_shadow_1h` auto-worker profile, which currently aborts before
+  artifact flush with `memory allocation of 1212416 bytes failed`.
 
 ## Immediate Next Slice
 
-1. Produce a stored step-15 claim bundle and run the new compare/certification
-   scripts on that real evidence.
-2. Fill the missing manifest provenance/build fingerprints that the
-   certification script now reports.
+1. Stabilize a stored step-15 claim bundle on the disclosed machine under the
+   intended `desktop_claim_shadow_1h` profile; the latest auto-worker attempt
+   still aborted before writing `run.json`.
+2. Once that bundle exists, run the compare/certification scripts on the real
+   evidence and record the remaining parity/breadth failures.
 3. Then close the remaining breadth/floor misses and benchmark the certified
    runtime threshold on the claim lane itself.
 
@@ -73,6 +80,7 @@ intentionally short and forward-looking; use
 
 - `cargo test -p pen-type --lib`
 - `cargo test -p pen-search --lib`
+- `cargo test -p pen-store --lib manifest::tests::run_manifest_round_trip_preserves_frozen_keys`
 - `cargo test -p pen-cli claim_run_writes_policy_metadata_and_claim_narrative`
 - `cargo test -p pen-cli --test atomic_bootstrap compare_runs_reports_claim_lane_policy_and_reason_audit`
 - `cargo test -p pen-cli --test atomic_bootstrap claim_certification_script_emits_failing_certificate_for_incomplete_smoke_run`

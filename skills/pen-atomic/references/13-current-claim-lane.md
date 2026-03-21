@@ -19,12 +19,16 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - `guidance_style = claim_debt_guided`
   - `late_expansion_policy = claim_generic`
   - `bucket_policy = structural_generic`
+- `run.json` now captures CPU, worker-count, build-profile, target, git,
+  `Cargo.lock`, and binary fingerprints for claim certification, and the smoke
+  certification path now passes the manifest-completeness gate.
 - `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
   reason coverage, prune-class coverage, narrative artifacts, and whether the
   stored run reaches the step-15 claim signoff surface.
 - `scripts/certify_claim_lane.py` now emits a stored pass/fail certificate from
   claim artifacts and currently fails honestly on missing breadth, missing
-  step-15 parity evidence, and incomplete manifest provenance.
+  step-15 parity evidence, and the still-missing full-profile stored claim
+  bundle on the intended auto-worker desktop config.
 
 ## Current Operational Blockers
 
@@ -33,15 +37,17 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - claim-path parity still needs stored signoff evidence even though direct
   exact prefix-completion behavior is now rechecked by tests under the new
   structural-generic scheduler surface
-- manifest provenance/build fingerprints and benchmark evidence are still too
-  weak for a passing claim certificate
+- a full `desktop_claim_shadow_1h` auto-worker run still aborts before writing
+  artifacts on the disclosed machine; the latest attempt failed with
+  `memory allocation of 1212416 bytes failed`
+- benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice
 
-1. Produce a stored step-15 claim bundle and run the compare/certification
-   scripts against it.
-2. Fill the missing manifest provenance/build fields that certification now
-   reports.
+1. Stabilize a stored step-15 claim bundle on the intended
+   `desktop_claim_shadow_1h` profile; the latest auto-worker attempt still
+   aborts before `run.json` flush.
+2. Once that bundle exists, run the compare/certification scripts against it.
 3. Then close the remaining breadth/floor misses on the live claim lane.
 
 ## First Reads

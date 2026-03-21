@@ -23,6 +23,10 @@ every section below is closed and a passing claim certificate exists.
   - `late_expansion_policy = claim_generic`
   - `bucket_policy = structural_generic`
 - `kappa 7-9` now use claim-specific later-band mutator packs in code/tests.
+- Claim manifests now persist CPU/build/git/binary fingerprints in code/tests,
+  but the intended `desktop_claim_shadow_1h` auto-worker profile still lacks a
+  stored step-15 bundle because the latest full run aborted before writing
+  `run.json` with `memory allocation of 1212416 bytes failed`.
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
@@ -188,17 +192,17 @@ Done when:
 
 ## 7. Provenance And Benchmark Appendix
 
-- [ ] Extend the run manifest with CPU model or brand.
-- [ ] Extend the run manifest with physical core count.
-- [ ] Extend the run manifest with RAM.
-- [ ] Extend the run manifest with resolved worker count.
-- [ ] Extend the run manifest with build profile.
-- [ ] Extend the run manifest with target triple.
-- [ ] Extend the run manifest with `target-cpu` when available.
-- [ ] Extend the run manifest with git commit SHA.
-- [ ] Extend the run manifest with dirty-tree flag.
-- [ ] Extend the run manifest with `Cargo.lock` hash.
-- [ ] Extend the run manifest with binary SHA256.
+- [x] Extend the run manifest with CPU model or brand.
+- [x] Extend the run manifest with physical core count.
+- [x] Extend the run manifest with RAM.
+- [x] Extend the run manifest with resolved worker count.
+- [x] Extend the run manifest with build profile.
+- [x] Extend the run manifest with target triple.
+- [x] Extend the run manifest with `target-cpu` when available.
+- [x] Extend the run manifest with git commit SHA.
+- [x] Extend the run manifest with dirty-tree flag.
+- [x] Extend the run manifest with `Cargo.lock` hash.
+- [x] Extend the run manifest with binary SHA256.
 - [ ] Replace any fixed compat tags used for the claim appendix with
       source-derived fingerprints.
 - [ ] Add a repeatable benchmark harness for the intended claim config.

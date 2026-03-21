@@ -5,8 +5,8 @@ use std::fs;
 use support::{
     assert_success, compact_search_space_stats, compact_step_summaries, fixtures_root,
     load_search_space_fixture, load_trajectory_fixture, mutate_latest_frontier_manifest,
-    normalize_checkpoint, read_json, read_text, run_claim_certify, run_compare_runs,
-    run_pen_cli, temp_dir, workspace_root, write_pressure_config,
+    normalize_checkpoint, read_json, read_text, run_claim_certify, run_compare_runs, run_pen_cli,
+    temp_dir, workspace_root, write_pressure_config,
 };
 
 #[test]
@@ -1131,7 +1131,10 @@ fn compare_runs_reports_claim_lane_policy_and_reason_audit() {
 
     let summary = read_json(&json_out);
     assert_eq!(summary["signoff"]["status"].as_str(), Some("attention"));
-    assert_eq!(summary["claim_lane_audit"]["status"].as_str(), Some("attention"));
+    assert_eq!(
+        summary["claim_lane_audit"]["status"].as_str(),
+        Some("attention")
+    );
 
     let claim_lane = summary["lanes"]
         .as_array()
@@ -1226,7 +1229,7 @@ fn claim_certification_script_emits_failing_certificate_for_incomplete_smoke_run
     assert!(stdout.contains("Claim Certification: attention"));
     assert!(stdout.contains("accepted_hash_parity: fail"));
     assert!(stdout.contains("search_policy: pass"));
-    assert!(stdout.contains("manifest_completeness: fail"));
+    assert!(stdout.contains("manifest_completeness: pass"));
 
     let certificate = read_json(&json_out);
     assert_eq!(certificate["status"].as_str(), Some("attention"));
@@ -1244,7 +1247,7 @@ fn claim_certification_script_emits_failing_certificate_for_incomplete_smoke_run
     );
     assert_eq!(
         certificate["checks"]["manifest_completeness"]["status"].as_str(),
-        Some("fail")
+        Some("pass")
     );
     assert_eq!(
         certificate["checks"]["runtime_threshold"]["status"].as_str(),

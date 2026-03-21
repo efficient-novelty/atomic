@@ -74,9 +74,10 @@ pub fn resume(args: ResumeArgs) -> Result<String> {
         &config_text,
         &steps,
         &config,
+        worker_count,
         manifest.created_utc,
         updated,
-    );
+    )?;
 
     write_run_artifacts(
         &run_dir,

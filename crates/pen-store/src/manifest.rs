@@ -15,9 +15,13 @@ pub struct RunManifestV1 {
     pub workspace_version: String,
     pub compat: RunCompat,
     pub host: HostInfo,
+    #[serde(default)]
+    pub runtime: RuntimeInfo,
     pub config: ConfigFingerprint,
     #[serde(default)]
     pub search_policy: SearchPolicyInfo,
+    #[serde(default)]
+    pub build: BuildInfo,
     pub position: RunPosition,
     pub artifacts: RunArtifacts,
 }
@@ -33,8 +37,10 @@ impl Default for RunManifestV1 {
             workspace_version: String::new(),
             compat: RunCompat::default(),
             host: HostInfo::default(),
+            runtime: RuntimeInfo::default(),
             config: ConfigFingerprint::default(),
             search_policy: SearchPolicyInfo::default(),
+            build: BuildInfo::default(),
             position: RunPosition::default(),
             artifacts: RunArtifacts::default(),
         }
@@ -137,11 +143,20 @@ impl Default for ResumeCompatible {
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
+#[serde(default)]
 pub struct HostInfo {
     pub os: String,
     pub arch: String,
     pub logical_cpus: u32,
     pub ram_bytes: u64,
+    pub cpu_model: String,
+    pub physical_core_count: u32,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
+#[serde(default)]
+pub struct RuntimeInfo {
+    pub resolved_worker_count: u16,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
@@ -155,6 +170,18 @@ pub struct SearchPolicyInfo {
     pub guidance_style: String,
     pub late_expansion_policy: String,
     pub bucket_policy: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
+#[serde(default)]
+pub struct BuildInfo {
+    pub profile: String,
+    pub target_triple: String,
+    pub target_cpu: String,
+    pub git_commit_sha: String,
+    pub dirty_tree: bool,
+    pub cargo_lock_sha256: String,
+    pub binary_sha256: String,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
@@ -307,10 +334,10 @@ pub struct FrontierScheduler {
 #[cfg(test)]
 mod tests {
     use super::{
-        AcceptedCandidate, BitBand, CheckpointCompat, ConfigFingerprint, FrontierCounts,
+        AcceptedCandidate, BitBand, BuildInfo, CheckpointCompat, ConfigFingerprint, FrontierCounts,
         FrontierFiles, FrontierManifestV1, FrontierScheduler, HostInfo, MemorySnapshot, NearMiss,
         ResumeCompatible, RunArtifacts, RunCompat, RunManifestV1, RunPosition, RunStatus,
-        SearchPolicyInfo, StepCheckpointV1, StepObjective, StepStats,
+        RuntimeInfo, SearchPolicyInfo, StepCheckpointV1, StepObjective, StepStats,
     };
     use crate::layout::{FRONTIER_RECORD_LAYOUT_ID, SCHEMA_VERSION_V1};
     use pen_core::library::{LibrarySnapshot, LibrarySnapshotEntry};
@@ -338,6 +365,11 @@ mod tests {
                 arch: "x86_64".to_owned(),
                 logical_cpus: 16,
                 ram_bytes: 17_179_869_184,
+                cpu_model: "AMD Ryzen".to_owned(),
+                physical_core_count: 8,
+            },
+            runtime: RuntimeInfo {
+                resolved_worker_count: 12,
             },
             config: ConfigFingerprint {
                 path: "config.toml".to_owned(),
@@ -347,6 +379,15 @@ mod tests {
                 guidance_style: "legacy_family_guided".to_owned(),
                 late_expansion_policy: "realistic_shadow".to_owned(),
                 bucket_policy: "semantic_family_runtime_local".to_owned(),
+            },
+            build: BuildInfo {
+                profile: "release".to_owned(),
+                target_triple: "x86_64-pc-windows-msvc".to_owned(),
+                target_cpu: "native".to_owned(),
+                git_commit_sha: "0123456789abcdef0123456789abcdef01234567".to_owned(),
+                dirty_tree: true,
+                cargo_lock_sha256: "lock-sha".to_owned(),
+                binary_sha256: "binary-sha".to_owned(),
             },
             position: RunPosition {
                 completed_step: 9,
@@ -365,6 +406,8 @@ mod tests {
         assert!(json.contains("\"schema_version\": 1"));
         assert!(json.contains("\"store_schema_hash\": \"blake3:store\""));
         assert!(json.contains("\"guidance_style\": \"legacy_family_guided\""));
+        assert!(json.contains("\"target_triple\": \"x86_64-pc-windows-msvc\""));
+        assert!(json.contains("\"resolved_worker_count\": 12"));
 
         let round_trip: RunManifestV1 =
             serde_json::from_str(&json).expect("deserialize run manifest");
