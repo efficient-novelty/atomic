@@ -52,6 +52,7 @@ use pen_type::obligations::{RetentionClass, RetentionPolicy, summarize_structura
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 use std::collections::{BTreeMap, BTreeSet};
+use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 pub const LIVE_BOOTSTRAP_MAX_STEP: u32 = 15;
@@ -904,7 +905,7 @@ struct OnlinePrefixWorkItem {
     clause_count: usize,
     filtered_next_clauses: Option<Vec<pen_core::clause::ClauseRec>>,
     next_clause_count: usize,
-    order_key: String,
+    order_key: Arc<str>,
 }
 
 impl OnlinePrefixWorkItem {
@@ -4799,8 +4800,7 @@ fn create_online_prefix_work_item(
         clause_count: prefix_telescope.kappa(),
         filtered_next_clauses,
         next_clause_count,
-        order_key: serde_json::to_string(&prefix_telescope)
-            .expect("prefix telescope should serialize"),
+        order_key: signature.order_key(),
         prefix_telescope,
         signature,
     }
@@ -5344,34 +5344,34 @@ fn materialize_terminal_prefix_group(
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<MaterializedTerminalPrefixGroup> {
-    let summary = if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
+    if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
         if let Some(summary) = discovery
             .prefix_legality_cache
             .take_terminal_prefix_completion_summary(prefix_signature)
         {
-            summary
-        } else {
-            let terminal_clauses = terminal_prefix_clause_candidates(
-                step_index,
-                library,
-                admissibility,
-                prefix_signature,
-                filtered_last_clause_options,
-                &mut discovery.prefix_legality_cache,
-            );
-            compute_terminal_prefix_completion_summary_from_candidates(
-                step_index,
-                library,
+            return Ok(materialize_terminal_prefix_group_from_summary(
                 admissibility,
                 objective_bar,
-                nu_history,
                 prefix_signature,
-                prefix_telescope,
-                terminal_clauses,
-                &mut discovery.prefix_legality_cache,
-            )
+                summary,
+                discovery,
+            ));
         }
-    } else if let Some(summary) = discovery
+
+        return materialize_terminal_prefix_group_compact(
+            step_index,
+            library,
+            admissibility,
+            objective_bar,
+            nu_history,
+            prefix_signature,
+            prefix_telescope,
+            filtered_last_clause_options,
+            discovery,
+        );
+    }
+
+    let summary = if let Some(summary) = discovery
         .prefix_legality_cache
         .terminal_prefix_completion_summary(prefix_signature)
     {
@@ -5401,6 +5401,23 @@ fn materialize_terminal_prefix_group(
             .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary.clone());
         summary
     };
+
+    Ok(materialize_terminal_prefix_group_from_summary(
+        admissibility,
+        objective_bar,
+        prefix_signature,
+        summary,
+        discovery,
+    ))
+}
+
+fn materialize_terminal_prefix_group_from_summary(
+    admissibility: StrictAdmissibility,
+    objective_bar: Rational,
+    prefix_signature: &PrefixSignature,
+    summary: TerminalPrefixCompletionSummary,
+    discovery: &mut RealisticShadowDiscovery,
+) -> MaterializedTerminalPrefixGroup {
     let admitted_terminal_candidates = summary.admitted_candidate_count;
     let best_accept_rank = summary.best_accept_rank.clone();
     let TerminalPrefixCompletionSummary {
@@ -5449,6 +5466,138 @@ fn materialize_terminal_prefix_group(
             }
         }
     }
+
+    MaterializedTerminalPrefixGroup {
+        candidates: retained_telescopes,
+        bound,
+        best_accept_rank,
+        generated_terminal_candidates,
+        admissible_terminal_candidates: admitted_terminal_candidates,
+    }
+}
+
+fn materialize_terminal_prefix_group_compact(
+    step_index: u32,
+    library: &Library,
+    admissibility: StrictAdmissibility,
+    objective_bar: Rational,
+    nu_history: &[(u32, u32)],
+    prefix_signature: &PrefixSignature,
+    prefix_telescope: &Telescope,
+    filtered_last_clause_options: &[pen_core::clause::ClauseRec],
+    discovery: &mut RealisticShadowDiscovery,
+) -> Result<MaterializedTerminalPrefixGroup> {
+    let terminal_clauses = terminal_prefix_clause_candidates(
+        step_index,
+        library,
+        admissibility,
+        prefix_signature,
+        filtered_last_clause_options,
+        &mut discovery.prefix_legality_cache,
+    );
+    let mut generated_terminal_candidates = 0usize;
+    let mut admitted_terminal_candidates = 0usize;
+    let mut bound: Option<PrefixBound> = None;
+    let mut best_accept_rank = None;
+    let mut retained_telescopes = Vec::new();
+
+    for (clause, cached_admissibility_decision) in terminal_clauses {
+        let Some(connectivity_decision) = discovery.prefix_legality_cache.terminal_connectivity(
+            prefix_signature,
+            library,
+            clause,
+        ) else {
+            continue;
+        };
+        generated_terminal_candidates += 1;
+        if matches!(
+            connectivity_decision,
+            TerminalConnectivityDecision::PruneDisconnected
+        ) {
+            continue;
+        }
+
+        let mut telescope = None;
+        if matches!(
+            connectivity_decision,
+            TerminalConnectivityDecision::NeedsFallback
+        ) {
+            let mut fallback_telescope = prefix_telescope.clone();
+            fallback_telescope.clauses.push(clause.clone());
+            if !passes_connectivity(library, &fallback_telescope) {
+                continue;
+            }
+            telescope = Some(fallback_telescope);
+        }
+
+        let admissibility_decision = if let Some(decision) = cached_admissibility_decision {
+            decision
+        } else {
+            let fallback_telescope = telescope.get_or_insert_with(|| {
+                let mut telescope = prefix_telescope.clone();
+                telescope.clauses.push(clause.clone());
+                telescope
+            });
+            assess_strict_admissibility(step_index, library, fallback_telescope, admissibility)
+        };
+        discovery.enumerated_candidates += 1;
+        discovery.well_formed_candidates += 1;
+        discovery
+            .admissibility_diagnostics
+            .record(&admissibility_decision);
+        if !admissibility_decision.is_admitted() {
+            discovery.admissibility_rejections += 1;
+            continue;
+        }
+
+        admitted_terminal_candidates += 1;
+        let telescope = telescope.unwrap_or_else(|| {
+            let mut telescope = prefix_telescope.clone();
+            telescope.clauses.push(clause.clone());
+            telescope
+        });
+        let exact_nu = u16::try_from(structural_nu(&telescope, library, nu_history).total)
+            .expect("nu exceeded u16");
+        let bit_kappa_used =
+            u16::try_from(telescope_bit_cost(&telescope)).expect("bit cost exceeded u16");
+        let clause_kappa_used = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+        let completion_bound = PrefixBound::singleton(exact_nu, clause_kappa_used, bit_kappa_used);
+        if let Some(current_bound) = bound.as_mut() {
+            current_bound.absorb_bound(completion_bound);
+        } else {
+            bound = Some(completion_bound);
+        }
+
+        if !terminal_completion_can_compete_for_acceptance(
+            prefix_signature,
+            admissibility,
+            &discovery.prefix_legality_cache,
+            &admissibility_decision,
+        ) {
+            continue;
+        }
+
+        let accept_rank = acceptance_rank_for_telescope(
+            objective_bar,
+            &telescope,
+            exact_nu,
+            bit_kappa_used,
+            clause_kappa_used,
+        );
+        if let Some(rank) = accept_rank.as_ref() {
+            match &best_accept_rank {
+                Some(current) if !better_rank(rank, current) => {}
+                _ => best_accept_rank = Some(rank.clone()),
+            }
+        }
+        retained_telescopes.push(PrefixGroupCandidate {
+            telescope,
+            accept_rank,
+            evaluated_candidate: None,
+        });
+    }
+
+    discovery.raw_generated_surface += generated_terminal_candidates;
 
     Ok(MaterializedTerminalPrefixGroup {
         candidates: retained_telescopes,
@@ -5900,7 +6049,7 @@ fn prefix_frontier_work_key(item: &OnlinePrefixWorkItem) -> (usize, usize, u8, u
         item.remaining_family_options,
         item.bit_cost,
         item.clause_count,
-        item.order_key.as_str(),
+        item.order_key.as_ref(),
     )
 }
 
@@ -6183,6 +6332,7 @@ mod tests {
         search_bootstrap_from_prefix_for_profile_with_runtime, search_bootstrap_prefix,
         search_bootstrap_prefix_for_config_with_runtime,
         sort_terminal_prefix_group_candidates_for_certification, supports_live_atomic_search,
+        terminal_prefix_clause_candidates,
     };
     use crate::bounds::PrefixBound;
     use crate::branch_bound::AcceptRank;
@@ -6220,6 +6370,7 @@ mod tests {
     };
     use std::cmp::Reverse;
     use std::collections::BTreeMap;
+    use std::sync::Arc;
 
     fn reference_prefix(until_step: u32) -> Vec<Telescope> {
         (1..=until_step).map(Telescope::reference).collect()
@@ -6273,7 +6424,7 @@ mod tests {
                 next_clause_count
             ]),
             next_clause_count,
-            order_key: order_key.to_owned(),
+            order_key: Arc::<str>::from(order_key),
         }
     }
 
@@ -7928,6 +8079,151 @@ mod tests {
     }
 
     #[test]
+    fn claim_compact_materialization_matches_summary_expansion_without_cache() {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = compute_bar(2, 15, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut summary_discovery = super::RealisticShadowDiscovery::default();
+        let mut compact_discovery = super::RealisticShadowDiscovery::default();
+
+        assert!(summary_discovery.prefix_legality_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        assert!(compact_discovery.prefix_legality_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        let summary_work_item = create_online_prefix_work_item(
+            8,
+            prefix.clone(),
+            signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut summary_discovery.prefix_legality_cache,
+        );
+        let compact_work_item = create_online_prefix_work_item(
+            8,
+            prefix,
+            signature,
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut compact_discovery.prefix_legality_cache,
+        );
+
+        let terminal_clauses = terminal_prefix_clause_candidates(
+            15,
+            &library,
+            admissibility,
+            &summary_work_item.signature,
+            summary_work_item.next_clauses(&clause_catalog),
+            &mut summary_discovery.prefix_legality_cache,
+        );
+        let summary = super::compute_terminal_prefix_completion_summary_from_candidates(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &summary_work_item.signature,
+            &summary_work_item.prefix_telescope,
+            terminal_clauses,
+            &mut summary_discovery.prefix_legality_cache,
+        );
+        let summary_group = super::materialize_terminal_prefix_group_from_summary(
+            admissibility,
+            objective_bar,
+            &summary_work_item.signature,
+            summary,
+            &mut summary_discovery,
+        );
+        let compact_group = super::materialize_terminal_prefix_group_compact(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &compact_work_item.signature,
+            &compact_work_item.prefix_telescope,
+            compact_work_item.next_clauses(&clause_catalog),
+            &mut compact_discovery,
+        )
+        .expect("compact materialization should succeed");
+
+        let summary_candidates = summary_group
+            .candidates
+            .iter()
+            .map(|candidate| (candidate.telescope.clone(), candidate.accept_rank.clone()))
+            .collect::<Vec<_>>();
+        let compact_candidates = compact_group
+            .candidates
+            .iter()
+            .map(|candidate| (candidate.telescope.clone(), candidate.accept_rank.clone()))
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            compact_group.generated_terminal_candidates,
+            summary_group.generated_terminal_candidates
+        );
+        assert_eq!(
+            compact_group.admissible_terminal_candidates,
+            summary_group.admissible_terminal_candidates
+        );
+        assert_eq!(compact_group.bound, summary_group.bound);
+        assert_eq!(
+            compact_group.best_accept_rank,
+            summary_group.best_accept_rank
+        );
+        assert_eq!(compact_candidates, summary_candidates);
+        assert_eq!(
+            compact_discovery.raw_generated_surface,
+            summary_discovery.raw_generated_surface
+        );
+        assert_eq!(
+            compact_discovery.enumerated_candidates,
+            summary_discovery.enumerated_candidates
+        );
+        assert_eq!(
+            compact_discovery.well_formed_candidates,
+            summary_discovery.well_formed_candidates
+        );
+        assert_eq!(
+            compact_discovery.admissibility_rejections,
+            summary_discovery.admissibility_rejections
+        );
+    }
+
+    #[test]
     fn realistic_shadow_keeps_semantic_family_bucket_taxonomy() {
         let realistic_step =
             profile_step_from_reference_prefix(10, SearchProfile::RealisticFrontierShadow);
@@ -8303,19 +8599,22 @@ mod tests {
         assert_eq!(
             pop_best_prefix(&mut frontier)
                 .expect("first work item should exist")
-                .order_key,
+                .order_key
+                .as_ref(),
             "a"
         );
         assert_eq!(
             pop_best_prefix(&mut frontier)
                 .expect("second work item should exist")
-                .order_key,
+                .order_key
+                .as_ref(),
             "b"
         );
         assert_eq!(
             pop_best_prefix(&mut frontier)
                 .expect("third work item should exist")
-                .order_key,
+                .order_key
+                .as_ref(),
             "c"
         );
     }

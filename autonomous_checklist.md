@@ -49,6 +49,17 @@ every section below is closed and a passing claim certificate exists.
   prefix-cache groups, so the dominant early queue-side spike was
   substantially reduced even though the full-profile lane still lacks a
   completed bundle.
+- A 2026-03-22 optimized step-5-limited rerun (`codex-claim-release-step5-v1`)
+  kept step `4` under about `167.1 MiB` observed RSS after `1777.1s` while
+  enumerating `310916028` candidates and exploring `16` prefix states, so the
+  release build is no longer showing an early allocator cliff on step `4`; the
+  bottleneck there is now exact remaining-two throughput.
+- A follow-up optimized step-`4` rerun after the new compact claim
+  materialization fast path (`codex-claim-release-step4-fastpath-v2`) reached
+  the same hot discovery checkpoints about `12-14%` sooner than
+  `codex-claim-release-step5-v1` while keeping observed RSS below about
+  `89.6 MiB`, but the intended full profile still has no stored completion
+  bundle yet.
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
@@ -60,19 +71,17 @@ every section below is closed and a passing claim certificate exists.
   - step `14` generated `>= 3500`
   - step `15` generated `>= 5000`
 
-## 1. Memory Stability On The Intended Claim Profile
+## 1. Runtime Stability On The Intended Claim Profile
 
 - [ ] Capture and review the observed process RSS versus governor-accounted RSS
       gap from a stored `desktop_claim_shadow` run now that claim artifacts
       persist both numbers.
 - [ ] Verify that the new memory-aware auto-worker cap is sufficient for the
       intended `desktop_claim_shadow_1h` profile on the disclosed machine.
-- [ ] Verify that claim-lane proof-close cache compaction removes the remaining
-      live allocation spike; claim proof-close now drops evaluated terminal
-      payloads and releases processed prefix groups, and claim materialization
-      now also drops duplicated legality-cache terminal payloads after reuse,
-      but the intended profile still needs a stored rerun to prove that the
-      combined compaction is sufficient.
+- [ ] Verify that claim-lane proof-close and materialization compaction remain
+      sufficient on the real full profile; the optimized step-`4` probes no
+      longer show the old allocator cliff, but later steps still need a stored
+      rerun to prove that they stay inside the same honest memory envelope.
 - [ ] Use the new `step_live_checkpoint` telemetry plus
       `reports/steps/step-XX-live.ndjson` artifacts to pinpoint whether step-4
       and step-5 claim growth is coming from raw catalog expansion,
@@ -83,6 +92,9 @@ every section below is closed and a passing claim certificate exists.
       each queued item, but step `5` and the intended full profile still need
       stored evidence that isolates any remaining legality/raw-surface or
       later-step residency honestly.
+- [ ] Continue reducing step-`4` exact remaining-two runtime on the optimized
+      claim binary; the latest release probe is throughput-bound there even
+      after the direct compact claim materialization fast path.
 - [ ] Reduce or cap any remaining worker scratch/frontier residency enough for
       the intended `desktop_claim_shadow_1h` profile to complete on the
       disclosed machine.

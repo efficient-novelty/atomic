@@ -42,12 +42,19 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   completion summaries from the legality cache after reuse, so claim runs stop
   holding both the legality-cache payload and the retained prefix-group copy of
   the same exact terminal surface.
+- claim terminal-prefix materialization now also has a direct compact path when
+  no cached completion summary exists, so claim runs no longer build and then
+  immediately re-walk a full terminal evaluation vector just to recover the
+  same retained candidates and counts.
 - cloned claim prefix signatures now share their serialized exact payload
   across frontier and legality-cache copies, so the same hot-path signature no
   longer duplicates that full prefix string into every cloned cache key.
 - claim online frontier work items now reuse the shared clause catalog when no
   prefix-local active-window filter applies, so claim discovery no longer
   clones the full next-clause list into every queued frontier item.
+- claim online frontier work items now also reuse that same shared serialized
+  prefix key for deterministic ordering, instead of allocating a second copy of
+  the serialized prefix string for the queue order key.
 - `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
   reason coverage, prune-class coverage, narrative artifacts, and whether the
   stored run reaches the step-15 claim signoff surface.
@@ -96,14 +103,25 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   `5084` partial-prefix-bound entries, and `13` retained prefix-cache groups,
   suggesting the old spike was largely frontier queue residency from cloning
   the full next-clause catalog into each queued item
+- a 2026-03-22 optimized step-5-limited rerun (`codex-claim-release-step5-v1`)
+  then showed that the release claim binary no longer has an early RSS crisis
+  on step `4`: after `1777.1s` it was still only about `167.1 MiB` observed
+  RSS while enumerating `310916028` candidates and exploring `16` prefix
+  states, so the hot blocker there is now exact remaining-two throughput
+- a follow-up optimized step-`4` rerun after the new compact claim
+  materialization fast path (`codex-claim-release-step4-fastpath-v2`) reached
+  the same hot discovery checkpoints about `12-14%` sooner than
+  `codex-claim-release-step5-v1` while keeping observed RSS below about
+  `89.6 MiB`, but the intended full profile still lacks a stored completion
+  bundle
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice
 
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
-   machine and inspect the stored RSS-gap data now that claim frontier items
-   reuse the shared clause catalog in addition to the earlier legality-cache
-   compaction plus processed-prefix-group release change.
+   machine on the optimized binary and inspect the stored RSS-gap data now that
+   claim frontier items reuse the shared clause catalog, the queue order key,
+   and the direct compact claim materialization fast path.
 2. Once that bundle exists, run the compare, benchmark, and certification
    scripts against it.
 3. Then close the remaining breadth/floor and parity misses.
@@ -129,7 +147,8 @@ Do:
   as `&&`; use separate commands for staging, commit, and push work
 - keep claim-lane edits narrow and staged; split very large file updates into
   smaller targeted patches when the first broad patch does not land cleanly
-- focus next on memory stability, then stored breadth/parity/certification
+- focus next on release-build step-`4` throughput and full-profile completion,
+  then stored breadth/parity/certification
 
 Do not:
 

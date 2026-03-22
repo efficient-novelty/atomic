@@ -59,6 +59,10 @@ impl PrefixSignature {
         }
     }
 
+    pub fn order_key(&self) -> Arc<str> {
+        self.exact_key.clone()
+    }
+
     pub fn dedupe_key(&self) -> String {
         format!("blake3:{}", blake3_hex(self.exact_key.as_bytes()))
     }

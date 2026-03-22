@@ -34,14 +34,20 @@ Treat these as current repo truths:
   also releases processed retained prefix groups once exact certification
   starts, and claim terminal-prefix materialization now also consumes cached
   exact completion summaries from the legality cache after reuse so the claim
-  lane stops holding both copies of the same exact terminal surface; cloned
-  prefix signatures now also share one serialized exact payload allocation
-  across frontier/cache copies instead of duplicating that string into every
-  clone; claim frontier work items now also reuse the shared clause catalog
-  when no prefix-local filter applies, which removed the old step-4 startup
-  RSS cliff on the latest smoke rerun; breadth evidence, parity signoff,
-  full-profile runtime stability on the intended `claim-1h` auto-worker
-  profile, and certification pass status still remain open
+  lane stops holding both copies of the same exact terminal surface; claim
+  materialization now also has a direct compact fast path when no cached
+  completion summary exists, so the claim lane no longer builds and then
+  immediately re-walks a full terminal evaluation vector just to recover the
+  same retained candidates; cloned prefix signatures now also share one
+  serialized exact payload allocation across frontier/cache copies instead of
+  duplicating that string into every clone; claim frontier work items now also
+  reuse the shared clause catalog when no prefix-local filter applies and reuse
+  that same shared serialized prefix key for deterministic queue ordering,
+  which removed the old step-4 startup RSS cliff and then improved the hot
+  release step-4 checkpoints by about `12-14%` on the latest rerun; breadth
+  evidence, parity signoff, full-profile runtime stability on the intended
+  `claim-1h` auto-worker profile, and certification pass status still remain
+  open
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -328,12 +334,16 @@ Focus on:
   metadata work: claim proof-close already drops evaluated terminal payloads
   after ranking and now also releases processed retained prefix groups once
   certification starts, and claim materialization now also consumes cached
-  exact completion summaries from the legality cache after reuse; rerun the
-  intended profile before claiming those compactions are sufficient
+  exact completion summaries from the legality cache after reuse, while the
+  newer direct compact claim materialization path avoids rebuilding and
+  re-walking the same uncached terminal evaluation vector on the hot step-4
+  path; rerun the intended profile before claiming those compactions and
+  throughput gains are sufficient
 - treating the remaining breadth evidence, stored parity signoff, and
-  certification work as downstream of the current memory-stability problem
-  rather than continuing to tune already-landed admissibility, claim-path
-  exactness tests, or bucket labels
+  certification work as downstream of the current full-profile completion
+  problem, which now includes release-build step-4 throughput in addition to
+  any later-step memory pressure, rather than continuing to tune already-landed
+  admissibility, claim-path exactness tests, or bucket labels
 - moving admissibility, mutation, scheduling, and certification toward
   family-agnostic structural evidence
 - not using stronger words like `unguided` before the certification gate lands
@@ -420,11 +430,13 @@ Reject designs that:
   while failed-run evidence preservation is now landed, claim proof-close now
   both drops evaluated terminal payloads and releases processed retained prefix
   groups more aggressively, claim materialization now also compacts duplicated
-  legality-cache terminal payloads, and claim frontier items now reuse the
-  shared clause catalog when no prefix-local filter applies; the latest smoke
-  rerun removed the old step-4 startup RSS cliff, but breadth evidence, stored
-  parity signoff, runtime stability on the intended auto-worker claim profile,
-  and certification pass status are still open.
+  legality-cache terminal payloads plus streams uncached terminal
+  materialization directly, and claim frontier items now reuse both the shared
+  clause catalog and the shared serialized prefix order key; the latest smoke
+  and release reruns removed the old step-4 startup RSS cliff and then sped up
+  the hot release step-4 path by about `12-14%`, but breadth evidence, stored
+  parity signoff, full-profile completion on the intended auto-worker claim
+  profile, and certification pass status are still open.
 - The next operational claim-lane work should focus on stored breadth
   evidence and stored parity signoff only after stabilizing full-profile claim
   execution on the disclosed machine, rather than on already-landed profile,

@@ -9,7 +9,7 @@ This file is the short operational read on `desktop_claim_shadow`. Use
 ## Current Status
 
 - `desktop_claim_shadow` is still not certification-ready.
-- The current blocker is runtime stability on the intended
+- The current blocker is full-profile completion on the intended
   `desktop_claim_shadow_1h` auto-worker profile.
 - The latest known full-profile failure is still
   `memory allocation of 1212416 bytes failed`.
@@ -45,26 +45,42 @@ This file is the short operational read on `desktop_claim_shadow`. Use
     - legality summaries: `10193`
     - partial-prefix-bound entries: `5084`
     - retained prefix-cache groups: `13`
-- The practical read is that cloning the full next-clause catalog into every
-  queued frontier item was a major part of the old startup spike. The next
-  unknown is later-step pressure on the real full profile.
+- `codex-claim-release-step5-v1` then showed that the optimized claim binary
+  no longer has an early memory emergency on step `4`:
+  - after `1777.1s` it was still only about `167.1 MiB` observed RSS
+  - by then it had enumerated `310916028` candidates while exploring `16`
+    prefix states
+  - the practical read is that the early release build is now runtime-bound in
+    exact remaining-two discovery rather than RSS-bound
+- The new claim fast path now streams compact terminal materialization when no
+  cached completion summary exists and reuses the shared serialized prefix key
+  for work-item ordering instead of allocating a duplicate copy.
+- `codex-claim-release-step4-fastpath-v2` shows the new release binary is
+  meaningfully faster on the same hot step-`4` path:
+  - `prefix_states_explored = 5` landed at `515.6s` versus `600.3s`
+  - `prefix_states_explored = 7` landed at `701.1s` versus `804.2s`
+  - observed RSS stayed below about `89.6 MiB` through that partial rerun
 
 ## Current Read
 
 - The queue-side step-`4` startup cliff is no longer the main bottleneck.
-- The next decision should come from a fresh `desktop_claim_shadow_1h` rerun,
-  not from more speculative memory edits in isolation.
+- The optimized claim lane is now visibly bottlenecked by step-`4`
+  exact-remaining-two throughput before it re-exposes any early RSS crisis.
+- The next decision should come from another optimized rerun after each narrow
+  throughput fix, not from reopening already-landed claim memory compaction in
+  isolation.
 - Breadth, parity, benchmark, and certification remain blocked on that full
   rerun finishing and leaving a stable stored bundle.
 
 ## Immediate Next Slice
 
-1. Rerun `desktop_claim_shadow_1h` with the latest frontier-catalog reuse fix.
-2. Inspect the stored RSS-gap and step-live evidence to see whether the run now
-   fails later, completes, or exposes a new dominant allocation site.
+1. Keep tightening the release-build step-`4` exact remaining-two claim path
+   until the intended profile moves materially farther within the same budget.
+2. Rerun `desktop_claim_shadow_1h` on the optimized binary and inspect the
+   stored RSS-gap and step-live evidence to see how far the full profile gets.
 3. If it completes, run compare, benchmark, and certification on that bundle.
-4. If it still fails, use the stored artifacts to choose the next narrow
-   memory fix.
+4. If it still fails later, use the stored artifacts to choose the next narrow
+   late-step memory or throughput fix.
 
 ## Verification Notes
 
@@ -72,6 +88,9 @@ This file is the short operational read on `desktop_claim_shadow`. Use
   - `cargo test -p pen-search online_work_items_cache_exact_filtered_next_clauses`
   - `cargo test -p pen-search online_work_items_reuse_full_catalog_when_no_filter_applies`
   - `cargo test -p pen-search claim_materialization_consumes_cached_terminal_completion_summary`
+- Recent targeted claim fast-path regressions also passed:
+  - `cargo test -p pen-search claim_compact_materialization_matches_summary_expansion_without_cache`
+  - `cargo test -p pen-search prefix_queue_prefers_nearer_terminal_and_tighter_cached_continuations`
 - The broader tree is still not fully green:
   - `cargo test -p pen-search --lib` still stops at
     `engine::tests::demo_late_surface_carries_through_live_config_runs`

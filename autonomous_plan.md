@@ -31,28 +31,38 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - `codex-claim-shared-signature-v1` still showed about `3.06 GiB`
   - `codex-claim-frontier-catalog-reuse-v1` removed that startup checkpoint
     from stored evidence and first reported about `66.4 MiB` at step `4`
+- The optimized release reruns now add a sharper read:
+  - `codex-claim-release-step5-v1` stayed under about `167.1 MiB` observed RSS
+    after `1777.1s` on step `4`, so the early release build is no longer
+    showing the old allocator cliff there
+  - the new direct compact claim materialization fast path plus shared
+    work-item order key improved the same hot step-`4` checkpoints by about
+    `12-14%` on `codex-claim-release-step4-fastpath-v2`
 - That means the queue-side cloned clause-catalog spike is no longer the main
-  unknown. The next unknown is what still fails later on the intended full
-  profile.
+  blocker. The next blocker is step-`4` exact remaining-two throughput on the
+  optimized claim lane, followed by whatever later-step pressure remains once
+  the run gets materially farther.
 
 ## Working Order
 
-### 1. Re-run The Intended Full Profile
+### 1. Keep Pushing The Optimized Claim Run Farther
 
-Run `desktop_claim_shadow_1h` on the disclosed desktop with the latest memory
-changes and inspect the stored artifacts, not terminal output.
+Run `desktop_claim_shadow_1h` on the disclosed desktop with the latest release
+binary and inspect the stored artifacts, not terminal output.
 
 Focus on:
 
 - latest completed step
 - observed RSS versus governor-accounted RSS gap
 - step `4` / `5` live checkpoints
+- whether step `4` now moves materially farther inside the same budget window
 - whether the run now fails later than the old step-`4` startup cliff
 
-### 2. If It Still Fails, Isolate The Next Real Allocation Site
+### 2. If It Still Stalls, Isolate The Next Real Cost Center
 
 Use the stored bundle to decide which remaining pressure story is real:
 
+- step-`4` exact remaining-two throughput
 - legality-summary residency
 - raw-surface expansion
 - later-step frontier retention
@@ -106,9 +116,11 @@ disclosed desktop shows all of the following at the same time:
 ## Immediate Next Slice
 
 1. Rerun `desktop_claim_shadow_1h` and inspect the stored RSS-gap and
-   step-live artifacts with the frontier-catalog reuse fix in place.
-2. If it still aborts, identify the new dominant allocation site from the
-   stored bundle and make the next narrow memory fix there.
+   step-live artifacts on the optimized binary with the new compact claim
+   materialization fast path in place.
+2. If it still stalls in step `4`, identify the next dominant exact
+   remaining-two cost inside the stored bundle and make the next narrow
+   throughput fix there.
 3. If it completes, move immediately to compare, benchmark, and certification
    on that same run directory.
 
