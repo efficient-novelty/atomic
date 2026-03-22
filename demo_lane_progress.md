@@ -1,85 +1,47 @@
 # Demo Lane Progress
 
-Last updated: 2026-03-18
+Last updated: 2026-03-22
 
-This file is a short operational status page for the tracked
-`demo_breadth_shadow` signoff state.
+This file tracks only the live operational state of `demo_breadth_shadow`.
+Historical rollout detail belongs in `demo_lane_plan.md`,
+`demo_lane_checklist.md`, and the bundled demo-lane reference docs.
 
-## Current Baseline
+## Current Status
 
-- `demo_breadth_shadow` is still comparison-backed. Guarded acceptance remains
-  authoritative.
-- Steps `5` to `9` already carry widened live search mass through the prefix
-  engine and are no longer the active problem.
-- The current early reference is `runs/codex-demo-early-catalog-v3`.
-- The current late reference is `runs/codex-demo-late-surface-v10`, compared
-  against `runs/codex-realistic-late-baseline-v2`.
+- Tracked `demo_breadth_shadow` signoff work is closed.
+- `demo_breadth_shadow` remains comparison-backed. Guarded / realistic
+  acceptance remains authoritative.
+- The current stored signoff references are:
+  - early: `runs/codex-demo-early-catalog-v3`
+  - late: `runs/codex-demo-late-surface-v10`
+  - guarded comparison baseline: `runs/codex-realistic-late-baseline-v2`
 
-## Remaining Signoff Gaps
+## Why The Lane Stays Closed
 
-- None. `runs/codex-demo-early-catalog-v3` and
-  `runs/codex-demo-late-surface-v10` now close every tracked
-  `demo_breadth_shadow` signoff target.
+- The early reference already closes the last early gap:
+  - step `1` generated raw = `2144`
+  - steps `1` to `4` complete in `93 ms` total
+- The late reference already closes the tracked late signoff set:
+  - accepted parity holds through step `15`
+  - late floors are closed from stored evidence
+  - `full_telescopes_evaluated = 1` on every late step
+  - `scripts/compare_runs.py` reports `Comparison Signoff: ready`
 
-## What Is Already Good Enough
+## Current Read
 
-- Step `1` now hits its generated-raw target: `2144`.
-- Step `10` now hits its exact-screened floor: `638 >= 120`.
-- Step `10` generated floor is hit: `1344 >= 500`.
-- Step `11` hits both floor families: `4191 >= 800`, `1423 >= 220`.
-- Step `12` now hits both late floors: generated `1330 >= 1200`,
-  exact-screened `12204 >= 400`.
-- Step `13` and step `15` hit both generated and exact-screened floors.
-- Step `14` now hits both late floors: generated `5135 >= 3500`,
-  exact-screened `3808 >= 1100`.
-- `full_telescopes_evaluated` stays `1` on every late step in the current
-  `10m` reference run.
-- Steps `1` to `4` finish in `93 ms` total in the current early reference
-  run (`46/1/1/45 ms`), so the shared `90s` early window is no longer a
-  blocker.
-- Step `1` now persists an explicit early audit in the current stored scout
-  narrative:
-  `clause_kappa=2 raw_clause_widths=18x120 raw_telescopes=2144 excluded_exact_clause_echoes=16`.
-- Accepted parity still holds through step `15`
-  (`matches_reference_replay x15`), and
-  `scripts/compare_runs.py` reports `Comparison Signoff: ready` for
-  `runs/codex-demo-late-surface-v10` against the realistic baseline.
-- Late exact-screened totals on steps with an exact-screen floor now count the
-  persisted exact-screen reason classes already emitted in the step summary:
-  partial-prefix failure, terminal-prefix failure, incumbent dominance, and
-  exact legality/connectivity rejection.
-- The stored `materialize`, `proof_close`, and `seal` phase details now use
-  that same late exact-screen accounting on floor-carrying steps, so the
-  phase-event stream no longer lags behind the persisted demo funnel totals.
+- The demo lane is not the active repo bottleneck. The live issue is the
+  claim-lane runtime/certification path, not `demo_breadth_shadow`.
+- Reopen this lane only for new scope or if one of the stored signoff
+  references regresses.
+- Treat any change that alters accepted hashes, weakens comparison-backed
+  accounting, materially raises `full_telescopes_evaluated`, or leans on
+  silent fallback as a regression first, not as new progress.
 
-## Current Read Of The Problem
+## Immediate Next Action
 
-- There is no remaining tracked signoff gap in `demo_breadth_shadow`.
-- The restored early exhaustive path no longer tops out at `36 x 36`. The
-  current stored early reference uses a step-`1`-specific
-  `18 x 120 => 2144` raw surface with `16` excluded exact-clause echo pairs,
-  and it does so without threatening the shared early-window story.
-- The late lane keeps every previously closed floor in the current `v10`
-  reference while preserving accepted parity and
-  `full_telescopes_evaluated = 1` on every late step.
-- Any change that alters accepted hashes, drives `full_telescopes_evaluated`
-  materially upward, or leans on silent fallback is a regression.
-
-## Immediate Next Actions
-
-1. Treat `runs/codex-demo-early-catalog-v3` and
-   `runs/codex-demo-late-surface-v10` as the current stored signoff
-   references.
-2. Keep the comparison-backed guardrails, accepted parity, and late
-   `full_telescopes_evaluated = 1` invariant intact on any further
-   `demo_breadth_shadow` changes.
-3. Reopen this lane only for new scope or if one of the stored signoff
-   references regresses.
-
-## Guardrails
-
-- Keep `demo_breadth_shadow` comparison-backed.
-- Keep guarded acceptance authoritative.
-- Count only honest generated and honest exact-screened mass.
-- Prefer stored run evidence over config intent when deciding whether a gap is
-  closed.
+1. Keep using `runs/codex-demo-early-catalog-v3` and
+   `runs/codex-demo-late-surface-v10` as the stored demo-lane references.
+2. Preserve accepted parity, honest generated / exact-screened accounting, and
+   late `full_telescopes_evaluated = 1` on any future demo-lane edits.
+3. Leave this lane closed unless the stored references regress or the scope
+   changes.
