@@ -27,6 +27,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   status incrementally, so failed long claim runs remain auditable from disk.
 - claim runs now record observed process RSS alongside governor-accounted RSS
   in stored step pressure data, so the model gap is visible from artifacts.
+- claim runs now also emit `step_live_checkpoint` telemetry and
+  `reports/steps/step-XX-live.ndjson` artifacts for steps 4-5, exposing
+  observed process RSS, raw catalog widths, frontier queue size, prefix-cache
+  size, legality-cache size, and whether late claim widening gates are active
+  while the step is still in flight.
 - claim auto-worker resolution is now memory-aware on
   `desktop_claim_shadow`, and claim proof-close now drops cached evaluated
   terminal payloads after ranking so the live prefix cache stays smaller.
@@ -56,8 +61,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   step-15 completion on the disclosed machine; the latest attempt failed with
   `memory allocation of 1212416 bytes failed`
 - the repo can now store the observed-versus-accounted RSS gap for claim steps,
-  but there is still no full-profile stored run showing whether the new worker
-  cap and cache compaction fully remove the live spike
+  and the new step-live checkpoint path can now show which in-memory structures
+  are growing before acceptance, but there is still no full-profile stored run
+  showing whether the new worker cap and cache compaction fully remove the live
+  spike
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice

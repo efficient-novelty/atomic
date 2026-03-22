@@ -106,6 +106,9 @@ Concrete tasks:
 
 - capture and review the newly stored observed-versus-accounted RSS gap from a
   full claim run on the disclosed machine
+- inspect the new `step_live_checkpoint` telemetry and
+  `reports/steps/step-XX-live.ndjson` artifacts for steps 4-5 so partial claim
+  bundles can reveal which in-memory structures are growing before acceptance
 - verify that the new memory-aware auto-worker cap is sufficient for the
   intended claim profile instead of merely changing the modeled worker count
 - reduce or cap any remaining worker scratch, resident cold frontier, and

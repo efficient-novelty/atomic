@@ -7,14 +7,36 @@ use pen_core::telescope::Telescope;
 use pen_type::admissibility::{AdmissibilityMode, StrictAdmissibility, StructuralFamily};
 use pen_type::check::{CheckResult, check_telescope};
 use pen_type::connectivity::passes_connectivity;
+use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum LateFamilySurface {
     None,
     RealisticShadow,
     ClaimGeneric,
     DemoBreadthShadow,
+}
+
+impl LateFamilySurface {
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::None => "none",
+            Self::RealisticShadow => "realistic_shadow",
+            Self::ClaimGeneric => "claim_generic",
+            Self::DemoBreadthShadow => "demo_breadth_shadow",
+        }
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct EnumerationSurfaceDiagnostics {
+    pub library_size: u32,
+    pub late_family_surface: LateFamilySurface,
+    pub claim_widening_band7_active: bool,
+    pub claim_widening_band8_active: bool,
+    pub claim_widening_band9_active: bool,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -102,6 +124,16 @@ impl EnumerationContext {
                     LateFamilySurface::None
                 }
             },
+        }
+    }
+
+    pub fn surface_diagnostics(self) -> EnumerationSurfaceDiagnostics {
+        EnumerationSurfaceDiagnostics {
+            library_size: self.library_size,
+            late_family_surface: self.late_family_surface,
+            claim_widening_band7_active: self.library_size >= 11,
+            claim_widening_band8_active: self.library_size >= 11,
+            claim_widening_band9_active: self.library_size >= 13,
         }
     }
 }

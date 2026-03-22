@@ -264,6 +264,12 @@ checks claim-policy honesty, exact-screen reason coverage, prune-class
 coverage, fallback evidence, and whether the stored run reaches the step-15
 claim signoff surface.
 
+Claim runs now also append `step_live_checkpoint` telemetry events and
+`reports/steps/step-XX-live.ndjson` artifacts for the in-flight claim-path
+memory diagnostics around steps 4 and 5, including observed process RSS,
+prefix-cache/legality-cache sizes, frontier queue size, raw catalog widths, and
+claim-surface widening flags.
+
 To audit a stored claim run directly against a guarded baseline and emit a
 certificate:
 

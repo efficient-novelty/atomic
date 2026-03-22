@@ -6,8 +6,8 @@ use crate::branch_bound::{AcceptRank, better_rank};
 use crate::config::{DemoConfig, RuntimeConfig, SearchProfile};
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{
-    ClauseCatalog, EnumerationContext, LateFamilySurface, build_clause_catalog,
-    enumerate_next_clauses, enumerate_raw_telescopes, enumerate_telescopes,
+    ClauseCatalog, EnumerationContext, EnumerationSurfaceDiagnostics, LateFamilySurface,
+    build_clause_catalog, enumerate_next_clauses, enumerate_raw_telescopes, enumerate_telescopes,
     raw_clause_catalog_widths,
 };
 use crate::expand::{
@@ -24,8 +24,9 @@ use crate::prefix_cache::{
     PrefixCache, PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature,
 };
 use crate::prefix_memo::{
-    PartialPrefixBoundDecision, PrefixLegalityCache, TerminalConnectivityDecision,
-    TerminalPrefixClauseEvaluation, TerminalPrefixCompletion, TerminalPrefixCompletionSummary,
+    PartialPrefixBoundDecision, PrefixLegalityCache, PrefixLegalityCacheEntryCounts,
+    TerminalConnectivityDecision, TerminalPrefixClauseEvaluation, TerminalPrefixCompletion,
+    TerminalPrefixCompletionSummary,
 };
 use crate::priority::{PriorityInputs, build_priority_key};
 use crate::scheduler::build_schedule;
@@ -564,6 +565,77 @@ pub struct AtomicSearchStep {
 pub trait AtomicSearchProgressObserver {
     fn on_step_started(&mut self, step_index: u32);
     fn on_step_completed(&mut self, step: &AtomicSearchStep);
+    fn on_step_live_checkpoint(&mut self, _checkpoint: &StepLiveCheckpoint) {}
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum LiveStepCheckpointPhase {
+    Discovery,
+    Materialize,
+    ProofClose,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct StepLiveCheckpoint {
+    pub step_index: u32,
+    pub phase: LiveStepCheckpointPhase,
+    pub elapsed_millis: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub clause_kappa: Option<u16>,
+    #[serde(default)]
+    pub raw_catalog_clause_widths: Vec<usize>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub raw_catalog_telescope_count: Option<usize>,
+    #[serde(default)]
+    pub generated_raw_surface: usize,
+    #[serde(default)]
+    pub enumerated_candidates: usize,
+    #[serde(default)]
+    pub well_formed_candidates: usize,
+    #[serde(default)]
+    pub admissibility_rejections: usize,
+    #[serde(default)]
+    pub prefixes_created: usize,
+    #[serde(default)]
+    pub prefix_states_explored: usize,
+    #[serde(default)]
+    pub frontier_queue_len: usize,
+    #[serde(default)]
+    pub candidate_pool_len: usize,
+    #[serde(default)]
+    pub prefix_cache_groups: usize,
+    #[serde(default)]
+    pub prefix_cache_candidates: usize,
+    #[serde(default)]
+    pub legality_cache_entries: LiveLegalityCacheEntries,
+    #[serde(default)]
+    pub exact_screen_prunes: usize,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub claim_surface: Option<EnumerationSurfaceDiagnostics>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub note: Option<String>,
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct LiveLegalityCacheEntries {
+    pub summaries: usize,
+    pub family_filters: usize,
+    pub family_surfaces: usize,
+    pub terminal_prefix_completions: usize,
+    pub partial_prefix_bounds: usize,
+}
+
+impl From<PrefixLegalityCacheEntryCounts> for LiveLegalityCacheEntries {
+    fn from(value: PrefixLegalityCacheEntryCounts) -> Self {
+        Self {
+            summaries: value.summaries,
+            family_filters: value.family_filters,
+            family_surfaces: value.family_surfaces,
+            terminal_prefix_completions: value.terminal_prefix_completions,
+            partial_prefix_bounds: value.partial_prefix_bounds,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
@@ -645,6 +717,42 @@ impl RealisticShadowDiscovery {
     ) {
         self.demo_bucket_stats_mut(bucket_key)
             .pruned_terminal_candidates += pruned_terminal_candidates;
+    }
+}
+
+fn claim_live_checkpoint_enabled(mode: AdmissibilityMode, step_index: u32) -> bool {
+    matches!(mode, AdmissibilityMode::DesktopClaimShadow) && (step_index == 4 || step_index == 5)
+}
+
+fn discovery_enumeration_context(
+    library: &Library,
+    admissibility: StrictAdmissibility,
+    demo_budget_enabled: bool,
+) -> EnumerationContext {
+    let mut enumeration_context = EnumerationContext::from_admissibility(library, admissibility);
+    if demo_budget_enabled && matches!(admissibility.mode, AdmissibilityMode::DemoBreadthShadow) {
+        enumeration_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+    }
+    enumeration_context
+}
+
+fn maybe_emit_claim_live_checkpoint(
+    progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
+    last_checkpoint_elapsed_millis: &mut u64,
+    checkpoint: StepLiveCheckpoint,
+    force: bool,
+) {
+    if !force
+        && checkpoint
+            .elapsed_millis
+            .saturating_sub(*last_checkpoint_elapsed_millis)
+            < 1_000
+    {
+        return;
+    }
+    if let Some(observer) = progress_observer.as_deref_mut() {
+        observer.on_step_live_checkpoint(&checkpoint);
+        *last_checkpoint_elapsed_millis = checkpoint.elapsed_millis;
     }
 }
 
@@ -2525,6 +2633,7 @@ fn search_bootstrap_from_prefix_internal(
             admissibility_mode,
             retention_runtime,
             demo_step_budget,
+            &mut progress_observer,
         )?;
         if let Some(controller) = demo_budget_controller.as_mut() {
             controller.record_step_outcome(&outcome);
@@ -2552,8 +2661,10 @@ fn search_next_step(
     admissibility_mode: AdmissibilityMode,
     retention_runtime: FrontierRuntimeLimits,
     demo_step_budget: Option<DemoStepBudget>,
+    progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
 ) -> Result<AtomicSearchStep> {
     let step_start = Instant::now();
+    let mut last_live_checkpoint_elapsed_millis = 0u64;
     let structural_debt = summarize_structural_debt(library, window_depth);
     let admissibility =
         strict_admissibility_for_mode(step_index, window_depth, library, admissibility_mode);
@@ -2630,6 +2741,7 @@ fn search_next_step(
             &mut demo_step_budget,
             step_start,
             &mut demo_narrative,
+            progress_observer,
         )?;
         let discovery_stop_reason = discovery.stop_reason.or_else(|| {
             demo_step_budget.and_then(|budget| {
@@ -2787,6 +2899,38 @@ fn search_next_step(
         + incremental_partial_prefix_bound_prunes
         + incremental_terminal_prefix_bar_prunes;
     let retained_prefix_groups = prefix_frontier.retained_prefix_signatures.len();
+    if claim_live_checkpoint_enabled(admissibility.mode, step_index) {
+        maybe_emit_claim_live_checkpoint(
+            progress_observer,
+            &mut last_live_checkpoint_elapsed_millis,
+            StepLiveCheckpoint {
+                step_index,
+                phase: LiveStepCheckpointPhase::Materialize,
+                elapsed_millis: elapsed_millis(step_start.elapsed()),
+                clause_kappa: None,
+                raw_catalog_clause_widths: Vec::new(),
+                raw_catalog_telescope_count: None,
+                generated_raw_surface,
+                enumerated_candidates,
+                well_formed_candidates,
+                admissibility_rejections,
+                prefixes_created,
+                prefix_states_explored,
+                frontier_queue_len: retained_prefix_groups,
+                candidate_pool_len: candidates.len(),
+                prefix_cache_groups: prefix_cache.len(),
+                prefix_cache_candidates: prefix_cache.candidate_count(),
+                legality_cache_entries: LiveLegalityCacheEntries::default(),
+                exact_screen_prunes: prefix_states_exact_pruned
+                    + incremental_connectivity_prunes
+                    + incremental_terminal_clause_filter_prunes
+                    + incremental_terminal_rank_prunes,
+                claim_surface: None,
+                note: Some("claim_materialize_entry".to_owned()),
+            },
+            true,
+        );
+    }
     if let (Some(observer), Some(budget)) = (demo_narrative.as_mut(), demo_step_budget) {
         observer.enter_materialize(
             narrative_progress_snapshot(
@@ -2836,6 +2980,38 @@ fn search_next_step(
         let mut incumbent_terminal_rank = None;
         let mut pending_group_signatures = prefix_frontier.retained_prefix_signatures.clone();
         while !pending_group_signatures.is_empty() {
+            if claim_live_checkpoint_enabled(admissibility.mode, step_index) {
+                maybe_emit_claim_live_checkpoint(
+                    progress_observer,
+                    &mut last_live_checkpoint_elapsed_millis,
+                    StepLiveCheckpoint {
+                        step_index,
+                        phase: LiveStepCheckpointPhase::ProofClose,
+                        elapsed_millis: elapsed_millis(step_start.elapsed()),
+                        clause_kappa: None,
+                        raw_catalog_clause_widths: Vec::new(),
+                        raw_catalog_telescope_count: None,
+                        generated_raw_surface,
+                        enumerated_candidates,
+                        well_formed_candidates,
+                        admissibility_rejections,
+                        prefixes_created,
+                        prefix_states_explored,
+                        frontier_queue_len: pending_group_signatures.len(),
+                        candidate_pool_len: candidates.len(),
+                        prefix_cache_groups: prefix_cache.len(),
+                        prefix_cache_candidates: prefix_cache.candidate_count(),
+                        legality_cache_entries: LiveLegalityCacheEntries::default(),
+                        exact_screen_prunes: prefix_states_exact_pruned
+                            + incremental_connectivity_prunes
+                            + incremental_terminal_clause_filter_prunes
+                            + incremental_terminal_rank_prunes,
+                        claim_surface: None,
+                        note: Some("claim_proof_close_progress".to_owned()),
+                    },
+                    false,
+                );
+            }
             let remaining_groups = pending_group_signatures.len();
             if !demo_proof_close_entered {
                 if let Some(budget) = demo_step_budget {
@@ -3656,6 +3832,7 @@ fn discover_realistic_shadow_candidates(
     demo_step_budget: &mut Option<DemoStepBudget>,
     step_start: Instant,
     demo_narrative: &mut Option<DemoNarrativeRuntime>,
+    progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
 ) -> Result<RealisticShadowDiscovery> {
     if demo_step_budget.is_some() && step_index <= 4 {
         return discover_demo_early_exhaustive_candidates(
@@ -3666,14 +3843,16 @@ fn discover_realistic_shadow_candidates(
             step_start,
             demo_step_budget,
             demo_narrative,
+            progress_observer,
         );
     }
 
     let mut discovery = RealisticShadowDiscovery::default();
-    let mut enumeration_context = EnumerationContext::from_admissibility(library, admissibility);
-    if demo_step_budget.is_some() {
-        enumeration_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
-    }
+    let enumeration_context =
+        discovery_enumeration_context(library, admissibility, demo_step_budget.is_some());
+    let mut last_checkpoint_elapsed_millis = 0u64;
+    let claim_surface = claim_live_checkpoint_enabled(admissibility.mode, step_index)
+        .then(|| enumeration_context.surface_diagnostics());
 
     for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
         if demo_discovery_budget_exhausted(
@@ -3718,6 +3897,42 @@ fn discover_realistic_shadow_candidates(
         if clause_catalog.is_empty() {
             continue;
         }
+        let raw_catalog_clause_widths =
+            raw_clause_catalog_widths(enumeration_context, clause_kappa);
+        maybe_emit_claim_live_checkpoint(
+            progress_observer,
+            &mut last_checkpoint_elapsed_millis,
+            StepLiveCheckpoint {
+                step_index,
+                phase: LiveStepCheckpointPhase::Discovery,
+                elapsed_millis: elapsed_millis(step_start.elapsed()),
+                clause_kappa: Some(clause_kappa),
+                raw_catalog_clause_widths: raw_catalog_clause_widths.clone(),
+                raw_catalog_telescope_count: Some(
+                    raw_catalog_clause_widths
+                        .iter()
+                        .copied()
+                        .fold(1usize, usize::saturating_mul),
+                ),
+                generated_raw_surface: discovery.raw_generated_surface,
+                enumerated_candidates: discovery.enumerated_candidates,
+                well_formed_candidates: discovery.well_formed_candidates,
+                admissibility_rejections: discovery.admissibility_rejections,
+                prefixes_created: discovery.prefixes_created,
+                prefix_states_explored: discovery.prefix_states_explored,
+                frontier_queue_len: 0,
+                candidate_pool_len: discovery.candidates.len(),
+                prefix_cache_groups: discovery.prefix_cache.len(),
+                prefix_cache_candidates: discovery.prefix_cache.candidate_count(),
+                legality_cache_entries: discovery.prefix_legality_cache.entry_counts().into(),
+                exact_screen_prunes: discovery.partial_prefix_bound_prunes
+                    + discovery.terminal_prefix_bar_prunes
+                    + discovery.connectivity_prunes,
+                claim_surface: claim_surface.clone(),
+                note: Some("claim_regular_clause_catalog".to_owned()),
+            },
+            true,
+        );
 
         let mut frontier = Vec::new();
         for clause in clause_catalog.clauses_at(0) {
@@ -3794,6 +4009,41 @@ fn discover_realistic_shadow_candidates(
         }
 
         while !frontier.is_empty() {
+            maybe_emit_claim_live_checkpoint(
+                progress_observer,
+                &mut last_checkpoint_elapsed_millis,
+                StepLiveCheckpoint {
+                    step_index,
+                    phase: LiveStepCheckpointPhase::Discovery,
+                    elapsed_millis: elapsed_millis(step_start.elapsed()),
+                    clause_kappa: Some(clause_kappa),
+                    raw_catalog_clause_widths: raw_catalog_clause_widths.clone(),
+                    raw_catalog_telescope_count: Some(
+                        raw_catalog_clause_widths
+                            .iter()
+                            .copied()
+                            .fold(1usize, usize::saturating_mul),
+                    ),
+                    generated_raw_surface: discovery.raw_generated_surface,
+                    enumerated_candidates: discovery.enumerated_candidates,
+                    well_formed_candidates: discovery.well_formed_candidates,
+                    admissibility_rejections: discovery.admissibility_rejections,
+                    prefixes_created: discovery.prefixes_created,
+                    prefix_states_explored: discovery.prefix_states_explored,
+                    frontier_queue_len: frontier.len(),
+                    candidate_pool_len: discovery.candidates.len(),
+                    prefix_cache_groups: discovery.prefix_cache.len(),
+                    prefix_cache_candidates: discovery.prefix_cache.candidate_count(),
+                    legality_cache_entries: discovery.prefix_legality_cache.entry_counts().into(),
+                    exact_screen_prunes: discovery.partial_prefix_bound_prunes
+                        + discovery.terminal_prefix_bar_prunes
+                        + discovery.terminal_rank_prunes
+                        + discovery.connectivity_prunes,
+                    claim_surface: claim_surface.clone(),
+                    note: Some("claim_regular_frontier_progress".to_owned()),
+                },
+                false,
+            );
             if demo_discovery_budget_exhausted(
                 demo_step_budget,
                 &mut discovery,
@@ -4098,9 +4348,13 @@ fn discover_demo_early_exhaustive_candidates(
     step_start: Instant,
     demo_step_budget: &mut Option<DemoStepBudget>,
     demo_narrative: &mut Option<DemoNarrativeRuntime>,
+    progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
 ) -> Result<RealisticShadowDiscovery> {
     let mut discovery = RealisticShadowDiscovery::default();
     let enumeration_context = EnumerationContext::from_admissibility(library, admissibility);
+    let claim_surface = claim_live_checkpoint_enabled(admissibility.mode, step_index)
+        .then(|| enumeration_context.surface_diagnostics());
+    let mut last_checkpoint_elapsed_millis = 0u64;
 
     'clause_band: for clause_kappa in
         admissibility.min_clause_kappa..=admissibility.max_clause_kappa
@@ -4139,6 +4393,33 @@ fn discover_demo_early_exhaustive_candidates(
                 true,
             );
         }
+        maybe_emit_claim_live_checkpoint(
+            progress_observer,
+            &mut last_checkpoint_elapsed_millis,
+            StepLiveCheckpoint {
+                step_index,
+                phase: LiveStepCheckpointPhase::Discovery,
+                elapsed_millis: elapsed_millis(step_start.elapsed()),
+                clause_kappa: Some(clause_kappa),
+                raw_catalog_clause_widths: raw_clause_widths.clone(),
+                raw_catalog_telescope_count: Some(raw_telescopes.len()),
+                generated_raw_surface: discovery.raw_generated_surface,
+                enumerated_candidates: discovery.enumerated_candidates,
+                well_formed_candidates: discovery.well_formed_candidates,
+                admissibility_rejections: discovery.admissibility_rejections,
+                prefixes_created: discovery.prefixes_created,
+                prefix_states_explored: discovery.prefix_states_explored,
+                frontier_queue_len: 0,
+                candidate_pool_len: discovery.candidates.len(),
+                prefix_cache_groups: discovery.prefix_cache.len(),
+                prefix_cache_candidates: discovery.prefix_cache.candidate_count(),
+                legality_cache_entries: discovery.prefix_legality_cache.entry_counts().into(),
+                exact_screen_prunes: discovery.connectivity_prunes,
+                claim_surface: claim_surface.clone(),
+                note: Some("claim_early_exhaustive_catalog".to_owned()),
+            },
+            true,
+        );
         for telescope in raw_telescopes {
             if demo_discovery_budget_exhausted(
                 demo_step_budget,
@@ -4148,6 +4429,33 @@ fn discover_demo_early_exhaustive_candidates(
             ) {
                 break 'clause_band;
             }
+            maybe_emit_claim_live_checkpoint(
+                progress_observer,
+                &mut last_checkpoint_elapsed_millis,
+                StepLiveCheckpoint {
+                    step_index,
+                    phase: LiveStepCheckpointPhase::Discovery,
+                    elapsed_millis: elapsed_millis(step_start.elapsed()),
+                    clause_kappa: Some(clause_kappa),
+                    raw_catalog_clause_widths: raw_clause_widths.clone(),
+                    raw_catalog_telescope_count: None,
+                    generated_raw_surface: discovery.raw_generated_surface,
+                    enumerated_candidates: discovery.enumerated_candidates,
+                    well_formed_candidates: discovery.well_formed_candidates,
+                    admissibility_rejections: discovery.admissibility_rejections,
+                    prefixes_created: discovery.prefixes_created,
+                    prefix_states_explored: discovery.prefix_states_explored,
+                    frontier_queue_len: 0,
+                    candidate_pool_len: discovery.candidates.len(),
+                    prefix_cache_groups: discovery.prefix_cache.len(),
+                    prefix_cache_candidates: discovery.prefix_cache.candidate_count(),
+                    legality_cache_entries: discovery.prefix_legality_cache.entry_counts().into(),
+                    exact_screen_prunes: discovery.connectivity_prunes,
+                    claim_surface: claim_surface.clone(),
+                    note: Some("claim_early_exhaustive_progress".to_owned()),
+                },
+                false,
+            );
 
             discovery.raw_generated_surface += 1;
             match check_telescope(library, &telescope) {
@@ -5764,9 +6072,10 @@ mod tests {
         create_online_prefix_work_item,
         demo_materialize_to_proof_close_handoff_reason_for_pressure, demo_proof_close_group_order,
         demo_proof_close_order_mode, demo_proof_close_order_mode_with_closure_pressure,
-        exact_partial_prefix_bound_decision, maybe_retune_demo_budget_live, pop_best_prefix,
-        search_bootstrap_from_prefix, search_bootstrap_from_prefix_for_profile_with_runtime,
-        search_bootstrap_prefix, search_bootstrap_prefix_for_config_with_runtime,
+        discovery_enumeration_context, exact_partial_prefix_bound_decision,
+        maybe_retune_demo_budget_live, pop_best_prefix, search_bootstrap_from_prefix,
+        search_bootstrap_from_prefix_for_profile_with_runtime, search_bootstrap_prefix,
+        search_bootstrap_prefix_for_config_with_runtime,
         sort_terminal_prefix_group_candidates_for_certification, supports_live_atomic_search,
     };
     use crate::bounds::PrefixBound;
@@ -7076,6 +7385,60 @@ mod tests {
         assert_eq!(
             super::admissibility_mode_for_profile(SearchProfile::DesktopClaimShadow),
             AdmissibilityMode::DesktopClaimShadow
+        );
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_four_surface_diagnostics_do_not_activate_late_widening() {
+        let library = reference_library(3);
+        let admissibility =
+            strict_admissibility_for_mode(4, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let context = discovery_enumeration_context(&library, admissibility, true);
+        let claim_surface = context.surface_diagnostics();
+        let raw_widths = crate::enumerate::raw_clause_catalog_widths(context, 4);
+
+        assert_eq!(
+            claim_surface.late_family_surface,
+            LateFamilySurface::ClaimGeneric
+        );
+        assert_eq!(claim_surface.library_size, 3);
+        assert!(!claim_surface.claim_widening_band7_active);
+        assert!(!claim_surface.claim_widening_band8_active);
+        assert!(!claim_surface.claim_widening_band9_active);
+        assert!(!raw_widths.is_empty());
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_five_keeps_claim_generic_surface_under_demo_budget() {
+        let library = reference_library(4);
+        let admissibility =
+            strict_admissibility_for_mode(5, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = discovery_enumeration_context(&library, admissibility, true);
+        let demo_context = discovery_enumeration_context(&library, admissibility, false);
+        let demo_shadow_context = discovery_enumeration_context(
+            &library,
+            strict_admissibility_for_mode(5, 2, &library, AdmissibilityMode::DemoBreadthShadow),
+            true,
+        );
+
+        let claim_surface = claim_context.surface_diagnostics();
+        let demo_surface = demo_context.surface_diagnostics();
+        let demo_shadow_surface = demo_shadow_context.surface_diagnostics();
+        assert_eq!(
+            claim_surface.late_family_surface,
+            LateFamilySurface::ClaimGeneric
+        );
+        assert_eq!(claim_surface.library_size, 4);
+        assert!(!claim_surface.claim_widening_band7_active);
+        assert!(!claim_surface.claim_widening_band8_active);
+        assert!(!claim_surface.claim_widening_band9_active);
+        assert_eq!(
+            demo_surface.late_family_surface,
+            LateFamilySurface::ClaimGeneric
+        );
+        assert_eq!(
+            demo_shadow_surface.late_family_surface,
+            LateFamilySurface::DemoBreadthShadow
         );
     }
 

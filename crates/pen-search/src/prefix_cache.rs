@@ -154,6 +154,13 @@ impl PrefixCache {
         self.groups.get(signature)
     }
 
+    pub fn candidate_count(&self) -> usize {
+        self.groups
+            .values()
+            .map(|group| group.candidates.len())
+            .sum()
+    }
+
     pub fn record_group(
         &mut self,
         step_index: u32,

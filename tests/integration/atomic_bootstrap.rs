@@ -1319,7 +1319,10 @@ fn claim_benchmark_script_aggregates_runtime_floor_and_manifest_evidence() {
 
     let summary = read_json(&json_out);
     assert_eq!(summary["aggregate"]["claim_run_count"].as_u64(), Some(2));
-    assert_eq!(summary["aggregate"]["parity_success_count"].as_u64(), Some(0));
+    assert_eq!(
+        summary["aggregate"]["parity_success_count"].as_u64(),
+        Some(0)
+    );
     assert_eq!(
         summary["aggregate"]["full_late_floor_hit_count"].as_u64(),
         Some(0)

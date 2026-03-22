@@ -15,6 +15,7 @@ use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{LibrarySnapshot, LibrarySnapshotEntry};
 use pen_search::config::{RuntimeConfig, SearchProfile, WorkerSetting};
 use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
+use pen_search::engine::StepLiveCheckpoint;
 use pen_search::engine::supports_live_atomic_search;
 use pen_search::frontier::FrontierWindow;
 use pen_search::priority::{PriorityInputs, build_priority_key};
@@ -200,6 +201,10 @@ impl StepProgressObserver for RunStepObserver<'_> {
         }
         self.writer.on_step_completed(step);
     }
+
+    fn on_step_live_checkpoint(&mut self, checkpoint: &StepLiveCheckpoint) {
+        self.writer.on_step_live_checkpoint(checkpoint);
+    }
 }
 
 #[allow(dead_code)]
@@ -343,6 +348,15 @@ impl<'a> RunArtifactWriter<'a> {
         }
     }
 
+    fn on_step_live_checkpoint(&mut self, checkpoint: &StepLiveCheckpoint) {
+        if self.error.is_some() {
+            return;
+        }
+        if let Err(error) = self.persist_live_checkpoint(checkpoint) {
+            self.error = Some(error);
+        }
+    }
+
     pub(crate) fn take_error(&mut self) -> Option<anyhow::Error> {
         self.error.take()
     }
@@ -406,6 +420,16 @@ impl<'a> RunArtifactWriter<'a> {
         )?;
         append_telemetry_event(&self.run_dir, &step_accepted_event(&manifest, &persisted))?;
         write_latest_reports(&self.run_dir, &manifest.run_id, &self.persisted_steps)?;
+        Ok(())
+    }
+
+    fn persist_live_checkpoint(&mut self, checkpoint: &StepLiveCheckpoint) -> Result<()> {
+        let manifest = self.current_manifest(RunStatus::Running, String::new())?;
+        append_telemetry_event(
+            &self.run_dir,
+            &step_live_checkpoint_event(&manifest, checkpoint),
+        )?;
+        append_live_checkpoint_artifact(&self.run_dir, checkpoint)?;
         Ok(())
     }
 
@@ -786,6 +810,87 @@ fn step_accepted_event(manifest: &RunManifestV1, step: &StepReport) -> Telemetry
             },
         }),
     }
+}
+
+fn step_live_checkpoint_event(
+    manifest: &RunManifestV1,
+    checkpoint: &StepLiveCheckpoint,
+) -> TelemetryEventV1 {
+    TelemetryEventV1 {
+        schema_version: SCHEMA_VERSION_V1,
+        run_id: manifest.run_id.clone(),
+        event: "step_live_checkpoint".to_owned(),
+        step_index: Some(checkpoint.step_index),
+        payload: json!({
+            "phase": checkpoint.phase,
+            "elapsed_millis": checkpoint.elapsed_millis,
+            "clause_kappa": checkpoint.clause_kappa,
+            "raw_catalog_clause_widths": checkpoint.raw_catalog_clause_widths,
+            "raw_catalog_telescope_count": checkpoint.raw_catalog_telescope_count,
+            "generated_raw_surface": checkpoint.generated_raw_surface,
+            "enumerated_candidates": checkpoint.enumerated_candidates,
+            "well_formed_candidates": checkpoint.well_formed_candidates,
+            "admissibility_rejections": checkpoint.admissibility_rejections,
+            "prefixes_created": checkpoint.prefixes_created,
+            "prefix_states_explored": checkpoint.prefix_states_explored,
+            "frontier_queue_len": checkpoint.frontier_queue_len,
+            "candidate_pool_len": checkpoint.candidate_pool_len,
+            "prefix_cache_groups": checkpoint.prefix_cache_groups,
+            "prefix_cache_candidates": checkpoint.prefix_cache_candidates,
+            "legality_cache_entries": {
+                "summaries": checkpoint.legality_cache_entries.summaries,
+                "family_filters": checkpoint.legality_cache_entries.family_filters,
+                "family_surfaces": checkpoint.legality_cache_entries.family_surfaces,
+                "terminal_prefix_completions": checkpoint.legality_cache_entries.terminal_prefix_completions,
+                "partial_prefix_bounds": checkpoint.legality_cache_entries.partial_prefix_bounds,
+            },
+            "exact_screen_prunes": checkpoint.exact_screen_prunes,
+            "claim_surface": checkpoint.claim_surface,
+            "observed_process_rss_bytes": current_process_rss_bytes().unwrap_or(0),
+            "note": checkpoint.note,
+        }),
+    }
+}
+
+fn append_live_checkpoint_artifact(run_dir: &Path, checkpoint: &StepLiveCheckpoint) -> Result<()> {
+    let steps_dir = run_dir.join("reports").join("steps");
+    fs::create_dir_all(&steps_dir).with_context(|| format!("create {}", steps_dir.display()))?;
+    let path = steps_dir.join(format!("step-{:02}-live.ndjson", checkpoint.step_index));
+    let mut file = OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(&path)
+        .with_context(|| format!("open {}", path.display()))?;
+    use std::io::Write;
+    writeln!(
+        file,
+        "{}",
+        serde_json::to_string(&json!({
+            "step_index": checkpoint.step_index,
+            "phase": checkpoint.phase,
+            "elapsed_millis": checkpoint.elapsed_millis,
+            "clause_kappa": checkpoint.clause_kappa,
+            "raw_catalog_clause_widths": checkpoint.raw_catalog_clause_widths,
+            "raw_catalog_telescope_count": checkpoint.raw_catalog_telescope_count,
+            "generated_raw_surface": checkpoint.generated_raw_surface,
+            "enumerated_candidates": checkpoint.enumerated_candidates,
+            "well_formed_candidates": checkpoint.well_formed_candidates,
+            "admissibility_rejections": checkpoint.admissibility_rejections,
+            "prefixes_created": checkpoint.prefixes_created,
+            "prefix_states_explored": checkpoint.prefix_states_explored,
+            "frontier_queue_len": checkpoint.frontier_queue_len,
+            "candidate_pool_len": checkpoint.candidate_pool_len,
+            "prefix_cache_groups": checkpoint.prefix_cache_groups,
+            "prefix_cache_candidates": checkpoint.prefix_cache_candidates,
+            "legality_cache_entries": checkpoint.legality_cache_entries,
+            "exact_screen_prunes": checkpoint.exact_screen_prunes,
+            "claim_surface": checkpoint.claim_surface,
+            "observed_process_rss_bytes": current_process_rss_bytes().unwrap_or(0),
+            "note": checkpoint.note,
+        }))?
+    )
+    .with_context(|| format!("append {}", path.display()))?;
+    Ok(())
 }
 
 fn run_status_event(manifest: &RunManifestV1) -> TelemetryEventV1 {
@@ -1440,10 +1545,11 @@ fn truncated_hash64(bytes: &[u8]) -> u64 {
 
 #[cfg(test)]
 mod tests {
-    use super::{RunArtifactWriter, build_run_manifest_base, planned_run_mode, run};
+    use super::{RunArtifactWriter, build_run_manifest_base, now_utc, planned_run_mode, run};
     use crate::cli::RunArgs;
     use crate::report::generate_steps_with_config_and_runtime;
     use pen_search::diversify::FrontierRuntimeLimits;
+    use pen_search::engine::StepLiveCheckpoint;
     use pen_store::frontier::frontier_checkpoint_dir;
     use pen_store::manifest::{RunManifestV1, RunStatus};
     use std::fs;
@@ -1553,6 +1659,90 @@ mod tests {
         let steps_dir = run_dir.join("reports").join("steps");
         assert!(steps_dir.join("step-03-narrative.txt").exists());
         assert!(steps_dir.join("step-03-events.ndjson").exists());
+
+        fs::remove_dir_all(root).ok();
+    }
+
+    #[test]
+    fn claim_run_persists_live_step_memory_checkpoints_before_acceptance() {
+        let root = temp_dir("claim-live-checkpoints");
+        let config_text = include_str!("../../../configs/desktop_claim_shadow_smoke.toml");
+        let config = pen_search::config::RuntimeConfig::from_toml_str(config_text)
+            .expect("claim config should parse");
+        let manifest_base = build_run_manifest_base(
+            "claim-live-checkpoints",
+            config_text,
+            &config,
+            1,
+            now_utc().expect("current time should serialize"),
+        )
+        .expect("manifest base should build");
+        let run_dir = root.join("claim-live-checkpoints");
+        let mut writer = RunArtifactWriter::start(
+            &run_dir,
+            config_text,
+            manifest_base,
+            &config,
+            1,
+            planned_run_mode(4).as_str(),
+            config.mode.search_profile.as_str(),
+            now_utc().expect("current time should serialize"),
+            Vec::new(),
+            None,
+        )
+        .expect("writer should start");
+        writer.on_step_live_checkpoint(&StepLiveCheckpoint {
+            step_index: 4,
+            phase: pen_search::engine::LiveStepCheckpointPhase::Discovery,
+            elapsed_millis: 12,
+            clause_kappa: Some(4),
+            raw_catalog_clause_widths: vec![3, 5, 7, 11],
+            raw_catalog_telescope_count: Some(1155),
+            generated_raw_surface: 377,
+            enumerated_candidates: 89,
+            well_formed_candidates: 34,
+            admissibility_rejections: 55,
+            prefixes_created: 21,
+            prefix_states_explored: 8,
+            frontier_queue_len: 13,
+            candidate_pool_len: 0,
+            prefix_cache_groups: 0,
+            prefix_cache_candidates: 0,
+            legality_cache_entries: pen_search::engine::LiveLegalityCacheEntries {
+                summaries: 21,
+                family_filters: 21,
+                family_surfaces: 21,
+                terminal_prefix_completions: 0,
+                partial_prefix_bounds: 13,
+            },
+            exact_screen_prunes: 55,
+            claim_surface: Some(pen_search::enumerate::EnumerationSurfaceDiagnostics {
+                library_size: 3,
+                late_family_surface: pen_search::enumerate::LateFamilySurface::ClaimGeneric,
+                claim_widening_band7_active: false,
+                claim_widening_band8_active: false,
+                claim_widening_band9_active: false,
+            }),
+            note: Some("claim_early_exhaustive_catalog".to_owned()),
+        });
+
+        let telemetry =
+            fs::read_to_string(run_dir.join("telemetry.ndjson")).expect("telemetry should exist");
+        assert!(telemetry.contains("\"event\":\"step_live_checkpoint\""));
+        assert!(telemetry.contains("\"observed_process_rss_bytes\""));
+        assert!(telemetry.contains("\"claim_surface\""));
+        assert!(telemetry.contains("\"claim_generic\""));
+
+        let live_step_four = fs::read_to_string(
+            run_dir
+                .join("reports")
+                .join("steps")
+                .join("step-04-live.ndjson"),
+        )
+        .expect("step 4 live checkpoints should exist");
+        assert!(live_step_four.contains("\"note\":\"claim_early_exhaustive_catalog\""));
+        assert!(live_step_four.contains("\"observed_process_rss_bytes\""));
+        assert!(!live_step_four.contains("demo_breadth_shadow"));
 
         fs::remove_dir_all(root).ok();
     }
