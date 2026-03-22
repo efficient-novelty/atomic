@@ -54,7 +54,10 @@ Treat these as current repo truths:
   step-live stream showed the retained prefix cache flattening after prefix
   state `24`, and the next landed throughput pass now reuses one scratch
   terminal telescope plus the precomputed prefix bit cost across the hot
-  exact remaining-two loops, so breadth evidence, parity signoff,
+  exact remaining-two loops, while a newer claim-only discovery pass now skips
+  full evaluation for compact terminal candidates that are already below bar
+  or incumbent-dominated and showed a modest early step-`4` smoke gain on
+  `codex-claim-scratch-smoke-v2`; breadth evidence, parity signoff,
   full-profile runtime stability on the intended `claim-1h` auto-worker
   profile, and certification pass status still remain open
 - the accepted executable late-step canon is the current Rust truth, including
@@ -349,8 +352,11 @@ Focus on:
   path; the latest full-profile rerun then showed the retained prefix cache
   flattening after prefix state `24`, and the next landed throughput pass now
   reuses one scratch terminal telescope plus the precomputed prefix bit cost
-  across that same remaining-two loop; rerun the intended profile before
-  claiming those compactions and throughput gains are sufficient
+  across that same remaining-two loop, while the newest claim-only discovery
+  pass now skips full evaluation for compact terminal candidates that are
+  already below bar or incumbent-dominated and showed a modest early smoke
+  gain; rerun the intended profile before claiming those compactions and
+  throughput gains are sufficient
 - treating the remaining breadth evidence, stored parity signoff, and
   certification work as downstream of the current full-profile completion
   problem, which now includes release-build step-4 throughput in addition to

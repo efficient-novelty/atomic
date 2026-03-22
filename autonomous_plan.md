@@ -59,6 +59,13 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     completion summaries, and compact materialization, so the hot remaining-two
     path stops cloning the full prefix telescope for every admitted last-clause
     candidate
+  - a newer claim-only throughput pass now skips discovery-time full
+    evaluation for compact terminal candidates that are already below bar or
+    no longer beat the current incumbent; a fresh single-worker smoke rerun
+    (`codex-claim-scratch-smoke-v2`) then reached `prefix_states_explored = 5`
+    at `499.9s` versus `519.4s` on `codex-claim-scratch-smoke-v1`, reached
+    `prefix_states_explored = 6` at `572.7s`, and stayed below about
+    `82.0 MiB` observed RSS through that checkpoint before manual stop
 - That means the queue-side cloned clause-catalog spike is no longer the main
   blocker, and the old allocator abort is no longer the first visible failure
   mode on the new binary. The next blocker is still step-`4` exact
@@ -139,9 +146,10 @@ disclosed desktop shows all of the following at the same time:
 ## Immediate Next Slice
 
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the newer release
-   binary that now reuses a scratch terminal telescope on the hot
-   remaining-two path, then inspect the stored step-live artifacts rather than
-   terminal output.
+   binary that now reuses a scratch terminal telescope and skips
+   discovery-time full evaluation for compact claim candidates that are
+   already below bar or incumbent-dominated on the hot remaining-two path,
+   then inspect the stored step-live artifacts rather than terminal output.
 2. If that rerun still stalls in step `4`, use the new stored evidence to
    decide whether the next narrow fix belongs in earlier incumbent pruning,
    broader exact bound screening, or some later-step pressure story that still

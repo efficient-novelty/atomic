@@ -5963,8 +5963,19 @@ fn cache_evaluated_terminal_prefix_group_candidates(
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<()> {
     sort_terminal_prefix_group_candidates_for_certification(candidates);
+    let compact_claim_mode = should_compact_terminal_prefix_group_candidates(admissibility.mode);
 
     for candidate in candidates.iter_mut() {
+        if compact_claim_mode
+            && candidate.evaluated_candidate.is_none()
+            && !claim_candidate_needs_discovery_evaluation(
+                candidate.accept_rank.as_ref(),
+                discovery.terminal_rank_incumbent.as_ref(),
+            )
+        {
+            continue;
+        }
+
         let evaluated = match candidate.evaluated_candidate.clone() {
             Some(evaluated) => evaluated,
             None => evaluate_checked_candidate(library, history, candidate.telescope.clone())?,
@@ -6001,6 +6012,17 @@ fn cache_evaluated_terminal_prefix_group_candidates(
     }
 
     Ok(())
+}
+
+fn claim_candidate_needs_discovery_evaluation(
+    candidate_rank: Option<&AcceptRank>,
+    incumbent_rank: Option<&AcceptRank>,
+) -> bool {
+    match (candidate_rank, incumbent_rank) {
+        (Some(candidate_rank), Some(incumbent_rank)) => better_rank(candidate_rank, incumbent_rank),
+        (Some(_), None) => true,
+        (None, _) => false,
+    }
 }
 
 fn should_compact_terminal_prefix_group_candidates(mode: AdmissibilityMode) -> bool {
@@ -6645,6 +6667,33 @@ mod tests {
         assert_eq!(group.prefix_telescope, prefix);
         assert_eq!(group.candidates.len(), 1);
         assert!(cache.is_empty());
+    }
+
+    #[test]
+    fn claim_candidate_discovery_evaluation_only_runs_for_incumbent_improvers() {
+        let incumbent = test_accept_rank(2, "incumbent");
+        let better = test_accept_rank(1, "better");
+        let worse = test_accept_rank(3, "worse");
+
+        assert!(super::claim_candidate_needs_discovery_evaluation(
+            Some(&better),
+            Some(&incumbent),
+        ));
+        assert!(!super::claim_candidate_needs_discovery_evaluation(
+            Some(&worse),
+            Some(&incumbent),
+        ));
+        assert!(!super::claim_candidate_needs_discovery_evaluation(
+            None,
+            Some(&incumbent),
+        ));
+        assert!(super::claim_candidate_needs_discovery_evaluation(
+            Some(&better),
+            None,
+        ));
+        assert!(!super::claim_candidate_needs_discovery_evaluation(
+            None, None
+        ));
     }
 
     #[test]

@@ -64,6 +64,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   completion-summary builds, and compact materialization, so the hot claim
   step-`4` path stops cloning the full prefix telescope for every admitted
   last-clause candidate.
+- claim compact discovery now also skips full evaluation for terminal
+  candidates that are already below bar or no longer beat the current
+  incumbent, so the hot claim step-`4` path stops spending discovery time on
+  proof-close work that is already known to be non-winning.
 - `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
   reason coverage, prune-class coverage, narrative artifacts, and whether the
   stored run reaches the step-15 claim signoff surface.
@@ -143,13 +147,25 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   rising from `140197` to `205199`, so much of the remaining step-`4` time
   was still repeated exact terminal completion on surfaces that were no longer
   adding new retained groups
+- a fresh single-worker release smoke rerun (`codex-claim-scratch-smoke-v2`)
+  then exercised that newer claim-only discovery-evaluation gate and was
+  manually stopped after enough evidence to compare early hot checkpoints:
+  - `prefix_states_explored = 5` landed at `499.9s` versus `519.4s` on
+    `codex-claim-scratch-smoke-v1`
+  - `prefix_states_explored = 6` reached `572.7s`
+  - observed RSS stayed below about `82.0 MiB` through that checkpoint
+  - the gain looks directionally real on the smoke profile, but the intended
+    `desktop_claim_shadow_1h` rerun still needs to prove whether it changes
+    the real full-profile bottleneck
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice
 
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
-   machine on the newer binary that now reuses a scratch terminal telescope on
-   the hot remaining-two path, then inspect the stored RSS-gap data again.
+   machine on the newer binary that now reuses a scratch terminal telescope
+   and skips discovery-time full evaluation for compact claim candidates that
+   are already below bar or incumbent-dominated on the hot remaining-two path,
+   then inspect the stored RSS-gap data again.
 2. If it still stalls in step `4`, use the new stored evidence to decide
    whether the next narrow fix belongs in earlier incumbent pruning, broader
    exact bound screening, or some later-step pressure story that still is not

@@ -93,6 +93,18 @@ every section below is closed and a passing claim certificate exists.
   remaining-two bound checks, completion summaries, and compact
   materialization, but no comparable full-profile rerun exists yet to show how
   much wall-clock that removes on the disclosed machine.
+- A newer 2026-03-22 claim-only throughput pass now skips discovery-time full
+  evaluation for compact terminal candidates that are already below bar or no
+  longer beat the current incumbent, and a fresh single-worker smoke rerun
+  (`codex-claim-scratch-smoke-v2`) was manually stopped after enough evidence
+  to compare the early hot checkpoints:
+  - `prefix_states_explored = 5` landed at `499.9s` versus `519.4s` on
+    `codex-claim-scratch-smoke-v1`
+  - `prefix_states_explored = 6` reached `572.7s`
+  - observed RSS stayed below about `82.0 MiB` through that checkpoint
+  - the intended full profile still lacks a comparable rerun on this newer
+    binary, so the real gate is still the next `desktop_claim_shadow_1h`
+    run rather than another speculative smoke-only rewrite
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
@@ -132,7 +144,8 @@ every section below is closed and a passing claim certificate exists.
       rerun on that binary still timed out in step `4` after exploring `43`
       prefix states, and its retained-prefix plateau after prefix state `24`
       suggests later terminal surfaces are still being processed too
-      expensively even after the new scratch-telescope reuse pass.
+      expensively even after the new scratch-telescope reuse pass and the
+      newer discovery-time non-improver evaluation skip.
 - [ ] Reduce or cap any remaining worker scratch/frontier residency enough for
       the intended `desktop_claim_shadow_1h` profile to complete on the
       disclosed machine.

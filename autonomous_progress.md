@@ -94,6 +94,21 @@ This file is the short operational read on `desktop_claim_shadow`. Use
   checks, completion summaries, and compact materialization, so the hot
   remaining-two path stops cloning the full prefix telescope for every
   admitted last-clause candidate.
+- A follow-up claim-only throughput pass now skips discovery-time full
+  evaluation for compact terminal candidates that are already below bar or can
+  no longer improve the current incumbent, so the claim lane stops spending
+  hot step-`4` discovery time on proof-close work that is already known to be
+  non-winning.
+- A fresh single-worker release smoke rerun (`codex-claim-scratch-smoke-v2`)
+  was then stopped after enough evidence to compare early step-`4`
+  checkpoints:
+  - `prefix_states_explored = 5` landed at `499.9s` versus `519.4s` on
+    `codex-claim-scratch-smoke-v1`
+  - `prefix_states_explored = 6` reached `572.7s`
+  - observed RSS stayed below about `82.0 MiB` through that checkpoint
+  - the practical read is that the new gating looks directionally helpful on
+    the smoke profile, but the intended `desktop_claim_shadow_1h` rerun still
+    needs to prove whether it changes the real full-profile bottleneck
 
 ## Current Read
 
@@ -103,7 +118,7 @@ This file is the short operational read on `desktop_claim_shadow`. Use
   is staying far away from the old early allocator cliff.
 - The stored `codex-claim-release-full-v1a` bundle now points specifically at
   repeated late step-`4` terminal completion on already-dominated surfaces,
-  and the newest code change targets that hot path directly rather than
+  and the newest code changes now target that hot path directly rather than
   reopening already-landed claim memory compaction.
 - Breadth, parity, benchmark, and certification remain blocked on that full
   rerun finishing and leaving a stable stored bundle.
@@ -111,8 +126,9 @@ This file is the short operational read on `desktop_claim_shadow`. Use
 ## Immediate Next Slice
 
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the newer release
-   binary that now reuses a scratch terminal telescope on the hot
-   remaining-two path.
+   binary that now both reuses a scratch terminal telescope and skips
+   discovery-time full evaluation for compact claim candidates that are
+   already below bar or dominated by the current incumbent.
 2. If it still stalls in step `4`, use the stored step-live evidence to decide
    whether the next narrow fix belongs in earlier incumbent pruning, broader
    exact bound screening, or some still-untracked frontier-drain cost.
@@ -130,8 +146,8 @@ This file is the short operational read on `desktop_claim_shadow`. Use
 - Recent targeted claim fast-path regressions also passed:
   - `cargo test -p pen-search claim_compact_materialization_matches_summary_expansion_without_cache`
   - `cargo test -p pen-search prefix_queue_prefers_nearer_terminal_and_tighter_cached_continuations`
-- The broader targeted claim regression slice also passed after the new
-  scratch-telescope change:
+- The broader targeted claim regression slice still passed after the newer
+  scratch-telescope reuse and discovery-time non-improver evaluation changes:
   - `cargo test -p pen-search claim_`
 - The broader tree is still not fully green:
   - `cargo test -p pen-search --lib` still stops at
