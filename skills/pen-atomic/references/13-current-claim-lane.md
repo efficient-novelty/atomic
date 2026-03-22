@@ -118,6 +118,10 @@ Do:
   changes
 - prefer structural explanations over family-name explanations in new claim
   code
+- assume the local shell is Windows PowerShell and avoid shell chaining such
+  as `&&`; use separate commands for staging, commit, and push work
+- keep claim-lane edits narrow and staged; split very large file updates into
+  smaller targeted patches when the first broad patch does not land cleanly
 - focus next on memory stability, then stored breadth/parity/certification
 
 Do not:

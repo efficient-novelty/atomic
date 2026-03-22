@@ -107,6 +107,12 @@ Start with the current architecture doc before diving into donor material:
    current bounded live atomic lane already works through step `15`.
 8. Use the operational repo docs for live open work and use the bundled
    references for stable current-state detail.
+9. Assume the local shell is Windows PowerShell unless the current task proves
+   otherwise. Prefer one command per shell call and avoid POSIX-style chaining
+   such as `&&`, especially for `git add` / `git commit` / `git push`.
+10. Prefer narrow, staged edits over oversized multi-file or multi-hunk
+    patches. If a large doc or instruction update starts failing to apply,
+    split it into smaller targeted changes instead of forcing one huge patch.
 
 ## Session Cleanup
 
