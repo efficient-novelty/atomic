@@ -29,6 +29,11 @@ every section below is closed and a passing claim certificate exists.
   payloads from the legality cache after reuse, but no full-profile stored
   claim run exists yet to show whether that closes enough of the live RSS gap
   on the disclosed machine.
+- A 2026-03-22 claim smoke rerun reached step `4` and recorded about
+  `3.30 GiB` observed RSS after `14.9s` with `2775` frontier groups,
+  `5550` legality summaries, `5084` partial-prefix-bound entries, and
+  `0` retained prefix-cache groups, so the early spike is still in
+  discovery/frontier/legality residency before proof-close on that partial run.
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
@@ -48,15 +53,18 @@ every section below is closed and a passing claim certificate exists.
 - [ ] Verify that the new memory-aware auto-worker cap is sufficient for the
       intended `desktop_claim_shadow_1h` profile on the disclosed machine.
 - [ ] Verify that claim-lane proof-close cache compaction removes the remaining
-      live allocation spike; claim materialization now also drops duplicated
-      legality-cache terminal payloads after reuse, but the intended profile
-      still needs a stored rerun to prove that the combined compaction is
-      sufficient.
+      live allocation spike; claim proof-close now drops evaluated terminal
+      payloads and releases processed prefix groups, and claim materialization
+      now also drops duplicated legality-cache terminal payloads after reuse,
+      but the intended profile still needs a stored rerun to prove that the
+      combined compaction is sufficient.
 - [ ] Use the new `step_live_checkpoint` telemetry plus
       `reports/steps/step-XX-live.ndjson` artifacts to pinpoint whether step-4
       and step-5 claim growth is coming from raw catalog expansion,
       legality-cache residency, prefix-cache residency, or proof-close queue
-      buildup.
+      buildup; the 2026-03-22 smoke rerun already points at discovery/frontier
+      plus legality-cache growth on step `4`, but step `5` and the intended
+      full profile still need stored evidence.
 - [ ] Reduce or cap any remaining worker scratch/frontier residency enough for
       the intended `desktop_claim_shadow_1h` profile to complete on the
       disclosed machine.

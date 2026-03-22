@@ -35,6 +35,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - claim auto-worker resolution is now memory-aware on
   `desktop_claim_shadow`, and claim proof-close now drops cached evaluated
   terminal payloads after ranking so the live prefix cache stays smaller.
+- claim proof-close now also releases processed retained prefix groups once
+  exact certification starts, so the live prefix cache can shrink during
+  proof-close instead of carrying already-closed groups to step end.
 - claim terminal-prefix materialization now also consumes cached exact
   completion summaries from the legality cache after reuse, so claim runs stop
   holding both the legality-cache payload and the retained prefix-group copy of
@@ -67,15 +70,20 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - the repo can now store the observed-versus-accounted RSS gap for claim steps,
   and the new step-live checkpoint path can now show which in-memory structures
   are growing before acceptance, but there is still no full-profile stored run
-  showing whether the new worker cap and combined prefix-cache plus
-  legality-cache compaction fully remove the live spike
+  showing whether the new worker cap and combined proof-close group release
+  plus prefix-cache and legality-cache compaction fully remove the live spike
+- a 2026-03-22 claim smoke rerun reached step `4` and recorded about
+  `3.30 GiB` observed RSS after `14.9s` with `2775` frontier groups,
+  `5550` legality summaries, `5084` partial-prefix-bound entries, and
+  `0` retained prefix-cache groups, so the early spike is still in
+  discovery/frontier/legality growth before proof-close on that partial run
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice
 
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
    machine and inspect the stored RSS-gap data after the latest
-   legality-cache compaction change.
+   legality-cache compaction plus processed-prefix-group release change.
 2. Once that bundle exists, run the compare, benchmark, and certification
    scripts against it.
 3. Then close the remaining breadth/floor and parity misses.

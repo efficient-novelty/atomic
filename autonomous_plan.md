@@ -40,6 +40,9 @@ These are now baseline truths, not forward work:
   governor-accounted RSS model
 - claim proof-close now drops cached evaluated terminal-prefix payloads after
   ranking so the live claim cache stays smaller
+- claim proof-close now also releases processed retained prefix groups once
+  certification starts, so the live claim cache can shrink during proof-close
+  instead of holding already-certified groups until the end of the step
 - claim terminal-prefix materialization now consumes cached exact completion
   summaries from the legality cache after reuse, so claim runs stop holding
   both copies of the same exact terminal surface
@@ -229,7 +232,14 @@ live blocker:
 
 1. rerun `desktop_claim_shadow_1h` on the disclosed desktop and inspect the
    stored observed-versus-accounted RSS gap, now including the latest
-   legality-cache compaction change
-2. compare that run against guarded from stored artifacts
-3. use that bundle to drive the remaining parity, breadth, benchmark, and
+   legality-cache compaction plus processed-prefix-group release change
+2. use the step-4/5 live-checkpoint stream to separate early discovery growth
+   from proof-close retention; the 2026-03-22 smoke rerun already showed
+   step `4` at about `3.30 GiB` observed RSS after `14.9s` with `2775`
+   frontier groups, `5550` legality summaries, `5084` partial-prefix-bound
+   entries, and `0` retained prefix-cache groups, so that early spike is still
+   discovery/frontier/cache-side rather than proof-close retention at that
+   point
+3. compare that run against guarded from stored artifacts and use that bundle
+   to drive the remaining parity, breadth, benchmark, and
    certification fixes

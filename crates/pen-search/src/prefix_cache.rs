@@ -154,6 +154,10 @@ impl PrefixCache {
         self.groups.get(signature)
     }
 
+    pub fn take(&mut self, signature: &PrefixSignature) -> Option<PrefixCandidateGroup> {
+        self.groups.remove(signature)
+    }
+
     pub fn candidate_count(&self) -> usize {
         self.groups
             .values()

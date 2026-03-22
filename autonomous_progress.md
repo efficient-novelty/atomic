@@ -37,6 +37,9 @@ intentionally short and forward-looking; use
 - claim proof-close now drops cached evaluated terminal-prefix payloads after
   recording accept ranks, trading recomputation for a smaller live prefix-cache
   footprint on the claim lane
+- claim proof-close now also releases processed retained prefix groups once
+  exact certification starts, so claim proof-close can shrink the resident
+  prefix cache instead of carrying already-closed groups until step end
 - claim terminal-prefix materialization now also consumes cached exact
   completion summaries from the legality cache after reuse, so claim runs stop
   holding both the legality-cache payload and the retained prefix-group copy of
@@ -64,6 +67,11 @@ intentionally short and forward-looking; use
   duplicated legality-cache terminal payloads after reuse, but there is still
   no stored full-profile bundle proving that those changes are sufficient on
   the disclosed machine.
+- A 2026-03-22 claim smoke rerun reached step `4` and recorded about
+  `3.30 GiB` observed RSS after `14.9s` with `2775` frontier groups,
+  `5550` legality summaries, `5084` partial-prefix-bound entries, and
+  `0` retained prefix-cache groups, so the early spike is still coming from
+  discovery/frontier/legality growth before proof-close on that partial run.
 - Manifest completeness and failed-run survivability are no longer the gating
   issue; rerunning the intended profile with the new memory controls is.
 - The benchmark harness now exists, but it still needs a real full-profile
@@ -85,9 +93,11 @@ intentionally short and forward-looking; use
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
    machine and inspect whether the stored observed-versus-accounted RSS gap
    shrinks now that claim materialization drops duplicated legality-cache
-   terminal payloads after reuse.
+   terminal payloads after reuse and claim proof-close releases processed
+   retained prefix groups.
 2. If the run still fails, use that stored gap plus the latest completed step
-   to identify the remaining untracked allocation site honestly.
+   plus the smoke step-4 checkpoint evidence to identify the remaining
+   untracked allocation site honestly.
 3. Once the run finishes, compare it against guarded from stored artifacts and
    feed the resulting bundle through `scripts/benchmark_claim_lane.py` plus
    `scripts/certify_claim_lane.py` to close the remaining parity, breadth,
@@ -107,7 +117,8 @@ intentionally short and forward-looking; use
 - `cargo test -p pen-cli claim_run_writes_policy_metadata_and_claim_narrative`
 - `cargo test -p pen-cli --bin pen-cli cmd_run::tests::failed_partial_claim_run_still_leaves_manifest_and_narrative_artifacts -- --exact`
 - `cargo test -p pen-cli --bin pen-cli cmd_run::tests::failed_partial_late_run_still_leaves_frontier_snapshot -- --exact`
-- `cargo test -p pen-search --lib claim_lane_drops_cached_terminal_payloads_after_ranking`
+- `cargo test -p pen-search engine::tests::claim_lane_drops_cached_terminal_payloads_after_ranking -- --exact`
+- `cargo test -p pen-search engine::tests::claim_lane_releases_processed_prefix_groups_during_proof_close -- --exact`
 - `cargo test -p pen-cli --bin pen-cli cmd_run::tests::`
 - `cargo test -p pen-cli --test deterministic_replay repeated_runs_with_the_same_inputs_are_deterministic -- --exact`
 - `cargo test -p pen-cli --test resume_roundtrip resume_roundtrip_keeps_the_reference_sequence_and_inspect_output -- --exact`

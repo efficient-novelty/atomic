@@ -3069,7 +3069,11 @@ fn search_next_step(
                 0
             };
             let signature = pending_group_signatures.remove(group_index);
-            let Some(group) = prefix_cache.get(&signature) else {
+            let Some(group) = load_terminal_prefix_group_for_proof_close(
+                &mut prefix_cache,
+                &signature,
+                admissibility.mode,
+            ) else {
                 if demo_proof_close_entered {
                     demo_proof_close_closed_groups += 1;
                     if let (Some(proof_close_started_elapsed), Some(budget)) =
@@ -3097,7 +3101,7 @@ fn search_next_step(
                 }
                 continue;
             };
-            let bucket_key = demo_bucket_key_for_group(admissibility.mode, &signature, group);
+            let bucket_key = demo_bucket_key_for_group(admissibility.mode, &signature, &group);
             if let (Some(group_best_rank), Some(incumbent_rank)) =
                 (&group.best_accept_rank, &incumbent_terminal_rank)
             {
@@ -3136,7 +3140,7 @@ fn search_next_step(
                 }
             }
 
-            let mut group_candidates = group.candidates.clone();
+            let mut group_candidates = group.candidates;
             if demo_step_budget.is_some() {
                 sort_terminal_prefix_group_candidates_for_certification(&mut group_candidates);
             } else {
@@ -5833,6 +5837,23 @@ fn should_compact_terminal_prefix_group_candidates(mode: AdmissibilityMode) -> b
     matches!(mode, AdmissibilityMode::DesktopClaimShadow)
 }
 
+fn should_release_processed_prefix_groups(mode: AdmissibilityMode) -> bool {
+    matches!(mode, AdmissibilityMode::DesktopClaimShadow)
+}
+
+fn load_terminal_prefix_group_for_proof_close(
+    prefix_cache: &mut PrefixCache,
+    signature: &PrefixSignature,
+    mode: AdmissibilityMode,
+) -> Option<PrefixCandidateGroup> {
+    if should_release_processed_prefix_groups(mode) {
+        // Claim proof-close can free a prefix group once certification starts.
+        prefix_cache.take(signature)
+    } else {
+        prefix_cache.get(signature).cloned()
+    }
+}
+
 fn compact_terminal_prefix_group_candidates(candidates: &mut [PrefixGroupCandidate]) {
     for candidate in candidates {
         candidate.evaluated_candidate = None;
@@ -6147,7 +6168,9 @@ mod tests {
     use crate::enumerate::{EnumerationContext, LateFamilySurface, build_clause_catalog};
     use crate::expand::{evaluate_candidate, evaluate_checked_candidate};
     use crate::narrative::{NarrativeEventKind, StepPhase, narrative_progress_snapshot};
-    use crate::prefix_cache::{PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature};
+    use crate::prefix_cache::{
+        PrefixCache, PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature,
+    };
     use crate::prefix_memo::{
         PartialPrefixBoundDecision, PrefixLegalityCache, TerminalPrefixClauseEvaluation,
         TerminalPrefixCompletion,
@@ -6171,7 +6194,7 @@ mod tests {
             strict_admissibility, strict_admissibility_for_mode,
         },
         connectivity::{ConnectivityWitness, analyze_connectivity, passes_connectivity},
-        obligations::RetentionClass,
+        obligations::{RetentionClass, RetentionFocus, RetentionPolicy},
     };
     use std::cmp::Reverse;
     use std::collections::BTreeMap;
@@ -6394,6 +6417,61 @@ mod tests {
             super::compact_terminal_prefix_group_candidates(&mut realistic_candidates);
         }
         assert!(realistic_candidates[0].evaluated_candidate.is_some());
+    }
+
+    #[test]
+    fn claim_lane_releases_processed_prefix_groups_during_proof_close() {
+        let mut cache = PrefixCache::default();
+        let prefix = Telescope::new(vec![
+            ClauseRec::new(ClauseRole::Formation, Expr::Univ),
+            ClauseRec::new(ClauseRole::Introduction, Expr::Var(1)),
+        ]);
+        let history = vec![DiscoveryRecord::new(1, 2, 2)];
+        let policy = RetentionPolicy {
+            focus: RetentionFocus::Former,
+            focus_quota: 1,
+            bridge_quota: 1,
+            support_quota: 1,
+            macro_quota: 1,
+            cold_limit: 4,
+        };
+
+        cache
+            .record_group_with_bound(
+                2,
+                prefix.clone(),
+                vec![PrefixGroupCandidate {
+                    telescope: Telescope::new(vec![
+                        ClauseRec::new(ClauseRole::Formation, Expr::Univ),
+                        ClauseRec::new(ClauseRole::Introduction, Expr::Var(1)),
+                        ClauseRec::new(ClauseRole::Introduction, Expr::PathCon(1)),
+                    ]),
+                    accept_rank: Some(test_accept_rank(1, "claim")),
+                    evaluated_candidate: None,
+                }],
+                PrefixBound::singleton(5, 3, 12),
+                &Library::default(),
+                &history,
+                policy,
+            )
+            .expect("group should record");
+
+        let signature = cache
+            .iter()
+            .next()
+            .expect("cache should contain a group")
+            .0
+            .clone();
+        let group = super::load_terminal_prefix_group_for_proof_close(
+            &mut cache,
+            &signature,
+            AdmissibilityMode::DesktopClaimShadow,
+        )
+        .expect("claim proof-close should take the resident group");
+
+        assert_eq!(group.prefix_telescope, prefix);
+        assert_eq!(group.candidates.len(), 1);
+        assert!(cache.is_empty());
     }
 
     #[test]
