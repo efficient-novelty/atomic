@@ -50,10 +50,13 @@ Treat these as current repo truths:
   `codex-claim-release-step4-fastpath-v2` and another about `18-20%` on
   `codex-claim-release-filter-slice-v1a`; the first intended-profile rerun on
   that newer binary (`codex-claim-release-full-v1a`) then stayed well below
-  the old RSS failure band but still timed out in step `4`, so breadth
-  evidence, parity signoff, full-profile runtime stability on the intended
-  `claim-1h` auto-worker profile, and certification pass status still remain
-  open
+  the old RSS failure band but still timed out in step `4`; its stored
+  step-live stream showed the retained prefix cache flattening after prefix
+  state `24`, and the next landed throughput pass now reuses one scratch
+  terminal telescope plus the precomputed prefix bit cost across the hot
+  exact remaining-two loops, so breadth evidence, parity signoff,
+  full-profile runtime stability on the intended `claim-1h` auto-worker
+  profile, and certification pass status still remain open
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -343,8 +346,11 @@ Focus on:
   exact completion summaries from the legality cache after reuse, while the
   newer direct compact claim materialization path avoids rebuilding and
   re-walking the same uncached terminal evaluation vector on the hot step-4
-  path; rerun the intended profile before claiming those compactions and
-  throughput gains are sufficient
+  path; the latest full-profile rerun then showed the retained prefix cache
+  flattening after prefix state `24`, and the next landed throughput pass now
+  reuses one scratch terminal telescope plus the precomputed prefix bit cost
+  across that same remaining-two loop; rerun the intended profile before
+  claiming those compactions and throughput gains are sufficient
 - treating the remaining breadth evidence, stored parity signoff, and
   certification work as downstream of the current full-profile completion
   problem, which now includes release-build step-4 throughput in addition to
@@ -439,10 +445,13 @@ Reject designs that:
   legality-cache terminal payloads plus streams uncached terminal
   materialization directly, and claim frontier items now reuse both the shared
   clause catalog and the shared serialized prefix order key; the latest smoke
-  and release reruns removed the old step-4 startup RSS cliff and then sped up
-  the hot release step-4 path by about `12-14%`, but breadth evidence, stored
-  parity signoff, full-profile completion on the intended auto-worker claim
-  profile, and certification pass status are still open.
+  and release reruns removed the old step-4 startup RSS cliff, then sped up
+  the hot release step-4 path by about `12-14%` and another about `18-20%`,
+  and the newest step-4 throughput pass now reuses one scratch terminal
+  telescope plus the precomputed prefix bit cost after the stored full-profile
+  rerun showed a retained-prefix plateau inside step `4`, but breadth
+  evidence, stored parity signoff, full-profile completion on the intended
+  auto-worker claim profile, and certification pass status are still open.
 - The next operational claim-lane work should focus on stored breadth
   evidence and stored parity signoff only after stabilizing full-profile claim
   execution on the disclosed machine, rather than on already-landed profile,

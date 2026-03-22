@@ -33,7 +33,7 @@ use crate::scheduler::build_schedule;
 use crate::state::{FrontierStateRecV1, PrefixState};
 use crate::worker::run_worker_batch;
 use anyhow::{Result, bail};
-use pen_core::encode::telescope_bit_cost;
+use pen_core::encode::expr_bit_length;
 use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::rational::Rational;
@@ -5084,6 +5084,10 @@ fn exact_terminal_prefix_bound_decision(
         return exact_terminal_prefix_completion_summary_decision(objective_bar, &summary);
     }
 
+    let prefix_len = prefix_telescope.clauses.len();
+    let clause_kappa_used =
+        u32::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u32");
+    let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
     for (clause, cached_admissibility_decision) in terminal_clauses {
         if !spend_exact_partial_prefix_budget(budget, 1) {
             return ExactPartialPrefixBoundDecision::Unknown;
@@ -5101,40 +5105,27 @@ fn exact_terminal_prefix_bound_decision(
             continue;
         }
 
-        let mut telescope = None;
+        let telescope =
+            load_terminal_clause_into_scratch(&mut scratch_telescope, prefix_len, clause);
         if matches!(
             connectivity_decision,
             TerminalConnectivityDecision::NeedsFallback
         ) {
-            let mut fallback_telescope = prefix_telescope.clone();
-            fallback_telescope.clauses.push(clause.clone());
-            if !passes_connectivity(library, &fallback_telescope) {
+            if !passes_connectivity(library, telescope) {
                 continue;
             }
-            telescope = Some(fallback_telescope);
         }
 
         let admissibility_decision = if let Some(decision) = cached_admissibility_decision {
             decision
         } else {
-            let fallback_telescope = telescope.get_or_insert_with(|| {
-                let mut telescope = prefix_telescope.clone();
-                telescope.clauses.push(clause.clone());
-                telescope
-            });
-            assess_strict_admissibility(step_index, library, fallback_telescope, admissibility)
+            assess_strict_admissibility(step_index, library, telescope, admissibility)
         };
         if !admissibility_decision.is_admitted() {
             continue;
         }
 
-        let telescope = telescope.unwrap_or_else(|| {
-            let mut telescope = prefix_telescope.clone();
-            telescope.clauses.push(clause.clone());
-            telescope
-        });
-        let exact_nu = structural_nu(&telescope, library, nu_history).total;
-        let clause_kappa_used = u32::try_from(telescope.kappa()).expect("kappa exceeded u32");
+        let exact_nu = structural_nu(telescope, library, nu_history).total;
         let rho = Rational::new(i64::from(exact_nu), i64::from(clause_kappa_used));
         if rho >= objective_bar {
             return ExactPartialPrefixBoundDecision::CanClearBar;
@@ -5191,6 +5182,32 @@ fn terminal_prefix_clause_candidates<'a>(
         })
 }
 
+fn terminal_prefix_scratch_telescope(prefix_telescope: &Telescope) -> Telescope {
+    let mut telescope = prefix_telescope.clone();
+    telescope.clauses.reserve(1);
+    telescope
+}
+
+fn load_terminal_clause_into_scratch<'a>(
+    scratch_telescope: &'a mut Telescope,
+    prefix_len: usize,
+    clause: &pen_core::clause::ClauseRec,
+) -> &'a Telescope {
+    if scratch_telescope.clauses.len() == prefix_len {
+        scratch_telescope.clauses.push(clause.clone());
+    } else {
+        scratch_telescope.clauses[prefix_len] = clause.clone();
+    }
+    scratch_telescope
+}
+
+fn terminal_prefix_completion_bit_cost(
+    prefix_bit_cost: u32,
+    clause: &pen_core::clause::ClauseRec,
+) -> u16 {
+    u16::try_from(prefix_bit_cost + expr_bit_length(&clause.expr)).expect("bit cost exceeded u16")
+}
+
 fn compute_terminal_prefix_completion_summary_from_candidates(
     step_index: u32,
     library: &Library,
@@ -5206,6 +5223,11 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     prefix_legality_cache: &mut PrefixLegalityCache,
 ) -> TerminalPrefixCompletionSummary {
     let mut summary = TerminalPrefixCompletionSummary::default();
+    let prefix_len = prefix_telescope.clauses.len();
+    let clause_kappa_used =
+        u16::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u16");
+    let prefix_bit_cost = prefix_telescope.bit_cost();
+    let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
 
     for (clause, cached_admissibility_decision) in terminal_clauses {
         let Some(connectivity_decision) =
@@ -5223,31 +5245,24 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
             continue;
         }
 
-        let mut telescope = None;
+        let telescope =
+            load_terminal_clause_into_scratch(&mut scratch_telescope, prefix_len, clause);
         if matches!(
             connectivity_decision,
             TerminalConnectivityDecision::NeedsFallback
         ) {
-            let mut fallback_telescope = prefix_telescope.clone();
-            fallback_telescope.clauses.push(clause.clone());
-            if !passes_connectivity(library, &fallback_telescope) {
+            if !passes_connectivity(library, telescope) {
                 summary
                     .evaluations
                     .push(TerminalPrefixClauseEvaluation::Disconnected);
                 continue;
             }
-            telescope = Some(fallback_telescope);
         }
 
         let admissibility_decision = if let Some(decision) = cached_admissibility_decision {
             decision
         } else {
-            let fallback_telescope = telescope.get_or_insert_with(|| {
-                let mut telescope = prefix_telescope.clone();
-                telescope.clauses.push(clause.clone());
-                telescope
-            });
-            assess_strict_admissibility(step_index, library, fallback_telescope, admissibility)
+            assess_strict_admissibility(step_index, library, telescope, admissibility)
         };
         if !admissibility_decision.is_admitted() {
             summary
@@ -5258,16 +5273,9 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
             continue;
         }
 
-        let telescope = telescope.unwrap_or_else(|| {
-            let mut telescope = prefix_telescope.clone();
-            telescope.clauses.push(clause.clone());
-            telescope
-        });
-        let exact_nu = u16::try_from(structural_nu(&telescope, library, nu_history).total)
+        let exact_nu = u16::try_from(structural_nu(telescope, library, nu_history).total)
             .expect("nu exceeded u16");
-        let bit_kappa_used =
-            u16::try_from(telescope_bit_cost(&telescope)).expect("bit cost exceeded u16");
-        let clause_kappa_used = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+        let bit_kappa_used = terminal_prefix_completion_bit_cost(prefix_bit_cost, clause);
         let completion_bound = PrefixBound::singleton(exact_nu, clause_kappa_used, bit_kappa_used);
         if let Some(bound) = summary.bound.as_mut() {
             bound.absorb_bound(completion_bound);
@@ -5299,7 +5307,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
             .push(TerminalPrefixClauseEvaluation::Admitted {
                 decision: admissibility_decision,
                 completion: TerminalPrefixCompletion {
-                    telescope,
+                    telescope: telescope.clone(),
                     exact_nu,
                     bit_kappa_used,
                     clause_kappa_used,
@@ -5500,6 +5508,11 @@ fn materialize_terminal_prefix_group_compact(
     let mut bound: Option<PrefixBound> = None;
     let mut best_accept_rank = None;
     let mut retained_telescopes = Vec::new();
+    let prefix_len = prefix_telescope.clauses.len();
+    let clause_kappa_used =
+        u16::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u16");
+    let prefix_bit_cost = prefix_telescope.bit_cost();
+    let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
 
     for (clause, cached_admissibility_decision) in terminal_clauses {
         let Some(connectivity_decision) = discovery.prefix_legality_cache.terminal_connectivity(
@@ -5517,28 +5530,21 @@ fn materialize_terminal_prefix_group_compact(
             continue;
         }
 
-        let mut telescope = None;
+        let telescope =
+            load_terminal_clause_into_scratch(&mut scratch_telescope, prefix_len, clause);
         if matches!(
             connectivity_decision,
             TerminalConnectivityDecision::NeedsFallback
         ) {
-            let mut fallback_telescope = prefix_telescope.clone();
-            fallback_telescope.clauses.push(clause.clone());
-            if !passes_connectivity(library, &fallback_telescope) {
+            if !passes_connectivity(library, telescope) {
                 continue;
             }
-            telescope = Some(fallback_telescope);
         }
 
         let admissibility_decision = if let Some(decision) = cached_admissibility_decision {
             decision
         } else {
-            let fallback_telescope = telescope.get_or_insert_with(|| {
-                let mut telescope = prefix_telescope.clone();
-                telescope.clauses.push(clause.clone());
-                telescope
-            });
-            assess_strict_admissibility(step_index, library, fallback_telescope, admissibility)
+            assess_strict_admissibility(step_index, library, telescope, admissibility)
         };
         discovery.enumerated_candidates += 1;
         discovery.well_formed_candidates += 1;
@@ -5551,16 +5557,9 @@ fn materialize_terminal_prefix_group_compact(
         }
 
         admitted_terminal_candidates += 1;
-        let telescope = telescope.unwrap_or_else(|| {
-            let mut telescope = prefix_telescope.clone();
-            telescope.clauses.push(clause.clone());
-            telescope
-        });
-        let exact_nu = u16::try_from(structural_nu(&telescope, library, nu_history).total)
+        let exact_nu = u16::try_from(structural_nu(telescope, library, nu_history).total)
             .expect("nu exceeded u16");
-        let bit_kappa_used =
-            u16::try_from(telescope_bit_cost(&telescope)).expect("bit cost exceeded u16");
-        let clause_kappa_used = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+        let bit_kappa_used = terminal_prefix_completion_bit_cost(prefix_bit_cost, clause);
         let completion_bound = PrefixBound::singleton(exact_nu, clause_kappa_used, bit_kappa_used);
         if let Some(current_bound) = bound.as_mut() {
             current_bound.absorb_bound(completion_bound);
@@ -5579,7 +5578,7 @@ fn materialize_terminal_prefix_group_compact(
 
         let accept_rank = acceptance_rank_for_telescope(
             objective_bar,
-            &telescope,
+            telescope,
             exact_nu,
             bit_kappa_used,
             clause_kappa_used,
@@ -5591,7 +5590,7 @@ fn materialize_terminal_prefix_group_compact(
             }
         }
         retained_telescopes.push(PrefixGroupCandidate {
-            telescope,
+            telescope: telescope.clone(),
             accept_rank,
             evaluated_candidate: None,
         });

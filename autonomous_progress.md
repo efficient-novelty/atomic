@@ -81,6 +81,19 @@ This file is the short operational read on `desktop_claim_shadow`. Use
   - the practical read is that the intended profile is now far more memory
     stable than the old failure bundle, but it is still throughput-bound in
     step `4`
+- The same `codex-claim-release-full-v1a` step-live stream also showed where
+  that remaining step-`4` time was still going:
+  - the retained prefix cache flattened after `prefix_states_explored = 24`
+  - later checkpoints stayed at `39` groups / `144845` retained candidates
+  - legality summaries still climbed from `140197` to `205199`
+  - the practical read is that much of the later step-`4` cost was still
+    repeated exact terminal completion on surfaces that were no longer adding
+    new retained groups
+- The next narrow throughput pass now reuses one scratch terminal telescope
+  and the precomputed prefix bit cost across claim exact terminal bound
+  checks, completion summaries, and compact materialization, so the hot
+  remaining-two path stops cloning the full prefix telescope for every
+  admitted last-clause candidate.
 
 ## Current Read
 
@@ -88,20 +101,21 @@ This file is the short operational read on `desktop_claim_shadow`. Use
 - The optimized claim lane is now visibly bottlenecked by step-`4`
   exact-remaining-two throughput and frontier drainage, while the newer binary
   is staying far away from the old early allocator cliff.
-- The next decision should now come from the stored
-  `codex-claim-release-full-v1a` bundle, not from reopening already-landed
-  claim memory compaction in isolation.
+- The stored `codex-claim-release-full-v1a` bundle now points specifically at
+  repeated late step-`4` terminal completion on already-dominated surfaces,
+  and the newest code change targets that hot path directly rather than
+  reopening already-landed claim memory compaction.
 - Breadth, parity, benchmark, and certification remain blocked on that full
   rerun finishing and leaving a stable stored bundle.
 
 ## Immediate Next Slice
 
-1. Inspect `codex-claim-release-full-v1a` and use its stored step-live
-   evidence to decide whether the next narrow throughput fix belongs in exact
-   bound screening, retained-prefix certification, or some still-untracked
-   frontier-drain cost.
-2. Make that next narrow step-`4` throughput fix and rerun the intended
-   `desktop_claim_shadow_1h` profile on the same release binary shape.
+1. Rerun the intended `desktop_claim_shadow_1h` profile on the newer release
+   binary that now reuses a scratch terminal telescope on the hot
+   remaining-two path.
+2. If it still stalls in step `4`, use the stored step-live evidence to decide
+   whether the next narrow fix belongs in earlier incumbent pruning, broader
+   exact bound screening, or some still-untracked frontier-drain cost.
 3. If it completes, run compare, benchmark, and certification on that bundle.
 4. If it still fails later, use the stored artifacts to choose the next narrow
    late-step memory or throughput fix.
@@ -116,6 +130,9 @@ This file is the short operational read on `desktop_claim_shadow`. Use
 - Recent targeted claim fast-path regressions also passed:
   - `cargo test -p pen-search claim_compact_materialization_matches_summary_expansion_without_cache`
   - `cargo test -p pen-search prefix_queue_prefers_nearer_terminal_and_tighter_cached_continuations`
+- The broader targeted claim regression slice also passed after the new
+  scratch-telescope change:
+  - `cargo test -p pen-search claim_`
 - The broader tree is still not fully green:
   - `cargo test -p pen-search --lib` still stops at
     `engine::tests::demo_late_surface_carries_through_live_config_runs`

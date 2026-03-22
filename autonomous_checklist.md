@@ -82,6 +82,17 @@ every section below is closed and a passing claim certificate exists.
   - observed RSS was about `278.2 MiB`
   - the blocker on the newer binary is therefore still step-`4` throughput
     and frontier drainage, not the old early RSS cliff
+- The same `codex-claim-release-full-v1a` step-live stream also showed the
+  retained prefix cache flattening after `prefix_states_explored = 24`:
+  later checkpoints stayed at `39` groups / `144845` retained candidates while
+  legality summaries kept climbing from `140197` to `205199`, so a meaningful
+  share of the remaining step-`4` cost is still exact terminal completion on
+  surfaces that are no longer adding new retained groups.
+- A follow-up 2026-03-22 throughput pass now reuses one scratch terminal
+  telescope and the precomputed prefix bit cost across claim exact
+  remaining-two bound checks, completion summaries, and compact
+  materialization, but no comparable full-profile rerun exists yet to show how
+  much wall-clock that removes on the disclosed machine.
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
@@ -119,7 +130,9 @@ every section below is closed and a passing claim certificate exists.
       after the direct compact claim materialization fast path and the new
       slice-based terminal-clause filtering path; the first intended-profile
       rerun on that binary still timed out in step `4` after exploring `43`
-      prefix states.
+      prefix states, and its retained-prefix plateau after prefix state `24`
+      suggests later terminal surfaces are still being processed too
+      expensively even after the new scratch-telescope reuse pass.
 - [ ] Reduce or cap any remaining worker scratch/frontier residency enough for
       the intended `desktop_claim_shadow_1h` profile to complete on the
       disclosed machine.

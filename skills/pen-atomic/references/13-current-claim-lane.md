@@ -59,6 +59,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   directly instead of first materializing a fresh `Vec<&ClauseRec>` at every
   terminal-prefix check, so the hot claim release path avoids that per-prefix
   allocation even when the claim lane has no active terminal filter to apply.
+- claim exact remaining-two loops now also reuse one scratch terminal
+  telescope plus the precomputed prefix bit cost across bound checks,
+  completion-summary builds, and compact materialization, so the hot claim
+  step-`4` path stops cloning the full prefix telescope for every admitted
+  last-clause candidate.
 - `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
   reason coverage, prune-class coverage, narrative artifacts, and whether the
   stored run reaches the step-15 claim signoff surface.
@@ -132,15 +137,23 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   candidates, kept the frontier queue at `2732`, and held observed RSS to
   about `278.2 MiB`, so the current blocker is still step-`4` throughput and
   frontier drainage rather than the old early RSS cliff
+- that same stored step-live stream also showed the retained prefix cache
+  flattening after `prefix_states_explored = 24`: later checkpoints stayed at
+  `39` groups / `144845` retained candidates while legality summaries kept
+  rising from `140197` to `205199`, so much of the remaining step-`4` time
+  was still repeated exact terminal completion on surfaces that were no longer
+  adding new retained groups
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice
 
-1. Inspect `codex-claim-release-full-v1a` and use its stored step-live data to
-   identify the next narrow exact remaining-two throughput fix inside step `4`.
-2. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
-   machine on the next optimized binary and inspect the stored RSS-gap data
-   again.
+1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
+   machine on the newer binary that now reuses a scratch terminal telescope on
+   the hot remaining-two path, then inspect the stored RSS-gap data again.
+2. If it still stalls in step `4`, use the new stored evidence to decide
+   whether the next narrow fix belongs in earlier incumbent pruning, broader
+   exact bound screening, or some later-step pressure story that still is not
+   visible.
 3. Once a full-profile bundle exists, run the compare, benchmark, and
    certification scripts against it, then close the remaining breadth/floor
    and parity misses.

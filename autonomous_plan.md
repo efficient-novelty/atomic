@@ -48,11 +48,23 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     before an external timeout after `3844.7s`; by then step `4` had explored
     `43` prefix states, enumerated `848047359` candidates, kept the frontier
     queue at `2732`, and held observed RSS to about `278.2 MiB`
+  - the same stored step-live stream also showed the retained prefix cache
+    flattening after prefix state `24`: later checkpoints stayed at `39`
+    groups / `144845` retained candidates while legality summaries kept rising
+    from `140197` to `205199`, so much of the remaining step-`4` cost was
+    still repeated exact terminal completion on surfaces that were no longer
+    adding new retained groups
+  - a follow-up throughput pass now reuses one scratch terminal telescope plus
+    the precomputed prefix bit cost across claim exact terminal bound checks,
+    completion summaries, and compact materialization, so the hot remaining-two
+    path stops cloning the full prefix telescope for every admitted last-clause
+    candidate
 - That means the queue-side cloned clause-catalog spike is no longer the main
   blocker, and the old allocator abort is no longer the first visible failure
   mode on the new binary. The next blocker is still step-`4` exact
-  remaining-two throughput on the optimized claim lane, followed by whatever
-  later-step pressure remains once the run gets materially farther.
+  remaining-two throughput on the optimized claim lane, but the newest binary
+  shape now needs a comparable intended-profile rerun before reopening a
+  broader rewrite.
 
 ## Working Order
 
@@ -126,11 +138,14 @@ disclosed desktop shows all of the following at the same time:
 
 ## Immediate Next Slice
 
-1. Inspect the stored `codex-claim-release-full-v1a` bundle and use the
-   step-live artifacts to identify the next dominant exact remaining-two cost
-   inside step `4`.
-2. Make the next narrow throughput fix against that evidence, then rerun the
-   intended `desktop_claim_shadow_1h` profile on the same release binary shape.
+1. Rerun the intended `desktop_claim_shadow_1h` profile on the newer release
+   binary that now reuses a scratch terminal telescope on the hot
+   remaining-two path, then inspect the stored step-live artifacts rather than
+   terminal output.
+2. If that rerun still stalls in step `4`, use the new stored evidence to
+   decide whether the next narrow fix belongs in earlier incumbent pruning,
+   broader exact bound screening, or some later-step pressure story that still
+   is not visible.
 3. If a rerun completes, move immediately to compare, benchmark, and
    certification on that same run directory.
 
