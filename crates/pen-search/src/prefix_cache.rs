@@ -12,6 +12,7 @@ use pen_eval::bar::DiscoveryRecord;
 use pen_eval::nu::structural_nu;
 use pen_type::obligations::{RetentionClass, RetentionPolicy};
 use std::collections::BTreeMap;
+use std::sync::Arc;
 
 const ACTIVE_WINDOW_DEPTH: usize = 2;
 const FAMILY_FLAG_LIBRARY_REFS: u16 = 1 << 0;
@@ -34,7 +35,7 @@ pub struct PrefixSignature {
     pub support_hash64: u64,
     pub family_flags: u16,
     pub prefix_hash64: u64,
-    exact_key: String,
+    exact_key: Arc<str>,
 }
 
 impl PrefixSignature {
@@ -44,6 +45,7 @@ impl PrefixSignature {
         let canonical_key = canonical_key_telescope(prefix_telescope);
         let candidate_hash = format!("blake3:{}", blake3_hex(exact_key.as_bytes()));
         let canonical_hash = format!("blake3:{}", blake3_hex(canonical_key.0.as_bytes()));
+        let exact_key: Arc<str> = exact_key.into();
         Self {
             clause_position: u16::try_from(prefix_telescope.clauses.len())
                 .expect("depth exceeded u16"),
@@ -333,6 +335,7 @@ mod tests {
     use pen_core::telescope::Telescope;
     use pen_eval::bar::DiscoveryRecord;
     use pen_type::obligations::{RetentionFocus, RetentionPolicy};
+    use std::sync::Arc;
 
     fn replay_reference_library(last_step: u32) -> Library {
         let mut library = Vec::new();
@@ -363,6 +366,17 @@ mod tests {
         assert!(signature.has_modal_family());
         assert!(signature.has_temporal_family());
         assert!(signature.dedupe_key().starts_with("blake3:"));
+    }
+
+    #[test]
+    fn prefix_signature_clone_shares_exact_payload_allocation() {
+        let library = replay_reference_library(14);
+        let telescope = Telescope::reference(15);
+        let signature = PrefixSignature::new(15, &library, &telescope);
+        let cloned = signature.clone();
+
+        assert!(Arc::ptr_eq(&signature.exact_key, &cloned.exact_key));
+        assert_eq!(signature, cloned);
     }
 
     #[test]

@@ -34,6 +34,12 @@ every section below is closed and a passing claim certificate exists.
   `5550` legality summaries, `5084` partial-prefix-bound entries, and
   `0` retained prefix-cache groups, so the early spike is still in
   discovery/frontier/legality residency before proof-close on that partial run.
+- A follow-up 2026-03-22 smoke rerun (`codex-claim-shared-signature-v1`)
+  shared cloned prefix-signature payloads across the frontier and
+  legality-cache maps, but the comparable early step-`4` checkpoint still hit
+  about `3.06 GiB` observed RSS after `13.2s`, only about `6.6 MiB` below the
+  prior comparable checkpoint, so the main discovery/frontier/legality spike
+  remains open beyond duplicated signature-key storage.
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
@@ -63,8 +69,12 @@ every section below is closed and a passing claim certificate exists.
       and step-5 claim growth is coming from raw catalog expansion,
       legality-cache residency, prefix-cache residency, or proof-close queue
       buildup; the 2026-03-22 smoke rerun already points at discovery/frontier
-      plus legality-cache growth on step `4`, but step `5` and the intended
-      full profile still need stored evidence.
+      plus legality-cache growth on step `4`, and the follow-up
+      `codex-claim-shared-signature-v1` rerun only trimmed about `6.6 MiB`
+      from the comparable early checkpoint after sharing cloned
+      prefix-signature payloads, so step `5` and the intended full profile
+      still need stored evidence that isolates the remaining queue/raw-surface
+      residency honestly.
 - [ ] Reduce or cap any remaining worker scratch/frontier residency enough for
       the intended `desktop_claim_shadow_1h` profile to complete on the
       disclosed machine.

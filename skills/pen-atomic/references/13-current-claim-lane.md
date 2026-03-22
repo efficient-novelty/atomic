@@ -42,6 +42,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   completion summaries from the legality cache after reuse, so claim runs stop
   holding both the legality-cache payload and the retained prefix-group copy of
   the same exact terminal surface.
+- cloned claim prefix signatures now share their serialized exact payload
+  across frontier and legality-cache copies, so the same hot-path signature no
+  longer duplicates that full prefix string into every cloned cache key.
 - `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
   reason coverage, prune-class coverage, narrative artifacts, and whether the
   stored run reaches the step-15 claim signoff surface.
@@ -77,6 +80,16 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   `5550` legality summaries, `5084` partial-prefix-bound entries, and
   `0` retained prefix-cache groups, so the early spike is still in
   discovery/frontier/legality growth before proof-close on that partial run
+- a follow-up 2026-03-22 smoke rerun (`codex-claim-shared-signature-v1`)
+  kept the comparable early step-`4` checkpoint at about `3.06 GiB` observed
+  RSS after `13.2s`, only about `6.6 MiB` below the prior comparable
+  checkpoint, so sharing cloned signature payloads is real but not the main
+  memory fix
+- that same rerun later showed a step-`4` live checkpoint around `639 MiB`
+  observed RSS after about `510.5s` with `13` retained prefix-cache groups and
+  `10193` legality summaries while step `4` was still running, so mid-step
+  memory collapse now shows up in stored evidence even though the early spike
+  and full-profile stability gate remain open
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice

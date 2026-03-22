@@ -44,6 +44,10 @@ intentionally short and forward-looking; use
   completion summaries from the legality cache after reuse, so claim runs stop
   holding both the legality-cache payload and the retained prefix-group copy of
   the same exact terminal surface
+- claim prefix signatures now share their serialized exact payload across
+  cloned frontier and legality-cache keys, so the claim lane no longer copies
+  the same full prefix string into every clone of the hot-path signature
+  object
 - `scripts/benchmark_claim_lane.py` now provides a repeatable stored-evidence
   benchmark harness for claim runs, recording median/p90/max runtime, parity
   success counts, breadth-floor hit counts, and manifest snapshots across a
@@ -72,6 +76,19 @@ intentionally short and forward-looking; use
   `5550` legality summaries, `5084` partial-prefix-bound entries, and
   `0` retained prefix-cache groups, so the early spike is still coming from
   discovery/frontier/legality growth before proof-close on that partial run.
+- A follow-up 2026-03-22 smoke rerun (`codex-claim-shared-signature-v1`)
+  kept the comparable early step-`4` checkpoint at about `3.06 GiB` observed
+  RSS after `13.2s` with the same `2775` frontier groups, `5550` legality
+  summaries, and `5084` partial-prefix-bound entries, only about `6.6 MiB`
+  below the prior comparable checkpoint, so sharing cloned signature payloads
+  removes duplicated exact-key storage but does not close the main
+  discovery/frontier/legality spike by itself.
+- That same rerun later reached about `33.46M` generated raw surfaces and
+  `16.94M` well-formed candidates on step `4` while a later live checkpoint
+  showed about `639 MiB` observed RSS with `13` retained prefix-cache groups
+  and `10193` legality summaries, so some mid-step memory collapse is now
+  visible even though the early spike and step-`4` completion time remain
+  open.
 - Manifest completeness and failed-run survivability are no longer the gating
   issue; rerunning the intended profile with the new memory controls is.
 - The benchmark harness now exists, but it still needs a real full-profile
@@ -93,11 +110,15 @@ intentionally short and forward-looking; use
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
    machine and inspect whether the stored observed-versus-accounted RSS gap
    shrinks now that claim materialization drops duplicated legality-cache
-   terminal payloads after reuse and claim proof-close releases processed
-   retained prefix groups.
+   terminal payloads after reuse, claim proof-close releases processed
+   retained prefix groups, and cloned prefix signatures share one exact payload
+   allocation instead of copying the full serialized prefix into every cache
+   key clone.
 2. If the run still fails, use that stored gap plus the latest completed step
    plus the smoke step-4 checkpoint evidence to identify the remaining
-   untracked allocation site honestly.
+   allocation site honestly; the next focus is whatever still dominates beyond
+   duplicated signature payloads, most likely frontier queue residency,
+   legality summaries, or raw-surface expansion.
 3. Once the run finishes, compare it against guarded from stored artifacts and
    feed the resulting bundle through `scripts/benchmark_claim_lane.py` plus
    `scripts/certify_claim_lane.py` to close the remaining parity, breadth,

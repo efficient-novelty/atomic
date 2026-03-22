@@ -46,6 +46,9 @@ These are now baseline truths, not forward work:
 - claim terminal-prefix materialization now consumes cached exact completion
   summaries from the legality cache after reuse, so claim runs stop holding
   both copies of the same exact terminal surface
+- claim prefix signatures now share their serialized exact payload across
+  cloned frontier and legality-cache keys, so cloned hot-path signatures no
+  longer copy the same full prefix string into every map entry
 
 ## Active Blocker
 
@@ -57,6 +60,11 @@ the disclosed machine:
   step-15 completion with `memory allocation of 1212416 bytes failed`
 - failed runs now leave an auditable bundle, but there is still no stored
   full-profile step-15 claim run on the disclosed machine
+- the 2026-03-22 `codex-claim-shared-signature-v1` smoke rerun showed that
+  sharing cloned prefix-signature payloads only trimmed the comparable early
+  step-4 observed RSS checkpoint by about `6.6 MiB`, so the dominant remaining
+  spike is still in discovery/frontier/legality growth beyond duplicated
+  signature-key storage
 - without a stored bundle, parity, breadth, fallback honesty, and runtime
   certification cannot advance from code/tests to real evidence
 
@@ -232,14 +240,17 @@ live blocker:
 
 1. rerun `desktop_claim_shadow_1h` on the disclosed desktop and inspect the
    stored observed-versus-accounted RSS gap, now including the latest
-   legality-cache compaction plus processed-prefix-group release change
+   legality-cache compaction plus processed-prefix-group release change, plus
+   shared cloned prefix-signature payloads
 2. use the step-4/5 live-checkpoint stream to separate early discovery growth
    from proof-close retention; the 2026-03-22 smoke rerun already showed
    step `4` at about `3.30 GiB` observed RSS after `14.9s` with `2775`
    frontier groups, `5550` legality summaries, `5084` partial-prefix-bound
-   entries, and `0` retained prefix-cache groups, so that early spike is still
-   discovery/frontier/cache-side rather than proof-close retention at that
-   point
+   entries, and `0` retained prefix-cache groups, and the follow-up
+   `codex-claim-shared-signature-v1` rerun only trimmed the comparable early
+   checkpoint by about `6.6 MiB`, so that early spike is still
+   discovery/frontier/cache-side rather than proof-close retention or cloned
+   signature payload duplication at that point
 3. compare that run against guarded from stored artifacts and use that bundle
    to drive the remaining parity, breadth, benchmark, and
    certification fixes

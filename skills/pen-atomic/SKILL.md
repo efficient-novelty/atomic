@@ -34,10 +34,12 @@ Treat these as current repo truths:
   also releases processed retained prefix groups once exact certification
   starts, and claim terminal-prefix materialization now also consumes cached
   exact completion summaries from the legality cache after reuse so the claim
-  lane stops holding both copies of the same exact terminal surface; breadth
-  evidence, parity signoff, full-profile runtime stability on the intended
-  `claim-1h` auto-worker profile, and certification pass status still remain
-  open
+  lane stops holding both copies of the same exact terminal surface; cloned
+  prefix signatures now also share one serialized exact payload allocation
+  across frontier/cache copies instead of duplicating that string into every
+  clone; breadth evidence, parity signoff, full-profile runtime stability on
+  the intended `claim-1h` auto-worker profile, and certification pass status
+  still remain open
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
