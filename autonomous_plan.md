@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-03-21
+Last updated: 2026-03-22
 Status: active
 
 ## Objective
@@ -40,6 +40,9 @@ These are now baseline truths, not forward work:
   governor-accounted RSS model
 - claim proof-close now drops cached evaluated terminal-prefix payloads after
   ranking so the live claim cache stays smaller
+- claim terminal-prefix materialization now consumes cached exact completion
+  summaries from the legality cache after reuse, so claim runs stop holding
+  both copies of the same exact terminal surface
 
 ## Active Blocker
 
@@ -225,7 +228,8 @@ Use the new memory controls and stored RSS-gap evidence to attack the remaining
 live blocker:
 
 1. rerun `desktop_claim_shadow_1h` on the disclosed desktop and inspect the
-   stored observed-versus-accounted RSS gap
+   stored observed-versus-accounted RSS gap, now including the latest
+   legality-cache compaction change
 2. compare that run against guarded from stored artifacts
 3. use that bundle to drive the remaining parity, breadth, benchmark, and
    certification fixes

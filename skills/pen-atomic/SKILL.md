@@ -30,9 +30,12 @@ Treat these as current repo truths:
   is now landed via incremental run/step/frontier/narrative persistence; claim
   runs now also record observed-versus-accounted RSS gap data, claim
   auto-worker resolution is now memory-aware, and claim proof-close now drops
-  cached evaluated terminal payloads to reduce live RSS; breadth evidence,
-  parity signoff, full-profile runtime stability on the intended `claim-1h`
-  auto-worker profile, and certification pass status still remain open
+  cached evaluated terminal payloads to reduce live RSS; claim terminal-prefix
+  materialization now also consumes cached exact completion summaries from the
+  legality cache after reuse so the claim lane stops holding both copies of the
+  same exact terminal surface; breadth evidence, parity signoff, full-profile
+  runtime stability on the intended `claim-1h` auto-worker profile, and
+  certification pass status still remain open
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -309,6 +312,11 @@ Focus on:
   before step-15 completion; use `scripts/compare_runs.py` and
   `scripts/certify_claim_lane.py` as the current evidence surfaces before
   changing more search code
+- treat the latest claim-cache work as operational memory work, not just
+  metadata work: claim proof-close already drops evaluated terminal payloads
+  after ranking, and claim materialization now also consumes cached exact
+  completion summaries from the legality cache after reuse; rerun the intended
+  profile before claiming those compactions are sufficient
 - treating the remaining breadth evidence, stored parity signoff, and
   certification work as downstream of the current memory-stability problem
   rather than continuing to tune already-landed admissibility, claim-path
@@ -396,9 +404,11 @@ Reject designs that:
   7-9` mutators and claim-path exactness rechecks are now also landed; the
   repo also now has a claim-lane compare audit, a failing-until-earned
   certification script, and richer manifest provenance/build fingerprints,
-  while failed-run evidence preservation is now landed and breadth evidence,
-  stored parity signoff, runtime stability on the intended auto-worker claim
-  profile, and certification pass status are still open.
+  while failed-run evidence preservation is now landed, claim proof-close and
+  materialization now both compact duplicated terminal payloads more
+  aggressively, and breadth evidence, stored parity signoff, runtime stability
+  on the intended auto-worker claim profile, and certification pass status are
+  still open.
 - The next operational claim-lane work should focus on stored breadth
   evidence and stored parity signoff only after stabilizing full-profile claim
   execution on the disclosed machine, rather than on already-landed profile,

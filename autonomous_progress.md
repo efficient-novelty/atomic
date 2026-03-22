@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Progress
 
-Last updated: 2026-03-21
+Last updated: 2026-03-22
 
 This file tracks the live operational state of `desktop_claim_shadow`. It is
 intentionally short and forward-looking; use
@@ -37,6 +37,10 @@ intentionally short and forward-looking; use
 - claim proof-close now drops cached evaluated terminal-prefix payloads after
   recording accept ranks, trading recomputation for a smaller live prefix-cache
   footprint on the claim lane
+- claim terminal-prefix materialization now also consumes cached exact
+  completion summaries from the legality cache after reuse, so claim runs stop
+  holding both the legality-cache payload and the retained prefix-group copy of
+  the same exact terminal surface
 - `scripts/benchmark_claim_lane.py` now provides a repeatable stored-evidence
   benchmark harness for claim runs, recording median/p90/max runtime, parity
   success counts, breadth-floor hit counts, and manifest snapshots across a
@@ -56,8 +60,10 @@ intentionally short and forward-looking; use
   allocator failure can be debugged from stored evidence instead of terminal
   output alone.
 - Claim runs now also expose observed-versus-accounted RSS gap data and keep a
-  smaller proof-close cache, but there is still no stored full-profile bundle
-  proving that those changes are sufficient on the disclosed machine.
+  smaller proof-close cache, and claim materialization now also releases
+  duplicated legality-cache terminal payloads after reuse, but there is still
+  no stored full-profile bundle proving that those changes are sufficient on
+  the disclosed machine.
 - Manifest completeness and failed-run survivability are no longer the gating
   issue; rerunning the intended profile with the new memory controls is.
 - The benchmark harness now exists, but it still needs a real full-profile
@@ -69,11 +75,17 @@ intentionally short and forward-looking; use
 - Breadth, parity, fallback honesty, and certification remain open, but they
   cannot move from tests into stored evidence until the full-profile claim run
   completes reliably enough to leave a bundle.
+- Targeted claim-cache regressions now pass, but a broader
+  `cargo test -p pen-search --lib` run in this tree still stops at
+  `engine::tests::demo_late_surface_carries_through_live_config_runs`, so the
+  repo is not fully green yet.
 
 ## Immediate Next Slice
 
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
-   machine and inspect the stored observed-versus-accounted RSS gap.
+   machine and inspect whether the stored observed-versus-accounted RSS gap
+   shrinks now that claim materialization drops duplicated legality-cache
+   terminal payloads after reuse.
 2. If the run still fails, use that stored gap plus the latest completed step
    to identify the remaining untracked allocation site honestly.
 3. Once the run finishes, compare it against guarded from stored artifacts and

@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-03-21
+Last updated: 2026-03-22
 
 This checklist is the live signoff gate for the stronger sentence that the PEN
 axioms discover the current 15-step sequence on the disclosed desktop
@@ -25,6 +25,10 @@ every section below is closed and a passing claim certificate exists.
 - Claim step artifacts now persist observed process RSS and the gap versus the
   governor-accounted RSS model, but no full-profile stored claim run exists yet
   to interpret those numbers on the disclosed machine.
+- Claim terminal-prefix materialization now drops duplicated exact completion
+  payloads from the legality cache after reuse, but no full-profile stored
+  claim run exists yet to show whether that closes enough of the live RSS gap
+  on the disclosed machine.
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
@@ -44,7 +48,10 @@ every section below is closed and a passing claim certificate exists.
 - [ ] Verify that the new memory-aware auto-worker cap is sufficient for the
       intended `desktop_claim_shadow_1h` profile on the disclosed machine.
 - [ ] Verify that claim-lane proof-close cache compaction removes the remaining
-      live allocation spike; if not, identify the next resident hot spot.
+      live allocation spike; claim materialization now also drops duplicated
+      legality-cache terminal payloads after reuse, but the intended profile
+      still needs a stored rerun to prove that the combined compaction is
+      sufficient.
 - [ ] Use the new `step_live_checkpoint` telemetry plus
       `reports/steps/step-XX-live.ndjson` artifacts to pinpoint whether step-4
       and step-5 claim growth is coming from raw catalog expansion,

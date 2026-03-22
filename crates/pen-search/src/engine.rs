@@ -910,6 +910,7 @@ struct OnlinePrefixWorkItem {
 struct MaterializedTerminalPrefixGroup {
     candidates: Vec<PrefixGroupCandidate>,
     bound: Option<PrefixBound>,
+    best_accept_rank: Option<AcceptRank>,
     generated_terminal_candidates: usize,
     admissible_terminal_candidates: usize,
 }
@@ -4107,11 +4108,21 @@ fn discover_realistic_shadow_candidates(
                     );
                     continue;
                 }
-                if let Some(pruned_candidates) = cached_terminal_prefix_rank_prune_count(
-                    &work_item.signature,
-                    discovery.terminal_rank_incumbent.as_ref(),
-                    &mut discovery.prefix_legality_cache,
-                ) {
+                let cached_rank_prune_count =
+                    if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
+                        terminal_prefix_rank_prune_count(
+                            group.best_accept_rank.as_ref(),
+                            group.admissible_terminal_candidates,
+                            discovery.terminal_rank_incumbent.as_ref(),
+                        )
+                    } else {
+                        cached_terminal_prefix_rank_prune_count(
+                            &work_item.signature,
+                            discovery.terminal_rank_incumbent.as_ref(),
+                            &mut discovery.prefix_legality_cache,
+                        )
+                    };
+                if let Some(pruned_candidates) = cached_rank_prune_count {
                     discovery.terminal_rank_prunes += pruned_candidates;
                     discovery.record_demo_bucket_pruned(bucket_key.clone(), pruned_candidates);
                     continue;
@@ -4673,11 +4684,21 @@ fn process_prepared_exact_two_step_terminal_surface(
             );
             continue;
         }
-        if let Some(pruned_candidates) = cached_terminal_prefix_rank_prune_count(
-            &terminal_prefix.signature,
-            discovery.terminal_rank_incumbent.as_ref(),
-            &mut discovery.prefix_legality_cache,
-        ) {
+        let cached_rank_prune_count =
+            if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
+                terminal_prefix_rank_prune_count(
+                    group.best_accept_rank.as_ref(),
+                    group.admissible_terminal_candidates,
+                    discovery.terminal_rank_incumbent.as_ref(),
+                )
+            } else {
+                cached_terminal_prefix_rank_prune_count(
+                    &terminal_prefix.signature,
+                    discovery.terminal_rank_incumbent.as_ref(),
+                    &mut discovery.prefix_legality_cache,
+                )
+            };
+        if let Some(pruned_candidates) = cached_rank_prune_count {
             discovery.terminal_rank_prunes += pruned_candidates;
             discovery.record_demo_bucket_pruned(bucket_key.clone(), pruned_candidates);
             continue;
@@ -5297,7 +5318,34 @@ fn materialize_terminal_prefix_group(
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<MaterializedTerminalPrefixGroup> {
-    let summary = if let Some(summary) = discovery
+    let summary = if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
+        if let Some(summary) = discovery
+            .prefix_legality_cache
+            .take_terminal_prefix_completion_summary(prefix_signature)
+        {
+            summary
+        } else {
+            let terminal_clauses = terminal_prefix_clause_candidates(
+                step_index,
+                library,
+                admissibility,
+                prefix_signature,
+                filtered_last_clause_options,
+                &mut discovery.prefix_legality_cache,
+            );
+            compute_terminal_prefix_completion_summary_from_candidates(
+                step_index,
+                library,
+                admissibility,
+                objective_bar,
+                nu_history,
+                prefix_signature,
+                prefix_telescope,
+                terminal_clauses,
+                &mut discovery.prefix_legality_cache,
+            )
+        }
+    } else if let Some(summary) = discovery
         .prefix_legality_cache
         .terminal_prefix_completion_summary(prefix_signature)
     {
@@ -5328,6 +5376,7 @@ fn materialize_terminal_prefix_group(
         summary
     };
     let admitted_terminal_candidates = summary.admitted_candidate_count;
+    let best_accept_rank = summary.best_accept_rank.clone();
     let TerminalPrefixCompletionSummary {
         evaluations, bound, ..
     } = summary;
@@ -5378,6 +5427,7 @@ fn materialize_terminal_prefix_group(
     Ok(MaterializedTerminalPrefixGroup {
         candidates: retained_telescopes,
         bound,
+        best_accept_rank,
         generated_terminal_candidates,
         admissible_terminal_candidates: admitted_terminal_candidates,
     })
@@ -5410,6 +5460,16 @@ fn best_prefix_group_accept_rank(candidates: &[PrefixGroupCandidate]) -> Option<
     best
 }
 
+fn terminal_prefix_rank_prune_count(
+    best_accept_rank: Option<&AcceptRank>,
+    admitted_candidate_count: usize,
+    incumbent_rank: Option<&AcceptRank>,
+) -> Option<usize> {
+    let incumbent_rank = incumbent_rank?;
+    let best_accept_rank = best_accept_rank?;
+    (!better_rank(best_accept_rank, incumbent_rank)).then_some(admitted_candidate_count)
+}
+
 fn cached_terminal_prefix_rank_prune_count(
     prefix_signature: &PrefixSignature,
     incumbent_rank: Option<&AcceptRank>,
@@ -5417,8 +5477,11 @@ fn cached_terminal_prefix_rank_prune_count(
 ) -> Option<usize> {
     let incumbent_rank = incumbent_rank?;
     let rank_summary = prefix_legality_cache.terminal_prefix_rank_summary(prefix_signature)?;
-    let best_rank = rank_summary.best_accept_rank.as_ref()?;
-    (!better_rank(best_rank, incumbent_rank)).then_some(rank_summary.admitted_candidate_count)
+    terminal_prefix_rank_prune_count(
+        rank_summary.best_accept_rank.as_ref(),
+        rank_summary.admitted_candidate_count,
+        Some(incumbent_rank),
+    )
 }
 
 fn demo_proof_close_order_mode(
@@ -7669,6 +7732,97 @@ mod tests {
         assert_eq!(
             cache.stats().terminal_prefix_completion_hits,
             terminal_summary_hits_before
+        );
+    }
+
+    #[test]
+    fn claim_materialization_consumes_cached_terminal_completion_summary() {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = compute_bar(2, 15, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut discovery = super::RealisticShadowDiscovery::default();
+
+        assert!(discovery.prefix_legality_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        let work_item = create_online_prefix_work_item(
+            8,
+            prefix,
+            signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut discovery.prefix_legality_cache,
+        );
+        assert_eq!(work_item.remaining_clause_slots, 1);
+
+        let mut budget = 64;
+        let decision = exact_partial_prefix_bound_decision(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog,
+            &work_item,
+            &mut discovery.prefix_legality_cache,
+            &mut budget,
+        );
+        assert_ne!(decision, super::ExactPartialPrefixBoundDecision::Unknown);
+        assert_eq!(
+            discovery
+                .prefix_legality_cache
+                .entry_counts()
+                .terminal_prefix_completions,
+            1
+        );
+
+        let group = super::materialize_terminal_prefix_group(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &work_item.signature,
+            &work_item.prefix_telescope,
+            &work_item.next_clauses,
+            &mut discovery,
+        )
+        .expect("materialization should succeed");
+
+        assert!(group.generated_terminal_candidates >= group.admissible_terminal_candidates);
+        assert_eq!(
+            discovery
+                .prefix_legality_cache
+                .entry_counts()
+                .terminal_prefix_completions,
+            0,
+            "claim materialization should release the cached terminal completion payload"
         );
     }
 

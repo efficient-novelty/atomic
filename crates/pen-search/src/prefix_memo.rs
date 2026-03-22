@@ -343,6 +343,15 @@ impl PrefixLegalityCache {
         Some(summary)
     }
 
+    pub fn take_terminal_prefix_completion_summary(
+        &mut self,
+        signature: &PrefixSignature,
+    ) -> Option<TerminalPrefixCompletionSummary> {
+        let summary = self.terminal_prefix_completions.remove(signature)?;
+        self.stats.terminal_prefix_completion_hits += 1;
+        Some(summary)
+    }
+
     pub fn terminal_prefix_rank_summary(
         &mut self,
         signature: &PrefixSignature,
@@ -1041,6 +1050,41 @@ mod tests {
                 .bound
                 .expect("bound should exist")
                 .can_clear_bar(Rational::new(5, 1))
+        );
+    }
+
+    #[test]
+    fn take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse() {
+        let library = library_until(10);
+        let prefix = Telescope::new(Telescope::reference(11).clauses[..4].to_vec());
+        let signature = PrefixSignature::new(11, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        cache.store_terminal_prefix_completion_summary(
+            signature.clone(),
+            TerminalPrefixCompletionSummary {
+                evaluations: vec![TerminalPrefixClauseEvaluation::Disconnected],
+                bound: Some(PrefixBound::singleton(26, 5, 79)),
+                best_accept_rank: None,
+                admitted_candidate_count: 0,
+            },
+        );
+
+        let summary = cache
+            .take_terminal_prefix_completion_summary(&signature)
+            .expect("summary should be removable");
+
+        assert_eq!(summary.bound, Some(PrefixBound::singleton(26, 5, 79)));
+        assert_eq!(cache.stats().terminal_prefix_completion_hits, 1);
+        assert!(
+            cache
+                .terminal_prefix_completion_summary(&signature)
+                .is_none(),
+            "consumed summaries should not stay resident"
+        );
+        assert!(
+            cache.terminal_prefix_rank_summary(&signature).is_none(),
+            "rank summaries should disappear with the consumed payload"
         );
     }
 

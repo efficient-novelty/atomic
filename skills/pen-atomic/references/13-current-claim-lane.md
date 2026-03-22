@@ -35,6 +35,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - claim auto-worker resolution is now memory-aware on
   `desktop_claim_shadow`, and claim proof-close now drops cached evaluated
   terminal payloads after ranking so the live prefix cache stays smaller.
+- claim terminal-prefix materialization now also consumes cached exact
+  completion summaries from the legality cache after reuse, so claim runs stop
+  holding both the legality-cache payload and the retained prefix-group copy of
+  the same exact terminal surface.
 - `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
   reason coverage, prune-class coverage, narrative artifacts, and whether the
   stored run reaches the step-15 claim signoff surface.
@@ -63,14 +67,15 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - the repo can now store the observed-versus-accounted RSS gap for claim steps,
   and the new step-live checkpoint path can now show which in-memory structures
   are growing before acceptance, but there is still no full-profile stored run
-  showing whether the new worker cap and cache compaction fully remove the live
-  spike
+  showing whether the new worker cap and combined prefix-cache plus
+  legality-cache compaction fully remove the live spike
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice
 
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
-   machine and inspect the stored RSS-gap data.
+   machine and inspect the stored RSS-gap data after the latest
+   legality-cache compaction change.
 2. Once that bundle exists, run the compare, benchmark, and certification
    scripts against it.
 3. Then close the remaining breadth/floor and parity misses.
