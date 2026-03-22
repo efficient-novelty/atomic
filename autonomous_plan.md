@@ -38,6 +38,11 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - the new direct compact claim materialization fast path plus shared
     work-item order key improved the same hot step-`4` checkpoints by about
     `12-14%` on `codex-claim-release-step4-fastpath-v2`
+  - a follow-up slice-based terminal-clause filter path that reuses the shared
+    clause slice when claim filters are inactive improved those same hot
+    checkpoints by about `18-20%` versus `codex-claim-release-step4-fastpath-v2`
+    on `codex-claim-release-filter-slice-v1a` while keeping observed RSS below
+    about `84.0 MiB` through prefix state `7`
 - That means the queue-side cloned clause-catalog spike is no longer the main
   blocker. The next blocker is step-`4` exact remaining-two throughput on the
   optimized claim lane, followed by whatever later-step pressure remains once
@@ -116,8 +121,9 @@ disclosed desktop shows all of the following at the same time:
 ## Immediate Next Slice
 
 1. Rerun `desktop_claim_shadow_1h` and inspect the stored RSS-gap and
-   step-live artifacts on the optimized binary with the new compact claim
-   materialization fast path in place.
+   step-live artifacts on the optimized binary with the compact claim
+   materialization fast path, shared work-item order key, and slice-based
+   terminal-clause filtering path in place.
 2. If it still stalls in step `4`, identify the next dominant exact
    remaining-two cost inside the stored bundle and make the next narrow
    throughput fix there.

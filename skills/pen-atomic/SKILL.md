@@ -42,12 +42,15 @@ Treat these as current repo truths:
   serialized exact payload allocation across frontier/cache copies instead of
   duplicating that string into every clone; claim frontier work items now also
   reuse the shared clause catalog when no prefix-local filter applies and reuse
-  that same shared serialized prefix key for deterministic queue ordering,
+  that same shared serialized prefix key for deterministic queue ordering; the
+  terminal-clause filter path now also reuses the shared clause slice instead
+  of allocating a fresh reference vector at every hot terminal-prefix check,
   which removed the old step-4 startup RSS cliff and then improved the hot
-  release step-4 checkpoints by about `12-14%` on the latest rerun; breadth
-  evidence, parity signoff, full-profile runtime stability on the intended
-  `claim-1h` auto-worker profile, and certification pass status still remain
-  open
+  release step-4 checkpoints by about `12-14%` on
+  `codex-claim-release-step4-fastpath-v2` and another about `18-20%` on
+  `codex-claim-release-filter-slice-v1a`; breadth evidence, parity signoff,
+  full-profile runtime stability on the intended `claim-1h` auto-worker
+  profile, and certification pass status still remain open
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 

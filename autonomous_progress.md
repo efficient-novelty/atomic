@@ -60,24 +60,37 @@ This file is the short operational read on `desktop_claim_shadow`. Use
   - `prefix_states_explored = 5` landed at `515.6s` versus `600.3s`
   - `prefix_states_explored = 7` landed at `701.1s` versus `804.2s`
   - observed RSS stayed below about `89.6 MiB` through that partial rerun
+- The new slice-based terminal clause filtering path avoids building a fresh
+  `Vec<&ClauseRec>` for every claim terminal-prefix check when claim filters
+  are inactive, which is the hot release-build case on step `4`.
+- `codex-claim-release-filter-slice-v1a` shows that narrower allocation cut
+  moved the same hot step-`4` checkpoints materially farther again:
+  - `prefix_states_explored = 5` landed at `421.9s` versus `515.6s`
+  - `prefix_states_explored = 7` landed at `564.1s` versus `701.1s`
+  - that is another about `18-20%` faster than `codex-claim-release-step4-fastpath-v2`
+  - observed RSS stayed below about `84.0 MiB` through prefix state `7`
 
 ## Current Read
 
 - The queue-side step-`4` startup cliff is no longer the main bottleneck.
 - The optimized claim lane is now visibly bottlenecked by step-`4`
-  exact-remaining-two throughput before it re-exposes any early RSS crisis.
-- The next decision should come from another optimized rerun after each narrow
-  throughput fix, not from reopening already-landed claim memory compaction in
+  exact-remaining-two throughput, but the latest release probe is now moving
+  materially farther inside the same budget window before any new RSS story
+  appears.
+- The next decision should now come from a full intended-profile rerun on this
+  newer binary, not from reopening already-landed claim memory compaction in
   isolation.
 - Breadth, parity, benchmark, and certification remain blocked on that full
   rerun finishing and leaving a stable stored bundle.
 
 ## Immediate Next Slice
 
-1. Keep tightening the release-build step-`4` exact remaining-two claim path
-   until the intended profile moves materially farther within the same budget.
-2. Rerun `desktop_claim_shadow_1h` on the optimized binary and inspect the
-   stored RSS-gap and step-live evidence to see how far the full profile gets.
+1. Rerun `desktop_claim_shadow_1h` on the optimized binary and inspect the
+   stored RSS-gap and step-live evidence to see how far the full profile gets
+   with the slice-based terminal-clause filtering path in place.
+2. If it still stalls in step `4`, use that fuller stored bundle to decide
+   whether the next narrow throughput fix belongs in exact bound screening,
+   retained-prefix certification, or some still-untracked allocation path.
 3. If it completes, run compare, benchmark, and certification on that bundle.
 4. If it still fails later, use the stored artifacts to choose the next narrow
    late-step memory or throughput fix.
@@ -88,6 +101,7 @@ This file is the short operational read on `desktop_claim_shadow`. Use
   - `cargo test -p pen-search online_work_items_cache_exact_filtered_next_clauses`
   - `cargo test -p pen-search online_work_items_reuse_full_catalog_when_no_filter_applies`
   - `cargo test -p pen-search claim_materialization_consumes_cached_terminal_completion_summary`
+  - `cargo test -p pen-search terminal_clause_filter_skips_inadmissible_last_clauses_before_connectivity`
 - Recent targeted claim fast-path regressions also passed:
   - `cargo test -p pen-search claim_compact_materialization_matches_summary_expansion_without_cache`
   - `cargo test -p pen-search prefix_queue_prefers_nearer_terminal_and_tighter_cached_continuations`

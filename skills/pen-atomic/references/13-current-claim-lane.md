@@ -55,6 +55,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - claim online frontier work items now also reuse that same shared serialized
   prefix key for deterministic ordering, instead of allocating a second copy of
   the serialized prefix string for the queue order key.
+- claim terminal-clause filtering now also accepts the shared clause slice
+  directly instead of first materializing a fresh `Vec<&ClauseRec>` at every
+  terminal-prefix check, so the hot claim release path avoids that per-prefix
+  allocation even when the claim lane has no active terminal filter to apply.
 - `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
   reason coverage, prune-class coverage, narrative artifacts, and whether the
   stored run reaches the step-15 claim signoff surface.
@@ -114,6 +118,13 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   `codex-claim-release-step5-v1` while keeping observed RSS below about
   `89.6 MiB`, but the intended full profile still lacks a stored completion
   bundle
+- a newer optimized step-`4` rerun with the slice-based terminal clause path
+  (`codex-claim-release-filter-slice-v1a`) reached those same hot checkpoints
+  another about `18-20%` sooner than
+  `codex-claim-release-step4-fastpath-v2` while keeping observed RSS below
+  about `84.0 MiB` through prefix state `7`, so the latest evidence says the
+  lane should now be rerun full-profile before reopening another speculative
+  step-`4` rewrite
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice
@@ -121,7 +132,8 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
    machine on the optimized binary and inspect the stored RSS-gap data now that
    claim frontier items reuse the shared clause catalog, the queue order key,
-   and the direct compact claim materialization fast path.
+   the direct compact claim materialization fast path, and the slice-based
+   terminal clause filter path.
 2. Once that bundle exists, run the compare, benchmark, and certification
    scripts against it.
 3. Then close the remaining breadth/floor and parity misses.

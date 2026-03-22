@@ -60,6 +60,16 @@ every section below is closed and a passing claim certificate exists.
   `codex-claim-release-step5-v1` while keeping observed RSS below about
   `89.6 MiB`, but the intended full profile still has no stored completion
   bundle yet.
+- A newer 2026-03-22 optimized rerun with slice-based terminal clause
+  filtering (`codex-claim-release-filter-slice-v1a`) reached those same hot
+  step-`4` checkpoints another `18-20%` sooner than
+  `codex-claim-release-step4-fastpath-v2`:
+  - `prefix_states_explored = 5` landed at `421.9s` versus `515.6s`
+  - `prefix_states_explored = 7` landed at `564.1s` versus `701.1s`
+  - observed RSS stayed below about `84.0 MiB` through prefix state `7`
+  - the intended full profile still lacks a stored completion bundle, so the
+    next gate is a full rerun on this newer binary rather than another
+    speculative step-`4` rewrite
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
@@ -94,7 +104,8 @@ every section below is closed and a passing claim certificate exists.
       later-step residency honestly.
 - [ ] Continue reducing step-`4` exact remaining-two runtime on the optimized
       claim binary; the latest release probe is throughput-bound there even
-      after the direct compact claim materialization fast path.
+      after the direct compact claim materialization fast path and the new
+      slice-based terminal-clause filtering path.
 - [ ] Reduce or cap any remaining worker scratch/frontier residency enough for
       the intended `desktop_claim_shadow_1h` profile to complete on the
       disclosed machine.

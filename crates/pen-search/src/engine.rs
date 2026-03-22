@@ -5175,7 +5175,7 @@ fn terminal_prefix_clause_candidates<'a>(
             prefix_signature,
             library,
             admissibility,
-            &filtered_last_clause_options.iter().collect::<Vec<_>>(),
+            filtered_last_clause_options,
         )
         .map(|clauses| {
             clauses

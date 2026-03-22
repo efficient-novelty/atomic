@@ -542,7 +542,7 @@ impl PrefixLegalityCache {
         parent_signature: &PrefixSignature,
         library: &Library,
         admissibility: StrictAdmissibility,
-        clauses: &[&'a ClauseRec],
+        clauses: &'a [ClauseRec],
     ) -> Option<Vec<FilteredTerminalClause<'a>>> {
         if step_index <= 3
             || !self.summaries.contains_key(parent_signature)
@@ -567,7 +567,7 @@ impl PrefixLegalityCache {
                 continue;
             }
             filtered.push(FilteredTerminalClause {
-                clause: *clause,
+                clause,
                 admissibility_decision: decision,
             });
         }
@@ -887,7 +887,7 @@ mod tests {
                 &signature,
                 &library,
                 admissibility,
-                &clause_catalog.clauses_at(4).iter().collect::<Vec<_>>(),
+                clause_catalog.clauses_at(4),
             )
             .expect("terminal summary should enable terminal filtering");
 
@@ -971,7 +971,7 @@ mod tests {
                 &signature,
                 &library,
                 admissibility,
-                &[&demo_only_clause],
+                &demo_only_slice,
             ),
             None
         );
