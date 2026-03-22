@@ -3,178 +3,75 @@
 Last updated: 2026-03-22
 Status: active
 
+This file tracks only the remaining operational work for
+`desktop_claim_shadow`. Completed rollout work belongs in the skill
+references and claim-lane baseline docs.
+
 ## Objective
 
-Stabilize `desktop_claim_shadow` so the intended full-profile claim run can
-finish on the disclosed desktop configuration, preserve usable artifacts when
-it does not finish, and then earn a passing certification bundle from stored
-evidence.
+Produce one stored, full-profile `desktop_claim_shadow` bundle from the
+disclosed desktop that:
 
-Until that certification gate passes, keep the paper wording in the safer
-`bounded live recovery` form.
+- finishes through step `15` without allocator abort
+- preserves auditable failure artifacts if a rerun still stops early
+- preserves accepted-hash parity and honest breadth accounting
+- passes compare, benchmark, and certification on stored evidence
 
-## Current Baseline
+Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
-These are now baseline truths, not forward work:
+## Current Operating Picture
 
-- `desktop_claim_shadow` is a distinct claim-lane profile/config family
-- claim admissibility is structurally guided:
-  - `guidance_style = claim_debt_guided`
-- claim late expansion is claim-specific:
-  - `late_expansion_policy = claim_generic`
-- claim bucket scheduling is claim-specific:
-  - `bucket_policy = structural_generic`
-- claim-path `kappa 4-9` mutator packs and exactness rechecks are landed in
-  code/tests
-- `scripts/compare_runs.py` and `scripts/certify_claim_lane.py` exist and now
-  audit claim-policy honesty, fallback evidence, reason/prune completeness,
-  breadth gates, runtime threshold, and manifest completeness
-- `run.json` now records CPU, worker-count, build-profile, target, git,
-  `Cargo.lock`, and binary fingerprints needed for certification
-- `pen-cli run` and `pen-cli resume` now persist `run.json`, step summaries,
-  step checkpoints, frontier snapshots, claim narratives/events, and failure
-  status incrementally so failed long runs remain auditable
-- claim auto-worker resolution is now memory-aware for
-  `desktop_claim_shadow`
-- claim step artifacts now persist observed process RSS alongside the
-  governor-accounted RSS model
-- claim proof-close now drops cached evaluated terminal-prefix payloads after
-  ranking so the live claim cache stays smaller
-- claim proof-close now also releases processed retained prefix groups once
-  certification starts, so the live claim cache can shrink during proof-close
-  instead of holding already-certified groups until the end of the step
-- claim terminal-prefix materialization now consumes cached exact completion
-  summaries from the legality cache after reuse, so claim runs stop holding
-  both copies of the same exact terminal surface
-- claim prefix signatures now share their serialized exact payload across
-  cloned frontier and legality-cache keys, so cloned hot-path signatures no
-  longer copy the same full prefix string into every map entry
-- claim online frontier work items now reuse the shared clause catalog when no
-  prefix-local filter applies, so claim discovery no longer clones the full
-  next-clause list into every queued frontier item
+- The active blocker is still runtime stability on
+  `configs/desktop_claim_shadow_1h.toml`.
+- The latest known full-profile failure is still
+  `memory allocation of 1212416 bytes failed`.
+- Failure survivability is no longer the issue: claim runs now keep
+  `run.json`, step artifacts, frontier snapshots, and narratives on disk.
+- The old step-`4` startup RSS cliff has moved materially:
+  - `codex-claim-shared-signature-v1` still showed about `3.06 GiB`
+  - `codex-claim-frontier-catalog-reuse-v1` removed that startup checkpoint
+    from stored evidence and first reported about `66.4 MiB` at step `4`
+- That means the queue-side cloned clause-catalog spike is no longer the main
+  unknown. The next unknown is what still fails later on the intended full
+  profile.
 
-## Active Blocker
+## Working Order
 
-The main blocker is no longer claim-specific policy plumbing. The main blocker
-is that the intended full-profile claim run is not yet operationally stable on
-the disclosed machine:
+### 1. Re-run The Intended Full Profile
 
-- `desktop_claim_shadow_1h` with `workers = "auto"` still aborts before
-  step-15 completion with `memory allocation of 1212416 bytes failed`
-- failed runs now leave an auditable bundle, but there is still no stored
-  full-profile step-15 claim run on the disclosed machine
-- the 2026-03-22 `codex-claim-frontier-catalog-reuse-v1` smoke rerun removed
-  the prior step-`4` startup cliff from stored evidence: the old `13.2s` /
-  `3.06 GiB` checkpoint no longer appears, and the first stored frontier
-  progress checkpoint now lands at about `66.4 MiB` observed RSS after
-  `422.9s` with `2774` frontier groups, `10193` legality summaries,
-  `5084` partial-prefix-bound entries, and `13` retained prefix-cache groups
-- despite that queue-side improvement, there is still no stored full-profile
-  step-15 claim run on the disclosed machine, so later-step pressure and the
-  real certification gate remain open
-- without a stored bundle, parity, breadth, fallback honesty, and runtime
-  certification cannot advance from code/tests to real evidence
+Run `desktop_claim_shadow_1h` on the disclosed desktop with the latest memory
+changes and inspect the stored artifacts, not terminal output.
 
-## Success Condition
+Focus on:
 
-This plan is complete only when a stored `desktop_claim_shadow` evidence bundle
-shows all of the following at the same time:
+- latest completed step
+- observed RSS versus governor-accounted RSS gap
+- step `4` / `5` live checkpoints
+- whether the run now fails later than the old step-`4` startup cliff
 
-- the intended full-profile claim run completes without allocator abort on the
-  disclosed machine
-- failed or interrupted claim runs still leave enough manifest and step data to
-  audit what happened
-- accepted hashes match the guarded reference through step `15`
-- the claim path has no silent guarded, replay, realistic-shadow, or demo-only
-  fallback
-- early breadth gates pass from stored evidence
-- late floors pass from stored evidence without inflating
-  `full_telescopes_evaluated` beyond a moderate range
-- exact-screen reasons and prune classes are complete in stored artifacts
-- benchmark and manifest data are complete enough for an appendix bundle
-- the certification script emits a passing claim certificate
+### 2. If It Still Fails, Isolate The Next Real Allocation Site
 
-Only after those conditions pass should the paper wording move beyond
-`bounded live recovery`.
+Use the stored bundle to decide which remaining pressure story is real:
 
-## Execution Priorities
+- legality-summary residency
+- raw-surface expansion
+- later-step frontier retention
+- worker scratch / spill / checkpoint pressure
+- some still-untracked allocation path
 
-1. Preserve failure evidence instead of losing the whole run.
-2. Make claim-run memory use predictable and bounded.
-3. Re-earn stored parity and breadth on the stabilized claim lane.
-4. Freeze benchmarking and certification on the intended profile.
+Do not reopen already-landed policy split work unless the stored evidence
+forces it.
 
-## 1. Stabilize Memory And Worker Use
+### 3. Once It Finishes, Re-Earn Stored Claim Evidence
 
-Why this is second:
+From the stabilized full-profile bundle:
 
-- the intended claim profile now fails before certification can even begin
-- the next job is to make full-profile claim execution finish, not to keep
-  widening the claim lane blindly
+- preserve accepted-hash parity through step `15`
+- re-earn early and late breadth gates from stored counts
+- keep `full_telescopes_evaluated` inside a moderate certified range
+- make fallback, exact-screen reasons, and prune classes impossible to miss
 
-Files:
-
-- `crates/pen-cli/src/cmd_run.rs`
-- `crates/pen-search/src/engine.rs`
-- `crates/pen-search/src/diversify.rs`
-- `crates/pen-search/src/frontier.rs`
-- `crates/pen-search/src/scheduler.rs`
-- `crates/pen-store/src/memory.rs`
-- `crates/pen-store/src/spill.rs`
-- `configs/desktop_claim_shadow_*.toml`
-
-Concrete tasks:
-
-- capture and review the newly stored observed-versus-accounted RSS gap from a
-  full claim run on the disclosed machine
-- inspect the new `step_live_checkpoint` telemetry and
-  `reports/steps/step-XX-live.ndjson` artifacts for steps 4-5 so partial claim
-  bundles can reveal which in-memory structures are growing before acceptance
-- verify that the new memory-aware auto-worker cap is sufficient for the
-  intended claim profile instead of merely changing the modeled worker count
-- reduce or cap any remaining worker scratch, resident cold frontier, and
-  checkpoint/spill buffers when the claim lane would otherwise exceed the
-  disclosed desktop envelope
-- spill and compact earlier again if the new claim-only controls still wait too
-  long before allocator pressure turns into failure
-- confirm whether any remaining allocator abort comes from tracked frontier
-  structures or from another untracked claim-path allocation spike, then close
-  the specific gap
-
-Done when:
-
-- the intended `desktop_claim_shadow_1h` profile finishes without allocator
-  abort on the disclosed machine
-- the claim lane no longer depends on luck in auto-worker selection
-- governor/pressure evidence explains the observed memory behavior honestly
-
-## 2. Re-Earn Stored Claim Evidence
-
-Why this is third:
-
-- once the run completes reliably, the real open question returns to stored
-  parity, breadth, and fallback honesty
-- those claims must be earned from artifacts on the stabilized lane itself
-
-Files:
-
-- `crates/pen-search/src/enumerate.rs`
-- `crates/pen-search/src/engine.rs`
-- `crates/pen-cli/src/report.rs`
-- `crates/pen-cli/src/narrative.rs`
-- `configs/desktop_claim_shadow_*.toml`
-
-Concrete tasks:
-
-- preserve accepted-hash parity through step `15` on the stabilized claim lane
-- restore honest early raw-surface accounting on steps `1-4`
-- close the late generated floors on steps `10-15`
-- keep `full_telescopes_evaluated` within a certified moderate threshold
-- persist any remaining claim-specific exact-screen or prune distinctions needed
-  to explain the live lane honestly
-- ensure claim artifacts make fallback impossible to miss
-
-Breadth gates to earn:
+Breadth gates that still must be earned from stored claim evidence:
 
 - step `1` generated raw `= 2144`
 - step `10` generated `>= 500`
@@ -184,78 +81,41 @@ Breadth gates to earn:
 - step `14` generated `>= 3500`
 - step `15` generated `>= 5000`
 
-Done when:
+### 4. Freeze Benchmarking And Certification On That Bundle
 
-- a stored claim bundle shows parity through step `15`
-- stored breadth gates pass honestly on the claim lane itself
-- reporting is explicit enough for compare/certification to judge the lane
-  without caveats
+Use the same stabilized bundle to produce:
 
-## 3. Benchmarking And Certification
+- one guarded-vs-claim compare report
+- one benchmark bundle
+- one passing `claim_certificate.json`
+- one certified runtime threshold tied to stored evidence
 
-Why this is last:
+## Success Condition
 
-- the strong sentence should be tied to one stable stored bundle, not to code
-  changes in isolation
+This plan is done only when one stored `desktop_claim_shadow` bundle from the
+disclosed desktop shows all of the following at the same time:
 
-Files:
+- full-profile completion through step `15`
+- no silent guarded, replay, realistic-shadow, or demo-only fallback
+- accepted parity through step `15`
+- breadth gates passed honestly from stored evidence
+- complete reason / prune accounting
+- benchmark and manifest data sufficient for certification
+- passing compare and certification outputs
 
-- `scripts/compare_runs.py`
-- `scripts/certify_claim_lane.py`
-- `scripts/benchmark_claim_lane.py`
-- repo-level autonomy docs
+## Immediate Next Slice
 
-Concrete tasks:
+1. Rerun `desktop_claim_shadow_1h` and inspect the stored RSS-gap and
+   step-live artifacts with the frontier-catalog reuse fix in place.
+2. If it still aborts, identify the new dominant allocation site from the
+   stored bundle and make the next narrow memory fix there.
+3. If it completes, move immediately to compare, benchmark, and certification
+   on that same run directory.
 
-- produce one canonical guarded-vs-claim compare report for the stabilized run
-- run the landed `scripts/benchmark_claim_lane.py` harness on the intended
-  claim config bundle
-- record benchmark timing and success/floor-hit counts
-- freeze the certified runtime threshold from real claim evidence
-- emit and store a passing `claim_certificate.json`
-- link the canonical bundle from repo-level autonomy docs
+## Guardrails
 
-Required outputs:
-
-- canonical claim run directory
-- compare report against guarded
-- benchmark bundle
-- passing `claim_certificate.json`
-
-Done when:
-
-- one command sequence produces an appendix-ready claim bundle on the disclosed
-  machine
-- the certification script passes on that intended configuration
-- the paper wording is tied to the stored certificate instead of free prose
-
-## Working Rules For Remaining Claim-Lane PRs
-
-- preserve existing behavior for `strict_canon_guarded`,
-  `realistic_frontier_shadow`, and `demo_breadth_shadow`
-- treat completed policy-split work as baseline, not as an excuse to keep
-  editing already-landed surfaces
-- prefer narrow fixes that explain or bound memory behavior over broad
-  speculative rewrites
-- do not lower floors or hide misses to make the claim look cleaner
-- do not use stronger language such as `unguided` before certification passes
-
-## Immediate Next Step
-
-Use the new memory controls and stored RSS-gap evidence to attack the remaining
-live blocker:
-
-1. rerun `desktop_claim_shadow_1h` on the disclosed desktop and inspect the
-   stored observed-versus-accounted RSS gap now that claim frontier items
-   reuse the shared clause catalog when no prefix-local filter applies, in
-   addition to the earlier legality-cache compaction, processed-prefix-group
-   release, and shared prefix-signature payload work
-2. use the step-4/5 live-checkpoint stream to separate any remaining discovery
-   growth from proof-close retention; the old `3.30 GiB` / `3.06 GiB`
-   step-`4` startup checkpoints are now replaced by a `66.4 MiB` first stored
-   frontier-progress checkpoint on `codex-claim-frontier-catalog-reuse-v1`, so
-   the next honest target is whatever still dominates after the frontier queue
-   stopped cloning full clause catalogs
-3. compare that run against guarded from stored artifacts and use that bundle
-   to drive the remaining parity, breadth, benchmark, and
-   certification fixes
+- Preserve existing `strict_canon_guarded`, `realistic_frontier_shadow`, and
+  `demo_breadth_shadow` behavior.
+- Prefer narrow fixes driven by stored evidence over broad speculative rewrites.
+- Do not lower breadth floors or hide misses to make the claim look cleaner.
+- Do not use stronger language such as `unguided` before certification passes.
