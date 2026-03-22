@@ -264,6 +264,12 @@ checks claim-policy honesty, exact-screen reason coverage, prune-class
 coverage, fallback evidence, and whether the stored run reaches the step-15
 claim signoff surface.
 
+Claim runs now also append `step_live_checkpoint` telemetry events and
+`reports/steps/step-XX-live.ndjson` artifacts for the in-flight claim-path
+memory diagnostics around steps 4 and 5, including observed process RSS,
+prefix-cache/legality-cache sizes, frontier queue size, raw catalog widths, and
+claim-surface widening flags.
+
 To audit a stored claim run directly against a guarded baseline and emit a
 certificate:
 
@@ -274,6 +280,18 @@ python scripts/certify_claim_lane.py --guarded-run runs/guarded --claim-run runs
 The current smoke claim config is expected to fail that certification honestly
 until the repo has a full step-15 claim bundle, breadth floors, and the
 remaining manifest provenance fields.
+
+To aggregate multiple stored claim runs into a repeatable benchmark bundle with
+median/p90/max runtime, parity success counts, breadth-floor hit counts, and
+manifest snapshots:
+
+```powershell
+python scripts/benchmark_claim_lane.py --guarded-run runs/guarded --claim-run runs/claim-a --claim-run runs/claim-b --runtime-threshold-ms 600000 --json-out runs/claim-benchmark.json --text-out runs/claim-benchmark.txt
+```
+
+The benchmark script summarizes stored claim-lane evidence only. It does not
+hide incomplete breadth or parity evidence; instead it records how many stored
+runs actually satisfy those gates.
 
 For the full Workstream 4 rollout matrix, also compare:
 

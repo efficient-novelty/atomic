@@ -30,9 +30,17 @@ intentionally short and forward-looking; use
 - claim step summaries and telemetry now persist both governor-accounted
   frontier RSS and sampled process RSS so stored claim bundles can show the
   live gap directly
+- claim runs now also emit in-flight `step_live_checkpoint` telemetry plus
+  `reports/steps/step-XX-live.ndjson` artifacts for steps 4-5, capturing
+  observed process RSS, prefix-cache/legality-cache sizes, frontier queue size,
+  raw catalog widths, and whether late claim widening gates are active
 - claim proof-close now drops cached evaluated terminal-prefix payloads after
   recording accept ranks, trading recomputation for a smaller live prefix-cache
   footprint on the claim lane
+- `scripts/benchmark_claim_lane.py` now provides a repeatable stored-evidence
+  benchmark harness for claim runs, recording median/p90/max runtime, parity
+  success counts, breadth-floor hit counts, and manifest snapshots across a
+  chosen benchmark bundle
 - the lane is still not certification-ready because the intended full-profile
   run is not yet stable enough to produce a stored step-15 claim bundle
 
@@ -52,6 +60,12 @@ intentionally short and forward-looking; use
   proving that those changes are sufficient on the disclosed machine.
 - Manifest completeness and failed-run survivability are no longer the gating
   issue; rerunning the intended profile with the new memory controls is.
+- The benchmark harness now exists, but it still needs a real full-profile
+  claim bundle before the repo can freeze runtime thresholds or cite
+  benchmark/floor success from the disclosed desktop honestly.
+- The live step-4/5 checkpoint path now makes it possible to distinguish
+  anonymous in-memory claim growth from persisted frontier/checkpoint growth on
+  a partial stored bundle instead of waiting for accepted-step boundaries.
 - Breadth, parity, fallback honesty, and certification remain open, but they
   cannot move from tests into stored evidence until the full-profile claim run
   completes reliably enough to leave a bundle.
@@ -63,8 +77,9 @@ intentionally short and forward-looking; use
 2. If the run still fails, use that stored gap plus the latest completed step
    to identify the remaining untracked allocation site honestly.
 3. Once the run finishes, compare it against guarded from stored artifacts and
-   use that bundle to close the remaining parity, breadth, benchmark, and
-   certification gaps.
+   feed the resulting bundle through `scripts/benchmark_claim_lane.py` plus
+   `scripts/certify_claim_lane.py` to close the remaining parity, breadth,
+   benchmark, and certification gaps.
 
 ## After That
 

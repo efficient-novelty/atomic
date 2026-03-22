@@ -106,6 +106,9 @@ Concrete tasks:
 
 - capture and review the newly stored observed-versus-accounted RSS gap from a
   full claim run on the disclosed machine
+- inspect the new `step_live_checkpoint` telemetry and
+  `reports/steps/step-XX-live.ndjson` artifacts for steps 4-5 so partial claim
+  bundles can reveal which in-memory structures are growing before acceptance
 - verify that the new memory-aware auto-worker cap is sufficient for the
   intended claim profile instead of merely changing the modeled worker count
 - reduce or cap any remaining worker scratch, resident cold frontier, and
@@ -178,13 +181,14 @@ Files:
 
 - `scripts/compare_runs.py`
 - `scripts/certify_claim_lane.py`
-- benchmark harness to be added
+- `scripts/benchmark_claim_lane.py`
 - repo-level autonomy docs
 
 Concrete tasks:
 
 - produce one canonical guarded-vs-claim compare report for the stabilized run
-- add a repeatable benchmark harness for the intended claim config
+- run the landed `scripts/benchmark_claim_lane.py` harness on the intended
+  claim config bundle
 - record benchmark timing and success/floor-hit counts
 - freeze the certified runtime threshold from real claim evidence
 - emit and store a passing `claim_certificate.json`

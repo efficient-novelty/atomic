@@ -45,6 +45,11 @@ every section below is closed and a passing claim certificate exists.
       intended `desktop_claim_shadow_1h` profile on the disclosed machine.
 - [ ] Verify that claim-lane proof-close cache compaction removes the remaining
       live allocation spike; if not, identify the next resident hot spot.
+- [ ] Use the new `step_live_checkpoint` telemetry plus
+      `reports/steps/step-XX-live.ndjson` artifacts to pinpoint whether step-4
+      and step-5 claim growth is coming from raw catalog expansion,
+      legality-cache residency, prefix-cache residency, or proof-close queue
+      buildup.
 - [ ] Reduce or cap any remaining worker scratch/frontier residency enough for
       the intended `desktop_claim_shadow_1h` profile to complete on the
       disclosed machine.
@@ -95,7 +100,8 @@ Done when:
 
 - [ ] Check the claim path used no silent guarded, replay, realistic-shadow, or
       demo-only fallback on the intended stored bundle.
-- [ ] Add a repeatable benchmark harness for the intended claim config.
+- [x] Add a repeatable benchmark harness for the intended claim config
+      (`scripts/benchmark_claim_lane.py`).
 - [ ] Record benchmark median wall time.
 - [ ] Record benchmark p90 wall time.
 - [ ] Record benchmark max wall time.

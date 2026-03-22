@@ -11,7 +11,7 @@ use pen_search::engine::{
     AtomicSearchProgressObserver, AtomicSearchStep, CandidateScoreDistribution,
     DedupePruneEvidence, DemoBucketReport, DemoBudgetSeed, DemoClosureStats, DemoFunnelStats,
     DemoPhaseStats, ExactScreenReasonStats, FrontierRetentionOutcome, MinimalityPruneEvidence,
-    search_bootstrap_from_prefix_for_config_with_runtime_and_seed,
+    StepLiveCheckpoint, search_bootstrap_from_prefix_for_config_with_runtime_and_seed,
     search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observer,
     search_bootstrap_from_prefix_for_profile_with_runtime,
     search_bootstrap_prefix_for_config_with_runtime,
@@ -516,6 +516,7 @@ pub struct GeneratedSteps {
 pub trait StepProgressObserver {
     fn on_step_started(&mut self, step_index: u32, label: &str);
     fn on_step_completed(&mut self, step: &StepReport);
+    fn on_step_live_checkpoint(&mut self, _checkpoint: &StepLiveCheckpoint) {}
 }
 
 struct LiveSearchProgressAdapter<'a> {
@@ -532,6 +533,10 @@ impl AtomicSearchProgressObserver for LiveSearchProgressAdapter<'_> {
     fn on_step_completed(&mut self, step: &AtomicSearchStep) {
         let report = step_to_report_with_provenance(step.clone(), self.provenance);
         self.observer.on_step_completed(&report);
+    }
+
+    fn on_step_live_checkpoint(&mut self, checkpoint: &StepLiveCheckpoint) {
+        self.observer.on_step_live_checkpoint(checkpoint);
     }
 }
 

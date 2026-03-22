@@ -5,8 +5,8 @@ use std::fs;
 use support::{
     assert_success, compact_search_space_stats, compact_step_summaries, fixtures_root,
     load_search_space_fixture, load_trajectory_fixture, mutate_latest_frontier_manifest,
-    normalize_checkpoint, read_json, read_text, run_claim_certify, run_compare_runs, run_pen_cli,
-    temp_dir, workspace_root, write_pressure_config,
+    normalize_checkpoint, read_json, read_text, run_claim_benchmark, run_claim_certify,
+    run_compare_runs, run_pen_cli, temp_dir, workspace_root, write_pressure_config,
 };
 
 #[test]
@@ -1254,6 +1254,93 @@ fn claim_certification_script_emits_failing_certificate_for_incomplete_smoke_run
         Some("pass")
     );
     assert!(read_text(&text_out).contains("Claim Certification: attention"));
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn claim_benchmark_script_aggregates_runtime_floor_and_manifest_evidence() {
+    let root = temp_dir("claim-benchmark");
+    let guarded_dir = root.join("guarded");
+    let claim_a_dir = root.join("claim-a");
+    let claim_b_dir = root.join("claim-b");
+
+    assert_success(run_pen_cli([
+        "run",
+        "--config",
+        &workspace_root()
+            .join("configs")
+            .join("strict_canon_guarded.toml")
+            .to_string_lossy(),
+        "--root",
+        &root.to_string_lossy(),
+        "--run-id",
+        "guarded",
+        "--until-step",
+        "2",
+    ]));
+    for run_id in ["claim-a", "claim-b"] {
+        assert_success(run_pen_cli([
+            "run",
+            "--config",
+            &workspace_root()
+                .join("configs")
+                .join("desktop_claim_shadow_smoke.toml")
+                .to_string_lossy(),
+            "--root",
+            &root.to_string_lossy(),
+            "--run-id",
+            run_id,
+            "--until-step",
+            "2",
+        ]));
+    }
+
+    let json_out = root.join("claim-benchmark.json");
+    let text_out = root.join("claim-benchmark.txt");
+    let stdout = assert_success(run_claim_benchmark([
+        "--guarded-run",
+        &guarded_dir.to_string_lossy(),
+        "--claim-run",
+        &claim_a_dir.to_string_lossy(),
+        "--claim-run",
+        &claim_b_dir.to_string_lossy(),
+        "--runtime-threshold-ms",
+        "1000",
+        "--json-out",
+        &json_out.to_string_lossy(),
+        "--text-out",
+        &text_out.to_string_lossy(),
+    ]));
+
+    assert!(stdout.contains("Claim Benchmark Summary"));
+    assert!(stdout.contains("claim run count: 2"));
+    assert!(stdout.contains("parity success count: 0"));
+
+    let summary = read_json(&json_out);
+    assert_eq!(summary["aggregate"]["claim_run_count"].as_u64(), Some(2));
+    assert_eq!(
+        summary["aggregate"]["parity_success_count"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
+        summary["aggregate"]["full_late_floor_hit_count"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
+        summary["aggregate"]["runtime_threshold_pass_count"].as_u64(),
+        Some(2)
+    );
+    assert_eq!(summary["runs"].as_array().map(Vec::len), Some(2));
+    assert_eq!(
+        summary["runs"][0]["manifest_snapshot"]["search_profile"].as_str(),
+        Some("desktop_claim_shadow")
+    );
+    assert_eq!(
+        summary["runs"][0]["manifest_completeness"]["status"].as_str(),
+        Some("pass")
+    );
+    assert!(read_text(&text_out).contains("full late floor hit count: 0"));
 
     fs::remove_dir_all(root).ok();
 }

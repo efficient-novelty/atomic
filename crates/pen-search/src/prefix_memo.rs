@@ -310,9 +310,28 @@ pub struct PrefixLegalityCache {
     stats: PrefixLegalityCacheStats,
 }
 
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub struct PrefixLegalityCacheEntryCounts {
+    pub summaries: usize,
+    pub family_filters: usize,
+    pub family_surfaces: usize,
+    pub terminal_prefix_completions: usize,
+    pub partial_prefix_bounds: usize,
+}
+
 impl PrefixLegalityCache {
     pub fn stats(&self) -> PrefixLegalityCacheStats {
         self.stats
+    }
+
+    pub fn entry_counts(&self) -> PrefixLegalityCacheEntryCounts {
+        PrefixLegalityCacheEntryCounts {
+            summaries: self.summaries.len(),
+            family_filters: self.family_filters.len(),
+            family_surfaces: self.family_surfaces.len(),
+            terminal_prefix_completions: self.terminal_prefix_completions.len(),
+            partial_prefix_bounds: self.partial_prefix_bounds.len(),
+        }
     }
 
     pub fn terminal_prefix_completion_summary(
