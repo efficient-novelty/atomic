@@ -43,10 +43,16 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     checkpoints by about `18-20%` versus `codex-claim-release-step4-fastpath-v2`
     on `codex-claim-release-filter-slice-v1a` while keeping observed RSS below
     about `84.0 MiB` through prefix state `7`
+  - a follow-up intended-profile rerun on that newer binary
+    (`codex-claim-release-full-v1a`) did not re-hit the old allocator abort
+    before an external timeout after `3844.7s`; by then step `4` had explored
+    `43` prefix states, enumerated `848047359` candidates, kept the frontier
+    queue at `2732`, and held observed RSS to about `278.2 MiB`
 - That means the queue-side cloned clause-catalog spike is no longer the main
-  blocker. The next blocker is step-`4` exact remaining-two throughput on the
-  optimized claim lane, followed by whatever later-step pressure remains once
-  the run gets materially farther.
+  blocker, and the old allocator abort is no longer the first visible failure
+  mode on the new binary. The next blocker is still step-`4` exact
+  remaining-two throughput on the optimized claim lane, followed by whatever
+  later-step pressure remains once the run gets materially farther.
 
 ## Working Order
 
@@ -120,15 +126,13 @@ disclosed desktop shows all of the following at the same time:
 
 ## Immediate Next Slice
 
-1. Rerun `desktop_claim_shadow_1h` and inspect the stored RSS-gap and
-   step-live artifacts on the optimized binary with the compact claim
-   materialization fast path, shared work-item order key, and slice-based
-   terminal-clause filtering path in place.
-2. If it still stalls in step `4`, identify the next dominant exact
-   remaining-two cost inside the stored bundle and make the next narrow
-   throughput fix there.
-3. If it completes, move immediately to compare, benchmark, and certification
-   on that same run directory.
+1. Inspect the stored `codex-claim-release-full-v1a` bundle and use the
+   step-live artifacts to identify the next dominant exact remaining-two cost
+   inside step `4`.
+2. Make the next narrow throughput fix against that evidence, then rerun the
+   intended `desktop_claim_shadow_1h` profile on the same release binary shape.
+3. If a rerun completes, move immediately to compare, benchmark, and
+   certification on that same run directory.
 
 ## Guardrails
 

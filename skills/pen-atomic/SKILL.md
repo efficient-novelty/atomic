@@ -48,9 +48,12 @@ Treat these as current repo truths:
   which removed the old step-4 startup RSS cliff and then improved the hot
   release step-4 checkpoints by about `12-14%` on
   `codex-claim-release-step4-fastpath-v2` and another about `18-20%` on
-  `codex-claim-release-filter-slice-v1a`; breadth evidence, parity signoff,
-  full-profile runtime stability on the intended `claim-1h` auto-worker
-  profile, and certification pass status still remain open
+  `codex-claim-release-filter-slice-v1a`; the first intended-profile rerun on
+  that newer binary (`codex-claim-release-full-v1a`) then stayed well below
+  the old RSS failure band but still timed out in step `4`, so breadth
+  evidence, parity signoff, full-profile runtime stability on the intended
+  `claim-1h` auto-worker profile, and certification pass status still remain
+  open
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 

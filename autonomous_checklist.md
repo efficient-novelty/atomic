@@ -70,6 +70,18 @@ every section below is closed and a passing claim certificate exists.
   - the intended full profile still lacks a stored completion bundle, so the
     next gate is a full rerun on this newer binary rather than another
     speculative step-`4` rewrite
+- A follow-up 2026-03-22 intended-profile rerun
+  (`codex-claim-release-full-v1a`) used that newer release binary on
+  `configs/desktop_claim_shadow_1h.toml` and did not re-hit the old allocator
+  abort before an external shell timeout after `3844.7s`:
+  - step `4` had explored `43` prefix states
+  - it had enumerated `848047359` candidates
+  - frontier queue length was still `2732`
+  - legality summaries had risen to `205199`
+  - prefix-cache groups were still only `39`
+  - observed RSS was about `278.2 MiB`
+  - the blocker on the newer binary is therefore still step-`4` throughput
+    and frontier drainage, not the old early RSS cliff
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
@@ -105,7 +117,9 @@ every section below is closed and a passing claim certificate exists.
 - [ ] Continue reducing step-`4` exact remaining-two runtime on the optimized
       claim binary; the latest release probe is throughput-bound there even
       after the direct compact claim materialization fast path and the new
-      slice-based terminal-clause filtering path.
+      slice-based terminal-clause filtering path; the first intended-profile
+      rerun on that binary still timed out in step `4` after exploring `43`
+      prefix states.
 - [ ] Reduce or cap any remaining worker scratch/frontier residency enough for
       the intended `desktop_claim_shadow_1h` profile to complete on the
       disclosed machine.

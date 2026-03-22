@@ -125,18 +125,25 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   about `84.0 MiB` through prefix state `7`, so the latest evidence says the
   lane should now be rerun full-profile before reopening another speculative
   step-`4` rewrite
+- a follow-up intended-profile rerun (`codex-claim-release-full-v1a`) then ran
+  the full `desktop_claim_shadow_1h` shape on that newer binary and did not
+  re-hit the old allocator abort before an external timeout after `3844.7s`;
+  by then step `4` had explored `43` prefix states, enumerated `848047359`
+  candidates, kept the frontier queue at `2732`, and held observed RSS to
+  about `278.2 MiB`, so the current blocker is still step-`4` throughput and
+  frontier drainage rather than the old early RSS cliff
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice
 
-1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
-   machine on the optimized binary and inspect the stored RSS-gap data now that
-   claim frontier items reuse the shared clause catalog, the queue order key,
-   the direct compact claim materialization fast path, and the slice-based
-   terminal clause filter path.
-2. Once that bundle exists, run the compare, benchmark, and certification
-   scripts against it.
-3. Then close the remaining breadth/floor and parity misses.
+1. Inspect `codex-claim-release-full-v1a` and use its stored step-live data to
+   identify the next narrow exact remaining-two throughput fix inside step `4`.
+2. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
+   machine on the next optimized binary and inspect the stored RSS-gap data
+   again.
+3. Once a full-profile bundle exists, run the compare, benchmark, and
+   certification scripts against it, then close the remaining breadth/floor
+   and parity misses.
 
 ## First Reads
 

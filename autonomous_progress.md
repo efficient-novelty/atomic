@@ -69,28 +69,39 @@ This file is the short operational read on `desktop_claim_shadow`. Use
   - `prefix_states_explored = 7` landed at `564.1s` versus `701.1s`
   - that is another about `18-20%` faster than `codex-claim-release-step4-fastpath-v2`
   - observed RSS stayed below about `84.0 MiB` through prefix state `7`
+- `codex-claim-release-full-v1a` then ran the intended
+  `desktop_claim_shadow_1h` profile on that newer release binary and gave the
+  first honest full-profile read after the slice-based filter change:
+  - it did not re-hit the old allocator abort before an external timeout after
+    `3844.7s`
+  - step `4` had reached `prefix_states_explored = 43`
+  - by then it had enumerated `848047359` candidates
+  - frontier queue length was still `2732`
+  - observed RSS was still only about `278.2 MiB`
+  - the practical read is that the intended profile is now far more memory
+    stable than the old failure bundle, but it is still throughput-bound in
+    step `4`
 
 ## Current Read
 
 - The queue-side step-`4` startup cliff is no longer the main bottleneck.
 - The optimized claim lane is now visibly bottlenecked by step-`4`
-  exact-remaining-two throughput, but the latest release probe is now moving
-  materially farther inside the same budget window before any new RSS story
-  appears.
-- The next decision should now come from a full intended-profile rerun on this
-  newer binary, not from reopening already-landed claim memory compaction in
-  isolation.
+  exact-remaining-two throughput and frontier drainage, while the newer binary
+  is staying far away from the old early allocator cliff.
+- The next decision should now come from the stored
+  `codex-claim-release-full-v1a` bundle, not from reopening already-landed
+  claim memory compaction in isolation.
 - Breadth, parity, benchmark, and certification remain blocked on that full
   rerun finishing and leaving a stable stored bundle.
 
 ## Immediate Next Slice
 
-1. Rerun `desktop_claim_shadow_1h` on the optimized binary and inspect the
-   stored RSS-gap and step-live evidence to see how far the full profile gets
-   with the slice-based terminal-clause filtering path in place.
-2. If it still stalls in step `4`, use that fuller stored bundle to decide
-   whether the next narrow throughput fix belongs in exact bound screening,
-   retained-prefix certification, or some still-untracked allocation path.
+1. Inspect `codex-claim-release-full-v1a` and use its stored step-live
+   evidence to decide whether the next narrow throughput fix belongs in exact
+   bound screening, retained-prefix certification, or some still-untracked
+   frontier-drain cost.
+2. Make that next narrow step-`4` throughput fix and rerun the intended
+   `desktop_claim_shadow_1h` profile on the same release binary shape.
 3. If it completes, run compare, benchmark, and certification on that bundle.
 4. If it still fails later, use the stored artifacts to choose the next narrow
    late-step memory or throughput fix.
