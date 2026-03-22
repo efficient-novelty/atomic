@@ -40,6 +40,15 @@ every section below is closed and a passing claim certificate exists.
   about `3.06 GiB` observed RSS after `13.2s`, only about `6.6 MiB` below the
   prior comparable checkpoint, so the main discovery/frontier/legality spike
   remains open beyond duplicated signature-key storage.
+- A newer 2026-03-22 smoke rerun (`codex-claim-frontier-catalog-reuse-v1`)
+  reused the shared clause catalog for unfiltered queued claim frontier items;
+  the old `13.2s` / `3.06 GiB` startup checkpoint disappeared, and the first
+  stored step-`4` frontier-progress checkpoint landed at about `66.4 MiB`
+  observed RSS after `422.9s` with `2774` frontier groups, `10193` legality
+  summaries, `5084` partial-prefix-bound entries, and `13` retained
+  prefix-cache groups, so the dominant early queue-side spike was
+  substantially reduced even though the full-profile lane still lacks a
+  completed bundle.
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:
@@ -68,13 +77,12 @@ every section below is closed and a passing claim certificate exists.
       `reports/steps/step-XX-live.ndjson` artifacts to pinpoint whether step-4
       and step-5 claim growth is coming from raw catalog expansion,
       legality-cache residency, prefix-cache residency, or proof-close queue
-      buildup; the 2026-03-22 smoke rerun already points at discovery/frontier
-      plus legality-cache growth on step `4`, and the follow-up
-      `codex-claim-shared-signature-v1` rerun only trimmed about `6.6 MiB`
-      from the comparable early checkpoint after sharing cloned
-      prefix-signature payloads, so step `5` and the intended full profile
-      still need stored evidence that isolates the remaining queue/raw-surface
-      residency honestly.
+      buildup; the 2026-03-22 `codex-claim-frontier-catalog-reuse-v1` smoke
+      rerun now suggests the old step-`4` startup cliff was dominated by
+      frontier queue residency that cloned the full next-clause catalog into
+      each queued item, but step `5` and the intended full profile still need
+      stored evidence that isolates any remaining legality/raw-surface or
+      later-step residency honestly.
 - [ ] Reduce or cap any remaining worker scratch/frontier residency enough for
       the intended `desktop_claim_shadow_1h` profile to complete on the
       disclosed machine.

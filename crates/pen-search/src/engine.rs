@@ -902,8 +902,20 @@ struct OnlinePrefixWorkItem {
     remaining_family_options: u8,
     bit_cost: u32,
     clause_count: usize,
-    next_clauses: Vec<pen_core::clause::ClauseRec>,
+    filtered_next_clauses: Option<Vec<pen_core::clause::ClauseRec>>,
+    next_clause_count: usize,
     order_key: String,
+}
+
+impl OnlinePrefixWorkItem {
+    fn next_clauses<'a>(
+        &'a self,
+        clause_catalog: &'a ClauseCatalog,
+    ) -> &'a [pen_core::clause::ClauseRec] {
+        self.filtered_next_clauses
+            .as_deref()
+            .unwrap_or_else(|| clause_catalog.clauses_at(self.prefix_telescope.clauses.len()))
+    }
 }
 
 #[derive(Clone, Debug, Default)]
@@ -4081,7 +4093,7 @@ fn discover_realistic_shadow_candidates(
                     nu_history,
                     &work_item.signature,
                     &work_item.prefix_telescope,
-                    &work_item.next_clauses,
+                    work_item.next_clauses(&clause_catalog),
                     &mut discovery,
                 )?;
                 let bucket_key = demo_bucket_key(
@@ -4185,6 +4197,7 @@ fn discover_realistic_shadow_candidates(
                         objective_bar,
                         nu_history,
                         retention_policy,
+                        &clause_catalog,
                         terminal_prefixes,
                         &mut discovery,
                     )?;
@@ -4220,7 +4233,7 @@ fn discover_realistic_shadow_candidates(
                 continue;
             }
 
-            for clause in &work_item.next_clauses {
+            for clause in work_item.next_clauses(&clause_catalog) {
                 if demo_discovery_budget_exhausted(
                     demo_step_budget,
                     &mut discovery,
@@ -4586,7 +4599,7 @@ fn prepare_exact_two_step_terminal_surface(
     debug_assert_eq!(work_item.remaining_clause_slots, 2);
 
     let mut terminal_prefixes = Vec::new();
-    for clause in &work_item.next_clauses {
+    for clause in work_item.next_clauses(clause_catalog) {
         discovery.raw_generated_surface += 1;
         let mut child_prefix = work_item.prefix_telescope.clone();
         child_prefix.clauses.push(clause.clone());
@@ -4643,6 +4656,7 @@ fn process_prepared_exact_two_step_terminal_surface(
     objective_bar: Rational,
     nu_history: &[(u32, u32)],
     retention_policy: RetentionPolicy,
+    clause_catalog: &ClauseCatalog,
     terminal_prefixes: Vec<OnlinePrefixWorkItem>,
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<()> {
@@ -4657,7 +4671,7 @@ fn process_prepared_exact_two_step_terminal_surface(
             nu_history,
             &terminal_prefix.signature,
             &terminal_prefix.prefix_telescope,
-            &terminal_prefix.next_clauses,
+            terminal_prefix.next_clauses(clause_catalog),
             discovery,
         )?;
         let bucket_key = demo_bucket_key(
@@ -4753,19 +4767,26 @@ fn create_online_prefix_work_item(
 ) -> OnlinePrefixWorkItem {
     let prefix_len = prefix_telescope.clauses.len();
     let remaining_clause_slots = usize::from(clause_kappa).saturating_sub(prefix_len);
-    let next_clauses = if remaining_clause_slots == 0 {
-        Vec::new()
+    let (filtered_next_clauses, next_clause_count) = if remaining_clause_slots == 0 {
+        (Some(Vec::new()), 0)
     } else {
-        prefix_legality_cache
-            .filter_active_window_clauses(
-                &signature,
-                prefix_len,
-                library,
-                admissibility,
-                clause_catalog.clauses_at(prefix_len),
-            )
-            .map(|clauses| clauses.into_iter().cloned().collect())
-            .unwrap_or_else(|| clause_catalog.clauses_at(prefix_len).to_vec())
+        let catalog_clauses = clause_catalog.clauses_at(prefix_len);
+        match prefix_legality_cache.filter_active_window_clauses(
+            &signature,
+            prefix_len,
+            library,
+            admissibility,
+            catalog_clauses,
+        ) {
+            Some(filtered_clauses) if filtered_clauses.len() < catalog_clauses.len() => {
+                let filtered_len = filtered_clauses.len();
+                (
+                    Some(filtered_clauses.into_iter().cloned().collect()),
+                    filtered_len,
+                )
+            }
+            Some(_) | None => (None, catalog_clauses.len()),
+        }
     };
 
     OnlinePrefixWorkItem {
@@ -4776,7 +4797,8 @@ fn create_online_prefix_work_item(
             .unwrap_or(u8::MAX),
         bit_cost: prefix_telescope.bit_cost(),
         clause_count: prefix_telescope.kappa(),
-        next_clauses,
+        filtered_next_clauses,
+        next_clause_count,
         order_key: serde_json::to_string(&prefix_telescope)
             .expect("prefix telescope should serialize"),
         prefix_telescope,
@@ -4820,7 +4842,7 @@ fn collapse_single_continuation_chain_inner(
             return Some((work_item, collapsed_signatures));
         }
 
-        let [clause] = work_item.next_clauses.as_slice() else {
+        let [clause] = work_item.next_clauses(clause_catalog) else {
             return Some((work_item, collapsed_signatures));
         };
 
@@ -4903,7 +4925,7 @@ fn exact_partial_prefix_bound_decision(
             nu_history,
             &work_item.signature,
             &work_item.prefix_telescope,
-            &work_item.next_clauses,
+            work_item.next_clauses(clause_catalog),
             prefix_legality_cache,
             budget,
         );
@@ -4914,7 +4936,7 @@ fn exact_partial_prefix_bound_decision(
         return decision;
     }
 
-    for clause in &work_item.next_clauses {
+    for clause in work_item.next_clauses(clause_catalog) {
         if !spend_exact_partial_prefix_budget(budget, 1) {
             return ExactPartialPrefixBoundDecision::Unknown;
         }
@@ -5874,7 +5896,7 @@ fn pop_best_prefix(frontier: &mut Vec<OnlinePrefixWorkItem>) -> Option<OnlinePre
 fn prefix_frontier_work_key(item: &OnlinePrefixWorkItem) -> (usize, usize, u8, u32, usize, &str) {
     (
         item.remaining_clause_slots,
-        item.next_clauses.len(),
+        item.next_clause_count,
         item.remaining_family_options,
         item.bit_cost,
         item.clause_count,
@@ -6246,10 +6268,11 @@ mod tests {
             remaining_family_options,
             bit_cost,
             clause_count,
-            next_clauses: vec![
+            filtered_next_clauses: Some(vec![
                 ClauseRec::new(ClauseRole::Introduction, Expr::Var(1));
                 next_clause_count
-            ],
+            ]),
+            next_clause_count,
             order_key: order_key.to_owned(),
         }
     }
@@ -7888,7 +7911,7 @@ mod tests {
             &nu_history,
             &work_item.signature,
             &work_item.prefix_telescope,
-            &work_item.next_clauses,
+            work_item.next_clauses(&clause_catalog),
             &mut discovery,
         )
         .expect("materialization should succeed");
@@ -8218,9 +8241,55 @@ mod tests {
 
         assert_eq!(work_item.remaining_clause_slots, 1);
         assert_eq!(usize::from(work_item.remaining_family_options), 1);
-        assert!(!work_item.next_clauses.is_empty());
-        assert!(work_item.next_clauses.len() < clause_catalog.clauses_at(4).len());
+        assert!(work_item.filtered_next_clauses.is_some());
+        assert!(work_item.next_clause_count < clause_catalog.clauses_at(4).len());
+        assert_eq!(
+            work_item.next_clauses(&clause_catalog).len(),
+            work_item.next_clause_count
+        );
         assert_eq!(cache.stats().active_window_clause_filter_hits, 1);
+    }
+
+    #[test]
+    fn online_work_items_reuse_full_catalog_when_no_filter_applies() {
+        let library = library_until(10);
+        let admissibility =
+            strict_admissibility_for_mode(11, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 5);
+        let prefix = Telescope::new(Telescope::reference(11).clauses[..4].to_vec());
+        let signature = PrefixSignature::new(11, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            5,
+            &library,
+            &prefix,
+            admissibility,
+            context.late_family_surface
+        ));
+        assert_eq!(cache.entry_counts().family_filters, 0);
+
+        let work_item = create_online_prefix_work_item(
+            5,
+            prefix,
+            signature,
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut cache,
+        );
+
+        assert!(work_item.filtered_next_clauses.is_none());
+        assert_eq!(
+            work_item.next_clause_count,
+            clause_catalog.clauses_at(4).len()
+        );
+        assert_eq!(
+            work_item.next_clauses(&clause_catalog).len(),
+            clause_catalog.clauses_at(4).len()
+        );
     }
 
     #[test]

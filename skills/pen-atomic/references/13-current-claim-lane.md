@@ -45,6 +45,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - cloned claim prefix signatures now share their serialized exact payload
   across frontier and legality-cache copies, so the same hot-path signature no
   longer duplicates that full prefix string into every cloned cache key.
+- claim online frontier work items now reuse the shared clause catalog when no
+  prefix-local active-window filter applies, so claim discovery no longer
+  clones the full next-clause list into every queued frontier item.
 - `scripts/compare_runs.py` now audits claim-policy honesty, exact-screen
   reason coverage, prune-class coverage, narrative artifacts, and whether the
   stored run reaches the step-15 claim signoff surface.
@@ -85,18 +88,22 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   RSS after `13.2s`, only about `6.6 MiB` below the prior comparable
   checkpoint, so sharing cloned signature payloads is real but not the main
   memory fix
-- that same rerun later showed a step-`4` live checkpoint around `639 MiB`
-  observed RSS after about `510.5s` with `13` retained prefix-cache groups and
-  `10193` legality summaries while step `4` was still running, so mid-step
-  memory collapse now shows up in stored evidence even though the early spike
-  and full-profile stability gate remain open
+- a newer 2026-03-22 smoke rerun (`codex-claim-frontier-catalog-reuse-v1`)
+  removed that startup cliff from stored evidence: the old `13.2s` /
+  `3.06 GiB` checkpoint no longer appears, and the first stored step-`4`
+  frontier-progress checkpoint now lands at about `66.4 MiB` observed RSS
+  after `422.9s` with `2774` frontier groups, `10193` legality summaries,
+  `5084` partial-prefix-bound entries, and `13` retained prefix-cache groups,
+  suggesting the old spike was largely frontier queue residency from cloning
+  the full next-clause catalog into each queued item
 - benchmark evidence is still too weak for a passing claim certificate
 
 ## Immediate Next Slice
 
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
-   machine and inspect the stored RSS-gap data after the latest
-   legality-cache compaction plus processed-prefix-group release change.
+   machine and inspect the stored RSS-gap data now that claim frontier items
+   reuse the shared clause catalog in addition to the earlier legality-cache
+   compaction plus processed-prefix-group release change.
 2. Once that bundle exists, run the compare, benchmark, and certification
    scripts against it.
 3. Then close the remaining breadth/floor and parity misses.

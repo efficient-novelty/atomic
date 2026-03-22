@@ -48,6 +48,9 @@ intentionally short and forward-looking; use
   cloned frontier and legality-cache keys, so the claim lane no longer copies
   the same full prefix string into every clone of the hot-path signature
   object
+- claim online frontier work items now reuse the shared clause catalog when no
+  prefix-local active-window filter applies, so claim discovery no longer
+  clones the full next-clause list into every queued frontier item
 - `scripts/benchmark_claim_lane.py` now provides a repeatable stored-evidence
   benchmark harness for claim runs, recording median/p90/max runtime, parity
   success counts, breadth-floor hit counts, and manifest snapshots across a
@@ -83,12 +86,16 @@ intentionally short and forward-looking; use
   below the prior comparable checkpoint, so sharing cloned signature payloads
   removes duplicated exact-key storage but does not close the main
   discovery/frontier/legality spike by itself.
-- That same rerun later reached about `33.46M` generated raw surfaces and
-  `16.94M` well-formed candidates on step `4` while a later live checkpoint
-  showed about `639 MiB` observed RSS with `13` retained prefix-cache groups
-  and `10193` legality summaries, so some mid-step memory collapse is now
-  visible even though the early spike and step-`4` completion time remain
-  open.
+- A newer 2026-03-22 smoke rerun (`codex-claim-frontier-catalog-reuse-v1`)
+  changed claim frontier items so unfiltered queued work reuses the shared
+  clause catalog; the prior `13.2s` / `3.06 GiB` startup checkpoint no longer
+  appears, and the first stored step-`4` frontier-progress checkpoint now
+  lands at about `66.4 MiB` observed RSS after `422.9s` with `2774` frontier
+  groups, `10193` legality summaries, `5084` partial-prefix-bound entries,
+  and `13` retained prefix-cache groups. This suggests the old step-`4`
+  startup cliff was dominated by frontier queue residency from cloning the
+  full next-clause catalog into each queued item rather than by proof-close
+  retention.
 - Manifest completeness and failed-run survivability are no longer the gating
   issue; rerunning the intended profile with the new memory controls is.
 - The benchmark harness now exists, but it still needs a real full-profile
@@ -108,17 +115,15 @@ intentionally short and forward-looking; use
 ## Immediate Next Slice
 
 1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
-   machine and inspect whether the stored observed-versus-accounted RSS gap
-   shrinks now that claim materialization drops duplicated legality-cache
-   terminal payloads after reuse, claim proof-close releases processed
-   retained prefix groups, and cloned prefix signatures share one exact payload
-   allocation instead of copying the full serialized prefix into every cache
-   key clone.
+   machine now that claim frontier items reuse the shared clause catalog when
+   no prefix-local filter applies, and inspect whether the stored
+   observed-versus-accounted RSS gap stays inside the desktop envelope beyond
+   the old step-`4` startup cliff.
 2. If the run still fails, use that stored gap plus the latest completed step
-   plus the smoke step-4 checkpoint evidence to identify the remaining
-   allocation site honestly; the next focus is whatever still dominates beyond
-   duplicated signature payloads, most likely frontier queue residency,
-   legality summaries, or raw-surface expansion.
+   plus the updated smoke step-`4` checkpoint evidence to identify the
+   remaining allocation site honestly; the next focus is whatever still
+   dominates after the frontier-catalog fix, most likely legality-summary
+   growth, raw-surface expansion, or a later-step retention spike.
 3. Once the run finishes, compare it against guarded from stored artifacts and
    feed the resulting bundle through `scripts/benchmark_claim_lane.py` plus
    `scripts/certify_claim_lane.py` to close the remaining parity, breadth,

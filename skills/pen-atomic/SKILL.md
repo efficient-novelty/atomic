@@ -37,9 +37,11 @@ Treat these as current repo truths:
   lane stops holding both copies of the same exact terminal surface; cloned
   prefix signatures now also share one serialized exact payload allocation
   across frontier/cache copies instead of duplicating that string into every
-  clone; breadth evidence, parity signoff, full-profile runtime stability on
-  the intended `claim-1h` auto-worker profile, and certification pass status
-  still remain open
+  clone; claim frontier work items now also reuse the shared clause catalog
+  when no prefix-local filter applies, which removed the old step-4 startup
+  RSS cliff on the latest smoke rerun; breadth evidence, parity signoff,
+  full-profile runtime stability on the intended `claim-1h` auto-worker
+  profile, and certification pass status still remain open
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -418,9 +420,11 @@ Reject designs that:
   while failed-run evidence preservation is now landed, claim proof-close now
   both drops evaluated terminal payloads and releases processed retained prefix
   groups more aggressively, claim materialization now also compacts duplicated
-  legality-cache terminal payloads, and breadth evidence, stored parity
-  signoff, runtime stability on the intended auto-worker claim profile, and
-  certification pass status are still open.
+  legality-cache terminal payloads, and claim frontier items now reuse the
+  shared clause catalog when no prefix-local filter applies; the latest smoke
+  rerun removed the old step-4 startup RSS cliff, but breadth evidence, stored
+  parity signoff, runtime stability on the intended auto-worker claim profile,
+  and certification pass status are still open.
 - The next operational claim-lane work should focus on stored breadth
   evidence and stored parity signoff only after stabilizing full-profile claim
   execution on the disclosed machine, rather than on already-landed profile,
