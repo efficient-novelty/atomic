@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-03-22
+Last updated: 2026-03-23
 
 This checklist is the live signoff gate for the stronger sentence that the PEN
 axioms discover the current 15-step sequence on the disclosed desktop
@@ -17,18 +17,24 @@ every section below is closed and a passing claim certificate exists.
 ## Current Open Numbers
 
 - No stored full-profile claim-lane signoff bundle yet.
-- The intended `desktop_claim_shadow_1h` auto-worker run still aborts before
-  step-15 completion with `memory allocation of 1212416 bytes failed`.
+- The intended `desktop_claim_shadow_1h` auto-worker run still does not finish
+  through step `15`; the newest clean rerun no longer re-hit the old
+  `memory allocation of 1212416 bytes failed` abort before manual stop in
+  step `4` at `prefix_states_explored = 59`.
 - Failed long runs now leave auditable `run.json`, step, checkpoint, frontier,
   and claim-narrative artifacts; the open issue is finishing the full profile,
   not preserving the failure bundle.
 - Claim step artifacts now persist observed process RSS and the gap versus the
-  governor-accounted RSS model, but no full-profile stored claim run exists yet
-  to interpret those numbers on the disclosed machine.
+  governor-accounted RSS model, and the newest clean full-profile rerun now
+  records those numbers through `prefix_states_explored = 59` on step `4`; the
+  open issue is still finishing the full profile, not exposing the pressure
+  data.
 - Claim terminal-prefix materialization now drops duplicated exact completion
-  payloads from the legality cache after reuse, but no full-profile stored
-  claim run exists yet to show whether that closes enough of the live RSS gap
-  on the disclosed machine.
+  payloads from the legality cache after reuse, and the newest clean
+  full-profile rerun now shows that materialization itself stays cheap
+  (`terminal_materialize_millis = 527 ms` at `prefix_states_explored = 59`);
+  the open issue is now summary-build throughput, not duplicated
+  materialization payloads first.
 - A 2026-03-22 claim smoke rerun reached step `4` and recorded about
   `3.30 GiB` observed RSS after `14.9s` with `2775` frontier groups,
   `5550` legality summaries, `5084` partial-prefix-bound entries, and
@@ -91,8 +97,20 @@ every section below is closed and a passing claim certificate exists.
 - A follow-up 2026-03-22 throughput pass now reuses one scratch terminal
   telescope and the precomputed prefix bit cost across claim exact
   remaining-two bound checks, completion summaries, and compact
-  materialization, but no comparable full-profile rerun exists yet to show how
-  much wall-clock that removes on the disclosed machine.
+  materialization, and a newer intended-profile rerun
+  (`codex-claim-release-full-delayed-summary-v1`) now shows how that newer
+  binary behaves on the real profile:
+  - at matching checkpoints it reached prefix states `24`, `39`, and `43`
+    materially earlier than `codex-claim-release-full-v1a`
+  - at about the old run's last stored checkpoint wall clock (`3936.1s`), it
+    had already reached `prefix_states_explored = 52` instead of `44`
+  - it was manually stopped at `prefix_states_explored = 59` with frontier
+    queue length `2716`, legality summaries `279487`, retained prefix-cache
+    still `39 / 144845`, observed RSS about `266.0 MiB`,
+    `terminal_summary_build_millis = 4387822 ms`, and
+    `terminal_materialize_millis = 527 ms`
+  - the old materialization bottleneck is therefore improved, but the lane is
+    still throughput-bound in step `4` on terminal-summary construction
 - A newer 2026-03-22 claim-only throughput pass now skips discovery-time full
   evaluation for compact terminal candidates that are already below bar or no
   longer beat the current incumbent, and a fresh single-worker smoke rerun
@@ -102,9 +120,10 @@ every section below is closed and a passing claim certificate exists.
     `codex-claim-scratch-smoke-v1`
   - `prefix_states_explored = 6` reached `572.7s`
   - observed RSS stayed below about `82.0 MiB` through that checkpoint
-  - the intended full profile still lacks a comparable rerun on this newer
-    binary, so the real gate is still the next `desktop_claim_shadow_1h`
-    run rather than another speculative smoke-only rewrite
+  - the intended full profile now has a comparable rerun on this newer binary
+    (`codex-claim-release-full-delayed-summary-v1`); it kept the gain and
+    showed that summary build, not materialization, is now the next hot
+    surface
 - Accepted-hash parity through step `15` and stored breadth evidence are still
   open claim-lane gates.
 - Minimum breadth floors that must be earned honestly on the claim lane:

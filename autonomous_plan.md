@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-03-22
+Last updated: 2026-03-23
 Status: active
 
 This file tracks only the remaining operational work for
@@ -23,8 +23,9 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 - The active blocker is still runtime stability on
   `configs/desktop_claim_shadow_1h.toml`.
-- The latest known full-profile failure is still
-  `memory allocation of 1212416 bytes failed`.
+- The latest allocator-backed full-profile failure on older binaries is still
+  `memory allocation of 1212416 bytes failed`, but the newest intended-profile
+  rerun on the delayed-summary binary no longer re-hit it before manual stop.
 - Failure survivability is no longer the issue: claim runs now keep
   `run.json`, step artifacts, frontier snapshots, and narratives on disk.
 - The old step-`4` startup RSS cliff has moved materially:
@@ -66,12 +67,22 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     at `499.9s` versus `519.4s` on `codex-claim-scratch-smoke-v1`, reached
     `prefix_states_explored = 6` at `572.7s`, and stayed below about
     `82.0 MiB` observed RSS through that checkpoint before manual stop
+  - a newer intended-profile rerun on the kept delayed-summary binary
+    (`codex-claim-release-full-delayed-summary-v1`) then kept that gain on the
+    real `desktop_claim_shadow_1h` shape: it reached matching step-`4`
+    checkpoints materially earlier than `codex-claim-release-full-v1a`, had
+    already reached `prefix_states_explored = 52` by about the old run's last
+    stored checkpoint wall clock (`3936.1s`), and was manually stopped at
+    `prefix_states_explored = 59` / `4529.4s` with frontier queue length
+    `2716`, legality summaries `279487`, retained prefix-cache still
+    `39 / 144845`, `terminal_summary_build_millis = 4387822 ms`,
+    `terminal_materialize_millis = 527 ms`, and observed RSS about `266.0 MiB`
 - That means the queue-side cloned clause-catalog spike is no longer the main
   blocker, and the old allocator abort is no longer the first visible failure
-  mode on the new binary. The next blocker is still step-`4` exact
-  remaining-two throughput on the optimized claim lane, but the newest binary
-  shape now needs a comparable intended-profile rerun before reopening a
-  broader rewrite.
+  mode on the new binary. The next blocker is still step-`4` throughput on the
+  optimized claim lane, but the hot cost has now moved from compact
+  materialization into remaining-one terminal-summary construction on the real
+  intended profile.
 
 ## Working Order
 
@@ -145,15 +156,12 @@ disclosed desktop shows all of the following at the same time:
 
 ## Immediate Next Slice
 
-1. Rerun the intended `desktop_claim_shadow_1h` profile on the newer release
-   binary that now reuses a scratch terminal telescope and skips
-   discovery-time full evaluation for compact claim candidates that are
-   already below bar or incumbent-dominated on the hot remaining-two path,
-   then inspect the stored step-live artifacts rather than terminal output.
-2. If that rerun still stalls in step `4`, use the new stored evidence to
-   decide whether the next narrow fix belongs in earlier incumbent pruning,
-   broader exact bound screening, or some later-step pressure story that still
-   is not visible.
+1. Patch one narrow remaining-one terminal-summary or earlier-incumbent path
+   on top of the kept delayed-summary binary, then inspect the stored step-live
+   artifacts rather than terminal output.
+2. If the updated `until_step = 4` rerun shows a real summary-side win, rerun
+   the intended `desktop_claim_shadow_1h` profile on that same binary; if it
+   does not, do not stack more speculative search changes on top.
 3. If a rerun completes, move immediately to compare, benchmark, and
    certification on that same run directory.
 

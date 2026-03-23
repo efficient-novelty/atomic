@@ -1,66 +1,77 @@
 # Autonomous Claim Lane: Next Operational Slice
 
 This note is for the local coding agent working on `desktop_claim_shadow`.
-It assumes the latest remaining-one telemetry, bound-only cached bound access,
-and cached-rank pre-prune-before-materialization work is already landed.
+It assumes the delayed-materialization / cached-rank pre-prune work is already
+landed and that the newest stored intended-profile rerun is
+`codex-claim-release-full-delayed-summary-v1`.
 
 ## Operating Read
 
-The newest stored step-`4` rerun on the updated binary is now
-`codex-claim-release-step4-telemetry-v1`, and it changes the next move.
+The newest stored intended-profile rerun on the updated binary is now
+`codex-claim-release-full-delayed-summary-v1`, and it changes the next move.
 
-At the hot early step-`4` checkpoints:
+Against the prior intended-profile baseline (`codex-claim-release-full-v1a`),
+the new rerun kept the same frontier and retained-prefix shape but reached the
+same hot step-`4` checkpoints materially earlier:
 
-- claim widening bands `7/8/9` are still not active at `library_size = 3`
-- cached bound hits are still `0`
-- exact bound screening time is still `0 ms`
-- terminal summary build time is still `0 ms`
-- frontier pop/sort time is still `0 ms`
-- direct compact remaining-one materialization is the dominant timer
-- almost every materialized remaining-one group is still dying only after
-  materialization
+- at `prefix_states_explored = 24`, elapsed time fell to `1854.5s` from
+  `2000.8s`, and observed RSS fell to about `218.7 MiB` from about `250.0 MiB`
+- at `prefix_states_explored = 39`, elapsed time fell to `3010.8s` from
+  `3440.6s`, and observed RSS fell to about `237.8 MiB` from about `275.0 MiB`
+- at `prefix_states_explored = 43`, elapsed time fell to `3309.4s` from
+  `3844.7s`, while frontier queue length, legality summaries, and retained
+  prefix-cache shape stayed identical at `2732`, `205199`, and `39 / 144845`
 
-At `prefix_states_explored = 5` on `codex-claim-release-step4-telemetry-v1`:
+At about the same wall clock as the old run's last stored checkpoint
+(`3936.1s`), the new rerun had already reached `prefix_states_explored = 52`
+instead of `44`, with:
 
-- elapsed time was `423.8s`
-- frontier queue length was `2770`
-- legality summaries had risen to `28765`
-- remaining-one groups materialized had reached `23220`
-- post-materialization rank prunes had reached `23205`
-- terminal materialization time had reached `393661 ms`
+- frontier queue length down to `2723` instead of `2731`
+- legality summaries up to `246986`
+- retained prefix-cache groups still flat at `39`
+- observed RSS at about `252.7 MiB` instead of about `268.0 MiB`
 
-That means the deadlock is no longer "which exact screening branch should we
-use first?" The hot cost is still payload that gets fully compact-materialized
-before the lane learns it will die.
+At the manual stop checkpoint on `codex-claim-release-full-delayed-summary-v1`
+(`prefix_states_explored = 59`, `4529.4s`):
 
-The follow-up stored rerun on a narrow partial exact-two split patch
-(`codex-claim-release-step4-split-handoff-v1`) did not improve those same
-checkpoints, and its exact-bound timer stayed at `0 ms` through
-`prefix_states_explored = 6`. So partial exact-two split handoff is not the
-next win on the current hot surface and should not be kept as the next patch.
+- frontier queue length was `2716`
+- legality summaries had risen to `279487`
+- retained prefix-cache groups and candidates were still flat at `39 / 144845`
+- `remaining_one_materialized` was still only `39`
+- pre-materialization rank prunes had risen to `273957`
+- post-materialization rank prunes were still `0`
+- cached bound hits were still `0`
+- `terminal_summary_build_millis` had reached `4387822 ms`
+- `terminal_materialize_millis` was still only `527 ms`
+
+That means the deadlock is no longer "should we delay materialization?" The
+lane is already killing almost all of the old dead remaining-one work before
+materialization. The hot cost has moved into building the compact pruning
+summaries themselves.
 
 ## Do Not Spend The Next Slice On
 
-1. Do not reopen memory compaction first. The old early-RSS cliff is still not
-   the main blocker.
-2. Do not retune claim widening bands `7/8/9` first. They are still not the
-   active step-`4` surface.
-3. Do not chase frontier queue rewrites first. The frontier pop timer is still
-   `0 ms` on the hot early checkpoints.
-4. Do not keep or reopen the partial exact-two split-handoff patch first. The
-   stored rerun did not earn it.
+1. Do not reopen the rejected partial exact-two split-handoff path first. It
+   still did not earn keep.
+2. Do not reopen memory compaction first. The new full rerun stayed around
+   `252-266 MiB` observed RSS while step `4` remained honest.
+3. Do not chase later-step frontier or certification work first. The real full
+   profile is still honestly blocked in step `4`.
+4. Do not treat cached bound reuse as the immediate next win. Bound hits are
+   still `0` on the new full-profile evidence.
 
 ## Work Order
 
-### 1. Patch One Narrow Discovery-Summary / Delayed-Materialization Path
+### 1. Patch One Narrow Remaining-One Summary-Build Path
 
-Choose the next slice around claim remaining-one discovery itself:
+Choose the next slice around the new hot cost center:
 
-- discovery should store a compact pruning summary first
-- full compact materialization should happen only when a prefix survives long
-  enough to justify it
-- keep the patch narrow enough that the new stored step-`4` rerun can answer
-  whether the lane is truly materializing less work
+- make remaining-one terminal-summary construction itself cheaper
+- or add one still-narrow incumbent-based early kill that avoids paying full
+  summary-build cost for non-improving surfaces
+- keep the patch narrow enough that a new stored step-`4` rerun can answer
+  whether `terminal_summary_build_millis` truly falls without weakening the
+  retained-prefix and frontier shape
 
 ### 2. Re-Earn One Stored `until_step = 4` Release Rerun On That Patch
 
@@ -72,25 +83,27 @@ Use the same local claim profile shape derived from
 - release build
 - live checkpoint persistence left on
 
-The point is still iteration speed, not weakening the real lane.
+The point is still iteration speed, not weakening the real lane. Use
+`codex-claim-release-full-delayed-summary-v1` and
+`codex-claim-release-step4-delayed-summary-v1` as the comparison baselines.
 
 ### 3. Read The New Step-`4` Telemetry Before Changing More Search Code
 
 Inspect `reports/steps/step-04-live.ndjson` and answer:
 
-- Does `remaining_one_materialized` fall materially at matching checkpoints?
-- Does `terminal_materialize_millis` stop dominating as early?
-- Do legality-summary counts grow in a way that now justifies consuming cached
-  summaries later instead of paying full materialization early?
-- Do post-materialization rank prunes drop enough to show that the lane is now
-  pruning earlier?
+- Does `terminal_summary_build_millis` fall materially at matching checkpoints?
+- Does the same wall clock now reach farther than
+  `codex-claim-release-full-delayed-summary-v1`?
+- Do legality-summary counts or frontier drainage improve without weakening the
+  retained prefix-cache shape?
+- Do pre-summary or pre-materialization rank prunes move early enough to show
+  that the lane is now rejecting more work before summary build?
 
 ### 4. Only After The `until_step = 4` Read Improves, Rerun The Real Profile
 
-Once the updated step-`4` rerun shows a real materialization-side win, rerun
-the real `desktop_claim_shadow_1h` profile on that same updated binary and
-inspect the stored artifacts again before touching compare/benchmark/
-certification work.
+Once the updated step-`4` rerun shows a real summary-side win, rerun the real
+`desktop_claim_shadow_1h` profile on that same updated binary and inspect the
+stored artifacts again before touching compare/benchmark/certification work.
 
 ## Keep/Drop Rule For The Next Patch
 
@@ -98,9 +111,11 @@ Keep a patch only if it does at least one of these on stored step-`4`
 artifacts:
 
 - pushes the same checkpoint materially earlier
-- lowers `remaining_one_materialized`
-- lowers `terminal_materialize_millis`
-- lowers post-materialization rank-prune volume materially
+- reaches materially farther at the same wall clock
+- lowers `terminal_summary_build_millis`
+- lowers legality-summary growth or frontier breadth without weakening retained
+  prefix shape
+- lowers pre-summary or pre-materialization work materially
 - or makes later step-`4` checkpoints keep moving after the old retained-prefix
   plateau
 
@@ -129,9 +144,9 @@ the broader tree still stops at
 This note is stale as soon as one new stored release rerun on the updated
 binary shows which of these is true:
 
-- delayed materialization is clearly the next win
+- terminal-summary construction is clearly no longer the next win
 - step `4` is no longer the dominant blocker
-- or some newly visible cost center overtakes materialization honestly
+- or some newly visible cost center overtakes summary build honestly
 
 At that point, rewrite this file again from the new stored evidence instead of
 keeping old rejected paths around.
