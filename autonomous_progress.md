@@ -15,78 +15,77 @@ This file is the short operational read on `desktop_claim_shadow`. Use
   `codex-claim-release-full-v1a`: it did not re-hit the old early allocator
   cliff, but it still timed out in step `4` after `prefix_states_explored = 43`
   with the frontier queue still broad and legality summaries still rising.
-- The most recent code slice is now landed, but it has not yet been followed
-  by a new stored rerun on the updated binary.
+- This turn earned the first stored `until_step = 4` rerun on the newer
+  telemetry binary (`codex-claim-release-step4-telemetry-v1`) and one follow-up
+  stored rerun on a narrow partial exact-two split patch
+  (`codex-claim-release-step4-split-handoff-v1`).
+- The split-handoff patch was not kept: the verification rerun did not beat the
+  baseline checkpoints and its exact-bound timer stayed at `0`, so the patch
+  never activated on the hot early step-`4` surface and was reverted.
 
 ## Current Read
 
-- The old queue-startup RSS cliff is no longer the main problem.
-- The active problem is still step-`4` exact remaining-two throughput and
-  frontier drainage on the intended claim lane.
-- The strongest stored signal remains the retained-prefix plateau from
-  `codex-claim-release-full-v1a`:
-  - retained prefix groups flattened after `prefix_states_explored = 24`
-  - legality summaries kept climbing anyway
-  - much of the later step-`4` wall time was therefore still exact terminal
-    completion on surfaces that were no longer changing the retained frontier
-- The code now has the instrumentation needed to stop guessing about the next
-  bottleneck, but there is not yet a fresh artifact bundle showing which cost
-  center now dominates on the updated binary.
-
-## Landed For The Next Rerun
-
-- Claim step-live checkpoints now carry remaining-one telemetry for:
-  - cached bound hits
-  - cached rank pre-prunes
-  - materialization count and source
-  - pre/post-materialization prune counts
-  - exact-two preparation, exact bound screening, materialization,
-    candidate sort/minimality, and frontier pop timing
-- Claim cached bound checks now use a bound-only legality-cache accessor
-  instead of cloning the full cached terminal completion payload just to read
-  `bound`.
-- Claim discovery now applies a cached-rank pre-prune before materialization
-  when the cached best remaining-one rank is already incumbent-dominated, and
-  it consumes the cached summary for honest generated/admissibility accounting
-  before releasing that payload.
+- The old queue-startup RSS cliff is still not the main problem.
+- The active problem is still step-`4` exact remaining-two throughput, but the
+  new telemetry now narrows the hot cost much more sharply than the older
+  full-profile artifact did.
+- `codex-claim-release-step4-telemetry-v1` showed that the hot early step-`4`
+  surface is still dominated by direct compact remaining-one materialization
+  that mostly dies only after materialization:
+  - at `prefix_states_explored = 5`, elapsed time was `423.8s`
+  - the frontier queue was still `2770`
+  - legality summaries had risen to `28765`
+  - remaining-one groups materialized had reached `23220`
+  - post-materialization rank prunes had reached `23205`
+  - cached bound hits were still `0`
+  - exact bound screening time was still `0 ms`
+  - terminal summary build time was still `0 ms`
+  - frontier pop/sort time was still `0 ms`
+  - terminal materialization time had already reached `393661 ms`
+- That means the lane is still paying heavily for payload that does not survive
+  long enough to justify full compact materialization, and the current hot
+  surface is not yet spending meaningful time in cached bound reuse, exact
+  screening, or frontier drain.
+- The narrow partial exact-two split handoff probe did not earn keep:
+  - `codex-claim-release-step4-split-handoff-v1` reached the same early
+    checkpoints slightly later than the baseline (`427.3s` at
+    `prefix_states_explored = 5` versus `423.8s`)
+  - it preserved the same materialization and post-prune counts at those
+    checkpoints
+  - its exact-bound timer still stayed at `0 ms` through
+    `prefix_states_explored = 6`
+  - so the split branch did not actually engage on the current hot path
+- The next honest code path is therefore no longer partial exact-two handoff
+  first. The next slice should move toward claim discovery summary /
+  delayed materialization work.
 
 ## Immediate Next Slice
 
-1. Run one stored release A/B on an `until_step = 4` claim config built from
-   the current code.
-2. Inspect `reports/steps/step-04-live.ndjson` and answer these questions
-   before making another search rewrite:
-   - Are cached bound hits still rare, or are summary misses no longer the main
-     story?
-   - Are rank prunes mostly happening before or after materialization?
-   - Is wall time now dominated by terminal materialization, terminal summary
-     building, or frontier pop/sort cost?
-   - Are bound-unknown budget exhaustions still large enough to justify broader
-     exact screening work?
-3. If step `4` still stalls after that rerun, use the telemetry to choose one
-   next code path:
-   - partial exact-two in-place processing instead of the current all-or-none
-     handoff
-   - claim discovery-summary / delayed-materialization work
-   - frontier queue data-structure work only if the new pop/sort timer is
-     genuinely large
-4. Once the `until_step = 4` read is clear enough, rerun the real
-   `desktop_claim_shadow_1h` profile on the same updated binary.
-5. Only move on to compare, benchmark, and certification after one stored
-   full-profile bundle exists on that updated code path.
+1. Keep the code at the reverted pre-split baseline; do not stack the rejected
+   partial-handoff patch back on top.
+2. Implement one narrow discovery-summary / delayed-materialization path for
+   claim remaining-one processing so discovery can store a compact pruning
+   summary before paying full compact materialization cost.
+3. Rerun the same stored release `until_step = 4` profile on that narrower
+   patch and inspect `reports/steps/step-04-live.ndjson` again.
+4. Keep that next patch only if the stored step-`4` artifacts show at least one
+   real win:
+   - fewer `remaining_one_materialized`
+   - materially lower `terminal_materialize_millis`
+   - materially earlier matching checkpoints
+   - or a clearer shift from post-materialization death toward earlier pruning
+5. Only rerun the real `desktop_claim_shadow_1h` profile after the stored
+   `until_step = 4` evidence improves on the same binary.
 
-## Verification Snapshot
+## Evidence Snapshot
 
-- The current claim regression slice passed on the landed code:
-  - `cargo test -p pen-search claim_`
-  - `cargo test -p pen-search online_work_items_`
-  - `cargo test -p pen-search prefix_queue_prefers_nearer_terminal_and_tighter_cached_continuations`
-  - `cargo test -p pen-search terminal_clause_filter_skips_inadmissible_last_clauses_before_connectivity`
-  - `cargo test -p pen-search terminal_prefix_bound_summary_reads_cached_bound_without_cloning_payload`
-  - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
-- The broader tree is still not fully green:
-  - `cargo test -p pen-search --lib` still stops at
-    `engine::tests::demo_late_surface_carries_through_live_config_runs`
+- New stored rerun on the newer telemetry binary:
+  `runs/codex-claim-release-step4-telemetry-v1`
+- New stored rerun on the rejected partial split probe:
+  `runs/codex-claim-release-step4-split-handoff-v1`
+- Both runs were manually stopped after enough step-`4` evidence was written,
+  so their `run.json` files remain in `running` state; the useful artifacts for
+  this slice are the persisted `reports/steps/step-04-live.ndjson` streams.
 
 ## Guardrails
 
