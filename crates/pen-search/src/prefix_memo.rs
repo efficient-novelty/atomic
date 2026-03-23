@@ -8,6 +8,7 @@ use crate::prefix_cache::PrefixSignature;
 use pen_core::clause::ClauseRec;
 use pen_core::expr::Expr;
 use pen_core::library::Library;
+use pen_core::rational::Rational;
 use pen_core::telescope::Telescope;
 use pen_type::admissibility::{
     AdmissibilityDecision, AdmissibilityDiagnostics, PackagePolicy, StrictAdmissibility,
@@ -270,6 +271,12 @@ pub struct TerminalPrefixCompletion {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
+pub struct TerminalPrefixPrimaryRank {
+    pub overshoot: Rational,
+    pub clause_kappa: u16,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum TerminalPrefixClauseEvaluation {
     Disconnected,
     AdmissibilityRejected {
@@ -287,12 +294,14 @@ pub struct TerminalPrefixCompletionSummary {
     pub generated_candidate_count: usize,
     pub admissibility_diagnostics: AdmissibilityDiagnostics,
     pub bound: Option<PrefixBound>,
+    pub best_accept_primary_rank: Option<TerminalPrefixPrimaryRank>,
     pub best_accept_rank: Option<AcceptRank>,
     pub admitted_candidate_count: usize,
 }
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct TerminalPrefixRankSummary {
+    pub best_accept_primary_rank: Option<TerminalPrefixPrimaryRank>,
     pub best_accept_rank: Option<AcceptRank>,
     pub admitted_candidate_count: usize,
 }
@@ -371,6 +380,7 @@ impl PrefixLegalityCache {
         let summary = self.terminal_prefix_completions.get(signature)?;
         self.stats.terminal_prefix_rank_hits += 1;
         Some(TerminalPrefixRankSummary {
+            best_accept_primary_rank: summary.best_accept_primary_rank.clone(),
             best_accept_rank: summary.best_accept_rank.clone(),
             admitted_candidate_count: summary.admitted_candidate_count,
         })
@@ -686,7 +696,8 @@ mod tests {
     use super::{
         PartialPrefixBoundDecision, PrefixAdmissibilitySummary, PrefixLegalityCache,
         TerminalConnectivityDecision, TerminalPrefixClauseEvaluation, TerminalPrefixCompletion,
-        TerminalPrefixCompletionSummary, late_family_surface_for_admissibility,
+        TerminalPrefixCompletionSummary, TerminalPrefixPrimaryRank,
+        late_family_surface_for_admissibility,
     };
     use crate::accept::acceptance_rank_for_telescope;
     use crate::bounds::PrefixBound;
@@ -1019,6 +1030,10 @@ mod tests {
                 generated_candidate_count: 1,
                 admissibility_diagnostics: diagnostics,
                 bound: Some(PrefixBound::singleton(26, 5, 79)),
+                best_accept_primary_rank: Some(TerminalPrefixPrimaryRank {
+                    overshoot: Rational::new(42, 145),
+                    clause_kappa: 5,
+                }),
                 best_accept_rank: acceptance_rank_for_telescope(
                     Rational::new(712, 145),
                     &Telescope::reference(11),
@@ -1086,6 +1101,7 @@ mod tests {
                 generated_candidate_count: 1,
                 admissibility_diagnostics: AdmissibilityDiagnostics::default(),
                 bound: Some(PrefixBound::singleton(26, 5, 79)),
+                best_accept_primary_rank: None,
                 best_accept_rank: None,
                 admitted_candidate_count: 0,
             },
@@ -1114,6 +1130,7 @@ mod tests {
                 generated_candidate_count: 1,
                 admissibility_diagnostics: AdmissibilityDiagnostics::default(),
                 bound: Some(PrefixBound::singleton(26, 5, 79)),
+                best_accept_primary_rank: None,
                 best_accept_rank: None,
                 admitted_candidate_count: 0,
             },

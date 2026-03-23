@@ -26,7 +26,7 @@ use crate::prefix_cache::{
 use crate::prefix_memo::{
     PartialPrefixBoundDecision, PrefixLegalityCache, PrefixLegalityCacheEntryCounts,
     TerminalConnectivityDecision, TerminalPrefixClauseEvaluation, TerminalPrefixCompletion,
-    TerminalPrefixCompletionSummary,
+    TerminalPrefixCompletionSummary, TerminalPrefixPrimaryRank,
 };
 use crate::priority::{PriorityInputs, build_priority_key};
 use crate::scheduler::build_schedule;
@@ -4165,6 +4165,7 @@ fn discover_realistic_shadow_candidates(
                     if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
                         terminal_prefix_rank_prune_count(
                             group.best_accept_rank.as_ref(),
+                            None,
                             group.admissible_terminal_candidates,
                             discovery.terminal_rank_incumbent.as_ref(),
                         )
@@ -4741,6 +4742,7 @@ fn screen_prefix_for_frontier(
         work_item,
         &mut discovery.prefix_legality_cache,
         &mut exact_bound_budget,
+        discovery.terminal_rank_incumbent.as_ref(),
         Some(&mut discovery.remaining_one_telemetry),
     );
     discovery
@@ -4841,6 +4843,7 @@ fn process_prepared_exact_two_step_terminal_surface(
             if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
                 terminal_prefix_rank_prune_count(
                     group.best_accept_rank.as_ref(),
+                    None,
                     group.admissible_terminal_candidates,
                     discovery.terminal_rank_incumbent.as_ref(),
                 )
@@ -5040,6 +5043,7 @@ fn exact_partial_prefix_bound_decision(
     work_item: &OnlinePrefixWorkItem,
     prefix_legality_cache: &mut PrefixLegalityCache,
     budget: &mut usize,
+    incumbent_rank: Option<&AcceptRank>,
     mut remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
 ) -> ExactPartialPrefixBoundDecision {
     if work_item.remaining_clause_slots == 0 {
@@ -5069,6 +5073,7 @@ fn exact_partial_prefix_bound_decision(
             work_item.next_clauses(clause_catalog),
             prefix_legality_cache,
             budget,
+            incumbent_rank,
             remaining_one_telemetry,
         );
         if let Some(cacheable) = decision.cacheable_partial_decision() {
@@ -5132,6 +5137,7 @@ fn exact_partial_prefix_bound_decision(
             &child_work_item,
             prefix_legality_cache,
             budget,
+            incumbent_rank,
             remaining_one_telemetry.as_deref_mut(),
         );
         if let Some(cacheable) = propagated_decision.cacheable_partial_decision() {
@@ -5199,6 +5205,7 @@ fn exact_terminal_prefix_bound_decision(
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
     prefix_legality_cache: &mut PrefixLegalityCache,
     budget: &mut usize,
+    incumbent_rank: Option<&AcceptRank>,
     mut remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
 ) -> ExactPartialPrefixBoundDecision {
     if let Some(bound) = prefix_legality_cache.terminal_prefix_bound_summary(prefix_signature) {
@@ -5232,6 +5239,7 @@ fn exact_terminal_prefix_bound_decision(
                 TerminalPrefixSummaryPayload::Full
             },
             terminal_clauses,
+            incumbent_rank,
             prefix_legality_cache,
         );
         if let Some(telemetry) = remaining_one_telemetry.as_deref_mut() {
@@ -5374,6 +5382,35 @@ fn terminal_prefix_completion_bit_cost(
     u16::try_from(prefix_bit_cost + expr_bit_length(&clause.expr)).expect("bit cost exceeded u16")
 }
 
+fn better_terminal_prefix_primary_rank(
+    left: &TerminalPrefixPrimaryRank,
+    right: &TerminalPrefixPrimaryRank,
+) -> bool {
+    left.overshoot < right.overshoot
+        || (left.overshoot == right.overshoot && left.clause_kappa < right.clause_kappa)
+}
+
+fn terminal_prefix_primary_rank(
+    objective_bar: Rational,
+    exact_nu: u16,
+    clause_kappa_used: u16,
+) -> Option<TerminalPrefixPrimaryRank> {
+    let rho = Rational::new(i64::from(exact_nu), i64::from(clause_kappa_used));
+    (rho >= objective_bar).then(|| TerminalPrefixPrimaryRank {
+        overshoot: rho - objective_bar,
+        clause_kappa: clause_kappa_used,
+    })
+}
+
+fn terminal_prefix_primary_rank_could_still_beat_incumbent(
+    candidate_rank: &TerminalPrefixPrimaryRank,
+    incumbent_rank: &AcceptRank,
+) -> bool {
+    !(candidate_rank.overshoot > incumbent_rank.overshoot
+        || (candidate_rank.overshoot == incumbent_rank.overshoot
+            && candidate_rank.clause_kappa > incumbent_rank.clause_kappa))
+}
+
 fn compute_terminal_prefix_completion_summary_from_candidates(
     step_index: u32,
     library: &Library,
@@ -5387,6 +5424,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
         &pen_core::clause::ClauseRec,
         Option<pen_type::admissibility::AdmissibilityDecision>,
     )>,
+    incumbent_rank: Option<&AcceptRank>,
     prefix_legality_cache: &mut PrefixLegalityCache,
 ) -> TerminalPrefixCompletionSummary {
     let mut summary = TerminalPrefixCompletionSummary {
@@ -5463,16 +5501,34 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
             prefix_legality_cache,
             &admissibility_decision,
         ) {
-            if let Some(rank) = acceptance_rank_for_telescope(
-                objective_bar,
-                &telescope,
-                exact_nu,
-                bit_kappa_used,
-                clause_kappa_used,
-            ) {
-                match &summary.best_accept_rank {
-                    Some(current) if !better_rank(&rank, current) => {}
-                    _ => summary.best_accept_rank = Some(rank),
+            if let Some(primary_rank) =
+                terminal_prefix_primary_rank(objective_bar, exact_nu, clause_kappa_used)
+            {
+                match &summary.best_accept_primary_rank {
+                    Some(current)
+                        if !better_terminal_prefix_primary_rank(&primary_rank, current) => {}
+                    _ => summary.best_accept_primary_rank = Some(primary_rank.clone()),
+                }
+                // Remaining-one incumbents only improve, so candidates that are
+                // already worse on overshoot/kappa can never become competitive later.
+                if incumbent_rank.is_none_or(|incumbent| {
+                    terminal_prefix_primary_rank_could_still_beat_incumbent(
+                        &primary_rank,
+                        incumbent,
+                    )
+                }) {
+                    if let Some(rank) = acceptance_rank_for_telescope(
+                        objective_bar,
+                        &telescope,
+                        exact_nu,
+                        bit_kappa_used,
+                        clause_kappa_used,
+                    ) {
+                        match &summary.best_accept_rank {
+                            Some(current) if !better_rank(&rank, current) => {}
+                            _ => summary.best_accept_rank = Some(rank),
+                        }
+                    }
                 }
             }
         }
@@ -5626,6 +5682,7 @@ fn claim_try_summary_prune_before_materialization(
             prefix_telescope,
             TerminalPrefixSummaryPayload::Compact,
             terminal_clauses,
+            discovery.terminal_rank_incumbent.as_ref(),
             &mut discovery.prefix_legality_cache,
         );
         discovery
@@ -5686,6 +5743,7 @@ fn claim_try_summary_prune_before_materialization(
 
     let Some(pruned_candidates) = terminal_prefix_rank_prune_count(
         summary.best_accept_rank.as_ref(),
+        summary.best_accept_primary_rank.as_ref(),
         admitted_terminal_candidates,
         discovery.terminal_rank_incumbent.as_ref(),
     ) else {
@@ -5777,6 +5835,7 @@ fn materialize_terminal_prefix_group(
             prefix_telescope,
             TerminalPrefixSummaryPayload::Full,
             terminal_clauses,
+            discovery.terminal_rank_incumbent.as_ref(),
             &mut discovery.prefix_legality_cache,
         );
         discovery
@@ -6004,12 +6063,22 @@ fn best_prefix_group_accept_rank(candidates: &[PrefixGroupCandidate]) -> Option<
 
 fn terminal_prefix_rank_prune_count(
     best_accept_rank: Option<&AcceptRank>,
+    best_accept_primary_rank: Option<&TerminalPrefixPrimaryRank>,
     admitted_candidate_count: usize,
     incumbent_rank: Option<&AcceptRank>,
 ) -> Option<usize> {
     let incumbent_rank = incumbent_rank?;
-    let best_accept_rank = best_accept_rank?;
-    (!better_rank(best_accept_rank, incumbent_rank)).then_some(admitted_candidate_count)
+    if let Some(best_accept_rank) = best_accept_rank {
+        return (!better_rank(best_accept_rank, incumbent_rank))
+            .then_some(admitted_candidate_count);
+    }
+
+    let best_accept_primary_rank = best_accept_primary_rank?;
+    (!terminal_prefix_primary_rank_could_still_beat_incumbent(
+        best_accept_primary_rank,
+        incumbent_rank,
+    ))
+    .then_some(admitted_candidate_count)
 }
 
 fn cached_terminal_prefix_rank_prune_count(
@@ -6021,6 +6090,7 @@ fn cached_terminal_prefix_rank_prune_count(
     let rank_summary = prefix_legality_cache.terminal_prefix_rank_summary(prefix_signature)?;
     terminal_prefix_rank_prune_count(
         rank_summary.best_accept_rank.as_ref(),
+        rank_summary.best_accept_primary_rank.as_ref(),
         rank_summary.admitted_candidate_count,
         Some(incumbent_rank),
     )
@@ -8276,6 +8346,7 @@ mod tests {
             &prefix,
             super::TerminalPrefixSummaryPayload::Full,
             terminal_clauses,
+            None,
             &mut cache,
         );
 
@@ -8376,6 +8447,7 @@ mod tests {
             &mut cache,
             &mut first_budget,
             None,
+            None,
         );
         assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
 
@@ -8408,6 +8480,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut second_budget,
+            None,
             None,
         );
 
@@ -8476,6 +8549,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut budget,
+            None,
             None,
         );
         assert_ne!(decision, super::ExactPartialPrefixBoundDecision::Unknown);
@@ -8559,6 +8633,7 @@ mod tests {
             &mut discovery.prefix_legality_cache,
             &mut budget,
             None,
+            None,
         );
         assert_ne!(decision, super::ExactPartialPrefixBoundDecision::Unknown);
         assert_eq!(
@@ -8624,6 +8699,121 @@ mod tests {
     }
 
     #[test]
+    fn claim_summary_build_skips_full_rank_for_primary_dominated_incumbent() {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = compute_bar(2, 15, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut discovery = super::RealisticShadowDiscovery::default();
+
+        assert!(discovery.prefix_legality_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        let work_item = create_online_prefix_work_item(
+            8,
+            prefix,
+            signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut discovery.prefix_legality_cache,
+        );
+        assert_eq!(work_item.remaining_clause_slots, 1);
+
+        let incumbent = test_accept_rank(0, "incumbent");
+        discovery.terminal_rank_incumbent = Some(incumbent.clone());
+
+        let mut budget = 64;
+        let decision = exact_partial_prefix_bound_decision(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog,
+            &work_item,
+            &mut discovery.prefix_legality_cache,
+            &mut budget,
+            Some(&incumbent),
+            None,
+        );
+        assert_eq!(
+            decision,
+            super::ExactPartialPrefixBoundDecision::CanClearBar
+        );
+
+        let summary = discovery
+            .prefix_legality_cache
+            .terminal_prefix_completion_summary(&signature)
+            .expect("terminal prefix should cache a pruning summary");
+        assert!(
+            summary.best_accept_primary_rank.is_some(),
+            "summary should still record the coarse best accept rank"
+        );
+        assert!(
+            summary.best_accept_rank.is_none(),
+            "primary-dominated incumbent should skip full accept rank construction"
+        );
+
+        assert!(super::claim_try_summary_prune_before_materialization(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &work_item.signature,
+            &work_item.prefix_telescope,
+            work_item.clause_kappa,
+            work_item.next_clauses(&clause_catalog),
+            &mut discovery,
+        ));
+        assert_eq!(
+            discovery
+                .prefix_legality_cache
+                .entry_counts()
+                .terminal_prefix_completions,
+            0,
+            "claim primary-rank pre-prune should consume the cached terminal payload"
+        );
+        assert_eq!(
+            discovery
+                .remaining_one_telemetry
+                .remaining_one_cached_rank_prunes,
+            1
+        );
+        assert_eq!(
+            discovery
+                .remaining_one_telemetry
+                .remaining_one_rank_prunes_pre_materialize,
+            1
+        );
+    }
+
+    #[test]
     fn claim_materialization_reopens_after_cached_pruning_summary() {
         let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
         let mut library: Library = Vec::new();
@@ -8680,6 +8870,7 @@ mod tests {
             &work_item,
             &mut discovery.prefix_legality_cache,
             &mut budget,
+            None,
             None,
         );
         assert_ne!(decision, super::ExactPartialPrefixBoundDecision::Unknown);
@@ -8890,6 +9081,7 @@ mod tests {
             &summary_work_item.prefix_telescope,
             super::TerminalPrefixSummaryPayload::Full,
             terminal_clauses,
+            None,
             &mut summary_discovery.prefix_legality_cache,
         );
         let summary_group = super::materialize_terminal_prefix_group_from_summary(
@@ -9409,6 +9601,7 @@ mod tests {
             &mut cache,
             &mut first_budget,
             None,
+            None,
         );
         assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
 
@@ -9424,6 +9617,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut second_budget,
+            None,
             None,
         );
 
@@ -9489,6 +9683,7 @@ mod tests {
             &mut cache,
             &mut first_budget,
             None,
+            None,
         );
         assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
 
@@ -9521,6 +9716,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut second_budget,
+            None,
             None,
         );
 
@@ -9589,6 +9785,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut budget,
+            None,
             None,
         );
         assert_eq!(
