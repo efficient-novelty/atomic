@@ -34,6 +34,7 @@ pub struct PrefixLegalityCacheStats {
     pub terminal_admissibility_hits: usize,
     pub terminal_admissibility_rejections: usize,
     pub terminal_prefix_completion_hits: usize,
+    pub terminal_prefix_bound_hits: usize,
     pub terminal_prefix_rank_hits: usize,
     pub partial_prefix_bound_hits: usize,
 }
@@ -341,6 +342,15 @@ impl PrefixLegalityCache {
         let summary = self.terminal_prefix_completions.get(signature)?.clone();
         self.stats.terminal_prefix_completion_hits += 1;
         Some(summary)
+    }
+
+    pub fn terminal_prefix_bound_summary(
+        &mut self,
+        signature: &PrefixSignature,
+    ) -> Option<Option<PrefixBound>> {
+        let summary = self.terminal_prefix_completions.get(signature)?;
+        self.stats.terminal_prefix_bound_hits += 1;
+        Some(summary.bound)
     }
 
     pub fn take_terminal_prefix_completion_summary(
@@ -1051,6 +1061,32 @@ mod tests {
                 .expect("bound should exist")
                 .can_clear_bar(Rational::new(5, 1))
         );
+    }
+
+    #[test]
+    fn terminal_prefix_bound_summary_reads_cached_bound_without_cloning_payload() {
+        let library = library_until(10);
+        let prefix = Telescope::new(Telescope::reference(11).clauses[..4].to_vec());
+        let signature = PrefixSignature::new(11, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        cache.store_terminal_prefix_completion_summary(
+            signature.clone(),
+            TerminalPrefixCompletionSummary {
+                evaluations: vec![TerminalPrefixClauseEvaluation::Disconnected],
+                bound: Some(PrefixBound::singleton(26, 5, 79)),
+                best_accept_rank: None,
+                admitted_candidate_count: 0,
+            },
+        );
+
+        let bound = cache
+            .terminal_prefix_bound_summary(&signature)
+            .expect("bound summary should be cached");
+
+        assert_eq!(bound, Some(PrefixBound::singleton(26, 5, 79)));
+        assert_eq!(cache.stats().terminal_prefix_bound_hits, 1);
+        assert_eq!(cache.stats().terminal_prefix_completion_hits, 0);
     }
 
     #[test]

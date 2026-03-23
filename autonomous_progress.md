@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Progress
 
-Last updated: 2026-03-22
+Last updated: 2026-03-23
 
 This file is the short operational read on `desktop_claim_shadow`. Use
 [autonomous_plan.md](autonomous_plan.md) for the remaining sequence and
@@ -109,6 +109,24 @@ This file is the short operational read on `desktop_claim_shadow`. Use
   - the practical read is that the new gating looks directionally helpful on
     the smoke profile, but the intended `desktop_claim_shadow_1h` rerun still
     needs to prove whether it changes the real full-profile bottleneck
+- The next `autonomous_next_steps.md` slice is now landed in code and tests:
+  - claim step-live checkpoints now carry remaining-one telemetry for
+    cached-bound hits, cached-rank pre-prunes, materialization source,
+    pre/post-materialization prune counts, and timing buckets for exact bound
+    screening, terminal summary builds, materialization, candidate
+    sort/minimality, exact-two preparation, and frontier pop/sort work
+  - claim queue-entry and remaining-one cached bound checks now read a
+    bound-only legality-cache accessor instead of cloning the full cached
+    terminal completion payload just to inspect `bound`
+  - claim discovery now applies a cached-rank pre-prune before
+    materialization when the current incumbent already dominates the cached
+    best remaining-one rank, and it consumes the cached completion summary for
+    honest generated/admissibility accounting before dropping that payload
+  - claim materialization now also records whether a remaining-one surface was
+    served from a cached summary or forced down the compact direct path
+- No new stored release rerun exists yet on top of that telemetry/prune pass,
+  so there is still no fresh artifact bundle showing which remaining step-`4`
+  cost center now dominates on the updated binary.
 
 ## Current Read
 
@@ -118,23 +136,33 @@ This file is the short operational read on `desktop_claim_shadow`. Use
   is staying far away from the old early allocator cliff.
 - The stored `codex-claim-release-full-v1a` bundle now points specifically at
   repeated late step-`4` terminal completion on already-dominated surfaces,
-  and the newest code changes now target that hot path directly rather than
-  reopening already-landed claim memory compaction.
+  and the newest code changes now target that hot path directly with
+  pre-materialization rank pruning, cheaper cached-bound reads, and explicit
+  remaining-one timing counters rather than reopening already-landed claim
+  memory compaction.
+- The next honest read now requires a stored rerun on the updated binary:
+  the code can finally distinguish cached-summary misses versus hits,
+  pre-materialize versus post-materialize rank prunes, and materialization
+  time versus frontier drain time, but there is not yet a new run artifact
+  proving which of those actually dominates.
 - Breadth, parity, benchmark, and certification remain blocked on that full
   rerun finishing and leaving a stable stored bundle.
 
 ## Immediate Next Slice
 
-1. Rerun the intended `desktop_claim_shadow_1h` profile on the newer release
-   binary that now both reuses a scratch terminal telescope and skips
-   discovery-time full evaluation for compact claim candidates that are
-   already below bar or dominated by the current incumbent.
-2. If it still stalls in step `4`, use the stored step-live evidence to decide
-   whether the next narrow fix belongs in earlier incumbent pruning, broader
-   exact bound screening, or some still-untracked frontier-drain cost.
-3. If it completes, run compare, benchmark, and certification on that bundle.
-4. If it still fails later, use the stored artifacts to choose the next narrow
-   late-step memory or throughput fix.
+1. Run one stored release A/B on an `until_step = 4` claim config first and
+   inspect the new remaining-one telemetry in `reports/steps/step-04-live.ndjson`.
+2. If the updated step-`4` rerun still stalls, use that telemetry to choose
+   between:
+   - partial exact-two in-place processing instead of the current all-or-none
+     handoff
+   - a larger claim discovery-summary split with delayed materialization
+   - some still-untracked frontier-drain cost if the new sort/pop timer is
+     unexpectedly large
+3. Once the `until_step = 4` read is clear enough, rerun the real
+   `desktop_claim_shadow_1h` profile on the same updated binary.
+4. Only move to compare, benchmark, and certification after one stored
+   full-profile bundle exists on that updated code path.
 
 ## Verification Notes
 
@@ -146,9 +174,14 @@ This file is the short operational read on `desktop_claim_shadow`. Use
 - Recent targeted claim fast-path regressions also passed:
   - `cargo test -p pen-search claim_compact_materialization_matches_summary_expansion_without_cache`
   - `cargo test -p pen-search prefix_queue_prefers_nearer_terminal_and_tighter_cached_continuations`
-- The broader targeted claim regression slice still passed after the newer
-  scratch-telescope reuse and discovery-time non-improver evaluation changes:
+- The new remaining-one telemetry and pre-prune regressions passed:
   - `cargo test -p pen-search claim_`
+  - `cargo test -p pen-search terminal_prefix_bound_summary_reads_cached_bound_without_cloning_payload`
+  - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
+- The broader targeted claim regression slice still passed after the newer
+  bound-only summary, cached-rank pre-prune, and live-telemetry changes:
+  - `cargo test -p pen-search online_work_items_`
+  - `cargo test -p pen-search terminal_clause_filter_skips_inadmissible_last_clauses_before_connectivity`
 - The broader tree is still not fully green:
   - `cargo test -p pen-search --lib` still stops at
     `engine::tests::demo_late_surface_carries_through_live_config_runs`

@@ -615,6 +615,8 @@ pub struct StepLiveCheckpoint {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub claim_surface: Option<EnumerationSurfaceDiagnostics>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub remaining_one_telemetry: Option<RemainingOneTelemetry>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub note: Option<String>,
 }
 
@@ -637,6 +639,27 @@ impl From<PrefixLegalityCacheEntryCounts> for LiveLegalityCacheEntries {
             partial_prefix_bounds: value.partial_prefix_bounds,
         }
     }
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct RemainingOneTelemetry {
+    pub remaining_one_prefixes_seen: usize,
+    pub remaining_one_cached_bound_hits: usize,
+    pub remaining_one_cached_rank_prunes: usize,
+    pub remaining_one_materialized: usize,
+    pub remaining_one_materialized_from_cached_summary: usize,
+    pub remaining_one_materialized_compact_direct: usize,
+    pub remaining_one_bar_prunes_pre_materialize: usize,
+    pub remaining_one_rank_prunes_pre_materialize: usize,
+    pub remaining_one_rank_prunes_post_materialize: usize,
+    pub remaining_one_unknown_bound_budget_exhaustions: usize,
+    pub prepare_exact_two_step_terminal_surface_millis: u64,
+    pub exact_partial_prefix_bound_millis: u64,
+    pub terminal_summary_build_millis: u64,
+    pub terminal_materialize_millis: u64,
+    pub candidate_sort_millis: u64,
+    pub candidate_eval_minimality_millis: u64,
+    pub frontier_sort_pop_millis: u64,
 }
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
@@ -680,6 +703,7 @@ struct RealisticShadowDiscovery {
     partial_prefix_bound_checks: usize,
     partial_prefix_bound_prunes: usize,
     terminal_prefix_bar_prunes: usize,
+    remaining_one_telemetry: RemainingOneTelemetry,
 }
 
 impl RealisticShadowDiscovery {
@@ -2940,6 +2964,7 @@ fn search_next_step(
                     + incremental_terminal_clause_filter_prunes
                     + incremental_terminal_rank_prunes,
                 claim_surface: None,
+                remaining_one_telemetry: None,
                 note: Some("claim_materialize_entry".to_owned()),
             },
             true,
@@ -3021,6 +3046,7 @@ fn search_next_step(
                             + incremental_terminal_clause_filter_prunes
                             + incremental_terminal_rank_prunes,
                         claim_surface: None,
+                        remaining_one_telemetry: None,
                         note: Some("claim_proof_close_progress".to_owned()),
                     },
                     false,
@@ -3947,6 +3973,7 @@ fn discover_realistic_shadow_candidates(
                     + discovery.terminal_prefix_bar_prunes
                     + discovery.connectivity_prunes,
                 claim_surface: claim_surface.clone(),
+                remaining_one_telemetry: Some(discovery.remaining_one_telemetry),
                 note: Some("claim_regular_clause_catalog".to_owned()),
             },
             true,
@@ -3986,22 +4013,7 @@ fn discover_realistic_shadow_candidates(
                 &clause_catalog,
                 &mut discovery.prefix_legality_cache,
             );
-            if let Some(decision) = cached_terminal_prefix_queue_entry_bound_decision(
-                objective_bar,
-                &work_item,
-                &mut discovery.prefix_legality_cache,
-            ) {
-                match decision {
-                    ExactPartialPrefixBoundDecision::CanClearBar => frontier.push(work_item),
-                    ExactPartialPrefixBoundDecision::CannotClearBar => {
-                        discovery.partial_prefix_bound_prunes += 1;
-                    }
-                    ExactPartialPrefixBoundDecision::Unknown => frontier.push(work_item),
-                }
-                continue;
-            }
-            let mut exact_bound_budget = EXACT_PARTIAL_PREFIX_BOUND_BUDGET;
-            match exact_partial_prefix_bound_decision(
+            let (decision, performed_exact_check) = screen_prefix_for_frontier(
                 step_index,
                 library,
                 admissibility,
@@ -4009,15 +4021,19 @@ fn discover_realistic_shadow_candidates(
                 nu_history,
                 &clause_catalog,
                 &work_item,
-                &mut discovery.prefix_legality_cache,
-                &mut exact_bound_budget,
-            ) {
+                &mut discovery,
+            );
+            match decision {
                 ExactPartialPrefixBoundDecision::CanClearBar => {
-                    discovery.partial_prefix_bound_checks += 1;
+                    if performed_exact_check {
+                        discovery.partial_prefix_bound_checks += 1;
+                    }
                     frontier.push(work_item);
                 }
                 ExactPartialPrefixBoundDecision::CannotClearBar => {
-                    discovery.partial_prefix_bound_checks += 1;
+                    if performed_exact_check {
+                        discovery.partial_prefix_bound_checks += 1;
+                    }
                     discovery.partial_prefix_bound_prunes += 1;
                 }
                 ExactPartialPrefixBoundDecision::Unknown => {
@@ -4058,6 +4074,7 @@ fn discover_realistic_shadow_candidates(
                         + discovery.terminal_rank_prunes
                         + discovery.connectivity_prunes,
                     claim_surface: claim_surface.clone(),
+                    remaining_one_telemetry: Some(discovery.remaining_one_telemetry),
                     note: Some("claim_regular_frontier_progress".to_owned()),
                 },
                 false,
@@ -4070,9 +4087,14 @@ fn discover_realistic_shadow_candidates(
             ) {
                 break;
             }
+            let frontier_pop_started = Instant::now();
             let Some(work_item) = pop_best_prefix(&mut frontier) else {
                 break;
             };
+            discovery.remaining_one_telemetry.frontier_sort_pop_millis = discovery
+                .remaining_one_telemetry
+                .frontier_sort_pop_millis
+                .saturating_add(elapsed_millis(frontier_pop_started.elapsed()));
             let Some(work_item) = collapse_single_continuation_chain(
                 step_index,
                 library,
@@ -4086,7 +4108,16 @@ fn discover_realistic_shadow_candidates(
             let prefix_len = work_item.prefix_telescope.clauses.len();
 
             if prefix_len + 1 == usize::from(work_item.clause_kappa) {
-                let mut group = materialize_terminal_prefix_group(
+                if claim_try_cached_rank_prune_before_materialization(
+                    admissibility,
+                    &work_item.signature,
+                    &work_item.prefix_telescope,
+                    work_item.clause_kappa,
+                    &mut discovery,
+                ) {
+                    continue;
+                }
+                let mut group = materialize_remaining_one_prefix_group(
                     step_index,
                     library,
                     admissibility,
@@ -4141,6 +4172,9 @@ fn discover_realistic_shadow_candidates(
                     };
                 if let Some(pruned_candidates) = cached_rank_prune_count {
                     discovery.terminal_rank_prunes += pruned_candidates;
+                    discovery
+                        .remaining_one_telemetry
+                        .remaining_one_rank_prunes_post_materialize += 1;
                     discovery.record_demo_bucket_pruned(bucket_key.clone(), pruned_candidates);
                     continue;
                 }
@@ -4150,6 +4184,9 @@ fn discover_realistic_shadow_candidates(
                 ) {
                     if !better_rank(&group_best_rank, incumbent_rank) {
                         discovery.terminal_rank_prunes += group.candidates.len();
+                        discovery
+                            .remaining_one_telemetry
+                            .remaining_one_rank_prunes_post_materialize += 1;
                         discovery
                             .record_demo_bucket_pruned(bucket_key.clone(), group.candidates.len());
                         continue;
@@ -4181,6 +4218,7 @@ fn discover_realistic_shadow_candidates(
 
             discovery.prefix_states_explored += 1;
             if work_item.remaining_clause_slots == 2 {
+                let prepare_started = Instant::now();
                 let terminal_prefixes = prepare_exact_two_step_terminal_surface(
                     step_index,
                     library,
@@ -4189,6 +4227,12 @@ fn discover_realistic_shadow_candidates(
                     &work_item,
                     &mut discovery,
                 );
+                discovery
+                    .remaining_one_telemetry
+                    .prepare_exact_two_step_terminal_surface_millis = discovery
+                    .remaining_one_telemetry
+                    .prepare_exact_two_step_terminal_surface_millis
+                    .saturating_add(elapsed_millis(prepare_started.elapsed()));
                 if can_process_exact_two_step_terminal_surface_now(&frontier, &terminal_prefixes) {
                     process_prepared_exact_two_step_terminal_surface(
                         step_index,
@@ -4206,8 +4250,7 @@ fn discover_realistic_shadow_candidates(
                 }
 
                 for terminal_prefix in terminal_prefixes {
-                    let mut exact_bound_budget = EXACT_PARTIAL_PREFIX_BOUND_BUDGET;
-                    match exact_partial_prefix_bound_decision(
+                    let (decision, performed_exact_check) = screen_prefix_for_frontier(
                         step_index,
                         library,
                         admissibility,
@@ -4215,15 +4258,19 @@ fn discover_realistic_shadow_candidates(
                         nu_history,
                         &clause_catalog,
                         &terminal_prefix,
-                        &mut discovery.prefix_legality_cache,
-                        &mut exact_bound_budget,
-                    ) {
+                        &mut discovery,
+                    );
+                    match decision {
                         ExactPartialPrefixBoundDecision::CanClearBar => {
-                            discovery.partial_prefix_bound_checks += 1;
+                            if performed_exact_check {
+                                discovery.partial_prefix_bound_checks += 1;
+                            }
                             frontier.push(terminal_prefix);
                         }
                         ExactPartialPrefixBoundDecision::CannotClearBar => {
-                            discovery.partial_prefix_bound_checks += 1;
+                            if performed_exact_check {
+                                discovery.partial_prefix_bound_checks += 1;
+                            }
                             discovery.partial_prefix_bound_prunes += 1;
                         }
                         ExactPartialPrefixBoundDecision::Unknown => {
@@ -4266,24 +4313,7 @@ fn discover_realistic_shadow_candidates(
                     &clause_catalog,
                     &mut discovery.prefix_legality_cache,
                 );
-                if let Some(decision) = cached_terminal_prefix_queue_entry_bound_decision(
-                    objective_bar,
-                    &child_work_item,
-                    &mut discovery.prefix_legality_cache,
-                ) {
-                    match decision {
-                        ExactPartialPrefixBoundDecision::CanClearBar => {
-                            frontier.push(child_work_item)
-                        }
-                        ExactPartialPrefixBoundDecision::CannotClearBar => {
-                            discovery.partial_prefix_bound_prunes += 1;
-                        }
-                        ExactPartialPrefixBoundDecision::Unknown => frontier.push(child_work_item),
-                    }
-                    continue;
-                }
-                let mut exact_bound_budget = EXACT_PARTIAL_PREFIX_BOUND_BUDGET;
-                match exact_partial_prefix_bound_decision(
+                let (decision, performed_exact_check) = screen_prefix_for_frontier(
                     step_index,
                     library,
                     admissibility,
@@ -4291,15 +4321,19 @@ fn discover_realistic_shadow_candidates(
                     nu_history,
                     &clause_catalog,
                     &child_work_item,
-                    &mut discovery.prefix_legality_cache,
-                    &mut exact_bound_budget,
-                ) {
+                    &mut discovery,
+                );
+                match decision {
                     ExactPartialPrefixBoundDecision::CanClearBar => {
-                        discovery.partial_prefix_bound_checks += 1;
+                        if performed_exact_check {
+                            discovery.partial_prefix_bound_checks += 1;
+                        }
                         frontier.push(child_work_item);
                     }
                     ExactPartialPrefixBoundDecision::CannotClearBar => {
-                        discovery.partial_prefix_bound_checks += 1;
+                        if performed_exact_check {
+                            discovery.partial_prefix_bound_checks += 1;
+                        }
                         discovery.partial_prefix_bound_prunes += 1;
                     }
                     ExactPartialPrefixBoundDecision::Unknown => {
@@ -4445,6 +4479,7 @@ fn discover_demo_early_exhaustive_candidates(
                 legality_cache_entries: discovery.prefix_legality_cache.entry_counts().into(),
                 exact_screen_prunes: discovery.connectivity_prunes,
                 claim_surface: claim_surface.clone(),
+                remaining_one_telemetry: Some(discovery.remaining_one_telemetry),
                 note: Some("claim_early_exhaustive_catalog".to_owned()),
             },
             true,
@@ -4481,6 +4516,7 @@ fn discover_demo_early_exhaustive_candidates(
                     legality_cache_entries: discovery.prefix_legality_cache.entry_counts().into(),
                     exact_screen_prunes: discovery.connectivity_prunes,
                     claim_surface: claim_surface.clone(),
+                    remaining_one_telemetry: Some(discovery.remaining_one_telemetry),
                     note: Some("claim_early_exhaustive_progress".to_owned()),
                 },
                 false,
@@ -4649,6 +4685,84 @@ fn can_process_exact_two_step_terminal_surface_now(
     prefix_frontier_work_key(last_terminal_prefix) < prefix_frontier_work_key(frontier_head)
 }
 
+fn screen_prefix_for_frontier(
+    step_index: u32,
+    library: &Library,
+    admissibility: StrictAdmissibility,
+    objective_bar: Rational,
+    nu_history: &[(u32, u32)],
+    clause_catalog: &ClauseCatalog,
+    work_item: &OnlinePrefixWorkItem,
+    discovery: &mut RealisticShadowDiscovery,
+) -> (ExactPartialPrefixBoundDecision, bool) {
+    let track_remaining_one = work_item.remaining_clause_slots == 1;
+    if track_remaining_one {
+        discovery
+            .remaining_one_telemetry
+            .remaining_one_prefixes_seen += 1;
+    }
+
+    let bound_started = Instant::now();
+    if let Some(decision) = cached_terminal_prefix_queue_entry_bound_decision(
+        objective_bar,
+        work_item,
+        &mut discovery.prefix_legality_cache,
+        Some(&mut discovery.remaining_one_telemetry),
+    ) {
+        discovery
+            .remaining_one_telemetry
+            .exact_partial_prefix_bound_millis = discovery
+            .remaining_one_telemetry
+            .exact_partial_prefix_bound_millis
+            .saturating_add(elapsed_millis(bound_started.elapsed()));
+        if track_remaining_one
+            && matches!(decision, ExactPartialPrefixBoundDecision::CannotClearBar)
+        {
+            discovery
+                .remaining_one_telemetry
+                .remaining_one_bar_prunes_pre_materialize += 1;
+        }
+        return (decision, false);
+    }
+
+    let mut exact_bound_budget = EXACT_PARTIAL_PREFIX_BOUND_BUDGET;
+    let decision = exact_partial_prefix_bound_decision(
+        step_index,
+        library,
+        admissibility,
+        objective_bar,
+        nu_history,
+        clause_catalog,
+        work_item,
+        &mut discovery.prefix_legality_cache,
+        &mut exact_bound_budget,
+        Some(&mut discovery.remaining_one_telemetry),
+    );
+    discovery
+        .remaining_one_telemetry
+        .exact_partial_prefix_bound_millis = discovery
+        .remaining_one_telemetry
+        .exact_partial_prefix_bound_millis
+        .saturating_add(elapsed_millis(bound_started.elapsed()));
+    if track_remaining_one {
+        match decision {
+            ExactPartialPrefixBoundDecision::CannotClearBar => {
+                discovery
+                    .remaining_one_telemetry
+                    .remaining_one_bar_prunes_pre_materialize += 1;
+            }
+            ExactPartialPrefixBoundDecision::Unknown => {
+                discovery
+                    .remaining_one_telemetry
+                    .remaining_one_unknown_bound_budget_exhaustions += 1;
+            }
+            ExactPartialPrefixBoundDecision::CanClearBar => {}
+        }
+    }
+
+    (decision, true)
+}
+
 fn process_prepared_exact_two_step_terminal_surface(
     step_index: u32,
     library: &Library,
@@ -4664,7 +4778,17 @@ fn process_prepared_exact_two_step_terminal_surface(
     for terminal_prefix in terminal_prefixes {
         debug_assert_eq!(terminal_prefix.remaining_clause_slots, 1);
 
-        let mut group = materialize_terminal_prefix_group(
+        if claim_try_cached_rank_prune_before_materialization(
+            admissibility,
+            &terminal_prefix.signature,
+            &terminal_prefix.prefix_telescope,
+            terminal_prefix.clause_kappa,
+            discovery,
+        ) {
+            continue;
+        }
+
+        let mut group = materialize_remaining_one_prefix_group(
             step_index,
             library,
             admissibility,
@@ -4719,6 +4843,9 @@ fn process_prepared_exact_two_step_terminal_surface(
             };
         if let Some(pruned_candidates) = cached_rank_prune_count {
             discovery.terminal_rank_prunes += pruned_candidates;
+            discovery
+                .remaining_one_telemetry
+                .remaining_one_rank_prunes_post_materialize += 1;
             discovery.record_demo_bucket_pruned(bucket_key.clone(), pruned_candidates);
             continue;
         }
@@ -4728,6 +4855,9 @@ fn process_prepared_exact_two_step_terminal_surface(
         ) {
             if !better_rank(&group_best_rank, incumbent_rank) {
                 discovery.terminal_rank_prunes += group.candidates.len();
+                discovery
+                    .remaining_one_telemetry
+                    .remaining_one_rank_prunes_post_materialize += 1;
                 discovery.record_demo_bucket_pruned(bucket_key.clone(), group.candidates.len());
                 continue;
             }
@@ -4900,6 +5030,7 @@ fn exact_partial_prefix_bound_decision(
     work_item: &OnlinePrefixWorkItem,
     prefix_legality_cache: &mut PrefixLegalityCache,
     budget: &mut usize,
+    mut remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
 ) -> ExactPartialPrefixBoundDecision {
     if work_item.remaining_clause_slots == 0 {
         return ExactPartialPrefixBoundDecision::Unknown;
@@ -4928,6 +5059,7 @@ fn exact_partial_prefix_bound_decision(
             work_item.next_clauses(clause_catalog),
             prefix_legality_cache,
             budget,
+            remaining_one_telemetry,
         );
         if let Some(cacheable) = decision.cacheable_partial_decision() {
             prefix_legality_cache
@@ -4990,6 +5122,7 @@ fn exact_partial_prefix_bound_decision(
             &child_work_item,
             prefix_legality_cache,
             budget,
+            remaining_one_telemetry.as_deref_mut(),
         );
         if let Some(cacheable) = propagated_decision.cacheable_partial_decision() {
             let mut signatures = collapsed_signatures;
@@ -5027,13 +5160,17 @@ fn cached_terminal_prefix_queue_entry_bound_decision(
     objective_bar: Rational,
     work_item: &OnlinePrefixWorkItem,
     prefix_legality_cache: &mut PrefixLegalityCache,
+    remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
 ) -> Option<ExactPartialPrefixBoundDecision> {
     if work_item.remaining_clause_slots != 1 {
         return None;
     }
 
-    let summary = prefix_legality_cache.terminal_prefix_completion_summary(&work_item.signature)?;
-    let decision = exact_terminal_prefix_completion_summary_decision(objective_bar, &summary);
+    let bound = prefix_legality_cache.terminal_prefix_bound_summary(&work_item.signature)?;
+    if let Some(telemetry) = remaining_one_telemetry {
+        telemetry.remaining_one_cached_bound_hits += 1;
+    }
+    let decision = exact_terminal_prefix_bound_decision_from_bound(objective_bar, bound);
     if let Some(cacheable) = decision.cacheable_partial_decision() {
         prefix_legality_cache
             .store_partial_prefix_bound_decision(work_item.signature.clone(), cacheable);
@@ -5052,11 +5189,13 @@ fn exact_terminal_prefix_bound_decision(
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
     prefix_legality_cache: &mut PrefixLegalityCache,
     budget: &mut usize,
+    mut remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
 ) -> ExactPartialPrefixBoundDecision {
-    if let Some(summary) =
-        prefix_legality_cache.terminal_prefix_completion_summary(prefix_signature)
-    {
-        return exact_terminal_prefix_completion_summary_decision(objective_bar, &summary);
+    if let Some(bound) = prefix_legality_cache.terminal_prefix_bound_summary(prefix_signature) {
+        if let Some(telemetry) = remaining_one_telemetry.as_deref_mut() {
+            telemetry.remaining_one_cached_bound_hits += 1;
+        }
+        return exact_terminal_prefix_bound_decision_from_bound(objective_bar, bound);
     }
 
     let terminal_clauses = terminal_prefix_clause_candidates(
@@ -5068,6 +5207,7 @@ fn exact_terminal_prefix_bound_decision(
         prefix_legality_cache,
     );
     if spend_exact_partial_prefix_budget(budget, terminal_clauses.len()) {
+        let summary_start = Instant::now();
         let summary = compute_terminal_prefix_completion_summary_from_candidates(
             step_index,
             library,
@@ -5079,9 +5219,14 @@ fn exact_terminal_prefix_bound_decision(
             terminal_clauses,
             prefix_legality_cache,
         );
+        if let Some(telemetry) = remaining_one_telemetry.as_deref_mut() {
+            telemetry.terminal_summary_build_millis = telemetry
+                .terminal_summary_build_millis
+                .saturating_add(elapsed_millis(summary_start.elapsed()));
+        }
         prefix_legality_cache
             .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary.clone());
-        return exact_terminal_prefix_completion_summary_decision(objective_bar, &summary);
+        return exact_terminal_prefix_bound_decision_from_bound(objective_bar, summary.bound);
     }
 
     let prefix_len = prefix_telescope.clauses.len();
@@ -5135,11 +5280,11 @@ fn exact_terminal_prefix_bound_decision(
     ExactPartialPrefixBoundDecision::CannotClearBar
 }
 
-fn exact_terminal_prefix_completion_summary_decision(
+fn exact_terminal_prefix_bound_decision_from_bound(
     objective_bar: Rational,
-    summary: &TerminalPrefixCompletionSummary,
+    bound: Option<PrefixBound>,
 ) -> ExactPartialPrefixBoundDecision {
-    let Some(bound) = summary.bound else {
+    let Some(bound) = bound else {
         return ExactPartialPrefixBoundDecision::CannotClearBar;
     };
     if bound.can_clear_bar(objective_bar) {
@@ -5341,6 +5486,119 @@ fn terminal_completion_can_compete_for_acceptance(
         )
 }
 
+fn materialize_remaining_one_prefix_group(
+    step_index: u32,
+    library: &Library,
+    admissibility: StrictAdmissibility,
+    objective_bar: Rational,
+    nu_history: &[(u32, u32)],
+    prefix_signature: &PrefixSignature,
+    prefix_telescope: &Telescope,
+    filtered_last_clause_options: &[pen_core::clause::ClauseRec],
+    discovery: &mut RealisticShadowDiscovery,
+) -> Result<MaterializedTerminalPrefixGroup> {
+    let materialize_started = Instant::now();
+    let group = materialize_terminal_prefix_group(
+        step_index,
+        library,
+        admissibility,
+        objective_bar,
+        nu_history,
+        prefix_signature,
+        prefix_telescope,
+        filtered_last_clause_options,
+        discovery,
+    )?;
+    discovery.remaining_one_telemetry.remaining_one_materialized += 1;
+    discovery
+        .remaining_one_telemetry
+        .terminal_materialize_millis = discovery
+        .remaining_one_telemetry
+        .terminal_materialize_millis
+        .saturating_add(elapsed_millis(materialize_started.elapsed()));
+    Ok(group)
+}
+
+fn record_terminal_prefix_summary_discovery_counts(
+    discovery: &mut RealisticShadowDiscovery,
+    summary: &TerminalPrefixCompletionSummary,
+) {
+    discovery.raw_generated_surface += summary.evaluations.len();
+
+    for evaluation in &summary.evaluations {
+        match evaluation {
+            TerminalPrefixClauseEvaluation::Disconnected => {}
+            TerminalPrefixClauseEvaluation::AdmissibilityRejected { decision } => {
+                discovery.enumerated_candidates += 1;
+                discovery.well_formed_candidates += 1;
+                discovery.admissibility_diagnostics.record(decision);
+                discovery.admissibility_rejections += 1;
+            }
+            TerminalPrefixClauseEvaluation::Admitted { decision, .. } => {
+                discovery.enumerated_candidates += 1;
+                discovery.well_formed_candidates += 1;
+                discovery.admissibility_diagnostics.record(decision);
+            }
+        }
+    }
+}
+
+fn claim_try_cached_rank_prune_before_materialization(
+    admissibility: StrictAdmissibility,
+    prefix_signature: &PrefixSignature,
+    prefix_telescope: &Telescope,
+    clause_kappa: u16,
+    discovery: &mut RealisticShadowDiscovery,
+) -> bool {
+    if !should_compact_terminal_prefix_group_candidates(admissibility.mode) {
+        return false;
+    }
+
+    let Some(pruned_candidates) = cached_terminal_prefix_rank_prune_count(
+        prefix_signature,
+        discovery.terminal_rank_incumbent.as_ref(),
+        &mut discovery.prefix_legality_cache,
+    ) else {
+        return false;
+    };
+    let Some(summary) = discovery
+        .prefix_legality_cache
+        .take_terminal_prefix_completion_summary(prefix_signature)
+    else {
+        return false;
+    };
+
+    let generated_terminal_candidates = summary.evaluations.len();
+    let admitted_terminal_candidates = summary.admitted_candidate_count;
+    let bucket_key = demo_bucket_key(
+        admissibility.mode,
+        prefix_signature,
+        prefix_telescope,
+        clause_kappa,
+        generated_terminal_candidates,
+        admitted_terminal_candidates,
+    );
+    discovery.record_demo_bucket_surface(
+        bucket_key.clone(),
+        generated_terminal_candidates,
+        admitted_terminal_candidates,
+    );
+    if summary.bound.is_some() {
+        discovery
+            .record_demo_bucket_exact_screened(bucket_key.clone(), admitted_terminal_candidates);
+    }
+    discovery.record_demo_bucket_pruned(bucket_key, pruned_candidates);
+    record_terminal_prefix_summary_discovery_counts(discovery, &summary);
+    discovery.terminal_rank_prunes += pruned_candidates;
+    discovery
+        .remaining_one_telemetry
+        .remaining_one_cached_rank_prunes += 1;
+    discovery
+        .remaining_one_telemetry
+        .remaining_one_rank_prunes_pre_materialize += 1;
+    true
+}
+
 fn materialize_terminal_prefix_group(
     step_index: u32,
     library: &Library,
@@ -5357,6 +5615,9 @@ fn materialize_terminal_prefix_group(
             .prefix_legality_cache
             .take_terminal_prefix_completion_summary(prefix_signature)
         {
+            discovery
+                .remaining_one_telemetry
+                .remaining_one_materialized_from_cached_summary += 1;
             return Ok(materialize_terminal_prefix_group_from_summary(
                 admissibility,
                 objective_bar,
@@ -5366,6 +5627,9 @@ fn materialize_terminal_prefix_group(
             ));
         }
 
+        discovery
+            .remaining_one_telemetry
+            .remaining_one_materialized_compact_direct += 1;
         return materialize_terminal_prefix_group_compact(
             step_index,
             library,
@@ -5426,31 +5690,23 @@ fn materialize_terminal_prefix_group_from_summary(
     summary: TerminalPrefixCompletionSummary,
     discovery: &mut RealisticShadowDiscovery,
 ) -> MaterializedTerminalPrefixGroup {
+    record_terminal_prefix_summary_discovery_counts(discovery, &summary);
     let admitted_terminal_candidates = summary.admitted_candidate_count;
     let best_accept_rank = summary.best_accept_rank.clone();
     let TerminalPrefixCompletionSummary {
         evaluations, bound, ..
     } = summary;
     let generated_terminal_candidates = evaluations.len();
-    discovery.raw_generated_surface += generated_terminal_candidates;
     let mut retained_telescopes = Vec::new();
 
     for evaluation in evaluations {
         match evaluation {
             TerminalPrefixClauseEvaluation::Disconnected => {}
-            TerminalPrefixClauseEvaluation::AdmissibilityRejected { decision } => {
-                discovery.enumerated_candidates += 1;
-                discovery.well_formed_candidates += 1;
-                discovery.admissibility_diagnostics.record(&decision);
-                discovery.admissibility_rejections += 1;
-            }
+            TerminalPrefixClauseEvaluation::AdmissibilityRejected { .. } => {}
             TerminalPrefixClauseEvaluation::Admitted {
                 decision,
                 completion,
             } => {
-                discovery.enumerated_candidates += 1;
-                discovery.well_formed_candidates += 1;
-                discovery.admissibility_diagnostics.record(&decision);
                 if !terminal_completion_can_compete_for_acceptance(
                     prefix_signature,
                     admissibility,
@@ -5962,8 +6218,14 @@ fn cache_evaluated_terminal_prefix_group_candidates(
     candidates: &mut [PrefixGroupCandidate],
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<()> {
+    let sort_started = Instant::now();
     sort_terminal_prefix_group_candidates_for_certification(candidates);
+    discovery.remaining_one_telemetry.candidate_sort_millis = discovery
+        .remaining_one_telemetry
+        .candidate_sort_millis
+        .saturating_add(elapsed_millis(sort_started.elapsed()));
     let compact_claim_mode = should_compact_terminal_prefix_group_candidates(admissibility.mode);
+    let eval_started = Instant::now();
 
     for candidate in candidates.iter_mut() {
         if compact_claim_mode
@@ -6010,6 +6272,13 @@ fn cache_evaluated_terminal_prefix_group_candidates(
         // terminal payload inside the prefix cache.
         compact_terminal_prefix_group_candidates(candidates);
     }
+
+    discovery
+        .remaining_one_telemetry
+        .candidate_eval_minimality_millis = discovery
+        .remaining_one_telemetry
+        .candidate_eval_minimality_millis
+        .saturating_add(elapsed_millis(eval_started.elapsed()));
 
     Ok(())
 }
@@ -7993,6 +8262,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut first_budget,
+            None,
         );
         assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
 
@@ -8025,6 +8295,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut second_budget,
+            None,
         );
 
         assert_eq!(second, first);
@@ -8033,6 +8304,196 @@ mod tests {
             cache.stats().terminal_prefix_completion_hits,
             terminal_summary_hits_before
         );
+    }
+
+    #[test]
+    fn claim_cached_terminal_queue_entry_bound_decision_uses_bound_summary_only() {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = compute_bar(2, 15, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        let work_item = create_online_prefix_work_item(
+            8,
+            prefix,
+            signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut cache,
+        );
+        assert_eq!(work_item.remaining_clause_slots, 1);
+
+        let mut budget = 64;
+        let decision = exact_partial_prefix_bound_decision(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog,
+            &work_item,
+            &mut cache,
+            &mut budget,
+            None,
+        );
+        assert_ne!(decision, super::ExactPartialPrefixBoundDecision::Unknown);
+
+        let completion_hits_before = cache.stats().terminal_prefix_completion_hits;
+        let bound_hits_before = cache.stats().terminal_prefix_bound_hits;
+        let cached = super::cached_terminal_prefix_queue_entry_bound_decision(
+            objective_bar,
+            &work_item,
+            &mut cache,
+            None,
+        )
+        .expect("queue-entry bound decision should use the cached terminal summary");
+
+        assert_eq!(cached, decision);
+        assert_eq!(
+            cache.stats().terminal_prefix_completion_hits,
+            completion_hits_before
+        );
+        assert_eq!(
+            cache.stats().terminal_prefix_bound_hits,
+            bound_hits_before + 1
+        );
+    }
+
+    #[test]
+    fn claim_cached_rank_preprune_consumes_cached_summary_before_materialization() {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = compute_bar(2, 15, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut discovery = super::RealisticShadowDiscovery::default();
+
+        assert!(discovery.prefix_legality_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        let work_item = create_online_prefix_work_item(
+            8,
+            prefix,
+            signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut discovery.prefix_legality_cache,
+        );
+        assert_eq!(work_item.remaining_clause_slots, 1);
+
+        let mut budget = 64;
+        let decision = exact_partial_prefix_bound_decision(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog,
+            &work_item,
+            &mut discovery.prefix_legality_cache,
+            &mut budget,
+            None,
+        );
+        assert_ne!(decision, super::ExactPartialPrefixBoundDecision::Unknown);
+        assert_eq!(
+            discovery
+                .prefix_legality_cache
+                .entry_counts()
+                .terminal_prefix_completions,
+            1
+        );
+
+        discovery.terminal_rank_incumbent = Some(
+            discovery
+                .prefix_legality_cache
+                .terminal_prefix_rank_summary(&signature)
+                .and_then(|summary| summary.best_accept_rank)
+                .expect("terminal prefix should cache an exact best accept rank"),
+        );
+
+        assert!(super::claim_try_cached_rank_prune_before_materialization(
+            admissibility,
+            &work_item.signature,
+            &work_item.prefix_telescope,
+            work_item.clause_kappa,
+            &mut discovery,
+        ));
+        assert_eq!(
+            discovery
+                .prefix_legality_cache
+                .entry_counts()
+                .terminal_prefix_completions,
+            0,
+            "claim cached rank pre-prune should consume the cached terminal payload"
+        );
+        assert_eq!(
+            discovery
+                .remaining_one_telemetry
+                .remaining_one_cached_rank_prunes,
+            1
+        );
+        assert_eq!(
+            discovery
+                .remaining_one_telemetry
+                .remaining_one_rank_prunes_pre_materialize,
+            1
+        );
+        assert!(discovery.raw_generated_surface > 0);
+        assert!(discovery.enumerated_candidates > 0);
+        assert!(discovery.terminal_rank_prunes > 0);
     }
 
     #[test]
@@ -8092,6 +8553,7 @@ mod tests {
             &work_item,
             &mut discovery.prefix_legality_cache,
             &mut budget,
+            None,
         );
         assert_ne!(decision, super::ExactPartialPrefixBoundDecision::Unknown);
         assert_eq!(
@@ -8123,6 +8585,92 @@ mod tests {
                 .terminal_prefix_completions,
             0,
             "claim materialization should release the cached terminal completion payload"
+        );
+        assert_eq!(
+            discovery
+                .remaining_one_telemetry
+                .remaining_one_materialized_from_cached_summary,
+            1
+        );
+        assert_eq!(
+            discovery
+                .remaining_one_telemetry
+                .remaining_one_materialized_compact_direct,
+            0
+        );
+    }
+
+    #[test]
+    fn claim_materialization_tracks_direct_compact_path_without_cache() {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = compute_bar(2, 15, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut discovery = super::RealisticShadowDiscovery::default();
+
+        assert!(discovery.prefix_legality_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        let work_item = create_online_prefix_work_item(
+            8,
+            prefix,
+            signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut discovery.prefix_legality_cache,
+        );
+        assert_eq!(work_item.remaining_clause_slots, 1);
+
+        let group = super::materialize_terminal_prefix_group(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &work_item.signature,
+            &work_item.prefix_telescope,
+            work_item.next_clauses(&clause_catalog),
+            &mut discovery,
+        )
+        .expect("materialization should succeed");
+
+        assert!(group.generated_terminal_candidates >= group.admissible_terminal_candidates);
+        assert_eq!(
+            discovery
+                .remaining_one_telemetry
+                .remaining_one_materialized_from_cached_summary,
+            0
+        );
+        assert_eq!(
+            discovery
+                .remaining_one_telemetry
+                .remaining_one_materialized_compact_direct,
+            1
         );
     }
 
@@ -8724,6 +9272,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut first_budget,
+            None,
         );
         assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
 
@@ -8739,6 +9288,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut second_budget,
+            None,
         );
 
         assert_eq!(second, first);
@@ -8802,6 +9352,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut first_budget,
+            None,
         );
         assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
 
@@ -8834,6 +9385,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut second_budget,
+            None,
         );
 
         assert_eq!(second, first);
@@ -8901,6 +9453,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut budget,
+            None,
         );
         assert_eq!(
             decision,

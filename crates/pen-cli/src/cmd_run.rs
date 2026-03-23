@@ -846,6 +846,7 @@ fn step_live_checkpoint_event(
             },
             "exact_screen_prunes": checkpoint.exact_screen_prunes,
             "claim_surface": checkpoint.claim_surface,
+            "remaining_one_telemetry": checkpoint.remaining_one_telemetry,
             "observed_process_rss_bytes": current_process_rss_bytes().unwrap_or(0),
             "note": checkpoint.note,
         }),
@@ -885,6 +886,7 @@ fn append_live_checkpoint_artifact(run_dir: &Path, checkpoint: &StepLiveCheckpoi
             "legality_cache_entries": checkpoint.legality_cache_entries,
             "exact_screen_prunes": checkpoint.exact_screen_prunes,
             "claim_surface": checkpoint.claim_surface,
+            "remaining_one_telemetry": checkpoint.remaining_one_telemetry,
             "observed_process_rss_bytes": current_process_rss_bytes().unwrap_or(0),
             "note": checkpoint.note,
         }))?
@@ -1723,6 +1725,25 @@ mod tests {
                 claim_widening_band8_active: false,
                 claim_widening_band9_active: false,
             }),
+            remaining_one_telemetry: Some(pen_search::engine::RemainingOneTelemetry {
+                remaining_one_prefixes_seen: 21,
+                remaining_one_cached_bound_hits: 8,
+                remaining_one_cached_rank_prunes: 3,
+                remaining_one_materialized: 5,
+                remaining_one_materialized_from_cached_summary: 2,
+                remaining_one_materialized_compact_direct: 3,
+                remaining_one_bar_prunes_pre_materialize: 4,
+                remaining_one_rank_prunes_pre_materialize: 3,
+                remaining_one_rank_prunes_post_materialize: 1,
+                remaining_one_unknown_bound_budget_exhaustions: 2,
+                prepare_exact_two_step_terminal_surface_millis: 11,
+                exact_partial_prefix_bound_millis: 22,
+                terminal_summary_build_millis: 33,
+                terminal_materialize_millis: 44,
+                candidate_sort_millis: 55,
+                candidate_eval_minimality_millis: 66,
+                frontier_sort_pop_millis: 77,
+            }),
             note: Some("claim_early_exhaustive_catalog".to_owned()),
         });
 
@@ -1732,6 +1753,7 @@ mod tests {
         assert!(telemetry.contains("\"observed_process_rss_bytes\""));
         assert!(telemetry.contains("\"claim_surface\""));
         assert!(telemetry.contains("\"claim_generic\""));
+        assert!(telemetry.contains("\"remaining_one_telemetry\""));
 
         let live_step_four = fs::read_to_string(
             run_dir
@@ -1742,6 +1764,7 @@ mod tests {
         .expect("step 4 live checkpoints should exist");
         assert!(live_step_four.contains("\"note\":\"claim_early_exhaustive_catalog\""));
         assert!(live_step_four.contains("\"observed_process_rss_bytes\""));
+        assert!(live_step_four.contains("\"remaining_one_prefixes_seen\":21"));
         assert!(!live_step_four.contains("demo_breadth_shadow"));
 
         fs::remove_dir_all(root).ok();
