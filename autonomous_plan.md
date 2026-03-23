@@ -3,143 +3,132 @@
 Last updated: 2026-03-23
 Status: active
 
-This file tracks only the remaining operational work for
-`desktop_claim_shadow`. Completed rollout work belongs in the skill
-references and claim-lane baseline docs.
+This file is the staged path from the current claim-lane bottleneck to final
+signoff. It intentionally omits rollout history that no longer changes the next
+decisions.
 
 ## Objective
 
-Produce one stored, full-profile `desktop_claim_shadow` bundle from the
-disclosed desktop that:
+Produce one stored `desktop_claim_shadow` bundle from the disclosed desktop
+that:
 
-- finishes through step `15` without allocator abort
-- preserves auditable failure artifacts if a rerun still stops early
+- finishes through step `15`
 - preserves accepted-hash parity and honest breadth accounting
 - passes compare, benchmark, and certification on stored evidence
 
 Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
-## Current Operating Picture
+## Current Operating Read
 
-- The active blocker is still runtime stability on
-  `configs/desktop_claim_shadow_1h.toml`.
-- The latest allocator-backed full-profile failure on older binaries is still
-  `memory allocation of 1212416 bytes failed`, but the newest intended-profile
-  rerun on the delayed-summary binary no longer re-hit it before manual stop.
-- Failure survivability is no longer the issue: claim runs now keep
-  `run.json`, step artifacts, frontier snapshots, and narratives on disk.
-- The old step-`4` startup RSS cliff has moved materially:
-  - `codex-claim-shared-signature-v1` still showed about `3.06 GiB`
-  - `codex-claim-frontier-catalog-reuse-v1` removed that startup checkpoint
-    from stored evidence and first reported about `66.4 MiB` at step `4`
-- The optimized release reruns now add a sharper read:
-  - `codex-claim-release-step5-v1` stayed under about `167.1 MiB` observed RSS
-    after `1777.1s` on step `4`, so the early release build is no longer
-    showing the old allocator cliff there
-  - the new direct compact claim materialization fast path plus shared
-    work-item order key improved the same hot step-`4` checkpoints by about
-    `12-14%` on `codex-claim-release-step4-fastpath-v2`
-  - a follow-up slice-based terminal-clause filter path that reuses the shared
-    clause slice when claim filters are inactive improved those same hot
-    checkpoints by about `18-20%` versus `codex-claim-release-step4-fastpath-v2`
-    on `codex-claim-release-filter-slice-v1a` while keeping observed RSS below
-    about `84.0 MiB` through prefix state `7`
-  - a follow-up intended-profile rerun on that newer binary
-    (`codex-claim-release-full-v1a`) did not re-hit the old allocator abort
-    before an external timeout after `3844.7s`; by then step `4` had explored
-    `43` prefix states, enumerated `848047359` candidates, kept the frontier
-    queue at `2732`, and held observed RSS to about `278.2 MiB`
-  - the same stored step-live stream also showed the retained prefix cache
-    flattening after prefix state `24`: later checkpoints stayed at `39`
-    groups / `144845` retained candidates while legality summaries kept rising
-    from `140197` to `205199`, so much of the remaining step-`4` cost was
-    still repeated exact terminal completion on surfaces that were no longer
-    adding new retained groups
-  - a follow-up throughput pass now reuses one scratch terminal telescope plus
-    the precomputed prefix bit cost across claim exact terminal bound checks,
-    completion summaries, and compact materialization, so the hot remaining-two
-    path stops cloning the full prefix telescope for every admitted last-clause
-    candidate
-  - a newer claim-only throughput pass now skips discovery-time full
-    evaluation for compact terminal candidates that are already below bar or
-    no longer beat the current incumbent; a fresh single-worker smoke rerun
-    (`codex-claim-scratch-smoke-v2`) then reached `prefix_states_explored = 5`
-    at `499.9s` versus `519.4s` on `codex-claim-scratch-smoke-v1`, reached
-    `prefix_states_explored = 6` at `572.7s`, and stayed below about
-    `82.0 MiB` observed RSS through that checkpoint before manual stop
-  - a newer intended-profile rerun on the kept delayed-summary binary
-    (`codex-claim-release-full-delayed-summary-v1`) then kept that gain on the
-    real `desktop_claim_shadow_1h` shape: it reached matching step-`4`
-    checkpoints materially earlier than `codex-claim-release-full-v1a`, had
-    already reached `prefix_states_explored = 52` by about the old run's last
-    stored checkpoint wall clock (`3936.1s`), and was manually stopped at
-    `prefix_states_explored = 59` / `4529.4s` with frontier queue length
-    `2716`, legality summaries `279487`, retained prefix-cache still
-    `39 / 144845`, `terminal_summary_build_millis = 4387822 ms`,
-    `terminal_materialize_millis = 527 ms`, and observed RSS about `266.0 MiB`
-- That means the queue-side cloned clause-catalog spike is no longer the main
-  blocker, and the old allocator abort is no longer the first visible failure
-  mode on the new binary. The next blocker is still step-`4` throughput on the
-  optimized claim lane, but the hot cost has now moved from compact
-  materialization into remaining-one terminal-summary construction on the real
-  intended profile.
+- The live blocker is still step-`4` throughput on the real
+  `desktop_claim_shadow_1h` profile.
+- The current full-profile baseline is
+  `runs/codex-claim-release-full-delayed-summary-v1`.
+- Delayed materialization is already earned and should be treated as baseline.
+- The hot cost has shifted from compact materialization into remaining-one
+  terminal-summary construction.
+- No downstream signoff work matters until that step-`4` throughput improves
+  again.
 
-## Working Order
+## Execution Order
 
-### 1. Keep Pushing The Optimized Claim Run Farther
+### Phase 1. Win The Next Step-`4` Throughput Slice
 
-Run `desktop_claim_shadow_1h` on the disclosed desktop with the latest release
-binary and inspect the stored artifacts, not terminal output.
+Goal:
 
-Focus on:
+- make summary build cheaper or kill more work before summary build starts
 
-- latest completed step
-- observed RSS versus governor-accounted RSS gap
-- step `4` / `5` live checkpoints
-- whether step `4` now moves materially farther inside the same budget window
-- whether the run now fails later than the old step-`4` startup cliff
+Required output:
 
-### 2. If It Still Stalls, Isolate The Next Real Cost Center
+- one narrow search-code patch
+- one stored release rerun with `until_step = 4`
+- a telemetry comparison against the current baselines
 
-Use the stored bundle to decide which remaining pressure story is real:
+Done when:
 
-- step-`4` exact remaining-two throughput
-- legality-summary residency
-- raw-surface expansion
-- later-step frontier retention
-- worker scratch / spill / checkpoint pressure
-- some still-untracked allocation path
+- the rerun shows a real stored win in summary-side step-`4` telemetry
 
-Do not reopen already-landed policy split work unless the stored evidence
-forces it.
+### Phase 2. Re-Earn The Real Full-Profile Read
 
-### 3. Once It Finishes, Re-Earn Stored Claim Evidence
+Goal:
 
-From the stabilized full-profile bundle:
+- prove the winning step-`4` patch helps on the real
+  `desktop_claim_shadow_1h` profile
 
-- preserve accepted-hash parity through step `15`
-- re-earn early and late breadth gates from stored counts
-- keep `full_telescopes_evaluated` inside a moderate certified range
-- make fallback, exact-screen reasons, and prune classes impossible to miss
+Required output:
 
-Breadth gates that still must be earned from stored claim evidence:
+- one new stored intended-profile rerun
+- a read of its full-profile artifacts, especially `step-04-live.ndjson`
 
-- step `1` generated raw `= 2144`
-- step `10` generated `>= 500`
-- step `11` generated `>= 800`
-- step `12` generated `>= 1200`
-- step `13` generated `>= 2200`
-- step `14` generated `>= 3500`
-- step `15` generated `>= 5000`
+Done when:
 
-### 4. Freeze Benchmarking And Certification On That Bundle
+- the full-profile rerun either moves materially farther or exposes a new later
+  blocker honestly
 
-Use the same stabilized bundle to produce:
+### Phase 3. Finish A Full Claim Bundle
 
-- one guarded-vs-claim compare report
+Goal:
+
+- complete one intended-profile run through step `15`
+
+Required output:
+
+- one canonical claim-lane run directory from the disclosed desktop
+- accepted parity through step `15`
+- honest breadth evidence through the required floors
+- complete reason and prune accounting
+
+Done when:
+
+- one stored run finishes through step `15` and still satisfies the claim-lane
+  honesty boundary
+
+### Phase 4. Freeze Signoff Artifacts
+
+Goal:
+
+- turn the finished run into the repo's auditable claim bundle
+
+Required output:
+
+- one compare report against the guarded reference
 - one benchmark bundle
 - one passing `claim_certificate.json`
 - one certified runtime threshold tied to stored evidence
+
+Done when:
+
+- another reviewer can audit the full claim from stored artifacts alone
+
+### Phase 5. Open The Language Gate
+
+Goal:
+
+- allow stronger wording only after the technical gate is closed
+
+Required output:
+
+- user-facing and paper-facing wording updated only after certification passes
+
+Done when:
+
+- the stronger sentence is explicitly tied to the stored claim certificate and
+  disclosed desktop bundle
+
+## Non-Goals Until Phase 1 Wins
+
+- reopening split-handoff work
+- reopening memory compaction first
+- broad frontier rewrites
+- benchmark or certification work
+- stronger user-facing language
+
+## Baselines To Compare Against
+
+- `runs/codex-claim-release-full-v1a`
+- `runs/codex-claim-release-full-delayed-summary-v1`
+- `runs/codex-claim-release-step4-delayed-summary-v1`
+- `runs/codex-claim-release-step4-telemetry-v1`
 
 ## Success Condition
 
@@ -150,25 +139,6 @@ disclosed desktop shows all of the following at the same time:
 - no silent guarded, replay, realistic-shadow, or demo-only fallback
 - accepted parity through step `15`
 - breadth gates passed honestly from stored evidence
-- complete reason / prune accounting
+- complete reason and prune accounting
 - benchmark and manifest data sufficient for certification
 - passing compare and certification outputs
-
-## Immediate Next Slice
-
-1. Patch one narrow remaining-one terminal-summary or earlier-incumbent path
-   on top of the kept delayed-summary binary, then inspect the stored step-live
-   artifacts rather than terminal output.
-2. If the updated `until_step = 4` rerun shows a real summary-side win, rerun
-   the intended `desktop_claim_shadow_1h` profile on that same binary; if it
-   does not, do not stack more speculative search changes on top.
-3. If a rerun completes, move immediately to compare, benchmark, and
-   certification on that same run directory.
-
-## Guardrails
-
-- Preserve existing `strict_canon_guarded`, `realistic_frontier_shadow`, and
-  `demo_breadth_shadow` behavior.
-- Prefer narrow fixes driven by stored evidence over broad speculative rewrites.
-- Do not lower breadth floors or hide misses to make the claim look cleaner.
-- Do not use stronger language such as `unguided` before certification passes.
