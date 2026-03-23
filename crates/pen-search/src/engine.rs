@@ -4108,11 +4108,16 @@ fn discover_realistic_shadow_candidates(
             let prefix_len = work_item.prefix_telescope.clauses.len();
 
             if prefix_len + 1 == usize::from(work_item.clause_kappa) {
-                if claim_try_cached_rank_prune_before_materialization(
+                if claim_try_summary_prune_before_materialization(
+                    step_index,
+                    library,
                     admissibility,
+                    objective_bar,
+                    nu_history,
                     &work_item.signature,
                     &work_item.prefix_telescope,
                     work_item.clause_kappa,
+                    work_item.next_clauses(&clause_catalog),
                     &mut discovery,
                 ) {
                     continue;
@@ -4778,11 +4783,16 @@ fn process_prepared_exact_two_step_terminal_surface(
     for terminal_prefix in terminal_prefixes {
         debug_assert_eq!(terminal_prefix.remaining_clause_slots, 1);
 
-        if claim_try_cached_rank_prune_before_materialization(
+        if claim_try_summary_prune_before_materialization(
+            step_index,
+            library,
             admissibility,
+            objective_bar,
+            nu_history,
             &terminal_prefix.signature,
             &terminal_prefix.prefix_telescope,
             terminal_prefix.clause_kappa,
+            terminal_prefix.next_clauses(clause_catalog),
             discovery,
         ) {
             continue;
@@ -5216,6 +5226,11 @@ fn exact_terminal_prefix_bound_decision(
             nu_history,
             prefix_signature,
             prefix_telescope,
+            if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
+                TerminalPrefixSummaryPayload::Compact
+            } else {
+                TerminalPrefixSummaryPayload::Full
+            },
             terminal_clauses,
             prefix_legality_cache,
         );
@@ -5294,6 +5309,12 @@ fn exact_terminal_prefix_bound_decision_from_bound(
     }
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum TerminalPrefixSummaryPayload {
+    Compact,
+    Full,
+}
+
 fn terminal_prefix_clause_candidates<'a>(
     step_index: u32,
     library: &Library,
@@ -5361,13 +5382,17 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     nu_history: &[(u32, u32)],
     prefix_signature: &PrefixSignature,
     prefix_telescope: &Telescope,
+    payload: TerminalPrefixSummaryPayload,
     terminal_clauses: Vec<(
         &pen_core::clause::ClauseRec,
         Option<pen_type::admissibility::AdmissibilityDecision>,
     )>,
     prefix_legality_cache: &mut PrefixLegalityCache,
 ) -> TerminalPrefixCompletionSummary {
-    let mut summary = TerminalPrefixCompletionSummary::default();
+    let mut summary = TerminalPrefixCompletionSummary {
+        evaluations: matches!(payload, TerminalPrefixSummaryPayload::Full).then(Vec::new),
+        ..TerminalPrefixCompletionSummary::default()
+    };
     let prefix_len = prefix_telescope.clauses.len();
     let clause_kappa_used =
         u16::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u16");
@@ -5380,13 +5405,14 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
         else {
             continue;
         };
+        summary.generated_candidate_count += 1;
         if matches!(
             connectivity_decision,
             TerminalConnectivityDecision::PruneDisconnected
         ) {
-            summary
-                .evaluations
-                .push(TerminalPrefixClauseEvaluation::Disconnected);
+            if let Some(evaluations) = summary.evaluations.as_mut() {
+                evaluations.push(TerminalPrefixClauseEvaluation::Disconnected);
+            }
             continue;
         }
 
@@ -5397,9 +5423,9 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
             TerminalConnectivityDecision::NeedsFallback
         ) {
             if !passes_connectivity(library, telescope) {
-                summary
-                    .evaluations
-                    .push(TerminalPrefixClauseEvaluation::Disconnected);
+                if let Some(evaluations) = summary.evaluations.as_mut() {
+                    evaluations.push(TerminalPrefixClauseEvaluation::Disconnected);
+                }
                 continue;
             }
         }
@@ -5409,12 +5435,15 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
         } else {
             assess_strict_admissibility(step_index, library, telescope, admissibility)
         };
+        summary
+            .admissibility_diagnostics
+            .record(&admissibility_decision);
         if !admissibility_decision.is_admitted() {
-            summary
-                .evaluations
-                .push(TerminalPrefixClauseEvaluation::AdmissibilityRejected {
+            if let Some(evaluations) = summary.evaluations.as_mut() {
+                evaluations.push(TerminalPrefixClauseEvaluation::AdmissibilityRejected {
                     decision: admissibility_decision,
                 });
+            }
             continue;
         }
 
@@ -5447,9 +5476,8 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                 }
             }
         }
-        summary
-            .evaluations
-            .push(TerminalPrefixClauseEvaluation::Admitted {
+        if let Some(evaluations) = summary.evaluations.as_mut() {
+            evaluations.push(TerminalPrefixClauseEvaluation::Admitted {
                 decision: admissibility_decision,
                 completion: TerminalPrefixCompletion {
                     telescope: telescope.clone(),
@@ -5458,6 +5486,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     clause_kappa_used,
                 },
             });
+        }
     }
 
     summary
@@ -5523,44 +5552,93 @@ fn record_terminal_prefix_summary_discovery_counts(
     discovery: &mut RealisticShadowDiscovery,
     summary: &TerminalPrefixCompletionSummary,
 ) {
-    discovery.raw_generated_surface += summary.evaluations.len();
-
-    for evaluation in &summary.evaluations {
-        match evaluation {
-            TerminalPrefixClauseEvaluation::Disconnected => {}
-            TerminalPrefixClauseEvaluation::AdmissibilityRejected { decision } => {
-                discovery.enumerated_candidates += 1;
-                discovery.well_formed_candidates += 1;
-                discovery.admissibility_diagnostics.record(decision);
-                discovery.admissibility_rejections += 1;
-            }
-            TerminalPrefixClauseEvaluation::Admitted { decision, .. } => {
-                discovery.enumerated_candidates += 1;
-                discovery.well_formed_candidates += 1;
-                discovery.admissibility_diagnostics.record(decision);
-            }
-        }
+    let evaluated_candidates = summary.admitted_candidate_count
+        + summary.admissibility_diagnostics.exact_legality_rejections
+        + summary
+            .admissibility_diagnostics
+            .structural_debt_cap_rejections;
+    discovery.raw_generated_surface += summary.generated_candidate_count;
+    discovery.enumerated_candidates += evaluated_candidates;
+    discovery.well_formed_candidates += evaluated_candidates;
+    discovery.admissibility_rejections +=
+        summary.admissibility_diagnostics.exact_legality_rejections;
+    discovery.admissibility_rejections += summary
+        .admissibility_diagnostics
+        .structural_debt_cap_rejections;
+    discovery
+        .admissibility_diagnostics
+        .exact_legality_rejections += summary.admissibility_diagnostics.exact_legality_rejections;
+    discovery
+        .admissibility_diagnostics
+        .structural_debt_cap_rejections += summary
+        .admissibility_diagnostics
+        .structural_debt_cap_rejections;
+    discovery.admissibility_diagnostics.admitted_deprioritized +=
+        summary.admissibility_diagnostics.admitted_deprioritized;
+    discovery.admissibility_diagnostics.admitted_focus_aligned +=
+        summary.admissibility_diagnostics.admitted_focus_aligned;
+    for (reason, count) in &summary.admissibility_diagnostics.reason_counts {
+        *discovery
+            .admissibility_diagnostics
+            .reason_counts
+            .entry(reason.clone())
+            .or_insert(0) += *count;
     }
 }
 
-fn claim_try_cached_rank_prune_before_materialization(
+fn claim_try_summary_prune_before_materialization(
+    step_index: u32,
+    library: &Library,
     admissibility: StrictAdmissibility,
+    objective_bar: Rational,
+    nu_history: &[(u32, u32)],
     prefix_signature: &PrefixSignature,
     prefix_telescope: &Telescope,
     clause_kappa: u16,
+    filtered_last_clause_options: &[pen_core::clause::ClauseRec],
     discovery: &mut RealisticShadowDiscovery,
 ) -> bool {
     if !should_compact_terminal_prefix_group_candidates(admissibility.mode) {
         return false;
     }
 
-    let Some(pruned_candidates) = cached_terminal_prefix_rank_prune_count(
-        prefix_signature,
-        discovery.terminal_rank_incumbent.as_ref(),
-        &mut discovery.prefix_legality_cache,
-    ) else {
-        return false;
-    };
+    if discovery
+        .prefix_legality_cache
+        .terminal_prefix_bound_summary(prefix_signature)
+        .is_none()
+    {
+        let summary_started = Instant::now();
+        let terminal_clauses = terminal_prefix_clause_candidates(
+            step_index,
+            library,
+            admissibility,
+            prefix_signature,
+            filtered_last_clause_options,
+            &mut discovery.prefix_legality_cache,
+        );
+        let summary = compute_terminal_prefix_completion_summary_from_candidates(
+            step_index,
+            library,
+            admissibility,
+            objective_bar,
+            nu_history,
+            prefix_signature,
+            prefix_telescope,
+            TerminalPrefixSummaryPayload::Compact,
+            terminal_clauses,
+            &mut discovery.prefix_legality_cache,
+        );
+        discovery
+            .remaining_one_telemetry
+            .terminal_summary_build_millis = discovery
+            .remaining_one_telemetry
+            .terminal_summary_build_millis
+            .saturating_add(elapsed_millis(summary_started.elapsed()));
+        discovery
+            .prefix_legality_cache
+            .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary);
+    }
+
     let Some(summary) = discovery
         .prefix_legality_cache
         .take_terminal_prefix_completion_summary(prefix_signature)
@@ -5568,7 +5646,7 @@ fn claim_try_cached_rank_prune_before_materialization(
         return false;
     };
 
-    let generated_terminal_candidates = summary.evaluations.len();
+    let generated_terminal_candidates = summary.generated_candidate_count;
     let admitted_terminal_candidates = summary.admitted_candidate_count;
     let bucket_key = demo_bucket_key(
         admissibility.mode,
@@ -5587,6 +5665,36 @@ fn claim_try_cached_rank_prune_before_materialization(
         discovery
             .record_demo_bucket_exact_screened(bucket_key.clone(), admitted_terminal_candidates);
     }
+    if summary.bound.is_none() {
+        record_terminal_prefix_summary_discovery_counts(discovery, &summary);
+        return true;
+    }
+
+    if !summary
+        .bound
+        .expect("checked for missing bound above")
+        .can_clear_bar(objective_bar)
+    {
+        discovery.record_demo_bucket_pruned(bucket_key, admitted_terminal_candidates);
+        record_terminal_prefix_summary_discovery_counts(discovery, &summary);
+        discovery.terminal_prefix_bar_prunes += 1;
+        discovery
+            .remaining_one_telemetry
+            .remaining_one_bar_prunes_pre_materialize += 1;
+        return true;
+    }
+
+    let Some(pruned_candidates) = terminal_prefix_rank_prune_count(
+        summary.best_accept_rank.as_ref(),
+        admitted_terminal_candidates,
+        discovery.terminal_rank_incumbent.as_ref(),
+    ) else {
+        discovery
+            .prefix_legality_cache
+            .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary);
+        return false;
+    };
+
     discovery.record_demo_bucket_pruned(bucket_key, pruned_candidates);
     record_terminal_prefix_summary_discovery_counts(discovery, &summary);
     discovery.terminal_rank_prunes += pruned_candidates;
@@ -5615,16 +5723,18 @@ fn materialize_terminal_prefix_group(
             .prefix_legality_cache
             .take_terminal_prefix_completion_summary(prefix_signature)
         {
-            discovery
-                .remaining_one_telemetry
-                .remaining_one_materialized_from_cached_summary += 1;
-            return Ok(materialize_terminal_prefix_group_from_summary(
-                admissibility,
-                objective_bar,
-                prefix_signature,
-                summary,
-                discovery,
-            ));
+            if summary.evaluations.is_some() {
+                discovery
+                    .remaining_one_telemetry
+                    .remaining_one_materialized_from_cached_summary += 1;
+                return Ok(materialize_terminal_prefix_group_from_summary(
+                    admissibility,
+                    objective_bar,
+                    prefix_signature,
+                    summary,
+                    discovery,
+                ));
+            }
         }
 
         discovery
@@ -5665,6 +5775,7 @@ fn materialize_terminal_prefix_group(
             nu_history,
             prefix_signature,
             prefix_telescope,
+            TerminalPrefixSummaryPayload::Full,
             terminal_clauses,
             &mut discovery.prefix_legality_cache,
         );
@@ -5693,10 +5804,11 @@ fn materialize_terminal_prefix_group_from_summary(
     record_terminal_prefix_summary_discovery_counts(discovery, &summary);
     let admitted_terminal_candidates = summary.admitted_candidate_count;
     let best_accept_rank = summary.best_accept_rank.clone();
-    let TerminalPrefixCompletionSummary {
-        evaluations, bound, ..
-    } = summary;
-    let generated_terminal_candidates = evaluations.len();
+    let generated_terminal_candidates = summary.generated_candidate_count;
+    let bound = summary.bound;
+    let evaluations = summary
+        .evaluations
+        .expect("cached completion payload missing for summary materialization");
     let mut retained_telescopes = Vec::new();
 
     for evaluation in evaluations {
@@ -8162,6 +8274,7 @@ mod tests {
             &nu_history,
             &signature,
             &prefix,
+            super::TerminalPrefixSummaryPayload::Full,
             terminal_clauses,
             &mut cache,
         );
@@ -8201,7 +8314,7 @@ mod tests {
             });
         }
 
-        assert_eq!(summary.evaluations, direct_evaluations);
+        assert_eq!(summary.evaluations, Some(direct_evaluations));
         assert_eq!(summary.admitted_candidate_count, direct_admitted);
     }
 
@@ -8464,11 +8577,25 @@ mod tests {
                 .expect("terminal prefix should cache an exact best accept rank"),
         );
 
-        assert!(super::claim_try_cached_rank_prune_before_materialization(
+        assert!(
+            discovery
+                .prefix_legality_cache
+                .terminal_prefix_completion_summary(&signature)
+                .expect("terminal prefix should cache a pruning summary")
+                .evaluations
+                .is_none()
+        );
+
+        assert!(super::claim_try_summary_prune_before_materialization(
+            15,
+            &library,
             admissibility,
+            objective_bar,
+            &nu_history,
             &work_item.signature,
             &work_item.prefix_telescope,
             work_item.clause_kappa,
+            work_item.next_clauses(&clause_catalog),
             &mut discovery,
         ));
         assert_eq!(
@@ -8497,7 +8624,7 @@ mod tests {
     }
 
     #[test]
-    fn claim_materialization_consumes_cached_terminal_completion_summary() {
+    fn claim_materialization_reopens_after_cached_pruning_summary() {
         let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
         let mut library: Library = Vec::new();
         let mut history: Vec<DiscoveryRecord> = Vec::new();
@@ -8563,6 +8690,14 @@ mod tests {
                 .terminal_prefix_completions,
             1
         );
+        assert!(
+            discovery
+                .prefix_legality_cache
+                .terminal_prefix_completion_summary(&signature)
+                .expect("terminal prefix should cache a pruning summary")
+                .evaluations
+                .is_none()
+        );
 
         let group = super::materialize_terminal_prefix_group(
             15,
@@ -8590,13 +8725,13 @@ mod tests {
             discovery
                 .remaining_one_telemetry
                 .remaining_one_materialized_from_cached_summary,
-            1
+            0
         );
         assert_eq!(
             discovery
                 .remaining_one_telemetry
                 .remaining_one_materialized_compact_direct,
-            0
+            1
         );
     }
 
@@ -8753,6 +8888,7 @@ mod tests {
             &nu_history,
             &summary_work_item.signature,
             &summary_work_item.prefix_telescope,
+            super::TerminalPrefixSummaryPayload::Full,
             terminal_clauses,
             &mut summary_discovery.prefix_legality_cache,
         );

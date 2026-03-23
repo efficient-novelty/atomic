@@ -10,8 +10,8 @@ use pen_core::expr::Expr;
 use pen_core::library::Library;
 use pen_core::telescope::Telescope;
 use pen_type::admissibility::{
-    AdmissibilityDecision, PackagePolicy, StrictAdmissibility, StructuralFamily,
-    StructuralFamilyMatchMask, assess_strict_admissibility_from_terminal_summary,
+    AdmissibilityDecision, AdmissibilityDiagnostics, PackagePolicy, StrictAdmissibility,
+    StructuralFamily, StructuralFamilyMatchMask, assess_strict_admissibility_from_terminal_summary,
 };
 use pen_type::check::CheckSummary;
 use pen_type::connectivity::{ConnectivitySummary, HistoricalReanchorSummary};
@@ -283,7 +283,9 @@ pub enum TerminalPrefixClauseEvaluation {
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct TerminalPrefixCompletionSummary {
-    pub evaluations: Vec<TerminalPrefixClauseEvaluation>,
+    pub evaluations: Option<Vec<TerminalPrefixClauseEvaluation>>,
+    pub generated_candidate_count: usize,
+    pub admissibility_diagnostics: AdmissibilityDiagnostics,
     pub bound: Option<PrefixBound>,
     pub best_accept_rank: Option<AcceptRank>,
     pub admitted_candidate_count: usize,
@@ -696,8 +698,8 @@ mod tests {
     use pen_core::rational::Rational;
     use pen_core::telescope::Telescope;
     use pen_type::admissibility::{
-        AdmissibilityDecisionClass, AdmissibilityMode, assess_strict_admissibility,
-        strict_admissibility, strict_admissibility_for_mode,
+        AdmissibilityDecisionClass, AdmissibilityDiagnostics, AdmissibilityMode,
+        assess_strict_admissibility, strict_admissibility, strict_admissibility_for_mode,
     };
 
     fn library_until(step: u32) -> Library {
@@ -1000,10 +1002,12 @@ mod tests {
             &Telescope::reference(11),
             strict_admissibility_for_mode(11, 2, &library, AdmissibilityMode::RealisticShadow),
         );
+        let mut diagnostics = AdmissibilityDiagnostics::default();
+        diagnostics.record(&decision);
         cache.store_terminal_prefix_completion_summary(
             signature.clone(),
             TerminalPrefixCompletionSummary {
-                evaluations: vec![TerminalPrefixClauseEvaluation::Admitted {
+                evaluations: Some(vec![TerminalPrefixClauseEvaluation::Admitted {
                     decision: decision.clone(),
                     completion: TerminalPrefixCompletion {
                         telescope: Telescope::reference(11),
@@ -1011,7 +1015,9 @@ mod tests {
                         bit_kappa_used: 79,
                         clause_kappa_used: 5,
                     },
-                }],
+                }]),
+                generated_candidate_count: 1,
+                admissibility_diagnostics: diagnostics,
                 bound: Some(PrefixBound::singleton(26, 5, 79)),
                 best_accept_rank: acceptance_rank_for_telescope(
                     Rational::new(712, 145),
@@ -1036,13 +1042,16 @@ mod tests {
         assert_eq!(cache.stats().terminal_prefix_rank_hits, 1);
         assert_eq!(rank_summary.admitted_candidate_count, 1);
         assert!(rank_summary.best_accept_rank.is_some());
-        match &summary.evaluations[..] {
-            [
-                TerminalPrefixClauseEvaluation::Admitted {
-                    decision,
-                    completion,
-                },
-            ] => {
+        assert_eq!(summary.generated_candidate_count, 1);
+        match summary.evaluations.as_deref() {
+            Some(
+                [
+                    TerminalPrefixClauseEvaluation::Admitted {
+                        decision,
+                        completion,
+                    },
+                ],
+            ) => {
                 assert_eq!(
                     decision.class,
                     AdmissibilityDecisionClass::AdmittedFocusAligned
@@ -1073,7 +1082,9 @@ mod tests {
         cache.store_terminal_prefix_completion_summary(
             signature.clone(),
             TerminalPrefixCompletionSummary {
-                evaluations: vec![TerminalPrefixClauseEvaluation::Disconnected],
+                evaluations: None,
+                generated_candidate_count: 1,
+                admissibility_diagnostics: AdmissibilityDiagnostics::default(),
                 bound: Some(PrefixBound::singleton(26, 5, 79)),
                 best_accept_rank: None,
                 admitted_candidate_count: 0,
@@ -1099,7 +1110,9 @@ mod tests {
         cache.store_terminal_prefix_completion_summary(
             signature.clone(),
             TerminalPrefixCompletionSummary {
-                evaluations: vec![TerminalPrefixClauseEvaluation::Disconnected],
+                evaluations: None,
+                generated_candidate_count: 1,
+                admissibility_diagnostics: AdmissibilityDiagnostics::default(),
                 bound: Some(PrefixBound::singleton(26, 5, 79)),
                 best_accept_rank: None,
                 admitted_candidate_count: 0,
