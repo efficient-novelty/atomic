@@ -12,8 +12,8 @@ final gate.
 
 - `desktop_claim_shadow` is not signoff-ready.
 - Delayed materialization, the narrow remaining-one incumbent-primary fast
-  path, and the new one-pass `structural_nu` summary-build fast path are all
-  now kept on the claim lane.
+  path, and the one-pass `structural_nu` summary-build fast path are all now
+  kept on the claim lane.
 - A new stored short rerun now exists on that winning binary:
   `runs/codex-claim-release-step4-nu-profile-v1`.
 - A new stored intended-profile rerun now exists on that same winning binary:
@@ -21,9 +21,10 @@ final gate.
 - The current full-profile iteration baseline is now
   `runs/codex-claim-release-full-nu-profile-v1`; the previous full-profile
   baseline is now `runs/codex-claim-release-full-primary-rank-v1`.
-- The real intended profile still stalls in step `4`, so the next live blocker
-  remains remaining-one summary-side throughput, not delayed materialization,
-  not the old allocator cliff, and not a later-step pressure story.
+- The claim lane has already crossed the memory wall; the real intended profile
+  is now compute-bound in step `4`.
+- The next likely leverage is not more memory work. It is earlier structural
+  pruning before exact remaining-one summary construction starts.
 
 ## Latest Evidence
 
@@ -75,41 +76,55 @@ final gate.
   - `terminal_summary_build_millis = 2221499`
   - `terminal_materialize_millis = 460`
   - observed RSS `~ 316 MiB`
+- Earlier full-profile evidence had already isolated the same phase transition
+  more starkly:
+  - legality summaries `= 446635`
+  - `terminal_summary_build_millis = 4314240`
+  - `remaining_one_rank_prunes_pre_materialize = 441140`
+  - observed RSS `~ 343 MiB`
+  - That older read and the newer `nu`-profile read tell the same story:
+    memory is stable, pruning is real, but the expensive proof that a prefix is
+    dead still happens too late.
 
 ## Current Read
 
-- The new one-pass `structural_nu` fast path earned keep on both the short
-  stored rerun and the real intended-profile stored rerun.
-- The current binary no longer needs the old allocator-failure story to explain
-  the hot lane.
-- Step `4` is still the dominant blocker on the real profile; no later cost
-  center has honestly overtaken it yet.
-- The hot cost is still `terminal_summary_build_millis` inside remaining-one
-  summary construction; materialization remains small and frontier drainage is
-  improving only gradually.
-- The new full rerun re-earned the real intended-profile read and confirmed
-  that the new short step-`4` win survives the full profile shape.
-- The next action returns to one more narrow remaining-one summary-side,
-  summary-reuse, or earlier incumbent-dominance patch, followed by one more
-  stored release `until_step = 4` rerun against the new baselines below.
-- Do not reopen split-handoff, memory-compaction, frontier-rewrite, compare,
+- The lane is now in a classic algorithmic phase transition: the old allocator
+  cliff is gone and the remaining wall is compute.
+- The current pruning logic is working, but the hot telemetry says it still
+  fires after too many exact summary builds have already been paid for.
+- The high pre-materialize rank-prune totals are therefore good evidence of the
+  next design move: shift more killing power ahead of
+  `compute_terminal_prefix_completion_summary_from_candidates`.
+- The most promising next structural patches are:
+  - an algebraic `nu` ceiling for remaining-one prefixes
+  - deterministic symmetry breaking for independent sibling clauses
+  - if still narrow and honest, a structural-unity forced-bridge prune
+- Context-equivalence quotienting and incumbent-first queue ordering remain
+  plausible follow-on moves, but they are larger and should wait until the
+  first structural culling slice is measured.
+- Do not reopen allocator, memory-compaction, frontier-rewrite, compare,
   benchmark, or certification work yet.
 
 ## Immediate Order
 
-1. Land one more narrow remaining-one summary-build, summary-reuse, or earlier
-   incumbent-dominance fast path on the hot step-`4` path.
-2. Re-earn one stored release rerun with `until_step = 4` and compare its
+1. Land one narrow `O(1)` structural pre-summary prune on the hot step-`4`
+   path, with the algebraic `nu` ceiling first in priority.
+2. If a second small patch can land safely in the same slice, prefer
+   deterministic symmetry breaking for independent sibling clauses over a
+   broader cache or frontier rewrite.
+3. Add targeted telemetry counters and tests for the new prune surface before
+   trusting live runs.
+4. Re-earn one stored release rerun with `until_step = 4` and compare its
    stored `reports/steps/step-04-live.ndjson` against
    `runs/codex-claim-release-full-nu-profile-v1` and
    `runs/codex-claim-release-step4-nu-profile-v1`.
-3. Keep that next patch only if matching checkpoints cut
-   `terminal_summary_build_millis` again or move materially farther without
-   weakening retained-prefix honesty.
-4. Only after that next short rerun earns keep should another real
+5. Keep that patch only if matching checkpoints cut
+   `terminal_summary_build_millis`, cut repeated legality-summary growth, or
+   move materially farther without weakening retained-prefix honesty.
+6. Only after that short rerun earns keep should another real
    `desktop_claim_shadow_1h` full-profile rerun happen.
-5. Compare, benchmark, and certification still remain downstream of that next
-   step-`4` win.
+7. If the short rerun still leaves step `4` compute-bound, escalate next to
+   context-equivalence quotienting rather than back to memory work.
 
 ## Active Baselines
 
@@ -135,4 +150,7 @@ final gate.
 - Keep `strict_canon_guarded`, `realistic_frontier_shadow`, and
   `demo_breadth_shadow` unchanged.
 - Keep user-facing wording at `bounded live recovery`.
+- Keep the claim lane honest about still being guided and not yet fully
+  unguided.
+- Prefer structural exact bounds over semantic shortcuts.
 - Trust stored artifacts over terminal impressions.

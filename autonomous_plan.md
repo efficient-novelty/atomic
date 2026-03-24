@@ -1,11 +1,11 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-03-23
+Last updated: 2026-03-24
 Status: active
 
-This file is the staged path from the current claim-lane bottleneck to final
-signoff. It intentionally omits rollout history that no longer changes the next
-decisions.
+This file is the staged path from the current compute-bound claim-lane wall to
+final signoff. It intentionally omits older rollout history that no longer
+changes the next decisions.
 
 ## Objective
 
@@ -20,35 +20,93 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 ## Current Operating Read
 
-- The live blocker is still step-`4` throughput on the real
-  `desktop_claim_shadow_1h` profile.
-- The current full-profile baseline is
-  `runs/codex-claim-release-full-delayed-summary-v1`.
-- Delayed materialization is already earned and should be treated as baseline.
-- The hot cost has shifted from compact materialization into remaining-one
-  terminal-summary construction.
-- No downstream signoff work matters until that step-`4` throughput improves
-  again.
+- The claim lane has already crossed the old memory wall.
+- The current binary is now stably compute-bound in step `4`.
+- The current full-profile iteration baseline is
+  `runs/codex-claim-release-full-nu-profile-v1`.
+- Delayed materialization, the incumbent-primary remaining-one fast path, and
+  the one-pass `structural_nu` summary build fast path are all baseline.
+- The hot cost is still remaining-one exact terminal-summary construction.
+- The high pre-materialize rank-prune count is good news: pruning works, but it
+  still triggers too late.
+- The next meaningful wins must happen before
+  `compute_terminal_prefix_completion_summary_from_candidates`, not in another
+  memory-first rewrite.
 
 ## Execution Order
 
-### Phase 1. Win The Next Step-`4` Throughput Slice
+### Phase 1. Shift Step-`4` Pruning Ahead Of Exact Summary Build
 
 Goal:
 
-- make summary build cheaper or kill more work before summary build starts
+- kill more doomed remaining-one prefixes in `O(1)` structural time before the
+  hot exact summary builder runs
+
+Preferred first patches:
+
+- algebraic `nu` ceiling derived from the current admissibility caps
+- deterministic symmetry breaking for independent sibling clauses
+- if still narrow and low risk, a structural-unity forced-bridge prune
 
 Required output:
 
-- one narrow search-code patch
+- one narrow search-code patch or tightly coupled patch pair
+- new telemetry counters for the new prune surface
 - one stored release rerun with `until_step = 4`
-- a telemetry comparison against the current baselines
+- a stored artifact comparison against the current short/full baselines
 
 Done when:
 
-- the rerun shows a real stored win in summary-side step-`4` telemetry
+- the rerun shows a real stored win in step-`4` summary-side telemetry without
+  weakening retained-prefix honesty
 
-### Phase 2. Re-Earn The Real Full-Profile Read
+### Phase 2. Collapse Duplicate Remaining-One States If Phase 1 Is Not Enough
+
+Goal:
+
+- stop paying exact-summary cost once per AST prefix when the surviving work is
+  really a small number of repeated typing-context shapes
+
+Preferred patch:
+
+- context-equivalence quotienting keyed by normalized exported type context
+  rather than exact prefix AST history
+
+Required output:
+
+- one scoped cache-key experiment
+- one stored release rerun with `until_step = 4`
+- evidence that legality/summary counts collapse materially without parity or
+  honesty regressions
+
+Done when:
+
+- the rerun shows materially fewer repeated exact summary builds at matching
+  checkpoints
+
+### Phase 3. Improve Incumbent Arrival Only If Structural Culling Still Leaves Waste
+
+Goal:
+
+- find the winning dense `Pi`/`Sigma` package earlier so the incumbent rank
+  rises sooner and structural ceilings can prune more of the queue
+
+Preferred patch:
+
+- deterministic incumbent-first or density-biased frontier ordering that keeps
+  the exact lane honest
+
+Required output:
+
+- one narrow queue-order experiment
+- one stored release rerun with `until_step = 4`
+
+Done when:
+
+- the rerun finds the same honest winner earlier and that earlier incumbent
+  materially reduces the surviving exact-summary load
+
+### Phase 4. Re-Earn The Real Full-Profile Read
 
 Goal:
 
@@ -62,10 +120,10 @@ Required output:
 
 Done when:
 
-- the full-profile rerun either moves materially farther or exposes a new later
+- the full-profile rerun either moves materially farther or exposes a later
   blocker honestly
 
-### Phase 3. Finish A Full Claim Bundle
+### Phase 5. Finish A Full Claim Bundle
 
 Goal:
 
@@ -83,7 +141,7 @@ Done when:
 - one stored run finishes through step `15` and still satisfies the claim-lane
   honesty boundary
 
-### Phase 4. Freeze Signoff Artifacts
+### Phase 6. Freeze Signoff Artifacts
 
 Goal:
 
@@ -100,7 +158,7 @@ Done when:
 
 - another reviewer can audit the full claim from stored artifacts alone
 
-### Phase 5. Open The Language Gate
+### Phase 7. Open The Language Gate
 
 Goal:
 
@@ -117,17 +175,21 @@ Done when:
 
 ## Non-Goals Until Phase 1 Wins
 
-- reopening split-handoff work
-- reopening memory compaction first
+- reopening allocator or memory-compaction work first
 - broad frontier rewrites
-- benchmark or certification work
+- widening-band retuning
+- compare, benchmark, or certification work
 - stronger user-facing language
 
 ## Baselines To Compare Against
 
 - `runs/codex-claim-release-full-v1a`
 - `runs/codex-claim-release-full-delayed-summary-v1`
+- `runs/codex-claim-release-full-primary-rank-v1`
+- `runs/codex-claim-release-full-nu-profile-v1`
 - `runs/codex-claim-release-step4-delayed-summary-v1`
+- `runs/codex-claim-release-step4-primary-rank-v1`
+- `runs/codex-claim-release-step4-nu-profile-v1`
 - `runs/codex-claim-release-step4-telemetry-v1`
 
 ## Success Condition
@@ -140,5 +202,6 @@ disclosed desktop shows all of the following at the same time:
 - accepted parity through step `15`
 - breadth gates passed honestly from stored evidence
 - complete reason and prune accounting
+- the step-`4` compute wall is no longer the blocker on the intended profile
 - benchmark and manifest data sufficient for certification
 - passing compare and certification outputs
