@@ -355,6 +355,10 @@ impl PrefixLegalityCache {
         Some(summary)
     }
 
+    pub fn has_terminal_prefix_completion_summary(&self, signature: &PrefixSignature) -> bool {
+        self.terminal_prefix_completions.contains_key(signature)
+    }
+
     pub fn terminal_prefix_bound_summary(
         &mut self,
         signature: &PrefixSignature,
