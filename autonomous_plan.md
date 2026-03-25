@@ -32,9 +32,14 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - The attempted phase-2 context-equivalence quotient did not earn keep on
   `runs/codex-claim-release-step4-context-equivalence-v1`, so the active short
   loop now moves to phase `3`.
+- The attempted phase-3 frontier-pop incumbent-ordering rerun also did not earn
+  keep on `runs/codex-claim-release-step4-incumbent-ordering-v1`; its new
+  ordering counters stayed zero on the stored run, which means that surface did
+  not engage on the live claim lane.
 - The next meaningful wins must happen before
-  `compute_terminal_prefix_completion_summary_from_candidates`, not in another
-  memory-first rewrite.
+  `compute_terminal_prefix_completion_summary_from_candidates`, and now most
+  likely inside the prepared exact-two-step or immediate proof-close surface,
+  not in another memory-first rewrite or another frontier-pop ordering variant.
 
 ## Execution Order
 
@@ -96,12 +101,12 @@ Goal:
 
 Preferred patch:
 
-- deterministic incumbent-first or density-biased frontier ordering that keeps
-  the exact lane honest
+- deterministic local ordering or proof-close handoff bias on the prepared
+  exact-two-step remaining-one surface that keeps the exact lane honest
 
 Required output:
 
-- one narrow queue-order experiment
+- one narrow exact-two-step or proof-close ordering experiment
 - one stored release rerun with `until_step = 4`
 
 Done when:

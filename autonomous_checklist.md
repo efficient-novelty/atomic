@@ -10,8 +10,9 @@ It lists only work that is still open.
 - The claim lane still does not have a signoff-ready full-profile bundle.
 - The current full-profile baseline is
   `runs/codex-claim-release-full-nu-profile-v1`.
-- The next concrete task is one narrow deterministic incumbent-arrival or
-  queue-order patch, then a stored release `until_step = 4` rerun.
+- The next concrete task is one narrow deterministic exact-two-step local
+  screening or proof-close patch, then a stored release `until_step = 4`
+  rerun.
 - The current hot bottleneck is `terminal_summary_build_millis` in step `4`,
   not compact materialization.
 
