@@ -21,32 +21,20 @@ final gate.
   also implemented, validated locally, rerun on the stored short step-`4`
   profile, and then dropped from code after the stored evidence failed to earn
   keep.
-- A new narrow claim-only exact-two-step local ordering pass is now landed in
-  `process_prepared_exact_two_step_terminal_surface`; it caches compact
-  remaining-one summaries on the prepared local surface, promotes stronger
-  cached exact or coarse accept potential ahead of weaker siblings inside that
-  one local bucket, and keeps stable exact order inside equal-priority
-  buckets.
-- The new local exact-two-step slice now also records three new counters on
-  stored step-`4` telemetry:
-  `local_exact_two_step_incumbent_priority_promotions`,
-  `local_exact_two_step_improving_prefixes_surfaced`, and
-  `local_exact_two_step_first_activation_prefix_state`.
-- The required targeted regressions for that local slice are now landed and
-  green:
-  - `claim_prepared_exact_two_step_surface_prefers_better_cached_coarse_accept_potential`
-  - `claim_prepared_exact_two_step_surface_keeps_stable_exact_order_inside_equal_priority`
-  - `claim_prepared_exact_two_step_surface_keeps_reference_step_four_winner_ahead_of_worse_cached_prefix`
+- A narrow claim-only exact-two-step local ordering pass was also implemented,
+  validated locally, rerun on the stored short step-`4` profile, and then
+  dropped from code after the stored evidence showed immediate activation but
+  no real step-`4` win.
 - A new stored short rerun now exists for that failed slice:
   `runs/codex-claim-release-step4-context-equivalence-v1`.
 - A second new stored short rerun now exists for the later failed slice:
   `runs/codex-claim-release-step4-incumbent-ordering-v1`.
-- A third new stored short rerun now exists for the current exact-two-step
+- A third new stored short rerun now exists for that dropped exact-two-step
   local ordering slice:
   `runs/codex-claim-release-step4-local-two-step-order-v2`.
 - The current short step-`4` iteration baseline remains
   `runs/codex-claim-release-step4-algebraic-v1`; neither later failed rerun
-  nor the current early exact-two-step rerun have earned replacement.
+  nor the dropped exact-two-step local ordering rerun have earned replacement.
 - The current full-profile iteration baseline remains
   `runs/codex-claim-release-full-nu-profile-v1`.
 - An earlier attempt at the same new run id family,
@@ -158,7 +146,8 @@ final gate.
   - `remaining_one_incumbent_improvement_prefix_state = 0`
   - `terminal_summary_build_millis = 6883748`
   - observed RSS `~ 610.7 MiB`
-- New stored short rerun for the landed exact-two-step local ordering slice:
+- New stored short rerun for the now-dropped exact-two-step local ordering
+  slice:
   `runs/codex-claim-release-step4-local-two-step-order-v2`
 - Against `runs/codex-claim-release-step4-algebraic-v1`, the new local
   exact-two-step rerun activates immediately on stored telemetry, but the
@@ -170,8 +159,8 @@ final gate.
   - At those same checkpoints, legality summaries still stayed
     `10193` and `28765` respectively.
   - At those same checkpoints, the retained prefix cache only moved from
-    `1/2794` to `2/5588` instead of `1/2788` to `2/5576`; the stored shape is
-    still honest, but it is not materially ahead.
+    `1/2794` to `2/5588` instead of `13/32520` to `15/38108`; the stored shape
+    is still honest, but it is materially behind the baseline.
   - At those same checkpoints, `remaining_one_cached_rank_prunes` rose only
     slightly to `4643` and `23218` instead of `4631` and `23205`.
   - At those same checkpoints, `remaining_one_materialized` fell sharply to
@@ -200,6 +189,8 @@ final gate.
   - `local_exact_two_step_incumbent_priority_promotions = 4638`
   - `terminal_summary_build_millis = 237791`
   - observed RSS `~ 46.8 MiB`
+- That rerun therefore did not earn keep and the local exact-two-step ordering
+  patch has now been dropped from code.
 - Current full baseline:
   `runs/codex-claim-release-full-nu-profile-v1`
 - The earlier intended-profile rerun
@@ -238,33 +229,30 @@ final gate.
   is not kept in code.
 - The attempted frontier-pop incumbent-arrival ordering slice is also exhausted
   on stored evidence and is not kept in code.
-- The new exact-two-step local ordering slice is the first post-algebraic
-  experiment that actually activates on the live claim lane, but the first
-  stored `1/5` checkpoints are still slower than the short baseline.
+- The attempted exact-two-step local ordering slice is the first post-algebraic
+  experiment that actually activates on the live claim lane, but its stored
+  `1/5` checkpoints were still slower than the short baseline, so it too has
+  been dropped from code.
 - Step `4` exact summary build therefore remains the dominant honest blocker on
-  the real profile, and the landed local ordering patch has not yet earned
-  baseline replacement from stored evidence.
+  the real profile, and no post-algebraic slice has yet earned baseline
+  replacement from stored evidence.
 - Memory remains controlled on the short reruns; the wall is still compute, not
   allocator or RSS pressure.
-- The next honest move is to finish the keep/drop read on
-  `runs/codex-claim-release-step4-local-two-step-order-v2` from stored
-  checkpoints before opening another search-code surface; if the later
-  comparable checkpoints keep the same early regression, this exact-two-step
-  ordering patch should be dropped from code rather than widened.
+- The next honest move is a narrow deterministic proof-close handoff bias on
+  the same already-cached exact or primary-rank evidence, not another prepared
+  exact-two-step local ordering pass.
 
 ## Immediate Order
 
-1. Keep reading `runs/codex-claim-release-step4-local-two-step-order-v2` from
-   stored `reports/steps/step-04-live.ndjson` until there is enough comparable
-   evidence to keep or drop the landed exact-two-step ordering patch honestly.
-2. Drop that patch from code if the later comparable checkpoints keep the same
-   early regression story:
-   slower wall clock and higher `terminal_summary_build_millis` despite live
-   activation.
-3. Only if that short rerun eventually shows a real stored win should another
-   real `desktop_claim_shadow_1h` full-profile rerun happen.
-4. Keep trusting stored artifacts over terminal impressions for keep/drop
-   decisions.
+1. Patch one narrow deterministic proof-close handoff ordering experiment on
+   the same exact-two-step remaining-one evidence surface that the dropped
+   local ordering slice already exposed.
+2. Add telemetry and tests for that proof-close handoff slice, then re-earn
+   one stored release `until_step = 4` rerun.
+3. Keep that next patch only if the stored rerun both activates and shows a
+   real step-`4` win against the current baseline.
+4. Only after that short rerun earns keep should another real
+   `desktop_claim_shadow_1h` full-profile rerun happen.
 
 ## Active Baselines
 
@@ -282,9 +270,9 @@ final gate.
   `runs/codex-claim-release-step4-nu-profile-v1`
 - Current short step-`4` iteration baseline:
   `runs/codex-claim-release-step4-algebraic-v1`
-- Current exact-two-step local ordering candidate evidence:
-  `runs/codex-claim-release-step4-local-two-step-order-v2`
 - Most recent short evidence that did not advance that baseline:
+  `runs/codex-claim-release-step4-local-two-step-order-v2`
+- Earlier short evidence that also did not advance that baseline:
   `runs/codex-claim-release-step4-incumbent-ordering-v1`
 - Earlier short evidence that also did not advance that baseline:
   `runs/codex-claim-release-step4-context-equivalence-v1`

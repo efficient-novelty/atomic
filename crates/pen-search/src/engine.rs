@@ -656,12 +656,6 @@ pub struct RemainingOneTelemetry {
     pub remaining_one_rank_prunes_pre_materialize: usize,
     pub remaining_one_rank_prunes_post_materialize: usize,
     pub remaining_one_unknown_bound_budget_exhaustions: usize,
-    #[serde(default)]
-    pub local_exact_two_step_incumbent_priority_promotions: usize,
-    #[serde(default)]
-    pub local_exact_two_step_improving_prefixes_surfaced: usize,
-    #[serde(default)]
-    pub local_exact_two_step_first_activation_prefix_state: usize,
     pub prepare_exact_two_step_terminal_surface_millis: u64,
     pub exact_partial_prefix_bound_millis: u64,
     pub terminal_summary_build_millis: u64,
@@ -4788,20 +4782,9 @@ fn process_prepared_exact_two_step_terminal_surface(
     nu_history: &[(u32, u32)],
     retention_policy: RetentionPolicy,
     clause_catalog: &ClauseCatalog,
-    mut terminal_prefixes: Vec<OnlinePrefixWorkItem>,
+    terminal_prefixes: Vec<OnlinePrefixWorkItem>,
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<()> {
-    reorder_claim_prepared_exact_two_step_terminal_surface(
-        step_index,
-        library,
-        admissibility,
-        objective_bar,
-        nu_history,
-        clause_catalog,
-        &mut terminal_prefixes,
-        discovery,
-    );
-
     for terminal_prefix in terminal_prefixes {
         debug_assert_eq!(terminal_prefix.remaining_clause_slots, 1);
 
@@ -4918,250 +4901,6 @@ fn process_prepared_exact_two_step_terminal_surface(
     }
 
     Ok(())
-}
-
-fn ensure_claim_compact_terminal_prefix_completion_summary_cached(
-    step_index: u32,
-    library: &Library,
-    admissibility: StrictAdmissibility,
-    objective_bar: Rational,
-    nu_history: &[(u32, u32)],
-    prefix_signature: &PrefixSignature,
-    prefix_telescope: &Telescope,
-    filtered_last_clause_options: &[pen_core::clause::ClauseRec],
-    discovery: &mut RealisticShadowDiscovery,
-) {
-    if discovery
-        .prefix_legality_cache
-        .has_terminal_prefix_completion_summary(prefix_signature)
-    {
-        return;
-    }
-
-    let summary_started = Instant::now();
-    let terminal_clauses = terminal_prefix_clause_candidates(
-        step_index,
-        library,
-        admissibility,
-        prefix_signature,
-        filtered_last_clause_options,
-        &mut discovery.prefix_legality_cache,
-    );
-    let summary = compute_terminal_prefix_completion_summary_from_candidates(
-        step_index,
-        library,
-        admissibility,
-        objective_bar,
-        nu_history,
-        prefix_signature,
-        prefix_telescope,
-        TerminalPrefixSummaryPayload::Compact,
-        terminal_clauses,
-        discovery.terminal_rank_incumbent.as_ref(),
-        &mut discovery.prefix_legality_cache,
-    );
-    discovery
-        .remaining_one_telemetry
-        .terminal_summary_build_millis = discovery
-        .remaining_one_telemetry
-        .terminal_summary_build_millis
-        .saturating_add(elapsed_millis(summary_started.elapsed()));
-    discovery
-        .prefix_legality_cache
-        .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary);
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-enum ClaimPreparedExactTwoStepLocalPriority {
-    ExactImprover(AcceptRank),
-    PrimaryImprover(TerminalPrefixPrimaryRank),
-    FastCollapse,
-    Stable,
-}
-
-impl ClaimPreparedExactTwoStepLocalPriority {
-    fn is_improving(&self) -> bool {
-        matches!(self, Self::ExactImprover(_) | Self::PrimaryImprover(_))
-    }
-}
-
-fn compare_claim_prepared_exact_two_step_local_priority(
-    left: &ClaimPreparedExactTwoStepLocalPriority,
-    right: &ClaimPreparedExactTwoStepLocalPriority,
-) -> Ordering {
-    use ClaimPreparedExactTwoStepLocalPriority::{
-        ExactImprover, FastCollapse, PrimaryImprover, Stable,
-    };
-
-    match (left, right) {
-        (ExactImprover(left_rank), ExactImprover(right_rank)) => left_rank.cmp(right_rank),
-        (ExactImprover(_), _) => Ordering::Less,
-        (_, ExactImprover(_)) => Ordering::Greater,
-        (PrimaryImprover(left_rank), PrimaryImprover(right_rank)) => {
-            if better_terminal_prefix_primary_rank(left_rank, right_rank) {
-                Ordering::Less
-            } else if better_terminal_prefix_primary_rank(right_rank, left_rank) {
-                Ordering::Greater
-            } else {
-                Ordering::Equal
-            }
-        }
-        (PrimaryImprover(_), FastCollapse | Stable) => Ordering::Less,
-        (FastCollapse | Stable, PrimaryImprover(_)) => Ordering::Greater,
-        (FastCollapse, FastCollapse) | (Stable, Stable) => Ordering::Equal,
-        (FastCollapse, Stable) => Ordering::Less,
-        (Stable, FastCollapse) => Ordering::Greater,
-    }
-}
-
-fn claim_prepared_exact_two_step_local_priority(
-    step_index: u32,
-    library: &Library,
-    admissibility: StrictAdmissibility,
-    objective_bar: Rational,
-    nu_history: &[(u32, u32)],
-    clause_catalog: &ClauseCatalog,
-    terminal_prefix: &OnlinePrefixWorkItem,
-    discovery: &mut RealisticShadowDiscovery,
-) -> ClaimPreparedExactTwoStepLocalPriority {
-    debug_assert_eq!(terminal_prefix.remaining_clause_slots, 1);
-
-    if claim_remaining_one_algebraic_nu_ceiling_cannot_clear_bar(
-        library,
-        admissibility,
-        objective_bar,
-        nu_history,
-        &terminal_prefix.prefix_telescope,
-    ) {
-        return ClaimPreparedExactTwoStepLocalPriority::FastCollapse;
-    }
-
-    ensure_claim_compact_terminal_prefix_completion_summary_cached(
-        step_index,
-        library,
-        admissibility,
-        objective_bar,
-        nu_history,
-        &terminal_prefix.signature,
-        &terminal_prefix.prefix_telescope,
-        terminal_prefix.next_clauses(clause_catalog),
-        discovery,
-    );
-
-    match discovery
-        .prefix_legality_cache
-        .terminal_prefix_bound_summary(&terminal_prefix.signature)
-    {
-        Some(Some(bound)) if !bound.can_clear_bar(objective_bar) => {
-            return ClaimPreparedExactTwoStepLocalPriority::FastCollapse;
-        }
-        Some(None) | None => return ClaimPreparedExactTwoStepLocalPriority::FastCollapse,
-        Some(Some(_)) => {}
-    }
-
-    let Some(rank_summary) = discovery
-        .prefix_legality_cache
-        .terminal_prefix_rank_summary(&terminal_prefix.signature)
-    else {
-        return ClaimPreparedExactTwoStepLocalPriority::Stable;
-    };
-
-    if terminal_prefix_rank_prune_count(
-        rank_summary.best_accept_rank.as_ref(),
-        rank_summary.best_accept_primary_rank.as_ref(),
-        rank_summary.admitted_candidate_count,
-        discovery.terminal_rank_incumbent.as_ref(),
-    )
-    .is_some()
-    {
-        return ClaimPreparedExactTwoStepLocalPriority::FastCollapse;
-    }
-
-    if let Some(rank) = rank_summary.best_accept_rank {
-        return ClaimPreparedExactTwoStepLocalPriority::ExactImprover(rank);
-    }
-    if let Some(primary_rank) = rank_summary.best_accept_primary_rank {
-        return ClaimPreparedExactTwoStepLocalPriority::PrimaryImprover(primary_rank);
-    }
-
-    ClaimPreparedExactTwoStepLocalPriority::Stable
-}
-
-fn reorder_claim_prepared_exact_two_step_terminal_surface(
-    step_index: u32,
-    library: &Library,
-    admissibility: StrictAdmissibility,
-    objective_bar: Rational,
-    nu_history: &[(u32, u32)],
-    clause_catalog: &ClauseCatalog,
-    terminal_prefixes: &mut Vec<OnlinePrefixWorkItem>,
-    discovery: &mut RealisticShadowDiscovery,
-) {
-    if !should_compact_terminal_prefix_group_candidates(admissibility.mode)
-        || terminal_prefixes.len() < 2
-    {
-        return;
-    }
-
-    let priorities = terminal_prefixes
-        .iter()
-        .map(|terminal_prefix| {
-            claim_prepared_exact_two_step_local_priority(
-                step_index,
-                library,
-                admissibility,
-                objective_bar,
-                nu_history,
-                clause_catalog,
-                terminal_prefix,
-                discovery,
-            )
-        })
-        .collect::<Vec<_>>();
-    let improving_prefixes = priorities
-        .iter()
-        .filter(|priority| priority.is_improving())
-        .count();
-    let promotions = priorities
-        .iter()
-        .enumerate()
-        .filter(|(index, priority)| {
-            priority.is_improving()
-                && priorities[..*index].iter().any(|earlier| {
-                    compare_claim_prepared_exact_two_step_local_priority(earlier, priority)
-                        == Ordering::Greater
-                })
-        })
-        .count();
-
-    discovery
-        .remaining_one_telemetry
-        .local_exact_two_step_improving_prefixes_surfaced += improving_prefixes;
-    discovery
-        .remaining_one_telemetry
-        .local_exact_two_step_incumbent_priority_promotions += promotions;
-    if promotions > 0
-        && discovery
-            .remaining_one_telemetry
-            .local_exact_two_step_first_activation_prefix_state
-            == 0
-    {
-        discovery
-            .remaining_one_telemetry
-            .local_exact_two_step_first_activation_prefix_state = discovery.prefix_states_explored;
-    }
-
-    let mut prioritized_prefixes = std::mem::take(terminal_prefixes)
-        .into_iter()
-        .zip(priorities)
-        .collect::<Vec<_>>();
-    prioritized_prefixes.sort_by(|(_, left_priority), (_, right_priority)| {
-        compare_claim_prepared_exact_two_step_local_priority(left_priority, right_priority)
-    });
-    *terminal_prefixes = prioritized_prefixes
-        .into_iter()
-        .map(|(terminal_prefix, _)| terminal_prefix)
-        .collect();
 }
 
 fn create_online_prefix_work_item(
@@ -5997,17 +5736,43 @@ fn claim_try_summary_prune_before_materialization(
         return true;
     }
 
-    ensure_claim_compact_terminal_prefix_completion_summary_cached(
-        step_index,
-        library,
-        admissibility,
-        objective_bar,
-        nu_history,
-        prefix_signature,
-        prefix_telescope,
-        filtered_last_clause_options,
-        discovery,
-    );
+    if discovery
+        .prefix_legality_cache
+        .terminal_prefix_bound_summary(prefix_signature)
+        .is_none()
+    {
+        let summary_started = Instant::now();
+        let terminal_clauses = terminal_prefix_clause_candidates(
+            step_index,
+            library,
+            admissibility,
+            prefix_signature,
+            filtered_last_clause_options,
+            &mut discovery.prefix_legality_cache,
+        );
+        let summary = compute_terminal_prefix_completion_summary_from_candidates(
+            step_index,
+            library,
+            admissibility,
+            objective_bar,
+            nu_history,
+            prefix_signature,
+            prefix_telescope,
+            TerminalPrefixSummaryPayload::Compact,
+            terminal_clauses,
+            discovery.terminal_rank_incumbent.as_ref(),
+            &mut discovery.prefix_legality_cache,
+        );
+        discovery
+            .remaining_one_telemetry
+            .terminal_summary_build_millis = discovery
+            .remaining_one_telemetry
+            .terminal_summary_build_millis
+            .saturating_add(elapsed_millis(summary_started.elapsed()));
+        discovery
+            .prefix_legality_cache
+            .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary);
+    }
 
     let Some(summary) = discovery
         .prefix_legality_cache
@@ -7130,7 +6895,7 @@ mod tests {
     };
     use crate::prefix_memo::{
         PartialPrefixBoundDecision, PrefixLegalityCache, TerminalPrefixClauseEvaluation,
-        TerminalPrefixCompletion, TerminalPrefixCompletionSummary, TerminalPrefixPrimaryRank,
+        TerminalPrefixCompletion,
     };
     use pen_core::{
         canonical::CanonKey,
@@ -7147,9 +6912,9 @@ mod tests {
     };
     use pen_type::{
         admissibility::{
-            AdmissibilityDiagnostics, AdmissibilityMode, PackagePolicies, PackagePolicy,
-            StrictAdmissibility, StructuralFamily, assess_strict_admissibility,
-            passes_strict_admissibility, strict_admissibility, strict_admissibility_for_mode,
+            AdmissibilityMode, PackagePolicies, PackagePolicy, StrictAdmissibility,
+            StructuralFamily, assess_strict_admissibility, passes_strict_admissibility,
+            strict_admissibility, strict_admissibility_for_mode,
         },
         connectivity::{ConnectivityWitness, analyze_connectivity, passes_connectivity},
         obligations::{RetentionClass, RetentionFocus, RetentionPolicy},
@@ -7233,44 +6998,6 @@ mod tests {
             ]),
             next_clause_count,
             order_key: Arc::<str>::from(order_key),
-        }
-    }
-
-    fn dummy_remaining_one_work_item(seed: u32, order_key: &str) -> OnlinePrefixWorkItem {
-        let prefix_telescope =
-            Telescope::new(vec![ClauseRec::new(ClauseRole::Formation, Expr::Var(seed))]);
-        let signature = PrefixSignature::new(4, &Library::default(), &prefix_telescope);
-        OnlinePrefixWorkItem {
-            clause_kappa: 3,
-            prefix_telescope,
-            signature,
-            remaining_clause_slots: 1,
-            remaining_family_options: 1,
-            bit_cost: seed,
-            clause_count: 2,
-            filtered_next_clauses: Some(vec![ClauseRec::new(
-                ClauseRole::Introduction,
-                Expr::Var(1),
-            )]),
-            next_clause_count: 1,
-            order_key: Arc::<str>::from(order_key),
-        }
-    }
-
-    fn cached_terminal_prefix_summary(
-        bound: Option<PrefixBound>,
-        best_accept_primary_rank: Option<TerminalPrefixPrimaryRank>,
-        best_accept_rank: Option<AcceptRank>,
-        admitted_candidate_count: usize,
-    ) -> TerminalPrefixCompletionSummary {
-        TerminalPrefixCompletionSummary {
-            evaluations: None,
-            generated_candidate_count: admitted_candidate_count,
-            admissibility_diagnostics: AdmissibilityDiagnostics::default(),
-            bound,
-            best_accept_primary_rank,
-            best_accept_rank,
-            admitted_candidate_count,
         }
     }
 
@@ -10048,239 +9775,6 @@ mod tests {
                 .as_ref(),
             "c"
         );
-    }
-
-    #[test]
-    fn claim_prepared_exact_two_step_surface_prefers_better_cached_coarse_accept_potential() {
-        let (library, history, nu_history) = reference_history_until(3);
-        let admissibility =
-            strict_admissibility_for_mode(4, 2, &library, AdmissibilityMode::DesktopClaimShadow);
-        let objective_bar = compute_bar(2, 4, &history).bar;
-        let clause_catalog = build_clause_catalog(
-            EnumerationContext::from_admissibility(&library, admissibility),
-            3,
-        );
-        let weaker = dummy_remaining_one_work_item(2, "a");
-        let stronger = dummy_remaining_one_work_item(1, "b");
-        let mut terminal_prefixes = vec![weaker.clone(), stronger.clone()];
-        let mut discovery = super::RealisticShadowDiscovery::default();
-        discovery.prefix_states_explored = 43;
-        discovery
-            .prefix_legality_cache
-            .store_terminal_prefix_completion_summary(
-                weaker.signature.clone(),
-                cached_terminal_prefix_summary(
-                    Some(PrefixBound::singleton(12, 3, 12)),
-                    Some(TerminalPrefixPrimaryRank {
-                        overshoot: Rational::new(4, 10),
-                        clause_kappa: 3,
-                    }),
-                    None,
-                    2,
-                ),
-            );
-        discovery
-            .prefix_legality_cache
-            .store_terminal_prefix_completion_summary(
-                stronger.signature.clone(),
-                cached_terminal_prefix_summary(
-                    Some(PrefixBound::singleton(13, 3, 12)),
-                    Some(TerminalPrefixPrimaryRank {
-                        overshoot: Rational::new(1, 10),
-                        clause_kappa: 3,
-                    }),
-                    None,
-                    2,
-                ),
-            );
-
-        super::reorder_claim_prepared_exact_two_step_terminal_surface(
-            4,
-            &library,
-            admissibility,
-            objective_bar,
-            &nu_history,
-            &clause_catalog,
-            &mut terminal_prefixes,
-            &mut discovery,
-        );
-
-        assert_eq!(terminal_prefixes[0].signature, stronger.signature);
-        assert_eq!(terminal_prefixes[1].signature, weaker.signature);
-        assert_eq!(
-            discovery
-                .remaining_one_telemetry
-                .local_exact_two_step_improving_prefixes_surfaced,
-            2
-        );
-        assert_eq!(
-            discovery
-                .remaining_one_telemetry
-                .local_exact_two_step_incumbent_priority_promotions,
-            1
-        );
-        assert_eq!(
-            discovery
-                .remaining_one_telemetry
-                .local_exact_two_step_first_activation_prefix_state,
-            43
-        );
-    }
-
-    #[test]
-    fn claim_prepared_exact_two_step_surface_keeps_stable_exact_order_inside_equal_priority() {
-        let (library, history, nu_history) = reference_history_until(3);
-        let admissibility =
-            strict_admissibility_for_mode(4, 2, &library, AdmissibilityMode::DesktopClaimShadow);
-        let objective_bar = compute_bar(2, 4, &history).bar;
-        let clause_catalog = build_clause_catalog(
-            EnumerationContext::from_admissibility(&library, admissibility),
-            3,
-        );
-        let first = dummy_remaining_one_work_item(3, "a");
-        let second = dummy_remaining_one_work_item(4, "b");
-        let mut terminal_prefixes = vec![first.clone(), second.clone()];
-        let mut discovery = super::RealisticShadowDiscovery::default();
-        discovery
-            .prefix_legality_cache
-            .store_terminal_prefix_completion_summary(
-                first.signature.clone(),
-                cached_terminal_prefix_summary(
-                    Some(PrefixBound::singleton(12, 3, 12)),
-                    Some(TerminalPrefixPrimaryRank {
-                        overshoot: Rational::new(2, 10),
-                        clause_kappa: 3,
-                    }),
-                    None,
-                    2,
-                ),
-            );
-        discovery
-            .prefix_legality_cache
-            .store_terminal_prefix_completion_summary(
-                second.signature.clone(),
-                cached_terminal_prefix_summary(
-                    Some(PrefixBound::singleton(12, 3, 12)),
-                    Some(TerminalPrefixPrimaryRank {
-                        overshoot: Rational::new(2, 10),
-                        clause_kappa: 3,
-                    }),
-                    None,
-                    2,
-                ),
-            );
-
-        super::reorder_claim_prepared_exact_two_step_terminal_surface(
-            4,
-            &library,
-            admissibility,
-            objective_bar,
-            &nu_history,
-            &clause_catalog,
-            &mut terminal_prefixes,
-            &mut discovery,
-        );
-
-        assert_eq!(terminal_prefixes[0].signature, first.signature);
-        assert_eq!(terminal_prefixes[1].signature, second.signature);
-        assert_eq!(
-            discovery
-                .remaining_one_telemetry
-                .local_exact_two_step_incumbent_priority_promotions,
-            0
-        );
-    }
-
-    #[test]
-    fn claim_prepared_exact_two_step_surface_keeps_reference_step_four_winner_ahead_of_worse_cached_prefix()
-     {
-        let (library, history, nu_history) = reference_history_until(3);
-        let admissibility =
-            strict_admissibility_for_mode(4, 2, &library, AdmissibilityMode::DesktopClaimShadow);
-        let objective_bar = compute_bar(2, 4, &history).bar;
-        let clause_catalog = build_clause_catalog(
-            EnumerationContext::from_admissibility(&library, admissibility),
-            3,
-        );
-        let prefix = Telescope::new(Telescope::reference(4).clauses[..1].to_vec());
-        let signature = PrefixSignature::new(4, &library, &prefix);
-        let mut discovery = super::RealisticShadowDiscovery::default();
-
-        assert!(discovery.prefix_legality_cache.insert_root(
-            signature.clone(),
-            3,
-            &library,
-            &prefix,
-            admissibility,
-            LateFamilySurface::ClaimGeneric
-        ));
-
-        let work_item = create_online_prefix_work_item(
-            3,
-            prefix,
-            signature,
-            &library,
-            admissibility,
-            &clause_catalog,
-            &mut discovery.prefix_legality_cache,
-        );
-        let prepared = super::prepare_exact_two_step_terminal_surface(
-            4,
-            &library,
-            admissibility,
-            &clause_catalog,
-            &work_item,
-            &mut discovery,
-        );
-        let winner_prefix = Telescope::new(Telescope::reference(4).clauses[..2].to_vec());
-        let winner = prepared
-            .iter()
-            .find(|item| item.prefix_telescope == winner_prefix)
-            .expect("reference step-four winner should be present in the prepared surface")
-            .clone();
-        let worse = prepared
-            .iter()
-            .find(|item| item.signature != winner.signature)
-            .expect("prepared surface should expose at least one non-winning sibling")
-            .clone();
-        let mut terminal_prefixes = vec![worse.clone(), winner.clone()];
-
-        discovery
-            .prefix_legality_cache
-            .store_terminal_prefix_completion_summary(
-                worse.signature.clone(),
-                cached_terminal_prefix_summary(
-                    Some(PrefixBound::singleton(12, 3, 12)),
-                    None,
-                    Some(test_accept_rank(4, "worse")),
-                    1,
-                ),
-            );
-        discovery
-            .prefix_legality_cache
-            .store_terminal_prefix_completion_summary(
-                winner.signature.clone(),
-                cached_terminal_prefix_summary(
-                    Some(PrefixBound::singleton(13, 3, 12)),
-                    None,
-                    Some(test_accept_rank(1, "winner")),
-                    1,
-                ),
-            );
-
-        super::reorder_claim_prepared_exact_two_step_terminal_surface(
-            4,
-            &library,
-            admissibility,
-            objective_bar,
-            &nu_history,
-            &clause_catalog,
-            &mut terminal_prefixes,
-            &mut discovery,
-        );
-
-        assert_eq!(terminal_prefixes[0].prefix_telescope, winner_prefix);
-        assert_eq!(terminal_prefixes[1].signature, worse.signature);
     }
 
     #[test]
