@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-03-24
+Last updated: 2026-03-25
 Status: active
 
 This file is the staged path from the current compute-bound claim-lane wall to
@@ -29,6 +29,9 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - The hot cost is still remaining-one exact terminal-summary construction.
 - The high pre-materialize rank-prune count is good news: pruning works, but it
   still triggers too late.
+- The attempted phase-2 context-equivalence quotient did not earn keep on
+  `runs/codex-claim-release-step4-context-equivalence-v1`, so the active short
+  loop now moves to phase `3`.
 - The next meaningful wins must happen before
   `compute_terminal_prefix_completion_summary_from_candidates`, not in another
   memory-first rewrite.
