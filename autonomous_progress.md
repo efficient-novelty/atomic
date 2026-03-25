@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Progress
 
-Last updated: 2026-03-24
+Last updated: 2026-03-25
 
 This file is the live status read for `desktop_claim_shadow`.
 Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next
@@ -25,6 +25,13 @@ final gate.
   is now compute-bound in step `4`.
 - The next likely leverage is not more memory work. It is earlier structural
   pruning before exact remaining-one summary construction starts.
+- A local algebraic `nu` ceiling remaining-one pre-summary prune is now landed
+  in code together with `remaining_one_algebraic_prunes` telemetry, but no
+  stored step-`4` rerun has earned keep on that patch yet.
+- The broad `cargo test -p pen-search claim_` sweep was not re-earned in this
+  turn on the disclosed desktop: a full-surface claim test run exhausted
+  virtual memory hard enough to crash Windows, so current local validation is
+  limited to compile coverage plus exact single-test regressions.
 
 ## Latest Evidence
 
@@ -85,6 +92,32 @@ final gate.
   - That older read and the newer `nu`-profile read tell the same story:
     memory is stable, pruning is real, but the expensive proof that a prefix is
     dead still happens too late.
+- The new algebraic-ceiling slice is now wired locally in search code:
+  - `remaining_one_algebraic_prunes` is recorded in
+    `RemainingOneTelemetry` and in claim live-checkpoint telemetry fixtures.
+  - The new engine regressions now avoid full step-surface enumeration and
+    pass as exact single-test runs:
+    `engine::tests::claim_remaining_one_algebraic_ceiling_prunes_before_summary_build`
+    and
+    `engine::tests::claim_remaining_one_algebraic_ceiling_keeps_reference_step_four_winner_prefix`.
+  - The named exact regressions also passed as low-memory single-test runs:
+    `engine::tests::online_work_items_cache_exact_filtered_next_clauses`,
+    `engine::tests::online_work_items_reuse_full_catalog_when_no_filter_applies`,
+    `engine::tests::prefix_queue_prefers_nearer_terminal_and_tighter_cached_continuations`,
+    `prefix_memo::tests::terminal_clause_filter_skips_inadmissible_last_clauses_before_connectivity`,
+    and
+    `cmd_run::tests::claim_run_persists_live_step_memory_checkpoints_before_acceptance`.
+- A 2026-03-25 attempted broad claim-test sweep is not trustworthy evidence and
+  should not be repeated casually on this machine:
+  - Windows logged `Resource-Exhaustion-Detector` warnings at `2026-03-25
+    06:41:02` and `2026-03-25 06:46:00` showing
+    `pen_search-28bcbd274e85075a.exe` at about `55.8 GiB` and `57.2 GiB` of
+    virtual memory respectively.
+  - Windows then logged `BugCheck 0x0000003b` at `2026-03-25 06:25:20` and a
+    later unexpected restart at `2026-03-25 06:47:17`.
+  - The trigger was the old test shape that bootstrapped and enumerated a full
+    step-`4` prefix surface just to find one algebraic-prune witness; that
+    setup is now removed from the new targeted regressions.
 
 ## Current Read
 
@@ -95,6 +128,9 @@ final gate.
 - The high pre-materialize rank-prune totals are therefore good evidence of the
   next design move: shift more killing power ahead of
   `compute_terminal_prefix_completion_summary_from_candidates`.
+- The new algebraic ceiling slice is now locally implemented and cheaply
+  testable, but it still needs one stored release rerun before it can count as
+  a kept claim-lane win.
 - The most promising next structural patches are:
   - an algebraic `nu` ceiling for remaining-one prefixes
   - deterministic symmetry breaking for independent sibling clauses
@@ -107,24 +143,21 @@ final gate.
 
 ## Immediate Order
 
-1. Land one narrow `O(1)` structural pre-summary prune on the hot step-`4`
-   path, with the algebraic `nu` ceiling first in priority.
-2. If a second small patch can land safely in the same slice, prefer
-   deterministic symmetry breaking for independent sibling clauses over a
-   broader cache or frontier rewrite.
-3. Add targeted telemetry counters and tests for the new prune surface before
-   trusting live runs.
-4. Re-earn one stored release rerun with `until_step = 4` and compare its
+1. Re-earn one stored release rerun with `until_step = 4` on the locally
+   landed algebraic `nu` ceiling patch and compare its
    stored `reports/steps/step-04-live.ndjson` against
    `runs/codex-claim-release-full-nu-profile-v1` and
    `runs/codex-claim-release-step4-nu-profile-v1`.
-5. Keep that patch only if matching checkpoints cut
+2. Keep that patch only if matching checkpoints cut
    `terminal_summary_build_millis`, cut repeated legality-summary growth, or
    move materially farther without weakening retained-prefix honesty.
-6. Only after that short rerun earns keep should another real
+3. Only after that short rerun earns keep should another real
    `desktop_claim_shadow_1h` full-profile rerun happen.
-7. If the short rerun still leaves step `4` compute-bound, escalate next to
+4. If the short rerun still leaves step `4` compute-bound, escalate next to
    context-equivalence quotienting rather than back to memory work.
+5. Do not rerun the broad `claim_` unit-test filter as a first validation step
+   on this desktop again; keep local validation to compile coverage plus exact
+   named tests unless a narrower claim-test shard is introduced.
 
 ## Active Baselines
 

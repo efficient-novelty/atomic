@@ -1729,6 +1729,7 @@ mod tests {
                 remaining_one_prefixes_seen: 21,
                 remaining_one_cached_bound_hits: 8,
                 remaining_one_cached_rank_prunes: 3,
+                remaining_one_algebraic_prunes: 2,
                 remaining_one_materialized: 5,
                 remaining_one_materialized_from_cached_summary: 2,
                 remaining_one_materialized_compact_direct: 3,

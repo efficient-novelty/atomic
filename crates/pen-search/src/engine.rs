@@ -40,7 +40,9 @@ use pen_core::rational::Rational;
 use pen_core::telescope::Telescope;
 use pen_eval::bar::{DiscoveryRecord, compute_bar};
 use pen_eval::minimality::analyze_semantic_minimality;
-use pen_eval::nu::structural_nu;
+use pen_eval::nu::{
+    SingleClauseStructuralNuCaps, structural_nu, structural_nu_single_clause_upper_bound,
+};
 use pen_store::manifest::{NearMiss, SearchTiming};
 use pen_type::admissibility::{
     AdmissibilityDecisionClass, AdmissibilityDiagnostics, AdmissibilityMode, StrictAdmissibility,
@@ -646,6 +648,7 @@ pub struct RemainingOneTelemetry {
     pub remaining_one_prefixes_seen: usize,
     pub remaining_one_cached_bound_hits: usize,
     pub remaining_one_cached_rank_prunes: usize,
+    pub remaining_one_algebraic_prunes: usize,
     pub remaining_one_materialized: usize,
     pub remaining_one_materialized_from_cached_summary: usize,
     pub remaining_one_materialized_compact_direct: usize,
@@ -5194,6 +5197,45 @@ fn cached_terminal_prefix_queue_entry_bound_decision(
     Some(decision)
 }
 
+fn remaining_one_structural_nu_caps(
+    admissibility: StrictAdmissibility,
+) -> SingleClauseStructuralNuCaps {
+    SingleClauseStructuralNuCaps {
+        max_expr_nodes: admissibility.max_expr_nodes,
+        max_path_dimension: admissibility.max_path_dimension,
+        include_trunc: admissibility.include_trunc,
+        include_modal: admissibility.include_modal,
+        include_temporal: admissibility.include_temporal,
+        historical_anchor_ref: admissibility.historical_anchor_ref,
+    }
+}
+
+fn claim_remaining_one_algebraic_nu_ceiling_cannot_clear_bar(
+    library: &Library,
+    admissibility: StrictAdmissibility,
+    objective_bar: Rational,
+    nu_history: &[(u32, u32)],
+    prefix_telescope: &Telescope,
+) -> bool {
+    if !should_compact_terminal_prefix_group_candidates(admissibility.mode) {
+        return false;
+    }
+
+    let clause_kappa_used = u32::try_from(prefix_telescope.clauses.len().saturating_add(1))
+        .expect("kappa exceeded u32");
+    let exact_nu_upper_bound = structural_nu_single_clause_upper_bound(
+        prefix_telescope,
+        library,
+        nu_history,
+        remaining_one_structural_nu_caps(admissibility),
+    );
+
+    Rational::new(
+        i64::from(exact_nu_upper_bound),
+        i64::from(clause_kappa_used),
+    ) < objective_bar
+}
+
 fn exact_terminal_prefix_bound_decision(
     step_index: u32,
     library: &Library,
@@ -5213,6 +5255,19 @@ fn exact_terminal_prefix_bound_decision(
             telemetry.remaining_one_cached_bound_hits += 1;
         }
         return exact_terminal_prefix_bound_decision_from_bound(objective_bar, bound);
+    }
+
+    if claim_remaining_one_algebraic_nu_ceiling_cannot_clear_bar(
+        library,
+        admissibility,
+        objective_bar,
+        nu_history,
+        prefix_telescope,
+    ) {
+        if let Some(telemetry) = remaining_one_telemetry.as_deref_mut() {
+            telemetry.remaining_one_algebraic_prunes += 1;
+        }
+        return ExactPartialPrefixBoundDecision::CannotClearBar;
     }
 
     let terminal_clauses = terminal_prefix_clause_candidates(
@@ -5656,6 +5711,29 @@ fn claim_try_summary_prune_before_materialization(
 ) -> bool {
     if !should_compact_terminal_prefix_group_candidates(admissibility.mode) {
         return false;
+    }
+
+    if claim_remaining_one_algebraic_nu_ceiling_cannot_clear_bar(
+        library,
+        admissibility,
+        objective_bar,
+        nu_history,
+        prefix_telescope,
+    ) {
+        discovery
+            .prefix_legality_cache
+            .store_partial_prefix_bound_decision(
+                prefix_signature.clone(),
+                PartialPrefixBoundDecision::CannotClearBar,
+            );
+        discovery.terminal_prefix_bar_prunes += 1;
+        discovery
+            .remaining_one_telemetry
+            .remaining_one_algebraic_prunes += 1;
+        discovery
+            .remaining_one_telemetry
+            .remaining_one_bar_prunes_pre_materialize += 1;
+        return true;
     }
 
     if discovery
@@ -6830,6 +6908,7 @@ mod tests {
     use pen_eval::{
         bar::{DiscoveryRecord, compute_bar},
         minimality::analyze_semantic_minimality,
+        nu::structural_nu,
     };
     use pen_type::{
         admissibility::{
@@ -6863,6 +6942,28 @@ mod tests {
             library.push(LibraryEntry::from_telescope(&telescope, &library));
         }
         library
+    }
+
+    fn reference_history_until(
+        until_step: u32,
+    ) -> (Library, Vec<DiscoveryRecord>, Vec<(u32, u32)>) {
+        let mut library = Vec::new();
+        let mut history = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in 1..=until_step {
+            let telescope = Telescope::reference(step);
+            let nu = structural_nu(&telescope, &library, &nu_history).total;
+            history.push(DiscoveryRecord::new(
+                step,
+                nu,
+                u32::try_from(telescope.kappa()).expect("kappa exceeded u32"),
+            ));
+            nu_history.push((step, nu));
+            library.push(LibraryEntry::from_telescope(&telescope, &library));
+        }
+
+        (library, history, nu_history)
     }
 
     fn demo_runtime_config_10m() -> RuntimeConfig {
@@ -8573,6 +8674,139 @@ mod tests {
             cache.stats().terminal_prefix_bound_hits,
             bound_hits_before + 1
         );
+    }
+
+    #[test]
+    fn claim_remaining_one_algebraic_ceiling_prunes_before_summary_build() {
+        let (library, _, nu_history) = reference_history_until(3);
+
+        let admissibility =
+            strict_admissibility_for_mode(4, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = Rational::new(100, 1);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 3);
+        let prefix = Telescope::reference(1);
+        let signature = PrefixSignature::new(4, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            3,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        let work_item = create_online_prefix_work_item(
+            3,
+            prefix,
+            signature,
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut cache,
+        );
+        assert_eq!(work_item.remaining_clause_slots, 1);
+        assert!(work_item.next_clause_count > 0);
+        assert!(
+            super::claim_remaining_one_algebraic_nu_ceiling_cannot_clear_bar(
+                &library,
+                admissibility,
+                objective_bar,
+                &nu_history,
+                &work_item.prefix_telescope,
+            )
+        );
+
+        let mut telemetry = super::RemainingOneTelemetry::default();
+        let mut budget = 64;
+        let decision = exact_partial_prefix_bound_decision(
+            4,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog,
+            &work_item,
+            &mut cache,
+            &mut budget,
+            None,
+            Some(&mut telemetry),
+        );
+
+        assert_eq!(
+            decision,
+            super::ExactPartialPrefixBoundDecision::CannotClearBar
+        );
+        assert_eq!(telemetry.remaining_one_algebraic_prunes, 1);
+        assert_eq!(telemetry.terminal_summary_build_millis, 0);
+        assert_eq!(cache.entry_counts().terminal_prefix_completions, 0);
+    }
+
+    #[test]
+    fn claim_remaining_one_algebraic_ceiling_keeps_reference_step_four_winner_prefix() {
+        let (library, history, nu_history) = reference_history_until(3);
+
+        let admissibility =
+            strict_admissibility_for_mode(4, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = compute_bar(2, 4, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 3);
+        let prefix = Telescope::new(Telescope::reference(4).clauses[..2].to_vec());
+        let signature = PrefixSignature::new(4, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            3,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        let work_item = create_online_prefix_work_item(
+            3,
+            prefix,
+            signature,
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut cache,
+        );
+        assert_eq!(work_item.remaining_clause_slots, 1);
+        assert!(
+            !super::claim_remaining_one_algebraic_nu_ceiling_cannot_clear_bar(
+                &library,
+                admissibility,
+                objective_bar,
+                &nu_history,
+                &work_item.prefix_telescope,
+            )
+        );
+
+        let mut telemetry = super::RemainingOneTelemetry::default();
+        let mut budget = 64;
+        let decision = exact_partial_prefix_bound_decision(
+            4,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog,
+            &work_item,
+            &mut cache,
+            &mut budget,
+            None,
+            Some(&mut telemetry),
+        );
+
+        assert_eq!(
+            decision,
+            super::ExactPartialPrefixBoundDecision::CanClearBar
+        );
+        assert_eq!(telemetry.remaining_one_algebraic_prunes, 0);
     }
 
     #[test]

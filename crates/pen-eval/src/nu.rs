@@ -26,6 +26,16 @@ pub struct NativeNuResult {
     pub trace: Vec<String>,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct SingleClauseStructuralNuCaps {
+    pub max_expr_nodes: u8,
+    pub max_path_dimension: u32,
+    pub include_trunc: bool,
+    pub include_modal: bool,
+    pub include_temporal: bool,
+    pub historical_anchor_ref: Option<u32>,
+}
+
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 struct TelescopeNuProfile {
     kappa: u32,
@@ -390,6 +400,18 @@ pub fn structural_nu(
     }
 }
 
+pub fn structural_nu_single_clause_upper_bound(
+    prefix_telescope: &Telescope,
+    library: &Library,
+    nu_history: &[(u32, u32)],
+    caps: SingleClauseStructuralNuCaps,
+) -> u32 {
+    let profile = TelescopeNuProfile::from_telescope(prefix_telescope);
+    let potential = SingleClauseStructuralNuPotential::new(&profile, library, nu_history, caps);
+
+    potential.upper_bound(&profile)
+}
+
 pub fn compute_native_nu(
     telescope: &Telescope,
     library: &Library,
@@ -541,11 +563,7 @@ fn hit_nu_g(telescope: &Telescope) -> u32 {
 }
 
 fn map_nu_g(telescope: &Telescope) -> u32 {
-    if telescope.kappa() == 1 {
-        1
-    } else {
-        0
-    }
+    if telescope.kappa() == 1 { 1 } else { 0 }
 }
 
 fn modal_nu_g(telescope: &Telescope) -> u32 {
@@ -893,12 +911,364 @@ fn u32_from_len(value: usize) -> u32 {
     u32::try_from(value).expect("value exceeded u32 range")
 }
 
+struct SingleClauseStructuralNuPotential {
+    final_kappa: u32,
+    library_size: u32,
+    max_path_dimension: u32,
+    max_expr_nodes: u8,
+    can_add_univ_expr: bool,
+    can_add_foundation_type_formation: bool,
+    can_add_parametric_formation: bool,
+    can_add_intro: bool,
+    can_add_lib_pointer: bool,
+    can_add_path: bool,
+    can_add_suspension: bool,
+    max_new_modal_kinds: u32,
+    can_add_temporal: bool,
+    can_add_distributive_law: bool,
+    can_add_polymorphic_temporal_elim: bool,
+    can_add_spatial_temporal_clause: bool,
+    lib_ref_count_upper: u32,
+    max_ref_nu: u32,
+    max_modal_ref_nu: u32,
+    library_path_dim_sq_sum: u32,
+}
+
+impl SingleClauseStructuralNuPotential {
+    fn new(
+        profile: &TelescopeNuProfile,
+        library: &Library,
+        nu_history: &[(u32, u32)],
+        caps: SingleClauseStructuralNuCaps,
+    ) -> Self {
+        let extension_refs = extension_reference_candidates(library, caps.historical_anchor_ref);
+        let max_new_library_refs = u32_from_len(extension_refs.len());
+        let can_add_lib_pointer = max_new_library_refs > 0 && caps.max_expr_nodes >= 1;
+        let prefix_ref_count = u32_from_len(profile.lib_refs.len());
+        let lib_ref_count_upper = if can_add_lib_pointer {
+            prefix_ref_count
+                .saturating_add(max_new_library_refs)
+                .min(u32_from_len(library.len()))
+        } else {
+            prefix_ref_count
+        };
+        let prefix_max_ref_nu = profile
+            .lib_refs
+            .iter()
+            .filter_map(|step| history_nu(*step, nu_history))
+            .max()
+            .unwrap_or(0);
+        let extension_max_ref_nu = extension_refs
+            .iter()
+            .filter_map(|step| history_nu(*step, nu_history))
+            .max()
+            .unwrap_or(0);
+        let prefix_max_modal_ref_nu = profile
+            .lib_refs
+            .iter()
+            .filter_map(|step| modal_reference_nu(*step, library, nu_history))
+            .max()
+            .unwrap_or(0);
+        let extension_max_modal_ref_nu = extension_refs
+            .iter()
+            .filter_map(|step| modal_reference_nu(*step, library, nu_history))
+            .max()
+            .unwrap_or(0);
+
+        Self {
+            final_kappa: profile.kappa.saturating_add(1),
+            library_size: u32_from_len(library.len()),
+            max_path_dimension: caps.max_path_dimension,
+            max_expr_nodes: caps.max_expr_nodes,
+            can_add_univ_expr: caps.max_expr_nodes >= 1,
+            can_add_foundation_type_formation: caps.max_expr_nodes >= 3,
+            can_add_parametric_formation: caps.include_trunc && caps.max_expr_nodes >= 2,
+            can_add_intro: caps.max_expr_nodes >= 1,
+            can_add_lib_pointer,
+            can_add_path: caps.max_path_dimension > 0 && caps.max_expr_nodes >= 1,
+            can_add_suspension: caps.max_expr_nodes >= 2,
+            max_new_modal_kinds: if caps.include_modal && caps.max_expr_nodes >= 2 {
+                u32::from(caps.max_expr_nodes.saturating_sub(1)).min(4)
+            } else {
+                0
+            },
+            can_add_temporal: caps.include_temporal && caps.max_expr_nodes >= 2,
+            can_add_distributive_law: caps.include_modal
+                && caps.include_temporal
+                && caps.max_expr_nodes >= 7,
+            can_add_polymorphic_temporal_elim: caps.include_temporal && caps.max_expr_nodes >= 5,
+            can_add_spatial_temporal_clause: caps.include_temporal
+                && can_add_lib_pointer
+                && caps.max_expr_nodes >= 5,
+            lib_ref_count_upper,
+            max_ref_nu: prefix_max_ref_nu.max(extension_max_ref_nu),
+            max_modal_ref_nu: prefix_max_modal_ref_nu.max(extension_max_modal_ref_nu),
+            library_path_dim_sq_sum: library
+                .iter()
+                .filter(|entry| entry.has_loop)
+                .flat_map(|entry| entry.path_dims.iter().copied())
+                .map(|dimension| dimension * dimension)
+                .sum(),
+        }
+    }
+
+    fn upper_bound(&self, profile: &TelescopeNuProfile) -> u32 {
+        if profile.path_count > 0 {
+            return self.hit_upper_from_existing_path(profile);
+        }
+
+        let mut best = 0;
+
+        if self.can_add_path {
+            best = best.max(self.hit_upper_with_new_path(profile));
+        }
+        if profile.has_temporal || self.can_add_temporal {
+            best = best.max(self.synthesis_upper(profile));
+        }
+        if !profile.has_temporal && (profile.modal_kind_count > 0 || self.max_new_modal_kinds > 0) {
+            best = best.max(self.modal_upper(profile));
+        }
+        if !profile.has_temporal
+            && profile.modal_kind_count == 0
+            && (profile.has_suspension || self.can_add_suspension)
+        {
+            best = best.max(5);
+        }
+        if !profile.has_temporal && profile.modal_kind_count == 0 && !profile.has_suspension {
+            if let Some(bound) = self.foundation_upper(profile) {
+                best = best.max(bound);
+            }
+            if let Some(bound) = self.map_upper(profile) {
+                best = best.max(bound);
+            }
+            if let Some(bound) = self.axiomatic_upper(profile) {
+                best = best.max(bound);
+            }
+            if let Some(bound) = self.generic_upper(profile) {
+                best = best.max(bound);
+            }
+        }
+
+        best
+    }
+
+    fn foundation_upper(&self, profile: &TelescopeNuProfile) -> Option<u32> {
+        if profile.any_lib_pointer || !profile.all_basic_formation {
+            return None;
+        }
+
+        let mut best = profile.type_formation_count;
+        if !profile.any_univ_expr && self.can_add_foundation_type_formation {
+            best = best.max(profile.type_formation_count.saturating_add(1));
+        }
+        if profile.any_univ_expr || self.can_add_univ_expr {
+            best = best.max(self.final_kappa.saturating_sub(1));
+        }
+
+        Some(best)
+    }
+
+    fn map_upper(&self, profile: &TelescopeNuProfile) -> Option<u32> {
+        if self.final_kappa == 1 {
+            return (self.can_add_lib_pointer && self.max_expr_nodes >= 3).then_some(2);
+        }
+
+        if !(2..=4).contains(&self.final_kappa) {
+            return None;
+        }
+
+        let map_locked = profile.kappa >= 2 && profile.first_two_lib_pointer_count == 2;
+        let map_from_second_clause = profile.kappa == 1
+            && profile.first_two_lib_pointer_count == 1
+            && self.can_add_lib_pointer;
+        if !map_locked && !map_from_second_clause {
+            return None;
+        }
+
+        Some(
+            self.final_kappa.saturating_mul(2).saturating_add(
+                self.lib_ref_count_upper
+                    .saturating_mul(self.lib_ref_count_upper),
+            ),
+        )
+    }
+
+    fn axiomatic_upper(&self, profile: &TelescopeNuProfile) -> Option<u32> {
+        let map_locked = profile.kappa >= 2 && profile.first_two_lib_pointer_count == 2;
+        if map_locked
+            || self.final_kappa < 3
+            || (!profile.any_lib_pointer && !self.can_add_lib_pointer)
+        {
+            return None;
+        }
+
+        let intro_boost = if profile.any_lib_pointer {
+            u32::from(self.can_add_intro)
+        } else {
+            u32::from(self.can_add_lib_pointer && self.max_expr_nodes >= 2)
+        };
+
+        Some(
+            profile
+                .axiomatic_intro_count
+                .saturating_add(intro_boost)
+                .saturating_add(self.max_ref_nu)
+                .saturating_add(self.final_kappa)
+                .saturating_add(self.lib_ref_count_upper.saturating_sub(1)),
+        )
+    }
+
+    fn generic_upper(&self, profile: &TelescopeNuProfile) -> Option<u32> {
+        let map_locked = profile.kappa >= 2 && profile.first_two_lib_pointer_count == 2;
+        if map_locked || (profile.any_lib_pointer && self.final_kappa >= 3) {
+            return None;
+        }
+
+        let generic_intro_possible =
+            self.max_expr_nodes >= 2 || profile.any_lib_pointer || !profile.all_basic_formation;
+        let generic_possible =
+            generic_intro_possible || (self.can_add_lib_pointer && self.final_kappa < 3);
+        if !generic_possible {
+            return None;
+        }
+
+        Some(
+            profile
+                .intro_count
+                .saturating_mul(2)
+                .saturating_add(profile.elim_count)
+                .saturating_add(u32::from(generic_intro_possible) * 2),
+        )
+    }
+
+    fn modal_upper(&self, profile: &TelescopeNuProfile) -> u32 {
+        let modal_kinds = profile
+            .modal_kind_count
+            .saturating_add(self.max_new_modal_kinds)
+            .min(4);
+        let pairwise = (modal_kinds * modal_kinds.saturating_sub(1)) / 2;
+
+        self.final_kappa
+            .saturating_add(self.library_size)
+            .saturating_add(pairwise)
+    }
+
+    fn synthesis_upper(&self, profile: &TelescopeNuProfile) -> u32 {
+        let distributive_law_count = profile
+            .distributive_law_count
+            .saturating_add(u32::from(self.can_add_distributive_law));
+        let polymorphic_temporal_elim_count = profile
+            .polymorphic_temporal_elim_count
+            .saturating_add(u32::from(self.can_add_polymorphic_temporal_elim));
+        let infinitesimal_shift_bonus =
+            if profile.has_spatial_temporal_clause || self.can_add_spatial_temporal_clause {
+                self.library_path_dim_sq_sum
+            } else {
+                0
+            };
+
+        self.final_kappa
+            .saturating_add(distributive_law_count.saturating_mul(self.max_modal_ref_nu))
+            .saturating_add(polymorphic_temporal_elim_count.saturating_mul(self.library_size))
+            .saturating_add(infinitesimal_shift_bonus)
+    }
+
+    fn hit_upper_with_new_path(&self, profile: &TelescopeNuProfile) -> u32 {
+        self.hit_total(
+            1,
+            self.max_path_dimension,
+            profile.has_formation,
+            profile.kappa,
+            u32::from(profile.any_parametric_formation),
+            0,
+        )
+    }
+
+    fn hit_upper_from_existing_path(&self, profile: &TelescopeNuProfile) -> u32 {
+        let post_path_count = profile.post_path_entry_count.saturating_add(1);
+        let mut best = self.hit_total(
+            profile
+                .path_count
+                .saturating_add(u32::from(self.can_add_path)),
+            profile.max_path_dimension.max(if self.can_add_path {
+                self.max_path_dimension
+            } else {
+                0
+            }),
+            profile.has_formation,
+            profile.pre_path_count,
+            u32::from(profile.any_parametric_formation),
+            post_path_count,
+        );
+
+        if profile.has_formation || self.can_add_univ_expr || self.can_add_parametric_formation {
+            best = best.max(self.hit_total(
+                profile.path_count,
+                profile.max_path_dimension,
+                true,
+                profile.pre_path_count,
+                u32::from(profile.any_parametric_formation || self.can_add_parametric_formation),
+                post_path_count,
+            ));
+        }
+
+        best
+    }
+
+    fn hit_total(
+        &self,
+        path_count: u32,
+        max_path_dimension: u32,
+        has_formation: bool,
+        pre_path_count: u32,
+        parametric_bonus: u32,
+        post_path_count: u32,
+    ) -> u32 {
+        let nu_h = path_count.saturating_add(max_path_dimension.saturating_mul(max_path_dimension));
+        if has_formation {
+            pre_path_count
+                .saturating_add(3)
+                .saturating_add(parametric_bonus)
+                .saturating_add(nu_h)
+                .saturating_add(post_path_count)
+                .saturating_add((post_path_count + 1) / 2)
+        } else {
+            nu_h.saturating_add(self.final_kappa)
+                .saturating_add(self.library_size)
+        }
+    }
+}
+
+fn extension_reference_candidates(
+    library: &Library,
+    historical_anchor_ref: Option<u32>,
+) -> BTreeSet<u32> {
+    let library_size = u32_from_len(library.len());
+    let mut refs = BTreeSet::new();
+
+    if library_size == 0 {
+        return refs;
+    }
+
+    let start = library_size.saturating_sub(1).max(1);
+    for index in start..=library_size {
+        refs.insert(index);
+    }
+    if let Some(anchor) = historical_anchor_ref {
+        if (1..=library_size).contains(&anchor) {
+            refs.insert(anchor);
+        }
+    }
+
+    refs
+}
+
 #[cfg(test)]
 mod tests {
     use super::{
-        compute_native_nu, compute_nu_c, compute_nu_g, compute_nu_h, detect_distributive_laws,
-        detect_infinitesimal_shift, detect_universe_polymorphism, structural_nu,
-        StructuralNuResult,
+        StructuralNuResult, compute_native_nu, compute_nu_c, compute_nu_g, compute_nu_h,
+        detect_distributive_laws, detect_infinitesimal_shift, detect_universe_polymorphism,
+        structural_nu,
     };
     use pen_core::clause::ClauseRec;
     use pen_core::expr::Expr;
