@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Progress
 
-Last updated: 2026-03-25
+Last updated: 2026-03-26
 
 This file is the live status read for `desktop_claim_shadow`.
 Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next
@@ -29,6 +29,11 @@ final gate.
   validated locally, rerun on the stored short step-`4` profile, and then
   dropped from code after the stored evidence showed that the new proof-close
   telemetry never activated on the live claim lane.
+- A narrow claim-only post-plateau discovery summary-skip pass was then
+  implemented, validated locally, rerun on the stored short step-`4`
+  profile, and then dropped from code after the stored evidence showed that it
+  only moved the hot cost from summary build into direct compact
+  materialization while making the wall clock materially worse.
 - A new stored short rerun now exists for that failed slice:
   `runs/codex-claim-release-step4-context-equivalence-v1`.
 - A second new stored short rerun now exists for the later failed slice:
@@ -39,10 +44,14 @@ final gate.
 - A fourth new stored short rerun now exists for that later dropped
   proof-close handoff slice:
   `runs/codex-claim-release-step4-proof-close-handoff-v1`.
+- A fifth new stored short rerun now exists for that later dropped
+  post-plateau summary-skip slice:
+  `runs/codex-claim-release-step4-post-plateau-v1`.
 - The current short step-`4` iteration baseline remains
   `runs/codex-claim-release-step4-algebraic-v1`; neither the later failed
   reruns, the dropped exact-two-step local ordering rerun, nor the dropped
-  proof-close handoff rerun have earned replacement.
+  proof-close handoff rerun, nor the dropped post-plateau summary-skip rerun
+  have earned replacement.
 - The current full-profile iteration baseline remains
   `runs/codex-claim-release-full-nu-profile-v1`.
 - An earlier attempt at the same new run id family,
@@ -240,6 +249,54 @@ final gate.
   - observed RSS `~ 530.2 MiB`
 - That rerun therefore did not earn keep and the proof-close handoff patch has
   now been dropped from code.
+- New stored short rerun for the now-dropped post-plateau summary-skip slice:
+  `runs/codex-claim-release-step4-post-plateau-v1`
+- Against `runs/codex-claim-release-step4-algebraic-v1`, the new
+  post-plateau rerun did activate the intended telemetry before proof-close
+  and it did slash stored `terminal_summary_build_millis`, but it did not earn
+  keep because it only moved the hot step-`4` cost into direct compact
+  materialization while making wall-clock progress much worse:
+  - `prefix_states_explored = 1` at `37.7s` instead of `35.7s`
+  - `prefix_states_explored = 5` at `354.4s` instead of `198.5s`
+  - `prefix_states_explored = 43` at `3113.3s` instead of `1629.3s`
+  - `prefix_states_explored = 52` at `3853.5s` instead of `1975.0s`
+  - `prefix_states_explored = 59` at `4403.0s` instead of `2252.6s`
+  - At those same checkpoints, frontier queue length still stayed
+    `2774`, `2770`, `2732`, `2723`, and `2716` respectively.
+  - At those same checkpoints, legality summaries still stayed
+    `10193`, `28765`, `205199`, `246986`, and `279487` respectively.
+  - At those same checkpoints, the retained prefix cache still stayed
+    `13/32520`, `15/38108`, and then `39/144845` at `43/52/59`.
+  - At those same checkpoints, `terminal_summary_build_millis` fell sharply to
+    `34920`, `67319`, `317305`, `317305`, and `317305` instead of
+    `32990`, `186848`, `1524266`, `1849248`, and `2111246`.
+  - But that same shortcut surface then exploded the materialize-side cost:
+    `terminal_materialize_millis` rose to `261792`, `2591286`, and `3797292`
+    at the `5`, `43`, and `59` checkpoints instead of `104`, `466`, and `466`.
+  - The new post-plateau telemetry did activate on the live claim lane:
+    `post_plateau_terminal_summary_builds` stayed `0`,
+    `post_plateau_terminal_summary_builds_skipped` rose to
+    `14018`, `158608`, `200404`, and `232912`,
+    and `post_plateau_flatten_first_prefix_state` first recorded `25`.
+  - That same rerun also showed why the patch is not a keep:
+    `remaining_one_materialized` rose to `14032`, `158639`, `200435`, and
+    `232943` instead of `15`, `39`, `39`, and `39`, and every one of those
+    materializations stayed on the direct compact path.
+- That rerun was then manually stopped after enough stored keep/drop evidence:
+  - `prefix_states_explored = 92` at `7187.0s`
+  - frontier queue length `= 2683`
+  - legality summaries `= 432706`
+  - retained prefix cache `= 40 groups / 147639 candidates`
+  - `terminal_summary_build_millis = 352986`
+  - `terminal_materialize_millis = 6367302`
+  - `remaining_one_materialized = 381637`
+  - `remaining_one_materialized_compact_direct = 381637`
+  - `post_plateau_terminal_summary_builds = 0`
+  - `post_plateau_terminal_summary_builds_skipped = 381606`
+  - `post_plateau_flatten_first_prefix_state = 75`
+  - observed RSS `~ 421.5 MiB`
+- That rerun therefore did not earn keep and the post-plateau summary-skip
+  patch has now been dropped from code.
 - Current full baseline:
   `runs/codex-claim-release-full-nu-profile-v1`
 - The earlier intended-profile rerun
@@ -285,27 +342,31 @@ final gate.
 - The attempted proof-close handoff slice then showed that the intended
   proof-close surface still never activates before the hot stored step-`4`
   checkpoints, so that slice is now also exhausted and dropped from code.
-- Step `4` exact summary build during discovery therefore remains the dominant
-  honest blocker on the real profile, and no post-algebraic slice has yet
-  earned baseline replacement from stored evidence.
+- The attempted post-plateau discovery summary-skip slice did activate and it
+  did cut stored summary-build time hard, but it only did so by forcing almost
+  every post-plateau prefix onto the direct compact materialize path, so that
+  slice is now also exhausted and dropped from code.
+- Step `4` still remains the dominant honest blocker on the real profile, and
+  no post-algebraic slice has yet earned baseline replacement from stored
+  evidence.
 - Memory remains controlled on the short reruns; the wall is still compute, not
   allocator or RSS pressure.
-- The next honest move is no longer another proof-close ordering variant;
-  it is an earlier discovery-side summary-build cut on the same retained
-  exact-two-step / remaining-one surface, because proof-close still does not
-  begin before the hot stored checkpoints.
+- The next honest move is no longer another proof-close ordering variant or a
+  broad post-plateau summary-skip handoff; it is now a narrower
+  post-plateau cut on the same retained remaining-one surface that preserves
+  summary-side pruning honesty while avoiding the new direct-materialize blowup.
 
 ## Immediate Order
 
-1. Patch one narrow discovery-side exact-summary experiment on the retained
-   remaining-one surface after the retained prefix cache has already flattened,
-   because the proof-close handoff surface never activates before the hot
-   stored checkpoints.
-2. Add telemetry and tests for that earlier discovery-side slice, then re-earn
-   one stored release `until_step = 4` rerun.
-3. Keep that next patch only if the stored rerun changes the same honest
-   retained-prefix shape while cutting `terminal_summary_build_millis` or
-   reaching materially farther by the same wall clock.
+1. Patch one narrower post-plateau remaining-one cut that does not skip all
+   uncached summary work straight into direct compact materialization; the next
+   slice must preserve the same honest retained-prefix shape without letting
+   `remaining_one_materialized` explode.
+2. Add telemetry and tests for that refined post-plateau surface, then
+   re-earn one stored release `until_step = 4` rerun.
+3. Keep that next patch only if the stored rerun keeps the same honest
+   retained-prefix shape while improving wall-clock progress and without merely
+   swapping `terminal_summary_build_millis` for `terminal_materialize_millis`.
 4. Only after that short rerun earns keep should another real
    `desktop_claim_shadow_1h` full-profile rerun happen.
 
@@ -326,6 +387,8 @@ final gate.
 - Current short step-`4` iteration baseline:
   `runs/codex-claim-release-step4-algebraic-v1`
 - Most recent short evidence that did not advance that baseline:
+  `runs/codex-claim-release-step4-post-plateau-v1`
+- Earlier short evidence that also did not advance that baseline:
   `runs/codex-claim-release-step4-proof-close-handoff-v1`
 - Earlier short evidence that also did not advance that baseline:
   `runs/codex-claim-release-step4-local-two-step-order-v2`
