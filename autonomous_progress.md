@@ -34,6 +34,11 @@ final gate.
   profile, and then dropped from code after the stored evidence showed that it
   only moved the hot cost from summary build into direct compact
   materialization while making the wall clock materially worse.
+- A follow-up narrow post-plateau materialize-side fast path was then
+  implemented, validated locally, rerun on the stored short step-`4`
+  profile, and then dropped from code after the stored evidence showed that
+  the intended direct-compact surface never actually engaged on the live claim
+  lane.
 - A new stored short rerun now exists for that failed slice:
   `runs/codex-claim-release-step4-context-equivalence-v1`.
 - A second new stored short rerun now exists for the later failed slice:
@@ -47,11 +52,15 @@ final gate.
 - A fifth new stored short rerun now exists for that later dropped
   post-plateau summary-skip slice:
   `runs/codex-claim-release-step4-post-plateau-v1`.
+- A sixth new stored short rerun now exists for that later dropped
+  post-plateau materialize-side slice:
+  `runs/codex-claim-release-step4-post-plateau-materialize-v1`.
 - The current short step-`4` iteration baseline remains
   `runs/codex-claim-release-step4-algebraic-v1`; neither the later failed
   reruns, the dropped exact-two-step local ordering rerun, nor the dropped
-  proof-close handoff rerun, nor the dropped post-plateau summary-skip rerun
-  have earned replacement.
+  proof-close handoff rerun, nor the dropped post-plateau summary-skip rerun,
+  nor the dropped post-plateau materialize-side rerun have earned
+  replacement.
 - The current full-profile iteration baseline remains
   `runs/codex-claim-release-full-nu-profile-v1`.
 - An earlier attempt at the same new run id family,
@@ -69,6 +78,12 @@ final gate.
   `remaining_one_incumbent_improving_groups_seen` stayed `0`, and
   `remaining_one_incumbent_improvement_prefix_state` stayed `0` through the
   manual stop.
+- The later post-plateau materialize-side counters likewise showed that the
+  intended direct-compact surface still never engaged on the stored short
+  rerun: `post_plateau_materialize_fast_path_kept = 0` and
+  `post_plateau_materialized_compact_direct = 0` at the stored `1`, `5`, and
+  manual-stop `9` checkpoints, while `post_plateau_materialize_fast_path_skipped`
+  only rose because the gate kept declining to open that surface.
 - The broad `cargo test -p pen-search claim_` sweep was re-earned again on
   this desktop in this turn after the old heavy witness shape was removed.
 
@@ -297,6 +312,49 @@ final gate.
   - observed RSS `~ 421.5 MiB`
 - That rerun therefore did not earn keep and the post-plateau summary-skip
   patch has now been dropped from code.
+- New stored short rerun for the now-dropped narrow post-plateau
+  materialize-side slice:
+  `runs/codex-claim-release-step4-post-plateau-materialize-v1`
+- Against `runs/codex-claim-release-step4-algebraic-v1`, the new
+  materialize-side rerun did record the intended plateau-side telemetry, but
+  it still did not earn keep because the direct-compact surface itself never
+  engaged and the early checkpoints moved slightly the wrong direction:
+  - `prefix_states_explored = 1` at `36.3s` instead of `35.7s`
+  - `prefix_states_explored = 5` at `202.0s` instead of `198.5s`
+  - `prefix_states_explored = 9` at `337.2s` instead of `332.5s`
+  - At those same stored checkpoints, frontier queue length still stayed
+    `2774`, `2770`, and `2766` respectively.
+  - At those same stored checkpoints, the retained prefix cache still stayed
+    `13/32520`, `15/38108`, and `19/53693` respectively.
+  - At those same stored checkpoints, `terminal_summary_build_millis` rose to
+    `33516`, `189616`, and `314814` instead of
+    `32990`, `186848`, and `310348`.
+  - `terminal_materialize_millis` stayed controlled at `85`, `103`, and `155`,
+    so the rerun did not recreate the old materialize blowup.
+  - But the new materialize-side telemetry still failed the real engagement
+    test:
+    `post_plateau_materialize_fast_path_kept = 0`,
+    `post_plateau_materialized_compact_direct = 0`, and
+    `post_plateau_materialize_fast_path_skipped` rose only to
+    `4630`, `23204`, and `41776`.
+  - The plateau markers did move on stored evidence:
+    `post_plateau_flatten_first_prefix_state` recorded `1`, then `5`, then
+    `8`, while `post_plateau_materialize_first_activation_prefix_state`
+    stayed pinned at `1`.
+- That rerun was then manually stopped after enough stored non-engagement
+  evidence:
+  - `prefix_states_explored = 9` at `337.2s`
+  - frontier queue length `= 2766`
+  - legality summaries `= 47337`
+  - retained prefix cache `= 19 groups / 53693 candidates`
+  - `terminal_summary_build_millis = 314814`
+  - `terminal_materialize_millis = 155`
+  - `post_plateau_materialize_fast_path_kept = 0`
+  - `post_plateau_materialized_compact_direct = 0`
+  - `post_plateau_materialize_fast_path_skipped = 41776`
+  - observed RSS `~ 98.5 MiB`
+- That rerun therefore did not earn keep and the narrow post-plateau
+  materialize-side patch has now also been dropped from code.
 - Current full baseline:
   `runs/codex-claim-release-full-nu-profile-v1`
 - The earlier intended-profile rerun
@@ -346,27 +404,30 @@ final gate.
   did cut stored summary-build time hard, but it only did so by forcing almost
   every post-plateau prefix onto the direct compact materialize path, so that
   slice is now also exhausted and dropped from code.
+- The attempted narrow post-plateau materialize-side follow-up then showed
+  that a one-clause direct-compact gate does not actually open on the live
+  claim lane at the honest early checkpoints, so that narrower materialize
+  surface is now also exhausted and dropped from code.
 - Step `4` still remains the dominant honest blocker on the real profile, and
   no post-algebraic slice has yet earned baseline replacement from stored
   evidence.
 - Memory remains controlled on the short reruns; the wall is still compute, not
   allocator or RSS pressure.
-- The next honest move is no longer another proof-close ordering variant or a
-  broad post-plateau summary-skip handoff; it is now a narrower
-  post-plateau cut on the same retained remaining-one surface that preserves
-  summary-side pruning honesty while avoiding the new direct-materialize blowup.
+- The next honest move is no longer another post-plateau direct-compact gate;
+  the stored evidence now points back to the post-plateau summary-build wall
+  itself on the retained remaining-one surface, because the materialize-side
+  follow-up never actually engaged the intended direct path.
 
 ## Immediate Order
 
-1. Patch one narrower post-plateau remaining-one cut that does not skip all
-   uncached summary work straight into direct compact materialization; the next
-   slice must preserve the same honest retained-prefix shape without letting
-   `remaining_one_materialized` explode.
-2. Add telemetry and tests for that refined post-plateau surface, then
+1. Patch one narrow post-plateau summary-build-side throughput or reuse cut on
+   the retained remaining-one surface that keeps the algebraic baseline's
+   direct compact behavior unchanged.
+2. Add telemetry and tests for that refined summary-side surface, then
    re-earn one stored release `until_step = 4` rerun.
 3. Keep that next patch only if the stored rerun keeps the same honest
-   retained-prefix shape while improving wall-clock progress and without merely
-   swapping `terminal_summary_build_millis` for `terminal_materialize_millis`.
+   retained-prefix shape while improving wall-clock progress and without
+   reopening the old direct-materialize blowup.
 4. Only after that short rerun earns keep should another real
    `desktop_claim_shadow_1h` full-profile rerun happen.
 
@@ -387,6 +448,8 @@ final gate.
 - Current short step-`4` iteration baseline:
   `runs/codex-claim-release-step4-algebraic-v1`
 - Most recent short evidence that did not advance that baseline:
+  `runs/codex-claim-release-step4-post-plateau-materialize-v1`
+- Earlier short evidence that also did not advance that baseline:
   `runs/codex-claim-release-step4-post-plateau-v1`
 - Earlier short evidence that also did not advance that baseline:
   `runs/codex-claim-release-step4-proof-close-handoff-v1`
