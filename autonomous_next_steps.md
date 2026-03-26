@@ -7,53 +7,56 @@ ceiling patch are already landed.
 Assume the attempted remaining-one context-equivalence quotient, the
 frontier-pop incumbent-ordering experiment, the exact-two-step local ordering
 experiment, the proof-close handoff ordering experiment, the broad
-post-plateau discovery summary-skip experiment, and the narrower post-plateau
-materialize-side one-clause gate experiment were all implemented, measured on
-stored short reruns, and then dropped from code after their stored evidence
-failed to earn keep.
+post-plateau discovery summary-skip experiment, the narrower post-plateau
+materialize-side one-clause gate experiment, and the later post-plateau
+summary-cache reuse experiment were all implemented, measured on stored short
+reruns, and then dropped from code after their stored evidence failed to earn
+keep.
 The current short step-`4` baseline remains
 `runs/codex-claim-release-step4-algebraic-v1`.
 The most recent short evidence that did not advance that baseline is
-`runs/codex-claim-release-step4-post-plateau-materialize-v1`.
+`runs/codex-claim-release-step4-post-plateau-summary-cache-v3`.
+Ignore the two earlier attempts at that same run-id family,
+`runs/codex-claim-release-step4-post-plateau-summary-cache-v1` and
+`runs/codex-claim-release-step4-post-plateau-summary-cache-v2`: those local
+reruns were stopped once their stored checkpoints showed the plateau gate
+activating before the honest retained `39 groups / 144845 candidates` flat
+zone.
 The current full-profile baseline remains
 `runs/codex-claim-release-full-nu-profile-v1`.
 
 ## Goal
 
-Cut post-plateau `terminal_summary_build_millis` on the retained remaining-one
-surface without reopening either the broad discovery-side summary-skip surface
-or another direct-compact materialize-side gate that does not actually engage
-on the live claim lane.
+Cut remaining-one `terminal_summary_build_millis` on the honest retained
+`39/144845` plateau surface by making each exact summary build cheaper, not by
+retaining whole compact pruning summaries across prefixes.
 
 ## Why This Is The Next Slice
 
-- On `runs/codex-claim-release-step4-post-plateau-v1`, the broad
-  post-plateau summary-skip surface did activate before proof-close and it did
-  collapse stored summary-build time, but it failed honestly because it moved
-  the wall into direct compact materialization:
-  - `terminal_summary_build_millis = 67319` instead of `186848` at `5`
-  - `terminal_materialize_millis = 261792` instead of `104` at `5`
-  - `remaining_one_materialized = 14032` instead of `15` at `5`
-  - wall-clock progress then fell materially behind the algebraic baseline
-- The follow-up narrow materialize-side rerun,
-  `runs/codex-claim-release-step4-post-plateau-materialize-v1`, then showed
-  that the intended retained-surface direct-compact gate still does not
-  actually engage on the live claim lane:
-  - `prefix_states_explored = 1` at `36.3s` instead of `35.7s`
-  - `prefix_states_explored = 5` at `202.0s` instead of `198.5s`
-  - `prefix_states_explored = 9` at `337.2s` instead of `332.5s`
-  - retained prefix cache still stayed `13/32520`, `15/38108`, and `19/53693`
-  - `terminal_summary_build_millis` still rose to
-    `33516`, `189616`, and `314814`
-  - `terminal_materialize_millis` stayed small at `85`, `103`, and `155`
-  - but `post_plateau_materialize_fast_path_kept = 0` and
-    `post_plateau_materialized_compact_direct = 0` at those same checkpoints,
-    while `post_plateau_materialize_fast_path_skipped` only rose to
-    `4630`, `23204`, and `41776`
-- That means the honest post-plateau wall is still summary-side exact
-  completion work on the retained remaining-one surface after the retained
-  prefix cache has already flattened, not a materialize-side direct-compact
-  reopening.
+- The later stored summary-cache rerun,
+  `runs/codex-claim-release-step4-post-plateau-summary-cache-v3`, did prove
+  that the post-plateau trigger can engage on the honest retained surface:
+  - `post_plateau_summary_first_activation_prefix_state = 24`
+  - retained prefix cache had reached `39 groups / 144845 candidates`
+- But that rerun also proved the hoped-for live duplicate-summary reuse is not
+  the honest wall:
+  - `post_plateau_summary_rebuild_elisions = 0` at `24`, `43`, and `44`
+  - `post_plateau_summary_rebuilds_kept` still rose to
+    `4353`, `92589`, and `97233`
+  - live `terminal_prefix_completions` rose with it to
+    `4353`, `92589`, and `97233`
+- The wall-clock and summary-build cost then moved the wrong direction while
+  the honest retained shape stayed the same:
+  - `prefix_states_explored = 43` at `1708.3s` instead of `1629.3s`
+  - frontier queue length still stayed `2732`
+  - legality summaries still stayed `205199`
+  - retained prefix cache still stayed `39 groups / 144845 candidates`
+  - `terminal_summary_build_millis = 1599435` instead of `1524266`
+  - `terminal_materialize_millis = 481` instead of `466`
+- So the exhausted idea is now specific and narrow:
+  exact-prefix retained-summary caching does not buy real reuse on the live
+  claim lane. The honest step-`4` wall is still the per-prefix exact
+  completion builder itself on the retained plateau surface.
 
 ## Current Comparison Targets
 
@@ -70,15 +73,11 @@ Use these as the numbers to beat:
   - `terminal_materialize_millis = 104` at `5`, `466` at `43`, and `466` at
     `59`
   - `remaining_one_materialized = 15` at `5` and `39` at `43/52/59`
-- `runs/codex-claim-release-step4-post-plateau-materialize-v1`
-  - plateau-side telemetry observed the retained-surface flat zone
-  - the intended direct-compact materialize counter still stayed `0`
-  - the run was manually stopped at `prefix_states_explored = 9` / `337.2s`
-    after enough stored non-engagement evidence
-- `runs/codex-claim-release-step4-post-plateau-v1`
-  - summary-build time collapsed
-  - wall-clock progress became materially worse because the work moved into
-    `terminal_materialize_millis`
+- `runs/codex-claim-release-step4-post-plateau-summary-cache-v3`
+  - first honest plateau activation at `24`
+  - `post_plateau_summary_rebuild_elisions` still stayed `0`
+  - `terminal_summary_build_millis` and wall clock both worsened while
+    retained shape stayed honest
 - `runs/codex-claim-release-full-nu-profile-v1`
   - `prefix_states_explored = 43` at `1629.6s`
   - `prefix_states_explored = 52` at `2039.7s`
@@ -92,24 +91,29 @@ Use these as the numbers to beat:
 
 ## Do This Next
 
-### 1. Patch One Narrow Post-Plateau Summary-Side Experiment
+### 1. Patch One Narrow Per-Summary Builder Throughput Experiment
 
 Preferred form:
 
-- target the retained remaining-one summary-build helpers after the retained
-  prefix cache has already flattened at the current honest winner shape
+- target `compute_terminal_prefix_completion_summary_from_candidates` and the
+  claim remaining-one exact helper path immediately around it
+- cut the cost of each exact summary build on the retained `39/144845` surface
+  without retaining compact pruning summaries across prefixes
 - preserve the algebraic baseline's materialize behavior; do not reopen the
-  broad discovery-side summary-skip surface or another non-engaging
-  direct-compact gate
-- use already-cached exact bound, admissibility, or rank evidence to avoid
-  rebuilding compact terminal summaries that are not changing the honest
-  retained surface
+  broad discovery-side summary-skip surface or another direct-compact
+  materialize gate
+- prefer a cut that attacks per-candidate exact work directly:
+  - cheaper bound/rank aggregation bookkeeping
+  - less repeated temporary object churn inside the compact summary loop
+  - narrower exact-`nu` work after already-known connectivity/admissibility
+    screens
 - keep deterministic ordering, retained-prefix honesty, and winner determinism
-- keep the write surface inside the claim remaining-one summary-build / cached
-  rank helpers first, not inside proof-close or the broad frontier loop
+- keep the write surface inside the claim remaining-one summary-build helpers
+  first, not inside proof-close or the broad frontier loop
 
 Reject as first moves:
 
+- more post-plateau summary-cache retention or reuse variants
 - more post-plateau direct-compact materialize gates
 - more blind post-plateau summary-skip variants
 - more proof-close handoff variants
@@ -121,28 +125,27 @@ Reject as first moves:
 - widening-band retuning
 - a broad frontier rewrite outside the narrow remaining-one summary surface
 
-### 2. Add Telemetry And Tests For The Summary-Side Post-Plateau Surface
+### 2. Add Telemetry And Tests For The Inner Summary-Builder Surface
 
-Before trusting live runs, make the new slice measurable and prove it engages
-before proof-close.
+Before trusting live runs, make the next slice measurable.
 
 Preferred telemetry additions:
 
-- one counter for post-plateau retained-surface summary reuses or rebuild
-  elisions on that surface
-- one earliest-prefix-state marker for when that summary-side fast path first
-  engages after the retained cache is already flat
-- one counter pair for kept-vs-skipped post-plateau summary rebuilds on that
-  surface
+- split `terminal_summary_build_millis` enough to show whether the win lands in
+  exact-`nu` work or in the surrounding non-`nu` summary bookkeeping
+- one counter or earliest-prefix-state marker that proves the new inner-loop
+  cut engages on the retained `39/144845` plateau surface
+- do not keep the dropped post-plateau summary-cache counters in code unless
+  the new slice genuinely still needs them
 
 Required tests:
 
-- one targeted test that the new post-plateau summary-side fast path does not
-  skip a group that can still beat the incumbent
-- one targeted deterministic-tie test that equal discovery-side buckets still
-  process in stable exact order
-- one regression that proves the kept reference step-`4` winner still survives
-  when the retained cache is already flat
+- one targeted regression that the kept reference step-`4` winner still
+  survives on the retained plateau surface
+- one targeted deterministic-order test if the new patch touches candidate
+  ordering or tie handling
+- one targeted test that the new helper cut preserves exact admitted/pruned
+  counts for a representative remaining-one prefix
 
 ### 3. Re-Earn One Stored Release `until_step = 4` Rerun
 
@@ -160,7 +163,8 @@ Read the stored artifacts, not terminal output.
 Keep the patch only if the new `reports/steps/step-04-live.ndjson` shows both
 of these:
 
-- the new summary-side telemetry activates before proof-close
+- the new inner summary-builder telemetry activates on the honest retained
+  plateau surface
 - at least one real step-`4` win against the current baselines:
   - wall clock reaches materially farther at matching checkpoints
   - `terminal_summary_build_millis` falls
@@ -171,8 +175,9 @@ of these:
   - cached rank-prune growth or retained-group collapse improves at the same
     honest retained-prefix shape
 
-Drop the patch if the activation counters stay zero or the rerun only adds
-telemetry overhead without improving real step-`4` progress.
+Drop the patch if the rerun only adds telemetry overhead, only grows resident
+summary/cache state, or still leaves the same `43/52/59` checkpoints slower
+than the algebraic baseline.
 
 ### 5. Only Then Rerun The Real Profile
 
@@ -187,9 +192,9 @@ Only after the short step-`4` rerun earns keep:
 
 Open `reports/steps/step-04-live.ndjson` and answer:
 
-- did the new summary-side telemetry activate before proof-close?
-- if it activated, how early did the retained prefix cache flatten?
-- did `terminal_summary_build_millis` fall at matching checkpoints?
+- did the new inner-loop telemetry activate on the retained `39/144845`
+  plateau surface?
+- did `terminal_summary_build_millis` fall at matching `43/52/59` checkpoints?
 - did `terminal_materialize_millis` stay controlled?
 - did frontier queue length drop faster?
 - did the same wall clock reach farther than the current baseline?
@@ -216,6 +221,6 @@ the broader tree still stops at
 Rewrite this file as soon as one new stored rerun shows one of these is true:
 
 - step `4` is no longer the dominant blocker
-- the refined post-plateau summary-side slice is exhausted and the next real
-  move is a different honest wall
+- the refined per-summary builder slice is exhausted and the next real move is
+  a different honest wall
 - the real full profile exposes a later honest wall

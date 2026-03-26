@@ -39,6 +39,12 @@ final gate.
   profile, and then dropped from code after the stored evidence showed that
   the intended direct-compact surface never actually engaged on the live claim
   lane.
+- A later narrow post-plateau summary-cache reuse pass was then implemented,
+  validated locally, rerun on the stored short step-`4` profile, and then
+  dropped from code after the stored evidence showed that the retained-surface
+  activation counters did engage on the honest `39/144845` plateau, but exact
+  rebuild elisions still stayed at `0` while wall clock and
+  `terminal_summary_build_millis` both moved the wrong direction.
 - A new stored short rerun now exists for that failed slice:
   `runs/codex-claim-release-step4-context-equivalence-v1`.
 - A second new stored short rerun now exists for the later failed slice:
@@ -55,12 +61,15 @@ final gate.
 - A sixth new stored short rerun now exists for that later dropped
   post-plateau materialize-side slice:
   `runs/codex-claim-release-step4-post-plateau-materialize-v1`.
+- A seventh new stored short rerun now exists for that later dropped
+  post-plateau summary-cache slice:
+  `runs/codex-claim-release-step4-post-plateau-summary-cache-v3`.
 - The current short step-`4` iteration baseline remains
   `runs/codex-claim-release-step4-algebraic-v1`; neither the later failed
   reruns, the dropped exact-two-step local ordering rerun, nor the dropped
   proof-close handoff rerun, nor the dropped post-plateau summary-skip rerun,
-  nor the dropped post-plateau materialize-side rerun have earned
-  replacement.
+  nor the dropped post-plateau materialize-side rerun, nor the dropped
+  post-plateau summary-cache rerun have earned replacement.
 - The current full-profile iteration baseline remains
   `runs/codex-claim-release-full-nu-profile-v1`.
 - An earlier attempt at the same new run id family,
@@ -68,6 +77,13 @@ final gate.
   it was started before a forced fresh `--release` rebuild and still emitted
   the dropped stale-binary telemetry shape, so it is not part of the active
   comparison set.
+- Two earlier attempts at the later post-plateau summary-cache run-id family,
+  `runs/codex-claim-release-step4-post-plateau-summary-cache-v1` and
+  `runs/codex-claim-release-step4-post-plateau-summary-cache-v2`, should also
+  be ignored: their local plateau-arm thresholds were too loose and those
+  local reruns were manually stopped as soon as the stored checkpoints showed
+  activation before the honest retained `39 groups / 144845 candidates` flat
+  zone.
 - The claim lane is still compute-bound in step `4`.
 - The attempted quotient counters recorded no live reuse on the stored short
   rerun: hits stayed `0`, reused summaries stayed `0`, and misses froze at
@@ -84,6 +100,13 @@ final gate.
   `post_plateau_materialized_compact_direct = 0` at the stored `1`, `5`, and
   manual-stop `9` checkpoints, while `post_plateau_materialize_fast_path_skipped`
   only rose because the gate kept declining to open that surface.
+- The later post-plateau summary-cache counters then showed that retaining
+  compact pruning summaries on the honest flat retained surface also does not
+  actually buy live reuse on the claim lane: at the stored `24`, `43`, and
+  manual-stop `44` checkpoints, `post_plateau_summary_rebuild_elisions` stayed
+  `0` while `post_plateau_summary_rebuilds_kept` rose to `4353`, `92589`, and
+  `97233`, and live `terminal_prefix_completions` rose with it to
+  `4353`, `92589`, and `97233`.
 - The broad `cargo test -p pen-search claim_` sweep was re-earned again on
   this desktop in this turn after the old heavy witness shape was removed.
 
@@ -355,6 +378,49 @@ final gate.
   - observed RSS `~ 98.5 MiB`
 - That rerun therefore did not earn keep and the narrow post-plateau
   materialize-side patch has now also been dropped from code.
+- New stored short rerun for the now-dropped narrow post-plateau
+  summary-cache slice:
+  `runs/codex-claim-release-step4-post-plateau-summary-cache-v3`
+- Against `runs/codex-claim-release-step4-algebraic-v1`, the new
+  summary-cache rerun did engage the intended retained-surface telemetry only
+  once the cache reached the honest `39 groups / 144845 candidates` plateau,
+  but it still did not earn keep because exact duplicate-summary reuse never
+  happened and the added retention work only slowed the hot path:
+  - `prefix_states_explored = 24` at `937.0s`, with
+    `post_plateau_summary_first_activation_prefix_state = 24`
+  - `prefix_states_explored = 43` at `1708.3s` instead of `1629.3s`
+  - `prefix_states_explored = 44` at `1743.6s`
+  - At those same plateau-side checkpoints, frontier queue length still stayed
+    `2751`, `2732`, and `2731` respectively.
+  - At those same checkpoints, legality summaries stayed
+    `116982`, `205199`, and `209842` respectively.
+  - At those same checkpoints, retained prefix cache stayed
+    `39/144845` throughout.
+  - At those same checkpoints, `remaining_one_cached_rank_prunes` still rose
+    only along the baseline surface to `111417`, `199653`, and `204297`.
+  - But the new reuse counter itself never moved:
+    `post_plateau_summary_rebuild_elisions = 0` at `24/43/44`.
+  - Meanwhile the retained-summary residency just grew into pure overhead:
+    `post_plateau_summary_rebuilds_kept = 4353`, `92589`, and `97233`, while
+    live `terminal_prefix_completions` rose to the same values.
+  - At those same checkpoints, `terminal_summary_build_millis` rose to
+    `874730`, `1599435`, and `1632349`; by the matched `43` checkpoint it was
+    already above the algebraic baseline's `1524266`.
+  - `terminal_materialize_millis` stayed controlled at `481`, so the rerun did
+    not reopen the old direct-materialize blowup.
+- That rerun was then manually stopped after enough stored keep/drop evidence:
+  - `prefix_states_explored = 44` at `1743.6s`
+  - frontier queue length `= 2731`
+  - legality summaries `= 209842`
+  - retained prefix cache `= 39 groups / 144845 candidates`
+  - `post_plateau_summary_first_activation_prefix_state = 24`
+  - `post_plateau_summary_rebuild_elisions = 0`
+  - `post_plateau_summary_rebuilds_kept = 97233`
+  - `terminal_summary_build_millis = 1632349`
+  - `terminal_materialize_millis = 481`
+  - observed RSS `~ 367.8 MiB`
+- That rerun therefore did not earn keep and the narrow post-plateau
+  summary-cache patch has now also been dropped from code.
 - Current full baseline:
   `runs/codex-claim-release-full-nu-profile-v1`
 - The earlier intended-profile rerun
@@ -408,26 +474,35 @@ final gate.
   that a one-clause direct-compact gate does not actually open on the live
   claim lane at the honest early checkpoints, so that narrower materialize
   surface is now also exhausted and dropped from code.
+- The attempted narrow post-plateau summary-cache reuse follow-up then showed
+  that exact duplicate remaining-one prefixes do not actually recur on the
+  live plateau surface, so retaining compact pruning summaries only adds cache
+  residency and telemetry overhead without cutting real summary-build work;
+  that summary-cache surface is now also exhausted and dropped from code.
 - Step `4` still remains the dominant honest blocker on the real profile, and
   no post-algebraic slice has yet earned baseline replacement from stored
   evidence.
 - Memory remains controlled on the short reruns; the wall is still compute, not
   allocator or RSS pressure.
-- The next honest move is no longer another post-plateau direct-compact gate;
-  the stored evidence now points back to the post-plateau summary-build wall
-  itself on the retained remaining-one surface, because the materialize-side
-  follow-up never actually engaged the intended direct path.
+- The next honest move is no longer another post-plateau direct-compact gate
+  or another cross-prefix summary-reuse cache; the stored evidence now points
+  at the per-prefix remaining-one exact summary-builder itself on the retained
+  `39/144845` surface, because the summary-cache follow-up never produced one
+  real rebuild elision.
 
 ## Immediate Order
 
-1. Patch one narrow post-plateau summary-build-side throughput or reuse cut on
-   the retained remaining-one surface that keeps the algebraic baseline's
-   direct compact behavior unchanged.
-2. Add telemetry and tests for that refined summary-side surface, then
+1. Patch one narrow per-summary throughput cut inside the remaining-one exact
+   summary builder on the retained `39/144845` surface, without retaining
+   compact pruning summaries across prefixes and without reopening the old
+   direct-compact materialize path.
+2. Add telemetry that splits the exact summary-builder cost enough to prove
+   which inner sub-phase actually moves, then
    re-earn one stored release `until_step = 4` rerun.
 3. Keep that next patch only if the stored rerun keeps the same honest
    retained-prefix shape while improving wall-clock progress and without
-   reopening the old direct-materialize blowup.
+   reopening the old direct-materialize blowup or another resident summary
+   cache.
 4. Only after that short rerun earns keep should another real
    `desktop_claim_shadow_1h` full-profile rerun happen.
 
@@ -448,6 +523,8 @@ final gate.
 - Current short step-`4` iteration baseline:
   `runs/codex-claim-release-step4-algebraic-v1`
 - Most recent short evidence that did not advance that baseline:
+  `runs/codex-claim-release-step4-post-plateau-summary-cache-v3`
+- Earlier short evidence that also did not advance that baseline:
   `runs/codex-claim-release-step4-post-plateau-materialize-v1`
 - Earlier short evidence that also did not advance that baseline:
   `runs/codex-claim-release-step4-post-plateau-v1`
@@ -461,6 +538,10 @@ final gate.
   `runs/codex-claim-release-step4-context-equivalence-v1`
 - Ignore as stale-binary noise, not active evidence:
   `runs/codex-claim-release-step4-local-two-step-order-v1`
+- Ignore as early-threshold local diagnostics, not active evidence:
+  `runs/codex-claim-release-step4-post-plateau-summary-cache-v1`
+- Ignore as early-threshold local diagnostics, not active evidence:
+  `runs/codex-claim-release-step4-post-plateau-summary-cache-v2`
 - Pre-delay materialization baseline:
   `runs/codex-claim-release-step4-telemetry-v1`
 
