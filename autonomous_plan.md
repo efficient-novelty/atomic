@@ -1,11 +1,11 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-03-25
+Last updated: 2026-03-26
 Status: active
 
-This file is the staged path from the current compute-bound claim-lane wall to
-final signoff. It intentionally omits older rollout history that no longer
-changes the next decisions.
+This file is the staged path from the current claim-lane wall to final
+signoff. It records the current strategy and decision rules, not every older
+experiment.
 
 ## Objective
 
@@ -18,109 +18,145 @@ that:
 
 Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
-## Current Operating Read
+## Strategic Diagnosis
 
 - The claim lane has already crossed the old memory wall.
-- The current binary is now stably compute-bound in step `4`.
-- The current full-profile iteration baseline is
-  `runs/codex-claim-release-full-nu-profile-v1`.
-- Delayed materialization, the incumbent-primary remaining-one fast path, and
-  the one-pass `structural_nu` summary build fast path are all baseline.
-- The hot cost is still remaining-one exact terminal-summary construction.
-- The high pre-materialize rank-prune count is good news: pruning works, but it
-  still triggers too late.
-- The attempted phase-2 context-equivalence quotient did not earn keep on
-  `runs/codex-claim-release-step4-context-equivalence-v1`, so the active short
-  loop now moves to phase `3`.
-- The attempted phase-3 frontier-pop incumbent-ordering rerun also did not earn
-  keep on `runs/codex-claim-release-step4-incumbent-ordering-v1`; its new
-  ordering counters stayed zero on the stored run, which means that surface did
-  not engage on the live claim lane.
-- The next meaningful wins must happen before
-  `compute_terminal_prefix_completion_summary_from_candidates`, and the latest
-  stored proof-close handoff attempt now says they must happen earlier on the
-  discovery/materialize surface after the retained prefix cache has flattened,
-  not in another proof-close ordering pass, memory-first rewrite, or
-  frontier-pop ordering variant.
+- The current binary is still compute-bound in step `4`.
+- The honest live shape still repeats across stored short reruns:
+  - the frontier queue drains along the same contour
+  - legality growth stays on the same contour
+  - the retained prefix cache still flattens at
+    `39 groups / 144845 candidates`
+- The landed wins so far were the cheap early ones:
+  delayed materialization, the incumbent-primary remaining-one fast path, the
+  one-pass `structural_nu` summary-build fast path, the algebraic `nu`
+  ceiling, and now the family-agnostic claim terminal-admissibility shortcut.
+- The indirect routes around the wall have now been exhausted on stored
+  evidence:
+  - context-equivalence quotienting found no live reuse
+  - frontier-pop incumbent ordering never engaged on the live lane
+  - proof-close handoff ordering never engaged on the live lane
+  - post-plateau summary-skip only moved cost into direct materialization
+  - the narrower post-plateau materialize gate never honestly opened
+  - post-plateau summary-cache reuse activated on the plateau, but rebuild
+    elisions stayed at `0`
+- The kernel split rerun
+  `runs/codex-claim-release-step4-kernel-profile-v2` then narrowed the wall
+  further: on the honest plateau at `prefix_states_explored = 44`,
+  admissibility was the dominant measured sub-phase
+  (`679889 ms`), ahead of connectivity (`492575 ms`), aggregation
+  (`118953 ms`), and exact `nu` (`74386 ms`).
+- The follow-up keep rerun
+  `runs/codex-claim-release-step4-kernel-admissibility-v1` widened the existing
+  terminal-summary admissibility shortcut onto the family-agnostic claim lane
+  and removed that cost on the same plateau:
+  - `elapsed_millis` fell to `1398528` from algebraic `1662758`
+  - `terminal_summary_build_millis` fell to `1292019` from algebraic
+    `1555470`
+  - `terminal_summary_admissibility_millis` fell to `0` from diagnostic
+    `679889`
+- So the honest wall has moved again, but not out of the same kernel:
+  remaining-one connectivity is now the dominant plateau cost, aggregation is
+  second, and exact `nu` is no longer the first target.
+
+## Strategic Rules
+
+- Trust stored artifacts over terminal impressions.
+- Treat "same honest shape, slower clock" as overhead, not progress.
+- Prefer exact structural cuts over broad heuristic rewrites.
+- Require telemetry for any newly claimed activation surface.
+- Retire a hypothesis after one honest stored rerun if it shows
+  non-engagement, zero reuse, or a pure cost shift.
+- Keep step-`4` work narrow until a rerun proves the wall has moved again.
+- Do not replace the short baseline unless the new rerun keeps the same honest
+  plateau shape and improves matched checkpoints.
+
+## Current Phase
+
+Current short baseline:
+`runs/codex-claim-release-step4-kernel-admissibility-v1`
+
+Previous short baseline:
+`runs/codex-claim-release-step4-algebraic-v1`
+
+Current full-profile baseline:
+`runs/codex-claim-release-full-nu-profile-v1`
+
+Current honest wall:
+
+- remaining-one connectivity on the retained `39/144845` plateau
+- then aggregation and bound/rank bookkeeping
 
 ## Execution Order
 
-### Phase 1. Shift Step-`4` Pruning Ahead Of Exact Summary Build
+### Phase 1. Make The Step-`4` Kernel Measurable
+
+Status:
+
+- done
+
+Stored evidence:
+
+- diagnostic split:
+  `runs/codex-claim-release-step4-kernel-profile-v2`
+- keep rerun using that read:
+  `runs/codex-claim-release-step4-kernel-admissibility-v1`
+
+What this phase proved:
+
+- the dominant plateau cost was real kernel admissibility work, not a cache or
+  ordering issue
+- the family-agnostic claim lane could reuse terminal-summary admissibility
+  exactly even with `family_filters = 0`
+- removing that work improved the honest plateau without reopening the old
+  materialize blowup
+
+### Phase 2. Reduce Work Before Or Inside Connectivity
 
 Goal:
 
-- kill more doomed remaining-one prefixes in `O(1)` structural time before the
-  hot exact summary builder runs
+- cut the new dominant plateau cost without changing retained-prefix honesty
 
-Preferred first patches:
+Preferred patches:
 
-- algebraic `nu` ceiling derived from the current admissibility caps
-- deterministic symmetry breaking for independent sibling clauses
-- if still narrow and low risk, a structural-unity forced-bridge prune
+- cheaper cached structural connectivity decisions
+- one exact-preserving disconnection prune moved earlier
+- less repeated summary-extension churn in `terminal_connectivity`
 
-Required output:
+Reject as primary moves:
 
-- one narrow search-code patch or tightly coupled patch pair
-- new telemetry counters for the new prune surface
-- one stored release rerun with `until_step = 4`
-- a stored artifact comparison against the current short/full baselines
+- another admissibility-focused patch
+- another exact-`nu` first optimization
+- another ordering, reuse, or post-plateau direct-materialize variant
 
 Done when:
 
-- the rerun shows a real stored win in step-`4` summary-side telemetry without
-  weakening retained-prefix honesty
+- the stored rerun shows lower connectivity-side cost and lower
+  `terminal_summary_build_millis` on matched plateau checkpoints
 
-### Phase 2. Collapse Duplicate Remaining-One States If Phase 1 Is Not Enough
+### Phase 3. Cut Aggregation And Residual Exact Work
 
 Goal:
 
-- stop paying exact-summary cost once per AST prefix when the surviving work is
-  really a small number of repeated typing-context shapes
+- shrink the next most expensive remaining kernel work after connectivity
 
-Preferred patch:
+Preferred patches:
 
-- context-equivalence quotienting keyed by normalized exported type context
-  rather than exact prefix AST history
-
-Required output:
-
-- one scoped cache-key experiment
-- one stored release rerun with `until_step = 4`
-- evidence that legality/summary counts collapse materially without parity or
-  honesty regressions
+- less bound merge or rank aggregation churn
+- less evaluation-record churn inside the compact summary loop
+- only then, if connectivity is already flat, a smaller exact-`nu` cleanup
 
 Done when:
 
-- the rerun shows materially fewer repeated exact summary builds at matching
-  checkpoints
-
-### Phase 3. Cut Post-Plateau Discovery Cost If Structural Culling Still Leaves Waste
-
-Goal:
-
-- find the winning dense `Pi`/`Sigma` package earlier so the incumbent rank
-  rises sooner and structural ceilings can prune more of the queue
-
-Preferred patch:
-
-- one narrow discovery-side summary-build cut on the prepared exact-two-step /
-  remaining-one surface after the retained prefix cache has already flattened
-
-Required output:
-
-- one narrow exact-two-step / remaining-one discovery experiment
-- one stored release rerun with `until_step = 4`
-
-Done when:
-
-- the rerun keeps the same honest retained-prefix shape while materially
-  reducing the surviving exact-summary load
+- `terminal_summary_build_millis` falls again at matched plateau checkpoints
+  while `terminal_materialize_millis` stays controlled and winner determinism
+  remains intact
 
 ### Phase 4. Re-Earn The Real Full-Profile Read
 
 Goal:
 
-- prove the winning step-`4` patch helps on the real
+- prove that the winning short step-`4` sequence helps on the real
   `desktop_claim_shadow_1h` profile
 
 Required output:
@@ -183,24 +219,35 @@ Done when:
 - the stronger sentence is explicitly tied to the stored claim certificate and
   disclosed desktop bundle
 
-## Non-Goals Until Phase 1 Wins
+## Non-Goals Until The Step-`4` Wall Moves Again
 
 - reopening allocator or memory-compaction work first
 - broad frontier rewrites
 - widening-band retuning
+- more ordering, cache-reuse, or post-plateau summary-skip variants
 - compare, benchmark, or certification work
 - stronger user-facing language
 
-## Baselines To Compare Against
+## Baselines And Informative Evidence
 
-- `runs/codex-claim-release-full-v1a`
-- `runs/codex-claim-release-full-delayed-summary-v1`
-- `runs/codex-claim-release-full-primary-rank-v1`
-- `runs/codex-claim-release-full-nu-profile-v1`
-- `runs/codex-claim-release-step4-delayed-summary-v1`
-- `runs/codex-claim-release-step4-primary-rank-v1`
-- `runs/codex-claim-release-step4-nu-profile-v1`
-- `runs/codex-claim-release-step4-telemetry-v1`
+- Current short step-`4` baseline:
+  `runs/codex-claim-release-step4-kernel-admissibility-v1`
+- Previous short step-`4` baseline:
+  `runs/codex-claim-release-step4-algebraic-v1`
+- Current full-profile baseline:
+  `runs/codex-claim-release-full-nu-profile-v1`
+- Diagnostic kernel split:
+  `runs/codex-claim-release-step4-kernel-profile-v2`
+- Ignore as invalid diagnostic:
+  `runs/codex-claim-release-step4-kernel-profile-v1`
+- Informative failed short reruns that define the current diagnosis:
+  - `runs/codex-claim-release-step4-context-equivalence-v1`
+  - `runs/codex-claim-release-step4-incumbent-ordering-v1`
+  - `runs/codex-claim-release-step4-local-two-step-order-v2`
+  - `runs/codex-claim-release-step4-proof-close-handoff-v1`
+  - `runs/codex-claim-release-step4-post-plateau-v1`
+  - `runs/codex-claim-release-step4-post-plateau-materialize-v1`
+  - `runs/codex-claim-release-step4-post-plateau-summary-cache-v3`
 
 ## Success Condition
 

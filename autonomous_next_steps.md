@@ -2,225 +2,206 @@
 
 This note is the exact work order for the next `desktop_claim_shadow` slice.
 Assume delayed materialization, the incumbent-primary remaining-one fast path,
-the one-pass `structural_nu` summary-build fast path, and the algebraic `nu`
-ceiling patch are already landed.
-Assume the attempted remaining-one context-equivalence quotient, the
-frontier-pop incumbent-ordering experiment, the exact-two-step local ordering
-experiment, the proof-close handoff ordering experiment, the broad
-post-plateau discovery summary-skip experiment, the narrower post-plateau
-materialize-side one-clause gate experiment, and the later post-plateau
-summary-cache reuse experiment were all implemented, measured on stored short
-reruns, and then dropped from code after their stored evidence failed to earn
-keep.
-The current short step-`4` baseline remains
+the one-pass `structural_nu` summary-build fast path, the algebraic `nu`
+ceiling patch, the step-`4` kernel telemetry split, and the family-agnostic
+claim terminal-admissibility shortcut are already landed.
+Assume the context-equivalence quotient, the frontier-pop ordering experiment,
+the exact-two-step local ordering experiment, the proof-close handoff
+experiment, the broad post-plateau summary-skip experiment, the narrower
+post-plateau materialize-side gate, and the post-plateau summary-cache reuse
+experiment were all measured on stored short reruns and then dropped from code
+after failing to earn keep.
+
+The current short step-`4` baseline is
+`runs/codex-claim-release-step4-kernel-admissibility-v1`.
+The previous short baseline is
 `runs/codex-claim-release-step4-algebraic-v1`.
-The most recent short evidence that did not advance that baseline is
-`runs/codex-claim-release-step4-post-plateau-summary-cache-v3`.
-Ignore the two earlier attempts at that same run-id family,
-`runs/codex-claim-release-step4-post-plateau-summary-cache-v1` and
-`runs/codex-claim-release-step4-post-plateau-summary-cache-v2`: those local
-reruns were stopped once their stored checkpoints showed the plateau gate
-activating before the honest retained `39 groups / 144845 candidates` flat
-zone.
 The current full-profile baseline remains
 `runs/codex-claim-release-full-nu-profile-v1`.
+The diagnostic kernel split that explained the last wall is
+`runs/codex-claim-release-step4-kernel-profile-v2`.
+
+Ignore `runs/codex-claim-release-step4-kernel-profile-v1`: that local run used
+the flawed per-candidate millisecond accumulation and is not valid evidence.
+
+## Working Diagnosis
+
+- The claim lane is still compute-bound in step `4`, but the wall has moved.
+- The honest live shape still repeats:
+  - frontier queue stays on the same contour
+  - legality growth stays on the same contour
+  - retained prefix cache still flattens at
+    `39 groups / 144845 candidates`
+- The kernel split rerun
+  `runs/codex-claim-release-step4-kernel-profile-v2` showed the dominant
+  plateau cost at `prefix_states_explored = 44` was:
+  - admissibility `= 679889 ms`
+  - connectivity `= 492575 ms`
+  - aggregation `= 118953 ms`
+  - exact `nu` `= 74386 ms`
+- The follow-up keep rerun
+  `runs/codex-claim-release-step4-kernel-admissibility-v1` widened the existing
+  terminal-summary admissibility shortcut onto the family-agnostic claim lane
+  and removed that dominant admissibility cost on the same plateau:
+  - `terminal_summary_admissibility_millis = 0`
+  - `terminal_summary_build_millis = 1292019` at `44`
+  - `elapsed_millis = 1398528` at `44`
+- That means the next honest wall is now:
+  - connectivity first
+  - aggregation second
+  - exact `nu` is no longer the dominant inner cost on the retained plateau
+- So the next slice should not re-open admissibility, reuse, ordering, or
+  direct-materialize ideas unless new stored evidence changes the shape again.
 
 ## Goal
 
-Cut remaining-one `terminal_summary_build_millis` on the honest retained
-`39/144845` plateau surface by making each exact summary build cheaper, not by
-retaining whole compact pruning summaries across prefixes.
-
-## Why This Is The Next Slice
-
-- The later stored summary-cache rerun,
-  `runs/codex-claim-release-step4-post-plateau-summary-cache-v3`, did prove
-  that the post-plateau trigger can engage on the honest retained surface:
-  - `post_plateau_summary_first_activation_prefix_state = 24`
-  - retained prefix cache had reached `39 groups / 144845 candidates`
-- But that rerun also proved the hoped-for live duplicate-summary reuse is not
-  the honest wall:
-  - `post_plateau_summary_rebuild_elisions = 0` at `24`, `43`, and `44`
-  - `post_plateau_summary_rebuilds_kept` still rose to
-    `4353`, `92589`, and `97233`
-  - live `terminal_prefix_completions` rose with it to
-    `4353`, `92589`, and `97233`
-- The wall-clock and summary-build cost then moved the wrong direction while
-  the honest retained shape stayed the same:
-  - `prefix_states_explored = 43` at `1708.3s` instead of `1629.3s`
-  - frontier queue length still stayed `2732`
-  - legality summaries still stayed `205199`
-  - retained prefix cache still stayed `39 groups / 144845 candidates`
-  - `terminal_summary_build_millis = 1599435` instead of `1524266`
-  - `terminal_materialize_millis = 481` instead of `466`
-- So the exhausted idea is now specific and narrow:
-  exact-prefix retained-summary caching does not buy real reuse on the live
-  claim lane. The honest step-`4` wall is still the per-prefix exact
-  completion builder itself on the retained plateau surface.
+Land one narrow connectivity-side or aggregation-side cut inside the retained
+remaining-one summary path, using the existing kernel telemetry to prove the
+dominant plateau cost actually falls.
 
 ## Current Comparison Targets
 
 Use these as the numbers to beat:
 
+- `runs/codex-claim-release-step4-kernel-admissibility-v1`
+  - honest retained plateau active from `prefix_states_explored = 24`
+  - `prefix_states_explored = 24` at `756.3s`
+  - `prefix_states_explored = 43` at `1367.5s`
+  - `prefix_states_explored = 44` at `1398.5s`
+  - retained prefix cache stayed `39 groups / 144845 candidates` at `24/43/44`
+  - `terminal_summary_build_millis = 695759` at `24`
+  - `terminal_summary_build_millis = 1263393` at `43`
+  - `terminal_summary_build_millis = 1292019` at `44`
+  - `terminal_summary_connectivity_millis = 269953` at `24`,
+    `481062` at `43`, `492949` at `44`
+  - `terminal_summary_aggregation_millis = 66625` at `24`,
+    `120646` at `43`, `122571` at `44`
+  - `terminal_summary_exact_nu_millis = 39462` at `24`,
+    `73255` at `43`, `74395` at `44`
+  - `terminal_summary_admissibility_millis = 0` at `24/43/44`
+  - `terminal_materialize_millis = 388` at `24/43/44`
+- `runs/codex-claim-release-step4-kernel-profile-v2`
+  - same retained plateau and queue shape as the keep rerun
+  - diagnostic-only run that proved admissibility was the old dominant wall
+  - `terminal_summary_admissibility_millis = 363234` at `24`,
+    `668084` at `43`, `679889` at `44`
 - `runs/codex-claim-release-step4-algebraic-v1`
-  - `prefix_states_explored = 5` at `198.5s`
-  - `prefix_states_explored = 43` at `1629.3s`
-  - `prefix_states_explored = 52` at `1975.0s`
-  - `prefix_states_explored = 59` at `2252.6s`
-  - retained prefix cache stayed `39 groups / 144845 candidates` at `43/52/59`
-  - `terminal_summary_build_millis = 186848` at `5`
-  - `terminal_summary_build_millis = 2111246` at `59`
-  - `terminal_materialize_millis = 104` at `5`, `466` at `43`, and `466` at
-    `59`
-  - `remaining_one_materialized = 15` at `5` and `39` at `43/52/59`
-- `runs/codex-claim-release-step4-post-plateau-summary-cache-v3`
-  - first honest plateau activation at `24`
-  - `post_plateau_summary_rebuild_elisions` still stayed `0`
-  - `terminal_summary_build_millis` and wall clock both worsened while
-    retained shape stayed honest
-- `runs/codex-claim-release-full-nu-profile-v1`
-  - `prefix_states_explored = 43` at `1629.6s`
-  - `prefix_states_explored = 52` at `2039.7s`
-  - `prefix_states_explored = 59` at `2367.7s`
-  - frontier queue length `= 2716`
-  - legality summaries `= 279487`
+  - previous kept baseline before the admissibility cut
+  - `prefix_states_explored = 44` at `1662.8s`
   - retained prefix cache `= 39 groups / 144845 candidates`
-  - `remaining_one_rank_prunes_pre_materialize = 273957`
-  - `terminal_summary_build_millis = 2221499`
-  - observed RSS `~ 316 MiB`
+  - `terminal_summary_build_millis = 1555470`
+  - `terminal_materialize_millis = 466`
 
 ## Do This Next
 
-### 1. Patch One Narrow Per-Summary Builder Throughput Experiment
+### 1. Reuse The Existing Kernel Split
 
-Preferred form:
+Do not start by adding another broad telemetry patch.
 
-- target `compute_terminal_prefix_completion_summary_from_candidates` and the
-  claim remaining-one exact helper path immediately around it
-- cut the cost of each exact summary build on the retained `39/144845` surface
-  without retaining compact pruning summaries across prefixes
-- preserve the algebraic baseline's materialize behavior; do not reopen the
-  broad discovery-side summary-skip surface or another direct-compact
-  materialize gate
-- prefer a cut that attacks per-candidate exact work directly:
-  - cheaper bound/rank aggregation bookkeeping
-  - less repeated temporary object churn inside the compact summary loop
-  - narrower exact-`nu` work after already-known connectivity/admissibility
-    screens
-- keep deterministic ordering, retained-prefix honesty, and winner determinism
-- keep the write surface inside the claim remaining-one summary-build helpers
-  first, not inside proof-close or the broad frontier loop
+The current split is already enough:
 
-Reject as first moves:
+- connectivity work
+- fallback connectivity checks
+- admissibility work
+- exact `nu` work
+- aggregation and bound/rank bookkeeping
+- honest plateau activation marker
 
-- more post-plateau summary-cache retention or reuse variants
-- more post-plateau direct-compact materialize gates
-- more blind post-plateau summary-skip variants
-- more proof-close handoff variants
-- more prepared exact-two-step local ordering variants
-- more frontier-pop ordering variants
-- more context-equivalence variants
-- memory compaction
-- certification or benchmark work
-- widening-band retuning
-- a broad frontier rewrite outside the narrow remaining-one summary surface
+Only add telemetry if one missing counter is strictly necessary to decide
+between two concrete connectivity or aggregation cuts.
 
-### 2. Add Telemetry And Tests For The Inner Summary-Builder Surface
+### 2. Choose One Narrow Patch In The New Dominant Plateau Cost
 
-Before trusting live runs, make the next slice measurable.
+Allowed directions:
 
-Preferred telemetry additions:
+- if connectivity still dominates:
+  reduce repeated connectivity-summary extension churn or move one exact
+  structural disconnection rejection earlier
+- if aggregation is the cheaper but easier local win:
+  reduce bound merge, rank aggregation, or evaluation-record churn after
+  connectivity already passed
+- if both look coupled:
+  choose the one smaller edit with the clearest exactness story
 
-- split `terminal_summary_build_millis` enough to show whether the win lands in
-  exact-`nu` work or in the surrounding non-`nu` summary bookkeeping
-- one counter or earliest-prefix-state marker that proves the new inner-loop
-  cut engages on the retained `39/144845` plateau surface
-- do not keep the dropped post-plateau summary-cache counters in code unless
-  the new slice genuinely still needs them
+Do not spend this slice on:
+
+- another admissibility shortcut
+- another exact-`nu` first optimization
+- another frontier ordering experiment
+- another proof-close handoff experiment
+- another context-equivalence or summary-cache reuse experiment
+- another post-plateau summary-skip or direct-materialize gate
+- memory compaction, certification, or benchmark work
+
+### 3. Re-Earn Targeted Tests
 
 Required tests:
 
 - one targeted regression that the kept reference step-`4` winner still
-  survives on the retained plateau surface
-- one targeted deterministic-order test if the new patch touches candidate
-  ordering or tie handling
-- one targeted test that the new helper cut preserves exact admitted/pruned
-  counts for a representative remaining-one prefix
+  survives
+- one targeted exactness test for the new connectivity or aggregation cut
+- one representative remaining-one summary test proving admitted/pruned counts
+  stay exact
 
-### 3. Re-Earn One Stored Release `until_step = 4` Rerun
-
-Run the same claim profile shape derived from
-`configs/desktop_claim_shadow_1h.toml` with:
-
-- `until_step = 4`
-- release build
-- live checkpoint persistence left on
-
-Read the stored artifacts, not terminal output.
-
-### 4. Decide Keep Or Drop From Stored Telemetry
-
-Keep the patch only if the new `reports/steps/step-04-live.ndjson` shows both
-of these:
-
-- the new inner summary-builder telemetry activates on the honest retained
-  plateau surface
-- at least one real step-`4` win against the current baselines:
-  - wall clock reaches materially farther at matching checkpoints
-  - `terminal_summary_build_millis` falls
-  - `terminal_materialize_millis` stays near the algebraic baseline instead of
-    reopening the old blowup
-  - frontier queue length drains faster without weakening retained prefix-cache
-    shape
-  - cached rank-prune growth or retained-group collapse improves at the same
-    honest retained-prefix shape
-
-Drop the patch if the rerun only adds telemetry overhead, only grows resident
-summary/cache state, or still leaves the same `43/52/59` checkpoints slower
-than the algebraic baseline.
-
-### 5. Only Then Rerun The Real Profile
-
-Only after the short step-`4` rerun earns keep:
-
-- rerun `desktop_claim_shadow_1h`
-- inspect the stored full-profile artifacts
-- decide whether step `4` still blocks or whether a later phase becomes the
-  honest next wall
-
-## What To Read After The Rerun
-
-Open `reports/steps/step-04-live.ndjson` and answer:
-
-- did the new inner-loop telemetry activate on the retained `39/144845`
-  plateau surface?
-- did `terminal_summary_build_millis` fall at matching `43/52/59` checkpoints?
-- did `terminal_materialize_millis` stay controlled?
-- did frontier queue length drop faster?
-- did the same wall clock reach farther than the current baseline?
-- did retained prefix-cache shape stay honest?
-- did the hot cost move somewhere new?
-
-## Regression Set
-
-Run these after each search-code change:
+Then rerun the standing validation set:
 
 ```bash
 cargo test -p pen-search claim_
 cargo test -p pen-search online_work_items_
 cargo test -p pen-search prefix_queue_prefers_nearer_terminal_and_tighter_cached_continuations
 cargo test -p pen-search terminal_clause_filter_skips_inadmissible_last_clauses_before_connectivity
+cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance
 ```
 
-Do not block on `cargo test -p pen-search --lib` being fully green right now;
-the broader tree still stops at
-`engine::tests::demo_late_surface_carries_through_live_config_runs`.
+### 4. Re-Earn One Stored Release `until_step = 4` Rerun
+
+Run the claim profile derived from `configs/desktop_claim_shadow_1h.toml`
+with:
+
+- `until_step = 4`
+- release build
+- live checkpoint persistence left on
+
+Use a new run id that states the actual target, for example:
+
+- `runs/codex-claim-release-step4-kernel-connectivity-v1`
+- or `runs/codex-claim-release-step4-kernel-aggregation-v1`
+
+### 5. Decide Keep Or Drop From Stored Evidence
+
+Keep the patch only if the stored `reports/steps/step-04-live.ndjson` shows
+all of the following:
+
+- the same honest retained `39 groups / 144845 candidates` plateau
+- the targeted dominant plateau sub-phase actually improves against
+  `runs/codex-claim-release-step4-kernel-admissibility-v1`
+- `terminal_summary_build_millis` falls at matching plateau checkpoints
+- wall clock reaches at least as far as the new short baseline at matching
+  checkpoints
+- `terminal_materialize_millis` stays near the current kept level
+- no new fallback-connectivity or cache-residency blowup appears
+
+Drop the patch if it only shifts cost between connectivity and aggregation,
+reopens materialization, or makes the same `24/43/44` checkpoints slower than
+the current short baseline.
+
+## What To Read After The Rerun
+
+Open `reports/steps/step-04-live.ndjson` and answer:
+
+- did the same honest `39/144845` plateau recur?
+- which plateau sub-phase now dominates?
+- did the targeted connectivity or aggregation counter actually fall?
+- did `terminal_summary_build_millis` fall at `24/43/44`?
+- did wall clock beat the current kept baseline?
+- did `terminal_materialize_millis` stay controlled?
+- did the hot cost move again, or is connectivity still the wall?
 
 ## Stop Condition For This Note
 
 Rewrite this file as soon as one new stored rerun shows one of these is true:
 
+- the remaining plateau wall is no longer connectivity or aggregation
 - step `4` is no longer the dominant blocker
-- the refined per-summary builder slice is exhausted and the next real move is
-  a different honest wall
+- the next honest move is a full-profile rerun rather than another short slice
 - the real full profile exposes a later honest wall

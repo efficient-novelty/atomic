@@ -568,7 +568,7 @@ impl PrefixLegalityCache {
     ) -> Option<Vec<FilteredTerminalClause<'a>>> {
         if step_index <= 3
             || !self.summaries.contains_key(parent_signature)
-            || !self.family_filters.contains_key(parent_signature)
+            || !self.supports_terminal_summary_admissibility(parent_signature, admissibility)
             || self.uses_family_surface_override(parent_signature, admissibility)
         {
             return None;
@@ -629,22 +629,30 @@ impl PrefixLegalityCache {
             ));
         }
 
-        let parent_filter = self.family_filters.get(parent_signature).copied()?;
         self.stats.terminal_admissibility_hits += 1;
-        let terminal_filter = parent_filter.retain_matching(
-            usize::from(parent_signature.clause_position),
-            clause,
-            family_filter_context(
-                library,
-                admissibility,
-                self.family_surface(parent_signature, admissibility),
-            ),
-        );
+        let terminal_filter =
+            if let Some(parent_filter) = self.family_filters.get(parent_signature).copied() {
+                parent_filter
+                    .retain_matching(
+                        usize::from(parent_signature.clause_position),
+                        clause,
+                        family_filter_context(
+                            library,
+                            admissibility,
+                            self.family_surface(parent_signature, admissibility),
+                        ),
+                    )
+                    .match_mask()
+            } else if supports_family_agnostic_terminal_summary_admissibility(admissibility) {
+                StructuralFamilyMatchMask::empty()
+            } else {
+                return None;
+            };
         let decision = assess_strict_admissibility_from_terminal_summary(
             step_index,
             clause_kappa,
             admissibility,
-            terminal_filter.match_mask(),
+            terminal_filter,
             false,
         );
         if !decision.is_admitted() {
@@ -680,6 +688,15 @@ impl PrefixLegalityCache {
         self.family_surface(signature, admissibility)
             != late_family_surface_for_admissibility(admissibility)
     }
+
+    fn supports_terminal_summary_admissibility(
+        &self,
+        signature: &PrefixSignature,
+        admissibility: StrictAdmissibility,
+    ) -> bool {
+        self.family_filters.contains_key(signature)
+            || supports_family_agnostic_terminal_summary_admissibility(admissibility)
+    }
 }
 
 fn should_skip_demo_family_filter(
@@ -689,6 +706,15 @@ fn should_skip_demo_family_filter(
 ) -> bool {
     late_family_surface == LateFamilySurface::DemoBreadthShadow
         && matches!((step_index, clause_kappa), (10, 4) | (11, 5))
+}
+
+fn supports_family_agnostic_terminal_summary_admissibility(
+    admissibility: StrictAdmissibility,
+) -> bool {
+    admissibility.focus_family.is_none()
+        && StructuralFamily::ALL
+            .into_iter()
+            .all(|family| !matches!(admissibility.policy_for(family), PackagePolicy::Forbid))
 }
 
 #[cfg(test)]
@@ -849,6 +875,42 @@ mod tests {
     }
 
     #[test]
+    fn claim_terminal_admissibility_matches_direct_assessment_without_family_summary() {
+        let library = library_until(14);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        assert_eq!(cache.entry_counts().family_filters, 0);
+
+        for clause in clause_catalog.clauses_at(7) {
+            let mut telescope = prefix.clone();
+            telescope.clauses.push(clause.clone());
+
+            let cached = cache
+                .terminal_admissibility(15, &signature, &library, clause, admissibility)
+                .expect("claim terminal admissibility should reuse legality summary");
+            let direct = assess_strict_admissibility(15, &library, &telescope, admissibility);
+
+            assert_eq!(cached, direct);
+        }
+
+        assert!(cache.stats().terminal_admissibility_hits > 0);
+    }
+
+    #[test]
     fn active_window_clause_filter_skips_impossible_terminal_continuations() {
         let library = library_until(10);
         let admissibility =
@@ -918,6 +980,63 @@ mod tests {
         assert!(terminal_filtered.len() < clause_catalog.clauses_at(4).len());
         assert_eq!(cache.stats().terminal_clause_filter_hits, 1);
         assert!(cache.stats().terminal_clause_filter_prunes > 0);
+        assert!(cache.stats().terminal_admissibility_hits > 0);
+    }
+
+    #[test]
+    fn claim_terminal_clause_filter_matches_direct_admissibility_without_family_summary() {
+        let library = library_until(14);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        assert_eq!(cache.entry_counts().family_filters, 0);
+
+        let terminal_filtered = cache
+            .filter_terminal_clauses(
+                15,
+                &signature,
+                &library,
+                admissibility,
+                clause_catalog.clauses_at(7),
+            )
+            .expect("claim legality summary should enable terminal filtering");
+
+        let mut direct_admitted = Vec::new();
+        for clause in clause_catalog.clauses_at(7) {
+            let mut telescope = prefix.clone();
+            telescope.clauses.push(clause.clone());
+            let decision = assess_strict_admissibility(15, &library, &telescope, admissibility);
+            if decision.is_admitted() {
+                direct_admitted.push((clause.clone(), decision));
+            }
+        }
+
+        assert!(!terminal_filtered.is_empty());
+        assert_eq!(terminal_filtered.len(), direct_admitted.len());
+        for (filtered, (expected_clause, expected_decision)) in
+            terminal_filtered.iter().zip(direct_admitted.iter())
+        {
+            assert_eq!(filtered.clause, expected_clause);
+            assert_eq!(&filtered.admissibility_decision, expected_decision);
+        }
+        assert_eq!(cache.stats().terminal_clause_filter_hits, 1);
+        assert_eq!(
+            cache.stats().terminal_clause_filter_prunes,
+            clause_catalog.clauses_at(7).len() - direct_admitted.len()
+        );
         assert!(cache.stats().terminal_admissibility_hits > 0);
     }
 

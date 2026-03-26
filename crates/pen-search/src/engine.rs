@@ -644,6 +644,7 @@ impl From<PrefixLegalityCacheEntryCounts> for LiveLegalityCacheEntries {
 }
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(default)]
 pub struct RemainingOneTelemetry {
     pub remaining_one_prefixes_seen: usize,
     pub remaining_one_cached_bound_hits: usize,
@@ -659,10 +660,94 @@ pub struct RemainingOneTelemetry {
     pub prepare_exact_two_step_terminal_surface_millis: u64,
     pub exact_partial_prefix_bound_millis: u64,
     pub terminal_summary_build_millis: u64,
+    pub terminal_summary_connectivity_checks: usize,
+    pub terminal_summary_fallback_connectivity_checks: usize,
+    pub terminal_summary_admissibility_checks: usize,
+    pub terminal_summary_exact_nu_evaluations: usize,
+    pub terminal_summary_plateau_activations: usize,
+    pub terminal_summary_first_plateau_activation_prefix_state: usize,
+    pub terminal_summary_connectivity_millis: u64,
+    pub terminal_summary_fallback_connectivity_millis: u64,
+    pub terminal_summary_admissibility_millis: u64,
+    pub terminal_summary_exact_nu_millis: u64,
+    pub terminal_summary_aggregation_millis: u64,
     pub terminal_materialize_millis: u64,
     pub candidate_sort_millis: u64,
     pub candidate_eval_minimality_millis: u64,
     pub frontier_sort_pop_millis: u64,
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+struct RemainingOneSummaryKernelActivationContext {
+    prefix_states_explored: usize,
+    prefix_cache_groups: usize,
+    prefix_cache_candidates: usize,
+}
+
+const CLAIM_REMAINING_ONE_RETAINED_PLATEAU_GROUPS: usize = 39;
+const CLAIM_REMAINING_ONE_RETAINED_PLATEAU_CANDIDATES: usize = 144_845;
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+struct RemainingOneSummaryKernelTiming {
+    terminal_summary_connectivity_checks: usize,
+    terminal_summary_fallback_connectivity_checks: usize,
+    terminal_summary_admissibility_checks: usize,
+    terminal_summary_exact_nu_evaluations: usize,
+    terminal_summary_connectivity_duration: Duration,
+    terminal_summary_fallback_connectivity_duration: Duration,
+    terminal_summary_admissibility_duration: Duration,
+    terminal_summary_exact_nu_duration: Duration,
+    terminal_summary_aggregation_duration: Duration,
+}
+
+impl RemainingOneTelemetry {
+    fn absorb_terminal_summary_kernel_timing(&mut self, timing: RemainingOneSummaryKernelTiming) {
+        self.terminal_summary_connectivity_checks += timing.terminal_summary_connectivity_checks;
+        self.terminal_summary_fallback_connectivity_checks +=
+            timing.terminal_summary_fallback_connectivity_checks;
+        self.terminal_summary_admissibility_checks += timing.terminal_summary_admissibility_checks;
+        self.terminal_summary_exact_nu_evaluations += timing.terminal_summary_exact_nu_evaluations;
+        self.terminal_summary_connectivity_millis = self
+            .terminal_summary_connectivity_millis
+            .saturating_add(elapsed_millis(
+                timing.terminal_summary_connectivity_duration,
+            ));
+        self.terminal_summary_fallback_connectivity_millis = self
+            .terminal_summary_fallback_connectivity_millis
+            .saturating_add(elapsed_millis(
+                timing.terminal_summary_fallback_connectivity_duration,
+            ));
+        self.terminal_summary_admissibility_millis = self
+            .terminal_summary_admissibility_millis
+            .saturating_add(elapsed_millis(
+                timing.terminal_summary_admissibility_duration,
+            ));
+        self.terminal_summary_exact_nu_millis = self
+            .terminal_summary_exact_nu_millis
+            .saturating_add(elapsed_millis(timing.terminal_summary_exact_nu_duration));
+        self.terminal_summary_aggregation_millis = self
+            .terminal_summary_aggregation_millis
+            .saturating_add(elapsed_millis(timing.terminal_summary_aggregation_duration));
+    }
+
+    fn note_terminal_summary_plateau_activation(
+        &mut self,
+        activation: Option<RemainingOneSummaryKernelActivationContext>,
+    ) {
+        let Some(activation) = activation else {
+            return;
+        };
+        if activation.prefix_cache_groups != CLAIM_REMAINING_ONE_RETAINED_PLATEAU_GROUPS
+            || activation.prefix_cache_candidates != CLAIM_REMAINING_ONE_RETAINED_PLATEAU_CANDIDATES
+        {
+            return;
+        }
+        self.terminal_summary_plateau_activations += 1;
+        if self.terminal_summary_first_plateau_activation_prefix_state == 0 {
+            self.terminal_summary_first_plateau_activation_prefix_state =
+                activation.prefix_states_explored;
+        }
+    }
 }
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
@@ -745,6 +830,16 @@ impl RealisticShadowDiscovery {
     ) {
         self.demo_bucket_stats_mut(bucket_key)
             .pruned_terminal_candidates += pruned_terminal_candidates;
+    }
+}
+
+fn remaining_one_summary_kernel_activation_context(
+    discovery: &RealisticShadowDiscovery,
+) -> RemainingOneSummaryKernelActivationContext {
+    RemainingOneSummaryKernelActivationContext {
+        prefix_states_explored: discovery.prefix_states_explored,
+        prefix_cache_groups: discovery.prefix_cache.len(),
+        prefix_cache_candidates: discovery.prefix_cache.candidate_count(),
     }
 }
 
@@ -4705,6 +4800,8 @@ fn screen_prefix_for_frontier(
     discovery: &mut RealisticShadowDiscovery,
 ) -> (ExactPartialPrefixBoundDecision, bool) {
     let track_remaining_one = work_item.remaining_clause_slots == 1;
+    let remaining_one_summary_kernel_activation =
+        track_remaining_one.then(|| remaining_one_summary_kernel_activation_context(discovery));
     if track_remaining_one {
         discovery
             .remaining_one_telemetry
@@ -4747,6 +4844,7 @@ fn screen_prefix_for_frontier(
         &mut exact_bound_budget,
         discovery.terminal_rank_incumbent.as_ref(),
         Some(&mut discovery.remaining_one_telemetry),
+        remaining_one_summary_kernel_activation,
     );
     discovery
         .remaining_one_telemetry
@@ -5048,6 +5146,7 @@ fn exact_partial_prefix_bound_decision(
     budget: &mut usize,
     incumbent_rank: Option<&AcceptRank>,
     mut remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
+    remaining_one_summary_kernel_activation: Option<RemainingOneSummaryKernelActivationContext>,
 ) -> ExactPartialPrefixBoundDecision {
     if work_item.remaining_clause_slots == 0 {
         return ExactPartialPrefixBoundDecision::Unknown;
@@ -5078,6 +5177,7 @@ fn exact_partial_prefix_bound_decision(
             budget,
             incumbent_rank,
             remaining_one_telemetry,
+            remaining_one_summary_kernel_activation,
         );
         if let Some(cacheable) = decision.cacheable_partial_decision() {
             prefix_legality_cache
@@ -5142,6 +5242,7 @@ fn exact_partial_prefix_bound_decision(
             budget,
             incumbent_rank,
             remaining_one_telemetry.as_deref_mut(),
+            remaining_one_summary_kernel_activation,
         );
         if let Some(cacheable) = propagated_decision.cacheable_partial_decision() {
             let mut signatures = collapsed_signatures;
@@ -5249,6 +5350,7 @@ fn exact_terminal_prefix_bound_decision(
     budget: &mut usize,
     incumbent_rank: Option<&AcceptRank>,
     mut remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
+    remaining_one_summary_kernel_activation: Option<RemainingOneSummaryKernelActivationContext>,
 ) -> ExactPartialPrefixBoundDecision {
     if let Some(bound) = prefix_legality_cache.terminal_prefix_bound_summary(prefix_signature) {
         if let Some(telemetry) = remaining_one_telemetry.as_deref_mut() {
@@ -5296,6 +5398,8 @@ fn exact_terminal_prefix_bound_decision(
             terminal_clauses,
             incumbent_rank,
             prefix_legality_cache,
+            remaining_one_telemetry.as_deref_mut(),
+            remaining_one_summary_kernel_activation,
         );
         if let Some(telemetry) = remaining_one_telemetry.as_deref_mut() {
             telemetry.terminal_summary_build_millis = telemetry
@@ -5481,6 +5585,8 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     )>,
     incumbent_rank: Option<&AcceptRank>,
     prefix_legality_cache: &mut PrefixLegalityCache,
+    remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
+    remaining_one_summary_kernel_activation: Option<RemainingOneSummaryKernelActivationContext>,
 ) -> TerminalPrefixCompletionSummary {
     let mut summary = TerminalPrefixCompletionSummary {
         evaluations: matches!(payload, TerminalPrefixSummaryPayload::Full).then(Vec::new),
@@ -5491,13 +5597,18 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
         u16::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u16");
     let prefix_bit_cost = prefix_telescope.bit_cost();
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
+    let mut kernel_timing = RemainingOneSummaryKernelTiming::default();
 
     for (clause, cached_admissibility_decision) in terminal_clauses {
+        let connectivity_started = Instant::now();
         let Some(connectivity_decision) =
             prefix_legality_cache.terminal_connectivity(prefix_signature, library, clause)
         else {
             continue;
         };
+        kernel_timing.terminal_summary_connectivity_checks += 1;
+        kernel_timing.terminal_summary_connectivity_duration += connectivity_started.elapsed();
+        let generated_started = Instant::now();
         summary.generated_candidate_count += 1;
         if matches!(
             connectivity_decision,
@@ -5506,28 +5617,48 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
             if let Some(evaluations) = summary.evaluations.as_mut() {
                 evaluations.push(TerminalPrefixClauseEvaluation::Disconnected);
             }
+            kernel_timing.terminal_summary_aggregation_duration += generated_started.elapsed();
             continue;
         }
+        kernel_timing.terminal_summary_aggregation_duration += generated_started.elapsed();
 
+        let load_started = Instant::now();
         let telescope =
             load_terminal_clause_into_scratch(&mut scratch_telescope, prefix_len, clause);
+        kernel_timing.terminal_summary_aggregation_duration += load_started.elapsed();
         if matches!(
             connectivity_decision,
             TerminalConnectivityDecision::NeedsFallback
         ) {
+            kernel_timing.terminal_summary_fallback_connectivity_checks += 1;
+            let fallback_started = Instant::now();
             if !passes_connectivity(library, telescope) {
+                kernel_timing.terminal_summary_fallback_connectivity_duration +=
+                    fallback_started.elapsed();
+                let disconnected_started = Instant::now();
                 if let Some(evaluations) = summary.evaluations.as_mut() {
                     evaluations.push(TerminalPrefixClauseEvaluation::Disconnected);
                 }
+                kernel_timing.terminal_summary_aggregation_duration +=
+                    disconnected_started.elapsed();
                 continue;
             }
+            kernel_timing.terminal_summary_fallback_connectivity_duration +=
+                fallback_started.elapsed();
         }
 
         let admissibility_decision = if let Some(decision) = cached_admissibility_decision {
             decision
         } else {
-            assess_strict_admissibility(step_index, library, telescope, admissibility)
+            kernel_timing.terminal_summary_admissibility_checks += 1;
+            let admissibility_started = Instant::now();
+            let decision =
+                assess_strict_admissibility(step_index, library, telescope, admissibility);
+            kernel_timing.terminal_summary_admissibility_duration +=
+                admissibility_started.elapsed();
+            decision
         };
+        let admissibility_bookkeeping_started = Instant::now();
         summary
             .admissibility_diagnostics
             .record(&admissibility_decision);
@@ -5537,11 +5668,19 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     decision: admissibility_decision,
                 });
             }
+            kernel_timing.terminal_summary_aggregation_duration +=
+                admissibility_bookkeeping_started.elapsed();
             continue;
         }
+        kernel_timing.terminal_summary_aggregation_duration +=
+            admissibility_bookkeeping_started.elapsed();
 
+        kernel_timing.terminal_summary_exact_nu_evaluations += 1;
+        let exact_nu_started = Instant::now();
         let exact_nu = u16::try_from(structural_nu(telescope, library, nu_history).total)
             .expect("nu exceeded u16");
+        kernel_timing.terminal_summary_exact_nu_duration += exact_nu_started.elapsed();
+        let aggregation_started = Instant::now();
         let bit_kappa_used = terminal_prefix_completion_bit_cost(prefix_bit_cost, clause);
         let completion_bound = PrefixBound::singleton(exact_nu, clause_kappa_used, bit_kappa_used);
         if let Some(bound) = summary.bound.as_mut() {
@@ -5598,6 +5737,12 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                 },
             });
         }
+        kernel_timing.terminal_summary_aggregation_duration += aggregation_started.elapsed();
+    }
+
+    if let Some(telemetry) = remaining_one_telemetry {
+        telemetry.absorb_terminal_summary_kernel_timing(kernel_timing);
+        telemetry.note_terminal_summary_plateau_activation(remaining_one_summary_kernel_activation);
     }
 
     summary
@@ -5741,6 +5886,8 @@ fn claim_try_summary_prune_before_materialization(
         .terminal_prefix_bound_summary(prefix_signature)
         .is_none()
     {
+        let remaining_one_summary_kernel_activation =
+            remaining_one_summary_kernel_activation_context(discovery);
         let summary_started = Instant::now();
         let terminal_clauses = terminal_prefix_clause_candidates(
             step_index,
@@ -5762,6 +5909,8 @@ fn claim_try_summary_prune_before_materialization(
             terminal_clauses,
             discovery.terminal_rank_incumbent.as_ref(),
             &mut discovery.prefix_legality_cache,
+            Some(&mut discovery.remaining_one_telemetry),
+            Some(remaining_one_summary_kernel_activation),
         );
         discovery
             .remaining_one_telemetry
@@ -5895,6 +6044,8 @@ fn materialize_terminal_prefix_group(
     {
         summary
     } else {
+        let remaining_one_summary_kernel_activation =
+            remaining_one_summary_kernel_activation_context(discovery);
         let terminal_clauses = terminal_prefix_clause_candidates(
             step_index,
             library,
@@ -5915,6 +6066,8 @@ fn materialize_terminal_prefix_group(
             terminal_clauses,
             discovery.terminal_rank_incumbent.as_ref(),
             &mut discovery.prefix_legality_cache,
+            Some(&mut discovery.remaining_one_telemetry),
+            Some(remaining_one_summary_kernel_activation),
         );
         discovery
             .prefix_legality_cache
@@ -8435,8 +8588,22 @@ mod tests {
             clause_catalog.clauses_at(7),
             &mut cache,
         );
-        assert!(terminal_clauses.iter().all(|entry| entry.1.is_none()));
+        assert!(!terminal_clauses.is_empty());
+        for (clause, cached_decision) in &terminal_clauses {
+            let mut telescope = prefix.clone();
+            telescope.clauses.push((*clause).clone());
+            assert_eq!(
+                cached_decision.as_ref(),
+                Some(&assess_strict_admissibility(
+                    15,
+                    &library,
+                    &telescope,
+                    admissibility,
+                ))
+            );
+        }
 
+        let mut telemetry = super::RemainingOneTelemetry::default();
         let summary = super::compute_terminal_prefix_completion_summary_from_candidates(
             15,
             &library,
@@ -8449,6 +8616,8 @@ mod tests {
             terminal_clauses,
             None,
             &mut cache,
+            Some(&mut telemetry),
+            None,
         );
 
         let mut direct_evaluations = Vec::new();
@@ -8488,6 +8657,16 @@ mod tests {
 
         assert_eq!(summary.evaluations, Some(direct_evaluations));
         assert_eq!(summary.admitted_candidate_count, direct_admitted);
+        assert_eq!(
+            telemetry.terminal_summary_connectivity_checks,
+            summary.generated_candidate_count
+        );
+        assert_eq!(telemetry.terminal_summary_admissibility_checks, 0);
+        assert_eq!(
+            telemetry.terminal_summary_exact_nu_evaluations,
+            summary.admitted_candidate_count
+        );
+        assert_eq!(telemetry.terminal_summary_plateau_activations, 0);
     }
 
     #[test]
@@ -8549,6 +8728,7 @@ mod tests {
             &mut first_budget,
             None,
             None,
+            None,
         );
         assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
 
@@ -8581,6 +8761,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut second_budget,
+            None,
             None,
             None,
         );
@@ -8650,6 +8831,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut budget,
+            None,
             None,
             None,
         );
@@ -8733,6 +8915,7 @@ mod tests {
             &mut budget,
             None,
             Some(&mut telemetry),
+            None,
         );
 
         assert_eq!(
@@ -8741,6 +8924,9 @@ mod tests {
         );
         assert_eq!(telemetry.remaining_one_algebraic_prunes, 1);
         assert_eq!(telemetry.terminal_summary_build_millis, 0);
+        assert_eq!(telemetry.terminal_summary_connectivity_checks, 0);
+        assert_eq!(telemetry.terminal_summary_exact_nu_evaluations, 0);
+        assert_eq!(telemetry.terminal_summary_plateau_activations, 0);
         assert_eq!(cache.entry_counts().terminal_prefix_completions, 0);
     }
 
@@ -8800,6 +8986,7 @@ mod tests {
             &mut budget,
             None,
             Some(&mut telemetry),
+            None,
         );
 
         assert_eq!(
@@ -8807,6 +8994,46 @@ mod tests {
             super::ExactPartialPrefixBoundDecision::CanClearBar
         );
         assert_eq!(telemetry.remaining_one_algebraic_prunes, 0);
+        assert_eq!(telemetry.terminal_summary_plateau_activations, 0);
+    }
+
+    #[test]
+    fn claim_remaining_one_plateau_activation_marker_tracks_first_matching_surface() {
+        let mut telemetry = super::RemainingOneTelemetry::default();
+
+        telemetry.note_terminal_summary_plateau_activation(Some(
+            super::RemainingOneSummaryKernelActivationContext {
+                prefix_states_explored: 24,
+                prefix_cache_groups: 19,
+                prefix_cache_candidates: 53_693,
+            },
+        ));
+        assert_eq!(telemetry.terminal_summary_plateau_activations, 0);
+        assert_eq!(
+            telemetry.terminal_summary_first_plateau_activation_prefix_state,
+            0
+        );
+
+        telemetry.note_terminal_summary_plateau_activation(Some(
+            super::RemainingOneSummaryKernelActivationContext {
+                prefix_states_explored: 43,
+                prefix_cache_groups: super::CLAIM_REMAINING_ONE_RETAINED_PLATEAU_GROUPS,
+                prefix_cache_candidates: super::CLAIM_REMAINING_ONE_RETAINED_PLATEAU_CANDIDATES,
+            },
+        ));
+        telemetry.note_terminal_summary_plateau_activation(Some(
+            super::RemainingOneSummaryKernelActivationContext {
+                prefix_states_explored: 52,
+                prefix_cache_groups: super::CLAIM_REMAINING_ONE_RETAINED_PLATEAU_GROUPS,
+                prefix_cache_candidates: super::CLAIM_REMAINING_ONE_RETAINED_PLATEAU_CANDIDATES,
+            },
+        ));
+
+        assert_eq!(telemetry.terminal_summary_plateau_activations, 2);
+        assert_eq!(
+            telemetry.terminal_summary_first_plateau_activation_prefix_state,
+            43
+        );
     }
 
     #[test]
@@ -8866,6 +9093,7 @@ mod tests {
             &work_item,
             &mut discovery.prefix_legality_cache,
             &mut budget,
+            None,
             None,
             None,
         );
@@ -8994,6 +9222,7 @@ mod tests {
             &mut budget,
             Some(&incumbent),
             None,
+            None,
         );
         assert_eq!(
             decision,
@@ -9104,6 +9333,7 @@ mod tests {
             &work_item,
             &mut discovery.prefix_legality_cache,
             &mut budget,
+            None,
             None,
             None,
         );
@@ -9317,6 +9547,8 @@ mod tests {
             terminal_clauses,
             None,
             &mut summary_discovery.prefix_legality_cache,
+            None,
+            None,
         );
         let summary_group = super::materialize_terminal_prefix_group_from_summary(
             admissibility,
@@ -9836,6 +10068,7 @@ mod tests {
             &mut first_budget,
             None,
             None,
+            None,
         );
         assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
 
@@ -9851,6 +10084,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut second_budget,
+            None,
             None,
             None,
         );
@@ -9918,6 +10152,7 @@ mod tests {
             &mut first_budget,
             None,
             None,
+            None,
         );
         assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
 
@@ -9950,6 +10185,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut second_budget,
+            None,
             None,
             None,
         );
@@ -10019,6 +10255,7 @@ mod tests {
             &work_item,
             &mut cache,
             &mut budget,
+            None,
             None,
             None,
         );

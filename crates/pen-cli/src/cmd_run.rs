@@ -1740,6 +1740,17 @@ mod tests {
                 prepare_exact_two_step_terminal_surface_millis: 11,
                 exact_partial_prefix_bound_millis: 22,
                 terminal_summary_build_millis: 33,
+                terminal_summary_connectivity_checks: 7,
+                terminal_summary_fallback_connectivity_checks: 2,
+                terminal_summary_admissibility_checks: 5,
+                terminal_summary_exact_nu_evaluations: 3,
+                terminal_summary_plateau_activations: 1,
+                terminal_summary_first_plateau_activation_prefix_state: 24,
+                terminal_summary_connectivity_millis: 34,
+                terminal_summary_fallback_connectivity_millis: 35,
+                terminal_summary_admissibility_millis: 36,
+                terminal_summary_exact_nu_millis: 37,
+                terminal_summary_aggregation_millis: 38,
                 terminal_materialize_millis: 44,
                 candidate_sort_millis: 55,
                 candidate_eval_minimality_millis: 66,
@@ -1755,6 +1766,7 @@ mod tests {
         assert!(telemetry.contains("\"claim_surface\""));
         assert!(telemetry.contains("\"claim_generic\""));
         assert!(telemetry.contains("\"remaining_one_telemetry\""));
+        assert!(telemetry.contains("\"terminal_summary_exact_nu_millis\":37"));
 
         let live_step_four = fs::read_to_string(
             run_dir
@@ -1766,6 +1778,7 @@ mod tests {
         assert!(live_step_four.contains("\"note\":\"claim_early_exhaustive_catalog\""));
         assert!(live_step_four.contains("\"observed_process_rss_bytes\""));
         assert!(live_step_four.contains("\"remaining_one_prefixes_seen\":21"));
+        assert!(live_step_four.contains("\"terminal_summary_plateau_activations\":1"));
         assert!(!live_step_four.contains("demo_breadth_shadow"));
 
         fs::remove_dir_all(root).ok();
