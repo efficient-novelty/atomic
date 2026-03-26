@@ -4,70 +4,65 @@ This note is the exact work order for the next `desktop_claim_shadow` slice.
 Assume delayed materialization, the incumbent-primary remaining-one fast path,
 the one-pass `structural_nu` summary-build fast path, and the algebraic `nu`
 ceiling patch are already landed.
-Assume the attempted remaining-one context-equivalence quotient was tried,
-measured on a stored short rerun, and then dropped from code after it failed
-to earn keep.
-Assume one additional narrow frontier-pop incumbent-arrival ordering experiment
-was also implemented, measured on a stored short rerun, and then dropped from
-code after the stored evidence showed that surface never activated on the live
-claim lane.
-Assume one further narrow claim-only exact-two-step local ordering experiment
-was also implemented, measured on a stored short rerun, and then dropped from
-code after the stored evidence showed that it activated immediately but still
-regressed the hot `1/5` step-`4` checkpoints.
+Assume the attempted remaining-one context-equivalence quotient, the frontier-
+pop incumbent-ordering experiment, the exact-two-step local ordering
+experiment, and the later proof-close handoff ordering experiment were all
+implemented, measured on stored short reruns, and then dropped from code after
+their stored evidence failed to earn keep.
 The current short step-`4` baseline remains
 `runs/codex-claim-release-step4-algebraic-v1`.
 The most recent short evidence that did not advance that baseline is
-`runs/codex-claim-release-step4-local-two-step-order-v2`.
+`runs/codex-claim-release-step4-proof-close-handoff-v1`.
 The current full-profile baseline remains
 `runs/codex-claim-release-full-nu-profile-v1`.
 
 ## Goal
 
-Raise the honest step-`4` incumbent sooner at the first proof-close handoff on
-the retained exact-two-step surface, because the prepared local ordering pass
-did activate but still left `compute_terminal_prefix_completion_summary_from_candidates`
-as the dominant wall-clock cost.
+Cut discovery-side `terminal_summary_build_millis` after the retained prefix
+cache has already flattened, because the proof-close handoff surface never
+activates before the hot stored step-`4` checkpoints.
 
 ## Why This Is The Next Slice
 
-- The stored exact-two-step local-order rerun was the first post-algebraic
-  slice that actually activated on the live claim lane.
-- On `runs/codex-claim-release-step4-local-two-step-order-v2`, the new local
-  telemetry turned on immediately:
-  - `local_exact_two_step_first_activation_prefix_state = 1`
-  - `local_exact_two_step_improving_prefixes_surfaced = 4644` then `4653`
-  - `local_exact_two_step_incumbent_priority_promotions = 4629` then `4638`
-- But those same comparable checkpoints still moved the wrong direction:
-  - `prefix_states_explored = 1` at `61.7s` instead of `35.7s`
-  - `prefix_states_explored = 5` at `249.6s` instead of `198.5s`
-- At those same checkpoints, frontier queue length and legality summaries still
-  matched the baseline exactly:
-  - frontier queue length `= 2774` and `2770`
-  - legality summaries `= 10193` and `28765`
-- At those same checkpoints, the retained prefix cache stayed honest but moved
-  materially behind the baseline:
-  - `1 group / 2794 candidates` instead of `13 / 32520`
-  - `2 groups / 5588 candidates` instead of `15 / 38108`
-- At those same checkpoints, `remaining_one_cached_rank_prunes` rose only
-  slightly to `4643` and `23218` instead of `4631` and `23205`, while
-  `remaining_one_materialized` fell to `1` and `2` instead of `13` and `15`.
-- The hot cost stayed in the same place and got worse early:
-  - `terminal_summary_build_millis = 58966` instead of `32990`
-  - `terminal_summary_build_millis = 237791` instead of `186848`
-- The rerun was then manually stopped at `prefix_states_explored = 5` /
-  `249.6s` after enough stored keep/drop evidence:
-  - frontier queue length `= 2770`
-  - legality summaries `= 28765`
-  - retained prefix cache `= 2 groups / 5588 candidates`
-  - `remaining_one_cached_rank_prunes = 23218`
-  - `terminal_summary_build_millis = 237791`
-  - observed RSS `~ 46.8 MiB`
-- The prepared exact-two-step local ordering surface therefore engaged but did
-  not earn keep. The next honest move is the immediate proof-close handoff on
-  the same cached exact or primary-rank evidence, not another prepared-surface
-  ordering pass, another frontier-order variant, more context-key work, more
-  memory work, or a blind full-profile rerun.
+- On `runs/codex-claim-release-step4-proof-close-handoff-v1`, the new
+  proof-close telemetry stayed pinned at zero at every stored checkpoint:
+  - `proof_close_handoff_first_activation_prefix_state = 0`
+  - `proof_close_handoff_improving_groups_surfaced = 0`
+  - `proof_close_handoff_incumbent_priority_promotions = 0`
+- The comparable hot checkpoints therefore all still happened in discovery,
+  not proof-close:
+  - `prefix_states_explored = 1` at `36.5s`
+  - `prefix_states_explored = 5` at `201.8s`
+  - `prefix_states_explored = 43` at `1623.8s`
+  - `prefix_states_explored = 52` at `1968.1s`
+  - `prefix_states_explored = 59` at `2230.4s`
+- At those same checkpoints, the honest retained-prefix shape stayed exactly on
+  the algebraic baseline:
+  - frontier queue length `= 2774`, `2770`, `2732`, `2723`, and `2716`
+  - legality summaries `= 10193`, `28765`, `205199`, `246986`, and `279487`
+  - retained prefix cache `= 13/32520`, `15/38108`, and then `39/144845`
+  - `remaining_one_cached_rank_prunes = 4631`, `23205`, `199653`, `241449`,
+    and `273957`
+  - `remaining_one_materialized = 13`, `15`, `39`, `39`, and `39`
+- The measured summary-build time moved only slightly at those same checkpoints:
+  - `terminal_summary_build_millis = 33691` instead of `32990`
+  - `terminal_summary_build_millis = 189133` instead of `186848`
+  - `terminal_summary_build_millis = 1516022` instead of `1524266`
+  - `terminal_summary_build_millis = 1839230` instead of `1849248`
+  - `terminal_summary_build_millis = 2084626` instead of `2111246`
+- The rerun was then manually stopped at `prefix_states_explored = 136` /
+  `5388.3s` after enough stored keep/drop evidence:
+  - frontier queue length `= 2639`
+  - legality summaries `= 636998`
+  - retained prefix cache `= 40 groups / 147639 candidates`
+  - `remaining_one_cached_rank_prunes = 631544`
+  - `terminal_summary_build_millis = 5061269`
+  - proof-close telemetry still all zero
+  - observed RSS `~ 530.2 MiB`
+- The proof-close handoff surface therefore is not on the hot path that is
+  still dominating step `4`. The next honest move must happen earlier, while
+  discovery is still paying repeated exact-summary cost after the retained
+  prefix cache has plateaued.
 
 ## Current Comparison Targets
 
@@ -79,24 +74,15 @@ Use these as the numbers to beat:
   - `prefix_states_explored = 43` at `1629.3s`
   - `prefix_states_explored = 52` at `1975.0s`
   - `prefix_states_explored = 59` at `2252.6s`
+  - retained prefix cache stayed `39 groups / 144845 candidates` at `43/52/59`
   - `terminal_summary_build_millis = 186848` at the `5`-state checkpoint
   - `terminal_summary_build_millis = 2111246` at the `59`-state checkpoint
-  - retained prefix cache stayed `15 groups / 38108 candidates` at `5`
-  - retained prefix cache stayed `39 groups / 144845 candidates` at `43/52/59`
-  - legality summaries stayed `28765`, `205199`, `246986`, and `279487`
-  - `remaining_one_cached_rank_prunes` stayed `23205`, `199653`, `241449`,
-    and `273957`
-- `runs/codex-claim-release-step4-local-two-step-order-v2`
-  - `prefix_states_explored = 1` at `61.7s` instead of `35.7s`
-  - `prefix_states_explored = 5` at `249.6s` instead of `198.5s`
-  - frontier queue length stayed `2774` and `2770`
-  - legality summaries stayed `10193` and `28765`
-  - retained prefix cache only reached `1/2794` and `2/5588`
-  - `remaining_one_cached_rank_prunes` only rose to `4643` and `23218`
-  - `remaining_one_materialized` fell to `1` and `2`
-  - `terminal_summary_build_millis` rose to `58966` and `237791`
-  - the local ordering telemetry activated immediately but still did not earn
-    keep
+- `runs/codex-claim-release-step4-proof-close-handoff-v1`
+  - proof-close telemetry stayed `0/0/0` at every stored checkpoint
+  - the same honest retained-prefix shape still held at `1`, `5`, `43`, `52`,
+    and `59`
+  - the run was still in discovery at `prefix_states_explored = 136` /
+    `5388.3s`
 - `runs/codex-claim-release-full-nu-profile-v1`
   - `prefix_states_explored = 43` at `1629.6s`
   - `prefix_states_explored = 52` at `2039.7s`
@@ -106,53 +92,54 @@ Use these as the numbers to beat:
   - retained prefix cache `= 39 groups / 144845 candidates`
   - `remaining_one_rank_prunes_pre_materialize = 273957`
   - `terminal_summary_build_millis = 2221499`
-  - `terminal_materialize_millis = 460`
   - observed RSS `~ 316 MiB`
 
 ## Do This Next
 
-### 1. Patch One Narrow Deterministic Proof-Close Handoff Experiment
+### 1. Patch One Narrow Discovery-Side Post-Plateau Summary Experiment
 
 Preferred form:
 
-- bias the first proof-close handoff or immediate proof-close group selection
-  toward retained groups that can raise the incumbent sooner or collapse faster
-  using already-cached exact or primary-rank evidence
-- keep deterministic ordering inside equal-priority buckets
-- preserve retained-prefix honesty and winner determinism
-- keep the write surface inside the immediate proof-close handoff and local
-  proof-close group-order helpers first
+- target the discovery/materialize hot path after the retained prefix cache has
+  already stopped growing at the current honest winner shape
+- use already-cached structural bound or rank evidence to avoid rebuilding full
+  exact terminal summaries on non-expanding groups
+- keep deterministic ordering, retained-prefix honesty, and winner determinism
+- keep the write surface inside the discovery/materialize remaining-one summary
+  helpers first, not inside proof-close
 
 Reject as first moves:
 
+- more proof-close handoff variants
 - more prepared exact-two-step local ordering variants
 - more frontier-pop ordering variants
 - more context-equivalence variants
 - memory compaction
 - certification or benchmark work
 - widening-band retuning
-- a broad frontier rewrite outside the narrow proof-close handoff surface
+- a broad frontier rewrite outside the narrow discovery-side summary surface
 
-### 2. Add Telemetry And Tests For The Local Proof-Close Handoff Surface
+### 2. Add Telemetry And Tests For The Post-Plateau Discovery Surface
 
-Before trusting live runs, make the new slice measurable and prove it actually
-activates on the live claim lane.
+Before trusting live runs, make the new slice measurable and prove it engages
+before proof-close.
 
 Preferred telemetry additions:
 
-- one counter for proof-close handoff incumbent-priority promotions
-- one counter for proof-close handoff improving groups surfaced
-- one earliest-prefix-state marker for when that proof-close handoff first
-  activates
+- one counter for terminal summaries built after the retained group count last
+  increased
+- one earliest-prefix-state marker for when the retained prefix cache first
+  flattens while legality summaries keep rising
+- one counter for kept-vs-skipped post-plateau summary builds on that surface
 
 Required tests:
 
-- one targeted test that a retained claim proof-close group with better cached
-  coarse accept potential is certified before a weaker sibling
-- one targeted deterministic-tie test that equal proof-close ordering buckets
-  still process in stable exact order
-- one regression that proves the kept reference step-`4` winner is not delayed
-  behind a worse cached retained group
+- one targeted test that the new post-plateau fast path does not skip a group
+  that can still beat the incumbent
+- one targeted deterministic-tie test that equal discovery-side buckets still
+  process in stable exact order
+- one regression that proves the kept reference step-`4` winner still survives
+  when the retained cache is already flat
 
 ### 3. Re-Earn One Stored Release `until_step = 4` Rerun
 
@@ -167,18 +154,17 @@ Read the stored artifacts, not terminal output.
 
 ### 4. Decide Keep Or Drop From Stored Telemetry
 
-Keep the proof-close handoff patch only if the new
-`reports/steps/step-04-live.ndjson` shows both of these:
+Keep the patch only if the new `reports/steps/step-04-live.ndjson` shows both
+of these:
 
-- the new proof-close handoff telemetry actually activates on the stored rerun
+- the new post-plateau discovery telemetry activates before proof-close
 - at least one real step-`4` win against the current baselines:
-  - the same honest winner arrives materially earlier
-  - `remaining_one_rank_prunes_pre_materialize` or retained-group collapse
-    grows materially faster at the comparable retained-prefix shape
   - `terminal_summary_build_millis` falls at matching checkpoints
   - the same wall clock reaches materially farther
   - frontier queue length drains faster without weakening retained prefix-cache
     shape
+  - retained-group collapse or cached rank-prune growth improves at the same
+    honest retained-prefix shape
 
 Drop the patch if the activation counters stay zero or the rerun does not show
 one of those wins.
@@ -196,10 +182,8 @@ Only after the short step-`4` rerun earns keep:
 
 Open `reports/steps/step-04-live.ndjson` and answer:
 
-- did the new proof-close handoff telemetry activate at all?
-- if it activated, how early did it first activate?
-- did the same honest winner arrive earlier?
-- did retained-group collapse or pre-materialize rank pruning climb faster?
+- did the new discovery-side telemetry activate before proof-close?
+- if it activated, how early did the retained prefix cache flatten?
 - did `terminal_summary_build_millis` fall at matching checkpoints?
 - did frontier queue length drop faster?
 - did the same wall clock reach farther than the current baseline?
@@ -226,6 +210,6 @@ the broader tree still stops at
 Rewrite this file as soon as one new stored rerun shows one of these is true:
 
 - step `4` is no longer the dominant blocker
-- the proof-close handoff slice is exhausted and the next real move is a later
-  honest wall
+- the post-plateau discovery slice is exhausted and the next real move is a
+  later honest wall
 - the real full profile exposes a later honest wall

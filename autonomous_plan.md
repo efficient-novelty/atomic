@@ -37,9 +37,11 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   ordering counters stayed zero on the stored run, which means that surface did
   not engage on the live claim lane.
 - The next meaningful wins must happen before
-  `compute_terminal_prefix_completion_summary_from_candidates`, and now most
-  likely inside the prepared exact-two-step or immediate proof-close surface,
-  not in another memory-first rewrite or another frontier-pop ordering variant.
+  `compute_terminal_prefix_completion_summary_from_candidates`, and the latest
+  stored proof-close handoff attempt now says they must happen earlier on the
+  discovery/materialize surface after the retained prefix cache has flattened,
+  not in another proof-close ordering pass, memory-first rewrite, or
+  frontier-pop ordering variant.
 
 ## Execution Order
 
@@ -92,7 +94,7 @@ Done when:
 - the rerun shows materially fewer repeated exact summary builds at matching
   checkpoints
 
-### Phase 3. Improve Incumbent Arrival Only If Structural Culling Still Leaves Waste
+### Phase 3. Cut Post-Plateau Discovery Cost If Structural Culling Still Leaves Waste
 
 Goal:
 
@@ -101,18 +103,18 @@ Goal:
 
 Preferred patch:
 
-- deterministic local ordering or proof-close handoff bias on the prepared
-  exact-two-step remaining-one surface that keeps the exact lane honest
+- one narrow discovery-side summary-build cut on the prepared exact-two-step /
+  remaining-one surface after the retained prefix cache has already flattened
 
 Required output:
 
-- one narrow exact-two-step or proof-close ordering experiment
+- one narrow exact-two-step / remaining-one discovery experiment
 - one stored release rerun with `until_step = 4`
 
 Done when:
 
-- the rerun finds the same honest winner earlier and that earlier incumbent
-  materially reduces the surviving exact-summary load
+- the rerun keeps the same honest retained-prefix shape while materially
+  reducing the surviving exact-summary load
 
 ### Phase 4. Re-Earn The Real Full-Profile Read
 

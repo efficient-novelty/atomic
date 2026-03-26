@@ -25,6 +25,10 @@ final gate.
   validated locally, rerun on the stored short step-`4` profile, and then
   dropped from code after the stored evidence showed immediate activation but
   no real step-`4` win.
+- A narrow claim-only proof-close handoff ordering pass was then implemented,
+  validated locally, rerun on the stored short step-`4` profile, and then
+  dropped from code after the stored evidence showed that the new proof-close
+  telemetry never activated on the live claim lane.
 - A new stored short rerun now exists for that failed slice:
   `runs/codex-claim-release-step4-context-equivalence-v1`.
 - A second new stored short rerun now exists for the later failed slice:
@@ -32,9 +36,13 @@ final gate.
 - A third new stored short rerun now exists for that dropped exact-two-step
   local ordering slice:
   `runs/codex-claim-release-step4-local-two-step-order-v2`.
+- A fourth new stored short rerun now exists for that later dropped
+  proof-close handoff slice:
+  `runs/codex-claim-release-step4-proof-close-handoff-v1`.
 - The current short step-`4` iteration baseline remains
-  `runs/codex-claim-release-step4-algebraic-v1`; neither later failed rerun
-  nor the dropped exact-two-step local ordering rerun have earned replacement.
+  `runs/codex-claim-release-step4-algebraic-v1`; neither the later failed
+  reruns, the dropped exact-two-step local ordering rerun, nor the dropped
+  proof-close handoff rerun have earned replacement.
 - The current full-profile iteration baseline remains
   `runs/codex-claim-release-full-nu-profile-v1`.
 - An earlier attempt at the same new run id family,
@@ -191,6 +199,47 @@ final gate.
   - observed RSS `~ 46.8 MiB`
 - That rerun therefore did not earn keep and the local exact-two-step ordering
   patch has now been dropped from code.
+- New stored short rerun for the now-dropped proof-close handoff slice:
+  `runs/codex-claim-release-step4-proof-close-handoff-v1`
+- Against `runs/codex-claim-release-step4-algebraic-v1`, the new proof-close
+  handoff rerun kept the same honest discovery-side shape at every comparable
+  stored checkpoint, but the intended proof-close surface still never engaged:
+  - `prefix_states_explored = 1` at `36.5s` instead of `35.7s`
+  - `prefix_states_explored = 5` at `201.8s` instead of `198.5s`
+  - `prefix_states_explored = 43` at `1623.8s` instead of `1629.3s`
+  - `prefix_states_explored = 52` at `1968.1s` instead of `1975.0s`
+  - `prefix_states_explored = 59` at `2230.4s` instead of `2252.6s`
+  - At those same checkpoints, frontier queue length still stayed
+    `2774`, `2770`, `2732`, `2723`, and `2716` respectively.
+  - At those same checkpoints, legality summaries still stayed
+    `10193`, `28765`, `205199`, `246986`, and `279487` respectively.
+  - At those same checkpoints, the retained prefix cache still stayed
+    `13/32520`, `15/38108`, and then `39/144845` at `43/52/59`.
+  - At those same checkpoints, `remaining_one_cached_rank_prunes` and
+    `remaining_one_materialized` still stayed exactly
+    `4631/13`, `23205/15`, `199653/39`, `241449/39`, and `273957/39`.
+  - At those same checkpoints, `terminal_summary_build_millis` moved only
+    slightly to `33691`, `189133`, `1516022`, `1839230`, and `2084626`
+    instead of `32990`, `186848`, `1524266`, `1849248`, and `2111246`.
+  - But the new proof-close handoff telemetry stayed pinned at zero at every
+    stored checkpoint:
+    `proof_close_handoff_first_activation_prefix_state = 0`,
+    `proof_close_handoff_improving_groups_surfaced = 0`, and
+    `proof_close_handoff_incumbent_priority_promotions = 0`.
+- That rerun was then manually stopped after enough stored keep/drop evidence:
+  - `prefix_states_explored = 136` at `5388.3s`
+  - frontier queue length `= 2639`
+  - legality summaries `= 636998`
+  - retained prefix cache `= 40 groups / 147639 candidates`
+  - `remaining_one_cached_rank_prunes = 631544`
+  - `remaining_one_materialized = 40`
+  - `terminal_summary_build_millis = 5061269`
+  - `proof_close_handoff_first_activation_prefix_state = 0`
+  - `proof_close_handoff_improving_groups_surfaced = 0`
+  - `proof_close_handoff_incumbent_priority_promotions = 0`
+  - observed RSS `~ 530.2 MiB`
+- That rerun therefore did not earn keep and the proof-close handoff patch has
+  now been dropped from code.
 - Current full baseline:
   `runs/codex-claim-release-full-nu-profile-v1`
 - The earlier intended-profile rerun
@@ -233,24 +282,30 @@ final gate.
   experiment that actually activates on the live claim lane, but its stored
   `1/5` checkpoints were still slower than the short baseline, so it too has
   been dropped from code.
-- Step `4` exact summary build therefore remains the dominant honest blocker on
-  the real profile, and no post-algebraic slice has yet earned baseline
-  replacement from stored evidence.
+- The attempted proof-close handoff slice then showed that the intended
+  proof-close surface still never activates before the hot stored step-`4`
+  checkpoints, so that slice is now also exhausted and dropped from code.
+- Step `4` exact summary build during discovery therefore remains the dominant
+  honest blocker on the real profile, and no post-algebraic slice has yet
+  earned baseline replacement from stored evidence.
 - Memory remains controlled on the short reruns; the wall is still compute, not
   allocator or RSS pressure.
-- The next honest move is a narrow deterministic proof-close handoff bias on
-  the same already-cached exact or primary-rank evidence, not another prepared
-  exact-two-step local ordering pass.
+- The next honest move is no longer another proof-close ordering variant;
+  it is an earlier discovery-side summary-build cut on the same retained
+  exact-two-step / remaining-one surface, because proof-close still does not
+  begin before the hot stored checkpoints.
 
 ## Immediate Order
 
-1. Patch one narrow deterministic proof-close handoff ordering experiment on
-   the same exact-two-step remaining-one evidence surface that the dropped
-   local ordering slice already exposed.
-2. Add telemetry and tests for that proof-close handoff slice, then re-earn
+1. Patch one narrow discovery-side exact-summary experiment on the retained
+   remaining-one surface after the retained prefix cache has already flattened,
+   because the proof-close handoff surface never activates before the hot
+   stored checkpoints.
+2. Add telemetry and tests for that earlier discovery-side slice, then re-earn
    one stored release `until_step = 4` rerun.
-3. Keep that next patch only if the stored rerun both activates and shows a
-   real step-`4` win against the current baseline.
+3. Keep that next patch only if the stored rerun changes the same honest
+   retained-prefix shape while cutting `terminal_summary_build_millis` or
+   reaching materially farther by the same wall clock.
 4. Only after that short rerun earns keep should another real
    `desktop_claim_shadow_1h` full-profile rerun happen.
 
@@ -271,6 +326,8 @@ final gate.
 - Current short step-`4` iteration baseline:
   `runs/codex-claim-release-step4-algebraic-v1`
 - Most recent short evidence that did not advance that baseline:
+  `runs/codex-claim-release-step4-proof-close-handoff-v1`
+- Earlier short evidence that also did not advance that baseline:
   `runs/codex-claim-release-step4-local-two-step-order-v2`
 - Earlier short evidence that also did not advance that baseline:
   `runs/codex-claim-release-step4-incumbent-ordering-v1`
