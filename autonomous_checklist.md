@@ -10,19 +10,21 @@ It lists only work that is still open.
 - The claim lane still does not have a signoff-ready full-profile bundle.
 - The current full-profile baseline is
   `runs/codex-claim-release-full-nu-profile-v1`.
-- The next concrete task is one more narrow connectivity-side exact-summary
-  patch on the retained remaining-one surface after the retained prefix cache
-  has flattened, then another stored release `until_step = 4` rerun; the
-  just-measured expr-keyed terminal clause profile cache did not earn keep and
-  should stay dropped.
+- The next concrete task is one narrow read of the hidden pre-summary
+  terminal-candidate preparation cost on the retained remaining-one surface,
+  then one narrow cut there and another stored release `until_step = 4` rerun;
+  the just-measured clause-side terminal connectivity profile precompute did
+  not earn keep and should stay dropped.
 - The current hot bottleneck is still `terminal_summary_build_millis` in step
-  `4`, with connectivity the dominant measured inner cost rather than compact
-  materialization.
+  `4`, but the latest rerun showed that the measured connectivity counter is no
+  longer the whole wall: total build time rose even while the connectivity
+  counter collapsed, so the next slice must isolate the hidden pre-summary
+  setup cost instead of assuming connectivity still dominates.
 
 ## 1. Runtime Completion
 
-- [ ] Land one narrow step-`4` summary-side throughput patch that earns keep on
-      stored telemetry.
+- [ ] Land one narrow step-`4` pre-summary or summary-side throughput patch
+      that earns keep on stored telemetry.
 - [ ] Re-earn one release `until_step = 4` rerun and confirm that summary-side
       telemetry improves without weakening retained prefix-cache shape.
 - [ ] Re-earn one full `desktop_claim_shadow_1h` rerun on the winning binary.

@@ -111,8 +111,10 @@ Current full-profile baseline:
 
 Current honest wall:
 
-- remaining-one connectivity on the retained `39/144845` plateau
-- then aggregation and bound/rank bookkeeping
+- hidden remaining-one pre-summary terminal-candidate preparation on the
+  retained `39/144845` plateau
+- then aggregation and bound or rank bookkeeping inside the already-measured
+  summary loop
 
 ## Execution Order
 
@@ -138,27 +140,32 @@ What this phase proved:
 - removing that work improved the honest plateau without reopening the old
   materialize blowup
 
-### Phase 2. Reduce Work Before Or Inside Connectivity
+### Phase 2. Measure And Reduce Work Before The Connectivity Loop
 
 Goal:
 
-- cut the new dominant plateau cost without changing retained-prefix honesty
+- isolate and cut the hidden pre-summary plateau cost without changing
+  retained-prefix honesty
 
 Preferred patches:
 
-- cheaper cached structural connectivity decisions
-- one exact-preserving disconnection prune moved earlier
-- less repeated summary-extension churn in `terminal_connectivity`
+- one narrow counter around terminal candidate preparation before the measured
+  connectivity checks
+- less per-prefix allocation or copy churn while building the terminal
+  candidate list
+- shared-catalog reuse of clause-side structural data only when that data is
+  genuinely stable across prefixes
 
 Reject as primary moves:
 
+- another blind connectivity-side cut without first measuring the shifted cost
 - another admissibility-focused patch
 - another exact-`nu` first optimization
 - another ordering, reuse, or post-plateau direct-materialize variant
 
 Done when:
 
-- the stored rerun shows lower connectivity-side cost and lower
+- the stored rerun shows a lower pre-summary setup counter and lower
   `terminal_summary_build_millis` on matched plateau checkpoints against
   `runs/codex-claim-release-step4-kernel-connectivity-v2`
 
