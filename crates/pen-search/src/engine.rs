@@ -5698,19 +5698,30 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
             if let Some(primary_rank) =
                 terminal_prefix_primary_rank(objective_bar, exact_nu, clause_kappa_used)
             {
-                match &summary.best_accept_primary_rank {
+                let build_full_accept_rank = match summary.best_accept_primary_rank.as_ref() {
                     Some(current)
-                        if !better_terminal_prefix_primary_rank(&primary_rank, current) => {}
-                    _ => summary.best_accept_primary_rank = Some(primary_rank.clone()),
-                }
+                        if better_terminal_prefix_primary_rank(&primary_rank, current) =>
+                    {
+                        summary.best_accept_primary_rank = Some(primary_rank.clone());
+                        true
+                    }
+                    Some(current) if *current == primary_rank => true,
+                    Some(_) => false,
+                    None => {
+                        summary.best_accept_primary_rank = Some(primary_rank.clone());
+                        true
+                    }
+                };
                 // Remaining-one incumbents only improve, so candidates that are
                 // already worse on overshoot/kappa can never become competitive later.
-                if incumbent_rank.is_none_or(|incumbent| {
-                    terminal_prefix_primary_rank_could_still_beat_incumbent(
-                        &primary_rank,
-                        incumbent,
-                    )
-                }) {
+                if build_full_accept_rank
+                    && incumbent_rank.is_none_or(|incumbent| {
+                        terminal_prefix_primary_rank_could_still_beat_incumbent(
+                            &primary_rank,
+                            incumbent,
+                        )
+                    })
+                {
                     if let Some(rank) = acceptance_rank_for_telescope(
                         objective_bar,
                         &telescope,
@@ -8688,7 +8699,7 @@ mod tests {
 
         let admissibility =
             strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
-        let objective_bar = compute_bar(2, 15, &history).bar;
+        let objective_bar = Rational::zero();
         let context = EnumerationContext::from_admissibility(&library, admissibility);
         let clause_catalog = build_clause_catalog(context, 8);
         let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
@@ -9273,6 +9284,152 @@ mod tests {
                 .remaining_one_telemetry
                 .remaining_one_rank_prunes_pre_materialize,
             1
+        );
+    }
+
+    #[test]
+    fn claim_compact_summary_best_accept_rank_matches_direct_best_when_worse_primary_candidates_clear_bar()
+     {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step_index in 2..=15 {
+            if step_index > 2 {
+                let previous_step =
+                    &steps[usize::try_from(step_index - 3).expect("step index exceeded usize")];
+                nu_history.push((
+                    previous_step.step_index,
+                    u32::from(previous_step.accepted.nu),
+                ));
+                library.push(LibraryEntry::from_telescope(
+                    &previous_step.telescope,
+                    &library,
+                ));
+            }
+
+            let admissibility = strict_admissibility_for_mode(
+                step_index,
+                2,
+                &library,
+                AdmissibilityMode::DesktopClaimShadow,
+            );
+            let target = Telescope::reference(step_index);
+            let prefix_len = target.clauses.len().saturating_sub(1);
+            let target_kappa = u16::try_from(target.kappa()).expect("kappa exceeded u16");
+            let prefix = Telescope::new(target.clauses[..prefix_len].to_vec());
+            let signature = PrefixSignature::new(step_index, &library, &prefix);
+            let mut cache = PrefixLegalityCache::default();
+
+            if !cache.insert_root(
+                signature.clone(),
+                target_kappa,
+                &library,
+                &prefix,
+                admissibility,
+                LateFamilySurface::ClaimGeneric,
+            ) {
+                continue;
+            }
+
+            let context = EnumerationContext::from_admissibility(&library, admissibility);
+            let clause_catalog = build_clause_catalog(context, target_kappa);
+            let terminal_clauses = super::terminal_prefix_clause_candidates(
+                step_index,
+                &library,
+                admissibility,
+                &signature,
+                clause_catalog.clauses_at(prefix_len),
+                &mut cache,
+            );
+            if terminal_clauses.is_empty() {
+                continue;
+            }
+
+            let objective_bar = Rational::zero();
+            let mut direct_best_primary_rank = None;
+            let mut direct_best_accept_rank = None;
+            let mut distinct_primary_ranks = Vec::new();
+
+            for (clause, cached_admissibility_decision) in &terminal_clauses {
+                let mut telescope = prefix.clone();
+                telescope.clauses.push((*clause).clone());
+
+                if !passes_connectivity(&library, &telescope) {
+                    continue;
+                }
+
+                let admissibility_decision =
+                    cached_admissibility_decision.clone().unwrap_or_else(|| {
+                        assess_strict_admissibility(step_index, &library, &telescope, admissibility)
+                    });
+                if !admissibility_decision.is_admitted() {
+                    continue;
+                }
+
+                let exact_nu =
+                    u16::try_from(structural_nu(&telescope, &library, &nu_history).total)
+                        .expect("nu exceeded u16");
+                let clause_kappa_used =
+                    u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                let Some(primary_rank) =
+                    super::terminal_prefix_primary_rank(objective_bar, exact_nu, clause_kappa_used)
+                else {
+                    continue;
+                };
+                if !distinct_primary_ranks.contains(&primary_rank) {
+                    distinct_primary_ranks.push(primary_rank.clone());
+                }
+                match &direct_best_primary_rank {
+                    Some(current)
+                        if !super::better_terminal_prefix_primary_rank(&primary_rank, current) => {}
+                    _ => direct_best_primary_rank = Some(primary_rank),
+                }
+
+                let bit_kappa_used =
+                    u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                        .expect("bit cost exceeded u16");
+                let rank = super::acceptance_rank_for_telescope(
+                    objective_bar,
+                    &telescope,
+                    exact_nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
+                )
+                .expect("bar-clearing direct candidate should produce an accept rank");
+                match &direct_best_accept_rank {
+                    Some(current) if !super::better_rank(&rank, current) => {}
+                    _ => direct_best_accept_rank = Some(rank),
+                }
+            }
+
+            if distinct_primary_ranks.len() <= 1 {
+                continue;
+            }
+
+            let summary = super::compute_terminal_prefix_completion_summary_from_candidates(
+                step_index,
+                &library,
+                admissibility,
+                objective_bar,
+                &nu_history,
+                &signature,
+                &prefix,
+                super::TerminalPrefixSummaryPayload::Compact,
+                terminal_clauses,
+                None,
+                &mut cache,
+                None,
+                None,
+            );
+
+            assert_eq!(summary.best_accept_primary_rank, direct_best_primary_rank);
+            assert_eq!(summary.best_accept_rank, direct_best_accept_rank);
+            return;
+        }
+
+        panic!(
+            "expected at least one claim remaining-one surface with multiple bar-clearing primary ranks"
         );
     }
 

@@ -10,26 +10,22 @@ It lists only work that is still open.
 - The claim lane still does not have a signoff-ready full-profile bundle.
 - The current full-profile baseline is
   `runs/codex-claim-release-full-nu-profile-v1`.
-- The most recent short rerun
-  `runs/codex-claim-release-step4-terminal-candidate-prep-v1`
-  made the hidden pre-summary cost measurable, but the throughput cut did not
-  earn keep and should stay dropped.
+- The current short step-`4` baseline is now
+  `runs/codex-claim-release-step4-kernel-aggregation-v1`.
+- That new kept rerun preserved the same honest `39 groups / 144845 candidates`
+  plateau and improved the matched `24/43/44` checkpoints against
+  `runs/codex-claim-release-step4-kernel-connectivity-v2`.
 - The current hot bottleneck is still `terminal_summary_build_millis` in step
-  `4`, but the new read now says the next slice should return to the already
-  measured counters instead of another blind prep-side rewrite:
-  - candidate prep is now visible at `32904/71577/73974` on the honest plateau
-    at `24/43/44`
-  - measured connectivity is still larger there at
-    `99484/183265/187753`
-  - aggregation is still second there at `68588/120729/122966`
-  - the tuple-remap prep cut still made the matched checkpoints slower than
-    `runs/codex-claim-release-step4-kernel-connectivity-v2`
+  `4`, with measured connectivity first and aggregation second on the honest
+  plateau, but one more narrow summary-side cut has now earned keep.
+- Because that short slice earned keep, the next honest move is now the real
+  intended-profile rerun, not another short step-`4` slice first.
 
 ## 1. Runtime Completion
 
-- [ ] Land one narrow step-`4` connectivity-side or aggregation-side
+- [x] Land one narrow step-`4` connectivity-side or aggregation-side
       throughput patch that earns keep on stored telemetry.
-- [ ] Re-earn one release `until_step = 4` rerun and confirm that the measured
+- [x] Re-earn one release `until_step = 4` rerun and confirm that the measured
       summary-side telemetry improves without weakening retained prefix-cache
       shape.
 - [ ] Re-earn one full `desktop_claim_shadow_1h` rerun on the winning binary.

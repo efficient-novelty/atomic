@@ -56,6 +56,20 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   `runs/codex-claim-release-step4-kernel-connectivity-v1`, and
   `runs/codex-claim-release-step4-kernel-connectivity-v2` removed that old
   admissibility wall and then cut the retained connectivity loop twice.
+- A newer kept rerun
+  `runs/codex-claim-release-step4-kernel-aggregation-v1` then stopped
+  building full `AcceptRank` values for bar-clearing claim candidates once a
+  strictly better primary `(overshoot, kappa)` rank had already been seen in
+  the same summary group.
+- That rerun kept the same honest plateau and improved the matched checkpoints
+  against `runs/codex-claim-release-step4-kernel-connectivity-v2`:
+  - `elapsed_millis = 549630/990480/1012067` instead of
+    `551825/998555/1020529`
+  - `terminal_summary_build_millis = 492524/892772/912271` instead of
+    `495256/901994/921924`
+  - `terminal_summary_connectivity_millis = 88989/164940/169227` instead of
+    `95969/178000/182453`
+  - aggregation also fell slightly to `67567/118700/120643`
 - The latest dropped rerun
   `runs/codex-claim-release-step4-terminal-candidate-prep-v1` then added one
   narrow pre-summary candidate-preparation counter and tried one narrow cut in
@@ -70,9 +84,9 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - So the new read is now explicit:
   terminal candidate preparation is real and measurable, but this particular
   prep path is not the next keep target.
-- The current honest short wall on the kept baseline has therefore collapsed
-  back onto the already-measured counters:
-  connectivity first, aggregation second, then exact `nu` and candidate prep.
+- The current honest short wall on the kept baseline still sits on the
+  already-measured counters:
+  connectivity first, aggregation second, then exact `nu`.
 
 ## Strategic Rules
 
@@ -89,10 +103,10 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 ## Current Phase
 
 Current short baseline:
-`runs/codex-claim-release-step4-kernel-connectivity-v2`
+`runs/codex-claim-release-step4-kernel-aggregation-v1`
 
 Previous short baseline:
-`runs/codex-claim-release-step4-kernel-connectivity-v1`
+`runs/codex-claim-release-step4-kernel-connectivity-v2`
 
 Current full-profile baseline:
 `runs/codex-claim-release-full-nu-profile-v1`
@@ -102,7 +116,7 @@ Current honest wall:
 - measured remaining-one connectivity on the retained `39/144845` plateau
 - then aggregation and bound or rank bookkeeping inside the compact summary
   loop
-- then exact `nu` and now-measured candidate preparation behind them
+- then exact `nu`
 
 ## Execution Order
 
@@ -129,6 +143,10 @@ What this phase proved:
   materialize blowup
 
 ### Phase 2. Re-Enter Measured Connectivity Or Aggregation Cuts
+
+Status:
+
+- done via `runs/codex-claim-release-step4-kernel-aggregation-v1`
 
 Goal:
 
@@ -240,9 +258,9 @@ Done when:
 ## Baselines And Informative Evidence
 
 - Current short step-`4` baseline:
-  `runs/codex-claim-release-step4-kernel-connectivity-v2`
+  `runs/codex-claim-release-step4-kernel-aggregation-v1`
 - Previous short step-`4` baseline:
-  `runs/codex-claim-release-step4-kernel-connectivity-v1`
+  `runs/codex-claim-release-step4-kernel-connectivity-v2`
 - Current full-profile baseline:
   `runs/codex-claim-release-full-nu-profile-v1`
 - Diagnostic kernel split:
