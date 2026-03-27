@@ -30,8 +30,9 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - The landed wins so far were the cheap early ones:
   delayed materialization, the incumbent-primary remaining-one fast path, the
   one-pass `structural_nu` summary-build fast path, the algebraic `nu`
-  ceiling, the family-agnostic claim terminal-admissibility shortcut, and now
-  the exact non-allocating connectivity summary scan.
+  ceiling, the family-agnostic claim terminal-admissibility shortcut, the
+  exact non-allocating connectivity summary scan, and the terminal-only cached
+  parent connectivity decision.
 - The indirect routes around the wall have now been exhausted on stored
   evidence:
   - context-equivalence quotienting found no live reuse
@@ -66,6 +67,21 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     `1292019`
   - `terminal_summary_connectivity_millis` fell to `408582` from admissibility
     `492949`
+- The later keep rerun
+  `runs/codex-claim-release-step4-kernel-connectivity-v2` then reused the
+  cached parent legality summary for the terminal-only
+  connectivity/reanchor decision and cut the same retained plateau again:
+  - `elapsed_millis` fell to `1020529` from connectivity-v1 `1273659`
+  - `terminal_summary_build_millis` fell to `921924` from connectivity-v1
+    `1170875`
+  - `terminal_summary_connectivity_millis` fell to `182453` from
+    connectivity-v1 `408582`
+- The follow-up short rerun
+  `runs/codex-claim-release-step4-kernel-connectivity-v3` then tried caching
+  per-clause hot-path terminal check/connectivity profiles keyed by clause
+  `expr` inside `terminal_connectivity`, but it kept the same plateau and made
+  the matched `24/43/44` checkpoints slower than connectivity-v2, so it was
+  dropped from code after measurement.
 - So the honest wall has moved again, but not out of the same kernel:
   remaining-one connectivity is still the dominant plateau cost, aggregation is
   still second, and exact `nu` is not the first target.
@@ -85,10 +101,10 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 ## Current Phase
 
 Current short baseline:
-`runs/codex-claim-release-step4-kernel-connectivity-v1`
+`runs/codex-claim-release-step4-kernel-connectivity-v2`
 
 Previous short baseline:
-`runs/codex-claim-release-step4-kernel-admissibility-v1`
+`runs/codex-claim-release-step4-kernel-connectivity-v1`
 
 Current full-profile baseline:
 `runs/codex-claim-release-full-nu-profile-v1`
@@ -144,7 +160,7 @@ Done when:
 
 - the stored rerun shows lower connectivity-side cost and lower
   `terminal_summary_build_millis` on matched plateau checkpoints against
-  `runs/codex-claim-release-step4-kernel-connectivity-v1`
+  `runs/codex-claim-release-step4-kernel-connectivity-v2`
 
 ### Phase 3. Cut Aggregation And Residual Exact Work
 
@@ -243,9 +259,9 @@ Done when:
 ## Baselines And Informative Evidence
 
 - Current short step-`4` baseline:
-  `runs/codex-claim-release-step4-kernel-connectivity-v1`
+  `runs/codex-claim-release-step4-kernel-connectivity-v2`
 - Previous short step-`4` baseline:
-  `runs/codex-claim-release-step4-kernel-admissibility-v1`
+  `runs/codex-claim-release-step4-kernel-connectivity-v1`
 - Current full-profile baseline:
   `runs/codex-claim-release-full-nu-profile-v1`
 - Diagnostic kernel split:
@@ -253,6 +269,7 @@ Done when:
 - Ignore as invalid diagnostic:
   `runs/codex-claim-release-step4-kernel-profile-v1`
 - Informative failed short reruns that define the current diagnosis:
+  - `runs/codex-claim-release-step4-kernel-connectivity-v3`
   - `runs/codex-claim-release-step4-context-equivalence-v1`
   - `runs/codex-claim-release-step4-incumbent-ordering-v1`
   - `runs/codex-claim-release-step4-local-two-step-order-v2`

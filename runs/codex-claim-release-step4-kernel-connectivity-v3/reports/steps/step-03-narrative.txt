@@ -1,0 +1,48 @@
+step 03 claim narrative
+label        Witness
+profile      claim-1h
+accepted     blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e nu=2 kappa=1 overshoot=2/3
+time         [................] 0ms / 1m30s (within limit; shared early window across steps 1-4)
+generated    56 generated
+exact_screen 1 screened
+full_eval    1 evaluated
+closure      [................] 0% frontier_total=1 certified_nonwinning=0
+phase_eval   materialize=0 proof_close=0 overrun=0 cap=none cap_triggered=false breadth_exit=none proof_close_reason=none overrun_reason=none
+proof_close  reserve=0ms elapsed=0ms remaining=0ms reserve_overrun=0ms exhausted=false groups_closed=0/0 groups_remaining=0 closure=0%
+timing       discovery=0ms frontier_plan=0ms selection=0ms
+funnel       enumerated=56 well_formed=56 malformed=0 admissibility_rejected=55 scored=1 canonical=1 semantically_minimal=1
+demo_funnel  raw=56 canonical_prefixes=56 hard_admissible=1 exact_pruned=0 heuristic_dropped=0 bar_clearers=1 semantically_minimal_clearers=1 winner_overshoot=2/3
+prune_totals quotient_dedupe=0 sound_minimality=0 heuristic_shaping=0
+
+events
+  [step_open] opened step 3 with bar 4/3 and clause band 1..1
+    mode=desktop_claim_shadow exact_legality_rejections=55 structural_cap_rejections=0 admitted_focus_aligned=1 admitted_deprioritized=0
+  [surface_summary] generated 56 structural candidates; 56 were well formed and 55 were rejected by admissibility
+    malformed=0 full_evaluated=1 canonical=1 semantically_minimal=1
+  [frontier_summary] retained 1 candidates with frontier hot=0 cold=0 dropped=0
+    pressure_state=green pressure_action=none resident_cold=0 spill_backed=0
+  [acceptance_summary seal] accepted blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e with overshoot 2/3 (nu=2 kappa=1)
+    bar_clearers=1 near_misses=0 candidate_hash=blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e canonical_hash=blake3:2e85e04d43f4ef6ae6c9b00f4460ba7b8507b8c371743c97b7262ca014fd2987
+  [step_complete seal] completed step 3 in 0 ms
+    discovery_ms=0 frontier_plan_ms=0 selection_ms=0
+
+retained candidates
+  accepted blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e rho=2/1 distance=2/3 frontier=hot headline=Map candidate with 1 clauses; reuses Step02 (Unit).
+
+prunes
+  totals quotient_dedupe=0 sound_minimality=0 heuristic_shaping=0
+  sampled: none
+
+accepted trace
+  source=structural-ast
+  nu_g=1
+  nu_h=0
+  nu_c=1
+  bonus_distributive=0
+  bonus_universe_poly=0
+  bonus_infinitesimal_shift=0
+  nu_total=2
+  node_trace_count=3
+  node=entry1|ctor=App
+  node=entry1/0|ctor=Lib
+  node=entry1/1|ctor=Var

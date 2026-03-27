@@ -4,19 +4,21 @@ This note is the exact work order for the next `desktop_claim_shadow` slice.
 Assume delayed materialization, the incumbent-primary remaining-one fast path,
 the one-pass `structural_nu` summary-build fast path, the algebraic `nu`
 ceiling patch, the step-`4` kernel telemetry split, the family-agnostic
-claim terminal-admissibility shortcut, and the exact non-allocating
-connectivity summary scan are already landed.
+claim terminal-admissibility shortcut, the exact non-allocating
+connectivity summary scan, and the terminal-only cached parent connectivity
+decision are already landed.
 Assume the context-equivalence quotient, the frontier-pop ordering experiment,
 the exact-two-step local ordering experiment, the proof-close handoff
 experiment, the broad post-plateau summary-skip experiment, the narrower
 post-plateau materialize-side gate, and the post-plateau summary-cache reuse
-experiment were all measured on stored short reruns and then dropped from code
-after failing to earn keep.
+experiment, plus the expr-keyed terminal clause hot-path profile cache
+experiment, were all measured on stored short reruns and then dropped from
+code after failing to earn keep.
 
 The current short step-`4` baseline is
-`runs/codex-claim-release-step4-kernel-connectivity-v1`.
+`runs/codex-claim-release-step4-kernel-connectivity-v2`.
 The previous short baseline is
-`runs/codex-claim-release-step4-kernel-admissibility-v1`.
+`runs/codex-claim-release-step4-kernel-connectivity-v1`.
 The current full-profile baseline remains
 `runs/codex-claim-release-full-nu-profile-v1`.
 The diagnostic kernel split that explained the last wall is
@@ -44,7 +46,7 @@ the flawed per-candidate millisecond accumulation and is not valid evidence.
   `runs/codex-claim-release-step4-kernel-admissibility-v1` widened the existing
   terminal-summary admissibility shortcut onto the family-agnostic claim lane
   and removed that dominant admissibility cost on the same plateau.
-- The next keep rerun
+- The keep rerun
   `runs/codex-claim-release-step4-kernel-connectivity-v1` then replaced the old
   allocating `lib_refs` / `var_refs` scans inside
   `ConnectivitySummary::extend` with exact non-allocating scans and cut the
@@ -57,6 +59,32 @@ the flawed per-candidate millisecond accumulation and is not valid evidence.
   - `elapsed_millis = 692343/1245950/1273659`
     at `24/43/44` instead of `756279/1367539/1398528`
   - `terminal_materialize_millis = 382` instead of `388`
+  - fallback connectivity stayed `0`
+- The next keep rerun
+  `runs/codex-claim-release-step4-kernel-connectivity-v2` then reused the
+  cached parent legality summary for a terminal-only
+  connectivity/reanchor decision and cut the same plateau again:
+  - same honest retained plateau `= 39 groups / 144845 candidates`
+  - `terminal_summary_connectivity_millis = 95969/178000/182453`
+    at `24/43/44` instead of `222604/399280/408582`
+  - `terminal_summary_build_millis = 495256/901994/921924`
+    at `24/43/44` instead of `635477/1145519/1170875`
+  - `elapsed_millis = 551825/998555/1020529`
+    at `24/43/44` instead of `692343/1245950/1273659`
+  - `terminal_materialize_millis = 327` instead of `382`
+  - fallback connectivity stayed `0`
+- The latest non-keep rerun
+  `runs/codex-claim-release-step4-kernel-connectivity-v3` then cached
+  per-clause hot-path terminal check/connectivity profiles keyed by clause
+  `expr` inside `terminal_connectivity`, but it preserved the same plateau and
+  made the matched checkpoints slower than connectivity-v2:
+  - `terminal_summary_connectivity_millis = 110842/199649/204320`
+    at `24/43/44` instead of `95969/178000/182453`
+  - `terminal_summary_build_millis = 526678/957324/978181`
+    at `24/43/44` instead of `495256/901994/921924`
+  - `elapsed_millis = 584324/1058494/1081589`
+    at `24/43/44` instead of `551825/998555/1020529`
+  - `terminal_materialize_millis = 354` instead of `327`
   - fallback connectivity stayed `0`
 - That means the current honest wall is still:
   - connectivity first
@@ -76,30 +104,38 @@ materialization.
 
 Use these as the numbers to beat:
 
-- `runs/codex-claim-release-step4-kernel-connectivity-v1`
+- `runs/codex-claim-release-step4-kernel-connectivity-v2`
   - honest retained plateau active from `prefix_states_explored = 24`
-  - `prefix_states_explored = 24` at `692.3s`
-  - `prefix_states_explored = 43` at `1246.0s`
-  - `prefix_states_explored = 44` at `1273.7s`
+  - `prefix_states_explored = 24` at `551.8s`
+  - `prefix_states_explored = 43` at `998.6s`
+  - `prefix_states_explored = 44` at `1020.5s`
   - retained prefix cache stayed `39 groups / 144845 candidates` at `24/43/44`
-  - `terminal_summary_build_millis = 635477` at `24`
-  - `terminal_summary_build_millis = 1145519` at `43`
-  - `terminal_summary_build_millis = 1170875` at `44`
-  - `terminal_summary_connectivity_millis = 222604` at `24`,
-    `399280` at `43`, `408582` at `44`
-  - `terminal_summary_aggregation_millis = 69544` at `24`,
-    `121941` at `43`, `123884` at `44`
-  - `terminal_summary_exact_nu_millis = 39556` at `24`,
-    `73468` at `43`, `74610` at `44`
+  - `terminal_summary_build_millis = 495256` at `24`
+  - `terminal_summary_build_millis = 901994` at `43`
+  - `terminal_summary_build_millis = 921924` at `44`
+  - `terminal_summary_connectivity_millis = 95969` at `24`,
+    `178000` at `43`, `182453` at `44`
+  - `terminal_summary_aggregation_millis = 68266` at `24`,
+    `119561` at `43`, `121524` at `44`
+  - `terminal_summary_exact_nu_millis = 39523` at `24`,
+    `73348` at `43`, `74489` at `44`
   - `terminal_summary_admissibility_millis = 0` at `24/43/44`
-  - `terminal_materialize_millis = 382` at `24/43/44`
-- `runs/codex-claim-release-step4-kernel-admissibility-v1`
-  - previous kept baseline before the connectivity cut
+  - `terminal_materialize_millis = 327` at `24/43/44`
+- `runs/codex-claim-release-step4-kernel-connectivity-v1`
+  - previous kept baseline before the terminal-only cached-parent cut
   - `prefix_states_explored = 24/43/44`
-    at `756.3s / 1367.5s / 1398.5s`
+    at `692.3s / 1246.0s / 1273.7s`
   - retained prefix cache `= 39 groups / 144845 candidates`
-  - `terminal_summary_connectivity_millis = 269953/481062/492949`
-  - `terminal_summary_build_millis = 695759/1263393/1292019`
+  - `terminal_summary_connectivity_millis = 222604/399280/408582`
+  - `terminal_summary_build_millis = 635477/1145519/1170875`
+- `runs/codex-claim-release-step4-kernel-connectivity-v3`
+  - most recent dropped connectivity-side slice
+  - same retained plateau `= 39 groups / 144845 candidates`
+  - `terminal_summary_connectivity_millis = 110842/199649/204320`
+  - `terminal_summary_build_millis = 526678/957324/978181`
+  - `elapsed_millis = 584324/1058494/1081589`
+  - use this only as a warning that per-candidate expr-key lookup caches do
+    not automatically beat the raw structural scan
 - `runs/codex-claim-release-step4-kernel-profile-v2`
   - diagnostic-only run that proved admissibility was the old dominant wall
   - `terminal_summary_admissibility_millis = 363234/668084/679889`
@@ -129,6 +165,8 @@ Allowed directions:
 
 - reduce one more repeated connectivity-summary extension cost that still sits
   on the retained plateau
+- or precompute any reused clause-side structural data beside the shared
+  terminal clause catalog instead of via a hot per-candidate map lookup
 - or move one exact structural disconnection rejection earlier if it can be
   proven from the existing summary state without reopening broad heuristics
 - only pivot to aggregation if one smaller connectivity edit is no longer
@@ -138,6 +176,8 @@ Do not spend this slice on:
 
 - another admissibility shortcut
 - another exact-`nu` first optimization
+- another expr-keyed `HashMap`/`BTreeMap` hot-path profile cache inside
+  `PrefixLegalityCache`
 - another frontier ordering experiment
 - another proof-close handoff experiment
 - another context-equivalence or summary-cache reuse experiment
@@ -175,7 +215,7 @@ with:
 
 Use a new run id that states the actual target, for example:
 
-- `runs/codex-claim-release-step4-kernel-connectivity-v2`
+- `runs/codex-claim-release-step4-kernel-connectivity-v4`
 - or `runs/codex-claim-release-step4-kernel-aggregation-v1`
 
 ### 5. Decide Keep Or Drop From Stored Evidence
@@ -185,7 +225,7 @@ all of the following:
 
 - the same honest retained `39 groups / 144845 candidates` plateau
 - the targeted dominant plateau sub-phase actually improves against
-  `runs/codex-claim-release-step4-kernel-connectivity-v1`
+  `runs/codex-claim-release-step4-kernel-connectivity-v2`
 - `terminal_summary_build_millis` falls at matching plateau checkpoints
 - wall clock reaches at least as far as the new short baseline at matching
   checkpoints

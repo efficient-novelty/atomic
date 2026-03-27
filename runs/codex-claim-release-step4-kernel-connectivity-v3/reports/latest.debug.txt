@@ -1,0 +1,97 @@
+run codex-claim-release-step4-kernel-connectivity-v3 debug
+search_profile: desktop_claim_shadow
+
+translation guide:
+  - Universe, Pi, Sigma, Trunc, Flat, Sharp, Disc, Shape, Next, Eventually, and Path^d are ASCII renderings of the MBTT constructors.
+  - x1, x2, ... are bound variables in de Bruijn order, with x1 the nearest enclosing binder.
+  - StepNN (Label) names an earlier accepted telescope when a candidate imports prior structure.
+  - Each clause line shows the clause role first, then the translated expression.
+
+run provenance: atomic_bootstrap_search x3
+replay ablation: matches_reference_replay x3
+
+step 01 Universe    nu=1 kappa=2 rho=1/2 bar=1/2 accepted=blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7 canonical=blake3:23ab301fcb806f4f151974b767119ea66f8ee39bcf5b7d9c95924fc2902663b2
+  provenance: atomic_bootstrap_search
+  replay ablation: matches_reference_replay rho_delta=0/1 bar_delta=0/1 overshoot_delta=0/1 nu_delta=0 kappa_delta=0 reference=blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7 (matches reference replay baseline)
+  accepted minimal overshoot: 0/1
+  canon evidence: charged_kappa=2 clears_bar=true bar_distance=0/1
+  search stats: full_evaluated=1 canonical_dedupe_prunes=0 semantic_minimality_prunes=0 heuristic_drops=0 retained_valid=1 frontier_hot=1 frontier_cold=0 frontier_resident=0 frontier_spill=0 frontier_drops=0
+  candidate funnel: enumerated=288 well_formed=288 malformed=0 admissibility_rejected=287 scored=1 canonical=1 semantically_minimal=1 frontier_kept=1 frontier_dropped=0
+  demo funnel: generated_raw_prefixes=546 canonical_prefix_signatures=16 well_formed_terminals=288 hard_admissible=1 exact_bound_screened=1 exact_bound_pruned=0 heuristic_dropped=0 full_telescopes_evaluated=1 bar_clearers=1 semantically_minimal_clearers=1 winner_overshoot=0/1
+  demo closure: frontier_total_seen=1 frontier_certified_nonwinning=0 closure_percent=0 generated_floor=none exact_screened_floor=none full_eval_soft_cap=none breadth_exit=none proof_close_reason=none overrun_reason=none
+  exact-screen reasons: partial_prefix_bar_failure=0 terminal_prefix_completion_failure=0 incumbent_dominance=0 legality_connectivity_exact_rejection=450
+  demo proof_close: reserve_millis=0 elapsed_millis=0 remaining_millis=0 reserve_overrun_millis=0 reserve_exhausted=false groups_closed=0 groups_total=0 groups_remaining=0 closure_percent=0
+  demo buckets: total=4 k2:structural_generic:local_plain:local_only:broad gen=297 adm=2 screen=2 pruned=0 scored=0 best=none | k2:structural_generic:local_plain:local_only:single gen=0 adm=0 screen=0 pruned=0 scored=1 best=0/1 | k2:structural_generic:binder_heavy:local_only:broad gen=132 adm=0 screen=0 pruned=0 scored=0 best=none | ... 1 more
+  prefix frontier: created=16 explored=1 merged=0 exact_pruned=0 heuristic_dropped=0 hot=1 cold=0
+  prefix memo: legality_hits=1094 connectivity_shortcuts=547 connectivity_fallbacks=0 connectivity_prunes=450 clause_family_hits=0 clause_family_prunes=0 active_window_filter_hits=0 active_window_filter_prunes=0 terminal_clause_filter_hits=0 terminal_clause_filter_prunes=0 trivial_derivability_hits=0 trivial_derivability_prunes=0 terminal_admissibility_hits=0 terminal_admissibility_rejections=0 terminal_prefix_completion_hits=17 terminal_prefix_rank_hits=0 terminal_rank_prunes=0 partial_prefix_bound_hits=0 partial_prefix_bound_checks=1 partial_prefix_bound_prunes=0 terminal_prefix_bar_prunes=0
+  admissibility diagnostics: exact_legality=287 structural_cap=0 de-prioritized=0 focus_aligned=1
+  admissibility reasons: bootstrap_universe_intro=1, bootstrap_universe_shape=287
+  scored candidates: clears_bar=1 below_bar=0 clause_kappa=2:1
+  scored nu summary: min=1 median=1 max=1 avg=1/1
+  scored rho summary: min=1/2 median=1/2 max=1/2 avg=1/2
+  retention policy: focus=open_band quotas(focus=1, bridge=0, support=0, macro=1) cold_limit=4
+  frontier pressure: state=green action=none rss_bytes=1342177376 observed_rss_bytes=18313216 rss_gap_bytes=-1323864160 hot_bytes=64 cold_bytes=0 dedupe_bytes=32 requested_cold=0 retained_cold=0 resident_cold=0 spill_backed=0 dropped=0
+  prune classes: quotient_dedupe=0 sound_minimality=450 heuristic_shaping=0
+  frontier retention: hot=1 resident_cold=0 spill_backed=0 dropped=0 delta=+1
+  retention classes (hot/resident/spill/dropped): focus=0/0/0/0 bridge=0/0/0/0 support=1/0/0/0 macro=0/0/0/0
+  retained valid candidates:
+    - ACCEPTED clears bar with minimal overshoot 0/1 | frontier=hot | rho=1/2 | nu=1 | kappa=2 | bits=14 | blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7
+      Foundation candidate with 2 clauses; uses only the current local scope.
+      imports: none
+      canonical: blake3:23ab301fcb806f4f151974b767119ea66f8ee39bcf5b7d9c95924fc2902663b2 | class: Foundation
+      c01 [formation] Universe
+      c02 [formation] (Universe x1)
+
+step 02 Unit        nu=1 kappa=1 rho=1/1 bar=1/2 accepted=blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555 canonical=blake3:cd72c5935198d40c0ef48ae172c9ccba1ef9c90435494569121c8dccd3466476
+  provenance: atomic_bootstrap_search
+  replay ablation: matches_reference_replay rho_delta=0/1 bar_delta=0/1 overshoot_delta=0/1 nu_delta=0 kappa_delta=0 reference=blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555 (matches reference replay baseline)
+  accepted minimal overshoot: 1/2
+  canon evidence: charged_kappa=1 clears_bar=true bar_distance=+1/2
+  search stats: full_evaluated=1 canonical_dedupe_prunes=0 semantic_minimality_prunes=0 heuristic_drops=0 retained_valid=1 frontier_hot=1 frontier_cold=0 frontier_resident=0 frontier_spill=0 frontier_drops=0
+  candidate funnel: enumerated=33 well_formed=33 malformed=0 admissibility_rejected=32 scored=1 canonical=1 semantically_minimal=1 frontier_kept=1 frontier_dropped=0
+  demo funnel: generated_raw_prefixes=33 canonical_prefix_signatures=33 well_formed_terminals=33 hard_admissible=1 exact_bound_screened=1 exact_bound_pruned=0 heuristic_dropped=0 full_telescopes_evaluated=1 bar_clearers=1 semantically_minimal_clearers=1 winner_overshoot=1/2
+  demo closure: frontier_total_seen=1 frontier_certified_nonwinning=0 closure_percent=0 generated_floor=none exact_screened_floor=none full_eval_soft_cap=none breadth_exit=none proof_close_reason=none overrun_reason=none
+  demo proof_close: reserve_millis=0 elapsed_millis=0 remaining_millis=0 reserve_overrun_millis=0 reserve_exhausted=false groups_closed=0 groups_total=0 groups_remaining=0 closure_percent=0
+  admissibility diagnostics: exact_legality=32 structural_cap=0 de-prioritized=0 focus_aligned=1
+  admissibility reasons: bootstrap_unit_shape=33
+  scored candidates: clears_bar=1 below_bar=0 clause_kappa=1:1
+  scored nu summary: min=1 median=1 max=1 avg=1/1
+  scored rho summary: min=1/1 median=1/1 max=1/1 avg=1/1
+  retention policy: focus=open_band quotas(focus=1, bridge=0, support=0, macro=1) cold_limit=4
+  frontier pressure: state=green action=none rss_bytes=0 observed_rss_bytes=0 rss_gap_bytes=0 hot_bytes=0 cold_bytes=0 dedupe_bytes=0 requested_cold=0 retained_cold=0 resident_cold=0 spill_backed=0 dropped=0
+  prune classes: quotient_dedupe=0 sound_minimality=0 heuristic_shaping=0
+  frontier retention: hot=1 resident_cold=0 spill_backed=0 dropped=0 delta=+1
+  retention classes (hot/resident/spill/dropped): focus=0/0/0/0 bridge=0/0/0/0 support=1/0/0/0 macro=0/0/0/0
+  retained valid candidates:
+    - ACCEPTED clears bar with minimal overshoot 1/2 | frontier=hot | rho=1/1 | nu=1 | kappa=1 | bits=10 | blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555
+      Foundation candidate with 1 clauses; uses only the current local scope.
+      imports: none
+      canonical: blake3:cd72c5935198d40c0ef48ae172c9ccba1ef9c90435494569121c8dccd3466476 | class: Foundation
+      c01 [formation] (Universe x1)
+
+step 03 Witness     nu=2 kappa=1 rho=2/1 bar=4/3 accepted=blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e canonical=blake3:2e85e04d43f4ef6ae6c9b00f4460ba7b8507b8c371743c97b7262ca014fd2987
+  provenance: atomic_bootstrap_search
+  replay ablation: matches_reference_replay rho_delta=0/1 bar_delta=0/1 overshoot_delta=0/1 nu_delta=0 kappa_delta=0 reference=blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e (matches reference replay baseline)
+  accepted minimal overshoot: 2/3
+  canon evidence: charged_kappa=1 clears_bar=true bar_distance=+2/3
+  search stats: full_evaluated=1 canonical_dedupe_prunes=0 semantic_minimality_prunes=0 heuristic_drops=0 retained_valid=1 frontier_hot=1 frontier_cold=0 frontier_resident=0 frontier_spill=0 frontier_drops=0
+  candidate funnel: enumerated=56 well_formed=56 malformed=0 admissibility_rejected=55 scored=1 canonical=1 semantically_minimal=1 frontier_kept=1 frontier_dropped=0
+  demo funnel: generated_raw_prefixes=56 canonical_prefix_signatures=56 well_formed_terminals=56 hard_admissible=1 exact_bound_screened=1 exact_bound_pruned=0 heuristic_dropped=0 full_telescopes_evaluated=1 bar_clearers=1 semantically_minimal_clearers=1 winner_overshoot=2/3
+  demo closure: frontier_total_seen=1 frontier_certified_nonwinning=0 closure_percent=0 generated_floor=none exact_screened_floor=none full_eval_soft_cap=none breadth_exit=none proof_close_reason=none overrun_reason=none
+  demo proof_close: reserve_millis=0 elapsed_millis=0 remaining_millis=0 reserve_overrun_millis=0 reserve_exhausted=false groups_closed=0 groups_total=0 groups_remaining=0 closure_percent=0
+  admissibility diagnostics: exact_legality=55 structural_cap=0 de-prioritized=0 focus_aligned=1
+  admissibility reasons: bootstrap_type_shape=56
+  scored candidates: clears_bar=1 below_bar=0 clause_kappa=1:1
+  scored nu summary: min=2 median=2 max=2 avg=2/1
+  scored rho summary: min=2/1 median=2/1 max=2/1 avg=2/1
+  retention policy: focus=former quotas(focus=1, bridge=1, support=1, macro=0) cold_limit=4
+  frontier pressure: state=green action=none rss_bytes=0 observed_rss_bytes=0 rss_gap_bytes=0 hot_bytes=0 cold_bytes=0 dedupe_bytes=0 requested_cold=0 retained_cold=0 resident_cold=0 spill_backed=0 dropped=0
+  prune classes: quotient_dedupe=0 sound_minimality=0 heuristic_shaping=0
+  frontier retention: hot=1 resident_cold=0 spill_backed=0 dropped=0 delta=+1
+  retention classes (hot/resident/spill/dropped): focus=0/0/0/0 bridge=0/0/0/0 support=1/0/0/0 macro=0/0/0/0
+  retained valid candidates:
+    - ACCEPTED clears bar with minimal overshoot 2/3 | frontier=hot | rho=2/1 | nu=2 | kappa=1 | bits=12 | blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e
+      Map candidate with 1 clauses; reuses Step02 (Unit).
+      imports: Step02 (Unit)
+      canonical: blake3:2e85e04d43f4ef6ae6c9b00f4460ba7b8507b8c371743c97b7262ca014fd2987 | class: Map
+      c01 [introduction] (Step02 (Unit) x1)

@@ -12,7 +12,9 @@ It lists only work that is still open.
   `runs/codex-claim-release-full-nu-profile-v1`.
 - The next concrete task is one more narrow connectivity-side exact-summary
   patch on the retained remaining-one surface after the retained prefix cache
-  has flattened, then another stored release `until_step = 4` rerun.
+  has flattened, then another stored release `until_step = 4` rerun; the
+  just-measured expr-keyed terminal clause profile cache did not earn keep and
+  should stay dropped.
 - The current hot bottleneck is still `terminal_summary_build_millis` in step
   `4`, with connectivity the dominant measured inner cost rather than compact
   materialization.

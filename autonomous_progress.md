@@ -35,13 +35,15 @@ final gate.
     `runs/codex-claim-release-step4-post-plateau-materialize-v1`
   - post-plateau summary-cache reuse:
     `runs/codex-claim-release-step4-post-plateau-summary-cache-v3`
+  - expr-keyed terminal clause hot-path profile cache:
+    `runs/codex-claim-release-step4-kernel-connectivity-v3`
 - The step-`4` kernel is now measurable from stored evidence:
   - valid diagnostic split:
     `runs/codex-claim-release-step4-kernel-profile-v2`
   - ignore as invalid local diagnostic:
     `runs/codex-claim-release-step4-kernel-profile-v1`
-- A new stored short rerun earned keep in this turn:
-  `runs/codex-claim-release-step4-kernel-connectivity-v2`
+- The most recent stored short rerun in this turn did not earn keep:
+  `runs/codex-claim-release-step4-kernel-connectivity-v3`
 - The current short step-`4` baseline is now
   `runs/codex-claim-release-step4-kernel-connectivity-v2`.
 - The previous short step-`4` baseline is now
@@ -105,7 +107,45 @@ final gate.
     the same plateau survives, connectivity falls by about `55%`, total
     summary-build time falls by about `21%`, and wall-clock progress improves
     by about `19.9%` at the matched `44` checkpoint.
+- New dropped short rerun:
+  `runs/codex-claim-release-step4-kernel-connectivity-v3`
+  - It kept the same honest retained plateau:
+    - retained prefix cache `= 39 groups / 144845 candidates` at `24/43/44`
+    - `terminal_summary_first_plateau_activation_prefix_state = 24`
+    - `terminal_summary_plateau_activations = 97234` at `44`
+  - It tried caching per-clause hot-path terminal
+    check/connectivity profiles keyed by clause `expr` inside
+    `terminal_connectivity`.
+  - Matched against the current short baseline
+    `runs/codex-claim-release-step4-kernel-connectivity-v2`:
+    - at `prefix_states_explored = 24`:
+      `elapsed_millis = 584324` instead of `551825`,
+      `terminal_summary_build_millis = 526678` instead of `495256`,
+      `terminal_summary_connectivity_millis = 110842` instead of `95969`
+    - at `prefix_states_explored = 43`:
+      `elapsed_millis = 1058494` instead of `998555`,
+      `terminal_summary_build_millis = 957324` instead of `901994`,
+      `terminal_summary_connectivity_millis = 199649` instead of `178000`
+    - at `prefix_states_explored = 44`:
+      `elapsed_millis = 1081589` instead of `1020529`,
+      `terminal_summary_build_millis = 978181` instead of `921924`,
+      `terminal_summary_connectivity_millis = 204320` instead of `182453`
+  - Residual costs also moved the wrong way at the same checkpoints:
+    - aggregation rose to
+      `69576/121714/123653` from `68266/119561/121524`
+    - exact `nu` stayed effectively unchanged at
+      `39533/73358/74499` versus `39523/73348/74489`
+    - `terminal_materialize_millis = 354` instead of `327`
+    - fallback connectivity stayed `0`
+  - The stored rerun was manually stopped once the stored
+    `step-04-live.ndjson` reached the matched `24/43/44` plateau checkpoints;
+    the drop decision is based on those stored checkpoints.
+  - So the hypothesis does not earn keep:
+    the same plateau survives, but the expr-keyed lookup path makes
+    connectivity about `12.0%` slower and total summary-build time about
+    `6.1%` slower at the matched `44` checkpoint.
 - Re-earned validations in this turn:
+  - `cargo test -p pen-type clause_check_profile_matches_incremental_extension_accept_reject_surface`
   - `cargo test -p pen-type terminal_decision_matches_incremental_extension_for_keep_prune_and_reanchor_cases`
   - `cargo test -p pen-search claim_terminal_connectivity_keeps_reference_step_four_winner_clause`
   - `cargo test -p pen-search claim_terminal_connectivity_matches_direct_step_four_assessment`
@@ -127,13 +167,18 @@ final gate.
   plateau.
 - Reusing the cached parent legality summary for a terminal-only connectivity
   decision was another real hot-loop cut on that same retained plateau.
-- The new terminal-only connectivity path earned keep on stored evidence
+- The expr-keyed terminal clause hot-path cache was not a keep:
+  on stored evidence it preserved the honest plateau but added more lookup
+  overhead than it removed, so it was dropped from code.
+- The kept terminal-only connectivity path still earns keep on stored evidence
   without changing the honest plateau shape, shifting cost into aggregation,
   or reopening materialization.
 - Connectivity is still the dominant plateau cost, aggregation is still
   second, and exact `nu` remains a smaller tail.
 - Because the same `39 / 144845` plateau still repeats, the next honest move
-  is another narrow connectivity-side cut rather than a full-profile rerun.
+  is another narrow connectivity-side cut rather than a full-profile rerun,
+  but not another per-candidate expr-key lookup cache in
+  `terminal_connectivity`.
 - Memory remains controlled on the short reruns; the wall is still compute,
   not allocator or RSS pressure.
 
@@ -141,7 +186,8 @@ final gate.
 
 1. Patch one more narrow connectivity-side throughput cut inside the
    remaining-one summary builder, using the existing kernel telemetry rather
-   than reopening a broad instrumentation pass.
+   than reopening a broad instrumentation pass; do not retry the just-failed
+   expr-key lookup cache shape.
 2. Re-earn the targeted remaining-one exactness tests and the standing claim
    regression set.
 3. Re-earn one stored release `until_step = 4` rerun and keep the patch only
@@ -163,7 +209,7 @@ final gate.
 - Ignore as invalid diagnostic:
   `runs/codex-claim-release-step4-kernel-profile-v1`
 - Most recent short evidence that did not advance the current short baseline:
-  `runs/codex-claim-release-step4-post-plateau-summary-cache-v3`
+  `runs/codex-claim-release-step4-kernel-connectivity-v3`
 
 ## Guardrails
 

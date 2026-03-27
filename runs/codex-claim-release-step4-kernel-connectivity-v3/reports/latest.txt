@@ -1,0 +1,14 @@
+run codex-claim-release-step4-kernel-connectivity-v3
+completed_step: 3
+search_profile: desktop_claim_shadow
+latest: step 3 (Witness)
+nu: 2
+kappa: 1
+charged_kappa: 1
+rho: 2/1
+bar: 4/3
+bar_distance: +2/3
+provenance: atomic_bootstrap_search
+run_provenance: atomic_bootstrap_search x3
+replay_ablation: matches_reference_replay x3
+minimal_overshoot: 2/3
