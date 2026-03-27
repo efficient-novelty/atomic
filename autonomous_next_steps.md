@@ -3,26 +3,27 @@
 This note is the exact work order for the next `desktop_claim_shadow` slice.
 Assume delayed materialization, the incumbent-primary remaining-one fast path,
 the one-pass `structural_nu` summary-build fast path, the algebraic `nu`
-ceiling patch, the step-`4` kernel telemetry split, the family-agnostic
-claim terminal-admissibility shortcut, the exact non-allocating
-connectivity summary scan, and the terminal-only cached parent connectivity
-decision are already landed.
+ceiling patch, the family-agnostic claim terminal-admissibility shortcut, the
+exact non-allocating connectivity summary scan, and the terminal-only cached
+parent connectivity decision are already landed.
 Assume the context-equivalence quotient, the frontier-pop ordering experiment,
 the exact-two-step local ordering experiment, the proof-close handoff
 experiment, the broad post-plateau summary-skip experiment, the narrower
 post-plateau materialize-side gate, the post-plateau summary-cache reuse
-experiment, the expr-keyed terminal clause hot-path profile cache
-experiment, and the clause-side terminal connectivity profile precompute
-experiment were all measured on stored short reruns and then dropped from code
-after failing to earn keep.
+experiment, the expr-keyed terminal clause hot-path profile cache experiment,
+the clause-side terminal connectivity profile precompute experiment, and the
+terminal-candidate tuple-remap prep experiment were all measured on stored
+short reruns and then dropped from code after failing to earn keep.
 
-The current short step-`4` baseline is
+The current short step-`4` baseline remains
 `runs/codex-claim-release-step4-kernel-connectivity-v2`.
-The previous short baseline is
+The previous short baseline remains
 `runs/codex-claim-release-step4-kernel-connectivity-v1`.
 The current full-profile baseline remains
 `runs/codex-claim-release-full-nu-profile-v1`.
-The diagnostic kernel split that explained the last kept wall is
+The latest dropped short rerun is now
+`runs/codex-claim-release-step4-terminal-candidate-prep-v1`.
+The diagnostic kernel split that explained the last kept wall is still
 `runs/codex-claim-release-step4-kernel-profile-v2`.
 
 Ignore `runs/codex-claim-release-step4-kernel-profile-v1`: that local run used
@@ -30,9 +31,8 @@ the flawed per-candidate millisecond accumulation and is not valid evidence.
 
 ## Working Diagnosis
 
-- The claim lane is still compute-bound in step `4`, but the measured wall has
-  moved again.
-- The honest live shape still repeats:
+- The claim lane is still compute-bound in step `4`, and the honest live shape
+  still repeats:
   - frontier queue stays on the same contour
   - legality growth stays on the same contour
   - retained prefix cache still flattens at
@@ -42,7 +42,8 @@ the flawed per-candidate millisecond accumulation and is not valid evidence.
   surface to beat:
   - same honest retained plateau `= 39 groups / 144845 candidates`
   - `elapsed_millis = 551825/998555/1020529` at `24/43/44`
-  - `terminal_summary_build_millis = 495256/901994/921924` at `24/43/44`
+  - `terminal_summary_build_millis = 495256/901994/921924`
+    at `24/43/44`
   - `terminal_summary_connectivity_millis = 95969/178000/182453`
     at `24/43/44`
   - `terminal_summary_aggregation_millis = 68266/119561/121524`
@@ -52,49 +53,49 @@ the flawed per-candidate millisecond accumulation and is not valid evidence.
   - `terminal_materialize_millis = 327`
   - fallback connectivity stayed `0`
 - The latest dropped rerun
-  `runs/codex-claim-release-step4-kernel-connectivity-v4` then precomputed a
-  clause-side terminal connectivity profile beside the terminal candidate list
-  and reused that profile inside the remaining-one connectivity decision.
+  `runs/codex-claim-release-step4-terminal-candidate-prep-v1` then added one
+  narrow candidate-preparation counter and removed the extra filtered-candidate
+  remap before the first connectivity check.
 - That rerun kept the same honest plateau:
   - retained prefix cache `= 39 groups / 144845 candidates` at `24/43/44`
   - `terminal_summary_first_plateau_activation_prefix_state = 24`
   - `terminal_summary_plateau_activations = 97234` at `44`
-- But matched against the current short baseline
-  `runs/codex-claim-release-step4-kernel-connectivity-v2`, it only moved cost
-  instead of removing it:
+- It also exposed the previously hidden prep bucket on that plateau:
+  - `terminal_summary_candidate_prep_millis = 32904/71577/73974`
+    at `24/43/44`
+- But matched against the kept short baseline, it still regressed:
   - at `prefix_states_explored = 24`:
-    `elapsed_millis = 606748` instead of `551825`,
-    `terminal_summary_build_millis = 544777` instead of `495256`,
-    `terminal_summary_connectivity_millis = 7074` instead of `95969`
+    `elapsed_millis = 562457` instead of `551825`,
+    `terminal_summary_build_millis = 505516` instead of `495256`,
+    `terminal_summary_connectivity_millis = 99484` instead of `95969`
   - at `prefix_states_explored = 43`:
-    `elapsed_millis = 1091451` instead of `998555`,
-    `terminal_summary_build_millis = 981266` instead of `901994`,
-    `terminal_summary_connectivity_millis = 12693` instead of `178000`
+    `elapsed_millis = 1017859` instead of `998555`,
+    `terminal_summary_build_millis = 918924` instead of `901994`,
+    `terminal_summary_connectivity_millis = 183265` instead of `178000`
   - at `prefix_states_explored = 44`:
-    `elapsed_millis = 1115276` instead of `1020529`,
-    `terminal_summary_build_millis = 1002528` instead of `921924`,
-    `terminal_summary_connectivity_millis = 13075` instead of `182453`
-- Residual measured work did not justify the regression:
-  - aggregation rose to `70228/122321/124289` from `68266/119561/121524`
-  - exact `nu` stayed effectively unchanged at
-    `39662/73565/74705` versus `39523/73348/74489`
-  - `terminal_materialize_millis = 343` instead of `327`
-  - fallback connectivity stayed `0`
+    `elapsed_millis = 1040469` instead of `1020529`,
+    `terminal_summary_build_millis = 939406` instead of `921924`,
+    `terminal_summary_connectivity_millis = 187753` instead of `182453`
+- Residual measured work also moved slightly the wrong way:
+  - aggregation rose to `68588/120729/122966` from `68266/119561/121524`
+  - exact `nu` rose slightly to `39558/73405/74546` from
+    `39523/73348/74489`
+  - `terminal_materialize_millis = 338` instead of `327`
 - So the new rerun proved something useful even though it did not earn keep:
-  - the old measured connectivity work can be collapsed dramatically
-  - but the total `terminal_summary_build_millis` and wall clock still get
-    worse
-  - therefore the current honest wall is no longer "connectivity first" in the
-    available counters
-  - the missing cost is now in pre-summary terminal candidate preparation or
-    equivalent clause-side setup work that the current split does not isolate
+  - the hidden prep bucket is now visible on the honest plateau
+  - but the tuple-remap candidate-prep path is not the keep target
+  - the short baseline is still more honestly blocked by the already-measured
+    connectivity bucket first and aggregation second
+  - the next slice should return to one narrow measured connectivity-side or
+    aggregation-side cut, not another blind prep-side rewrite
 
 ## Goal
 
-Make the hidden remaining-one pre-summary setup cost measurable, then land one
-narrow cut there only if stored evidence shows `terminal_summary_build_millis`
-and wall clock both improve against
-`runs/codex-claim-release-step4-kernel-connectivity-v2`.
+Land one narrow connectivity-side or aggregation-side cut on top of
+`runs/codex-claim-release-step4-kernel-connectivity-v2`, then keep it only if
+stored evidence shows both `terminal_summary_build_millis` and wall clock
+improve at matched `24/43/44` checkpoints without blowing up
+`terminal_materialize_millis` or moving cost into another hidden bucket.
 
 ## Current Comparison Targets
 
@@ -112,54 +113,57 @@ Use these as the numbers to beat:
   - `terminal_summary_exact_nu_millis = 39523/73348/74489`
   - `terminal_materialize_millis = 327`
   - fallback connectivity stayed `0`
-- `runs/codex-claim-release-step4-kernel-connectivity-v4`
+- `runs/codex-claim-release-step4-terminal-candidate-prep-v1`
   - latest dropped rerun
   - same retained plateau `= 39 groups / 144845 candidates`
-  - `elapsed_millis = 606748/1091451/1115276`
-  - `terminal_summary_build_millis = 544777/981266/1002528`
-  - `terminal_summary_connectivity_millis = 7074/12693/13075`
-  - `terminal_summary_aggregation_millis = 70228/122321/124289`
-  - use this only as proof that the hidden cost now sits outside the measured
-    connectivity counter
-- `runs/codex-claim-release-step4-kernel-profile-v2`
-  - diagnostic-only kept reference for the older measured split
-  - use this only as provenance for why admissibility was the earlier wall
+  - `terminal_summary_candidate_prep_millis = 32904/71577/73974`
+  - `elapsed_millis = 562457/1017859/1040469`
+  - `terminal_summary_build_millis = 505516/918924/939406`
+  - `terminal_summary_connectivity_millis = 99484/183265/187753`
+  - `terminal_summary_aggregation_millis = 68588/120729/122966`
+  - use this only as proof that the tuple-remap prep path is not the next keep
+    target
+- `runs/codex-claim-release-step4-kernel-connectivity-v4`
+  - informative earlier drop showing that clause-side profile precompute can
+    collapse the measured connectivity counter while still making total build
+    and wall slower
+  - use this only as a warning not to revive that profile-precompute shape
 
 ## Do This Next
 
-### 1. Add One Missing Counter, Not Another Broad Telemetry Pass
+### 1. Keep The Prep Experiment Dropped
 
-The current split is no longer enough because `v4` made
-`terminal_summary_connectivity_millis` tiny while total
-`terminal_summary_build_millis` still rose.
+Do not carry forward the code from
+`runs/codex-claim-release-step4-terminal-candidate-prep-v1`.
 
-Add exactly one narrow counter around the missing pre-summary work, for example:
+The new prep counter did its job, but the actual throughput cut still made the
+matched plateau checkpoints slower than the kept short baseline.
 
-- terminal candidate preparation before the first connectivity check
-- or, if that bundle is still too wide, the clause-side structural profile
-  build inside that preparation path
+### 2. Choose One Narrow Cut Inside Measured Connectivity Or Aggregation
 
-Do not reopen a broad diagnostic patch across the whole kernel.
+Preferred direction for this slice:
 
-### 2. Choose One Narrow Patch In The Newly Exposed Pre-Summary Cost
+- stay inside the already-measured connectivity or aggregation loop
+- do not add another broad telemetry pass first
 
 Allowed directions:
 
-- reuse clause-side structural data directly from the shared terminal clause
-  catalog when that data is genuinely catalog-stable across prefixes
-- reduce per-prefix allocation or copy churn while building the terminal
-  candidate list
-- avoid rebuilding one clause-side structural summary when the same shared
-  last-clause slice is already available unchanged
-- only return to connectivity or aggregation edits after the new counter proves
-  that candidate preparation is not the new wall
+- reduce work inside the current `terminal_connectivity` path using only the
+  existing parent summary data already on hand
+- reduce historical reanchor or equivalent connectivity-side bookkeeping only
+  if it stays inside the measured connectivity bucket
+- reduce bound merge, acceptance-rank bookkeeping, or evaluation-record churn
+  inside the admitted summary aggregation path
+- only touch exact `nu` first if the chosen patch already leaves connectivity
+  and aggregation flat on the new candidate
 
 Do not spend this slice on:
 
-- retrying the dropped `v4` profile shape as-is
-- another expr-keyed `HashMap` or `BTreeMap` hot-path cache
+- another pre-summary terminal-candidate preparation patch
+- reviving the dropped clause-side profile precompute from
+  `runs/codex-claim-release-step4-kernel-connectivity-v4`
+- another expr-keyed hot-path cache
 - another admissibility shortcut
-- another exact-`nu` first optimization
 - another frontier ordering experiment
 - another proof-close handoff experiment
 - another context-equivalence or summary-cache reuse experiment
@@ -172,7 +176,8 @@ Required tests:
 
 - one targeted regression that the kept reference step-`4` winner still
   survives
-- one targeted exactness test for the new pre-summary or summary-prep cut
+- one targeted exactness test for the new connectivity-side or aggregation-side
+  cut
 - one representative remaining-one summary test proving admitted or pruned
   counts stay exact
 
@@ -197,8 +202,8 @@ with:
 
 Use a new run id that states the new target, for example:
 
-- `runs/codex-claim-release-step4-kernel-prep-v1`
-- or `runs/codex-claim-release-step4-terminal-candidate-prep-v1`
+- `runs/codex-claim-release-step4-kernel-connectivity-v5`
+- or `runs/codex-claim-release-step4-kernel-aggregation-v1`
 
 ### 5. Decide Keep Or Drop From Stored Evidence
 
@@ -206,15 +211,15 @@ Keep the patch only if the stored `reports/steps/step-04-live.ndjson` shows
 all of the following:
 
 - the same honest retained `39 groups / 144845 candidates` plateau
-- the new pre-summary counter actually falls on the plateau
 - `terminal_summary_build_millis` falls at matching `24/43/44` checkpoints
 - wall clock reaches at least as far as
   `runs/codex-claim-release-step4-kernel-connectivity-v2`
   at matching checkpoints
+- the targeted measured bucket actually falls
 - `terminal_materialize_millis` stays near the current kept level
 - no new fallback-connectivity or cache-residency blowup appears
 
-Drop the patch if it only moves cost between measured counters, hides work
+Drop the patch if it only moves cost into another measured bucket, hides work
 outside the kept split again, raises `terminal_materialize_millis`, or makes
 the same `24/43/44` checkpoints slower than the current short baseline.
 
@@ -223,20 +228,19 @@ the same `24/43/44` checkpoints slower than the current short baseline.
 Open `reports/steps/step-04-live.ndjson` and answer:
 
 - did the same honest `39/144845` plateau recur?
-- did the new pre-summary counter dominate?
-- did that new counter actually fall?
+- did the targeted measured bucket actually fall?
 - did `terminal_summary_build_millis` fall at `24/43/44`?
 - did wall clock beat the current kept baseline?
 - did `terminal_materialize_millis` stay controlled?
-- after the new counter is visible, is the wall now pre-summary setup,
-  aggregation, or something else?
+- after the new cut, is the wall now still connectivity, aggregation, exact
+  `nu`, or something else?
 
 ## Stop Condition For This Note
 
 Rewrite this file as soon as one new stored rerun shows one of these is true:
 
-- the remaining plateau wall is no longer the pre-summary setup cost or
-  aggregation
+- the remaining plateau wall is no longer the measured connectivity or
+  aggregation buckets
 - step `4` is no longer the dominant blocker
 - the next honest move is a full-profile rerun rather than another short slice
 - the real full profile exposes a later honest wall

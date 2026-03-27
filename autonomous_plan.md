@@ -42,49 +42,37 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - the narrower post-plateau materialize gate never honestly opened
   - post-plateau summary-cache reuse activated on the plateau, but rebuild
     elisions stayed at `0`
-- The kernel split rerun
-  `runs/codex-claim-release-step4-kernel-profile-v2` then narrowed the wall
-  further: on the honest plateau at `prefix_states_explored = 44`,
-  admissibility was the dominant measured sub-phase
-  (`679889 ms`), ahead of connectivity (`492575 ms`), aggregation
-  (`118953 ms`), and exact `nu` (`74386 ms`).
-- The follow-up keep rerun
-  `runs/codex-claim-release-step4-kernel-admissibility-v1` widened the existing
-  terminal-summary admissibility shortcut onto the family-agnostic claim lane
-  and removed that cost on the same plateau:
-  - `elapsed_millis` fell to `1398528` from algebraic `1662758`
-  - `terminal_summary_build_millis` fell to `1292019` from algebraic
-    `1555470`
-  - `terminal_summary_admissibility_millis` fell to `0` from diagnostic
-    `679889`
-- The next keep rerun
-  `runs/codex-claim-release-step4-kernel-connectivity-v1` then replaced the
-  old allocating `lib_refs` / `var_refs` scans inside
-  `ConnectivitySummary::extend` with exact non-allocating scans and cut the
-  same retained plateau again:
-  - `elapsed_millis` fell to `1273659` from admissibility `1398528`
-  - `terminal_summary_build_millis` fell to `1170875` from admissibility
-    `1292019`
-  - `terminal_summary_connectivity_millis` fell to `408582` from admissibility
-    `492949`
-- The later keep rerun
-  `runs/codex-claim-release-step4-kernel-connectivity-v2` then reused the
-  cached parent legality summary for the terminal-only
-  connectivity/reanchor decision and cut the same retained plateau again:
-  - `elapsed_millis` fell to `1020529` from connectivity-v1 `1273659`
-  - `terminal_summary_build_millis` fell to `921924` from connectivity-v1
-    `1170875`
-  - `terminal_summary_connectivity_millis` fell to `182453` from
-    connectivity-v1 `408582`
-- The follow-up short rerun
-  `runs/codex-claim-release-step4-kernel-connectivity-v3` then tried caching
-  per-clause hot-path terminal check/connectivity profiles keyed by clause
-  `expr` inside `terminal_connectivity`, but it kept the same plateau and made
-  the matched `24/43/44` checkpoints slower than connectivity-v2, so it was
-  dropped from code after measurement.
-- So the honest wall has moved again, but not out of the same kernel:
-  remaining-one connectivity is still the dominant plateau cost, aggregation is
-  still second, and exact `nu` is not the first target.
+  - the expr-keyed terminal clause hot-path cache regressed
+  - the clause-side connectivity profile precompute regressed
+  - the terminal-candidate tuple remap cut regressed
+- The diagnostic split rerun
+  `runs/codex-claim-release-step4-kernel-profile-v2` explained the live
+  surface:
+  on the honest plateau at `prefix_states_explored = 44`, admissibility was
+  the first old wall, followed by connectivity, then aggregation, then exact
+  `nu`.
+- The follow-up keeps in
+  `runs/codex-claim-release-step4-kernel-admissibility-v1`,
+  `runs/codex-claim-release-step4-kernel-connectivity-v1`, and
+  `runs/codex-claim-release-step4-kernel-connectivity-v2` removed that old
+  admissibility wall and then cut the retained connectivity loop twice.
+- The latest dropped rerun
+  `runs/codex-claim-release-step4-terminal-candidate-prep-v1` then added one
+  narrow pre-summary candidate-preparation counter and tried one narrow cut in
+  the filtered-candidate remap path.
+- That rerun kept the same honest plateau and showed:
+  - `terminal_summary_candidate_prep_millis = 32904/71577/73974`
+    at `24/43/44`
+  - but `elapsed_millis = 562457/1017859/1040469` instead of
+    baseline `551825/998555/1020529`
+  - and `terminal_summary_build_millis = 505516/918924/939406` instead of
+    baseline `495256/901994/921924`
+- So the new read is now explicit:
+  terminal candidate preparation is real and measurable, but this particular
+  prep path is not the next keep target.
+- The current honest short wall on the kept baseline has therefore collapsed
+  back onto the already-measured counters:
+  connectivity first, aggregation second, then exact `nu` and candidate prep.
 
 ## Strategic Rules
 
@@ -111,10 +99,10 @@ Current full-profile baseline:
 
 Current honest wall:
 
-- hidden remaining-one pre-summary terminal-candidate preparation on the
-  retained `39/144845` plateau
-- then aggregation and bound or rank bookkeeping inside the already-measured
-  summary loop
+- measured remaining-one connectivity on the retained `39/144845` plateau
+- then aggregation and bound or rank bookkeeping inside the compact summary
+  loop
+- then exact `nu` and now-measured candidate preparation behind them
 
 ## Execution Order
 
@@ -140,54 +128,40 @@ What this phase proved:
 - removing that work improved the honest plateau without reopening the old
   materialize blowup
 
-### Phase 2. Measure And Reduce Work Before The Connectivity Loop
+### Phase 2. Re-Enter Measured Connectivity Or Aggregation Cuts
 
 Goal:
 
-- isolate and cut the hidden pre-summary plateau cost without changing
-  retained-prefix honesty
+- use the new prep read, keep the failed prep patch dropped, and land one
+  narrow connectivity-side or aggregation-side cut that improves the kept
+  baseline honestly
 
 Preferred patches:
 
-- one narrow counter around terminal candidate preparation before the measured
-  connectivity checks
-- less per-prefix allocation or copy churn while building the terminal
-  candidate list
-- shared-catalog reuse of clause-side structural data only when that data is
-  genuinely stable across prefixes
+- stay inside the already-measured `terminal_connectivity` path and cut work
+  there without reviving clause-side profile precompute beside the candidate
+  list
+- or cut bound merge, acceptance-rank bookkeeping, or evaluation-record churn
+  inside the admitted summary loop
+- only if connectivity and aggregation are both already flat on the next
+  candidate, a smaller exact-`nu` cleanup
 
 Reject as primary moves:
 
-- another blind connectivity-side cut without first measuring the shifted cost
+- another blind pre-summary candidate-preparation rewrite
+- reviving `runs/codex-claim-release-step4-kernel-connectivity-v4`
+  in any equivalent profile-precompute shape
+- another expr-keyed `HashMap` or `BTreeMap` hot-path cache
 - another admissibility-focused patch
-- another exact-`nu` first optimization
 - another ordering, reuse, or post-plateau direct-materialize variant
 
 Done when:
 
-- the stored rerun shows a lower pre-summary setup counter and lower
-  `terminal_summary_build_millis` on matched plateau checkpoints against
+- the stored rerun lowers `terminal_summary_build_millis` and wall clock at the
+  matched `24/43/44` plateau checkpoints against
   `runs/codex-claim-release-step4-kernel-connectivity-v2`
 
-### Phase 3. Cut Aggregation And Residual Exact Work
-
-Goal:
-
-- shrink the next most expensive remaining kernel work after connectivity
-
-Preferred patches:
-
-- less bound merge or rank aggregation churn
-- less evaluation-record churn inside the compact summary loop
-- only then, if connectivity is already flat, a smaller exact-`nu` cleanup
-
-Done when:
-
-- `terminal_summary_build_millis` falls again at matched plateau checkpoints
-  while `terminal_materialize_millis` stays controlled and winner determinism
-  remains intact
-
-### Phase 4. Re-Earn The Real Full-Profile Read
+### Phase 3. Re-Earn The Real Full-Profile Read
 
 Goal:
 
@@ -204,7 +178,7 @@ Done when:
 - the full-profile rerun either moves materially farther or exposes a later
   blocker honestly
 
-### Phase 5. Finish A Full Claim Bundle
+### Phase 4. Finish A Full Claim Bundle
 
 Goal:
 
@@ -222,7 +196,7 @@ Done when:
 - one stored run finishes through step `15` and still satisfies the claim-lane
   honesty boundary
 
-### Phase 6. Freeze Signoff Artifacts
+### Phase 5. Freeze Signoff Artifacts
 
 Goal:
 
@@ -239,7 +213,7 @@ Done when:
 
 - another reviewer can audit the full claim from stored artifacts alone
 
-### Phase 7. Open The Language Gate
+### Phase 6. Open The Language Gate
 
 Goal:
 
@@ -276,6 +250,8 @@ Done when:
 - Ignore as invalid diagnostic:
   `runs/codex-claim-release-step4-kernel-profile-v1`
 - Informative failed short reruns that define the current diagnosis:
+  - `runs/codex-claim-release-step4-terminal-candidate-prep-v1`
+  - `runs/codex-claim-release-step4-kernel-connectivity-v4`
   - `runs/codex-claim-release-step4-kernel-connectivity-v3`
   - `runs/codex-claim-release-step4-context-equivalence-v1`
   - `runs/codex-claim-release-step4-incumbent-ordering-v1`

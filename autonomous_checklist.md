@@ -10,23 +10,28 @@ It lists only work that is still open.
 - The claim lane still does not have a signoff-ready full-profile bundle.
 - The current full-profile baseline is
   `runs/codex-claim-release-full-nu-profile-v1`.
-- The next concrete task is one narrow read of the hidden pre-summary
-  terminal-candidate preparation cost on the retained remaining-one surface,
-  then one narrow cut there and another stored release `until_step = 4` rerun;
-  the just-measured clause-side terminal connectivity profile precompute did
-  not earn keep and should stay dropped.
+- The most recent short rerun
+  `runs/codex-claim-release-step4-terminal-candidate-prep-v1`
+  made the hidden pre-summary cost measurable, but the throughput cut did not
+  earn keep and should stay dropped.
 - The current hot bottleneck is still `terminal_summary_build_millis` in step
-  `4`, but the latest rerun showed that the measured connectivity counter is no
-  longer the whole wall: total build time rose even while the connectivity
-  counter collapsed, so the next slice must isolate the hidden pre-summary
-  setup cost instead of assuming connectivity still dominates.
+  `4`, but the new read now says the next slice should return to the already
+  measured counters instead of another blind prep-side rewrite:
+  - candidate prep is now visible at `32904/71577/73974` on the honest plateau
+    at `24/43/44`
+  - measured connectivity is still larger there at
+    `99484/183265/187753`
+  - aggregation is still second there at `68588/120729/122966`
+  - the tuple-remap prep cut still made the matched checkpoints slower than
+    `runs/codex-claim-release-step4-kernel-connectivity-v2`
 
 ## 1. Runtime Completion
 
-- [ ] Land one narrow step-`4` pre-summary or summary-side throughput patch
-      that earns keep on stored telemetry.
-- [ ] Re-earn one release `until_step = 4` rerun and confirm that summary-side
-      telemetry improves without weakening retained prefix-cache shape.
+- [ ] Land one narrow step-`4` connectivity-side or aggregation-side
+      throughput patch that earns keep on stored telemetry.
+- [ ] Re-earn one release `until_step = 4` rerun and confirm that the measured
+      summary-side telemetry improves without weakening retained prefix-cache
+      shape.
 - [ ] Re-earn one full `desktop_claim_shadow_1h` rerun on the winning binary.
 - [ ] Finish one intended-profile claim run through step `15`.
 - [ ] Confirm from stored artifacts that the run no longer depends on the old
