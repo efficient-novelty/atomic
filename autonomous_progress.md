@@ -58,14 +58,15 @@ final gate.
   `runs/codex-claim-release-step4-kernel-connectivity-v2`.
 - The older short step-`4` baseline remains
   `runs/codex-claim-release-step4-kernel-connectivity-v1`.
-- The current full-profile iteration baseline remains
+- The current full-profile iteration baseline is now
+  `runs/codex-claim-release-full-kernel-aggregation-v1`.
+- The previous full-profile iteration baseline is now
   `runs/codex-claim-release-full-nu-profile-v1`.
-- The claim lane is still compute-bound in step `4`, but one more narrow
-  aggregation-side slice now earned keep on stored telemetry:
-  the same honest plateau survived, `terminal_summary_build_millis` and wall
-  clock both improved at matched `24/43/44` checkpoints, measured connectivity
-  dropped materially again, aggregation dropped modestly, exact `nu` stayed
-  flat, and `terminal_materialize_millis` stayed controlled.
+- The claim lane is still compute-bound in step `4` on the intended profile.
+  A new stored full-profile rerun moved materially farther than the prior full
+  baseline with observed RSS still controlled, but it did not reach step `5`,
+  and it proved the next honest move is another narrow short step-`4` slice
+  rather than compare, benchmark, certification, or breadth closeout.
 
 ## Latest Evidence
 
@@ -139,6 +140,53 @@ final gate.
     under a bounded session timeout, then the still-live `pen-cli` process was
     terminated manually after the stored short comparison surface had been
     secured through `prefix_states_explored = 54`.
+- New intended full-profile rerun:
+  `runs/codex-claim-release-full-kernel-aggregation-v1`
+  - It materially improved the old intended full-profile baseline
+    `runs/codex-claim-release-full-nu-profile-v1` at the matched early
+    checkpoints while preserving the same real search policy and worker shape:
+    - at `prefix_states_explored = 24`:
+      `elapsed_millis = 564414` instead of `898646`,
+      `terminal_summary_build_millis = 506830` instead of `836247`,
+      observed RSS `= 228831232` instead of `228790272`
+    - at `prefix_states_explored = 43`:
+      `elapsed_millis = 1014969` instead of `1629553`,
+      `terminal_summary_build_millis = 916413` instead of `1520539`,
+      observed RSS `= 282046464` instead of `284622848`
+    - at `prefix_states_explored = 44`:
+      `elapsed_millis = 1036933` instead of `1667689`,
+      `terminal_summary_build_millis = 936329` instead of `1556452`,
+      observed RSS `= 284889088` instead of `287059968`
+    - at `prefix_states_explored = 54`:
+      `elapsed_millis = 1274136` instead of `2142900`,
+      `terminal_summary_build_millis = 1152279` instead of `2008719`,
+      observed RSS `= 313511936` instead of `315887616`
+  - At those matched checkpoints it also stayed close to the kept short
+    baseline `runs/codex-claim-release-step4-kernel-aggregation-v1`, which
+    shows that the winning kernel-aggregation shape survived on the real
+    intended profile with only modest full-profile overhead.
+  - The old honest retained plateau did not remain terminal on the real
+    full-profile rerun:
+    - `39 groups / 144845 candidates` first activated at
+      `prefix_states_explored = 24` and held through `73`
+    - `40 groups / 147639 candidates` first appeared at `74`
+    - `41 groups / 154842 candidates` first appeared at `140`
+  - The rerun never reached step `5`; there is no stored
+    `reports/steps/step-05-live.ndjson`.
+  - The last stored step-`4` checkpoint before manual termination was
+    `prefix_states_explored = 163` with:
+    - `elapsed_millis = 3942636`
+    - `observed_process_rss_bytes = 632197120`
+    - `frontier_queue_len = 2612`
+    - legality summaries `= 762359`
+    - `terminal_summary_build_millis = 3584914`
+    - `terminal_summary_connectivity_millis = 696824`
+    - `terminal_summary_aggregation_millis = 483012`
+    - `terminal_summary_exact_nu_millis = 311183`
+  - So the new intended-profile read moved far enough to invalidate the old
+    `39/144845` "final plateau" read, but it still exposes no later step wall:
+    the live blocker remains step-`4` summary compute, especially connectivity
+    first and aggregation second, with exact `nu` still behind them.
 - Dropped short rerun:
   `runs/codex-claim-release-step4-kernel-connectivity-v3`
   - It tried caching per-clause hot-path terminal
@@ -178,36 +226,47 @@ final gate.
   slices:
   `runs/codex-claim-release-step4-kernel-connectivity-v2` and
   `runs/codex-claim-release-step4-kernel-aggregation-v1`.
-- The newest keep stayed inside measured summary-side bookkeeping rather than
-  reopening prep-side, cache-profile, or ordering experiments, and it earned
-  keep on stored evidence.
-- The honest retained plateau is unchanged:
-  `39 groups / 144845 candidates`, first activated at
-  `prefix_states_explored = 24`.
-- The current honest short wall on the new kept baseline is still inside the
-  measured counters:
-  connectivity first, aggregation second, exact `nu` behind them.
-- Memory remains controlled on the short reruns; the live blocker is still
-  compute, not allocator or RSS pressure.
-- Because one more short step-`4` slice has now earned keep, the next honest
-  move is no longer another short slice first; it is the real intended-profile
-  rerun on the winning binary.
+- The re-earned intended-profile rerun
+  `runs/codex-claim-release-full-kernel-aggregation-v1` then proved three
+  things from stored artifacts:
+  - the winning kernel-aggregation shape survives on the real
+    `desktop_claim_shadow_1h` profile and materially improves the old
+    full-profile baseline at matched `24/43/44/54` checkpoints
+  - the earlier `39 groups / 144845 candidates` plateau is real but no longer
+    the full-profile terminal read, because the retained prefix cache later
+    reopens to `40/147639` and then `41/154842`
+  - no later step wall is exposed yet, because the run still never reaches
+    step `5`
+- The current honest blocker is therefore still inside step `4` on the
+  intended profile:
+  connectivity first, aggregation second, exact `nu` behind them, now on the
+  later reopened retained-prefix surface rather than only on the first
+  `39/144845` plateau.
+- Observed RSS remained controlled on the intended profile during the re-earned
+  full read, rising gradually to about `632.2 MiB` at the last stored
+  checkpoint rather than revisiting the old allocator-failure story.
+- The next honest move is now another narrow short step-`4` slice guided by
+  the later full-profile retained-prefix growth, not compare, benchmark,
+  certification, or breadth/parity closeout work.
 
 ## Immediate Order
 
 1. Keep `runs/codex-claim-release-step4-kernel-aggregation-v1` landed in code
    and keep the earlier prep/profile cache experiments dropped.
-2. Re-earn one full `desktop_claim_shadow_1h` rerun on the winning binary
-   before spending another short step-`4` slice.
-3. Use that full-profile stored evidence to decide whether step `4` still owns
-   the real blocker or whether a later honest wall is now exposed.
-4. Only after that full-profile rerun should the next move branch to either
-   another narrow short slice, or to stored parity, breadth, compare,
-   benchmark, and certification work.
+2. Treat `runs/codex-claim-release-full-kernel-aggregation-v1` as the new
+   intended-profile baseline and use its stored step-`4` evidence, not the old
+   `full-nu-profile-v1` read, to define the next runtime slice.
+3. Re-enter one narrow short step-`4` throughput experiment aimed at the later
+   retained-prefix surface that reopens after the old `39/144845` plateau.
+4. Return to stored parity, breadth, compare, benchmark, and certification
+   work only after a later rerun either reaches step `5` or proves the step-`4`
+   wall has finally moved.
 
 ## Active Baselines
 
 - Current full-profile baseline:
+  `runs/codex-claim-release-full-kernel-aggregation-v1`
+- Previous full-profile baseline:
   `runs/codex-claim-release-full-nu-profile-v1`
 - Current short step-`4` baseline:
   `runs/codex-claim-release-step4-kernel-aggregation-v1`
