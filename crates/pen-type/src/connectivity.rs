@@ -13,6 +13,13 @@ pub struct ConnectivityWitness {
     pub historical_reanchor: bool,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ConnectivityTerminalDecision {
+    PruneDisconnected,
+    KeepWithoutFallback,
+    NeedsFallback,
+}
+
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 struct ConnectivityClauseState {
     has_lib_pointer: bool,
@@ -220,6 +227,62 @@ impl ConnectivitySummary {
         self
     }
 
+    pub fn terminal_decision(
+        &self,
+        library: &Library,
+        clause: &ClauseRec,
+        historical_reanchor: bool,
+    ) -> ConnectivityTerminalDecision {
+        let new_index = self.clauses.len();
+        let previous_latest = new_index.checked_sub(1);
+        let has_point_constructor_before = self.has_point_constructor;
+        let new_expr = &clause.expr;
+        let new_clause_is_path_con = matches!(new_expr, Expr::PathCon(_));
+        let new_clause_is_point_constructor = is_point_constructor_expr(new_expr);
+        let new_clause_is_higher_path_witness = is_higher_path_witness_clause(new_expr);
+        let new_clause_is_operator_bundle_closure = is_operator_bundle_closure_clause(new_expr);
+        let lib_size = library.len() as u32;
+        let lib_ref_summary = summarize_lib_refs(
+            new_expr,
+            (lib_size > 2).then_some((lib_size, lib_size.saturating_sub(1))),
+        );
+        let new_clause_has_lib_pointer = lib_ref_summary.has_any;
+        let references_active_window = self.references_active_window
+            || lib_size <= 2
+            || lib_ref_summary.references_active_window;
+        let self_contained = self.self_contained && !new_clause_has_lib_pointer;
+
+        let unresolved_previous_latest =
+            previous_latest.filter(|index| !self.unresolved_indices.contains(index));
+        for index in self
+            .unresolved_indices
+            .iter()
+            .copied()
+            .chain(unresolved_previous_latest)
+        {
+            if !clause_state_satisfied_by_terminal_clause(
+                &self.clauses[index],
+                index,
+                new_index,
+                new_expr,
+                has_point_constructor_before,
+                new_clause_has_lib_pointer,
+                new_clause_is_path_con,
+                new_clause_is_point_constructor,
+                new_clause_is_higher_path_witness,
+                new_clause_is_operator_bundle_closure,
+            ) {
+                return ConnectivityTerminalDecision::PruneDisconnected;
+            }
+        }
+
+        if references_active_window || self_contained || historical_reanchor {
+            ConnectivityTerminalDecision::KeepWithoutFallback
+        } else {
+            ConnectivityTerminalDecision::NeedsFallback
+        }
+    }
+
     pub fn structurally_connected(&self) -> bool {
         self.unresolved_indices.is_empty()
     }
@@ -276,16 +339,40 @@ fn clause_state_satisfied_by_new_clause(
     new_clause_is_higher_path_witness: bool,
     new_clause_is_operator_bundle_closure: bool,
 ) -> bool {
+    if new_clause_is_path_con && !clause_state.local_path_anchor(has_point_constructor_before) {
+        clause_state.later_pathcon_seen = true;
+    }
+    clause_state_satisfied_by_terminal_clause(
+        clause_state,
+        earlier_index,
+        later_index,
+        expr,
+        has_point_constructor_before,
+        new_clause_has_lib_pointer,
+        new_clause_is_path_con,
+        new_clause_is_point_constructor,
+        new_clause_is_higher_path_witness,
+        new_clause_is_operator_bundle_closure,
+    )
+}
+
+fn clause_state_satisfied_by_terminal_clause(
+    clause_state: &ConnectivityClauseState,
+    earlier_index: usize,
+    later_index: usize,
+    expr: &Expr,
+    has_point_constructor_before: bool,
+    new_clause_has_lib_pointer: bool,
+    new_clause_is_path_con: bool,
+    new_clause_is_point_constructor: bool,
+    new_clause_is_higher_path_witness: bool,
+    new_clause_is_operator_bundle_closure: bool,
+) -> bool {
     let de_bruijn = (later_index - earlier_index) as u32;
     let has_var_edge = expr_contains_raw_var_ref(expr, de_bruijn)
         || later_clause_depends_on(earlier_index, later_index, expr, 0);
     let has_path_attachment = if new_clause_is_path_con {
-        if clause_state.local_path_anchor(has_point_constructor_before) {
-            true
-        } else {
-            clause_state.later_pathcon_seen = true;
-            false
-        }
+        clause_state.local_path_anchor(has_point_constructor_before)
     } else if new_clause_is_point_constructor {
         clause_state.later_pathcon_seen && clause_state.local_path_anchor(true)
     } else {
@@ -624,8 +711,8 @@ fn matches_temporal_flat_next_bridge(expr: &Expr) -> bool {
 #[cfg(test)]
 mod tests {
     use super::{
-        ConnectivitySummary, ConnectivityWitness, HistoricalReanchorSummary, analyze_connectivity,
-        passes_connectivity,
+        ConnectivitySummary, ConnectivityTerminalDecision, ConnectivityWitness,
+        HistoricalReanchorSummary, analyze_connectivity, passes_connectivity,
     };
     use pen_core::clause::{ClauseRec, ClauseRole};
     use pen_core::expr::Expr;
@@ -674,6 +761,90 @@ mod tests {
         assert!(reanchor.allows_historical_reanchor());
         assert_eq!(summary.max_lib_ref(), witness.max_lib_ref);
         assert!(witness.historical_reanchor);
+    }
+
+    #[test]
+    fn terminal_decision_matches_incremental_extension_for_keep_prune_and_reanchor_cases() {
+        let step_four_library = library_until(3);
+        let step_four_prefix = Telescope::new(Telescope::reference(4).clauses[..2].to_vec());
+        let step_four_summary =
+            ConnectivitySummary::from_telescope(&step_four_library, &step_four_prefix);
+        let step_four_last_clause = Telescope::reference(4)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step four should have a last clause");
+
+        let step_four_extended = step_four_summary
+            .clone()
+            .extend(&step_four_library, &step_four_last_clause);
+        assert_eq!(
+            step_four_summary.terminal_decision(&step_four_library, &step_four_last_clause, false),
+            ConnectivityTerminalDecision::KeepWithoutFallback
+        );
+        assert!(step_four_extended.structurally_connected());
+        assert!(step_four_extended.passes_without_reanchor());
+
+        let disconnected_library: Library = Vec::new();
+        let disconnected_prefix = Telescope::new(vec![
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1))),
+            ),
+            ClauseRec::new(ClauseRole::Introduction, Expr::PathCon(1)),
+        ]);
+        let disconnected_summary =
+            ConnectivitySummary::from_telescope(&disconnected_library, &disconnected_prefix);
+        let disconnected_clause = ClauseRec::new(ClauseRole::Formation, Expr::Univ);
+        let disconnected_extended = disconnected_summary
+            .clone()
+            .extend(&disconnected_library, &disconnected_clause);
+        assert_eq!(
+            disconnected_summary.terminal_decision(
+                &disconnected_library,
+                &disconnected_clause,
+                false
+            ),
+            ConnectivityTerminalDecision::PruneDisconnected
+        );
+        assert!(!disconnected_extended.structurally_connected());
+
+        let step_fifteen_library = library_until(14);
+        let step_fifteen_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let step_fifteen_summary =
+            ConnectivitySummary::from_telescope(&step_fifteen_library, &step_fifteen_prefix);
+        let step_fifteen_reanchor =
+            HistoricalReanchorSummary::from_telescope(&step_fifteen_library, &step_fifteen_prefix);
+        let step_fifteen_last_clause = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step fifteen should have a last clause");
+
+        let step_fifteen_extended = step_fifteen_summary
+            .clone()
+            .extend(&step_fifteen_library, &step_fifteen_last_clause);
+        let step_fifteen_reanchor_allowed = step_fifteen_reanchor
+            .extend(&step_fifteen_last_clause)
+            .allows_historical_reanchor();
+        assert!(step_fifteen_extended.structurally_connected());
+        assert!(!step_fifteen_extended.passes_without_reanchor());
+        assert_eq!(
+            step_fifteen_summary.terminal_decision(
+                &step_fifteen_library,
+                &step_fifteen_last_clause,
+                false
+            ),
+            ConnectivityTerminalDecision::NeedsFallback
+        );
+        assert_eq!(
+            step_fifteen_summary.terminal_decision(
+                &step_fifteen_library,
+                &step_fifteen_last_clause,
+                step_fifteen_reanchor_allowed
+            ),
+            ConnectivityTerminalDecision::KeepWithoutFallback
+        );
     }
 
     #[test]

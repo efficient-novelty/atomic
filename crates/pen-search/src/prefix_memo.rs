@@ -15,7 +15,9 @@ use pen_type::admissibility::{
     StructuralFamily, StructuralFamilyMatchMask, assess_strict_admissibility_from_terminal_summary,
 };
 use pen_type::check::CheckSummary;
-use pen_type::connectivity::{ConnectivitySummary, HistoricalReanchorSummary};
+use pen_type::connectivity::{
+    ConnectivitySummary, ConnectivityTerminalDecision, HistoricalReanchorSummary,
+};
 use std::collections::BTreeMap;
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
@@ -511,22 +513,31 @@ impl PrefixLegalityCache {
             return None;
         };
         self.stats.legality_hits += 1;
-        let Some(terminal_summary) = parent_summary.extend(library, clause) else {
-            return None;
-        };
-        if !terminal_summary.connectivity.structurally_connected() {
-            self.stats.connectivity_prunes += 1;
-            return Some(TerminalConnectivityDecision::PruneDisconnected);
-        }
-        if terminal_summary.connectivity.passes_without_reanchor()
-            || terminal_summary.reanchor.allows_historical_reanchor()
+        parent_summary
+            .check
+            .extend_clause(library.len(), clause)
+            .ok()?;
+        let historical_reanchor = parent_summary
+            .reanchor
+            .extend(clause)
+            .allows_historical_reanchor();
+        match parent_summary
+            .connectivity
+            .terminal_decision(library, clause, historical_reanchor)
         {
-            self.stats.connectivity_shortcuts += 1;
-            return Some(TerminalConnectivityDecision::KeepWithoutFallback);
+            ConnectivityTerminalDecision::PruneDisconnected => {
+                self.stats.connectivity_prunes += 1;
+                Some(TerminalConnectivityDecision::PruneDisconnected)
+            }
+            ConnectivityTerminalDecision::KeepWithoutFallback => {
+                self.stats.connectivity_shortcuts += 1;
+                Some(TerminalConnectivityDecision::KeepWithoutFallback)
+            }
+            ConnectivityTerminalDecision::NeedsFallback => {
+                self.stats.connectivity_fallbacks += 1;
+                Some(TerminalConnectivityDecision::NeedsFallback)
+            }
         }
-
-        self.stats.connectivity_fallbacks += 1;
-        Some(TerminalConnectivityDecision::NeedsFallback)
     }
 
     pub fn filter_active_window_clauses<'a>(

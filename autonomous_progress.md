@@ -18,6 +18,7 @@ final gate.
   - the algebraic `nu` ceiling patch
   - the family-agnostic claim terminal-admissibility shortcut
   - the exact non-allocating connectivity summary scan
+  - the terminal-only cached parent connectivity decision
 - The following claim-only slices were implemented, measured on stored short
   reruns, and then dropped from code after failing keep:
   - context-equivalence quotient:
@@ -40,15 +41,15 @@ final gate.
   - ignore as invalid local diagnostic:
     `runs/codex-claim-release-step4-kernel-profile-v1`
 - A new stored short rerun earned keep in this turn:
-  `runs/codex-claim-release-step4-kernel-connectivity-v1`
+  `runs/codex-claim-release-step4-kernel-connectivity-v2`
 - The current short step-`4` baseline is now
-  `runs/codex-claim-release-step4-kernel-connectivity-v1`.
+  `runs/codex-claim-release-step4-kernel-connectivity-v2`.
 - The previous short step-`4` baseline is now
-  `runs/codex-claim-release-step4-kernel-admissibility-v1`.
+  `runs/codex-claim-release-step4-kernel-connectivity-v1`.
 - The current full-profile iteration baseline remains
   `runs/codex-claim-release-full-nu-profile-v1`.
 - The claim lane is still compute-bound in step `4`, but the dominant inner
-  wall remains connectivity, with aggregation still second.
+  wall remains connectivity, with aggregation still second and now closer.
 
 ## Latest Evidence
 
@@ -63,46 +64,49 @@ final gate.
   - That rerun was diagnostic-only and slower overall, but it identified the
     real dominant cost on the live plateau.
 - Previous kept short baseline:
-  `runs/codex-claim-release-step4-kernel-admissibility-v1`
-  - It kept the same honest frontier and retained-prefix shape while removing
-    direct admissibility work from the plateau.
-- New kept short baseline:
   `runs/codex-claim-release-step4-kernel-connectivity-v1`
+  - It kept the same honest retained plateau while removing the old
+    allocating `lib_refs` / `var_refs` scans inside
+    `ConnectivitySummary::extend`.
+- New kept short baseline:
+  `runs/codex-claim-release-step4-kernel-connectivity-v2`
   - It keeps the same honest retained plateau:
     - retained prefix cache `= 39 groups / 144845 candidates` at `24/43/44`
     - `terminal_summary_first_plateau_activation_prefix_state = 24`
     - `terminal_summary_plateau_activations = 97234` at `44`
-  - It replaces the old allocating `lib_refs` / `var_refs` scans inside the
-    connectivity summary extension with exact non-allocating scans.
+  - It stops cloning and extending a full child legality summary for every
+    last-clause connectivity check and instead reuses the cached parent
+    legality summary for a terminal-only connectivity/reanchor decision.
   - Matched against the previous short baseline
-    `runs/codex-claim-release-step4-kernel-admissibility-v1`:
+    `runs/codex-claim-release-step4-kernel-connectivity-v1`:
     - at `prefix_states_explored = 24`:
-      `elapsed_millis = 692343` instead of `756279`,
-      `terminal_summary_build_millis = 635477` instead of `695759`,
-      `terminal_summary_connectivity_millis = 222604` instead of `269953`
+      `elapsed_millis = 551825` instead of `692343`,
+      `terminal_summary_build_millis = 495256` instead of `635477`,
+      `terminal_summary_connectivity_millis = 95969` instead of `222604`
     - at `prefix_states_explored = 43`:
-      `elapsed_millis = 1245950` instead of `1367539`,
-      `terminal_summary_build_millis = 1145519` instead of `1263393`,
-      `terminal_summary_connectivity_millis = 399280` instead of `481062`
+      `elapsed_millis = 998555` instead of `1245950`,
+      `terminal_summary_build_millis = 901994` instead of `1145519`,
+      `terminal_summary_connectivity_millis = 178000` instead of `399280`
     - at `prefix_states_explored = 44`:
-      `elapsed_millis = 1273659` instead of `1398528`,
-      `terminal_summary_build_millis = 1170875` instead of `1292019`,
-      `terminal_summary_connectivity_millis = 408582` instead of `492949`
+      `elapsed_millis = 1020529` instead of `1273659`,
+      `terminal_summary_build_millis = 921924` instead of `1170875`,
+      `terminal_summary_connectivity_millis = 182453` instead of `408582`
   - Residual costs stayed controlled at the same matched checkpoints:
-    - aggregation rose only slightly:
-      `69544/121941/123884` instead of `66625/120646/122571`
-    - exact `nu` stayed close:
-      `39556/73468/74610` instead of `39462/73255/74395`
-    - `terminal_materialize_millis = 382` instead of `388`
+    - aggregation stayed slightly lower:
+      `68266/119561/121524` instead of `69544/121941/123884`
+    - exact `nu` stayed essentially unchanged:
+      `39523/73348/74489` instead of `39556/73468/74610`
+    - `terminal_materialize_millis = 327` instead of `382`
     - fallback connectivity stayed `0`
-  - The stored rerun was manually stopped after enough matched plateau evidence
-    had been recorded beyond `prefix_states_explored = 44`; the keep decision
-    is based on the stored `step-04-live.ndjson` checkpoints.
+  - The stored rerun was manually stopped once the stored
+    `step-04-live.ndjson` reached the matched `24/43/44` plateau checkpoints;
+    the keep decision is based on those stored checkpoints.
   - So the step-`4` gain is real and exact:
-    the same plateau survives, connectivity falls by about `17%`, total
-    summary-build time falls by about `9%`, and wall-clock progress improves by
-    about `8.9%` at the matched `44` checkpoint.
+    the same plateau survives, connectivity falls by about `55%`, total
+    summary-build time falls by about `21%`, and wall-clock progress improves
+    by about `19.9%` at the matched `44` checkpoint.
 - Re-earned validations in this turn:
+  - `cargo test -p pen-type terminal_decision_matches_incremental_extension_for_keep_prune_and_reanchor_cases`
   - `cargo test -p pen-search claim_terminal_connectivity_keeps_reference_step_four_winner_clause`
   - `cargo test -p pen-search claim_terminal_connectivity_matches_direct_step_four_assessment`
   - `cargo test -p pen-search claim_terminal_prefix_completion_summary_matches_direct_exact_assessment`
@@ -121,9 +125,11 @@ final gate.
 - The old allocating `lib_refs` / `var_refs` scans inside
   `ConnectivitySummary::extend` were real hot-loop overhead on the retained
   plateau.
-- Replacing those scans with exact non-allocating walks earned keep on stored
-  evidence without changing the honest plateau shape or reopening
-  materialization.
+- Reusing the cached parent legality summary for a terminal-only connectivity
+  decision was another real hot-loop cut on that same retained plateau.
+- The new terminal-only connectivity path earned keep on stored evidence
+  without changing the honest plateau shape, shifting cost into aggregation,
+  or reopening materialization.
 - Connectivity is still the dominant plateau cost, aggregation is still
   second, and exact `nu` remains a smaller tail.
 - Because the same `39 / 144845` plateau still repeats, the next honest move
@@ -140,7 +146,7 @@ final gate.
    regression set.
 3. Re-earn one stored release `until_step = 4` rerun and keep the patch only
    if it improves matched plateau checkpoints against
-   `runs/codex-claim-release-step4-kernel-connectivity-v1`.
+   `runs/codex-claim-release-step4-kernel-connectivity-v2`.
 4. Only after another short step-`4` slice earns keep should the next real
    `desktop_claim_shadow_1h` full-profile rerun happen.
 
@@ -149,9 +155,9 @@ final gate.
 - Current full-profile baseline:
   `runs/codex-claim-release-full-nu-profile-v1`
 - Current short step-`4` baseline:
-  `runs/codex-claim-release-step4-kernel-connectivity-v1`
+  `runs/codex-claim-release-step4-kernel-connectivity-v2`
 - Previous short step-`4` baseline:
-  `runs/codex-claim-release-step4-kernel-admissibility-v1`
+  `runs/codex-claim-release-step4-kernel-connectivity-v1`
 - Most recent valid diagnostic:
   `runs/codex-claim-release-step4-kernel-profile-v2`
 - Ignore as invalid diagnostic:
