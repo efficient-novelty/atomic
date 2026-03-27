@@ -28,7 +28,7 @@ struct ConnectivityClauseState {
 impl ConnectivityClauseState {
     fn new(expr: &Expr, has_prior_operator_bundle_seed: bool) -> Self {
         Self {
-            has_lib_pointer: expr.has_lib_pointer(),
+            has_lib_pointer: summarize_lib_refs(expr, None).has_any,
             is_path_con: matches!(expr, Expr::PathCon(_)),
             is_trunc_like_anchor: matches!(expr, Expr::Trunc(_))
                 || matches!(expr, Expr::App(function, _) if matches!(function.as_ref(), Expr::Trunc(_))),
@@ -42,6 +42,22 @@ impl ConnectivityClauseState {
 
     fn local_path_anchor(self, has_point_constructor: bool) -> bool {
         (has_point_constructor && !self.is_path_con) || self.is_trunc_like_anchor
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+struct LibRefSummary {
+    has_any: bool,
+    references_active_window: bool,
+    max_ref: u32,
+}
+
+impl LibRefSummary {
+    fn merge(mut self, other: Self) -> Self {
+        self.has_any |= other.has_any;
+        self.references_active_window |= other.references_active_window;
+        self.max_ref = self.max_ref.max(other.max_ref);
+        self
     }
 }
 
@@ -123,27 +139,26 @@ impl ConnectivitySummary {
         let previous_latest = new_index.checked_sub(1);
         let has_point_constructor_before = self.has_point_constructor;
         let new_expr = &clause.expr;
-        let new_clause_has_lib_pointer = new_expr.has_lib_pointer();
         let new_clause_is_path_con = matches!(new_expr, Expr::PathCon(_));
         let new_clause_is_point_constructor = is_point_constructor_expr(new_expr);
         let new_clause_is_higher_path_witness = is_higher_path_witness_clause(new_expr);
         let new_clause_is_operator_bundle_closure = is_operator_bundle_closure_clause(new_expr);
-        let new_clause_refs = new_expr.lib_refs();
         let lib_size = library.len() as u32;
+        let lib_ref_summary = summarize_lib_refs(
+            new_expr,
+            (lib_size > 2).then_some((lib_size, lib_size.saturating_sub(1))),
+        );
+        let new_clause_has_lib_pointer = lib_ref_summary.has_any;
 
         if lib_size <= 2 {
             self.references_active_window = true;
-        } else if new_clause_refs.contains(&lib_size)
-            || new_clause_refs.contains(&lib_size.saturating_sub(1))
-        {
+        } else if lib_ref_summary.references_active_window {
             self.references_active_window = true;
         }
 
-        if !new_clause_refs.is_empty() {
+        if new_clause_has_lib_pointer {
             self.self_contained = false;
-            self.max_lib_ref = self
-                .max_lib_ref
-                .max(new_clause_refs.iter().next_back().copied().unwrap_or(0));
+            self.max_lib_ref = self.max_lib_ref.max(lib_ref_summary.max_ref);
         }
 
         let mut newly_resolved = Vec::new();
@@ -262,7 +277,7 @@ fn clause_state_satisfied_by_new_clause(
     new_clause_is_operator_bundle_closure: bool,
 ) -> bool {
     let de_bruijn = (later_index - earlier_index) as u32;
-    let has_var_edge = expr.var_refs().contains(&de_bruijn)
+    let has_var_edge = expr_contains_raw_var_ref(expr, de_bruijn)
         || later_clause_depends_on(earlier_index, later_index, expr, 0);
     let has_path_attachment = if new_clause_is_path_con {
         if clause_state.local_path_anchor(has_point_constructor_before) {
@@ -325,6 +340,63 @@ fn later_clause_depends_on(
                 || later_clause_depends_on(earlier_index, later_index, right, binder_depth)
         }
         Expr::Univ | Expr::Lib(_) | Expr::PathCon(_) => false,
+    }
+}
+
+fn expr_contains_raw_var_ref(expr: &Expr, target: u32) -> bool {
+    match expr {
+        Expr::Var(index) => *index == target,
+        Expr::App(function, argument)
+        | Expr::Pi(function, argument)
+        | Expr::Sigma(function, argument) => {
+            expr_contains_raw_var_ref(function, target)
+                || expr_contains_raw_var_ref(argument, target)
+        }
+        Expr::Lam(body)
+        | Expr::Refl(body)
+        | Expr::Susp(body)
+        | Expr::Trunc(body)
+        | Expr::Flat(body)
+        | Expr::Sharp(body)
+        | Expr::Disc(body)
+        | Expr::Shape(body)
+        | Expr::Next(body)
+        | Expr::Eventually(body) => expr_contains_raw_var_ref(body, target),
+        Expr::Id(ty, left, right) => {
+            expr_contains_raw_var_ref(ty, target)
+                || expr_contains_raw_var_ref(left, target)
+                || expr_contains_raw_var_ref(right, target)
+        }
+        Expr::Univ | Expr::Lib(_) | Expr::PathCon(_) => false,
+    }
+}
+
+fn summarize_lib_refs(expr: &Expr, active_window_refs: Option<(u32, u32)>) -> LibRefSummary {
+    match expr {
+        Expr::Lib(index) => LibRefSummary {
+            has_any: true,
+            references_active_window: active_window_refs
+                .is_some_and(|(latest, previous)| *index == latest || *index == previous),
+            max_ref: *index,
+        },
+        Expr::App(function, argument)
+        | Expr::Pi(function, argument)
+        | Expr::Sigma(function, argument) => summarize_lib_refs(function, active_window_refs)
+            .merge(summarize_lib_refs(argument, active_window_refs)),
+        Expr::Lam(body)
+        | Expr::Refl(body)
+        | Expr::Susp(body)
+        | Expr::Trunc(body)
+        | Expr::Flat(body)
+        | Expr::Sharp(body)
+        | Expr::Disc(body)
+        | Expr::Shape(body)
+        | Expr::Next(body)
+        | Expr::Eventually(body) => summarize_lib_refs(body, active_window_refs),
+        Expr::Id(ty, left, right) => summarize_lib_refs(ty, active_window_refs)
+            .merge(summarize_lib_refs(left, active_window_refs))
+            .merge(summarize_lib_refs(right, active_window_refs)),
+        Expr::Univ | Expr::Var(_) | Expr::PathCon(_) => LibRefSummary::default(),
     }
 }
 

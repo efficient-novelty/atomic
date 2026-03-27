@@ -3,8 +3,9 @@
 This note is the exact work order for the next `desktop_claim_shadow` slice.
 Assume delayed materialization, the incumbent-primary remaining-one fast path,
 the one-pass `structural_nu` summary-build fast path, the algebraic `nu`
-ceiling patch, the step-`4` kernel telemetry split, and the family-agnostic
-claim terminal-admissibility shortcut are already landed.
+ceiling patch, the step-`4` kernel telemetry split, the family-agnostic
+claim terminal-admissibility shortcut, and the exact non-allocating
+connectivity summary scan are already landed.
 Assume the context-equivalence quotient, the frontier-pop ordering experiment,
 the exact-two-step local ordering experiment, the proof-close handoff
 experiment, the broad post-plateau summary-skip experiment, the narrower
@@ -13,9 +14,9 @@ experiment were all measured on stored short reruns and then dropped from code
 after failing to earn keep.
 
 The current short step-`4` baseline is
-`runs/codex-claim-release-step4-kernel-admissibility-v1`.
+`runs/codex-claim-release-step4-kernel-connectivity-v1`.
 The previous short baseline is
-`runs/codex-claim-release-step4-algebraic-v1`.
+`runs/codex-claim-release-step4-kernel-admissibility-v1`.
 The current full-profile baseline remains
 `runs/codex-claim-release-full-nu-profile-v1`.
 The diagnostic kernel split that explained the last wall is
@@ -42,55 +43,67 @@ the flawed per-candidate millisecond accumulation and is not valid evidence.
 - The follow-up keep rerun
   `runs/codex-claim-release-step4-kernel-admissibility-v1` widened the existing
   terminal-summary admissibility shortcut onto the family-agnostic claim lane
-  and removed that dominant admissibility cost on the same plateau:
-  - `terminal_summary_admissibility_millis = 0`
-  - `terminal_summary_build_millis = 1292019` at `44`
-  - `elapsed_millis = 1398528` at `44`
-- That means the next honest wall is now:
+  and removed that dominant admissibility cost on the same plateau.
+- The next keep rerun
+  `runs/codex-claim-release-step4-kernel-connectivity-v1` then replaced the old
+  allocating `lib_refs` / `var_refs` scans inside
+  `ConnectivitySummary::extend` with exact non-allocating scans and cut the
+  remaining plateau wall further on the same surface:
+  - same honest retained plateau `= 39 groups / 144845 candidates`
+  - `terminal_summary_connectivity_millis = 222604/399280/408582`
+    at `24/43/44` instead of `269953/481062/492949`
+  - `terminal_summary_build_millis = 635477/1145519/1170875`
+    at `24/43/44` instead of `695759/1263393/1292019`
+  - `elapsed_millis = 692343/1245950/1273659`
+    at `24/43/44` instead of `756279/1367539/1398528`
+  - `terminal_materialize_millis = 382` instead of `388`
+  - fallback connectivity stayed `0`
+- That means the current honest wall is still:
   - connectivity first
   - aggregation second
-  - exact `nu` is no longer the dominant inner cost on the retained plateau
-- So the next slice should not re-open admissibility, reuse, ordering, or
-  direct-materialize ideas unless new stored evidence changes the shape again.
+  - exact `nu` remains smaller and did not materially move
+- So the next slice should stay on connectivity-side work unless new stored
+  evidence changes the shape again.
 
 ## Goal
 
-Land one narrow connectivity-side or aggregation-side cut inside the retained
-remaining-one summary path, using the existing kernel telemetry to prove the
-dominant plateau cost actually falls.
+Land one more narrow connectivity-side cut inside the retained remaining-one
+summary path, using the existing kernel telemetry to prove the dominant
+plateau cost falls again without shifting the wall back into aggregation or
+materialization.
 
 ## Current Comparison Targets
 
 Use these as the numbers to beat:
 
-- `runs/codex-claim-release-step4-kernel-admissibility-v1`
+- `runs/codex-claim-release-step4-kernel-connectivity-v1`
   - honest retained plateau active from `prefix_states_explored = 24`
-  - `prefix_states_explored = 24` at `756.3s`
-  - `prefix_states_explored = 43` at `1367.5s`
-  - `prefix_states_explored = 44` at `1398.5s`
+  - `prefix_states_explored = 24` at `692.3s`
+  - `prefix_states_explored = 43` at `1246.0s`
+  - `prefix_states_explored = 44` at `1273.7s`
   - retained prefix cache stayed `39 groups / 144845 candidates` at `24/43/44`
-  - `terminal_summary_build_millis = 695759` at `24`
-  - `terminal_summary_build_millis = 1263393` at `43`
-  - `terminal_summary_build_millis = 1292019` at `44`
-  - `terminal_summary_connectivity_millis = 269953` at `24`,
-    `481062` at `43`, `492949` at `44`
-  - `terminal_summary_aggregation_millis = 66625` at `24`,
-    `120646` at `43`, `122571` at `44`
-  - `terminal_summary_exact_nu_millis = 39462` at `24`,
-    `73255` at `43`, `74395` at `44`
+  - `terminal_summary_build_millis = 635477` at `24`
+  - `terminal_summary_build_millis = 1145519` at `43`
+  - `terminal_summary_build_millis = 1170875` at `44`
+  - `terminal_summary_connectivity_millis = 222604` at `24`,
+    `399280` at `43`, `408582` at `44`
+  - `terminal_summary_aggregation_millis = 69544` at `24`,
+    `121941` at `43`, `123884` at `44`
+  - `terminal_summary_exact_nu_millis = 39556` at `24`,
+    `73468` at `43`, `74610` at `44`
   - `terminal_summary_admissibility_millis = 0` at `24/43/44`
-  - `terminal_materialize_millis = 388` at `24/43/44`
-- `runs/codex-claim-release-step4-kernel-profile-v2`
-  - same retained plateau and queue shape as the keep rerun
-  - diagnostic-only run that proved admissibility was the old dominant wall
-  - `terminal_summary_admissibility_millis = 363234` at `24`,
-    `668084` at `43`, `679889` at `44`
-- `runs/codex-claim-release-step4-algebraic-v1`
-  - previous kept baseline before the admissibility cut
-  - `prefix_states_explored = 44` at `1662.8s`
+  - `terminal_materialize_millis = 382` at `24/43/44`
+- `runs/codex-claim-release-step4-kernel-admissibility-v1`
+  - previous kept baseline before the connectivity cut
+  - `prefix_states_explored = 24/43/44`
+    at `756.3s / 1367.5s / 1398.5s`
   - retained prefix cache `= 39 groups / 144845 candidates`
-  - `terminal_summary_build_millis = 1555470`
-  - `terminal_materialize_millis = 466`
+  - `terminal_summary_connectivity_millis = 269953/481062/492949`
+  - `terminal_summary_build_millis = 695759/1263393/1292019`
+- `runs/codex-claim-release-step4-kernel-profile-v2`
+  - diagnostic-only run that proved admissibility was the old dominant wall
+  - `terminal_summary_admissibility_millis = 363234/668084/679889`
+    at `24/43/44`
 
 ## Do This Next
 
@@ -110,18 +123,16 @@ The current split is already enough:
 Only add telemetry if one missing counter is strictly necessary to decide
 between two concrete connectivity or aggregation cuts.
 
-### 2. Choose One Narrow Patch In The New Dominant Plateau Cost
+### 2. Choose One Narrow Patch In The Still-Dominant Connectivity Cost
 
 Allowed directions:
 
-- if connectivity still dominates:
-  reduce repeated connectivity-summary extension churn or move one exact
-  structural disconnection rejection earlier
-- if aggregation is the cheaper but easier local win:
-  reduce bound merge, rank aggregation, or evaluation-record churn after
-  connectivity already passed
-- if both look coupled:
-  choose the one smaller edit with the clearest exactness story
+- reduce one more repeated connectivity-summary extension cost that still sits
+  on the retained plateau
+- or move one exact structural disconnection rejection earlier if it can be
+  proven from the existing summary state without reopening broad heuristics
+- only pivot to aggregation if one smaller connectivity edit is no longer
+  obvious from the stored evidence
 
 Do not spend this slice on:
 
@@ -164,7 +175,7 @@ with:
 
 Use a new run id that states the actual target, for example:
 
-- `runs/codex-claim-release-step4-kernel-connectivity-v1`
+- `runs/codex-claim-release-step4-kernel-connectivity-v2`
 - or `runs/codex-claim-release-step4-kernel-aggregation-v1`
 
 ### 5. Decide Keep Or Drop From Stored Evidence
@@ -174,7 +185,7 @@ all of the following:
 
 - the same honest retained `39 groups / 144845 candidates` plateau
 - the targeted dominant plateau sub-phase actually improves against
-  `runs/codex-claim-release-step4-kernel-admissibility-v1`
+  `runs/codex-claim-release-step4-kernel-connectivity-v1`
 - `terminal_summary_build_millis` falls at matching plateau checkpoints
 - wall clock reaches at least as far as the new short baseline at matching
   checkpoints

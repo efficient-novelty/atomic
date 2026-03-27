@@ -738,6 +738,7 @@ mod tests {
         AdmissibilityDecisionClass, AdmissibilityDiagnostics, AdmissibilityMode,
         assess_strict_admissibility, strict_admissibility, strict_admissibility_for_mode,
     };
+    use pen_type::connectivity::analyze_connectivity;
 
     fn library_until(step: u32) -> Library {
         let mut library = Vec::new();
@@ -836,6 +837,88 @@ mod tests {
         );
         assert_eq!(cache.stats().legality_hits, 1);
         assert_eq!(cache.stats().connectivity_shortcuts, 1);
+        assert_eq!(cache.stats().connectivity_fallbacks, 0);
+    }
+
+    #[test]
+    fn claim_terminal_connectivity_keeps_reference_step_four_winner_clause() {
+        let library = library_until(3);
+        let admissibility =
+            strict_admissibility_for_mode(4, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let prefix = Telescope::new(Telescope::reference(4).clauses[..2].to_vec());
+        let last_clause = Telescope::reference(4)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step four should have a last clause");
+        let signature = PrefixSignature::new(4, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            3,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        assert_eq!(
+            cache.terminal_connectivity(&signature, &library, &last_clause),
+            Some(TerminalConnectivityDecision::KeepWithoutFallback)
+        );
+        assert_eq!(cache.stats().connectivity_shortcuts, 1);
+        assert_eq!(cache.stats().connectivity_prunes, 0);
+        assert_eq!(cache.stats().connectivity_fallbacks, 0);
+    }
+
+    #[test]
+    fn claim_terminal_connectivity_matches_direct_step_four_assessment() {
+        let library = library_until(3);
+        let admissibility =
+            strict_admissibility_for_mode(4, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 3);
+        let prefix = Telescope::new(Telescope::reference(4).clauses[..2].to_vec());
+        let prefix_check = pen_type::check::CheckSummary::from_telescope(&library, &prefix)
+            .expect("reference step four prefix should pass conservative checks");
+        let signature = PrefixSignature::new(4, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            3,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        for clause in clause_catalog.clauses_at(2) {
+            let mut telescope = prefix.clone();
+            telescope.clauses.push(clause.clone());
+            let expected = if prefix_check.extend_clause(library.len(), clause).is_err() {
+                None
+            } else {
+                let witness = analyze_connectivity(&library, &telescope);
+                Some(if !witness.connected {
+                    TerminalConnectivityDecision::PruneDisconnected
+                } else if witness.references_active_window
+                    || witness.self_contained
+                    || witness.historical_reanchor
+                {
+                    TerminalConnectivityDecision::KeepWithoutFallback
+                } else {
+                    TerminalConnectivityDecision::NeedsFallback
+                })
+            };
+
+            assert_eq!(
+                cache.terminal_connectivity(&signature, &library, clause),
+                expected
+            );
+        }
+
+        assert!(cache.stats().connectivity_prunes > 0);
         assert_eq!(cache.stats().connectivity_fallbacks, 0);
     }
 

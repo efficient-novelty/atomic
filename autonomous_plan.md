@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-03-26
+Last updated: 2026-03-27
 Status: active
 
 This file is the staged path from the current claim-lane wall to final
@@ -30,7 +30,8 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - The landed wins so far were the cheap early ones:
   delayed materialization, the incumbent-primary remaining-one fast path, the
   one-pass `structural_nu` summary-build fast path, the algebraic `nu`
-  ceiling, and now the family-agnostic claim terminal-admissibility shortcut.
+  ceiling, the family-agnostic claim terminal-admissibility shortcut, and now
+  the exact non-allocating connectivity summary scan.
 - The indirect routes around the wall have now been exhausted on stored
   evidence:
   - context-equivalence quotienting found no live reuse
@@ -55,9 +56,19 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     `1555470`
   - `terminal_summary_admissibility_millis` fell to `0` from diagnostic
     `679889`
+- The next keep rerun
+  `runs/codex-claim-release-step4-kernel-connectivity-v1` then replaced the
+  old allocating `lib_refs` / `var_refs` scans inside
+  `ConnectivitySummary::extend` with exact non-allocating scans and cut the
+  same retained plateau again:
+  - `elapsed_millis` fell to `1273659` from admissibility `1398528`
+  - `terminal_summary_build_millis` fell to `1170875` from admissibility
+    `1292019`
+  - `terminal_summary_connectivity_millis` fell to `408582` from admissibility
+    `492949`
 - So the honest wall has moved again, but not out of the same kernel:
-  remaining-one connectivity is now the dominant plateau cost, aggregation is
-  second, and exact `nu` is no longer the first target.
+  remaining-one connectivity is still the dominant plateau cost, aggregation is
+  still second, and exact `nu` is not the first target.
 
 ## Strategic Rules
 
@@ -74,10 +85,10 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 ## Current Phase
 
 Current short baseline:
-`runs/codex-claim-release-step4-kernel-admissibility-v1`
+`runs/codex-claim-release-step4-kernel-connectivity-v1`
 
 Previous short baseline:
-`runs/codex-claim-release-step4-algebraic-v1`
+`runs/codex-claim-release-step4-kernel-admissibility-v1`
 
 Current full-profile baseline:
 `runs/codex-claim-release-full-nu-profile-v1`
@@ -132,7 +143,8 @@ Reject as primary moves:
 Done when:
 
 - the stored rerun shows lower connectivity-side cost and lower
-  `terminal_summary_build_millis` on matched plateau checkpoints
+  `terminal_summary_build_millis` on matched plateau checkpoints against
+  `runs/codex-claim-release-step4-kernel-connectivity-v1`
 
 ### Phase 3. Cut Aggregation And Residual Exact Work
 
@@ -231,9 +243,9 @@ Done when:
 ## Baselines And Informative Evidence
 
 - Current short step-`4` baseline:
-  `runs/codex-claim-release-step4-kernel-admissibility-v1`
+  `runs/codex-claim-release-step4-kernel-connectivity-v1`
 - Previous short step-`4` baseline:
-  `runs/codex-claim-release-step4-algebraic-v1`
+  `runs/codex-claim-release-step4-kernel-admissibility-v1`
 - Current full-profile baseline:
   `runs/codex-claim-release-full-nu-profile-v1`
 - Diagnostic kernel split:

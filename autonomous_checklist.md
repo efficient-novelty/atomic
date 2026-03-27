@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-03-25
+Last updated: 2026-03-27
 
 This checklist is the live signoff gate for `desktop_claim_shadow`.
 It lists only work that is still open.
@@ -10,11 +10,12 @@ It lists only work that is still open.
 - The claim lane still does not have a signoff-ready full-profile bundle.
 - The current full-profile baseline is
   `runs/codex-claim-release-full-nu-profile-v1`.
-- The next concrete task is one narrow discovery-side exact-summary patch on
-  the retained remaining-one surface after the retained prefix cache has
-  flattened, then a stored release `until_step = 4` rerun.
-- The current hot bottleneck is `terminal_summary_build_millis` in step `4`,
-  not compact materialization.
+- The next concrete task is one more narrow connectivity-side exact-summary
+  patch on the retained remaining-one surface after the retained prefix cache
+  has flattened, then another stored release `until_step = 4` rerun.
+- The current hot bottleneck is still `terminal_summary_build_millis` in step
+  `4`, with connectivity the dominant measured inner cost rather than compact
+  materialization.
 
 ## 1. Runtime Completion
 
