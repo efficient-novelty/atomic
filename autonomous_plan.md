@@ -34,10 +34,13 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   `runs/codex-claim-release-step4-kernel-late-profile-v1`
   shows that aggregation remains the first measured cost on the reopened
   `40/147639` surface.
-- The latest exact primary-rank bookkeeping rewrite
-  `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
-  failed keep, so the next step should stay aggregation-side but not reuse
-  that exact shape.
+- The latest fixed-threshold summary rewrite
+  `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
+  preserved the honest short and reopened shapes and cut some aggregation
+  microtime versus the late diagnostic, but still failed keep on elapsed and
+  total summary-build time.
+- The next step should stay aggregation-side, but not reuse either the exact
+  cross-multiplied bookkeeping shape or the threshold-only summary shape.
 
 ## Decision Rules
 
@@ -85,6 +88,7 @@ Reject as the next primary move:
 - another exact-`nu` cleanup first
 - another diagnostic-only slice first
 - another retry of `kernel-rank-bookkeeping-v1`
+- another retry of `kernel-summary-threshold-v1`
 - reopening old ordering, reuse, cache, or post-plateau variants
 
 Done when:

@@ -22,6 +22,8 @@ Assume the following were already measured and should stay dropped:
 - telemetry-only filter profiling
 - the exact cross-multiplied primary-rank bookkeeping rewrite in
   `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
+- the fixed bar-clear summary-threshold rewrite in
+  `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
 
 ## Active Baselines
 
@@ -43,9 +45,11 @@ Assume the following were already measured and should stay dropped:
 - The honest late target is therefore the reopened `40/147639` surface.
 - On that surface, the current diagnostic still shows aggregation first,
   connectivity second, clause filtering third, and exact `nu` fourth.
-- The latest bookkeeping rewrite kept the same honest shape but regressed too
-  much to keep. The next move should stay aggregation-side, but not retry that
-  exact rank-bookkeeping shape.
+- The latest threshold rewrite kept the same honest shape and shaved some
+  aggregation microtime, but it still regressed too much on elapsed and total
+  summary-build time to keep.
+- The next move should stay aggregation-side, but not retry either the exact
+  rank-bookkeeping shape or the threshold-only shape.
 
 ## Goal
 
@@ -74,6 +78,7 @@ Do not reopen first:
 - another exact-`nu` cleanup first
 - another ordering, reuse, cache, or post-plateau variant
 - another retry of `kernel-rank-bookkeeping-v1`
+- another retry of `kernel-summary-threshold-v1`
 - another diagnostic-only slice before a new aggregation hypothesis is measured
 
 ### 2. Pick One Aggregation Hypothesis
@@ -83,9 +88,9 @@ exact `nu`.
 
 Prefer cuts that reduce one of these:
 
+- full `AcceptRank` tie-break bookkeeping that still runs for compact summary
+  candidates which only match the current best primary `exact_nu`
 - per-candidate `PrefixBound` construction or bound-absorb churn
-- bookkeeping that still runs for admitted but clearly non-winning candidates
-  after the primary-rank gate
 - summary-side record or counter work that does not affect bound shape or
   winner selection
 

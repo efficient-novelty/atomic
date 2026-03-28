@@ -18,7 +18,7 @@ gate.
 - The authoritative late-surface diagnostic is
   `runs/codex-claim-release-step4-kernel-late-profile-v1`.
 - The latest measured slice is
-  `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`, and it was
+  `runs/codex-claim-release-step4-kernel-summary-threshold-v1`, and it was
   dropped from code after failing keep.
 - The lane is still compute-bound in step `4` on the intended profile.
   The old early allocator-failure story is no longer the primary blocker.
@@ -95,33 +95,36 @@ gate.
 ### 4. Latest Failed Slice
 
 - Run:
-  `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
+  `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
 - Hypothesis:
-  replace temporary per-candidate primary-rank `Rational` bookkeeping with
-  exact cross-multiplied `exact_nu` comparisons inside the fixed-`kappa`
-  remaining-one summary loop.
+  precompute one fixed remaining-one bar-clear `exact_nu` threshold for the
+  summary and then keep the compact primary-rank hot loop on integer compares
+  instead of rebuilding the same bar-clear `Rational` gate for every admitted
+  candidate.
 - Outcome:
-  preserved the same honest shapes at `24/43/44/54/74/76`, but regressed too
-  much on stored evidence to keep.
+  preserved the same honest shapes at `24/43/44/54/74/76`, improved
+  aggregation microtime versus the late diagnostic, but still regressed too
+  much on elapsed and total `terminal_summary_build_*` to keep.
 - Regressions versus the kept short baseline:
-  - `24`: `573901 / 568754` instead of `549630 / 492524`
-  - `43`: `1034086 / 1027818` instead of `990480 / 892772`
-  - `44`: `1056646 / 1050319` instead of `1012067 / 912271`
-  - `54`: `1302135 / 1295217` instead of `1247600 / 1126754`
+  - `24`: `549601 / 544734` instead of `549630 / 492524`
+  - `43`: `1003460 / 997508` instead of `990480 / 892772`
+  - `44`: `1025573 / 1019566` instead of `1012067 / 912271`
+  - `54`: `1266594 / 1260019` instead of `1247600 / 1126754`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
 - Reopened-surface read:
-  - `74`: `elapsed_millis = 1785225`
-  - `76`: `elapsed_millis = 1841312`,
-    `terminal_summary_build_micros = 1833094123`
-  This recovered only a small amount of the late diagnostic overhead and still
-  stayed behind the intended full-profile baseline at the same checkpoints.
+  - `74`: `elapsed_millis = 1747206`
+  - `76`: `elapsed_millis = 1802825`,
+    `terminal_summary_build_micros = 1794975153`
+  This recovered a real amount of late diagnostic overhead, but still stayed
+  behind the intended full-profile baseline on elapsed at `76` and never came
+  close to replacing the kept short baseline on total summary-build time.
 - Incremental `54 -> 76` still kept aggregation first:
-  - aggregation `+133491578 us`
-  - connectivity `+119443282 us`
-  - clause filtering `+107661541 us`
-  - exact `nu` `+79398829 us`
+  - aggregation `+133778333 us`
+  - connectivity `+116730506 us`
+  - clause filtering `+107065881 us`
+  - exact `nu` `+79763394 us`
 - The run was terminated manually after storing evidence through
-  `prefix_states_explored = 98`.
+  `prefix_states_explored = 79`.
 
 ## What Stays Dropped
 
@@ -144,6 +147,11 @@ gate.
 - Exact primary-rank bookkeeping rewrite:
   `kernel-rank-bookkeeping-v1`
   Honest shape, slower clock, dropped.
+- Bar-clear threshold bookkeeping rewrite:
+  `kernel-summary-threshold-v1`
+  Honest shape, better aggregation microtime than the late diagnostic, but no
+  keep because elapsed and total summary-build stayed behind the kept short
+  baseline.
 
 ## Working Diagnosis
 
@@ -158,8 +166,11 @@ gate.
   only the early plateau.
 - On that reopened surface, aggregation is still the largest measured cost,
   connectivity remains second, clause filtering third, and exact `nu` fourth.
-- The latest failed bookkeeping rewrite shows that "aggregation-side" is still
-  the right region, but not every rank-bookkeeping cleanup is worth keeping.
+- The latest failed threshold slice shows that the per-candidate bar-clear
+  `Rational` gate was real work, but not the dominant remaining wall.
+- The next aggregation cut should therefore stay inside the compact summary
+  path, but move deeper into post-primary-gate tie bookkeeping rather than
+  retrying another threshold-only cleanup first.
 
 ## Immediate Next Move
 
@@ -169,9 +180,9 @@ gate.
    `runs/codex-claim-release-step4-kernel-late-profile-v1`.
 2. Land one different narrow aggregation-side cut on the winning binary.
    Prefer hypotheses that reduce:
+   - full `AcceptRank` tie-break bookkeeping that still runs for compact
+     summary candidates which only match the current best primary `exact_nu`
    - per-candidate bound construction or bound-absorb churn
-   - bookkeeping that still runs for admitted but clearly non-winning
-     candidates after the primary-rank gate
    - summary-side record or counter work that does not affect bound shape or
      winner selection
 3. Re-earn one short release rerun from
@@ -194,6 +205,7 @@ gate.
 - Do not reopen another connectivity-side rewrite first.
 - Do not reopen another clause-filter-side rewrite first.
 - Do not retry `kernel-rank-bookkeeping-v1` as the next primary move.
+- Do not retry `kernel-summary-threshold-v1` as the next primary move.
 - Do not spend another turn on a diagnostic-only slice before an aggregation
   hypothesis is measured.
 - Keep user-facing wording at `bounded live recovery`.
