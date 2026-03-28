@@ -18,7 +18,7 @@ gate.
 - The authoritative late-surface diagnostic is
   `runs/codex-claim-release-step4-kernel-late-profile-v1`.
 - The latest measured slice is
-  `runs/codex-claim-release-step4-kernel-bound-merge-v1`, and it was
+  `runs/codex-claim-release-step4-kernel-lazy-acceptrank-v1`, and it was
   dropped from code after failing keep.
 - The lane is still compute-bound in step `4` on the intended profile.
   The old early allocator-failure story is no longer the primary blocker.
@@ -95,38 +95,37 @@ gate.
 ### 4. Latest Failed Slice
 
 - Run:
-  `runs/codex-claim-release-step4-kernel-bound-merge-v1`
+  `runs/codex-claim-release-step4-kernel-lazy-acceptrank-v1`
 - Hypothesis:
-  keep the compact remaining-one summary loop on the same winning binary, but
-  replace per-admitted-candidate `PrefixBound::singleton` construction plus
-  `absorb_bound` churn with one constant-`kappa` scalar accumulator that only
-  materializes the final summary bound once at the end.
+  keep the current primary-rank short-circuit, but defer full `AcceptRank`
+  construction further so compact summary candidates only pay the exact
+  tie-break path when an incumbent-primary tie actually requires it.
 - Outcome:
-  preserved the same honest shapes at `24/43/44/54/74/76`, improved the late
-  diagnostic at `74/76`, but still regressed materially versus the kept short
-  baseline and even stayed slightly behind the already-dropped threshold slice
-  on both elapsed and total `terminal_summary_build_*`.
+  preserved the same honest shapes at `24/43/44/54/74/76`, including the
+  reopened `40/147639` surface at `74/76`, but still regressed materially
+  versus the kept short baseline and even stayed behind the already-dropped
+  bound-merge slice on the reopened late surface.
 - Regressions versus the kept short baseline:
-  - `24`: `565136 / 559976` instead of `549630 / 492524`
-  - `43`: `1017812 / 1011603` instead of `990480 / 892772`
-  - `44`: `1039567 / 1033308` instead of `1012067 / 912271`
-  - `54`: `1277135 / 1270385` instead of `1247600 / 1126754`
+  - `24`: `569349 / 564296` instead of `549630 / 492524`
+  - `43`: `1033665 / 1027479` instead of `990480 / 892772`
+  - `44`: `1056066 / 1049822` instead of `1012067 / 912271`
+  - `54`: `1299758 / 1292916` instead of `1247600 / 1126754`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
 - Reopened-surface read:
-  - `74`: `elapsed_millis = 1754470`,
-    `terminal_summary_build_micros = 1746647551`
-  - `76`: `elapsed_millis = 1810157`,
-    `terminal_summary_build_micros = 1802218309`
-  This beat the late diagnostic by about `36-38s` on elapsed and total
-  summary-build at `74/76`, but it still stayed behind the intended
-  full-profile baseline on elapsed by about `11-13s`, behind it on total
-  summary-build by about `167-173s`, and nowhere close to replacing the kept
-  short baseline on the matched early surface.
+  - `74`: `elapsed_millis = 1785638`,
+    `terminal_summary_build_micros = 1777597354`
+  - `76`: `elapsed_millis = 1841896`,
+    `terminal_summary_build_micros = 1833734584`
+  This only trimmed the older late diagnostic by about `6.2s` on total
+  summary-build at `76`, stayed behind the already-dropped bound-merge slice
+  by about `31-32s` on both elapsed and total summary-build at `74/76`, and
+  never came close to replacing the kept short baseline on the matched early
+  surface.
 - Incremental `54 -> 76` still kept aggregation first:
-  - aggregation `+136064041 us`
-  - connectivity `+115008624 us`
-  - clause filtering `+105322968 us`
-  - exact `nu` `+78680417 us`
+  - aggregation `+138094248 us`
+  - connectivity `+117332431 us`
+  - clause filtering `+107643334 us`
+  - exact `nu` `+79770167 us`
 - The run was terminated manually after storing evidence through
   `prefix_states_explored = 76`.
 
@@ -156,6 +155,11 @@ gate.
   Honest shape, slightly better reopened `74/76` read than the late
   diagnostic, but materially worse than the kept short baseline at
   `24/43/44/54`, so no keep.
+- Lazy incumbent-tie `AcceptRank` deferral rewrite:
+  `kernel-lazy-acceptrank-v1`
+  Honest early and reopened shapes, but materially worse than the kept short
+  baseline at `24/43/44/54` and still behind `kernel-bound-merge-v1` at
+  `74/76`, so no keep.
 - Bar-clear threshold bookkeeping rewrite:
   `kernel-summary-threshold-v1`
   Honest shape, better aggregation microtime than the late diagnostic, but no
@@ -178,9 +182,15 @@ gate.
 - The latest failed threshold and bound-merge slices show that both the
   per-candidate bar-clear `Rational` gate and the per-candidate `PrefixBound`
   merge churn were real work, but neither was the dominant remaining wall.
+- The current compact summary code already skips full `AcceptRank`
+  construction for candidates whose primary rank is clearly worse than the
+  current group best.
+- The lazy incumbent-tie `AcceptRank` deferral slice kept the same honest
+  early and reopened shapes, but exact tie-break construction was too small a
+  share of the remaining summary-build wall to earn keep.
 - The next aggregation cut should therefore stay inside the compact summary
-  path, but move deeper into post-primary-gate tie bookkeeping or summary-side
-  record work rather than retrying another threshold-only or bound-only
+  path, but move next to summary-side diagnostics or counter bookkeeping
+  rather than retrying another threshold-only, bound-only, or tie-break-only
   cleanup first.
 
 ## Immediate Next Move
@@ -190,16 +200,19 @@ gate.
    `runs/codex-claim-release-full-kernel-aggregation-v1`, and
    `runs/codex-claim-release-step4-kernel-late-profile-v1`.
 2. Land one different narrow aggregation-side cut on the winning binary.
-   Prefer hypotheses that reduce:
-   - full `AcceptRank` tie-break bookkeeping that still runs for compact
-     summary candidates which only match the current best primary `exact_nu`
-   - summary-side record or counter work that does not affect bound shape or
-     winner selection
-   - other compact-summary bookkeeping that still runs for every admitted
-     candidate on the reopened `40/147639` surface
+   Prefer this next:
+   - batch summary-side diagnostics or counter updates locally per prefix group
+     so the hot loop stops paying repeated record bookkeeping that does not
+     affect bound shape or winner selection
+   Do not use:
+   - another retry of `kernel-lazy-acceptrank-v1` as the next primary move
+   - a lossy hash or surrogate key in place of the exact tie-break
+   - another bound-only cleanup as the next primary move
 3. Re-earn one short release rerun from
    `configs/desktop_claim_shadow_1h.toml` with `--until-step 4` and a run id
-   that names the new cut.
+   that names the new cut, preferably
+   `runs/codex-claim-release-step4-kernel-summary-batching-v1` next or
+   `runs/codex-claim-release-step4-kernel-summary-bookkeeping-v1`.
 4. Capture at least `24/43/44/54/74/76`, and `140` only if it arrives cheaply.
 5. Compare the new run against the current short baseline at `24/43/44/54`
    and against the late diagnostic plus full-profile baseline at `74/76`.
@@ -218,7 +231,10 @@ gate.
 - Do not reopen another clause-filter-side rewrite first.
 - Do not retry `kernel-rank-bookkeeping-v1` as the next primary move.
 - Do not retry `kernel-bound-merge-v1` as the next primary move.
+- Do not retry `kernel-lazy-acceptrank-v1` as the next primary move.
 - Do not retry `kernel-summary-threshold-v1` as the next primary move.
+- Do not replace the exact compact-summary tie-break with a lossy hash or
+  surrogate ordering key.
 - Do not spend another turn on a diagnostic-only slice before an aggregation
   hypothesis is measured.
 - Keep user-facing wording at `bounded live recovery`.
