@@ -5631,6 +5631,8 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     let prefix_bit_cost = prefix_telescope.bit_cost();
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
     let mut kernel_timing = RemainingOneSummaryKernelTiming::default();
+    let focus_aligned_competitors_only =
+        demo_focus_aligned_competitors_only(prefix_signature, admissibility, prefix_legality_cache);
 
     for (clause, cached_admissibility_decision) in terminal_clauses {
         let connectivity_started = Instant::now();
@@ -5722,10 +5724,8 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
             summary.bound = Some(completion_bound);
         }
         summary.admitted_candidate_count += 1;
-        if terminal_completion_can_compete_for_acceptance(
-            prefix_signature,
-            admissibility,
-            prefix_legality_cache,
+        if admitted_terminal_completion_can_compete_for_acceptance(
+            focus_aligned_competitors_only,
             &admissibility_decision,
         ) {
             if let Some(primary_rank) =
@@ -5808,7 +5808,17 @@ fn terminal_completion_can_compete_for_acceptance(
     prefix_legality_cache: &PrefixLegalityCache,
     admissibility_decision: &pen_type::admissibility::AdmissibilityDecision,
 ) -> bool {
-    !demo_focus_aligned_competitors_only(prefix_signature, admissibility, prefix_legality_cache)
+    admitted_terminal_completion_can_compete_for_acceptance(
+        demo_focus_aligned_competitors_only(prefix_signature, admissibility, prefix_legality_cache),
+        admissibility_decision,
+    )
+}
+
+fn admitted_terminal_completion_can_compete_for_acceptance(
+    focus_aligned_competitors_only: bool,
+    admissibility_decision: &pen_type::admissibility::AdmissibilityDecision,
+) -> bool {
+    !focus_aligned_competitors_only
         || !matches!(
             admissibility_decision.class,
             AdmissibilityDecisionClass::AdmittedDeprioritized
@@ -7126,9 +7136,9 @@ mod tests {
     };
     use pen_type::{
         admissibility::{
-            AdmissibilityMode, PackagePolicies, PackagePolicy, StrictAdmissibility,
-            StructuralFamily, assess_strict_admissibility, passes_strict_admissibility,
-            strict_admissibility, strict_admissibility_for_mode,
+            AdmissibilityDecision, AdmissibilityDecisionClass, AdmissibilityMode, PackagePolicies,
+            PackagePolicy, StrictAdmissibility, StructuralFamily, assess_strict_admissibility,
+            passes_strict_admissibility, strict_admissibility, strict_admissibility_for_mode,
         },
         connectivity::{ConnectivityWitness, analyze_connectivity, passes_connectivity},
         obligations::{RetentionClass, RetentionFocus, RetentionPolicy},
@@ -8742,6 +8752,66 @@ mod tests {
             summary.admitted_candidate_count
         );
         assert_eq!(telemetry.terminal_summary_plateau_activations, 0);
+    }
+
+    #[test]
+    fn claim_hoisted_terminal_competition_gate_matches_direct_check() {
+        let library = library_until(10);
+        let admissibility =
+            strict_admissibility_for_mode(11, 2, &library, AdmissibilityMode::RealisticShadow);
+        let prefix = Telescope::new(Telescope::reference(11).clauses[..4].to_vec());
+        let signature = PrefixSignature::new(11, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            5,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::DemoBreadthShadow
+        ));
+
+        let focus_aligned_competitors_only =
+            super::demo_focus_aligned_competitors_only(&signature, admissibility, &cache);
+        assert!(focus_aligned_competitors_only);
+
+        let admitted_focus_aligned = AdmissibilityDecision {
+            class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+            reason: "focus".to_owned(),
+        };
+        let admitted_deprioritized = AdmissibilityDecision {
+            class: AdmissibilityDecisionClass::AdmittedDeprioritized,
+            reason: "deprioritized".to_owned(),
+        };
+
+        for decision in [&admitted_focus_aligned, &admitted_deprioritized] {
+            assert_eq!(
+                super::terminal_completion_can_compete_for_acceptance(
+                    &signature,
+                    admissibility,
+                    &cache,
+                    decision,
+                ),
+                super::admitted_terminal_completion_can_compete_for_acceptance(
+                    focus_aligned_competitors_only,
+                    decision,
+                )
+            );
+        }
+
+        assert!(
+            super::admitted_terminal_completion_can_compete_for_acceptance(
+                focus_aligned_competitors_only,
+                &admitted_focus_aligned,
+            )
+        );
+        assert!(
+            !super::admitted_terminal_completion_can_compete_for_acceptance(
+                focus_aligned_competitors_only,
+                &admitted_deprioritized,
+            )
+        );
     }
 
     #[test]
