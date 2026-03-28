@@ -34,16 +34,16 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   `runs/codex-claim-release-step4-kernel-late-profile-v1`
   shows that aggregation remains the first measured cost on the reopened
   `40/147639` surface.
-- The latest fixed-threshold summary rewrite
-  `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
-  and the later constant-`kappa` bound-merge rewrite
-  `runs/codex-claim-release-step4-kernel-bound-merge-v1`
-  both preserved the honest short and reopened shapes and improved some late
-  diagnostic components, but both still failed keep on elapsed and total
-  summary-build time.
+- The latest shared-reason-key summary bookkeeping rewrite
+  `runs/codex-claim-release-step4-kernel-summary-bookkeeping-v1`
+  preserved the honest short and reopened shapes, improved elapsed materially
+  on both surfaces, and beat the late diagnostic strongly at `74/76`, but it
+  still failed keep because total `terminal_summary_build_*` regressed too
+  much at the matched `24/43/44/54` checkpoints.
 - The next step should stay aggregation-side, but not reuse either the exact
-  cross-multiplied bookkeeping shape, the threshold-only summary shape, or
-  another bound-only cleanup.
+  cross-multiplied bookkeeping shape, the threshold-only summary shape,
+  another bound-only cleanup, or another batching-only/bookkeeping-only
+  cleanup first.
 
 ## Decision Rules
 
@@ -78,11 +78,10 @@ Working baselines:
 
 Preferred cuts:
 
-- defer full `AcceptRank` construction further inside the compact summary path
-  so admitted candidates only pay the exact tie-break when an
-  incumbent-primary tie actually requires it
-- reduce summary-side record or counter work that still runs for every
-  admitted candidate but does not affect bound shape or winner selection
+- hoist prefix-wide competition gating and other loop-invariant aggregation
+  work out of the per-admitted compact summary path
+- remove one more piece of per-admitted work that is already charged inside
+  the measured summary kernel, not only in downstream discovery bookkeeping
 - keep exact tie-break truth; do not swap it for a lossy hash or surrogate key
 
 Reject as the next primary move:
@@ -93,6 +92,9 @@ Reject as the next primary move:
 - another diagnostic-only slice first
 - another retry of `kernel-rank-bookkeeping-v1`
 - another retry of `kernel-bound-merge-v1`
+- another retry of `kernel-lazy-acceptrank-v1`
+- another retry of `kernel-summary-batching-v1`
+- another retry of `kernel-summary-bookkeeping-v1`
 - another retry of `kernel-summary-threshold-v1`
 - reopening old ordering, reuse, cache, or post-plateau variants
 

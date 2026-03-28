@@ -24,6 +24,12 @@ Assume the following were already measured and should stay dropped:
   `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
 - the constant-`kappa` bound-merge rewrite in
   `runs/codex-claim-release-step4-kernel-bound-merge-v1`
+- the lazy incumbent-tie `AcceptRank` rewrite in
+  `runs/codex-claim-release-step4-kernel-lazy-acceptrank-v1`
+- the local summary batching rewrite in
+  `runs/codex-claim-release-step4-kernel-summary-batching-v1`
+- the shared reason-key summary bookkeeping rewrite in
+  `runs/codex-claim-release-step4-kernel-summary-bookkeeping-v1`
 - the fixed bar-clear summary-threshold rewrite in
   `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
 
@@ -47,14 +53,16 @@ Assume the following were already measured and should stay dropped:
 - The honest late target is therefore the reopened `40/147639` surface.
 - On that surface, the current diagnostic still shows aggregation first,
   connectivity second, clause filtering third, and exact `nu` fourth.
-- The latest threshold and bound-merge rewrites kept the same honest shape and
-  improved some late diagnostic components, but both still regressed too much
-  on elapsed and total summary-build time to keep.
+- The latest summary-bookkeeping rewrite kept the same honest early and
+  reopened shapes, improved elapsed materially on both surfaces, and beat the
+  late diagnostic strongly at `74/76`, but it still regressed too much on
+  total `terminal_summary_build_*` at `24/43/44/54` to keep.
 - The current code already skips full `AcceptRank` construction for compact
   summary candidates whose primary rank is clearly worse than the current
-  group best, so the next move should stay aggregation-side but go deeper into
-  lazy tie-break deferral and summary bookkeeping, not retry another
-  threshold-only, bound-only, or exact rank-bookkeeping shape.
+  group best, so the next move should stay aggregation-side but go after
+  loop-invariant or per-admitted work inside the measured summary kernel, not
+  retry another threshold-only, bound-only, exact rank-bookkeeping,
+  batching-only, or bookkeeping-only shape first.
 
 ## Goal
 
@@ -84,6 +92,9 @@ Do not reopen first:
 - another ordering, reuse, cache, or post-plateau variant
 - another retry of `kernel-rank-bookkeeping-v1`
 - another retry of `kernel-bound-merge-v1`
+- another retry of `kernel-lazy-acceptrank-v1`
+- another retry of `kernel-summary-batching-v1`
+- another retry of `kernel-summary-bookkeeping-v1`
 - another retry of `kernel-summary-threshold-v1`
 - another diagnostic-only slice before a new aggregation hypothesis is measured
 
@@ -94,22 +105,27 @@ exact `nu`.
 
 Prefer this first:
 
-- keep the current primary-rank short-circuit, but defer full
-  `AcceptRank` construction even further so compact summary candidates only
-  pay the full tie-break path when an incumbent-primary tie actually requires
-  exact ordering; do not replace the exact tie-break with a lossy hash or
-  other surrogate key
+- keep the current primary-rank short-circuit and stored diagnostics, but
+  hoist prefix-wide competition gating and other loop-invariant aggregation
+  work out of the per-admitted compact-summary path in
+  `compute_terminal_prefix_completion_summary_from_candidates`, so admitted
+  candidates stop paying repeated prefix-constant checks on the reopened
+  surface
 
 Fallback after that:
 
-- batch summary-side diagnostics or counter updates locally per prefix group
-  and merge once at group end, so the hot loop stops paying repeated
-  map/string bookkeeping that does not affect bound shape or winner selection
+- precompute one more compact-summary constant that is currently rebuilt for
+  every admitted candidate inside the aggregation block, but do not reopen the
+  old terminal-candidate-prep or remap shapes first
 
 Do not pick next:
 
 - another bound-only cleanup; `kernel-bound-merge-v1` already showed that
   per-candidate bound churn was real but not dominant enough to keep
+- another batching-only or bookkeeping-only cleanup; `kernel-summary-batching-v1`
+  and `kernel-summary-bookkeeping-v1` already showed that those shapes can
+  help elapsed on the reopened surface without fixing the honest early
+  summary-build wall
 
 If two candidate cuts still look equally plausible, prefer the one that
 removes expensive work from every admitted candidate on the reopened surface
@@ -124,9 +140,9 @@ Run a release claim rerun derived from
 - the winning binary plus the new aggregation-side cut
 - live checkpoint persistence left on
 - a new run id that states the patch, for example:
-  - `runs/codex-claim-release-step4-kernel-lazy-acceptrank-v1`
-  - `runs/codex-claim-release-step4-kernel-summary-batching-v1`
-  - `runs/codex-claim-release-step4-kernel-summary-bookkeeping-v1`
+  - `runs/codex-claim-release-step4-kernel-summary-loop-hoist-v1`
+  - `runs/codex-claim-release-step4-kernel-competition-hoist-v1`
+  - `runs/codex-claim-release-step4-kernel-summary-invariants-v1`
 
 Let the run go far enough to capture at least:
 
