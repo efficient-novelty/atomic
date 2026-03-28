@@ -47,6 +47,8 @@ final gate.
     `runs/codex-claim-release-step4-terminal-candidate-prep-v1`
   - terminal-prefix clause-filter timing counter:
     `runs/codex-claim-release-step4-kernel-filter-profile-v1`
+  - exact cross-multiplied primary-rank bookkeeping:
+    `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
 - The step-`4` kernel is still measurable from stored evidence:
   - valid plateau diagnostic split:
     `runs/codex-claim-release-step4-kernel-profile-v2`
@@ -54,8 +56,10 @@ final gate.
     `runs/codex-claim-release-step4-kernel-late-profile-v1`
   - ignore as invalid local diagnostic:
     `runs/codex-claim-release-step4-kernel-profile-v1`
-- The most recent stored short rerun in this turn was diagnostic-only:
-  `runs/codex-claim-release-step4-kernel-late-profile-v1`
+- The most recent stored short rerun in this turn was
+  `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`.
+  It was a throughput attempt, not a diagnostic-only pass, and it was dropped
+  from code after failing keep.
 - The current short step-`4` baseline is now
   `runs/codex-claim-release-step4-kernel-aggregation-v1`.
 - The previous short step-`4` baseline is now
@@ -67,16 +71,17 @@ final gate.
 - The previous full-profile iteration baseline is now
   `runs/codex-claim-release-full-nu-profile-v1`.
 - The claim lane is still compute-bound in step `4` on the intended profile.
-  The kept full-profile rerun still does not reach step `5`, but a new
-  higher-fidelity short late-surface diagnostic now reproduces the reopened
-  `40/147639` and `41/154842` surfaces while still tracking the intended
-  full-profile baseline closely. Its cumulative microsecond split closes most
-  of the old reopened-surface build gap and now shows aggregation or
+  The kept full-profile rerun still does not reach step `5`, and the newer
+  higher-fidelity short late-surface diagnostic still shows aggregation or
   rank-bookkeeping first, connectivity second, clause filtering third, and
-  exact `nu` fourth on the honest `40/147639` surface. The next honest move
-  is therefore one narrow aggregation-side or rank-bookkeeping throughput cut,
-  not another diagnostic-only slice and not compare, benchmark,
-  certification, or breadth closeout work yet.
+  exact `nu` fourth on the honest reopened `40/147639` surface. A fresh short
+  throughput attempt that replaced per-candidate primary-rank `Rational`
+  bookkeeping with exact cross-multiplied `exact_nu` comparisons preserved the
+  same retained-prefix shapes at `24/43/44/54/74/76`, but it regressed wall
+  clock and `terminal_summary_build_*` badly enough on stored evidence that it
+  was dropped from code. The next honest move is therefore still one narrow
+  aggregation-side cut on the winning binary, but not this exact
+  rank-bookkeeping shape and not another diagnostic-only slice yet.
 
 ## Latest Evidence
 
@@ -259,6 +264,51 @@ final gate.
   - Because that stop was manual, `run.json` still shows `status = "running"`
     at `completed_step = 3`, but the stored step-`4` live checkpoints remain
     the authoritative evidence surface for this diagnostic rerun.
+- New dropped short rerun:
+  `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
+  - It tried one narrow aggregation-side bookkeeping cut that stopped
+    rebuilding the temporary primary-rank `Rational` for every admitted
+    remaining-one candidate and instead compared bar-clearing primary rank by
+    exact cross-multiplied `exact_nu` inside the fixed-`kappa` summary loop.
+  - It kept the same honest retained-prefix shapes:
+    - retained prefix cache `= 39 groups / 144845 candidates` at `24/43/44/54`
+    - `40 groups / 147639 candidates` first appeared at `74`
+    - the reopened surface still held at `76` with `frontier_queue_len = 2699`
+  - But it regressed against the kept short baseline
+    `runs/codex-claim-release-step4-kernel-aggregation-v1` at every matched
+    early checkpoint:
+    - at `prefix_states_explored = 24`:
+      `elapsed_millis = 573901` instead of `549630`,
+      `terminal_summary_build_millis = 568754` instead of `492524`
+    - at `prefix_states_explored = 43`:
+      `elapsed_millis = 1034086` instead of `990480`,
+      `terminal_summary_build_millis = 1027818` instead of `892772`
+    - at `prefix_states_explored = 44`:
+      `elapsed_millis = 1056646` instead of `1012067`,
+      `terminal_summary_build_millis = 1050319` instead of `912271`
+    - at `prefix_states_explored = 54`:
+      `elapsed_millis = 1302135` instead of `1247600`,
+      `terminal_summary_build_millis = 1295217` instead of `1126754`
+  - On the reopened `40/147639` surface it only clawed back a small fraction
+    of the late diagnostic overhead and still did not earn keep:
+    - at `74`, `elapsed_millis = 1785225` versus late diagnostic `1790703`
+      but still slower than the intended full-profile baseline `1743244`
+    - at `76`, `elapsed_millis = 1841312` versus late diagnostic `1848102`
+      but still slower than the intended full-profile baseline `1797441`
+    - cumulative `terminal_summary_build_micros = 1833094123` at `76`,
+      only slightly below the late diagnostic `1839910636`
+  - The wall also did not move away from aggregation first on the reopened
+    short surface:
+    - incremental `54 -> 76`:
+      aggregation `+133491578 us`,
+      connectivity `+119443282 us`,
+      clause filtering `+107661541 us`,
+      exact `nu` `+79398829 us`
+  - The rerun was terminated manually after the stored reopened-surface
+    evidence had been secured through `prefix_states_explored = 98`.
+  - Because that stop was manual, `run.json` still shows `status = "running"`
+    at `completed_step = 3`, but the stored step-`4` live checkpoints remain
+    the authoritative evidence surface for this failed keep attempt.
 - Previous dropped short diagnostic rerun:
   `runs/codex-claim-release-step4-kernel-filter-profile-v1`
   - It added one narrow terminal-prefix clause-filter timing counter to the
@@ -325,8 +375,6 @@ final gate.
     baseline and was dropped from code.
 - Re-earned validations in this turn:
   - `cargo test -p pen-search claim_`
-  - `cargo test -p pen-search remaining_one_telemetry_accumulates_sub_millisecond_durations`
-  - `cargo test -p pen-search terminal_clause_filter_skips_inadmissible_last_clauses_before_connectivity`
   - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
 
 ## Current Read
@@ -357,15 +405,27 @@ final gate.
     measured cost on the honest reopened `40/147639` surface
   - the remaining unexplained build tail is now smaller and better read as
     secondary untracked bookkeeping than as truncation noise
+- The new short throughput attempt
+  `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1` then proved two
+  more things:
+  - the retained-prefix and reopened-surface shapes stay honest even if the
+    temporary primary-rank `Rational` bookkeeping is replaced by exact
+    cross-multiplied `exact_nu` comparisons inside the fixed-`kappa`
+    remaining-one summary loop
+  - but that bookkeeping shape still regresses badly enough on stored
+    `24/43/44/54` wall clock and `terminal_summary_build_*` that it does not
+    earn keep, even though the reopened `74/76` timings recover a small amount
+    of the late diagnostic overhead
 - The current honest blocker is therefore still inside step `4` on the
   intended profile.
 - Observed RSS remained controlled on the intended profile during the re-earned
   full read, rising gradually to about `632.2 MiB` at the last stored
   checkpoint rather than revisiting the old allocator-failure story.
-- The next honest move is now one narrow aggregation-side or rank-bookkeeping
-  throughput cut on the winning binary, not another diagnostic-only slice, not
-  a connectivity-side or clause-filter-side rewrite first, and not compare,
-  benchmark, certification, or breadth/parity closeout work yet.
+- The next honest move is now still one narrow aggregation-side throughput cut
+  on the winning binary, not this exact primary-rank bookkeeping rewrite, not
+  another diagnostic-only slice, not a connectivity-side or clause-filter-side
+  rewrite first, and not compare, benchmark, certification, or
+  breadth/parity closeout work yet.
 
 ## Immediate Order
 
@@ -378,7 +438,8 @@ final gate.
 3. Treat `runs/codex-claim-release-step4-kernel-late-profile-v1` as the new
    authoritative late-surface diagnostic and keep the older
    `kernel-filter-profile-v1` telemetry patch dropped after measurement.
-4. Land one narrow aggregation-side or rank-bookkeeping throughput cut inside
+4. Keep `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1` dropped
+   after measurement and land a different narrow aggregation-side cut inside
    the remaining-one summary loop, then re-earn one short stored rerun that
    reaches `24/43/44/54/74/76` and, if still cheap, `140`.
 5. Only after a new short rerun earns keep should the next move branch back to
@@ -404,7 +465,7 @@ final gate.
 - Ignore as invalid diagnostic:
   `runs/codex-claim-release-step4-kernel-profile-v1`
 - Most recent short evidence that did not advance the current short baseline:
-  `runs/codex-claim-release-step4-kernel-late-profile-v1`
+  `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
 - Most recent informative late-surface diagnostic:
   `runs/codex-claim-release-step4-kernel-late-profile-v1`
 - Previous informative late-surface diagnostic:
