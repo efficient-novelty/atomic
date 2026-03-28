@@ -22,6 +22,8 @@ Assume the following were already measured and should stay dropped:
 - telemetry-only filter profiling
 - the exact cross-multiplied primary-rank bookkeeping rewrite in
   `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
+- the constant-`kappa` bound-merge rewrite in
+  `runs/codex-claim-release-step4-kernel-bound-merge-v1`
 - the fixed bar-clear summary-threshold rewrite in
   `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
 
@@ -45,11 +47,14 @@ Assume the following were already measured and should stay dropped:
 - The honest late target is therefore the reopened `40/147639` surface.
 - On that surface, the current diagnostic still shows aggregation first,
   connectivity second, clause filtering third, and exact `nu` fourth.
-- The latest threshold rewrite kept the same honest shape and shaved some
-  aggregation microtime, but it still regressed too much on elapsed and total
-  summary-build time to keep.
-- The next move should stay aggregation-side, but not retry either the exact
-  rank-bookkeeping shape or the threshold-only shape.
+- The latest threshold and bound-merge rewrites kept the same honest shape and
+  improved some late diagnostic components, but both still regressed too much
+  on elapsed and total summary-build time to keep.
+- The current code already skips full `AcceptRank` construction for compact
+  summary candidates whose primary rank is clearly worse than the current
+  group best, so the next move should stay aggregation-side but go deeper into
+  lazy tie-break deferral and summary bookkeeping, not retry another
+  threshold-only, bound-only, or exact rank-bookkeeping shape.
 
 ## Goal
 
@@ -78,6 +83,7 @@ Do not reopen first:
 - another exact-`nu` cleanup first
 - another ordering, reuse, cache, or post-plateau variant
 - another retry of `kernel-rank-bookkeeping-v1`
+- another retry of `kernel-bound-merge-v1`
 - another retry of `kernel-summary-threshold-v1`
 - another diagnostic-only slice before a new aggregation hypothesis is measured
 
@@ -86,17 +92,28 @@ Do not reopen first:
 Stay inside the remaining-one compact summary path after connectivity and after
 exact `nu`.
 
-Prefer cuts that reduce one of these:
+Prefer this first:
 
-- full `AcceptRank` tie-break bookkeeping that still runs for compact summary
-  candidates which only match the current best primary `exact_nu`
-- per-candidate `PrefixBound` construction or bound-absorb churn
-- summary-side record or counter work that does not affect bound shape or
-  winner selection
+- keep the current primary-rank short-circuit, but defer full
+  `AcceptRank` construction even further so compact summary candidates only
+  pay the full tie-break path when an incumbent-primary tie actually requires
+  exact ordering; do not replace the exact tie-break with a lossy hash or
+  other surrogate key
 
-If two candidate cuts look equally plausible, prefer the one that removes work
-from every admitted candidate on the reopened surface rather than the one that
-only improves rare tie cases.
+Fallback after that:
+
+- batch summary-side diagnostics or counter updates locally per prefix group
+  and merge once at group end, so the hot loop stops paying repeated
+  map/string bookkeeping that does not affect bound shape or winner selection
+
+Do not pick next:
+
+- another bound-only cleanup; `kernel-bound-merge-v1` already showed that
+  per-candidate bound churn was real but not dominant enough to keep
+
+If two candidate cuts still look equally plausible, prefer the one that
+removes expensive work from every admitted candidate on the reopened surface
+rather than the one that only improves rare late tie cases.
 
 ### 3. Re-Earn The Short Runtime Read
 
@@ -107,8 +124,8 @@ Run a release claim rerun derived from
 - the winning binary plus the new aggregation-side cut
 - live checkpoint persistence left on
 - a new run id that states the patch, for example:
-  - `runs/codex-claim-release-step4-kernel-aggregation-v2`
-  - `runs/codex-claim-release-step4-kernel-bound-merge-v1`
+  - `runs/codex-claim-release-step4-kernel-lazy-acceptrank-v1`
+  - `runs/codex-claim-release-step4-kernel-summary-batching-v1`
   - `runs/codex-claim-release-step4-kernel-summary-bookkeeping-v1`
 
 Let the run go far enough to capture at least:

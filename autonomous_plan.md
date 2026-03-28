@@ -36,11 +36,14 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   `40/147639` surface.
 - The latest fixed-threshold summary rewrite
   `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
-  preserved the honest short and reopened shapes and cut some aggregation
-  microtime versus the late diagnostic, but still failed keep on elapsed and
-  total summary-build time.
+  and the later constant-`kappa` bound-merge rewrite
+  `runs/codex-claim-release-step4-kernel-bound-merge-v1`
+  both preserved the honest short and reopened shapes and improved some late
+  diagnostic components, but both still failed keep on elapsed and total
+  summary-build time.
 - The next step should stay aggregation-side, but not reuse either the exact
-  cross-multiplied bookkeeping shape or the threshold-only summary shape.
+  cross-multiplied bookkeeping shape, the threshold-only summary shape, or
+  another bound-only cleanup.
 
 ## Decision Rules
 
@@ -75,11 +78,12 @@ Working baselines:
 
 Preferred cuts:
 
-- reduce per-candidate bound construction or bound-absorb churn
-- reduce bookkeeping that still runs for admitted but clearly non-winning
-  candidates after the primary-rank gate
-- reduce summary-side record or counter work that does not affect bound shape
-  or winner selection
+- defer full `AcceptRank` construction further inside the compact summary path
+  so admitted candidates only pay the exact tie-break when an
+  incumbent-primary tie actually requires it
+- reduce summary-side record or counter work that still runs for every
+  admitted candidate but does not affect bound shape or winner selection
+- keep exact tie-break truth; do not swap it for a lossy hash or surrogate key
 
 Reject as the next primary move:
 
@@ -88,6 +92,7 @@ Reject as the next primary move:
 - another exact-`nu` cleanup first
 - another diagnostic-only slice first
 - another retry of `kernel-rank-bookkeeping-v1`
+- another retry of `kernel-bound-merge-v1`
 - another retry of `kernel-summary-threshold-v1`
 - reopening old ordering, reuse, cache, or post-plateau variants
 
