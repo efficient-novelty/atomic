@@ -23,9 +23,10 @@ It lists only work that is still open.
   rank-bookkeeping first on the reopened short surface, connectivity second,
   clause filtering third, exact `nu` fourth, and only a smaller residual
   bookkeeping tail left unattributed.
-- Because that diagnostic attribution is now re-earned, the next honest move
-  is one narrow aggregation-side or rank-bookkeeping cut, not another
-  diagnostic-only rerun and not another full-profile rerun first.
+- The latest exact primary-rank bookkeeping rewrite kept the honest short
+  shapes but still failed keep, so the next honest move is now one different
+  narrow aggregation-side cut, not another diagnostic-only rerun and not
+  another full-profile rerun first.
 
 ## 1. Runtime Completion
 

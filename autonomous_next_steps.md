@@ -1,86 +1,65 @@
 # Autonomous Claim Lane: Next Operational Slice
 
-This note is the exact work order for the next `desktop_claim_shadow` slice.
-Assume delayed materialization, the incumbent-primary remaining-one fast path,
-the one-pass `structural_nu` summary-build fast path, the algebraic `nu`
-ceiling patch, the family-agnostic claim terminal-admissibility shortcut, the
-exact non-allocating connectivity summary scan, the terminal-only cached
-parent connectivity decision, the aggregation-side accept-rank short-circuit,
-and the higher-fidelity late-surface timing accumulation are already landed.
-Assume the context-equivalence quotient, frontier-pop ordering, exact-two-step
-local ordering, proof-close handoff ordering, post-plateau summary-skip,
-post-plateau materialize-side gating, post-plateau summary-cache reuse,
-expr-keyed terminal-clause caching, clause-side connectivity profile
-precompute, terminal-candidate prep or remap cuts, and the temporary
-filter-only timing patch were all measured on stored reruns and then dropped
-after failing keep.
+This note is the exact next work order for `desktop_claim_shadow`.
 
-The current short step-`4` baseline remains
-`runs/codex-claim-release-step4-kernel-aggregation-v1`.
-The previous short baseline remains
-`runs/codex-claim-release-step4-kernel-connectivity-v2`.
-The current full-profile baseline remains
-`runs/codex-claim-release-full-kernel-aggregation-v1`.
-The previous full-profile baseline remains
-`runs/codex-claim-release-full-nu-profile-v1`.
-The most recent informative late-surface diagnostic is now
-`runs/codex-claim-release-step4-kernel-late-profile-v1`.
-The previous informative late-surface diagnostic remains
-`runs/codex-claim-release-step4-kernel-filter-profile-v1`.
+Assume the following are already landed and should stay landed:
+
+- delayed materialization
+- the incumbent-primary remaining-one fast path
+- the one-pass `structural_nu` summary-build fast path
+- the algebraic `nu` ceiling patch
+- the family-agnostic claim terminal-admissibility shortcut
+- the exact non-allocating connectivity summary scan
+- the terminal-only cached parent connectivity decision
+- the aggregation-side accept-rank short-circuit
+- the higher-fidelity late-surface timing accumulation
+
+Assume the following were already measured and should stay dropped:
+
+- ordering and reuse variants
+- expr-keyed or clause-side connectivity cache variants
+- terminal-candidate prep or remap cuts
+- telemetry-only filter profiling
+- the exact cross-multiplied primary-rank bookkeeping rewrite in
+  `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
+
+## Active Baselines
+
+- Current short baseline:
+  `runs/codex-claim-release-step4-kernel-aggregation-v1`
+- Current full-profile baseline:
+  `runs/codex-claim-release-full-kernel-aggregation-v1`
+- Current late-surface diagnostic:
+  `runs/codex-claim-release-step4-kernel-late-profile-v1`
 
 ## Working Diagnosis
 
-- The new short diagnostic rerun
-  `runs/codex-claim-release-step4-kernel-late-profile-v1`
-  kept the same honest early retained plateau, reopened
-  `40 groups / 147639 candidates` at `74`, and then reached
-  `41 groups / 154842 candidates` at `140`.
-- That rerun still tracks the intended full-profile baseline closely on the
-  reopened surfaces:
-  - at `74`, short `elapsed_millis = 1790703`,
-    observed RSS `= 378155008`, queue `= 2701`;
-    full baseline `= 1743244 / 374198272 / 2701`
-  - at `76`, short `elapsed_millis = 1848102`,
-    observed RSS `= 382369792`, queue `= 2699`;
-    full baseline `= 1797441 / 379269120 / 2699`
-  - at `140`, short `elapsed_millis = 3535425`,
-    observed RSS `= 570712064`, queue `= 2635`;
-    full baseline `= 3393970 / 566460416 / 2635`
-- The higher-fidelity split closes most of the old reopened-surface build-gap
-  read:
-  - at `76`,
-    `terminal_summary_build_micros = 1839910636`
-  - tracked subphases now sum to
-    `352203534 + 416766880 + 469431036 + 267574759 = 1505976209`
-  - leaving only `333934427` microseconds unexplained, about `18.15%` of
-    build time instead of the older roughly `49.07%` gap
-- On the reopened `40/147639` surface, aggregation or rank-bookkeeping is now
-  the honest dominant measured phase:
-  - cumulative at `76`:
-    aggregation `= 469431036 us`,
-    connectivity `= 416766880 us`,
-    clause filtering `= 352203534 us`,
-    exact `nu` `= 267574759 us`
-  - incremental `54 -> 76`:
-    aggregation `+141716373 us`,
-    connectivity `+124894828 us`,
-    clause filtering `+107776335 us`,
-    exact `nu` `+80574865 us`
-- That means the next honest move is no longer another diagnostic-only slice
-  first.
-- The next honest move is one narrow aggregation-side or rank-bookkeeping
-  throughput cut on the winning binary, while treating the smaller remaining
-  build gap as secondary untracked bookkeeping rather than the primary target.
+- The intended profile is still blocked in step `4`, not by the old early RSS
+  story, but by remaining-one summary throughput.
+- The early retained-prefix plateau
+  `39 groups / 144845 candidates` is real, but it is not terminal on the real
+  profile. The intended run later reopens to `40/147639` at `74` and
+  `41/154842` at `140`.
+- The honest late target is therefore the reopened `40/147639` surface.
+- On that surface, the current diagnostic still shows aggregation first,
+  connectivity second, clause filtering third, and exact `nu` fourth.
+- The latest bookkeeping rewrite kept the same honest shape but regressed too
+  much to keep. The next move should stay aggregation-side, but not retry that
+  exact rank-bookkeeping shape.
 
 ## Goal
 
-Land one narrow remaining-one aggregation or rank-bookkeeping cut that lowers
-the reopened `40/147639` retained-prefix surface honestly on stored short
-evidence without weakening the retained-prefix shape.
+Land one different narrow aggregation-side cut that lowers the honest short
+read on both:
+
+- the matched `24/43/44/54` plateau checkpoints
+- the reopened `40/147639` surface at `74/76`
+
+without weakening the retained-prefix shape.
 
 ## Do This Next
 
-### 1. Keep The Winning Baselines And Diagnostic Surface Landed
+### 1. Keep The Right Reference Surface
 
 Keep the code behind:
 
@@ -88,40 +67,31 @@ Keep the code behind:
 - `runs/codex-claim-release-full-kernel-aggregation-v1`
 - `runs/codex-claim-release-step4-kernel-late-profile-v1`
 
-Keep the temporary filter-only timing patch dropped.
-
 Do not reopen first:
 
 - another connectivity-side rewrite
 - another clause-filter-side rewrite
-- another prep-side candidate-remap rewrite
-- the dropped clause-side profile-precompute shape
-- another expr-keyed hot-path cache
-- another ordering or proof-close handoff experiment
-- another post-plateau summary-skip or summary-cache-reuse variant
-- another telemetry-only slice before an aggregation hypothesis is measured
+- another exact-`nu` cleanup first
+- another ordering, reuse, cache, or post-plateau variant
+- another retry of `kernel-rank-bookkeeping-v1`
+- another diagnostic-only slice before a new aggregation hypothesis is measured
 
-### 2. Land One Narrow Aggregation-Side Cut
+### 2. Pick One Aggregation Hypothesis
 
-Stay inside the remaining-one summary loop after connectivity and around the
-compact bound or rank bookkeeping.
+Stay inside the remaining-one compact summary path after connectivity and after
+exact `nu`.
 
-Prefer cuts that reduce:
+Prefer cuts that reduce one of these:
 
-- primary-rank or best-rank bookkeeping churn
-- bound absorption or merge overhead
-- summary-side evaluation or record construction that remains non-winning
-  after the primary-rank check
-- other compact summary aggregation work exposed by
-  `runs/codex-claim-release-step4-kernel-late-profile-v1`
+- per-candidate `PrefixBound` construction or bound-absorb churn
+- bookkeeping that still runs for admitted but clearly non-winning candidates
+  after the primary-rank gate
+- summary-side record or counter work that does not affect bound shape or
+  winner selection
 
-Reject as primary moves:
-
-- another connectivity-side cut first
-- another clause-filter-side cut first
-- another exact-`nu` cleanup first unless aggregation proves flat on the next
-  candidate
-- another diagnostic-only pass first
+If two candidate cuts look equally plausible, prefer the one that removes work
+from every admitted candidate on the reopened surface rather than the one that
+only improves rare tie cases.
 
 ### 3. Re-Earn The Short Runtime Read
 
@@ -132,17 +102,17 @@ Run a release claim rerun derived from
 - the winning binary plus the new aggregation-side cut
 - live checkpoint persistence left on
 - a new run id that states the patch, for example:
-  `runs/codex-claim-release-step4-kernel-aggregation-v2`
-  or
-  `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
+  - `runs/codex-claim-release-step4-kernel-aggregation-v2`
+  - `runs/codex-claim-release-step4-kernel-bound-merge-v1`
+  - `runs/codex-claim-release-step4-kernel-summary-bookkeeping-v1`
 
 Let the run go far enough to capture at least:
 
-- matched `24/43/44/54` checkpoints
+- matched `24/43/44/54`
 - the reopened `40 groups / 147639 candidates` surface at `74/76`
-- the later `41/154842` reopen at `140` if it still arrives cheaply
+- `140` only if it still arrives cheaply
 
-### 4. Read The Stored Runtime Artifacts
+### 4. Read The Stored Artifacts
 
 Open at least:
 
@@ -152,40 +122,37 @@ Open at least:
 
 Answer from stored evidence:
 
-- does the new cut lower elapsed and summary-build time at the matched
-  `24/43/44/54` checkpoints without losing `39/144845`?
-- does the reopened `40/147639` surface improve enough to justify keep?
-- is aggregation still first on `54 -> 76`, or has connectivity,
-  clause filtering, or the smaller bookkeeping tail become the next target?
-- does a later full-profile rerun still remain the next runtime gate after the
-  short read?
+- did the new cut lower elapsed and `terminal_summary_build_*` at
+  `24/43/44/54` without losing `39/144845`?
+- did the reopened `74/76` surface improve enough to justify keep?
+- is aggregation still first on `54 -> 76`, or has the wall moved honestly?
+- does a later full-profile rerun become the next gate, or is step `4` still
+  the next honest runtime target?
 
-### 5. Re-Earn Only The Validation Needed For That Runtime Slice
+### 5. Re-Earn Only The Validation Needed
 
-Use the already-kept full-profile and short reruns as baseline.
-If the next slice stays claim-only and step-`4` runtime-only, re-run only the
-focused claim test set plus the `pen-cli` live-checkpoint persistence test.
-If the new runtime cut earns keep, then re-enter one full
-`desktop_claim_shadow_1h` rerun before parity, breadth, compare, benchmark,
-or certification work.
+If the slice stays claim-only and step-`4` runtime-only, rerun only:
+
+- `cargo test -p pen-search claim_`
+- `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
+
+If the short runtime slice earns keep, then branch back to one new full-profile
+rerun before parity, breadth, compare, benchmark, or certification work.
 
 ## Keep Or Branch Decision
 
-After the next short aggregation-side rerun:
+After the next short rerun:
 
-- stay on runtime work only if step `4` still blocks the intended profile
-- branch back to full-profile completion only if the new short rerun earns
-  keep honestly
+- stay on runtime work if step `4` still blocks the intended profile
+- branch back to a new full-profile rerun only if the short rerun earns keep
 - branch to parity, breadth, compare, benchmark, and certification work only
-  after a later full-profile rerun honestly moves past the step-`4` wall
+  after a later full-profile run honestly moves past the step-`4` wall
 
 ## Stop Condition For This Note
 
-Rewrite this file as soon as one new stored short rerun shows one of these is
-true:
+Rewrite this file as soon as one new stored rerun shows one of these is true:
 
-- an aggregation-side or rank-bookkeeping cut earns keep on the reopened short
-  surface
+- a new aggregation-side cut earns keep on the honest short surface
 - the step-`4` wall moves away from aggregation first
-- the full-profile rerun reaches a later blocker honestly
+- a later full-profile rerun reaches a new blocker honestly
 - runtime work is no longer the next honest move
