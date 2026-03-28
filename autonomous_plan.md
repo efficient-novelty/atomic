@@ -34,16 +34,20 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   `runs/codex-claim-release-step4-kernel-late-profile-v1`
   shows that aggregation remains the first measured cost on the reopened
   `40/147639` surface.
-- The latest shared-reason-key summary bookkeeping rewrite
-  `runs/codex-claim-release-step4-kernel-summary-bookkeeping-v1`
-  preserved the honest short and reopened shapes, improved elapsed materially
-  on both surfaces, and beat the late diagnostic strongly at `74/76`, but it
-  still failed keep because total `terminal_summary_build_*` regressed too
-  much at the matched `24/43/44/54` checkpoints.
+- The latest exact-`nu` high-water rerun
+  `runs/codex-claim-release-step4-kernel-nu-highwater-v1`
+  preserved the honest short and reopened shapes, but it still failed keep
+  because wall clock and total `terminal_summary_build_*` regressed too much
+  at the matched `24/43/44/54` checkpoints and it remained slightly behind
+  the late diagnostic at `74/76`.
 - The next step should stay aggregation-side, but not reuse either the exact
-  cross-multiplied bookkeeping shape, the threshold-only summary shape,
-  another bound-only cleanup, or another batching-only/bookkeeping-only
-  cleanup first.
+  cross-multiplied bookkeeping shape, the threshold-only summary shape, the
+  competition-gate-only shape, the exact-`nu`-gate-only shape, another
+  bound-only cleanup, or another batching-only/bookkeeping-only cleanup first.
+- The strongest current inference is now that the next runtime slice should
+  precompute one more compact-summary constant that is still rebuilt for every
+  admitted candidate inside the measured aggregation block, rather than adding
+  another smaller static or dynamic gate first.
 
 ## Decision Rules
 
@@ -78,8 +82,8 @@ Working baselines:
 
 Preferred cuts:
 
-- hoist prefix-wide competition gating and other loop-invariant aggregation
-  work out of the per-admitted compact summary path
+- precompute one more compact-summary constant that is still rebuilt for every
+  admitted candidate inside the measured aggregation block
 - remove one more piece of per-admitted work that is already charged inside
   the measured summary kernel, not only in downstream discovery bookkeeping
 - keep exact tie-break truth; do not swap it for a lossy hash or surrogate key
@@ -95,6 +99,8 @@ Reject as the next primary move:
 - another retry of `kernel-lazy-acceptrank-v1`
 - another retry of `kernel-summary-batching-v1`
 - another retry of `kernel-summary-bookkeeping-v1`
+- another retry of `kernel-competition-hoist-v1`
+- another retry of `kernel-nu-highwater-v1`
 - another retry of `kernel-summary-threshold-v1`
 - reopening old ordering, reuse, cache, or post-plateau variants
 

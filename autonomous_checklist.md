@@ -23,14 +23,18 @@ It lists only work that is still open.
   rank-bookkeeping first on the reopened short surface, connectivity second,
   clause filtering third, exact `nu` fourth, and only a smaller residual
   bookkeeping tail left unattributed.
-- The latest summary-bookkeeping rewrite kept the honest short and reopened
-  shapes, improved elapsed materially on both the matched early surface and
-  the reopened `74/76` surface, and beat the late diagnostic strongly there,
-  but it still failed keep because total `terminal_summary_build_*` regressed
-  too much at the matched `24/43/44/54` checkpoints, so the next honest move
-  is still one different narrow aggregation-side cut inside the measured
-  summary kernel, not another diagnostics/bookkeeping-only cleanup and not
-  another full-profile rerun first.
+- The latest exact-`nu` high-water rerun kept the honest short and reopened
+  shapes, but it still failed keep because wall clock and total
+  `terminal_summary_build_*` regressed too much at the matched `24/43/44/54`
+  checkpoints and it remained slightly behind the late diagnostic at `74/76`,
+  so the next honest move is still one different narrow aggregation-side cut
+  inside the measured summary kernel, not another exact-`nu`-gate-only
+  cleanup and not another full-profile rerun first.
+- The strongest current next-cut hypothesis is now one more precomputed
+  compact-summary constant inside the admitted aggregation block. The exact-`nu`
+  high-water gate preserved shape and tie-break truth, but it was too small on
+  its own, so the next cut should remove a larger per-admitted invariant that
+  is still rebuilt inside the measured summary kernel.
 
 ## 1. Runtime Completion
 

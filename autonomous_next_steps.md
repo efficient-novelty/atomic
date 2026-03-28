@@ -30,6 +30,10 @@ Assume the following were already measured and should stay dropped:
   `runs/codex-claim-release-step4-kernel-summary-batching-v1`
 - the shared reason-key summary bookkeeping rewrite in
   `runs/codex-claim-release-step4-kernel-summary-bookkeeping-v1`
+- the prefix-wide competition-gate hoist in
+  `runs/codex-claim-release-step4-kernel-competition-hoist-v1`
+- the exact-`nu` high-water gate in
+  `runs/codex-claim-release-step4-kernel-nu-highwater-v1`
 - the fixed bar-clear summary-threshold rewrite in
   `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
 
@@ -53,16 +57,22 @@ Assume the following were already measured and should stay dropped:
 - The honest late target is therefore the reopened `40/147639` surface.
 - On that surface, the current diagnostic still shows aggregation first,
   connectivity second, clause filtering third, and exact `nu` fourth.
-- The latest summary-bookkeeping rewrite kept the same honest early and
-  reopened shapes, improved elapsed materially on both surfaces, and beat the
-  late diagnostic strongly at `74/76`, but it still regressed too much on
-  total `terminal_summary_build_*` at `24/43/44/54` to keep.
+- The latest exact-`nu` high-water rerun kept the same honest early and
+  reopened shapes, but it still regressed too much on wall clock and total
+  `terminal_summary_build_*` at `24/43/44/54` and remained slightly behind
+  the late diagnostic at `74/76`, so it did not earn keep.
 - The current code already skips full `AcceptRank` construction for compact
   summary candidates whose primary rank is clearly worse than the current
-  group best, so the next move should stay aggregation-side but go after
-  loop-invariant or per-admitted work inside the measured summary kernel, not
-  retry another threshold-only, bound-only, exact rank-bookkeeping,
-  batching-only, or bookkeeping-only shape first.
+  group best, so the next move should stay aggregation-side but go after a
+  larger per-admitted cut inside the measured summary kernel, not retry
+  another threshold-only, bound-only, exact rank-bookkeeping,
+  competition-gate-only, exact-`nu`-gate-only, batching-only, or
+  bookkeeping-only shape first.
+- The bound-merge, threshold-only, competition-gate-only, and exact-`nu`
+  high-water failures now point at a narrower remaining wall: many admitted
+  candidates still clear the static bar and the earlier static or dynamic
+  gates, but too much per-admitted compact-summary work is still rebuilt
+  inside the measured aggregation block.
 
 ## Goal
 
@@ -95,6 +105,7 @@ Do not reopen first:
 - another retry of `kernel-lazy-acceptrank-v1`
 - another retry of `kernel-summary-batching-v1`
 - another retry of `kernel-summary-bookkeeping-v1`
+- another retry of `kernel-competition-hoist-v1`
 - another retry of `kernel-summary-threshold-v1`
 - another diagnostic-only slice before a new aggregation hypothesis is measured
 
@@ -106,22 +117,30 @@ exact `nu`.
 Prefer this first:
 
 - keep the current primary-rank short-circuit and stored diagnostics, but
-  hoist prefix-wide competition gating and other loop-invariant aggregation
-  work out of the per-admitted compact-summary path in
-  `compute_terminal_prefix_completion_summary_from_candidates`, so admitted
-  candidates stop paying repeated prefix-constant checks on the reopened
-  surface
+  precompute one more compact-summary constant that is still rebuilt for every
+  admitted candidate inside
+  `compute_terminal_prefix_completion_summary_from_candidates`, without
+  reopening the old terminal-candidate-prep or remap shapes first
 
 Fallback after that:
 
-- precompute one more compact-summary constant that is currently rebuilt for
-  every admitted candidate inside the aggregation block, but do not reopen the
-  old terminal-candidate-prep or remap shapes first
+- pick another per-admitted aggregation-side invariant that is already charged
+  inside the measured summary kernel, but do not reopen the old
+  terminal-candidate-prep or remap shapes first
 
 Do not pick next:
 
+- another competition-gate-only cleanup; `kernel-competition-hoist-v1` showed
+  that prefix-wide focus-gating lookup is real but too small to keep on its
+  own
+- another exact-`nu`-gate-only cleanup; `kernel-nu-highwater-v1` preserved the
+  honest shapes, but the gate was too small on its own to beat even the late
+  diagnostic on total summary-build
 - another bound-only cleanup; `kernel-bound-merge-v1` already showed that
   per-candidate bound churn was real but not dominant enough to keep
+- another fixed-threshold-only cleanup; `kernel-summary-threshold-v1` already
+  showed that static bar gating alone does not remove enough admitted-candidate
+  work on the reopened surface
 - another batching-only or bookkeeping-only cleanup; `kernel-summary-batching-v1`
   and `kernel-summary-bookkeeping-v1` already showed that those shapes can
   help elapsed on the reopened surface without fixing the honest early
@@ -140,9 +159,9 @@ Run a release claim rerun derived from
 - the winning binary plus the new aggregation-side cut
 - live checkpoint persistence left on
 - a new run id that states the patch, for example:
-  - `runs/codex-claim-release-step4-kernel-summary-loop-hoist-v1`
-  - `runs/codex-claim-release-step4-kernel-competition-hoist-v1`
   - `runs/codex-claim-release-step4-kernel-summary-invariants-v1`
+  - `runs/codex-claim-release-step4-kernel-summary-highwater-v1`
+  - `runs/codex-claim-release-step4-kernel-summary-constant-v1`
 
 Let the run go far enough to capture at least:
 
