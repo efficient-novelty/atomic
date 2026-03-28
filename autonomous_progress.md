@@ -18,7 +18,7 @@ gate.
 - The authoritative late-surface diagnostic is
   `runs/codex-claim-release-step4-kernel-late-profile-v1`.
 - The latest measured slice is
-  `runs/codex-claim-release-step4-kernel-summary-threshold-v1`, and it was
+  `runs/codex-claim-release-step4-kernel-bound-merge-v1`, and it was
   dropped from code after failing keep.
 - The lane is still compute-bound in step `4` on the intended profile.
   The old early allocator-failure story is no longer the primary blocker.
@@ -95,36 +95,40 @@ gate.
 ### 4. Latest Failed Slice
 
 - Run:
-  `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
+  `runs/codex-claim-release-step4-kernel-bound-merge-v1`
 - Hypothesis:
-  precompute one fixed remaining-one bar-clear `exact_nu` threshold for the
-  summary and then keep the compact primary-rank hot loop on integer compares
-  instead of rebuilding the same bar-clear `Rational` gate for every admitted
-  candidate.
+  keep the compact remaining-one summary loop on the same winning binary, but
+  replace per-admitted-candidate `PrefixBound::singleton` construction plus
+  `absorb_bound` churn with one constant-`kappa` scalar accumulator that only
+  materializes the final summary bound once at the end.
 - Outcome:
-  preserved the same honest shapes at `24/43/44/54/74/76`, improved
-  aggregation microtime versus the late diagnostic, but still regressed too
-  much on elapsed and total `terminal_summary_build_*` to keep.
+  preserved the same honest shapes at `24/43/44/54/74/76`, improved the late
+  diagnostic at `74/76`, but still regressed materially versus the kept short
+  baseline and even stayed slightly behind the already-dropped threshold slice
+  on both elapsed and total `terminal_summary_build_*`.
 - Regressions versus the kept short baseline:
-  - `24`: `549601 / 544734` instead of `549630 / 492524`
-  - `43`: `1003460 / 997508` instead of `990480 / 892772`
-  - `44`: `1025573 / 1019566` instead of `1012067 / 912271`
-  - `54`: `1266594 / 1260019` instead of `1247600 / 1126754`
+  - `24`: `565136 / 559976` instead of `549630 / 492524`
+  - `43`: `1017812 / 1011603` instead of `990480 / 892772`
+  - `44`: `1039567 / 1033308` instead of `1012067 / 912271`
+  - `54`: `1277135 / 1270385` instead of `1247600 / 1126754`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
 - Reopened-surface read:
-  - `74`: `elapsed_millis = 1747206`
-  - `76`: `elapsed_millis = 1802825`,
-    `terminal_summary_build_micros = 1794975153`
-  This recovered a real amount of late diagnostic overhead, but still stayed
-  behind the intended full-profile baseline on elapsed at `76` and never came
-  close to replacing the kept short baseline on total summary-build time.
+  - `74`: `elapsed_millis = 1754470`,
+    `terminal_summary_build_micros = 1746647551`
+  - `76`: `elapsed_millis = 1810157`,
+    `terminal_summary_build_micros = 1802218309`
+  This beat the late diagnostic by about `36-38s` on elapsed and total
+  summary-build at `74/76`, but it still stayed behind the intended
+  full-profile baseline on elapsed by about `11-13s`, behind it on total
+  summary-build by about `167-173s`, and nowhere close to replacing the kept
+  short baseline on the matched early surface.
 - Incremental `54 -> 76` still kept aggregation first:
-  - aggregation `+133778333 us`
-  - connectivity `+116730506 us`
-  - clause filtering `+107065881 us`
-  - exact `nu` `+79763394 us`
+  - aggregation `+136064041 us`
+  - connectivity `+115008624 us`
+  - clause filtering `+105322968 us`
+  - exact `nu` `+78680417 us`
 - The run was terminated manually after storing evidence through
-  `prefix_states_explored = 79`.
+  `prefix_states_explored = 76`.
 
 ## What Stays Dropped
 
@@ -147,6 +151,11 @@ gate.
 - Exact primary-rank bookkeeping rewrite:
   `kernel-rank-bookkeeping-v1`
   Honest shape, slower clock, dropped.
+- Bound-merge bookkeeping rewrite:
+  `kernel-bound-merge-v1`
+  Honest shape, slightly better reopened `74/76` read than the late
+  diagnostic, but materially worse than the kept short baseline at
+  `24/43/44/54`, so no keep.
 - Bar-clear threshold bookkeeping rewrite:
   `kernel-summary-threshold-v1`
   Honest shape, better aggregation microtime than the late diagnostic, but no
@@ -166,11 +175,13 @@ gate.
   only the early plateau.
 - On that reopened surface, aggregation is still the largest measured cost,
   connectivity remains second, clause filtering third, and exact `nu` fourth.
-- The latest failed threshold slice shows that the per-candidate bar-clear
-  `Rational` gate was real work, but not the dominant remaining wall.
+- The latest failed threshold and bound-merge slices show that both the
+  per-candidate bar-clear `Rational` gate and the per-candidate `PrefixBound`
+  merge churn were real work, but neither was the dominant remaining wall.
 - The next aggregation cut should therefore stay inside the compact summary
-  path, but move deeper into post-primary-gate tie bookkeeping rather than
-  retrying another threshold-only cleanup first.
+  path, but move deeper into post-primary-gate tie bookkeeping or summary-side
+  record work rather than retrying another threshold-only or bound-only
+  cleanup first.
 
 ## Immediate Next Move
 
@@ -182,9 +193,10 @@ gate.
    Prefer hypotheses that reduce:
    - full `AcceptRank` tie-break bookkeeping that still runs for compact
      summary candidates which only match the current best primary `exact_nu`
-   - per-candidate bound construction or bound-absorb churn
    - summary-side record or counter work that does not affect bound shape or
      winner selection
+   - other compact-summary bookkeeping that still runs for every admitted
+     candidate on the reopened `40/147639` surface
 3. Re-earn one short release rerun from
    `configs/desktop_claim_shadow_1h.toml` with `--until-step 4` and a run id
    that names the new cut.
@@ -205,6 +217,7 @@ gate.
 - Do not reopen another connectivity-side rewrite first.
 - Do not reopen another clause-filter-side rewrite first.
 - Do not retry `kernel-rank-bookkeeping-v1` as the next primary move.
+- Do not retry `kernel-bound-merge-v1` as the next primary move.
 - Do not retry `kernel-summary-threshold-v1` as the next primary move.
 - Do not spend another turn on a diagnostic-only slice before an aggregation
   hypothesis is measured.

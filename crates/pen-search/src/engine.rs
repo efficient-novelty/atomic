@@ -8685,6 +8685,7 @@ mod tests {
 
         let mut direct_evaluations = Vec::new();
         let mut direct_admitted = 0usize;
+        let mut direct_bound: Option<PrefixBound> = None;
         for clause in clause_catalog.clauses_at(7) {
             let mut telescope = prefix.clone();
             telescope.clauses.push(clause.clone());
@@ -8702,17 +8703,27 @@ mod tests {
             }
 
             direct_admitted += 1;
+            let exact_nu =
+                u16::try_from(pen_eval::nu::structural_nu(&telescope, &library, &nu_history).total)
+                    .expect("nu exceeded u16");
+            let bit_kappa_used = u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                .expect("bit cost exceeded u16");
+            let clause_kappa_used = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+            if let Some(bound) = direct_bound.as_mut() {
+                bound.absorb_completion(exact_nu, clause_kappa_used, bit_kappa_used);
+            } else {
+                direct_bound = Some(PrefixBound::singleton(
+                    exact_nu,
+                    clause_kappa_used,
+                    bit_kappa_used,
+                ));
+            }
             direct_evaluations.push(TerminalPrefixClauseEvaluation::Admitted {
                 decision,
                 completion: TerminalPrefixCompletion {
-                    exact_nu: u16::try_from(
-                        pen_eval::nu::structural_nu(&telescope, &library, &nu_history).total,
-                    )
-                    .expect("nu exceeded u16"),
-                    bit_kappa_used: u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
-                        .expect("bit cost exceeded u16"),
-                    clause_kappa_used: u16::try_from(telescope.kappa())
-                        .expect("kappa exceeded u16"),
+                    exact_nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
                     telescope,
                 },
             });
@@ -8720,6 +8731,7 @@ mod tests {
 
         assert_eq!(summary.evaluations, Some(direct_evaluations));
         assert_eq!(summary.admitted_candidate_count, direct_admitted);
+        assert_eq!(summary.bound, direct_bound);
         assert_eq!(
             telemetry.terminal_summary_connectivity_checks,
             summary.generated_candidate_count
