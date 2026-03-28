@@ -659,7 +659,10 @@ pub struct RemainingOneTelemetry {
     pub remaining_one_unknown_bound_budget_exhaustions: usize,
     pub prepare_exact_two_step_terminal_surface_millis: u64,
     pub exact_partial_prefix_bound_millis: u64,
+    pub terminal_prefix_clause_filter_millis: u64,
+    pub terminal_prefix_clause_filter_micros: u64,
     pub terminal_summary_build_millis: u64,
+    pub terminal_summary_build_micros: u64,
     pub terminal_summary_connectivity_checks: usize,
     pub terminal_summary_fallback_connectivity_checks: usize,
     pub terminal_summary_admissibility_checks: usize,
@@ -667,10 +670,15 @@ pub struct RemainingOneTelemetry {
     pub terminal_summary_plateau_activations: usize,
     pub terminal_summary_first_plateau_activation_prefix_state: usize,
     pub terminal_summary_connectivity_millis: u64,
+    pub terminal_summary_connectivity_micros: u64,
     pub terminal_summary_fallback_connectivity_millis: u64,
+    pub terminal_summary_fallback_connectivity_micros: u64,
     pub terminal_summary_admissibility_millis: u64,
+    pub terminal_summary_admissibility_micros: u64,
     pub terminal_summary_exact_nu_millis: u64,
+    pub terminal_summary_exact_nu_micros: u64,
     pub terminal_summary_aggregation_millis: u64,
+    pub terminal_summary_aggregation_micros: u64,
     pub terminal_materialize_millis: u64,
     pub candidate_sort_millis: u64,
     pub candidate_eval_minimality_millis: u64,
@@ -701,33 +709,53 @@ struct RemainingOneSummaryKernelTiming {
 }
 
 impl RemainingOneTelemetry {
+    fn absorb_terminal_prefix_clause_filter_duration(&mut self, duration: Duration) {
+        absorb_elapsed_duration(
+            &mut self.terminal_prefix_clause_filter_millis,
+            &mut self.terminal_prefix_clause_filter_micros,
+            duration,
+        );
+    }
+
+    fn absorb_terminal_summary_build_duration(&mut self, duration: Duration) {
+        absorb_elapsed_duration(
+            &mut self.terminal_summary_build_millis,
+            &mut self.terminal_summary_build_micros,
+            duration,
+        );
+    }
+
     fn absorb_terminal_summary_kernel_timing(&mut self, timing: RemainingOneSummaryKernelTiming) {
         self.terminal_summary_connectivity_checks += timing.terminal_summary_connectivity_checks;
         self.terminal_summary_fallback_connectivity_checks +=
             timing.terminal_summary_fallback_connectivity_checks;
         self.terminal_summary_admissibility_checks += timing.terminal_summary_admissibility_checks;
         self.terminal_summary_exact_nu_evaluations += timing.terminal_summary_exact_nu_evaluations;
-        self.terminal_summary_connectivity_millis = self
-            .terminal_summary_connectivity_millis
-            .saturating_add(elapsed_millis(
-                timing.terminal_summary_connectivity_duration,
-            ));
-        self.terminal_summary_fallback_connectivity_millis = self
-            .terminal_summary_fallback_connectivity_millis
-            .saturating_add(elapsed_millis(
-                timing.terminal_summary_fallback_connectivity_duration,
-            ));
-        self.terminal_summary_admissibility_millis = self
-            .terminal_summary_admissibility_millis
-            .saturating_add(elapsed_millis(
-                timing.terminal_summary_admissibility_duration,
-            ));
-        self.terminal_summary_exact_nu_millis = self
-            .terminal_summary_exact_nu_millis
-            .saturating_add(elapsed_millis(timing.terminal_summary_exact_nu_duration));
-        self.terminal_summary_aggregation_millis = self
-            .terminal_summary_aggregation_millis
-            .saturating_add(elapsed_millis(timing.terminal_summary_aggregation_duration));
+        absorb_elapsed_duration(
+            &mut self.terminal_summary_connectivity_millis,
+            &mut self.terminal_summary_connectivity_micros,
+            timing.terminal_summary_connectivity_duration,
+        );
+        absorb_elapsed_duration(
+            &mut self.terminal_summary_fallback_connectivity_millis,
+            &mut self.terminal_summary_fallback_connectivity_micros,
+            timing.terminal_summary_fallback_connectivity_duration,
+        );
+        absorb_elapsed_duration(
+            &mut self.terminal_summary_admissibility_millis,
+            &mut self.terminal_summary_admissibility_micros,
+            timing.terminal_summary_admissibility_duration,
+        );
+        absorb_elapsed_duration(
+            &mut self.terminal_summary_exact_nu_millis,
+            &mut self.terminal_summary_exact_nu_micros,
+            timing.terminal_summary_exact_nu_duration,
+        );
+        absorb_elapsed_duration(
+            &mut self.terminal_summary_aggregation_millis,
+            &mut self.terminal_summary_aggregation_micros,
+            timing.terminal_summary_aggregation_duration,
+        );
     }
 
     fn note_terminal_summary_plateau_activation(
@@ -5372,6 +5400,7 @@ fn exact_terminal_prefix_bound_decision(
         return ExactPartialPrefixBoundDecision::CannotClearBar;
     }
 
+    let summary_started = Instant::now();
     let terminal_clauses = terminal_prefix_clause_candidates(
         step_index,
         library,
@@ -5379,9 +5408,9 @@ fn exact_terminal_prefix_bound_decision(
         prefix_signature,
         filtered_last_clause_options,
         prefix_legality_cache,
+        remaining_one_telemetry.as_deref_mut(),
     );
     if spend_exact_partial_prefix_budget(budget, terminal_clauses.len()) {
-        let summary_start = Instant::now();
         let summary = compute_terminal_prefix_completion_summary_from_candidates(
             step_index,
             library,
@@ -5402,9 +5431,7 @@ fn exact_terminal_prefix_bound_decision(
             remaining_one_summary_kernel_activation,
         );
         if let Some(telemetry) = remaining_one_telemetry.as_deref_mut() {
-            telemetry.terminal_summary_build_millis = telemetry
-                .terminal_summary_build_millis
-                .saturating_add(elapsed_millis(summary_start.elapsed()));
+            telemetry.absorb_terminal_summary_build_duration(summary_started.elapsed());
         }
         prefix_legality_cache
             .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary.clone());
@@ -5489,11 +5516,13 @@ fn terminal_prefix_clause_candidates<'a>(
     prefix_signature: &PrefixSignature,
     filtered_last_clause_options: &'a [pen_core::clause::ClauseRec],
     prefix_legality_cache: &mut PrefixLegalityCache,
+    remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
 ) -> Vec<(
     &'a pen_core::clause::ClauseRec,
     Option<pen_type::admissibility::AdmissibilityDecision>,
 )> {
-    prefix_legality_cache
+    let clause_filter_started = Instant::now();
+    let terminal_clauses = prefix_legality_cache
         .filter_terminal_clauses(
             step_index,
             prefix_signature,
@@ -5512,7 +5541,11 @@ fn terminal_prefix_clause_candidates<'a>(
                 .iter()
                 .map(|clause| (clause, None))
                 .collect::<Vec<_>>()
-        })
+        });
+    if let Some(telemetry) = remaining_one_telemetry {
+        telemetry.absorb_terminal_prefix_clause_filter_duration(clause_filter_started.elapsed());
+    }
+    terminal_clauses
 }
 
 fn terminal_prefix_scratch_telescope(prefix_telescope: &Telescope) -> Telescope {
@@ -5907,6 +5940,7 @@ fn claim_try_summary_prune_before_materialization(
             prefix_signature,
             filtered_last_clause_options,
             &mut discovery.prefix_legality_cache,
+            Some(&mut discovery.remaining_one_telemetry),
         );
         let summary = compute_terminal_prefix_completion_summary_from_candidates(
             step_index,
@@ -5925,10 +5959,7 @@ fn claim_try_summary_prune_before_materialization(
         );
         discovery
             .remaining_one_telemetry
-            .terminal_summary_build_millis = discovery
-            .remaining_one_telemetry
-            .terminal_summary_build_millis
-            .saturating_add(elapsed_millis(summary_started.elapsed()));
+            .absorb_terminal_summary_build_duration(summary_started.elapsed());
         discovery
             .prefix_legality_cache
             .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary);
@@ -6057,6 +6088,7 @@ fn materialize_terminal_prefix_group(
     } else {
         let remaining_one_summary_kernel_activation =
             remaining_one_summary_kernel_activation_context(discovery);
+        let summary_started = Instant::now();
         let terminal_clauses = terminal_prefix_clause_candidates(
             step_index,
             library,
@@ -6064,6 +6096,7 @@ fn materialize_terminal_prefix_group(
             prefix_signature,
             filtered_last_clause_options,
             &mut discovery.prefix_legality_cache,
+            Some(&mut discovery.remaining_one_telemetry),
         );
         let summary = compute_terminal_prefix_completion_summary_from_candidates(
             step_index,
@@ -6080,6 +6113,9 @@ fn materialize_terminal_prefix_group(
             Some(&mut discovery.remaining_one_telemetry),
             Some(remaining_one_summary_kernel_activation),
         );
+        discovery
+            .remaining_one_telemetry
+            .absorb_terminal_summary_build_duration(summary_started.elapsed());
         discovery
             .prefix_legality_cache
             .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary.clone());
@@ -6171,6 +6207,7 @@ fn materialize_terminal_prefix_group_compact(
         prefix_signature,
         filtered_last_clause_options,
         &mut discovery.prefix_legality_cache,
+        Some(&mut discovery.remaining_one_telemetry),
     );
     let mut generated_terminal_candidates = 0usize;
     let mut admitted_terminal_candidates = 0usize;
@@ -7030,6 +7067,19 @@ fn elapsed_millis(duration: Duration) -> u64 {
     u64::try_from(duration.as_millis()).unwrap_or(u64::MAX)
 }
 
+fn elapsed_micros(duration: Duration) -> u64 {
+    u64::try_from(duration.as_micros()).unwrap_or(u64::MAX)
+}
+
+fn absorb_elapsed_duration(millis: &mut u64, micros: &mut u64, duration: Duration) {
+    *micros = micros.saturating_add(elapsed_micros(duration));
+    *millis = if *micros == u64::MAX {
+        u64::MAX
+    } else {
+        *micros / 1_000
+    };
+}
+
 #[cfg(test)]
 mod tests {
     use super::{
@@ -7086,6 +7136,7 @@ mod tests {
     use std::cmp::Reverse;
     use std::collections::BTreeMap;
     use std::sync::Arc;
+    use std::time::Duration;
 
     fn reference_prefix(until_step: u32) -> Vec<Telescope> {
         (1..=until_step).map(Telescope::reference).collect()
@@ -8598,6 +8649,7 @@ mod tests {
             &signature,
             clause_catalog.clauses_at(7),
             &mut cache,
+            None,
         );
         assert!(!terminal_clauses.is_empty());
         for (clause, cached_decision) in &terminal_clauses {
@@ -8939,6 +8991,39 @@ mod tests {
         assert_eq!(telemetry.terminal_summary_exact_nu_evaluations, 0);
         assert_eq!(telemetry.terminal_summary_plateau_activations, 0);
         assert_eq!(cache.entry_counts().terminal_prefix_completions, 0);
+    }
+
+    #[test]
+    fn remaining_one_telemetry_accumulates_sub_millisecond_durations() {
+        let mut telemetry = super::RemainingOneTelemetry::default();
+
+        telemetry.absorb_terminal_prefix_clause_filter_duration(Duration::from_micros(600));
+        telemetry.absorb_terminal_prefix_clause_filter_duration(Duration::from_micros(700));
+        telemetry.absorb_terminal_summary_build_duration(Duration::from_micros(400));
+        telemetry.absorb_terminal_summary_build_duration(Duration::from_micros(800));
+        telemetry.absorb_terminal_summary_kernel_timing(super::RemainingOneSummaryKernelTiming {
+            terminal_summary_connectivity_duration: Duration::from_micros(550),
+            terminal_summary_exact_nu_duration: Duration::from_micros(250),
+            terminal_summary_aggregation_duration: Duration::from_micros(300),
+            ..Default::default()
+        });
+        telemetry.absorb_terminal_summary_kernel_timing(super::RemainingOneSummaryKernelTiming {
+            terminal_summary_connectivity_duration: Duration::from_micros(550),
+            terminal_summary_exact_nu_duration: Duration::from_micros(850),
+            terminal_summary_aggregation_duration: Duration::from_micros(800),
+            ..Default::default()
+        });
+
+        assert_eq!(telemetry.terminal_prefix_clause_filter_micros, 1300);
+        assert_eq!(telemetry.terminal_prefix_clause_filter_millis, 1);
+        assert_eq!(telemetry.terminal_summary_build_micros, 1200);
+        assert_eq!(telemetry.terminal_summary_build_millis, 1);
+        assert_eq!(telemetry.terminal_summary_connectivity_micros, 1100);
+        assert_eq!(telemetry.terminal_summary_connectivity_millis, 1);
+        assert_eq!(telemetry.terminal_summary_exact_nu_micros, 1100);
+        assert_eq!(telemetry.terminal_summary_exact_nu_millis, 1);
+        assert_eq!(telemetry.terminal_summary_aggregation_micros, 1100);
+        assert_eq!(telemetry.terminal_summary_aggregation_millis, 1);
     }
 
     #[test]
@@ -9341,6 +9426,7 @@ mod tests {
                 &signature,
                 clause_catalog.clauses_at(prefix_len),
                 &mut cache,
+                None,
             );
             if terminal_clauses.is_empty() {
                 continue;
@@ -9691,6 +9777,7 @@ mod tests {
             &summary_work_item.signature,
             summary_work_item.next_clauses(&clause_catalog),
             &mut summary_discovery.prefix_legality_cache,
+            None,
         );
         let summary = super::compute_terminal_prefix_completion_summary_from_candidates(
             15,

@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-03-27
+Last updated: 2026-03-28
 Status: active
 
 This file is the staged path from the current claim-lane wall to final
@@ -109,13 +109,14 @@ Previous short baseline:
 `runs/codex-claim-release-step4-kernel-connectivity-v2`
 
 Current full-profile baseline:
-`runs/codex-claim-release-full-nu-profile-v1`
+`runs/codex-claim-release-full-kernel-aggregation-v1`
 
 Current honest wall:
 
-- measured remaining-one connectivity on the retained `39/144845` plateau
-- then aggregation and bound or rank bookkeeping inside the compact summary
-  loop
+- measured aggregation or rank bookkeeping on the reopened `40/147639`
+  surface
+- then remaining-one connectivity on that same late surface
+- then terminal-prefix clause filtering
 - then exact `nu`
 
 ## Execution Order
@@ -180,6 +181,10 @@ Done when:
   `runs/codex-claim-release-step4-kernel-connectivity-v2`
 
 ### Phase 3. Re-Earn The Real Full-Profile Read
+
+Status:
+
+- done via `runs/codex-claim-release-full-kernel-aggregation-v1`
 
 Goal:
 
@@ -262,9 +267,11 @@ Done when:
 - Previous short step-`4` baseline:
   `runs/codex-claim-release-step4-kernel-connectivity-v2`
 - Current full-profile baseline:
-  `runs/codex-claim-release-full-nu-profile-v1`
+  `runs/codex-claim-release-full-kernel-aggregation-v1`
 - Diagnostic kernel split:
   `runs/codex-claim-release-step4-kernel-profile-v2`
+- Late-surface diagnostic:
+  `runs/codex-claim-release-step4-kernel-late-profile-v1`
 - Ignore as invalid diagnostic:
   `runs/codex-claim-release-step4-kernel-profile-v1`
 - Informative failed short reruns that define the current diagnosis:

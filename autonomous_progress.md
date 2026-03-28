@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Progress
 
-Last updated: 2026-03-27
+Last updated: 2026-03-28
 
 This file is the live status read for `desktop_claim_shadow`.
 Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next
@@ -48,12 +48,14 @@ final gate.
   - terminal-prefix clause-filter timing counter:
     `runs/codex-claim-release-step4-kernel-filter-profile-v1`
 - The step-`4` kernel is still measurable from stored evidence:
-  - valid diagnostic split:
+  - valid plateau diagnostic split:
     `runs/codex-claim-release-step4-kernel-profile-v2`
+  - valid late-surface diagnostic:
+    `runs/codex-claim-release-step4-kernel-late-profile-v1`
   - ignore as invalid local diagnostic:
     `runs/codex-claim-release-step4-kernel-profile-v1`
-- The most recent stored short rerun in this turn earned keep:
-  `runs/codex-claim-release-step4-kernel-aggregation-v1`
+- The most recent stored short rerun in this turn was diagnostic-only:
+  `runs/codex-claim-release-step4-kernel-late-profile-v1`
 - The current short step-`4` baseline is now
   `runs/codex-claim-release-step4-kernel-aggregation-v1`.
 - The previous short step-`4` baseline is now
@@ -65,16 +67,16 @@ final gate.
 - The previous full-profile iteration baseline is now
   `runs/codex-claim-release-full-nu-profile-v1`.
 - The claim lane is still compute-bound in step `4` on the intended profile.
-  A new stored full-profile rerun moved materially farther than the prior full
-  baseline with observed RSS still controlled, but it did not reach step `5`.
-  A follow-up short diagnostic rerun then reproduced the first later
-  retained-prefix reopen on stored short evidence, but its added clause-filter
-  timing counter still left most of `terminal_summary_build_millis`
-  unattributed because the current remaining-one counter surface is still
-  dominated by per-summary millisecond truncation. The next honest move is
-  therefore a higher-fidelity late-surface diagnostic, not compare,
-  benchmark, certification, breadth closeout, or another blind throughput
-  rewrite first.
+  The kept full-profile rerun still does not reach step `5`, but a new
+  higher-fidelity short late-surface diagnostic now reproduces the reopened
+  `40/147639` and `41/154842` surfaces while still tracking the intended
+  full-profile baseline closely. Its cumulative microsecond split closes most
+  of the old reopened-surface build gap and now shows aggregation or
+  rank-bookkeeping first, connectivity second, clause filtering third, and
+  exact `nu` fourth on the honest `40/147639` surface. The next honest move
+  is therefore one narrow aggregation-side or rank-bookkeeping throughput cut,
+  not another diagnostic-only slice and not compare, benchmark,
+  certification, or breadth closeout work yet.
 
 ## Latest Evidence
 
@@ -193,9 +195,71 @@ final gate.
     - `terminal_summary_exact_nu_millis = 311183`
   - So the new intended-profile read moved far enough to invalidate the old
     `39/144845` "final plateau" read, but it still exposes no later step wall:
-    the live blocker remains step-`4` summary compute, especially connectivity
-    first and aggregation second, with exact `nu` still behind them.
-- New dropped short diagnostic rerun:
+    the live blocker remains step-`4` summary compute, with connectivity and
+    aggregation both still large enough that the later short diagnostic was
+    needed to choose between them honestly.
+- New higher-fidelity late-surface diagnostic rerun:
+  `runs/codex-claim-release-step4-kernel-late-profile-v1`
+  - It keeps the same honest retained plateau through `24/43/44/54`, then
+    reproduces the same later short-lane reopens already seen on the intended
+    full-profile baseline:
+    - `40 groups / 147639 candidates` first appeared at `74`
+    - `41 groups / 154842 candidates` first appeared at `140`
+  - It stayed close to the current short baseline at the matched early
+    checkpoints, with only diagnostic overhead in wall clock:
+    - at `prefix_states_explored = 24`:
+      `elapsed_millis = 567105` instead of baseline `549630`
+    - at `prefix_states_explored = 43`:
+      `elapsed_millis = 1021948` instead of `990480`
+    - at `prefix_states_explored = 44`:
+      `elapsed_millis = 1044233` instead of `1012067`
+    - at `prefix_states_explored = 54`:
+      `elapsed_millis = 1293355` instead of `1247600`
+  - It also kept tracking the intended full-profile baseline closely on the
+    reopened surfaces:
+    - at `prefix_states_explored = 74`:
+      short `elapsed_millis = 1790703`,
+      observed RSS `= 378155008`,
+      `frontier_queue_len = 2701`
+      versus full-profile `1743244 / 374198272 / 2701`
+    - at `prefix_states_explored = 76`:
+      short `elapsed_millis = 1848102`,
+      observed RSS `= 382369792`,
+      `frontier_queue_len = 2699`
+      versus full-profile `1797441 / 379269120 / 2699`
+    - at `prefix_states_explored = 140`:
+      short `elapsed_millis = 3535425`,
+      observed RSS `= 570712064`,
+      `frontier_queue_len = 2635`
+      versus full-profile `3393970 / 566460416 / 2635`
+  - The higher-fidelity split closed most of the old reopened-surface
+    build-gap read:
+    - at `76`,
+      `terminal_summary_build_micros = 1839910636`
+    - tracked subphases now sum to
+      `352203534 + 416766880 + 469431036 + 267574759 = 1505976209`
+    - leaving only `333934427` microseconds unexplained, about `18.15%` of
+      build time instead of the older roughly `49.07%` gap
+  - On that reopened `40/147639` surface, aggregation or rank-bookkeeping is
+    now the honest dominant measured phase:
+    - cumulative at `76`:
+      aggregation `= 469431036 us`,
+      connectivity `= 416766880 us`,
+      clause filtering `= 352203534 us`,
+      exact `nu` `= 267574759 us`
+    - incremental `54 -> 76`:
+      aggregation `+141716373 us`,
+      connectivity `+124894828 us`,
+      clause filtering `+107776335 us`,
+      exact `nu` `+80574865 us`
+  - The rerun was allowed to continue far past the first reopen under a long
+    session timeout, then the still-live release `pen-cli` process was
+    terminated manually after the stored late-surface evidence had been
+    secured through `prefix_states_explored = 212`.
+  - Because that stop was manual, `run.json` still shows `status = "running"`
+    at `completed_step = 3`, but the stored step-`4` live checkpoints remain
+    the authoritative evidence surface for this diagnostic rerun.
+- Previous dropped short diagnostic rerun:
   `runs/codex-claim-release-step4-kernel-filter-profile-v1`
   - It added one narrow terminal-prefix clause-filter timing counter to the
     remaining-one telemetry so the later reopened short surface could be read
@@ -261,8 +325,7 @@ final gate.
     baseline and was dropped from code.
 - Re-earned validations in this turn:
   - `cargo test -p pen-search claim_`
-  - `cargo test -p pen-search online_work_items_`
-  - `cargo test -p pen-search prefix_queue_prefers_nearer_terminal_and_tighter_cached_continuations`
+  - `cargo test -p pen-search remaining_one_telemetry_accumulates_sub_millisecond_durations`
   - `cargo test -p pen-search terminal_clause_filter_skips_inadmissible_last_clauses_before_connectivity`
   - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
 
@@ -283,46 +346,44 @@ final gate.
     reopens to `40/147639` and then `41/154842`
   - no later step wall is exposed yet, because the run still never reaches
     step `5`
-- The follow-up short diagnostic rerun
-  `runs/codex-claim-release-step4-kernel-filter-profile-v1` then proved two
+- The new higher-fidelity late-surface diagnostic rerun
+  `runs/codex-claim-release-step4-kernel-late-profile-v1` then proved four
   more things:
-  - the first later retained-prefix reopen is reproducible on the short lane,
-    not just on the intended full-profile rerun
-  - the current millisecond subphase counters still cannot explain
-    `terminal_summary_build_millis` honestly on that reopened short surface,
-    because the new clause-filter counter still leaves a large unexplained gap
-    that is now best read as truncation noise across hundreds of thousands of
-    summary calls
+  - the reopened short surfaces still track the intended full-profile read at
+    `74/76/140`, not just the first reopen
+  - the higher-fidelity split closes most of the old reopened-surface
+    build-gap read and keeps the tracked share stable at about `82%`
+  - aggregation or rank-bookkeeping, not connectivity, is now the dominant
+    measured cost on the honest reopened `40/147639` surface
+  - the remaining unexplained build tail is now smaller and better read as
+    secondary untracked bookkeeping than as truncation noise
 - The current honest blocker is therefore still inside step `4` on the
   intended profile.
-- But the next honest move is no longer another blind throughput rewrite
-  first. The later reopened retained-prefix surface is real, but it still
-  needs a higher-fidelity diagnostic split before the next connectivity-side,
-  aggregation-side, or clause-filter-side patch can be chosen honestly.
 - Observed RSS remained controlled on the intended profile during the re-earned
   full read, rising gradually to about `632.2 MiB` at the last stored
   checkpoint rather than revisiting the old allocator-failure story.
-- The next honest move is now a higher-fidelity late-surface short step-`4`
-  diagnostic on the winning binary so the reopened `40/147639` surface can be
-  attributed without per-summary millisecond truncation, not compare,
-  benchmark, certification, breadth/parity closeout, or another blind
-  throughput patch first.
+- The next honest move is now one narrow aggregation-side or rank-bookkeeping
+  throughput cut on the winning binary, not another diagnostic-only slice, not
+  a connectivity-side or clause-filter-side rewrite first, and not compare,
+  benchmark, certification, or breadth/parity closeout work yet.
 
 ## Immediate Order
 
 1. Keep `runs/codex-claim-release-step4-kernel-aggregation-v1` landed in code
-   and keep the earlier prep/profile cache experiments dropped.
+   landed in code, keep the higher-fidelity late-surface timing accumulation
+   landed, and keep the earlier prep/profile cache experiments dropped.
 2. Treat `runs/codex-claim-release-full-kernel-aggregation-v1` as the new
    intended-profile baseline and use its stored step-`4` evidence, not the old
    `full-nu-profile-v1` read, to define the next runtime slice.
-3. Keep `runs/codex-claim-release-step4-kernel-filter-profile-v1` as
-   informative diagnostic evidence only; keep its telemetry patch dropped from
-   code after measurement.
-4. Re-enter one higher-fidelity late-surface short step-`4` diagnostic that
-   accumulates remaining-one subphase time without per-summary millisecond
-   truncation on the winning binary.
-5. Only after that measurement slice should the next move branch to another
-   narrow throughput patch, or later parity/breadth/compare/benchmark work.
+3. Treat `runs/codex-claim-release-step4-kernel-late-profile-v1` as the new
+   authoritative late-surface diagnostic and keep the older
+   `kernel-filter-profile-v1` telemetry patch dropped after measurement.
+4. Land one narrow aggregation-side or rank-bookkeeping throughput cut inside
+   the remaining-one summary loop, then re-earn one short stored rerun that
+   reaches `24/43/44/54/74/76` and, if still cheap, `140`.
+5. Only after a new short rerun earns keep should the next move branch back to
+   another full-profile rerun, or later parity/breadth/compare/benchmark
+   work.
 
 ## Active Baselines
 
@@ -337,12 +398,16 @@ final gate.
 - Older short step-`4` baseline:
   `runs/codex-claim-release-step4-kernel-connectivity-v1`
 - Most recent valid diagnostic:
+  `runs/codex-claim-release-step4-kernel-late-profile-v1`
+- Previous valid plateau diagnostic:
   `runs/codex-claim-release-step4-kernel-profile-v2`
 - Ignore as invalid diagnostic:
   `runs/codex-claim-release-step4-kernel-profile-v1`
 - Most recent short evidence that did not advance the current short baseline:
-  `runs/codex-claim-release-step4-terminal-candidate-prep-v1`
+  `runs/codex-claim-release-step4-kernel-late-profile-v1`
 - Most recent informative late-surface diagnostic:
+  `runs/codex-claim-release-step4-kernel-late-profile-v1`
+- Previous informative late-surface diagnostic:
   `runs/codex-claim-release-step4-kernel-filter-profile-v1`
 
 ## Guardrails

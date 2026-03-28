@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-03-27
+Last updated: 2026-03-28
 
 This checklist is the live signoff gate for `desktop_claim_shadow`.
 It lists only work that is still open.
@@ -9,17 +9,23 @@ It lists only work that is still open.
 
 - The claim lane still does not have a signoff-ready full-profile bundle.
 - The current full-profile baseline is
-  `runs/codex-claim-release-full-nu-profile-v1`.
+  `runs/codex-claim-release-full-kernel-aggregation-v1`.
 - The current short step-`4` baseline is now
   `runs/codex-claim-release-step4-kernel-aggregation-v1`.
-- That new kept rerun preserved the same honest `39 groups / 144845 candidates`
-  plateau and improved the matched `24/43/44` checkpoints against
-  `runs/codex-claim-release-step4-kernel-connectivity-v2`.
+- The most recent informative late-surface diagnostic is now
+  `runs/codex-claim-release-step4-kernel-late-profile-v1`.
+- That diagnostic rerun kept the same honest `39 groups / 144845 candidates`
+  plateau through `24/43/44/54`, then reopened to `40/147639` at `74/76`
+  and `41/154842` at `140` while still tracking the intended full-profile
+  baseline closely on elapsed time, RSS, and frontier queue length.
 - The current hot bottleneck is still `terminal_summary_build_millis` in step
-  `4`, with measured connectivity first and aggregation second on the honest
-  plateau, but one more narrow summary-side cut has now earned keep.
-- Because that short slice earned keep, the next honest move is now the real
-  intended-profile rerun, not another short step-`4` slice first.
+  `4`, but the higher-fidelity microsecond split now shows aggregation or
+  rank-bookkeeping first on the reopened short surface, connectivity second,
+  clause filtering third, exact `nu` fourth, and only a smaller residual
+  bookkeeping tail left unattributed.
+- Because that diagnostic attribution is now re-earned, the next honest move
+  is one narrow aggregation-side or rank-bookkeeping cut, not another
+  diagnostic-only rerun and not another full-profile rerun first.
 
 ## 1. Runtime Completion
 
@@ -28,7 +34,7 @@ It lists only work that is still open.
 - [x] Re-earn one release `until_step = 4` rerun and confirm that the measured
       summary-side telemetry improves without weakening retained prefix-cache
       shape.
-- [ ] Re-earn one full `desktop_claim_shadow_1h` rerun on the winning binary.
+- [x] Re-earn one full `desktop_claim_shadow_1h` rerun on the winning binary.
 - [ ] Finish one intended-profile claim run through step `15`.
 - [ ] Confirm from stored artifacts that the run no longer depends on the old
       allocator-failure story.
