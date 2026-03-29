@@ -18,7 +18,7 @@ gate.
 - The authoritative late-surface diagnostic is
   `runs/codex-claim-release-step4-kernel-late-profile-v1`.
 - The latest measured slice is
-  `runs/codex-claim-release-step4-kernel-catalog-constant-v1`, and it was
+  `runs/codex-claim-release-step4-kernel-terminal-rank-sidecar-v1`, and it was
   dropped from code after failing keep.
 - The lane is still compute-bound in step `4` on the intended profile.
   The old early allocator-failure story is no longer the primary blocker.
@@ -95,56 +95,53 @@ gate.
 ### 4. Latest Failed Slice
 
 - Run:
-  `runs/codex-claim-release-step4-kernel-catalog-constant-v1`
+  `runs/codex-claim-release-step4-kernel-terminal-rank-sidecar-v1`
 - Hypothesis:
   keep the current primary-rank short-circuit and stored diagnostics, but
-  remove clause-local `expr_bit_length` rescans from the claim remaining-one
-  path by carrying a catalog-backed clause bit-cost sidecar through both the
-  filtered terminal-clause slice and
-  `compute_terminal_prefix_completion_summary_from_candidates`, so the compact
-  summary kernel no longer recomputes that clause-local constant for admitted
-  candidates.
+  remove whole-prefix exact contender-rank rescans from the claim
+  remaining-one path by combining one prefix-side exact rank context with one
+  exact terminal-clause structural-signal sidecar, so the compact summary
+  kernel no longer rebuilds full-telescope structural signals, max-var-ref,
+  and canonical-key context when it does need a full `AcceptRank` for a
+  bar-clearing contender.
 - Outcome:
   preserved the same honest plateau and reopened shapes at
-  `24/43/44/54/74/76/140`, materially beat the late diagnostic on elapsed
-  time plus total `terminal_summary_build_*` and every measured bucket at
-  `74/76/140`, but still materially regressed the matched early
-  `24/43/44/54` surface and still trailed the kept full-profile aggregation
-  baseline on total `terminal_summary_build_*` at `74/76/140`, so it did not
-  earn keep.
+  `24/43/44/54/74/76`, materially beat the late diagnostic on elapsed time
+  plus total `terminal_summary_build_*` and every measured bucket at
+  `74/76`, but still materially regressed the matched early `24/43/44/54`
+  surface and still trailed the kept full-profile aggregation baseline on
+  total `terminal_summary_build_*` at `74/76`, so it did not earn keep.
 - Comparison versus the kept short baseline:
-  - `24`: `555368 / 550298` instead of `549630 / 492524`
-  - `43`: `1004835 / 998679` instead of `990480 / 892772`
-  - `44`: `1026826 / 1020611` instead of `1012067 / 912271`
-  - `54`: `1267489 / 1260687` instead of `1247600 / 1126754`
+  - `24`: `550360 / 545601` instead of `549630 / 492524`
+  - `43`: `1000033 / 994244` instead of `990480 / 892772`
+  - `44`: `1022008 / 1016165` instead of `1012067 / 912271`
+  - `54`: `1267127 / 1260682` instead of `1247600 / 1126754`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
 - Reopened-surface read:
-  - `74`: `elapsed_millis = 1749226`,
-    `terminal_summary_build_micros = 1741209697`
-  - `76`: `elapsed_millis = 1803622`,
-    `terminal_summary_build_micros = 1795499595`
-  - `140`: `elapsed_millis = 3399012`,
-    `terminal_summary_build_micros = 3387552071`
-  This beat the late diagnostic by about `41.5s / 41.4s` at `74`,
-  `44.5s / 44.4s` at `76`, and `136.4s / 135.5s` at `140` on
-  `elapsed / total summary-build`, but it still trailed the kept full-profile
-  aggregation baseline by about `6.0s / 162.1s` at `74`,
-  `6.2s / 166.7s` at `76`, and `5.0s / 301.9s` at `140`.
+  - `74`: `elapsed_millis = 1752569`,
+    `terminal_summary_build_micros = 1744964766`
+  - `76`: `elapsed_millis = 1803362`,
+    `terminal_summary_build_micros = 1795650034`
+  This beat the late diagnostic by about `38.1s / 37.7s` at `74` and
+  `44.7s / 44.3s` at `76` on `elapsed / total summary-build`, but it still
+  trailed the kept full-profile aggregation baseline by about
+  `9.3s / 165.8s` at `74` and `15.9s / 166.9s` at `76`.
 - Incremental `54 -> 76` still kept aggregation first:
-  - aggregation `+132835090 us`
-  - connectivity `+120558805 us`
-  - clause filtering `+106153519 us`
-  - exact `nu` `+77891689 us`
+  - aggregation `+124167604 us`
+  - connectivity `+123522658 us`
+  - clause filtering `+107646225 us`
+  - exact `nu` `+80527499 us`
 - Honest read on where the time went:
-  removing recursive clause-local bit-cost rescans from both the filtered
-  terminal-clause path and the measured summary aggregation block is truthful
-  and enough to beat the late diagnostic honestly on the reopened surface, but
-  it still leaves too much early total `terminal_summary_build_*` on the
-  matched `24/43/44/54` plateau and still trails the kept full-profile
-  aggregation baseline on total summary-build at `74/76/140`, so clause-local
-  bit-cost rescans are also not the dominant remaining step-`4` wall.
+  avoiding whole-prefix exact contender-rank rescans by reusing one
+  prefix-side exact rank context plus exact terminal-clause structural-signal
+  metadata is truthful and enough to beat the late diagnostic honestly on the
+  reopened surface, but it still leaves too much early total
+  `terminal_summary_build_*` on the matched `24/43/44/54` plateau and still
+  trails the kept full-profile aggregation baseline on total summary-build at
+  `74/76`, so exact contender-rank rescans are also not the dominant
+  remaining step-`4` wall.
 - The run was terminated after storing live evidence through
-  `prefix_states_explored = 430`. Because step `4` never sealed, the
+  `prefix_states_explored = 76`. Because step `4` never sealed, the
   authoritative artifact for this slice is `reports/steps/step-04-live.ndjson`;
   `reports/latest.txt` and `run.json` remained at `step 3 / running`.
 
@@ -221,6 +218,14 @@ gate.
   still regressed total `terminal_summary_build_*` too much at
   `24/43/44/54` and still trailed the kept full-profile aggregation baseline
   on total summary-build at `74/76`, so no keep.
+- Terminal-rank sidecar exact contender-rank rewrite:
+  `kernel-terminal-rank-sidecar-v1`
+  Honest early plateau and reopened late surface, materially better reopened
+  `74/76` elapsed plus total summary-build than the late diagnostic and
+  better measured aggregation/connectivity/clause-filter/exact-`nu` buckets
+  there, but still materially worse than the kept short baseline at
+  `24/43/44/54` and still behind the kept full-profile aggregation baseline
+  on total summary-build at `74/76`, so no keep.
 - Primary-rank context exact-threshold rewrite:
   `kernel-primary-context-v1`
   Honest early plateau and reopened late surface, but materially worse than
@@ -262,8 +267,14 @@ gate.
   only the early plateau.
 - On that reopened surface, aggregation is still the largest measured cost.
   Connectivity and clause filtering remain the second-tier buckets, and the
-  latest failed bit-cost hoist showed they can trade places when work is moved
-  between them without changing the honest wall.
+  latest failed bit-cost and contender-rank slices showed they can trade
+  places when work is moved between them without changing the honest wall.
+- The kept full-profile reopened `40/147639` surface at `74/76` still shows
+  `terminal_summary_fallback_connectivity_checks = 0` in the stored step-`4`
+  live artifacts. The measured connectivity wall there is therefore dominated
+  by the cached terminal-connectivity triage itself, not by fallback graph
+  traversals, so another deferred-connectivity rewrite is still the wrong next
+  move.
 - The latest failed threshold and bound-merge slices show that both the
   per-candidate bar-clear `Rational` gate and the per-candidate `PrefixBound`
   merge churn were real work, but neither was the dominant remaining wall.
@@ -297,6 +308,12 @@ gate.
   the late diagnostic, but total `terminal_summary_build_*` and wall clock
   still regressed too much on the matched early surface and remained slightly
   behind even the late diagnostic at `74/76`.
+- Exact candidate-local single-clause `nu` ceilings still have some merit in
+  principle, but the high-water result means that another standalone exact-`nu`
+  gate should not be the next primary move. If that family is revisited later,
+  it should ride on one different exact per-clause sidecar that removes
+  repeated whole-clause rescans, not on another threshold-only `nu` cleanup by
+  itself.
 - The summary-invariants slice showed that reusing prefix-side exact
   `AcceptRank` inputs is real enough to improve elapsed time on both the
   matched early surface and the reopened `74/76` surface, but because total
@@ -312,6 +329,14 @@ gate.
   `24/43/44/54` and the reopened `74/76` surface still trailed the kept
   full-profile aggregation baseline on total summary-build, that exact-rank
   rescan wall is still not dominant enough on its own.
+- The terminal-rank-sidecar slice showed that combining one prefix-side exact
+  rank context with exact terminal-clause structural-signal metadata removes
+  whole-prefix exact contender-rank rescans honestly and beats the late
+  diagnostic on the reopened `74/76` surface, but because early total
+  `terminal_summary_build_*` still regressed materially at `24/43/44/54` and
+  the kept full-profile aggregation baseline still wins on total summary-build
+  at `74/76`, that contender-rank rescan wall is also not dominant enough on
+  its own.
 - The primary-rank-context slice showed that precomputing the fixed-`kappa`
   bar-clear and incumbent-beat ceilings preserves the honest plateau and
   reopened shapes, but the remaining primary-rank `Rational` bookkeeping is
@@ -333,6 +358,11 @@ gate.
   regresses too much and the kept full-profile aggregation baseline still wins
   on total `terminal_summary_build_*` at `74/76/140`. The next cut therefore
   should not spend another turn on clause-bit-cost constants.
+- The remaining repeated hot rescans now also look more terminal-clause-local
+  than subtree-context-local. The shared clause catalog and prefix memo already
+  capture most prefix reuse, so if a reuse variant is revisited later, prefer
+  exact terminal-clause metadata over generic subtree-hash memoization or any
+  lossy surrogate ordering key.
 - The next aggregation cut should therefore stay inside the compact summary
   path, but move to one different aggregation-side shape that removes a larger
   per-admitted compact-summary constant than the exact-rank context or the
@@ -355,24 +385,30 @@ gate.
    The competition-gate hoist, exact-`nu` high-water gate,
    summary-invariants accept-rank prefix-context slice,
    rank-context exact tie-break rewrite, primary-rank context exact-threshold
-   rewrite, summary-constant bit-cost hoist, and catalog-backed clause
-   bit-cost sidecar have now been tried and dropped.
+   rewrite, terminal-rank sidecar exact contender-rank rewrite,
+   summary-constant bit-cost hoist, and catalog-backed clause bit-cost
+   sidecar have now been tried and dropped.
    Prefer this next:
-   - keep the current primary-rank short-circuit and stored diagnostics, but
-     remove one different larger compact-summary constant that is still
-     charged for admitted candidates even when the current primary-rank
-     short-circuit skips full `AcceptRank` construction inside
-     `compute_terminal_prefix_completion_summary_from_candidates`, but do not
-     spend the next slice on another clause-bit-cost cleanup or on a move that
-     only shifts recursive work between summary aggregation and
-     `terminal_prefix_clause_filter_*`, without reopening the old
-     terminal-candidate-prep or remap shapes first
-   Do not use:
+    - keep the current primary-rank short-circuit and stored diagnostics, but
+      remove one different larger compact-summary constant that is still
+      charged for admitted candidates even when the current primary-rank
+      short-circuit skips full `AcceptRank` construction inside
+      `compute_terminal_prefix_completion_summary_from_candidates`, but do not
+      spend the next slice on another clause-bit-cost cleanup or on a move that
+      only shifts recursive work between summary aggregation and
+      `terminal_prefix_clause_filter_*`, without reopening the old
+      terminal-candidate-prep or remap shapes first
+      If two such cuts still look equally plausible, prefer an exact
+      terminal-clause metadata sidecar over a generic subtree-hash reuse scheme,
+      but not another contender-rank-only sidecar as the next primary move.
+    Do not use:
    - another retry of `kernel-competition-hoist-v1` as the next primary move
    - another retry of `kernel-nu-highwater-v1` as the next primary move
    - another retry of `kernel-summary-invariants-v1` as the next primary move
    - another retry of `kernel-rank-context-v1` as the next primary move
-   - another retry of `kernel-primary-context-v1` as the next primary move
+   - another retry of `kernel-terminal-rank-sidecar-v1` as the next primary move
+    - another retry of `kernel-primary-context-v1` as the next primary move
+    - generic subtree-hash memoization as the next primary move
    - another retry of `kernel-summary-constant-v1` as the next primary move
    - another retry of `kernel-catalog-constant-v1` as the next primary move
    - another retry of `kernel-lazy-acceptrank-v1` as the next primary move
@@ -405,6 +441,7 @@ gate.
 - Do not retry `kernel-nu-highwater-v1` as the next primary move.
 - Do not retry `kernel-summary-invariants-v1` as the next primary move.
 - Do not retry `kernel-rank-context-v1` as the next primary move.
+- Do not retry `kernel-terminal-rank-sidecar-v1` as the next primary move.
 - Do not retry `kernel-primary-context-v1` as the next primary move.
 - Do not retry `kernel-summary-constant-v1` as the next primary move.
 - Do not retry `kernel-catalog-constant-v1` as the next primary move.
