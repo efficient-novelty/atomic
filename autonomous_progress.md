@@ -18,7 +18,7 @@ gate.
 - The authoritative late-surface diagnostic is
   `runs/codex-claim-release-step4-kernel-late-profile-v1`.
 - The latest measured slice is
-  `runs/codex-claim-release-step4-kernel-summary-constant-v1`, and it was
+  `runs/codex-claim-release-step4-kernel-rank-context-v1`, and it was
   dropped from code after failing keep.
 - The lane is still compute-bound in step `4` on the intended profile.
   The old early allocator-failure story is no longer the primary blocker.
@@ -95,47 +95,54 @@ gate.
 ### 4. Latest Failed Slice
 
 - Run:
-  `runs/codex-claim-release-step4-kernel-summary-constant-v1`
+  `runs/codex-claim-release-step4-kernel-rank-context-v1`
 - Hypothesis:
   keep the current primary-rank short-circuit and stored diagnostics, but
-  precompute one more compact-summary constant for every terminal candidate:
-  hoist the clause-local `expr_bit_length` read so the measured summary kernel
-  and direct compact materialization path can reuse a precomputed terminal
-  clause bit cost instead of rescanning each admitted clause expression after
+  make the exact compact-summary tie-break cheaper by reusing one prefix-side
+  exact-rank context and rebuilding the rare full `AcceptRank` from
+  clause-local context instead of rescanning the whole terminal telescope each
+  time the measured summary kernel still needs an exact tie-break after
   exact `nu`.
 - Outcome:
-  preserved the same honest shapes at `24/43/44/54/74/76`, including the
-  reopened `40/147639` surface at `74/76`, but it materially regressed both
-  elapsed time and total `terminal_summary_build_*` versus the kept short
-  baseline at `24/43/44/54`, and it also regressed versus both the late
-  diagnostic and the kept full-profile aggregation baseline at `74/76`, so it
-  did not earn keep.
+  preserved the same honest shapes at `24/43/44/54/74/76/140`, continued the
+  reopened `41/154842` surface through `225`, improved elapsed time versus the
+  kept short baseline at `24/43/44/54`, and beat the late diagnostic on both
+  elapsed time and total `terminal_summary_build_*` at `74/76`, but it still
+  regressed total `terminal_summary_build_*` materially versus the kept short
+  baseline at `24/43/44/54` and still trailed the kept full-profile
+  aggregation baseline on total summary-build at `74/76`, so it did not earn
+  keep.
 - Comparison versus the kept short baseline:
-  - `24`: `593844 / 587998` instead of `549630 / 492524`
-  - `43`: `1061464 / 1054426` instead of `990480 / 892772`
-  - `44`: `1084365 / 1077265` instead of `1012067 / 912271`
-  - `54`: `1336657 / 1328900` instead of `1247600 / 1126754`
+  - `24`: `541850 / 537132` instead of `549630 / 492524`
+  - `43`: `974421 / 968828` instead of `990480 / 892772`
+  - `44`: `995618 / 989981` instead of `1012067 / 912271`
+  - `54`: `1229031 / 1222943` instead of `1247600 / 1126754`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
 - Reopened-surface read:
-  - `74`: `elapsed_millis = 1822008`,
-    `terminal_summary_build_micros = 1813100680`
-  - `76`: `elapsed_millis = 1877750`,
-    `terminal_summary_build_micros = 1868727870`
-  This trailed the late diagnostic by about `31.3s / 30.5s` at `74` and
-  `29.6s / 28.8s` at `76` on `elapsed / total summary-build`, and it trailed
-  the kept full-profile aggregation baseline by about `78.8s / 234.0s` at
-  `74` and `80.3s / 240.0s` at `76` on `elapsed / total summary-build`.
+  - `74`: `elapsed_millis = 1688078`,
+    `terminal_summary_build_micros = 1681053741`
+  - `76`: `elapsed_millis = 1737177`,
+    `terminal_summary_build_micros = 1730063316`
+  This beat the late diagnostic by about `102.6s / 101.6s` at `74` and
+  `110.9s / 109.8s` at `76` on `elapsed / total summary-build`, but it still
+  trailed the kept full-profile aggregation baseline on total summary-build by
+  about `101.9s` at `74` and `101.3s` at `76` even while beating that full
+  baseline on elapsed by about `55.2s` and `60.3s`.
 - Incremental `54 -> 76` still kept aggregation first:
-  - aggregation `+131417515 us`
-  - clause filtering `+120441948 us`
-  - connectivity `+114027910 us`
-  - exact `nu` `+77300765 us`
+  - aggregation `+117965757 us`
+  - connectivity `+113206937 us`
+  - clause filtering `+103308586 us`
+  - exact `nu` `+76585815 us`
 - Honest read on where the time went:
-  aggregation itself fell slightly versus the late diagnostic, but the hoist
-  moved far more work into `terminal_prefix_clause_filter_*`, so the slice was
-  a cost shift, not a real summary-kernel win.
+  avoiding full-telescope exact `AcceptRank` rescans is real enough to improve
+  wall clock on both the matched early surface and the reopened late surface,
+  and it also lowered late total summary-build versus the late diagnostic, but
+  the early total summary-build regression plus the remaining late
+  total-summary-build gap versus the kept full-profile aggregation baseline
+  show that exact-rank rescans are still not the dominant measured wall on
+  their own.
 - The run was terminated after storing live evidence through
-  `prefix_states_explored = 76`. Because step `4` never sealed, the
+  `prefix_states_explored = 225`. Because step `4` never sealed, the
   authoritative artifact for this slice is `reports/steps/step-04-live.ndjson`;
   `reports/latest.txt` and `run.json` remained at `step 3 / running`.
 
@@ -198,6 +205,14 @@ gate.
   there, so no keep.
 - Summary-invariants accept-rank prefix-context rewrite:
   `kernel-summary-invariants-v1`
+  Honest early and reopened shapes, materially better elapsed time than the
+  kept short baseline at `24/43/44/54`, and materially better reopened
+  `74/76` elapsed plus total summary-build than the late diagnostic, but it
+  still regressed total `terminal_summary_build_*` too much at
+  `24/43/44/54` and still trailed the kept full-profile aggregation baseline
+  on total summary-build at `74/76`, so no keep.
+- Summary-rank-context exact tie-break rewrite:
+  `kernel-rank-context-v1`
   Honest early and reopened shapes, materially better elapsed time than the
   kept short baseline at `24/43/44/54`, and materially better reopened
   `74/76` elapsed plus total summary-build than the late diagnostic, but it
@@ -273,6 +288,14 @@ gate.
   still trailed the kept full-profile aggregation baseline at `74/76`, that
   full-rank prefix rescan is not the dominant measured summary-build wall on
   its own.
+- The summary-rank-context slice showed that avoiding whole-telescope exact
+  `AcceptRank` rescans is also real enough to improve elapsed time on both the
+  matched early surface and the reopened `74/76` surface, and it even lowered
+  late total `terminal_summary_build_*` versus the late diagnostic there, but
+  because early total `terminal_summary_build_*` still regressed materially at
+  `24/43/44/54` and the reopened `74/76` surface still trailed the kept
+  full-profile aggregation baseline on total summary-build, that exact-rank
+  rescan wall is still not dominant enough on its own.
 - The summary-constant slice showed that clause-local `expr_bit_length`
   rescans are real work, but hoisting them into
   `terminal_prefix_clause_candidates` just moved that cost into
@@ -282,9 +305,11 @@ gate.
   it.
 - The next aggregation cut should therefore stay inside the compact summary
   path, but move to one different aggregation-side shape that removes a larger
-  per-admitted compact-summary constant that is still rebuilt inside the
-  measured summary kernel, rather than retrying another threshold-only,
-  bound-only, full-rank tie-break-only, competition-gate-only,
+  per-admitted compact-summary constant than the exact-rank context itself and
+  that is still rebuilt inside the measured summary kernel even when the
+  current primary-rank short-circuit skips full `AcceptRank` construction,
+  rather than retrying another threshold-only, bound-only, full-rank
+  tie-break-only, competition-gate-only,
   exact-`nu`-gate-only, batching-only, bookkeeping-only, or
   clause-filter-cost-shift cleanup first.
 
@@ -296,8 +321,9 @@ gate.
    `runs/codex-claim-release-step4-kernel-late-profile-v1`.
 2. Land one different narrow aggregation-side cut on the winning binary.
    The competition-gate hoist, exact-`nu` high-water gate,
-   summary-invariants accept-rank prefix-context slice, and
-   summary-constant bit-cost hoist have now been tried and dropped.
+   summary-invariants accept-rank prefix-context slice,
+   rank-context exact tie-break rewrite, and summary-constant bit-cost hoist
+   have now been tried and dropped.
    Prefer this next:
    - keep the current primary-rank short-circuit and stored diagnostics, but
      remove one larger compact-summary constant that is still charged for
@@ -311,6 +337,7 @@ gate.
    - another retry of `kernel-competition-hoist-v1` as the next primary move
    - another retry of `kernel-nu-highwater-v1` as the next primary move
    - another retry of `kernel-summary-invariants-v1` as the next primary move
+   - another retry of `kernel-rank-context-v1` as the next primary move
    - another retry of `kernel-summary-constant-v1` as the next primary move
    - another retry of `kernel-lazy-acceptrank-v1` as the next primary move
    - another retry of `kernel-summary-batching-v1` as the next primary move
@@ -341,6 +368,7 @@ gate.
 - Do not retry `kernel-lazy-acceptrank-v1` as the next primary move.
 - Do not retry `kernel-nu-highwater-v1` as the next primary move.
 - Do not retry `kernel-summary-invariants-v1` as the next primary move.
+- Do not retry `kernel-rank-context-v1` as the next primary move.
 - Do not retry `kernel-summary-constant-v1` as the next primary move.
 - Do not retry `kernel-summary-batching-v1` as the next primary move.
 - Do not retry `kernel-summary-bookkeeping-v1` as the next primary move.
