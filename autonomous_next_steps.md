@@ -36,6 +36,8 @@ Assume the following were already measured and should stay dropped:
   `runs/codex-claim-release-step4-kernel-nu-highwater-v1`
 - the fixed bar-clear summary-threshold rewrite in
   `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
+- the catalog-backed clause bit-cost sidecar in
+  `runs/codex-claim-release-step4-kernel-catalog-constant-v1`
 
 ## Active Baselines
 
@@ -73,6 +75,13 @@ Assume the following were already measured and should stay dropped:
   candidates still clear the static bar and the earlier static or dynamic
   gates, but too much per-admitted compact-summary work is still rebuilt
   inside the measured aggregation block.
+- The newer catalog-backed clause bit-cost sidecar proves that removing
+  recursive clause-local bit-cost rescans from both terminal filtering and the
+  measured aggregation block is truthful and helps on the reopened late
+  surface, but it still regressed the matched early `24/43/44/54` wall and
+  still trailed the kept full-profile aggregation baseline on total
+  `terminal_summary_build_*` at `74/76/140`, so clause-bit-cost constants are
+  no longer the best next primary move.
 
 ## Goal
 
@@ -145,6 +154,10 @@ Do not pick next:
   and `kernel-summary-bookkeeping-v1` already showed that those shapes can
   help elapsed on the reopened surface without fixing the honest early
   summary-build wall
+- another clause-bit-cost-only cleanup; `kernel-summary-constant-v1` and the
+  newer `kernel-catalog-constant-v1` now show that both the local shift and
+  the broader catalog-backed removal are still too small to beat the kept
+  short baseline honestly
 
 If two candidate cuts still look equally plausible, prefer the one that
 removes expensive work from every admitted candidate on the reopened surface
