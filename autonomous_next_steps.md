@@ -1,9 +1,9 @@
 # Autonomous Claim Lane: Next Operational Slice
+Last updated: 2026-03-29
 
 This note is the exact next work order for `desktop_claim_shadow`.
 
 Assume the following are already landed and should stay landed:
-
 - delayed materialization
 - the incumbent-primary remaining-one fast path
 - the one-pass `structural_nu` summary-build fast path
@@ -11,83 +11,43 @@ Assume the following are already landed and should stay landed:
 - the family-agnostic claim terminal-admissibility shortcut
 - the exact non-allocating connectivity summary scan
 - the terminal-only cached parent connectivity decision
-- the aggregation-side accept-rank short-circuit
+- the aggregation-side accept-rank short-circuit that skips full `AcceptRank` construction for primary-dominated bar-clearers
 - the higher-fidelity late-surface timing accumulation
 
-Assume the following were already measured and should stay dropped:
-
+Assume the following were already measured and should stay dropped as standalone next moves:
 - ordering and reuse variants
 - expr-keyed or clause-side connectivity cache variants
-- terminal-candidate prep or remap cuts
-- telemetry-only filter profiling
-- the exact cross-multiplied primary-rank bookkeeping rewrite in
-  `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
-- the constant-`kappa` bound-merge rewrite in
-  `runs/codex-claim-release-step4-kernel-bound-merge-v1`
-- the lazy incumbent-tie `AcceptRank` rewrite in
-  `runs/codex-claim-release-step4-kernel-lazy-acceptrank-v1`
-- the local summary batching rewrite in
-  `runs/codex-claim-release-step4-kernel-summary-batching-v1`
-- the shared reason-key summary bookkeeping rewrite in
-  `runs/codex-claim-release-step4-kernel-summary-bookkeeping-v1`
-- the prefix-wide competition-gate hoist in
-  `runs/codex-claim-release-step4-kernel-competition-hoist-v1`
-- the exact-`nu` high-water gate in
-  `runs/codex-claim-release-step4-kernel-nu-highwater-v1`
-- the fixed bar-clear summary-threshold rewrite in
-  `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
-- the catalog-backed clause bit-cost sidecar in
-  `runs/codex-claim-release-step4-kernel-catalog-constant-v1`
+- terminal-candidate prep or remap variants
+- telemetry-only filter profiling as a separate slice
+- the exact cross-multiplied primary-rank bookkeeping rewrite in `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
+- the constant-`kappa` bound-merge rewrite in `runs/codex-claim-release-step4-kernel-bound-merge-v1`
+- the lazy incumbent-tie `AcceptRank` rewrite in `runs/codex-claim-release-step4-kernel-lazy-acceptrank-v1`
+- the local summary batching rewrite in `runs/codex-claim-release-step4-kernel-summary-batching-v1`
+- the shared reason-key summary bookkeeping rewrite in `runs/codex-claim-release-step4-kernel-summary-bookkeeping-v1`
+- the prefix-wide competition-gate hoist in `runs/codex-claim-release-step4-kernel-competition-hoist-v1`
+- the exact-`nu` high-water gate in `runs/codex-claim-release-step4-kernel-nu-highwater-v1`
+- the fixed bar-clear summary-threshold rewrite in `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
+- the summary-invariants accept-rank prefix-context rewrite in `runs/codex-claim-release-step4-kernel-summary-invariants-v1`
+- the summary-rank-context exact tie-break rewrite in `runs/codex-claim-release-step4-kernel-rank-context-v1`
+- the terminal-rank sidecar exact contender-rank rewrite in `runs/codex-claim-release-step4-kernel-terminal-rank-sidecar-v1`
+- the primary-rank context exact-threshold rewrite in `runs/codex-claim-release-step4-kernel-primary-context-v1`
+- the summary-constant bit-cost hoist in `runs/codex-claim-release-step4-kernel-summary-constant-v1`
+- the catalog-backed clause bit-cost sidecar in `runs/codex-claim-release-step4-kernel-catalog-constant-v1`
 
 ## Active Baselines
+- Current short baseline: `runs/codex-claim-release-step4-kernel-aggregation-v1`
+- Current full-profile baseline: `runs/codex-claim-release-full-kernel-aggregation-v1`
+- Current late-surface diagnostic: `runs/codex-claim-release-step4-kernel-late-profile-v1`
 
-- Current short baseline:
-  `runs/codex-claim-release-step4-kernel-aggregation-v1`
-- Current full-profile baseline:
-  `runs/codex-claim-release-full-kernel-aggregation-v1`
-- Current late-surface diagnostic:
-  `runs/codex-claim-release-step4-kernel-late-profile-v1`
-
-## Working Diagnosis
-
-- The intended profile is still blocked in step `4`, not by the old early RSS
-  story, but by remaining-one summary throughput.
-- The early retained-prefix plateau
-  `39 groups / 144845 candidates` is real, but it is not terminal on the real
-  profile. The intended run later reopens to `40/147639` at `74` and
-  `41/154842` at `140`.
-- The honest late target is therefore the reopened `40/147639` surface.
-- On that surface, the current diagnostic still shows aggregation first,
-  connectivity second, clause filtering third, and exact `nu` fourth.
-- The latest exact-`nu` high-water rerun kept the same honest early and
-  reopened shapes, but it still regressed too much on wall clock and total
-  `terminal_summary_build_*` at `24/43/44/54` and remained slightly behind
-  the late diagnostic at `74/76`, so it did not earn keep.
-- The current code already skips full `AcceptRank` construction for compact
-  summary candidates whose primary rank is clearly worse than the current
-  group best, so the next move should stay aggregation-side but go after a
-  larger per-admitted cut inside the measured summary kernel, not retry
-  another threshold-only, bound-only, exact rank-bookkeeping,
-  competition-gate-only, exact-`nu`-gate-only, batching-only, or
-  bookkeeping-only shape first.
-- The bound-merge, threshold-only, competition-gate-only, and exact-`nu`
-  high-water failures now point at a narrower remaining wall: many admitted
-  candidates still clear the static bar and the earlier static or dynamic
-  gates, but too much per-admitted compact-summary work is still rebuilt
-  inside the measured aggregation block.
-- The newer catalog-backed clause bit-cost sidecar proves that removing
-  recursive clause-local bit-cost rescans from both terminal filtering and the
-  measured aggregation block is truthful and helps on the reopened late
-  surface, but it still regressed the matched early `24/43/44/54` wall and
-  still trailed the kept full-profile aggregation baseline on total
-  `terminal_summary_build_*` at `74/76/140`, so clause-bit-cost constants are
-  no longer the best next primary move.
+## Revised Working Diagnosis
+- The intended profile is still blocked in step `4` by remaining-one compact-summary throughput.
+- The early retained-prefix plateau `39 groups / 144845 candidates` is real, but it is not the terminal intended-profile surface. The real profile later reopens to `40/147639` at `74` and `41/154842` at `140`.
+- The compact summary wall is now best read as a **composite per-admitted kernel**, not as one missing scalar gate. In the current code, every admitted candidate still pays for multiple exact operations inside `compute_terminal_prefix_completion_summary_from_candidates`: clause load into scratch state, admissibility diagnostics bookkeeping, exact bit-cost recovery, bound update, primary-rank math, and sometimes full `AcceptRank` construction.
+- The full `AcceptRank` path is still expensive when it fires because it rebuilds full-telescope structural signals, max-var-ref context, and canonical-key context. The dropped contender-rank sidecar proved that this work is real, but the keep failures show it is not the only remaining wall.
+- The lesson from the dropped threshold-only, bound-only, bookkeeping-only, competition-gate-only, exact-`nu`-gate-only, bit-cost-only, and contender-rank-only slices is now that **another one-constant slice is unlikely to be enough** unless it removes several exact per-admitted rescans at once.
 
 ## Goal
-
-Land one different narrow aggregation-side cut that lowers the honest short
-read on both:
-
+Land one exact aggregation-side slice that lowers the honest short read on both:
 - the matched `24/43/44/54` plateau checkpoints
 - the reopened `40/147639` surface at `74/76`
 
@@ -96,133 +56,103 @@ without weakening the retained-prefix shape.
 ## Do This Next
 
 ### 1. Keep The Right Reference Surface
-
 Keep the code behind:
-
 - `runs/codex-claim-release-step4-kernel-aggregation-v1`
 - `runs/codex-claim-release-full-kernel-aggregation-v1`
 - `runs/codex-claim-release-step4-kernel-late-profile-v1`
 
 Do not reopen first:
-
 - another connectivity-side rewrite
 - another clause-filter-side rewrite
 - another exact-`nu` cleanup first
 - another ordering, reuse, cache, or post-plateau variant
-- another retry of `kernel-rank-bookkeeping-v1`
-- another retry of `kernel-bound-merge-v1`
-- another retry of `kernel-lazy-acceptrank-v1`
-- another retry of `kernel-summary-batching-v1`
-- another retry of `kernel-summary-bookkeeping-v1`
-- another retry of `kernel-competition-hoist-v1`
-- another retry of `kernel-summary-threshold-v1`
-- another diagnostic-only slice before a new aggregation hypothesis is measured
+- another retry of the dropped single-axis aggregation slices listed above
+- another diagnostic-only slice before a new runtime hypothesis is measured
 
-### 2. Pick One Aggregation Hypothesis
+### 2. Change The Shape Of The Next Aggregation Cut
+Do **not** treat the next winner as "one more scalar constant". Treat it as **one exact terminal-clause metadata pack** landed in one narrow slice.
 
-Stay inside the remaining-one compact summary path after connectivity and after
-exact `nu`.
+Preferred primary move:
+- extend `terminal_prefix_clause_candidates` / `FilteredTerminalClause` so the summary loop can reuse exact terminal-clause metadata that is currently rebuilt per admitted candidate
+- keep the metadata exact and structural only; no lossy surrogate keys and no semantic reward signals
+- target a pack that can be reused in both the compact summary path and the rare full-rank path, for example:
+  - terminal-clause bit-cost delta
+  - terminal-clause structural-signal delta
+  - terminal-clause max-var-ref contribution
+  - exact canonical-key suffix or rolling exact-key context needed to avoid rebuilding the whole telescope key on ordinary contenders
+- pair that with one prefix-side exact aggregate computed once per signature, so the compact summary path can recover most ranking and bound inputs without rescanning the whole telescope
 
-Prefer this first:
+The intended effect is to remove several exact per-admitted rescans in one landed slice rather than chasing one small constant at a time.
 
-- keep the current primary-rank short-circuit and stored diagnostics, but
-  precompute one more compact-summary constant that is still rebuilt for every
-  admitted candidate inside
-  `compute_terminal_prefix_completion_summary_from_candidates`, without
-  reopening the old terminal-candidate-prep or remap shapes first
+### 3. Make Full `AcceptRank` Truly Last-Tie Only
+Inside the same slice:
+- keep the existing primary-rank short-circuit
+- compare contenders first on the exact numeric fields that can be assembled from prefix aggregates plus terminal-clause metadata
+- only materialize the exact canonical key when those earlier exact tie-break fields still tie
 
-Fallback after that:
+This keeps exact tie-break truth while moving the most allocation-heavy work to the rarest path.
 
-- pick another per-admitted aggregation-side invariant that is already charged
-  inside the measured summary kernel, but do not reopen the old
-  terminal-candidate-prep or remap shapes first
+### 4. Add Fine-Grained Aggregation Telemetry Inside The Same Patch
+Do not run a separate diagnostic-only slice first. Instead, add sub-bucket timing to the same candidate patch so one honest rerun answers where the remaining aggregation time actually sits.
 
-Do not pick next:
+At minimum, split aggregation into:
+- clause load / scratch update
+- admissibility-diagnostics bookkeeping
+- exact bit-cost recovery
+- bound update
+- primary-rank math
+- full `AcceptRank` construction
+- canonical-key finalization
 
-- another competition-gate-only cleanup; `kernel-competition-hoist-v1` showed
-  that prefix-wide focus-gating lookup is real but too small to keep on its
-  own
-- another exact-`nu`-gate-only cleanup; `kernel-nu-highwater-v1` preserved the
-  honest shapes, but the gate was too small on its own to beat even the late
-  diagnostic on total summary-build
-- another bound-only cleanup; `kernel-bound-merge-v1` already showed that
-  per-candidate bound churn was real but not dominant enough to keep
-- another fixed-threshold-only cleanup; `kernel-summary-threshold-v1` already
-  showed that static bar gating alone does not remove enough admitted-candidate
-  work on the reopened surface
-- another batching-only or bookkeeping-only cleanup; `kernel-summary-batching-v1`
-  and `kernel-summary-bookkeeping-v1` already showed that those shapes can
-  help elapsed on the reopened surface without fixing the honest early
-  summary-build wall
-- another clause-bit-cost-only cleanup; `kernel-summary-constant-v1` and the
-  newer `kernel-catalog-constant-v1` now show that both the local shift and
-  the broader catalog-backed removal are still too small to beat the kept
-  short baseline honestly
+This is only to read the stored artifact from the same runtime slice; it is not a separate branch of work.
 
-If two candidate cuts still look equally plausible, prefer the one that
-removes expensive work from every admitted candidate on the reopened surface
-rather than the one that only improves rare late tie cases.
-
-### 3. Re-Earn The Short Runtime Read
-
-Run a release claim rerun derived from
-`configs/desktop_claim_shadow_1h.toml` with:
-
+### 5. Re-Earn The Short Runtime Read
+Run a release claim rerun derived from `configs/desktop_claim_shadow_1h.toml` with:
 - `--until-step 4`
-- the winning binary plus the new aggregation-side cut
+- the metadata-pack binary above
 - live checkpoint persistence left on
 - a new run id that states the patch, for example:
-  - `runs/codex-claim-release-step4-kernel-summary-invariants-v1`
-  - `runs/codex-claim-release-step4-kernel-summary-highwater-v1`
-  - `runs/codex-claim-release-step4-kernel-summary-constant-v1`
+  - `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
+  - `runs/codex-claim-release-step4-kernel-rank-metadata-v1`
+  - `runs/codex-claim-release-step4-kernel-canonical-tail-v1`
 
 Let the run go far enough to capture at least:
-
 - matched `24/43/44/54`
 - the reopened `40 groups / 147639 candidates` surface at `74/76`
 - `140` only if it still arrives cheaply
 
-### 4. Read The Stored Artifacts
-
+### 6. Read The Stored Artifacts
 Open at least:
-
 - `reports/steps/step-04-live.ndjson`
 - `reports/latest.txt`
 - `run.json`
 
 Answer from stored evidence:
+- did the new slice lower elapsed and total `terminal_summary_build_*` at `24/43/44/54` without losing `39/144845`?
+- did the reopened `74/76` surface move toward the kept full-profile aggregation baseline, not only the late diagnostic?
+- which new aggregation sub-bucket is now first at `54 -> 76`?
+- is aggregation still the honest blocker, or has the wall moved to connectivity / clause filtering / exact `nu` / unexplained tail?
 
-- did the new cut lower elapsed and `terminal_summary_build_*` at
-  `24/43/44/54` without losing `39/144845`?
-- did the reopened `74/76` surface improve enough to justify keep?
-- is aggregation still first on `54 -> 76`, or has the wall moved honestly?
-- does a later full-profile rerun become the next gate, or is step `4` still
-  the next honest runtime target?
-
-### 5. Re-Earn Only The Validation Needed
-
+### 7. Re-Earn Only The Validation Needed
 If the slice stays claim-only and step-`4` runtime-only, rerun only:
-
 - `cargo test -p pen-search claim_`
 - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
 
-If the short runtime slice earns keep, then branch back to one new full-profile
-rerun before parity, breadth, compare, benchmark, or certification work.
+If the short runtime slice earns keep, then branch back to one new full-profile rerun before parity, breadth, compare, benchmark, or certification work.
 
 ## Keep Or Branch Decision
-
 After the next short rerun:
-
 - stay on runtime work if step `4` still blocks the intended profile
-- branch back to a new full-profile rerun only if the short rerun earns keep
-- branch to parity, breadth, compare, benchmark, and certification work only
-  after a later full-profile run honestly moves past the step-`4` wall
+- branch back to a new full-profile rerun only if the short rerun earns keep against the early plateau **and** materially narrows the reopened `74/76` gap to the kept full-profile aggregation baseline
+- branch to parity, breadth, compare, benchmark, and certification work only after a later full-profile run honestly moves past the step-`4` wall
+
+## Fallback If The Metadata Pack Proves Too Invasive
+Do not reopen old prep/remap work first. The fallback should still stay inside the same exact hot path:
+- replace scratch-telescope clause cloning with a borrowed prefix-plus-tail view, or another equally narrow exact representation, so the same metadata pack can still be used without broad frontier or enumeration rewrites
 
 ## Stop Condition For This Note
-
 Rewrite this file as soon as one new stored rerun shows one of these is true:
-
-- a new aggregation-side cut earns keep on the honest short surface
+- the metadata-pack aggregation cut earns keep on the honest short surface
 - the step-`4` wall moves away from aggregation first
 - a later full-profile rerun reaches a new blocker honestly
 - runtime work is no longer the next honest move
