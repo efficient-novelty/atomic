@@ -34,51 +34,57 @@ Assume the following were already measured and should stay dropped as standalone
 - the summary-constant bit-cost hoist in `runs/codex-claim-release-step4-kernel-summary-constant-v1`
 - the catalog-backed clause bit-cost sidecar in `runs/codex-claim-release-step4-kernel-catalog-constant-v1`
 - the eager terminal-clause metadata pack in `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
+- the lazy admitted-only metadata retry in `runs/codex-claim-release-step4-kernel-admitted-metadata-v1`
 
 ## Active Baselines
 - Current short baseline: `runs/codex-claim-release-step4-kernel-aggregation-v1`
 - Current full-profile baseline: `runs/codex-claim-release-full-kernel-aggregation-v1`
 - Current late-surface diagnostic: `runs/codex-claim-release-step4-kernel-late-profile-v1`
+- Current informative non-keep rerun: `runs/codex-claim-release-step4-kernel-admitted-metadata-v1`
 
 ## Revised Working Diagnosis
-- The eager exact terminal-clause metadata pack engaged and preserved the honest retained-prefix shape:
+- The lazy admitted-only metadata retry re-earned the honest retained-prefix shape:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
-- It failed keep badly on runtime:
-  - `24`: `1385075 / 1067196` instead of `549630 / 492524`
-  - `43`: `2474918 / 1930943` instead of `990480 / 892772`
-  - `44`: `2534606 / 1975294` instead of `1012067 / 912271`
-  - `54`: `3077025 / 2439389` instead of `1247600 / 1126754`
+  - `41 groups / 154842 candidates` at `140`
+- It also re-earned cheap clause filtering relative to the kept late-surface read:
+  - `76` clause filtering `= 355695170 us` versus `352203534 us` on `runs/codex-claim-release-step4-kernel-late-profile-v1`
+  - this stayed far below the eager metadata wall `= 2178547522 us`
+- But it still failed keep on the matched early short surface:
+  - `24`: `546048 / 541027` versus kept short `549630 / 492524`
+  - `43`: `996092 / 989892` versus kept short `990480 / 892772`
+  - `44`: `1018420 / 1012159` versus kept short `1012067 / 912271`
+  - `54`: `1260641 / 1253745` versus kept short `1247600 / 1126754`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
-- The reopened surface also regressed hard against both kept references:
-  - `74`: `4181583 / 3351564019` versus kept full-profile `1743244 / 1579138`
-  - `76`: `4322812 / 3445171148` versus kept full-profile `1797441 / 1628768`
-  - `76` also trailed the late diagnostic `1848102 / 1839910636`
-- The finer telemetry answers why. On the new slice at `76`:
-  - clause filtering `= 2178547522 us`
-  - aggregation `= 456894681 us`
-  - connectivity `= 412251293 us`
-  - exact `nu` `= 269107583 us`
-- Inside the new aggregation split, the largest incremental `54 -> 76` sub-bucket is still clause load / scratch update:
-  - clause load `+58123032 us`
-  - admissibility bookkeeping `+21360371 us`
-  - primary-rank math `+13290870 us`
-  - bound update `+10799021 us`
-  - bit-cost recovery `+10749565 us`
-  - full `AcceptRank` construction `+513476 us`
-  - canonical-key finalization `+22 us`
+- On the reopened surface, wall clock improved relative to the late diagnostic but not relative to the kept full-profile baseline:
+  - `74`: `1736421 / 1728274` versus kept full-profile `1743244 / 1579138`
+  - `76`: `1786620 / 1778350` versus kept full-profile `1797441 / 1628768`
+  - `76`: `1786620 / 1778350` versus late diagnostic `1848102 / 1839910`
+- The visible wall moved away from clause filtering first. At `76` on the lazy admitted-only rerun:
+  - connectivity `= 414014281 us`
+  - aggregation `= 410788615 us`
+  - clause filtering `= 355695170 us`
+  - exact `nu` `= 263235482 us`
+- Incremental `54 -> 76` also no longer led with clause filtering:
+  - connectivity `+121876363 us`
+  - aggregation `+119778206 us`
+  - clause filtering `+107161442 us`
+  - exact `nu` `+77782222 us`
 
 ## Honest Read
-- The numeric-first exact rank idea is real once metadata already exists: full `AcceptRank` assembly and canonical-key finalization became tiny.
-- The failure is **where** the metadata was built. Precomputing structural and canonical clause metadata inside `terminal_prefix_clause_candidates` moved the wall to clause filtering first and more than erased the later rank-side savings.
-- The next retry should therefore keep the current winning code in place and only revisit metadata if it is built **after** connectivity and admitted-candidate checks, not during terminal clause filtering.
+- Moving exact rank metadata behind admitted-candidate gates was enough to restore cheap clause filtering and keep the reopened surface honest.
+- It was **not** enough to earn keep. The lazy metadata path still added about `10-11%` to `terminal_summary_build_*` at `24/43/44/54`, so metadata work itself is still too expensive on the early short wall.
+- The new lesson is therefore different from the prior note:
+  - metadata is no longer the first visible problem
+  - clause filtering is no longer the first visible problem
+  - the reopened step-`4` wall is now connectivity first, with aggregation immediately behind it
 
 ## Goal
-Land one narrower exact slice that:
+Land one narrower reopened-surface runtime slice that:
 - keeps the kept short baseline code behind `runs/codex-claim-release-step4-kernel-aggregation-v1`
-- keeps the honest `39/144845` and reopened `40/147639` shapes
-- avoids the clause-filter explosion from `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
-- re-tests whether lazy admitted-only metadata can still cut the remaining aggregation work
+- keeps the honest `39/144845`, reopened `40/147639`, and late `41/154842` shapes
+- keeps clause filtering near `runs/codex-claim-release-step4-kernel-late-profile-v1`
+- attacks the now-honest connectivity-first reopened wall without reintroducing metadata cost on the early surface
 
 ## Do This Next
 
@@ -90,37 +96,40 @@ Keep the code behind:
 
 Do not keep in code:
 - the eager clause-filter-wide metadata pack from `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
+- the lazy admitted-only metadata path from `runs/codex-claim-release-step4-kernel-admitted-metadata-v1`
 
-### 2. Retry Metadata Only Behind Admitted Candidates
-If metadata is retried, move it behind the hot-path gates:
-- do **not** build structural-signal or canonical-key suffix metadata in `terminal_prefix_clause_candidates`
+### 2. Pivot From Metadata To The Reopened Connectivity Wall
+The next retry should not be another metadata slice.
+
+Instead:
 - keep terminal clause filtering cheap again
-- build any exact clause metadata only after:
-  - connectivity passes
-  - admissibility admits the candidate
-  - and preferably only once the candidate can still contend after the incumbent-primary short-circuit
+- keep the current exact-rank truth surface as-is
+- target one narrow exact runtime cut on the reopened connectivity wall
+- prefer work that engages only after the retained-prefix plateau or reopened `74/76` surface, not a broad early-frontier rewrite
 
-The next slice can still keep:
-- one prefix-side exact rank context computed once per signature
-- numeric-field comparison before canonical-key finalization
+The next slice may still touch remaining-one runtime code, but it should avoid:
+- rebuilding clause-local exact metadata as a primary move
+- reopening eager or lazy canonical-key work
+- reopening already-dropped broad connectivity cache variants unchanged
 
-But it must delay clause-local metadata until the candidate is already in the admitted summary kernel.
+### 3. Keep The Timing Surface Honest
+Keep these stored reads available on the next retry:
+- clause filtering separate from total summary build
+- aggregation separate from connectivity
+- exact `nu` separate from the rest
 
-### 3. Keep The Fine-Grained Timing
-Keep the new diagnostic lesson, not the eager runtime shape:
-- clause filtering must stay separately readable from summary build
-- if a lazy metadata retry lands, keep aggregation sub-buckets so one honest rerun shows whether:
-  - clause filtering falls back toward the kept references
-  - and the admitted-only metadata still lowers aggregation
+If one new connectivity retry lands, keep any extra split narrowly scoped and only if it stays cheap enough to measure:
+- cache lookup or summary reuse versus fallback connectivity
+- late reopened prefixes versus the earlier `39/144845` plateau
 
 ### 4. Re-Earn The Short Runtime Read
 Run a new release claim rerun derived from `configs/desktop_claim_shadow_1h.toml` with:
 - `--until-step 4`
-- the lazy admitted-only metadata binary above
+- the connectivity-side binary above
 - live checkpoint persistence left on
 - a new run id that states the patch, for example:
-  - `runs/codex-claim-release-step4-kernel-lazy-metadata-v1`
-  - `runs/codex-claim-release-step4-kernel-admitted-metadata-v1`
+  - `runs/codex-claim-release-step4-kernel-connectivity-late-v1`
+  - `runs/codex-claim-release-step4-kernel-reopened-connectivity-v1`
 
 Let the run go far enough to capture at least:
 - matched `24/43/44/54`
@@ -134,11 +143,11 @@ Open at least:
 - `run.json`
 
 Answer from stored evidence:
-- did clause filtering fall back toward the kept short or late-diagnostic surfaces?
-- did the lazy metadata retry lower elapsed and total `terminal_summary_build_*` at `24/43/44/54` without losing `39/144845`?
-- did the reopened `74/76` surface move back toward the kept full-profile aggregation baseline?
-- which aggregation sub-bucket is now first at `54 -> 76`?
-- is aggregation the honest blocker again, or has the wall moved somewhere else?
+- did the early `24/43/44/54` surface move back under the kept short baseline honestly?
+- did clause filtering stay near the kept late diagnostic instead of reopening the old clause-filter wall?
+- did the reopened `74/76` wall stay connectivity-first, or did it move again?
+- did `74/76` move past the kept full-profile aggregation baseline honestly?
+- is connectivity still first on the `54 -> 76` increment, or did aggregation retake the lead?
 
 ### 6. Re-Earn Only The Validation Needed
 If the slice stays claim-only and step-`4` runtime-only, rerun only:
@@ -150,12 +159,12 @@ If the new short slice earns keep, then branch back to one new full-profile reru
 ## Keep Or Branch Decision
 After the next short rerun:
 - stay on runtime work if the early or reopened surfaces still regress
-- branch back to a new full-profile rerun only if the short rerun beats the kept short baseline honestly and materially narrows the reopened `74/76` gap to the kept full-profile aggregation baseline
+- branch back to a new full-profile rerun only if the short rerun beats the kept short baseline honestly and materially improves the reopened `74/76` read against the kept full-profile baseline
 - branch to parity, breadth, compare, benchmark, and certification work only after a later full-profile run honestly moves past the step-`4` wall
 
 ## Stop Condition For This Note
 Rewrite this file as soon as one new stored rerun shows one of these is true:
-- a lazy admitted-only metadata cut earns keep on the honest short surface
-- the step-`4` wall moves away from clause filtering and aggregation first
+- a reopened-surface connectivity cut earns keep on both the early and reopened short surfaces
+- the step-`4` wall moves away from connectivity first
 - a later full-profile rerun reaches a new blocker honestly
 - runtime work is no longer the next honest move

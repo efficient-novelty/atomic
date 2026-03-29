@@ -18,7 +18,7 @@ It lists only work that is still open.
   plateau through `24/43/44/54`, then reopened to `40/147639` at `74/76`
   and `41/154842` at `140` while still tracking the intended full-profile
   baseline closely on elapsed time, RSS, and frontier queue length.
-- The newest eager metadata rerun
+- The eager metadata rerun
   `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
   preserved the same honest early and reopened shapes, but it failed keep
   badly on runtime and moved the visible wall to clause filtering first.
@@ -29,9 +29,17 @@ It lists only work that is still open.
   `AcceptRank` construction and canonical-key finalization become small, so
   the remaining lesson is to keep any metadata retry lazy and admitted-only
   rather than building it in terminal clause filtering.
-- The next honest move is therefore not another eager metadata pack and not a
-  full-profile rerun first. It is one narrower admitted-only metadata retry on
-  the kept short baseline code.
+- The newer admitted-only metadata rerun
+  `runs/codex-claim-release-step4-kernel-admitted-metadata-v1`
+  then re-earned cheap clause filtering and kept the same honest early and
+  reopened shapes, but it still failed keep on the matched early short
+  surface because `terminal_summary_build_*` regressed by about `10-11%`.
+- At `76` on that newer slice, stored telemetry read:
+  connectivity `= 414014281 us`, aggregation `= 410788615 us`,
+  clause filtering `= 355695170 us`, exact `nu` `= 263235482 us`.
+- The next honest move is therefore not another metadata retry and not a
+  full-profile rerun first. It is one narrower reopened-surface connectivity
+  retry on the kept short baseline code.
 
 ## 1. Runtime Completion
 

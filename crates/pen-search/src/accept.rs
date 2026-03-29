@@ -1,10 +1,153 @@
 use crate::branch_bound::AcceptRank;
-use crate::expand::{ExpandedCandidate, structural_signals_for_telescope};
+use crate::expand::{
+    ExpandedCandidate, StructuralSignals, structural_signals_for_expr,
+    structural_signals_for_telescope,
+};
 use pen_core::canonical::canonical_key_telescope;
+use pen_core::clause::ClauseRec;
 use pen_core::rational::Rational;
 use pen_core::telescope::Telescope;
 use pen_store::manifest::{AcceptedCandidate, NearMiss};
 use std::cmp::Reverse;
+use std::collections::BTreeSet;
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct AcceptRankPrefixContext {
+    structural_signals: StructuralSignals,
+    library_refs: BTreeSet<u32>,
+    var_refs: BTreeSet<u32>,
+    max_var_ref: u32,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct TerminalClauseAcceptRankMetadata {
+    structural_signals: StructuralSignals,
+    library_refs: BTreeSet<u32>,
+    var_refs: BTreeSet<u32>,
+    max_var_ref: u32,
+}
+
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+pub(crate) struct AcceptRankNumericFields {
+    pub overshoot: Rational,
+    pub clause_kappa: u16,
+    pub descending_eliminator_score: Reverse<u16>,
+    pub descending_former_score: Reverse<u16>,
+    pub descending_dependent_motive_density: Reverse<u16>,
+    pub descending_library_reference_density: Reverse<u16>,
+    pub max_var_ref: u32,
+    pub descending_generic_binder_count: Reverse<u16>,
+    pub descending_closure_score: Reverse<u16>,
+    pub bit_kappa: u16,
+    pub descending_nu: Reverse<u16>,
+}
+
+pub(crate) fn accept_rank_prefix_context(prefix_telescope: &Telescope) -> AcceptRankPrefixContext {
+    let library_refs = prefix_telescope.lib_refs();
+    let var_refs = prefix_telescope.var_refs();
+    let max_var_ref = var_refs.iter().next_back().copied().unwrap_or(0);
+    AcceptRankPrefixContext {
+        structural_signals: structural_signals_for_telescope(prefix_telescope),
+        library_refs,
+        var_refs,
+        max_var_ref,
+    }
+}
+
+pub(crate) fn terminal_clause_accept_rank_metadata(
+    clause: &ClauseRec,
+) -> TerminalClauseAcceptRankMetadata {
+    let library_refs = clause.expr.lib_refs();
+    let var_refs = clause.expr.var_refs();
+    let max_var_ref = var_refs.iter().next_back().copied().unwrap_or(0);
+    TerminalClauseAcceptRankMetadata {
+        structural_signals: structural_signals_for_expr(&clause.expr),
+        library_refs,
+        var_refs,
+        max_var_ref,
+    }
+}
+
+pub(crate) fn acceptance_rank_numeric_fields(
+    bar: Rational,
+    exact_nu: u16,
+    bit_kappa: u16,
+    clause_kappa: u16,
+    prefix_context: &AcceptRankPrefixContext,
+    clause_metadata: &TerminalClauseAcceptRankMetadata,
+) -> Option<AcceptRankNumericFields> {
+    let rho = Rational::new(i64::from(exact_nu), i64::from(clause_kappa));
+    if rho < bar {
+        return None;
+    }
+
+    let prefix_signals = &prefix_context.structural_signals;
+    let clause_signals = &clause_metadata.structural_signals;
+    let library_reference_density = u16::try_from(
+        prefix_context
+            .library_refs
+            .union(&clause_metadata.library_refs)
+            .count(),
+    )
+    .expect("library ref count exceeded u16");
+    let closure_score = u16::try_from(
+        prefix_context
+            .var_refs
+            .union(&clause_metadata.var_refs)
+            .count(),
+    )
+    .expect("closure score exceeded u16");
+
+    Some(AcceptRankNumericFields {
+        overshoot: rho - bar,
+        clause_kappa,
+        descending_eliminator_score: Reverse(
+            prefix_signals
+                .eliminator_score
+                .saturating_add(clause_signals.eliminator_score),
+        ),
+        descending_former_score: Reverse(
+            prefix_signals
+                .former_score
+                .saturating_add(clause_signals.former_score),
+        ),
+        descending_dependent_motive_density: Reverse(
+            prefix_signals
+                .dependent_motive_density
+                .saturating_add(clause_signals.dependent_motive_density),
+        ),
+        descending_library_reference_density: Reverse(library_reference_density),
+        max_var_ref: prefix_context.max_var_ref.max(clause_metadata.max_var_ref),
+        descending_generic_binder_count: Reverse(
+            prefix_signals
+                .generic_binder_count
+                .saturating_add(clause_signals.generic_binder_count),
+        ),
+        descending_closure_score: Reverse(closure_score),
+        bit_kappa,
+        descending_nu: Reverse(exact_nu),
+    })
+}
+
+pub(crate) fn finalize_acceptance_rank(
+    numeric_fields: AcceptRankNumericFields,
+    telescope: &Telescope,
+) -> AcceptRank {
+    AcceptRank {
+        overshoot: numeric_fields.overshoot,
+        clause_kappa: numeric_fields.clause_kappa,
+        descending_eliminator_score: numeric_fields.descending_eliminator_score,
+        descending_former_score: numeric_fields.descending_former_score,
+        descending_dependent_motive_density: numeric_fields.descending_dependent_motive_density,
+        descending_library_reference_density: numeric_fields.descending_library_reference_density,
+        max_var_ref: numeric_fields.max_var_ref,
+        descending_generic_binder_count: numeric_fields.descending_generic_binder_count,
+        descending_closure_score: numeric_fields.descending_closure_score,
+        bit_kappa: numeric_fields.bit_kappa,
+        descending_nu: numeric_fields.descending_nu,
+        canonical_key: canonical_key_telescope(telescope),
+    }
+}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AcceptanceOutcome {
@@ -146,7 +289,10 @@ fn collect_near_misses(
 
 #[cfg(test)]
 mod tests {
-    use super::select_acceptance;
+    use super::{
+        accept_rank_prefix_context, acceptance_rank_for_telescope, acceptance_rank_numeric_fields,
+        finalize_acceptance_rank, select_acceptance, terminal_clause_accept_rank_metadata,
+    };
     use crate::expand::evaluate_candidate;
     use pen_core::library::{Library, LibraryEntry};
     use pen_core::rational::Rational;
@@ -185,5 +331,46 @@ mod tests {
         assert_eq!(outcome.accepted.nu, hopf.nu);
         assert_eq!(outcome.accepted.overshoot, Rational::new(1, 4));
         assert_eq!(outcome.near_misses[0].status, "below_bar");
+    }
+
+    #[test]
+    fn claim_admitted_only_rank_metadata_matches_full_accept_rank() {
+        let (library, history) = replay_prefix(14);
+        let bar = Rational::zero();
+        let target = Telescope::reference(15);
+        let prefix = Telescope::new(target.clauses[..target.clauses.len() - 1].to_vec());
+        let clause = target
+            .clauses
+            .last()
+            .expect("reference target should have a terminal clause")
+            .clone();
+        let exact_nu = u16::try_from(
+            evaluate_candidate(&library, &history, target.clone())
+                .expect("reference target should evaluate")
+                .nu,
+        )
+        .expect("nu should fit in u16");
+        let bit_kappa =
+            u16::try_from(target.bit_cost()).expect("reference target bit cost should fit in u16");
+        let clause_kappa =
+            u16::try_from(target.kappa()).expect("reference target kappa should fit in u16");
+
+        let prefix_context = accept_rank_prefix_context(&prefix);
+        let clause_metadata = terminal_clause_accept_rank_metadata(&clause);
+        let numeric_fields = acceptance_rank_numeric_fields(
+            bar,
+            exact_nu,
+            bit_kappa,
+            clause_kappa,
+            &prefix_context,
+            &clause_metadata,
+        )
+        .expect("reference target should clear zero bar");
+        let lazy_rank = finalize_acceptance_rank(numeric_fields, &target);
+        let direct_rank =
+            acceptance_rank_for_telescope(bar, &target, exact_nu, bit_kappa, clause_kappa)
+                .expect("reference target should produce an accept rank");
+
+        assert_eq!(lazy_rank, direct_rank);
     }
 }

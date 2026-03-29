@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-03-28
+Last updated: 2026-03-29
 Status: active
 
 This file is the staged path from the current step-`4` wall to final claim
@@ -32,21 +32,24 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   `41/154842` at `140`, while still never reaching step `5`.
 - The current late diagnostic
   `runs/codex-claim-release-step4-kernel-late-profile-v1`
-  showed aggregation first on the kept reopened surface, but the newest eager
-  metadata rerun changed that read.
-- The latest eager clause-metadata rerun
+  showed aggregation first on the kept reopened surface.
+- The eager clause-metadata rerun
   `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
   preserved the honest short and reopened shapes, but it failed keep badly:
   wall clock and total `terminal_summary_build_*` regressed hard at
   `24/43/44/54`, it trailed both kept reopened references at `74/76`, and it
   moved the visible wall to clause filtering first.
-- The lesson is now more specific: exact rank metadata is only promising if it
-  is built lazily behind connectivity and admitted-candidate checks. Building
-  structural/canonical clause metadata in terminal clause filtering is too
-  early and swamps the later accept-rank savings.
-- The next step should keep the current winning binary in code and retry only
-  a narrower admitted-only metadata path rather than another eager
-  clause-filter-wide metadata pack.
+- The newer lazy admitted-only metadata rerun
+  `runs/codex-claim-release-step4-kernel-admitted-metadata-v1`
+  re-earned cheap clause filtering and kept the honest early and reopened
+  shapes, but it still failed keep on the matched early short surface because
+  `terminal_summary_build_*` regressed by about `10-11%`.
+- That newest rerun also changed the honest reopened read again: at `76`, the
+  stored bucket order became connectivity first, aggregation second, clause
+  filtering third, and exact `nu` fourth.
+- The next step should therefore keep the current winning binary in code,
+  leave both metadata retries dropped, and target one narrower reopened-surface
+  connectivity cut rather than another metadata pass.
 
 ## Decision Rules
 
@@ -67,9 +70,9 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 Goal:
 
-- land one narrower admitted-only metadata cut on the winning binary and
-  re-earn the short read on the reopened surface without reintroducing a
-  clause-filter wall
+- land one narrower reopened-surface connectivity cut on the winning binary
+  and re-earn the short read on the reopened surface without reintroducing a
+  clause-filter wall or metadata cost on the early surface
 
 Working baselines:
 
@@ -83,16 +86,15 @@ Working baselines:
 Preferred cuts:
 
 - keep terminal clause filtering cheap
-- if metadata is revisited, build it only after connectivity and admitted
-  checks inside the summary kernel
-- keep exact tie-break truth; do not swap it for a lossy hash or surrogate key
-- preserve the numeric-first rank comparison idea only if it stays behind the
-  incumbent-primary short-circuit
+- keep the current exact tie-break truth surface intact
+- target the reopened connectivity wall after the retained-prefix plateau
+- keep aggregation, connectivity, clause filtering, and exact `nu` separately
+  readable in stored evidence
 
 Reject as the next primary move:
 
-- another connectivity-side rewrite
 - another eager clause-filter-wide metadata rewrite
+- another lazy admitted-only metadata rewrite
 - another exact-`nu` cleanup first
 - another diagnostic-only slice first
 - another retry of `kernel-rank-bookkeeping-v1`
@@ -109,7 +111,8 @@ Done when:
 
 - one new short rerun lowers matched `24/43/44/54` wall clock and
   `terminal_summary_build_*` honestly, keeps clause filtering near the kept
-  references, and still looks good at `74/76`
+  references, and improves the reopened `74/76` read against the kept
+  full-profile baseline
 
 ## Phase 2: Re-Earn The Intended-Profile Read
 
