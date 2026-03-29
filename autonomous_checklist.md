@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-03-28
+Last updated: 2026-03-29
 
 This checklist is the live signoff gate for `desktop_claim_shadow`.
 It lists only work that is still open.
@@ -18,23 +18,20 @@ It lists only work that is still open.
   plateau through `24/43/44/54`, then reopened to `40/147639` at `74/76`
   and `41/154842` at `140` while still tracking the intended full-profile
   baseline closely on elapsed time, RSS, and frontier queue length.
-- The current hot bottleneck is still `terminal_summary_build_millis` in step
-  `4`, but the higher-fidelity microsecond split now shows aggregation or
-  rank-bookkeeping first on the reopened short surface, connectivity second,
-  clause filtering third, exact `nu` fourth, and only a smaller residual
-  bookkeeping tail left unattributed.
-- The latest exact-`nu` high-water rerun kept the honest short and reopened
-  shapes, but it still failed keep because wall clock and total
-  `terminal_summary_build_*` regressed too much at the matched `24/43/44/54`
-  checkpoints and it remained slightly behind the late diagnostic at `74/76`,
-  so the next honest move is still one different narrow aggregation-side cut
-  inside the measured summary kernel, not another exact-`nu`-gate-only
-  cleanup and not another full-profile rerun first.
-- The strongest current next-cut hypothesis is now one more precomputed
-  compact-summary constant inside the admitted aggregation block. The exact-`nu`
-  high-water gate preserved shape and tie-break truth, but it was too small on
-  its own, so the next cut should remove a larger per-admitted invariant that
-  is still rebuilt inside the measured summary kernel.
+- The newest eager metadata rerun
+  `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
+  preserved the same honest early and reopened shapes, but it failed keep
+  badly on runtime and moved the visible wall to clause filtering first.
+- At `76` on that slice, stored telemetry read:
+  clause filtering `= 2178547522 us`, aggregation `= 456894681 us`,
+  connectivity `= 412251293 us`, exact `nu` `= 269107583 us`.
+- The same rerun also showed that once clause metadata already exists, full
+  `AcceptRank` construction and canonical-key finalization become small, so
+  the remaining lesson is to keep any metadata retry lazy and admitted-only
+  rather than building it in terminal clause filtering.
+- The next honest move is therefore not another eager metadata pack and not a
+  full-profile rerun first. It is one narrower admitted-only metadata retry on
+  the kept short baseline code.
 
 ## 1. Runtime Completion
 
