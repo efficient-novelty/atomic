@@ -37,9 +37,20 @@ It lists only work that is still open.
 - At `76` on that newer slice, stored telemetry read:
   connectivity `= 414014281 us`, aggregation `= 410788615 us`,
   clause filtering `= 355695170 us`, exact `nu` `= 263235482 us`.
-- The next honest move is therefore not another metadata retry and not a
-  full-profile rerun first. It is one narrower reopened-surface connectivity
-  retry on the kept short baseline code.
+- The newer reopened connectivity rerun
+  `runs/codex-claim-release-step4-kernel-reopened-connectivity-v1`
+  then kept the same honest early and reopened shapes, improved elapsed wall
+  clock at `24/43/44/54/74/76`, and cut reopened connectivity timing
+  materially, but it still failed keep because `terminal_summary_build_*`
+  regressed by about `5.2-5.6%` on the matched early short surface and about
+  `4.0%` at `74/76` versus the kept full-profile baseline.
+- At `76` on that newest slice, stored telemetry read:
+  aggregation `= 463408834 us`, clause filtering `= 356760236 us`,
+  connectivity `= 282490143 us`, exact `nu` `= 265598332 us`.
+- The next honest move is therefore not another metadata retry, not another
+  unchanged connectivity retry, and not a full-profile rerun first. It is
+  one narrower reopened-surface aggregation retry on the kept short baseline
+  code.
 
 ## 1. Runtime Completion
 

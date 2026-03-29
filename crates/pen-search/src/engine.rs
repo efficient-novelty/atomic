@@ -1,7 +1,5 @@
 use crate::accept::{
-    AcceptanceOutcome, accept_rank_prefix_context, acceptance_rank, acceptance_rank_for_telescope,
-    acceptance_rank_numeric_fields, finalize_acceptance_rank, select_acceptance,
-    terminal_clause_accept_rank_metadata,
+    AcceptanceOutcome, acceptance_rank, acceptance_rank_for_telescope, select_acceptance,
 };
 use crate::bounds::PrefixBound;
 use crate::branch_bound::{AcceptRank, better_rank};
@@ -5631,13 +5629,10 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     let clause_kappa_used =
         u16::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u16");
     let prefix_bit_cost = prefix_telescope.bit_cost();
-    let prefix_rank_context = accept_rank_prefix_context(prefix_telescope);
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
     let mut kernel_timing = RemainingOneSummaryKernelTiming::default();
-    let mut best_accept_numeric_fields = None;
     let focus_aligned_competitors_only =
         demo_focus_aligned_competitors_only(prefix_signature, admissibility, prefix_legality_cache);
-
     for (clause, cached_admissibility_decision) in terminal_clauses {
         let connectivity_started = Instant::now();
         let Some(connectivity_decision) =
@@ -5759,33 +5754,16 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                         )
                     })
                 {
-                    let clause_rank_metadata = terminal_clause_accept_rank_metadata(clause);
-                    if let Some(rank_numeric_fields) = acceptance_rank_numeric_fields(
+                    if let Some(rank) = acceptance_rank_for_telescope(
                         objective_bar,
+                        telescope,
                         exact_nu,
                         bit_kappa_used,
                         clause_kappa_used,
-                        &prefix_rank_context,
-                        &clause_rank_metadata,
                     ) {
-                        let should_finalize_rank = match best_accept_numeric_fields.as_ref() {
-                            Some(current) if rank_numeric_fields > *current => false,
-                            Some(current) if rank_numeric_fields < *current => {
-                                best_accept_numeric_fields = Some(rank_numeric_fields.clone());
-                                true
-                            }
-                            Some(_) => true,
-                            None => {
-                                best_accept_numeric_fields = Some(rank_numeric_fields.clone());
-                                true
-                            }
-                        };
-                        if should_finalize_rank {
-                            let rank = finalize_acceptance_rank(rank_numeric_fields, telescope);
-                            match &summary.best_accept_rank {
-                                Some(current) if !better_rank(&rank, current) => {}
-                                _ => summary.best_accept_rank = Some(rank),
-                            }
+                        match &summary.best_accept_rank {
+                            Some(current) if !better_rank(&rank, current) => {}
+                            _ => summary.best_accept_rank = Some(rank),
                         }
                     }
                 }
@@ -6250,7 +6228,6 @@ fn materialize_terminal_prefix_group_compact(
         u16::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u16");
     let prefix_bit_cost = prefix_telescope.bit_cost();
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
-
     for (clause, cached_admissibility_decision) in terminal_clauses {
         let Some(connectivity_decision) = discovery.prefix_legality_cache.terminal_connectivity(
             prefix_signature,

@@ -44,12 +44,20 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   re-earned cheap clause filtering and kept the honest early and reopened
   shapes, but it still failed keep on the matched early short surface because
   `terminal_summary_build_*` regressed by about `10-11%`.
-- That newest rerun also changed the honest reopened read again: at `76`, the
-  stored bucket order became connectivity first, aggregation second, clause
-  filtering third, and exact `nu` fourth.
+- The newer reopened connectivity rerun
+  `runs/codex-claim-release-step4-kernel-reopened-connectivity-v1`
+  then kept the honest early and reopened shapes, cut reopened connectivity
+  timing materially, and improved elapsed wall clock at `24/43/44/54/74/76`,
+  but it still failed keep because `terminal_summary_build_*` regressed by
+  about `5.2-5.6%` on the matched early short surface and about `4.0%` at
+  `74/76` versus the kept full-profile baseline.
+- That newest rerun changed the honest reopened read again: at `76`, the
+  stored bucket order became aggregation first, clause filtering second,
+  connectivity third, and exact `nu` fourth.
 - The next step should therefore keep the current winning binary in code,
-  leave both metadata retries dropped, and target one narrower reopened-surface
-  connectivity cut rather than another metadata pass.
+  leave both metadata retries and the dropped connectivity reuse out of code,
+  and target one narrower reopened-surface aggregation cut rather than another
+  metadata or connectivity pass.
 
 ## Decision Rules
 
@@ -70,8 +78,8 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 Goal:
 
-- land one narrower reopened-surface connectivity cut on the winning binary
-  and re-earn the short read on the reopened surface without reintroducing a
+- land one narrower reopened-surface aggregation cut on the winning binary and
+  re-earn the short read on the reopened surface without reintroducing a
   clause-filter wall or metadata cost on the early surface
 
 Working baselines:
@@ -87,7 +95,7 @@ Preferred cuts:
 
 - keep terminal clause filtering cheap
 - keep the current exact tie-break truth surface intact
-- target the reopened connectivity wall after the retained-prefix plateau
+- target the reopened aggregation wall after the retained-prefix plateau
 - keep aggregation, connectivity, clause filtering, and exact `nu` separately
   readable in stored evidence
 
@@ -95,6 +103,7 @@ Reject as the next primary move:
 
 - another eager clause-filter-wide metadata rewrite
 - another lazy admitted-only metadata rewrite
+- another unchanged reopened connectivity reuse retry
 - another exact-`nu` cleanup first
 - another diagnostic-only slice first
 - another retry of `kernel-rank-bookkeeping-v1`
