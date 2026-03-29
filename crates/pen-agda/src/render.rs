@@ -232,7 +232,9 @@ mod tests {
             },
         );
         assert!(source.contains("module Payload15 where"));
-        assert!(source.contains("open import BridgePayload using (BridgePayload; ContractWitness)"));
+        assert!(
+            source.contains("open import BridgePayload using (BridgePayload; ContractWitness)")
+        );
         assert!(source.contains("-- canonical_key: f00dbabe"));
         assert!(source.contains("-- nu_total: 103"));
         assert!(source.contains("-- import_steps: 10"));

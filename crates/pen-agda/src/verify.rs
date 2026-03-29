@@ -178,7 +178,11 @@ fn verify_step_contract(
         &format!("-- nu_total: {}", step.claims.nu_claim.nu_total),
         "payload nu_total comment",
     )?;
-    require_contains(&payload, "payload : BridgePayload", "payload bridge witness")?;
+    require_contains(
+        &payload,
+        "payload : BridgePayload",
+        "payload bridge witness",
+    )?;
     require_contains(
         &payload,
         "contractWitness : ContractWitness payload",
