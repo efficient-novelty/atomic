@@ -1,6 +1,7 @@
 mod support;
 
 use std::fs;
+use std::process::Command;
 
 use support::{
     assert_success, fixtures_root, normalize_export_manifest, read_json, read_text, run_pen_cli,
@@ -8,7 +9,7 @@ use support::{
 };
 
 #[test]
-fn export_agda_emits_the_frozen_manifest_and_stub_source() {
+fn export_agda_emits_the_frozen_manifest_and_witness_source() {
     let output_dir = temp_dir("agda-export");
     let output_dir_arg = output_dir.to_string_lossy().to_string();
     let output = run_pen_cli([
@@ -45,6 +46,9 @@ fn export_agda_emits_the_frozen_manifest_and_stub_source() {
             .join("reference_payload_02.agda"),
     );
     assert_eq!(actual_payload, expected_payload);
+    assert!(output_dir.join("BridgePayload.agda").exists());
+    assert!(output_dir.join("AbstractionBarrier.agda").exists());
+    assert!(output_dir.join("StepWitness.agda").exists());
 
     fs::remove_dir_all(output_dir).ok();
 }
@@ -112,4 +116,41 @@ fn export_agda_prefers_run_artifacts_and_carries_step_fifteen_claims() {
     assert!(payload15.contains("-- nu_total: 103"));
 
     fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn export_agda_verify_typechecks_the_self_contained_bundle() {
+    let output_dir = temp_dir("agda-export-verify");
+    let output_dir_arg = output_dir.to_string_lossy().to_string();
+    let stdout = assert_success(run_pen_cli([
+        "export-agda",
+        "--until-step",
+        "2",
+        "--output-dir",
+        &output_dir_arg,
+        "--verify",
+    ]));
+    assert!(stdout.contains("verify_requested: true"));
+
+    let manifest = read_json(&output_dir.join("manifest.json"));
+    let agda_available = Command::new("agda").arg("--version").output().is_ok();
+    let expected_status = if agda_available { "passed" } else { "skipped" };
+    assert_eq!(
+        manifest["steps"][0]["verification"].as_str(),
+        Some(expected_status)
+    );
+    assert_eq!(
+        manifest["steps"][1]["verification"].as_str(),
+        Some(expected_status)
+    );
+
+    let verify_log = read_text(&output_dir.join("Step02.verify.log"));
+    assert!(verify_log.contains("contract: payload and witness checks passed for step 2"));
+    if agda_available {
+        assert!(verify_log.contains("Checking Step02"));
+    } else {
+        assert!(verify_log.contains("skipped: agda executable not found"));
+    }
+
+    fs::remove_dir_all(output_dir).ok();
 }

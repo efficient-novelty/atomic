@@ -1,6 +1,6 @@
 module Payload02 where
 
-open import Agda.Primitive using (Set)
+open import BridgePayload using (BridgePayload; ContractWitness)
 
 -- step: 2
 -- label: Unit
@@ -18,4 +18,5 @@ open import Agda.Primitive using (Set)
 -- nu_total: 1
 
 postulate
-  ContractWitness : Set
+  payload : BridgePayload
+  contractWitness : ContractWitness payload

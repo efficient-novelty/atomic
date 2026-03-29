@@ -20,6 +20,12 @@ use std::path::Path;
 use time::OffsetDateTime;
 use time::format_description::well_known::Rfc3339;
 
+const SUPPORT_MODULES: &[&str] = &[
+    "BridgePayload.agda",
+    "AbstractionBarrier.agda",
+    "StepWitness.agda",
+];
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ExportStepInput {
     pub step_index: u32,
@@ -41,6 +47,7 @@ pub fn export_steps(
     source: ExportSource,
 ) -> Result<AgdaExportManifest> {
     fs::create_dir_all(output_dir).with_context(|| format!("create {}", output_dir.display()))?;
+    write_support_modules(output_dir)?;
 
     let prepared_steps = prepare_steps(steps)?;
     for step in &prepared_steps {
@@ -106,6 +113,28 @@ pub fn export_steps(
         .with_context(|| format!("write {}", manifest_path.display()))?;
 
     Ok(manifest)
+}
+
+fn write_support_modules(output_dir: &Path) -> Result<()> {
+    let support_root = workspace_root().join("agda");
+    for module in SUPPORT_MODULES {
+        let source_path = support_root.join(module);
+        let destination_path = output_dir.join(module);
+        let source = fs::read_to_string(&source_path)
+            .with_context(|| format!("read {}", source_path.display()))?;
+        fs::write(&destination_path, source)
+            .with_context(|| format!("write {}", destination_path.display()))?;
+    }
+
+    Ok(())
+}
+
+fn workspace_root() -> std::path::PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .ancestors()
+        .nth(2)
+        .expect("workspace root")
+        .to_path_buf()
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -270,6 +299,9 @@ mod tests {
         .expect("export should succeed");
 
         assert_eq!(manifest.steps[0].verification, VerificationStatus::Pending);
+        assert!(output_dir.join("BridgePayload.agda").exists());
+        assert!(output_dir.join("AbstractionBarrier.agda").exists());
+        assert!(output_dir.join("StepWitness.agda").exists());
         assert!(output_dir.join("Step01.agda").exists());
         assert!(output_dir.join("Payload01.agda").exists());
         assert!(output_dir.join("manifest.json").exists());

@@ -32,7 +32,10 @@ pub fn render_step_module(
 ) -> String {
     let module_name = step_module_name(step_index);
     let prior_imports = render_imports(telescope);
-    let mut imports = vec![format!("open import {payload_module} as {payload_module}")];
+    let mut imports = vec![
+        "open import StepWitness using (StepWitness)".to_owned(),
+        format!("open import {payload_module} as {payload_module}"),
+    ];
     imports.extend(prior_imports);
     let clauses = telescope
         .clauses
@@ -54,7 +57,7 @@ pub fn render_step_module(
     };
 
     format!(
-        "module {module_name} where\n\nopen import Agda.Primitive using (Set)\n\n{imports_block}-- step: {step_index}\n-- label: {label}\n-- candidate_hash: {candidate_hash}\n-- canonical_hash: {canonical_hash}\n-- proof_payload: {payload_module}\n\npostulate\n  T : Set\n{clauses}\n"
+        "module {module_name} where\n\nopen import Agda.Primitive using (Set)\n\n{imports_block}-- step: {step_index}\n-- label: {label}\n-- candidate_hash: {candidate_hash}\n-- canonical_hash: {canonical_hash}\n-- proof_payload: {payload_module}\n\npostulate\n  T : Set\n  stepWitness : StepWitness {payload_module}.payload T\n{clauses}\n"
     )
 }
 
@@ -78,7 +81,7 @@ pub fn render_payload_module(
     };
 
     format!(
-        "module {module_name} where\n\nopen import Agda.Primitive using (Set)\n\n-- step: {step_index}\n-- label: {label}\n-- candidate_hash: {candidate_hash}\n-- canonical_hash: {canonical_hash}\n-- canonical_key: {}\n-- bit_kappa: {}\n-- clause_kappa: {}\n-- desugared_kappa: {}\n-- rho: {}\n-- import_steps: {import_steps}\n-- nu_g: {}\n-- nu_h: {}\n-- nu_c: {}\n-- nu_total: {}\n\npostulate\n  ContractWitness : Set\n",
+        "module {module_name} where\n\nopen import BridgePayload using (BridgePayload; ContractWitness)\n\n-- step: {step_index}\n-- label: {label}\n-- candidate_hash: {candidate_hash}\n-- canonical_hash: {canonical_hash}\n-- canonical_key: {}\n-- bit_kappa: {}\n-- clause_kappa: {}\n-- desugared_kappa: {}\n-- rho: {}\n-- import_steps: {import_steps}\n-- nu_g: {}\n-- nu_h: {}\n-- nu_c: {}\n-- nu_total: {}\n\npostulate\n  payload : BridgePayload\n  contractWitness : ContractWitness payload\n",
         claims.canonical_key,
         claims.bit_kappa,
         claims.clause_kappa,
@@ -199,8 +202,10 @@ mod tests {
     fn renderer_emits_useful_comments_and_imports() {
         let source = render_step_module(9, "Hopf", &Telescope::reference(9), "a", "b", "Payload09");
         assert!(source.contains("module Step09 where"));
+        assert!(source.contains("open import StepWitness using (StepWitness)"));
         assert!(source.contains("open import Payload09 as Payload09"));
         assert!(source.contains("open import Step08 as Step08"));
+        assert!(source.contains("stepWitness : StepWitness Payload09.payload T"));
         assert!(source.contains("-- translated:"));
     }
 
@@ -227,9 +232,12 @@ mod tests {
             },
         );
         assert!(source.contains("module Payload15 where"));
+        assert!(source.contains("open import BridgePayload using (BridgePayload; ContractWitness)"));
         assert!(source.contains("-- canonical_key: f00dbabe"));
         assert!(source.contains("-- nu_total: 103"));
         assert!(source.contains("-- import_steps: 10"));
+        assert!(source.contains("payload : BridgePayload"));
+        assert!(source.contains("contractWitness : ContractWitness payload"));
     }
 
     #[test]

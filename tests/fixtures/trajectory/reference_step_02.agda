@@ -2,6 +2,7 @@ module Step02 where
 
 open import Agda.Primitive using (Set)
 
+open import StepWitness using (StepWitness)
 open import Payload02 as Payload02
 
 -- step: 2
@@ -12,6 +13,7 @@ open import Payload02 as Payload02
 
 postulate
   T : Set
+  stepWitness : StepWitness Payload02.payload T
   clause01 : Set
     -- translated: (Set x1)
     -- mbtt: {"App":["Univ",{"Var":1}]}

@@ -66,6 +66,11 @@ fn verify_step_contract(
     )?;
     require_contains(
         &source,
+        "open import StepWitness using (StepWitness)",
+        "step witness import",
+    )?;
+    require_contains(
+        &source,
         &format!(
             "open import {} as {}",
             step.payload_module_name, step.payload_module_name
@@ -82,6 +87,14 @@ fn verify_step_contract(
         &format!("-- canonical_hash: {}", step.canonical_hash),
         "step canonical hash comment",
     )?;
+    require_contains(
+        &source,
+        &format!(
+            "stepWitness : StepWitness {}.payload T",
+            step.payload_module_name
+        ),
+        "step witness binding",
+    )?;
 
     for import_step in &step.claims.import_steps {
         let module_name = format!("Step{import_step:02}");
@@ -96,6 +109,11 @@ fn verify_step_contract(
         &payload,
         &format!("module {} where", step.payload_module_name),
         "payload module declaration",
+    )?;
+    require_contains(
+        &payload,
+        "open import BridgePayload using (BridgePayload; ContractWitness)",
+        "payload bridge import",
     )?;
     require_contains(
         &payload,
@@ -159,6 +177,12 @@ fn verify_step_contract(
         &payload,
         &format!("-- nu_total: {}", step.claims.nu_claim.nu_total),
         "payload nu_total comment",
+    )?;
+    require_contains(&payload, "payload : BridgePayload", "payload bridge witness")?;
+    require_contains(
+        &payload,
+        "contractWitness : ContractWitness payload",
+        "payload contract witness",
     )?;
 
     let summed = step.claims.nu_claim.nu_g + step.claims.nu_claim.nu_h + step.claims.nu_claim.nu_c;
