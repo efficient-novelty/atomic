@@ -7,32 +7,29 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 ## Current Status
 - `desktop_claim_shadow` is not signoff-ready.
 - The current short step-`4` baseline is `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
-- The current full-profile baseline is `runs/codex-claim-release-full-open-band-handoff-v1`.
+- The current full-profile runtime reference is `runs/codex-claim-release-full-open-band-handoff-followup-v1`.
 - The authoritative late-surface diagnostic is `runs/codex-claim-release-step4-kernel-late-profile-v1`.
-- The latest measured slice is `runs/codex-claim-release-full-open-band-handoff-v1`.
-- That intended-profile rerun re-earned the full-profile read on stored evidence:
+- The latest measured slice is `runs/codex-claim-release-full-open-band-handoff-followup-v1`.
+- That intended-profile follow-up re-earned the full-profile read again on stored evidence:
   - it preserved the honest `39 groups / 144845 candidates` plateau at `24/43/44/54`
   - it preserved the honest reopened `40 groups / 147639 candidates` surface at `74/76`
-  - it reopened again to `41 groups / 154842 candidates` by `140`
-  - it then moved materially beyond the old full-profile wall to a stored `228` checkpoint while still in step `4`
-- Decisive stored checkpoints on that rerun are:
-  - `24`: `417512 / 414611`
-  - `43`: `747903 / 743859`
-  - `44`: `763654 / 759550`
-  - `54`: `941234 / 936486`
-  - `74`: `1292196 / 1286212`
-  - `76`: `1336730 / 1330612`
-  - `140`: `2575049 / 2564601`
-  - `163`: `2985344 / 2973404`
-  - `228`: `4209220 / 4192906`
+  - it reopened again to `41 groups / 154842 candidates` by `140` and kept that surface through the stored `229` read
+- The new follow-up slightly trailed the earlier same-binary full-profile reference at `24/43/44/54/74/76`, but it improved the decisive later checkpoints and moved one stored checkpoint farther:
+  - `140`: `2571309 / 2561049` instead of `2575049 / 2564601`
+  - `163`: `2978288 / 2966621` instead of `2985344 / 2973404`
+  - `228`: `4189959 / 4174213` instead of `4209220 / 4192906`
+  - it then continued to `229`: `4211079 / 4195271` while still in step `4`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
-- The later stored bucket order on that rerun stayed a step-`4` throughput composite rather than a clause-filter or allocator relapse:
-  - `228`: connectivity `= 1249033160 us`, aggregation `= 1209742017 us`, exact `nu` `= 866913331 us`, terminal clause-filter handoff `= 17262280 us`
-  - `terminal_summary_admissibility_checks = 0` through the stored `228` read
-- Observed RSS on that rerun stayed below `837795840` bytes through the stored `228` checkpoint, well below the old allocator-failure band.
+- The later stored bucket order on that follow-up stayed connectivity-first after the `41 / 154842` reopen:
+  - `140`: connectivity `= 758717336 us`, aggregation `= 751161774 us`, exact `nu` `= 525949191 us`, terminal clause-filter handoff `= 10375779 us`
+  - `163`: connectivity `= 884102477 us`, aggregation `= 862160190 us`, exact `nu` `= 609549050 us`, terminal clause-filter handoff `= 12108178 us`
+  - `228`: connectivity `= 1238402593 us`, aggregation `= 1199772615 us`, exact `nu` `= 872697561 us`, terminal clause-filter handoff `= 17145752 us`
+  - `229`: connectivity `= 1243971258 us`, aggregation `= 1208974002 us`, exact `nu` `= 875496908 us`, terminal clause-filter handoff `= 17225219 us`
+  - `terminal_summary_admissibility_checks = 0` through the stored `229` read
+- Observed RSS on that follow-up stayed below `833540096` bytes through the stored `229` checkpoint, well below the old allocator-failure band.
 - The completed step summaries still keep the observed-versus-accounted RSS story explicit: step `1` stored green pressure with `rss_bytes = 1342177376`, `observed_process_rss_bytes = 18309120`, and `rss_gap_bytes = -1323868256`, while steps `2` and `3` stored zero frontier pressure; the stopped step-`4` rerun never sealed a step summary, so the late blocker is still read from `reports/steps/step-04-live.ndjson`.
 - Because the rerun was manually stopped after the new later blocker was already visible, `reports/latest.txt` still reflects completed step `3`, `run.json` still says `status = "running"`, and `reports/steps/step-05-live.ndjson` is absent; the authoritative evidence for that rerun lives in `reports/steps/step-04-live.ndjson`.
-- The lane is still compute-bound, but the blocker has moved materially later inside step `4`.
+- The lane is still compute-bound, and the later post-`140` blocker now reads connectivity-first rather than near-tied.
 
 ## What Stays Landed
 - delayed materialization
@@ -62,33 +59,38 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
   - `74`: `elapsed_millis = 1315892`, `terminal_summary_build_millis = 1309667`
   - `76`: `elapsed_millis = 1358533`, `terminal_summary_build_millis = 1352182`
 
-### 2. Current Full-Profile Baseline
-- Run: `runs/codex-claim-release-full-open-band-handoff-v1`
-- It re-earned the kept short winner on the real intended profile and moved the full-profile step-`4` wall materially later than `runs/codex-claim-release-full-kernel-aggregation-v1`.
+### 2. Current Full-Profile Runtime Reference
+- Run: `runs/codex-claim-release-full-open-band-handoff-followup-v1`
+- It re-earned the kept short winner again on the real intended profile, slightly trailed the earlier same-binary reference at `24/43/44/54/74/76`, improved the decisive later checkpoints, and moved the full-profile step-`4` wall one stored checkpoint farther while still staying materially ahead of `runs/codex-claim-release-full-kernel-aggregation-v1`.
 - Honest retained shape:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
-  - `41 groups / 154842 candidates` from `140` through the stored `228` read
+  - `41 groups / 154842 candidates` from `140` through the stored `229` read
 - The run never reached step `5` on stored evidence; `reports/steps/step-05-live.ndjson` is absent.
 - Stored checkpoints:
-  - `24`: `elapsed_millis = 417512`, `terminal_summary_build_millis = 414611`
-  - `43`: `elapsed_millis = 747903`, `terminal_summary_build_millis = 743859`
-  - `44`: `elapsed_millis = 763654`, `terminal_summary_build_millis = 759550`
-  - `54`: `elapsed_millis = 941234`, `terminal_summary_build_millis = 936486`
-  - `74`: `elapsed_millis = 1292196`, `terminal_summary_build_millis = 1286212`
-  - `76`: `elapsed_millis = 1336730`, `terminal_summary_build_millis = 1330612`
-  - `140`: `elapsed_millis = 2575049`, `terminal_summary_build_millis = 2564601`
-  - `163`: `elapsed_millis = 2985344`, `terminal_summary_build_millis = 2973404`
-  - `228`: `elapsed_millis = 4209220`, `terminal_summary_build_millis = 4192906`
-- It stayed materially ahead of the earlier full-profile aggregation baseline at every decisive later checkpoint:
-  - `140`: `2575049 / 2564601` instead of `3393970 / 3085651`
-  - `163`: `2985344 / 2973404` instead of `3942636 / 3584914`
-- Later stored bucket order at `228` was:
-  - connectivity `= 1249033160 us`
-  - aggregation `= 1209742017 us`
-  - exact `nu` `= 866913331 us`
-  - terminal clause-filter handoff `= 17262280 us`
-- Observed RSS reached `837795840` bytes at `228`, still far below the old allocator-failure band.
+  - `24`: `elapsed_millis = 417678`, `terminal_summary_build_millis = 414814`
+  - `43`: `elapsed_millis = 760980`, `terminal_summary_build_millis = 756851`
+  - `44`: `elapsed_millis = 777344`, `terminal_summary_build_millis = 773151`
+  - `54`: `elapsed_millis = 961793`, `terminal_summary_build_millis = 956919`
+  - `74`: `elapsed_millis = 1325033`, `terminal_summary_build_millis = 1318766`
+  - `76`: `elapsed_millis = 1368485`, `terminal_summary_build_millis = 1362079`
+  - `140`: `elapsed_millis = 2571309`, `terminal_summary_build_millis = 2561049`
+  - `163`: `elapsed_millis = 2978288`, `terminal_summary_build_millis = 2966621`
+  - `228`: `elapsed_millis = 4189959`, `terminal_summary_build_millis = 4174213`
+  - `229`: `elapsed_millis = 4211079`, `terminal_summary_build_millis = 4195271`
+- Compared with the earlier same-binary full-profile reference, it was slightly slower at `24/43/44/54/74/76` but improved the decisive later checkpoints:
+  - `140`: `2571309 / 2561049` instead of `2575049 / 2564601`
+  - `163`: `2978288 / 2966621` instead of `2985344 / 2973404`
+  - `228`: `4189959 / 4174213` instead of `4209220 / 4192906`
+- It also stayed materially ahead of the earlier full-profile aggregation baseline at every decisive later checkpoint:
+  - `140`: `2571309 / 2561049` instead of `3393970 / 3085651`
+  - `163`: `2978288 / 2966621` instead of `3942636 / 3584914`
+- Later stored bucket order after the `41 / 154842` reopen was:
+  - `140`: connectivity `= 758717336 us`, aggregation `= 751161774 us`, exact `nu` `= 525949191 us`, terminal clause-filter handoff `= 10375779 us`
+  - `163`: connectivity `= 884102477 us`, aggregation `= 862160190 us`, exact `nu` `= 609549050 us`, terminal clause-filter handoff `= 12108178 us`
+  - `228`: connectivity `= 1238402593 us`, aggregation `= 1199772615 us`, exact `nu` `= 872697561 us`, terminal clause-filter handoff `= 17145752 us`
+  - `229`: connectivity `= 1243971258 us`, aggregation `= 1208974002 us`, exact `nu` `= 875496908 us`, terminal clause-filter handoff `= 17225219 us`
+- Observed RSS reached `833540096` bytes at `229`, still far below the old allocator-failure band.
 - Because the rerun was manually stopped during step `4` after the later blocker was already visible, `reports/latest.txt` still reflects completed step `3` and `run.json` still says `status = "running"`; the authoritative evidence for this run is `reports/steps/step-04-live.ndjson`.
 
 ### 3. Earlier Full-Profile Aggregation Baseline
@@ -147,7 +149,7 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
   - the broader open-band handoff cut engaged without weakening the retained-prefix shape
   - the early short surface moved back under the kept baseline honestly on both elapsed and `terminal_summary_build_*`
   - the reopened `74/76` surface also moved materially under the kept full-profile baseline on both elapsed and `terminal_summary_build_*`
-  - the next honest move is therefore a full-profile rerun on this winning binary rather than another short step-`4` micro-slice first
+  - at that point, the next honest move was a full-profile rerun on this winning binary rather than another short step-`4` micro-slice first
 
 ### 6. Earlier Failed Admitted-Kernel Slice
 - Run: `runs/codex-claim-release-step4-kernel-admitted-kernel-v1`
@@ -370,41 +372,42 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 
 ## Revised Working Diagnosis
 - The old early RSS cliff remains broken; this is still a step-`4` throughput problem, not a return of the allocator-failure story.
-- The new full-profile rerun on the open-band-handoff winner preserved the decisive early and reopened surfaces on the real `desktop_claim_shadow_1h` profile:
+- The new full-profile follow-up on the open-band-handoff winner preserved the decisive early, reopened, and later retained-prefix surfaces on the real `desktop_claim_shadow_1h` profile:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
-  - `41 groups / 154842 candidates` from `140` through the stored `228` read
-- That rerun also moved materially farther than the prior full-profile baseline:
-  - `140`: `2575049 / 2564601` instead of `3393970 / 3085651`
-  - `163`: `2985344 / 2973404` instead of `3942636 / 3584914`
-  - it then continued to `228` at `4209220 / 4192906` before the external stop
-- The later stored wall on the current winner is no longer the old early plateau or the old `163` stop point; it is the post-`140` step-`4` surface where connectivity and aggregation stay nearly tied, exact `nu` remains the third cost, and terminal clause-filter handoff stays tiny.
+  - `41 groups / 154842 candidates` from `140` through the stored `229` read
+- That follow-up slightly trailed the earlier same-binary reference at `24/43/44/54/74/76`, but it improved the decisive later checkpoints and moved one stored checkpoint farther:
+  - `140`: `2571309 / 2561049` instead of `2575049 / 2564601`
+  - `163`: `2978288 / 2966621` instead of `2985344 / 2973404`
+  - `228`: `4189959 / 4174213` instead of `4209220 / 4192906`
+  - it then continued to `229` at `4211079 / 4195271` before the external stop
+- The later stored wall on the current winner is no longer the old early plateau or the old `163` stop point; it is the post-`140` step-`4` surface where connectivity now leads, aggregation stays second, exact `nu` stays third, and terminal clause-filter handoff stays tiny.
 - Completed step summaries still keep the observed-versus-accounted RSS story explicit, and the live step-`4` stream kept observed RSS below about `0.84 GiB`; the current blocker is therefore later step-`4` runtime, not a revived memory cliff.
-- The accumulated lesson from the dropped retries is now stronger: the open-band handoff cut won on both short and full-profile evidence, so the next honest runtime choice is no longer "rerun or not?" but "which later connectivity-versus-aggregation cut should move first on this winner?"
+- The accumulated lesson from the dropped retries is now stronger: the rerun-only question is closed, so the next honest runtime choice is a connectivity-side cut first on this winner rather than another plain rerun or another aggregation-first slice.
 
 ## Best Current Inference
-The broader claim open-band handoff cut is now both the short keep winner and the current full-profile runtime reference.
+The broader claim open-band handoff cut remains the short keep winner and is now also the current repeated full-profile runtime reference.
 
-The next honest question is no longer whether this winner survives the intended profile. It does. The next honest question is which later step-`4` throughput component after the `41 / 154842` reopen should move first:
-- connectivity-side exact summary work
-- aggregation-side per-admitted bookkeeping and ranking work
-- or a still-later structural effect that only appears beyond the current stored `228` read
+The next honest question is no longer whether this winner survives the intended profile, and it is no longer which bucket leads after the `41 / 154842` reopen. The new stored follow-up answered that:
+- connectivity-side exact summary work is the current post-`140` lead cost
+- aggregation-side per-admitted bookkeeping and ranking work remains second
+- exact `nu` remains third and terminal clause-filter handoff remains tiny
 
 The stored evidence is already good enough to stop reopening plain rerun-only turns or new early-surface micro-slices first:
-- the real full-profile run preserved the short `24/43/44/54` win
-- it preserved the reopened `74/76` win and the later `41/154842` widen
-- it moved materially beyond the old `163` wall
+- the repeated full-profile run preserved the honest `39/40/41` retained-prefix story
+- it moved one stored checkpoint farther to `229` while improving `140/163/228`
 - clause-filter handoff and admissibility rechecks remain negligible on the current winner
+- observed RSS stayed far below the old allocator-failure band even on the later wall
 
 ## Immediate Next Move
-1. Keep the code behind `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`, treat `runs/codex-claim-release-full-open-band-handoff-v1` as the current full-profile runtime reference, and keep `runs/codex-claim-release-full-kernel-aggregation-v1` only as the comparison baseline.
-2. Do not reopen another early short step-`4` micro-slice first, and do not spend another turn on a plain intended-profile rerun with no new runtime question.
-3. Use the stored late surface on `runs/codex-claim-release-full-open-band-handoff-v1` to pick one later-runtime follow-up that targets the post-`140` wall, with connectivity-side and aggregation-side work as the only live first-cut candidates.
-4. If the next turn is diagnostic-first, rerun a release claim follow-up that goes far enough to cover at least the `140/163/228` region and keep live checkpoint persistence on so the later bucket order is re-earned on stored evidence.
+1. Keep the code behind `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`, treat `runs/codex-claim-release-full-open-band-handoff-followup-v1` as the current full-profile runtime reference, keep `runs/codex-claim-release-full-open-band-handoff-v1` as the earlier same-binary comparison, and keep `runs/codex-claim-release-full-kernel-aggregation-v1` only as the broader comparison baseline.
+2. Do not spend another turn on a plain intended-profile rerun with no new code or new runtime question, and do not reopen another early short step-`4` micro-slice first.
+3. Land one narrow later-surface connectivity-side runtime cut on the current winner. Target the post-`140` exact summary/connectivity work; do not reopen the dropped parent-summary connectivity lookup reuse unchanged or switch back to aggregation-first work before a new connectivity read exists.
+4. After code changes land, rerun a release claim follow-up with a new run id that states the slice and carry it at least through the `140/163/228` region with live checkpoint persistence on.
 5. If code changes land before that rerun, rerun only:
    - `cargo test -p pen-search claim_`
    - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
-6. Branch to parity, breadth, compare, benchmark, or certification work only after a later full-profile rerun either reaches step `5` or moves materially past the current stored `228` wall.
+6. Branch to parity, breadth, compare, benchmark, or certification work only after a later full-profile rerun either reaches step `5` or moves materially past the current stored `229` wall.
 
 ## What Has Not Changed
 - Do not branch to compare, benchmark, certification, or stronger language before step `4` moves or a full-profile run finishes.

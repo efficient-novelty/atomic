@@ -8,39 +8,45 @@ It lists only work that is still open.
 ## Current Open Read
 
 - The claim lane still does not have a signoff-ready full-profile bundle.
-- The current full-profile baseline is
-  `runs/codex-claim-release-full-kernel-aggregation-v1`.
+- The current full-profile runtime reference is
+  `runs/codex-claim-release-full-open-band-handoff-followup-v1`.
 - The current short step-`4` baseline is now
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
 - The most recent informative late-surface diagnostic is now
   `runs/codex-claim-release-step4-kernel-late-profile-v1`.
-- That diagnostic rerun kept the same honest `39 groups / 144845 candidates`
-  plateau through `24/43/44/54`, then reopened to `40/147639` at `74/76`
-  and `41/154842` at `140` while still tracking the intended full-profile
-  baseline closely on elapsed time, RSS, and frontier queue length.
-- The newer open-band-handoff rerun
-  `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
-  then preserved the same honest early plateau at `24/43/44/54`, preserved
-  the honest reopened `40/147639` surface at `74/76`, and materially improved
-  both elapsed and `terminal_summary_build_*` at every decisive checkpoint:
-  - `24`: `417756 / 414838` instead of `549630 / 492524`
-  - `43`: `760135 / 755953` instead of `990480 / 892772`
-  - `44`: `777287 / 773037` instead of `1012067 / 912271`
-  - `54`: `962821 / 957858` instead of `1247600 / 1126754`
-  - `74`: `1315892 / 1309667` instead of `1743244 / 1579138`
-  - `76`: `1358533 / 1352182` instead of `1797441 / 1628768`
+- The latest intended-profile follow-up preserved the honest retained-prefix
+  shape on stored evidence:
+  - `39 groups / 144845 candidates` at `24/43/44/54`
+  - `40 groups / 147639 candidates` at `74/76`
+  - `41 groups / 154842 candidates` from `140` through the stored `229` read
+- That follow-up slightly trailed the earlier same-binary full-profile
+  reference at `24/43/44/54/74/76`, but it improved the decisive later
+  checkpoints and moved one stored checkpoint farther:
+  - `140`: `2571309 / 2561049` instead of `2575049 / 2564601`
+  - `163`: `2978288 / 2966621` instead of `2985344 / 2973404`
+  - `228`: `4189959 / 4174213` instead of `4209220 / 4192906`
+  - it then continued to `229`: `4211079 / 4195271`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
-- At `76` on that kept rerun, stored step-live kernel telemetry read:
-  terminal clause-filter handoff `= 5572740 us`,
-  connectivity `= 410676521 us`, aggregation `= 391673461 us`,
-  exact `nu` `= 269118565 us`, and
-  `terminal_summary_admissibility_checks = 0`.
-- That rerun was manually stopped after the decisive stored `76` checkpoint;
-  one extra stored `77` checkpoint flushed while stopping and kept the same
-  honest reopened `40/147639` surface.
-- Because the stop was external during step `4`, `reports/latest.txt` still
-  reflects completed step `3` and `run.json` still says `status = "running"`;
-  the authoritative evidence for that short winner lives in
+- At `140/163/228/229` on that follow-up, stored step-live telemetry kept the
+  later bucket order connectivity first, aggregation second, exact `nu`
+  third, and terminal clause-filter handoff tiny:
+  - `140`: connectivity `= 758717336 us`, aggregation `= 751161774 us`,
+    exact `nu` `= 525949191 us`, handoff `= 10375779 us`
+  - `163`: connectivity `= 884102477 us`, aggregation `= 862160190 us`,
+    exact `nu` `= 609549050 us`, handoff `= 12108178 us`
+  - `228`: connectivity `= 1238402593 us`, aggregation `= 1199772615 us`,
+    exact `nu` `= 872697561 us`, handoff `= 17145752 us`
+  - `229`: connectivity `= 1243971258 us`, aggregation `= 1208974002 us`,
+    exact `nu` `= 875496908 us`, handoff `= 17225219 us`
+  - `terminal_summary_admissibility_checks = 0` through the stored `229` read
+- Observed RSS stayed below `833540096` bytes through the stored `229`
+  checkpoint, so the intended profile is still throughput-bound rather than
+  allocator-bound on the current winner.
+- That rerun was manually stopped after the decisive stored `229` checkpoint.
+  Because the stop was external during step `4`, `reports/latest.txt` still
+  reflects completed step `3`, `run.json` still says `status = "running"`,
+  and `reports/steps/step-05-live.ndjson` is absent; the authoritative
+  evidence for that full-profile reference lives in
   `reports/steps/step-04-live.ndjson`.
 - The eager metadata rerun
   `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
@@ -86,9 +92,10 @@ It lists only work that is still open.
   early short surface read `519065 / 514192` instead of the kept
   `549630 / 492524`, while the broad early bucket order moved to connectivity
   first, aggregation second, clause filtering third, and exact `nu` fourth.
-- The next honest move is therefore not another short step-`4` micro-slice
-  first. It is one full-profile rerun on the kept short winner so the later
-  blocker can be read honestly from stored evidence.
+- The next honest move is therefore not another short step-`4` micro-slice or
+  another plain rerun-only turn first. It is one narrow later-surface
+  connectivity-side cut on the current winner so the post-`140` wall can move
+  honestly on stored evidence.
 
 ## 1. Runtime Completion
 
@@ -99,7 +106,7 @@ It lists only work that is still open.
       shape.
 - [x] Re-earn one full `desktop_claim_shadow_1h` rerun on the winning binary.
 - [ ] Finish one intended-profile claim run through step `15`.
-- [ ] Confirm from stored artifacts that the run no longer depends on the old
+- [x] Confirm from stored artifacts that the run no longer depends on the old
       allocator-failure story.
 - [ ] Explain the observed RSS versus governor-accounted RSS behavior honestly
       from stored step artifacts.

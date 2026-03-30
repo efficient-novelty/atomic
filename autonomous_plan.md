@@ -27,13 +27,25 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   keeps the honest `39 groups / 144845 candidates` retained-prefix shape
   through `24/43/44/54` and the honest reopened `40/147639` surface at
   `74/76`.
-- The current full-profile baseline
+- The current full-profile runtime reference
+  `runs/codex-claim-release-full-open-band-handoff-followup-v1`
+  re-earned the same honest `39/144845`, `40/147639`, and `41/154842`
+  retained-prefix story on the intended profile through the stored `229` read.
+- That repeated full-profile read was slightly slower than the earlier
+  same-binary reference at `24/43/44/54/74/76`, but it improved the decisive
+  later checkpoints at `140/163/228` and moved one stored checkpoint farther
+  to `229` while still never reaching step `5`.
+- The earlier same-binary full-profile reference
+  `runs/codex-claim-release-full-open-band-handoff-v1`
+  and the broader comparison baseline
   `runs/codex-claim-release-full-kernel-aggregation-v1`
-  proves that the intended profile later reopens to `40/147639` at `74` and
-  `41/154842` at `140`, while still never reaching step `5`.
+  now remain comparison reads rather than the current runtime reference.
 - The current late diagnostic
   `runs/codex-claim-release-step4-kernel-late-profile-v1`
-  showed aggregation first on the kept reopened surface.
+  earlier showed aggregation first on the kept reopened surface, but the newer
+  full-profile follow-up now shows that the post-`140` wall is connectivity
+  first, aggregation second, exact `nu` third, and terminal clause-filter
+  handoff tiny.
 - The eager clause-metadata rerun
   `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
   preserved the honest short and reopened shapes, but it failed keep badly:
@@ -75,11 +87,15 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   the honest reopened `40/147639` surface at `74/76`, and materially
   improved both elapsed and `terminal_summary_build_*` against the prior kept
   short and full-profile reopened baselines at every decisive checkpoint.
-- The next step should therefore keep that new short winner in code, leave
-  the dropped metadata, connectivity, clause-load-only, bookkeeping/bound-
-  only, and admitted-kernel-only retries out of code as standalone next
-  moves, and branch back to one new full-profile rerun on the winning binary
-  before reopening another short step-`4` micro-slice.
+- Observed RSS on the repeated full-profile follow-up still stayed below about
+  `0.84 GiB` through the stored `229` read, so the blocker remains later
+  step-`4` throughput rather than allocator pressure.
+- The next step should therefore keep the short winner and current full-profile
+  runtime reference in code, leave the dropped metadata, connectivity-retry,
+  clause-load-only, bookkeeping/bound-only, admitted-kernel-only, and
+  aggregation-first retries out of code as standalone next moves, and land one
+  narrow later-surface connectivity-side cut before reopening another plain
+  rerun-only turn.
 
 ## Decision Rules
 
@@ -96,30 +112,38 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - Do not branch to compare, benchmark, certification, or stronger language
   before step `4` moves or a full-profile run finishes.
 
-## Active Phase: Re-Earn The Intended-Profile Read
+## Active Phase: Move The Later Connectivity Wall
 
 Goal:
 
-- prove that the new short winner helps on the real
-  `desktop_claim_shadow_1h` profile
+- cut the post-`140` connectivity-side exact summary wall on the current
+  winner on the real `desktop_claim_shadow_1h` profile
 
 Working baselines:
 
 - short:
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
-- full profile:
+- full-profile runtime reference:
+  `runs/codex-claim-release-full-open-band-handoff-followup-v1`
+- earlier same-binary comparison:
+  `runs/codex-claim-release-full-open-band-handoff-v1`
+- broader full-profile baseline:
   `runs/codex-claim-release-full-kernel-aggregation-v1`
 - late diagnostic:
   `runs/codex-claim-release-step4-kernel-late-profile-v1`
 
 Required output:
 
-- one new stored full-profile rerun on the kept short winner
+- one narrow later-surface connectivity-side code slice on the current winner
+- one new stored full-profile rerun on that slice with live checkpoint
+  persistence through at least the `140/163/228` region
 - a read of its `step-04-live.ndjson`, `run.json`, and `reports/latest.txt`
 - `step-05-live.ndjson` too if the rerun reaches step `5`
 
 Reject as the next primary move:
 
+- another plain intended-profile rerun with no code or new runtime question
+- another aggregation-first slice before a new connectivity-side read exists
 - another eager clause-filter-wide metadata rewrite
 - another lazy admitted-only metadata rewrite
 - another unchanged reopened connectivity reuse retry
@@ -140,27 +164,28 @@ Reject as the next primary move:
 
 Done when:
 
-- the full-profile rerun either:
-  - moves materially farther than `runs/codex-claim-release-full-kernel-aggregation-v1`
-  - exposes a later blocker honestly
+- the next connectivity-side rerun either:
+  - materially reduces the post-`140` connectivity wall
+  - exposes a new later blocker honestly
   - or finishes through step `15`
 
-## Phase 2: Re-Earn The Intended-Profile Read
+## Phase 2: Re-Earn The New Runtime Reference
 
 Goal:
 
-- prove that the new short winner helps on the real
-  `desktop_claim_shadow_1h` profile
+- prove that the connectivity-side slice moves the current later step-`4`
+  wall on the real `desktop_claim_shadow_1h` profile
 
 Required output:
 
-- one new stored full-profile rerun
+- one new stored full-profile rerun on the connectivity-side slice
 - a read of its `step-04-live.ndjson`, `run.json`, and `reports/latest.txt`
 
 Done when:
 
-- the run either moves materially farther, exposes a later blocker honestly,
-  or finishes through step `15`
+- the run either moves materially past
+  `runs/codex-claim-release-full-open-band-handoff-followup-v1`, exposes a
+  later blocker honestly, or finishes through step `15`
 
 ## Phase 3: Finish A Full Claim Bundle
 
