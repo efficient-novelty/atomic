@@ -11,6 +11,7 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 - The authoritative late-surface diagnostic is `runs/codex-claim-release-step4-kernel-late-profile-v1`.
 - The latest measured slice is `runs/codex-claim-release-step4-kernel-aggregation-tiecut-v1`.
 - That rerun was manually stopped after enough stored step-`4` evidence had landed through `prefix_states_explored = 80`; it is dropped from code after failing keep on the matched early short surface and the reopened full-profile surface.
+- The intended profile is still blocked in step `4` by remaining-one compact-summary throughput.
 - The lane is still compute-bound in step `4`, and the visible reopened wall is still aggregation first. On the newest stored rerun the bucket order stayed aggregation first, clause filtering second, connectivity third, and exact `nu` fourth.
 
 ## What Stays Landed
@@ -182,29 +183,33 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 
 ## Revised Working Diagnosis
 - The old early RSS cliff remains broken; this is still a step-`4` throughput problem, not a return of the allocator-failure story.
-- The kept baselines still say the intended profile later reopens beyond the early `39/144845` plateau.
-- The newest stored rerun proves three things at once:
-  - clause filtering can stay near the kept late diagnostic without metadata work
-  - compact-summary exact-rank finalization is a real part of the reopened aggregation wall
-  - but trimming that exact-rank work alone still is not enough to recover the kept short or reopened full-profile surfaces
-- Because `76` now reads aggregation `> clause filtering > connectivity > exact nu`, the honest reopened wall has shifted again.
+- The kept baselines still say the intended profile later reopens beyond the early `39/144845` plateau:
+  - `40 groups / 147639 candidates` at `74/76`
+  - `41 groups / 154842 candidates` at `140`
+- The reopened connectivity rerun and the compact-summary exact-rank-deferral rerun together now show that the remaining compact-summary wall is a composite per-admitted kernel rather than one missing scalar gate.
+- In the current code, each admitted candidate can still pay for multiple exact operations inside `compute_terminal_prefix_completion_summary_from_candidates`: clause load into scratch state, admissibility-diagnostics bookkeeping, exact bit-cost recovery, bound update, primary-rank math, and sometimes full `AcceptRank` construction.
+- The full `AcceptRank` path is still real when it fires because it rebuilds full-telescope structural signals, max-var-ref context, and canonical-key context, but the failed keep reads show it is not the only remaining wall.
+- The accumulated lesson from the dropped threshold-only, bound-only, bookkeeping-only, competition-gate-only, exact-`nu`-gate-only, bit-cost-only, contender-rank-only, and strict-better-incumbent exact-rank-deferral slices is that another one-constant retry is unlikely to be enough unless it removes several exact per-admitted rescans at once.
+- Because `76` still reads aggregation `> clause filtering > connectivity > exact nu`, the honest reopened wall remains aggregation first.
 
 ## Best Current Inference
-The next honest retry should keep the winning baseline code and keep only the lesson from the newest rerun:
+The next honest retry should keep the winning baseline code and keep only the lesson from the newest reruns:
 
-> do not spend the next slice on metadata or connectivity first. The next runtime wall to attack is reopened-surface aggregation.
+> do not spend the next slice on connectivity first, clause filtering first, or another single-axis aggregation constant first. The next runtime wall to attack is reopened-surface aggregation, and it should be attacked as one exact metadata-pack slice.
 
-That means the next plausible keep slice is not another metadata retry, not another unchanged connectivity reuse retry, and not another unchanged compact-summary exact-rank deferral retry. It is one different reopened-surface aggregation cut that:
+That means the next plausible keep slice is not another unchanged metadata retry, not another unchanged connectivity reuse retry, and not another unchanged compact-summary exact-rank deferral retry. It is one different reopened-surface aggregation cut that:
 - leaves terminal clause filtering cheap
 - preserves the current exact tie-break truth surface
+- removes several exact per-admitted rescans together by pairing terminal-clause exact metadata with one prefix-side exact aggregate
 - and improves the later `74/76` wall without giving back the matched `24/43/44/54` read
 
 ## Immediate Next Move
 1. Keep the code behind `runs/codex-claim-release-step4-kernel-aggregation-v1`, `runs/codex-claim-release-full-kernel-aggregation-v1`, and `runs/codex-claim-release-step4-kernel-late-profile-v1`.
-2. Do not keep either metadata retry, the reopened connectivity lookup reuse, or the compact-summary strict-better-incumbent exact-rank deferral in code.
-3. Land, if possible, one different narrow reopened-surface aggregation-side runtime cut rather than another metadata, connectivity, or unchanged exact-rank-deferral pass.
-4. Re-run a short release claim slice to `--until-step 4` and read the stored artifacts at `24/43/44/54/74/76`.
-5. Only branch back to a new full-profile rerun if a later short slice earns keep against the matched early plateau and materially improves the reopened `74/76` read against the kept full-profile baseline.
+2. Do not keep either metadata retry, the reopened connectivity lookup reuse, or the compact-summary strict-better-incumbent exact-rank deferral in code as standalone next moves.
+3. Land, if possible, one exact aggregation-side metadata pack that lets the summary loop reuse terminal-clause bit-cost, structural-signal, max-var-ref, and canonical-tail context together with one prefix-side exact aggregate.
+4. Inside the same patch, make full `AcceptRank` and exact canonical-key finalization truly last-tie-only, and add fine-grained aggregation telemetry for clause load, diagnostics bookkeeping, bit-cost recovery, bound update, primary-rank math, full `AcceptRank`, and canonical-key finalization.
+5. Re-run a short release claim slice to `--until-step 4` and read the stored artifacts at `24/43/44/54/74/76`.
+6. Only branch back to a new full-profile rerun if a later short slice earns keep against the matched early plateau and materially improves the reopened `74/76` read against the kept full-profile baseline.
 
 ## What Has Not Changed
 - Do not branch to compare, benchmark, certification, or stronger language before step `4` moves or a full-profile run finishes.
