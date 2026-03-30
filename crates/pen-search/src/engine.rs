@@ -5631,8 +5631,6 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     let prefix_bit_cost = prefix_telescope.bit_cost();
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
     let mut kernel_timing = RemainingOneSummaryKernelTiming::default();
-    let focus_aligned_competitors_only =
-        demo_focus_aligned_competitors_only(prefix_signature, admissibility, prefix_legality_cache);
     for (clause, cached_admissibility_decision) in terminal_clauses {
         let connectivity_started = Instant::now();
         let Some(connectivity_decision) =
@@ -5723,8 +5721,10 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
             summary.bound = Some(completion_bound);
         }
         summary.admitted_candidate_count += 1;
-        if admitted_terminal_completion_can_compete_for_acceptance(
-            focus_aligned_competitors_only,
+        if terminal_completion_can_compete_for_acceptance(
+            prefix_signature,
+            admissibility,
+            prefix_legality_cache,
             &admissibility_decision,
         ) {
             if let Some(primary_rank) =
