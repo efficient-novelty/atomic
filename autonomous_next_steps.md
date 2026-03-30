@@ -19,7 +19,7 @@ Assume the following were already measured and should stay dropped as standalone
 - ordering and reuse variants
 - expr-keyed or clause-side connectivity cache variants
 - terminal-candidate prep or remap variants
-- telemetry-only filter profiling as a separate slice
+- telemetry-only filter profiling as a separate slice before a later full-profile read exists
 - the exact cross-multiplied primary-rank bookkeeping rewrite in `runs/codex-claim-release-step4-kernel-rank-bookkeeping-v1`
 - the constant-`kappa` bound-merge rewrite in `runs/codex-claim-release-step4-kernel-bound-merge-v1`
 - the lazy incumbent-tie `AcceptRank` rewrite in `runs/codex-claim-release-step4-kernel-lazy-acceptrank-v1`
@@ -36,96 +36,100 @@ Assume the following were already measured and should stay dropped as standalone
 
 ## Active Baselines
 - Current short baseline: `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
-- Current full-profile baseline: `runs/codex-claim-release-full-kernel-aggregation-v1`
-- Current late-surface diagnostic: `runs/codex-claim-release-step4-kernel-late-profile-v1`
+- Current full-profile runtime reference: `runs/codex-claim-release-full-open-band-handoff-v1`
+- Comparison full-profile baseline: `runs/codex-claim-release-full-kernel-aggregation-v1`
+- Earlier late-surface diagnostic: `runs/codex-claim-release-step4-kernel-late-profile-v1`
 
 ## Revised Working Diagnosis
-- The broader claim open-band handoff cut earned keep on stored step-`4` evidence.
-- The honest retained-prefix story is now:
+- The kept open-band handoff code is now re-earned on both short and full-profile evidence.
+- The honest retained-prefix story on the current full-profile runtime reference is now:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
-- The new short winner beat the prior kept short baseline on both elapsed and `terminal_summary_build_*` at every matched checkpoint:
-  - `24`: `417756 / 414838` instead of `549630 / 492524`
-  - `43`: `760135 / 755953` instead of `990480 / 892772`
-  - `44`: `777287 / 773037` instead of `1012067 / 912271`
-  - `54`: `962821 / 957858` instead of `1247600 / 1126754`
-- It also beat the kept full-profile reopened surface on both elapsed and `terminal_summary_build_*`:
-  - `74`: `1315892 / 1309667` instead of `1743244 / 1579138`
-  - `76`: `1358533 / 1352182` instead of `1797441 / 1628768`
-- Stored step-live kernel telemetry says the targeted handoff cost is now tiny on the keep slice:
-  - `24`: terminal clause-filter handoff `= 1716095 us`
-  - `76`: terminal clause-filter handoff `= 5572740 us`
-  - `terminal_summary_admissibility_checks = 0` through the stored `76` read
-- The rerun was manually stopped after the decisive stored `76` checkpoint; one extra stored `77` checkpoint flushed while stopping and kept the same honest reopened surface.
-- Because that stop was external during step `4`, `reports/latest.txt` still reflects completed step `3` and `run.json` still says `status = "running"`; the authoritative evidence for this winner lives in `reports/steps/step-04-live.ndjson`.
+  - `41 groups / 154842 candidates` from `140` through the stored `228` read
+- The new full-profile rerun stayed ahead of the earlier full-profile aggregation baseline at every decisive later checkpoint:
+  - `140`: `2575049 / 2564601` instead of `3393970 / 3085651`
+  - `163`: `2985344 / 2973404` instead of `3942636 / 3584914`
+  - it then continued to `228`: `4209220 / 4192906` while still in step `4`
+- The later stored wall on the current winner is a tight step-`4` throughput composite:
+  - `228`: connectivity `= 1249033160 us`
+  - `228`: aggregation `= 1209742017 us`
+  - `228`: exact `nu` `= 866913331 us`
+  - `228`: terminal clause-filter handoff `= 17262280 us`
+  - `terminal_summary_admissibility_checks = 0` through the stored `228` read
+- Observed RSS reached only `837795840` bytes at `228`, so the blocker remains throughput rather than a return of the old allocator-failure story.
+- The rerun never reached step `5`; `reports/steps/step-05-live.ndjson` is absent.
+- Because the stop was external during step `4`, `reports/latest.txt` still reflects completed step `3` and `run.json` still says `status = "running"`; the authoritative evidence for this rerun lives in `reports/steps/step-04-live.ndjson`.
 
 ## Honest Read
-- The broader open-band handoff cut is real and is now the short keep winner.
-- The next honest unknown is no longer another short step-`4` micro-slice first.
-- The lane is still blocked on the intended profile until one new full-profile rerun shows what later blocker remains on this winner.
+- The broader open-band handoff cut is now the current runtime reference on the real intended profile, not just the short keep winner.
+- The intended profile still stalls in step `4`, but the wall moved materially later than the old `163` checkpoint.
+- The later blocker is no longer clause-filter handoff or allocator pressure first; it is the post-`140` step-`4` surface where connectivity and aggregation stay nearly tied and exact `nu` remains the third cost.
+- The next honest unknown is therefore which later step-`4` runtime cut should move first on this winner.
 
 ## Goal
-Run one full-profile intended `desktop_claim_shadow_1h` rerun on the new short winner and read the later blocker honestly from stored artifacts.
+Use one later-surface follow-up on the current full-profile runtime reference to choose the next later step-`4` runtime cut honestly.
 
 ## Do This Next
 
-### 1. Keep The Winning Short Binary
+### 1. Keep The Current Runtime Reference
 Keep the code behind:
 - `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
-- `runs/codex-claim-release-full-kernel-aggregation-v1`
+- `runs/codex-claim-release-full-open-band-handoff-v1`
 - `runs/codex-claim-release-step4-kernel-late-profile-v1`
 
+Keep `runs/codex-claim-release-full-kernel-aggregation-v1` only as the comparison baseline.
+
 Do not reopen first:
-- another short step-`4` micro-slice
+- another early short step-`4` micro-slice
+- another plain intended-profile rerun with no new runtime question
 - another metadata retry
-- another connectivity reuse retry
+- another unchanged reopened-connectivity replay
 - another admitted-kernel-only replay
 - another clause-load-only or bookkeeping/bound-only cleanup
-- another diagnostic-only slice before the full-profile rerun is measured
 
-### 2. Re-Earn The Intended-Profile Read
-Run one release claim rerun derived from `configs/desktop_claim_shadow_1h.toml` with:
-- the kept open-band handoff code above
-- the profile's intended full horizon
-- live checkpoint persistence left on
-- a new run id that states the kept patch, for example:
-  - `runs/codex-claim-release-full-open-band-handoff-v1`
+### 2. Re-Earn The Later-Bucket Read
+Run one release claim follow-up that keeps live checkpoint persistence on and goes far enough to cover at least the stored `140/163/228` region on the current winner.
 
-Let the rerun go far enough to answer from stored evidence:
-- does it preserve the new `24/43/44/54` win on the real full profile?
-- does it preserve the reopened `74/76` win there too?
-- does it move materially farther than `runs/codex-claim-release-full-kernel-aggregation-v1`?
-- does it finally reach step `5` or expose a different later blocker honestly?
+If the next turn is diagnostic-first with no code changes, use that rerun to decide from stored evidence whether connectivity or aggregation should be attacked first on the post-`140` surface.
+
+If code changes land first, use a new run id that states the slice.
+
+Let the follow-up go far enough to answer from stored evidence:
+- does the later step-`4` surface stay at `41 groups / 154842 candidates` or reopen again?
+- is connectivity still first there, or does aggregation reclaim the lead?
+- is exact `nu` becoming large enough to challenge that pair?
+- does any later structural or memory blocker appear before step `5`?
 
 ### 3. Read The Stored Artifacts
 Open at least:
 - `reports/steps/step-04-live.ndjson`
 - `reports/steps/step-05-live.ndjson` if it exists
+- `telemetry.ndjson`
 - `reports/latest.txt`
 - `run.json`
 
 Answer from stored evidence:
-- did the full-profile rerun keep the new early and reopened short wins?
-- if it still stalled in step `4`, which later bucket order dominated there?
-- if it reached step `5` or later, what new blocker became visible?
-- did the observed-versus-accounted RSS story stay honest on the kept short winner?
+- did the follow-up preserve the current full-profile runtime reference honestly?
+- which later bucket order dominated after the `41 / 154842` reopen?
+- did observed RSS stay well below the old allocator-failure band there too?
+- did the run finally reach step `5` or expose a different later blocker honestly?
 
 ### 4. Re-Earn Only The Validation Needed
 If the next turn is rerun-only with no new code changes, do not reopen extra tests first.
 
-If new code changes land before the full-profile rerun, rerun only:
+If new code changes land before the follow-up rerun, rerun only:
 - `cargo test -p pen-search claim_`
 - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
 
 ## Keep Or Branch Decision
-After the next full-profile rerun:
-- stay on runtime work if it still stalls in step `4` or exposes a later runtime blocker
-- keep this short winner as the runtime reference if the full-profile rerun preserves the early and reopened surfaces honestly
-- branch to parity, breadth, compare, benchmark, and certification work only after a later full-profile rerun honestly moves past the step-`4` wall
+After the next later-surface follow-up:
+- stay on runtime work if the intended profile still stalls in step `4`
+- keep `runs/codex-claim-release-full-open-band-handoff-v1` as the runtime reference until a later rerun beats its stored `228` wall honestly
+- branch to parity, breadth, compare, benchmark, and certification work only after a later full-profile rerun reaches step `5` or moves materially past the current stored `228` wall
 
 ## Stop Condition For This Note
-Rewrite this file as soon as one new stored full-profile rerun shows one of these is true:
-- the kept open-band handoff winner reaches a new later blocker honestly
+Rewrite this file as soon as one new stored follow-up shows one of these is true:
+- the current full-profile runtime reference reaches a new later blocker honestly
 - the intended profile finally moves past the step-`4` wall
-- the full-profile rerun fails for a different structural reason than the short evidence predicted
+- the next follow-up fails for a different structural reason than the current stored evidence predicts
 - runtime work is no longer the next honest move
