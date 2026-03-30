@@ -43,7 +43,7 @@ Assume the following were already measured and should stay dropped as standalone
 - Current short baseline: `runs/codex-claim-release-step4-kernel-aggregation-v1`
 - Current full-profile baseline: `runs/codex-claim-release-full-kernel-aggregation-v1`
 - Current late-surface diagnostic: `runs/codex-claim-release-step4-kernel-late-profile-v1`
-- Current informative non-keep rerun: `runs/codex-claim-release-step4-kernel-rank-metadata-v1`
+- Current informative non-keep rerun: `runs/codex-claim-release-step4-kernel-bound-bookkeeping-v1`
 
 ## Revised Working Diagnosis
 - The intended profile is still blocked in step `4` by remaining-one compact-summary throughput.
@@ -61,13 +61,18 @@ Assume the following were already measured and should stay dropped as standalone
   - full `AcceptRank` construction was only `543075 us`
   - canonical-key finalization was only `5 us`
   - the broad hot costs at that same checkpoint were still clause load `= 61477661 us`, admissibility bookkeeping `= 22145864 us`, bit-cost recovery `= 11259134 us`, bound update `= 11437024 us`, connectivity `= 137191827 us`, clause filtering `= 135071766 us`, and compact materialize `= 319890 ms`
+- The newer direct bound/bookkeeping rerun then answered the next local structural question on stored evidence. At the matched `24` checkpoint it also preserved the honest `39 groups / 144845 candidates` plateau, but it still failed keep:
+  - `24`: `549708 / 544700` instead of the kept short `549630 / 492524`
+  - the broad hot costs at that same checkpoint were aggregation `= 132199915 us`, connectivity `= 125043669 us`, clause filtering `= 105522189 us`, exact `nu` `= 80087659 us`, and terminal materialize `= 336 ms`
+  - the rerun was manually stopped after the decisive `24` read; one extra stored `25` checkpoint flushed while stopping and kept the same `39 groups / 144845 candidates` plateau
 - The compact summary wall is therefore still best read as a composite per-admitted kernel, but the stored answer changed: the next blocker is not canonical-tail work first.
 
 ## Honest Read
 - The reopened wall is no longer connectivity first.
 - The compact-summary exact-rank deferral was real but only partial.
 - The last-tie canonical-key path is already the rare tail on stored evidence.
-- The next winner should therefore not be another canonical-tail or rank-metadata retry. It should be one kept-binary slice that removes broader clause-load, bookkeeping, bound, connectivity, clause-filter, or compact-materialization cost while keeping the retained-prefix shape honest.
+- One local bookkeeping/bound cleanup was also not enough to re-earn the early short surface.
+- The next winner should therefore not be another canonical-tail, clause-load-only, or bookkeeping/bound-only retry. It should be one kept-binary slice that removes a broader compound clause-load, bookkeeping, bound, connectivity, or clause-filter cost while keeping the retained-prefix shape honest.
 
 ## Goal
 Land one kept-binary slice that lowers the honest short read on both:
@@ -97,19 +102,20 @@ Do **not** treat the next winner as another canonical-tail or rank-metadata retr
 
 Preferred primary move:
 - keep the winning baseline code
-- attack one broader structural hot path first:
-  - clause load / scratch update
-  - admissibility-diagnostics bookkeeping
-  - exact bit-cost recovery
-  - bound update
-  - compact materialization
+- attack one broader compound structural hot path first:
+  - clause load / scratch update together with bookkeeping / bit-cost / bound work
+  - or a different aggregation-side fusion that removes multiple per-admitted structural costs at once
+- do **not** spend the next slice on:
+  - another scratch-slot clause-load-only replay
+  - another bookkeeping/bound-only cleanup
+  - compact materialization first on the early surface
 - if you reuse any exact metadata again, keep it off the compact materialization path unless the stored early surface proves that extra work pays for itself
 - keep the metadata exact and structural only; no lossy surrogate keys and no semantic reward signals
 
 The intended effect is to remove broad per-admitted work without paying another early-surface tax just to reconfirm that canonical-tail cost is small.
 
 ### 3. Keep The New Telemetry As The Evidence Map
-Use `runs/codex-claim-release-step4-kernel-rank-metadata-v1` as the current sub-bucket map.
+Use `runs/codex-claim-release-step4-kernel-rank-metadata-v1` as the current sub-bucket map and `runs/codex-claim-release-step4-kernel-bound-bookkeeping-v1` as the latest broad checkpoint read.
 
 At the matched `24` checkpoint:
 - clause load / scratch update `= 61477661 us`
@@ -119,8 +125,14 @@ At the matched `24` checkpoint:
 - primary-rank math `= 14524895 us`
 - full `AcceptRank` construction `= 543075 us`
 - canonical-key finalization `= 5 us`
+- latest broad bucket order on the newer structural rerun:
+  - aggregation `= 132199915 us`
+  - connectivity `= 125043669 us`
+  - clause filtering `= 105522189 us`
+  - exact `nu` `= 80087659 us`
+  - terminal materialize `= 336 ms`
 
-Read that as: the next honest move is not to chase the last tie-break key first.
+Read that as: the next honest move is not to chase the last tie-break key first, and not to spend another turn on a bookkeeping/bound-only cleanup that still leaves aggregation, connectivity, and clause filtering materially hot.
 
 ### 4. Re-Earn The Short Runtime Read
 Run a release claim rerun derived from `configs/desktop_claim_shadow_1h.toml` with:
@@ -128,9 +140,9 @@ Run a release claim rerun derived from `configs/desktop_claim_shadow_1h.toml` wi
 - one new kept-binary slice above
 - live checkpoint persistence left on
 - a new run id that states the patch, for example:
-  - `runs/codex-claim-release-step4-kernel-materialize-cost-v1`
-  - `runs/codex-claim-release-step4-kernel-clause-load-v1`
-  - `runs/codex-claim-release-step4-kernel-bound-bookkeeping-v1`
+  - `runs/codex-claim-release-step4-kernel-aggregation-fusion-v1`
+  - `runs/codex-claim-release-step4-kernel-admitted-kernel-v1`
+  - `runs/codex-claim-release-step4-kernel-clause-load-bound-fusion-v1`
 
 Let the run go far enough to capture at least:
 - matched `24`

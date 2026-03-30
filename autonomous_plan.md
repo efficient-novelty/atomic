@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-03-29
+Last updated: 2026-03-30
 Status: active
 
 This file is the staged path from the current step-`4` wall to final claim
@@ -54,10 +54,16 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - That newest rerun changed the honest reopened read again: at `76`, the
   stored bucket order became aggregation first, clause filtering second,
   connectivity third, and exact `nu` fourth.
+- The newer direct bound/bookkeeping rerun
+  `runs/codex-claim-release-step4-kernel-bound-bookkeeping-v1`
+  then preserved the same honest early plateau at `24` and kept aggregation
+  first, connectivity second, clause filtering third, and exact `nu` fourth,
+  but it still failed keep because the matched early short surface read
+  `549708 / 544700` instead of the kept `549630 / 492524`.
 - The next step should therefore keep the current winning binary in code,
   leave both metadata retries and the dropped connectivity reuse out of code,
-  and target one narrower reopened-surface aggregation cut rather than another
-  metadata or connectivity pass.
+  and target one broader compound aggregation cut rather than another
+  metadata, connectivity, clause-load-only, or bookkeeping/bound-only pass.
 
 ## Decision Rules
 
@@ -78,7 +84,7 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 Goal:
 
-- land one narrower reopened-surface aggregation cut on the winning binary and
+- land one broader compound aggregation cut on the winning binary and
   re-earn the short read on the reopened surface without reintroducing a
   clause-filter wall or metadata cost on the early surface
 
@@ -104,6 +110,8 @@ Reject as the next primary move:
 - another eager clause-filter-wide metadata rewrite
 - another lazy admitted-only metadata rewrite
 - another unchanged reopened connectivity reuse retry
+- another narrow clause-load-only replay
+- another narrow bookkeeping/bound-only replay
 - another exact-`nu` cleanup first
 - another diagnostic-only slice first
 - another retry of `kernel-rank-bookkeeping-v1`

@@ -281,10 +281,11 @@ impl AdmissibilityDiagnostics {
                 self.admitted_focus_aligned += 1;
             }
         }
-        *self
-            .reason_counts
-            .entry(decision.reason.clone())
-            .or_insert(0) += 1;
+        if let Some(count) = self.reason_counts.get_mut(decision.reason.as_str()) {
+            *count += 1;
+        } else {
+            self.reason_counts.insert(decision.reason.clone(), 1);
+        }
     }
 }
 
@@ -1992,6 +1993,7 @@ fn contains_eliminator_expr(expr: &Expr) -> bool {
 #[cfg(test)]
 mod tests {
     use super::{
+        AdmissibilityDecision, AdmissibilityDecisionClass, AdmissibilityDiagnostics,
         AdmissibilityMode, PackagePolicies, PackagePolicy, StrictAdmissibility, StructuralFamily,
         passes_strict_admissibility, strict_admissibility, strict_admissibility_for_mode,
     };
@@ -2006,6 +2008,33 @@ mod tests {
             library.push(entry);
         }
         library
+    }
+
+    #[test]
+    fn admissibility_diagnostics_reuses_existing_reason_buckets() {
+        let mut diagnostics = AdmissibilityDiagnostics::default();
+        let focus = AdmissibilityDecision {
+            class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+            reason: "focus_modal_shell".to_owned(),
+        };
+        let focus_same_reason = AdmissibilityDecision {
+            class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+            reason: "focus_modal_shell".to_owned(),
+        };
+        let rejected = AdmissibilityDecision {
+            class: AdmissibilityDecisionClass::RejectedByExactLegality,
+            reason: "outside_exact_kappa_band".to_owned(),
+        };
+
+        diagnostics.record(&focus);
+        diagnostics.record(&focus_same_reason);
+        diagnostics.record(&rejected);
+
+        assert_eq!(diagnostics.admitted_focus_aligned, 2);
+        assert_eq!(diagnostics.exact_legality_rejections, 1);
+        assert_eq!(diagnostics.reason_counts.len(), 2);
+        assert_eq!(diagnostics.reason_counts["focus_modal_shell"], 2);
+        assert_eq!(diagnostics.reason_counts["outside_exact_kappa_band"], 1);
     }
 
     #[test]

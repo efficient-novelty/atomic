@@ -5574,6 +5574,23 @@ fn terminal_prefix_completion_bit_cost(
     u16::try_from(prefix_bit_cost + expr_bit_length(&clause.expr)).expect("bit cost exceeded u16")
 }
 
+fn absorb_terminal_prefix_completion_bound(
+    bound: &mut Option<PrefixBound>,
+    exact_nu: u16,
+    clause_kappa_used: u16,
+    bit_kappa_used: u16,
+) {
+    if let Some(bound) = bound.as_mut() {
+        bound.absorb_completion(exact_nu, clause_kappa_used, bit_kappa_used);
+    } else {
+        *bound = Some(PrefixBound::singleton(
+            exact_nu,
+            clause_kappa_used,
+            bit_kappa_used,
+        ));
+    }
+}
+
 fn better_terminal_prefix_primary_rank(
     left: &TerminalPrefixPrimaryRank,
     right: &TerminalPrefixPrimaryRank,
@@ -5714,12 +5731,12 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
         kernel_timing.terminal_summary_exact_nu_duration += exact_nu_started.elapsed();
         let aggregation_started = Instant::now();
         let bit_kappa_used = terminal_prefix_completion_bit_cost(prefix_bit_cost, clause);
-        let completion_bound = PrefixBound::singleton(exact_nu, clause_kappa_used, bit_kappa_used);
-        if let Some(bound) = summary.bound.as_mut() {
-            bound.absorb_bound(completion_bound);
-        } else {
-            summary.bound = Some(completion_bound);
-        }
+        absorb_terminal_prefix_completion_bound(
+            &mut summary.bound,
+            exact_nu,
+            clause_kappa_used,
+            bit_kappa_used,
+        );
         summary.admitted_candidate_count += 1;
         if terminal_completion_can_compete_for_acceptance(
             prefix_signature,
@@ -6274,12 +6291,12 @@ fn materialize_terminal_prefix_group_compact(
         let exact_nu = u16::try_from(structural_nu(telescope, library, nu_history).total)
             .expect("nu exceeded u16");
         let bit_kappa_used = terminal_prefix_completion_bit_cost(prefix_bit_cost, clause);
-        let completion_bound = PrefixBound::singleton(exact_nu, clause_kappa_used, bit_kappa_used);
-        if let Some(current_bound) = bound.as_mut() {
-            current_bound.absorb_bound(completion_bound);
-        } else {
-            bound = Some(completion_bound);
-        }
+        absorb_terminal_prefix_completion_bound(
+            &mut bound,
+            exact_nu,
+            clause_kappa_used,
+            bit_kappa_used,
+        );
 
         if !terminal_completion_can_compete_for_acceptance(
             prefix_signature,

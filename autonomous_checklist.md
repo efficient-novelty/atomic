@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-03-29
+Last updated: 2026-03-30
 
 This checklist is the live signoff gate for `desktop_claim_shadow`.
 It lists only work that is still open.
@@ -47,10 +47,18 @@ It lists only work that is still open.
 - At `76` on that newest slice, stored telemetry read:
   aggregation `= 463408834 us`, clause filtering `= 356760236 us`,
   connectivity `= 282490143 us`, exact `nu` `= 265598332 us`.
+- The newer direct bound/bookkeeping rerun
+  `runs/codex-claim-release-step4-kernel-bound-bookkeeping-v1`
+  then preserved the same honest early plateau at `24` and kept aggregation
+  first, connectivity second, clause filtering third, and exact `nu` fourth,
+  but it still failed keep because the matched early short surface read
+  `549708 / 544700` instead of the kept `549630 / 492524`, while terminal
+  materialization still stayed tiny at `336 ms`.
 - The next honest move is therefore not another metadata retry, not another
-  unchanged connectivity retry, and not a full-profile rerun first. It is
-  one narrower reopened-surface aggregation retry on the kept short baseline
-  code.
+  unchanged connectivity retry, not another clause-load-only replay, not
+  another bookkeeping/bound-only cleanup, and not a full-profile rerun
+  first. It is one broader compound aggregation retry on the kept short
+  baseline code.
 
 ## 1. Runtime Completion
 
