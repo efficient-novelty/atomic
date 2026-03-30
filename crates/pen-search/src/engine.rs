@@ -49,6 +49,7 @@ use pen_type::admissibility::{
     StrictAdmissibility, assess_strict_admissibility, strict_admissibility_for_mode,
 };
 use pen_type::check::{CheckResult, check_telescope};
+use pen_type::connectivity::TerminalClauseConnectivityFacts;
 use pen_type::connectivity::passes_connectivity;
 use pen_type::obligations::{RetentionClass, RetentionPolicy, summarize_structural_debt};
 use serde::{Deserialize, Serialize};
@@ -1067,6 +1068,15 @@ impl OnlinePrefixWorkItem {
         self.filtered_next_clauses
             .as_deref()
             .unwrap_or_else(|| clause_catalog.clauses_at(self.prefix_telescope.clauses.len()))
+    }
+
+    fn next_clause_connectivity_facts<'a>(
+        &'a self,
+        clause_catalog: &'a ClauseCatalog,
+    ) -> Option<&'a [TerminalClauseConnectivityFacts]> {
+        self.filtered_next_clauses.is_none().then(|| {
+            clause_catalog.terminal_connectivity_facts_at(self.prefix_telescope.clauses.len())
+        })
     }
 }
 
@@ -4245,6 +4255,7 @@ fn discover_realistic_shadow_candidates(
                     &work_item.prefix_telescope,
                     work_item.clause_kappa,
                     work_item.next_clauses(&clause_catalog),
+                    work_item.next_clause_connectivity_facts(&clause_catalog),
                     &mut discovery,
                 ) {
                     continue;
@@ -4258,6 +4269,7 @@ fn discover_realistic_shadow_candidates(
                     &work_item.signature,
                     &work_item.prefix_telescope,
                     work_item.next_clauses(&clause_catalog),
+                    work_item.next_clause_connectivity_facts(&clause_catalog),
                     &mut discovery,
                 )?;
                 let bucket_key = demo_bucket_key(
@@ -4925,6 +4937,7 @@ fn process_prepared_exact_two_step_terminal_surface(
             &terminal_prefix.prefix_telescope,
             terminal_prefix.clause_kappa,
             terminal_prefix.next_clauses(clause_catalog),
+            terminal_prefix.next_clause_connectivity_facts(clause_catalog),
             discovery,
         ) {
             continue;
@@ -4939,6 +4952,7 @@ fn process_prepared_exact_two_step_terminal_surface(
             &terminal_prefix.signature,
             &terminal_prefix.prefix_telescope,
             terminal_prefix.next_clauses(clause_catalog),
+            terminal_prefix.next_clause_connectivity_facts(clause_catalog),
             discovery,
         )?;
         let bucket_key = demo_bucket_key(
@@ -5202,6 +5216,7 @@ fn exact_partial_prefix_bound_decision(
             &work_item.signature,
             &work_item.prefix_telescope,
             work_item.next_clauses(clause_catalog),
+            work_item.next_clause_connectivity_facts(clause_catalog),
             prefix_legality_cache,
             budget,
             incumbent_rank,
@@ -5375,6 +5390,7 @@ fn exact_terminal_prefix_bound_decision(
     prefix_signature: &PrefixSignature,
     prefix_telescope: &Telescope,
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
+    filtered_last_clause_connectivity_facts: Option<&[TerminalClauseConnectivityFacts]>,
     prefix_legality_cache: &mut PrefixLegalityCache,
     budget: &mut usize,
     incumbent_rank: Option<&AcceptRank>,
@@ -5408,6 +5424,7 @@ fn exact_terminal_prefix_bound_decision(
         admissibility,
         prefix_signature,
         filtered_last_clause_options,
+        filtered_last_clause_connectivity_facts,
         prefix_legality_cache,
         remaining_one_telemetry.as_deref_mut(),
     );
@@ -5445,13 +5462,18 @@ fn exact_terminal_prefix_bound_decision(
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
     match terminal_clauses {
         TerminalPrefixClauseCandidates::General(terminal_clauses) => {
-            for (clause, cached_admissibility_decision) in terminal_clauses {
+            for terminal_clause in terminal_clauses {
                 if !spend_exact_partial_prefix_budget(budget, 1) {
                     return ExactPartialPrefixBoundDecision::Unknown;
                 }
 
-                let Some(connectivity_decision) =
-                    prefix_legality_cache.terminal_connectivity(prefix_signature, library, clause)
+                let Some(connectivity_decision) = prefix_legality_cache
+                    .terminal_connectivity_with_facts(
+                        prefix_signature,
+                        library,
+                        terminal_clause.clause,
+                        terminal_clause.connectivity_facts,
+                    )
                 else {
                     continue;
                 };
@@ -5462,8 +5484,11 @@ fn exact_terminal_prefix_bound_decision(
                     continue;
                 }
 
-                let telescope =
-                    load_terminal_clause_into_scratch(&mut scratch_telescope, prefix_len, clause);
+                let telescope = load_terminal_clause_into_scratch(
+                    &mut scratch_telescope,
+                    prefix_len,
+                    terminal_clause.clause,
+                );
                 if matches!(
                     connectivity_decision,
                     TerminalConnectivityDecision::NeedsFallback
@@ -5473,11 +5498,12 @@ fn exact_terminal_prefix_bound_decision(
                     }
                 }
 
-                let admissibility_decision = if let Some(decision) = cached_admissibility_decision {
-                    decision
-                } else {
-                    assess_strict_admissibility(step_index, library, telescope, admissibility)
-                };
+                let admissibility_decision =
+                    if let Some(decision) = terminal_clause.cached_admissibility_decision {
+                        decision
+                    } else {
+                        assess_strict_admissibility(step_index, library, telescope, admissibility)
+                    };
                 if !admissibility_decision.is_admitted() {
                     continue;
                 }
@@ -5490,13 +5516,18 @@ fn exact_terminal_prefix_bound_decision(
             }
         }
         TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(terminal_clauses) => {
-            for clause in terminal_clauses {
+            for terminal_clause in terminal_clauses {
                 if !spend_exact_partial_prefix_budget(budget, 1) {
                     return ExactPartialPrefixBoundDecision::Unknown;
                 }
 
-                let Some(connectivity_decision) =
-                    prefix_legality_cache.terminal_connectivity(prefix_signature, library, clause)
+                let Some(connectivity_decision) = prefix_legality_cache
+                    .terminal_connectivity_with_facts(
+                        prefix_signature,
+                        library,
+                        terminal_clause.clause,
+                        terminal_clause.connectivity_facts,
+                    )
                 else {
                     continue;
                 };
@@ -5507,8 +5538,11 @@ fn exact_terminal_prefix_bound_decision(
                     continue;
                 }
 
-                let telescope =
-                    load_terminal_clause_into_scratch(&mut scratch_telescope, prefix_len, clause);
+                let telescope = load_terminal_clause_into_scratch(
+                    &mut scratch_telescope,
+                    prefix_len,
+                    terminal_clause.clause,
+                );
                 if matches!(
                     connectivity_decision,
                     TerminalConnectivityDecision::NeedsFallback
@@ -5551,14 +5585,16 @@ enum TerminalPrefixSummaryPayload {
 }
 
 #[derive(Clone, Debug)]
+struct TerminalPrefixCandidate<'a> {
+    clause: &'a pen_core::clause::ClauseRec,
+    cached_admissibility_decision: Option<AdmissibilityDecision>,
+    connectivity_facts: Option<&'a TerminalClauseConnectivityFacts>,
+}
+
+#[derive(Clone, Debug)]
 enum TerminalPrefixClauseCandidates<'a> {
-    General(
-        Vec<(
-            &'a pen_core::clause::ClauseRec,
-            Option<AdmissibilityDecision>,
-        )>,
-    ),
-    ClaimAdmittedOpenBand(Vec<&'a pen_core::clause::ClauseRec>),
+    General(Vec<TerminalPrefixCandidate<'a>>),
+    ClaimAdmittedOpenBand(Vec<TerminalPrefixCandidate<'a>>),
 }
 
 impl<'a> TerminalPrefixClauseCandidates<'a> {
@@ -5576,9 +5612,25 @@ fn terminal_prefix_clause_candidates<'a>(
     admissibility: StrictAdmissibility,
     prefix_signature: &PrefixSignature,
     filtered_last_clause_options: &'a [pen_core::clause::ClauseRec],
+    filtered_last_clause_connectivity_facts: Option<&'a [TerminalClauseConnectivityFacts]>,
     prefix_legality_cache: &mut PrefixLegalityCache,
     remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
 ) -> TerminalPrefixClauseCandidates<'a> {
+    fn find_connectivity_fact<'a>(
+        clause: &pen_core::clause::ClauseRec,
+        clauses: &'a [pen_core::clause::ClauseRec],
+        facts: Option<&'a [TerminalClauseConnectivityFacts]>,
+    ) -> Option<&'a TerminalClauseConnectivityFacts> {
+        let facts = facts?;
+        if facts.len() != clauses.len() {
+            return None;
+        }
+        clauses
+            .iter()
+            .zip(facts.iter())
+            .find_map(|(candidate, fact)| std::ptr::eq(candidate, clause).then_some(fact))
+    }
+
     let clause_filter_started = Instant::now();
     let terminal_clauses = if let Some(clauses) = prefix_legality_cache
         .filter_claim_open_band_terminal_clauses(
@@ -5587,7 +5639,20 @@ fn terminal_prefix_clause_candidates<'a>(
             admissibility,
             filtered_last_clause_options,
         ) {
-        TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(clauses)
+        TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(
+            clauses
+                .into_iter()
+                .map(|clause| TerminalPrefixCandidate {
+                    clause,
+                    cached_admissibility_decision: None,
+                    connectivity_facts: find_connectivity_fact(
+                        clause,
+                        filtered_last_clause_options,
+                        filtered_last_clause_connectivity_facts,
+                    ),
+                })
+                .collect(),
+        )
     } else {
         prefix_legality_cache
             .filter_terminal_clauses(
@@ -5601,7 +5666,15 @@ fn terminal_prefix_clause_candidates<'a>(
                 TerminalPrefixClauseCandidates::General(
                     clauses
                         .into_iter()
-                        .map(|clause| (clause.clause, Some(clause.admissibility_decision)))
+                        .map(|clause| TerminalPrefixCandidate {
+                            connectivity_facts: find_connectivity_fact(
+                                clause.clause,
+                                filtered_last_clause_options,
+                                filtered_last_clause_connectivity_facts,
+                            ),
+                            clause: clause.clause,
+                            cached_admissibility_decision: Some(clause.admissibility_decision),
+                        })
                         .collect(),
                 )
             })
@@ -5609,7 +5682,13 @@ fn terminal_prefix_clause_candidates<'a>(
                 TerminalPrefixClauseCandidates::General(
                     filtered_last_clause_options
                         .iter()
-                        .map(|clause| (clause, None))
+                        .enumerate()
+                        .map(|(index, clause)| TerminalPrefixCandidate {
+                            clause,
+                            cached_admissibility_decision: None,
+                            connectivity_facts: filtered_last_clause_connectivity_facts
+                                .and_then(|facts| facts.get(index)),
+                        })
                         .collect(),
                 )
             })
@@ -5799,10 +5878,15 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     let mut kernel_timing = RemainingOneSummaryKernelTiming::default();
     match terminal_clauses {
         TerminalPrefixClauseCandidates::General(terminal_clauses) => {
-            for (clause, cached_admissibility_decision) in terminal_clauses {
+            for terminal_clause in terminal_clauses {
                 let connectivity_started = Instant::now();
-                let Some(connectivity_decision) =
-                    prefix_legality_cache.terminal_connectivity(prefix_signature, library, clause)
+                let Some(connectivity_decision) = prefix_legality_cache
+                    .terminal_connectivity_with_facts(
+                        prefix_signature,
+                        library,
+                        terminal_clause.clause,
+                        terminal_clause.connectivity_facts,
+                    )
                 else {
                     continue;
                 };
@@ -5825,8 +5909,11 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                 kernel_timing.terminal_summary_aggregation_duration += generated_started.elapsed();
 
                 let load_started = Instant::now();
-                let telescope =
-                    load_terminal_clause_into_scratch(&mut scratch_telescope, prefix_len, clause);
+                let telescope = load_terminal_clause_into_scratch(
+                    &mut scratch_telescope,
+                    prefix_len,
+                    terminal_clause.clause,
+                );
                 kernel_timing.terminal_summary_aggregation_duration += load_started.elapsed();
                 if matches!(
                     connectivity_decision,
@@ -5849,7 +5936,9 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                         fallback_started.elapsed();
                 }
 
-                let admissibility_decision = if let Some(decision) = cached_admissibility_decision {
+                let admissibility_decision = if let Some(decision) =
+                    terminal_clause.cached_admissibility_decision
+                {
                     decision
                 } else {
                     kernel_timing.terminal_summary_admissibility_checks += 1;
@@ -5883,7 +5972,8 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     .expect("nu exceeded u16");
                 kernel_timing.terminal_summary_exact_nu_duration += exact_nu_started.elapsed();
                 let aggregation_started = Instant::now();
-                let bit_kappa_used = terminal_prefix_completion_bit_cost(prefix_bit_cost, clause);
+                let bit_kappa_used =
+                    terminal_prefix_completion_bit_cost(prefix_bit_cost, terminal_clause.clause);
                 let competition_allowed = terminal_completion_can_compete_for_acceptance(
                     prefix_signature,
                     admissibility,
@@ -5911,10 +6001,15 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                 .is_some()
                 .then(claim_open_band_admissibility_decision);
             let mut admitted_focus_aligned_count = 0usize;
-            for clause in terminal_clauses {
+            for terminal_clause in terminal_clauses {
                 let connectivity_started = Instant::now();
-                let Some(connectivity_decision) =
-                    prefix_legality_cache.terminal_connectivity(prefix_signature, library, clause)
+                let Some(connectivity_decision) = prefix_legality_cache
+                    .terminal_connectivity_with_facts(
+                        prefix_signature,
+                        library,
+                        terminal_clause.clause,
+                        terminal_clause.connectivity_facts,
+                    )
                 else {
                     continue;
                 };
@@ -5937,8 +6032,11 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                 kernel_timing.terminal_summary_aggregation_duration += generated_started.elapsed();
 
                 let load_started = Instant::now();
-                let telescope =
-                    load_terminal_clause_into_scratch(&mut scratch_telescope, prefix_len, clause);
+                let telescope = load_terminal_clause_into_scratch(
+                    &mut scratch_telescope,
+                    prefix_len,
+                    terminal_clause.clause,
+                );
                 kernel_timing.terminal_summary_aggregation_duration += load_started.elapsed();
                 if matches!(
                     connectivity_decision,
@@ -5968,7 +6066,8 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     .expect("nu exceeded u16");
                 kernel_timing.terminal_summary_exact_nu_duration += exact_nu_started.elapsed();
                 let aggregation_started = Instant::now();
-                let bit_kappa_used = terminal_prefix_completion_bit_cost(prefix_bit_cost, clause);
+                let bit_kappa_used =
+                    terminal_prefix_completion_bit_cost(prefix_bit_cost, terminal_clause.clause);
                 absorb_terminal_prefix_admitted_clause_summary(
                     objective_bar,
                     incumbent_rank,
@@ -6041,6 +6140,7 @@ fn materialize_remaining_one_prefix_group(
     prefix_signature: &PrefixSignature,
     prefix_telescope: &Telescope,
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
+    filtered_last_clause_connectivity_facts: Option<&[TerminalClauseConnectivityFacts]>,
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<MaterializedTerminalPrefixGroup> {
     let materialize_started = Instant::now();
@@ -6053,6 +6153,7 @@ fn materialize_remaining_one_prefix_group(
         prefix_signature,
         prefix_telescope,
         filtered_last_clause_options,
+        filtered_last_clause_connectivity_facts,
         discovery,
     )?;
     discovery.remaining_one_telemetry.remaining_one_materialized += 1;
@@ -6113,6 +6214,7 @@ fn claim_try_summary_prune_before_materialization(
     prefix_telescope: &Telescope,
     clause_kappa: u16,
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
+    filtered_last_clause_connectivity_facts: Option<&[TerminalClauseConnectivityFacts]>,
     discovery: &mut RealisticShadowDiscovery,
 ) -> bool {
     if !should_compact_terminal_prefix_group_candidates(admissibility.mode) {
@@ -6156,6 +6258,7 @@ fn claim_try_summary_prune_before_materialization(
             admissibility,
             prefix_signature,
             filtered_last_clause_options,
+            filtered_last_clause_connectivity_facts,
             &mut discovery.prefix_legality_cache,
             Some(&mut discovery.remaining_one_telemetry),
         );
@@ -6260,6 +6363,7 @@ fn materialize_terminal_prefix_group(
     prefix_signature: &PrefixSignature,
     prefix_telescope: &Telescope,
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
+    filtered_last_clause_connectivity_facts: Option<&[TerminalClauseConnectivityFacts]>,
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<MaterializedTerminalPrefixGroup> {
     if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
@@ -6293,6 +6397,7 @@ fn materialize_terminal_prefix_group(
             prefix_signature,
             prefix_telescope,
             filtered_last_clause_options,
+            filtered_last_clause_connectivity_facts,
             discovery,
         );
     }
@@ -6312,6 +6417,7 @@ fn materialize_terminal_prefix_group(
             admissibility,
             prefix_signature,
             filtered_last_clause_options,
+            filtered_last_clause_connectivity_facts,
             &mut discovery.prefix_legality_cache,
             Some(&mut discovery.remaining_one_telemetry),
         );
@@ -6415,6 +6521,7 @@ fn materialize_terminal_prefix_group_compact(
     prefix_signature: &PrefixSignature,
     prefix_telescope: &Telescope,
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
+    filtered_last_clause_connectivity_facts: Option<&[TerminalClauseConnectivityFacts]>,
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<MaterializedTerminalPrefixGroup> {
     let terminal_clauses = terminal_prefix_clause_candidates(
@@ -6423,6 +6530,7 @@ fn materialize_terminal_prefix_group_compact(
         admissibility,
         prefix_signature,
         filtered_last_clause_options,
+        filtered_last_clause_connectivity_facts,
         &mut discovery.prefix_legality_cache,
         Some(&mut discovery.remaining_one_telemetry),
     );
@@ -6438,10 +6546,15 @@ fn materialize_terminal_prefix_group_compact(
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
     match terminal_clauses {
         TerminalPrefixClauseCandidates::General(terminal_clauses) => {
-            for (clause, cached_admissibility_decision) in terminal_clauses {
+            for terminal_clause in terminal_clauses {
                 let Some(connectivity_decision) = discovery
                     .prefix_legality_cache
-                    .terminal_connectivity(prefix_signature, library, clause)
+                    .terminal_connectivity_with_facts(
+                        prefix_signature,
+                        library,
+                        terminal_clause.clause,
+                        terminal_clause.connectivity_facts,
+                    )
                 else {
                     continue;
                 };
@@ -6453,8 +6566,11 @@ fn materialize_terminal_prefix_group_compact(
                     continue;
                 }
 
-                let telescope =
-                    load_terminal_clause_into_scratch(&mut scratch_telescope, prefix_len, clause);
+                let telescope = load_terminal_clause_into_scratch(
+                    &mut scratch_telescope,
+                    prefix_len,
+                    terminal_clause.clause,
+                );
                 if matches!(
                     connectivity_decision,
                     TerminalConnectivityDecision::NeedsFallback
@@ -6464,11 +6580,12 @@ fn materialize_terminal_prefix_group_compact(
                     }
                 }
 
-                let admissibility_decision = if let Some(decision) = cached_admissibility_decision {
-                    decision
-                } else {
-                    assess_strict_admissibility(step_index, library, telescope, admissibility)
-                };
+                let admissibility_decision =
+                    if let Some(decision) = terminal_clause.cached_admissibility_decision {
+                        decision
+                    } else {
+                        assess_strict_admissibility(step_index, library, telescope, admissibility)
+                    };
                 discovery.enumerated_candidates += 1;
                 discovery.well_formed_candidates += 1;
                 discovery
@@ -6482,7 +6599,8 @@ fn materialize_terminal_prefix_group_compact(
                 admitted_terminal_candidates += 1;
                 let exact_nu = u16::try_from(structural_nu(telescope, library, nu_history).total)
                     .expect("nu exceeded u16");
-                let bit_kappa_used = terminal_prefix_completion_bit_cost(prefix_bit_cost, clause);
+                let bit_kappa_used =
+                    terminal_prefix_completion_bit_cost(prefix_bit_cost, terminal_clause.clause);
                 absorb_terminal_prefix_completion_bound(
                     &mut bound,
                     exact_nu,
@@ -6521,10 +6639,15 @@ fn materialize_terminal_prefix_group_compact(
         }
         TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(terminal_clauses) => {
             let mut admitted_focus_aligned_count = 0usize;
-            for clause in terminal_clauses {
+            for terminal_clause in terminal_clauses {
                 let Some(connectivity_decision) = discovery
                     .prefix_legality_cache
-                    .terminal_connectivity(prefix_signature, library, clause)
+                    .terminal_connectivity_with_facts(
+                        prefix_signature,
+                        library,
+                        terminal_clause.clause,
+                        terminal_clause.connectivity_facts,
+                    )
                 else {
                     continue;
                 };
@@ -6536,8 +6659,11 @@ fn materialize_terminal_prefix_group_compact(
                     continue;
                 }
 
-                let telescope =
-                    load_terminal_clause_into_scratch(&mut scratch_telescope, prefix_len, clause);
+                let telescope = load_terminal_clause_into_scratch(
+                    &mut scratch_telescope,
+                    prefix_len,
+                    terminal_clause.clause,
+                );
                 if matches!(
                     connectivity_decision,
                     TerminalConnectivityDecision::NeedsFallback
@@ -6553,7 +6679,8 @@ fn materialize_terminal_prefix_group_compact(
                 admitted_terminal_candidates += 1;
                 let exact_nu = u16::try_from(structural_nu(telescope, library, nu_history).total)
                     .expect("nu exceeded u16");
-                let bit_kappa_used = terminal_prefix_completion_bit_cost(prefix_bit_cost, clause);
+                let bit_kappa_used =
+                    terminal_prefix_completion_bit_cost(prefix_bit_cost, terminal_clause.clause);
                 absorb_terminal_prefix_completion_bound(
                     &mut bound,
                     exact_nu,
@@ -8934,6 +9061,7 @@ mod tests {
             admissibility,
             &signature,
             clause_catalog.clauses_at(7),
+            Some(clause_catalog.terminal_connectivity_facts_at(7)),
             &mut cache,
             None,
         );
@@ -8942,7 +9070,7 @@ mod tests {
             super::TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(clauses) => {
                 for clause in clauses {
                     let mut telescope = prefix.clone();
-                    telescope.clauses.push((*clause).clone());
+                    telescope.clauses.push(clause.clause.clone());
                     let decision =
                         assess_strict_admissibility(15, &library, &telescope, admissibility);
                     assert!(decision.is_admitted());
@@ -8954,11 +9082,11 @@ mod tests {
                 }
             }
             super::TerminalPrefixClauseCandidates::General(clauses) => {
-                for (clause, cached_decision) in clauses {
+                for clause in clauses {
                     let mut telescope = prefix.clone();
-                    telescope.clauses.push((*clause).clone());
+                    telescope.clauses.push(clause.clause.clone());
                     assert_eq!(
-                        cached_decision.as_ref(),
+                        clause.cached_admissibility_decision.as_ref(),
                         Some(&assess_strict_admissibility(
                             15,
                             &library,
@@ -9605,6 +9733,7 @@ mod tests {
             &work_item.prefix_telescope,
             work_item.clause_kappa,
             work_item.next_clauses(&clause_catalog),
+            work_item.next_clause_connectivity_facts(&clause_catalog),
             &mut discovery,
         ));
         assert_eq!(
@@ -9724,6 +9853,7 @@ mod tests {
             &work_item.prefix_telescope,
             work_item.clause_kappa,
             work_item.next_clauses(&clause_catalog),
+            work_item.next_clause_connectivity_facts(&clause_catalog),
             &mut discovery,
         ));
         assert_eq!(
@@ -9801,6 +9931,7 @@ mod tests {
                 admissibility,
                 &signature,
                 clause_catalog.clauses_at(prefix_len),
+                Some(clause_catalog.terminal_connectivity_facts_at(prefix_len)),
                 &mut cache,
                 None,
             );
@@ -9817,7 +9948,7 @@ mod tests {
                 super::TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(clauses) => {
                     for clause in clauses {
                         let mut telescope = prefix.clone();
-                        telescope.clauses.push((*clause).clone());
+                        telescope.clauses.push(clause.clause.clone());
 
                         if !passes_connectivity(&library, &telescope) {
                             continue;
@@ -9865,16 +9996,18 @@ mod tests {
                     }
                 }
                 super::TerminalPrefixClauseCandidates::General(clauses) => {
-                    for (clause, cached_admissibility_decision) in clauses {
+                    for clause in clauses {
                         let mut telescope = prefix.clone();
-                        telescope.clauses.push((*clause).clone());
+                        telescope.clauses.push(clause.clause.clone());
 
                         if !passes_connectivity(&library, &telescope) {
                             continue;
                         }
 
-                        let admissibility_decision =
-                            cached_admissibility_decision.clone().unwrap_or_else(|| {
+                        let admissibility_decision = clause
+                            .cached_admissibility_decision
+                            .clone()
+                            .unwrap_or_else(|| {
                                 assess_strict_admissibility(
                                     step_index,
                                     &library,
@@ -10046,6 +10179,7 @@ mod tests {
             &work_item.signature,
             &work_item.prefix_telescope,
             work_item.next_clauses(&clause_catalog),
+            work_item.next_clause_connectivity_facts(&clause_catalog),
             &mut discovery,
         )
         .expect("materialization should succeed");
@@ -10128,6 +10262,7 @@ mod tests {
             &work_item.signature,
             &work_item.prefix_telescope,
             work_item.next_clauses(&clause_catalog),
+            work_item.next_clause_connectivity_facts(&clause_catalog),
             &mut discovery,
         )
         .expect("materialization should succeed");
@@ -10216,6 +10351,7 @@ mod tests {
             admissibility,
             &summary_work_item.signature,
             summary_work_item.next_clauses(&clause_catalog),
+            summary_work_item.next_clause_connectivity_facts(&clause_catalog),
             &mut summary_discovery.prefix_legality_cache,
             None,
         );
@@ -10250,6 +10386,7 @@ mod tests {
             &compact_work_item.signature,
             &compact_work_item.prefix_telescope,
             compact_work_item.next_clauses(&clause_catalog),
+            compact_work_item.next_clause_connectivity_facts(&clause_catalog),
             &mut compact_discovery,
         )
         .expect("compact materialization should succeed");

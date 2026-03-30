@@ -6,7 +6,7 @@ use pen_core::library::Library;
 use pen_core::telescope::Telescope;
 use pen_type::admissibility::{AdmissibilityMode, StrictAdmissibility, StructuralFamily};
 use pen_type::check::{CheckResult, check_telescope};
-use pen_type::connectivity::passes_connectivity;
+use pen_type::connectivity::{TerminalClauseConnectivityFacts, passes_connectivity};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -74,6 +74,7 @@ pub struct TelescopeEnumeration {
 pub struct ClauseCatalog {
     clause_kappa: u16,
     options_by_position: Vec<Vec<ClauseRec>>,
+    terminal_connectivity_facts_by_position: Vec<Vec<TerminalClauseConnectivityFacts>>,
 }
 
 impl ClauseCatalog {
@@ -83,6 +84,16 @@ impl ClauseCatalog {
 
     pub fn clauses_at(&self, position: usize) -> &[ClauseRec] {
         self.options_by_position
+            .get(position)
+            .map(Vec::as_slice)
+            .unwrap_or(&[])
+    }
+
+    pub fn terminal_connectivity_facts_at(
+        &self,
+        position: usize,
+    ) -> &[TerminalClauseConnectivityFacts] {
+        self.terminal_connectivity_facts_by_position
             .get(position)
             .map(Vec::as_slice)
             .unwrap_or(&[])
@@ -2141,13 +2152,22 @@ pub fn build_clause_catalog(base_context: EnumerationContext, clause_kappa: u16)
         return ClauseCatalog::default();
     }
 
-    let options_by_position = (0..usize::from(clause_kappa))
-        .map(|position| clauses_for_position(base_context, clause_kappa, position))
-        .collect::<Vec<_>>();
+    let (options_by_position, terminal_connectivity_facts_by_position) =
+        (0..usize::from(clause_kappa))
+            .map(|position| {
+                let clauses = clauses_for_position(base_context, clause_kappa, position);
+                let facts = clauses
+                    .iter()
+                    .map(TerminalClauseConnectivityFacts::from_clause)
+                    .collect::<Vec<_>>();
+                (clauses, facts)
+            })
+            .unzip();
 
     ClauseCatalog {
         clause_kappa,
         options_by_position,
+        terminal_connectivity_facts_by_position,
     }
 }
 

@@ -18,6 +18,7 @@ use pen_type::admissibility::{
 use pen_type::check::CheckSummary;
 use pen_type::connectivity::{
     ConnectivitySummary, ConnectivityTerminalDecision, HistoricalReanchorSummary,
+    TerminalClauseConnectivityFacts,
 };
 use std::collections::BTreeMap;
 
@@ -510,6 +511,16 @@ impl PrefixLegalityCache {
         library: &Library,
         clause: &ClauseRec,
     ) -> Option<TerminalConnectivityDecision> {
+        self.terminal_connectivity_with_facts(parent_signature, library, clause, None)
+    }
+
+    pub fn terminal_connectivity_with_facts(
+        &mut self,
+        parent_signature: &PrefixSignature,
+        library: &Library,
+        clause: &ClauseRec,
+        facts: Option<&TerminalClauseConnectivityFacts>,
+    ) -> Option<TerminalConnectivityDecision> {
         let Some(parent_summary) = self.summaries.get(parent_signature) else {
             return None;
         };
@@ -522,10 +533,18 @@ impl PrefixLegalityCache {
             .reanchor
             .extend(clause)
             .allows_historical_reanchor();
-        match parent_summary
-            .connectivity
-            .terminal_decision(library, clause, historical_reanchor)
-        {
+        let connectivity_decision = if let Some(facts) = facts {
+            parent_summary.connectivity.terminal_decision_with_facts(
+                library,
+                facts,
+                historical_reanchor,
+            )
+        } else {
+            parent_summary
+                .connectivity
+                .terminal_decision(library, clause, historical_reanchor)
+        };
+        match connectivity_decision {
             ConnectivityTerminalDecision::PruneDisconnected => {
                 self.stats.connectivity_prunes += 1;
                 Some(TerminalConnectivityDecision::PruneDisconnected)

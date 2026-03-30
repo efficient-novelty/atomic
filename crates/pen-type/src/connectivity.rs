@@ -20,6 +20,68 @@ pub enum ConnectivityTerminalDecision {
     NeedsFallback,
 }
 
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct TerminalClauseConnectivityFacts {
+    lib_refs: Box<[u32]>,
+    max_lib_ref: u32,
+    raw_var_ref_mask: u64,
+    dependency_distance_mask: u64,
+    is_path_con: bool,
+    is_point_constructor: bool,
+    is_higher_path_witness: bool,
+    is_operator_bundle_closure: bool,
+}
+
+impl TerminalClauseConnectivityFacts {
+    pub fn from_clause(clause: &ClauseRec) -> Self {
+        let mut lib_refs = Vec::new();
+        let mut max_lib_ref = 0u32;
+        let mut raw_var_ref_mask = 0u64;
+        let mut dependency_distance_mask = 0u64;
+        collect_terminal_clause_connectivity_facts(
+            &clause.expr,
+            0,
+            &mut lib_refs,
+            &mut max_lib_ref,
+            &mut raw_var_ref_mask,
+            &mut dependency_distance_mask,
+        );
+        lib_refs.sort_unstable();
+        lib_refs.dedup();
+        Self {
+            lib_refs: lib_refs.into_boxed_slice(),
+            max_lib_ref,
+            raw_var_ref_mask,
+            dependency_distance_mask,
+            is_path_con: matches!(clause.expr, Expr::PathCon(_)),
+            is_point_constructor: is_point_constructor_expr(&clause.expr),
+            is_higher_path_witness: is_higher_path_witness_clause(&clause.expr),
+            is_operator_bundle_closure: is_operator_bundle_closure_clause(&clause.expr),
+        }
+    }
+
+    fn has_lib_pointer(&self) -> bool {
+        !self.lib_refs.is_empty()
+    }
+
+    fn references_active_window(&self, library_size: u32) -> bool {
+        library_size <= 2
+            || self
+                .lib_refs
+                .iter()
+                .copied()
+                .any(|index| index == library_size || index == library_size.saturating_sub(1))
+    }
+
+    fn supports_dependency_distance(&self, distance: u32) -> bool {
+        if distance >= 64 {
+            return false;
+        }
+        let bit = 1u64 << distance;
+        self.raw_var_ref_mask & bit != 0 || self.dependency_distance_mask & bit != 0
+    }
+}
+
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 struct ConnectivityClauseState {
     has_lib_pointer: bool,
@@ -233,23 +295,24 @@ impl ConnectivitySummary {
         clause: &ClauseRec,
         historical_reanchor: bool,
     ) -> ConnectivityTerminalDecision {
+        let facts = TerminalClauseConnectivityFacts::from_clause(clause);
+        self.terminal_decision_with_facts(library, &facts, historical_reanchor)
+    }
+
+    pub fn terminal_decision_with_facts(
+        &self,
+        library: &Library,
+        facts: &TerminalClauseConnectivityFacts,
+        historical_reanchor: bool,
+    ) -> ConnectivityTerminalDecision {
         let new_index = self.clauses.len();
         let previous_latest = new_index.checked_sub(1);
         let has_point_constructor_before = self.has_point_constructor;
-        let new_expr = &clause.expr;
-        let new_clause_is_path_con = matches!(new_expr, Expr::PathCon(_));
-        let new_clause_is_point_constructor = is_point_constructor_expr(new_expr);
-        let new_clause_is_higher_path_witness = is_higher_path_witness_clause(new_expr);
-        let new_clause_is_operator_bundle_closure = is_operator_bundle_closure_clause(new_expr);
         let lib_size = library.len() as u32;
-        let lib_ref_summary = summarize_lib_refs(
-            new_expr,
-            (lib_size > 2).then_some((lib_size, lib_size.saturating_sub(1))),
-        );
-        let new_clause_has_lib_pointer = lib_ref_summary.has_any;
+        let new_clause_has_lib_pointer = facts.has_lib_pointer();
         let references_active_window = self.references_active_window
             || lib_size <= 2
-            || lib_ref_summary.references_active_window;
+            || facts.references_active_window(lib_size);
         let self_contained = self.self_contained && !new_clause_has_lib_pointer;
 
         let unresolved_previous_latest =
@@ -260,17 +323,12 @@ impl ConnectivitySummary {
             .copied()
             .chain(unresolved_previous_latest)
         {
-            if !clause_state_satisfied_by_terminal_clause(
+            if !clause_state_satisfied_by_terminal_clause_facts(
                 &self.clauses[index],
                 index,
                 new_index,
-                new_expr,
                 has_point_constructor_before,
-                new_clause_has_lib_pointer,
-                new_clause_is_path_con,
-                new_clause_is_point_constructor,
-                new_clause_is_higher_path_witness,
-                new_clause_is_operator_bundle_closure,
+                facts,
             ) {
                 return ConnectivityTerminalDecision::PruneDisconnected;
             }
@@ -389,6 +447,33 @@ fn clause_state_satisfied_by_terminal_clause(
             && new_clause_is_operator_bundle_closure)
 }
 
+fn clause_state_satisfied_by_terminal_clause_facts(
+    clause_state: &ConnectivityClauseState,
+    earlier_index: usize,
+    later_index: usize,
+    has_point_constructor_before: bool,
+    facts: &TerminalClauseConnectivityFacts,
+) -> bool {
+    let de_bruijn = (later_index - earlier_index) as u32;
+    let has_var_edge = facts.supports_dependency_distance(de_bruijn);
+    let has_path_attachment = if facts.is_path_con {
+        clause_state.local_path_anchor(has_point_constructor_before)
+    } else if facts.is_point_constructor {
+        clause_state.later_pathcon_seen && clause_state.local_path_anchor(true)
+    } else {
+        false
+    };
+
+    has_var_edge
+        || clause_state.has_lib_pointer
+        || has_path_attachment
+        || (clause_state.is_higher_path_con && facts.is_higher_path_witness)
+        || (clause_state.is_higher_order_bridge && facts.has_lib_pointer())
+        || (clause_state.is_operator_action
+            && clause_state.has_prior_operator_bundle_seed
+            && facts.is_operator_bundle_closure)
+}
+
 fn later_clause_depends_on(
     earlier_index: usize,
     later_index: usize,
@@ -455,6 +540,95 @@ fn expr_contains_raw_var_ref(expr: &Expr, target: u32) -> bool {
                 || expr_contains_raw_var_ref(right, target)
         }
         Expr::Univ | Expr::Lib(_) | Expr::PathCon(_) => false,
+    }
+}
+
+fn collect_terminal_clause_connectivity_facts(
+    expr: &Expr,
+    binder_depth: u32,
+    lib_refs: &mut Vec<u32>,
+    max_lib_ref: &mut u32,
+    raw_var_ref_mask: &mut u64,
+    dependency_distance_mask: &mut u64,
+) {
+    match expr {
+        Expr::Lib(index) => {
+            lib_refs.push(*index);
+            *max_lib_ref = (*max_lib_ref).max(*index);
+        }
+        Expr::Var(index) => {
+            if *index < 64 {
+                *raw_var_ref_mask |= 1u64 << *index;
+            }
+            if *index > binder_depth && *index < 64 + binder_depth {
+                let distance = index - binder_depth;
+                *dependency_distance_mask |= 1u64 << distance;
+            }
+        }
+        Expr::Univ | Expr::PathCon(_) => {}
+        Expr::App(function, argument)
+        | Expr::Pi(function, argument)
+        | Expr::Sigma(function, argument) => {
+            collect_terminal_clause_connectivity_facts(
+                function,
+                binder_depth,
+                lib_refs,
+                max_lib_ref,
+                raw_var_ref_mask,
+                dependency_distance_mask,
+            );
+            collect_terminal_clause_connectivity_facts(
+                argument,
+                binder_depth,
+                lib_refs,
+                max_lib_ref,
+                raw_var_ref_mask,
+                dependency_distance_mask,
+            );
+        }
+        Expr::Lam(body)
+        | Expr::Refl(body)
+        | Expr::Susp(body)
+        | Expr::Trunc(body)
+        | Expr::Flat(body)
+        | Expr::Sharp(body)
+        | Expr::Disc(body)
+        | Expr::Shape(body)
+        | Expr::Next(body)
+        | Expr::Eventually(body) => collect_terminal_clause_connectivity_facts(
+            body,
+            binder_depth + 1,
+            lib_refs,
+            max_lib_ref,
+            raw_var_ref_mask,
+            dependency_distance_mask,
+        ),
+        Expr::Id(ty, left, right) => {
+            collect_terminal_clause_connectivity_facts(
+                ty,
+                binder_depth,
+                lib_refs,
+                max_lib_ref,
+                raw_var_ref_mask,
+                dependency_distance_mask,
+            );
+            collect_terminal_clause_connectivity_facts(
+                left,
+                binder_depth,
+                lib_refs,
+                max_lib_ref,
+                raw_var_ref_mask,
+                dependency_distance_mask,
+            );
+            collect_terminal_clause_connectivity_facts(
+                right,
+                binder_depth,
+                lib_refs,
+                max_lib_ref,
+                raw_var_ref_mask,
+                dependency_distance_mask,
+            );
+        }
     }
 }
 
@@ -712,7 +886,8 @@ fn matches_temporal_flat_next_bridge(expr: &Expr) -> bool {
 mod tests {
     use super::{
         ConnectivitySummary, ConnectivityTerminalDecision, ConnectivityWitness,
-        HistoricalReanchorSummary, analyze_connectivity, passes_connectivity,
+        HistoricalReanchorSummary, TerminalClauseConnectivityFacts, analyze_connectivity,
+        passes_connectivity,
     };
     use pen_core::clause::{ClauseRec, ClauseRole};
     use pen_core::expr::Expr;
@@ -844,6 +1019,82 @@ mod tests {
                 step_fifteen_reanchor_allowed
             ),
             ConnectivityTerminalDecision::KeepWithoutFallback
+        );
+    }
+
+    #[test]
+    fn terminal_clause_connectivity_facts_match_direct_terminal_decision() {
+        let step_four_library = library_until(3);
+        let step_four_prefix = Telescope::new(Telescope::reference(4).clauses[..2].to_vec());
+        let step_four_summary =
+            ConnectivitySummary::from_telescope(&step_four_library, &step_four_prefix);
+        let step_four_last_clause = Telescope::reference(4)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step four should have a last clause");
+        let step_four_facts = TerminalClauseConnectivityFacts::from_clause(&step_four_last_clause);
+        assert_eq!(
+            step_four_summary.terminal_decision(&step_four_library, &step_four_last_clause, false),
+            step_four_summary.terminal_decision_with_facts(
+                &step_four_library,
+                &step_four_facts,
+                false,
+            )
+        );
+
+        let disconnected_library: Library = Vec::new();
+        let disconnected_prefix = Telescope::new(vec![
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1))),
+            ),
+            ClauseRec::new(ClauseRole::Introduction, Expr::PathCon(1)),
+        ]);
+        let disconnected_summary =
+            ConnectivitySummary::from_telescope(&disconnected_library, &disconnected_prefix);
+        let disconnected_clause = ClauseRec::new(ClauseRole::Formation, Expr::Univ);
+        let disconnected_facts = TerminalClauseConnectivityFacts::from_clause(&disconnected_clause);
+        assert_eq!(
+            disconnected_summary.terminal_decision(
+                &disconnected_library,
+                &disconnected_clause,
+                false,
+            ),
+            disconnected_summary.terminal_decision_with_facts(
+                &disconnected_library,
+                &disconnected_facts,
+                false,
+            )
+        );
+
+        let step_fifteen_library = library_until(14);
+        let step_fifteen_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let step_fifteen_summary =
+            ConnectivitySummary::from_telescope(&step_fifteen_library, &step_fifteen_prefix);
+        let step_fifteen_reanchor =
+            HistoricalReanchorSummary::from_telescope(&step_fifteen_library, &step_fifteen_prefix);
+        let step_fifteen_last_clause = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step fifteen should have a last clause");
+        let step_fifteen_facts =
+            TerminalClauseConnectivityFacts::from_clause(&step_fifteen_last_clause);
+        let step_fifteen_reanchor_allowed = step_fifteen_reanchor
+            .extend(&step_fifteen_last_clause)
+            .allows_historical_reanchor();
+        assert_eq!(
+            step_fifteen_summary.terminal_decision(
+                &step_fifteen_library,
+                &step_fifteen_last_clause,
+                step_fifteen_reanchor_allowed,
+            ),
+            step_fifteen_summary.terminal_decision_with_facts(
+                &step_fifteen_library,
+                &step_fifteen_facts,
+                step_fifteen_reanchor_allowed,
+            )
         );
     }
 

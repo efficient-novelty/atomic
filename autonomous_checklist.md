@@ -9,93 +9,64 @@ It lists only work that is still open.
 
 - The claim lane still does not have a signoff-ready full-profile bundle.
 - The current full-profile runtime reference is
-  `runs/codex-claim-release-full-open-band-handoff-followup-v1`.
-- The current short step-`4` baseline is now
+  `runs/codex-claim-release-full-connectivity-facts-v1`.
+- The current short step-`4` baseline is
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
-- The most recent informative late-surface diagnostic is now
+- The most recent informative late-surface diagnostic is
   `runs/codex-claim-release-step4-kernel-late-profile-v1`.
 - The latest intended-profile follow-up preserved the honest retained-prefix
-  shape on stored evidence:
+  shape on stored evidence and then reopened twice farther:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
-  - `41 groups / 154842 candidates` from `140` through the stored `229` read
-- That follow-up slightly trailed the earlier same-binary full-profile
-  reference at `24/43/44/54/74/76`, but it improved the decisive later
-  checkpoints and moved one stored checkpoint farther:
-  - `140`: `2571309 / 2561049` instead of `2575049 / 2564601`
-  - `163`: `2978288 / 2966621` instead of `2985344 / 2973404`
-  - `228`: `4189959 / 4174213` instead of `4209220 / 4192906`
-  - it then continued to `229`: `4211079 / 4195271`
+  - `41 groups / 154842 candidates` from `140` through `331`
+  - `42 groups / 157636 candidates` at `332/333/334`
+  - `43 groups / 160430 candidates` through the stored `408` read
+- That follow-up materially improved every decisive stored matched checkpoint
+  through `229`:
+  - `24`: `385802 / 383018` instead of `417678 / 414814`
+  - `43`: `698661 / 694743` instead of `760980 / 756851`
+  - `44`: `713483 / 709504` instead of `777344 / 773151`
+  - `54`: `880003 / 875413` instead of `961793 / 956919`
+  - `74`: `1210334 / 1204512` instead of `1325033 / 1318766`
+  - `76`: `1250591 / 1244645` instead of `1368485 / 1362079`
+  - `140`: `2389805 / 2379752` instead of `2571309 / 2561049`
+  - `163`: `2773573 / 2762030` instead of `2978288 / 2966621`
+  - `228`: `3924018 / 3908221` instead of `4189959 / 4174213`
+  - `229`: `3945205 / 3929337` instead of `4211079 / 4195271`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
-- At `140/163/228/229` on that follow-up, stored step-live telemetry kept the
-  later bucket order connectivity first, aggregation second, exact `nu`
-  third, and terminal clause-filter handoff tiny:
-  - `140`: connectivity `= 758717336 us`, aggregation `= 751161774 us`,
-    exact `nu` `= 525949191 us`, handoff `= 10375779 us`
-  - `163`: connectivity `= 884102477 us`, aggregation `= 862160190 us`,
-    exact `nu` `= 609549050 us`, handoff `= 12108178 us`
-  - `228`: connectivity `= 1238402593 us`, aggregation `= 1199772615 us`,
-    exact `nu` `= 872697561 us`, handoff `= 17145752 us`
-  - `229`: connectivity `= 1243971258 us`, aggregation `= 1208974002 us`,
-    exact `nu` `= 875496908 us`, handoff `= 17225219 us`
-  - `terminal_summary_admissibility_checks = 0` through the stored `229` read
-- Observed RSS stayed below `833540096` bytes through the stored `229`
+- At `140/163/228/229/332/335/408`, stored step-live telemetry now shows
+  aggregation first, connectivity second, exact `nu` third, and terminal
+  clause-filter handoff tiny:
+  - `140`: aggregation `= 744641415 us`, connectivity `= 586579312 us`,
+    exact `nu` `= 520449833 us`, handoff `= 15799216 us`
+  - `163`: aggregation `= 857070798 us`, connectivity `= 685837174 us`,
+    exact `nu` `= 604333257 us`, handoff `= 18798149 us`
+  - `228`: aggregation `= 1200334910 us`, connectivity `= 968606567 us`,
+    exact `nu` `= 869713548 us`, handoff `= 28170861 us`
+  - `229`: aggregation `= 1210184906 us`, connectivity `= 973284301 us`,
+    exact `nu` `= 872719297 us`, handoff `= 28348740 us`
+  - `332`: aggregation `= 1799313029 us`, connectivity `= 1424660906 us`,
+    exact `nu` `= 1323961772 us`, handoff `= 45034612 us`
+  - `335`: aggregation `= 1814967597 us`, connectivity `= 1437778259 us`,
+    exact `nu` `= 1337241409 us`, handoff `= 45526234 us`
+  - `408`: aggregation `= 2185774562 us`, connectivity `= 1756872641 us`,
+    exact `nu` `= 1633848702 us`, handoff `= 58019282 us`
+  - `terminal_summary_admissibility_checks = 0` and
+    `terminal_summary_fallback_connectivity_checks = 0` through the stored
+    `408` read
+- Observed RSS stayed below `964218880` bytes through the stored `408`
   checkpoint, so the intended profile is still throughput-bound rather than
   allocator-bound on the current winner.
-- That rerun was manually stopped after the decisive stored `229` checkpoint.
+- That rerun was manually stopped after the decisive stored `408` checkpoint.
   Because the stop was external during step `4`, `reports/latest.txt` still
   reflects completed step `3`, `run.json` still says `status = "running"`,
   and `reports/steps/step-05-live.ndjson` is absent; the authoritative
   evidence for that full-profile reference lives in
   `reports/steps/step-04-live.ndjson`.
-- The eager metadata rerun
-  `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
-  preserved the same honest early and reopened shapes, but it failed keep
-  badly on runtime and moved the visible wall to clause filtering first.
-- At `76` on that slice, stored telemetry read:
-  clause filtering `= 2178547522 us`, aggregation `= 456894681 us`,
-  connectivity `= 412251293 us`, exact `nu` `= 269107583 us`.
-- The same rerun also showed that once clause metadata already exists, full
-  `AcceptRank` construction and canonical-key finalization become small, so
-  the remaining lesson is to keep any metadata retry lazy and admitted-only
-  rather than building it in terminal clause filtering.
-- The newer admitted-only metadata rerun
-  `runs/codex-claim-release-step4-kernel-admitted-metadata-v1`
-  then re-earned cheap clause filtering and kept the same honest early and
-  reopened shapes, but it still failed keep on the matched early short
-  surface because `terminal_summary_build_*` regressed by about `10-11%`.
-- At `76` on that newer slice, stored telemetry read:
-  connectivity `= 414014281 us`, aggregation `= 410788615 us`,
-  clause filtering `= 355695170 us`, exact `nu` `= 263235482 us`.
-- The newer reopened connectivity rerun
-  `runs/codex-claim-release-step4-kernel-reopened-connectivity-v1`
-  then kept the same honest early and reopened shapes, improved elapsed wall
-  clock at `24/43/44/54/74/76`, and cut reopened connectivity timing
-  materially, but it still failed keep because `terminal_summary_build_*`
-  regressed by about `5.2-5.6%` on the matched early short surface and about
-  `4.0%` at `74/76` versus the kept full-profile baseline.
-- At `76` on that newest slice, stored telemetry read:
-  aggregation `= 463408834 us`, clause filtering `= 356760236 us`,
-  connectivity `= 282490143 us`, exact `nu` `= 265598332 us`.
-- The newer direct bound/bookkeeping rerun
-  `runs/codex-claim-release-step4-kernel-bound-bookkeeping-v1`
-  then preserved the same honest early plateau at `24` and kept aggregation
-  first, connectivity second, clause filtering third, and exact `nu` fourth,
-  but it still failed keep because the matched early short surface read
-  `549708 / 544700` instead of the kept `549630 / 492524`, while terminal
-  materialization still stayed tiny at `336 ms`.
-- The newer admitted-kernel rerun
-  `runs/codex-claim-release-step4-kernel-admitted-kernel-v1`
-  then preserved the same honest early plateau at `24/25`, improved elapsed
-  materially at the matched `24` checkpoint, and lowered the measured
-  aggregation bucket there, but it still failed keep because the matched
-  early short surface read `519065 / 514192` instead of the kept
-  `549630 / 492524`, while the broad early bucket order moved to connectivity
-  first, aggregation second, clause filtering third, and exact `nu` fourth.
-- The next honest move is therefore not another short step-`4` micro-slice or
-  another plain rerun-only turn first. It is one narrow later-surface
-  connectivity-side cut on the current winner so the post-`140` wall can move
-  honestly on stored evidence.
+- The next honest move is therefore not another short step-`4` micro-slice, a
+  plain rerun-only turn, or another connectivity-first retry. It is one
+  narrow later-surface aggregation-side cut on the current winner so the
+  post-`140` aggregation wall can move honestly on stored evidence.
 
 ## 1. Runtime Completion
 

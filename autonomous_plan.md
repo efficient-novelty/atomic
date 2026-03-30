@@ -24,77 +24,26 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - The intended profile is still blocked inside step `4`.
 - The current short baseline
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
-  keeps the honest `39 groups / 144845 candidates` retained-prefix shape
-  through `24/43/44/54` and the honest reopened `40/147639` surface at
-  `74/76`.
+  keeps the honest `39/144845` retained-prefix shape through `24/43/44/54`
+  and the honest reopened `40/147639` surface at `74/76`.
 - The current full-profile runtime reference
-  `runs/codex-claim-release-full-open-band-handoff-followup-v1`
-  re-earned the same honest `39/144845`, `40/147639`, and `41/154842`
-  retained-prefix story on the intended profile through the stored `229` read.
-- That repeated full-profile read was slightly slower than the earlier
-  same-binary reference at `24/43/44/54/74/76`, but it improved the decisive
-  later checkpoints at `140/163/228` and moved one stored checkpoint farther
-  to `229` while still never reaching step `5`.
-- The earlier same-binary full-profile reference
-  `runs/codex-claim-release-full-open-band-handoff-v1`
-  and the broader comparison baseline
-  `runs/codex-claim-release-full-kernel-aggregation-v1`
-  now remain comparison reads rather than the current runtime reference.
-- The current late diagnostic
-  `runs/codex-claim-release-step4-kernel-late-profile-v1`
-  earlier showed aggregation first on the kept reopened surface, but the newer
-  full-profile follow-up now shows that the post-`140` wall is connectivity
-  first, aggregation second, exact `nu` third, and terminal clause-filter
-  handoff tiny.
-- The eager clause-metadata rerun
-  `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
-  preserved the honest short and reopened shapes, but it failed keep badly:
-  wall clock and total `terminal_summary_build_*` regressed hard at
-  `24/43/44/54`, it trailed both kept reopened references at `74/76`, and it
-  moved the visible wall to clause filtering first.
-- The newer lazy admitted-only metadata rerun
-  `runs/codex-claim-release-step4-kernel-admitted-metadata-v1`
-  re-earned cheap clause filtering and kept the honest early and reopened
-  shapes, but it still failed keep on the matched early short surface because
-  `terminal_summary_build_*` regressed by about `10-11%`.
-- The newer reopened connectivity rerun
-  `runs/codex-claim-release-step4-kernel-reopened-connectivity-v1`
-  then kept the honest early and reopened shapes, cut reopened connectivity
-  timing materially, and improved elapsed wall clock at `24/43/44/54/74/76`,
-  but it still failed keep because `terminal_summary_build_*` regressed by
-  about `5.2-5.6%` on the matched early short surface and about `4.0%` at
-  `74/76` versus the kept full-profile baseline.
-- That newest rerun changed the honest reopened read again: at `76`, the
-  stored bucket order became aggregation first, clause filtering second,
-  connectivity third, and exact `nu` fourth.
-- The newer direct bound/bookkeeping rerun
-  `runs/codex-claim-release-step4-kernel-bound-bookkeeping-v1`
-  then preserved the same honest early plateau at `24` and kept aggregation
-  first, connectivity second, clause filtering third, and exact `nu` fourth,
-  but it still failed keep because the matched early short surface read
-  `549708 / 544700` instead of the kept `549630 / 492524`.
-- The newer admitted-kernel rerun
-  `runs/codex-claim-release-step4-kernel-admitted-kernel-v1`
-  then preserved the same honest early plateau at `24/25`, materially
-  improved elapsed at the matched `24` checkpoint, and lowered the measured
-  aggregation bucket there, but it still failed keep because
-  `terminal_summary_build_*` read `514192` instead of the kept `492524` while
-  the broad early bucket order moved to connectivity first, aggregation
-  second, clause filtering third, and exact `nu` fourth.
-- The newer open-band-handoff rerun
-  `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
-  then preserved the same honest early plateau at `24/43/44/54`, preserved
-  the honest reopened `40/147639` surface at `74/76`, and materially
-  improved both elapsed and `terminal_summary_build_*` against the prior kept
-  short and full-profile reopened baselines at every decisive checkpoint.
-- Observed RSS on the repeated full-profile follow-up still stayed below about
-  `0.84 GiB` through the stored `229` read, so the blocker remains later
-  step-`4` throughput rather than allocator pressure.
+  `runs/codex-claim-release-full-connectivity-facts-v1`
+  preserved the honest `39/144845`, `40/147639`, and `41/154842` story,
+  reopened farther to `42/157636` and `43/160430`, and moved the stored
+  step-`4` wall from `229` to `408`.
+- That new full-profile reference materially improved every decisive stored
+  checkpoint through `229`, then exposed a new later blocker honestly: on the
+  real intended profile, aggregation now leads, connectivity is second, exact
+  `nu` is third, and terminal clause-filter handoff remains tiny on the
+  `41/42/43` surface.
+- Observed RSS on the new reference stayed below about `0.97 GiB` through the
+  stored `408` read, so the blocker remains later step-`4` throughput rather
+  than allocator pressure.
 - The next step should therefore keep the short winner and current full-profile
-  runtime reference in code, leave the dropped metadata, connectivity-retry,
+  runtime reference in code, leave the dropped metadata, reopened-connectivity,
   clause-load-only, bookkeeping/bound-only, admitted-kernel-only, and
-  aggregation-first retries out of code as standalone next moves, and land one
-  narrow later-surface connectivity-side cut before reopening another plain
+  connectivity-retry moves out of code as standalone next moves, and land one
+  narrow later-surface aggregation-side cut before reopening another plain
   rerun-only turn.
 
 ## Decision Rules
@@ -105,6 +54,11 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - keeps the same honest shape at `24/43/44/54`
   - improves wall clock and `terminal_summary_build_*` at those checkpoints
   - and does not lose the reopened `74/76` read honestly
+- Replace the full-profile runtime reference only if the new rerun:
+  - preserves the honest retained-prefix story already visible on the current
+    runtime reference
+  - moves materially past the current stored `408` wall or reaches step `5`
+  - and keeps RSS well below the old allocator-failure band
 - Retire a hypothesis after one honest stored rerun if it shows:
   - non-engagement
   - a pure cost shift
@@ -112,21 +66,21 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - Do not branch to compare, benchmark, certification, or stronger language
   before step `4` moves or a full-profile run finishes.
 
-## Active Phase: Move The Later Connectivity Wall
+## Active Phase: Move The Later Aggregation Wall
 
 Goal:
 
-- cut the post-`140` connectivity-side exact summary wall on the current
-  winner on the real `desktop_claim_shadow_1h` profile
+- cut the post-`140` aggregation-side step-`4` wall on the current winner on
+  the real `desktop_claim_shadow_1h` profile
 
 Working baselines:
 
 - short:
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
 - full-profile runtime reference:
+  `runs/codex-claim-release-full-connectivity-facts-v1`
+- previous full-profile runtime reference:
   `runs/codex-claim-release-full-open-band-handoff-followup-v1`
-- earlier same-binary comparison:
-  `runs/codex-claim-release-full-open-band-handoff-v1`
 - broader full-profile baseline:
   `runs/codex-claim-release-full-kernel-aggregation-v1`
 - late diagnostic:
@@ -134,16 +88,17 @@ Working baselines:
 
 Required output:
 
-- one narrow later-surface connectivity-side code slice on the current winner
+- one narrow later-surface aggregation-side code slice on the current winner
 - one new stored full-profile rerun on that slice with live checkpoint
-  persistence through at least the `140/163/228` region
+  persistence through at least the `140/163/228` region and ideally through the
+  current `42/43` reopen
 - a read of its `step-04-live.ndjson`, `run.json`, and `reports/latest.txt`
 - `step-05-live.ndjson` too if the rerun reaches step `5`
 
 Reject as the next primary move:
 
 - another plain intended-profile rerun with no code or new runtime question
-- another aggregation-first slice before a new connectivity-side read exists
+- another connectivity-first slice before a new aggregation-side read exists
 - another eager clause-filter-wide metadata rewrite
 - another lazy admitted-only metadata rewrite
 - another unchanged reopened connectivity reuse retry
@@ -164,8 +119,8 @@ Reject as the next primary move:
 
 Done when:
 
-- the next connectivity-side rerun either:
-  - materially reduces the post-`140` connectivity wall
+- the next aggregation-side rerun either:
+  - materially reduces the post-`140` aggregation wall
   - exposes a new later blocker honestly
   - or finishes through step `15`
 
@@ -173,19 +128,19 @@ Done when:
 
 Goal:
 
-- prove that the connectivity-side slice moves the current later step-`4`
-  wall on the real `desktop_claim_shadow_1h` profile
+- prove that the aggregation-side slice moves the current later step-`4` wall
+  on the real `desktop_claim_shadow_1h` profile
 
 Required output:
 
-- one new stored full-profile rerun on the connectivity-side slice
+- one new stored full-profile rerun on the aggregation-side slice
 - a read of its `step-04-live.ndjson`, `run.json`, and `reports/latest.txt`
 
 Done when:
 
 - the run either moves materially past
-  `runs/codex-claim-release-full-open-band-handoff-followup-v1`, exposes a
-  later blocker honestly, or finishes through step `15`
+  `runs/codex-claim-release-full-connectivity-facts-v1`, exposes a later
+  blocker honestly, or finishes through step `15`
 
 ## Phase 3: Finish A Full Claim Bundle
 
