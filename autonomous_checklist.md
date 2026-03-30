@@ -54,11 +54,19 @@ It lists only work that is still open.
   but it still failed keep because the matched early short surface read
   `549708 / 544700` instead of the kept `549630 / 492524`, while terminal
   materialization still stayed tiny at `336 ms`.
+- The newer admitted-kernel rerun
+  `runs/codex-claim-release-step4-kernel-admitted-kernel-v1`
+  then preserved the same honest early plateau at `24/25`, improved elapsed
+  materially at the matched `24` checkpoint, and lowered the measured
+  aggregation bucket there, but it still failed keep because the matched
+  early short surface read `519065 / 514192` instead of the kept
+  `549630 / 492524`, while the broad early bucket order moved to connectivity
+  first, aggregation second, clause filtering third, and exact `nu` fourth.
 - The next honest move is therefore not another metadata retry, not another
   unchanged connectivity retry, not another clause-load-only replay, not
-  another bookkeeping/bound-only cleanup, and not a full-profile rerun
-  first. It is one broader compound aggregation retry on the kept short
-  baseline code.
+  another bookkeeping/bound-only cleanup, not another admitted-kernel-only
+  replay, and not a full-profile rerun first. It is one broader compound
+  claim open-band handoff retry on the kept short baseline code.
 
 ## 1. Runtime Completion
 

@@ -60,10 +60,19 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   first, connectivity second, clause filtering third, and exact `nu` fourth,
   but it still failed keep because the matched early short surface read
   `549708 / 544700` instead of the kept `549630 / 492524`.
+- The newer admitted-kernel rerun
+  `runs/codex-claim-release-step4-kernel-admitted-kernel-v1`
+  then preserved the same honest early plateau at `24/25`, materially
+  improved elapsed at the matched `24` checkpoint, and lowered the measured
+  aggregation bucket there, but it still failed keep because
+  `terminal_summary_build_*` read `514192` instead of the kept `492524` while
+  the broad early bucket order moved to connectivity first, aggregation
+  second, clause filtering third, and exact `nu` fourth.
 - The next step should therefore keep the current winning binary in code,
-  leave both metadata retries and the dropped connectivity reuse out of code,
-  and target one broader compound aggregation cut rather than another
-  metadata, connectivity, clause-load-only, or bookkeeping/bound-only pass.
+  leave both metadata retries, the dropped connectivity reuse, and the
+  admitted-kernel-only replay out of code, and target one broader claim
+  open-band handoff cut rather than another metadata, connectivity,
+  clause-load-only, bookkeeping/bound-only, or admitted-kernel-only pass.
 
 ## Decision Rules
 
@@ -84,8 +93,8 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 Goal:
 
-- land one broader compound aggregation cut on the winning binary and
-  re-earn the short read on the reopened surface without reintroducing a
+- land one broader compound claim open-band handoff cut on the winning binary
+  and re-earn the short read on the reopened surface without reintroducing a
   clause-filter wall or metadata cost on the early surface
 
 Working baselines:
@@ -101,7 +110,8 @@ Preferred cuts:
 
 - keep terminal clause filtering cheap
 - keep the current exact tie-break truth surface intact
-- target the reopened aggregation wall after the retained-prefix plateau
+- keep the admitted-kernel aggregation win while lowering the newer
+  connectivity / aggregation / clause-filter composite
 - keep aggregation, connectivity, clause filtering, and exact `nu` separately
   readable in stored evidence
 
@@ -112,6 +122,7 @@ Reject as the next primary move:
 - another unchanged reopened connectivity reuse retry
 - another narrow clause-load-only replay
 - another narrow bookkeeping/bound-only replay
+- another admitted-kernel-only replay
 - another exact-`nu` cleanup first
 - another diagnostic-only slice first
 - another retry of `kernel-rank-bookkeeping-v1`

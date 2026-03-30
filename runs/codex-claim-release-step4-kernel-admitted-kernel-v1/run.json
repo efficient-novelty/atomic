@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "run_id": "codex-claim-release-step4-kernel-admitted-kernel-v1",
+  "status": "running",
+  "created_utc": "2026-03-30T10:00:53.0202152Z",
+  "updated_utc": "2026-03-30T10:00:53.4215933Z",
+  "workspace_version": "0.1.0",
+  "compat": {
+    "ast_schema_hash": "blake3:fc9be9ae20ab7277941ba7c98fcb9b7b0a78f699e595d3268656144a3f0b21bf",
+    "type_rules_hash": "blake3:39c261a0e90bde0cfa2affee542db9a2519e4b8cd95c008e3fa0ed59cd38ac2e",
+    "evaluator_hash": "blake3:dc3ad0d7c757a4b498bd4cfc56446e05af84df38049161883ab8592b18df4792",
+    "search_semantics_hash": "blake3:f3572c8c8c9e01202de7df3840fda6eb4458c2f10104b509a36610d2f6dc80ea",
+    "store_schema_hash": "blake3:26406715da9464e22b5d786dfef50f4e93eeb8a42a52e1ad8feeb62248b82143"
+  },
+  "host": {
+    "os": "windows",
+    "arch": "x86_64",
+    "logical_cpus": 12,
+    "ram_bytes": 16217264128,
+    "cpu_model": "AMD Ryzen 5 7600 6-Core Processor",
+    "physical_core_count": 6
+  },
+  "runtime": {
+    "resolved_worker_count": 8
+  },
+  "config": {
+    "path": "config.toml",
+    "sha256": "505847f4e8c2c236a799376c32605c3d02e412944880ed6fa087570cd2f5014f"
+  },
+  "search_policy": {
+    "guidance_style": "claim_debt_guided",
+    "late_expansion_policy": "claim_generic",
+    "bucket_policy": "structural_generic"
+  },
+  "build": {
+    "profile": "release",
+    "target_triple": "x86_64-pc-windows-msvc",
+    "target_cpu": "default",
+    "git_commit_sha": "21e0221cad1def1231a50d4ea852e820bc6cfb94",
+    "dirty_tree": true,
+    "cargo_lock_sha256": "0e69f79462261b9360797a7ff7874f6da9177a1c08815eb48b2ae2cba4096dab",
+    "binary_sha256": "1503f070ad2587de29d52f56fc2c7621fa37427b6aafc5b425480d9aeb0cb79c"
+  },
+  "position": {
+    "completed_step": 3,
+    "active_step": 4,
+    "active_band": 1,
+    "frontier_epoch": 0
+  },
+  "artifacts": {
+    "telemetry": "telemetry.ndjson",
+    "reports_dir": "reports",
+    "checkpoints_dir": "checkpoints"
+  }
+}

@@ -267,24 +267,36 @@ pub struct AdmissibilityDiagnostics {
 
 impl AdmissibilityDiagnostics {
     pub fn record(&mut self, decision: &AdmissibilityDecision) {
-        match decision.class {
+        self.record_repeated(decision.class, decision.reason.as_str(), 1);
+    }
+
+    pub fn record_repeated(
+        &mut self,
+        class: AdmissibilityDecisionClass,
+        reason: &str,
+        count: usize,
+    ) {
+        if count == 0 {
+            return;
+        }
+        match class {
             AdmissibilityDecisionClass::RejectedByExactLegality => {
-                self.exact_legality_rejections += 1;
+                self.exact_legality_rejections += count;
             }
             AdmissibilityDecisionClass::RejectedByStructuralDebtCap => {
-                self.structural_debt_cap_rejections += 1;
+                self.structural_debt_cap_rejections += count;
             }
             AdmissibilityDecisionClass::AdmittedDeprioritized => {
-                self.admitted_deprioritized += 1;
+                self.admitted_deprioritized += count;
             }
             AdmissibilityDecisionClass::AdmittedFocusAligned => {
-                self.admitted_focus_aligned += 1;
+                self.admitted_focus_aligned += count;
             }
         }
-        if let Some(count) = self.reason_counts.get_mut(decision.reason.as_str()) {
-            *count += 1;
+        if let Some(existing) = self.reason_counts.get_mut(reason) {
+            *existing += count;
         } else {
-            self.reason_counts.insert(decision.reason.clone(), 1);
+            self.reason_counts.insert(reason.to_owned(), count);
         }
     }
 }
@@ -2035,6 +2047,27 @@ mod tests {
         assert_eq!(diagnostics.reason_counts.len(), 2);
         assert_eq!(diagnostics.reason_counts["focus_modal_shell"], 2);
         assert_eq!(diagnostics.reason_counts["outside_exact_kappa_band"], 1);
+    }
+
+    #[test]
+    fn admissibility_diagnostics_can_record_repeated_counts() {
+        let mut diagnostics = AdmissibilityDiagnostics::default();
+
+        diagnostics.record_repeated(
+            AdmissibilityDecisionClass::AdmittedFocusAligned,
+            "open_band_structural",
+            3,
+        );
+        diagnostics.record_repeated(
+            AdmissibilityDecisionClass::RejectedByExactLegality,
+            "outside_exact_kappa_band",
+            2,
+        );
+
+        assert_eq!(diagnostics.admitted_focus_aligned, 3);
+        assert_eq!(diagnostics.exact_legality_rejections, 2);
+        assert_eq!(diagnostics.reason_counts["open_band_structural"], 3);
+        assert_eq!(diagnostics.reason_counts["outside_exact_kappa_band"], 2);
     }
 
     #[test]
