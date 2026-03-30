@@ -24,9 +24,9 @@ use crate::prefix_cache::{
     PrefixCache, PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature,
 };
 use crate::prefix_memo::{
-    FilteredTerminalClause, PartialPrefixBoundDecision, PrefixLegalityCache,
-    PrefixLegalityCacheEntryCounts, TerminalConnectivityDecision, TerminalPrefixClauseEvaluation,
-    TerminalPrefixCompletion, TerminalPrefixCompletionSummary, TerminalPrefixPrimaryRank,
+    PartialPrefixBoundDecision, PrefixLegalityCache, PrefixLegalityCacheEntryCounts,
+    TerminalConnectivityDecision, TerminalPrefixClauseEvaluation, TerminalPrefixCompletion,
+    TerminalPrefixCompletionSummary, TerminalPrefixPrimaryRank,
 };
 use crate::priority::{PriorityInputs, build_priority_key};
 use crate::scheduler::build_schedule;
@@ -5570,17 +5570,6 @@ impl<'a> TerminalPrefixClauseCandidates<'a> {
     }
 }
 
-fn claim_can_use_open_band_admitted_kernel(
-    admissibility: StrictAdmissibility,
-    clauses: &[FilteredTerminalClause<'_>],
-) -> bool {
-    matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
-        && clauses.iter().all(|clause| {
-            clause.admissibility_decision.class == AdmissibilityDecisionClass::AdmittedFocusAligned
-                && clause.admissibility_decision.reason == CLAIM_OPEN_BAND_ADMISSIBILITY_REASON
-        })
-}
-
 fn terminal_prefix_clause_candidates<'a>(
     step_index: u32,
     library: &Library,
@@ -5591,36 +5580,40 @@ fn terminal_prefix_clause_candidates<'a>(
     remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
 ) -> TerminalPrefixClauseCandidates<'a> {
     let clause_filter_started = Instant::now();
-    let terminal_clauses = prefix_legality_cache
-        .filter_terminal_clauses(
+    let terminal_clauses = if let Some(clauses) = prefix_legality_cache
+        .filter_claim_open_band_terminal_clauses(
             step_index,
             prefix_signature,
-            library,
             admissibility,
             filtered_last_clause_options,
-        )
-        .map(|clauses| {
-            if claim_can_use_open_band_admitted_kernel(admissibility, &clauses) {
-                TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(
-                    clauses.into_iter().map(|clause| clause.clause).collect(),
-                )
-            } else {
+        ) {
+        TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(clauses)
+    } else {
+        prefix_legality_cache
+            .filter_terminal_clauses(
+                step_index,
+                prefix_signature,
+                library,
+                admissibility,
+                filtered_last_clause_options,
+            )
+            .map(|clauses| {
                 TerminalPrefixClauseCandidates::General(
                     clauses
                         .into_iter()
                         .map(|clause| (clause.clause, Some(clause.admissibility_decision)))
                         .collect(),
                 )
-            }
-        })
-        .unwrap_or_else(|| {
-            TerminalPrefixClauseCandidates::General(
-                filtered_last_clause_options
-                    .iter()
-                    .map(|clause| (clause, None))
-                    .collect(),
-            )
-        });
+            })
+            .unwrap_or_else(|| {
+                TerminalPrefixClauseCandidates::General(
+                    filtered_last_clause_options
+                        .iter()
+                        .map(|clause| (clause, None))
+                        .collect(),
+                )
+            })
+    };
     if let Some(telemetry) = remaining_one_telemetry {
         telemetry.absorb_terminal_prefix_clause_filter_duration(clause_filter_started.elapsed());
     }

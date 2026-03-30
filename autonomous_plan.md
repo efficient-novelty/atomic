@@ -23,9 +23,10 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - The claim lane has already crossed the old early RSS wall.
 - The intended profile is still blocked inside step `4`.
 - The current short baseline
-  `runs/codex-claim-release-step4-kernel-aggregation-v1`
+  `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
   keeps the honest `39 groups / 144845 candidates` retained-prefix shape
-  through `24/43/44/54`.
+  through `24/43/44/54` and the honest reopened `40/147639` surface at
+  `74/76`.
 - The current full-profile baseline
   `runs/codex-claim-release-full-kernel-aggregation-v1`
   proves that the intended profile later reopens to `40/147639` at `74` and
@@ -68,11 +69,17 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   `terminal_summary_build_*` read `514192` instead of the kept `492524` while
   the broad early bucket order moved to connectivity first, aggregation
   second, clause filtering third, and exact `nu` fourth.
-- The next step should therefore keep the current winning binary in code,
-  leave both metadata retries, the dropped connectivity reuse, and the
-  admitted-kernel-only replay out of code, and target one broader claim
-  open-band handoff cut rather than another metadata, connectivity,
-  clause-load-only, bookkeeping/bound-only, or admitted-kernel-only pass.
+- The newer open-band-handoff rerun
+  `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
+  then preserved the same honest early plateau at `24/43/44/54`, preserved
+  the honest reopened `40/147639` surface at `74/76`, and materially
+  improved both elapsed and `terminal_summary_build_*` against the prior kept
+  short and full-profile reopened baselines at every decisive checkpoint.
+- The next step should therefore keep that new short winner in code, leave
+  the dropped metadata, connectivity, clause-load-only, bookkeeping/bound-
+  only, and admitted-kernel-only retries out of code as standalone next
+  moves, and branch back to one new full-profile rerun on the winning binary
+  before reopening another short step-`4` micro-slice.
 
 ## Decision Rules
 
@@ -89,31 +96,27 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - Do not branch to compare, benchmark, certification, or stronger language
   before step `4` moves or a full-profile run finishes.
 
-## Active Phase: Break The Step-`4` Wall
+## Active Phase: Re-Earn The Intended-Profile Read
 
 Goal:
 
-- land one broader compound claim open-band handoff cut on the winning binary
-  and re-earn the short read on the reopened surface without reintroducing a
-  clause-filter wall or metadata cost on the early surface
+- prove that the new short winner helps on the real
+  `desktop_claim_shadow_1h` profile
 
 Working baselines:
 
 - short:
-  `runs/codex-claim-release-step4-kernel-aggregation-v1`
+  `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
 - full profile:
   `runs/codex-claim-release-full-kernel-aggregation-v1`
 - late diagnostic:
   `runs/codex-claim-release-step4-kernel-late-profile-v1`
 
-Preferred cuts:
+Required output:
 
-- keep terminal clause filtering cheap
-- keep the current exact tie-break truth surface intact
-- keep the admitted-kernel aggregation win while lowering the newer
-  connectivity / aggregation / clause-filter composite
-- keep aggregation, connectivity, clause filtering, and exact `nu` separately
-  readable in stored evidence
+- one new stored full-profile rerun on the kept short winner
+- a read of its `step-04-live.ndjson`, `run.json`, and `reports/latest.txt`
+- `step-05-live.ndjson` too if the rerun reaches step `5`
 
 Reject as the next primary move:
 
@@ -137,10 +140,10 @@ Reject as the next primary move:
 
 Done when:
 
-- one new short rerun lowers matched `24/43/44/54` wall clock and
-  `terminal_summary_build_*` honestly, keeps clause filtering near the kept
-  references, and improves the reopened `74/76` read against the kept
-  full-profile baseline
+- the full-profile rerun either:
+  - moves materially farther than `runs/codex-claim-release-full-kernel-aggregation-v1`
+  - exposes a later blocker honestly
+  - or finishes through step `15`
 
 ## Phase 2: Re-Earn The Intended-Profile Read
 

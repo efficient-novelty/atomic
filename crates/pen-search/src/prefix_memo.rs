@@ -11,8 +11,9 @@ use pen_core::library::Library;
 use pen_core::rational::Rational;
 use pen_core::telescope::Telescope;
 use pen_type::admissibility::{
-    AdmissibilityDecision, AdmissibilityDiagnostics, PackagePolicy, StrictAdmissibility,
-    StructuralFamily, StructuralFamilyMatchMask, assess_strict_admissibility_from_terminal_summary,
+    AdmissibilityDecision, AdmissibilityDiagnostics, AdmissibilityMode, PackagePolicies,
+    PackagePolicy, StrictAdmissibility, StructuralFamily, StructuralFamilyMatchMask,
+    assess_strict_admissibility_from_terminal_summary,
 };
 use pen_type::check::CheckSummary;
 use pen_type::connectivity::{
@@ -608,6 +609,49 @@ impl PrefixLegalityCache {
         Some(filtered)
     }
 
+    pub fn filter_claim_open_band_terminal_clauses<'a>(
+        &mut self,
+        step_index: u32,
+        parent_signature: &PrefixSignature,
+        admissibility: StrictAdmissibility,
+        clauses: &'a [ClauseRec],
+    ) -> Option<Vec<&'a ClauseRec>> {
+        if step_index <= 3
+            || !self.summaries.contains_key(parent_signature)
+            || !self.supports_terminal_summary_admissibility(parent_signature, admissibility)
+            || self.uses_family_surface_override(parent_signature, admissibility)
+            || !matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
+            || admissibility.focus_family.is_some()
+            || admissibility.package_policies != PackagePolicies::default()
+        {
+            return None;
+        }
+
+        self.stats.terminal_clause_filter_hits += 1;
+        let clause_kappa = parent_signature.clause_position.saturating_add(1);
+        let parent_admissibility = self.summaries.get(parent_signature)?.admissibility;
+        let mut filtered = Vec::with_capacity(clauses.len());
+        for clause in clauses {
+            self.stats.trivial_derivability_hits += 1;
+            if parent_admissibility.extend(clause).is_trivially_derivable() {
+                self.stats.trivial_derivability_prunes += 1;
+                self.stats.terminal_clause_filter_prunes += 1;
+                continue;
+            }
+
+            self.stats.terminal_admissibility_hits += 1;
+            if !admissibility.supports_exact_clause_kappa(clause_kappa) {
+                self.stats.terminal_admissibility_rejections += 1;
+                self.stats.terminal_clause_filter_prunes += 1;
+                continue;
+            }
+
+            filtered.push(clause);
+        }
+
+        Some(filtered)
+    }
+
     pub fn terminal_admissibility(
         &mut self,
         step_index: u32,
@@ -1078,7 +1122,8 @@ mod tests {
     }
 
     #[test]
-    fn claim_terminal_clause_filter_matches_direct_admissibility_without_family_summary() {
+    fn claim_open_band_terminal_clause_filter_matches_direct_admissibility_without_family_summary()
+    {
         let library = library_until(14);
         let admissibility =
             strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
@@ -1099,14 +1144,13 @@ mod tests {
         assert_eq!(cache.entry_counts().family_filters, 0);
 
         let terminal_filtered = cache
-            .filter_terminal_clauses(
+            .filter_claim_open_band_terminal_clauses(
                 15,
                 &signature,
-                &library,
                 admissibility,
                 clause_catalog.clauses_at(7),
             )
-            .expect("claim legality summary should enable terminal filtering");
+            .expect("claim legality summary should enable open-band terminal filtering");
 
         let mut direct_admitted = Vec::new();
         for clause in clause_catalog.clauses_at(7) {
@@ -1114,18 +1158,13 @@ mod tests {
             telescope.clauses.push(clause.clone());
             let decision = assess_strict_admissibility(15, &library, &telescope, admissibility);
             if decision.is_admitted() {
-                direct_admitted.push((clause.clone(), decision));
+                direct_admitted.push(clause);
             }
         }
 
         assert!(!terminal_filtered.is_empty());
         assert_eq!(terminal_filtered.len(), direct_admitted.len());
-        for (filtered, (expected_clause, expected_decision)) in
-            terminal_filtered.iter().zip(direct_admitted.iter())
-        {
-            assert_eq!(filtered.clause, expected_clause);
-            assert_eq!(&filtered.admissibility_decision, expected_decision);
-        }
+        assert_eq!(terminal_filtered, direct_admitted);
         assert_eq!(cache.stats().terminal_clause_filter_hits, 1);
         assert_eq!(
             cache.stats().terminal_clause_filter_prunes,

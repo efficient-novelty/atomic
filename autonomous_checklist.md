@@ -11,13 +11,37 @@ It lists only work that is still open.
 - The current full-profile baseline is
   `runs/codex-claim-release-full-kernel-aggregation-v1`.
 - The current short step-`4` baseline is now
-  `runs/codex-claim-release-step4-kernel-aggregation-v1`.
+  `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
 - The most recent informative late-surface diagnostic is now
   `runs/codex-claim-release-step4-kernel-late-profile-v1`.
 - That diagnostic rerun kept the same honest `39 groups / 144845 candidates`
   plateau through `24/43/44/54`, then reopened to `40/147639` at `74/76`
   and `41/154842` at `140` while still tracking the intended full-profile
   baseline closely on elapsed time, RSS, and frontier queue length.
+- The newer open-band-handoff rerun
+  `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
+  then preserved the same honest early plateau at `24/43/44/54`, preserved
+  the honest reopened `40/147639` surface at `74/76`, and materially improved
+  both elapsed and `terminal_summary_build_*` at every decisive checkpoint:
+  - `24`: `417756 / 414838` instead of `549630 / 492524`
+  - `43`: `760135 / 755953` instead of `990480 / 892772`
+  - `44`: `777287 / 773037` instead of `1012067 / 912271`
+  - `54`: `962821 / 957858` instead of `1247600 / 1126754`
+  - `74`: `1315892 / 1309667` instead of `1743244 / 1579138`
+  - `76`: `1358533 / 1352182` instead of `1797441 / 1628768`
+  These pairs are `elapsed_millis / terminal_summary_build_millis`.
+- At `76` on that kept rerun, stored step-live kernel telemetry read:
+  terminal clause-filter handoff `= 5572740 us`,
+  connectivity `= 410676521 us`, aggregation `= 391673461 us`,
+  exact `nu` `= 269118565 us`, and
+  `terminal_summary_admissibility_checks = 0`.
+- That rerun was manually stopped after the decisive stored `76` checkpoint;
+  one extra stored `77` checkpoint flushed while stopping and kept the same
+  honest reopened `40/147639` surface.
+- Because the stop was external during step `4`, `reports/latest.txt` still
+  reflects completed step `3` and `run.json` still says `status = "running"`;
+  the authoritative evidence for that short winner lives in
+  `reports/steps/step-04-live.ndjson`.
 - The eager metadata rerun
   `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
   preserved the same honest early and reopened shapes, but it failed keep
@@ -62,11 +86,9 @@ It lists only work that is still open.
   early short surface read `519065 / 514192` instead of the kept
   `549630 / 492524`, while the broad early bucket order moved to connectivity
   first, aggregation second, clause filtering third, and exact `nu` fourth.
-- The next honest move is therefore not another metadata retry, not another
-  unchanged connectivity retry, not another clause-load-only replay, not
-  another bookkeeping/bound-only cleanup, not another admitted-kernel-only
-  replay, and not a full-profile rerun first. It is one broader compound
-  claim open-band handoff retry on the kept short baseline code.
+- The next honest move is therefore not another short step-`4` micro-slice
+  first. It is one full-profile rerun on the kept short winner so the later
+  blocker can be read honestly from stored evidence.
 
 ## 1. Runtime Completion
 

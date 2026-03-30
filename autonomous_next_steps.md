@@ -12,6 +12,7 @@ Assume the following are already landed and should stay landed:
 - the exact non-allocating connectivity summary scan
 - the terminal-only cached parent connectivity decision
 - the aggregation-side accept-rank short-circuit that skips full `AcceptRank` construction for primary-dominated bar-clearers
+- the claim open-band terminal-clause handoff fast path that keeps exact-admitted open-band surfaces on clause refs instead of per-clause admissibility payloads
 - the higher-fidelity late-surface timing accumulation
 
 Assume the following were already measured and should stay dropped as standalone next moves:
@@ -26,167 +27,105 @@ Assume the following were already measured and should stay dropped as standalone
 - the shared reason-key summary bookkeeping rewrite in `runs/codex-claim-release-step4-kernel-summary-bookkeeping-v1`
 - the prefix-wide competition-gate hoist in `runs/codex-claim-release-step4-kernel-competition-hoist-v1`
 - the claim open-band admitted-kernel fusion in `runs/codex-claim-release-step4-kernel-admitted-kernel-v1`
-- the exact-`nu` high-water gate in `runs/codex-claim-release-step4-kernel-nu-highwater-v1`
-- the fixed bar-clear summary-threshold rewrite in `runs/codex-claim-release-step4-kernel-summary-threshold-v1`
-- the summary-invariants accept-rank prefix-context rewrite in `runs/codex-claim-release-step4-kernel-summary-invariants-v1`
-- the summary-rank-context exact tie-break rewrite in `runs/codex-claim-release-step4-kernel-rank-context-v1`
-- the terminal-rank sidecar exact contender-rank rewrite in `runs/codex-claim-release-step4-kernel-terminal-rank-sidecar-v1`
-- the primary-rank context exact-threshold rewrite in `runs/codex-claim-release-step4-kernel-primary-context-v1`
-- the summary-constant bit-cost hoist in `runs/codex-claim-release-step4-kernel-summary-constant-v1`
-- the catalog-backed clause bit-cost sidecar in `runs/codex-claim-release-step4-kernel-catalog-constant-v1`
+- the direct bound/bookkeeping cleanup in `runs/codex-claim-release-step4-kernel-bound-bookkeeping-v1`
+- the exact rank-metadata pack in `runs/codex-claim-release-step4-kernel-rank-metadata-v1`
+- the compact-summary strict-better-incumbent exact-rank deferral in `runs/codex-claim-release-step4-kernel-aggregation-tiecut-v1`
+- the parent-summary connectivity lookup reuse in `runs/codex-claim-release-step4-kernel-reopened-connectivity-v1`
 - the eager clause-filter-wide metadata pack in `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
 - the lazy admitted-only metadata retry in `runs/codex-claim-release-step4-kernel-admitted-metadata-v1`
-- the parent-summary connectivity lookup reuse in `runs/codex-claim-release-step4-kernel-reopened-connectivity-v1`
-- the compact-summary strict-better-incumbent exact-rank deferral in `runs/codex-claim-release-step4-kernel-aggregation-tiecut-v1`
-- the exact rank-metadata pack with last-tie canonical-key finalization in `runs/codex-claim-release-step4-kernel-rank-metadata-v1`
 
 ## Active Baselines
-- Current short baseline: `runs/codex-claim-release-step4-kernel-aggregation-v1`
+- Current short baseline: `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
 - Current full-profile baseline: `runs/codex-claim-release-full-kernel-aggregation-v1`
 - Current late-surface diagnostic: `runs/codex-claim-release-step4-kernel-late-profile-v1`
-- Current informative non-keep rerun: `runs/codex-claim-release-step4-kernel-admitted-kernel-v1`
 
 ## Revised Working Diagnosis
-- The intended profile is still blocked in step `4` by remaining-one compact-summary throughput.
-- The honest retained-prefix story is now stable across the kept and dropped reruns:
+- The broader claim open-band handoff cut earned keep on stored step-`4` evidence.
+- The honest retained-prefix story is now:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
-  - `41 groups / 154842 candidates` at `140` on the kept full-profile baseline
-- The reopened connectivity reuse rerun showed that connectivity can fall materially while clause filtering stays cheap, but it still failed keep on `terminal_summary_build_*`.
-- The newer compact-summary exact-rank deferral rerun showed that late aggregation really does move:
-  - at `76`, aggregation `= 453514026 us` versus `469431036 us` on `runs/codex-claim-release-step4-kernel-late-profile-v1`
-  - clause filtering also stayed near the kept late diagnostic: `346694360 us` versus `352203534 us`
-  - but it still failed keep because the matched `24/43/44/54` surface regressed on both elapsed and `terminal_summary_build_*`, and the reopened `74/76` read still trailed the kept full-profile baseline
-- The newer exact rank-metadata rerun then answered the open ranking question on stored evidence. At the matched `24` checkpoint it preserved the honest `39 groups / 144845 candidates` plateau, but it still failed keep badly:
-  - `24`: `1232202 / 872432` instead of the kept short `549630 / 492524`
-  - full `AcceptRank` construction was only `543075 us`
-  - canonical-key finalization was only `5 us`
-  - the broad hot costs at that same checkpoint were still clause load `= 61477661 us`, admissibility bookkeeping `= 22145864 us`, bit-cost recovery `= 11259134 us`, bound update `= 11437024 us`, connectivity `= 137191827 us`, clause filtering `= 135071766 us`, and compact materialize `= 319890 ms`
-- The newer direct bound/bookkeeping rerun then answered the next local structural question on stored evidence. At the matched `24` checkpoint it also preserved the honest `39 groups / 144845 candidates` plateau, but it still failed keep:
-  - `24`: `549708 / 544700` instead of the kept short `549630 / 492524`
-  - the broad hot costs at that same checkpoint were aggregation `= 132199915 us`, connectivity `= 125043669 us`, clause filtering `= 105522189 us`, exact `nu` `= 80087659 us`, and terminal materialize `= 336 ms`
-  - the rerun was manually stopped after the decisive `24` read; one extra stored `25` checkpoint flushed while stopping and kept the same `39 groups / 144845 candidates` plateau
-- The newer admitted-kernel rerun then answered the next broader structural question on stored evidence. At the matched `24` checkpoint it preserved the honest `39 groups / 144845 candidates` plateau and materially improved elapsed, but it still failed keep:
-  - `24`: `519065 / 514192` instead of the kept short `549630 / 492524`
-  - the broad hot costs at that same checkpoint became connectivity `= 121124566 us`, aggregation `= 119212285 us`, clause filtering `= 113491706 us`, exact `nu` `= 78051194 us`, and terminal materialize `= 324 ms`
-  - the rerun was manually stopped after the decisive `24` read; one extra stored `25` checkpoint flushed while stopping and kept the same `39 groups / 144845 candidates` plateau
-- The compact summary wall is therefore still best read as a composite per-admitted kernel, but the stored answer changed again: the next blocker is no longer aggregation first on the early short surface.
+- The new short winner beat the prior kept short baseline on both elapsed and `terminal_summary_build_*` at every matched checkpoint:
+  - `24`: `417756 / 414838` instead of `549630 / 492524`
+  - `43`: `760135 / 755953` instead of `990480 / 892772`
+  - `44`: `777287 / 773037` instead of `1012067 / 912271`
+  - `54`: `962821 / 957858` instead of `1247600 / 1126754`
+- It also beat the kept full-profile reopened surface on both elapsed and `terminal_summary_build_*`:
+  - `74`: `1315892 / 1309667` instead of `1743244 / 1579138`
+  - `76`: `1358533 / 1352182` instead of `1797441 / 1628768`
+- Stored step-live kernel telemetry says the targeted handoff cost is now tiny on the keep slice:
+  - `24`: terminal clause-filter handoff `= 1716095 us`
+  - `76`: terminal clause-filter handoff `= 5572740 us`
+  - `terminal_summary_admissibility_checks = 0` through the stored `76` read
+- The rerun was manually stopped after the decisive stored `76` checkpoint; one extra stored `77` checkpoint flushed while stopping and kept the same honest reopened surface.
+- Because that stop was external during step `4`, `reports/latest.txt` still reflects completed step `3` and `run.json` still says `status = "running"`; the authoritative evidence for this winner lives in `reports/steps/step-04-live.ndjson`.
 
 ## Honest Read
-- The reopened wall is no longer connectivity first.
-- The compact-summary exact-rank deferral was real but only partial.
-- The last-tie canonical-key path is already the rare tail on stored evidence.
-- One local bookkeeping/bound cleanup was also not enough to re-earn the early short surface.
-- The newer admitted-kernel fast path was also real but only partial.
-- The next winner should therefore not be another canonical-tail, admitted-kernel-only, clause-load-only, or bookkeeping/bound-only retry. It should be one kept-binary slice that removes a broader compound connectivity / aggregation / clause-filter cost while keeping the retained-prefix shape honest.
+- The broader open-band handoff cut is real and is now the short keep winner.
+- The next honest unknown is no longer another short step-`4` micro-slice first.
+- The lane is still blocked on the intended profile until one new full-profile rerun shows what later blocker remains on this winner.
 
 ## Goal
-Land one kept-binary slice that lowers the honest short read on both:
-- the matched `24/43/44/54` plateau checkpoints
-- the reopened `40/147639` surface at `74/76`
-
-without weakening the retained-prefix shape.
+Run one full-profile intended `desktop_claim_shadow_1h` rerun on the new short winner and read the later blocker honestly from stored artifacts.
 
 ## Do This Next
 
-### 1. Keep The Right Reference Surface
+### 1. Keep The Winning Short Binary
 Keep the code behind:
-- `runs/codex-claim-release-step4-kernel-aggregation-v1`
+- `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
 - `runs/codex-claim-release-full-kernel-aggregation-v1`
 - `runs/codex-claim-release-step4-kernel-late-profile-v1`
 
 Do not reopen first:
-- another connectivity-side rewrite
-- another clause-filter-side rewrite
-- another exact-`nu` cleanup first
+- another short step-`4` micro-slice
+- another metadata retry
+- another connectivity reuse retry
 - another admitted-kernel-only replay
-- another ordering, reuse, cache, or post-plateau variant
-- another retry of the dropped single-axis aggregation slices listed above
-- another diagnostic-only slice before a new runtime hypothesis is measured
+- another clause-load-only or bookkeeping/bound-only cleanup
+- another diagnostic-only slice before the full-profile rerun is measured
 
-### 2. Change The Shape Of The Next Runtime Cut
-Do **not** treat the next winner as another canonical-tail or rank-metadata retry. The last stored rerun already proved that full `AcceptRank` construction and canonical-key finalization are a rare tail cost.
-
-Preferred primary move:
-- keep the winning baseline code
-- attack one broader claim open-band handoff first:
-  - keep the admitted-kernel win on the summary/materialize side
-  - remove the remaining clause-filter payload handoff cost on the same open-band admitted surface
-  - keep the exact reason surface and tie-break truth intact
-- do **not** spend the next slice on:
-  - another scratch-slot clause-load-only replay
-  - another bookkeeping/bound-only cleanup
-  - another admitted-kernel-only replay
-  - compact materialization first on the early surface
-- if you reuse any exact metadata again, keep it off the compact materialization path unless the stored early surface proves that extra work pays for itself
-- keep the metadata exact and structural only; no lossy surrogate keys and no semantic reward signals
-
-The intended effect is to keep the proven aggregation-side admitted-kernel gain while also cutting the remaining open-band clause-filter / connectivity-adjacent handoff cost that is still leaving the early build surface above the kept baseline.
-
-### 3. Keep The New Telemetry As The Evidence Map
-Use `runs/codex-claim-release-step4-kernel-rank-metadata-v1` as the current aggregation sub-bucket map, `runs/codex-claim-release-step4-kernel-bound-bookkeeping-v1` as the previous broad checkpoint read, and `runs/codex-claim-release-step4-kernel-admitted-kernel-v1` as the newest broad checkpoint read.
-
-At the matched `24` checkpoint:
-- clause load / scratch update `= 61477661 us`
-- admissibility bookkeeping `= 22145864 us`
-- exact bit-cost recovery `= 11259134 us`
-- bound update `= 11437024 us`
-- primary-rank math `= 14524895 us`
-- full `AcceptRank` construction `= 543075 us`
-- canonical-key finalization `= 5 us`
-- latest broad bucket order on the newest structural rerun:
-  - connectivity `= 121124566 us`
-  - aggregation `= 119212285 us`
-  - clause filtering `= 113491706 us`
-  - exact `nu` `= 78051194 us`
-  - terminal materialize `= 324 ms`
-
-Read that as: the next honest move is not to chase the last tie-break key first, not to spend another turn on a bookkeeping/bound-only cleanup, and not to replay the admitted-kernel slice by itself. The next slice needs to preserve that aggregation gain while lowering the now-nearby clause-filter and connectivity composite on the same early surface.
-
-### 4. Re-Earn The Short Runtime Read
-Run a release claim rerun derived from `configs/desktop_claim_shadow_1h.toml` with:
-- `--until-step 4`
-- one new kept-binary slice above
+### 2. Re-Earn The Intended-Profile Read
+Run one release claim rerun derived from `configs/desktop_claim_shadow_1h.toml` with:
+- the kept open-band handoff code above
+- the profile's intended full horizon
 - live checkpoint persistence left on
-- a new run id that states the patch, for example:
-  - `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
-  - `runs/codex-claim-release-step4-kernel-filter-handoff-v1`
-  - `runs/codex-claim-release-step4-kernel-claim-open-band-v1`
+- a new run id that states the kept patch, for example:
+  - `runs/codex-claim-release-full-open-band-handoff-v1`
 
-Let the run go far enough to capture at least:
-- matched `24`
-- `43/44/54` only if the `24` read still looks plausible
-- the reopened `40 groups / 147639 candidates` surface at `74/76` only if the early surface earns that extra runtime
+Let the rerun go far enough to answer from stored evidence:
+- does it preserve the new `24/43/44/54` win on the real full profile?
+- does it preserve the reopened `74/76` win there too?
+- does it move materially farther than `runs/codex-claim-release-full-kernel-aggregation-v1`?
+- does it finally reach step `5` or expose a different later blocker honestly?
 
-### 5. Read The Stored Artifacts
+### 3. Read The Stored Artifacts
 Open at least:
 - `reports/steps/step-04-live.ndjson`
+- `reports/steps/step-05-live.ndjson` if it exists
 - `reports/latest.txt`
 - `run.json`
 
 Answer from stored evidence:
-- did the early `24` surface move back under the kept short baseline honestly on both elapsed and `terminal_summary_build_*`?
-- if not, which broad buckets dominated there: clause load, bookkeeping, bit-cost/bound work, connectivity, clause filtering, or compact materialization?
-- did clause filtering stay near the kept late diagnostic instead of reopening the old clause-filter wall?
-- if `24` passes honestly, did the later `43/44/54/74/76` surfaces also hold?
+- did the full-profile rerun keep the new early and reopened short wins?
+- if it still stalled in step `4`, which later bucket order dominated there?
+- if it reached step `5` or later, what new blocker became visible?
+- did the observed-versus-accounted RSS story stay honest on the kept short winner?
 
-### 6. Re-Earn Only The Validation Needed
-If the slice stays claim-only and step-`4` runtime-only, rerun only:
+### 4. Re-Earn Only The Validation Needed
+If the next turn is rerun-only with no new code changes, do not reopen extra tests first.
+
+If new code changes land before the full-profile rerun, rerun only:
 - `cargo test -p pen-search claim_`
 - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
 
-If the new short slice earns keep, then branch back to one new full-profile rerun before parity, breadth, compare, benchmark, or certification work.
-
 ## Keep Or Branch Decision
-After the next short rerun:
-- stay on runtime work if the early or reopened surfaces still regress
-- branch back to a new full-profile rerun only if the short rerun beats the kept short baseline honestly and materially improves the reopened `74/76` read against the kept full-profile baseline
-- branch to parity, breadth, compare, benchmark, and certification work only after a later full-profile run honestly moves past the step-`4` wall
+After the next full-profile rerun:
+- stay on runtime work if it still stalls in step `4` or exposes a later runtime blocker
+- keep this short winner as the runtime reference if the full-profile rerun preserves the early and reopened surfaces honestly
+- branch to parity, breadth, compare, benchmark, and certification work only after a later full-profile rerun honestly moves past the step-`4` wall
 
 ## Stop Condition For This Note
-Rewrite this file as soon as one new stored rerun shows one of these is true:
-- a broader kept-binary structural slice earns keep on the early short surface and still looks viable later
-- the step-`4` wall moves away from aggregation first
-- the new sub-bucket telemetry shows a different exact blocker than expected
-- a later full-profile rerun reaches a new blocker honestly
+Rewrite this file as soon as one new stored full-profile rerun shows one of these is true:
+- the kept open-band handoff winner reaches a new later blocker honestly
+- the intended profile finally moves past the step-`4` wall
+- the full-profile rerun fails for a different structural reason than the short evidence predicted
 - runtime work is no longer the next honest move
