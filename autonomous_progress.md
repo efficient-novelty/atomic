@@ -7,38 +7,42 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 ## Current Status
 - `desktop_claim_shadow` is not signoff-ready.
 - The current short step-`4` baseline is `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
-- The current full-profile runtime reference is `runs/codex-claim-release-full-connectivity-facts-v1`.
-- The previous full-profile runtime reference is `runs/codex-claim-release-full-open-band-handoff-followup-v1`.
-- The latest measured slice is `runs/codex-claim-release-full-connectivity-facts-v1`.
-- That new intended-profile follow-up preserved the honest retained-prefix story and then reopened it twice farther:
+- The current full-profile runtime reference is `runs/codex-claim-release-full-aggregation-open-band-compact-v1`.
+- The previous full-profile runtime reference is `runs/codex-claim-release-full-connectivity-facts-v1`.
+- The latest measured slice is `runs/codex-claim-release-full-aggregation-open-band-compact-v1`.
+- That new intended-profile follow-up preserved the honest retained-prefix story and then reopened it twice farther before moving the stored wall again:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
   - `41 groups / 154842 candidates` from `140` through `331`
   - `42 groups / 157636 candidates` at `332/333/334`
-  - `43 groups / 160430 candidates` from `335` through the stored `408` read
+-  - `43 groups / 160430 candidates` from `335` through the stored `437` read
 - It materially improved every decisive stored matched checkpoint versus the previous runtime reference:
-  - `24`: `385802 / 383018` instead of `417678 / 414814`
-  - `43`: `698661 / 694743` instead of `760980 / 756851`
-  - `44`: `713483 / 709504` instead of `777344 / 773151`
-  - `54`: `880003 / 875413` instead of `961793 / 956919`
-  - `74`: `1210334 / 1204512` instead of `1325033 / 1318766`
-  - `76`: `1250591 / 1244645` instead of `1368485 / 1362079`
-  - `140`: `2389805 / 2379752` instead of `2571309 / 2561049`
-  - `163`: `2773573 / 2762030` instead of `2978288 / 2966621`
-  - `228`: `3924018 / 3908221` instead of `4189959 / 4174213`
-  - `229`: `3945205 / 3929337` instead of `4211079 / 4195271`
+  - `24`: `382590 / 379801` instead of `385802 / 383018`
+  - `43`: `690362 / 686494` instead of `698661 / 694743`
+  - `44`: `704899 / 700975` instead of `713483 / 709504`
+  - `54`: `868693 / 864182` instead of `880003 / 875413`
+  - `74`: `1199861 / 1194114` instead of `1210334 / 1204512`
+  - `76`: `1239371 / 1233502` instead of `1250591 / 1244645`
+  - `140`: `2376318 / 2366374` instead of `2389805 / 2379752`
+  - `163`: `2764278 / 2752823` instead of `2773573 / 2762030`
+  - `228`: `3893876 / 3878458` instead of `3924018 / 3908221`
+  - `229`: `3913384 / 3897912` instead of `3945205 / 3929337`
+  - `332`: `5752765 / 5731419` instead of `5857640 / 5835050`
+  - `335`: `5806317 / 5784752` instead of `5912135 / 5889319`
+  - `408`: `7058211 / 7032377` instead of `7191639 / 7164178`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
-- The later bucket order changed honestly after the connectivity-side cut landed:
-  - `140`: aggregation `= 744641415 us`, connectivity `= 586579312 us`, exact `nu` `= 520449833 us`, terminal clause-filter handoff `= 15799216 us`
-  - `163`: aggregation `= 857070798 us`, connectivity `= 685837174 us`, exact `nu` `= 604333257 us`, terminal clause-filter handoff `= 18798149 us`
-  - `228`: aggregation `= 1200334910 us`, connectivity `= 968606567 us`, exact `nu` `= 869713548 us`, terminal clause-filter handoff `= 28170861 us`
-  - `229`: aggregation `= 1210184906 us`, connectivity `= 973284301 us`, exact `nu` `= 872719297 us`, terminal clause-filter handoff `= 28348740 us`
-  - `332`: aggregation `= 1799313029 us`, connectivity `= 1424660906 us`, exact `nu` `= 1323961772 us`, terminal clause-filter handoff `= 45034612 us`
-  - `335`: aggregation `= 1814967597 us`, connectivity `= 1437778259 us`, exact `nu` `= 1337241409 us`, terminal clause-filter handoff `= 45526234 us`
-  - `408`: aggregation `= 2185774562 us`, connectivity `= 1756872641 us`, exact `nu` `= 1633848702 us`, terminal clause-filter handoff `= 58019282 us`
-- `terminal_summary_admissibility_checks = 0` and `terminal_summary_fallback_connectivity_checks = 0` through the stored `408` read.
-- Observed RSS stayed below `964218880` bytes through the stored `408` checkpoint, still far below the old allocator-failure band.
-- The lane is still compute-bound, and the later wall is now aggregation-first rather than connectivity-first.
+- The later bucket order stayed aggregation first honestly while also improving the other later buckets versus the previous runtime reference:
+  - `140`: aggregation `= 736648605 us`, connectivity `= 584518736 us`, exact `nu` `= 514778949 us`, terminal clause-filter handoff `= 16302812 us`
+  - `163`: aggregation `= 848880527 us`, connectivity `= 685516569 us`, exact `nu` `= 599314951 us`, terminal clause-filter handoff `= 19619817 us`
+  - `228`: aggregation `= 1181979703 us`, connectivity `= 963171133 us`, exact `nu` `= 859172298 us`, terminal clause-filter handoff `= 28959988 us`
+  - `229`: aggregation `= 1190946496 us`, connectivity `= 967419769 us`, exact `nu` `= 861934419 us`, terminal clause-filter handoff `= 29077770 us`
+  - `332`: aggregation `= 1750150164 us`, connectivity `= 1399874662 us`, exact `nu` `= 1295406289 us`, terminal clause-filter handoff `= 43827165 us`
+  - `335`: aggregation `= 1765342397 us`, connectivity `= 1412824636 us`, exact `nu` `= 1308406106 us`, terminal clause-filter handoff `= 44274555 us`
+  - `408`: aggregation `= 2125653593 us`, connectivity `= 1725842418 us`, exact `nu` `= 1597252620 us`, terminal clause-filter handoff `= 55875597 us`
+  - `437`: aggregation `= 2281770088 us`, connectivity `= 1848246266 us`, exact `nu` `= 1728738686 us`, terminal clause-filter handoff `= 60344895 us`
+- `terminal_summary_admissibility_checks = 0` and `terminal_summary_fallback_connectivity_checks = 0` through the stored `437` read.
+- Observed RSS rose materially versus the previous runtime reference, reaching `1440825344` bytes at `437`, but it still stayed well below the old allocator-failure band.
+- The lane is still compute-bound, and the later wall remains aggregation-first even after the wall moved from `408` to `437`.
 - Because the rerun was manually stopped after the new later blocker was already visible, `reports/latest.txt` still reflects completed step `3`, `run.json` still says `status = "running"`, and `reports/steps/step-05-live.ndjson` is absent; the authoritative evidence for this run lives in `reports/steps/step-04-live.ndjson`.
 
 ## What Stays Landed
@@ -51,6 +55,7 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 - the terminal-only cached parent connectivity decision
 - the aggregation-side accept-rank short-circuit that skips full `AcceptRank` construction for primary-dominated bar-clearers
 - the claim open-band terminal-clause handoff fast path that keeps exact-admitted open-band surfaces on clause refs instead of per-clause admissibility payloads
+- the compact claim open-band aggregation fast path that bypasses generic admitted-evaluation bookkeeping on the no-evaluations summary kernel
 - the higher-fidelity late-surface timing accumulation used by the current short diagnostic surface
 - the shared terminal-clause connectivity-facts sidecar on the shared clause catalog used by the claim remaining-one summary/materialization path
 
@@ -65,37 +70,40 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 - Because the stop was external during step `4`, the authoritative evidence for this short winner is `reports/steps/step-04-live.ndjson`, while `reports/latest.txt` still reflects completed step `3` and `run.json` still says `status = "running"`.
 
 ### 2. Current Full-Profile Runtime Reference
-- Run: `runs/codex-claim-release-full-connectivity-facts-v1`
-- It preserved the honest `39/40/41` retained-prefix story from the previous runtime reference, then reopened to `42/157636` and `43/160430`, while materially improving all decisive stored matched checkpoints and pushing the stored step-`4` wall from `229` to `408`.
+- Run: `runs/codex-claim-release-full-aggregation-open-band-compact-v1`
+- It preserved the honest `39/40/41` retained-prefix story from the previous runtime reference, re-earned the `42/157636` and `43/160430` reopens, materially improved every decisive stored matched checkpoint through the previous stored `408` wall, and then pushed the stored step-`4` wall farther to `437`.
 - Stored decisive checkpoints:
-  - `24`: `385802 / 383018`
-  - `43`: `698661 / 694743`
-  - `44`: `713483 / 709504`
-  - `54`: `880003 / 875413`
-  - `74`: `1210334 / 1204512`
-  - `76`: `1250591 / 1244645`
-  - `140`: `2389805 / 2379752`
-  - `163`: `2773573 / 2762030`
-  - `228`: `3924018 / 3908221`
-  - `229`: `3945205 / 3929337`
-  - `332`: `5857640 / 5835050`
-  - `335`: `5912135 / 5889319`
-  - `408`: `7191639 / 7164178`
+  - `24`: `382590 / 379801`
+  - `43`: `690362 / 686494`
+  - `44`: `704899 / 700975`
+  - `54`: `868693 / 864182`
+  - `74`: `1199861 / 1194114`
+  - `76`: `1239371 / 1233502`
+  - `140`: `2376318 / 2366374`
+  - `163`: `2764278 / 2752823`
+  - `228`: `3893876 / 3878458`
+  - `229`: `3913384 / 3897912`
+  - `332`: `5752765 / 5731419`
+  - `335`: `5806317 / 5784752`
+  - `408`: `7058211 / 7032377`
+  - `437`: `7587461 / 7560060`
 - The later retained-prefix surface now reads:
   - `41 groups / 154842 candidates` through `331`
   - `42 groups / 157636 candidates` at `332/333/334`
-  - `43 groups / 160430 candidates` through the stored `408` read
-- Aggregation is now the lead later bucket on the stored `41/42/43` surfaces, with connectivity second, exact `nu` third, and terminal clause-filter handoff still tiny.
-- Observed RSS reached `964218880` bytes at `408`.
+  - `43 groups / 160430 candidates` through the stored `437` read
+- Aggregation remains the lead later bucket on the stored `41/42/43` surfaces, with connectivity second, exact `nu` third, and terminal clause-filter handoff still tiny.
+- Observed RSS reached `1440825344` bytes at `437`.
 - The run never reached step `5` on stored evidence; `reports/steps/step-05-live.ndjson` is absent.
 
 ### 3. Previous Full-Profile Runtime Reference
-- Run: `runs/codex-claim-release-full-open-band-handoff-followup-v1`
-- It re-earned the kept short winner again on the real intended profile and pushed the prior stored wall to `229`, but the new connectivity-facts reference now materially beats it at every decisive stored checkpoint and pushes the wall much farther.
+- Run: `runs/codex-claim-release-full-connectivity-facts-v1`
+- It preserved the honest `39/40/41` retained-prefix story from the old open-band-handoff follow-up, reopened to `42/157636` and `43/160430`, and pushed the prior stored wall to `408`, but the new compact open-band aggregation reference now materially beats it at every decisive stored checkpoint and pushes the wall farther again.
 - Honest retained shape:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
-  - `41 groups / 154842 candidates` from `140` through the stored `229` read
+  - `41 groups / 154842 candidates` from `140` through `331`
+  - `42 groups / 157636 candidates` at `332/333/334`
+  - `43 groups / 160430 candidates` through the stored `408` read
 
 ### 4. Comparison Full-Profile Baseline
 - Run: `runs/codex-claim-release-full-kernel-aggregation-v1`
@@ -103,7 +111,7 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 
 ### 5. Current Late-Surface Diagnostic
 - Run: `runs/codex-claim-release-step4-kernel-late-profile-v1`
-- It remains the earlier late diagnostic, but the newer full-profile connectivity-facts follow-up is now the authoritative later-surface read.
+- It remains the earlier late diagnostic, but the newer full-profile compact open-band aggregation follow-up is now the authoritative later-surface read.
 
 ## What Stays Dropped
 - ordering and reuse variants: `context-equivalence-v1`, `incumbent-ordering-v1`, `local-two-step-order-v2`, `proof-close-handoff-v1`, `post-plateau-v1`, `post-plateau-materialize-v1`, `post-plateau-summary-cache-v3`
@@ -135,28 +143,30 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 
 ## Revised Working Diagnosis
 - The old early RSS cliff remains broken; this is still a step-`4` throughput problem, not a return of the allocator-failure story.
-- The connectivity-facts slice answered the old later question honestly: the post-`140` connectivity wall moved materially first on stored evidence.
-- Once that happened, the later wall reopened twice more and aggregation became the new lead bucket on the real intended profile.
-- The accumulated lesson from the dropped retries is now stronger again: the next honest runtime choice is a later-surface aggregation-side cut first on this winner rather than another connectivity-first retry, another early short micro-slice, or another plain rerun-only turn.
+- The compact open-band aggregation slice engaged honestly on the real intended profile: it preserved the kept `39/40/41/42/43` surface story, improved every stored matched checkpoint through the old `408` wall, and moved the later wall to `437`.
+- The later wall is still aggregation first on stored evidence, with connectivity second, exact `nu` third, and terminal clause-filter handoff still tiny, so the new runtime question remains inside later summary throughput rather than earlier admissibility or connectivity work.
+- Observed RSS now grows materially higher than it did on the previous runtime reference, but it is still far below the old allocator-failure band; the lane still reads as throughput-bound rather than allocator-bound on stored evidence.
+- The accumulated lesson from the dropped retries is stronger again: the next honest runtime choice is still a later-surface runtime cut on this new winner rather than another plain rerun-only turn, another connectivity-first retry, or another metadata/clause-load replay.
 
 ## Best Current Inference
-The current runtime reference is no longer the old open-band-handoff follow-up. It is `runs/codex-claim-release-full-connectivity-facts-v1`.
+The current runtime reference is `runs/codex-claim-release-full-aggregation-open-band-compact-v1`.
 
-That run is already good enough to answer the connectivity-side question from stored evidence:
-- it preserved the honest `39/40/41` retained-prefix story
-- it reopened farther to `42/157636` and `43/160430`
-- it moved materially past the prior stored `229` wall to `408`
-- it kept observed RSS far below the old allocator-failure band
-- it changed the visible later wall from connectivity-first to aggregation-first
+That run is already good enough to answer the latest aggregation-side question from stored evidence:
+- it preserved the honest `39/40/41/42/43` retained-prefix story
+- it materially beat the previous runtime reference at every stored matched checkpoint through `408`
+- it moved materially past the prior stored `408` wall to `437`
+- it still did not reach step `5`
+- it kept the visible later wall aggregation-first
+- it kept observed RSS well below the old allocator-failure band, even though RSS grew materially higher than on the previous runtime reference
 
-The next honest question is therefore aggregation-side runtime work on the current winner.
+The next honest question is therefore another later-surface runtime cut on this new winner, with the higher observed RSS growth treated as an explicit guardrail rather than ignored.
 
 ## Immediate Next Move
-1. Keep `runs/codex-claim-release-step4-kernel-open-band-handoff-v1` as the short step-`4` baseline and `runs/codex-claim-release-full-connectivity-facts-v1` as the current full-profile runtime reference.
-2. Do not spend another turn on a plain intended-profile rerun with no code or new runtime question, and do not reopen another unchanged connectivity-first retry first.
-3. Land one narrow later-surface aggregation-side runtime cut on the current winner. Target the post-`140` aggregation-side summary/rank/bookkeeping work that now leads the stored `41/42/43` surface.
-4. After code changes land, rerun a release claim follow-up with a new run id that states the slice and carry it at least through the stored `140/163/228` region and the current `42/43` reopen on stored evidence.
+1. Keep `runs/codex-claim-release-step4-kernel-open-band-handoff-v1` as the short step-`4` baseline and `runs/codex-claim-release-full-aggregation-open-band-compact-v1` as the current full-profile runtime reference.
+2. Do not spend another turn on a plain intended-profile rerun with no code or new runtime question, and do not reopen another unchanged connectivity-first retry, metadata retry, or clause-load-only replay first.
+3. Land one narrow later-surface runtime cut on the current winner. Target the post-`228` aggregation-side summary/rank/bookkeeping work that still leads the stored `41/42/43` surface, while keeping the new higher observed RSS growth in view as a hard honesty check.
+4. After code changes land, rerun a release claim follow-up with a new run id that states the slice and carry it at least through the stored `228/229/332/335` region and ideally past the new `437` wall or into step `5` on stored evidence.
 5. If code changes land before that rerun, rerun only:
    - `cargo test -p pen-search claim_`
    - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
-6. Branch to parity, breadth, compare, benchmark, or certification work only after a later full-profile rerun either reaches step `5` or moves materially past the current stored `408` wall.
+6. Branch to parity, breadth, compare, benchmark, or certification work only after a later full-profile rerun either reaches step `5` or moves materially past the current stored `437` wall.

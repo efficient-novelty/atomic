@@ -9,55 +9,62 @@ It lists only work that is still open.
 
 - The claim lane still does not have a signoff-ready full-profile bundle.
 - The current full-profile runtime reference is
-  `runs/codex-claim-release-full-connectivity-facts-v1`.
+  `runs/codex-claim-release-full-aggregation-open-band-compact-v1`.
 - The current short step-`4` baseline is
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
 - The most recent informative late-surface diagnostic is
   `runs/codex-claim-release-step4-kernel-late-profile-v1`.
 - The latest intended-profile follow-up preserved the honest retained-prefix
-  shape on stored evidence and then reopened twice farther:
+  shape on stored evidence, re-earned the later reopens, and then moved the
+  stored step-`4` wall farther:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
   - `41 groups / 154842 candidates` from `140` through `331`
   - `42 groups / 157636 candidates` at `332/333/334`
-  - `43 groups / 160430 candidates` through the stored `408` read
+  - `43 groups / 160430 candidates` through the stored `437` read
 - That follow-up materially improved every decisive stored matched checkpoint
-  through `229`:
-  - `24`: `385802 / 383018` instead of `417678 / 414814`
-  - `43`: `698661 / 694743` instead of `760980 / 756851`
-  - `44`: `713483 / 709504` instead of `777344 / 773151`
-  - `54`: `880003 / 875413` instead of `961793 / 956919`
-  - `74`: `1210334 / 1204512` instead of `1325033 / 1318766`
-  - `76`: `1250591 / 1244645` instead of `1368485 / 1362079`
-  - `140`: `2389805 / 2379752` instead of `2571309 / 2561049`
-  - `163`: `2773573 / 2762030` instead of `2978288 / 2966621`
-  - `228`: `3924018 / 3908221` instead of `4189959 / 4174213`
-  - `229`: `3945205 / 3929337` instead of `4211079 / 4195271`
+  through `408`:
+  - `24`: `382590 / 379801` instead of `385802 / 383018`
+  - `43`: `690362 / 686494` instead of `698661 / 694743`
+  - `44`: `704899 / 700975` instead of `713483 / 709504`
+  - `54`: `868693 / 864182` instead of `880003 / 875413`
+  - `74`: `1199861 / 1194114` instead of `1210334 / 1204512`
+  - `76`: `1239371 / 1233502` instead of `1250591 / 1244645`
+  - `140`: `2376318 / 2366374` instead of `2389805 / 2379752`
+  - `163`: `2764278 / 2752823` instead of `2773573 / 2762030`
+  - `228`: `3893876 / 3878458` instead of `3924018 / 3908221`
+  - `229`: `3913384 / 3897912` instead of `3945205 / 3929337`
+  - `332`: `5752765 / 5731419` instead of `5857640 / 5835050`
+  - `335`: `5806317 / 5784752` instead of `5912135 / 5889319`
+  - `408`: `7058211 / 7032377` instead of `7191639 / 7164178`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
-- At `140/163/228/229/332/335/408`, stored step-live telemetry now shows
-  aggregation first, connectivity second, exact `nu` third, and terminal
-  clause-filter handoff tiny:
-  - `140`: aggregation `= 744641415 us`, connectivity `= 586579312 us`,
-    exact `nu` `= 520449833 us`, handoff `= 15799216 us`
-  - `163`: aggregation `= 857070798 us`, connectivity `= 685837174 us`,
-    exact `nu` `= 604333257 us`, handoff `= 18798149 us`
-  - `228`: aggregation `= 1200334910 us`, connectivity `= 968606567 us`,
-    exact `nu` `= 869713548 us`, handoff `= 28170861 us`
-  - `229`: aggregation `= 1210184906 us`, connectivity `= 973284301 us`,
-    exact `nu` `= 872719297 us`, handoff `= 28348740 us`
-  - `332`: aggregation `= 1799313029 us`, connectivity `= 1424660906 us`,
-    exact `nu` `= 1323961772 us`, handoff `= 45034612 us`
-  - `335`: aggregation `= 1814967597 us`, connectivity `= 1437778259 us`,
-    exact `nu` `= 1337241409 us`, handoff `= 45526234 us`
-  - `408`: aggregation `= 2185774562 us`, connectivity `= 1756872641 us`,
-    exact `nu` `= 1633848702 us`, handoff `= 58019282 us`
+- At `140/163/228/229/332/335/408/437`, stored step-live telemetry still
+  shows aggregation first, connectivity second, exact `nu` third, and
+  terminal clause-filter handoff tiny:
+  - `140`: aggregation `= 736648605 us`, connectivity `= 584518736 us`,
+    exact `nu` `= 514778949 us`, handoff `= 16302812 us`
+  - `163`: aggregation `= 848880527 us`, connectivity `= 685516569 us`,
+    exact `nu` `= 599314951 us`, handoff `= 19619817 us`
+  - `228`: aggregation `= 1181979703 us`, connectivity `= 963171133 us`,
+    exact `nu` `= 859172298 us`, handoff `= 28959988 us`
+  - `229`: aggregation `= 1190946496 us`, connectivity `= 967419769 us`,
+    exact `nu` `= 861934419 us`, handoff `= 29077770 us`
+  - `332`: aggregation `= 1750150164 us`, connectivity `= 1399874662 us`,
+    exact `nu` `= 1295406289 us`, handoff `= 43827165 us`
+  - `335`: aggregation `= 1765342397 us`, connectivity `= 1412824636 us`,
+    exact `nu` `= 1308406106 us`, handoff `= 44274555 us`
+  - `408`: aggregation `= 2125653593 us`, connectivity `= 1725842418 us`,
+    exact `nu` `= 1597252620 us`, handoff `= 55875597 us`
+  - `437`: aggregation `= 2281770088 us`, connectivity `= 1848246266 us`,
+    exact `nu` `= 1728738686 us`, handoff `= 60344895 us`
   - `terminal_summary_admissibility_checks = 0` and
     `terminal_summary_fallback_connectivity_checks = 0` through the stored
-    `408` read
-- Observed RSS stayed below `964218880` bytes through the stored `408`
-  checkpoint, so the intended profile is still throughput-bound rather than
-  allocator-bound on the current winner.
-- That rerun was manually stopped after the decisive stored `408` checkpoint.
+    `437` read
+- Observed RSS reached `1440825344` bytes by the stored `437` checkpoint.
+  That is materially higher than the previous runtime reference, but it still
+  stays well below the old allocator-failure band, so the intended profile is
+  still throughput-bound rather than allocator-bound on the current winner.
+- That rerun was manually stopped after the decisive stored `437` checkpoint.
   Because the stop was external during step `4`, `reports/latest.txt` still
   reflects completed step `3`, `run.json` still says `status = "running"`,
   and `reports/steps/step-05-live.ndjson` is absent; the authoritative
@@ -65,8 +72,9 @@ It lists only work that is still open.
   `reports/steps/step-04-live.ndjson`.
 - The next honest move is therefore not another short step-`4` micro-slice, a
   plain rerun-only turn, or another connectivity-first retry. It is one
-  narrow later-surface aggregation-side cut on the current winner so the
-  post-`140` aggregation wall can move honestly on stored evidence.
+  narrow later-surface runtime cut on the current winner so the post-`228`
+  aggregation wall can move honestly again without hiding the newer RSS
+  growth story.
 
 ## 1. Runtime Completion
 
