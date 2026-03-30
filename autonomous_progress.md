@@ -1,5 +1,5 @@
 # Autonomous Claim Lane Progress
-Last updated: 2026-03-29
+Last updated: 2026-03-30
 
 This file is the live operating brief for `desktop_claim_shadow`.
 Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slice, [autonomous_plan.md](autonomous_plan.md) for the staged path to signoff, and [autonomous_checklist.md](autonomous_checklist.md) for the final gate.
@@ -9,9 +9,9 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 - The current short step-`4` baseline is `runs/codex-claim-release-step4-kernel-aggregation-v1`.
 - The current full-profile baseline is `runs/codex-claim-release-full-kernel-aggregation-v1`.
 - The authoritative late-surface diagnostic is `runs/codex-claim-release-step4-kernel-late-profile-v1`.
-- The latest measured slice is `runs/codex-claim-release-step4-kernel-reopened-connectivity-v1`.
-- That rerun was manually stopped after enough stored step-`4` evidence had landed through `prefix_states_explored = 76`; it is dropped from code after failing keep on the matched early short surface and the reopened `terminal_summary_build_*` surface.
-- The lane is still compute-bound in step `4`, but the visible reopened wall is no longer connectivity first. On the newest stored rerun it has moved to aggregation first, with clause filtering second and connectivity third.
+- The latest measured slice is `runs/codex-claim-release-step4-kernel-aggregation-tiecut-v1`.
+- That rerun was manually stopped after enough stored step-`4` evidence had landed through `prefix_states_explored = 80`; it is dropped from code after failing keep on the matched early short surface and the reopened full-profile surface.
+- The lane is still compute-bound in step `4`, and the visible reopened wall is still aggregation first. On the newest stored rerun the bucket order stayed aggregation first, clause filtering second, connectivity third, and exact `nu` fourth.
 
 ## What Stays Landed
 - delayed materialization
@@ -66,6 +66,41 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
   - exact `nu` `+80574865 us`
 
 ### 4. Latest Measured Slice
+- Run: `runs/codex-claim-release-step4-kernel-aggregation-tiecut-v1`
+- Hypothesis: keep the aggregation baseline code, keep the reopened connectivity retry dropped, and cut reopened-surface aggregation cost by deferring compact-summary full `AcceptRank` construction whenever a new best primary rank already strictly beats the incumbent.
+- Outcome:
+  - it preserved the same honest early plateau and the reopened `74/76` shape
+  - it kept clause filtering near the kept late diagnostic
+  - it cut late aggregation modestly relative to the kept late diagnostic
+  - but it still failed keep because both elapsed wall clock and `terminal_summary_build_*` regressed on the matched early short surface, and the reopened `74/76` read still trailed the kept full-profile baseline
+- Comparison versus the kept short baseline:
+  - `24`: `558655 / 553615` instead of `549630 / 492524`
+  - `43`: `1011015 / 1004860` instead of `990480 / 892772`
+  - `44`: `1033239 / 1027024` instead of `1012067 / 912271`
+  - `54`: `1274068 / 1267275` instead of `1247600 / 1126754`
+  These pairs are `elapsed_millis / terminal_summary_build_millis`.
+- Reopened-surface read versus the kept full-profile baseline:
+  - `74`: `elapsed_millis = 1745950`, `terminal_summary_build_millis = 1738100`
+  - `76`: `elapsed_millis = 1800387`, `terminal_summary_build_millis = 1792430`
+  - baseline comparison:
+    - `74`: kept full-profile `1743244 / 1579138`
+    - `76`: kept full-profile `1797441 / 1628768`
+- At `76`, the measured bucket order became:
+  - aggregation `= 453514026 us`
+  - clause filtering `= 346694360 us`
+  - connectivity `= 397810359 us`
+  - exact `nu` `= 263740192 us`
+- Incremental `54 -> 76` became:
+  - aggregation `+133894436 us`
+  - clause filtering `+103929214 us`
+  - connectivity `+113861249 us`
+  - exact `nu` `+77298166 us`
+- Honest read:
+  - the compact-summary exact-rank deferral is real on the late aggregation bucket and on total build time versus `runs/codex-claim-release-step4-kernel-late-profile-v1`
+  - it still did not earn keep because the stored short surface regressed by about `1.6-2.1%` on elapsed and about `12.4-12.6%` on `terminal_summary_build_*` at `24/43/44/54`, while the reopened `74/76` surface still regressed by about `0.16%` on elapsed and about `10.0%` on `terminal_summary_build_*` versus the kept full-profile baseline
+  - exact accept-rank finalization is therefore part of the reopened aggregation wall, but not enough by itself to re-earn the baseline surfaces
+
+### 5. Earlier Failed Reopened Connectivity Slice
 - Run: `runs/codex-claim-release-step4-kernel-reopened-connectivity-v1`
 - Hypothesis: keep the aggregation baseline code, remove the lingering admitted-only rank-metadata path from code, and cut reopened-surface connectivity cost by reusing one parent legality summary across each remaining-one clause scan.
 - Outcome:
@@ -101,7 +136,7 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
   - it still did not earn keep because the stored summary-build surface regressed by about `5.2-5.6%` at `24/43/44/54` and about `4.0%` at `74/76`
   - the visible reopened blocker is now aggregation first rather than connectivity first
 
-### 5. Earlier Failed Admitted-Only Metadata Slice
+### 6. Earlier Failed Admitted-Only Metadata Slice
 - Run: `runs/codex-claim-release-step4-kernel-admitted-metadata-v1`
 - It preserved the same honest early plateau and reopened `74/76/140` shape, re-earned cheap clause filtering, and improved elapsed time relative to the late diagnostic, but it still failed keep because `terminal_summary_build_*` regressed by about `10-11%` on the matched early short surface.
 - At `76`, the measured bucket order was:
@@ -110,7 +145,7 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
   - clause filtering `= 355695170 us`
   - exact `nu` `= 263235482 us`
 
-### 6. Earlier Failed Eager Metadata Slice
+### 7. Earlier Failed Eager Metadata Slice
 - Run: `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
 - It preserved the same honest early plateau and reopened `74/76` shape, but regressed catastrophically on runtime and moved the visible wall to clause filtering first, so it did not earn keep.
 - At `76`, the measured bucket order was:
@@ -140,6 +175,7 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 - Summary-constant bit-cost hoist: `kernel-summary-constant-v1`
 - Catalog-backed clause bit-cost sidecar: `kernel-catalog-constant-v1`
 - Bar-clear threshold bookkeeping rewrite: `kernel-summary-threshold-v1`
+- Compact-summary strict-better-incumbent exact-rank deferral: `kernel-aggregation-tiecut-v1`
 - Eager terminal-clause metadata pack: `kernel-clause-metadata-v1`
 - Lazy admitted-only metadata retry: `kernel-admitted-metadata-v1`
 - Parent-summary connectivity lookup reuse: `kernel-reopened-connectivity-v1`
@@ -148,9 +184,9 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 - The old early RSS cliff remains broken; this is still a step-`4` throughput problem, not a return of the allocator-failure story.
 - The kept baselines still say the intended profile later reopens beyond the early `39/144845` plateau.
 - The newest stored rerun proves three things at once:
-  - cutting repeated parent-summary lookups can reduce reopened connectivity cost materially
   - clause filtering can stay near the kept late diagnostic without metadata work
-  - but the build surface can still regress even while elapsed wall clock improves
+  - compact-summary exact-rank finalization is a real part of the reopened aggregation wall
+  - but trimming that exact-rank work alone still is not enough to recover the kept short or reopened full-profile surfaces
 - Because `76` now reads aggregation `> clause filtering > connectivity > exact nu`, the honest reopened wall has shifted again.
 
 ## Best Current Inference
@@ -158,17 +194,17 @@ The next honest retry should keep the winning baseline code and keep only the le
 
 > do not spend the next slice on metadata or connectivity first. The next runtime wall to attack is reopened-surface aggregation.
 
-That means the next plausible keep slice is not another metadata retry and not another unchanged connectivity reuse retry. It is one narrower reopened-surface aggregation cut that:
+That means the next plausible keep slice is not another metadata retry, not another unchanged connectivity reuse retry, and not another unchanged compact-summary exact-rank deferral retry. It is one different reopened-surface aggregation cut that:
 - leaves terminal clause filtering cheap
 - preserves the current exact tie-break truth surface
 - and improves the later `74/76` wall without giving back the matched `24/43/44/54` read
 
 ## Immediate Next Move
 1. Keep the code behind `runs/codex-claim-release-step4-kernel-aggregation-v1`, `runs/codex-claim-release-full-kernel-aggregation-v1`, and `runs/codex-claim-release-step4-kernel-late-profile-v1`.
-2. Do not keep either metadata retry or the reopened connectivity lookup reuse in code.
-3. Land, if possible, one narrow reopened-surface aggregation-side runtime cut rather than another metadata or connectivity pass.
+2. Do not keep either metadata retry, the reopened connectivity lookup reuse, or the compact-summary strict-better-incumbent exact-rank deferral in code.
+3. Land, if possible, one different narrow reopened-surface aggregation-side runtime cut rather than another metadata, connectivity, or unchanged exact-rank-deferral pass.
 4. Re-run a short release claim slice to `--until-step 4` and read the stored artifacts at `24/43/44/54/74/76`.
-5. Only branch back to a new full-profile rerun if that short slice earns keep against the matched early plateau and materially improves the reopened `74/76` read against the kept full-profile baseline.
+5. Only branch back to a new full-profile rerun if a later short slice earns keep against the matched early plateau and materially improves the reopened `74/76` read against the kept full-profile baseline.
 
 ## What Has Not Changed
 - Do not branch to compare, benchmark, certification, or stronger language before step `4` moves or a full-profile run finishes.
