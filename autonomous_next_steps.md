@@ -37,12 +37,13 @@ Assume the following were already measured and should stay dropped as standalone
 - the lazy admitted-only metadata retry in `runs/codex-claim-release-step4-kernel-admitted-metadata-v1`
 - the parent-summary connectivity lookup reuse in `runs/codex-claim-release-step4-kernel-reopened-connectivity-v1`
 - the compact-summary strict-better-incumbent exact-rank deferral in `runs/codex-claim-release-step4-kernel-aggregation-tiecut-v1`
+- the exact rank-metadata pack with last-tie canonical-key finalization in `runs/codex-claim-release-step4-kernel-rank-metadata-v1`
 
 ## Active Baselines
 - Current short baseline: `runs/codex-claim-release-step4-kernel-aggregation-v1`
 - Current full-profile baseline: `runs/codex-claim-release-full-kernel-aggregation-v1`
 - Current late-surface diagnostic: `runs/codex-claim-release-step4-kernel-late-profile-v1`
-- Current informative non-keep rerun: `runs/codex-claim-release-step4-kernel-aggregation-tiecut-v1`
+- Current informative non-keep rerun: `runs/codex-claim-release-step4-kernel-rank-metadata-v1`
 
 ## Revised Working Diagnosis
 - The intended profile is still blocked in step `4` by remaining-one compact-summary throughput.
@@ -55,17 +56,21 @@ Assume the following were already measured and should stay dropped as standalone
   - at `76`, aggregation `= 453514026 us` versus `469431036 us` on `runs/codex-claim-release-step4-kernel-late-profile-v1`
   - clause filtering also stayed near the kept late diagnostic: `346694360 us` versus `352203534 us`
   - but it still failed keep because the matched `24/43/44/54` surface regressed on both elapsed and `terminal_summary_build_*`, and the reopened `74/76` read still trailed the kept full-profile baseline
-- The compact summary wall is now best read as a composite per-admitted kernel, not as one missing scalar gate. In the current code, every admitted candidate still pays for multiple exact operations inside `compute_terminal_prefix_completion_summary_from_candidates`: clause load into scratch state, admissibility diagnostics bookkeeping, exact bit-cost recovery, bound update, primary-rank math, and sometimes full `AcceptRank` construction.
-- The full `AcceptRank` path is still expensive when it fires because it rebuilds full-telescope structural signals, max-var-ref context, and canonical-key context. The dropped contender-rank sidecar proved that this work is real, but the keep failures show it is not the only remaining wall.
-- The lesson from the dropped threshold-only, bound-only, bookkeeping-only, competition-gate-only, exact-`nu`-gate-only, bit-cost-only, contender-rank-only, and strict-better-incumbent exact-rank-deferral slices is now that another one-constant slice is unlikely to be enough unless it removes several exact per-admitted rescans at once.
+- The newer exact rank-metadata rerun then answered the open ranking question on stored evidence. At the matched `24` checkpoint it preserved the honest `39 groups / 144845 candidates` plateau, but it still failed keep badly:
+  - `24`: `1232202 / 872432` instead of the kept short `549630 / 492524`
+  - full `AcceptRank` construction was only `543075 us`
+  - canonical-key finalization was only `5 us`
+  - the broad hot costs at that same checkpoint were still clause load `= 61477661 us`, admissibility bookkeeping `= 22145864 us`, bit-cost recovery `= 11259134 us`, bound update `= 11437024 us`, connectivity `= 137191827 us`, clause filtering `= 135071766 us`, and compact materialize `= 319890 ms`
+- The compact summary wall is therefore still best read as a composite per-admitted kernel, but the stored answer changed: the next blocker is not canonical-tail work first.
 
 ## Honest Read
 - The reopened wall is no longer connectivity first.
 - The compact-summary exact-rank deferral was real but only partial.
-- The next winner should therefore not be another standalone scalar tweak. It should be one exact aggregation-side slice that removes several exact per-admitted rescans at once while keeping the retained-prefix shape honest.
+- The last-tie canonical-key path is already the rare tail on stored evidence.
+- The next winner should therefore not be another canonical-tail or rank-metadata retry. It should be one kept-binary slice that removes broader clause-load, bookkeeping, bound, connectivity, clause-filter, or compact-materialization cost while keeping the retained-prefix shape honest.
 
 ## Goal
-Land one exact aggregation-side slice that lowers the honest short read on both:
+Land one kept-binary slice that lowers the honest short read on both:
 - the matched `24/43/44/54` plateau checkpoints
 - the reopened `40/147639` surface at `74/76`
 
@@ -87,73 +92,64 @@ Do not reopen first:
 - another retry of the dropped single-axis aggregation slices listed above
 - another diagnostic-only slice before a new runtime hypothesis is measured
 
-### 2. Change The Shape Of The Next Aggregation Cut
-Do **not** treat the next winner as "one more scalar constant". Treat it as one exact terminal-clause metadata pack landed in one narrow slice.
+### 2. Change The Shape Of The Next Runtime Cut
+Do **not** treat the next winner as another canonical-tail or rank-metadata retry. The last stored rerun already proved that full `AcceptRank` construction and canonical-key finalization are a rare tail cost.
 
 Preferred primary move:
-- extend `terminal_prefix_clause_candidates` / `FilteredTerminalClause` so the summary loop can reuse exact terminal-clause metadata that is currently rebuilt per admitted candidate
+- keep the winning baseline code
+- attack one broader structural hot path first:
+  - clause load / scratch update
+  - admissibility-diagnostics bookkeeping
+  - exact bit-cost recovery
+  - bound update
+  - compact materialization
+- if you reuse any exact metadata again, keep it off the compact materialization path unless the stored early surface proves that extra work pays for itself
 - keep the metadata exact and structural only; no lossy surrogate keys and no semantic reward signals
-- target a pack that can be reused in both the compact summary path and the rare full-rank path, for example:
-  - terminal-clause bit-cost delta
-  - terminal-clause structural-signal delta
-  - terminal-clause max-var-ref contribution
-  - exact canonical-key suffix or rolling exact-key context needed to avoid rebuilding the whole telescope key on ordinary contenders
-- pair that with one prefix-side exact aggregate computed once per signature, so the compact summary path can recover most ranking and bound inputs without rescanning the whole telescope
 
-The intended effect is to remove several exact per-admitted rescans in one landed slice rather than chasing one small constant at a time.
+The intended effect is to remove broad per-admitted work without paying another early-surface tax just to reconfirm that canonical-tail cost is small.
 
-### 3. Make Full `AcceptRank` Truly Last-Tie Only
-Inside the same slice:
-- keep the existing primary-rank short-circuit
-- compare contenders first on the exact numeric fields that can be assembled from prefix aggregates plus terminal-clause metadata
-- only materialize the exact canonical key when those earlier exact tie-break fields still tie
+### 3. Keep The New Telemetry As The Evidence Map
+Use `runs/codex-claim-release-step4-kernel-rank-metadata-v1` as the current sub-bucket map.
 
-This keeps exact tie-break truth while moving the most allocation-heavy work to the rarest path.
+At the matched `24` checkpoint:
+- clause load / scratch update `= 61477661 us`
+- admissibility bookkeeping `= 22145864 us`
+- exact bit-cost recovery `= 11259134 us`
+- bound update `= 11437024 us`
+- primary-rank math `= 14524895 us`
+- full `AcceptRank` construction `= 543075 us`
+- canonical-key finalization `= 5 us`
 
-### 4. Add Fine-Grained Aggregation Telemetry Inside The Same Patch
-Do not run a separate diagnostic-only slice first. Instead, add sub-bucket timing to the same candidate patch so one honest rerun answers where the remaining aggregation time actually sits.
+Read that as: the next honest move is not to chase the last tie-break key first.
 
-At minimum, split aggregation into:
-- clause load / scratch update
-- admissibility-diagnostics bookkeeping
-- exact bit-cost recovery
-- bound update
-- primary-rank math
-- full `AcceptRank` construction
-- canonical-key finalization
-
-This is only to read the stored artifact from the same runtime slice; it is not a separate branch of work.
-
-### 5. Re-Earn The Short Runtime Read
+### 4. Re-Earn The Short Runtime Read
 Run a release claim rerun derived from `configs/desktop_claim_shadow_1h.toml` with:
 - `--until-step 4`
-- the metadata-pack binary above
+- one new kept-binary slice above
 - live checkpoint persistence left on
 - a new run id that states the patch, for example:
-  - `runs/codex-claim-release-step4-kernel-clause-metadata-v2`
-  - `runs/codex-claim-release-step4-kernel-rank-metadata-v1`
-  - `runs/codex-claim-release-step4-kernel-canonical-tail-v1`
+  - `runs/codex-claim-release-step4-kernel-materialize-cost-v1`
+  - `runs/codex-claim-release-step4-kernel-clause-load-v1`
+  - `runs/codex-claim-release-step4-kernel-bound-bookkeeping-v1`
 
 Let the run go far enough to capture at least:
-- matched `24/43/44/54`
-- the reopened `40 groups / 147639 candidates` surface at `74/76`
-- `140` only if it still arrives cheaply
+- matched `24`
+- `43/44/54` only if the `24` read still looks plausible
+- the reopened `40 groups / 147639 candidates` surface at `74/76` only if the early surface earns that extra runtime
 
-### 6. Read The Stored Artifacts
+### 5. Read The Stored Artifacts
 Open at least:
 - `reports/steps/step-04-live.ndjson`
 - `reports/latest.txt`
 - `run.json`
 
 Answer from stored evidence:
-- did the early `24/43/44/54` surface move back under the kept short baseline honestly on both elapsed and `terminal_summary_build_*`?
+- did the early `24` surface move back under the kept short baseline honestly on both elapsed and `terminal_summary_build_*`?
+- if not, which broad buckets dominated there: clause load, bookkeeping, bit-cost/bound work, connectivity, clause filtering, or compact materialization?
 - did clause filtering stay near the kept late diagnostic instead of reopening the old clause-filter wall?
-- did the reopened `74/76` wall stay aggregation-first, or did it move again?
-- which aggregation sub-buckets dominated at `74/76` and on the `54 -> 76` increment?
-- did full `AcceptRank` construction and canonical-key finalization become the rare tail rather than the common admitted-candidate path?
-- did `74/76` move past the kept full-profile aggregation baseline honestly?
+- if `24` passes honestly, did the later `43/44/54/74/76` surfaces also hold?
 
-### 7. Re-Earn Only The Validation Needed
+### 6. Re-Earn Only The Validation Needed
 If the slice stays claim-only and step-`4` runtime-only, rerun only:
 - `cargo test -p pen-search claim_`
 - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
@@ -168,7 +164,7 @@ After the next short rerun:
 
 ## Stop Condition For This Note
 Rewrite this file as soon as one new stored rerun shows one of these is true:
-- a composite aggregation-side metadata pack earns keep on both the early and reopened short surfaces
+- a broader kept-binary structural slice earns keep on the early short surface and still looks viable later
 - the step-`4` wall moves away from aggregation first
 - the new sub-bucket telemetry shows a different exact blocker than expected
 - a later full-profile rerun reaches a new blocker honestly
