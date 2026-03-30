@@ -5713,7 +5713,10 @@ fn load_terminal_clause_into_scratch<'a>(
     if scratch_telescope.clauses.len() == prefix_len {
         scratch_telescope.clauses.push(clause.clone());
     } else {
-        scratch_telescope.clauses[prefix_len] = clause.clone();
+        // Reuse the hot scratch slot's existing heap shape once it has been
+        // initialized so remaining-one summary/materialization stops paying a
+        // fresh deep clause clone on every terminal candidate.
+        scratch_telescope.clauses[prefix_len].clone_from(clause);
     }
     scratch_telescope
 }
