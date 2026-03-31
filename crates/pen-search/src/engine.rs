@@ -6106,7 +6106,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                 }
             } else {
                 for terminal_clause in terminal_clauses {
-                    let connectivity_started = Instant::now();
+                    let candidate_started = Instant::now();
                     let Some(connectivity_decision) = prefix_legality_cache
                         .terminal_connectivity_with_facts(
                             prefix_signature,
@@ -6117,52 +6117,58 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     else {
                         continue;
                     };
+                    let after_connectivity = Instant::now();
                     kernel_timing.terminal_summary_connectivity_checks += 1;
                     kernel_timing.terminal_summary_connectivity_duration +=
-                        connectivity_started.elapsed();
-                    let generated_started = Instant::now();
+                        after_connectivity.duration_since(candidate_started);
                     summary.generated_candidate_count += 1;
                     if matches!(
                         connectivity_decision,
                         TerminalConnectivityDecision::PruneDisconnected
                     ) {
+                        let after_disconnected = Instant::now();
                         kernel_timing.terminal_summary_aggregation_duration +=
-                            generated_started.elapsed();
+                            after_disconnected.duration_since(after_connectivity);
                         continue;
                     }
-                    kernel_timing.terminal_summary_aggregation_duration +=
-                        generated_started.elapsed();
 
-                    let load_started = Instant::now();
                     let telescope = load_terminal_clause_into_scratch(
                         &mut scratch_telescope,
                         prefix_len,
                         terminal_clause.clause,
                     );
-                    kernel_timing.terminal_summary_aggregation_duration += load_started.elapsed();
+                    let mut after_aggregation = Instant::now();
+                    kernel_timing.terminal_summary_aggregation_duration +=
+                        after_aggregation.duration_since(after_connectivity);
                     if matches!(
                         connectivity_decision,
                         TerminalConnectivityDecision::NeedsFallback
                     ) {
                         kernel_timing.terminal_summary_fallback_connectivity_checks += 1;
-                        let fallback_started = Instant::now();
+                        let fallback_started = after_aggregation;
                         if !passes_connectivity(library, telescope) {
+                            let after_fallback = Instant::now();
                             kernel_timing.terminal_summary_fallback_connectivity_duration +=
-                                fallback_started.elapsed();
+                                after_fallback.duration_since(fallback_started);
                             continue;
                         }
+                        let after_fallback = Instant::now();
                         kernel_timing.terminal_summary_fallback_connectivity_duration +=
-                            fallback_started.elapsed();
+                            after_fallback.duration_since(fallback_started);
+                        after_aggregation = after_fallback;
                     }
 
                     admitted_focus_aligned_count += 1;
                     kernel_timing.terminal_summary_exact_nu_evaluations += 1;
                     let exact_nu_started = Instant::now();
+                    kernel_timing.terminal_summary_aggregation_duration +=
+                        exact_nu_started.duration_since(after_aggregation);
                     let exact_nu =
                         u16::try_from(structural_nu(telescope, library, nu_history).total)
                             .expect("nu exceeded u16");
-                    kernel_timing.terminal_summary_exact_nu_duration += exact_nu_started.elapsed();
-                    let aggregation_started = Instant::now();
+                    let after_exact_nu = Instant::now();
+                    kernel_timing.terminal_summary_exact_nu_duration +=
+                        after_exact_nu.duration_since(exact_nu_started);
                     let bit_kappa_used = terminal_prefix_completion_bit_cost(
                         prefix_bit_cost,
                         terminal_clause.clause,
@@ -6183,8 +6189,9 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                         bit_kappa_used,
                         &mut summary,
                     );
+                    let after_rank_update = Instant::now();
                     kernel_timing.terminal_summary_aggregation_duration +=
-                        aggregation_started.elapsed();
+                        after_rank_update.duration_since(after_exact_nu);
                 }
             }
             summary.admissibility_diagnostics.record_repeated(

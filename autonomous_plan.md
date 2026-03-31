@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-03-30
+Last updated: 2026-03-31
 Status: active
 
 This file is the staged path from the current step-`4` wall to final claim
@@ -27,19 +27,23 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   keeps the honest `39/144845` retained-prefix shape through `24/43/44/54`
   and the honest reopened `40/147639` surface at `74/76`.
 - The current full-profile runtime reference
-  `runs/codex-claim-release-full-aggregation-open-band-compact-v1`
-  preserved the honest `39/144845`, `40/147639`, and `41/154842` story,
-  re-earned `42/157636` and `43/160430`, and moved the stored
-  step-`4` wall from `408` to `437`.
+  `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`
+  preserved the honest `39/144845`, `40/147639`, `41/154842`, `42/157636`,
+  and `43/160430` story and moved the stored step-`4` wall from `454`
+  to `484`.
 - That new full-profile reference materially improved every decisive stored
-  checkpoint through the previous stored `408` wall, then exposed a new later
-  blocker honestly: on the real intended profile, aggregation still leads,
+  checkpoint through the previous stored `454` wall and kept the visible
+  later blocker honest: on the real intended profile, aggregation still leads,
   connectivity is second, exact `nu` is third, and terminal clause-filter
   handoff remains tiny on the `41/42/43` surface.
-- Observed RSS on the new reference rose to about `1.44 GiB` by the stored
-  `437` read, materially above the previous runtime reference but still far
-  below the old allocator-failure band, so the blocker remains later step-`4`
-  throughput rather than allocator pressure.
+- Inference from the matched checkpoint totals: the latest win comes mostly
+  from collapsing previously unattributed summary-build overhead while
+  measured aggregation remains the lead bucket.
+- Observed RSS on the new reference rose to about `1.58 GiB` by the stored
+  `484` read and is slightly above the previous runtime reference on the
+  matched later surface, but it still stays far below the old
+  allocator-failure band, so the blocker remains later step-`4` throughput
+  rather than allocator pressure.
 - The next step should therefore keep the short winner and current full-profile
   runtime reference in code, leave the dropped metadata, reopened-connectivity,
   clause-load-only, bookkeeping/bound-only, admitted-kernel-only, and
@@ -58,7 +62,7 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - Replace the full-profile runtime reference only if the new rerun:
   - preserves the honest retained-prefix story already visible on the current
     runtime reference
-  - moves materially past the current stored `437` wall or reaches step `5`
+  - moves materially past the current stored `484` wall or reaches step `5`
   - and keeps RSS well below the old allocator-failure band
 - Retire a hypothesis after one honest stored rerun if it shows:
   - non-engagement
@@ -79,9 +83,11 @@ Working baselines:
 - short:
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
 - full-profile runtime reference:
-  `runs/codex-claim-release-full-aggregation-open-band-compact-v1`
+  `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`
 - previous full-profile runtime reference:
-  `runs/codex-claim-release-full-connectivity-facts-v1`
+  `runs/codex-claim-release-full-aggregation-open-band-scratch-clonefrom-v1`
+- earlier full-profile runtime reference:
+  `runs/codex-claim-release-full-aggregation-open-band-compact-v1`
 - broader full-profile baseline:
   `runs/codex-claim-release-full-kernel-aggregation-v1`
 - late diagnostic:
@@ -140,7 +146,7 @@ Required output:
 Done when:
 
 - the run either moves materially past
-  `runs/codex-claim-release-full-aggregation-open-band-compact-v1`, exposes a
+  `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`, exposes a
   later blocker honestly, or finishes through step `15`
 
 ## Phase 3: Finish A Full Claim Bundle

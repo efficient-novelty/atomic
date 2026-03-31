@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-03-30
+Last updated: 2026-03-31
 
 This checklist is the live signoff gate for `desktop_claim_shadow`.
 It lists only work that is still open.
@@ -9,7 +9,7 @@ It lists only work that is still open.
 
 - The claim lane still does not have a signoff-ready full-profile bundle.
 - The current full-profile runtime reference is
-  `runs/codex-claim-release-full-aggregation-open-band-compact-v1`.
+  `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`.
 - The current short step-`4` baseline is
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
 - The most recent informative late-surface diagnostic is
@@ -21,50 +21,58 @@ It lists only work that is still open.
   - `40 groups / 147639 candidates` at `74/76`
   - `41 groups / 154842 candidates` from `140` through `331`
   - `42 groups / 157636 candidates` at `332/333/334`
-  - `43 groups / 160430 candidates` through the stored `437` read
+  - `43 groups / 160430 candidates` through the stored `484` read
 - That follow-up materially improved every decisive stored matched checkpoint
-  through `408`:
-  - `24`: `382590 / 379801` instead of `385802 / 383018`
-  - `43`: `690362 / 686494` instead of `698661 / 694743`
-  - `44`: `704899 / 700975` instead of `713483 / 709504`
-  - `54`: `868693 / 864182` instead of `880003 / 875413`
-  - `74`: `1199861 / 1194114` instead of `1210334 / 1204512`
-  - `76`: `1239371 / 1233502` instead of `1250591 / 1244645`
-  - `140`: `2376318 / 2366374` instead of `2389805 / 2379752`
-  - `163`: `2764278 / 2752823` instead of `2773573 / 2762030`
-  - `228`: `3893876 / 3878458` instead of `3924018 / 3908221`
-  - `229`: `3913384 / 3897912` instead of `3945205 / 3929337`
-  - `332`: `5752765 / 5731419` instead of `5857640 / 5835050`
-  - `335`: `5806317 / 5784752` instead of `5912135 / 5889319`
-  - `408`: `7058211 / 7032377` instead of `7191639 / 7164178`
+  through the previous stored `454` wall:
+  - `24`: `327917 / 325321` instead of `385100 / 382267`
+  - `43`: `591083 / 587479` instead of `693470 / 689512`
+  - `44`: `603570 / 599913` instead of `708134 / 704116`
+  - `54`: `743997 / 739797` instead of `872387 / 867757`
+  - `74`: `1023572 / 1018283` instead of `1200035 / 1194139`
+  - `76`: `1057864 / 1052464` instead of `1239059 / 1233043`
+  - `140`: `2014043 / 2005230` instead of `2349156 / 2339322`
+  - `163`: `2334208 / 2324213` instead of `2722673 / 2711471`
+  - `228`: `3287422 / 3274060` instead of `3837038 / 3821952`
+  - `229`: `3304737 / 3291324` instead of `3856643 / 3841498`
+  - `332`: `4885155 / 4866258` instead of `5704569 / 5683113`
+  - `335`: `4931017 / 4911930` instead of `5758074 / 5736396`
+  - `408`: `6031554 / 6007913` instead of `7014570 / 6988332`
+  - `437`: `6494645 / 6469171` instead of `7548400 / 7520336`
+  - `454`: `6770742 / 6744132` instead of `7860534 / 7831399`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
-- At `140/163/228/229/332/335/408/437`, stored step-live telemetry still
+- At `140/163/228/229/332/335/408/454/484`, stored step-live telemetry still
   shows aggregation first, connectivity second, exact `nu` third, and
   terminal clause-filter handoff tiny:
-  - `140`: aggregation `= 736648605 us`, connectivity `= 584518736 us`,
-    exact `nu` `= 514778949 us`, handoff `= 16302812 us`
-  - `163`: aggregation `= 848880527 us`, connectivity `= 685516569 us`,
-    exact `nu` `= 599314951 us`, handoff `= 19619817 us`
-  - `228`: aggregation `= 1181979703 us`, connectivity `= 963171133 us`,
-    exact `nu` `= 859172298 us`, handoff `= 28959988 us`
-  - `229`: aggregation `= 1190946496 us`, connectivity `= 967419769 us`,
-    exact `nu` `= 861934419 us`, handoff `= 29077770 us`
-  - `332`: aggregation `= 1750150164 us`, connectivity `= 1399874662 us`,
-    exact `nu` `= 1295406289 us`, handoff `= 43827165 us`
-  - `335`: aggregation `= 1765342397 us`, connectivity `= 1412824636 us`,
-    exact `nu` `= 1308406106 us`, handoff `= 44274555 us`
-  - `408`: aggregation `= 2125653593 us`, connectivity `= 1725842418 us`,
-    exact `nu` `= 1597252620 us`, handoff `= 55875597 us`
-  - `437`: aggregation `= 2281770088 us`, connectivity `= 1848246266 us`,
-    exact `nu` `= 1728738686 us`, handoff `= 60344895 us`
+  - `140`: aggregation `= 763398133 us`, connectivity `= 557557788 us`,
+    exact `nu` `= 511854832 us`, handoff `= 25988115 us`
+  - `163`: aggregation `= 877573120 us`, connectivity `= 651431110 us`,
+    exact `nu` `= 594142794 us`, handoff `= 29787220 us`
+  - `228`: aggregation `= 1222738289 us`, connectivity `= 916833230 us`,
+    exact `nu` `= 851890919 us`, handoff `= 35116478 us`
+  - `229`: aggregation `= 1231827955 us`, connectivity `= 920978899 us`,
+    exact `nu` `= 854659192 us`, handoff `= 35324213 us`
+  - `332`: aggregation `= 1817428261 us`, connectivity `= 1345141843 us`,
+    exact `nu` `= 1288881640 us`, handoff `= 46243052 us`
+  - `335`: aggregation `= 1833436572 us`, connectivity `= 1357602031 us`,
+    exact `nu` `= 1302219954 us`, handoff `= 46350411 us`
+  - `408`: aggregation `= 2218628958 us`, connectivity `= 1675112606 us`,
+    exact `nu` `= 1596901898 us`, handoff `= 54702325 us`
+  - `454`: aggregation `= 2480479553 us`, connectivity `= 1875448296 us`,
+    exact `nu` `= 1808063671 us`, handoff `= 58420696 us`
+  - `484`: aggregation `= 2641777960 us`, connectivity `= 2010145015 us`,
+    exact `nu` `= 1932111468 us`, handoff `= 65158646 us`
   - `terminal_summary_admissibility_checks = 0` and
     `terminal_summary_fallback_connectivity_checks = 0` through the stored
-    `437` read
-- Observed RSS reached `1440825344` bytes by the stored `437` checkpoint.
-  That is materially higher than the previous runtime reference, but it still
-  stays well below the old allocator-failure band, so the intended profile is
-  still throughput-bound rather than allocator-bound on the current winner.
-- That rerun was manually stopped after the decisive stored `437` checkpoint.
+    `484` read
+- Inference from the matched checkpoint totals:
+  the new winner's main gain comes from shrinking the previously unattributed
+  summary-build tail rather than from lower measured aggregation itself.
+- Observed RSS reached `1581830144` bytes by the stored `484` checkpoint.
+  That is slightly above the previous runtime reference on the matched later
+  surface, but it still stays well below the old allocator-failure band, so
+  the intended profile is still throughput-bound rather than allocator-bound
+  on the current winner.
+- That rerun was manually stopped after the decisive stored `484` checkpoint.
   Because the stop was external during step `4`, `reports/latest.txt` still
   reflects completed step `3`, `run.json` still says `status = "running"`,
   and `reports/steps/step-05-live.ndjson` is absent; the authoritative
