@@ -72,7 +72,7 @@ standalone next moves:
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
 - Current full-profile runtime reference:
   `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`
-- Current live intended-profile rerun:
+- Current stopped intended-profile rerun and best speed target:
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
 - Previous proof-of-win intended-profile rerun:
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v1`
@@ -131,17 +131,20 @@ standalone next moves:
     exact `nu` `= 1808063671 us`, terminal clause-filter handoff `= 58420696 us`
   - `484`: aggregation `= 2641777960 us`, connectivity `= 2010145015 us`,
     exact `nu` `= 1932111468 us`, terminal clause-filter handoff `= 65158646 us`
-- The current live intended-profile rerun on the already-landed
-  prefix-`nu` context slice has now re-earned the later `42/43` reopens and
-  remains ahead of the current runtime reference at the matched
-  `140/163/332/335/408` checkpoints, but it has not yet re-earned the stored
-  `437/454/484` wall or reached step `5`.
-- The biggest missing operational layer is now iteration speed: the repo still
-  has no deterministic replay harness for the stable retained plateau
-  prefixes `39 / 144845`, `40 / 147639`, `41 / 154842`, `42 / 157636`, and
-  `43 / 160430`, even though the stored step-live artifacts are now stable
-  enough to replay the hot remaining-one kernel on fixtures instead of waiting
-  on multi-hour full reruns.
+- The stopped intended-profile rerun on the already-landed prefix-`nu`
+  context slice is now the best current speed target to beat:
+  it re-earned the decisive `140/163/332/335/408/437/454/484` region,
+  re-opened `42/43`, stayed ahead of the current runtime reference at every
+  matched checkpoint there, moved the stored wall to `1038`, and still did
+  not reach step `5`.
+- The deterministic replay harness is now landed end-to-end on stored
+  evidence:
+  `tests/fixtures/claim_runtime/remaining_one_plateau_fixtures.json` now
+  stores `39 / 144845 @ 24`, `40 / 147639 @ 74`, `41 / 154842 @ 140`,
+  `42 / 157636 @ 332`, and `43 / 160430 @ 335`, and
+  `tests/fixtures/claim_runtime/remaining_one_plateau_benchmark.json` now
+  stores the corresponding `10`-iteration release timings:
+  `2830 us`, `4447 us`, `3017 us`, `2983 us`, and `2234 us` average.
 - The failed rank-scan follow-up on the current winner,
   `runs/codex-claim-release-full-aggregation-open-band-rank-scan-v1`,
   preserved the honest `39/40/41` retained-prefix story through the stored
@@ -207,9 +210,9 @@ standalone next moves:
   question: the retained-prefix plateau after state `24` is real, but this
   specific cached-summary reopen path is dormant on the decisive `39/40/41`
   surfaces, so it cannot explain or relieve the active later cost yet.
-- The next honest operational addition is therefore not just another full
-  rerun. It is a deterministic replay harness for the retained plateau
-  prefixes plus one harness-backed hit-path slice on the current winner.
+- The replay harness layer is now in place, so the next honest operational
+  addition is the first harness-backed hit-path slice on the current winner,
+  not another harness-build turn and not another plain rerun.
 - Because stored later surfaces already keep
   `terminal_summary_admissibility_checks = 0` and
   `terminal_summary_fallback_connectivity_checks = 0`, the next code slice
@@ -218,12 +221,11 @@ standalone next moves:
   another cache-first miss-path rewrite.
 
 ## Goal
-While the live prefix-`nu` rerun finishes, add the missing iteration-speed
-layer and line up the next harness-backed runtime cut on the current winner:
-- build a deterministic replay harness for the stable retained plateau
-  prefixes and benchmark only
-  `compute_terminal_prefix_completion_summary_from_candidates(...)` on stored
-  fixtures
+With the stopped prefix-`nu` rerun now serving as the best speed target and
+the replay harness already landed, line up the next harness-backed runtime cut
+on the current winner:
+- keep the full retained plateau fixture corpus and replay benchmark read live
+  while judging slices locally
 - then land one narrow hit-path slice that pushes the step-`4` loop toward
   clause refs plus predecoded connectivity facts plus predecoded
   structural-`nu` facts without relying on dormant cached-summary reopen logic
@@ -247,12 +249,12 @@ Keep the code behind:
 Keep `runs/codex-claim-release-full-kernel-aggregation-v1` only as the broader
 comparison baseline.
 
-Keep the current live intended-profile rerun
+Keep the stopped intended-profile rerun
 `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
-running until it either:
-- re-earns the stored `437/454/484` wall
-- reaches step `5`
-- or stops externally for a new honest reason
+as the best current speed target until a later slice either:
+- beats its stored `140/163/332/335/408/437/454/484` checkpoints honestly
+- moves materially past its stored `1038` wall
+- or reaches step `5`
 
 Do not reopen first:
 - another plain intended-profile rerun with no code or new runtime question
@@ -268,29 +270,33 @@ Do not reopen first:
 - another timing-only rewrite that merely reattributes the same late-surface
   cost with no new runtime question
 
-### 2. Add Iteration-Speed Layer First
-Build a deterministic replay harness for the retained plateau prefixes before
-cutting the next full-profile runtime slice.
+### 2. Keep The Iteration-Speed Layer Live
+Use the landed deterministic replay harness as the local judge before cutting
+the next full-profile runtime slice.
 
-The harness should:
-- materialize deterministic fixtures for the stable retained surfaces
-  `39 / 144845`, `40 / 147639`, `41 / 154842`, `42 / 157636`, and
-  `43 / 160430`
-- benchmark only
+The harness state to keep is:
+- `tests/fixtures/claim_runtime/remaining_one_plateau_fixtures.json` holding
+  the stable retained surfaces
+  `39 / 144845 @ 24`, `40 / 147639 @ 74`, `41 / 154842 @ 140`,
+  `42 / 157636 @ 332`, and `43 / 160430 @ 335`
+- `tests/fixtures/claim_runtime/remaining_one_plateau_benchmark.json`
+  recording the compact-summary-parity benchmark on exactly
   `compute_terminal_prefix_completion_summary_from_candidates(...)`
-- replay the stored hot kernel from real step-`4` evidence rather than from
-  synthetic data
-- check deterministic best-rank parity and output shape on every stored
+- release-mode harness refreshes via
+  `cargo run --release -p xtask -- claim-replay-harness ...`, since the late
+  plateau capture is too slow in the default debug profile on this repo
+- deterministic best-rank parity and output-shape checks on every stored
   surface before a full rerun is used to judge the slice
 
 Do not reopen first:
 - another later-surface code slice with no harness-backed replay read
 - another attempt to wake the full cached-summary reopen mechanism as the
   primary next move
-- deterministic batched parallel reduction before the harness exists
+- deterministic batched parallel reduction before the harness-backed slice
+  proves merge parity safely
 
 ### 3. Cut Facts-Only Hot Loop First
-After the harness lands, bias the next actual code slice toward the hit path
+With the harness landed, bias the next actual code slice toward the hit path
 itself.
 
 Bias toward this shape:
@@ -353,7 +359,7 @@ Answer from stored evidence:
   to improve the wall clock on the current winner?
 - did aggregation stay the lead bucket, or did a different bucket take the
   lead honestly on the later surface?
-- did the run move materially past the stored `484` wall or reach step `5`?
+- did the run move materially past the stored `1038` wall or reach step `5`?
 - did observed RSS stay well below the old allocator-failure band, and did its
   later growth flatten or worsen relative to the current runtime reference?
 
@@ -371,17 +377,20 @@ After the next later-surface slice:
 - keep `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`
   as the runtime reference until a later rerun beats its stored `484` wall
   honestly
+- keep `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
+  as the current speed target until a later rerun beats its stored `1038`
+  wall honestly
 - keep the replay harness as a permanent iteration layer for later claim
-  runtime slices once it lands
+  runtime slices
 - branch to parity, breadth, compare, benchmark, and certification work only
   after a later full-profile rerun reaches step `5` or moves materially past
-  the current stored `484` wall
+  the current stored `1038` wall
 
 ## Stop Condition For This Note
 Rewrite this file as soon as one new stored follow-up shows one of these is
 true:
-- the current live intended-profile rerun reaches a new later blocker
-  honestly
+- a later full-profile follow-up replaces the current best speed target with a
+  new honest blocker
 - the current full-profile runtime reference reaches a new later blocker
   honestly
 - the intended profile finally moves past the step-`4` wall
