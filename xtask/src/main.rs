@@ -5,6 +5,12 @@ use pen_core::library::{Library, LibraryEntry};
 use pen_core::telescope::Telescope;
 use pen_eval::bar::DiscoveryRecord;
 use pen_search::config::RuntimeConfig;
+use pen_search::engine::claim_replay::{
+    ClaimRemainingOneSurfaceTarget, benchmark_claim_remaining_one_replay_fixtures,
+    capture_claim_remaining_one_replay_fixtures, default_claim_remaining_one_surface_targets,
+    read_claim_remaining_one_replay_fixtures, render_claim_remaining_one_replay_benchmark_text,
+    write_claim_remaining_one_replay_benchmark, write_claim_remaining_one_replay_fixtures,
+};
 use pen_search::expand::evaluate_candidate;
 use schemars::schema_for;
 use std::env;
@@ -23,8 +29,11 @@ fn main() -> Result<()> {
                 .unwrap_or(15);
             export_reference_agda(repo_root()?, until_step)
         }
+        Some("claim-replay-harness") => claim_replay_harness(repo_root()?, args.collect()),
         Some(other) => bail!("unknown xtask command: {other}"),
-        None => bail!("usage: cargo xtask <generate-schemas|export-reference-agda [until_step]>"),
+        None => bail!(
+            "usage: cargo xtask <generate-schemas|export-reference-agda [until_step]|claim-replay-harness <capture|benchmark> ...>"
+        ),
     }
 }
 
@@ -105,6 +114,86 @@ fn export_reference_agda(root: PathBuf, until_step: u32) -> Result<()> {
         ExportSource::ReferenceReplayFallback,
     )?;
     Ok(())
+}
+
+fn claim_replay_harness(root: PathBuf, args: Vec<String>) -> Result<()> {
+    let mut args = args.into_iter();
+    match args.next().as_deref() {
+        Some("capture") => {
+            let output_path = args
+                .next()
+                .map(PathBuf::from)
+                .unwrap_or_else(|| default_claim_replay_fixture_path(&root));
+            let surface_targets = args
+                .next()
+                .map(|value| parse_claim_replay_surface_targets(&value))
+                .transpose()?
+                .unwrap_or_else(default_claim_remaining_one_surface_targets);
+            let fixtures = capture_claim_remaining_one_replay_fixtures(&surface_targets)?;
+            write_claim_remaining_one_replay_fixtures(&output_path, &fixtures)?;
+            println!(
+                "captured {} claim replay fixtures into {}",
+                fixtures.len(),
+                output_path.display()
+            );
+            Ok(())
+        }
+        Some("benchmark") => {
+            let fixture_path = args
+                .next()
+                .map(PathBuf::from)
+                .unwrap_or_else(|| default_claim_replay_fixture_path(&root));
+            let iterations = args
+                .next()
+                .map(|value| value.parse::<usize>().context("parse benchmark iterations"))
+                .transpose()?
+                .unwrap_or(10);
+            let json_output_path = args.next().map(PathBuf::from);
+            let fixtures = read_claim_remaining_one_replay_fixtures(&fixture_path)?;
+            let benchmark = benchmark_claim_remaining_one_replay_fixtures(&fixtures, iterations)?;
+            let rendered = render_claim_remaining_one_replay_benchmark_text(&benchmark);
+            println!("{rendered}");
+            if let Some(json_output_path) = json_output_path {
+                write_claim_remaining_one_replay_benchmark(&json_output_path, &benchmark)?;
+            }
+            Ok(())
+        }
+        Some(other) => bail!("unknown claim-replay-harness command: {other}"),
+        None => bail!(
+            "usage: cargo xtask claim-replay-harness <capture [output_path] [surfaces_csv]|benchmark [fixture_path] [iterations] [json_output_path]>"
+        ),
+    }
+}
+
+fn default_claim_replay_fixture_path(root: &Path) -> PathBuf {
+    root.join("tests")
+        .join("fixtures")
+        .join("claim_runtime")
+        .join("remaining_one_plateau_fixtures.json")
+}
+
+fn parse_claim_replay_surface_targets(value: &str) -> Result<Vec<ClaimRemainingOneSurfaceTarget>> {
+    if value.trim().is_empty() {
+        bail!("claim replay surface target list must not be empty");
+    }
+
+    value
+        .split(',')
+        .map(|entry| {
+            let entry = entry.trim();
+            let (groups, candidates) = entry.split_once('/').ok_or_else(|| {
+                anyhow::anyhow!("surface target '{entry}' must use groups/candidates")
+            })?;
+            Ok(ClaimRemainingOneSurfaceTarget {
+                prefix_cache_groups: groups
+                    .parse::<usize>()
+                    .with_context(|| format!("parse groups in '{entry}'"))?,
+                prefix_cache_candidates: candidates
+                    .parse::<usize>()
+                    .with_context(|| format!("parse candidates in '{entry}'"))?,
+            })
+        })
+        .collect()
 }
 
 fn step_label(step_index: u32) -> &'static str {

@@ -20,6 +20,7 @@ use pen_type::connectivity::{
     ConnectivitySummary, ConnectivityTerminalDecision, HistoricalReanchorSummary,
     TerminalClauseConnectivityFacts,
 };
+use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
@@ -274,7 +275,7 @@ pub struct TerminalPrefixCompletion {
     pub clause_kappa_used: u16,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct TerminalPrefixPrimaryRank {
     pub overshoot: Rational,
     pub clause_kappa: u16,

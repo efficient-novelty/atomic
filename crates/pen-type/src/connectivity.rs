@@ -2,6 +2,7 @@ use pen_core::clause::ClauseRec;
 use pen_core::expr::Expr;
 use pen_core::library::Library;
 use pen_core::telescope::{Telescope, TelescopeClass};
+use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -20,7 +21,7 @@ pub enum ConnectivityTerminalDecision {
     NeedsFallback,
 }
 
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 pub struct TerminalClauseConnectivityFacts {
     lib_refs: Box<[u32]>,
     max_lib_ref: u32,

@@ -301,7 +301,7 @@ impl AdmissibilityDiagnostics {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct StrictAdmissibility {
     pub mode: AdmissibilityMode,
     pub min_clause_kappa: u16,

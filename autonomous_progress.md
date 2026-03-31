@@ -79,6 +79,23 @@ gate.
 - The first stored plateau activation is still `24`, and
   `terminal_summary_plateau_activations = 231996` has stayed flat through the
   stored `1038` read.
+- The deterministic plateau replay harness is now landed in code:
+  `pen_search::engine::claim_replay` can capture compact remaining-one summary
+  inputs at targeted retained surfaces, replay only
+  `compute_terminal_prefix_completion_summary_from_candidates(...)`, and check
+  compact summary parity before reporting local benchmark timings.
+- A repo-facing entry point is now landed too:
+  `cargo xtask claim-replay-harness <capture|benchmark> ...`.
+- The harness has honest local validation now:
+  - `cargo test -p pen-search claim_`
+  - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
+  both pass with the new replay module and its compact-summary parity test.
+- The stored plateau fixture corpus is still not materialized yet.
+  The first in-turn capture attempt through the new `xtask` path did not
+  finish within the session window before the first requested
+  `39 / 144845` fixture was written, so iteration-speed scaffolding is landed
+  but the real `39/40/41/42/43` fixture set still needs a dedicated capture
+  run.
 - Observed RSS stayed well below the old allocator-failure band, even though
   late drift rose materially after the prior `484` wall:
   - `140`: `572006400` bytes
@@ -543,13 +560,12 @@ honesty. Aggregation and late RSS should stay in view as explicit guardrails
 while answering that.
 
 ## New Planning Input
-- The biggest missing operational layer is iteration speed: build a
-  deterministic replay harness for the stable retained plateau prefixes
-  `39 / 144845`, `40 / 147639`, `41 / 154842`, `42 / 157636`, and
-  `43 / 160430`, then benchmark only
-  `compute_terminal_prefix_completion_summary_from_candidates(...)` on stored
-  fixtures instead of waiting on multi-hour full reruns for every later-step
-  idea.
+- The biggest missing operational layer is still iteration speed, but the
+  scaffolding status is now mixed instead of absent:
+  the deterministic replay harness and benchmark path are landed, while the
+  stored plateau fixture corpus for `39 / 144845`, `40 / 147639`,
+  `41 / 154842`, `42 / 157636`, and `43 / 160430` still needs to be captured
+  from a dedicated step-`4` run.
 - The favored next actual code slice now that the rerun has been stopped is a
   facts-only hot loop: drive the step-`4` hit path all the way down to clause
   refs plus predecoded connectivity facts plus predecoded structural-`nu`
@@ -578,23 +594,26 @@ while answering that.
    reopen another unchanged connectivity-first retry, accumulator-only replay,
    contender-rank-helper replay, cached-summary-reuse replay, metadata retry,
    clause-load-only replay, or timing-only replay first.
-3. Build the deterministic plateau replay harness now that the current live
-   rerun has been stopped, and benchmark only
-   `compute_terminal_prefix_completion_summary_from_candidates(...)` on stored
-   fixtures for the stable `39/40/41/42/43` retained surfaces.
-4. Bias the next actual code slice after that harness lands toward the
+3. Use the landed replay harness to materialize the stored plateau fixtures
+   first, starting with the earliest stable retained surface and then carrying
+   that capture forward through the real `39/40/41/42/43` targets.
+4. Benchmark only
+   `compute_terminal_prefix_completion_summary_from_candidates(...)` on those
+   stored fixtures and require compact-summary parity before judging the next
+   runtime slice locally.
+5. Bias the next actual code slice after those fixtures land toward the
    facts-only hot loop: clause refs plus predecoded connectivity facts plus
    predecoded structural-`nu` facts on the hit path, since stored later
    surfaces already keep `terminal_summary_admissibility_checks = 0` and
    `terminal_summary_fallback_connectivity_checks = 0`.
-5. Keep the tiny survivor sketch and dense `lib_refs` membership micro-slice
+6. Keep the tiny survivor sketch and dense `lib_refs` membership micro-slice
    as harness-backed follow-ups if the facts-only slice still leaves too much
    second-pass duplication, and do not open deterministic batched parallel
    reduction before the harness proves merge parity safely.
-6. If code changes land, rerun only:
+7. If code changes land, rerun only:
    - `cargo test -p pen-search claim_`
    - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
-7. After the harness-backed slice lands, compare it against
+8. After the harness-backed slice lands, compare it against
    `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
    first. Branch to parity, breadth, compare, benchmark, or certification work
    only after a later full-profile rerun either reaches step `5` or moves

@@ -1,6 +1,7 @@
 use crate::bounds::PrefixBound;
 use pen_core::canonical::CanonKey;
 use pen_core::rational::Rational;
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum PruneClass {
@@ -15,7 +16,7 @@ pub enum BranchDecision {
     Prune(PruneClass),
 }
 
-#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct AcceptRank {
     pub overshoot: Rational,
     pub clause_kappa: u16,

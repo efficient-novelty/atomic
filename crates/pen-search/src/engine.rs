@@ -59,6 +59,9 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
+#[path = "engine_claim_replay.rs"]
+pub mod claim_replay;
+
 pub const LIVE_BOOTSTRAP_MAX_STEP: u32 = 15;
 const MAX_PRUNE_SAMPLES: usize = 3;
 const EXACT_PARTIAL_PREFIX_BOUND_BUDGET: usize = 32;
@@ -4037,6 +4040,9 @@ fn discover_realistic_shadow_candidates(
         .then(|| enumeration_context.surface_diagnostics());
 
     for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+        if claim_replay::capture_should_stop() {
+            break;
+        }
         if demo_discovery_budget_exhausted(
             demo_step_budget,
             &mut discovery,
@@ -4119,6 +4125,9 @@ fn discover_realistic_shadow_candidates(
 
         let mut frontier = Vec::new();
         for clause in clause_catalog.clauses_at(0) {
+            if claim_replay::capture_should_stop() {
+                break;
+            }
             if demo_discovery_budget_exhausted(
                 demo_step_budget,
                 &mut discovery,
@@ -4181,6 +4190,9 @@ fn discover_realistic_shadow_candidates(
         }
 
         while !frontier.is_empty() {
+            if claim_replay::capture_should_stop() {
+                break;
+            }
             maybe_emit_claim_live_checkpoint(
                 progress_observer,
                 &mut last_checkpoint_elapsed_millis,
@@ -4428,6 +4440,9 @@ fn discover_realistic_shadow_candidates(
             }
 
             for clause in work_item.next_clauses(&clause_catalog) {
+                if claim_replay::capture_should_stop() {
+                    break;
+                }
                 if demo_discovery_budget_exhausted(
                     demo_step_budget,
                     &mut discovery,
@@ -5926,6 +5941,19 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     let single_clause_nu_context = (!prefix_telescope.clauses.is_empty()).then(|| {
         SingleClauseStructuralNuContext::from_prefix(prefix_telescope, library, nu_history)
     });
+    let replay_capture = claim_replay::prepare_remaining_one_summary_capture(
+        step_index,
+        library,
+        admissibility,
+        objective_bar,
+        nu_history,
+        prefix_signature,
+        prefix_telescope,
+        payload,
+        &terminal_clauses,
+        incumbent_rank,
+        remaining_one_summary_kernel_activation,
+    );
     let mut kernel_timing = RemainingOneSummaryKernelTiming::default();
     match terminal_clauses {
         TerminalPrefixClauseCandidates::General(terminal_clauses) => {
@@ -6253,6 +6281,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
         telemetry.absorb_terminal_summary_kernel_timing(kernel_timing);
         telemetry.note_terminal_summary_plateau_activation(remaining_one_summary_kernel_activation);
     }
+    claim_replay::finish_remaining_one_summary_capture(replay_capture, &summary);
 
     summary
 }
@@ -9387,6 +9416,85 @@ mod tests {
             summary.admitted_candidate_count
         );
         assert_eq!(telemetry.terminal_summary_plateau_activations, 0);
+    }
+
+    #[test]
+    fn claim_replay_fixture_replays_compact_summary_with_parity() {
+        let (library, history, nu_history) = reference_history_until(3);
+        let admissibility =
+            strict_admissibility_for_mode(4, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = compute_bar(2, 4, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 3);
+        let prefix = Telescope::new(Telescope::reference(4).clauses[..2].to_vec());
+        let signature = PrefixSignature::new(4, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            3,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        let summary = super::compute_terminal_prefix_completion_summary_from_candidates(
+            4,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &signature,
+            &prefix,
+            super::TerminalPrefixSummaryPayload::Compact,
+            super::terminal_prefix_clause_candidates(
+                4,
+                &library,
+                admissibility,
+                &signature,
+                clause_catalog.clauses_at(2),
+                Some(clause_catalog.terminal_connectivity_facts_at(2)),
+                &mut cache,
+                None,
+            ),
+            None,
+            &mut cache,
+            None,
+            None,
+        );
+
+        let fixture = super::claim_replay::build_claim_remaining_one_replay_fixture(
+            4,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &signature,
+            &prefix,
+            None,
+            super::claim_replay::ClaimRemainingOneSurfaceSnapshot {
+                prefix_states_explored: 24,
+                prefix_cache_groups: super::CLAIM_REMAINING_ONE_RETAINED_PLATEAU_GROUPS,
+                prefix_cache_candidates: super::CLAIM_REMAINING_ONE_RETAINED_PLATEAU_CANDIDATES,
+            },
+            &super::terminal_prefix_clause_candidates(
+                4,
+                &library,
+                admissibility,
+                &signature,
+                clause_catalog.clauses_at(2),
+                Some(clause_catalog.terminal_connectivity_facts_at(2)),
+                &mut cache,
+                None,
+            ),
+            &summary,
+        );
+
+        let replay = super::claim_replay::replay_claim_remaining_one_fixture(&fixture)
+            .expect("fixture replay should preserve compact summary parity");
+
+        assert_eq!(replay.summary, fixture.expected_summary);
     }
 
     #[test]

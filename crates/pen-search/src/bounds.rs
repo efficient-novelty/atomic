@@ -1,7 +1,8 @@
 use crate::state::{FrontierStateRecV1, PrefixState};
 use pen_core::rational::Rational;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 pub struct PrefixBound {
     pub nu_lower_bound: u16,
     pub nu_upper_bound: u16,
