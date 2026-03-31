@@ -83,9 +83,35 @@ It lists only work that is still open.
   narrow later-surface runtime cut on the current winner so the post-`228`
   aggregation wall can move honestly again without hiding the newer RSS
   growth story.
+- The biggest missing operational layer is now iteration speed: the repo still
+  lacks a deterministic replay harness for the stable retained plateau
+  prefixes `39/144845`, `40/147639`, `41/154842`, `42/157636`, and
+  `43/160430`, even though stored step-`4` live artifacts are now sufficient
+  to benchmark the hot kernel locally.
+- Because stored later surfaces already keep
+  `terminal_summary_admissibility_checks = 0` and
+  `terminal_summary_fallback_connectivity_checks = 0`, the next code slice
+  should bias toward the hit path itself: clause refs plus predecoded
+  connectivity facts plus predecoded structural-`nu` facts, not another
+  cache-first miss-path rewrite.
+- A tiny survivor sketch and a dense `lib_refs` membership set remain
+  reasonable harness-backed follow-ups if the first facts-only slice still
+  leaves too much second-pass duplication. Deterministic batched parallel
+  reduction stays gated behind the harness and parity checks.
 
 ## 1. Runtime Completion
 
+- [ ] Build a deterministic replay harness for retained plateau prefixes from
+      stored `step-04-live.ndjson` evidence.
+- [ ] Persist deterministic plateau fixtures for `39/144845`, `40/147639`,
+      `41/154842`, `42/157636`, and `43/160430`.
+- [ ] Benchmark only
+      `compute_terminal_prefix_completion_summary_from_candidates(...)` on
+      those stored fixtures before another expensive later-surface slice lands.
+- [ ] Use that harness to validate the next facts-only hot-loop slice before
+      judging it from another multi-hour full-profile rerun.
+- [ ] Keep deterministic batched parallel reduction gated behind harness-backed
+      parity evidence.
 - [x] Land one narrow step-`4` connectivity-side or aggregation-side
       throughput patch that earns keep on stored telemetry.
 - [x] Re-earn one release `until_step = 4` rerun and confirm that the measured

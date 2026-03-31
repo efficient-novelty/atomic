@@ -72,6 +72,10 @@ standalone next moves:
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
 - Current full-profile runtime reference:
   `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`
+- Current live intended-profile rerun:
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
+- Previous proof-of-win intended-profile rerun:
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v1`
 - Previous full-profile runtime reference:
   `runs/codex-claim-release-full-aggregation-open-band-scratch-clonefrom-v1`
 - Earlier full-profile runtime reference:
@@ -127,6 +131,17 @@ standalone next moves:
     exact `nu` `= 1808063671 us`, terminal clause-filter handoff `= 58420696 us`
   - `484`: aggregation `= 2641777960 us`, connectivity `= 2010145015 us`,
     exact `nu` `= 1932111468 us`, terminal clause-filter handoff `= 65158646 us`
+- The current live intended-profile rerun on the already-landed
+  prefix-`nu` context slice has now re-earned the later `42/43` reopens and
+  remains ahead of the current runtime reference at the matched
+  `140/163/332/335/408` checkpoints, but it has not yet re-earned the stored
+  `437/454/484` wall or reached step `5`.
+- The biggest missing operational layer is now iteration speed: the repo still
+  has no deterministic replay harness for the stable retained plateau
+  prefixes `39 / 144845`, `40 / 147639`, `41 / 154842`, `42 / 157636`, and
+  `43 / 160430`, even though the stored step-live artifacts are now stable
+  enough to replay the hot remaining-one kernel on fixtures instead of waiting
+  on multi-hour full reruns.
 - The failed rank-scan follow-up on the current winner,
   `runs/codex-claim-release-full-aggregation-open-band-rank-scan-v1`,
   preserved the honest `39/40/41` retained-prefix story through the stored
@@ -192,22 +207,29 @@ standalone next moves:
   question: the retained-prefix plateau after state `24` is real, but this
   specific cached-summary reopen path is dormant on the decisive `39/40/41`
   surfaces, so it cannot explain or relieve the active later cost yet.
-- The next honest first cut is therefore still another narrow later-surface
-  runtime slice on the current winner, but not another unchanged contender-
-  rank-helper replay or another unchanged cached-summary-reuse replay. The
-  next slice should either make cached reuse actually engage on the retained
-  `39/40/41` plateau or cut the active connectivity/exact-`nu` work on those
-  same surfaces directly.
+- The next honest operational addition is therefore not just another full
+  rerun. It is a deterministic replay harness for the retained plateau
+  prefixes plus one harness-backed hit-path slice on the current winner.
+- Because stored later surfaces already keep
+  `terminal_summary_admissibility_checks = 0` and
+  `terminal_summary_fallback_connectivity_checks = 0`, the next code slice
+  should bias toward the cost of the hit path itself: clause refs plus
+  predecoded connectivity facts plus predecoded structural-`nu` facts, not
+  another cache-first miss-path rewrite.
 
 ## Goal
-Land one narrow later-surface runtime cut on the current winner that either:
-- makes cached compact-summary reuse engage honestly on the retained
-  `39/40/41` plateau
-- or reduces the active post-`140` / post-`163` connectivity and exact-`nu`
-  work directly without relying on dormant cached-summary reopen logic
+While the live prefix-`nu` rerun finishes, add the missing iteration-speed
+layer and line up the next harness-backed runtime cut on the current winner:
+- build a deterministic replay harness for the stable retained plateau
+  prefixes and benchmark only
+  `compute_terminal_prefix_completion_summary_from_candidates(...)` on stored
+  fixtures
+- then land one narrow hit-path slice that pushes the step-`4` loop toward
+  clause refs plus predecoded connectivity facts plus predecoded
+  structural-`nu` facts without relying on dormant cached-summary reopen logic
 
-Do that without losing the retained-prefix story or hiding the later RSS
-guardrail.
+Do that without losing the retained-prefix story, deterministic rank parity,
+or the later RSS guardrail.
 
 ## Do This Next
 
@@ -215,6 +237,7 @@ guardrail.
 Keep the code behind:
 - `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
 - `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`
+- `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v1`
 - `runs/codex-claim-release-full-aggregation-open-band-scratch-clonefrom-v1`
 - `runs/codex-claim-release-full-aggregation-open-band-compact-v1`
 - `runs/codex-claim-release-full-connectivity-facts-v1`
@@ -223,6 +246,13 @@ Keep the code behind:
 
 Keep `runs/codex-claim-release-full-kernel-aggregation-v1` only as the broader
 comparison baseline.
+
+Keep the current live intended-profile rerun
+`runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
+running until it either:
+- re-earns the stored `437/454/484` wall
+- reaches step `5`
+- or stops externally for a new honest reason
 
 Do not reopen first:
 - another plain intended-profile rerun with no code or new runtime question
@@ -234,32 +264,68 @@ Do not reopen first:
 - another metadata retry
 - another admitted-kernel-only replay
 - another clause-load-only or bookkeeping/bound-only cleanup
+- another multi-hour full-profile slice with no harness-backed local replay
 - another timing-only rewrite that merely reattributes the same late-surface
   cost with no new runtime question
 
-### 2. Cut Later Runtime First
-Land one narrow code change on the current winner that answers the new question
-the latest failed slice exposed.
+### 2. Add Iteration-Speed Layer First
+Build a deterministic replay harness for the retained plateau prefixes before
+cutting the next full-profile runtime slice.
 
-Bias toward one of these two shapes:
-- make cached compact-summary reuse actually engage on the retained
-  `39/40/41` plateau
-- or cut the active connectivity/exact-`nu` work on those same surfaces
-  directly, without relying on dormant cached-summary reopen logic
+The harness should:
+- materialize deterministic fixtures for the stable retained surfaces
+  `39 / 144845`, `40 / 147639`, `41 / 154842`, `42 / 157636`, and
+  `43 / 160430`
+- benchmark only
+  `compute_terminal_prefix_completion_summary_from_candidates(...)`
+- replay the stored hot kernel from real step-`4` evidence rather than from
+  synthetic data
+- check deterministic best-rank parity and output shape on every stored
+  surface before a full rerun is used to judge the slice
 
-Keep aggregation and the small later-surface RSS increase visible as honesty
-checks.
+Do not reopen first:
+- another later-surface code slice with no harness-backed replay read
+- another attempt to wake the full cached-summary reopen mechanism as the
+  primary next move
+- deterministic batched parallel reduction before the harness exists
+
+### 3. Cut Facts-Only Hot Loop First
+After the harness lands, bias the next actual code slice toward the hit path
+itself.
+
+Bias toward this shape:
+- keep the step-`4` loop on clause refs plus predecoded connectivity facts
+  plus predecoded structural-`nu` facts until a prefix survives
+- use the existing facts-based helpers directly rather than rebuilding clause
+  facts on the hot path
+- treat the stored zero
+  `terminal_summary_admissibility_checks` and zero
+  `terminal_summary_fallback_connectivity_checks` reads as evidence that
+  misses are not the main story anymore
 
 If code changes land, use a new run id that states the slice.
 
 Do not reintroduce first:
 - another unchanged contender-rank-helper replay with no new runtime question
 - another unchanged cached-summary-reuse replay with no new runtime question
+- another full cached-summary reopen wake-up attempt on the decisive
+  `39/40/41` surfaces
 - the parent-summary connectivity lookup reuse exactly as previously measured
 - new clause-filter metadata work
 - another timing-only replay with no new aggregation-side runtime question
 
-### 3. Re-Earn Stored Evidence
+### 4. Keep Secondary Harness-Backed Follow-Ups Narrow
+If the facts-only slice wins locally but still leaves too much second-pass
+duplication, keep the next follow-ups narrow:
+- prefer a tiny survivor sketch that stores only the clause refs/facts needed
+  for the best primary rank or remaining tie-break-relevant survivors, rather
+  than reopening the full dormant cached-summary reopen mechanism
+- prefer a dense bitset or fixed smallset for `lib_refs` membership inside
+  `SingleClauseStructuralNuContext` as a low-risk micro-slice
+- keep deterministic batched parallel reduction as a later, higher-risk move
+  that stays gated behind the replay harness and explicit merge-parity checks
+
+### 5. Re-Earn Stored Evidence
 After code changes land, rerun release claim with live checkpoint persistence
 on.
 
@@ -277,22 +343,21 @@ Open at least:
 
 Answer from stored evidence:
 - did the new slice preserve the `39 / 144845`, `40 / 147639`, and
-  `41 / 154842` surfaces honestly?
-- did cached-summary reopen actually engage on those decisive surfaces:
-  `remaining_one_materialized_from_cached_summary > 0` or
-  `remaining_one_prefixes_seen > 0`?
+  `41 / 154842` surfaces honestly, then re-earn `42 / 157636` and
+  `43 / 160430` too?
+- did the harness-backed slice lower the hit-path cost locally on the replay
+  fixtures before the full rerun, and did that local win survive the full
+  rerun honestly?
 - if cached-summary reopen still stayed dormant, did the new slice still move
   the active post-`140` / post-`163` connectivity and exact `nu` cost enough
   to improve the wall clock on the current winner?
 - did aggregation stay the lead bucket, or did a different bucket take the
   lead honestly on the later surface?
-- did the run re-earn or move the `42 / 157636` and `43 / 160430` surfaces
-  honestly?
 - did the run move materially past the stored `484` wall or reach step `5`?
 - did observed RSS stay well below the old allocator-failure band, and did its
   later growth flatten or worsen relative to the current runtime reference?
 
-### 4. Re-Earn Only The Validation Needed
+### 6. Re-Earn Only The Validation Needed
 If new code changes land before the rerun, rerun only:
 - `cargo test -p pen-search claim_`
 - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
@@ -306,6 +371,8 @@ After the next later-surface slice:
 - keep `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`
   as the runtime reference until a later rerun beats its stored `484` wall
   honestly
+- keep the replay harness as a permanent iteration layer for later claim
+  runtime slices once it lands
 - branch to parity, breadth, compare, benchmark, and certification work only
   after a later full-profile rerun reaches step `5` or moves materially past
   the current stored `484` wall
@@ -313,6 +380,8 @@ After the next later-surface slice:
 ## Stop Condition For This Note
 Rewrite this file as soon as one new stored follow-up shows one of these is
 true:
+- the current live intended-profile rerun reaches a new later blocker
+  honestly
 - the current full-profile runtime reference reaches a new later blocker
   honestly
 - the intended profile finally moves past the step-`4` wall

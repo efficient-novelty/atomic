@@ -13,6 +13,8 @@ gate.
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
 - The current full-profile runtime reference is
   `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`.
+- The best current full-profile candidate to beat is
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
 - The previous full-profile runtime reference is
   `runs/codex-claim-release-full-aggregation-open-band-scratch-clonefrom-v1`.
 - The earlier full-profile runtime reference is
@@ -21,24 +23,35 @@ gate.
   `runs/codex-claim-release-full-connectivity-facts-v1`.
 - The latest intended-profile rerun is
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
-  It is carrying the already-landed prefix-side single-clause structural `nu`
-  context slice farther on the current winner and is still live inside
-  step `4`.
-- That live rerun has already re-earned the honest retained-prefix story
-  through the current `41` surface:
+  It carried the already-landed prefix-side single-clause structural `nu`
+  context slice past the prior runtime reference, then was manually stopped
+  during step `4` after the stored `1038` checkpoint so it can serve as the
+  next speed target to beat.
+- That stopped rerun re-earned the honest retained-prefix story through the
+  farthest stored `43` surface:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
-  - `41 groups / 154842 candidates` from `140` through the current `168` read
-  It has not yet re-earned the current reference's `42 / 157636` or
-  `43 / 160430` reopens.
-- It remains materially ahead of the current runtime reference on the
-  decisive matched later checkpoints it has re-earned so far:
+  - `41 groups / 154842 candidates` from `140` through `331`
+  - `42 groups / 157636 candidates` at `332/333/334`
+  - `43 groups / 160430 candidates` through the stored `1038` read
+  It re-earned and beat the prior runtime reference's stored
+  `437/454/484` wall, but it still did not reach step `5`.
+- It remains materially ahead of the prior runtime reference on every
+  decisive matched later checkpoint it re-earned:
   - `140`: `1849510 / 1839797` instead of `2014043 / 2005230`
   - `163`: `2147103 / 2135876` instead of `2334208 / 2324213`
+  - `332`: `4465654 / 4444493` instead of `4885155 / 4866258`
+  - `335`: `4506796 / 4485426` instead of `4931017 / 4911930`
+  - `408`: `5479859 / 5454313` instead of `6031554 / 6007913`
+  - `437`: `5888660 / 5861474` instead of `6494645 / 6469171`
+  - `454`: `6125662 / 6097497` instead of `6770742 / 6744132`
+  - `484`: `6536061 / 6505941` instead of `7235355 / 7206681`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
 - The same exact-`nu` win is still the source of the improvement, even though
-  this live rerun is slightly softer than the earlier `v1` proof-of-win rerun
-  at matched `140/163`:
+  this stopped rerun is slightly softer than the earlier `v1` proof-of-win rerun
+  at matched `140/163`, and the later `42/43` reopens still show the same
+  aggregation-first, exact-`nu`-cut shape all the way through the prior
+  stored `484` wall:
   - `140`: aggregation `= 787853 ms` instead of `763398 ms`, connectivity
     `= 578640 ms` instead of `557557 ms`, exact `nu` `= 295922 ms` instead of
     `511854 ms`, terminal clause-filter handoff `= 15506 ms` instead of
@@ -47,29 +60,41 @@ gate.
     `= 678215 ms` instead of `651431 ms`, exact `nu` `= 343912 ms` instead of
     `594142 ms`, terminal clause-filter handoff `= 18516 ms` instead of
     `16351 ms`
-- Cached-summary reopen remains dormant on stored evidence through the current
-  `168` read:
+  - `408`: aggregation `= 2290021 ms` instead of `2218628 ms`,
+    connectivity `= 1729598 ms` instead of `1675112 ms`, exact
+    `nu` `= 903168 ms` instead of `1596901 ms`, terminal clause-filter
+    handoff `= 55743 ms` instead of `54702 ms`
+  - `484`: aggregation `= 2722926 ms` instead of `2641777 ms`,
+    connectivity `= 2063163 ms` instead of `2010145 ms`, exact
+    `nu` `= 1084329 ms` instead of `1902551 ms`, terminal clause-filter
+    handoff `= 70144 ms` instead of `65174 ms`
+- Cached-summary reopen remains dormant on stored evidence through the stored
+  `1038` read:
   - `remaining_one_materialized_from_cached_summary = 0`
   - `remaining_one_prefixes_seen = 0`
-  - `remaining_one_materialized_compact_direct = 41`
+  - `remaining_one_materialized_compact_direct = 43`
 - `terminal_summary_admissibility_checks = 0` and
-  `terminal_summary_fallback_connectivity_checks = 0` through the current
-  `168` read.
+  `terminal_summary_fallback_connectivity_checks = 0` through the stored
+  `1038` read.
 - The first stored plateau activation is still `24`, and
   `terminal_summary_plateau_activations = 231996` has stayed flat through the
-  current live read.
-- Observed RSS stayed well below the old allocator-failure band:
+  stored `1038` read.
+- Observed RSS stayed well below the old allocator-failure band, even though
+  late drift rose materially after the prior `484` wall:
   - `140`: `572006400` bytes
   - `163`: `638435328` bytes
-  - `168`: `653393920` bytes
+  - `332`: `938635264` bytes
+  - `408`: `1064996864` bytes
+  - `484`: `1233252352` bytes
+  - `1038`: `2303102976` bytes
 - The previous manually stopped proof-of-win rerun remains
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v1`.
   It still provides the deepest stored completed read of this slice through
   `239`.
-- Because the current rerun is still active inside step `4`,
+- Because the rerun was manually stopped externally during step `4`,
   `reports/latest.txt` still reflects completed step `3`, `run.json` still
   says `status = "running"`, and `reports/steps/step-05-live.ndjson` is
-  absent; the authoritative evidence so far lives in
+  absent; the authoritative evidence lives in
   `reports/steps/step-04-live.ndjson`.
 
 ## What Stays Landed
@@ -152,55 +177,69 @@ gate.
 - The run never reached step `5` on stored evidence;
   `reports/steps/step-05-live.ndjson` is absent.
 
-### 3. Latest Active Intended-Profile Rerun
+### 3. Best Current Candidate
 - Run: `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
 - Hypothesis:
   keep the already-landed prefix-`nu` context slice intact and carry the same
   intended-profile rerun deeper before deciding whether it can replace the
   current runtime reference.
-- Outcome so far:
-  - it has preserved the honest `39/40/41` retained-prefix story through the
-    current stored `168` read while still running
-  - it has re-earned the decisive `140/163` region and remains materially
-    ahead of the current runtime reference there
-  - it has not yet re-earned the current runtime reference's
-    `42 / 157636`, `43 / 160430`, or stored `484` wall
+- Outcome:
+  - it preserved the honest `39/40/41/42/43` retained-prefix story through
+    the stored `1038` read before being manually stopped
+  - it re-earned the decisive `140/163/332/335/408/437/454/484` region and
+    stayed materially ahead of the current runtime reference at every matched
+    checkpoint
+  - it moved the stored step-`4` wall materially past the previous
+    `484` stopper to `1038`
+  - it still did not reach step `5`
   - it is slightly slower than the earlier `v1` proof-of-win rerun at matched
     `140/163`, but not enough to erase the win versus the current runtime
-    reference
+    reference, and the later `42/43/484` region is now back with a clear
+    wall-clock lead
   - it is still winning by cutting exact `nu`; aggregation remains first,
     connectivity remains second, exact `nu` remains third, and the terminal
     clause-filter handoff remains tiny
-  - cached-summary reopen is still dormant on stored evidence
-  - it remains memory-safe and still shows no sign of the old
-    allocator-failure story returning
-  - the rerun is still active, so this read is provisional until the later
-    `42/43/484` region or step `5` is re-earned
+  - cached-summary reopen stayed dormant on stored evidence
+  - it remained memory-safe, though late RSS drift rose materially by the
+    stopped `1038` read
 - Comparison versus the current runtime reference:
   - `140`: `1849510 / 1839797` instead of `2014043 / 2005230`
   - `163`: `2147103 / 2135876` instead of `2334208 / 2324213`
+  - `332`: `4465654 / 4444493` instead of `4885155 / 4866258`
+  - `335`: `4506796 / 4485426` instead of `4931017 / 4911930`
+  - `408`: `5479859 / 5454313` instead of `6031554 / 6007913`
+  - `437`: `5888660 / 5861474` instead of `6494645 / 6469171`
+  - `454`: `6125662 / 6097497` instead of `6770742 / 6744132`
+  - `484`: `6536061 / 6505941` instead of `7235355 / 7206681`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
 - Comparison versus the earlier `v1` proof-of-win rerun:
   - `140`: `1849510 / 1839797` instead of `1836533 / 1826733`
   - `163`: `2147103 / 2135876` instead of `2135897 / 2124610`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
-- Stored later-surface read so far:
+- Stored later-surface read before stopping:
   - `140`: `41 groups / 154842 candidates`, exact `nu` `= 295922 ms`
     instead of `511854 ms`, RSS `= 572006400` bytes
   - `163`: `41 groups / 154842 candidates`, exact `nu` `= 343912 ms`
     instead of `594142 ms`, RSS `= 638435328` bytes
-  - `168`: `41 groups / 154842 candidates`, exact `nu` `= 354460 ms`,
-    RSS `= 653393920` bytes
+  - `332`: `42 groups / 157636 candidates`, exact `nu` `= 732960 ms`,
+    RSS `= 938635264` bytes
+  - `408`: `43 groups / 160430 candidates`, exact `nu` `= 903168 ms`,
+    RSS `= 1064996864` bytes
+  - `484`: `43 groups / 160430 candidates`, exact `nu` `= 1084329 ms`,
+    RSS `= 1233252352` bytes
+  - `1038`: `43 groups / 160430 candidates`, exact `nu` `= 2406190 ms`,
+    RSS `= 2303102976` bytes
 - Honest read:
-  the deeper rerun confirms that the same exact-`nu` win still survives the
-  minimum `140/163` re-earn on the real intended profile without waking the
-  dormant cached-summary reopen path. The current runtime reference still
-  holds until this live rerun proves itself once the later `42/43/484` region
-  comes back.
-- Because the rerun is still live during step `4`, `reports/latest.txt` still
-  reflects completed step `3`, `run.json` still says `status = "running"`,
+  the deeper rerun has now shown that the same exact-`nu` win survives not
+  just the minimum `140/163` re-earn, but also the later `42/43` reopens and
+  the full stored `437/454/484` wall, all without waking the dormant
+  cached-summary reopen path. This stopped rerun is now the best current
+  candidate to beat on speed, even though it still ended inside step `4` and
+  late RSS drift stayed visible.
+- Because the rerun was manually stopped during step `4`, `reports/latest.txt`
+  still reflects completed step `3`, `run.json` still says `status = "running"`,
   and `reports/steps/step-05-live.ndjson` is absent; the authoritative
-  evidence so far lives in `reports/steps/step-04-live.ndjson`.
+  evidence lives in `reports/steps/step-04-live.ndjson`.
 
 ### 4. Latest Measured Later-Surface Follow-Up
 - Run: `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v1`
@@ -425,13 +464,14 @@ gate.
   decisive matched checkpoint through the prior stored `454` wall, and moved
   the later wall again to `484`.
 - The newer prefix-`nu`-context follow-up answered the next active exact-`nu`
-  question on stored evidence, and the newer live rerun has now confirmed that
-  the same slice still wins honestly at the re-earned `140/163` surface:
+  question on stored evidence, and the deeper `v2` rerun has now confirmed
+  that the same slice still wins honestly well past the re-earned `140/163`
+  surface:
   `v1` preserved the honest `39/40/41` surfaces through the stored `239` read
   and materially improved the matched `140/163/231/239` checkpoints, while
-  the live `v2` rerun has already re-earned `140/163` and remains ahead of
-  the current runtime reference there even before the later `42/43/484`
-  region comes back.
+  the stopped `v2` rerun re-earned `140/163/332/335/408/437/454/484`,
+  reopened `42/43`, and then moved the stored wall to `1038` while staying
+  ahead of the current runtime reference at every matched checkpoint.
 - That newer follow-up also sharpens the blocker: the first honest win after
   the stage-timing slice comes from collapsing active exact `nu` work on the
   retained `41 / 154842` plateau, not from lowering aggregation or making
@@ -448,35 +488,37 @@ gate.
 - The new nuance is that the retained-prefix plateau after state `24` is real,
   and the first post-stage-timing gain that actually holds on stored evidence
   is an exact-`nu` cut on that plateau. The open question is no longer whether
-  that work is active; it is whether the win survives once the later `42/43`
-  reopens come back.
-- Observed RSS on the live rerun is still slightly lower than the current
-  runtime reference at `140/163` and remains far below the old
-  allocator-failure band through the current `168` read; the earlier `v1`
-  proof-of-win rerun then drifted slightly above the current runtime reference
-  by the stored `239` read. The lane still reads as throughput-bound rather
-  than allocator-bound on stored evidence.
+  that work survives the stored `437/454/484` wall; it does. The next honest
+  question is whether the next harness-backed code slice can beat this stopped
+  `v2` candidate without losing honesty.
+- Observed RSS on the stopped rerun stayed slightly lower than the current
+  runtime reference at `140/163`, then rose well above it by the stored
+  `1038` read. The lane still reads as throughput-bound rather than
+  allocator-bound on stored evidence, but late RSS now needs to stay in view
+  as an explicit guardrail while chasing further speed.
 - The accumulated lesson is narrower now: do not reopen another dormant
-  cached-summary replay or another contender-rank-helper replay first, and do
-  not invent another new code slice before this exact-`nu` win is carried far
-  enough to prove whether it survives the later wall.
+  cached-summary replay or another contender-rank-helper replay first. The
+  next code slice should attack the live hit path directly and try to beat
+  this exact-`nu` winner.
 
 ## Best Current Inference
-The current runtime reference is
-`runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`.
+The current full-profile runtime reference is
+`runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`, but the
+best current candidate to beat is
+`runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
 
-That run is already good enough to answer the latest late-surface
-timing-overhead question from stored evidence:
+That stopped `v2` candidate is now the right speed target for the next slice:
 - it preserved the honest `39/40/41/42/43` retained-prefix story
-- it improved every decisive matched checkpoint through the prior stored `454`
+- it improved every decisive matched checkpoint through the prior stored `484`
   wall
-- it moved materially past the prior stored `454` wall to `484`
+- it moved materially past that prior stored wall to `1038`
 - it still did not reach step `5`
-- it kept the visible later wall aggregation-first
-- it appears to have removed most of the previously unattributed summary-build
-  remainder while keeping the retained-prefix story intact
-- it kept observed RSS well below the old allocator-failure band even though
-  late RSS drift is now slightly worse than the previous runtime reference
+- it kept the visible later wall aggregation-first, with connectivity second
+  and exact `nu` third
+- it won by cutting active exact `nu` work on the retained plateau while
+  cached-summary reopen stayed dormant
+- it kept the run memory-safe, even though late RSS drift rose materially by
+  the stopped `1038` read
 
 The newer follow-ups then answered three more runtime questions from stored
 evidence:
@@ -490,37 +532,70 @@ evidence:
   surfaces through the stored `239` read and materially improved the matched
   `140/163/231/239` checkpoints by cutting active exact `nu`, even though
   aggregation and connectivity both rose slightly
-- the deeper live rerun on that same prefix-`nu` slice has now re-earned the
-  decisive `140/163` region on a fresh run id, stayed ahead of the current
-  runtime reference there, and kept cached-summary reopen dormant through the
-  current `168` read
+- the deeper stopped rerun on that same prefix-`nu` slice then re-earned the
+  decisive `140/163/332/335/408/437/454/484` region on a fresh run id, stayed
+  ahead of the current runtime reference there, re-opened `42/43`, moved the
+  stored wall to `1038`, and kept cached-summary reopen dormant throughout
 
-The next honest question is now whether that exact-`nu` win survives once the
-later `42/43/484` region is re-earned. Aggregation and late RSS should stay in
-view as explicit guardrails while answering that.
+The next honest question is now whether the next harness-backed improvement
+slice can beat that stopped `v2` candidate on speed without giving back
+honesty. Aggregation and late RSS should stay in view as explicit guardrails
+while answering that.
+
+## New Planning Input
+- The biggest missing operational layer is iteration speed: build a
+  deterministic replay harness for the stable retained plateau prefixes
+  `39 / 144845`, `40 / 147639`, `41 / 154842`, `42 / 157636`, and
+  `43 / 160430`, then benchmark only
+  `compute_terminal_prefix_completion_summary_from_candidates(...)` on stored
+  fixtures instead of waiting on multi-hour full reruns for every later-step
+  idea.
+- The favored next actual code slice now that the rerun has been stopped is a
+  facts-only hot loop: drive the step-`4` hit path all the way down to clause
+  refs plus predecoded connectivity facts plus predecoded structural-`nu`
+  facts until a prefix survives, rather than paying repeated per-clause decode
+  work on the hit path itself.
+- The compact-summary reopen story should stay narrow: do not try to wake the
+  full cached-summary reopen path first while it is still dormant on the
+  decisive `39/40/41` surfaces. If second-pass duplication still matters after
+  the facts-only slice, prefer a tiny survivor sketch that stores only the few
+  clause refs/facts that established the best primary rank or remain tie-break
+  relevant.
+- A low-risk harness-backed micro-slice remains a dense bitset or fixed
+  smallset for `lib_refs` membership inside
+  `SingleClauseStructuralNuContext`, since the facts path now pays repeated
+  membership checks directly inside the live winning hot loop.
+- Deterministic batched parallel reduction of the per-clause summary loop is a
+  later, higher-risk swing. Keep it gated behind the replay harness and
+  deterministic merge-parity checks first.
 
 ## Immediate Next Move
 1. Keep `runs/codex-claim-release-step4-kernel-open-band-handoff-v1` as the
    short step-`4` baseline and
-   `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1` as
-   the current full-profile runtime reference. Keep the prefix-`nu`-context
-   slice landed, but treat it as provisional until it re-earns the later wall.
+   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
+   as the best current full-profile candidate to beat on speed.
 2. Do not spend another turn on a plain new-code exploration first, and do not
    reopen another unchanged connectivity-first retry, accumulator-only replay,
    contender-rank-helper replay, cached-summary-reuse replay, metadata retry,
    clause-load-only replay, or timing-only replay first.
-3. Keep the current live rerun
-   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
-   moving past the already re-earned `140/163` region into the current
-   `332/335/408/437/454/484` band or into step `5`.
-4. If that live rerun keeps winning once `42 / 157636` and `43 / 160430`
-   reopen, promote it to the new runtime reference. If it gives the win back
-   there, only then cut the next code slice.
-5. If code changes land before that deeper rerun, rerun only:
+3. Build the deterministic plateau replay harness now that the current live
+   rerun has been stopped, and benchmark only
+   `compute_terminal_prefix_completion_summary_from_candidates(...)` on stored
+   fixtures for the stable `39/40/41/42/43` retained surfaces.
+4. Bias the next actual code slice after that harness lands toward the
+   facts-only hot loop: clause refs plus predecoded connectivity facts plus
+   predecoded structural-`nu` facts on the hit path, since stored later
+   surfaces already keep `terminal_summary_admissibility_checks = 0` and
+   `terminal_summary_fallback_connectivity_checks = 0`.
+5. Keep the tiny survivor sketch and dense `lib_refs` membership micro-slice
+   as harness-backed follow-ups if the facts-only slice still leaves too much
+   second-pass duplication, and do not open deterministic batched parallel
+   reduction before the harness proves merge parity safely.
+6. If code changes land, rerun only:
    - `cargo test -p pen-search claim_`
    - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
-   If the next turn is rerun-only on this already-landed slice, do not reopen
-   extra tests first.
-6. Branch to parity, breadth, compare, benchmark, or certification work only
-   after a later full-profile rerun either reaches step `5` or moves
-   materially past the current stored `484` wall.
+7. After the harness-backed slice lands, compare it against
+   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
+   first. Branch to parity, breadth, compare, benchmark, or certification work
+   only after a later full-profile rerun either reaches step `5` or moves
+   materially past the current stored `1038` wall.

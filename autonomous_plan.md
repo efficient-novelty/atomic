@@ -44,12 +44,23 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   matched later surface, but it still stays far below the old
   allocator-failure band, so the blocker remains later step-`4` throughput
   rather than allocator pressure.
-- The next step should therefore keep the short winner and current full-profile
-  runtime reference in code, leave the dropped metadata, reopened-connectivity,
-  clause-load-only, bookkeeping/bound-only, admitted-kernel-only, and
-  connectivity-retry moves out of code as standalone next moves, and land one
-  narrow later-surface runtime cut before reopening another plain rerun-only
-  turn.
+- The biggest missing layer in this plan is now iteration speed: the repo
+  should add a deterministic replay harness for the stable retained plateau
+  prefixes `39/144845`, `40/147639`, `41/154842`, `42/157636`, and
+  `43/160430`, then benchmark only
+  `compute_terminal_prefix_completion_summary_from_candidates(...)` on stored
+  fixtures so later-surface ideas can be tested in minutes instead of
+  multi-hour reruns.
+- The next actual code slice after the current live rerun settles should
+  therefore bias toward the hit path itself: clause refs plus predecoded
+  connectivity facts plus predecoded structural-`nu` facts on the step-`4`
+  loop, not another cache-first miss-path rewrite while admissibility and
+  fallback connectivity checks are already zero on stored later surfaces.
+- A tiny survivor sketch and a dense `lib_refs` membership set are acceptable
+  harness-backed follow-ups if that first facts-only slice still leaves too
+  much second-pass duplication. Deterministic batched parallel reduction stays
+  explicitly deferred until the replay harness exists and merge-parity rules
+  are nailed down.
 
 ## Decision Rules
 
@@ -64,6 +75,13 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     runtime reference
   - moves materially past the current stored `484` wall or reaches step `5`
   - and keeps RSS well below the old allocator-failure band
+- Do not land another expensive later-surface slice first without a replay
+  harness for the stable retained plateau prefixes unless the current live
+  rerun exposes a different blocker entirely.
+- Prefer hit-path fact-predecode cuts over new cache layers while stored later
+  surfaces still keep admissibility and fallback connectivity checks at zero.
+- Do not open deterministic batched parallel reduction work before the replay
+  harness can prove deterministic best-rank merge parity locally.
 - Retire a hypothesis after one honest stored rerun if it shows:
   - non-engagement
   - a pure cost shift
@@ -71,12 +89,17 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - Do not branch to compare, benchmark, certification, or stronger language
   before step `4` moves or a full-profile run finishes.
 
-## Active Phase: Move The Later Aggregation Wall
+## Active Phase: Finish The Live Rerun And Add Iteration Speed
 
 Goal:
 
-- cut the post-`140` aggregation-side step-`4` wall on the current winner on
-  the real `desktop_claim_shadow_1h` profile
+- let the current live prefix-`nu` rerun finish proving whether it survives
+  the stored `437/454/484` wall or reaches step `5`
+- add a deterministic replay harness for the stable retained plateau prefixes
+  so the next later-surface slice can be judged locally before another
+  multi-hour rerun
+- then cut the next hit-path step-`4` wall on the current winner on the real
+  `desktop_claim_shadow_1h` profile
 
 Working baselines:
 
@@ -84,6 +107,10 @@ Working baselines:
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
 - full-profile runtime reference:
   `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`
+- live intended-profile rerun:
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
+- proof-of-win rerun:
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v1`
 - previous full-profile runtime reference:
   `runs/codex-claim-release-full-aggregation-open-band-scratch-clonefrom-v1`
 - earlier full-profile runtime reference:
@@ -95,7 +122,13 @@ Working baselines:
 
 Required output:
 
-- one narrow later-surface aggregation-side code slice on the current winner
+- one final honest read of the current live intended-profile rerun
+- one deterministic replay harness for the plateau fixtures
+  `39/144845`, `40/147639`, `41/154842`, `42/157636`, and `43/160430`
+- one local benchmark surface for
+  `compute_terminal_prefix_completion_summary_from_candidates(...)`
+- one narrow harness-backed later-surface code slice on the current winner,
+  biased toward the facts-only hit path
 - one new stored full-profile rerun on that slice with live checkpoint
   persistence through at least the `140/163/228` region and ideally through the
   current `42/43` reopen
@@ -105,6 +138,7 @@ Required output:
 Reject as the next primary move:
 
 - another plain intended-profile rerun with no code or new runtime question
+- another multi-hour later-surface slice with no replay-harness read first
 - another connectivity-first slice before a new aggregation-side read exists
 - another eager clause-filter-wide metadata rewrite
 - another lazy admitted-only metadata rewrite
@@ -112,8 +146,9 @@ Reject as the next primary move:
 - another narrow clause-load-only replay
 - another narrow bookkeeping/bound-only replay
 - another admitted-kernel-only replay
-- another exact-`nu` cleanup first
+- another attempt to wake the full cached-summary reopen mechanism first
 - another diagnostic-only slice first
+- deterministic batched parallel reduction before the replay harness exists
 - another retry of `kernel-rank-bookkeeping-v1`
 - another retry of `kernel-bound-merge-v1`
 - another retry of `kernel-lazy-acceptrank-v1`
@@ -126,21 +161,23 @@ Reject as the next primary move:
 
 Done when:
 
-- the next aggregation-side rerun either:
+- the current live rerun exposes its next honest blocker, and
+- the replay harness exists, and
+- the next harness-backed rerun either:
   - materially reduces the post-`140` aggregation wall
   - exposes a new later blocker honestly
   - or finishes through step `15`
 
-## Phase 2: Re-Earn The New Runtime Reference
+## Phase 2: Re-Earn The Harness-Backed Runtime Reference
 
 Goal:
 
-- prove that the aggregation-side slice moves the current later step-`4` wall
-  on the real `desktop_claim_shadow_1h` profile
+- prove that the harness-backed hit-path slice moves the current later
+  step-`4` wall on the real `desktop_claim_shadow_1h` profile
 
 Required output:
 
-- one new stored full-profile rerun on the aggregation-side slice
+- one new stored full-profile rerun on the harness-backed slice
 - a read of its `step-04-live.ndjson`, `run.json`, and `reports/latest.txt`
 
 Done when:
