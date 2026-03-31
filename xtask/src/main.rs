@@ -7,12 +7,14 @@ use pen_eval::bar::DiscoveryRecord;
 use pen_search::config::RuntimeConfig;
 use pen_search::engine::claim_replay::{
     ClaimRemainingOneSurfaceTarget, benchmark_claim_remaining_one_replay_fixtures,
-    capture_claim_remaining_one_replay_fixtures, default_claim_remaining_one_surface_targets,
-    read_claim_remaining_one_replay_fixtures, render_claim_remaining_one_replay_benchmark_text,
-    write_claim_remaining_one_replay_benchmark, write_claim_remaining_one_replay_fixtures,
+    capture_claim_remaining_one_replay_fixtures_with_seed,
+    default_claim_remaining_one_surface_targets, read_claim_remaining_one_replay_fixtures,
+    render_claim_remaining_one_replay_benchmark_text, write_claim_remaining_one_replay_benchmark,
+    write_claim_remaining_one_replay_fixtures,
 };
 use pen_search::expand::evaluate_candidate;
 use schemars::schema_for;
+use std::collections::BTreeSet;
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -129,12 +131,42 @@ fn claim_replay_harness(root: PathBuf, args: Vec<String>) -> Result<()> {
                 .map(|value| parse_claim_replay_surface_targets(&value))
                 .transpose()?
                 .unwrap_or_else(default_claim_remaining_one_surface_targets);
-            let fixtures = capture_claim_remaining_one_replay_fixtures(&surface_targets)?;
+            let requested_targets = surface_targets.iter().copied().collect::<BTreeSet<_>>();
+            let mut seed_fixtures = if output_path.exists() {
+                read_claim_remaining_one_replay_fixtures(&output_path)?
+            } else {
+                Vec::new()
+            };
+            seed_fixtures.retain(|fixture| {
+                requested_targets.contains(&ClaimRemainingOneSurfaceTarget {
+                    prefix_cache_groups: fixture.surface.prefix_cache_groups,
+                    prefix_cache_candidates: fixture.surface.prefix_cache_candidates,
+                })
+            });
+            seed_fixtures.sort_by_key(|fixture| {
+                (
+                    fixture.surface.prefix_cache_groups,
+                    fixture.surface.prefix_cache_candidates,
+                    fixture.surface.prefix_states_explored,
+                )
+            });
+            seed_fixtures.dedup_by(|left, right| {
+                left.surface.prefix_cache_groups == right.surface.prefix_cache_groups
+                    && left.surface.prefix_cache_candidates == right.surface.prefix_cache_candidates
+            });
+            let reused_count = seed_fixtures.len();
+            let fixtures = capture_claim_remaining_one_replay_fixtures_with_seed(
+                &surface_targets,
+                &seed_fixtures,
+                Some(&output_path),
+            )?;
             write_claim_remaining_one_replay_fixtures(&output_path, &fixtures)?;
             println!(
-                "captured {} claim replay fixtures into {}",
+                "captured {} claim replay fixtures into {} ({} reused, {} newly captured)",
                 fixtures.len(),
-                output_path.display()
+                output_path.display(),
+                reused_count,
+                fixtures.len().saturating_sub(reused_count)
             );
             Ok(())
         }

@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::cell::RefCell;
 use std::collections::BTreeSet;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::time::Instant;
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
@@ -132,6 +132,8 @@ struct ClaimRemainingOneReplayCaptureState {
     targets: BTreeSet<ClaimRemainingOneSurfaceTarget>,
     fixtures: Vec<ClaimRemainingOneReplayFixture>,
     completed: bool,
+    persist_path: Option<PathBuf>,
+    persist_error: Option<String>,
 }
 
 thread_local! {
@@ -195,8 +197,41 @@ pub fn render_claim_remaining_one_replay_benchmark_text(
 pub fn capture_claim_remaining_one_replay_fixtures(
     surface_targets: &[ClaimRemainingOneSurfaceTarget],
 ) -> Result<Vec<ClaimRemainingOneReplayFixture>> {
+    capture_claim_remaining_one_replay_fixtures_with_seed(surface_targets, &[], None)
+}
+
+pub fn capture_claim_remaining_one_replay_fixtures_with_seed(
+    surface_targets: &[ClaimRemainingOneSurfaceTarget],
+    seed_fixtures: &[ClaimRemainingOneReplayFixture],
+    persist_path: Option<&Path>,
+) -> Result<Vec<ClaimRemainingOneReplayFixture>> {
     if surface_targets.is_empty() {
-        return Ok(Vec::new());
+        return Ok(seed_fixtures.to_vec());
+    }
+
+    let requested_targets = surface_targets.iter().copied().collect::<BTreeSet<_>>();
+    let mut fixtures = seed_fixtures
+        .iter()
+        .filter(|fixture| requested_targets.contains(&fixture_surface_target(fixture)))
+        .cloned()
+        .collect::<Vec<_>>();
+    sort_claim_remaining_one_replay_fixtures(&mut fixtures);
+    fixtures.dedup_by(|left, right| fixture_surface_target(left) == fixture_surface_target(right));
+
+    let captured_targets = fixtures
+        .iter()
+        .map(fixture_surface_target)
+        .collect::<BTreeSet<_>>();
+    let missing_targets = surface_targets
+        .iter()
+        .copied()
+        .filter(|target| !captured_targets.contains(target))
+        .collect::<Vec<_>>();
+    if missing_targets.is_empty() {
+        if let Some(persist_path) = persist_path {
+            write_claim_remaining_one_replay_fixtures(persist_path, &fixtures)?;
+        }
+        return Ok(fixtures);
     }
 
     let accepted_prefix = search_bootstrap_prefix_for_profile_with_runtime(
@@ -236,7 +271,11 @@ pub fn capture_claim_remaining_one_replay_fixtures(
     let mut demo_narrative = None;
     let mut progress_observer = None;
 
-    start_capture(surface_targets);
+    start_capture(
+        surface_targets,
+        fixtures,
+        persist_path.map(Path::to_path_buf),
+    );
     let capture_result = discover_realistic_shadow_candidates(
         step_index,
         &library,
@@ -250,15 +289,12 @@ pub fn capture_claim_remaining_one_replay_fixtures(
         &mut demo_narrative,
         &mut progress_observer,
     );
-    let fixtures = finish_capture();
+    let fixtures = finish_capture()?;
     capture_result.context("capture claim replay fixtures")?;
 
     let captured_targets = fixtures
         .iter()
-        .map(|fixture| ClaimRemainingOneSurfaceTarget {
-            prefix_cache_groups: fixture.surface.prefix_cache_groups,
-            prefix_cache_candidates: fixture.surface.prefix_cache_candidates,
-        })
+        .map(fixture_surface_target)
         .collect::<BTreeSet<_>>();
 
     let missing_targets = surface_targets
@@ -486,7 +522,23 @@ pub(super) fn finish_remaining_one_summary_capture(
             expected_summary: summary_expectation(summary),
         };
         capture.fixtures.push(fixture);
-        capture.completed = capture.fixtures.len() == capture.targets.len();
+        sort_claim_remaining_one_replay_fixtures(&mut capture.fixtures);
+        capture
+            .fixtures
+            .dedup_by(|left, right| fixture_surface_target(left) == fixture_surface_target(right));
+        capture.completed = capture_is_complete(&capture.targets, &capture.fixtures);
+        if let Some(path) = capture.persist_path.as_ref() {
+            if capture.persist_error.is_none() {
+                if let Err(error) =
+                    write_claim_remaining_one_replay_fixtures(path, &capture.fixtures)
+                {
+                    capture.persist_error = Some(format!(
+                        "persist claim replay fixtures to {}: {error:#}",
+                        path.display()
+                    ));
+                }
+            }
+        }
     });
 }
 
@@ -522,24 +574,64 @@ pub(super) fn build_claim_remaining_one_replay_fixture(
     }
 }
 
-fn start_capture(surface_targets: &[ClaimRemainingOneSurfaceTarget]) {
+fn fixture_surface_target(
+    fixture: &ClaimRemainingOneReplayFixture,
+) -> ClaimRemainingOneSurfaceTarget {
+    ClaimRemainingOneSurfaceTarget {
+        prefix_cache_groups: fixture.surface.prefix_cache_groups,
+        prefix_cache_candidates: fixture.surface.prefix_cache_candidates,
+    }
+}
+
+fn capture_is_complete(
+    targets: &BTreeSet<ClaimRemainingOneSurfaceTarget>,
+    fixtures: &[ClaimRemainingOneReplayFixture],
+) -> bool {
+    targets.iter().all(|target| {
+        fixtures
+            .iter()
+            .any(|fixture| fixture_surface_target(fixture) == *target)
+    })
+}
+
+fn sort_claim_remaining_one_replay_fixtures(fixtures: &mut [ClaimRemainingOneReplayFixture]) {
+    fixtures.sort_by_key(|fixture| {
+        (
+            fixture.surface.prefix_cache_groups,
+            fixture.surface.prefix_cache_candidates,
+            fixture.surface.prefix_states_explored,
+        )
+    });
+}
+
+fn start_capture(
+    surface_targets: &[ClaimRemainingOneSurfaceTarget],
+    mut fixtures: Vec<ClaimRemainingOneReplayFixture>,
+    persist_path: Option<PathBuf>,
+) {
+    sort_claim_remaining_one_replay_fixtures(&mut fixtures);
+    fixtures.dedup_by(|left, right| fixture_surface_target(left) == fixture_surface_target(right));
+    let targets = surface_targets.iter().copied().collect::<BTreeSet<_>>();
+    let completed = capture_is_complete(&targets, &fixtures);
     CLAIM_REMAINING_ONE_REPLAY_CAPTURE.with(|capture| {
         let mut capture = capture.borrow_mut();
         *capture = Some(ClaimRemainingOneReplayCaptureState {
-            targets: surface_targets.iter().copied().collect(),
-            fixtures: Vec::new(),
-            completed: false,
+            targets,
+            fixtures,
+            completed,
+            persist_path,
+            persist_error: None,
         });
     });
 }
 
-fn finish_capture() -> Vec<ClaimRemainingOneReplayFixture> {
+fn finish_capture() -> Result<Vec<ClaimRemainingOneReplayFixture>> {
     CLAIM_REMAINING_ONE_REPLAY_CAPTURE.with(|capture| {
-        capture
-            .borrow_mut()
-            .take()
-            .map(|capture| capture.fixtures)
-            .unwrap_or_default()
+        let capture = capture.borrow_mut().take().unwrap_or_default();
+        if let Some(error) = capture.persist_error {
+            bail!("{error}");
+        }
+        Ok(capture.fixtures)
     })
 }
 

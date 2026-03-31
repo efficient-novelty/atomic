@@ -86,16 +86,29 @@ gate.
   compact summary parity before reporting local benchmark timings.
 - A repo-facing entry point is now landed too:
   `cargo xtask claim-replay-harness <capture|benchmark> ...`.
+  The capture path now also reuses an existing fixture file and persists
+  newly captured surfaces back to disk during long runs so early plateau
+  fixtures are no longer lost when later targets outlast one shell window.
 - The harness has honest local validation now:
   - `cargo test -p pen-search claim_`
   - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
   both pass with the new replay module and its compact-summary parity test.
-- The stored plateau fixture corpus is still not materialized yet.
-  The first in-turn capture attempt through the new `xtask` path did not
-  finish within the session window before the first requested
-  `39 / 144845` fixture was written, so iteration-speed scaffolding is landed
-  but the real `39/40/41/42/43` fixture set still needs a dedicated capture
-  run.
+- The stored plateau fixture corpus is now partially materialized.
+  `tests/fixtures/claim_runtime/remaining_one_plateau_fixtures.json` now
+  stores the first three stable retained surfaces from the release harness:
+  - `39 / 144845` at `24`
+  - `40 / 147639` at `74`
+  - `41 / 154842` at `140`
+- The first local replay benchmark read is now stored too:
+  `tests/fixtures/claim_runtime/remaining_one_plateau_benchmark.json`.
+  On `10` release iterations with compact-summary parity enforced, the current
+  timings read:
+  - `39 / 144845 @ 24`: avg `2977 us`, best `2847 us`, worst `3629 us`
+  - `40 / 147639 @ 74`: avg `4898 us`, best `4734 us`, worst `5147 us`
+  - `41 / 154842 @ 140`: avg `3032 us`, best `2914 us`, worst `3473 us`
+- The later plateau fixtures still need to be carried forward honestly from
+  the same harness path:
+  `42 / 157636` and `43 / 160430` are still missing from the stored corpus.
 - Observed RSS stayed well below the old allocator-failure band, even though
   late drift rose materially after the prior `484` wall:
   - `140`: `572006400` bytes
@@ -562,10 +575,10 @@ while answering that.
 ## New Planning Input
 - The biggest missing operational layer is still iteration speed, but the
   scaffolding status is now mixed instead of absent:
-  the deterministic replay harness and benchmark path are landed, while the
-  stored plateau fixture corpus for `39 / 144845`, `40 / 147639`,
-  `41 / 154842`, `42 / 157636`, and `43 / 160430` still needs to be captured
-  from a dedicated step-`4` run.
+  the deterministic replay harness and benchmark path are landed, the stored
+  plateau fixture corpus now covers `39 / 144845`, `40 / 147639`, and
+  `41 / 154842`, and the remaining capture gap is now only
+  `42 / 157636` plus `43 / 160430`.
 - The favored next actual code slice now that the rerun has been stopped is a
   facts-only hot loop: drive the step-`4` hit path all the way down to clause
   refs plus predecoded connectivity facts plus predecoded structural-`nu`
@@ -594,13 +607,13 @@ while answering that.
    reopen another unchanged connectivity-first retry, accumulator-only replay,
    contender-rank-helper replay, cached-summary-reuse replay, metadata retry,
    clause-load-only replay, or timing-only replay first.
-3. Use the landed replay harness to materialize the stored plateau fixtures
-   first, starting with the earliest stable retained surface and then carrying
-   that capture forward through the real `39/40/41/42/43` targets.
+3. Use the landed replay harness to carry the stored plateau corpus forward
+   from the now-landed `39/40/41` fixtures to the missing `42/43` surfaces,
+   reusing the existing fixture file instead of restarting from zero.
 4. Benchmark only
-   `compute_terminal_prefix_completion_summary_from_candidates(...)` on those
-   stored fixtures and require compact-summary parity before judging the next
-   runtime slice locally.
+   `compute_terminal_prefix_completion_summary_from_candidates(...)` on the
+   stored fixtures after each new surface lands and require compact-summary
+   parity before judging the next runtime slice locally.
 5. Bias the next actual code slice after those fixtures land toward the
    facts-only hot loop: clause refs plus predecoded connectivity facts plus
    predecoded structural-`nu` facts on the hit path, since stored later

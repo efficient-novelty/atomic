@@ -1,0 +1,43 @@
+{
+  "entries": [
+    {
+      "fixture_index": 0,
+      "surface": {
+        "prefix_states_explored": 24,
+        "prefix_cache_groups": 39,
+        "prefix_cache_candidates": 144845
+      },
+      "iterations": 10,
+      "average_micros": 2977,
+      "best_micros": 2847,
+      "worst_micros": 3629,
+      "total_micros": 29771
+    },
+    {
+      "fixture_index": 1,
+      "surface": {
+        "prefix_states_explored": 74,
+        "prefix_cache_groups": 40,
+        "prefix_cache_candidates": 147639
+      },
+      "iterations": 10,
+      "average_micros": 4898,
+      "best_micros": 4734,
+      "worst_micros": 5147,
+      "total_micros": 48985
+    },
+    {
+      "fixture_index": 2,
+      "surface": {
+        "prefix_states_explored": 140,
+        "prefix_cache_groups": 41,
+        "prefix_cache_candidates": 154842
+      },
+      "iterations": 10,
+      "average_micros": 3032,
+      "best_micros": 2914,
+      "worst_micros": 3473,
+      "total_micros": 30325
+    }
+  ]
+}
