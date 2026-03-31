@@ -20,56 +20,56 @@ gate.
 - The earlier full-profile runtime reference is
   `runs/codex-claim-release-full-connectivity-facts-v1`.
 - The latest measured slice is
-  `runs/codex-claim-release-full-aggregation-open-band-compact-summary-reuse-v1`,
-  and it was dropped after preserving the current `39/40/41`
-  retained-prefix story through the stored `163` read but still regressing the
-  current runtime reference on stored evidence.
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v1`,
+  and it landed a prefix-side single-clause structural `nu` context for the
+  remaining-one exact scoring, compact-summary build, and compact
+  materialization hot path on the current winner.
 - That later-surface follow-up preserved the honest retained-prefix story
   through the current `41` surface:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
-  - `41 groups / 154842 candidates` at `140/163`
-  It never re-earned the current reference's `42 / 157636` or
-  `43 / 160430` reopens before the stored stop.
-- It regressed every decisive matched checkpoint against the current runtime
-  reference:
-  - `24`: `333574 / 330822` instead of `327917 / 325321`
-  - `43`: `602370 / 598494` instead of `591083 / 587479`
-  - `44`: `614946 / 611012` instead of `603570 / 599913`
-  - `54`: `758510 / 753973` instead of `743997 / 739797`
-  - `74`: `1043186 / 1037421` instead of `1023572 / 1018283`
-  - `76`: `1076868 / 1070982` instead of `1057864 / 1052464`
-  - `140`: `2054569 / 2044701` instead of `2014043 / 2005230`
-  - `163`: `2388800 / 2377464` instead of `2334208 / 2324213`
+  - `41 groups / 154842 candidates` from `140` through the stored `239` read
+  It has not yet re-earned the current reference's `42 / 157636` or
+  `43 / 160430` reopens.
+- It materially improved the decisive matched later checkpoints it re-earned
+  against the current runtime reference:
+  - `140`: `1836533 / 1826733` instead of `2014043 / 2005230`
+  - `163`: `2135897 / 2124610` instead of `2334208 / 2324213`
+  - `231`: `3069187 / 3053464` instead of `3338028 / 3324509`
+  - `239`: `3199123 / 3182864` instead of `3475147 / 3461204`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
-- Its intended cached-summary reopen path never engaged on stored evidence
-  through the max stored `165` read:
+- The win is coming from exact `nu`, not from lower aggregation or
+  connectivity:
+  - `140`: aggregation `= 787415 ms` instead of `763398 ms`, connectivity
+    `= 569913 ms` instead of `557557 ms`, exact `nu` `= 293473 ms` instead of
+    `511854 ms`, terminal clause-filter handoff `= 14855 ms` instead of
+    `13877 ms`
+  - `163`: aggregation `= 907945 ms` instead of `877573 ms`, connectivity
+    `= 667954 ms` instead of `651431 ms`, exact `nu` `= 343044 ms` instead of
+    `594142 ms`, terminal clause-filter handoff `= 17645 ms` instead of
+    `16351 ms`
+  - `239`: aggregation `= 1361981 ms` instead of `1303826 ms`, connectivity
+    `= 993382 ms` instead of `962017 ms`, exact `nu` `= 522245 ms` instead of
+    `898852 ms`, terminal clause-filter handoff `= 27858 ms` instead of
+    `25090 ms`
+- Cached-summary reopen remained dormant on stored evidence through the max
+  stored `239` read:
   - `remaining_one_materialized_from_cached_summary = 0`
   - `remaining_one_prefixes_seen = 0`
   - `remaining_one_materialized_compact_direct = 41`
-- Measured aggregation dipped slightly on the stored `41` surface, but the
-  total wall still regressed because connectivity, exact `nu`, and terminal
-  clause-filter handoff all rose more than the aggregation win saved:
-  - `140`: aggregation `= 749278357 us` instead of `763398133 us`,
-    connectivity `= 588117600 us` instead of `557557788 us`,
-    exact `nu` `= 527205532 us` instead of `511854832 us`,
-    terminal clause-filter handoff `= 16844349 us` instead of `13877225 us`
-  - `163`: aggregation `= 864250355 us` instead of `877573120 us`,
-    connectivity `= 689039849 us` instead of `651431110 us`,
-    exact `nu` `= 613184156 us` instead of `594142794 us`,
-    terminal clause-filter handoff `= 20206734 us` instead of `16351330 us`
 - `terminal_summary_admissibility_checks = 0` and
   `terminal_summary_fallback_connectivity_checks = 0` through the stored
-  `165` read.
+  `239` read.
 - The first stored plateau activation is still `24`, and
   `terminal_summary_plateau_activations = 231996` stayed flat through the
   stored stop.
 - Observed RSS stayed well below the old allocator-failure band:
-  - `140`: `577400832` bytes
-  - `163`: `644460544` bytes
-- Because the rerun was manually stopped after the non-engaging later-surface
-  regression was already clear, `reports/latest.txt` still reflects completed
-  step `3`, `run.json` still says `status = "running"`, and
+  - `140`: `577634304` bytes
+  - `163`: `646213632` bytes
+  - `239`: `867381248` bytes
+- Because the rerun was manually stopped after the exact-`nu` win through the
+  first later surface was already clear, `reports/latest.txt` still reflects
+  completed step `3`, `run.json` still says `status = "running"`, and
   `reports/steps/step-05-live.ndjson` is absent; the authoritative evidence
   for this run lives in `reports/steps/step-04-live.ndjson`.
 
@@ -77,6 +77,9 @@ gate.
 - delayed materialization
 - the incumbent-primary remaining-one fast path
 - the one-pass `structural_nu` summary-build fast path
+- the prefix-side single-clause structural `nu` context reused across
+  remaining-one exact scoring, compact-summary build, and compact
+  materialization on the claim open-band path
 - the algebraic `nu` ceiling patch
 - the family-agnostic claim terminal-admissibility shortcut
 - the exact non-allocating connectivity summary scan
@@ -150,7 +153,54 @@ gate.
 - The run never reached step `5` on stored evidence;
   `reports/steps/step-05-live.ndjson` is absent.
 
-### 3. Latest Failed Later-Surface Follow-Up
+### 3. Latest Measured Later-Surface Follow-Up
+- Run: `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v1`
+- Hypothesis:
+  keep the current stage-timing winner intact, but stop rebuilding a full
+  structural-`nu` prefix profile for every remaining-one exact candidate by
+  precomputing one prefix-side context and folding in only the final clause
+  during bound checks, compact-summary construction, and compact
+  materialization.
+- Outcome:
+  - it preserved the honest `39/40/41` retained-prefix story through the
+    stored `239` read
+  - it has not yet re-earned the current runtime reference's `42 / 157636`
+    or `43 / 160430` surfaces
+  - it materially improved every decisive matched checkpoint it re-earned
+    versus the current runtime reference from `140` through `239`
+  - it cut exact `nu` sharply on that retained `41 / 154842` plateau, even
+    while aggregation, connectivity, and clause-filter handoff all rose
+    slightly
+  - it kept aggregation first, connectivity second, exact `nu` third, and the
+    clause-filter handoff tiny
+  - it stayed memory-safe and never hinted at the old allocator-failure story
+    returning
+  - the rerun was manually stopped after the stored `239` checkpoint because
+    the first later-surface win was already clear but the later `42/43/484`
+    region had not yet been re-earned
+- Comparison versus the current runtime reference:
+  - `140`: `1836533 / 1826733` instead of `2014043 / 2005230`
+  - `163`: `2135897 / 2124610` instead of `2334208 / 2324213`
+  - `231`: `3069187 / 3053464` instead of `3338028 / 3324509`
+  - `239`: `3199123 / 3182864` instead of `3475147 / 3461204`
+  These pairs are `elapsed_millis / terminal_summary_build_millis`.
+- Stored later-surface read before stopping:
+  - `140`: `41 groups / 154842 candidates`, exact `nu` `= 293473 ms`
+    instead of `511854 ms`, RSS `= 577634304` bytes
+  - `163`: `41 groups / 154842 candidates`, exact `nu` `= 343044 ms`
+    instead of `594142 ms`, RSS `= 646213632` bytes
+  - `239`: `41 groups / 154842 candidates`, exact `nu` `= 522245 ms`
+    instead of `898852 ms`, RSS `= 867381248` bytes
+- Honest read:
+  this is the first follow-up after the stage-timing winner that wins the
+  decisive early later surface honestly on stored evidence. It does not yet
+  dislodge the current runtime reference because it has only re-earned the
+  `41 / 154842` plateau so far, but the exact-`nu` cut is real and durable
+  through the stored `239` read. The next honest move is to carry this same
+  slice farther into `332/335/408/437/454/484` or step `5` before inventing
+  another code path.
+
+### 4. Latest Failed Later-Surface Follow-Up
 - Run: `runs/codex-claim-release-full-aggregation-open-band-compact-summary-reuse-v1`
 - Hypothesis:
   keep the current stage-timing winner intact, but let compact claim
@@ -195,7 +245,7 @@ gate.
   higher connectivity, exact `nu`, and clause-filter time. This compact-
   summary reuse rewrite is now dropped as a standalone next move.
 
-### 4. Previous Failed Later-Surface Follow-Up
+### 5. Previous Failed Later-Surface Follow-Up
 - Run: `runs/codex-claim-release-full-aggregation-open-band-rank-scan-v1`
 - Hypothesis:
   keep the current stage-timing winner intact, but cut one more
@@ -239,7 +289,7 @@ gate.
   win saved and the unattributed remainder did not shrink enough. This
   contender-rank helper rewrite is now dropped as a standalone next move.
 
-### 5. Previous Full-Profile Runtime Reference
+### 6. Previous Full-Profile Runtime Reference
 - Run: `runs/codex-claim-release-full-aggregation-open-band-scratch-clonefrom-v1`
 - It preserved the honest `39/40/41/42/43` retained-prefix story from the
   previous runtime reference, paid only a tiny early retained-surface tax,
@@ -249,7 +299,7 @@ gate.
   story, wins materially at every decisive matched checkpoint, and moves the
   stored wall again from `454` to `484`.
 
-### 6. Earlier Full-Profile Runtime Reference
+### 7. Earlier Full-Profile Runtime Reference
 - Run: `runs/codex-claim-release-full-aggregation-open-band-compact-v1`
 - It preserved the honest `39/40/41` retained-prefix story from the previous
   runtime reference, re-earned the `42/157636` and `43/160430` reopens,
@@ -257,19 +307,19 @@ gate.
   previous stored `408` wall, and then pushed the stored step-`4` wall farther
   to `437`.
 
-### 7. Earlier Full-Profile Runtime Reference
+### 8. Earlier Full-Profile Runtime Reference
 - Run: `runs/codex-claim-release-full-connectivity-facts-v1`
 - It preserved the honest `39/40/41` retained-prefix story from the old
   open-band-handoff follow-up, reopened to `42/157636` and `43/160430`, and
   pushed the prior stored wall to `408`, but the newer compact, scratch-slot,
   and stage-timing references all now stay ahead of it.
 
-### 8. Comparison Full-Profile Baseline
+### 9. Comparison Full-Profile Baseline
 - Run: `runs/codex-claim-release-full-kernel-aggregation-v1`
 - It remains the broader comparison baseline only. The current runtime
   reference stays materially ahead of it.
 
-### 9. Current Late-Surface Diagnostic
+### 10. Current Late-Surface Diagnostic
 - Run: `runs/codex-claim-release-step4-kernel-late-profile-v1`
 - It remains the earlier late diagnostic, but the newer full-profile
   stage-timing follow-up is now the authoritative later-surface read.
@@ -325,14 +375,17 @@ gate.
   preserved the kept `39/40/41/42/43` surface story, materially improved every
   decisive matched checkpoint through the prior stored `454` wall, and moved
   the later wall again to `484`.
-- The newer compact-summary reuse follow-up answered the next local cached-
-  materialization question on stored evidence: it preserved the honest
-  `39/40/41` surfaces through the stored `163` read, stayed memory-safe, and
-  did reduce measured aggregation first on that later `41` surface, but it
-  still regressed every decisive matched checkpoint against the stage-timing
-  winner because connectivity, exact `nu`, and clause-filter time rose more
-  than the aggregation win saved.
-- That newer compact-summary reuse follow-up also exposed the sharper blocker:
+- The newer prefix-`nu`-context follow-up answered the next active exact-`nu`
+  question on stored evidence: it preserved the honest `39/40/41` surfaces
+  through the stored `239` read and materially improved the matched
+  `140/163/231/239` checkpoints, but it has not yet re-earned the later
+  `42/43/484` region.
+- That newer follow-up also sharpens the blocker: the first honest win after
+  the stage-timing slice comes from collapsing active exact `nu` work on the
+  retained `41 / 154842` plateau, not from lowering aggregation or making
+  cached-summary reopen engage there.
+- The older compact-summary reuse follow-up still exposed the dormant cached
+  reuse story clearly enough to keep that replay dropped:
   its intended cached-summary reopen path never engaged on the decisive stored
   `39/40/41` surfaces. Through the max stored `165` read,
   `remaining_one_materialized_from_cached_summary = 0` and
@@ -341,19 +394,18 @@ gate.
   connectivity second, exact `nu` third, and terminal clause-filter handoff
   still tiny.
 - The new nuance is that the retained-prefix plateau after state `24` is real,
-  but this specific cached-summary reopen path is dormant on the decisive
-  `39/40/41` surfaces, so it cannot explain or relieve the active later cost
-  yet.
-- Observed RSS is slightly higher than the previous runtime reference on the
-  matched later surface and then continues rising to `1581830144` bytes by
-  `484`; that is still far below the old allocator-failure band, so the lane
-  still reads as throughput-bound rather than allocator-bound on stored
-  evidence.
-- The accumulated lesson from the dropped retries is stronger again: the next
-  honest runtime choice is still a later-surface runtime cut on this winner,
-  but it should now avoid another dormant cached-summary-reuse replay or
-  another contender-rank-helper replay and instead target work that is active
-  on the `39/40/41` plateau or make the intended reuse engage there.
+  and the first post-stage-timing gain that actually holds on stored evidence
+  is an exact-`nu` cut on that plateau. The open question is no longer whether
+  that work is active; it is whether the win survives once the later `42/43`
+  reopens come back.
+- Observed RSS is slightly lower than the current runtime reference at
+  `140/163`, then slightly higher by the stored `239` read; that is still far
+  below the old allocator-failure band, so the lane still reads as
+  throughput-bound rather than allocator-bound on stored evidence.
+- The accumulated lesson is narrower now: do not reopen another dormant
+  cached-summary replay or another contender-rank-helper replay first, and do
+  not invent another new code slice before this exact-`nu` win is carried far
+  enough to prove whether it survives the later wall.
 
 ## Best Current Inference
 The current runtime reference is
@@ -372,45 +424,44 @@ timing-overhead question from stored evidence:
 - it kept observed RSS well below the old allocator-failure band even though
   late RSS drift is now slightly worse than the previous runtime reference
 
-The newer rank-scan and compact-summary reuse follow-ups then answered two more
-runtime questions from stored evidence:
+The newer follow-ups then answered three more runtime questions from stored
+evidence:
 - the rank-scan helper lowered measured aggregation first at `140/163`, but
   connectivity and exact `nu` both rose more than that aggregation win saved
 - the compact-summary reuse follow-up preserved the same honest `39/40/41`
   surfaces through the stored `163` read, but it regressed every decisive
-  matched checkpoint and never engaged cached-summary reopen on stored evidence
-  through the max stored `165` read
+  matched checkpoint and never engaged cached-summary reopen on stored
+  evidence through the max stored `165` read
+- the prefix-`nu`-context follow-up preserved the same honest `39/40/41`
+  surfaces through the stored `239` read and materially improved the matched
+  `140/163/231/239` checkpoints by cutting active exact `nu`, even though
+  aggregation and connectivity both rose slightly
 
-The next honest question is therefore still another later-surface runtime cut
-on this winner, but it should either make cached remaining-one summary reuse
-engage on the retained `39/40/41` plateau or cut the active connectivity/
-exact-`nu` work on those same surfaces directly, with aggregation and late RSS
-both kept in view as explicit guardrails.
+The next honest question is now whether that exact-`nu` win survives once the
+later `42/43/484` region is re-earned. Aggregation and late RSS should stay in
+view as explicit guardrails while answering that.
 
 ## Immediate Next Move
 1. Keep `runs/codex-claim-release-step4-kernel-open-band-handoff-v1` as the
    short step-`4` baseline and
    `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1` as
-   the current full-profile runtime reference.
-2. Do not spend another turn on a plain intended-profile rerun with no code or
-   new runtime question, and do not reopen another unchanged connectivity-first
-   retry, accumulator-only replay, contender-rank-helper replay, cached-
-   summary-reuse replay, metadata retry, clause-load-only replay, or timing-
-   only replay first.
-3. Land one narrow later-surface runtime cut on the current winner. Target
-   either:
-   - making cached compact-summary reuse engage on the retained `39/40/41`
-     plateau
-   - or cutting the active post-`140` / post-`163` connectivity and exact-`nu`
-     work on those same surfaces without relying on dormant cached-summary
-     reopen logic
-4. After code changes land, rerun a release claim follow-up with a new run id
-   that states the slice. Re-earn the stored `140/163` region first, and only
-   carry it onward into `228/229` and ideally the current
-   `332/335/408/437/454` band or into step `5` if it wins there honestly.
-5. If code changes land before that rerun, rerun only:
+   the current full-profile runtime reference. Keep the prefix-`nu`-context
+   slice landed, but treat it as provisional until it re-earns the later wall.
+2. Do not spend another turn on a plain new-code exploration first, and do not
+   reopen another unchanged connectivity-first retry, accumulator-only replay,
+   contender-rank-helper replay, cached-summary-reuse replay, metadata retry,
+   clause-load-only replay, or timing-only replay first.
+3. Re-run the same exact-`nu` slice with a fresh run id and carry it past the
+   already-won `140/163/231/239` region into the current
+   `332/335/408/437/454/484` band or into step `5`.
+4. If that deeper rerun keeps winning once `42 / 157636` and `43 / 160430`
+   reopen, promote it to the new runtime reference. If it gives the win back
+   there, only then cut the next code slice.
+5. If code changes land before that deeper rerun, rerun only:
    - `cargo test -p pen-search claim_`
    - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
+   If the next turn is rerun-only on this already-landed slice, do not reopen
+   extra tests first.
 6. Branch to parity, breadth, compare, benchmark, or certification work only
    after a later full-profile rerun either reaches step `5` or moves
    materially past the current stored `484` wall.

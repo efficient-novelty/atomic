@@ -1,4 +1,5 @@
 use crate::nu_trace::trace_lines;
+use pen_core::clause::ClauseRec;
 use pen_core::expr::Expr;
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::telescope::{Telescope, TelescopeClass};
@@ -36,6 +37,17 @@ pub struct SingleClauseStructuralNuCaps {
     pub historical_anchor_ref: Option<u32>,
 }
 
+#[derive(Clone, Debug)]
+pub struct SingleClauseStructuralNuContext {
+    prefix_profile: TelescopeNuProfile,
+    step_nu_lookup: Box<[u32]>,
+    modal_ref_nu_lookup: Box<[u32]>,
+    prefix_max_ref_nu: u32,
+    prefix_max_modal_ref_nu: u32,
+    library_size: u32,
+    library_path_dim_sq_sum: u32,
+}
+
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 struct TelescopeNuProfile {
     kappa: u32,
@@ -45,6 +57,7 @@ struct TelescopeNuProfile {
     intro_count: u32,
     elim_count: u32,
     axiomatic_intro_count: u32,
+    modal_kind_mask: u8,
     modal_kind_count: u32,
     temporal_formation_count: u32,
     any_univ_expr: bool,
@@ -68,6 +81,34 @@ struct TelescopeNuProfile {
     polymorphic_temporal_elim_count: u32,
     has_spatial_temporal_clause: bool,
     lib_refs: BTreeSet<u32>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+struct TerminalClauseNuFacts {
+    lib_refs: Box<[u32]>,
+    is_type_formation: bool,
+    is_intro: bool,
+    is_elim: bool,
+    is_axiomatic_intro: bool,
+    modal_kind_mask: u8,
+    is_temporal_formation: bool,
+    is_univ: bool,
+    is_single_foundation_expr: bool,
+    is_single_map_expr: bool,
+    has_formation: bool,
+    is_parametric_formation: bool,
+    is_temporal: bool,
+    is_suspension: bool,
+    has_lib_pointer: bool,
+    is_basic_formation: bool,
+    is_pi_sigma: bool,
+    is_lib_or_var: bool,
+    is_path_con: bool,
+    path_dimension: u32,
+    is_trunc_context: bool,
+    is_distributive_law: bool,
+    is_polymorphic_temporal_elim: bool,
+    is_spatial_temporal_clause: bool,
 }
 
 impl TelescopeNuProfile {
@@ -172,12 +213,8 @@ impl TelescopeNuProfile {
             profile.has_spatial_temporal_clause |= is_spatial_temporal_clause(expr);
         }
 
-        profile.modal_kind_count = u32_from_len(
-            [has_flat, has_sharp, has_disc, has_shape]
-                .into_iter()
-                .filter(|flag| *flag)
-                .count(),
-        );
+        profile.modal_kind_mask = modal_kind_mask(has_flat, has_sharp, has_disc, has_shape);
+        profile.modal_kind_count = profile.modal_kind_mask.count_ones();
         profile.trivially_derivable = telescope.clauses.is_empty()
             || profile.all_lib_or_var
             || (profile.has_higher_path
@@ -343,6 +380,317 @@ impl TelescopeNuProfile {
             library_path_dim_sq_sum
         } else {
             0
+        }
+    }
+}
+
+impl TerminalClauseNuFacts {
+    fn from_clause(clause: &ClauseRec) -> Self {
+        let expr = &clause.expr;
+        let mut lib_refs = expr.lib_refs().into_iter().collect::<Vec<_>>();
+        lib_refs.sort_unstable();
+        lib_refs.dedup();
+        let has_lib_pointer = !lib_refs.is_empty();
+        let is_path_con = is_path_con_expr(expr);
+        Self {
+            lib_refs: lib_refs.into_boxed_slice(),
+            is_type_formation: is_type_formation(expr),
+            is_intro: is_intro_expr(expr),
+            is_elim: is_elim_expr(expr),
+            is_axiomatic_intro: is_axiomatic_intro(expr),
+            modal_kind_mask: modal_kind_mask_for_expr(expr),
+            is_temporal_formation: matches!(expr, Expr::Next(_) | Expr::Eventually(_)),
+            is_univ: is_univ_expr(expr),
+            is_single_foundation_expr: matches!(
+                classify_single_entry_expr(expr),
+                TelescopeClass::Foundation
+            ),
+            is_single_map_expr: matches!(expr, Expr::App(left, _) if matches!(left.as_ref(), Expr::Lib(_))),
+            has_formation: is_type_formation(expr),
+            is_parametric_formation: is_parametric_formation(expr),
+            is_temporal: expr.is_temporal(),
+            is_suspension: matches!(expr, Expr::Susp(_)),
+            has_lib_pointer,
+            is_basic_formation: is_basic_formation_expr(expr),
+            is_pi_sigma: is_pi_sigma_expr(expr),
+            is_lib_or_var: matches!(expr, Expr::Lib(_) | Expr::Var(_)),
+            is_path_con,
+            path_dimension: match expr {
+                Expr::PathCon(dimension) => *dimension,
+                _ => 0,
+            },
+            is_trunc_context: expr.is_trunc_context(),
+            is_distributive_law: is_distributive_law(expr),
+            is_polymorphic_temporal_elim: is_polymorphic_temporal_elim(expr),
+            is_spatial_temporal_clause: is_spatial_temporal_clause(expr),
+        }
+    }
+}
+
+impl SingleClauseStructuralNuContext {
+    pub fn from_prefix(
+        prefix_telescope: &Telescope,
+        library: &Library,
+        nu_history: &[(u32, u32)],
+    ) -> Self {
+        let prefix_profile = TelescopeNuProfile::from_telescope(prefix_telescope);
+        let lookup_len = library.len().saturating_add(1);
+        let mut step_nu_lookup = vec![0; lookup_len];
+        for &(step, nu) in nu_history {
+            if let Ok(index) = usize::try_from(step) {
+                if index < lookup_len {
+                    step_nu_lookup[index] = nu;
+                }
+            }
+        }
+
+        let mut modal_ref_nu_lookup = vec![0; lookup_len];
+        for step in 1..lookup_len {
+            modal_ref_nu_lookup[step] =
+                modal_reference_nu(step as u32, library, nu_history).unwrap_or(0);
+        }
+
+        let prefix_max_ref_nu = prefix_profile
+            .lib_refs
+            .iter()
+            .filter_map(|step| step_nu_lookup.get(*step as usize).copied())
+            .max()
+            .unwrap_or(0);
+        let prefix_max_modal_ref_nu = prefix_profile
+            .lib_refs
+            .iter()
+            .filter_map(|step| modal_ref_nu_lookup.get(*step as usize).copied())
+            .max()
+            .unwrap_or(0);
+        let library_path_dim_sq_sum = library
+            .iter()
+            .filter(|entry| entry.has_loop)
+            .flat_map(|entry| entry.path_dims.iter().copied())
+            .map(|dimension| dimension * dimension)
+            .sum();
+
+        Self {
+            prefix_profile,
+            step_nu_lookup: step_nu_lookup.into_boxed_slice(),
+            modal_ref_nu_lookup: modal_ref_nu_lookup.into_boxed_slice(),
+            prefix_max_ref_nu,
+            prefix_max_modal_ref_nu,
+            library_size: u32_from_len(library.len()),
+            library_path_dim_sq_sum,
+        }
+    }
+
+    pub fn structural_nu_with_clause(&self, clause: &ClauseRec) -> StructuralNuResult {
+        let facts = TerminalClauseNuFacts::from_clause(clause);
+        self.structural_nu_with_clause_facts(&facts)
+    }
+
+    fn structural_nu_with_clause_facts(&self, facts: &TerminalClauseNuFacts) -> StructuralNuResult {
+        let profile = &self.prefix_profile;
+        let kappa = profile.kappa.saturating_add(1);
+        let type_formation_count =
+            profile.type_formation_count + u32::from(facts.is_type_formation);
+        let intro_count = profile.intro_count + u32::from(facts.is_intro);
+        let elim_count = profile.elim_count + u32::from(facts.is_elim);
+        let axiomatic_intro_count =
+            profile.axiomatic_intro_count + u32::from(facts.is_axiomatic_intro);
+        let modal_kind_mask = profile.modal_kind_mask | facts.modal_kind_mask;
+        let modal_kind_count = modal_kind_mask.count_ones();
+        let temporal_formation_count =
+            profile.temporal_formation_count + u32::from(facts.is_temporal_formation);
+        let any_univ_expr = profile.any_univ_expr || facts.is_univ;
+        let has_formation = profile.has_formation || facts.has_formation;
+        let any_parametric_formation =
+            profile.any_parametric_formation || facts.is_parametric_formation;
+        let has_temporal = profile.has_temporal || facts.is_temporal;
+        let has_suspension = profile.has_suspension || facts.is_suspension;
+        let any_lib_pointer = profile.any_lib_pointer || facts.has_lib_pointer;
+        let all_basic_formation = profile.all_basic_formation && facts.is_basic_formation;
+        let all_pi_sigma = profile.all_pi_sigma && facts.is_pi_sigma;
+        let all_lib_or_var = profile.all_lib_or_var && facts.is_lib_or_var;
+        let first_two_lib_pointer_count = profile.first_two_lib_pointer_count
+            + u8::from(profile.kappa < 2 && facts.has_lib_pointer);
+        let path_count = profile.path_count + u32::from(facts.is_path_con);
+        let max_path_dimension = profile.max_path_dimension.max(facts.path_dimension);
+        let (pre_path_count, post_path_entry_count) = if profile.path_count == 0 {
+            if facts.is_path_con {
+                (profile.kappa, 0)
+            } else {
+                (profile.pre_path_count, profile.post_path_entry_count)
+            }
+        } else {
+            (
+                profile.pre_path_count,
+                profile.post_path_entry_count.saturating_add(1),
+            )
+        };
+        let has_higher_path = profile.has_higher_path || facts.path_dimension > 1;
+        let non_path_expr_count = profile.non_path_expr_count + usize::from(!facts.is_path_con);
+        let all_non_path_trunc_context =
+            profile.all_non_path_trunc_context && (facts.is_path_con || facts.is_trunc_context);
+        let distributive_law_count =
+            profile.distributive_law_count + u32::from(facts.is_distributive_law);
+        let polymorphic_temporal_elim_count =
+            profile.polymorphic_temporal_elim_count + u32::from(facts.is_polymorphic_temporal_elim);
+        let has_spatial_temporal_clause =
+            profile.has_spatial_temporal_clause || facts.is_spatial_temporal_clause;
+
+        let trivially_derivable = all_lib_or_var
+            || (has_higher_path && non_path_expr_count > 0 && all_non_path_trunc_context);
+        if trivially_derivable {
+            return StructuralNuResult {
+                nu_g: 0,
+                nu_h: 0,
+                nu_c: 0,
+                total: 0,
+                distributive_law_bonus: 0,
+                universe_polymorphism_bonus: 0,
+                infinitesimal_shift_bonus: 0,
+            };
+        }
+
+        let class = if kappa == 1 {
+            if facts.is_single_foundation_expr {
+                TelescopeClass::Foundation
+            } else if facts.is_single_map_expr {
+                TelescopeClass::Map
+            } else if path_count > 0 {
+                TelescopeClass::Hit
+            } else if modal_kind_count > 0 && !has_temporal {
+                TelescopeClass::Modal
+            } else if has_temporal {
+                TelescopeClass::Synthesis
+            } else if has_suspension {
+                TelescopeClass::Suspension
+            } else if all_pi_sigma && !any_lib_pointer {
+                TelescopeClass::Former
+            } else {
+                TelescopeClass::Unknown
+            }
+        } else if all_basic_formation && !any_lib_pointer {
+            TelescopeClass::Foundation
+        } else if path_count > 0 {
+            TelescopeClass::Hit
+        } else if modal_kind_count > 0 && !has_temporal {
+            TelescopeClass::Modal
+        } else if has_temporal {
+            TelescopeClass::Synthesis
+        } else if has_suspension {
+            TelescopeClass::Suspension
+        } else if (2..=4).contains(&kappa) && first_two_lib_pointer_count == 2 {
+            TelescopeClass::Map
+        } else if kappa >= 3 && any_lib_pointer && modal_kind_count == 0 {
+            TelescopeClass::Axiomatic
+        } else if all_pi_sigma && !any_lib_pointer {
+            TelescopeClass::Former
+        } else {
+            TelescopeClass::Unknown
+        };
+
+        let mut lib_ref_count = u32_from_len(profile.lib_refs.len());
+        let mut max_ref_nu = self.prefix_max_ref_nu;
+        let mut max_modal_ref_nu = self.prefix_max_modal_ref_nu;
+        for step in facts.lib_refs.iter().copied() {
+            if !profile.lib_refs.contains(&step) {
+                lib_ref_count = lib_ref_count.saturating_add(1);
+            }
+            if let Some(nu) = self.step_nu_lookup.get(step as usize).copied() {
+                max_ref_nu = max_ref_nu.max(nu);
+            }
+            if let Some(nu) = self.modal_ref_nu_lookup.get(step as usize).copied() {
+                max_modal_ref_nu = max_modal_ref_nu.max(nu);
+            }
+        }
+
+        let nu_g = match class {
+            TelescopeClass::Foundation => {
+                if any_univ_expr {
+                    0
+                } else {
+                    type_formation_count
+                }
+            }
+            TelescopeClass::Former => intro_count,
+            TelescopeClass::Hit => {
+                if has_formation {
+                    pre_path_count + 3 + u32::from(any_parametric_formation)
+                } else {
+                    0
+                }
+            }
+            TelescopeClass::Suspension => 5,
+            TelescopeClass::Map => u32::from(kappa == 1),
+            TelescopeClass::Modal => modal_kind_count / 2,
+            TelescopeClass::Axiomatic => axiomatic_intro_count,
+            TelescopeClass::Synthesis => temporal_formation_count.min(2),
+            TelescopeClass::Unknown => intro_count,
+        };
+        let base_nu_h = if path_count > 0 {
+            path_count + max_path_dimension * max_path_dimension
+        } else {
+            0
+        };
+        let base_nu_c = match class {
+            TelescopeClass::Foundation => {
+                if any_univ_expr {
+                    kappa.saturating_sub(1)
+                } else {
+                    0
+                }
+            }
+            TelescopeClass::Former => intro_count + elim_count,
+            TelescopeClass::Hit => {
+                if has_formation {
+                    post_path_entry_count + (post_path_entry_count + 1) / 2
+                } else {
+                    kappa + self.library_size
+                }
+            }
+            TelescopeClass::Suspension => 0,
+            TelescopeClass::Map => {
+                if kappa == 1 {
+                    1
+                } else {
+                    2 * kappa + lib_ref_count * lib_ref_count
+                }
+            }
+            TelescopeClass::Modal => {
+                let axiom_entries = kappa.saturating_sub(nu_g);
+                let pairwise = (modal_kind_count * modal_kind_count.saturating_sub(1)) / 2;
+                axiom_entries + self.library_size + pairwise
+            }
+            TelescopeClass::Axiomatic => max_ref_nu + kappa + lib_ref_count.saturating_sub(1),
+            TelescopeClass::Synthesis => kappa.saturating_sub(nu_g),
+            TelescopeClass::Unknown => intro_count + elim_count,
+        };
+        let distributive_law_bonus = if class == TelescopeClass::Synthesis && max_modal_ref_nu > 0 {
+            distributive_law_count * max_modal_ref_nu
+        } else {
+            0
+        };
+        let universe_polymorphism_bonus = if class == TelescopeClass::Synthesis {
+            polymorphic_temporal_elim_count * self.library_size
+        } else {
+            0
+        };
+        let infinitesimal_shift_bonus =
+            if class == TelescopeClass::Synthesis && has_spatial_temporal_clause {
+                self.library_path_dim_sq_sum
+            } else {
+                0
+            };
+        let nu_h = base_nu_h + infinitesimal_shift_bonus;
+        let nu_c = base_nu_c + distributive_law_bonus + universe_polymorphism_bonus;
+        let total = nu_g + nu_h + nu_c;
+
+        StructuralNuResult {
+            nu_g,
+            nu_h,
+            nu_c,
+            total,
+            distributive_law_bonus,
+            universe_polymorphism_bonus,
+            infinitesimal_shift_bonus,
         }
     }
 }
@@ -780,6 +1128,22 @@ fn is_type_formation(expr: &Expr) -> bool {
 
 fn is_path_con_expr(expr: &Expr) -> bool {
     matches!(expr, Expr::PathCon(_))
+}
+
+fn modal_kind_mask(has_flat: bool, has_sharp: bool, has_disc: bool, has_shape: bool) -> u8 {
+    u8::from(has_flat)
+        | (u8::from(has_sharp) << 1)
+        | (u8::from(has_disc) << 2)
+        | (u8::from(has_shape) << 3)
+}
+
+fn modal_kind_mask_for_expr(expr: &Expr) -> u8 {
+    modal_kind_mask(
+        matches!(expr, Expr::Flat(_)),
+        matches!(expr, Expr::Sharp(_)),
+        matches!(expr, Expr::Disc(_)),
+        matches!(expr, Expr::Shape(_)),
+    )
 }
 
 fn is_intro_expr(expr: &Expr) -> bool {
@@ -1266,9 +1630,9 @@ fn extension_reference_candidates(
 #[cfg(test)]
 mod tests {
     use super::{
-        StructuralNuResult, compute_native_nu, compute_nu_c, compute_nu_g, compute_nu_h,
-        detect_distributive_laws, detect_infinitesimal_shift, detect_universe_polymorphism,
-        structural_nu,
+        SingleClauseStructuralNuContext, StructuralNuResult, compute_native_nu, compute_nu_c,
+        compute_nu_g, compute_nu_h, detect_distributive_laws, detect_infinitesimal_shift,
+        detect_universe_polymorphism, structural_nu,
     };
     use pen_core::clause::ClauseRec;
     use pen_core::expr::Expr;
@@ -1418,6 +1782,69 @@ mod tests {
                 structural_nu(telescope, &library, &history),
                 legacy_structural_nu(telescope, &library, &history),
                 "surface {index} diverged"
+            );
+        }
+    }
+
+    #[test]
+    fn single_clause_context_matches_full_structural_nu() {
+        let (library, history) = replay_reference_library(14);
+        let surfaces = vec![
+            Telescope::reference(2),
+            Telescope::reference(4),
+            Telescope::reference(5),
+            Telescope::reference(10),
+            Telescope::reference(15),
+            Telescope::new(vec![ClauseRec::new(
+                pen_core::clause::ClauseRole::Formation,
+                Expr::Susp(Box::new(Expr::Var(1))),
+            )]),
+            Telescope::new(vec![
+                ClauseRec::new(
+                    pen_core::clause::ClauseRole::Formation,
+                    Expr::Pi(Box::new(Expr::Lib(3)), Box::new(Expr::Var(1))),
+                ),
+                ClauseRec::new(
+                    pen_core::clause::ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::Var(1))),
+                ),
+                ClauseRec::new(
+                    pen_core::clause::ClauseRole::Introduction,
+                    Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2))),
+                ),
+            ]),
+            Telescope::new(vec![
+                ClauseRec::new(
+                    pen_core::clause::ClauseRole::Formation,
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                ),
+                ClauseRec::new(
+                    pen_core::clause::ClauseRole::Introduction,
+                    Expr::Eventually(Box::new(Expr::Lib(2))),
+                ),
+                ClauseRec::new(
+                    pen_core::clause::ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(4)),
+                        Box::new(Expr::Var(1)),
+                    ))),
+                ),
+            ]),
+        ];
+
+        for (index, telescope) in surfaces.iter().enumerate() {
+            let expected = structural_nu(telescope, &library, &history);
+            let prefix_len = telescope.clauses.len().saturating_sub(1);
+            let prefix = Telescope::new(telescope.clauses[..prefix_len].to_vec());
+            let last_clause = telescope
+                .clauses
+                .last()
+                .expect("test surface should contain a last clause");
+            let context = SingleClauseStructuralNuContext::from_prefix(&prefix, &library, &history);
+            assert_eq!(
+                context.structural_nu_with_clause(last_clause),
+                expected,
+                "surface {index} diverged",
             );
         }
     }

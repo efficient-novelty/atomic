@@ -41,7 +41,8 @@ use pen_core::telescope::Telescope;
 use pen_eval::bar::{DiscoveryRecord, compute_bar};
 use pen_eval::minimality::analyze_semantic_minimality;
 use pen_eval::nu::{
-    SingleClauseStructuralNuCaps, structural_nu, structural_nu_single_clause_upper_bound,
+    SingleClauseStructuralNuCaps, SingleClauseStructuralNuContext, structural_nu,
+    structural_nu_single_clause_upper_bound,
 };
 use pen_store::manifest::{NearMiss, SearchTiming};
 use pen_type::admissibility::{
@@ -5460,6 +5461,9 @@ fn exact_terminal_prefix_bound_decision(
     let clause_kappa_used =
         u32::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u32");
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
+    let single_clause_nu_context = (!prefix_telescope.clauses.is_empty()).then(|| {
+        SingleClauseStructuralNuContext::from_prefix(prefix_telescope, library, nu_history)
+    });
     match terminal_clauses {
         TerminalPrefixClauseCandidates::General(terminal_clauses) => {
             for terminal_clause in terminal_clauses {
@@ -5508,7 +5512,13 @@ fn exact_terminal_prefix_bound_decision(
                     continue;
                 }
 
-                let exact_nu = structural_nu(telescope, library, nu_history).total;
+                let exact_nu = single_clause_structural_nu_total(
+                    telescope,
+                    terminal_clause.clause,
+                    single_clause_nu_context.as_ref(),
+                    library,
+                    nu_history,
+                );
                 let rho = Rational::new(i64::from(exact_nu), i64::from(clause_kappa_used));
                 if rho >= objective_bar {
                     return ExactPartialPrefixBoundDecision::CanClearBar;
@@ -5552,7 +5562,13 @@ fn exact_terminal_prefix_bound_decision(
                     }
                 }
 
-                let exact_nu = structural_nu(telescope, library, nu_history).total;
+                let exact_nu = single_clause_structural_nu_total(
+                    telescope,
+                    terminal_clause.clause,
+                    single_clause_nu_context.as_ref(),
+                    library,
+                    nu_history,
+                );
                 let rho = Rational::new(i64::from(exact_nu), i64::from(clause_kappa_used));
                 if rho >= objective_bar {
                     return ExactPartialPrefixBoundDecision::CanClearBar;
@@ -5719,6 +5735,18 @@ fn load_terminal_clause_into_scratch<'a>(
         scratch_telescope.clauses[prefix_len].clone_from(clause);
     }
     scratch_telescope
+}
+
+fn single_clause_structural_nu_total(
+    telescope: &Telescope,
+    clause: &pen_core::clause::ClauseRec,
+    single_clause_nu_context: Option<&SingleClauseStructuralNuContext>,
+    library: &Library,
+    nu_history: &[(u32, u32)],
+) -> u32 {
+    single_clause_nu_context
+        .map(|context| context.structural_nu_with_clause(clause).total)
+        .unwrap_or_else(|| structural_nu(telescope, library, nu_history).total)
 }
 
 fn terminal_prefix_completion_bit_cost(
@@ -5895,6 +5923,9 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
         u16::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u16");
     let prefix_bit_cost = prefix_telescope.bit_cost();
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
+    let single_clause_nu_context = (!prefix_telescope.clauses.is_empty()).then(|| {
+        SingleClauseStructuralNuContext::from_prefix(prefix_telescope, library, nu_history)
+    });
     let mut kernel_timing = RemainingOneSummaryKernelTiming::default();
     match terminal_clauses {
         TerminalPrefixClauseCandidates::General(terminal_clauses) => {
@@ -5988,8 +6019,14 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
 
                 kernel_timing.terminal_summary_exact_nu_evaluations += 1;
                 let exact_nu_started = Instant::now();
-                let exact_nu = u16::try_from(structural_nu(telescope, library, nu_history).total)
-                    .expect("nu exceeded u16");
+                let exact_nu = u16::try_from(single_clause_structural_nu_total(
+                    telescope,
+                    terminal_clause.clause,
+                    single_clause_nu_context.as_ref(),
+                    library,
+                    nu_history,
+                ))
+                .expect("nu exceeded u16");
                 kernel_timing.terminal_summary_exact_nu_duration += exact_nu_started.elapsed();
                 let aggregation_started = Instant::now();
                 let bit_kappa_used =
@@ -6081,9 +6118,14 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     admitted_focus_aligned_count += 1;
                     kernel_timing.terminal_summary_exact_nu_evaluations += 1;
                     let exact_nu_started = Instant::now();
-                    let exact_nu =
-                        u16::try_from(structural_nu(telescope, library, nu_history).total)
-                            .expect("nu exceeded u16");
+                    let exact_nu = u16::try_from(single_clause_structural_nu_total(
+                        telescope,
+                        terminal_clause.clause,
+                        single_clause_nu_context.as_ref(),
+                        library,
+                        nu_history,
+                    ))
+                    .expect("nu exceeded u16");
                     kernel_timing.terminal_summary_exact_nu_duration += exact_nu_started.elapsed();
                     let aggregation_started = Instant::now();
                     let bit_kappa_used = terminal_prefix_completion_bit_cost(
@@ -6163,9 +6205,14 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     let exact_nu_started = Instant::now();
                     kernel_timing.terminal_summary_aggregation_duration +=
                         exact_nu_started.duration_since(after_aggregation);
-                    let exact_nu =
-                        u16::try_from(structural_nu(telescope, library, nu_history).total)
-                            .expect("nu exceeded u16");
+                    let exact_nu = u16::try_from(single_clause_structural_nu_total(
+                        telescope,
+                        terminal_clause.clause,
+                        single_clause_nu_context.as_ref(),
+                        library,
+                        nu_history,
+                    ))
+                    .expect("nu exceeded u16");
                     let after_exact_nu = Instant::now();
                     kernel_timing.terminal_summary_exact_nu_duration +=
                         after_exact_nu.duration_since(exact_nu_started);
@@ -6656,6 +6703,9 @@ fn materialize_terminal_prefix_group_compact(
         u16::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u16");
     let prefix_bit_cost = prefix_telescope.bit_cost();
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
+    let single_clause_nu_context = (!prefix_telescope.clauses.is_empty()).then(|| {
+        SingleClauseStructuralNuContext::from_prefix(prefix_telescope, library, nu_history)
+    });
     match terminal_clauses {
         TerminalPrefixClauseCandidates::General(terminal_clauses) => {
             for terminal_clause in terminal_clauses {
@@ -6709,8 +6759,14 @@ fn materialize_terminal_prefix_group_compact(
                 }
 
                 admitted_terminal_candidates += 1;
-                let exact_nu = u16::try_from(structural_nu(telescope, library, nu_history).total)
-                    .expect("nu exceeded u16");
+                let exact_nu = u16::try_from(single_clause_structural_nu_total(
+                    telescope,
+                    terminal_clause.clause,
+                    single_clause_nu_context.as_ref(),
+                    library,
+                    nu_history,
+                ))
+                .expect("nu exceeded u16");
                 let bit_kappa_used =
                     terminal_prefix_completion_bit_cost(prefix_bit_cost, terminal_clause.clause);
                 absorb_terminal_prefix_completion_bound(
@@ -6789,8 +6845,14 @@ fn materialize_terminal_prefix_group_compact(
                 discovery.enumerated_candidates += 1;
                 discovery.well_formed_candidates += 1;
                 admitted_terminal_candidates += 1;
-                let exact_nu = u16::try_from(structural_nu(telescope, library, nu_history).total)
-                    .expect("nu exceeded u16");
+                let exact_nu = u16::try_from(single_clause_structural_nu_total(
+                    telescope,
+                    terminal_clause.clause,
+                    single_clause_nu_context.as_ref(),
+                    library,
+                    nu_history,
+                ))
+                .expect("nu exceeded u16");
                 let bit_kappa_used =
                     terminal_prefix_completion_bit_cost(prefix_bit_cost, terminal_clause.clause);
                 absorb_terminal_prefix_completion_bound(
