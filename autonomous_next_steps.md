@@ -38,6 +38,7 @@ Assume the following were already measured and should stay dropped as standalone
 - the eager clause-filter-wide metadata pack in `runs/codex-claim-release-step4-kernel-clause-metadata-v1`
 - the lazy admitted-only metadata retry in `runs/codex-claim-release-step4-kernel-admitted-metadata-v1`
 - the first scratch-slot clause-load reuse pass in `runs/codex-claim-release-step4-kernel-clause-load-v1`
+- the helper-level contender-rank fused scan in `runs/codex-claim-release-full-aggregation-open-band-rank-scan-v1`
 
 ## Active Baselines
 - Current short baseline: `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`
@@ -81,6 +82,20 @@ Assume the following were already measured and should stay dropped as standalone
   - `408`: aggregation `= 2218628958 us`, connectivity `= 1675112606 us`, exact `nu` `= 1596901898 us`, terminal clause-filter handoff `= 54702325 us`
   - `454`: aggregation `= 2480479553 us`, connectivity `= 1875448296 us`, exact `nu` `= 1808063671 us`, terminal clause-filter handoff `= 58420696 us`
   - `484`: aggregation `= 2641777960 us`, connectivity `= 2010145015 us`, exact `nu` `= 1932111468 us`, terminal clause-filter handoff `= 65158646 us`
+- The latest failed follow-up on the current winner,
+  `runs/codex-claim-release-full-aggregation-open-band-rank-scan-v1`, preserved the honest `39/40/41` retained-prefix story through the stored `163` read and stayed well below the old allocator-failure band, but it still regressed every decisive matched checkpoint through `163`:
+  - `24`: `328941 / 326192` instead of `327917 / 325321`
+  - `43`: `595120 / 591267` instead of `591083 / 587479`
+  - `44`: `607902 / 603989` instead of `603570 / 599913`
+  - `54`: `750755 / 746245` instead of `743997 / 739797`
+  - `74`: `1031304 / 1025636` instead of `1023572 / 1018283`
+  - `76`: `1064603 / 1058818` instead of `1057864 / 1052464`
+  - `140`: `2034303 / 2024681` instead of `2014043 / 2005230`
+  - `163`: `2376395 / 2365242` instead of `2334208 / 2324213`
+  These pairs are `elapsed_millis / terminal_summary_build_millis`.
+- That failed rank-scan follow-up did answer one real runtime question: it lowered measured aggregation first on the stored `41 / 154842` surface, but the total wall still regressed because connectivity and exact `nu` rose more than the aggregation win saved:
+  - `140`: aggregation `= 747555991 us`, connectivity `= 574927903 us`, exact `nu` `= 526111828 us`, terminal clause-filter handoff `= 15292063 us`
+  - `163`: aggregation `= 866239839 us`, connectivity `= 677193306 us`, exact `nu` `= 615067992 us`, terminal clause-filter handoff `= 18498612 us`
 - Inference from matched checkpoint totals:
   the new slice's main win is not lower measured aggregation. Measured aggregation and exact `nu` are slightly higher at matched late checkpoints, but the previously unattributed summary-build tail collapsed sharply. At `454`, the unattributed remainder fell from about `1698726 ms` on the previous runtime reference to about `521722 ms` on the new one.
 - `terminal_summary_admissibility_checks = 0` and `terminal_summary_fallback_connectivity_checks = 0` through the stored `484` read.
@@ -97,10 +112,11 @@ Assume the following were already measured and should stay dropped as standalone
 - The visible later blocker did not change category. Aggregation is still first, connectivity is still second, exact `nu` is still third, and terminal clause-filter handoff is still tiny.
 - The key new nuance is that the new win comes mainly from collapsing previously unattributed summary-build overhead while keeping the retained-prefix story intact. That is an inference from the matched checkpoint totals and bucket sums, not a separately recorded telemetry field.
 - The new guardrail is a small but consistent later-surface RSS increase versus the previous runtime reference. It remains secondary to the later aggregation-led throughput wall, but it should stay visible on the next slice.
-- The next honest first cut is therefore another narrow later-surface runtime slice on the new winner, now aimed at measured aggregation-side rank/bound/summary work directly rather than another timing-only rewrite or a plain rerun-only turn.
+- The failed rank-scan follow-up answered one more honest question too: the duplicated contender-rank scan inside full `AcceptRank` construction is not the decisive later wall by itself. It can lower measured aggregation on the `41` surface, but enough time shifts into connectivity, exact `nu`, and the unattributed remainder that the total wall still worsens.
+- The next honest first cut is therefore another narrow later-surface runtime slice on the current winner, now aimed at the connectivity/exact-`nu` structural work exposed by the failed rank-scan follow-up rather than another timing-only rewrite, plain rerun-only turn, or another contender-rank-helper replay.
 
 ## Goal
-Land one narrow later-surface runtime cut on the current winner that keeps the new `484` wall gain and either reduces measured aggregation first or reveals a new lead bucket honestly without losing the retained-prefix story.
+Land one narrow later-surface runtime cut on the current winner that keeps the new `484` wall gain and either reduces the connectivity/exact-`nu` rise exposed by the failed rank-scan follow-up or reveals a different lead bucket honestly without losing the retained-prefix story.
 
 ## Do This Next
 
@@ -127,16 +143,16 @@ Do not reopen first:
 - another timing-only rewrite that merely reattributes the same late-surface cost with no new runtime question
 
 ### 2. Cut Later Runtime First
-Land one narrow code change that targets the post-`332` / post-`335` measured aggregation-side summary/rank/bound work on the current winner.
+Land one narrow code change that targets the post-`140` / post-`163` connectivity and exact-`nu` structural work on the current winner.
 
-Bias toward reductions in measured aggregation first. Keep the small later-surface RSS increase visible while you cut, and treat connectivity and exact `nu` as secondary follow-up buckets unless a new stored read shows one of them taking the lead honestly.
+The failed rank-scan follow-up already showed that measured aggregation can move down without moving the total wall. Bias toward the shared later-surface structural work now inflating connectivity and exact `nu`, while still keeping aggregation and the small later-surface RSS increase visible as honesty checks.
 
 If code changes land, use a new run id that states the slice.
 
 Do not reintroduce first:
+- another contender-rank-helper replay with no new runtime question
 - the parent-summary connectivity lookup reuse exactly as previously measured
 - new clause-filter metadata work
-- another connectivity-first slice before a new later runtime read exists
 - another timing-only replay with no new aggregation-side runtime question
 
 ### 3. Re-Earn Stored Evidence
@@ -152,8 +168,8 @@ Open at least:
 Answer from stored evidence:
 - did the new slice preserve the `39 / 144845`, `40 / 147639`, and `41 / 154842` surfaces honestly?
 - did it preserve or move the `42 / 157636` and `43 / 160430` surfaces honestly?
-- did the post-`332` measured aggregation time finally move materially first?
-- did connectivity or exact `nu` become the new lead if aggregation moved?
+- did the post-`140` / post-`163` connectivity and exact `nu` cost finally move enough to let the wall clock improve on the current winner?
+- did aggregation stay the lead bucket, or did a different bucket take the lead honestly on the later surface?
 - did the run move materially past the stored `484` wall or reach step `5`?
 - did observed RSS stay well below the old allocator-failure band, and did its later growth flatten or worsen relative to the current runtime reference?
 

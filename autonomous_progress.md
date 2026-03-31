@@ -11,36 +11,31 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 - The previous full-profile runtime reference is `runs/codex-claim-release-full-aggregation-open-band-scratch-clonefrom-v1`.
 - The earlier full-profile runtime reference is `runs/codex-claim-release-full-aggregation-open-band-compact-v1`.
 - The earlier full-profile runtime reference is `runs/codex-claim-release-full-connectivity-facts-v1`.
-- The latest measured slice is `runs/codex-claim-release-full-aggregation-open-band-accumulator-v1`, and it was dropped after regressing the current runtime reference on stored evidence.
-- That later-surface follow-up preserved the honest retained-prefix story only through the current `41` surface:
+- The latest measured slice is `runs/codex-claim-release-full-aggregation-open-band-rank-scan-v1`, and it was dropped after preserving the current `39/40/41` retained-prefix story through the stored `163` read but still regressing the current runtime reference on stored evidence.
+- That later-surface follow-up preserved the honest retained-prefix story through the current `41` surface:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
-  - `41 groups / 154842 candidates` from `140` through the stored `285` read
+  - `41 groups / 154842 candidates` at `140/163`
   It never re-earned the current reference's `42 / 157636` or `43 / 160430` reopens before the stored stop.
 - It regressed every decisive matched checkpoint against the current runtime reference:
-  - `24`: `336071 / 333226` instead of `327917 / 325321`
-  - `43`: `606634 / 602665` instead of `591083 / 587479`
-  - `44`: `619470 / 615435` instead of `603570 / 599913`
-  - `54`: `762881 / 758237` instead of `743997 / 739797`
-  - `74`: `1049197 / 1043309` instead of `1023572 / 1018283`
-  - `76`: `1084568 / 1078557` instead of `1057864 / 1052464`
-  - `140`: `2063608 / 2053672` instead of `2014043 / 2005230`
-  - `163`: `2393159 / 2381788` instead of `2334208 / 2324213`
-  - `228`: `3374290 / 3358809` instead of `3287422 / 3274060`
-  - `229`: `3392631 / 3377087` instead of `3304737 / 3291324`
+  - `24`: `328941 / 326192` instead of `327917 / 325321`
+  - `43`: `595120 / 591267` instead of `591083 / 587479`
+  - `44`: `607902 / 603989` instead of `603570 / 599913`
+  - `54`: `750755 / 746245` instead of `743997 / 739797`
+  - `74`: `1031304 / 1025636` instead of `1023572 / 1018283`
+  - `76`: `1064603 / 1058818` instead of `1057864 / 1052464`
+  - `140`: `2034303 / 2024681` instead of `2014043 / 2005230`
+  - `163`: `2376395 / 2365242` instead of `2334208 / 2324213`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
-- The bucket order stayed aggregation first honestly on the stored later surface:
-  - `140`: aggregation `= 775992589 us`, connectivity `= 575235886 us`, exact `nu` `= 525904436 us`, terminal clause-filter handoff `= 15264839 us`
-  - `228`: aggregation `= 1245498762 us`, connectivity `= 947381690 us`, exact `nu` `= 875269842 us`, terminal clause-filter handoff `= 27189213 us`
-  - `285`: aggregation `= 1597950348 us`, connectivity `= 1192428892 us`, exact `nu` `= 1115322732 us`, terminal clause-filter handoff `= 36292013 us`
-- `terminal_summary_admissibility_checks = 0` and `terminal_summary_fallback_connectivity_checks = 0` through the stored `285` read.
+- Unlike the dropped accumulator slice, this helper-level follow-up did move measured aggregation first on the stored `41` surface, but the total wall still regressed because connectivity and exact `nu` rose more than the aggregation win saved:
+  - `140`: aggregation `= 747555991 us` instead of `763398133 us`, connectivity `= 574927903 us` instead of `557557788 us`, exact `nu` `= 526111828 us` instead of `511854832 us`, terminal clause-filter handoff `= 15292063 us` instead of `25988115 us`
+  - `163`: aggregation `= 866239839 us` instead of `877573120 us`, connectivity `= 677193306 us` instead of `651431110 us`, exact `nu` `= 615067992 us` instead of `594142794 us`, terminal clause-filter handoff `= 18498612 us` instead of `29787220 us`
+- `terminal_summary_admissibility_checks = 0` and `terminal_summary_fallback_connectivity_checks = 0` through the stored `163` read.
 - The first stored plateau activation is still `24`, and `terminal_summary_plateau_activations = 231996` stayed flat through the stored stop.
 - Observed RSS stayed well below the old allocator-failure band:
-  - `228`: `828514304` bytes
-  - `229`: `831315968` bytes
-  - `279`: `973017088` bytes
-  - `285`: `990433280` bytes
-- Because the rerun was manually stopped after the later-surface regression was already clear, `reports/latest.txt` still reflects completed step `3`, `run.json` still says `status = "running"`, and `reports/steps/step-05-live.ndjson` is absent; the authoritative evidence for this run lives in `reports/steps/step-04-live.ndjson`.
+  - `140`: `572178432` bytes
+  - `163`: `639975424` bytes
+- Because the rerun was manually stopped after the later-surface cost-shift regression was already clear, `reports/latest.txt` still reflects completed step `3`, `run.json` still says `status = "running"`, and `reports/steps/step-05-live.ndjson` is absent; the authoritative evidence for this run lives in `reports/steps/step-04-live.ndjson`.
 
 ## What Stays Landed
 - delayed materialization
@@ -99,32 +94,31 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 - The run never reached step `5` on stored evidence; `reports/steps/step-05-live.ndjson` is absent.
 
 ### 3. Latest Failed Later-Surface Follow-Up
-- Run: `runs/codex-claim-release-full-aggregation-open-band-accumulator-v1`
+- Run: `runs/codex-claim-release-full-aggregation-open-band-rank-scan-v1`
 - Hypothesis:
-  keep the current stage-timing winner intact, but cut one more per-candidate aggregation constant inside the compact claim open-band no-evaluations summary kernel by specializing the local summary accumulator instead of repeatedly mutating the generic summary fields and `Option` payloads in the hottest loop.
+  keep the current stage-timing winner intact, but cut one more per-contender measured aggregation cost inside full `AcceptRank` construction by fusing the structural signal and max-var-ref scans so contender updates stop rebuilding variable-reference sets twice per telescope.
 - Outcome:
-  - it preserved the honest `39/40/41` retained-prefix story through the stored `285` read
+  - it preserved the honest `39/40/41` retained-prefix story through the stored `163` read
   - it never re-earned the current runtime reference's `42 / 157636` or `43 / 160430` surfaces
-  - it regressed every decisive matched checkpoint versus the current runtime reference from `24` through `229`
+  - it regressed every decisive matched checkpoint versus the current runtime reference from `24` through `163`
+  - it did reduce measured aggregation first on the stored `41 / 154842` surface, but connectivity and exact `nu` both rose more than the aggregation win saved
   - it stayed memory-safe and never hinted at the old allocator-failure story returning
-  - the rerun was manually stopped after the regression was already clear on stored evidence
+  - the rerun was manually stopped after the later-surface cost shift was already clear on stored evidence
 - Comparison versus the current runtime reference:
-  - `24`: `336071 / 333226` instead of `327917 / 325321`
-  - `43`: `606634 / 602665` instead of `591083 / 587479`
-  - `44`: `619470 / 615435` instead of `603570 / 599913`
-  - `54`: `762881 / 758237` instead of `743997 / 739797`
-  - `74`: `1049197 / 1043309` instead of `1023572 / 1018283`
-  - `76`: `1084568 / 1078557` instead of `1057864 / 1052464`
-  - `140`: `2063608 / 2053672` instead of `2014043 / 2005230`
-  - `163`: `2393159 / 2381788` instead of `2334208 / 2324213`
-  - `228`: `3374290 / 3358809` instead of `3287422 / 3274060`
-  - `229`: `3392631 / 3377087` instead of `3304737 / 3291324`
+  - `24`: `328941 / 326192` instead of `327917 / 325321`
+  - `43`: `595120 / 591267` instead of `591083 / 587479`
+  - `44`: `607902 / 603989` instead of `603570 / 599913`
+  - `54`: `750755 / 746245` instead of `743997 / 739797`
+  - `74`: `1031304 / 1025636` instead of `1023572 / 1018283`
+  - `76`: `1064603 / 1058818` instead of `1057864 / 1052464`
+  - `140`: `2034303 / 2024681` instead of `2014043 / 2005230`
+  - `163`: `2376395 / 2365242` instead of `2334208 / 2324213`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
 - Stored later-surface read before stopping:
-  - `279`: `41 groups / 154842 candidates`, `4204858 / 4186088`, RSS `= 973017088` bytes
-  - `285`: `41 groups / 154842 candidates`, `4291394 / 4272236`, RSS `= 990433280` bytes
+  - `140`: `41 groups / 154842 candidates`, `2034303 / 2024681`, RSS `= 572178432` bytes
+  - `163`: `41 groups / 154842 candidates`, `2376395 / 2365242`, RSS `= 639975424` bytes
 - Honest read:
-  the accumulator specialization engaged and stayed honest, but it did not move the measured aggregation wall first. The regression stayed visible from the early kept surface through the later stored `41` surface, so this local summary field/`Option` cleanup is now dropped as a standalone next move.
+  the fused contender-rank scan engaged and honestly lowered measured aggregation on the first later `41` surface, but the total wall still regressed because connectivity and exact `nu` rose more than the aggregation win saved and the unattributed remainder did not shrink enough. This contender-rank helper rewrite is now dropped as a standalone next move.
 
 ### 4. Previous Full-Profile Runtime Reference
 - Run: `runs/codex-claim-release-full-aggregation-open-band-scratch-clonefrom-v1`
@@ -161,6 +155,7 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 - claim open-band admitted-kernel fusion: `kernel-admitted-kernel-v1`
 - direct bound/bookkeeping absorb cleanup: `kernel-bound-bookkeeping-v1`
 - open-band compact-summary accumulator follow-up: `full-aggregation-open-band-accumulator-v1`
+- open-band contender-rank fused scan follow-up: `full-aggregation-open-band-rank-scan-v1`
 - scratch-slot clause-load reuse first pass: `kernel-clause-load-v1`
 - exact-`nu` high-water gate: `kernel-nu-highwater-v1`
 - summary-invariants accept-rank prefix-context rewrite: `kernel-summary-invariants-v1`
@@ -179,11 +174,11 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 ## Revised Working Diagnosis
 - The old early RSS cliff remains broken; this is still a step-`4` throughput problem, not a return of the allocator-failure story.
 - The stage-timing slice engaged honestly on the real intended profile: it preserved the kept `39/40/41/42/43` surface story, materially improved every decisive matched checkpoint through the prior stored `454` wall, and moved the later wall again to `484`.
-- The newer accumulator follow-up answered the next local bookkeeping question on stored evidence: it preserved the honest `39/40/41` surfaces and stayed memory-safe, but it regressed every decisive matched checkpoint against the stage-timing winner and never re-earned the `42/43` reopens before the stored `285` stop.
+- The newer rank-scan follow-up answered the next local contender-rank question on stored evidence: it preserved the honest `39/40/41` surfaces through the stored `163` read, stayed memory-safe, and did reduce measured aggregation first on that later `41` surface, but it still regressed every decisive matched checkpoint against the stage-timing winner because connectivity and exact `nu` rose more than the aggregation win saved.
 - The later wall is still aggregation first on stored evidence, with connectivity second, exact `nu` third, and terminal clause-filter handoff still tiny.
-- The new nuance is that the current winner's main gain comes from a much smaller previously unattributed summary-build remainder, while measured aggregation itself remains the lead bucket and is slightly higher at matched later checkpoints. That is an inference from the matched checkpoint totals and bucket sums rather than a separately emitted telemetry field.
+- The new nuance is that the duplicated contender-rank scan inside `AcceptRank` construction is not the decisive later wall by itself. The latest helper-level slice lowered measured aggregation at `140/163`, but enough time shifted into connectivity, exact `nu`, and the unattributed remainder that total wall time still worsened.
 - Observed RSS is slightly higher than the previous runtime reference on the matched later surface and then continues rising to `1581830144` bytes by `484`; that is still far below the old allocator-failure band, so the lane still reads as throughput-bound rather than allocator-bound on stored evidence.
-- The accumulated lesson from the dropped retries is stronger again: the next honest runtime choice is still a later-surface runtime cut on this new winner rather than another plain rerun-only turn, another connectivity-first retry, another accumulator-only replay, or another metadata/clause-load-only replay.
+- The accumulated lesson from the dropped retries is stronger again: the next honest runtime choice is still a later-surface runtime cut on this winner, but it should now bias toward the connectivity/exact-`nu` structural work exposed by the failed rank-scan follow-up rather than another accumulator-only, contender-rank-helper, or metadata/clause-load-only replay.
 
 ## Best Current Inference
 The current runtime reference is `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`.
@@ -197,19 +192,20 @@ That run is already good enough to answer the latest late-surface timing-overhea
 - it appears to have removed most of the previously unattributed summary-build remainder while keeping the retained-prefix story intact
 - it kept observed RSS well below the old allocator-failure band even though late RSS drift is now slightly worse than the previous runtime reference
 
-The newer accumulator follow-up then answered the next local bookkeeping question from stored evidence too:
-- it preserved the honest `39/40/41` retained-prefix story through the stored `285` read
-- it never re-earned the `42 / 157636` and `43 / 160430` reopens
-- it regressed every decisive matched checkpoint against the stage-timing winner from `24` through `229`
+The newer rank-scan follow-up then answered the next contender-rank helper question from stored evidence too:
+- it preserved the honest `39/40/41` retained-prefix story through the stored `163` read
+- it never re-earned the `42 / 157636` and `43 / 160430` reopens before the stored stop
+- it regressed every decisive matched checkpoint against the stage-timing winner from `24` through `163`
+- it did reduce measured aggregation first at `140/163`, but connectivity and exact `nu` both rose more than that aggregation win saved
 - it still stayed well below the old allocator-failure band
 
-The next honest question is therefore still another later-surface runtime cut on this winner, now targeting measured aggregation-side rank/bound/summary work beyond the dropped local accumulator cleanup, with the small late RSS increase treated as an explicit guardrail rather than ignored.
+The next honest question is therefore still another later-surface runtime cut on this winner, but it should now target the connectivity/exact-`nu` structural work that erased the helper's aggregation gain, with aggregation and late RSS both kept in view as explicit guardrails.
 
 ## Immediate Next Move
 1. Keep `runs/codex-claim-release-step4-kernel-open-band-handoff-v1` as the short step-`4` baseline and `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1` as the current full-profile runtime reference.
 2. Do not spend another turn on a plain intended-profile rerun with no code or new runtime question, and do not reopen another unchanged connectivity-first retry, accumulator-only replay, metadata retry, clause-load-only replay, or timing-only replay first.
-3. Land one narrow later-surface runtime cut on the current winner. Target the post-`332` / post-`335` measured aggregation-side summary/rank/bound work that still leads the stored `43 / 160430` surface, while keeping the slight late-surface RSS increase in view as a hard honesty check.
-4. After code changes land, rerun a release claim follow-up with a new run id that states the slice and carry it at least through the stored `332/335/408/437/454` region and ideally past the new `484` wall or into step `5` on stored evidence.
+3. Land one narrow later-surface runtime cut on the current winner. Target the post-`140` / post-`163` connectivity and exact-`nu` structural work that erased the failed rank-scan slice's aggregation win, while keeping aggregation and the slight late-surface RSS increase in view as hard honesty checks.
+4. After code changes land, rerun a release claim follow-up with a new run id that states the slice and carry it at least through the stored `140/163/228/229` region and ideally through the current `332/335/408/437/454` band or into step `5` on stored evidence.
 5. If code changes land before that rerun, rerun only:
    - `cargo test -p pen-search claim_`
    - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
