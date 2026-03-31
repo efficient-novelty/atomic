@@ -24,9 +24,9 @@ use crate::prefix_cache::{
     PrefixCache, PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature,
 };
 use crate::prefix_memo::{
-    PartialPrefixBoundDecision, PrefixLegalityCache, PrefixLegalityCacheEntryCounts,
-    TerminalConnectivityDecision, TerminalPrefixClauseEvaluation, TerminalPrefixCompletion,
-    TerminalPrefixCompletionSummary, TerminalPrefixPrimaryRank,
+    CompactTerminalPrefixCandidate, PartialPrefixBoundDecision, PrefixLegalityCache,
+    PrefixLegalityCacheEntryCounts, TerminalConnectivityDecision, TerminalPrefixClauseEvaluation,
+    TerminalPrefixCompletion, TerminalPrefixCompletionSummary, TerminalPrefixPrimaryRank,
 };
 use crate::priority::{PriorityInputs, build_priority_key};
 use crate::scheduler::build_schedule;
@@ -5586,6 +5586,7 @@ enum TerminalPrefixSummaryPayload {
 
 #[derive(Clone, Debug)]
 struct TerminalPrefixCandidate<'a> {
+    source_index: usize,
     clause: &'a pen_core::clause::ClauseRec,
     cached_admissibility_decision: Option<AdmissibilityDecision>,
     connectivity_facts: Option<&'a TerminalClauseConnectivityFacts>,
@@ -5616,19 +5617,23 @@ fn terminal_prefix_clause_candidates<'a>(
     prefix_legality_cache: &mut PrefixLegalityCache,
     remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
 ) -> TerminalPrefixClauseCandidates<'a> {
-    fn find_connectivity_fact<'a>(
+    fn find_terminal_clause_metadata<'a>(
         clause: &pen_core::clause::ClauseRec,
         clauses: &'a [pen_core::clause::ClauseRec],
         facts: Option<&'a [TerminalClauseConnectivityFacts]>,
-    ) -> Option<&'a TerminalClauseConnectivityFacts> {
-        let facts = facts?;
-        if facts.len() != clauses.len() {
-            return None;
-        }
+    ) -> (usize, Option<&'a TerminalClauseConnectivityFacts>) {
         clauses
             .iter()
-            .zip(facts.iter())
-            .find_map(|(candidate, fact)| std::ptr::eq(candidate, clause).then_some(fact))
+            .enumerate()
+            .find_map(|(index, candidate)| {
+                std::ptr::eq(candidate, clause).then_some((
+                    index,
+                    facts
+                        .filter(|facts| facts.len() == clauses.len())
+                        .and_then(|facts| facts.get(index)),
+                ))
+            })
+            .expect("filtered terminal clause should come from the current clause slice")
     }
 
     let clause_filter_started = Instant::now();
@@ -5642,14 +5647,18 @@ fn terminal_prefix_clause_candidates<'a>(
         TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(
             clauses
                 .into_iter()
-                .map(|clause| TerminalPrefixCandidate {
-                    clause,
-                    cached_admissibility_decision: None,
-                    connectivity_facts: find_connectivity_fact(
+                .map(|clause| {
+                    let (source_index, connectivity_facts) = find_terminal_clause_metadata(
                         clause,
                         filtered_last_clause_options,
                         filtered_last_clause_connectivity_facts,
-                    ),
+                    );
+                    TerminalPrefixCandidate {
+                        source_index,
+                        clause,
+                        cached_admissibility_decision: None,
+                        connectivity_facts,
+                    }
                 })
                 .collect(),
         )
@@ -5666,14 +5675,18 @@ fn terminal_prefix_clause_candidates<'a>(
                 TerminalPrefixClauseCandidates::General(
                     clauses
                         .into_iter()
-                        .map(|clause| TerminalPrefixCandidate {
-                            connectivity_facts: find_connectivity_fact(
+                        .map(|clause| {
+                            let (source_index, connectivity_facts) = find_terminal_clause_metadata(
                                 clause.clause,
                                 filtered_last_clause_options,
                                 filtered_last_clause_connectivity_facts,
-                            ),
-                            clause: clause.clause,
-                            cached_admissibility_decision: Some(clause.admissibility_decision),
+                            );
+                            TerminalPrefixCandidate {
+                                source_index,
+                                connectivity_facts,
+                                clause: clause.clause,
+                                cached_admissibility_decision: Some(clause.admissibility_decision),
+                            }
                         })
                         .collect(),
                 )
@@ -5684,6 +5697,7 @@ fn terminal_prefix_clause_candidates<'a>(
                         .iter()
                         .enumerate()
                         .map(|(index, clause)| TerminalPrefixCandidate {
+                            source_index: index,
                             clause,
                             cached_admissibility_decision: None,
                             connectivity_facts: filtered_last_clause_connectivity_facts
@@ -5829,6 +5843,7 @@ fn claim_open_band_admissibility_decision() -> AdmissibilityDecision {
 fn absorb_terminal_prefix_admitted_clause_summary(
     objective_bar: Rational,
     incumbent_rank: Option<&AcceptRank>,
+    source_index: usize,
     telescope: &Telescope,
     exact_nu: u16,
     clause_kappa_used: u16,
@@ -5844,6 +5859,15 @@ fn absorb_terminal_prefix_admitted_clause_summary(
         bit_kappa_used,
     );
     summary.admitted_candidate_count += 1;
+    if competition_allowed {
+        if let Some(retained_candidates) = summary.compact_retained_candidates.as_mut() {
+            retained_candidates.push(CompactTerminalPrefixCandidate {
+                source_index,
+                exact_nu,
+                bit_kappa_used,
+            });
+        }
+    }
     if competition_allowed {
         update_terminal_prefix_best_accept_rank(
             objective_bar,
@@ -5888,6 +5912,8 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
 ) -> TerminalPrefixCompletionSummary {
     let mut summary = TerminalPrefixCompletionSummary {
         evaluations: matches!(payload, TerminalPrefixSummaryPayload::Full).then(Vec::new),
+        compact_retained_candidates: matches!(payload, TerminalPrefixSummaryPayload::Compact)
+            .then(Vec::new),
         ..TerminalPrefixCompletionSummary::default()
     };
     let prefix_len = prefix_telescope.clauses.len();
@@ -6003,6 +6029,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                 absorb_terminal_prefix_admitted_clause_summary(
                     objective_bar,
                     incumbent_rank,
+                    terminal_clause.source_index,
                     telescope,
                     exact_nu,
                     clause_kappa_used,
@@ -6093,6 +6120,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     absorb_terminal_prefix_admitted_clause_summary(
                         objective_bar,
                         incumbent_rank,
+                        terminal_clause.source_index,
                         telescope,
                         exact_nu,
                         clause_kappa_used,
@@ -6180,6 +6208,14 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                         bit_kappa_used,
                     );
                     summary.admitted_candidate_count += 1;
+                    if let Some(retained_candidates) = summary.compact_retained_candidates.as_mut()
+                    {
+                        retained_candidates.push(CompactTerminalPrefixCandidate {
+                            source_index: terminal_clause.source_index,
+                            exact_nu,
+                            bit_kappa_used,
+                        });
+                    }
                     update_terminal_prefix_best_accept_rank(
                         objective_bar,
                         incumbent_rank,
@@ -6495,6 +6531,18 @@ fn materialize_terminal_prefix_group(
                     discovery,
                 ));
             }
+            if summary.compact_retained_candidates.is_some() {
+                discovery
+                    .remaining_one_telemetry
+                    .remaining_one_materialized_from_cached_summary += 1;
+                return Ok(materialize_terminal_prefix_group_from_compact_summary(
+                    objective_bar,
+                    prefix_telescope,
+                    filtered_last_clause_options,
+                    summary,
+                    discovery,
+                ));
+            }
         }
 
         discovery
@@ -6613,6 +6661,56 @@ fn materialize_terminal_prefix_group_from_summary(
                 });
             }
         }
+    }
+
+    MaterializedTerminalPrefixGroup {
+        candidates: retained_telescopes,
+        bound,
+        best_accept_rank,
+        generated_terminal_candidates,
+        admissible_terminal_candidates: admitted_terminal_candidates,
+    }
+}
+
+fn materialize_terminal_prefix_group_from_compact_summary(
+    objective_bar: Rational,
+    prefix_telescope: &Telescope,
+    filtered_last_clause_options: &[pen_core::clause::ClauseRec],
+    summary: TerminalPrefixCompletionSummary,
+    discovery: &mut RealisticShadowDiscovery,
+) -> MaterializedTerminalPrefixGroup {
+    record_terminal_prefix_summary_discovery_counts(discovery, &summary);
+    let admitted_terminal_candidates = summary.admitted_candidate_count;
+    let best_accept_rank = summary.best_accept_rank.clone();
+    let generated_terminal_candidates = summary.generated_candidate_count;
+    let bound = summary.bound;
+    let compact_retained_candidates = summary
+        .compact_retained_candidates
+        .expect("compact completion payload missing for summary materialization");
+    let prefix_len = prefix_telescope.clauses.len();
+    let clause_kappa_used =
+        u16::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u16");
+    let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
+    let mut retained_telescopes = Vec::with_capacity(compact_retained_candidates.len());
+
+    for candidate in compact_retained_candidates {
+        let clause = filtered_last_clause_options
+            .get(candidate.source_index)
+            .expect("cached compact terminal candidate should reference the current clause slice");
+        let telescope =
+            load_terminal_clause_into_scratch(&mut scratch_telescope, prefix_len, clause);
+        let accept_rank = acceptance_rank_for_telescope(
+            objective_bar,
+            telescope,
+            candidate.exact_nu,
+            candidate.bit_kappa_used,
+            clause_kappa_used,
+        );
+        retained_telescopes.push(PrefixGroupCandidate {
+            telescope: telescope.clone(),
+            accept_rank,
+            evaluated_candidate: None,
+        });
     }
 
     MaterializedTerminalPrefixGroup {
@@ -7633,8 +7731,8 @@ mod tests {
         PrefixCache, PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature,
     };
     use crate::prefix_memo::{
-        PartialPrefixBoundDecision, PrefixLegalityCache, TerminalPrefixClauseEvaluation,
-        TerminalPrefixCompletion,
+        CompactTerminalPrefixCandidate, PartialPrefixBoundDecision, PrefixLegalityCache,
+        TerminalPrefixClauseEvaluation, TerminalPrefixCompletion,
     };
     use pen_core::{
         canonical::CanonKey,
@@ -9252,9 +9350,10 @@ mod tests {
         );
 
         let mut direct_evaluations = Vec::new();
+        let mut direct_compact_retained_candidates = Vec::new();
         let mut direct_admitted = 0usize;
         let mut direct_bound: Option<PrefixBound> = None;
-        for clause in clause_catalog.clauses_at(7) {
+        for (source_index, clause) in clause_catalog.clauses_at(7).iter().enumerate() {
             let mut telescope = prefix.clone();
             telescope.clauses.push(clause.clone());
 
@@ -9286,6 +9385,12 @@ mod tests {
                     bit_kappa_used,
                 ));
             }
+            let competition_allowed = super::terminal_completion_can_compete_for_acceptance(
+                &signature,
+                admissibility,
+                &cache,
+                &decision,
+            );
             direct_evaluations.push(TerminalPrefixClauseEvaluation::Admitted {
                 decision,
                 completion: TerminalPrefixCompletion {
@@ -9295,12 +9400,23 @@ mod tests {
                     telescope,
                 },
             });
+            if competition_allowed {
+                direct_compact_retained_candidates.push(CompactTerminalPrefixCandidate {
+                    source_index,
+                    exact_nu,
+                    bit_kappa_used,
+                });
+            }
         }
 
         assert_eq!(summary.evaluations, Some(direct_evaluations));
         assert_eq!(summary.admitted_candidate_count, direct_admitted);
         assert_eq!(summary.bound, direct_bound);
         assert_eq!(compact_summary.evaluations, None);
+        assert_eq!(
+            compact_summary.compact_retained_candidates,
+            Some(direct_compact_retained_candidates)
+        );
         assert_eq!(
             compact_summary.generated_candidate_count,
             summary.generated_candidate_count
@@ -10320,6 +10436,14 @@ mod tests {
                 .evaluations
                 .is_none()
         );
+        assert!(
+            discovery
+                .prefix_legality_cache
+                .terminal_prefix_completion_summary(&signature)
+                .expect("terminal prefix should cache compact retained candidates")
+                .compact_retained_candidates
+                .is_some()
+        );
 
         let group = super::materialize_terminal_prefix_group(
             15,
@@ -10336,6 +10460,28 @@ mod tests {
         .expect("materialization should succeed");
 
         assert!(group.generated_terminal_candidates >= group.admissible_terminal_candidates);
+        let mut direct_discovery = super::RealisticShadowDiscovery::default();
+        assert!(direct_discovery.prefix_legality_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &work_item.prefix_telescope,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        let direct_group = super::materialize_terminal_prefix_group_compact(
+            15,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &work_item.signature,
+            &work_item.prefix_telescope,
+            work_item.next_clauses(&clause_catalog),
+            work_item.next_clause_connectivity_facts(&clause_catalog),
+            &mut direct_discovery,
+        )
+        .expect("direct compact materialization should succeed");
         assert_eq!(
             discovery
                 .prefix_legality_cache
@@ -10344,17 +10490,38 @@ mod tests {
             0,
             "claim materialization should release the cached terminal completion payload"
         );
+        let cached_candidates = group
+            .candidates
+            .iter()
+            .map(|candidate| (candidate.telescope.clone(), candidate.accept_rank.clone()))
+            .collect::<Vec<_>>();
+        let direct_candidates = direct_group
+            .candidates
+            .iter()
+            .map(|candidate| (candidate.telescope.clone(), candidate.accept_rank.clone()))
+            .collect::<Vec<_>>();
+        assert_eq!(
+            group.generated_terminal_candidates,
+            direct_group.generated_terminal_candidates
+        );
+        assert_eq!(
+            group.admissible_terminal_candidates,
+            direct_group.admissible_terminal_candidates
+        );
+        assert_eq!(group.bound, direct_group.bound);
+        assert_eq!(group.best_accept_rank, direct_group.best_accept_rank);
+        assert_eq!(cached_candidates, direct_candidates);
         assert_eq!(
             discovery
                 .remaining_one_telemetry
                 .remaining_one_materialized_from_cached_summary,
-            0
+            1
         );
         assert_eq!(
             discovery
                 .remaining_one_telemetry
                 .remaining_one_materialized_compact_direct,
-            1
+            0
         );
     }
 

@@ -274,6 +274,13 @@ pub struct TerminalPrefixCompletion {
     pub clause_kappa_used: u16,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct CompactTerminalPrefixCandidate {
+    pub source_index: usize,
+    pub exact_nu: u16,
+    pub bit_kappa_used: u16,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TerminalPrefixPrimaryRank {
     pub overshoot: Rational,
@@ -295,6 +302,7 @@ pub enum TerminalPrefixClauseEvaluation {
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct TerminalPrefixCompletionSummary {
     pub evaluations: Option<Vec<TerminalPrefixClauseEvaluation>>,
+    pub compact_retained_candidates: Option<Vec<CompactTerminalPrefixCandidate>>,
     pub generated_candidate_count: usize,
     pub admissibility_diagnostics: AdmissibilityDiagnostics,
     pub bound: Option<PrefixBound>,
@@ -1298,6 +1306,7 @@ mod tests {
                         clause_kappa_used: 5,
                     },
                 }]),
+                compact_retained_candidates: None,
                 generated_candidate_count: 1,
                 admissibility_diagnostics: diagnostics,
                 bound: Some(PrefixBound::singleton(26, 5, 79)),
@@ -1369,6 +1378,7 @@ mod tests {
             signature.clone(),
             TerminalPrefixCompletionSummary {
                 evaluations: None,
+                compact_retained_candidates: None,
                 generated_candidate_count: 1,
                 admissibility_diagnostics: AdmissibilityDiagnostics::default(),
                 bound: Some(PrefixBound::singleton(26, 5, 79)),
@@ -1398,6 +1408,7 @@ mod tests {
             signature.clone(),
             TerminalPrefixCompletionSummary {
                 evaluations: None,
+                compact_retained_candidates: None,
                 generated_candidate_count: 1,
                 admissibility_diagnostics: AdmissibilityDiagnostics::default(),
                 bound: Some(PrefixBound::singleton(26, 5, 79)),

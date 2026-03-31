@@ -12,6 +12,12 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 - The earlier full-profile runtime reference is `runs/codex-claim-release-full-aggregation-open-band-compact-v1`.
 - The earlier full-profile runtime reference is `runs/codex-claim-release-full-connectivity-facts-v1`.
 - The latest measured slice is `runs/codex-claim-release-full-aggregation-open-band-rank-scan-v1`, and it was dropped after preserving the current `39/40/41` retained-prefix story through the stored `163` read but still regressing the current runtime reference on stored evidence.
+- A new unmeasured later-surface follow-up is now landed in code on top of the current winner:
+  compact claim remaining-one summaries now keep a lightweight retained-candidate sidecar keyed by terminal-clause position, and compact materialization now reuses that cached sidecar instead of rescanning connectivity and exact `nu` for surviving prefixes.
+- That new cached-compact-materialization slice is not yet a runtime reference:
+  it has only re-earned the required validation so far:
+  - `cargo test -p pen-search claim_`
+  - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
 - That later-surface follow-up preserved the honest retained-prefix story through the current `41` surface:
   - `39 groups / 144845 candidates` at `24/43/44/54`
   - `40 groups / 147639 candidates` at `74/76`
@@ -52,6 +58,7 @@ Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next slic
 - the shared terminal-clause connectivity-facts sidecar on the shared clause catalog used by the claim remaining-one summary/materialization path
 - the steady-state scratch-slot `clone_from` reuse on terminal-clause loads inside remaining-one summary/materialization
 - the boundary-timestamp timing pass on the compact claim open-band no-evaluations summary kernel
+- the compact claim remaining-one retained-candidate sidecar that now lets cached compact summaries reopen directly into materialization without rescanning connectivity or exact `nu` for surviving prefixes
 
 ## Baselines That Matter
 
@@ -204,8 +211,9 @@ The next honest question is therefore still another later-surface runtime cut on
 ## Immediate Next Move
 1. Keep `runs/codex-claim-release-step4-kernel-open-band-handoff-v1` as the short step-`4` baseline and `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1` as the current full-profile runtime reference.
 2. Do not spend another turn on a plain intended-profile rerun with no code or new runtime question, and do not reopen another unchanged connectivity-first retry, accumulator-only replay, metadata retry, clause-load-only replay, or timing-only replay first.
-3. Land one narrow later-surface runtime cut on the current winner. Target the post-`140` / post-`163` connectivity and exact-`nu` structural work that erased the failed rank-scan slice's aggregation win, while keeping aggregation and the slight late-surface RSS increase in view as hard honesty checks.
-4. After code changes land, rerun a release claim follow-up with a new run id that states the slice and carry it at least through the stored `140/163/228/229` region and ideally through the current `332/335/408/437/454` band or into step `5` on stored evidence.
+3. The next narrow later-surface runtime cut is now landed in code:
+   cached compact claim summaries now retain just enough per-candidate exact data to reopen surviving prefixes directly into materialization, so the claim lane can stop replaying the same connectivity and exact-`nu` work after the compact pre-prune summary already paid for it.
+4. Re-earn that landed slice on the intended release profile with a new run id that states the slice, for example `runs/codex-claim-release-full-aggregation-open-band-compact-summary-reuse-v1`, and carry it at least through the stored `140/163/228/229` region and ideally through the current `332/335/408/437/454` band or into step `5` on stored evidence.
 5. If code changes land before that rerun, rerun only:
    - `cargo test -p pen-search claim_`
    - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
