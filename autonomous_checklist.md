@@ -34,9 +34,22 @@ It lists only work that is still open.
   benchmark artifact was rewritten from a later under-gate reread at
   `123148 us`, although extra spot-check rereads still bounced around the
   gate at `124012 us` and `126456 us`, so the replay win is real but narrow.
-- The lane has therefore now honestly re-earned another capped intended-
-  profile rerun, but the current stored 20-minute checkpoint to beat still
-  remains `plateau-kernel-split-v1` at `124` explored prefixes.
+- That earned capped intended-profile rerun was then spent on
+  `runs/codex-claim-release-full-aggregation-open-band-clause-bit-cost-sidecar-v1`,
+  whose nearest stored step-`4` checkpoint to `1200000 ms` landed at
+  `1192222 ms`, `122` explored prefixes, `40 groups / 109690 candidates`,
+  `frontier_queue_len = 2653`, RSS `= 489394176`,
+  `terminal_summary_build_millis = 1184060`, and still
+  `0` fallback/admissibility checks, so the current stored short-loop gate to
+  beat still remains `plateau-kernel-split-v1` at `124` explored prefixes.
+- A fresh follow-on slice now precomputes a prefix-local accept-rank context
+  and reuses it in the compact remaining-one no-miss branches so those hot
+  best-rank updates stop loading a scratch telescope and rescanning the full
+  terminal telescope just to break primary-rank ties.
+- That follow-on slice has already cleared the same claim-focused tests plus
+  `claim_replay_fixture_replays_compact_summary_with_parity`, but its release
+  replay parity and warmed rereads are still pending before another intended-
+  profile rerun is justified.
 - A later local-only focus-aligned competition-gate/payload-mode hoist stayed
   parity-clean in tests and replay parity, but its warm rereads landed
   `136040 us`, `137054 us`, and `140843 us` total after a `130405 us`

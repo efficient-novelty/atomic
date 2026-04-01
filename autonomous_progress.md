@@ -31,6 +31,13 @@ gate.
   competition-allowed bar-clearers even when multiple primary ranks are live,
   and materialization still reuses that cached sketch without waking the
   dormant general cached-summary reopen path.
+- A fresh follow-on slice is now in the repo but still unbenchmarked:
+  compact remaining-one no-miss branches now build full accept ranks from a
+  prefix-local accept-rank context plus the terminal clause instead of
+  reloading a scratch telescope and rescanning the whole terminal telescope
+  when they need to break a primary-rank tie.
+  That follow-on slice has only cleared claim-focused tests so far and still
+  needs replay timing/parity before it earns another intended-profile rerun.
 
 ## Current Run To Beat
 
@@ -96,6 +103,22 @@ gate.
   same retained-prefix surface, one more explored prefix, one shorter frontier
   queue, lower summary-build time, and still no fallback connectivity or
   admissibility work.
+- The newly earned capped rerun was then spent on
+  `runs/codex-claim-release-full-aggregation-open-band-clause-bit-cost-sidecar-v1`.
+  Its nearest stored step-`4` checkpoint to `1200000 ms` landed at:
+  - `elapsed_millis = 1192222`
+  - `prefix_states_explored = 122`
+  - `prefix_cache_groups = 40`
+  - `prefix_cache_candidates = 109690`
+  - `frontier_queue_len = 2653`
+  - RSS `= 489394176` bytes
+  - `terminal_summary_build_millis = 1184060`
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- That rerun did not replace the current gate honestly:
+  it kept the same retained-prefix surface and lower RSS, but explored two
+  fewer prefixes than `plateau-kernel-split-v1`, left one more frontier item,
+  and spent slightly more time in summary build.
 - Near-term validation should now try to beat `124` explored prefixes by
   `20` minutes while keeping that no-miss shape honest.
 
@@ -182,7 +205,25 @@ gate.
   and `126456 us`, so the win is narrow and noisy, but the slice re-earned the
   checked-in `123544 us` replay gate more than once and also beat the
   immediate pre-slice local release reread honestly, so the code stayed
-  landed and the lane has now earned another capped intended-profile rerun.
+  landed and the lane then spent that earned capped intended-profile rerun.
+- That capped intended-profile rerun landed the stored `1192222 ms` /
+  `122`-prefix checkpoint on
+  `runs/codex-claim-release-full-aggregation-open-band-clause-bit-cost-sidecar-v1`,
+  which kept the same retained-prefix story and lower RSS but did not beat the
+  current `124`-prefix short-loop gate honestly.
+- A fresh local-only follow-on slice now precomputes a prefix-local
+  accept-rank context and reuses it in the compact remaining-one no-miss
+  branches so the hot best-rank updates stop loading a scratch telescope and
+  rescanning the full terminal telescope just to break primary-rank ties.
+- Claim-focused validation stayed green for the follow-on slice:
+  - `cargo test -p pen-search prefix_clause_acceptance_rank_matches_full_telescope_rank`
+  - `cargo test -p pen-search claim_replay_fixture_replays_compact_summary_with_parity`
+  - `cargo test -p pen-search claim_`
+  - `cargo test -p pen-search cached_terminal_prefix_rank_summary_prunes_without_reopening_completion_summary`
+  - `cargo test -p pen-search take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse`
+- Release replay parity and warmed rereads for the new prefix-local
+  accept-rank slice are still pending, so no new benchmark artifact or
+  intended-profile rerun has been launched on top of it yet.
 
 ## What Stays Landed
 
@@ -241,14 +282,17 @@ gate.
   while the earlier dropped focus-aligned competition-gate hoist, shared
   compact-bookkeeping fold, and claim-open-band compact local-state hoist all
   stayed parity-clean but landed worse on the stored plateau fixtures.
-- The lane has therefore now earned another `20`-minute intended-profile
-  rerun, but the replay margin is still noisy enough that the next stored
-  short-loop checkpoint must stay the real judge.
+- The newly spent capped rerun then lost narrowly at `122` explored prefixes
+  by `1192222 ms`, so the lane is back in code work and the stored
+  `124`-prefix gate still stands.
+- The fresh prefix-local accept-rank follow-on slice has only cleared
+  claim-focused tests so far, so replay timing/parity must now decide whether
+  it deserves another `20`-minute intended-profile rerun.
 - The plateau-kernel split still owns the current stored short-loop run to
   beat.
   The lane should keep treating `prefix-local-score-v1` as the long-run
-  reference until the next capped rerun either replaces the `124`-prefix
-  checkpoint honestly or sends the loop back to another narrow code slice.
+  reference until a later capped rerun replaces the `124`-prefix checkpoint
+  honestly.
 - The optimization loop now needs shorter, more repeatable intended-profile
   reads.
   We no longer expect the very next slice to beat the full `1095`-prefix stop.
@@ -260,15 +304,17 @@ gate.
 - Keep `prefix-local-score-v1` as the long-run run to beat and
   `plateau-kernel-split-v1` as the current short-loop checkpoint to beat.
 - Use a hard 20-minute max intended-profile rerun for the next attempts.
-- Spend the newly re-earned replay gate on one capped intended-profile rerun
-  before reopening another speculative code slice.
-- If that rerun does not beat the current `124`-prefix short-loop checkpoint
-  honestly, return to another narrow per-admitted compact-summary cost slice
-  inside `compute_terminal_prefix_completion_summary_from_candidates(...)`
-  rather than retrying the dropped focus-aligned
-  competition-gate/payload-mode hoist, the dropped shared
-  compact-bookkeeping fold, or the dropped claim-open-band compact local-state
-  hoist.
+- The newly spent bit-cost-sidecar rerun lost narrowly, so validate the new
+  prefix-local accept-rank compact-summary slice on the release replay harness
+  before spending another intended-profile rerun.
+- Only launch another capped intended-profile rerun if that new slice stays
+  replay-parity clean and re-earns the checked-in replay gate honestly.
+- If the new slice loses, drop it and stay on another narrow per-admitted
+  compact-summary cost slice inside
+  `compute_terminal_prefix_completion_summary_from_candidates(...)` rather
+  than retrying the dropped focus-aligned competition-gate/payload-mode hoist,
+  the dropped shared compact-bookkeeping fold, or the dropped claim-open-band
+  compact local-state hoist.
 - Do not wake the dormant general cached-summary reopen machinery first.
 - Only reopen longer full-profile continuation reads after repeated 20-minute
   wins show that the lane has materially improved.
@@ -276,21 +322,26 @@ gate.
 ## Immediate Next Move
 
 1. Keep `prefix-local-score-v1` frozen as the long-run run to beat.
-2. Launch one new intended-profile rerun on the current binary for `20`
-   minutes max.
-3. Record the nearest stored step-`4` checkpoint to `1200000 ms` and compare it
+2. Validate the new prefix-local accept-rank compact-summary slice on the
+   stored plateau fixtures in release mode first.
+3. Keep the slice only if it preserves replay parity and re-earns or beats the
+   current checked-in replay total of `123148 us` honestly on warmed rereads.
+4. Only then launch one new intended-profile rerun on the current binary for
+   `20` minutes max.
+5. Record the nearest stored step-`4` checkpoint to `1200000 ms` and compare it
    first against the current short-loop gate:
    `1191562 ms`, `124` explored prefixes, `40 groups / 109690 candidates`,
    `frontier_queue_len = 2651`, RSS `= 495325184`,
    `terminal_summary_build_millis = 1183359`,
    `terminal_summary_admissibility_checks = 0`, and
    `terminal_summary_fallback_connectivity_checks = 0`.
-4. If the rerun does not beat that checkpoint honestly, return to code work
-   with another narrow compact-summary per-admitted cost slice while keeping
-   the dropped focus-aligned competition-gate/payload-mode hoist, the dropped
-   shared compact-bookkeeping fold, and the dropped claim-open-band compact
-   local-state hoist off the table first.
-5. Keep broad cleanup, cached-summary reopen wake-up work, contender-rank
+6. If the new slice does not re-earn replay gate honestly, or if the later
+   rerun still does not beat that checkpoint honestly, drop back to another
+   narrow compact-summary per-admitted cost slice while keeping the dropped
+   focus-aligned competition-gate/payload-mode hoist, the dropped shared
+   compact-bookkeeping fold, and the dropped claim-open-band compact local-
+   state hoist off the table first.
+7. Keep broad cleanup, cached-summary reopen wake-up work, contender-rank
    rewrites, connectivity-first/cache-first rewrites, and deterministic
    batched parallel reduction dropped until the short-loop runtime wins become
    strong enough to justify a longer read again.

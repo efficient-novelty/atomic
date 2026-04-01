@@ -1,10 +1,18 @@
 use crate::branch_bound::AcceptRank;
-use crate::expand::{ExpandedCandidate, structural_signals_for_telescope};
-use pen_core::canonical::canonical_key_telescope;
+use crate::expand::{
+    ExpandedCandidate, StructuralSignals, structural_signals_for_clause,
+    structural_signals_for_telescope,
+};
+use pen_core::canonical::{
+    CanonKey, canonical_encoded_expr, canonical_encoded_telescope, canonical_key_from_encoded,
+    canonical_key_telescope,
+};
+use pen_core::clause::ClauseRec;
 use pen_core::rational::Rational;
 use pen_core::telescope::Telescope;
 use pen_store::manifest::{AcceptedCandidate, NearMiss};
 use std::cmp::Reverse;
+use std::collections::BTreeSet;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AcceptanceOutcome {
@@ -100,6 +108,141 @@ pub(crate) fn acceptance_rank_for_telescope(
     })
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct PrefixLocalAcceptRankContext {
+    prefix_signals: StructuralSignals,
+    prefix_lib_refs: BTreeSet<u32>,
+    prefix_var_refs: BTreeSet<u32>,
+    prefix_max_var_ref: u32,
+    prefix_canonical_encoding: String,
+}
+
+pub(crate) fn acceptance_rank_context_for_prefix(
+    prefix_telescope: &Telescope,
+) -> PrefixLocalAcceptRankContext {
+    let prefix_var_refs = prefix_telescope.var_refs();
+    PrefixLocalAcceptRankContext {
+        prefix_signals: structural_signals_for_telescope(prefix_telescope),
+        prefix_lib_refs: prefix_telescope.lib_refs(),
+        prefix_max_var_ref: prefix_var_refs.iter().next_back().copied().unwrap_or(0),
+        prefix_var_refs,
+        prefix_canonical_encoding: canonical_encoded_telescope(prefix_telescope),
+    }
+}
+
+pub(crate) fn acceptance_rank_for_prefix_clause(
+    bar: Rational,
+    prefix_context: &PrefixLocalAcceptRankContext,
+    terminal_clause: &ClauseRec,
+    exact_nu: u16,
+    bit_kappa: u16,
+    clause_kappa: u16,
+) -> Option<AcceptRank> {
+    let rho = Rational::new(i64::from(exact_nu), i64::from(clause_kappa));
+    if rho < bar {
+        return None;
+    }
+
+    let clause_signals = structural_signals_for_clause(terminal_clause);
+    let clause_lib_refs = terminal_clause.expr.lib_refs();
+    let clause_var_refs = terminal_clause.expr.var_refs();
+    let signals = StructuralSignals {
+        eliminator_score: prefix_context
+            .prefix_signals
+            .eliminator_score
+            .saturating_add(clause_signals.eliminator_score),
+        former_score: prefix_context
+            .prefix_signals
+            .former_score
+            .saturating_add(clause_signals.former_score),
+        dependent_motive_density: prefix_context
+            .prefix_signals
+            .dependent_motive_density
+            .saturating_add(clause_signals.dependent_motive_density),
+        library_reference_density: u16::try_from(sorted_union_count(
+            prefix_context.prefix_lib_refs.iter().copied(),
+            clause_lib_refs.iter().copied(),
+        ))
+        .expect("library ref count exceeded u16"),
+        generic_binder_count: prefix_context
+            .prefix_signals
+            .generic_binder_count
+            .saturating_add(clause_signals.generic_binder_count),
+        closure_score: u16::try_from(sorted_union_count(
+            prefix_context.prefix_var_refs.iter().copied(),
+            clause_var_refs.iter().copied(),
+        ))
+        .expect("closure score exceeded u16"),
+    };
+    let max_var_ref = prefix_context
+        .prefix_max_var_ref
+        .max(clause_var_refs.iter().next_back().copied().unwrap_or(0));
+    let canonical_key = canonical_key_for_prefix_clause(
+        prefix_context.prefix_canonical_encoding.as_str(),
+        terminal_clause,
+    );
+
+    Some(AcceptRank {
+        overshoot: rho - bar,
+        clause_kappa,
+        descending_eliminator_score: Reverse(signals.eliminator_score),
+        descending_former_score: Reverse(signals.former_score),
+        descending_dependent_motive_density: Reverse(signals.dependent_motive_density),
+        descending_library_reference_density: Reverse(signals.library_reference_density),
+        descending_generic_binder_count: Reverse(signals.generic_binder_count),
+        descending_closure_score: Reverse(signals.closure_score),
+        max_var_ref,
+        bit_kappa,
+        descending_nu: Reverse(exact_nu),
+        canonical_key,
+    })
+}
+
+fn canonical_key_for_prefix_clause(prefix_encoding: &str, terminal_clause: &ClauseRec) -> CanonKey {
+    let clause_encoding = canonical_encoded_expr(&terminal_clause.expr);
+    let mut encoded =
+        String::with_capacity(prefix_encoding.len().saturating_add(clause_encoding.len()));
+    encoded.push_str(prefix_encoding);
+    encoded.push_str(&clause_encoding);
+    canonical_key_from_encoded(&encoded)
+}
+
+fn sorted_union_count<I>(left: I, right: I) -> usize
+where
+    I: IntoIterator<Item = u32>,
+{
+    let mut left = left.into_iter().peekable();
+    let mut right = right.into_iter().peekable();
+    let mut count = 0usize;
+
+    loop {
+        match (left.peek(), right.peek()) {
+            (Some(left_value), Some(right_value)) => {
+                if left_value < right_value {
+                    left.next();
+                } else if right_value < left_value {
+                    right.next();
+                } else {
+                    left.next();
+                    right.next();
+                }
+                count += 1;
+            }
+            (Some(_), None) => {
+                count += left.count();
+                break;
+            }
+            (None, Some(_)) => {
+                count += right.count();
+                break;
+            }
+            (None, None) => break,
+        }
+    }
+
+    count
+}
+
 fn collect_near_misses(
     bar: Rational,
     candidates: &[ExpandedCandidate],
@@ -146,8 +289,12 @@ fn collect_near_misses(
 
 #[cfg(test)]
 mod tests {
-    use super::select_acceptance;
+    use super::{
+        acceptance_rank_context_for_prefix, acceptance_rank_for_prefix_clause,
+        acceptance_rank_for_telescope, select_acceptance,
+    };
     use crate::expand::evaluate_candidate;
+    use pen_core::encode::telescope_bit_cost;
     use pen_core::library::{Library, LibraryEntry};
     use pen_core::rational::Rational;
     use pen_core::telescope::Telescope;
@@ -185,5 +332,43 @@ mod tests {
         assert_eq!(outcome.accepted.nu, hopf.nu);
         assert_eq!(outcome.accepted.overshoot, Rational::new(1, 4));
         assert_eq!(outcome.near_misses[0].status, "below_bar");
+    }
+
+    #[test]
+    fn prefix_clause_acceptance_rank_matches_full_telescope_rank() {
+        for step in 4..=15 {
+            let (library, history) = replay_prefix(step - 1);
+            let telescope = Telescope::reference(step);
+            let evaluated = evaluate_candidate(&library, &history, telescope.clone())
+                .expect("reference telescope should evaluate");
+            let clause_kappa = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+            let bit_kappa =
+                u16::try_from(telescope_bit_cost(&telescope)).expect("bit cost exceeded u16");
+            let prefix = Telescope::new(telescope.clauses[..telescope.clauses.len() - 1].to_vec());
+            let terminal_clause = telescope
+                .clauses
+                .last()
+                .expect("reference telescope should have a final clause");
+            let prefix_context = acceptance_rank_context_for_prefix(&prefix);
+            let objective_bar = Rational::zero();
+
+            assert_eq!(
+                acceptance_rank_for_prefix_clause(
+                    objective_bar,
+                    &prefix_context,
+                    terminal_clause,
+                    evaluated.nu,
+                    bit_kappa,
+                    clause_kappa,
+                ),
+                acceptance_rank_for_telescope(
+                    objective_bar,
+                    &telescope,
+                    evaluated.nu,
+                    bit_kappa,
+                    clause_kappa,
+                )
+            );
+        }
     }
 }

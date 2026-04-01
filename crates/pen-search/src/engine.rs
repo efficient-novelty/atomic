@@ -1,5 +1,6 @@
 use crate::accept::{
-    AcceptanceOutcome, acceptance_rank, acceptance_rank_for_telescope, select_acceptance,
+    AcceptanceOutcome, acceptance_rank, acceptance_rank_context_for_prefix,
+    acceptance_rank_for_prefix_clause, acceptance_rank_for_telescope, select_acceptance,
 };
 use crate::bounds::PrefixBound;
 use crate::branch_bound::{AcceptRank, better_rank};
@@ -6328,6 +6329,8 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     let prefix_bit_cost =
         u16::try_from(prefix_telescope.bit_cost()).expect("bit cost exceeded u16");
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
+    let compact_accept_rank_context = matches!(payload, TerminalPrefixSummaryPayload::Compact)
+        .then(|| acceptance_rank_context_for_prefix(prefix_telescope));
     let single_clause_nu_context = (!prefix_telescope.clauses.is_empty()).then(|| {
         SingleClauseStructuralNuContext::from_prefix(prefix_telescope, library, nu_history)
     });
@@ -6454,18 +6457,13 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                         continue;
                                     }
 
-                                    let load_started = Instant::now();
-                                    let telescope = load_terminal_clause_into_scratch(
-                                        &mut scratch_telescope,
-                                        prefix_len,
-                                        terminal_clause.clause,
-                                    );
-                                    kernel_timing.terminal_summary_aggregation_duration +=
-                                        load_started.elapsed();
                                     let rank_started = Instant::now();
-                                    if let Some(rank) = acceptance_rank_for_telescope(
+                                    if let Some(rank) = acceptance_rank_for_prefix_clause(
                                         objective_bar,
-                                        telescope,
+                                        compact_accept_rank_context
+                                            .as_ref()
+                                            .expect("compact accept rank context should exist"),
+                                        terminal_clause.clause,
                                         score.exact_nu,
                                         score.bit_kappa_used,
                                         clause_kappa_used,
@@ -6841,18 +6839,13 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                     continue;
                                 }
 
-                                let load_started = Instant::now();
-                                let telescope = load_terminal_clause_into_scratch(
-                                    &mut scratch_telescope,
-                                    prefix_len,
-                                    terminal_clause.clause,
-                                );
-                                kernel_timing.terminal_summary_aggregation_duration +=
-                                    load_started.elapsed();
                                 let rank_started = Instant::now();
-                                if let Some(rank) = acceptance_rank_for_telescope(
+                                if let Some(rank) = acceptance_rank_for_prefix_clause(
                                     objective_bar,
-                                    telescope,
+                                    compact_accept_rank_context
+                                        .as_ref()
+                                        .expect("compact accept rank context should exist"),
+                                    terminal_clause.clause,
                                     score.exact_nu,
                                     score.bit_kappa_used,
                                     clause_kappa_used,

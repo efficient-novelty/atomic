@@ -119,35 +119,71 @@ This note is the exact next work order for `desktop_claim_shadow`.
   and `126456 us`, so the win is narrow and noisy, but the slice re-earned the
   checked-in `123544 us` total more than once and also beat the immediate
   pre-slice local release reread honestly.
-- The plateau-kernel split therefore remains the stored 20-minute run to beat,
-  but the lane has now earned another capped intended-profile rerun.
+- The earned capped intended-profile rerun was then spent on
+  `runs/codex-claim-release-full-aggregation-open-band-clause-bit-cost-sidecar-v1`.
+  Its nearest stored step-`4` checkpoint to `1200000 ms` landed at:
+  - `elapsed_millis = 1192222`
+  - `prefix_states_explored = 122`
+  - `prefix_cache_groups = 40`
+  - `prefix_cache_candidates = 109690`
+  - `frontier_queue_len = 2653`
+  - RSS `= 489394176` bytes
+  - `terminal_summary_build_millis = 1184060`
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- That rerun did not beat the current `124`-prefix short-loop target honestly:
+  it kept the same retained-prefix surface and lower RSS, but explored two
+  fewer prefixes than `plateau-kernel-split-v1`, left one more frontier item,
+  and spent slightly more time in summary build.
+- The loop has therefore already spent the re-earned capped rerun and is back
+  in code work.
+- A fresh local-only slice now precomputes a prefix-local accept-rank context
+  and reuses it in the compact remaining-one no-miss branches so those hot
+  best-rank updates stop loading a scratch telescope and rescanning the full
+  terminal telescope just to break primary-rank ties.
+- Claim-focused validation stayed green for that follow-on slice:
+  - `cargo test -p pen-search prefix_clause_acceptance_rank_matches_full_telescope_rank`
+  - `cargo test -p pen-search claim_replay_fixture_replays_compact_summary_with_parity`
+  - `cargo test -p pen-search claim_`
+  - `cargo test -p pen-search cached_terminal_prefix_rank_summary_prunes_without_reopening_completion_summary`
+  - `cargo test -p pen-search take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse`
+- Release replay parity and warmed rereads for the new prefix-local accept-rank
+  slice are still pending, so no new benchmark artifact or intended-profile
+  rerun has been launched on top of it yet.
 
 ## Do This Next
 
-### 1. Spend The Replay Win Now
+### 1. Validate The New Slice First
 
-Do not reopen another speculative code slice first.
-The next move is one capped intended-profile rerun on top of the newly landed
-tiered-`lib_refs`, plateau-kernel, broadened survivor-sketch, borrowed-
-primary-rank, and clause-bit-cost sidecar work while keeping
+Do not launch another intended-profile rerun yet.
+The last capped rerun has already been spent and lost narrowly, so the next
+move is release replay validation of the new prefix-local accept-rank slice on
+top of the tiered-`lib_refs`, plateau-kernel, broadened survivor-sketch,
+borrowed-primary-rank, and clause-bit-cost sidecar work while keeping
 `prefix-local-score-v1` as the long-run reference.
 
 ### 2. Run The Next Validation Slice In This Order
 
-1. Launch the intended `desktop_claim_shadow` profile on the current binary.
-2. Stop the rerun after `20` minutes max.
-3. Record the nearest stored step-`4` checkpoint to `1200000 ms`.
-4. Compare that checkpoint first against the current short-loop target from
+1. Run the release replay harness on the stored plateau fixtures for the new
+   prefix-local accept-rank slice.
+2. Require replay parity first.
+3. Compare warmed rereads first against the current checked-in
+   `123148 us` total.
+4. Only if the slice re-earns that replay gate honestly, launch one new
+   intended `desktop_claim_shadow` profile rerun on the current binary.
+5. Stop that rerun after `20` minutes max.
+6. Record the nearest stored step-`4` checkpoint to `1200000 ms`.
+7. Compare that checkpoint first against the current short-loop target from
    `plateau-kernel-split-v1`, then keep `prefix-local-score-v1` as the long-
    run continuation reference behind it.
-5. If the rerun does not beat the current short-loop target honestly, return
-   to code work with another narrow per-admitted compact-summary cost slice
-   inside `compute_terminal_prefix_completion_summary_from_candidates(...)`,
-   but do not retry the dropped focus-aligned
-   competition-gate/payload-mode hoist, the dropped shared
-   compact-bookkeeping fold, or the dropped claim-open-band compact local-
-   state hoist first.
-6. Do not wake the dormant general cached-summary reopen machinery first.
+8. If the new slice does not re-earn the replay gate, or if the later rerun
+   still does not beat the current short-loop target honestly, return to code
+   work with another narrow per-admitted compact-summary cost slice inside
+   `compute_terminal_prefix_completion_summary_from_candidates(...)`, but do
+   not retry the dropped focus-aligned competition-gate/payload-mode hoist,
+   the dropped shared compact-bookkeeping fold, or the dropped
+   claim-open-band compact local-state hoist first.
+9. Do not wake the dormant general cached-summary reopen machinery first.
 
 ### 3. Keep Rule For The Next Rerun
 
@@ -194,7 +230,8 @@ Until then:
 ## Do Not Reopen First
 
 - another long intended-profile continuation beyond the `20`-minute cap
-- another fresh code slice before spending the newly re-earned capped rerun
+- another intended-profile rerun before the new prefix-local accept-rank slice
+  re-earns replay gate honestly
 - cached-summary reopen wake-up work
 - the dropped focus-aligned competition-gate/payload-mode hoist
 - the dropped shared compact-bookkeeping fold
@@ -213,7 +250,7 @@ Until then:
   beats the older longer continuation honestly.
 - Treat the stopped `1095`-prefix read as the current long-run continuation
   reference, but treat the `plateau-kernel-split-v1` 20-minute checkpoint as
-  the next validation gate.
+  the next validation gate until a later capped rerun replaces it honestly.
 - Branch to parity, breadth, compare, benchmark, and certification work only
   after later runtime slices move the intended profile far enough that longer
   reads become worth reopening.

@@ -53,17 +53,28 @@ pub fn canonicalize_telescope(telescope: &Telescope) -> Telescope {
 }
 
 pub fn canonical_key_expr(expr: &Expr) -> CanonKey {
-    CanonKey(fnv1a_hex(&encode_expr(&canonicalize_expr(expr))))
+    canonical_key_from_encoded(&canonical_encoded_expr(expr))
 }
 
 pub fn canonical_key_telescope(telescope: &Telescope) -> CanonKey {
-    let encoded = canonicalize_telescope(telescope)
+    canonical_key_from_encoded(&canonical_encoded_telescope(telescope))
+}
+
+pub fn canonical_encoded_expr(expr: &Expr) -> String {
+    encode_expr(&canonicalize_expr(expr))
+}
+
+pub fn canonical_encoded_telescope(telescope: &Telescope) -> String {
+    canonicalize_telescope(telescope)
         .clauses
         .iter()
         .map(|clause| encode_expr(&clause.expr))
         .collect::<Vec<_>>()
-        .join("");
-    CanonKey(fnv1a_hex(&encoded))
+        .join("")
+}
+
+pub fn canonical_key_from_encoded(encoded: &str) -> CanonKey {
+    CanonKey(fnv1a_hex(encoded))
 }
 
 fn encode_expr(expr: &Expr) -> String {
