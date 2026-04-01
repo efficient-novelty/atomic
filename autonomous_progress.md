@@ -106,31 +106,72 @@ gate.
   `tests/fixtures/claim_runtime/remaining_one_plateau_benchmark.json`.
   On `10` release iterations with compact-summary parity enforced, the current
   timings read:
-  - `39 / 144845 @ 24`: avg `3326 us`, best `2604 us`, worst `4103 us`
-  - `40 / 147639 @ 74`: avg `4564 us`, best `4300 us`, worst `5060 us`
-  - `41 / 154842 @ 140`: avg `2782 us`, best `2433 us`, worst `3025 us`
-  - `42 / 157636 @ 332`: avg `2553 us`, best `2438 us`, worst `3184 us`
-  - `43 / 160430 @ 335`: avg `2085 us`, best `2005 us`, worst `2564 us`
+  - `39 / 144845 @ 24`: avg `3431 us`, best `2742 us`, worst `4103 us`
+  - `40 / 147639 @ 74`: avg `5157 us`, best `4420 us`, worst `7276 us`
+  - `41 / 154842 @ 140`: avg `2713 us`, best `2611 us`, worst `2959 us`
+  - `42 / 157636 @ 332`: avg `2856 us`, best `2463 us`, worst `3594 us`
+  - `43 / 160430 @ 335`: avg `2235 us`, best `2024 us`, worst `2934 us`
 - The first harness-backed facts-only hot-loop slice is now landed in code:
   remaining-one bound checks, compact/full summary build, compact
   materialization, clause-catalog reuse, filtered active-window clones, and
   replay fixtures can now all stay on clause refs plus predecoded
   connectivity facts plus predecoded structural-`nu` facts instead of
   rebuilding terminal-clause `nu` facts inside the hot loop itself.
-- That local replay read is mixed but net-positive on the full stored corpus:
-  the early `39/40` surfaces regressed slightly, but the later
-  `41/42/43` surfaces improved enough to lower the five-surface total from
-  `155131 us` to `153124 us` (about `1.29%` faster overall) while keeping
-  compact-summary parity.
+- That refreshed local replay read is softer overall than the prior stored
+  `2026-03-31` read:
+  only the stored `41 / 154842` surface improved, while `39/40/42/43`
+  regressed enough to raise the five-surface total from `153124 us` to
+  `163951 us` (about `7.07%` slower, and about `5.69%` above the earlier
+  pre-facts `155131 us` total) while still keeping compact-summary parity.
 - The facts-only slice has honest local validation too:
   - `cargo test -p pen-search claim_`
   - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
   - `cargo test -p pen-eval single_clause_context_matches_full_structural_nu`
   all pass after threading the predecoded structural-`nu` facts through the
   hot path and replay harness.
-- No new full-profile rerun has been started on that landed slice yet, so the
-  current runtime reference and the stopped `prefix-nu-context-v2` speed
-  target stay unchanged until stored step-`4` evidence exists on the new code.
+- A fresh intended-profile rerun on that landed slice now exists:
+  `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`.
+  It was manually stopped during step `4` after the stored `229` checkpoint,
+  and it preserved the honest retained-prefix story through that read:
+  - `39 groups / 144845 candidates` at `24/43/44/54`
+  - `40 groups / 147639 candidates` at `74/76`
+  - `41 groups / 154842 candidates` through the stored `229` read
+- That stopped rerun materially improved every matched stored checkpoint it
+  re-earned versus the current speed target
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`:
+  - `24`: `270393 / 267623` instead of `297716 / 295006`
+  - `43`: `489831 / 485917` instead of `535068 / 531318`
+  - `44`: `500425 / 496452` instead of `546538 / 542733`
+  - `54`: `612851 / 608287` instead of `674040 / 669640`
+  - `74`: `843984 / 838184` instead of `929910 / 924314`
+  - `76`: `873422 / 867487` instead of `961986 / 956271`
+  - `140`: `1664957 / 1654897` instead of `1849510 / 1839797`
+  - `163`: `1927201 / 1915799` instead of `2147103 / 2135876`
+  - `228`: `2687659 / 2672592` instead of `3018308 / 3003118`
+  - `229`: `2703503 / 2688385` instead of `3035483 / 3020234`
+  These pairs are `elapsed_millis / terminal_summary_build_millis`.
+- The same newer rerun kept the visible later wall category unchanged through
+  the stored `229` read while cutting active exact `nu` sharply again:
+  - `140`: aggregation `= 787553 ms`, connectivity `= 584152 ms`, exact
+    `nu` `= 102187 ms`, terminal clause-filter handoff `= 18308 ms`,
+    RSS `= 577945600` bytes
+  - `163`: aggregation `= 905537 ms`, connectivity `= 681165 ms`, exact
+    `nu` `= 118301 ms`, terminal clause-filter handoff `= 21401 ms`,
+    RSS `= 645066752` bytes
+  - `228`: aggregation `= 1258056 ms`, connectivity `= 953059 ms`, exact
+    `nu` `= 166719 ms`, terminal clause-filter handoff `= 30296 ms`,
+    RSS `= 832106496` bytes
+  - `229`: aggregation `= 1267657 ms`, connectivity `= 957351 ms`, exact
+    `nu` `= 167317 ms`, terminal clause-filter handoff `= 30442 ms`,
+    RSS `= 834568192` bytes
+- Cached-summary reopen still stayed dormant on stored evidence through the
+  stored `229` read:
+  - `remaining_one_materialized_from_cached_summary = 0`
+  - `remaining_one_prefixes_seen = 0`
+  - `remaining_one_materialized_compact_direct = 41`
+- `terminal_summary_admissibility_checks = 0` and
+  `terminal_summary_fallback_connectivity_checks = 0` through the stored
+  `229` read on that newer rerun.
 - The later retained surfaces now capture honestly from the same seeded path,
   but the operational command needs to stay in release mode on this repo:
   use `cargo run --release -p xtask -- claim-replay-harness ...` when
@@ -148,10 +189,11 @@ gate.
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v1`.
   It still provides the deepest stored completed read of this slice through
   `239`.
-- Because the rerun was manually stopped externally during step `4`,
+- Because the latest rerun was manually stopped externally during step `4`
+  after the stored `229` checkpoint,
   `reports/latest.txt` still reflects completed step `3`, `run.json` still
   says `status = "running"`, and `reports/steps/step-05-live.ndjson` is
-  absent; the authoritative evidence lives in
+  absent; the authoritative evidence for that rerun lives in
   `reports/steps/step-04-live.ndjson`.
 
 ## What Stays Landed
@@ -302,7 +344,7 @@ gate.
   and `reports/steps/step-05-live.ndjson` is absent; the authoritative
   evidence lives in `reports/steps/step-04-live.ndjson`.
 
-### 4. Latest Measured Later-Surface Follow-Up
+### 4. Earlier Prefix-`nu` Measured Later-Surface Follow-Up
 - Run: `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v1`
 - Hypothesis:
   keep the current stage-timing winner intact, but stop rebuilding a full
@@ -548,12 +590,12 @@ gate.
   still tiny.
 - The new nuance is that the retained-prefix plateau after state `24` is real,
   and the first post-stage-timing gain that actually holds on stored evidence
-  is an exact-`nu` cut on that plateau. The newly landed facts-only follow-up
-  now pushes that same idea one step farther locally by keeping the hit path
-  on predecoded clause facts; on the stored replay fixtures it is mixed
-  early but net-positive overall, so the next honest question is whether that
-  local gain survives a fresh intended-profile rerun against the stopped
-  `v2` speed target without losing honesty.
+  is an exact-`nu` cut on that plateau. The newer facts-only follow-up now
+  pushes that same idea one step farther by keeping the hit path on
+  predecoded clause facts; its refreshed local replay read turned softer
+  overall on this machine snapshot, but its fresh full-profile rerun still
+  materially beat the stopped `v2` speed target through the stored `229`
+  checkpoint while keeping the same honest `39/40/41` retained surfaces.
 - Observed RSS on the stopped rerun stayed slightly lower than the current
   runtime reference at `140/163`, then rose well above it by the stored
   `1038` read. The lane still reads as throughput-bound rather than
@@ -561,9 +603,9 @@ gate.
   as an explicit guardrail while chasing further speed.
 - The accumulated lesson is narrower now: do not reopen another dormant
   cached-summary replay or another contender-rank-helper replay first. The
-  live hit-path slice is now the landed code under test, so the next move is
-  to rerun that slice on the intended profile and see whether the local replay
-  win survives stored step-`4` evidence honestly.
+  live hit-path slice is now the landed code under test, and the next move is
+  to carry that same rerun shape deeper into the stored `332/335/408/437/454`
+  region or step `5`, not to restart code exploration first.
 
 ## Best Current Inference
 The current full-profile runtime reference is
@@ -601,10 +643,11 @@ evidence:
   ahead of the current runtime reference there, re-opened `42/43`, moved the
   stored wall to `1038`, and kept cached-summary reopen dormant throughout
 
-The next honest question is now whether the next harness-backed improvement
-slice can beat that stopped `v2` candidate on speed without giving back
-honesty. Aggregation and late RSS should stay in view as explicit guardrails
-while answering that.
+The next honest question is now whether the current harness-backed
+improvement slice can carry its stored `24/43/44/54/74/76/140/163/228/229`
+win into the stopped `v2` candidate's later `332/335/408/437/454/484`
+region without giving back honesty. Aggregation and late RSS should stay in
+view as explicit guardrails while answering that.
 
 ## New Planning Input
 - The missing iteration-speed layer is now landed end-to-end:
@@ -616,11 +659,11 @@ while answering that.
   the step-`4` hit path can stay on clause refs plus predecoded connectivity
   facts plus predecoded structural-`nu` facts until a prefix survives, rather
   than paying repeated per-clause decode work on the hit path itself.
-- The local replay read on that landed slice is good enough to justify the
-  next full-profile rerun, but not good enough to replace the current speed
-  target on its own:
-  `39/40` regressed slightly, `41/42/43` improved clearly, and the aggregate
-  five-surface total fell by about `1.29%`.
+- The refreshed local replay read on that landed slice is now a caution, not a
+  proof of keep on its own:
+  only the stored `41 / 154842` surface improved, and the aggregate
+  five-surface total rose from `153124 us` to `163951 us`, but the fresh
+  full-profile rerun still materially won through the stored `229` read.
 - The compact-summary reopen story should stay narrow: do not try to wake the
   full cached-summary reopen path first while it is still dormant on the
   decisive `39/40/41` surfaces. If second-pass duplication still matters after
@@ -639,7 +682,8 @@ while answering that.
 1. Keep `runs/codex-claim-release-step4-kernel-open-band-handoff-v1` as the
    short step-`4` baseline and
    `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
-   as the best current full-profile candidate to beat on speed.
+   as the best current full-profile candidate to beat on speed until a later
+   rerun re-earns `332/335/408/437/454/484` or moves past `1038`.
 2. Do not spend another turn on a plain new-code exploration first, and do not
    reopen another unchanged connectivity-first retry, accumulator-only replay,
    contender-rank-helper replay, cached-summary-reuse replay, metadata retry,
@@ -649,20 +693,22 @@ while answering that.
    the stored `39@24`, `40@74`, `41@140`, `42@332`, and `43@335` surfaces,
    and refresh it only through the seeded release-harness path instead of
    restarting from zero.
-4. Benchmark only
-   `compute_terminal_prefix_completion_summary_from_candidates(...)` on the
-   full stored fixture set, keep compact-summary parity mandatory, and refresh
-   `tests/fixtures/claim_runtime/remaining_one_plateau_benchmark.json` before
-   judging the next runtime slice locally.
-5. Keep the landed facts-only slice intact for the next full-profile rerun:
+4. Keep the refreshed replay benchmark honest:
+   `tests/fixtures/claim_runtime/remaining_one_plateau_benchmark.json` is now
+   softer overall on this machine snapshot, so treat it as a caution while
+   judging the stored full-profile rerun evidence rather than as a local win.
+5. Keep the landed facts-only slice intact for the same full-profile rerun
+   shape:
    clause refs plus predecoded connectivity facts plus predecoded
    structural-`nu` facts on the hit path, since stored later surfaces already
    keep `terminal_summary_admissibility_checks = 0` and
    `terminal_summary_fallback_connectivity_checks = 0`.
-6. Reuse the refreshed local replay read honestly when judging that rerun:
-   the current benchmark is mixed early but wins overall on the stored corpus,
-   so the next question is whether the same slice re-earns `140/163` and then
-   carries that gain into `332/335/408/437/454/484` or step `5`.
+6. Do not start a new code slice first.
+   The next runtime move is to carry
+   `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`
+   or an equivalent continuation of the same binary deeper into
+   `332/335/408/437/454/484` or step `5`, because it has already re-earned
+   and beaten `24/43/44/54/74/76/140/163/228/229` honestly.
 7. Keep the tiny survivor sketch and dense `lib_refs` membership micro-slice
    as harness-backed follow-ups only if the landed facts-only slice still
    leaves too much second-pass duplication, and do not open deterministic
