@@ -670,10 +670,44 @@ view as explicit guardrails while answering that.
   the facts-only slice, prefer a tiny survivor sketch that stores only the few
   clause refs/facts that established the best primary rank or remain tie-break
   relevant.
+- The next code slice after the in-flight rerun settles should make the local
+  continuation cone the primary scoring object:
+  use the already-landed
+  `SingleClauseStructuralNuContext`,
+  `TerminalClauseNuFacts`, and
+  `structural_nu_single_clause_upper_bound`
+  to carry cheap exact or exact-safe prefix-local interval bounds on
+  bar-clearability and overshoot before terminal assembly, so more of the
+  decisive step-`4` decision is made from the current prefix rather than from
+  full future materialization.
+- The hot path should stop reconstructing clause facts on demand:
+  `pen-eval/src/nu.rs` still lets `TerminalClauseNuFacts::from_clause(...)`
+  collect, sort, and deduplicate library refs dynamically, while
+  `structural_nu_with_clause_facts(...)` is the cheaper path that assumes
+  those facts already exist. The next honest direction is to make
+  `TerminalClauseNuFacts` a mandatory clause-catalog sidecar and keep
+  `structural_nu_with_clause(...)` off the winning hot path entirely.
+- The late step-`4` remaining-one kernel should split more explicitly into a
+  true hit-path plateau kernel and a general fallback kernel:
+  stored decisive later surfaces already keep
+  `terminal_summary_admissibility_checks = 0` and
+  `terminal_summary_fallback_connectivity_checks = 0`, so the no-miss plateau
+  path should be specialized harder around clause refs plus predecoded
+  connectivity facts plus predecoded structural-`nu` facts, with fewer
+  branches and fewer generic checks.
 - A low-risk harness-backed micro-slice remains a dense bitset or fixed
   smallset for `lib_refs` membership inside
   `SingleClauseStructuralNuContext`, since the facts path now pays repeated
   membership checks directly inside the live winning hot loop.
+  The preferred shape is now a tiered representation:
+  inline small array for the common case, dense bitset once the ref count
+  crosses a threshold, and sorted boxed slices only where serialization or
+  debug parity actually needs them.
+- The replay harness should stay the hard local admission gate for serious
+  optimization work:
+  every new slice should prove either fewer exact-`nu` evaluations or lower
+  measured aggregation time on the stored plateau fixtures before it earns
+  another expensive full-profile rerun.
 - Deterministic batched parallel reduction of the per-clause summary loop is a
   later, higher-risk swing. Keep it gated behind the replay harness and
   deterministic merge-parity checks first.
@@ -709,17 +743,35 @@ view as explicit guardrails while answering that.
    or an equivalent continuation of the same binary deeper into
    `332/335/408/437/454/484` or step `5`, because it has already re-earned
    and beaten `24/43/44/54/74/76/140/163/228/229` honestly.
-7. Keep the tiny survivor sketch and dense `lib_refs` membership micro-slice
-   as harness-backed follow-ups only if the landed facts-only slice still
-   leaves too much second-pass duplication, and do not open deterministic
-   batched parallel reduction before the harness proves merge parity safely.
-8. The current landed slice already passed:
+7. When the current rerun settles and the next code slice becomes honest
+   again, make the local continuation cone the primary scoring object:
+   push cheap exact or exact-safe prefix-local interval pruning through
+   `SingleClauseStructuralNuContext`,
+   `TerminalClauseNuFacts`, and
+   `structural_nu_single_clause_upper_bound`
+   so more bar-clearability and overshoot decisions are made before terminal
+   assembly.
+8. Treat predecoded clause facts as mandatory on the hit path:
+   keep `TerminalClauseNuFacts` as a clause-catalog sidecar and do not reopen
+   `structural_nu_with_clause(...)` on the winning hot path when
+   `structural_nu_with_clause_facts(...)` already has the cheaper shape.
+9. Keep the next specialization narrow:
+   split the step-`4` remaining-one kernel into a true no-miss plateau
+   hit-path kernel and a general fallback kernel, prefer the tiny survivor
+   sketch over waking dormant general reopen machinery, and keep the dense
+   `lib_refs` representation as the low-risk data-structure follow-up.
+10. Require the replay harness to veto weak slices:
+    before any future full-profile rerun, the slice should show either fewer
+    exact-`nu` evaluations or lower aggregation time on the stored plateau
+    fixtures, and deterministic batched parallel reduction should stay gated
+    behind that same replay evidence plus merge-parity checks.
+11. The current landed slice already passed:
    - `cargo test -p pen-search claim_`
    - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
    - `cargo test -p pen-eval single_clause_context_matches_full_structural_nu`
    so the next honest move is the intended-profile rerun itself, not another
    local code-only pass first.
-9. Compare that rerun against
+12. Compare that rerun against
    `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
    first. Branch to parity, breadth, compare, benchmark, or certification work
    only after a later full-profile rerun either reaches step `5` or moves

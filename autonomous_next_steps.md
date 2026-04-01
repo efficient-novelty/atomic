@@ -340,6 +340,9 @@ Treat the latest refreshed benchmark honestly:
 - only the stored `41 / 154842` surface improved
 - the aggregate five-surface total rose from `153124 us` to `163951 us`
 - that softer local replay read is now a caution, not a keep-proof on its own
+- require every serious follow-up slice to prove either fewer exact-`nu`
+  evaluations or lower measured aggregation time on those stored plateau
+  fixtures before it earns another expensive full-profile rerun
 
 Do not reopen first:
 - another later-surface code slice with no harness-backed replay read
@@ -358,6 +361,15 @@ Keep this shape intact on the continued rerun:
   plus predecoded structural-`nu` facts until a prefix survives
 - use the existing facts-based helpers directly rather than rebuilding clause
   facts on the hot path
+- treat the local continuation cone as the next primary scoring object once
+  code work reopens:
+  carry cheap exact or exact-safe prefix-local interval bounds on
+  bar-clearability and overshoot through
+  `SingleClauseStructuralNuContext`,
+  `TerminalClauseNuFacts`, and
+  `structural_nu_single_clause_upper_bound`
+  so more decisive work is done from the present prefix before terminal
+  assembly
 - treat the stored zero
   `terminal_summary_admissibility_checks` and zero
   `terminal_summary_fallback_connectivity_checks` reads as evidence that
@@ -382,11 +394,25 @@ Do not reintroduce first:
 ### 4. Keep Secondary Harness-Backed Follow-Ups Narrow
 If the facts-only slice wins locally but still leaves too much second-pass
 duplication, keep the next follow-ups narrow:
+- make `TerminalClauseNuFacts` a mandatory clause-catalog sidecar on the
+  winning path:
+  `pen-eval/src/nu.rs` should not keep paying
+  `TerminalClauseNuFacts::from_clause(...)` reconstruction on hot-path calls
+  when `structural_nu_with_clause_facts(...)` already exposes the cheaper
+  predecoded route
+- split the step-`4` remaining-one kernel into a true no-miss plateau
+  hit-path kernel and a general fallback kernel, because stored decisive later
+  surfaces already keep
+  `terminal_summary_admissibility_checks = 0` and
+  `terminal_summary_fallback_connectivity_checks = 0`
 - prefer a tiny survivor sketch that stores only the clause refs/facts needed
   for the best primary rank or remaining tie-break-relevant survivors, rather
   than reopening the full dormant cached-summary reopen mechanism
-- prefer a dense bitset or fixed smallset for `lib_refs` membership inside
-  `SingleClauseStructuralNuContext` as a low-risk micro-slice
+- prefer a tiered `lib_refs` representation inside
+  `SingleClauseStructuralNuContext` as the low-risk micro-slice:
+  inline small array for the common case, dense bitset once the ref count
+  crosses a threshold, and sorted boxed slices only where serialization or
+  debug parity actually needs them
 - keep deterministic batched parallel reduction as a later, higher-risk move
   that stays gated behind the replay harness and explicit merge-parity checks
 
