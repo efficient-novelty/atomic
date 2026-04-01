@@ -13,73 +13,71 @@ gate.
 - `desktop_claim_shadow` is not signoff-ready.
 - The current short step-`4` baseline is
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
-- The current full-profile speed winner to beat is
+- The current run to beat is now
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`.
+- The previous full-profile speed winner was
   `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`.
-- The current deeper continuation target is
-  `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`,
-  because it still owns the farthest stored wall at `1038` even though it is
-  slower than the new winner at matched later checkpoints.
-- The newest landed code slice is
-  `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`:
-  a prefix-local continuation-cone scoring pass on the remaining-one hot path
-  that now uses
+- The previous deeper continuation target was
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
+- The newest landed code slice is the prefix-local continuation-cone scoring
+  pass on the remaining-one hot path.
+  It now uses
   `SingleClauseStructuralNuContext` plus
   `TerminalClauseNuFacts`
   to make more bar-clearability and primary-overshoot decisions before scratch
   telescope assembly whenever connectivity needs no fallback and admissibility
   is already known.
-- That same run id is now the active full-profile contender.
-  `run.json` currently reports `status = "running"`,
-  `completed_step = 3`, and `active_step = 4`.
-- The previous broader full-profile runtime reference is
-  `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`.
 
-## Current Winner
+## Current Run To Beat
 
 - Run:
-  `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`
 - Status:
-  manually stopped during step `4`; `reports/latest.txt` still reflects
-  completed step `3`, `run.json` still says `status = "running"`, and
-  `reports/steps/step-05-live.ndjson` is absent. The authoritative evidence is
+  manually stopped during step `4`.
+  `run.json` still says `status = "running"`,
+  `reports/latest.txt` still reflects completed step `3`,
+  and `reports/steps/step-05-live.ndjson` is absent.
+  The authoritative evidence is
   `reports/steps/step-04-live.ndjson`.
-- Honest retained-prefix story through the stored `576` read:
-  - `39 groups / 144845 candidates` at `24/43/44/54`
-  - `40 groups / 147639 candidates` at `74/76`
-  - `41 groups / 154842 candidates` from `140` through `331`
-  - `42 groups / 157636 candidates` at `332/333/334`
-  - `43 groups / 160430 candidates` from `335` through the stored `576` read
-- Decisive matched later checkpoints versus
-  `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`:
-  - `140`: `1656717 / 1647017` instead of `1849510 / 1839797`
-  - `163`: `1925819 / 1914639` instead of `2147103 / 2135876`
-  - `332`: `4011498 / 3989370` instead of `4465654 / 4444493`
-  - `335`: `4047111 / 4024786` instead of `4506796 / 4485426`
-  - `408`: `4899116 / 4872728` instead of `5479859 / 5454313`
-  - `437`: `5256846 / 5228815` instead of `5888660 / 5861474`
-  - `454`: `5469278 / 5440222` instead of `6125662 / 6097497`
-  - `484`: `5823948 / 5793152` instead of `6536061 / 6505941`
-  - `533`: `6446054 / 6412428` instead of `7246571 / 7213520`
+- Final stored read before stopping:
+  - `prefix_states_explored = 1095`
+  - `prefix_cache_groups = 43`
+  - `prefix_cache_candidates = 122481`
+  - `elapsed_millis = 10815742`
+  - `terminal_summary_build_millis = 10751697`
+  - RSS `= 3175555072` bytes
+  - `frontier_queue_len = 1680`
+- This run materially passed both earlier stored walls:
+  - at `576`:
+    `5632051 / 5598470` with `43 groups / 122481 candidates`
+  - at `1038`:
+    `10238225 / 10177832` with `43 groups / 122481 candidates`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
-- Stored wall after stopping:
-  - `576`: `6934404 / 6898343`, `43 groups / 160430 candidates`,
-    RSS `= 1423429632` bytes
-- Late-surface shape stayed the same at the current winner:
-  aggregation first, connectivity second, exact `nu` third, terminal
-  clause-filter handoff tiny.
-- At the stored `533` read:
-  - aggregation `= 3007387 ms`
-  - connectivity `= 2281593 ms`
-  - exact `nu` `= 410409 ms`
-  - terminal clause-filter handoff `= 83505 ms`
-  - RSS `= 1423474688` bytes
-- Cached-summary reopen stayed dormant through the stored `576` read:
+- The later-surface shape still stayed no-miss on stored evidence:
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- Cached-summary reopen stayed dormant:
   - `remaining_one_materialized_from_cached_summary = 0`
   - `remaining_one_prefixes_seen = 0`
   - `remaining_one_materialized_compact_direct = 43`
-- `terminal_summary_admissibility_checks = 0` and
-  `terminal_summary_fallback_connectivity_checks = 0` through the stored
-  `576` read.
+
+## 20-Minute Validation Baseline
+
+- Future intended-profile attempts now stop after `20` minutes max.
+- The stored comparison point is the nearest step-`4` checkpoint to
+  `1200000 ms` on `prefix-local-score-v1`.
+- Current 20-minute baseline:
+  - `elapsed_millis = 1203991`
+  - `prefix_states_explored = 123`
+  - `prefix_cache_groups = 40`
+  - `prefix_cache_candidates = 109690`
+  - `frontier_queue_len = 2652`
+  - RSS `= 491208704` bytes
+  - `terminal_summary_build_millis = 1196362`
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- Near-term validation is now about beating that 20-minute stored read, not
+  about matching the full `1095`-prefix stop immediately.
 
 ## New Local Read
 
@@ -105,10 +103,6 @@ gate.
 - The replay read is therefore a real overall local improvement, but not a
   uniform per-surface win yet because `40 groups / 147639 candidates`
   regressed.
-- A fresh full-profile contender is now running:
-  `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`.
-  The stored run directory already exists, and the run is currently in
-  step `4`.
 
 ## What Stays Landed
 
@@ -125,7 +119,6 @@ gate.
   bound checks, compact summary build, and compact materialization when
   fallback connectivity is not needed
 - the compact claim open-band aggregation fast path on the no-evaluations
-  kernel
 - the aggregation-side accept-rank short-circuit for primary-dominated
   bar-clearers
 - the claim open-band terminal-clause handoff fast path on clause refs
@@ -138,49 +131,50 @@ gate.
 
 - The old early RSS cliff is still gone. This remains a step-`4` throughput
   problem, not a return of the allocator-failure story.
-- The retained-prefix plateau after state `24` is real.
-- The decisive later surfaces are now effectively no-miss surfaces:
+- The latest stopped run proved that the lane can move materially past both the
+  old `576` wall and the old `1038` wall, but it still did not finish step `4`.
+- The decisive later surfaces remain effectively no-miss surfaces:
   stored later reads keep
   `terminal_summary_admissibility_checks = 0` and
   `terminal_summary_fallback_connectivity_checks = 0`.
-- The new continuation-cone slice is pointed at the right cost center:
-  it makes more bar-clearability and primary-overshoot decisions from the
-  current prefix before assembly, and the replay harness now shows an overall
-  local win rather than the previous cautionary regression.
-- Aggregation is still the lead measured bucket, so this is not done:
-  the replay win is mixed at one stored surface, and the real question is
-  whether the in-flight full rerun re-earns the stored later checkpoints
-  through `576`.
+- Aggregation is still the lead measured bucket.
+- The optimization loop now needs shorter, more repeatable intended-profile
+  reads.
+  We no longer expect the very next slice to beat the full `1095`-prefix stop.
+  Instead, each new slice should first try to beat the 20-minute stored read at
+  `123` explored prefixes.
 
 ## Forward Direction
 
-- Read the in-flight full rerun before opening another code slice.
-- If `prefix-local-score-v1` wins honestly through `484/533/576`, promote it
-  and keep pushing that same run toward `1038` or step `5`.
-- If it stalls before then, the next code slice is:
-  make `TerminalClauseNuFacts` mandatory on every winning-path remaining-one
-  evaluation so `structural_nu_with_clause_facts(...)` stays hot-path-only and
-  `structural_nu_with_clause(...)` stays off that path.
+- Keep `prefix-local-score-v1` as the current run to beat.
+- Use a hard 20-minute max intended-profile rerun for the next attempts.
+- The next code slice is still:
+  make `TerminalClauseNuFacts` a mandatory clause-catalog sidecar on every
+  winning-path remaining-one evaluation so
+  `structural_nu_with_clause_facts(...)`
+  stays on the hot path and
+  `structural_nu_with_clause(...)`
+  stays off it.
 - After that, split the explicit no-miss hit-path plateau kernel from the
   general fallback kernel.
 - Keep `lib_refs` compression and any tiny survivor sketch work after those two
   slices, not before.
+- Only reopen longer full-profile continuation reads after repeated 20-minute
+  wins show that the lane has materially improved.
 
 ## Immediate Next Move
 
-1. Keep the current winner frozen as the speed target through the stored
-   `576` wall until the in-flight contender proves otherwise.
-2. Read
-   `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`
-   at `140/163`, then `332/335`, then `408/437/454/484`, then `533/576`.
-3. If it wins honestly through `576`, keep driving that run toward `1038` or
-   step `5`.
-4. If it stalls or loses honestly before then, reopen code in this order:
-   - mandatory `TerminalClauseNuFacts` sidecar on the hot path
-   - explicit no-miss hit-path kernel versus fallback kernel split
-   - tiered `lib_refs` representation
-   - tiny survivor sketch only if second-pass duplication still matters
-5. Keep these categories dropped until a new stored read says otherwise:
-   cached-summary reopen wake-up work, contender-rank helper rewrites,
-   connectivity-first/cache-first rewrites, deterministic batched parallel
-   reduction, and broad metadata or bookkeeping cleanup.
+1. Keep `prefix-local-score-v1` frozen as the current run to beat.
+2. Reopen code work with the next slice:
+   make `TerminalClauseNuFacts` mandatory on the winning remaining-one hot
+   path.
+3. After that slice:
+   - rerun only the claim-focused tests touched by the change
+   - rerun the replay harness in release mode
+   - then launch a new intended-profile rerun for `20` minutes max
+4. Judge that rerun first against the stored 20-minute baseline:
+   `1203991 ms`, `123` explored prefixes, `40 groups / 109690 candidates`
+5. Keep broad cleanup, cached-summary reopen wake-up work, contender-rank
+   rewrites, connectivity-first/cache-first rewrites, and deterministic
+   batched parallel reduction dropped until the short-loop runtime wins become
+   strong enough to justify a longer read again.
