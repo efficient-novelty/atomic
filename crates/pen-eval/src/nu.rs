@@ -3,6 +3,7 @@ use pen_core::clause::ClauseRec;
 use pen_core::expr::Expr;
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::telescope::{Telescope, TelescopeClass};
+use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
 pub type NuHistory = Vec<(u32, u32)>;
@@ -83,8 +84,8 @@ struct TelescopeNuProfile {
     lib_refs: BTreeSet<u32>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
-struct TerminalClauseNuFacts {
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct TerminalClauseNuFacts {
     lib_refs: Box<[u32]>,
     is_type_formation: bool,
     is_intro: bool,
@@ -385,7 +386,7 @@ impl TelescopeNuProfile {
 }
 
 impl TerminalClauseNuFacts {
-    fn from_clause(clause: &ClauseRec) -> Self {
+    pub fn from_clause(clause: &ClauseRec) -> Self {
         let expr = &clause.expr;
         let mut lib_refs = expr.lib_refs().into_iter().collect::<Vec<_>>();
         lib_refs.sort_unstable();
@@ -485,7 +486,10 @@ impl SingleClauseStructuralNuContext {
         self.structural_nu_with_clause_facts(&facts)
     }
 
-    fn structural_nu_with_clause_facts(&self, facts: &TerminalClauseNuFacts) -> StructuralNuResult {
+    pub fn structural_nu_with_clause_facts(
+        &self,
+        facts: &TerminalClauseNuFacts,
+    ) -> StructuralNuResult {
         let profile = &self.prefix_profile;
         let kappa = profile.kappa.saturating_add(1);
         let type_formation_count =
@@ -1630,9 +1634,9 @@ fn extension_reference_candidates(
 #[cfg(test)]
 mod tests {
     use super::{
-        SingleClauseStructuralNuContext, StructuralNuResult, compute_native_nu, compute_nu_c,
-        compute_nu_g, compute_nu_h, detect_distributive_laws, detect_infinitesimal_shift,
-        detect_universe_polymorphism, structural_nu,
+        SingleClauseStructuralNuContext, StructuralNuResult, TerminalClauseNuFacts,
+        compute_native_nu, compute_nu_c, compute_nu_g, compute_nu_h, detect_distributive_laws,
+        detect_infinitesimal_shift, detect_universe_polymorphism, structural_nu,
     };
     use pen_core::clause::ClauseRec;
     use pen_core::expr::Expr;
@@ -1841,10 +1845,16 @@ mod tests {
                 .last()
                 .expect("test surface should contain a last clause");
             let context = SingleClauseStructuralNuContext::from_prefix(&prefix, &library, &history);
+            let last_clause_facts = TerminalClauseNuFacts::from_clause(last_clause);
             assert_eq!(
                 context.structural_nu_with_clause(last_clause),
                 expected,
                 "surface {index} diverged",
+            );
+            assert_eq!(
+                context.structural_nu_with_clause_facts(&last_clause_facts),
+                expected,
+                "facts surface {index} diverged",
             );
         }
     }

@@ -4,6 +4,7 @@ use pen_core::encode::expr_bit_length;
 use pen_core::expr::Expr;
 use pen_core::library::Library;
 use pen_core::telescope::Telescope;
+use pen_eval::nu::TerminalClauseNuFacts;
 use pen_type::admissibility::{AdmissibilityMode, StrictAdmissibility, StructuralFamily};
 use pen_type::check::{CheckResult, check_telescope};
 use pen_type::connectivity::{TerminalClauseConnectivityFacts, passes_connectivity};
@@ -75,6 +76,7 @@ pub struct ClauseCatalog {
     clause_kappa: u16,
     options_by_position: Vec<Vec<ClauseRec>>,
     terminal_connectivity_facts_by_position: Vec<Vec<TerminalClauseConnectivityFacts>>,
+    terminal_nu_facts_by_position: Vec<Vec<TerminalClauseNuFacts>>,
 }
 
 impl ClauseCatalog {
@@ -94,6 +96,13 @@ impl ClauseCatalog {
         position: usize,
     ) -> &[TerminalClauseConnectivityFacts] {
         self.terminal_connectivity_facts_by_position
+            .get(position)
+            .map(Vec::as_slice)
+            .unwrap_or(&[])
+    }
+
+    pub fn terminal_nu_facts_at(&self, position: usize) -> &[TerminalClauseNuFacts] {
+        self.terminal_nu_facts_by_position
             .get(position)
             .map(Vec::as_slice)
             .unwrap_or(&[])
@@ -2152,22 +2161,29 @@ pub fn build_clause_catalog(base_context: EnumerationContext, clause_kappa: u16)
         return ClauseCatalog::default();
     }
 
-    let (options_by_position, terminal_connectivity_facts_by_position) =
-        (0..usize::from(clause_kappa))
-            .map(|position| {
-                let clauses = clauses_for_position(base_context, clause_kappa, position);
-                let facts = clauses
-                    .iter()
-                    .map(TerminalClauseConnectivityFacts::from_clause)
-                    .collect::<Vec<_>>();
-                (clauses, facts)
-            })
-            .unzip();
+    let mut options_by_position = Vec::with_capacity(usize::from(clause_kappa));
+    let mut terminal_connectivity_facts_by_position = Vec::with_capacity(usize::from(clause_kappa));
+    let mut terminal_nu_facts_by_position = Vec::with_capacity(usize::from(clause_kappa));
+    for position in 0..usize::from(clause_kappa) {
+        let clauses = clauses_for_position(base_context, clause_kappa, position);
+        let connectivity_facts = clauses
+            .iter()
+            .map(TerminalClauseConnectivityFacts::from_clause)
+            .collect::<Vec<_>>();
+        let nu_facts = clauses
+            .iter()
+            .map(TerminalClauseNuFacts::from_clause)
+            .collect::<Vec<_>>();
+        options_by_position.push(clauses);
+        terminal_connectivity_facts_by_position.push(connectivity_facts);
+        terminal_nu_facts_by_position.push(nu_facts);
+    }
 
     ClauseCatalog {
         clause_kappa,
         options_by_position,
         terminal_connectivity_facts_by_position,
+        terminal_nu_facts_by_position,
     }
 }
 

@@ -1,5 +1,5 @@
 # Autonomous Claim Lane Progress
-Last updated: 2026-03-31
+Last updated: 2026-04-01
 
 This file is the live operating brief for `desktop_claim_shadow`.
 Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next
@@ -106,11 +106,31 @@ gate.
   `tests/fixtures/claim_runtime/remaining_one_plateau_benchmark.json`.
   On `10` release iterations with compact-summary parity enforced, the current
   timings read:
-  - `39 / 144845 @ 24`: avg `2830 us`, best `2737 us`, worst `3463 us`
-  - `40 / 147639 @ 74`: avg `4447 us`, best `4377 us`, worst `4777 us`
-  - `41 / 154842 @ 140`: avg `3017 us`, best `2933 us`, worst `3292 us`
-  - `42 / 157636 @ 332`: avg `2983 us`, best `2931 us`, worst `3322 us`
-  - `43 / 160430 @ 335`: avg `2234 us`, best `2175 us`, worst `2695 us`
+  - `39 / 144845 @ 24`: avg `3326 us`, best `2604 us`, worst `4103 us`
+  - `40 / 147639 @ 74`: avg `4564 us`, best `4300 us`, worst `5060 us`
+  - `41 / 154842 @ 140`: avg `2782 us`, best `2433 us`, worst `3025 us`
+  - `42 / 157636 @ 332`: avg `2553 us`, best `2438 us`, worst `3184 us`
+  - `43 / 160430 @ 335`: avg `2085 us`, best `2005 us`, worst `2564 us`
+- The first harness-backed facts-only hot-loop slice is now landed in code:
+  remaining-one bound checks, compact/full summary build, compact
+  materialization, clause-catalog reuse, filtered active-window clones, and
+  replay fixtures can now all stay on clause refs plus predecoded
+  connectivity facts plus predecoded structural-`nu` facts instead of
+  rebuilding terminal-clause `nu` facts inside the hot loop itself.
+- That local replay read is mixed but net-positive on the full stored corpus:
+  the early `39/40` surfaces regressed slightly, but the later
+  `41/42/43` surfaces improved enough to lower the five-surface total from
+  `155131 us` to `153124 us` (about `1.29%` faster overall) while keeping
+  compact-summary parity.
+- The facts-only slice has honest local validation too:
+  - `cargo test -p pen-search claim_`
+  - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
+  - `cargo test -p pen-eval single_clause_context_matches_full_structural_nu`
+  all pass after threading the predecoded structural-`nu` facts through the
+  hot path and replay harness.
+- No new full-profile rerun has been started on that landed slice yet, so the
+  current runtime reference and the stopped `prefix-nu-context-v2` speed
+  target stay unchanged until stored step-`4` evidence exists on the new code.
 - The later retained surfaces now capture honestly from the same seeded path,
   but the operational command needs to stay in release mode on this repo:
   use `cargo run --release -p xtask -- claim-replay-harness ...` when
@@ -156,6 +176,10 @@ gate.
   short diagnostic surface
 - the shared terminal-clause connectivity-facts sidecar on the shared clause
   catalog used by the claim remaining-one summary/materialization path
+- the shared terminal-clause structural-`nu` facts sidecar threaded through
+  the clause catalog, filtered active-window clones, remaining-one
+  bound/summary/materialization, and replay fixtures so the hit path can stay
+  on predecoded facts end-to-end
 - the steady-state scratch-slot `clone_from` reuse on terminal-clause loads
   inside remaining-one summary/materialization
 - the boundary-timestamp timing pass on the compact claim open-band
@@ -524,10 +548,12 @@ gate.
   still tiny.
 - The new nuance is that the retained-prefix plateau after state `24` is real,
   and the first post-stage-timing gain that actually holds on stored evidence
-  is an exact-`nu` cut on that plateau. The open question is no longer whether
-  that work survives the stored `437/454/484` wall; it does. The next honest
-  question is whether the next harness-backed code slice can beat this stopped
-  `v2` candidate without losing honesty.
+  is an exact-`nu` cut on that plateau. The newly landed facts-only follow-up
+  now pushes that same idea one step farther locally by keeping the hit path
+  on predecoded clause facts; on the stored replay fixtures it is mixed
+  early but net-positive overall, so the next honest question is whether that
+  local gain survives a fresh intended-profile rerun against the stopped
+  `v2` speed target without losing honesty.
 - Observed RSS on the stopped rerun stayed slightly lower than the current
   runtime reference at `140/163`, then rose well above it by the stored
   `1038` read. The lane still reads as throughput-bound rather than
@@ -535,8 +561,9 @@ gate.
   as an explicit guardrail while chasing further speed.
 - The accumulated lesson is narrower now: do not reopen another dormant
   cached-summary replay or another contender-rank-helper replay first. The
-  next code slice should attack the live hit path directly and try to beat
-  this exact-`nu` winner.
+  live hit-path slice is now the landed code under test, so the next move is
+  to rerun that slice on the intended profile and see whether the local replay
+  win survives stored step-`4` evidence honestly.
 
 ## Best Current Inference
 The current full-profile runtime reference is
@@ -585,11 +612,15 @@ while answering that.
   plateau fixture corpus now covers `39 / 144845`, `40 / 147639`,
   `41 / 154842`, `42 / 157636`, and `43 / 160430`, and the local replay
   timings are now stored for all five retained surfaces.
-- The favored next actual code slice now that the rerun has been stopped is a
-  facts-only hot loop: drive the step-`4` hit path all the way down to clause
-  refs plus predecoded connectivity facts plus predecoded structural-`nu`
-  facts until a prefix survives, rather than paying repeated per-clause decode
-  work on the hit path itself.
+- The favored facts-only hot loop is now landed in code:
+  the step-`4` hit path can stay on clause refs plus predecoded connectivity
+  facts plus predecoded structural-`nu` facts until a prefix survives, rather
+  than paying repeated per-clause decode work on the hit path itself.
+- The local replay read on that landed slice is good enough to justify the
+  next full-profile rerun, but not good enough to replace the current speed
+  target on its own:
+  `39/40` regressed slightly, `41/42/43` improved clearly, and the aggregate
+  five-surface total fell by about `1.29%`.
 - The compact-summary reopen story should stay narrow: do not try to wake the
   full cached-summary reopen path first while it is still dormant on the
   decisive `39/40/41` surfaces. If second-pass duplication still matters after
@@ -623,20 +654,26 @@ while answering that.
    full stored fixture set, keep compact-summary parity mandatory, and refresh
    `tests/fixtures/claim_runtime/remaining_one_plateau_benchmark.json` before
    judging the next runtime slice locally.
-5. Bias the next actual code slice now that the harness corpus is complete
-   toward the
-   facts-only hot loop: clause refs plus predecoded connectivity facts plus
-   predecoded structural-`nu` facts on the hit path, since stored later
-   surfaces already keep `terminal_summary_admissibility_checks = 0` and
+5. Keep the landed facts-only slice intact for the next full-profile rerun:
+   clause refs plus predecoded connectivity facts plus predecoded
+   structural-`nu` facts on the hit path, since stored later surfaces already
+   keep `terminal_summary_admissibility_checks = 0` and
    `terminal_summary_fallback_connectivity_checks = 0`.
-6. Keep the tiny survivor sketch and dense `lib_refs` membership micro-slice
-   as harness-backed follow-ups if the facts-only slice still leaves too much
-   second-pass duplication, and do not open deterministic batched parallel
-   reduction before the harness proves merge parity safely.
-7. If code changes land, rerun only:
+6. Reuse the refreshed local replay read honestly when judging that rerun:
+   the current benchmark is mixed early but wins overall on the stored corpus,
+   so the next question is whether the same slice re-earns `140/163` and then
+   carries that gain into `332/335/408/437/454/484` or step `5`.
+7. Keep the tiny survivor sketch and dense `lib_refs` membership micro-slice
+   as harness-backed follow-ups only if the landed facts-only slice still
+   leaves too much second-pass duplication, and do not open deterministic
+   batched parallel reduction before the harness proves merge parity safely.
+8. The current landed slice already passed:
    - `cargo test -p pen-search claim_`
    - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
-8. After the harness-backed slice lands, compare it against
+   - `cargo test -p pen-eval single_clause_context_matches_full_structural_nu`
+   so the next honest move is the intended-profile rerun itself, not another
+   local code-only pass first.
+9. Compare that rerun against
    `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`
    first. Branch to parity, breadth, compare, benchmark, or certification work
    only after a later full-profile rerun either reaches step `5` or moves

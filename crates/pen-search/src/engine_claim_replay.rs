@@ -34,6 +34,8 @@ pub struct ClaimRemainingOneTerminalCandidateFixture {
     pub cached_admissibility_decision: Option<AdmissibilityDecision>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub connectivity_facts: Option<TerminalClauseConnectivityFacts>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub nu_facts: Option<TerminalClauseNuFacts>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -159,7 +161,16 @@ pub fn read_claim_remaining_one_replay_fixtures(
     path: &Path,
 ) -> Result<Vec<ClaimRemainingOneReplayFixture>> {
     let json = fs::read_to_string(path).with_context(|| format!("read {}", path.display()))?;
-    serde_json::from_str(&json).with_context(|| format!("parse {}", path.display()))
+    let mut fixtures: Vec<ClaimRemainingOneReplayFixture> =
+        serde_json::from_str(&json).with_context(|| format!("parse {}", path.display()))?;
+    for fixture in &mut fixtures {
+        for candidate in &mut fixture.terminal_candidates {
+            if candidate.nu_facts.is_none() {
+                candidate.nu_facts = Some(TerminalClauseNuFacts::from_clause(&candidate.clause));
+            }
+        }
+    }
+    Ok(fixtures)
 }
 
 pub fn write_claim_remaining_one_replay_benchmark(
@@ -350,6 +361,7 @@ pub fn replay_claim_remaining_one_fixture(
             clause: &candidate.clause,
             cached_admissibility_decision: candidate.cached_admissibility_decision.clone(),
             connectivity_facts: candidate.connectivity_facts.as_ref(),
+            nu_facts: candidate.nu_facts.as_ref(),
         })
         .collect::<Vec<_>>();
     let terminal_clauses = match fixture.clause_mode {
@@ -650,6 +662,7 @@ fn fixture_terminal_candidates(
                     clause: clause.clause.clone(),
                     cached_admissibility_decision: clause.cached_admissibility_decision.clone(),
                     connectivity_facts: clause.connectivity_facts.cloned(),
+                    nu_facts: clause.nu_facts.cloned(),
                 })
                 .collect(),
         ),
@@ -661,6 +674,7 @@ fn fixture_terminal_candidates(
                     clause: clause.clause.clone(),
                     cached_admissibility_decision: clause.cached_admissibility_decision.clone(),
                     connectivity_facts: clause.connectivity_facts.cloned(),
+                    nu_facts: clause.nu_facts.cloned(),
                 })
                 .collect(),
         ),

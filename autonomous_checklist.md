@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-03-31
+Last updated: 2026-04-01
 
 This checklist is the live signoff gate for `desktop_claim_shadow`.
 It lists only work that is still open.
@@ -78,22 +78,24 @@ It lists only work that is still open.
   and `reports/steps/step-05-live.ndjson` is absent; the authoritative
   evidence for that full-profile reference lives in
   `reports/steps/step-04-live.ndjson`.
-- The next honest move is therefore not another short step-`4` micro-slice, a
-  plain rerun-only turn, or another connectivity-first retry. It is one
-  narrow later-surface runtime cut on the current winner so the post-`228`
-  aggregation wall can move honestly again without hiding the newer RSS
-  growth story.
-- The biggest missing operational layer is now iteration speed: the repo still
-  lacks a deterministic replay harness for the stable retained plateau
-  prefixes `39/144845`, `40/147639`, `41/154842`, `42/157636`, and
-  `43/160430`, even though stored step-`4` live artifacts are now sufficient
-  to benchmark the hot kernel locally.
-- Because stored later surfaces already keep
-  `terminal_summary_admissibility_checks = 0` and
-  `terminal_summary_fallback_connectivity_checks = 0`, the next code slice
-  should bias toward the hit path itself: clause refs plus predecoded
-  connectivity facts plus predecoded structural-`nu` facts, not another
-  cache-first miss-path rewrite.
+- The replay harness layer is now landed end-to-end:
+  the repo now stores deterministic plateau fixtures for
+  `39/144845`, `40/147639`, `41/154842`, `42/157636`, and `43/160430`, and
+  the refreshed release benchmark now reads `3326`, `4564`, `2782`, `2553`,
+  and `2085 us` average on those five retained surfaces.
+- The first harness-backed facts-only hit-path slice is now landed in code:
+  the claim remaining-one hot loop can now stay on clause refs plus
+  predecoded connectivity facts plus predecoded structural-`nu` facts through
+  bound checks, summary build, compact materialization, clause-catalog reuse,
+  filtered active-window clones, and replay fixtures.
+- That local replay read is mixed but net-positive on the stored corpus:
+  `39/40` regressed slightly, `41/42/43` improved clearly, and the aggregate
+  five-surface total fell from `155131 us` to `153124 us` while keeping
+  compact-summary parity.
+- The next honest move is therefore not another short step-`4` micro-slice,
+  another code-only exploration pass, or another connectivity-first retry. It
+  is the intended-profile rerun on the landed facts-only slice so the
+  post-`140` / post-`228` wall can be judged from stored step-`4` evidence.
 - A tiny survivor sketch and a dense `lib_refs` membership set remain
   reasonable harness-backed follow-ups if the first facts-only slice still
   leaves too much second-pass duplication. Deterministic batched parallel
@@ -101,14 +103,14 @@ It lists only work that is still open.
 
 ## 1. Runtime Completion
 
-- [ ] Build a deterministic replay harness for retained plateau prefixes from
+- [x] Build a deterministic replay harness for retained plateau prefixes from
       stored `step-04-live.ndjson` evidence.
-- [ ] Persist deterministic plateau fixtures for `39/144845`, `40/147639`,
+- [x] Persist deterministic plateau fixtures for `39/144845`, `40/147639`,
       `41/154842`, `42/157636`, and `43/160430`.
-- [ ] Benchmark only
+- [x] Benchmark only
       `compute_terminal_prefix_completion_summary_from_candidates(...)` on
       those stored fixtures before another expensive later-surface slice lands.
-- [ ] Use that harness to validate the next facts-only hot-loop slice before
+- [x] Use that harness to validate the next facts-only hot-loop slice before
       judging it from another multi-hour full-profile rerun.
 - [ ] Keep deterministic batched parallel reduction gated behind harness-backed
       parity evidence.

@@ -1,5 +1,5 @@
 # Autonomous Claim Lane: Next Operational Slice
-Last updated: 2026-03-31
+Last updated: 2026-04-01
 
 This note is the exact next work order for `desktop_claim_shadow`.
 
@@ -21,6 +21,10 @@ Assume the following are already landed and should stay landed:
 - the higher-fidelity late-surface timing accumulation
 - the shared terminal-clause connectivity-facts sidecar on the shared clause
   catalog used by the claim remaining-one summary/materialization path
+- the shared terminal-clause structural-`nu` facts sidecar threaded through
+  the clause catalog, filtered active-window clones, remaining-one
+  bound/summary/materialization, and replay fixtures so the hit path can stay
+  on predecoded facts end-to-end
 - the steady-state scratch-slot `clone_from` reuse on terminal-clause loads
   inside remaining-one summary/materialization
 - the boundary-timestamp timing pass on the compact claim open-band
@@ -144,7 +148,17 @@ standalone next moves:
   `42 / 157636 @ 332`, and `43 / 160430 @ 335`, and
   `tests/fixtures/claim_runtime/remaining_one_plateau_benchmark.json` now
   stores the corresponding `10`-iteration release timings:
-  `2830 us`, `4447 us`, `3017 us`, `2983 us`, and `2234 us` average.
+  `3326 us`, `4564 us`, `2782 us`, `2553 us`, and `2085 us` average.
+- The first harness-backed facts-only hit-path slice is now landed in code:
+  remaining-one bound checks, compact/full summary build, compact
+  materialization, clause-catalog reuse, filtered active-window clones, and
+  replay fixtures can now all stay on clause refs plus predecoded
+  connectivity facts plus predecoded structural-`nu` facts instead of
+  rebuilding terminal-clause `nu` facts inside the hot loop itself.
+- That local replay read is mixed but net-positive on the full stored corpus:
+  the early `39/40` surfaces regressed slightly, but the later
+  `41/42/43` surfaces improved enough to lower the aggregate five-surface
+  total from `155131 us` to `153124 us` while keeping compact-summary parity.
 - The failed rank-scan follow-up on the current winner,
   `runs/codex-claim-release-full-aggregation-open-band-rank-scan-v1`,
   preserved the honest `39/40/41` retained-prefix story through the stored
@@ -210,15 +224,18 @@ standalone next moves:
   question: the retained-prefix plateau after state `24` is real, but this
   specific cached-summary reopen path is dormant on the decisive `39/40/41`
   surfaces, so it cannot explain or relieve the active later cost yet.
-- The replay harness layer is now in place, so the next honest operational
-  addition is the first harness-backed hit-path slice on the current winner,
-  not another harness-build turn and not another plain rerun.
+- The replay harness layer is now in place, and the first harness-backed
+  hit-path slice is now landed and locally benchmarked, so the next honest
+  operational move is the intended-profile rerun on that landed slice, not
+  another harness-build turn and not another plain rerun on unchanged code.
 - Because stored later surfaces already keep
   `terminal_summary_admissibility_checks = 0` and
   `terminal_summary_fallback_connectivity_checks = 0`, the next code slice
   should bias toward the cost of the hit path itself: clause refs plus
   predecoded connectivity facts plus predecoded structural-`nu` facts, not
-  another cache-first miss-path rewrite.
+  another cache-first miss-path rewrite. That bias is now the landed code
+  under test, so the next turn should judge it from the rerun rather than
+  reopen another code-only exploration first.
 
 ## Goal
 With the stopped prefix-`nu` rerun now serving as the best speed target and
@@ -226,9 +243,10 @@ the replay harness already landed, line up the next harness-backed runtime cut
 on the current winner:
 - keep the full retained plateau fixture corpus and replay benchmark read live
   while judging slices locally
-- then land one narrow hit-path slice that pushes the step-`4` loop toward
-  clause refs plus predecoded connectivity facts plus predecoded
-  structural-`nu` facts without relying on dormant cached-summary reopen logic
+- then carry the landed facts-only hit-path slice into a fresh intended-profile
+  rerun that tests clause refs plus predecoded connectivity facts plus
+  predecoded structural-`nu` facts on the real step-`4` wall without relying
+  on dormant cached-summary reopen logic
 
 Do that without losing the retained-prefix story, deterministic rank parity,
 or the later RSS guardrail.
@@ -295,11 +313,11 @@ Do not reopen first:
 - deterministic batched parallel reduction before the harness-backed slice
   proves merge parity safely
 
-### 3. Cut Facts-Only Hot Loop First
-With the harness landed, bias the next actual code slice toward the hit path
-itself.
+### 3. Rerun The Landed Facts-Only Hot Loop
+With the harness-backed facts-only slice now landed in code, the next actual
+move is the rerun, not another code-only pass.
 
-Bias toward this shape:
+Keep this shape intact on the rerun:
 - keep the step-`4` loop on clause refs plus predecoded connectivity facts
   plus predecoded structural-`nu` facts until a prefix survives
 - use the existing facts-based helpers directly rather than rebuilding clause
@@ -308,8 +326,12 @@ Bias toward this shape:
   `terminal_summary_admissibility_checks` and zero
   `terminal_summary_fallback_connectivity_checks` reads as evidence that
   misses are not the main story anymore
+- judge the rerun against the current local replay read honestly:
+  `39/40` are slightly softer, `41/42/43` are faster, and the full stored
+  corpus total is lower overall
 
-If code changes land, use a new run id that states the slice.
+Use a new run id that states the landed slice, for example
+`runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`.
 
 Do not reintroduce first:
 - another unchanged contender-rank-helper replay with no new runtime question
@@ -332,8 +354,8 @@ duplication, keep the next follow-ups narrow:
   that stays gated behind the replay harness and explicit merge-parity checks
 
 ### 5. Re-Earn Stored Evidence
-After code changes land, rerun release claim with live checkpoint persistence
-on.
+After the landed code slice, rerun release claim with live checkpoint
+persistence on.
 
 At minimum, let it re-earn the stored `140/163` region on the new slice.
 Only carry it onward into `228/229` and ideally the stored
@@ -352,8 +374,8 @@ Answer from stored evidence:
   `41 / 154842` surfaces honestly, then re-earn `42 / 157636` and
   `43 / 160430` too?
 - did the harness-backed slice lower the hit-path cost locally on the replay
-  fixtures before the full rerun, and did that local win survive the full
-  rerun honestly?
+  fixtures before the full rerun, and did that mixed-but-net-positive local
+  win survive the full rerun honestly?
 - if cached-summary reopen still stayed dormant, did the new slice still move
   the active post-`140` / post-`163` connectivity and exact `nu` cost enough
   to improve the wall clock on the current winner?
@@ -364,7 +386,12 @@ Answer from stored evidence:
   later growth flatten or worsen relative to the current runtime reference?
 
 ### 6. Re-Earn Only The Validation Needed
-If new code changes land before the rerun, rerun only:
+The currently landed facts-only slice already passed:
+- `cargo test -p pen-search claim_`
+- `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
+- `cargo test -p pen-eval single_clause_context_matches_full_structural_nu`
+
+If additional code changes land before the rerun, rerun only:
 - `cargo test -p pen-search claim_`
 - `cargo test -p pen-cli claim_run_persists_live_step_memory_checkpoints_before_acceptance`
 
