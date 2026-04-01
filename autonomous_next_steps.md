@@ -29,11 +29,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 ## Current Read
 
-- The tiny survivor-sketch slice is now landed on top of the tiered `lib_refs`
-  work, the explicit no-miss plateau-kernel split, and the mandatory
-  `TerminalClauseNuFacts` winner.
-  Compact claim summaries now keep a survivor sketch on the safe
-  single-primary surfaces and reuse it during materialization without waking
+- The broader incumbent-relevant survivor-sketch slice is now landed on top of
+  the tiered `lib_refs` work, the explicit no-miss plateau-kernel split, and
+  the mandatory `TerminalClauseNuFacts` winner.
+  Compact claim summaries now keep a survivor sketch for competition-allowed
+  bar-clearers that can still beat the current incumbent even when multiple
+  primary ranks are live, and reuse it during materialization without waking
   the dormant general cached-summary reopen path.
 - Claim-focused validation stayed green:
   - `cargo test -p pen-search claim_`
@@ -41,53 +42,36 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - `cargo test -p pen-search take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse`
 - The release replay harness stayed parity-clean on the stored plateau
   fixtures.
-- The checked-in five-surface replay benchmark improved overall from
-  `126668 us` to `123544 us`.
-  It improved all five stored surfaces again.
-- The capped intended-profile contender
-  `runs/codex-claim-release-full-aggregation-open-band-survivor-sketch-v1`
-  was manually stopped during step `4` after the `20` minute cap.
-  The authoritative stored read is
-  `reports/steps/step-04-live.ndjson`.
-- Its nearest stored checkpoint to `20` minutes was:
-  - `elapsed_millis = 1191856`
-  - `prefix_states_explored = 124`
-  - `prefix_cache_groups = 40`
-  - `prefix_cache_candidates = 109690`
-  - `frontier_queue_len = 2651`
-  - `terminal_summary_build_millis = 1183893`
-  - RSS `= 495775744` bytes
-  - `terminal_summary_admissibility_checks = 0`
-  - `terminal_summary_fallback_connectivity_checks = 0`
-- That contender kept the same retained-prefix surface and the same no-miss
-  later-shape, but it still did not beat the current `124`-prefix short-loop
-  gate.
-  It re-matched the prefix count and queue length, but still lost on
-  summary-build time and landed slightly higher on RSS.
-- The stored telemetry also showed that the new sketch never activated on the
-  live plateau surface:
-  - `remaining_one_materialized_from_cached_summary = 0`
-  - `remaining_one_materialized_compact_direct = 40`
-- The next loop is still a short intended-profile optimization loop with a
-  hard `20` minute cap.
-  The plateau-kernel split remains the only honest short-loop win so far.
+- Two local release benchmark reads after the slice stayed slightly slower than
+  the checked-in `123544 us` total, so the benchmark artifact was left
+  unchanged and no new intended-profile rerun was launched yet.
+  The warmer reread landed `126760 us` total:
+  - `24`: `26150`
+  - `74`: `45111`
+  - `140`: `18395`
+  - `332`: `18490`
+  - `335`: `18614`
+- The slice therefore proved the broader cached-materialization path
+  functionally, but it has not yet re-earned the replay-time gate needed
+  before another `20`-minute intended-profile attempt.
+- The plateau-kernel split remains the only honest short-loop win so far.
 
 ## Do This Next
 
 ### 1. Reopen Code Work Now
 
-Do not run another uncapped intended-profile continuation first.
-The next move is the next code slice on top of the newly landed tiered-
-`lib_refs`, plateau-kernel, and safe survivor-sketch work while keeping
+Do not run another intended-profile continuation first.
+The next move is a follow-on code slice on top of the newly landed tiered-
+`lib_refs`, plateau-kernel, and broadened survivor-sketch work while keeping
 `prefix-local-score-v1` as the long-run reference.
 
 ### 2. Implement The Next Slice In This Order
 
-1. Broaden the survivor sketch now that the safe single-primary version is
-   landed.
-   Carry the clause refs and facts needed for the incumbent-relevant
-   plateau survivors too, especially when multiple bar-clearing primary ranks
-   keep the current sketch dormant.
+1. Keep the new multi-primary/incumbent-relevant survivor-sketch coverage, but
+   reduce its replay-summary overhead.
+   Reuse the broader survivor bookkeeping more cheaply so compact summary
+   replay can at least re-earn the checked-in `123544 us` total or otherwise
+   show fewer exact-`nu` evaluations on the stored plateau fixtures.
    Do not wake the dormant general cached-summary reopen machinery first.
 
 ### 3. Validation Loop For Each New Slice
@@ -98,9 +82,11 @@ For the next attempts, validate in this order:
 2. Refresh the replay-harness read in release mode.
 3. Confirm replay parity plus either fewer exact-`nu` evaluations or lower
    measured replay time on the stored plateau fixtures.
-4. Launch a new intended-profile rerun and stop it after `20` minutes max.
-5. Compare the nearest stored step-`4` checkpoint to the current 20-minute
-   target from `plateau-kernel-split-v1`.
+4. Only launch a new intended-profile rerun after that replay gate improves,
+   then stop it after `20` minutes max.
+5. Compare the next local slice first to the checked-in replay gate, then
+   compare any resulting rerun against the current 20-minute target from
+   `plateau-kernel-split-v1`.
 
 ### 4. Short-Loop Beat Rule
 

@@ -5757,9 +5757,7 @@ enum TerminalPrefixSummaryPayload {
 
 #[derive(Clone, Debug, Default)]
 struct CompactTerminalPrefixSurvivorSketchBuilder {
-    best_primary_rank: Option<TerminalPrefixPrimaryRank>,
     survivors: Vec<TerminalPrefixSurvivorSketchEntry>,
-    saw_secondary_primary_rank: bool,
 }
 
 impl CompactTerminalPrefixSurvivorSketchBuilder {
@@ -5770,6 +5768,7 @@ impl CompactTerminalPrefixSurvivorSketchBuilder {
         exact_nu: u16,
         bit_kappa_used: u16,
         competition_allowed: bool,
+        incumbent_rank: Option<&AcceptRank>,
     ) {
         if !competition_allowed {
             return;
@@ -5777,38 +5776,23 @@ impl CompactTerminalPrefixSurvivorSketchBuilder {
         let Some(primary_rank) = primary_rank else {
             return;
         };
+        if incumbent_rank.is_some_and(|incumbent| {
+            !terminal_prefix_primary_rank_could_still_beat_incumbent(&primary_rank, incumbent)
+        }) {
+            return;
+        }
 
-        let survivor = TerminalPrefixSurvivorSketchEntry {
+        self.survivors.push(TerminalPrefixSurvivorSketchEntry {
             clause_index,
             exact_nu,
             bit_kappa_used,
-        };
-        match self.best_primary_rank.as_ref() {
-            Some(current) if better_terminal_prefix_primary_rank(&primary_rank, current) => {
-                self.saw_secondary_primary_rank = true;
-                self.best_primary_rank = Some(primary_rank);
-                self.survivors.clear();
-                self.survivors.push(survivor);
-            }
-            Some(current) if *current == primary_rank => {
-                self.survivors.push(survivor);
-            }
-            Some(_) => {
-                self.saw_secondary_primary_rank = true;
-            }
-            None => {
-                self.best_primary_rank = Some(primary_rank);
-                self.survivors.push(survivor);
-            }
-        }
+        });
     }
 
     fn finish(self) -> Option<TerminalPrefixSurvivorSketch> {
-        (!self.saw_secondary_primary_rank && !self.survivors.is_empty()).then_some(
-            TerminalPrefixSurvivorSketch {
-                survivors: self.survivors,
-            },
-        )
+        (!self.survivors.is_empty()).then_some(TerminalPrefixSurvivorSketch {
+            survivors: self.survivors,
+        })
     }
 }
 
@@ -6456,6 +6440,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                             score.exact_nu,
                                             score.bit_kappa_used,
                                             competition_allowed,
+                                            incumbent_rank,
                                         );
                                     }
                                     kernel_timing.terminal_summary_aggregation_duration +=
@@ -6605,6 +6590,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                         exact_nu,
                         bit_kappa_used,
                         competition_allowed,
+                        incumbent_rank,
                     );
                 }
                 absorb_terminal_prefix_admitted_clause_summary(
@@ -6837,6 +6823,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                         score.exact_nu,
                                         score.bit_kappa_used,
                                         true,
+                                        incumbent_rank,
                                     );
                                 }
                                 kernel_timing.terminal_summary_aggregation_duration +=
@@ -6928,6 +6915,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                             exact_nu,
                             bit_kappa_used,
                             true,
+                            incumbent_rank,
                         );
                     }
                     absorb_terminal_prefix_completion_bound(
@@ -11099,8 +11087,7 @@ mod tests {
     }
 
     #[test]
-    fn claim_compact_summary_best_accept_rank_matches_direct_best_when_worse_primary_candidates_clear_bar()
-     {
+    fn claim_compact_summary_reuses_survivor_sketch_for_multiple_bar_clearing_primary_ranks() {
         let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
         let mut library: Library = Vec::new();
         let mut nu_history = Vec::new();
@@ -11252,6 +11239,14 @@ mod tests {
                         ) else {
                             continue;
                         };
+                        if !super::terminal_completion_can_compete_for_acceptance(
+                            &signature,
+                            admissibility,
+                            &cache,
+                            &admissibility_decision,
+                        ) {
+                            continue;
+                        }
                         if !distinct_primary_ranks.contains(&primary_rank) {
                             distinct_primary_ranks.push(primary_rank.clone());
                         }
@@ -11304,8 +11299,11 @@ mod tests {
             );
 
             assert!(
-                summary.compact_survivor_sketch.is_none(),
-                "multiple bar-clearing primary ranks should keep survivor sketch fallback disabled"
+                summary
+                    .compact_survivor_sketch
+                    .as_ref()
+                    .is_some_and(|sketch| sketch.survivors.len() >= distinct_primary_ranks.len()),
+                "multiple bar-clearing primary ranks should now keep an incumbent-relevant survivor sketch"
             );
             assert_eq!(summary.best_accept_primary_rank, direct_best_primary_rank);
             assert_eq!(summary.best_accept_rank, direct_best_accept_rank);
@@ -11318,7 +11316,7 @@ mod tests {
     }
 
     #[test]
-    fn claim_materialization_falls_back_to_direct_path_when_survivor_sketch_is_unavailable() {
+    fn claim_materialization_reuses_cached_survivor_sketch_for_multiple_primary_ranks() {
         for step_index in 4..=15 {
             let (library, history, nu_history) = reference_history_until(step_index - 1);
             let admissibility = strict_admissibility_for_mode(
@@ -11357,6 +11355,93 @@ mod tests {
                 &clause_catalog,
                 &mut cache,
             );
+            let terminal_clauses = super::terminal_prefix_clause_candidates(
+                step_index,
+                &library,
+                admissibility,
+                &signature,
+                work_item.next_clauses(&clause_catalog),
+                work_item.next_clause_connectivity_facts(&clause_catalog),
+                work_item.next_clause_nu_facts(&clause_catalog),
+                &mut cache,
+                None,
+            );
+            let mut distinct_primary_ranks = Vec::new();
+            match &terminal_clauses {
+                super::TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(clauses) => {
+                    for clause in clauses {
+                        let mut telescope = prefix.clone();
+                        telescope.clauses.push(clause.clause.clone());
+                        if !passes_connectivity(&library, &telescope) {
+                            continue;
+                        }
+                        let exact_nu =
+                            u16::try_from(structural_nu(&telescope, &library, &nu_history).total)
+                                .expect("nu exceeded u16");
+                        let clause_kappa_used =
+                            u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                        let Some(primary_rank) = super::terminal_prefix_primary_rank(
+                            objective_bar,
+                            exact_nu,
+                            clause_kappa_used,
+                        ) else {
+                            continue;
+                        };
+                        if !distinct_primary_ranks.contains(&primary_rank) {
+                            distinct_primary_ranks.push(primary_rank);
+                        }
+                    }
+                }
+                super::TerminalPrefixClauseCandidates::General(clauses) => {
+                    for clause in clauses {
+                        let mut telescope = prefix.clone();
+                        telescope.clauses.push(clause.clause.clone());
+                        if !passes_connectivity(&library, &telescope) {
+                            continue;
+                        }
+                        let admissibility_decision = clause
+                            .cached_admissibility_decision
+                            .clone()
+                            .unwrap_or_else(|| {
+                                assess_strict_admissibility(
+                                    step_index,
+                                    &library,
+                                    &telescope,
+                                    admissibility,
+                                )
+                            });
+                        if !admissibility_decision.is_admitted()
+                            || !super::terminal_completion_can_compete_for_acceptance(
+                                &signature,
+                                admissibility,
+                                &cache,
+                                &admissibility_decision,
+                            )
+                        {
+                            continue;
+                        }
+                        let exact_nu =
+                            u16::try_from(structural_nu(&telescope, &library, &nu_history).total)
+                                .expect("nu exceeded u16");
+                        let clause_kappa_used =
+                            u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                        let Some(primary_rank) = super::terminal_prefix_primary_rank(
+                            objective_bar,
+                            exact_nu,
+                            clause_kappa_used,
+                        ) else {
+                            continue;
+                        };
+                        if !distinct_primary_ranks.contains(&primary_rank) {
+                            distinct_primary_ranks.push(primary_rank);
+                        }
+                    }
+                }
+            }
+            if distinct_primary_ranks.len() <= 1 {
+                continue;
+            }
+
             let summary = super::compute_terminal_prefix_completion_summary_from_candidates(
                 step_index,
                 &library,
@@ -11366,29 +11451,20 @@ mod tests {
                 &signature,
                 &prefix,
                 super::TerminalPrefixSummaryPayload::Compact,
-                super::terminal_prefix_clause_candidates(
-                    step_index,
-                    &library,
-                    admissibility,
-                    &signature,
-                    work_item.next_clauses(&clause_catalog),
-                    work_item.next_clause_connectivity_facts(&clause_catalog),
-                    work_item.next_clause_nu_facts(&clause_catalog),
-                    &mut cache,
-                    None,
-                ),
+                terminal_clauses,
                 None,
                 &mut cache,
                 None,
                 None,
             );
-            if summary.compact_survivor_sketch.is_some() {
-                continue;
-            }
+            assert!(
+                summary.compact_survivor_sketch.is_some(),
+                "multiple primary ranks should now keep a cached survivor sketch"
+            );
 
-            let mut fallback_discovery = super::RealisticShadowDiscovery::default();
+            let mut sketch_discovery = super::RealisticShadowDiscovery::default();
             let mut direct_discovery = super::RealisticShadowDiscovery::default();
-            assert!(fallback_discovery.prefix_legality_cache.insert_root(
+            assert!(sketch_discovery.prefix_legality_cache.insert_root(
                 signature.clone(),
                 target_kappa,
                 &library,
@@ -11405,11 +11481,11 @@ mod tests {
                 LateFamilySurface::ClaimGeneric
             ));
 
-            fallback_discovery
+            sketch_discovery
                 .prefix_legality_cache
                 .store_terminal_prefix_completion_summary(signature.clone(), summary);
 
-            let fallback_group = super::materialize_terminal_prefix_group(
+            let sketch_group = super::materialize_terminal_prefix_group(
                 step_index,
                 &library,
                 admissibility,
@@ -11420,9 +11496,9 @@ mod tests {
                 work_item.next_clauses(&clause_catalog),
                 work_item.next_clause_connectivity_facts(&clause_catalog),
                 work_item.next_clause_nu_facts(&clause_catalog),
-                &mut fallback_discovery,
+                &mut sketch_discovery,
             )
-            .expect("fallback materialization should succeed");
+            .expect("sketch materialization should succeed");
             let direct_group = super::materialize_terminal_prefix_group_compact(
                 step_index,
                 &library,
@@ -11438,47 +11514,45 @@ mod tests {
             )
             .expect("direct compact materialization should succeed");
 
-            let fallback_candidates = fallback_group
+            let sketch_candidates = sketch_group
                 .candidates
                 .iter()
                 .map(|candidate| (candidate.telescope.clone(), candidate.accept_rank.clone()))
                 .collect::<Vec<_>>();
-            let direct_candidates = direct_group
+            let direct_survivors = direct_group
                 .candidates
                 .iter()
+                .filter(|candidate| candidate.accept_rank.is_some())
                 .map(|candidate| (candidate.telescope.clone(), candidate.accept_rank.clone()))
                 .collect::<Vec<_>>();
 
             assert_eq!(
-                fallback_group.generated_terminal_candidates,
+                sketch_group.generated_terminal_candidates,
                 direct_group.generated_terminal_candidates
             );
             assert_eq!(
-                fallback_group.admissible_terminal_candidates,
+                sketch_group.admissible_terminal_candidates,
                 direct_group.admissible_terminal_candidates
             );
-            assert_eq!(fallback_group.bound, direct_group.bound);
+            assert_eq!(sketch_group.bound, direct_group.bound);
+            assert_eq!(sketch_group.best_accept_rank, direct_group.best_accept_rank);
+            assert_eq!(sketch_candidates, direct_survivors);
             assert_eq!(
-                fallback_group.best_accept_rank,
-                direct_group.best_accept_rank
-            );
-            assert_eq!(fallback_candidates, direct_candidates);
-            assert_eq!(
-                fallback_discovery
+                sketch_discovery
                     .remaining_one_telemetry
                     .remaining_one_materialized_from_cached_summary,
-                0
+                1
             );
             assert_eq!(
-                fallback_discovery
+                sketch_discovery
                     .remaining_one_telemetry
                     .remaining_one_materialized_compact_direct,
-                1
+                0
             );
             return;
         }
 
-        panic!("expected at least one claim remaining-one surface without a survivor sketch");
+        panic!("expected at least one claim remaining-one surface with multiple primary ranks");
     }
 
     #[test]
