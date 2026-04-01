@@ -8,123 +8,52 @@ It lists only work that is still open.
 ## Current Open Read
 
 - The claim lane still does not have a signoff-ready full-profile bundle.
-- The current full-profile runtime reference is
-  `runs/codex-claim-release-full-aggregation-open-band-stage-timing-v1`.
 - The current short step-`4` baseline is
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
-- The most recent informative late-surface diagnostic is
-  `runs/codex-claim-release-step4-kernel-late-profile-v1`.
-- The latest intended-profile follow-up preserved the honest retained-prefix
-  shape on stored evidence, re-earned the later reopens, and then moved the
-  stored step-`4` wall farther:
-  - `39 groups / 144845 candidates` at `24/43/44/54`
-  - `40 groups / 147639 candidates` at `74/76`
-  - `41 groups / 154842 candidates` from `140` through `331`
-  - `42 groups / 157636 candidates` at `332/333/334`
-  - `43 groups / 160430 candidates` through the stored `484` read
-- That follow-up materially improved every decisive stored matched checkpoint
-  through the previous stored `454` wall:
-  - `24`: `327917 / 325321` instead of `385100 / 382267`
-  - `43`: `591083 / 587479` instead of `693470 / 689512`
-  - `44`: `603570 / 599913` instead of `708134 / 704116`
-  - `54`: `743997 / 739797` instead of `872387 / 867757`
-  - `74`: `1023572 / 1018283` instead of `1200035 / 1194139`
-  - `76`: `1057864 / 1052464` instead of `1239059 / 1233043`
-  - `140`: `2014043 / 2005230` instead of `2349156 / 2339322`
-  - `163`: `2334208 / 2324213` instead of `2722673 / 2711471`
-  - `228`: `3287422 / 3274060` instead of `3837038 / 3821952`
-  - `229`: `3304737 / 3291324` instead of `3856643 / 3841498`
-  - `332`: `4885155 / 4866258` instead of `5704569 / 5683113`
-  - `335`: `4931017 / 4911930` instead of `5758074 / 5736396`
-  - `408`: `6031554 / 6007913` instead of `7014570 / 6988332`
-  - `437`: `6494645 / 6469171` instead of `7548400 / 7520336`
-  - `454`: `6770742 / 6744132` instead of `7860534 / 7831399`
-  These pairs are `elapsed_millis / terminal_summary_build_millis`.
-- At `140/163/228/229/332/335/408/454/484`, stored step-live telemetry still
-  shows aggregation first, connectivity second, exact `nu` third, and
-  terminal clause-filter handoff tiny:
-  - `140`: aggregation `= 763398133 us`, connectivity `= 557557788 us`,
-    exact `nu` `= 511854832 us`, handoff `= 25988115 us`
-  - `163`: aggregation `= 877573120 us`, connectivity `= 651431110 us`,
-    exact `nu` `= 594142794 us`, handoff `= 29787220 us`
-  - `228`: aggregation `= 1222738289 us`, connectivity `= 916833230 us`,
-    exact `nu` `= 851890919 us`, handoff `= 35116478 us`
-  - `229`: aggregation `= 1231827955 us`, connectivity `= 920978899 us`,
-    exact `nu` `= 854659192 us`, handoff `= 35324213 us`
-  - `332`: aggregation `= 1817428261 us`, connectivity `= 1345141843 us`,
-    exact `nu` `= 1288881640 us`, handoff `= 46243052 us`
-  - `335`: aggregation `= 1833436572 us`, connectivity `= 1357602031 us`,
-    exact `nu` `= 1302219954 us`, handoff `= 46350411 us`
-  - `408`: aggregation `= 2218628958 us`, connectivity `= 1675112606 us`,
-    exact `nu` `= 1596901898 us`, handoff `= 54702325 us`
-  - `454`: aggregation `= 2480479553 us`, connectivity `= 1875448296 us`,
-    exact `nu` `= 1808063671 us`, handoff `= 58420696 us`
-  - `484`: aggregation `= 2641777960 us`, connectivity `= 2010145015 us`,
-    exact `nu` `= 1932111468 us`, handoff `= 65158646 us`
-  - `terminal_summary_admissibility_checks = 0` and
-    `terminal_summary_fallback_connectivity_checks = 0` through the stored
-    `484` read
-- Inference from the matched checkpoint totals:
-  the new winner's main gain comes from shrinking the previously unattributed
-  summary-build tail rather than from lower measured aggregation itself.
-- Observed RSS reached `1581830144` bytes by the stored `484` checkpoint.
-  That is slightly above the previous runtime reference on the matched later
-  surface, but it still stays well below the old allocator-failure band, so
-  the intended profile is still throughput-bound rather than allocator-bound
-  on the current winner.
-- That rerun was manually stopped after the decisive stored `484` checkpoint.
-  Because the stop was external during step `4`, `reports/latest.txt` still
-  reflects completed step `3`, `run.json` still says `status = "running"`,
-  and `reports/steps/step-05-live.ndjson` is absent; the authoritative
-  evidence for that full-profile reference lives in
-  `reports/steps/step-04-live.ndjson`.
-- The replay harness layer is now landed end-to-end:
-  the repo now stores deterministic plateau fixtures for
-  `39/144845`, `40/147639`, `41/154842`, `42/157636`, and `43/160430`, and
-  the refreshed release benchmark now reads `3326`, `4564`, `2782`, `2553`,
-  and `2085 us` average on those five retained surfaces.
-- The first harness-backed facts-only hit-path slice is now landed in code:
-  the claim remaining-one hot loop can now stay on clause refs plus
-  predecoded connectivity facts plus predecoded structural-`nu` facts through
-  bound checks, summary build, compact materialization, clause-catalog reuse,
-  filtered active-window clones, and replay fixtures.
-- That local replay read is mixed but net-positive on the stored corpus:
-  `39/40` regressed slightly, `41/42/43` improved clearly, and the aggregate
-  five-surface total fell from `155131 us` to `153124 us` while keeping
-  compact-summary parity.
-- The next honest move is therefore not another short step-`4` micro-slice,
-  another code-only exploration pass, or another connectivity-first retry. It
-  is the intended-profile rerun on the landed facts-only slice so the
-  post-`140` / post-`228` wall can be judged from stored step-`4` evidence.
-- A tiny survivor sketch and a dense `lib_refs` membership set remain
-  reasonable harness-backed follow-ups if the first facts-only slice still
-  leaves too much second-pass duplication. Deterministic batched parallel
-  reduction stays gated behind the harness and parity checks.
+- The current full-profile speed winner is
+  `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`.
+- The current deeper continuation target is
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
+- The current winner preserved the honest retained-prefix story through the
+  stored `576` read, beat `prefix-nu-context-v2` at matched later checkpoints
+  through `533`, and still did not reach step `5`.
+- The decisive later surfaces are now no-miss surfaces on stored evidence:
+  `terminal_summary_admissibility_checks = 0` and
+  `terminal_summary_fallback_connectivity_checks = 0`.
+- The lane is still blocked by step-`4` throughput, not by the old allocator
+  failure story.
 
-## 1. Runtime Completion
+## 1. Runtime Improvement Loop
 
-- [x] Build a deterministic replay harness for retained plateau prefixes from
-      stored `step-04-live.ndjson` evidence.
-- [x] Persist deterministic plateau fixtures for `39/144845`, `40/147639`,
-      `41/154842`, `42/157636`, and `43/160430`.
-- [x] Benchmark only
-      `compute_terminal_prefix_completion_summary_from_candidates(...)` on
-      those stored fixtures before another expensive later-surface slice lands.
-- [x] Use that harness to validate the next facts-only hot-loop slice before
-      judging it from another multi-hour full-profile rerun.
-- [ ] Keep deterministic batched parallel reduction gated behind harness-backed
-      parity evidence.
-- [x] Land one narrow step-`4` connectivity-side or aggregation-side
-      throughput patch that earns keep on stored telemetry.
-- [x] Re-earn one release `until_step = 4` rerun and confirm that the measured
-      summary-side telemetry improves without weakening retained prefix-cache
-      shape.
-- [x] Re-earn one full `desktop_claim_shadow_1h` rerun on the winning binary.
+- [ ] Land prefix-local interval pruning on the local continuation cone using
+      `SingleClauseStructuralNuContext`,
+      `TerminalClauseNuFacts`, and
+      `structural_nu_single_clause_upper_bound`.
+- [ ] Make `TerminalClauseNuFacts` a mandatory clause-catalog sidecar on the
+      hot path and keep `structural_nu_with_clause(...)` off the winning path.
+- [ ] Split the step-`4` remaining-one kernel into a true no-miss hit-path
+      plateau kernel and a general fallback kernel.
+- [ ] Replace `lib_refs` tree membership on the hot path with the intended
+      tiered representation:
+      inline small array, dense bitset after threshold, boxed sorted slice
+      only where serialization or debug parity needs it.
+- [ ] Add a tiny survivor sketch only if second-pass duplication is still
+      visible after the facts-only winner.
+- [ ] Keep deterministic batched parallel reduction gated behind replay-harness
+      parity evidence and do not open it first.
+- [ ] Require every serious runtime slice to prove replay-harness parity plus
+      either fewer exact-`nu` evaluations or lower measured aggregation time
+      before another full-profile rerun.
+- [ ] After the next winning code slice, re-earn `140/163` on the intended
+      profile.
+- [ ] After that, re-earn `332/335` on the intended profile.
+- [ ] After that, re-earn `408/437/454/484` on the intended profile.
+- [ ] Move materially past the current winner's stored `576` wall.
+- [ ] Move materially past the deeper continuation target's stored `1038` wall
+      or reach step `5`.
 - [ ] Finish one intended-profile claim run through step `15`.
-- [x] Confirm from stored artifacts that the run no longer depends on the old
-      allocator-failure story.
-- [ ] Explain the observed RSS versus governor-accounted RSS behavior honestly
-      from stored step artifacts.
+- [ ] Explain observed RSS versus governor-accounted RSS honestly from stored
+      step artifacts.
 
 Done when:
 
