@@ -19,14 +19,16 @@ gate.
   `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`.
 - The previous deeper continuation target was
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
-- The newest landed code slice is the prefix-local continuation-cone scoring
-  pass on the remaining-one hot path.
-  It now uses
-  `SingleClauseStructuralNuContext` plus
+- The newest landed code slice now makes
   `TerminalClauseNuFacts`
-  to make more bar-clearability and primary-overshoot decisions before scratch
-  telescope assembly whenever connectivity needs no fallback and admissibility
-  is already known.
+  mandatory on the winning remaining-one hot path.
+  Filtered online work items and terminal-prefix candidates keep the aligned
+  clause-catalog sidecar through clone/filter boundaries, so prefix-local
+  remaining-one scoring stays on
+  `structural_nu_with_clause_facts(...)`
+  and no longer falls back to
+  `structural_nu_with_clause(...)`
+  on that path.
 
 ## Current Run To Beat
 
@@ -81,11 +83,11 @@ gate.
 
 ## New Local Read
 
-- The first continuation-cone slice is now landed in code.
+- The mandatory-`TerminalClauseNuFacts` slice is now landed in code.
   Remaining-one exact bound checks, compact summary build, and compact
-  materialization now fast-path prefix-local exact scoring whenever
-  connectivity needs no fallback and admissibility is already known from the
-  prefix-local surface.
+  materialization now require the aligned clause-catalog `nu` facts on the
+  winning path, so the prefix-local scoring fast path stays on
+  `structural_nu_with_clause_facts(...)`.
 - Claim-focused parity checks stayed green after the slice:
   - `claim_remaining_one_algebraic_ceiling_keeps_reference_step_four_winner_prefix`
   - `claim_terminal_prefix_completion_summary_matches_direct_exact_assessment`
@@ -93,16 +95,35 @@ gate.
   - `claim_hoisted_terminal_competition_gate_matches_direct_check`
   - `claim_materialization_reopens_after_cached_pruning_summary`
 - The checked-in release replay benchmark on the stored plateau fixtures is now
-  `150440 us` total across the five stored surfaces, down from `163951 us`.
+  `147912 us` total across the five stored surfaces, down from `150440 us`.
   Surface deltas versus the prior checked-in read:
-  - `24`: `34319 -> 29887`
-  - `74`: `51575 -> 58992`
-  - `140`: `27139 -> 20863`
-  - `332`: `28566 -> 19680`
-  - `335`: `22352 -> 21018`
+  - `24`: `29887 -> 29557`
+  - `74`: `58992 -> 54615`
+  - `140`: `20863 -> 21011`
+  - `332`: `19680 -> 20884`
+  - `335`: `21018 -> 21845`
 - The replay read is therefore a real overall local improvement, but not a
-  uniform per-surface win yet because `40 groups / 147639 candidates`
-  regressed.
+  uniform per-surface win yet because the later stored surfaces regressed.
+- The capped intended-profile contender
+  `runs/codex-claim-release-full-aggregation-open-band-mandatory-terminal-nu-facts-v1`
+  was manually stopped at the `20` minute cap during step `4`.
+  `run.json` still says `status = "running"` and
+  `reports/latest.txt` still reflects completed step `3`;
+  the authoritative evidence is
+  `reports/steps/step-04-live.ndjson`.
+- Its nearest stored read to `20` minutes was:
+  - `elapsed_millis = 1189920`
+  - `prefix_states_explored = 122`
+  - `prefix_cache_groups = 40`
+  - `prefix_cache_candidates = 109690`
+  - `frontier_queue_len = 2653`
+  - RSS `= 482144256` bytes
+  - `terminal_summary_build_millis = 1182072`
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- That read kept the retained-prefix story honest and lowered RSS versus the
+  stored `20` minute baseline, but it is not a short-loop win because it
+  explored `122` prefixes instead of the baseline `123`.
 
 ## What Stays Landed
 
@@ -114,7 +135,8 @@ gate.
 - the shared terminal-clause connectivity-facts sidecar on the clause catalog
 - the shared terminal-clause structural-`nu` facts sidecar threaded through
   the clause catalog, filtered active-window clones, remaining-one
-  bound/summary/materialization, and replay fixtures
+  bound/summary/materialization, and replay fixtures, now mandatory on the
+  winning remaining-one path
 - the prefix-local continuation-cone score fast path on remaining-one exact
   bound checks, compact summary build, and compact materialization when
   fallback connectivity is not needed
@@ -138,6 +160,9 @@ gate.
   `terminal_summary_admissibility_checks = 0` and
   `terminal_summary_fallback_connectivity_checks = 0`.
 - Aggregation is still the lead measured bucket.
+- The latest mandatory-facts contender preserved the same `40 groups / 109690`
+  retained-prefix surface and improved overall replay time, but it still
+  missed the short-loop target by one explored prefix at the `20` minute gate.
 - The optimization loop now needs shorter, more repeatable intended-profile
   reads.
   We no longer expect the very next slice to beat the full `1095`-prefix stop.
@@ -148,15 +173,10 @@ gate.
 
 - Keep `prefix-local-score-v1` as the current run to beat.
 - Use a hard 20-minute max intended-profile rerun for the next attempts.
-- The next code slice is still:
-  make `TerminalClauseNuFacts` a mandatory clause-catalog sidecar on every
-  winning-path remaining-one evaluation so
-  `structural_nu_with_clause_facts(...)`
-  stays on the hot path and
-  `structural_nu_with_clause(...)`
-  stays off it.
-- After that, split the explicit no-miss hit-path plateau kernel from the
-  general fallback kernel.
+- The next code slice is now:
+  split the explicit no-miss hit-path plateau kernel from the general fallback
+  kernel while keeping the now-mandatory `TerminalClauseNuFacts` sidecar on
+  the winning path.
 - Keep `lib_refs` compression and any tiny survivor sketch work after those two
   slices, not before.
 - Only reopen longer full-profile continuation reads after repeated 20-minute
@@ -166,8 +186,8 @@ gate.
 
 1. Keep `prefix-local-score-v1` frozen as the current run to beat.
 2. Reopen code work with the next slice:
-   make `TerminalClauseNuFacts` mandatory on the winning remaining-one hot
-   path.
+   split the step-`4` remaining-one kernel into an explicit no-miss hit-path
+   plateau kernel and a general fallback kernel.
 3. After that slice:
    - rerun only the claim-focused tests touched by the change
    - rerun the replay harness in release mode

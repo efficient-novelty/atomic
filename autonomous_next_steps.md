@@ -24,34 +24,39 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 ## Current Read
 
-- The first continuation-cone slice is now landed on top of the older winner.
-  Remaining-one exact bound checks, compact summary build, and compact
-  materialization now use
-  `SingleClauseStructuralNuContext` plus
-  `TerminalClauseNuFacts`
-  to make more bar-clearability and primary-overshoot decisions before scratch
-  telescope assembly whenever connectivity needs no fallback and admissibility
-  is already known from the local prefix surface.
+- The mandatory-`TerminalClauseNuFacts` slice is now landed on top of the older
+  winner.
+  Filtered online work items and terminal-prefix candidates now keep aligned
+  clause-catalog `nu` facts on the winning remaining-one path, so
+  `structural_nu_with_clause_facts(...)`
+  stays on that path and
+  `structural_nu_with_clause(...)`
+  stays off it.
 - The release replay harness stayed parity-clean on the stored plateau
   fixtures.
 - The checked-in five-surface replay benchmark improved overall from
-  `163951 us` to `150440 us`.
-  It improved surfaces `24`, `140`, `332`, and `335`, but regressed surface
-  `74/147639`, so the slice is a real local win overall, not a uniform win at
-  every stored surface.
-- The full intended-profile rerun
-  `prefix-local-score-v1`
-  was then manually stopped during step `4`.
+  `150440 us` to `147912 us`.
+  It improved surfaces `24` and `74`, but regressed surfaces `140`, `332`, and
+  `335`, so the slice is a real local win overall, not a uniform win at every
+  stored surface.
+- The capped intended-profile contender
+  `runs/codex-claim-release-full-aggregation-open-band-mandatory-terminal-nu-facts-v1`
+  was manually stopped during step `4` at the `20` minute cap.
   The authoritative stored read is
   `reports/steps/step-04-live.ndjson`.
-- That run materially passed the old stored `576` wall and the old stored
-  `1038` wall, then stopped at:
-  - `prefix_states_explored = 1095`
-  - `prefix_cache_groups = 43`
-  - `prefix_cache_candidates = 122481`
-  - `elapsed_millis = 10815742`
-  - `terminal_summary_build_millis = 10751697`
-  - RSS `= 3175555072` bytes
+- Its nearest stored checkpoint to `20` minutes was:
+  - `elapsed_millis = 1189920`
+  - `prefix_states_explored = 122`
+  - `prefix_cache_groups = 40`
+  - `prefix_cache_candidates = 109690`
+  - `frontier_queue_len = 2653`
+  - `terminal_summary_build_millis = 1182072`
+  - RSS `= 482144256` bytes
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- That contender kept the same retained-prefix surface and lowered RSS versus
+  the stored `20` minute target, but it did not beat the current target
+  honestly because it explored `122` prefixes instead of `123`.
 - The next loop is no longer "let every contender run as long as possible."
   The next loop is now a short intended-profile optimization loop with a hard
   `20` minute cap.
@@ -66,24 +71,19 @@ The next move is the next code slice on top of
 
 ### 2. Implement The Next Slice In This Order
 
-1. Make `TerminalClauseNuFacts` a mandatory clause-catalog sidecar on every
-   winning-path remaining-one evaluation.
-   Keep `structural_nu_with_clause_facts(...)` on the hot path and keep
-   `structural_nu_with_clause(...)` off it.
-
-2. After that slice lands, split the step-`4` remaining-one kernel into two
+1. Split the step-`4` remaining-one kernel into two
    kernels.
    - true no-miss hit-path plateau kernel
    - general fallback kernel
 
-3. After that, compress `lib_refs` inside
+2. After that, compress `lib_refs` inside
    `SingleClauseStructuralNuContext`.
    Preferred order:
    - inline small array for the common case
    - dense bitset after a threshold
    - sorted boxed slices only where serialization or debug parity needs them
 
-4. If second-pass duplication still matters after those slices, prefer a tiny
+3. If second-pass duplication still matters after those slices, prefer a tiny
    survivor sketch.
    Carry only the clause refs and facts needed for the best primary rank and
    tie-break-relevant survivors.

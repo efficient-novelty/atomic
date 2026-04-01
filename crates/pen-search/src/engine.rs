@@ -1093,12 +1093,16 @@ impl OnlinePrefixWorkItem {
     fn next_clause_nu_facts<'a>(
         &'a self,
         clause_catalog: &'a ClauseCatalog,
-    ) -> Option<&'a [TerminalClauseNuFacts]> {
-        self.filtered_next_clause_nu_facts.as_deref().or_else(|| {
-            self.filtered_next_clauses
-                .is_none()
-                .then(|| clause_catalog.terminal_nu_facts_at(self.prefix_telescope.clauses.len()))
-        })
+    ) -> &'a [TerminalClauseNuFacts] {
+        self.filtered_next_clause_nu_facts
+            .as_deref()
+            .unwrap_or_else(|| {
+                assert!(
+                    self.filtered_next_clauses.is_none(),
+                    "filtered terminal clauses should carry aligned nu facts"
+                );
+                clause_catalog.terminal_nu_facts_at(self.prefix_telescope.clauses.len())
+            })
     }
 }
 
@@ -5487,7 +5491,7 @@ fn exact_terminal_prefix_bound_decision(
     prefix_telescope: &Telescope,
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
     filtered_last_clause_connectivity_facts: Option<&[TerminalClauseConnectivityFacts]>,
-    filtered_last_clause_nu_facts: Option<&[TerminalClauseNuFacts]>,
+    filtered_last_clause_nu_facts: &[TerminalClauseNuFacts],
     prefix_legality_cache: &mut PrefixLegalityCache,
     budget: &mut usize,
     incumbent_rank: Option<&AcceptRank>,
@@ -5635,7 +5639,6 @@ fn exact_terminal_prefix_bound_decision(
 
                 let exact_nu = single_clause_structural_nu_total(
                     telescope,
-                    terminal_clause.clause,
                     terminal_clause.nu_facts,
                     single_clause_nu_context.as_ref(),
                     library,
@@ -5704,7 +5707,6 @@ fn exact_terminal_prefix_bound_decision(
 
                 let exact_nu = single_clause_structural_nu_total(
                     telescope,
-                    terminal_clause.clause,
                     terminal_clause.nu_facts,
                     single_clause_nu_context.as_ref(),
                     library,
@@ -5746,7 +5748,7 @@ struct TerminalPrefixCandidate<'a> {
     clause: &'a pen_core::clause::ClauseRec,
     cached_admissibility_decision: Option<AdmissibilityDecision>,
     connectivity_facts: Option<&'a TerminalClauseConnectivityFacts>,
-    nu_facts: Option<&'a TerminalClauseNuFacts>,
+    nu_facts: &'a TerminalClauseNuFacts,
 }
 
 #[derive(Clone, Debug)]
@@ -5771,7 +5773,7 @@ fn terminal_prefix_clause_candidates<'a>(
     prefix_signature: &PrefixSignature,
     filtered_last_clause_options: &'a [pen_core::clause::ClauseRec],
     filtered_last_clause_connectivity_facts: Option<&'a [TerminalClauseConnectivityFacts]>,
-    filtered_last_clause_nu_facts: Option<&'a [TerminalClauseNuFacts]>,
+    filtered_last_clause_nu_facts: &'a [TerminalClauseNuFacts],
     prefix_legality_cache: &mut PrefixLegalityCache,
     remaining_one_telemetry: Option<&mut RemainingOneTelemetry>,
 ) -> TerminalPrefixClauseCandidates<'a> {
@@ -5793,16 +5795,18 @@ fn terminal_prefix_clause_candidates<'a>(
     fn find_nu_fact<'a>(
         clause: &pen_core::clause::ClauseRec,
         clauses: &'a [pen_core::clause::ClauseRec],
-        facts: Option<&'a [TerminalClauseNuFacts]>,
-    ) -> Option<&'a TerminalClauseNuFacts> {
-        let facts = facts?;
-        if facts.len() != clauses.len() {
-            return None;
-        }
+        facts: &'a [TerminalClauseNuFacts],
+    ) -> &'a TerminalClauseNuFacts {
+        assert_eq!(
+            facts.len(),
+            clauses.len(),
+            "terminal nu facts should align with terminal clauses"
+        );
         clauses
             .iter()
             .zip(facts.iter())
             .find_map(|(candidate, fact)| std::ptr::eq(candidate, clause).then_some(fact))
+            .expect("terminal nu facts should align with filtered terminal clause")
     }
 
     let clause_filter_started = Instant::now();
@@ -5873,7 +5877,8 @@ fn terminal_prefix_clause_candidates<'a>(
                             connectivity_facts: filtered_last_clause_connectivity_facts
                                 .and_then(|facts| facts.get(index)),
                             nu_facts: filtered_last_clause_nu_facts
-                                .and_then(|facts| facts.get(index)),
+                                .get(index)
+                                .expect("terminal nu facts should align with terminal clauses"),
                         })
                         .collect(),
                 )
@@ -5909,17 +5914,16 @@ fn load_terminal_clause_into_scratch<'a>(
 
 fn single_clause_structural_nu_total(
     telescope: &Telescope,
-    clause: &pen_core::clause::ClauseRec,
-    clause_nu_facts: Option<&TerminalClauseNuFacts>,
+    clause_nu_facts: &TerminalClauseNuFacts,
     single_clause_nu_context: Option<&SingleClauseStructuralNuContext>,
     library: &Library,
     nu_history: &[(u32, u32)],
 ) -> u32 {
     single_clause_nu_context
         .map(|context| {
-            clause_nu_facts
-                .map(|facts| context.structural_nu_with_clause_facts(facts).total)
-                .unwrap_or_else(|| context.structural_nu_with_clause(clause).total)
+            context
+                .structural_nu_with_clause_facts(clause_nu_facts)
+                .total
         })
         .unwrap_or_else(|| structural_nu(telescope, library, nu_history).total)
 }
@@ -5936,12 +5940,12 @@ fn prefix_local_terminal_clause_score(
     clause_kappa_used: u16,
     prefix_bit_cost: u32,
     clause: &pen_core::clause::ClauseRec,
-    clause_nu_facts: Option<&TerminalClauseNuFacts>,
+    clause_nu_facts: &TerminalClauseNuFacts,
     single_clause_nu_context: Option<&SingleClauseStructuralNuContext>,
 ) -> Option<PrefixLocalTerminalClauseScore> {
     let exact_nu = u16::try_from(
         single_clause_nu_context?
-            .structural_nu_with_clause_facts(clause_nu_facts?)
+            .structural_nu_with_clause_facts(clause_nu_facts)
             .total,
     )
     .expect("nu exceeded u16");
@@ -6361,7 +6365,6 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                 let exact_nu_started = Instant::now();
                 let exact_nu = u16::try_from(single_clause_structural_nu_total(
                     telescope,
-                    terminal_clause.clause,
                     terminal_clause.nu_facts,
                     single_clause_nu_context.as_ref(),
                     library,
@@ -6461,7 +6464,6 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     let exact_nu_started = Instant::now();
                     let exact_nu = u16::try_from(single_clause_structural_nu_total(
                         telescope,
-                        terminal_clause.clause,
                         terminal_clause.nu_facts,
                         single_clause_nu_context.as_ref(),
                         library,
@@ -6613,7 +6615,6 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                         exact_nu_started.duration_since(after_aggregation);
                     let exact_nu = u16::try_from(single_clause_structural_nu_total(
                         telescope,
-                        terminal_clause.clause,
                         terminal_clause.nu_facts,
                         single_clause_nu_context.as_ref(),
                         library,
@@ -6708,7 +6709,7 @@ fn materialize_remaining_one_prefix_group(
     prefix_telescope: &Telescope,
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
     filtered_last_clause_connectivity_facts: Option<&[TerminalClauseConnectivityFacts]>,
-    filtered_last_clause_nu_facts: Option<&[TerminalClauseNuFacts]>,
+    filtered_last_clause_nu_facts: &[TerminalClauseNuFacts],
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<MaterializedTerminalPrefixGroup> {
     let materialize_started = Instant::now();
@@ -6784,7 +6785,7 @@ fn claim_try_summary_prune_before_materialization(
     clause_kappa: u16,
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
     filtered_last_clause_connectivity_facts: Option<&[TerminalClauseConnectivityFacts]>,
-    filtered_last_clause_nu_facts: Option<&[TerminalClauseNuFacts]>,
+    filtered_last_clause_nu_facts: &[TerminalClauseNuFacts],
     discovery: &mut RealisticShadowDiscovery,
 ) -> bool {
     if !should_compact_terminal_prefix_group_candidates(admissibility.mode) {
@@ -6935,7 +6936,7 @@ fn materialize_terminal_prefix_group(
     prefix_telescope: &Telescope,
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
     filtered_last_clause_connectivity_facts: Option<&[TerminalClauseConnectivityFacts]>,
-    filtered_last_clause_nu_facts: Option<&[TerminalClauseNuFacts]>,
+    filtered_last_clause_nu_facts: &[TerminalClauseNuFacts],
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<MaterializedTerminalPrefixGroup> {
     if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
@@ -7096,7 +7097,7 @@ fn materialize_terminal_prefix_group_compact(
     prefix_telescope: &Telescope,
     filtered_last_clause_options: &[pen_core::clause::ClauseRec],
     filtered_last_clause_connectivity_facts: Option<&[TerminalClauseConnectivityFacts]>,
-    filtered_last_clause_nu_facts: Option<&[TerminalClauseNuFacts]>,
+    filtered_last_clause_nu_facts: &[TerminalClauseNuFacts],
     discovery: &mut RealisticShadowDiscovery,
 ) -> Result<MaterializedTerminalPrefixGroup> {
     let terminal_clauses = terminal_prefix_clause_candidates(
@@ -7251,7 +7252,6 @@ fn materialize_terminal_prefix_group_compact(
                 admitted_terminal_candidates += 1;
                 let exact_nu = u16::try_from(single_clause_structural_nu_total(
                     telescope,
-                    terminal_clause.clause,
                     terminal_clause.nu_facts,
                     single_clause_nu_context.as_ref(),
                     library,
@@ -7390,7 +7390,6 @@ fn materialize_terminal_prefix_group_compact(
                 admitted_terminal_candidates += 1;
                 let exact_nu = u16::try_from(single_clause_structural_nu_total(
                     telescope,
-                    terminal_clause.clause,
                     terminal_clause.nu_facts,
                     single_clause_nu_context.as_ref(),
                     library,
@@ -8253,7 +8252,7 @@ mod tests {
     use pen_eval::{
         bar::{DiscoveryRecord, compute_bar},
         minimality::analyze_semantic_minimality,
-        nu::structural_nu,
+        nu::{TerminalClauseNuFacts, structural_nu},
     };
     use pen_type::{
         admissibility::{
@@ -8330,6 +8329,12 @@ mod tests {
         let prefix_telescope =
             Telescope::new(vec![ClauseRec::new(ClauseRole::Formation, Expr::Univ)]);
         let signature = PrefixSignature::new(1, &Library::default(), &prefix_telescope);
+        let filtered_next_clauses =
+            vec![ClauseRec::new(ClauseRole::Introduction, Expr::Var(1)); next_clause_count];
+        let filtered_next_clause_nu_facts = filtered_next_clauses
+            .iter()
+            .map(TerminalClauseNuFacts::from_clause)
+            .collect();
         OnlinePrefixWorkItem {
             clause_kappa: 4,
             prefix_telescope,
@@ -8338,12 +8343,9 @@ mod tests {
             remaining_family_options,
             bit_cost,
             clause_count,
-            filtered_next_clauses: Some(vec![
-                ClauseRec::new(ClauseRole::Introduction, Expr::Var(1));
-                next_clause_count
-            ]),
+            filtered_next_clauses: Some(filtered_next_clauses),
             filtered_next_clause_connectivity_facts: None,
-            filtered_next_clause_nu_facts: None,
+            filtered_next_clause_nu_facts: Some(filtered_next_clause_nu_facts),
             next_clause_count,
             order_key: Arc::<str>::from(order_key),
         }
@@ -9782,7 +9784,7 @@ mod tests {
             &signature,
             clause_catalog.clauses_at(7),
             Some(clause_catalog.terminal_connectivity_facts_at(7)),
-            Some(clause_catalog.terminal_nu_facts_at(7)),
+            clause_catalog.terminal_nu_facts_at(7),
             &mut cache,
             None,
         );
@@ -9851,7 +9853,7 @@ mod tests {
                 &signature,
                 clause_catalog.clauses_at(7),
                 Some(clause_catalog.terminal_connectivity_facts_at(7)),
-                Some(clause_catalog.terminal_nu_facts_at(7)),
+                clause_catalog.terminal_nu_facts_at(7),
                 &mut cache,
                 None,
             ),
@@ -9974,7 +9976,7 @@ mod tests {
                 &signature,
                 clause_catalog.clauses_at(2),
                 Some(clause_catalog.terminal_connectivity_facts_at(2)),
-                Some(clause_catalog.terminal_nu_facts_at(2)),
+                clause_catalog.terminal_nu_facts_at(2),
                 &mut cache,
                 None,
             ),
@@ -10005,7 +10007,7 @@ mod tests {
                 &signature,
                 clause_catalog.clauses_at(2),
                 Some(clause_catalog.terminal_connectivity_facts_at(2)),
-                Some(clause_catalog.terminal_nu_facts_at(2)),
+                clause_catalog.terminal_nu_facts_at(2),
                 &mut cache,
                 None,
             ),
@@ -10776,7 +10778,7 @@ mod tests {
                 &signature,
                 clause_catalog.clauses_at(prefix_len),
                 Some(clause_catalog.terminal_connectivity_facts_at(prefix_len)),
-                Some(clause_catalog.terminal_nu_facts_at(prefix_len)),
+                clause_catalog.terminal_nu_facts_at(prefix_len),
                 &mut cache,
                 None,
             );
@@ -11603,6 +11605,17 @@ mod tests {
             work_item.next_clauses(&clause_catalog).len(),
             work_item.next_clause_count
         );
+        assert_eq!(
+            work_item.next_clause_nu_facts(&clause_catalog).len(),
+            work_item.next_clause_count
+        );
+        for (clause, facts) in work_item
+            .next_clauses(&clause_catalog)
+            .iter()
+            .zip(work_item.next_clause_nu_facts(&clause_catalog).iter())
+        {
+            assert_eq!(facts, &TerminalClauseNuFacts::from_clause(clause));
+        }
         assert_eq!(cache.stats().active_window_clause_filter_hits, 1);
     }
 
@@ -11645,6 +11658,10 @@ mod tests {
         assert_eq!(
             work_item.next_clauses(&clause_catalog).len(),
             clause_catalog.clauses_at(4).len()
+        );
+        assert_eq!(
+            work_item.next_clause_nu_facts(&clause_catalog),
+            clause_catalog.terminal_nu_facts_at(4)
         );
     }
 

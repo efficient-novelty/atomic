@@ -11,12 +11,14 @@ It lists only work that is still open.
 - The current short step-`4` baseline is
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
 - The current full-profile speed winner is
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`.
+- The previous full-profile speed winner was
   `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`.
 - The current deeper continuation target is
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
-- The first prefix-local continuation-cone slice is now landed, and the next
-  full-profile contender is
-  `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`.
+- The mandatory-`TerminalClauseNuFacts` slice is now landed, and its capped
+  intended-profile contender is
+  `runs/codex-claim-release-full-aggregation-open-band-mandatory-terminal-nu-facts-v1`.
 - The current winner preserved the honest retained-prefix story through the
   stored `576` read, beat `prefix-nu-context-v2` at matched later checkpoints
   through `533`, and still did not reach step `5`.
@@ -28,8 +30,6 @@ It lists only work that is still open.
 
 ## 1. Runtime Improvement Loop
 
-- [ ] Make `TerminalClauseNuFacts` a mandatory clause-catalog sidecar on the
-      hot path and keep `structural_nu_with_clause(...)` off the winning path.
 - [ ] Split the step-`4` remaining-one kernel into a true no-miss hit-path
       plateau kernel and a general fallback kernel.
 - [ ] Replace `lib_refs` tree membership on the hot path with the intended
@@ -37,14 +37,13 @@ It lists only work that is still open.
       inline small array, dense bitset after threshold, boxed sorted slice
       only where serialization or debug parity needs it.
 - [ ] Add a tiny survivor sketch only if second-pass duplication is still
-      visible after the facts-only winner.
+      visible after the kernel split and `lib_refs` work.
 - [ ] Keep deterministic batched parallel reduction gated behind replay-harness
       parity evidence and do not open it first.
 - [ ] Require every serious runtime slice to prove replay-harness parity plus
       either fewer exact-`nu` evaluations or lower measured aggregation time
       before another full-profile rerun.
-- [ ] On the in-flight `prefix-local-score-v1` rerun or a later contender,
-      re-earn `140/163` on the intended profile.
+- [ ] On a later contender, re-earn `140/163` on the intended profile.
 - [ ] After that, re-earn `332/335` on the intended profile.
 - [ ] After that, re-earn `408/437/454/484` on the intended profile.
 - [ ] Move materially past the current winner's stored `576` wall.

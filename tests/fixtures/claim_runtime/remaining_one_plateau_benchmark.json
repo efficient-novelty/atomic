@@ -8,10 +8,10 @@
         "prefix_cache_candidates": 144845
       },
       "iterations": 10,
-      "average_micros": 2988,
-      "best_micros": 2650,
-      "worst_micros": 3646,
-      "total_micros": 29887
+      "average_micros": 2955,
+      "best_micros": 2432,
+      "worst_micros": 3443,
+      "total_micros": 29557
     },
     {
       "fixture_index": 1,
@@ -21,10 +21,10 @@
         "prefix_cache_candidates": 147639
       },
       "iterations": 10,
-      "average_micros": 5899,
-      "best_micros": 5443,
-      "worst_micros": 6352,
-      "total_micros": 58992
+      "average_micros": 5461,
+      "best_micros": 4457,
+      "worst_micros": 6731,
+      "total_micros": 54615
     },
     {
       "fixture_index": 2,
@@ -34,10 +34,10 @@
         "prefix_cache_candidates": 154842
       },
       "iterations": 10,
-      "average_micros": 2086,
-      "best_micros": 1793,
-      "worst_micros": 2650,
-      "total_micros": 20863
+      "average_micros": 2101,
+      "best_micros": 1797,
+      "worst_micros": 2764,
+      "total_micros": 21011
     },
     {
       "fixture_index": 3,
@@ -47,10 +47,10 @@
         "prefix_cache_candidates": 157636
       },
       "iterations": 10,
-      "average_micros": 1968,
-      "best_micros": 1796,
-      "worst_micros": 2347,
-      "total_micros": 19680
+      "average_micros": 2088,
+      "best_micros": 1939,
+      "worst_micros": 2389,
+      "total_micros": 20884
     },
     {
       "fixture_index": 4,
@@ -60,10 +60,10 @@
         "prefix_cache_candidates": 160430
       },
       "iterations": 10,
-      "average_micros": 2101,
-      "best_micros": 1945,
-      "worst_micros": 2574,
-      "total_micros": 21018
+      "average_micros": 2184,
+      "best_micros": 1990,
+      "worst_micros": 2542,
+      "total_micros": 21845
     }
   ]
 }

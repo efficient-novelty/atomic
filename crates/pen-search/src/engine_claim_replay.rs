@@ -361,7 +361,10 @@ pub fn replay_claim_remaining_one_fixture(
             clause: &candidate.clause,
             cached_admissibility_decision: candidate.cached_admissibility_decision.clone(),
             connectivity_facts: candidate.connectivity_facts.as_ref(),
-            nu_facts: candidate.nu_facts.as_ref(),
+            nu_facts: candidate
+                .nu_facts
+                .as_ref()
+                .expect("remaining-one replay fixtures should carry nu facts"),
         })
         .collect::<Vec<_>>();
     let terminal_clauses = match fixture.clause_mode {
@@ -662,7 +665,7 @@ fn fixture_terminal_candidates(
                     clause: clause.clause.clone(),
                     cached_admissibility_decision: clause.cached_admissibility_decision.clone(),
                     connectivity_facts: clause.connectivity_facts.cloned(),
-                    nu_facts: clause.nu_facts.cloned(),
+                    nu_facts: Some(clause.nu_facts.clone()),
                 })
                 .collect(),
         ),
@@ -674,7 +677,7 @@ fn fixture_terminal_candidates(
                     clause: clause.clause.clone(),
                     cached_admissibility_decision: clause.cached_admissibility_decision.clone(),
                     connectivity_facts: clause.connectivity_facts.cloned(),
-                    nu_facts: clause.nu_facts.cloned(),
+                    nu_facts: Some(clause.nu_facts.clone()),
                 })
                 .collect(),
         ),
