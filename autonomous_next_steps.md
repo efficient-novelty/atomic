@@ -29,31 +29,38 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 ## Current Read
 
-- The broader incumbent-relevant survivor-sketch slice is now landed on top of
-  the tiered `lib_refs` work, the explicit no-miss plateau-kernel split, and
-  the mandatory `TerminalClauseNuFacts` winner.
-  Compact claim summaries now keep a survivor sketch for competition-allowed
+- The follow-on survivor-sketch bookkeeping slice is now landed on top of the
+  broadened incumbent-relevant sketch coverage, the tiered `lib_refs` work,
+  the explicit no-miss plateau-kernel split, and the mandatory
+  `TerminalClauseNuFacts` winner.
+  Compact claim summaries still keep a survivor sketch for competition-allowed
   bar-clearers that can still beat the current incumbent even when multiple
-  primary ranks are live, and reuse it during materialization without waking
-  the dormant general cached-summary reopen path.
+  primary ranks are live, and still reuse it during materialization without
+  waking the dormant general cached-summary reopen path, but the hot compact
+  summary path now threads borrowed primary-rank refs through best-rank
+  tracking and sketch append instead of cloning the same primary-rank payload
+  twice per bar-clearer.
 - Claim-focused validation stayed green:
   - `cargo test -p pen-search claim_`
   - `cargo test -p pen-search cached_terminal_prefix_rank_summary_prunes_without_reopening_completion_summary`
   - `cargo test -p pen-search take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse`
 - The release replay harness stayed parity-clean on the stored plateau
   fixtures.
-- Two local release benchmark reads after the slice stayed slightly slower than
+- Local release benchmark rereads after the slice stayed mixed and still above
   the checked-in `123544 us` total, so the benchmark artifact was left
   unchanged and no new intended-profile rerun was launched yet.
-  The warmer reread landed `126760 us` total:
-  - `24`: `26150`
-  - `74`: `45111`
-  - `140`: `18395`
-  - `332`: `18490`
-  - `335`: `18614`
-- The slice therefore proved the broader cached-materialization path
-  functionally, but it has not yet re-earned the replay-time gate needed
-  before another `20`-minute intended-profile attempt.
+  The best warm reread landed `126553 us` total:
+  - `24`: `27087`
+  - `74`: `44928`
+  - `140`: `17736`
+  - `332`: `18270`
+  - `335`: `18532`
+  Follow-up warm rereads bounced back to `127375 us` and `129611 us`, so the
+  replay gate has not yet been re-earned honestly.
+- The slice therefore proved that the broader cached-materialization path can
+  be replayed a bit more cheaply locally, but it has not yet re-earned the
+  replay-time gate needed before another `20`-minute intended-profile
+  attempt.
 - The plateau-kernel split remains the only honest short-loop win so far.
 
 ## Do This Next
@@ -67,11 +74,12 @@ The next move is a follow-on code slice on top of the newly landed tiered-
 
 ### 2. Implement The Next Slice In This Order
 
-1. Keep the new multi-primary/incumbent-relevant survivor-sketch coverage, but
-   reduce its replay-summary overhead.
-   Reuse the broader survivor bookkeeping more cheaply so compact summary
-   replay can at least re-earn the checked-in `123544 us` total or otherwise
-   show fewer exact-`nu` evaluations on the stored plateau fixtures.
+1. Keep the new multi-primary/incumbent-relevant survivor-sketch coverage plus
+   the new borrowed-primary-rank bookkeeping reuse, but reduce the remaining
+   compact-summary survivor-bookkeeping overhead.
+   Collapse the open-band compact summary bookkeeping further so replay can at
+   least re-earn the checked-in `123544 us` total or otherwise show fewer
+   exact-`nu` evaluations on the stored plateau fixtures.
    Do not wake the dormant general cached-summary reopen machinery first.
 
 ### 3. Validation Loop For Each New Slice

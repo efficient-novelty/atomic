@@ -19,11 +19,13 @@ It lists only work that is still open.
 - The explicit no-miss plateau-kernel split is now landed, and its capped
   intended-profile contender is
   `runs/codex-claim-release-full-aggregation-open-band-plateau-kernel-split-v1`.
-- The broadened incumbent-relevant survivor sketch is now landed, and
-  multi-primary claim surfaces now reuse cached sketch materialization in
-  tests, but the warm local replay benchmark still landed slightly slower than
-  the checked-in `123544 us` total (`126760 us` on the warmer reread), so the
-  lane has not yet re-earned another intended-profile rerun.
+- The broadened incumbent-relevant survivor sketch is now landed, and the
+  follow-on compact-summary bookkeeping slice now reuses borrowed
+  primary-rank refs while preserving cached multi-primary sketch
+  materialization in tests, but the best warm local replay reread still
+  landed above the checked-in `123544 us` total (`126553 us`, with later
+  rereads back at `127375 us` and `129611 us`), so the lane has not yet
+  re-earned another intended-profile rerun.
 - The current winner preserved the honest retained-prefix story through the
   stored `576` read, beat `prefix-nu-context-v2` at matched later checkpoints
   through `533`, and still did not reach step `5`.

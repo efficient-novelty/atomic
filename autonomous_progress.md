@@ -19,13 +19,16 @@ gate.
   `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`.
 - The previous deeper continuation target was
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
-- The newest landed code slice now broadens the cached survivor sketch on top
-  of the tiered prefix-side structural-`nu` `lib_refs` work and the explicit
-  plateau/fallback kernel split.
-  Compact remaining-one summaries now keep a survivor sketch for
+- The newest landed code slice now keeps the broadened cached survivor sketch
+  on top of the tiered prefix-side structural-`nu` `lib_refs` work and the
+  explicit plateau/fallback kernel split, while threading borrowed
+  primary-rank refs through compact summary bookkeeping so the hot path stops
+  cloning the same primary rank into both best-rank tracking and
+  survivor-sketch append on every bar-clearer.
+  Compact remaining-one summaries still keep a survivor sketch for
   incumbent-relevant competition-allowed bar-clearers even when multiple
-  primary ranks are live, and materialization can then reuse that cached
-  sketch without waking the dormant general cached-summary reopen path.
+  primary ranks are live, and materialization still reuses that cached sketch
+  without waking the dormant general cached-summary reopen path.
 
 ## Current Run To Beat
 
@@ -96,31 +99,37 @@ gate.
 
 ## New Local Read
 
-- The broader incumbent-relevant survivor-sketch slice is now landed on top of
-  the tiered `lib_refs` and explicit no-miss plateau-kernel split work.
-  Compact claim summaries now keep a cached survivor sketch for
+- The follow-on survivor-sketch bookkeeping slice is now landed on top of the
+  broadened incumbent-relevant sketch coverage, the tiered `lib_refs` work,
+  and the explicit no-miss plateau-kernel split.
+  Compact claim summaries still keep a cached survivor sketch for
   competition-allowed bar-clearers that can still beat the current incumbent,
-  even when multiple primary ranks are live, and materialization now reuses
-  that cached sketch on those broader surfaces without waking the dormant
-  general cached-summary reopen path.
+  even when multiple primary ranks are live, but the compact summary hot path
+  now threads borrowed primary-rank refs through best-rank tracking and sketch
+  append instead of cloning the same primary-rank payload twice per
+  bar-clearer.
 - Claim-focused validation stayed green after the slice:
   - `cargo test -p pen-search claim_`
   - `cargo test -p pen-search cached_terminal_prefix_rank_summary_prunes_without_reopening_completion_summary`
   - `cargo test -p pen-search take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse`
 - The release replay harness stayed parity-clean on the stored plateau
   fixtures.
-- Two local release benchmark reads after the slice stayed slightly slower than
+- Local release benchmark rereads after the slice stayed mixed and still above
   the checked-in `123544 us` total, so the benchmark artifact was left
   unchanged and no new intended-profile rerun was launched yet.
-  The warmer reread landed `126760 us` total across the five stored surfaces:
-  - `24`: `26150`
-  - `74`: `45111`
-  - `140`: `18395`
-  - `332`: `18490`
-  - `335`: `18614`
-- The slice therefore proved the broader cached-materialization path
-  functionally, but it has not yet re-earned the replay-time gate needed before
-  another `20`-minute intended-profile attempt.
+  The best warm reread landed `126553 us` total across the five stored
+  surfaces:
+  - `24`: `27087`
+  - `74`: `44928`
+  - `140`: `17736`
+  - `332`: `18270`
+  - `335`: `18532`
+  Follow-up warm rereads bounced back to `127375 us` and `129611 us`, so the
+  replay gate has not yet been re-earned honestly.
+- The slice therefore proved that the broader cached-materialization path can
+  be replayed a bit more cheaply locally, but it has not yet re-earned the
+  replay-time gate needed before another `20`-minute intended-profile
+  attempt.
 
 ## What Stays Landed
 
@@ -146,8 +155,9 @@ gate.
   bar-clearers
 - the broadened compact remaining-one survivor sketch on cached summaries for
   incumbent-relevant bar-clearers across both single-primary and multi-primary
-  surfaces, with direct compact reopen still preserved when no cached sketch
-  is available
+  surfaces, now with borrowed primary-rank reuse across compact best-rank
+  bookkeeping and survivor-sketch append, while direct compact reopen still
+  stays preserved when no cached sketch is available
 - the claim open-band terminal-clause handoff fast path on clause refs
 - steady-state scratch-slot `clone_from` reuse on terminal-clause loads
 - the boundary-timestamp timing pass on the compact summary kernel
@@ -168,10 +178,11 @@ gate.
 - The old "second primary rank disables the sketch" limitation is now gone:
   multi-primary incumbent-relevant surfaces now reuse cached sketch
   materialization in tests.
-- The new local evidence is mixed:
-  cached-materialization coverage is better, but the warm replay benchmark
-  stayed slightly slower than the checked-in `123544 us` total across the
-  stored plateau surfaces.
+- The new local evidence is still mixed:
+  the clone-reduced survivor-sketch bookkeeping nudged the best warm replay
+  reread slightly below the prior local `126760 us` read, but the slice still
+  stayed above the checked-in `123544 us` total across the stored plateau
+  surfaces.
 - Because that replay gate did not improve, the lane has not yet earned
   another `20`-minute intended-profile rerun.
 - The plateau-kernel split therefore still owns the only honest short-loop win
@@ -191,10 +202,12 @@ gate.
   `plateau-kernel-split-v1` as the current short-loop checkpoint to beat.
 - Use a hard 20-minute max intended-profile rerun for the next attempts.
 - The next code slice is now:
-  keep the new multi-primary/incumbent-relevant survivor-sketch coverage, but
-  cut the replay-summary overhead enough to re-earn the checked-in
-  `123544 us` replay gate or otherwise reduce exact-`nu` work on the stored
-  plateau fixtures before another intended-profile rerun.
+  keep the new multi-primary/incumbent-relevant survivor-sketch coverage plus
+  the borrowed-primary-rank bookkeeping reuse, but collapse the remaining
+  compact-summary survivor bookkeeping further so the open-band replay path can
+  honestly re-earn the checked-in `123544 us` replay gate or otherwise reduce
+  exact-`nu` work on the stored plateau fixtures before another intended-
+  profile rerun.
 - Do not wake the dormant general cached-summary reopen machinery first.
 - Only reopen longer full-profile continuation reads after repeated 20-minute
   wins show that the lane has materially improved.
@@ -203,8 +216,9 @@ gate.
 
 1. Keep `prefix-local-score-v1` frozen as the long-run run to beat.
 2. Reopen code work with the next slice:
-   keep the new multi-primary/incumbent-relevant sketch coverage, but reduce
-   the replay-summary cost on top of the tiered-`lib_refs` and
+   keep the new multi-primary/incumbent-relevant sketch coverage and the new
+   borrowed-primary-rank fast path, but cut the remaining compact-summary
+   survivor bookkeeping cost on top of the tiered-`lib_refs` and
    plateau/fallback kernel work so the lane can re-earn the replay gate before
    reopening another intended-profile rerun.
 3. After that slice:

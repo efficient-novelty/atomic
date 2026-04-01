@@ -5763,7 +5763,7 @@ struct CompactTerminalPrefixSurvivorSketchBuilder {
 impl CompactTerminalPrefixSurvivorSketchBuilder {
     fn record_candidate(
         &mut self,
-        primary_rank: Option<TerminalPrefixPrimaryRank>,
+        primary_rank: Option<&TerminalPrefixPrimaryRank>,
         clause_index: usize,
         exact_nu: u16,
         bit_kappa_used: u16,
@@ -6153,7 +6153,7 @@ fn update_terminal_prefix_best_accept_rank(
 ) {
     if should_build_full_accept_rank(
         incumbent_rank,
-        terminal_prefix_primary_rank(objective_bar, exact_nu, clause_kappa_used),
+        terminal_prefix_primary_rank(objective_bar, exact_nu, clause_kappa_used).as_ref(),
         summary,
     ) {
         if let Some(rank) = acceptance_rank_for_telescope(
@@ -6173,18 +6173,18 @@ fn update_terminal_prefix_best_accept_rank(
 
 fn should_build_full_accept_rank(
     incumbent_rank: Option<&AcceptRank>,
-    primary_rank: Option<TerminalPrefixPrimaryRank>,
+    primary_rank: Option<&TerminalPrefixPrimaryRank>,
     summary: &mut TerminalPrefixCompletionSummary,
 ) -> bool {
     let Some(primary_rank) = primary_rank else {
         return false;
     };
     let build_full_accept_rank = match summary.best_accept_primary_rank.as_ref() {
-        Some(current) if better_terminal_prefix_primary_rank(&primary_rank, current) => {
+        Some(current) if better_terminal_prefix_primary_rank(primary_rank, current) => {
             summary.best_accept_primary_rank = Some(primary_rank.clone());
             true
         }
-        Some(current) if *current == primary_rank => true,
+        Some(current) if current == primary_rank => true,
         Some(_) => false,
         None => {
             summary.best_accept_primary_rank = Some(primary_rank.clone());
@@ -6199,7 +6199,7 @@ fn should_build_full_accept_rank(
 
 fn absorb_compact_terminal_prefix_admitted_clause_summary(
     incumbent_rank: Option<&AcceptRank>,
-    primary_rank: Option<TerminalPrefixPrimaryRank>,
+    primary_rank: Option<&TerminalPrefixPrimaryRank>,
     exact_nu: u16,
     clause_kappa_used: u16,
     bit_kappa_used: u16,
@@ -6426,7 +6426,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                     let needs_full_accept_rank =
                                         absorb_compact_terminal_prefix_admitted_clause_summary(
                                             incumbent_rank,
-                                            score.primary_rank.clone(),
+                                            score.primary_rank.as_ref(),
                                             score.exact_nu,
                                             clause_kappa_used,
                                             score.bit_kappa_used,
@@ -6435,7 +6435,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                         );
                                     if let Some(sketch) = compact_survivor_sketch.as_mut() {
                                         sketch.record_candidate(
-                                            score.primary_rank.clone(),
+                                            score.primary_rank.as_ref(),
                                             clause_index,
                                             score.exact_nu,
                                             score.bit_kappa_used,
@@ -6585,7 +6585,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     terminal_prefix_primary_rank(objective_bar, exact_nu, clause_kappa_used);
                 if let Some(sketch) = compact_survivor_sketch.as_mut() {
                     sketch.record_candidate(
-                        primary_rank.clone(),
+                        primary_rank.as_ref(),
                         clause_index,
                         exact_nu,
                         bit_kappa_used,
@@ -6809,7 +6809,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                 let needs_full_accept_rank =
                                     absorb_compact_terminal_prefix_admitted_clause_summary(
                                         incumbent_rank,
-                                        score.primary_rank.clone(),
+                                        score.primary_rank.as_ref(),
                                         score.exact_nu,
                                         clause_kappa_used,
                                         score.bit_kappa_used,
@@ -6818,7 +6818,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                     );
                                 if let Some(sketch) = compact_survivor_sketch.as_mut() {
                                     sketch.record_candidate(
-                                        score.primary_rank.clone(),
+                                        score.primary_rank.as_ref(),
                                         clause_index,
                                         score.exact_nu,
                                         score.bit_kappa_used,
@@ -6910,7 +6910,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                         terminal_prefix_primary_rank(objective_bar, exact_nu, clause_kappa_used);
                     if let Some(sketch) = compact_survivor_sketch.as_mut() {
                         sketch.record_candidate(
-                            primary_rank.clone(),
+                            primary_rank.as_ref(),
                             clause_index,
                             exact_nu,
                             bit_kappa_used,
