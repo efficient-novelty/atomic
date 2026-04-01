@@ -14,6 +14,9 @@ It lists only work that is still open.
   `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`.
 - The current deeper continuation target is
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
+- The first prefix-local continuation-cone slice is now landed, and the next
+  full-profile contender is
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`.
 - The current winner preserved the honest retained-prefix story through the
   stored `576` read, beat `prefix-nu-context-v2` at matched later checkpoints
   through `533`, and still did not reach step `5`.
@@ -25,10 +28,6 @@ It lists only work that is still open.
 
 ## 1. Runtime Improvement Loop
 
-- [ ] Land prefix-local interval pruning on the local continuation cone using
-      `SingleClauseStructuralNuContext`,
-      `TerminalClauseNuFacts`, and
-      `structural_nu_single_clause_upper_bound`.
 - [ ] Make `TerminalClauseNuFacts` a mandatory clause-catalog sidecar on the
       hot path and keep `structural_nu_with_clause(...)` off the winning path.
 - [ ] Split the step-`4` remaining-one kernel into a true no-miss hit-path
@@ -44,8 +43,8 @@ It lists only work that is still open.
 - [ ] Require every serious runtime slice to prove replay-harness parity plus
       either fewer exact-`nu` evaluations or lower measured aggregation time
       before another full-profile rerun.
-- [ ] After the next winning code slice, re-earn `140/163` on the intended
-      profile.
+- [ ] On the in-flight `prefix-local-score-v1` rerun or a later contender,
+      re-earn `140/163` on the intended profile.
 - [ ] After that, re-earn `332/335` on the intended profile.
 - [ ] After that, re-earn `408/437/454/484` on the intended profile.
 - [ ] Move materially past the current winner's stored `576` wall.
