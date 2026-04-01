@@ -26,6 +26,11 @@ It lists only work that is still open.
   landed above the checked-in `123544 us` total (`126553 us`, with later
   rereads back at `127375 us` and `129611 us`), so the lane has not yet
   re-earned another intended-profile rerun.
+- A later local-only focus-aligned competition-gate/payload-mode hoist stayed
+  parity-clean in tests and replay parity, but its warm rereads landed
+  `136040 us`, `137054 us`, and `140843 us` total after a `130405 us`
+  immediate pre-slice local reread, so that code was dropped and the lane
+  still has not honestly re-earned another intended-profile rerun.
 - The current winner preserved the honest retained-prefix story through the
   stored `576` read, beat `prefix-nu-context-v2` at matched later checkpoints
   through `533`, and still did not reach step `5`.

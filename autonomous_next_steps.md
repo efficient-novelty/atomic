@@ -46,21 +46,26 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - `cargo test -p pen-search take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse`
 - The release replay harness stayed parity-clean on the stored plateau
   fixtures.
-- Local release benchmark rereads after the slice stayed mixed and still above
-  the checked-in `123544 us` total, so the benchmark artifact was left
-  unchanged and no new intended-profile rerun was launched yet.
-  The best warm reread landed `126553 us` total:
-  - `24`: `27087`
-  - `74`: `44928`
-  - `140`: `17736`
-  - `332`: `18270`
-  - `335`: `18532`
-  Follow-up warm rereads bounced back to `127375 us` and `129611 us`, so the
-  replay gate has not yet been re-earned honestly.
-- The slice therefore proved that the broader cached-materialization path can
-  be replayed a bit more cheaply locally, but it has not yet re-earned the
-  replay-time gate needed before another `20`-minute intended-profile
-  attempt.
+- A follow-on local-only attempt then hoisted the focus-aligned competition
+  gate plus the compact/full payload-mode branch once per
+  `compute_terminal_prefix_completion_summary_from_candidates(...)` call, but
+  that code was dropped after replay validation.
+- The immediate pre-slice local reread was `130405 us` total:
+  - `24`: `28907`
+  - `74`: `47093`
+  - `140`: `17896`
+  - `332`: `18018`
+  - `335`: `18491`
+- Warm rereads with the hoist landed worse at `136040 us`, `137054 us`, and
+  `140843 us` total:
+  - `136040`: `27713 / 50699 / 18734 / 19345 / 19549`
+  - `137054`: `25619 / 50318 / 22239 / 19997 / 18881`
+  - `140843`: `28737 / 49206 / 20016 / 20591 / 22293`
+  These are `24 / 74 / 140 / 332 / 335` in order.
+- The dropped hoist therefore did not re-earn the checked-in `123544 us`
+  total and did not beat the immediate pre-slice local reread honestly, so the
+  benchmark artifact stayed unchanged and no new intended-profile rerun was
+  launched.
 - The plateau-kernel split remains the only honest short-loop win so far.
 
 ## Do This Next
@@ -75,11 +80,13 @@ The next move is a follow-on code slice on top of the newly landed tiered-
 ### 2. Implement The Next Slice In This Order
 
 1. Keep the new multi-primary/incumbent-relevant survivor-sketch coverage plus
-   the new borrowed-primary-rank bookkeeping reuse, but reduce the remaining
-   compact-summary survivor-bookkeeping overhead.
-   Collapse the open-band compact summary bookkeeping further so replay can at
-   least re-earn the checked-in `123544 us` total or otherwise show fewer
-   exact-`nu` evaluations on the stored plateau fixtures.
+   the new borrowed-primary-rank bookkeeping reuse, but reduce a different
+   remaining compact-summary per-admitted cost.
+   Stay inside `compute_terminal_prefix_completion_summary_from_candidates(...)`
+   and collapse the open-band compact summary bookkeeping further so replay can
+   at least re-earn the checked-in `123544 us` total or otherwise show fewer
+   exact-`nu` evaluations on the stored plateau fixtures, but do not retry the
+   dropped focus-aligned competition-gate/payload-mode hoist first.
    Do not wake the dormant general cached-summary reopen machinery first.
 
 ### 3. Validation Loop For Each New Slice
@@ -90,6 +97,8 @@ For the next attempts, validate in this order:
 2. Refresh the replay-harness read in release mode.
 3. Confirm replay parity plus either fewer exact-`nu` evaluations or lower
    measured replay time on the stored plateau fixtures.
+   Do not keep a slice on one noisy reread alone; require it to beat the
+   immediate pre-slice local replay read honestly as well.
 4. Only launch a new intended-profile rerun after that replay gate improves,
    then stop it after `20` minutes max.
 5. Compare the next local slice first to the checked-in replay gate, then
@@ -137,6 +146,7 @@ Until then:
 
 - another long intended-profile rerun with no new code
 - cached-summary reopen wake-up work
+- the dropped focus-aligned competition-gate/payload-mode hoist
 - contender-rank helper rewrites
 - connectivity-first or cache-first rewrites
 - deterministic batched parallel reduction

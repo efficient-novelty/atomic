@@ -99,37 +99,34 @@ gate.
 
 ## New Local Read
 
-- The follow-on survivor-sketch bookkeeping slice is now landed on top of the
-  broadened incumbent-relevant sketch coverage, the tiered `lib_refs` work,
-  and the explicit no-miss plateau-kernel split.
-  Compact claim summaries still keep a cached survivor sketch for
-  competition-allowed bar-clearers that can still beat the current incumbent,
-  even when multiple primary ranks are live, but the compact summary hot path
-  now threads borrowed primary-rank refs through best-rank tracking and sketch
-  append instead of cloning the same primary-rank payload twice per
-  bar-clearer.
-- Claim-focused validation stayed green after the slice:
+- A follow-on local-only slice then tried hoisting the focus-aligned
+  competition gate plus the compact/full payload-mode branch once per
+  `compute_terminal_prefix_completion_summary_from_candidates(...)` call on top
+  of the landed survivor-sketch, tiered-`lib_refs`, and plateau-kernel work,
+  but that code was dropped instead of landed.
+- Claim-focused validation stayed green while testing the slice:
   - `cargo test -p pen-search claim_`
   - `cargo test -p pen-search cached_terminal_prefix_rank_summary_prunes_without_reopening_completion_summary`
   - `cargo test -p pen-search take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse`
 - The release replay harness stayed parity-clean on the stored plateau
-  fixtures.
-- Local release benchmark rereads after the slice stayed mixed and still above
-  the checked-in `123544 us` total, so the benchmark artifact was left
-  unchanged and no new intended-profile rerun was launched yet.
-  The best warm reread landed `126553 us` total across the five stored
-  surfaces:
-  - `24`: `27087`
-  - `74`: `44928`
-  - `140`: `17736`
-  - `332`: `18270`
-  - `335`: `18532`
-  Follow-up warm rereads bounced back to `127375 us` and `129611 us`, so the
-  replay gate has not yet been re-earned honestly.
-- The slice therefore proved that the broader cached-materialization path can
-  be replayed a bit more cheaply locally, but it has not yet re-earned the
-  replay-time gate needed before another `20`-minute intended-profile
-  attempt.
+  fixtures while the hoist was in place.
+- The immediate pre-slice local reread was `130405 us` total across the five
+  stored surfaces:
+  - `24`: `28907`
+  - `74`: `47093`
+  - `140`: `17896`
+  - `332`: `18018`
+  - `335`: `18491`
+- Warm rereads with the hoist stayed worse at `136040 us`, `137054 us`, and
+  `140843 us` total:
+  - `136040`: `27713 / 50699 / 18734 / 19345 / 19549`
+  - `137054`: `25619 / 50318 / 22239 / 19997 / 18881`
+  - `140843`: `28737 / 49206 / 20016 / 20591 / 22293`
+  These are `24 / 74 / 140 / 332 / 335` in order.
+- The hoist therefore did not re-earn the checked-in `123544 us` replay gate
+  and also did not beat the immediate pre-slice local reread honestly, so the
+  code was reverted, the benchmark artifact stayed unchanged, and no new
+  intended-profile rerun was launched.
 
 ## What Stays Landed
 
@@ -179,10 +176,11 @@ gate.
   multi-primary incumbent-relevant surfaces now reuse cached sketch
   materialization in tests.
 - The new local evidence is still mixed:
-  the clone-reduced survivor-sketch bookkeeping nudged the best warm replay
-  reread slightly below the prior local `126760 us` read, but the slice still
-  stayed above the checked-in `123544 us` total across the stored plateau
-  surfaces.
+  the landed borrowed-primary-rank survivor-sketch bookkeeping reuse still
+  owns the last directionally-better replay read, while the latest attempted
+  focus-aligned competition-gate hoist stayed parity-clean but landed worse
+  than the immediate pre-slice local reread on the stored plateau fixtures and
+  was therefore dropped.
 - Because that replay gate did not improve, the lane has not yet earned
   another `20`-minute intended-profile rerun.
 - The plateau-kernel split therefore still owns the only honest short-loop win
@@ -203,11 +201,13 @@ gate.
 - Use a hard 20-minute max intended-profile rerun for the next attempts.
 - The next code slice is now:
   keep the new multi-primary/incumbent-relevant survivor-sketch coverage plus
-  the borrowed-primary-rank bookkeeping reuse, but collapse the remaining
-  compact-summary survivor bookkeeping further so the open-band replay path can
-  honestly re-earn the checked-in `123544 us` replay gate or otherwise reduce
-  exact-`nu` work on the stored plateau fixtures before another intended-
-  profile rerun.
+  the borrowed-primary-rank bookkeeping reuse, but try a different narrow
+  per-admitted compact-summary cost inside
+  `compute_terminal_prefix_completion_summary_from_candidates(...)` instead of
+  retrying the dropped focus-aligned competition-gate/payload-mode hoist, so
+  the open-band replay path can honestly re-earn the checked-in `123544 us`
+  replay gate or otherwise reduce exact-`nu` work on the stored plateau
+  fixtures before another intended-profile rerun.
 - Do not wake the dormant general cached-summary reopen machinery first.
 - Only reopen longer full-profile continuation reads after repeated 20-minute
   wins show that the lane has materially improved.
@@ -217,10 +217,10 @@ gate.
 1. Keep `prefix-local-score-v1` frozen as the long-run run to beat.
 2. Reopen code work with the next slice:
    keep the new multi-primary/incumbent-relevant sketch coverage and the new
-   borrowed-primary-rank fast path, but cut the remaining compact-summary
-   survivor bookkeeping cost on top of the tiered-`lib_refs` and
-   plateau/fallback kernel work so the lane can re-earn the replay gate before
-   reopening another intended-profile rerun.
+   borrowed-primary-rank fast path, but cut a different remaining
+   compact-summary per-admitted cost on top of the tiered-`lib_refs` and
+   plateau/fallback kernel work; do not reopen the dropped focus-aligned
+   competition-gate/payload-mode hoist first.
 3. After that slice:
    - rerun only the claim-focused tests touched by the change
    - rerun the replay harness in release mode
