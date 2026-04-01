@@ -19,13 +19,14 @@ gate.
   `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`.
 - The previous deeper continuation target was
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
-- The newest landed code slice now splits the step-`4` remaining-one kernel
-  into an explicit true no-miss hit-path plateau kernel and a general fallback
-  kernel.
-  Exact bound screening, compact summary build, and compact materialization now
-  share that split while keeping the mandatory
-  `TerminalClauseNuFacts`
-  sidecar on the winning path.
+- The newest landed code slice now compresses prefix-side structural-`nu`
+  `lib_refs` inside `SingleClauseStructuralNuContext` with a tiered hot-path
+  representation:
+  inline small arrays for the common case and dense bitsets once the ref set
+  gets wider, while sorted boxed slices stay only on the serialized clause-
+  facts surface.
+  The earlier plateau/fallback kernel split and the mandatory
+  `TerminalClauseNuFacts` sidecar both stay intact on the winning path.
 
 ## Current Run To Beat
 
@@ -96,46 +97,47 @@ gate.
 
 ## New Local Read
 
-- The explicit no-miss plateau-kernel split is now landed on top of the
-  mandatory-`TerminalClauseNuFacts` winner.
-  Remaining-one exact bound checks, compact summary build, and compact
-  materialization now route candidates that stay on cached
-  `KeepWithoutFallback`
-  evidence through one shared plateau kernel and reserve the general fallback
-  kernel for candidates that really need extra connectivity or admissibility
-  work.
-- Claim-focused parity checks stayed green after the slice:
+- The tiered `lib_refs` slice is now landed on top of the explicit no-miss
+  plateau-kernel split.
+  Prefix-side structural-`nu` context now avoids `BTreeSet` membership on the
+  hot path while keeping sorted boxed lib-ref slices only on the serialized
+  clause-facts surface.
+- Claim-focused validation stayed green after the slice:
+  - `cargo test -p pen-eval structural_nu`
   - `cargo test -p pen-search claim_`
 - The checked-in release replay benchmark on the stored plateau fixtures is now
-  `145248 us` total across the five stored surfaces, down from `147912 us`.
+  `126668 us` total across the five stored surfaces, down from `145248 us`.
   Surface deltas versus the prior checked-in read:
-  - `24`: `29557 -> 33376`
-  - `74`: `54615 -> 50232`
-  - `140`: `21011 -> 21316`
-  - `332`: `20884 -> 20210`
-  - `335`: `21845 -> 20114`
-- The replay read is therefore a real overall local improvement, but not a
-  uniform per-surface win yet because surfaces `24` and `140` regressed.
+  - `24`: `33376 -> 27244`
+  - `74`: `50232 -> 44252`
+  - `140`: `21316 -> 18167`
+  - `332`: `20210 -> 18381`
+  - `335`: `20114 -> 18624`
+- The replay read is therefore a real overall local improvement again, and
+  this time it improved all five stored surfaces.
 - The capped intended-profile contender
-  `runs/codex-claim-release-full-aggregation-open-band-plateau-kernel-split-v1`
-  was manually stopped at the `20` minute cap during step `4`.
-  `run.json` still says `status = "running"` and
-  `reports/latest.txt` still reflects completed step `3`;
-  the authoritative evidence is
+  `runs/codex-claim-release-full-aggregation-open-band-tiered-lib-refs-v2`
+  was manually stopped after the `20` minute cap during step `4`.
+  `run.json` still says `status = "running"` and the authoritative evidence is
   `reports/steps/step-04-live.ndjson`.
 - Its nearest stored read to `20` minutes was:
-  - `elapsed_millis = 1191562`
+  - `elapsed_millis = 1199662`
   - `prefix_states_explored = 124`
   - `prefix_cache_groups = 40`
   - `prefix_cache_candidates = 109690`
   - `frontier_queue_len = 2651`
-  - RSS `= 495325184` bytes
-  - `terminal_summary_build_millis = 1183359`
+  - RSS `= 494972928` bytes
+  - `terminal_summary_build_millis = 1191859`
   - `terminal_summary_admissibility_checks = 0`
   - `terminal_summary_fallback_connectivity_checks = 0`
-- That read kept the retained-prefix story honest and is now the first
-  short-loop win, because it explored `124` prefixes instead of the baseline
-  `123` while keeping the same `40 groups / 109690 candidates` surface.
+- That read kept the retained-prefix story honest and stayed on the same
+  no-miss `40 groups / 109690 candidates` surface, but it did not beat the
+  current `124`-prefix short-loop gate.
+  It re-matched the `124` explored prefixes and queue length, but its
+  summary-build time was still slower than `plateau-kernel-split-v1`.
+  It therefore does not replace
+  `runs/codex-claim-release-full-aggregation-open-band-plateau-kernel-split-v1`
+  as the best short-loop checkpoint.
 
 ## What Stays Landed
 
@@ -143,7 +145,7 @@ gate.
 - the incumbent-primary remaining-one fast path
 - the prefix-side single-clause structural-`nu` context reused across
   remaining-one exact scoring, compact-summary build, and compact
-  materialization
+  materialization, now with tiered `lib_refs` storage on the hot path
 - the shared terminal-clause connectivity-facts sidecar on the clause catalog
 - the shared terminal-clause structural-`nu` facts sidecar threaded through
   the clause catalog, filtered active-window clones, remaining-one
@@ -176,10 +178,12 @@ gate.
   `terminal_summary_admissibility_checks = 0` and
   `terminal_summary_fallback_connectivity_checks = 0`.
 - Aggregation is still the lead measured bucket.
-- The latest plateau-kernel contender preserved the same `40 groups / 109690`
-  retained-prefix surface, improved overall replay time again, and produced the
-  first honest short-loop win at `124` explored prefixes by `20` minutes.
-- That win is still only one short-loop beat.
+- The latest tiered-`lib_refs` contender preserved the same
+  `40 groups / 109690` retained-prefix surface and improved overall replay time
+  again, but its nearest stored 20-minute read only re-matched the current
+  `124` explored-prefix gate instead of beating it.
+- The plateau-kernel split therefore still owns the only honest short-loop win
+  so far.
   The lane should keep treating `prefix-local-score-v1` as the long-run
   reference until later slices repeat the 20-minute win and then reopen the
   deeper continuation honestly.
@@ -195,11 +199,9 @@ gate.
   `plateau-kernel-split-v1` as the current short-loop checkpoint to beat.
 - Use a hard 20-minute max intended-profile rerun for the next attempts.
 - The next code slice is now:
-  compress `lib_refs` inside
-  `SingleClauseStructuralNuContext`
-  while keeping the new plateau/fallback split and the mandatory
-  `TerminalClauseNuFacts` sidecar on the winning path.
-- Keep any tiny survivor sketch work after the `lib_refs` slice, not before.
+  a tiny survivor sketch that carries only the clause refs and facts needed for
+  the best primary rank and tie-break-relevant survivors.
+- Do not wake the dormant general cached-summary reopen machinery first.
 - Only reopen longer full-profile continuation reads after repeated 20-minute
   wins show that the lane has materially improved.
 
@@ -207,9 +209,9 @@ gate.
 
 1. Keep `prefix-local-score-v1` frozen as the long-run run to beat.
 2. Reopen code work with the next slice:
-   compress `lib_refs` inside
-   `SingleClauseStructuralNuContext`
-   without undoing the new plateau/fallback kernel split.
+   add the tiny survivor sketch on top of the new tiered-`lib_refs` and
+   plateau/fallback kernel work, without waking the dormant general cached-
+   summary reopen machinery.
 3. After that slice:
    - rerun only the claim-focused tests touched by the change
    - rerun the replay harness in release mode

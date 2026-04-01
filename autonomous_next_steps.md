@@ -29,61 +29,54 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 ## Current Read
 
-- The explicit no-miss plateau-kernel split is now landed on top of the
-  mandatory-`TerminalClauseNuFacts` winner.
-  Remaining-one exact bound screening, compact summary build, and compact
-  materialization now route `KeepWithoutFallback` candidates through one shared
-  plateau kernel and reserve the general fallback kernel for the candidates
-  that really need extra connectivity or admissibility work.
+- The tiered `lib_refs` slice is now landed on top of the explicit no-miss
+  plateau-kernel split and the mandatory `TerminalClauseNuFacts` winner.
+  Prefix-side structural-`nu` context now uses inline small arrays first,
+  dense bitsets after the threshold, while sorted boxed slices stay only on
+  the serialized clause-facts surface.
+- Claim-focused validation stayed green:
+  - `cargo test -p pen-eval structural_nu`
+  - `cargo test -p pen-search claim_`
 - The release replay harness stayed parity-clean on the stored plateau
   fixtures.
 - The checked-in five-surface replay benchmark improved overall from
-  `147912 us` to `145248 us`.
-  It improved surfaces `74`, `332`, and `335`, but regressed surfaces `24` and
-  `140`, so the slice is a real local win overall, not a uniform win at every
-  stored surface.
+  `145248 us` to `126668 us`.
+  It improved all five stored surfaces.
 - The capped intended-profile contender
-  `runs/codex-claim-release-full-aggregation-open-band-plateau-kernel-split-v1`
-  was manually stopped during step `4` at the `20` minute cap.
+  `runs/codex-claim-release-full-aggregation-open-band-tiered-lib-refs-v2`
+  was manually stopped during step `4` after the `20` minute cap.
   The authoritative stored read is
   `reports/steps/step-04-live.ndjson`.
 - Its nearest stored checkpoint to `20` minutes was:
-  - `elapsed_millis = 1191562`
+  - `elapsed_millis = 1199662`
   - `prefix_states_explored = 124`
   - `prefix_cache_groups = 40`
   - `prefix_cache_candidates = 109690`
   - `frontier_queue_len = 2651`
-  - `terminal_summary_build_millis = 1183359`
-  - RSS `= 495325184` bytes
+  - `terminal_summary_build_millis = 1191859`
+  - RSS `= 494972928` bytes
   - `terminal_summary_admissibility_checks = 0`
   - `terminal_summary_fallback_connectivity_checks = 0`
-- That contender kept the same retained-prefix surface and beat the old
-  `prefix-local-score-v1` 20-minute gate honestly because it explored
-  `124` prefixes instead of `123` while keeping fallback connectivity and
-  admissibility checks at zero.
+- That contender kept the same retained-prefix surface and the same no-miss
+  later-shape, but it did not beat the current `124`-prefix short-loop gate.
+  It re-matched the prefix count and queue length, but still lost on
+  summary-build time.
 - The next loop is still a short intended-profile optimization loop with a
   hard `20` minute cap.
-  One short-loop win is not enough yet to reopen a longer continuation read.
+  The plateau-kernel split remains the only honest short-loop win so far.
 
 ## Do This Next
 
 ### 1. Reopen Code Work Now
 
 Do not run another uncapped intended-profile continuation first.
-The next move is the next code slice on top of the newly landed plateau-kernel
-split while keeping `prefix-local-score-v1` as the long-run reference.
+The next move is the next code slice on top of the newly landed tiered-
+`lib_refs` and plateau-kernel work while keeping `prefix-local-score-v1` as
+the long-run reference.
 
 ### 2. Implement The Next Slice In This Order
 
-1. Compress `lib_refs` inside
-   `SingleClauseStructuralNuContext`.
-   Preferred order:
-   - inline small array for the common case
-   - dense bitset after a threshold
-   - sorted boxed slices only where serialization or debug parity needs them
-
-2. If second-pass duplication still matters after that slice, prefer a tiny
-   survivor sketch.
+1. Add the tiny survivor sketch now that the tiered `lib_refs` slice is landed.
    Carry only the clause refs and facts needed for the best primary rank and
    tie-break-relevant survivors.
    Do not wake the dormant general cached-summary reopen machinery first.

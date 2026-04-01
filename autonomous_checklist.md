@@ -19,6 +19,12 @@ It lists only work that is still open.
 - The explicit no-miss plateau-kernel split is now landed, and its capped
   intended-profile contender is
   `runs/codex-claim-release-full-aggregation-open-band-plateau-kernel-split-v1`.
+- The later tiered-`lib_refs` contender
+  `runs/codex-claim-release-full-aggregation-open-band-tiered-lib-refs-v2`
+  improved the checked-in replay benchmark again and re-matched the
+  `124`-prefix short-loop gate, but it still did not beat
+  `plateau-kernel-split-v1` honestly because the summary-build time stayed
+  slower.
 - The current winner preserved the honest retained-prefix story through the
   stored `576` read, beat `prefix-nu-context-v2` at matched later checkpoints
   through `533`, and still did not reach step `5`.
@@ -29,11 +35,6 @@ It lists only work that is still open.
   failure story.
 
 ## 1. Runtime Improvement Loop
-
-- [ ] Replace `lib_refs` tree membership on the hot path with the intended
-      tiered representation:
-      inline small array, dense bitset after threshold, boxed sorted slice
-      only where serialization or debug parity needs it.
 - [ ] Add a tiny survivor sketch only if second-pass duplication is still
       visible after the kernel split and `lib_refs` work.
 - [ ] Keep deterministic batched parallel reduction gated behind replay-harness

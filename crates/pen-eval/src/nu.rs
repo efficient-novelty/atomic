@@ -49,6 +49,20 @@ pub struct SingleClauseStructuralNuContext {
     library_path_dim_sq_sum: u32,
 }
 
+const INLINE_LIB_REF_CAPACITY: usize = 4;
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+enum StructuralNuLibRefs {
+    Inline {
+        len: u8,
+        refs: [u32; INLINE_LIB_REF_CAPACITY],
+    },
+    DenseBitset {
+        words: Box<[u64]>,
+        len: usize,
+    },
+}
+
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 struct TelescopeNuProfile {
     kappa: u32,
@@ -81,7 +95,7 @@ struct TelescopeNuProfile {
     distributive_law_count: u32,
     polymorphic_temporal_elim_count: u32,
     has_spatial_temporal_clause: bool,
-    lib_refs: BTreeSet<u32>,
+    lib_refs: StructuralNuLibRefs,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -127,6 +141,7 @@ impl TelescopeNuProfile {
         let mut has_sharp = false;
         let mut has_disc = false;
         let mut has_shape = false;
+        let mut lib_refs = Vec::new();
 
         for (index, clause) in telescope.clauses.iter().enumerate() {
             let expr = &clause.expr;
@@ -140,7 +155,7 @@ impl TelescopeNuProfile {
                         profile.first_two_lib_pointer_count.saturating_add(1);
                 }
             }
-            profile.lib_refs.extend(clause_lib_refs);
+            lib_refs.extend(clause_lib_refs);
 
             if is_type_formation(expr) {
                 profile.type_formation_count += 1;
@@ -216,6 +231,7 @@ impl TelescopeNuProfile {
 
         profile.modal_kind_mask = modal_kind_mask(has_flat, has_sharp, has_disc, has_shape);
         profile.modal_kind_count = profile.modal_kind_mask.count_ones();
+        profile.lib_refs = StructuralNuLibRefs::from_refs(lib_refs);
         profile.trivially_derivable = telescope.clauses.is_empty()
             || profile.all_lib_or_var
             || (profile.has_higher_path
@@ -338,10 +354,7 @@ impl TelescopeNuProfile {
             TelescopeClass::Axiomatic => {
                 let max_ref_nu = self
                     .lib_refs
-                    .iter()
-                    .filter_map(|step| history_nu(*step, nu_history))
-                    .max()
-                    .unwrap_or(0);
+                    .max_defined_by(|step| history_nu(step, nu_history));
                 let ref_bonus = u32_from_len(self.lib_refs.len()).saturating_sub(1);
                 max_ref_nu + self.kappa + ref_bonus
             }
@@ -353,10 +366,7 @@ impl TelescopeNuProfile {
     fn distributive_law_bonus(&self, library: &Library, nu_history: &[(u32, u32)]) -> u32 {
         let inherited_nu = self
             .lib_refs
-            .iter()
-            .filter_map(|step| modal_reference_nu(*step, library, nu_history))
-            .max()
-            .unwrap_or(0);
+            .max_defined_by(|step| modal_reference_nu(step, library, nu_history));
 
         if inherited_nu == 0 {
             0
@@ -381,6 +391,96 @@ impl TelescopeNuProfile {
             library_path_dim_sq_sum
         } else {
             0
+        }
+    }
+}
+
+impl Default for StructuralNuLibRefs {
+    fn default() -> Self {
+        Self::Inline {
+            len: 0,
+            refs: [0; INLINE_LIB_REF_CAPACITY],
+        }
+    }
+}
+
+impl StructuralNuLibRefs {
+    fn from_refs(mut refs: Vec<u32>) -> Self {
+        refs.sort_unstable();
+        refs.dedup();
+
+        if refs.len() <= INLINE_LIB_REF_CAPACITY {
+            let mut inline_refs = [0; INLINE_LIB_REF_CAPACITY];
+            inline_refs[..refs.len()].copy_from_slice(&refs);
+            return Self::Inline {
+                len: u8::try_from(refs.len()).expect("inline lib ref capacity exceeded u8"),
+                refs: inline_refs,
+            };
+        }
+
+        let dense_word_count = refs
+            .last()
+            .copied()
+            .map(|max_ref| max_ref as usize / 64 + 1)
+            .unwrap_or(0);
+        let mut words = vec![0_u64; dense_word_count];
+        for step in refs {
+            let index = step as usize;
+            words[index / 64] |= 1_u64 << (index % 64);
+        }
+        let len = words.iter().map(|word| word.count_ones() as usize).sum();
+        Self::DenseBitset {
+            words: words.into_boxed_slice(),
+            len,
+        }
+    }
+
+    fn len(&self) -> usize {
+        match self {
+            Self::Inline { len, .. } => usize::from(*len),
+            Self::DenseBitset { len, .. } => *len,
+        }
+    }
+
+    fn contains(&self, step: u32) -> bool {
+        match self {
+            Self::Inline { len, refs } => refs[..usize::from(*len)].contains(&step),
+            Self::DenseBitset { words, .. } => {
+                let index = step as usize;
+                words
+                    .get(index / 64)
+                    .is_some_and(|word| (word & (1_u64 << (index % 64))) != 0)
+            }
+        }
+    }
+
+    fn max_defined_by(&self, mut value_for_step: impl FnMut(u32) -> Option<u32>) -> u32 {
+        let mut max_value = 0;
+        self.for_each(|step| {
+            if let Some(value) = value_for_step(step) {
+                max_value = max_value.max(value);
+            }
+        });
+        max_value
+    }
+
+    fn for_each(&self, mut visit: impl FnMut(u32)) {
+        match self {
+            Self::Inline { len, refs } => {
+                for step in refs[..usize::from(*len)].iter().copied() {
+                    visit(step);
+                }
+            }
+            Self::DenseBitset { words, .. } => {
+                for (word_index, word) in words.iter().copied().enumerate() {
+                    let mut remaining = word;
+                    while remaining != 0 {
+                        let bit_index = remaining.trailing_zeros() as usize;
+                        visit((word_index * 64 + bit_index) as u32);
+                        remaining &= remaining - 1;
+                    }
+                }
+            }
         }
     }
 }
@@ -453,16 +553,10 @@ impl SingleClauseStructuralNuContext {
 
         let prefix_max_ref_nu = prefix_profile
             .lib_refs
-            .iter()
-            .filter_map(|step| step_nu_lookup.get(*step as usize).copied())
-            .max()
-            .unwrap_or(0);
+            .max_defined_by(|step| step_nu_lookup.get(step as usize).copied());
         let prefix_max_modal_ref_nu = prefix_profile
             .lib_refs
-            .iter()
-            .filter_map(|step| modal_ref_nu_lookup.get(*step as usize).copied())
-            .max()
-            .unwrap_or(0);
+            .max_defined_by(|step| modal_ref_nu_lookup.get(step as usize).copied());
         let library_path_dim_sq_sum = library
             .iter()
             .filter(|entry| entry.has_loop)
@@ -595,7 +689,7 @@ impl SingleClauseStructuralNuContext {
         let mut max_ref_nu = self.prefix_max_ref_nu;
         let mut max_modal_ref_nu = self.prefix_max_modal_ref_nu;
         for step in facts.lib_refs.iter().copied() {
-            if !profile.lib_refs.contains(&step) {
+            if !profile.lib_refs.contains(step) {
                 lib_ref_count = lib_ref_count.saturating_add(1);
             }
             if let Some(nu) = self.step_nu_lookup.get(step as usize).copied() {
@@ -1322,10 +1416,7 @@ impl SingleClauseStructuralNuPotential {
         };
         let prefix_max_ref_nu = profile
             .lib_refs
-            .iter()
-            .filter_map(|step| history_nu(*step, nu_history))
-            .max()
-            .unwrap_or(0);
+            .max_defined_by(|step| history_nu(step, nu_history));
         let extension_max_ref_nu = extension_refs
             .iter()
             .filter_map(|step| history_nu(*step, nu_history))
@@ -1333,10 +1424,7 @@ impl SingleClauseStructuralNuPotential {
             .unwrap_or(0);
         let prefix_max_modal_ref_nu = profile
             .lib_refs
-            .iter()
-            .filter_map(|step| modal_reference_nu(*step, library, nu_history))
-            .max()
-            .unwrap_or(0);
+            .max_defined_by(|step| modal_reference_nu(step, library, nu_history));
         let extension_max_modal_ref_nu = extension_refs
             .iter()
             .filter_map(|step| modal_reference_nu(*step, library, nu_history))
@@ -1634,9 +1722,10 @@ fn extension_reference_candidates(
 #[cfg(test)]
 mod tests {
     use super::{
-        SingleClauseStructuralNuContext, StructuralNuResult, TerminalClauseNuFacts,
-        compute_native_nu, compute_nu_c, compute_nu_g, compute_nu_h, detect_distributive_laws,
-        detect_infinitesimal_shift, detect_universe_polymorphism, structural_nu,
+        SingleClauseStructuralNuContext, StructuralNuLibRefs, StructuralNuResult,
+        TerminalClauseNuFacts, compute_native_nu, compute_nu_c, compute_nu_g, compute_nu_h,
+        detect_distributive_laws, detect_infinitesimal_shift, detect_universe_polymorphism,
+        structural_nu,
     };
     use pen_core::clause::ClauseRec;
     use pen_core::expr::Expr;
@@ -1791,6 +1880,21 @@ mod tests {
     }
 
     #[test]
+    fn structural_nu_lib_refs_uses_tiered_storage() {
+        let inline = StructuralNuLibRefs::from_refs(vec![3, 1, 3]);
+        assert!(matches!(inline, StructuralNuLibRefs::Inline { .. }));
+        assert_eq!(inline.len(), 2);
+        assert!(inline.contains(1));
+        assert!(!inline.contains(2));
+
+        let dense = StructuralNuLibRefs::from_refs(vec![1, 2, 3, 4, 5]);
+        assert!(matches!(dense, StructuralNuLibRefs::DenseBitset { .. }));
+        assert_eq!(dense.len(), 5);
+        assert!(dense.contains(4));
+        assert!(!dense.contains(6));
+    }
+
+    #[test]
     fn single_clause_context_matches_full_structural_nu() {
         let (library, history) = replay_reference_library(14);
         let surfaces = vec![
@@ -1830,6 +1934,35 @@ mod tests {
                     pen_core::clause::ClauseRole::Introduction,
                     Expr::Lam(Box::new(Expr::App(
                         Box::new(Expr::Lib(4)),
+                        Box::new(Expr::Var(1)),
+                    ))),
+                ),
+            ]),
+            Telescope::new(vec![
+                ClauseRec::new(
+                    pen_core::clause::ClauseRole::Formation,
+                    Expr::Pi(Box::new(Expr::Lib(1)), Box::new(Expr::Var(1))),
+                ),
+                ClauseRec::new(
+                    pen_core::clause::ClauseRole::Introduction,
+                    Expr::App(Box::new(Expr::Lib(2)), Box::new(Expr::Var(1))),
+                ),
+                ClauseRec::new(
+                    pen_core::clause::ClauseRole::Introduction,
+                    Expr::App(Box::new(Expr::Lib(3)), Box::new(Expr::Var(2))),
+                ),
+                ClauseRec::new(
+                    pen_core::clause::ClauseRole::Introduction,
+                    Expr::App(Box::new(Expr::Lib(4)), Box::new(Expr::Var(3))),
+                ),
+                ClauseRec::new(
+                    pen_core::clause::ClauseRole::Introduction,
+                    Expr::App(Box::new(Expr::Lib(5)), Box::new(Expr::Var(4))),
+                ),
+                ClauseRec::new(
+                    pen_core::clause::ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(6)),
                         Box::new(Expr::Var(1)),
                     ))),
                 ),
