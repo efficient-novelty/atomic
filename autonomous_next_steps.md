@@ -66,6 +66,27 @@ This note is the exact next work order for `desktop_claim_shadow`.
   total and did not beat the immediate pre-slice local reread honestly, so the
   benchmark artifact stayed unchanged and no new intended-profile rerun was
   launched.
+- Two later local-only compact-summary bookkeeping slices then also stayed
+  parity-clean in the same claim-focused tests and replay parity, but both
+  landed worse and were dropped:
+  - a shared compact sketch/best-primary bookkeeping fold across the compact
+    summary paths
+  - a claim-open-band compact local-state hoist for
+    `bound / admitted count / best primary / best rank / sketch` bookkeeping
+- The shared compact-bookkeeping fold rereads landed `140129 us`,
+  `140565 us`, and `145083 us` total:
+  - `140129`: `27648 / 50765 / 20329 / 20751 / 20636`
+  - `140565`: `26793 / 58976 / 18071 / 18207 / 18518`
+  - `145083`: `31456 / 56870 / 19093 / 18553 / 19111`
+- The claim-open-band compact local-state hoist rereads landed `129362 us`,
+  `133001 us`, and `164098 us` total:
+  - `129362`: `26190 / 45671 / 18214 / 18308 / 20979`
+  - `133001`: `24988 / 49889 / 19082 / 18876 / 20166`
+  - `164098`: `47503 / 54272 / 21662 / 19399 / 21262`
+  These are `24 / 74 / 140 / 332 / 335` in order for each total above.
+- Neither later slice re-earned the checked-in `123544 us` total, so both
+  code paths were reverted, the benchmark artifact stayed unchanged, and no
+  new intended-profile rerun was launched.
 - The plateau-kernel split remains the only honest short-loop win so far.
 
 ## Do This Next
@@ -86,7 +107,9 @@ The next move is a follow-on code slice on top of the newly landed tiered-
    and collapse the open-band compact summary bookkeeping further so replay can
    at least re-earn the checked-in `123544 us` total or otherwise show fewer
    exact-`nu` evaluations on the stored plateau fixtures, but do not retry the
-   dropped focus-aligned competition-gate/payload-mode hoist first.
+   dropped focus-aligned competition-gate/payload-mode hoist, the dropped
+   shared compact-bookkeeping fold, or the dropped claim-open-band compact
+   local-state hoist first.
    Do not wake the dormant general cached-summary reopen machinery first.
 
 ### 3. Validation Loop For Each New Slice
@@ -147,6 +170,8 @@ Until then:
 - another long intended-profile rerun with no new code
 - cached-summary reopen wake-up work
 - the dropped focus-aligned competition-gate/payload-mode hoist
+- the dropped shared compact-bookkeeping fold
+- the dropped claim-open-band compact local-state hoist
 - contender-rank helper rewrites
 - connectivity-first or cache-first rewrites
 - deterministic batched parallel reduction

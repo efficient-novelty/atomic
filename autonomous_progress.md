@@ -97,7 +97,7 @@ gate.
 - Near-term validation should now try to beat `124` explored prefixes by
   `20` minutes while keeping that no-miss shape honest.
 
-## New Local Read
+## New Local Reads
 
 - A follow-on local-only slice then tried hoisting the focus-aligned
   competition gate plus the compact/full payload-mode branch once per
@@ -127,6 +127,27 @@ gate.
   and also did not beat the immediate pre-slice local reread honestly, so the
   code was reverted, the benchmark artifact stayed unchanged, and no new
   intended-profile rerun was launched.
+- Two later local-only compact-summary bookkeeping slices then stayed
+  parity-clean in the same claim-focused tests and replay parity, but both
+  also landed worse and were dropped instead of kept:
+  - a shared compact sketch/best-primary bookkeeping fold across the compact
+    summary paths
+  - a claim-open-band compact local-state hoist for
+    `bound / admitted count / best primary / best rank / sketch` bookkeeping
+- The shared compact-bookkeeping fold rereads landed `140129 us`,
+  `140565 us`, and `145083 us` total:
+  - `140129`: `27648 / 50765 / 20329 / 20751 / 20636`
+  - `140565`: `26793 / 58976 / 18071 / 18207 / 18518`
+  - `145083`: `31456 / 56870 / 19093 / 18553 / 19111`
+- The claim-open-band compact local-state hoist rereads landed `129362 us`,
+  `133001 us`, and `164098 us` total:
+  - `129362`: `26190 / 45671 / 18214 / 18308 / 20979`
+  - `133001`: `24988 / 49889 / 19082 / 18876 / 20166`
+  - `164098`: `47503 / 54272 / 21662 / 19399 / 21262`
+- These are `24 / 74 / 140 / 332 / 335` in order for each total above.
+- Neither later slice re-earned the checked-in `123544 us` replay gate, so
+  both code paths were reverted, the benchmark artifact stayed unchanged, and
+  no new intended-profile rerun was launched.
 
 ## What Stays Landed
 
@@ -177,10 +198,10 @@ gate.
   materialization in tests.
 - The new local evidence is still mixed:
   the landed borrowed-primary-rank survivor-sketch bookkeeping reuse still
-  owns the last directionally-better replay read, while the latest attempted
-  focus-aligned competition-gate hoist stayed parity-clean but landed worse
-  than the immediate pre-slice local reread on the stored plateau fixtures and
-  was therefore dropped.
+  owns the last directionally-better replay read, while the dropped
+  focus-aligned competition-gate hoist, the dropped shared compact-bookkeeping
+  fold, and the dropped claim-open-band compact local-state hoist all stayed
+  parity-clean but landed worse on the stored plateau fixtures.
 - Because that replay gate did not improve, the lane has not yet earned
   another `20`-minute intended-profile rerun.
 - The plateau-kernel split therefore still owns the only honest short-loop win
@@ -204,10 +225,11 @@ gate.
   the borrowed-primary-rank bookkeeping reuse, but try a different narrow
   per-admitted compact-summary cost inside
   `compute_terminal_prefix_completion_summary_from_candidates(...)` instead of
-  retrying the dropped focus-aligned competition-gate/payload-mode hoist, so
-  the open-band replay path can honestly re-earn the checked-in `123544 us`
-  replay gate or otherwise reduce exact-`nu` work on the stored plateau
-  fixtures before another intended-profile rerun.
+  retrying the dropped focus-aligned competition-gate/payload-mode hoist, the
+  dropped shared compact-bookkeeping fold, or the dropped claim-open-band
+  compact local-state hoist, so the open-band replay path can honestly
+  re-earn the checked-in `123544 us` replay gate or otherwise reduce exact-`nu`
+  work on the stored plateau fixtures before another intended-profile rerun.
 - Do not wake the dormant general cached-summary reopen machinery first.
 - Only reopen longer full-profile continuation reads after repeated 20-minute
   wins show that the lane has materially improved.
@@ -220,7 +242,8 @@ gate.
    borrowed-primary-rank fast path, but cut a different remaining
    compact-summary per-admitted cost on top of the tiered-`lib_refs` and
    plateau/fallback kernel work; do not reopen the dropped focus-aligned
-   competition-gate/payload-mode hoist first.
+   competition-gate/payload-mode hoist, the dropped shared compact-bookkeeping
+   fold, or the dropped claim-open-band compact local-state hoist first.
 3. After that slice:
    - rerun only the claim-focused tests touched by the change
    - rerun the replay harness in release mode

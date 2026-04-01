@@ -31,6 +31,14 @@ It lists only work that is still open.
   `136040 us`, `137054 us`, and `140843 us` total after a `130405 us`
   immediate pre-slice local reread, so that code was dropped and the lane
   still has not honestly re-earned another intended-profile rerun.
+- Two later local-only compact-summary bookkeeping slices also stayed
+  parity-clean in tests and replay parity, but both regressed and were
+  dropped:
+  the shared compact sketch/best-primary bookkeeping fold landed
+  `140129 us`, `140565 us`, and `145083 us`, while the claim-open-band
+  compact local-state hoist landed `129362 us`, `133001 us`, and `164098 us`
+  total across `24 / 74 / 140 / 332 / 335`, so the lane still has not
+  honestly re-earned another intended-profile rerun.
 - The current winner preserved the honest retained-prefix story through the
   stored `576` read, beat `prefix-nu-context-v2` at matched later checkpoints
   through `533`, and still did not reach step `5`.
