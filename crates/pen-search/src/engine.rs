@@ -26,7 +26,8 @@ use crate::prefix_cache::{
 use crate::prefix_memo::{
     PartialPrefixBoundDecision, PrefixLegalityCache, PrefixLegalityCacheEntryCounts,
     TerminalConnectivityDecision, TerminalPrefixClauseEvaluation, TerminalPrefixCompletion,
-    TerminalPrefixCompletionSummary, TerminalPrefixPrimaryRank,
+    TerminalPrefixCompletionSummary, TerminalPrefixPrimaryRank, TerminalPrefixSurvivorSketch,
+    TerminalPrefixSurvivorSketchEntry,
 };
 use crate::priority::{PriorityInputs, build_priority_key};
 use crate::scheduler::build_schedule;
@@ -5754,6 +5755,63 @@ enum TerminalPrefixSummaryPayload {
     Full,
 }
 
+#[derive(Clone, Debug, Default)]
+struct CompactTerminalPrefixSurvivorSketchBuilder {
+    best_primary_rank: Option<TerminalPrefixPrimaryRank>,
+    survivors: Vec<TerminalPrefixSurvivorSketchEntry>,
+    saw_secondary_primary_rank: bool,
+}
+
+impl CompactTerminalPrefixSurvivorSketchBuilder {
+    fn record_candidate(
+        &mut self,
+        primary_rank: Option<TerminalPrefixPrimaryRank>,
+        clause_index: usize,
+        exact_nu: u16,
+        bit_kappa_used: u16,
+        competition_allowed: bool,
+    ) {
+        if !competition_allowed {
+            return;
+        }
+        let Some(primary_rank) = primary_rank else {
+            return;
+        };
+
+        let survivor = TerminalPrefixSurvivorSketchEntry {
+            clause_index,
+            exact_nu,
+            bit_kappa_used,
+        };
+        match self.best_primary_rank.as_ref() {
+            Some(current) if better_terminal_prefix_primary_rank(&primary_rank, current) => {
+                self.saw_secondary_primary_rank = true;
+                self.best_primary_rank = Some(primary_rank);
+                self.survivors.clear();
+                self.survivors.push(survivor);
+            }
+            Some(current) if *current == primary_rank => {
+                self.survivors.push(survivor);
+            }
+            Some(_) => {
+                self.saw_secondary_primary_rank = true;
+            }
+            None => {
+                self.best_primary_rank = Some(primary_rank);
+                self.survivors.push(survivor);
+            }
+        }
+    }
+
+    fn finish(self) -> Option<TerminalPrefixSurvivorSketch> {
+        (!self.saw_secondary_primary_rank && !self.survivors.is_empty()).then_some(
+            TerminalPrefixSurvivorSketch {
+                survivors: self.survivors,
+            },
+        )
+    }
+}
+
 #[derive(Clone, Debug)]
 struct TerminalPrefixCandidate<'a> {
     clause: &'a pen_core::clause::ClauseRec,
@@ -6156,8 +6214,8 @@ fn should_build_full_accept_rank(
 }
 
 fn absorb_compact_terminal_prefix_admitted_clause_summary(
-    objective_bar: Rational,
     incumbent_rank: Option<&AcceptRank>,
+    primary_rank: Option<TerminalPrefixPrimaryRank>,
     exact_nu: u16,
     clause_kappa_used: u16,
     bit_kappa_used: u16,
@@ -6171,12 +6229,7 @@ fn absorb_compact_terminal_prefix_admitted_clause_summary(
         bit_kappa_used,
     );
     summary.admitted_candidate_count += 1;
-    competition_allowed
-        && should_build_full_accept_rank(
-            incumbent_rank,
-            terminal_prefix_primary_rank(objective_bar, exact_nu, clause_kappa_used),
-            summary,
-        )
+    competition_allowed && should_build_full_accept_rank(incumbent_rank, primary_rank, summary)
 }
 
 fn better_terminal_prefix_primary_rank(
@@ -6279,6 +6332,8 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
         evaluations: matches!(payload, TerminalPrefixSummaryPayload::Full).then(Vec::new),
         ..TerminalPrefixCompletionSummary::default()
     };
+    let mut compact_survivor_sketch = matches!(payload, TerminalPrefixSummaryPayload::Compact)
+        .then(CompactTerminalPrefixSurvivorSketchBuilder::default);
     let prefix_len = prefix_telescope.clauses.len();
     let clause_kappa_used =
         u16::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u16");
@@ -6303,7 +6358,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     let mut kernel_timing = RemainingOneSummaryKernelTiming::default();
     match terminal_clauses {
         TerminalPrefixClauseCandidates::General(terminal_clauses) => {
-            for terminal_clause in terminal_clauses {
+            for (clause_index, terminal_clause) in terminal_clauses.into_iter().enumerate() {
                 let connectivity_started = Instant::now();
                 let Some(connectivity_decision) = prefix_legality_cache
                     .terminal_connectivity_with_facts(
@@ -6386,14 +6441,23 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                     let aggregation_started = Instant::now();
                                     let needs_full_accept_rank =
                                         absorb_compact_terminal_prefix_admitted_clause_summary(
-                                            objective_bar,
                                             incumbent_rank,
+                                            score.primary_rank.clone(),
                                             score.exact_nu,
                                             clause_kappa_used,
                                             score.bit_kappa_used,
                                             competition_allowed,
                                             &mut summary,
                                         );
+                                    if let Some(sketch) = compact_survivor_sketch.as_mut() {
+                                        sketch.record_candidate(
+                                            score.primary_rank.clone(),
+                                            clause_index,
+                                            score.exact_nu,
+                                            score.bit_kappa_used,
+                                            competition_allowed,
+                                        );
+                                    }
                                     kernel_timing.terminal_summary_aggregation_duration +=
                                         aggregation_started.elapsed();
                                     if !needs_full_accept_rank {
@@ -6532,6 +6596,17 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     prefix_legality_cache,
                     &admissibility_decision,
                 );
+                let primary_rank =
+                    terminal_prefix_primary_rank(objective_bar, exact_nu, clause_kappa_used);
+                if let Some(sketch) = compact_survivor_sketch.as_mut() {
+                    sketch.record_candidate(
+                        primary_rank.clone(),
+                        clause_index,
+                        exact_nu,
+                        bit_kappa_used,
+                        competition_allowed,
+                    );
+                }
                 absorb_terminal_prefix_admitted_clause_summary(
                     objective_bar,
                     incumbent_rank,
@@ -6693,7 +6768,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                         aggregation_started.elapsed();
                 }
             } else {
-                for terminal_clause in terminal_clauses {
+                for (clause_index, terminal_clause) in terminal_clauses.into_iter().enumerate() {
                     let candidate_started = Instant::now();
                     let Some(connectivity_decision) = prefix_legality_cache
                         .terminal_connectivity_with_facts(
@@ -6747,14 +6822,23 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                 let aggregation_started = Instant::now();
                                 let needs_full_accept_rank =
                                     absorb_compact_terminal_prefix_admitted_clause_summary(
-                                        objective_bar,
                                         incumbent_rank,
+                                        score.primary_rank.clone(),
                                         score.exact_nu,
                                         clause_kappa_used,
                                         score.bit_kappa_used,
                                         true,
                                         &mut summary,
                                     );
+                                if let Some(sketch) = compact_survivor_sketch.as_mut() {
+                                    sketch.record_candidate(
+                                        score.primary_rank.clone(),
+                                        clause_index,
+                                        score.exact_nu,
+                                        score.bit_kappa_used,
+                                        true,
+                                    );
+                                }
                                 kernel_timing.terminal_summary_aggregation_duration +=
                                     aggregation_started.elapsed();
                                 if !needs_full_accept_rank {
@@ -6835,6 +6919,17 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                         prefix_bit_cost,
                         terminal_clause.clause,
                     );
+                    let primary_rank =
+                        terminal_prefix_primary_rank(objective_bar, exact_nu, clause_kappa_used);
+                    if let Some(sketch) = compact_survivor_sketch.as_mut() {
+                        sketch.record_candidate(
+                            primary_rank.clone(),
+                            clause_index,
+                            exact_nu,
+                            bit_kappa_used,
+                            true,
+                        );
+                    }
                     absorb_terminal_prefix_completion_bound(
                         &mut summary.bound,
                         exact_nu,
@@ -6863,6 +6958,8 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
             );
         }
     }
+    summary.compact_survivor_sketch =
+        compact_survivor_sketch.and_then(CompactTerminalPrefixSurvivorSketchBuilder::finish);
 
     if let Some(telemetry) = remaining_one_telemetry {
         telemetry.absorb_terminal_summary_kernel_timing(kernel_timing);
@@ -7163,6 +7260,18 @@ fn materialize_terminal_prefix_group(
                     discovery,
                 ));
             }
+            if summary.compact_survivor_sketch.is_some() {
+                discovery
+                    .remaining_one_telemetry
+                    .remaining_one_materialized_from_cached_summary += 1;
+                return Ok(materialize_terminal_prefix_group_from_survivor_sketch(
+                    objective_bar,
+                    prefix_telescope,
+                    filtered_last_clause_options,
+                    summary,
+                    discovery,
+                ));
+            }
         }
 
         discovery
@@ -7283,6 +7392,55 @@ fn materialize_terminal_prefix_group_from_summary(
                 });
             }
         }
+    }
+
+    MaterializedTerminalPrefixGroup {
+        candidates: retained_telescopes,
+        bound,
+        best_accept_rank,
+        generated_terminal_candidates,
+        admissible_terminal_candidates: admitted_terminal_candidates,
+    }
+}
+
+fn materialize_terminal_prefix_group_from_survivor_sketch(
+    objective_bar: Rational,
+    prefix_telescope: &Telescope,
+    filtered_last_clause_options: &[pen_core::clause::ClauseRec],
+    summary: TerminalPrefixCompletionSummary,
+    discovery: &mut RealisticShadowDiscovery,
+) -> MaterializedTerminalPrefixGroup {
+    record_terminal_prefix_summary_discovery_counts(discovery, &summary);
+    let admitted_terminal_candidates = summary.admitted_candidate_count;
+    let best_accept_rank = summary.best_accept_rank.clone();
+    let generated_terminal_candidates = summary.generated_candidate_count;
+    let bound = summary.bound;
+    let clause_kappa_used = u16::try_from(prefix_telescope.clauses.len().saturating_add(1))
+        .expect("kappa exceeded u16");
+    let sketch = summary
+        .compact_survivor_sketch
+        .expect("compact survivor sketch should exist for sketch materialization");
+    let prefix_len = prefix_telescope.clauses.len();
+    let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
+    let mut retained_telescopes = Vec::with_capacity(sketch.survivors.len());
+
+    for survivor in sketch.survivors {
+        let clause = filtered_last_clause_options
+            .get(survivor.clause_index)
+            .expect("survivor sketch clause index should align with filtered terminal clauses");
+        let telescope =
+            load_terminal_clause_into_scratch(&mut scratch_telescope, prefix_len, clause);
+        retained_telescopes.push(PrefixGroupCandidate {
+            telescope: telescope.clone(),
+            accept_rank: acceptance_rank_for_telescope(
+                objective_bar,
+                telescope,
+                survivor.exact_nu,
+                survivor.bit_kappa_used,
+                clause_kappa_used,
+            ),
+            evaluated_candidate: None,
+        });
     }
 
     MaterializedTerminalPrefixGroup {
@@ -11145,6 +11303,10 @@ mod tests {
                 None,
             );
 
+            assert!(
+                summary.compact_survivor_sketch.is_none(),
+                "multiple bar-clearing primary ranks should keep survivor sketch fallback disabled"
+            );
             assert_eq!(summary.best_accept_primary_rank, direct_best_primary_rank);
             assert_eq!(summary.best_accept_rank, direct_best_accept_rank);
             return;
@@ -11156,119 +11318,330 @@ mod tests {
     }
 
     #[test]
-    fn claim_materialization_reopens_after_cached_pruning_summary() {
-        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
-        let mut library: Library = Vec::new();
-        let mut history: Vec<DiscoveryRecord> = Vec::new();
-        let mut nu_history = Vec::new();
+    fn claim_materialization_falls_back_to_direct_path_when_survivor_sketch_is_unavailable() {
+        for step_index in 4..=15 {
+            let (library, history, nu_history) = reference_history_until(step_index - 1);
+            let admissibility = strict_admissibility_for_mode(
+                step_index,
+                2,
+                &library,
+                AdmissibilityMode::DesktopClaimShadow,
+            );
+            let objective_bar = compute_bar(2, step_index, &history).bar;
+            let target = Telescope::reference(step_index);
+            let prefix_len = target.clauses.len().saturating_sub(1);
+            let target_kappa = u16::try_from(target.kappa()).expect("kappa exceeded u16");
+            let prefix = Telescope::new(target.clauses[..prefix_len].to_vec());
+            let signature = PrefixSignature::new(step_index, &library, &prefix);
+            let context = EnumerationContext::from_admissibility(&library, admissibility);
+            let clause_catalog = build_clause_catalog(context, target_kappa);
+            let mut cache = PrefixLegalityCache::default();
 
-        for step in &steps {
-            history.push(DiscoveryRecord::new(
-                step.step_index,
-                u32::from(step.accepted.nu),
-                u32::from(step.accepted.clause_kappa),
+            if !cache.insert_root(
+                signature.clone(),
+                target_kappa,
+                &library,
+                &prefix,
+                admissibility,
+                LateFamilySurface::ClaimGeneric,
+            ) {
+                continue;
+            }
+
+            let work_item = create_online_prefix_work_item(
+                target_kappa,
+                prefix.clone(),
+                signature.clone(),
+                &library,
+                admissibility,
+                &clause_catalog,
+                &mut cache,
+            );
+            let summary = super::compute_terminal_prefix_completion_summary_from_candidates(
+                step_index,
+                &library,
+                admissibility,
+                objective_bar,
+                &nu_history,
+                &signature,
+                &prefix,
+                super::TerminalPrefixSummaryPayload::Compact,
+                super::terminal_prefix_clause_candidates(
+                    step_index,
+                    &library,
+                    admissibility,
+                    &signature,
+                    work_item.next_clauses(&clause_catalog),
+                    work_item.next_clause_connectivity_facts(&clause_catalog),
+                    work_item.next_clause_nu_facts(&clause_catalog),
+                    &mut cache,
+                    None,
+                ),
+                None,
+                &mut cache,
+                None,
+                None,
+            );
+            if summary.compact_survivor_sketch.is_some() {
+                continue;
+            }
+
+            let mut fallback_discovery = super::RealisticShadowDiscovery::default();
+            let mut direct_discovery = super::RealisticShadowDiscovery::default();
+            assert!(fallback_discovery.prefix_legality_cache.insert_root(
+                signature.clone(),
+                target_kappa,
+                &library,
+                &prefix,
+                admissibility,
+                LateFamilySurface::ClaimGeneric
             ));
-            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
-            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+            assert!(direct_discovery.prefix_legality_cache.insert_root(
+                signature.clone(),
+                target_kappa,
+                &library,
+                &prefix,
+                admissibility,
+                LateFamilySurface::ClaimGeneric
+            ));
+
+            fallback_discovery
+                .prefix_legality_cache
+                .store_terminal_prefix_completion_summary(signature.clone(), summary);
+
+            let fallback_group = super::materialize_terminal_prefix_group(
+                step_index,
+                &library,
+                admissibility,
+                objective_bar,
+                &nu_history,
+                &signature,
+                &prefix,
+                work_item.next_clauses(&clause_catalog),
+                work_item.next_clause_connectivity_facts(&clause_catalog),
+                work_item.next_clause_nu_facts(&clause_catalog),
+                &mut fallback_discovery,
+            )
+            .expect("fallback materialization should succeed");
+            let direct_group = super::materialize_terminal_prefix_group_compact(
+                step_index,
+                &library,
+                admissibility,
+                objective_bar,
+                &nu_history,
+                &signature,
+                &prefix,
+                work_item.next_clauses(&clause_catalog),
+                work_item.next_clause_connectivity_facts(&clause_catalog),
+                work_item.next_clause_nu_facts(&clause_catalog),
+                &mut direct_discovery,
+            )
+            .expect("direct compact materialization should succeed");
+
+            let fallback_candidates = fallback_group
+                .candidates
+                .iter()
+                .map(|candidate| (candidate.telescope.clone(), candidate.accept_rank.clone()))
+                .collect::<Vec<_>>();
+            let direct_candidates = direct_group
+                .candidates
+                .iter()
+                .map(|candidate| (candidate.telescope.clone(), candidate.accept_rank.clone()))
+                .collect::<Vec<_>>();
+
+            assert_eq!(
+                fallback_group.generated_terminal_candidates,
+                direct_group.generated_terminal_candidates
+            );
+            assert_eq!(
+                fallback_group.admissible_terminal_candidates,
+                direct_group.admissible_terminal_candidates
+            );
+            assert_eq!(fallback_group.bound, direct_group.bound);
+            assert_eq!(
+                fallback_group.best_accept_rank,
+                direct_group.best_accept_rank
+            );
+            assert_eq!(fallback_candidates, direct_candidates);
+            assert_eq!(
+                fallback_discovery
+                    .remaining_one_telemetry
+                    .remaining_one_materialized_from_cached_summary,
+                0
+            );
+            assert_eq!(
+                fallback_discovery
+                    .remaining_one_telemetry
+                    .remaining_one_materialized_compact_direct,
+                1
+            );
+            return;
         }
 
-        let admissibility =
-            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
-        let objective_bar = compute_bar(2, 15, &history).bar;
-        let context = EnumerationContext::from_admissibility(&library, admissibility);
-        let clause_catalog = build_clause_catalog(context, 8);
-        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
-        let signature = PrefixSignature::new(15, &library, &prefix);
-        let mut discovery = super::RealisticShadowDiscovery::default();
+        panic!("expected at least one claim remaining-one surface without a survivor sketch");
+    }
 
-        assert!(discovery.prefix_legality_cache.insert_root(
-            signature.clone(),
-            8,
-            &library,
-            &prefix,
-            admissibility,
-            LateFamilySurface::ClaimGeneric
-        ));
+    #[test]
+    fn claim_materialization_reuses_cached_survivor_sketch_when_available() {
+        for step_index in 4..=15 {
+            let (library, history, nu_history) = reference_history_until(step_index - 1);
+            let admissibility = strict_admissibility_for_mode(
+                step_index,
+                2,
+                &library,
+                AdmissibilityMode::DesktopClaimShadow,
+            );
+            let objective_bar = compute_bar(2, step_index, &history).bar;
+            let target = Telescope::reference(step_index);
+            let prefix_len = target.clauses.len().saturating_sub(1);
+            let target_kappa = u16::try_from(target.kappa()).expect("kappa exceeded u16");
+            let prefix = Telescope::new(target.clauses[..prefix_len].to_vec());
+            let signature = PrefixSignature::new(step_index, &library, &prefix);
+            let context = EnumerationContext::from_admissibility(&library, admissibility);
+            let clause_catalog = build_clause_catalog(context, target_kappa);
+            let mut cache = PrefixLegalityCache::default();
 
-        let work_item = create_online_prefix_work_item(
-            8,
-            prefix,
-            signature.clone(),
-            &library,
-            admissibility,
-            &clause_catalog,
-            &mut discovery.prefix_legality_cache,
-        );
-        assert_eq!(work_item.remaining_clause_slots, 1);
+            if !cache.insert_root(
+                signature.clone(),
+                target_kappa,
+                &library,
+                &prefix,
+                admissibility,
+                LateFamilySurface::ClaimGeneric,
+            ) {
+                continue;
+            }
 
-        let mut budget = 64;
-        let decision = exact_partial_prefix_bound_decision(
-            15,
-            &library,
-            admissibility,
-            objective_bar,
-            &nu_history,
-            &clause_catalog,
-            &work_item,
-            &mut discovery.prefix_legality_cache,
-            &mut budget,
-            None,
-            None,
-            None,
-        );
-        assert_ne!(decision, super::ExactPartialPrefixBoundDecision::Unknown);
-        assert_eq!(
-            discovery
+            let work_item = create_online_prefix_work_item(
+                target_kappa,
+                prefix.clone(),
+                signature.clone(),
+                &library,
+                admissibility,
+                &clause_catalog,
+                &mut cache,
+            );
+            let summary = super::compute_terminal_prefix_completion_summary_from_candidates(
+                step_index,
+                &library,
+                admissibility,
+                objective_bar,
+                &nu_history,
+                &signature,
+                &prefix,
+                super::TerminalPrefixSummaryPayload::Compact,
+                super::terminal_prefix_clause_candidates(
+                    step_index,
+                    &library,
+                    admissibility,
+                    &signature,
+                    work_item.next_clauses(&clause_catalog),
+                    work_item.next_clause_connectivity_facts(&clause_catalog),
+                    work_item.next_clause_nu_facts(&clause_catalog),
+                    &mut cache,
+                    None,
+                ),
+                None,
+                &mut cache,
+                None,
+                None,
+            );
+            let Some(sketch) = summary.compact_survivor_sketch.clone() else {
+                continue;
+            };
+
+            let mut sketch_discovery = super::RealisticShadowDiscovery::default();
+            let mut direct_discovery = super::RealisticShadowDiscovery::default();
+            assert!(sketch_discovery.prefix_legality_cache.insert_root(
+                signature.clone(),
+                target_kappa,
+                &library,
+                &prefix,
+                admissibility,
+                LateFamilySurface::ClaimGeneric
+            ));
+            assert!(direct_discovery.prefix_legality_cache.insert_root(
+                signature.clone(),
+                target_kappa,
+                &library,
+                &prefix,
+                admissibility,
+                LateFamilySurface::ClaimGeneric
+            ));
+
+            sketch_discovery
                 .prefix_legality_cache
-                .entry_counts()
-                .terminal_prefix_completions,
-            1
-        );
-        assert!(
-            discovery
-                .prefix_legality_cache
-                .terminal_prefix_completion_summary(&signature)
-                .expect("terminal prefix should cache a pruning summary")
-                .evaluations
-                .is_none()
-        );
+                .store_terminal_prefix_completion_summary(signature.clone(), summary.clone());
 
-        let group = super::materialize_terminal_prefix_group(
-            15,
-            &library,
-            admissibility,
-            objective_bar,
-            &nu_history,
-            &work_item.signature,
-            &work_item.prefix_telescope,
-            work_item.next_clauses(&clause_catalog),
-            work_item.next_clause_connectivity_facts(&clause_catalog),
-            work_item.next_clause_nu_facts(&clause_catalog),
-            &mut discovery,
-        )
-        .expect("materialization should succeed");
+            let sketch_group = super::materialize_terminal_prefix_group(
+                step_index,
+                &library,
+                admissibility,
+                objective_bar,
+                &nu_history,
+                &signature,
+                &prefix,
+                work_item.next_clauses(&clause_catalog),
+                work_item.next_clause_connectivity_facts(&clause_catalog),
+                work_item.next_clause_nu_facts(&clause_catalog),
+                &mut sketch_discovery,
+            )
+            .expect("sketch materialization should succeed");
+            let direct_group = super::materialize_terminal_prefix_group_compact(
+                step_index,
+                &library,
+                admissibility,
+                objective_bar,
+                &nu_history,
+                &signature,
+                &prefix,
+                work_item.next_clauses(&clause_catalog),
+                work_item.next_clause_connectivity_facts(&clause_catalog),
+                work_item.next_clause_nu_facts(&clause_catalog),
+                &mut direct_discovery,
+            )
+            .expect("direct compact materialization should succeed");
 
-        assert!(group.generated_terminal_candidates >= group.admissible_terminal_candidates);
-        assert_eq!(
-            discovery
-                .prefix_legality_cache
-                .entry_counts()
-                .terminal_prefix_completions,
-            0,
-            "claim materialization should release the cached terminal completion payload"
-        );
-        assert_eq!(
-            discovery
-                .remaining_one_telemetry
-                .remaining_one_materialized_from_cached_summary,
-            0
-        );
-        assert_eq!(
-            discovery
-                .remaining_one_telemetry
-                .remaining_one_materialized_compact_direct,
-            1
-        );
+            let sketch_candidates = sketch_group
+                .candidates
+                .iter()
+                .map(|candidate| (candidate.telescope.clone(), candidate.accept_rank.clone()))
+                .collect::<Vec<_>>();
+            let direct_survivors = direct_group
+                .candidates
+                .iter()
+                .filter(|candidate| candidate.accept_rank.is_some())
+                .map(|candidate| (candidate.telescope.clone(), candidate.accept_rank.clone()))
+                .collect::<Vec<_>>();
+
+            assert_eq!(
+                sketch_group.generated_terminal_candidates,
+                direct_group.generated_terminal_candidates
+            );
+            assert_eq!(
+                sketch_group.admissible_terminal_candidates,
+                direct_group.admissible_terminal_candidates
+            );
+            assert_eq!(sketch_group.bound, direct_group.bound);
+            assert_eq!(sketch_group.best_accept_rank, direct_group.best_accept_rank);
+            assert_eq!(sketch_candidates, direct_survivors);
+            assert_eq!(sketch_candidates.len(), sketch.survivors.len());
+            assert_eq!(
+                sketch_discovery
+                    .remaining_one_telemetry
+                    .remaining_one_materialized_from_cached_summary,
+                1
+            );
+            assert_eq!(
+                sketch_discovery
+                    .remaining_one_telemetry
+                    .remaining_one_materialized_compact_direct,
+                0
+            );
+            return;
+        }
+
+        panic!("expected at least one claim remaining-one surface with a survivor sketch");
     }
 
     #[test]

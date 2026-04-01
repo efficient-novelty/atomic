@@ -275,6 +275,18 @@ pub struct TerminalPrefixCompletion {
     pub clause_kappa_used: u16,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct TerminalPrefixSurvivorSketchEntry {
+    pub clause_index: usize,
+    pub exact_nu: u16,
+    pub bit_kappa_used: u16,
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct TerminalPrefixSurvivorSketch {
+    pub survivors: Vec<TerminalPrefixSurvivorSketchEntry>,
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct TerminalPrefixPrimaryRank {
     pub overshoot: Rational,
@@ -299,6 +311,7 @@ pub struct TerminalPrefixCompletionSummary {
     pub generated_candidate_count: usize,
     pub admissibility_diagnostics: AdmissibilityDiagnostics,
     pub bound: Option<PrefixBound>,
+    pub compact_survivor_sketch: Option<TerminalPrefixSurvivorSketch>,
     pub best_accept_primary_rank: Option<TerminalPrefixPrimaryRank>,
     pub best_accept_rank: Option<AcceptRank>,
     pub admitted_candidate_count: usize,
@@ -1302,6 +1315,7 @@ mod tests {
                 generated_candidate_count: 1,
                 admissibility_diagnostics: diagnostics,
                 bound: Some(PrefixBound::singleton(26, 5, 79)),
+                compact_survivor_sketch: None,
                 best_accept_primary_rank: Some(TerminalPrefixPrimaryRank {
                     overshoot: Rational::new(42, 145),
                     clause_kappa: 5,
@@ -1373,6 +1387,7 @@ mod tests {
                 generated_candidate_count: 1,
                 admissibility_diagnostics: AdmissibilityDiagnostics::default(),
                 bound: Some(PrefixBound::singleton(26, 5, 79)),
+                compact_survivor_sketch: None,
                 best_accept_primary_rank: None,
                 best_accept_rank: None,
                 admitted_candidate_count: 0,
@@ -1402,6 +1417,7 @@ mod tests {
                 generated_candidate_count: 1,
                 admissibility_diagnostics: AdmissibilityDiagnostics::default(),
                 bound: Some(PrefixBound::singleton(26, 5, 79)),
+                compact_survivor_sketch: None,
                 best_accept_primary_rank: None,
                 best_accept_rank: None,
                 admitted_candidate_count: 0,

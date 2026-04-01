@@ -29,38 +29,45 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 ## Current Read
 
-- The tiered `lib_refs` slice is now landed on top of the explicit no-miss
-  plateau-kernel split and the mandatory `TerminalClauseNuFacts` winner.
-  Prefix-side structural-`nu` context now uses inline small arrays first,
-  dense bitsets after the threshold, while sorted boxed slices stay only on
-  the serialized clause-facts surface.
+- The tiny survivor-sketch slice is now landed on top of the tiered `lib_refs`
+  work, the explicit no-miss plateau-kernel split, and the mandatory
+  `TerminalClauseNuFacts` winner.
+  Compact claim summaries now keep a survivor sketch on the safe
+  single-primary surfaces and reuse it during materialization without waking
+  the dormant general cached-summary reopen path.
 - Claim-focused validation stayed green:
-  - `cargo test -p pen-eval structural_nu`
   - `cargo test -p pen-search claim_`
+  - `cargo test -p pen-search cached_terminal_prefix_rank_summary_prunes_without_reopening_completion_summary`
+  - `cargo test -p pen-search take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse`
 - The release replay harness stayed parity-clean on the stored plateau
   fixtures.
 - The checked-in five-surface replay benchmark improved overall from
-  `145248 us` to `126668 us`.
-  It improved all five stored surfaces.
+  `126668 us` to `123544 us`.
+  It improved all five stored surfaces again.
 - The capped intended-profile contender
-  `runs/codex-claim-release-full-aggregation-open-band-tiered-lib-refs-v2`
+  `runs/codex-claim-release-full-aggregation-open-band-survivor-sketch-v1`
   was manually stopped during step `4` after the `20` minute cap.
   The authoritative stored read is
   `reports/steps/step-04-live.ndjson`.
 - Its nearest stored checkpoint to `20` minutes was:
-  - `elapsed_millis = 1199662`
+  - `elapsed_millis = 1191856`
   - `prefix_states_explored = 124`
   - `prefix_cache_groups = 40`
   - `prefix_cache_candidates = 109690`
   - `frontier_queue_len = 2651`
-  - `terminal_summary_build_millis = 1191859`
-  - RSS `= 494972928` bytes
+  - `terminal_summary_build_millis = 1183893`
+  - RSS `= 495775744` bytes
   - `terminal_summary_admissibility_checks = 0`
   - `terminal_summary_fallback_connectivity_checks = 0`
 - That contender kept the same retained-prefix surface and the same no-miss
-  later-shape, but it did not beat the current `124`-prefix short-loop gate.
+  later-shape, but it still did not beat the current `124`-prefix short-loop
+  gate.
   It re-matched the prefix count and queue length, but still lost on
-  summary-build time.
+  summary-build time and landed slightly higher on RSS.
+- The stored telemetry also showed that the new sketch never activated on the
+  live plateau surface:
+  - `remaining_one_materialized_from_cached_summary = 0`
+  - `remaining_one_materialized_compact_direct = 40`
 - The next loop is still a short intended-profile optimization loop with a
   hard `20` minute cap.
   The plateau-kernel split remains the only honest short-loop win so far.
@@ -71,14 +78,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 Do not run another uncapped intended-profile continuation first.
 The next move is the next code slice on top of the newly landed tiered-
-`lib_refs` and plateau-kernel work while keeping `prefix-local-score-v1` as
-the long-run reference.
+`lib_refs`, plateau-kernel, and safe survivor-sketch work while keeping
+`prefix-local-score-v1` as the long-run reference.
 
 ### 2. Implement The Next Slice In This Order
 
-1. Add the tiny survivor sketch now that the tiered `lib_refs` slice is landed.
-   Carry only the clause refs and facts needed for the best primary rank and
-   tie-break-relevant survivors.
+1. Broaden the survivor sketch now that the safe single-primary version is
+   landed.
+   Carry the clause refs and facts needed for the incumbent-relevant
+   plateau survivors too, especially when multiple bar-clearing primary ranks
+   keep the current sketch dormant.
    Do not wake the dormant general cached-summary reopen machinery first.
 
 ### 3. Validation Loop For Each New Slice
