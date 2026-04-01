@@ -19,26 +19,35 @@ It lists only work that is still open.
 - The explicit no-miss plateau-kernel split is now landed, and its capped
   intended-profile contender is
   `runs/codex-claim-release-full-aggregation-open-band-plateau-kernel-split-v1`.
-- The broadened incumbent-relevant survivor sketch is now landed, and the
+- The broadened incumbent-relevant survivor sketch is now landed, the
   follow-on compact-summary bookkeeping slice now reuses borrowed
   primary-rank refs while preserving cached multi-primary sketch
-  materialization in tests, but the best warm local replay reread still
-  landed above the checked-in `123544 us` total (`126553 us`, with later
-  rereads back at `127375 us` and `129611 us`), so the lane has not yet
-  re-earned another intended-profile rerun.
+  materialization in tests, and a newer clause-bit-cost sidecar reuse now
+  keeps terminal clause bit cost inside `TerminalClauseNuFacts` while
+  backfilling older replay fixtures on load, so the remaining-one plateau
+  kernel and compact admitted bookkeeping stop recursively re-walking the
+  same clause expr just to recover `bit_kappa_used`.
+- The clause-bit-cost sidecar slice stayed parity-clean in the claim-focused
+  tests and release replay parity, beat the immediate pre-slice local release
+  reread of `134660 us`, and re-earned the checked-in `123544 us` replay gate
+  on warmed rereads at `122830 us` and `122493 us`; the refreshed stored
+  benchmark artifact was rewritten from a later under-gate reread at
+  `123148 us`, although extra spot-check rereads still bounced around the
+  gate at `124012 us` and `126456 us`, so the replay win is real but narrow.
+- The lane has therefore now honestly re-earned another capped intended-
+  profile rerun, but the current stored 20-minute checkpoint to beat still
+  remains `plateau-kernel-split-v1` at `124` explored prefixes.
 - A later local-only focus-aligned competition-gate/payload-mode hoist stayed
   parity-clean in tests and replay parity, but its warm rereads landed
   `136040 us`, `137054 us`, and `140843 us` total after a `130405 us`
-  immediate pre-slice local reread, so that code was dropped and the lane
-  still has not honestly re-earned another intended-profile rerun.
+  immediate pre-slice local reread, so that code was dropped.
 - Two later local-only compact-summary bookkeeping slices also stayed
   parity-clean in tests and replay parity, but both regressed and were
   dropped:
   the shared compact sketch/best-primary bookkeeping fold landed
   `140129 us`, `140565 us`, and `145083 us`, while the claim-open-band
   compact local-state hoist landed `129362 us`, `133001 us`, and `164098 us`
-  total across `24 / 74 / 140 / 332 / 335`, so the lane still has not
-  honestly re-earned another intended-profile rerun.
+  total across `24 / 74 / 140 / 332 / 335`.
 - The current winner preserved the honest retained-prefix story through the
   stored `576` read, beat `prefix-nu-context-v2` at matched later checkpoints
   through `533`, and still did not reach step `5`.

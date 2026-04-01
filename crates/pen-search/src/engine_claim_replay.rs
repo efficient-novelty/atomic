@@ -165,9 +165,13 @@ pub fn read_claim_remaining_one_replay_fixtures(
         serde_json::from_str(&json).with_context(|| format!("parse {}", path.display()))?;
     for fixture in &mut fixtures {
         for candidate in &mut fixture.terminal_candidates {
-            if candidate.nu_facts.is_none() {
-                candidate.nu_facts = Some(TerminalClauseNuFacts::from_clause(&candidate.clause));
-            }
+            candidate.nu_facts = Some(
+                candidate
+                    .nu_facts
+                    .take()
+                    .unwrap_or_else(|| TerminalClauseNuFacts::from_clause(&candidate.clause))
+                    .with_missing_runtime_fields_from_clause(&candidate.clause),
+            );
         }
     }
     Ok(fixtures)

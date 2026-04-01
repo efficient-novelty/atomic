@@ -34,7 +34,6 @@ use crate::scheduler::build_schedule;
 use crate::state::{FrontierStateRecV1, PrefixState};
 use crate::worker::run_worker_batch;
 use anyhow::{Result, bail};
-use pen_core::encode::expr_bit_length;
 use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::rational::Rational;
@@ -5562,7 +5561,8 @@ fn exact_terminal_prefix_bound_decision(
     let prefix_len = prefix_telescope.clauses.len();
     let clause_kappa_used =
         u32::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u32");
-    let prefix_bit_cost = prefix_telescope.bit_cost();
+    let prefix_bit_cost =
+        u16::try_from(prefix_telescope.bit_cost()).expect("bit cost exceeded u16");
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
     let single_clause_nu_context = (!prefix_telescope.clauses.is_empty()).then(|| {
         SingleClauseStructuralNuContext::from_prefix(prefix_telescope, library, nu_history)
@@ -6041,7 +6041,7 @@ enum RemainingOneNoMissPlateauKernelOutcome<'a> {
 fn run_remaining_one_no_miss_plateau_kernel<'a>(
     objective_bar: Rational,
     clause_kappa_used: u16,
-    prefix_bit_cost: u32,
+    prefix_bit_cost: u16,
     terminal_clause: &'a TerminalPrefixCandidate<'a>,
     connectivity_decision: TerminalConnectivityDecision,
     kernel_mode: RemainingOneNoMissKernelMode<'a>,
@@ -6099,7 +6099,7 @@ fn run_remaining_one_no_miss_plateau_kernel<'a>(
 fn prefix_local_terminal_clause_score(
     objective_bar: Rational,
     clause_kappa_used: u16,
-    prefix_bit_cost: u32,
+    prefix_bit_cost: u16,
     clause: &pen_core::clause::ClauseRec,
     clause_nu_facts: &TerminalClauseNuFacts,
     single_clause_nu_context: Option<&SingleClauseStructuralNuContext>,
@@ -6110,7 +6110,8 @@ fn prefix_local_terminal_clause_score(
             .total,
     )
     .expect("nu exceeded u16");
-    let bit_kappa_used = terminal_prefix_completion_bit_cost(prefix_bit_cost, clause);
+    let bit_kappa_used =
+        terminal_prefix_completion_bit_cost(prefix_bit_cost, clause, clause_nu_facts);
     Some(PrefixLocalTerminalClauseScore {
         exact_nu,
         bit_kappa_used,
@@ -6119,10 +6120,13 @@ fn prefix_local_terminal_clause_score(
 }
 
 fn terminal_prefix_completion_bit_cost(
-    prefix_bit_cost: u32,
-    clause: &pen_core::clause::ClauseRec,
+    prefix_bit_cost: u16,
+    _clause: &pen_core::clause::ClauseRec,
+    clause_nu_facts: &TerminalClauseNuFacts,
 ) -> u16 {
-    u16::try_from(prefix_bit_cost + expr_bit_length(&clause.expr)).expect("bit cost exceeded u16")
+    prefix_bit_cost
+        .checked_add(clause_nu_facts.cached_clause_bit_cost())
+        .expect("bit cost exceeded u16")
 }
 
 fn absorb_terminal_prefix_completion_bound(
@@ -6321,7 +6325,8 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
     let prefix_len = prefix_telescope.clauses.len();
     let clause_kappa_used =
         u16::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u16");
-    let prefix_bit_cost = prefix_telescope.bit_cost();
+    let prefix_bit_cost =
+        u16::try_from(prefix_telescope.bit_cost()).expect("bit cost exceeded u16");
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
     let single_clause_nu_context = (!prefix_telescope.clauses.is_empty()).then(|| {
         SingleClauseStructuralNuContext::from_prefix(prefix_telescope, library, nu_history)
@@ -6573,8 +6578,11 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                 .expect("nu exceeded u16");
                 kernel_timing.terminal_summary_exact_nu_duration += exact_nu_started.elapsed();
                 let aggregation_started = Instant::now();
-                let bit_kappa_used =
-                    terminal_prefix_completion_bit_cost(prefix_bit_cost, terminal_clause.clause);
+                let bit_kappa_used = terminal_prefix_completion_bit_cost(
+                    prefix_bit_cost,
+                    terminal_clause.clause,
+                    terminal_clause.nu_facts,
+                );
                 let competition_allowed = terminal_completion_can_compete_for_acceptance(
                     prefix_signature,
                     admissibility,
@@ -6738,6 +6746,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     let bit_kappa_used = terminal_prefix_completion_bit_cost(
                         prefix_bit_cost,
                         terminal_clause.clause,
+                        terminal_clause.nu_facts,
                     );
                     absorb_terminal_prefix_admitted_clause_summary(
                         objective_bar,
@@ -6905,6 +6914,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     let bit_kappa_used = terminal_prefix_completion_bit_cost(
                         prefix_bit_cost,
                         terminal_clause.clause,
+                        terminal_clause.nu_facts,
                     );
                     let primary_rank =
                         terminal_prefix_primary_rank(objective_bar, exact_nu, clause_kappa_used);
@@ -7472,7 +7482,8 @@ fn materialize_terminal_prefix_group_compact(
     let prefix_len = prefix_telescope.clauses.len();
     let clause_kappa_used =
         u16::try_from(prefix_len.saturating_add(1)).expect("kappa exceeded u16");
-    let prefix_bit_cost = prefix_telescope.bit_cost();
+    let prefix_bit_cost =
+        u16::try_from(prefix_telescope.bit_cost()).expect("bit cost exceeded u16");
     let mut scratch_telescope = terminal_prefix_scratch_telescope(prefix_telescope);
     let single_clause_nu_context = (!prefix_telescope.clauses.is_empty()).then(|| {
         SingleClauseStructuralNuContext::from_prefix(prefix_telescope, library, nu_history)
@@ -7615,8 +7626,11 @@ fn materialize_terminal_prefix_group_compact(
                     nu_history,
                 ))
                 .expect("nu exceeded u16");
-                let bit_kappa_used =
-                    terminal_prefix_completion_bit_cost(prefix_bit_cost, terminal_clause.clause);
+                let bit_kappa_used = terminal_prefix_completion_bit_cost(
+                    prefix_bit_cost,
+                    terminal_clause.clause,
+                    terminal_clause.nu_facts,
+                );
                 absorb_terminal_prefix_completion_bound(
                     &mut bound,
                     exact_nu,
@@ -7758,8 +7772,11 @@ fn materialize_terminal_prefix_group_compact(
                     nu_history,
                 ))
                 .expect("nu exceeded u16");
-                let bit_kappa_used =
-                    terminal_prefix_completion_bit_cost(prefix_bit_cost, terminal_clause.clause);
+                let bit_kappa_used = terminal_prefix_completion_bit_cost(
+                    prefix_bit_cost,
+                    terminal_clause.clause,
+                    terminal_clause.nu_facts,
+                );
                 absorb_terminal_prefix_completion_bound(
                     &mut bound,
                     exact_nu,

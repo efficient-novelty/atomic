@@ -20,15 +20,17 @@ gate.
 - The previous deeper continuation target was
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
 - The newest landed code slice now keeps the broadened cached survivor sketch
-  on top of the tiered prefix-side structural-`nu` `lib_refs` work and the
-  explicit plateau/fallback kernel split, while threading borrowed
-  primary-rank refs through compact summary bookkeeping so the hot path stops
-  cloning the same primary rank into both best-rank tracking and
-  survivor-sketch append on every bar-clearer.
-  Compact remaining-one summaries still keep a survivor sketch for
-  incumbent-relevant competition-allowed bar-clearers even when multiple
-  primary ranks are live, and materialization still reuses that cached sketch
-  without waking the dormant general cached-summary reopen path.
+  on top of the tiered prefix-side structural-`nu` `lib_refs` work, the
+  explicit plateau/fallback kernel split, and the borrowed-primary-rank reuse,
+  while also caching each terminal clause's bit cost inside
+  `TerminalClauseNuFacts` and backfilling older replay fixtures on load.
+  The hot remaining-one summary/materialization path therefore stops
+  recursively re-walking the same last-clause expr just to recover
+  `bit_kappa_used` on every admitted candidate, while compact remaining-one
+  summaries still keep a survivor sketch for incumbent-relevant
+  competition-allowed bar-clearers even when multiple primary ranks are live,
+  and materialization still reuses that cached sketch without waking the
+  dormant general cached-summary reopen path.
 
 ## Current Run To Beat
 
@@ -148,6 +150,39 @@ gate.
 - Neither later slice re-earned the checked-in `123544 us` replay gate, so
   both code paths were reverted, the benchmark artifact stayed unchanged, and
   no new intended-profile rerun was launched.
+- A later narrow slice then cached terminal-clause bit cost inside
+  `TerminalClauseNuFacts`, backfilled older replay fixtures on load, and
+  reused that sidecar across the remaining-one plateau-kernel and compact
+  admitted bit-`kappa` bookkeeping paths instead of recursively walking the
+  same clause expr on every admitted candidate.
+- Claim-focused validation stayed green while testing the slice:
+  - `cargo test -p pen-eval terminal_clause_nu_facts_backfill_missing_bit_cost`
+  - `cargo test -p pen-search claim_`
+  - `cargo test -p pen-search cached_terminal_prefix_rank_summary_prunes_without_reopening_completion_summary`
+  - `cargo test -p pen-search take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse`
+- The release replay harness stayed parity-clean on the stored plateau
+  fixtures while the slice was in place.
+- The immediate pre-slice local release reread was `134660 us` total:
+  - `24`: `30164`
+  - `74`: `48407`
+  - `140`: `18293`
+  - `332`: `18854`
+  - `335`: `18942`
+- Warm rereads with the bit-cost sidecar reuse landed `133228 us`,
+  `124028 us`, `122830 us`, and `122493 us` total:
+  - `133228`: `26828 / 49463 / 18923 / 18241 / 19773`
+  - `124028`: `24874 / 45415 / 17527 / 18007 / 18205`
+  - `122830`: `26271 / 43593 / 17247 / 17245 / 18474`
+  - `122493`: `25108 / 43553 / 18100 / 17228 / 18504`
+- These are `24 / 74 / 140 / 332 / 335` in order for each total above.
+- The refreshed stored benchmark artifact was then rewritten from a later
+  under-gate reread at `123148 us` total:
+  - `123148`: `25589 / 43365 / 18070 / 17325 / 18799`
+- Additional spot-check rereads still bounced around the gate at `124012 us`
+  and `126456 us`, so the win is narrow and noisy, but the slice re-earned the
+  checked-in `123544 us` replay gate more than once and also beat the
+  immediate pre-slice local release reread honestly, so the code stayed
+  landed and the lane has now earned another capped intended-profile rerun.
 
 ## What Stays Landed
 
@@ -161,6 +196,10 @@ gate.
   the clause catalog, filtered active-window clones, remaining-one
   bound/summary/materialization, and replay fixtures, now mandatory on the
   winning remaining-one path
+- the terminal-clause bit-cost sidecar cached inside
+  `TerminalClauseNuFacts`, with replay-loader backfill for older fixtures, now
+  reused across the remaining-one plateau-kernel and compact admitted
+  bit-`kappa` bookkeeping paths
 - the prefix-local continuation-cone score fast path on remaining-one exact
   bound checks, compact summary build, and compact materialization when
   fallback connectivity is not needed
@@ -196,19 +235,20 @@ gate.
 - The old "second primary rank disables the sketch" limitation is now gone:
   multi-primary incumbent-relevant surfaces now reuse cached sketch
   materialization in tests.
-- The new local evidence is still mixed:
-  the landed borrowed-primary-rank survivor-sketch bookkeeping reuse still
-  owns the last directionally-better replay read, while the dropped
-  focus-aligned competition-gate hoist, the dropped shared compact-bookkeeping
-  fold, and the dropped claim-open-band compact local-state hoist all stayed
-  parity-clean but landed worse on the stored plateau fixtures.
-- Because that replay gate did not improve, the lane has not yet earned
-  another `20`-minute intended-profile rerun.
-- The plateau-kernel split therefore still owns the only honest short-loop win
-  so far.
+- The new local evidence is now better but still narrow:
+  the landed clause-bit-cost sidecar reuse re-earned the checked-in replay
+  gate on warmed release rereads and beat the immediate pre-slice local read,
+  while the earlier dropped focus-aligned competition-gate hoist, shared
+  compact-bookkeeping fold, and claim-open-band compact local-state hoist all
+  stayed parity-clean but landed worse on the stored plateau fixtures.
+- The lane has therefore now earned another `20`-minute intended-profile
+  rerun, but the replay margin is still noisy enough that the next stored
+  short-loop checkpoint must stay the real judge.
+- The plateau-kernel split still owns the current stored short-loop run to
+  beat.
   The lane should keep treating `prefix-local-score-v1` as the long-run
-  reference until later slices repeat the 20-minute win and then reopen the
-  deeper continuation honestly.
+  reference until the next capped rerun either replaces the `124`-prefix
+  checkpoint honestly or sends the loop back to another narrow code slice.
 - The optimization loop now needs shorter, more repeatable intended-profile
   reads.
   We no longer expect the very next slice to beat the full `1095`-prefix stop.
@@ -220,16 +260,15 @@ gate.
 - Keep `prefix-local-score-v1` as the long-run run to beat and
   `plateau-kernel-split-v1` as the current short-loop checkpoint to beat.
 - Use a hard 20-minute max intended-profile rerun for the next attempts.
-- The next code slice is now:
-  keep the new multi-primary/incumbent-relevant survivor-sketch coverage plus
-  the borrowed-primary-rank bookkeeping reuse, but try a different narrow
-  per-admitted compact-summary cost inside
-  `compute_terminal_prefix_completion_summary_from_candidates(...)` instead of
-  retrying the dropped focus-aligned competition-gate/payload-mode hoist, the
-  dropped shared compact-bookkeeping fold, or the dropped claim-open-band
-  compact local-state hoist, so the open-band replay path can honestly
-  re-earn the checked-in `123544 us` replay gate or otherwise reduce exact-`nu`
-  work on the stored plateau fixtures before another intended-profile rerun.
+- Spend the newly re-earned replay gate on one capped intended-profile rerun
+  before reopening another speculative code slice.
+- If that rerun does not beat the current `124`-prefix short-loop checkpoint
+  honestly, return to another narrow per-admitted compact-summary cost slice
+  inside `compute_terminal_prefix_completion_summary_from_candidates(...)`
+  rather than retrying the dropped focus-aligned
+  competition-gate/payload-mode hoist, the dropped shared
+  compact-bookkeeping fold, or the dropped claim-open-band compact local-state
+  hoist.
 - Do not wake the dormant general cached-summary reopen machinery first.
 - Only reopen longer full-profile continuation reads after repeated 20-minute
   wins show that the lane has materially improved.
@@ -237,22 +276,20 @@ gate.
 ## Immediate Next Move
 
 1. Keep `prefix-local-score-v1` frozen as the long-run run to beat.
-2. Reopen code work with the next slice:
-   keep the new multi-primary/incumbent-relevant sketch coverage and the new
-   borrowed-primary-rank fast path, but cut a different remaining
-   compact-summary per-admitted cost on top of the tiered-`lib_refs` and
-   plateau/fallback kernel work; do not reopen the dropped focus-aligned
-   competition-gate/payload-mode hoist, the dropped shared compact-bookkeeping
-   fold, or the dropped claim-open-band compact local-state hoist first.
-3. After that slice:
-   - rerun only the claim-focused tests touched by the change
-   - rerun the replay harness in release mode
-   - only then launch a new intended-profile rerun for `20` minutes max if
-     parity stays clean and the replay gate improves
-4. Judge the next local slice first against the checked-in replay gate, then
-   against the current short-loop gate:
-   `123544 us` total across the five stored replay surfaces, then
-   `1191562 ms`, `124` explored prefixes, `40 groups / 109690 candidates`
+2. Launch one new intended-profile rerun on the current binary for `20`
+   minutes max.
+3. Record the nearest stored step-`4` checkpoint to `1200000 ms` and compare it
+   first against the current short-loop gate:
+   `1191562 ms`, `124` explored prefixes, `40 groups / 109690 candidates`,
+   `frontier_queue_len = 2651`, RSS `= 495325184`,
+   `terminal_summary_build_millis = 1183359`,
+   `terminal_summary_admissibility_checks = 0`, and
+   `terminal_summary_fallback_connectivity_checks = 0`.
+4. If the rerun does not beat that checkpoint honestly, return to code work
+   with another narrow compact-summary per-admitted cost slice while keeping
+   the dropped focus-aligned competition-gate/payload-mode hoist, the dropped
+   shared compact-bookkeeping fold, and the dropped claim-open-band compact
+   local-state hoist off the table first.
 5. Keep broad cleanup, cached-summary reopen wake-up work, contender-rank
    rewrites, connectivity-first/cache-first rewrites, and deterministic
    batched parallel reduction dropped until the short-loop runtime wins become

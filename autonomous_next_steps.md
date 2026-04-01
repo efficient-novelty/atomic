@@ -29,15 +29,15 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 ## Current Read
 
-- The follow-on survivor-sketch bookkeeping slice is now landed on top of the
+- The follow-on survivor-sketch bookkeeping slice remains landed on top of the
   broadened incumbent-relevant sketch coverage, the tiered `lib_refs` work,
   the explicit no-miss plateau-kernel split, and the mandatory
   `TerminalClauseNuFacts` winner.
   Compact claim summaries still keep a survivor sketch for competition-allowed
   bar-clearers that can still beat the current incumbent even when multiple
   primary ranks are live, and still reuse it during materialization without
-  waking the dormant general cached-summary reopen path, but the hot compact
-  summary path now threads borrowed primary-rank refs through best-rank
+  waking the dormant general cached-summary reopen path, while the hot compact
+  summary path still threads borrowed primary-rank refs through best-rank
   tracking and sketch append instead of cloning the same primary-rank payload
   twice per bar-clearer.
 - Claim-focused validation stayed green:
@@ -87,46 +87,72 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - Neither later slice re-earned the checked-in `123544 us` total, so both
   code paths were reverted, the benchmark artifact stayed unchanged, and no
   new intended-profile rerun was launched.
-- The plateau-kernel split remains the only honest short-loop win so far.
+- A later narrow slice then cached terminal-clause bit cost inside
+  `TerminalClauseNuFacts`, backfilled older replay fixtures on load, and
+  reused that sidecar across the remaining-one plateau-kernel and compact
+  admitted bit-`kappa` bookkeeping paths instead of recursively walking the
+  same clause expr on every admitted candidate.
+- Claim-focused validation stayed green:
+  - `cargo test -p pen-eval terminal_clause_nu_facts_backfill_missing_bit_cost`
+  - `cargo test -p pen-search claim_`
+  - `cargo test -p pen-search cached_terminal_prefix_rank_summary_prunes_without_reopening_completion_summary`
+  - `cargo test -p pen-search take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse`
+- The release replay harness stayed parity-clean on the stored plateau
+  fixtures while the slice was in place.
+- The immediate pre-slice local release reread was `134660 us` total:
+  - `24`: `30164`
+  - `74`: `48407`
+  - `140`: `18293`
+  - `332`: `18854`
+  - `335`: `18942`
+- Warm rereads with the bit-cost sidecar reuse landed `133228 us`,
+  `124028 us`, `122830 us`, and `122493 us` total:
+  - `133228`: `26828 / 49463 / 18923 / 18241 / 19773`
+  - `124028`: `24874 / 45415 / 17527 / 18007 / 18205`
+  - `122830`: `26271 / 43593 / 17247 / 17245 / 18474`
+  - `122493`: `25108 / 43553 / 18100 / 17228 / 18504`
+  These are `24 / 74 / 140 / 332 / 335` in order.
+- The refreshed stored benchmark artifact was then rewritten from a later
+  under-gate reread at `123148 us` total:
+  - `123148`: `25589 / 43365 / 18070 / 17325 / 18799`
+- Additional spot-check rereads still bounced around the gate at `124012 us`
+  and `126456 us`, so the win is narrow and noisy, but the slice re-earned the
+  checked-in `123544 us` total more than once and also beat the immediate
+  pre-slice local release reread honestly.
+- The plateau-kernel split therefore remains the stored 20-minute run to beat,
+  but the lane has now earned another capped intended-profile rerun.
 
 ## Do This Next
 
-### 1. Reopen Code Work Now
+### 1. Spend The Replay Win Now
 
-Do not run another intended-profile continuation first.
-The next move is a follow-on code slice on top of the newly landed tiered-
-`lib_refs`, plateau-kernel, and broadened survivor-sketch work while keeping
+Do not reopen another speculative code slice first.
+The next move is one capped intended-profile rerun on top of the newly landed
+tiered-`lib_refs`, plateau-kernel, broadened survivor-sketch, borrowed-
+primary-rank, and clause-bit-cost sidecar work while keeping
 `prefix-local-score-v1` as the long-run reference.
 
-### 2. Implement The Next Slice In This Order
+### 2. Run The Next Validation Slice In This Order
 
-1. Keep the new multi-primary/incumbent-relevant survivor-sketch coverage plus
-   the new borrowed-primary-rank bookkeeping reuse, but reduce a different
-   remaining compact-summary per-admitted cost.
-   Stay inside `compute_terminal_prefix_completion_summary_from_candidates(...)`
-   and collapse the open-band compact summary bookkeeping further so replay can
-   at least re-earn the checked-in `123544 us` total or otherwise show fewer
-   exact-`nu` evaluations on the stored plateau fixtures, but do not retry the
-   dropped focus-aligned competition-gate/payload-mode hoist, the dropped
-   shared compact-bookkeeping fold, or the dropped claim-open-band compact
-   local-state hoist first.
-   Do not wake the dormant general cached-summary reopen machinery first.
+1. Launch the intended `desktop_claim_shadow` profile on the current binary.
+2. Stop the rerun after `20` minutes max.
+3. Record the nearest stored step-`4` checkpoint to `1200000 ms`.
+4. Compare that checkpoint first against the current short-loop target from
+   `plateau-kernel-split-v1`, then keep `prefix-local-score-v1` as the long-
+   run continuation reference behind it.
+5. If the rerun does not beat the current short-loop target honestly, return
+   to code work with another narrow per-admitted compact-summary cost slice
+   inside `compute_terminal_prefix_completion_summary_from_candidates(...)`,
+   but do not retry the dropped focus-aligned
+   competition-gate/payload-mode hoist, the dropped shared
+   compact-bookkeeping fold, or the dropped claim-open-band compact local-
+   state hoist first.
+6. Do not wake the dormant general cached-summary reopen machinery first.
 
-### 3. Validation Loop For Each New Slice
+### 3. Keep Rule For The Next Rerun
 
-For the next attempts, validate in this order:
-
-1. Rerun only the claim-focused tests needed by the changed code.
-2. Refresh the replay-harness read in release mode.
-3. Confirm replay parity plus either fewer exact-`nu` evaluations or lower
-   measured replay time on the stored plateau fixtures.
-   Do not keep a slice on one noisy reread alone; require it to beat the
-   immediate pre-slice local replay read honestly as well.
-4. Only launch a new intended-profile rerun after that replay gate improves,
-   then stop it after `20` minutes max.
-5. Compare the next local slice first to the checked-in replay gate, then
-   compare any resulting rerun against the current 20-minute target from
-   `plateau-kernel-split-v1`.
+Treat the next rerun as real progress only if the stored `20`-minute
+checkpoint beats the current short-loop target honestly.
 
 ### 4. Short-Loop Beat Rule
 
@@ -167,7 +193,8 @@ Until then:
 
 ## Do Not Reopen First
 
-- another long intended-profile rerun with no new code
+- another long intended-profile continuation beyond the `20`-minute cap
+- another fresh code slice before spending the newly re-earned capped rerun
 - cached-summary reopen wake-up work
 - the dropped focus-aligned competition-gate/payload-mode hoist
 - the dropped shared compact-bookkeeping fold

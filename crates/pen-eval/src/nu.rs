@@ -1,5 +1,6 @@
 use crate::nu_trace::trace_lines;
 use pen_core::clause::ClauseRec;
+use pen_core::encode::expr_bit_length;
 use pen_core::expr::Expr;
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::telescope::{Telescope, TelescopeClass};
@@ -101,6 +102,8 @@ struct TelescopeNuProfile {
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct TerminalClauseNuFacts {
     lib_refs: Box<[u32]>,
+    #[serde(default)]
+    clause_bit_cost: u16,
     is_type_formation: bool,
     is_intro: bool,
     is_elim: bool,
@@ -495,6 +498,7 @@ impl TerminalClauseNuFacts {
         let is_path_con = is_path_con_expr(expr);
         Self {
             lib_refs: lib_refs.into_boxed_slice(),
+            clause_bit_cost: u16::try_from(expr_bit_length(expr)).expect("bit cost exceeded u16"),
             is_type_formation: is_type_formation(expr),
             is_intro: is_intro_expr(expr),
             is_elim: is_elim_expr(expr),
@@ -525,6 +529,26 @@ impl TerminalClauseNuFacts {
             is_polymorphic_temporal_elim: is_polymorphic_temporal_elim(expr),
             is_spatial_temporal_clause: is_spatial_temporal_clause(expr),
         }
+    }
+
+    pub fn clause_bit_cost(&self, clause: &ClauseRec) -> u16 {
+        if self.clause_bit_cost != 0 {
+            self.clause_bit_cost
+        } else {
+            u16::try_from(expr_bit_length(&clause.expr)).expect("bit cost exceeded u16")
+        }
+    }
+
+    pub fn cached_clause_bit_cost(&self) -> u16 {
+        debug_assert_ne!(self.clause_bit_cost, 0);
+        self.clause_bit_cost
+    }
+
+    pub fn with_missing_runtime_fields_from_clause(mut self, clause: &ClauseRec) -> Self {
+        if self.clause_bit_cost == 0 {
+            self.clause_bit_cost = self.clause_bit_cost(clause);
+        }
+        self
     }
 }
 
@@ -1990,5 +2014,22 @@ mod tests {
                 "facts surface {index} diverged",
             );
         }
+    }
+
+    #[test]
+    fn terminal_clause_nu_facts_backfill_missing_bit_cost() {
+        let clause = ClauseRec::new(
+            pen_core::clause::ClauseRole::Formation,
+            Expr::Pi(Box::new(Expr::Lib(2)), Box::new(Expr::Var(1))),
+        );
+        let facts = TerminalClauseNuFacts::from_clause(&clause);
+        let mut missing = facts.clone();
+        missing.clause_bit_cost = 0;
+
+        assert_eq!(missing.clause_bit_cost(&clause), facts.clause_bit_cost);
+        assert_eq!(
+            missing.with_missing_runtime_fields_from_clause(&clause),
+            facts
+        );
     }
 }
