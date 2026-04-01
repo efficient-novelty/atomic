@@ -5589,26 +5589,32 @@ fn exact_terminal_prefix_bound_decision(
                 ) {
                     continue;
                 }
-                if !matches!(
-                    connectivity_decision,
-                    TerminalConnectivityDecision::NeedsFallback
-                ) {
-                    if let Some(decision) = terminal_clause.cached_admissibility_decision.as_ref() {
-                        if !decision.is_admitted() {
-                            continue;
-                        }
-                        if let Some(score) = prefix_local_terminal_clause_score(
-                            objective_bar,
-                            u16::try_from(clause_kappa_used).expect("kappa exceeded u16"),
-                            prefix_bit_cost,
-                            terminal_clause.clause,
-                            terminal_clause.nu_facts,
-                            single_clause_nu_context.as_ref(),
-                        ) {
-                            if score.primary_rank.is_some() {
-                                return ExactPartialPrefixBoundDecision::CanClearBar;
+                if let Some(kernel_mode) = terminal_clause
+                    .cached_admissibility_decision
+                    .as_ref()
+                    .map(RemainingOneNoMissKernelMode::General)
+                {
+                    if let Some(kernel_outcome) = run_remaining_one_no_miss_plateau_kernel(
+                        objective_bar,
+                        u16::try_from(clause_kappa_used).expect("kappa exceeded u16"),
+                        prefix_bit_cost,
+                        &terminal_clause,
+                        connectivity_decision,
+                        kernel_mode,
+                        single_clause_nu_context.as_ref(),
+                    ) {
+                        match kernel_outcome {
+                            RemainingOneNoMissPlateauKernelOutcome::AdmissibilityRejected {
+                                ..
+                            } => {
+                                continue;
                             }
-                            continue;
+                            RemainingOneNoMissPlateauKernelOutcome::Admitted { score, .. } => {
+                                if score.primary_rank.is_some() {
+                                    return ExactPartialPrefixBoundDecision::CanClearBar;
+                                }
+                                continue;
+                            }
                         }
                     }
                 }
@@ -5672,22 +5678,27 @@ fn exact_terminal_prefix_bound_decision(
                 ) {
                     continue;
                 }
-                if !matches!(
+                if let Some(kernel_outcome) = run_remaining_one_no_miss_plateau_kernel(
+                    objective_bar,
+                    u16::try_from(clause_kappa_used).expect("kappa exceeded u16"),
+                    prefix_bit_cost,
+                    &terminal_clause,
                     connectivity_decision,
-                    TerminalConnectivityDecision::NeedsFallback
+                    RemainingOneNoMissKernelMode::ClaimAdmittedOpenBand,
+                    single_clause_nu_context.as_ref(),
                 ) {
-                    if let Some(score) = prefix_local_terminal_clause_score(
-                        objective_bar,
-                        u16::try_from(clause_kappa_used).expect("kappa exceeded u16"),
-                        prefix_bit_cost,
-                        terminal_clause.clause,
-                        terminal_clause.nu_facts,
-                        single_clause_nu_context.as_ref(),
-                    ) {
-                        if score.primary_rank.is_some() {
-                            return ExactPartialPrefixBoundDecision::CanClearBar;
+                    match kernel_outcome {
+                        RemainingOneNoMissPlateauKernelOutcome::AdmissibilityRejected {
+                            ..
+                        } => {
+                            continue;
                         }
-                        continue;
+                        RemainingOneNoMissPlateauKernelOutcome::Admitted { score, .. } => {
+                            if score.primary_rank.is_some() {
+                                return ExactPartialPrefixBoundDecision::CanClearBar;
+                            }
+                            continue;
+                        }
                     }
                 }
 
@@ -5933,6 +5944,114 @@ struct PrefixLocalTerminalClauseScore {
     exact_nu: u16,
     bit_kappa_used: u16,
     primary_rank: Option<TerminalPrefixPrimaryRank>,
+}
+
+#[derive(Clone, Copy, Debug)]
+enum RemainingOneNoMissKernelMode<'a> {
+    General(&'a AdmissibilityDecision),
+    ClaimAdmittedOpenBand,
+}
+
+#[derive(Clone, Copy, Debug)]
+enum RemainingOneNoMissKernelAdmittedDecision<'a> {
+    Cached(&'a AdmissibilityDecision),
+    ClaimOpenBand,
+}
+
+impl RemainingOneNoMissKernelAdmittedDecision<'_> {
+    fn clone_for_evaluation(self) -> AdmissibilityDecision {
+        match self {
+            Self::Cached(decision) => decision.clone(),
+            Self::ClaimOpenBand => claim_open_band_admissibility_decision(),
+        }
+    }
+
+    fn competition_allowed(
+        self,
+        prefix_signature: &PrefixSignature,
+        admissibility: StrictAdmissibility,
+        prefix_legality_cache: &PrefixLegalityCache,
+    ) -> bool {
+        match self {
+            Self::Cached(decision) => terminal_completion_can_compete_for_acceptance(
+                prefix_signature,
+                admissibility,
+                prefix_legality_cache,
+                decision,
+            ),
+            Self::ClaimOpenBand => true,
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+enum RemainingOneNoMissPlateauKernelOutcome<'a> {
+    AdmissibilityRejected {
+        decision: &'a AdmissibilityDecision,
+    },
+    Admitted {
+        decision: RemainingOneNoMissKernelAdmittedDecision<'a>,
+        score: PrefixLocalTerminalClauseScore,
+        exact_nu_duration: Duration,
+    },
+}
+
+fn run_remaining_one_no_miss_plateau_kernel<'a>(
+    objective_bar: Rational,
+    clause_kappa_used: u16,
+    prefix_bit_cost: u32,
+    terminal_clause: &'a TerminalPrefixCandidate<'a>,
+    connectivity_decision: TerminalConnectivityDecision,
+    kernel_mode: RemainingOneNoMissKernelMode<'a>,
+    single_clause_nu_context: Option<&SingleClauseStructuralNuContext>,
+) -> Option<RemainingOneNoMissPlateauKernelOutcome<'a>> {
+    if !matches!(
+        connectivity_decision,
+        TerminalConnectivityDecision::KeepWithoutFallback
+    ) {
+        return None;
+    }
+
+    match kernel_mode {
+        RemainingOneNoMissKernelMode::General(decision) => {
+            if !decision.is_admitted() {
+                return Some(
+                    RemainingOneNoMissPlateauKernelOutcome::AdmissibilityRejected { decision },
+                );
+            }
+
+            let exact_nu_started = Instant::now();
+            let score = prefix_local_terminal_clause_score(
+                objective_bar,
+                clause_kappa_used,
+                prefix_bit_cost,
+                terminal_clause.clause,
+                terminal_clause.nu_facts,
+                single_clause_nu_context,
+            )?;
+            Some(RemainingOneNoMissPlateauKernelOutcome::Admitted {
+                decision: RemainingOneNoMissKernelAdmittedDecision::Cached(decision),
+                score,
+                exact_nu_duration: exact_nu_started.elapsed(),
+            })
+        }
+        RemainingOneNoMissKernelMode::ClaimAdmittedOpenBand => {
+            let exact_nu_started = Instant::now();
+            let score = prefix_local_terminal_clause_score(
+                objective_bar,
+                clause_kappa_used,
+                prefix_bit_cost,
+                terminal_clause.clause,
+                terminal_clause.nu_facts,
+                single_clause_nu_context,
+            )?;
+            Some(RemainingOneNoMissPlateauKernelOutcome::Admitted {
+                decision: RemainingOneNoMissKernelAdmittedDecision::ClaimOpenBand,
+                score,
+                exact_nu_duration: exact_nu_started.elapsed(),
+            })
+        }
+    }
 }
 
 fn prefix_local_terminal_clause_score(
@@ -6214,63 +6333,96 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                 }
                 kernel_timing.terminal_summary_aggregation_duration += generated_started.elapsed();
 
-                if !matches!(
-                    connectivity_decision,
-                    TerminalConnectivityDecision::NeedsFallback
-                ) {
-                    if let Some(admissibility_decision) =
-                        terminal_clause.cached_admissibility_decision.as_ref()
-                    {
-                        let admissibility_bookkeeping_started = Instant::now();
-                        summary
-                            .admissibility_diagnostics
-                            .record(admissibility_decision);
-                        kernel_timing.terminal_summary_aggregation_duration +=
-                            admissibility_bookkeeping_started.elapsed();
-                        if !admissibility_decision.is_admitted() {
-                            if let Some(evaluations) = summary.evaluations.as_mut() {
-                                evaluations.push(
-                                    TerminalPrefixClauseEvaluation::AdmissibilityRejected {
-                                        decision: admissibility_decision.clone(),
-                                    },
-                                );
+                if let Some(kernel_mode) = terminal_clause
+                    .cached_admissibility_decision
+                    .as_ref()
+                    .map(RemainingOneNoMissKernelMode::General)
+                {
+                    if let Some(kernel_outcome) = run_remaining_one_no_miss_plateau_kernel(
+                        objective_bar,
+                        clause_kappa_used,
+                        prefix_bit_cost,
+                        &terminal_clause,
+                        connectivity_decision,
+                        kernel_mode,
+                        single_clause_nu_context.as_ref(),
+                    ) {
+                        match kernel_outcome {
+                            RemainingOneNoMissPlateauKernelOutcome::AdmissibilityRejected {
+                                decision,
+                            } => {
+                                let admissibility_bookkeeping_started = Instant::now();
+                                summary.admissibility_diagnostics.record(decision);
+                                if let Some(evaluations) = summary.evaluations.as_mut() {
+                                    evaluations.push(
+                                        TerminalPrefixClauseEvaluation::AdmissibilityRejected {
+                                            decision: decision.clone(),
+                                        },
+                                    );
+                                }
+                                kernel_timing.terminal_summary_aggregation_duration +=
+                                    admissibility_bookkeeping_started.elapsed();
+                                continue;
                             }
-                            continue;
-                        }
-                        if summary.evaluations.is_none() {
-                            let exact_nu_started = Instant::now();
-                            if let Some(score) = prefix_local_terminal_clause_score(
-                                objective_bar,
-                                clause_kappa_used,
-                                prefix_bit_cost,
-                                terminal_clause.clause,
-                                terminal_clause.nu_facts,
-                                single_clause_nu_context.as_ref(),
-                            ) {
+                            RemainingOneNoMissPlateauKernelOutcome::Admitted {
+                                decision,
+                                score,
+                                exact_nu_duration,
+                            } => {
                                 kernel_timing.terminal_summary_exact_nu_evaluations += 1;
                                 kernel_timing.terminal_summary_exact_nu_duration +=
-                                    exact_nu_started.elapsed();
-                                let aggregation_started = Instant::now();
-                                let competition_allowed =
-                                    terminal_completion_can_compete_for_acceptance(
-                                        prefix_signature,
-                                        admissibility,
-                                        prefix_legality_cache,
-                                        admissibility_decision,
-                                    );
-                                let needs_full_accept_rank =
-                                    absorb_compact_terminal_prefix_admitted_clause_summary(
-                                        objective_bar,
-                                        incumbent_rank,
-                                        score.exact_nu,
-                                        clause_kappa_used,
-                                        score.bit_kappa_used,
-                                        competition_allowed,
-                                        &mut summary,
-                                    );
+                                    exact_nu_duration;
+                                let admitted_decision = decision.clone_for_evaluation();
+                                let competition_allowed = decision.competition_allowed(
+                                    prefix_signature,
+                                    admissibility,
+                                    prefix_legality_cache,
+                                );
+                                let admissibility_bookkeeping_started = Instant::now();
+                                summary.admissibility_diagnostics.record(&admitted_decision);
                                 kernel_timing.terminal_summary_aggregation_duration +=
-                                    aggregation_started.elapsed();
-                                if !needs_full_accept_rank {
+                                    admissibility_bookkeeping_started.elapsed();
+                                if summary.evaluations.is_none() {
+                                    let aggregation_started = Instant::now();
+                                    let needs_full_accept_rank =
+                                        absorb_compact_terminal_prefix_admitted_clause_summary(
+                                            objective_bar,
+                                            incumbent_rank,
+                                            score.exact_nu,
+                                            clause_kappa_used,
+                                            score.bit_kappa_used,
+                                            competition_allowed,
+                                            &mut summary,
+                                        );
+                                    kernel_timing.terminal_summary_aggregation_duration +=
+                                        aggregation_started.elapsed();
+                                    if !needs_full_accept_rank {
+                                        continue;
+                                    }
+
+                                    let load_started = Instant::now();
+                                    let telescope = load_terminal_clause_into_scratch(
+                                        &mut scratch_telescope,
+                                        prefix_len,
+                                        terminal_clause.clause,
+                                    );
+                                    kernel_timing.terminal_summary_aggregation_duration +=
+                                        load_started.elapsed();
+                                    let rank_started = Instant::now();
+                                    if let Some(rank) = acceptance_rank_for_telescope(
+                                        objective_bar,
+                                        telescope,
+                                        score.exact_nu,
+                                        score.bit_kappa_used,
+                                        clause_kappa_used,
+                                    ) {
+                                        match &summary.best_accept_rank {
+                                            Some(current) if !better_rank(&rank, current) => {}
+                                            _ => summary.best_accept_rank = Some(rank),
+                                        }
+                                    }
+                                    kernel_timing.terminal_summary_aggregation_duration +=
+                                        rank_started.elapsed();
                                     continue;
                                 }
 
@@ -6282,21 +6434,20 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                 );
                                 kernel_timing.terminal_summary_aggregation_duration +=
                                     load_started.elapsed();
-                                let rank_started = Instant::now();
-                                if let Some(rank) = acceptance_rank_for_telescope(
+                                let aggregation_started = Instant::now();
+                                absorb_terminal_prefix_admitted_clause_summary(
                                     objective_bar,
+                                    incumbent_rank,
                                     telescope,
                                     score.exact_nu,
-                                    score.bit_kappa_used,
                                     clause_kappa_used,
-                                ) {
-                                    match &summary.best_accept_rank {
-                                        Some(current) if !better_rank(&rank, current) => {}
-                                        _ => summary.best_accept_rank = Some(rank),
-                                    }
-                                }
+                                    score.bit_kappa_used,
+                                    competition_allowed,
+                                    Some(&admitted_decision),
+                                    &mut summary,
+                                );
                                 kernel_timing.terminal_summary_aggregation_duration +=
-                                    rank_started.elapsed();
+                                    aggregation_started.elapsed();
                                 continue;
                             }
                         }
@@ -6431,6 +6582,57 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                     kernel_timing.terminal_summary_aggregation_duration +=
                         generated_started.elapsed();
 
+                    if let Some(kernel_outcome) = run_remaining_one_no_miss_plateau_kernel(
+                        objective_bar,
+                        clause_kappa_used,
+                        prefix_bit_cost,
+                        &terminal_clause,
+                        connectivity_decision,
+                        RemainingOneNoMissKernelMode::ClaimAdmittedOpenBand,
+                        single_clause_nu_context.as_ref(),
+                    ) {
+                        match kernel_outcome {
+                            RemainingOneNoMissPlateauKernelOutcome::AdmissibilityRejected {
+                                ..
+                            } => {
+                                continue;
+                            }
+                            RemainingOneNoMissPlateauKernelOutcome::Admitted {
+                                score,
+                                exact_nu_duration,
+                                ..
+                            } => {
+                                admitted_focus_aligned_count += 1;
+                                kernel_timing.terminal_summary_exact_nu_evaluations += 1;
+                                kernel_timing.terminal_summary_exact_nu_duration +=
+                                    exact_nu_duration;
+                                let load_started = Instant::now();
+                                let telescope = load_terminal_clause_into_scratch(
+                                    &mut scratch_telescope,
+                                    prefix_len,
+                                    terminal_clause.clause,
+                                );
+                                kernel_timing.terminal_summary_aggregation_duration +=
+                                    load_started.elapsed();
+                                let aggregation_started = Instant::now();
+                                absorb_terminal_prefix_admitted_clause_summary(
+                                    objective_bar,
+                                    incumbent_rank,
+                                    telescope,
+                                    score.exact_nu,
+                                    clause_kappa_used,
+                                    score.bit_kappa_used,
+                                    true,
+                                    Some(&claim_evaluation_decision),
+                                    &mut summary,
+                                );
+                                kernel_timing.terminal_summary_aggregation_duration +=
+                                    aggregation_started.elapsed();
+                                continue;
+                            }
+                        }
+                    }
+
                     let load_started = Instant::now();
                     let telescope = load_terminal_clause_into_scratch(
                         &mut scratch_telescope,
@@ -6518,67 +6720,72 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                         continue;
                     }
 
-                    if !matches!(
+                    if let Some(kernel_outcome) = run_remaining_one_no_miss_plateau_kernel(
+                        objective_bar,
+                        clause_kappa_used,
+                        prefix_bit_cost,
+                        &terminal_clause,
                         connectivity_decision,
-                        TerminalConnectivityDecision::NeedsFallback
+                        RemainingOneNoMissKernelMode::ClaimAdmittedOpenBand,
+                        single_clause_nu_context.as_ref(),
                     ) {
-                        let exact_nu_started = Instant::now();
-                        if let Some(score) = prefix_local_terminal_clause_score(
-                            objective_bar,
-                            clause_kappa_used,
-                            prefix_bit_cost,
-                            terminal_clause.clause,
-                            terminal_clause.nu_facts,
-                            single_clause_nu_context.as_ref(),
-                        ) {
-                            let after_exact_nu = Instant::now();
-                            kernel_timing.terminal_summary_exact_nu_evaluations += 1;
-                            kernel_timing.terminal_summary_exact_nu_duration +=
-                                after_exact_nu.duration_since(exact_nu_started);
-                            admitted_focus_aligned_count += 1;
-                            kernel_timing.terminal_summary_aggregation_duration +=
-                                exact_nu_started.duration_since(after_connectivity);
-                            let aggregation_started = Instant::now();
-                            let needs_full_accept_rank =
-                                absorb_compact_terminal_prefix_admitted_clause_summary(
-                                    objective_bar,
-                                    incumbent_rank,
-                                    score.exact_nu,
-                                    clause_kappa_used,
-                                    score.bit_kappa_used,
-                                    true,
-                                    &mut summary,
-                                );
-                            kernel_timing.terminal_summary_aggregation_duration +=
-                                aggregation_started.elapsed();
-                            if !needs_full_accept_rank {
+                        match kernel_outcome {
+                            RemainingOneNoMissPlateauKernelOutcome::AdmissibilityRejected {
+                                ..
+                            } => {
                                 continue;
                             }
-
-                            let load_started = Instant::now();
-                            let telescope = load_terminal_clause_into_scratch(
-                                &mut scratch_telescope,
-                                prefix_len,
-                                terminal_clause.clause,
-                            );
-                            kernel_timing.terminal_summary_aggregation_duration +=
-                                load_started.elapsed();
-                            let rank_started = Instant::now();
-                            if let Some(rank) = acceptance_rank_for_telescope(
-                                objective_bar,
-                                telescope,
-                                score.exact_nu,
-                                score.bit_kappa_used,
-                                clause_kappa_used,
-                            ) {
-                                match &summary.best_accept_rank {
-                                    Some(current) if !better_rank(&rank, current) => {}
-                                    _ => summary.best_accept_rank = Some(rank),
+                            RemainingOneNoMissPlateauKernelOutcome::Admitted {
+                                score,
+                                exact_nu_duration,
+                                ..
+                            } => {
+                                kernel_timing.terminal_summary_exact_nu_evaluations += 1;
+                                kernel_timing.terminal_summary_exact_nu_duration +=
+                                    exact_nu_duration;
+                                admitted_focus_aligned_count += 1;
+                                let aggregation_started = Instant::now();
+                                let needs_full_accept_rank =
+                                    absorb_compact_terminal_prefix_admitted_clause_summary(
+                                        objective_bar,
+                                        incumbent_rank,
+                                        score.exact_nu,
+                                        clause_kappa_used,
+                                        score.bit_kappa_used,
+                                        true,
+                                        &mut summary,
+                                    );
+                                kernel_timing.terminal_summary_aggregation_duration +=
+                                    aggregation_started.elapsed();
+                                if !needs_full_accept_rank {
+                                    continue;
                                 }
+
+                                let load_started = Instant::now();
+                                let telescope = load_terminal_clause_into_scratch(
+                                    &mut scratch_telescope,
+                                    prefix_len,
+                                    terminal_clause.clause,
+                                );
+                                kernel_timing.terminal_summary_aggregation_duration +=
+                                    load_started.elapsed();
+                                let rank_started = Instant::now();
+                                if let Some(rank) = acceptance_rank_for_telescope(
+                                    objective_bar,
+                                    telescope,
+                                    score.exact_nu,
+                                    score.bit_kappa_used,
+                                    clause_kappa_used,
+                                ) {
+                                    match &summary.best_accept_rank {
+                                        Some(current) if !better_rank(&rank, current) => {}
+                                        _ => summary.best_accept_rank = Some(rank),
+                                    }
+                                }
+                                kernel_timing.terminal_summary_aggregation_duration +=
+                                    rank_started.elapsed();
+                                continue;
                             }
-                            kernel_timing.terminal_summary_aggregation_duration +=
-                                rank_started.elapsed();
-                            continue;
                         }
                     }
 
@@ -7145,76 +7352,80 @@ fn materialize_terminal_prefix_group_compact(
                 ) {
                     continue;
                 }
-                if !matches!(
-                    connectivity_decision,
-                    TerminalConnectivityDecision::NeedsFallback
-                ) {
-                    if let Some(admissibility_decision) =
-                        terminal_clause.cached_admissibility_decision.as_ref()
-                    {
-                        if !admissibility_decision.is_admitted() {
-                            discovery.enumerated_candidates += 1;
-                            discovery.well_formed_candidates += 1;
-                            discovery
-                                .admissibility_diagnostics
-                                .record(admissibility_decision);
-                            discovery.admissibility_rejections += 1;
-                            continue;
-                        }
-                        if let Some(score) = prefix_local_terminal_clause_score(
-                            objective_bar,
-                            clause_kappa_used,
-                            prefix_bit_cost,
-                            terminal_clause.clause,
-                            terminal_clause.nu_facts,
-                            single_clause_nu_context.as_ref(),
-                        ) {
-                            discovery.enumerated_candidates += 1;
-                            discovery.well_formed_candidates += 1;
-                            discovery
-                                .admissibility_diagnostics
-                                .record(admissibility_decision);
-                            admitted_terminal_candidates += 1;
-                            absorb_terminal_prefix_completion_bound(
-                                &mut bound,
-                                score.exact_nu,
-                                clause_kappa_used,
-                                score.bit_kappa_used,
-                            );
-                            if !terminal_completion_can_compete_for_acceptance(
-                                prefix_signature,
-                                admissibility,
-                                &discovery.prefix_legality_cache,
-                                admissibility_decision,
-                            ) || score.primary_rank.is_none()
-                            {
+                if let Some(kernel_mode) = terminal_clause
+                    .cached_admissibility_decision
+                    .as_ref()
+                    .map(RemainingOneNoMissKernelMode::General)
+                {
+                    if let Some(kernel_outcome) = run_remaining_one_no_miss_plateau_kernel(
+                        objective_bar,
+                        clause_kappa_used,
+                        prefix_bit_cost,
+                        &terminal_clause,
+                        connectivity_decision,
+                        kernel_mode,
+                        single_clause_nu_context.as_ref(),
+                    ) {
+                        discovery.enumerated_candidates += 1;
+                        discovery.well_formed_candidates += 1;
+                        match kernel_outcome {
+                            RemainingOneNoMissPlateauKernelOutcome::AdmissibilityRejected {
+                                decision,
+                            } => {
+                                discovery.admissibility_diagnostics.record(decision);
+                                discovery.admissibility_rejections += 1;
                                 continue;
                             }
-
-                            let telescope = load_terminal_clause_into_scratch(
-                                &mut scratch_telescope,
-                                prefix_len,
-                                terminal_clause.clause,
-                            );
-                            let accept_rank = acceptance_rank_for_telescope(
-                                objective_bar,
-                                telescope,
-                                score.exact_nu,
-                                score.bit_kappa_used,
-                                clause_kappa_used,
-                            );
-                            if let Some(rank) = accept_rank.as_ref() {
-                                match &best_accept_rank {
-                                    Some(current) if !better_rank(rank, current) => {}
-                                    _ => best_accept_rank = Some(rank.clone()),
+                            RemainingOneNoMissPlateauKernelOutcome::Admitted {
+                                decision,
+                                score,
+                                ..
+                            } => {
+                                let admitted_decision = decision.clone_for_evaluation();
+                                discovery
+                                    .admissibility_diagnostics
+                                    .record(&admitted_decision);
+                                admitted_terminal_candidates += 1;
+                                absorb_terminal_prefix_completion_bound(
+                                    &mut bound,
+                                    score.exact_nu,
+                                    clause_kappa_used,
+                                    score.bit_kappa_used,
+                                );
+                                if !decision.competition_allowed(
+                                    prefix_signature,
+                                    admissibility,
+                                    &discovery.prefix_legality_cache,
+                                ) || score.primary_rank.is_none()
+                                {
+                                    continue;
                                 }
+
+                                let telescope = load_terminal_clause_into_scratch(
+                                    &mut scratch_telescope,
+                                    prefix_len,
+                                    terminal_clause.clause,
+                                );
+                                let accept_rank = acceptance_rank_for_telescope(
+                                    objective_bar,
+                                    telescope,
+                                    score.exact_nu,
+                                    score.bit_kappa_used,
+                                    clause_kappa_used,
+                                );
+                                if let Some(rank) = accept_rank.as_ref() {
+                                    match &best_accept_rank {
+                                        Some(current) if !better_rank(rank, current) => {}
+                                        _ => best_accept_rank = Some(rank.clone()),
+                                    }
+                                }
+                                retained_telescopes.push(PrefixGroupCandidate {
+                                    telescope: telescope.clone(),
+                                    accept_rank,
+                                    evaluated_candidate: None,
+                                });
+                                continue;
                             }
-                            retained_telescopes.push(PrefixGroupCandidate {
-                                telescope: telescope.clone(),
-                                accept_rank,
-                                evaluated_candidate: None,
-                            });
-                            continue;
                         }
                     }
                 }
@@ -7317,56 +7528,61 @@ fn materialize_terminal_prefix_group_compact(
                 ) {
                     continue;
                 }
-                if !matches!(
+                if let Some(kernel_outcome) = run_remaining_one_no_miss_plateau_kernel(
+                    objective_bar,
+                    clause_kappa_used,
+                    prefix_bit_cost,
+                    &terminal_clause,
                     connectivity_decision,
-                    TerminalConnectivityDecision::NeedsFallback
+                    RemainingOneNoMissKernelMode::ClaimAdmittedOpenBand,
+                    single_clause_nu_context.as_ref(),
                 ) {
-                    if let Some(score) = prefix_local_terminal_clause_score(
-                        objective_bar,
-                        clause_kappa_used,
-                        prefix_bit_cost,
-                        terminal_clause.clause,
-                        terminal_clause.nu_facts,
-                        single_clause_nu_context.as_ref(),
-                    ) {
-                        admitted_focus_aligned_count += 1;
-                        discovery.enumerated_candidates += 1;
-                        discovery.well_formed_candidates += 1;
-                        admitted_terminal_candidates += 1;
-                        absorb_terminal_prefix_completion_bound(
-                            &mut bound,
-                            score.exact_nu,
-                            clause_kappa_used,
-                            score.bit_kappa_used,
-                        );
-                        if score.primary_rank.is_none() {
+                    match kernel_outcome {
+                        RemainingOneNoMissPlateauKernelOutcome::AdmissibilityRejected {
+                            ..
+                        } => {
                             continue;
                         }
-
-                        let telescope = load_terminal_clause_into_scratch(
-                            &mut scratch_telescope,
-                            prefix_len,
-                            terminal_clause.clause,
-                        );
-                        let accept_rank = acceptance_rank_for_telescope(
-                            objective_bar,
-                            telescope,
-                            score.exact_nu,
-                            score.bit_kappa_used,
-                            clause_kappa_used,
-                        );
-                        if let Some(rank) = accept_rank.as_ref() {
-                            match &best_accept_rank {
-                                Some(current) if !better_rank(rank, current) => {}
-                                _ => best_accept_rank = Some(rank.clone()),
+                        RemainingOneNoMissPlateauKernelOutcome::Admitted { score, .. } => {
+                            admitted_focus_aligned_count += 1;
+                            discovery.enumerated_candidates += 1;
+                            discovery.well_formed_candidates += 1;
+                            admitted_terminal_candidates += 1;
+                            absorb_terminal_prefix_completion_bound(
+                                &mut bound,
+                                score.exact_nu,
+                                clause_kappa_used,
+                                score.bit_kappa_used,
+                            );
+                            if score.primary_rank.is_none() {
+                                continue;
                             }
+
+                            let telescope = load_terminal_clause_into_scratch(
+                                &mut scratch_telescope,
+                                prefix_len,
+                                terminal_clause.clause,
+                            );
+                            let accept_rank = acceptance_rank_for_telescope(
+                                objective_bar,
+                                telescope,
+                                score.exact_nu,
+                                score.bit_kappa_used,
+                                clause_kappa_used,
+                            );
+                            if let Some(rank) = accept_rank.as_ref() {
+                                match &best_accept_rank {
+                                    Some(current) if !better_rank(rank, current) => {}
+                                    _ => best_accept_rank = Some(rank.clone()),
+                                }
+                            }
+                            retained_telescopes.push(PrefixGroupCandidate {
+                                telescope: telescope.clone(),
+                                accept_rank,
+                                evaluated_candidate: None,
+                            });
+                            continue;
                         }
-                        retained_telescopes.push(PrefixGroupCandidate {
-                            telescope: telescope.clone(),
-                            accept_rank,
-                            evaluated_candidate: None,
-                        });
-                        continue;
                     }
                 }
 

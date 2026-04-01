@@ -16,9 +16,9 @@ It lists only work that is still open.
   `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`.
 - The current deeper continuation target is
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
-- The mandatory-`TerminalClauseNuFacts` slice is now landed, and its capped
+- The explicit no-miss plateau-kernel split is now landed, and its capped
   intended-profile contender is
-  `runs/codex-claim-release-full-aggregation-open-band-mandatory-terminal-nu-facts-v1`.
+  `runs/codex-claim-release-full-aggregation-open-band-plateau-kernel-split-v1`.
 - The current winner preserved the honest retained-prefix story through the
   stored `576` read, beat `prefix-nu-context-v2` at matched later checkpoints
   through `533`, and still did not reach step `5`.
@@ -30,8 +30,6 @@ It lists only work that is still open.
 
 ## 1. Runtime Improvement Loop
 
-- [ ] Split the step-`4` remaining-one kernel into a true no-miss hit-path
-      plateau kernel and a general fallback kernel.
 - [ ] Replace `lib_refs` tree membership on the hot path with the intended
       tiered representation:
       inline small array, dense bitset after threshold, boxed sorted slice
