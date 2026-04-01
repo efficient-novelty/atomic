@@ -11,19 +11,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - Keep the current long-run reference to beat:
   `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`
 - Keep the current best short-loop checkpoint to beat:
-  `runs/codex-claim-release-full-aggregation-open-band-prefix-accept-rank-context-v1`
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-v1`
 - Keep the replay harness corpus and benchmark files:
   - `tests/fixtures/claim_runtime/remaining_one_plateau_fixtures.json`
   - `tests/fixtures/claim_runtime/remaining_one_plateau_benchmark.json`
 - Keep the current 20-minute intended-profile validation target from the stored
-  step-`4` stream of `prefix-accept-rank-context-v1`:
-  - `elapsed_millis = 1190946`
-  - `prefix_states_explored = 135`
+  step-`4` stream of `clause-accept-rank-facts-v1`:
+  - `elapsed_millis = 1191501`
+  - `prefix_states_explored = 139`
   - `prefix_cache_groups = 40`
   - `prefix_cache_candidates = 28438`
-  - `frontier_queue_len = 2640`
-  - RSS `= 445005824` bytes
-  - `terminal_summary_build_millis = 1183014`
+  - `frontier_queue_len = 2636`
+  - RSS `= 453021696` bytes
+  - `terminal_summary_build_millis = 1183915`
   - `terminal_summary_admissibility_checks = 0`
   - `terminal_summary_fallback_connectivity_checks = 0`
 
@@ -184,55 +184,98 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - The loop has therefore already spent the earned capped rerun and is back in
   code work with `prefix-accept-rank-context-v1` as the short-loop checkpoint
   to beat.
+- A fresh narrow slice now precomputes clause-side accept-rank facts inside
+  `TerminalClauseNuFacts` and reuses them in the compact remaining-one no-miss
+  branches, so hot best-rank tie updates stop rescanning the same terminal
+  clause expr for structural signals and ref sets once the compact path has
+  already decided the clause is worth a full accept-rank build.
+- Claim-focused validation stayed green for that follow-on slice:
+  - `cargo test -p pen-eval terminal_clause_nu_facts_backfill_missing_bit_cost`
+  - `cargo test -p pen-search prefix_clause_acceptance_rank_matches_full_telescope_rank`
+  - `cargo test -p pen-search claim_replay_fixture_replays_compact_summary_with_parity`
+  - `cargo test -p pen-search claim_`
+  - `cargo test -p pen-search cached_terminal_prefix_rank_summary_prunes_without_reopening_completion_summary`
+  - `cargo test -p pen-search take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse`
+- The release replay harness stayed parity-clean on the stored plateau
+  fixtures while the slice was in place.
+- The checked-in replay gate before the slice was `102513 us` total.
+- The first release build-and-read landed `90263 us` total:
+  - `90263`: `16928 / 22945 / 17849 / 17759 / 14782`
+- Warm rereads with the clause-side accept-rank facts landed `90614 us`,
+  `98305 us`, and `88197 us` total:
+  - `90614`: `16795 / 24703 / 17110 / 17247 / 14759`
+  - `98305`: `20715 / 26426 / 18860 / 17740 / 14564`
+  - `88197`: `16135 / 22658 / 17127 / 17735 / 14542`
+- These are `24 / 74 / 140 / 332 / 335` in order.
+- Every warmed reread beat the checked-in `102513 us` replay gate honestly, so
+  the slice stayed landed and the refreshed stored benchmark artifact was
+  rewritten from a later under-gate reread at `88197 us` total:
+  - `88197`: `16135 / 22658 / 17127 / 17735 / 14542`
+- The earned capped intended-profile rerun was then spent on
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-v1`.
+- Its nearest stored step-`4` checkpoint to `1200000 ms` landed at:
+  - `elapsed_millis = 1191501`
+  - `prefix_states_explored = 139`
+  - `prefix_cache_groups = 40`
+  - `prefix_cache_candidates = 28438`
+  - `frontier_queue_len = 2636`
+  - RSS `= 453021696` bytes
+  - `terminal_summary_build_millis = 1183915`
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- That rerun replaced the current short-loop gate honestly:
+  same retained-prefix surface, four more explored prefixes than
+  `prefix-accept-rank-context-v1`, a shorter frontier, and still no fallback
+  connectivity or admissibility work, although RSS and summary-build time both
+  rose slightly.
+- The lane therefore now has repeated honest 20-minute wins on the current
+  retained-prefix surface (`135` then `139`), so longer continuation reads are
+  back on the table.
 
 ## Do This Next
 
-### 1. Spend The Next Slice In Code, Not Another Long Read
+### 1. Spend The Next Slice On A Longer Continuation, Not Another Code Change
 
-Do not reopen a longer intended-profile continuation yet.
-The accept-rank slice already re-earned replay gate, spent one capped rerun,
-and won the short-loop checkpoint once, but repeated 20-minute wins are still
-required before longer reads reopen.
-The next move is another narrow per-admitted compact-summary cost slice inside
-`compute_terminal_prefix_completion_summary_from_candidates(...)` on top of the
-tiered-`lib_refs`, plateau-kernel, broadened survivor-sketch,
-borrowed-primary-rank, clause-bit-cost sidecar, and prefix-local accept-rank
-work while keeping `prefix-local-score-v1` as the long-run reference and
-`prefix-accept-rank-context-v1` as the current short-loop target.
+Keep the clause-side accept-rank-facts slice landed.
+It already re-earned replay gate comfortably, spent one capped rerun, and then
+won the short-loop checkpoint again at `139` explored prefixes.
+The next move is no longer another fresh code slice first.
+Reopen one longer intended-profile continuation on the current binary and see
+whether the lane can now clear the next stored step-`4` walls honestly.
 
 ### 2. Run The Next Validation Slice In This Order
 
-1. Land one narrow per-admitted compact-summary cost slice inside
-   `compute_terminal_prefix_completion_summary_from_candidates(...)`.
-2. Run the release replay harness on the stored plateau fixtures for that next
-   slice.
-3. Require replay parity first.
-4. Compare warmed rereads first against the current checked-in
-   `102513 us` total.
-5. Only if the slice re-earns that replay gate honestly, launch one new
-   intended `desktop_claim_shadow` profile rerun on the current binary.
-6. Stop that rerun after `20` minutes max.
-7. Record the nearest stored step-`4` checkpoint to `1200000 ms`.
-8. Compare that checkpoint first against the current short-loop target from
-   `prefix-accept-rank-context-v1`, then keep `prefix-local-score-v1` as the
-   long-run continuation reference behind it.
-9. If the new slice does not re-earn the replay gate, or if the later rerun
-   still does not beat the current short-loop target honestly, return to code
-   work with another narrow per-admitted compact-summary cost slice, but do
+1. Keep the current landed code and the refreshed replay benchmark artifact
+   unchanged.
+2. Prefer `pen-cli resume` on
+   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-v1`
+   if frontier compatibility admits it; otherwise launch one fresh intended
+   `desktop_claim_shadow` rerun on the same release binary and config.
+3. Let that continuation run materially past the `20`-minute window.
+4. Re-earn the later stored step-`4` checkpoints in this order:
+   `140/163`, then `332/335`, then `408/437/454/484`.
+5. Keep comparing the `20`-minute checkpoint first against the current
+   short-loop target from `clause-accept-rank-facts-v1`, then keep
+   `prefix-local-score-v1` as the long-run continuation reference behind it.
+6. If the longer continuation fails to clear `140/163` honestly, or if later
+   stored reads lose the retained-prefix story, return to code work with
+   another narrow per-admitted compact-summary cost slice inside
+   `compute_terminal_prefix_completion_summary_from_candidates(...)`, but do
    not retry the dropped focus-aligned competition-gate/payload-mode hoist,
    the dropped shared compact-bookkeeping fold, or the dropped
    claim-open-band compact local-state hoist first.
-10. Do not wake the dormant general cached-summary reopen machinery first.
+7. Do not wake the dormant general cached-summary reopen machinery first.
 
-### 3. Keep Rule For The Next Rerun
+### 3. Keep Rule For The Next Longer Read
 
-Treat the next rerun as real progress only if the stored `20`-minute
-checkpoint beats the current short-loop target honestly.
+Treat the reopened continuation as real progress only if the stored later
+step-`4` checkpoints keep the same no-miss shape and move materially beyond
+the new `139`-prefix gate.
 
 ### 4. Short-Loop Beat Rule
 
-Treat a new slice as a real short-loop win only if its 20-minute stored read
-beats the current target honestly.
+Treat a later slice as a real short-loop win only if its `20`-minute stored
+read beats the current target honestly.
 
 Minimum comparison fields:
 
@@ -252,25 +295,24 @@ Interpretation rule:
 - Do not accept a "win" that only comes from waking fallback connectivity or
   admissibility work on what should still be no-miss surfaces.
 - Do not expect the next few slices to beat the full `1095`-prefix stop yet.
-  The immediate goal is repeated honest improvement over the current
-  `135`-prefix short-loop checkpoint.
+- The immediate goal is to turn the repeated `20`-minute wins into later
+  stored step-`4` progress.
 
 ### 5. When To Allow Another Long Read
 
-Only allow a longer intended-profile continuation again after repeated
-20-minute wins show that the lane has materially improved.
+Repeated `20`-minute wins now exist, so one longer continuation is allowed on
+the current landed binary.
 
-Until then:
+After that continuation:
 
-- stop new intended-profile contenders at `20` minutes
-- record their nearest stored 20-minute checkpoint
 - keep `prefix-local-score-v1` as the long-run reference to beat
+- keep `clause-accept-rank-facts-v1` as the current short-loop gate until a
+  later contender replaces it honestly
+- return to code work first if the longer continuation fails to move the later
+  stored walls honestly
 
 ## Do Not Reopen First
 
-- another long intended-profile continuation beyond the `20`-minute cap
-- another intended-profile rerun before the next slice re-earns replay gate
-  honestly
 - cached-summary reopen wake-up work
 - the dropped focus-aligned competition-gate/payload-mode hoist
 - the dropped shared compact-bookkeeping fold
@@ -285,12 +327,12 @@ Until then:
 
 - Stay on runtime work while the intended profile still stalls in step `4`.
 - Keep `prefix-local-score-v1` as the long-run reference until a later slice
-  beats the new `135`-prefix short-loop gate repeatedly and then eventually
+  beats the new `139`-prefix short-loop gate repeatedly and then eventually
   beats the older longer continuation honestly.
 - Treat the stopped `1095`-prefix read as the current long-run continuation
   reference, but treat the
-  `prefix-accept-rank-context-v1` 20-minute checkpoint as the next validation
+  `clause-accept-rank-facts-v1` 20-minute checkpoint as the next validation
   gate until a later capped rerun replaces it honestly.
 - Branch to parity, breadth, compare, benchmark, and certification work only
-  after later runtime slices move the intended profile far enough that longer
-  reads become worth reopening.
+  after the reopened longer continuation proves that the newer short-loop wins
+  also move the later intended-profile walls.

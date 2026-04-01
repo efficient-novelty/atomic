@@ -106,16 +106,6 @@ pub(crate) fn structural_signals_for_telescope(telescope: &Telescope) -> Structu
     structural_signals(telescope)
 }
 
-pub(crate) fn structural_signals_for_clause(clause: &ClauseRec) -> StructuralSignals {
-    let mut signals = StructuralSignals::default();
-    accumulate_expr_signals(&clause.expr, &mut signals);
-    signals.library_reference_density =
-        u16::try_from(clause.expr.lib_refs().len()).expect("library ref count exceeded u16");
-    signals.closure_score =
-        u16::try_from(clause.expr.var_refs().len()).expect("closure score exceeded u16");
-    signals
-}
-
 fn build_candidate(
     telescope: Telescope,
     native: NativeNuResult,

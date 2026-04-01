@@ -18,7 +18,7 @@ It lists only work that is still open.
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
 - The explicit no-miss plateau-kernel split is now landed, and the current
   short-loop contender to beat is
-  `runs/codex-claim-release-full-aggregation-open-band-prefix-accept-rank-context-v1`.
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-v1`.
 - The broadened incumbent-relevant survivor sketch is now landed, the
   follow-on compact-summary bookkeeping slice now reuses borrowed
   primary-rank refs while preserving cached multi-primary sketch
@@ -39,14 +39,26 @@ It lists only work that is still open.
   stored benchmark artifact from a later under-gate reread at `102513 us`.
 - Its earned capped intended-profile rerun on
   `runs/codex-claim-release-full-aggregation-open-band-prefix-accept-rank-context-v1`
-  then landed the current stored short-loop gate:
+  then landed the previous short-loop gate:
   `1190946 ms`, `135` explored prefixes, `40 groups / 28438 candidates`,
   `frontier_queue_len = 2640`, RSS `= 445005824`,
   `terminal_summary_build_millis = 1183014`, and still
   `0` fallback/admissibility checks.
-- The lane therefore now needs repeated honest improvement over that
-  `135`-prefix short-loop checkpoint before longer intended-profile
-  continuations reopen.
+- A newer clause-side accept-rank-facts slice then stayed parity-clean in the
+  targeted claim tests and release replay harness, beat the checked-in
+  `102513 us` replay total on every warmed release reread (`90614 us`,
+  `98305 us`, and `88197 us`), and refreshed the stored benchmark artifact
+  from a later under-gate reread at `88197 us`.
+- Its earned capped intended-profile rerun on
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-v1`
+  then landed the current stored short-loop gate:
+  `1191501 ms`, `139` explored prefixes, `40 groups / 28438 candidates`,
+  `frontier_queue_len = 2636`, RSS `= 453021696`,
+  `terminal_summary_build_millis = 1183915`, and still
+  `0` fallback/admissibility checks.
+- The lane now has repeated honest 20-minute wins on the same retained-prefix
+  surface, so the next open runtime question is whether a longer continuation
+  also moves the later stored step-`4` walls honestly.
 - A later local-only focus-aligned competition-gate/payload-mode hoist stayed
   parity-clean in tests and replay parity, but its warm rereads landed
   `136040 us`, `137054 us`, and `140843 us` total after a `130405 us`

@@ -1,8 +1,5 @@
 use crate::branch_bound::AcceptRank;
-use crate::expand::{
-    ExpandedCandidate, StructuralSignals, structural_signals_for_clause,
-    structural_signals_for_telescope,
-};
+use crate::expand::{ExpandedCandidate, StructuralSignals, structural_signals_for_telescope};
 use pen_core::canonical::{
     CanonKey, canonical_encoded_expr, canonical_encoded_telescope, canonical_key_from_encoded,
     canonical_key_telescope,
@@ -10,6 +7,7 @@ use pen_core::canonical::{
 use pen_core::clause::ClauseRec;
 use pen_core::rational::Rational;
 use pen_core::telescope::Telescope;
+use pen_eval::nu::TerminalClauseNuFacts;
 use pen_store::manifest::{AcceptedCandidate, NearMiss};
 use std::cmp::Reverse;
 use std::collections::BTreeSet;
@@ -134,6 +132,7 @@ pub(crate) fn acceptance_rank_for_prefix_clause(
     bar: Rational,
     prefix_context: &PrefixLocalAcceptRankContext,
     terminal_clause: &ClauseRec,
+    clause_nu_facts: &TerminalClauseNuFacts,
     exact_nu: u16,
     bit_kappa: u16,
     clause_kappa: u16,
@@ -143,9 +142,7 @@ pub(crate) fn acceptance_rank_for_prefix_clause(
         return None;
     }
 
-    let clause_signals = structural_signals_for_clause(terminal_clause);
-    let clause_lib_refs = terminal_clause.expr.lib_refs();
-    let clause_var_refs = terminal_clause.expr.var_refs();
+    let clause_signals = clause_nu_facts.acceptance_signals();
     let signals = StructuralSignals {
         eliminator_score: prefix_context
             .prefix_signals
@@ -161,7 +158,7 @@ pub(crate) fn acceptance_rank_for_prefix_clause(
             .saturating_add(clause_signals.dependent_motive_density),
         library_reference_density: u16::try_from(sorted_union_count(
             prefix_context.prefix_lib_refs.iter().copied(),
-            clause_lib_refs.iter().copied(),
+            clause_nu_facts.lib_refs().iter().copied(),
         ))
         .expect("library ref count exceeded u16"),
         generic_binder_count: prefix_context
@@ -170,13 +167,13 @@ pub(crate) fn acceptance_rank_for_prefix_clause(
             .saturating_add(clause_signals.generic_binder_count),
         closure_score: u16::try_from(sorted_union_count(
             prefix_context.prefix_var_refs.iter().copied(),
-            clause_var_refs.iter().copied(),
+            clause_nu_facts.var_refs().iter().copied(),
         ))
         .expect("closure score exceeded u16"),
     };
     let max_var_ref = prefix_context
         .prefix_max_var_ref
-        .max(clause_var_refs.iter().next_back().copied().unwrap_or(0));
+        .max(clause_nu_facts.max_var_ref());
     let canonical_key = canonical_key_for_prefix_clause(
         prefix_context.prefix_canonical_encoding.as_str(),
         terminal_clause,
@@ -207,9 +204,10 @@ fn canonical_key_for_prefix_clause(prefix_encoding: &str, terminal_clause: &Clau
     canonical_key_from_encoded(&encoded)
 }
 
-fn sorted_union_count<I>(left: I, right: I) -> usize
+fn sorted_union_count<I, J>(left: I, right: J) -> usize
 where
     I: IntoIterator<Item = u32>,
+    J: IntoIterator<Item = u32>,
 {
     let mut left = left.into_iter().peekable();
     let mut right = right.into_iter().peekable();
@@ -299,6 +297,7 @@ mod tests {
     use pen_core::rational::Rational;
     use pen_core::telescope::Telescope;
     use pen_eval::bar::DiscoveryRecord;
+    use pen_eval::nu::TerminalClauseNuFacts;
 
     fn replay_prefix(last_step: u32) -> (Library, Vec<DiscoveryRecord>) {
         let mut library = Vec::new();
@@ -357,6 +356,7 @@ mod tests {
                     objective_bar,
                     &prefix_context,
                     terminal_clause,
+                    &TerminalClauseNuFacts::from_clause(terminal_clause),
                     evaluated.nu,
                     bit_kappa,
                     clause_kappa,

@@ -22,15 +22,17 @@ gate.
 - The current winning stack now keeps the broadened cached survivor sketch on
   top of the tiered prefix-side structural-`nu` `lib_refs` work, the explicit
   plateau/fallback kernel split, the borrowed-primary-rank reuse, the cached
-  terminal-clause bit-cost sidecar inside `TerminalClauseNuFacts`, and the
-  newer prefix-local accept-rank context for compact remaining-one no-miss
-  branches.
+  terminal-clause bit-cost sidecar inside `TerminalClauseNuFacts`, the newer
+  prefix-local accept-rank context, and the newer clause-side accept-rank
+  facts reuse for compact remaining-one no-miss branches.
   The hot remaining-one summary/materialization path therefore avoids both
   recursively re-walking the same last-clause expr just to recover
-  `bit_kappa_used` and reloading a scratch telescope plus the full terminal
-  telescope just to break a primary-rank tie, while cached multi-primary
-  survivor-sketch materialization still stays landed without waking the
-  dormant general cached-summary reopen path.
+  `bit_kappa_used`, reloading a scratch telescope plus the full terminal
+  telescope just to break a primary-rank tie, and rescanning the same
+  terminal clause expr for structural signals and ref sets after the compact
+  path has already decided the clause is worth a full accept-rank build,
+  while cached multi-primary survivor-sketch materialization still stays
+  landed without waking the dormant general cached-summary reopen path.
 
 ## Current Run To Beat
 
@@ -102,24 +104,24 @@ gate.
   fewer prefixes than `plateau-kernel-split-v1`, left one more frontier item,
   and spent slightly more time in summary build.
 - The newest landed slice now owns the best short-loop stored read:
-  `runs/codex-claim-release-full-aggregation-open-band-prefix-accept-rank-context-v1`
-  - `elapsed_millis = 1190946`
-  - `prefix_states_explored = 135`
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-v1`
+  - `elapsed_millis = 1191501`
+  - `prefix_states_explored = 139`
   - `prefix_cache_groups = 40`
   - `prefix_cache_candidates = 28438`
-  - `frontier_queue_len = 2640`
-  - RSS `= 445005824` bytes
-  - `terminal_summary_build_millis = 1183014`
+  - `frontier_queue_len = 2636`
+  - RSS `= 453021696` bytes
+  - `terminal_summary_build_millis = 1183915`
   - `terminal_summary_admissibility_checks = 0`
   - `terminal_summary_fallback_connectivity_checks = 0`
 - That rerun is the new honest short-loop gate:
-  eleven more explored prefixes than `plateau-kernel-split-v1` by the same
-  20-minute window, the same retained-group count, a much smaller retained
-  candidate surface, a shorter frontier, lower RSS, slightly lower
-  summary-build time, and still no fallback connectivity or admissibility
-  work.
-- Near-term validation should now try to beat `135` explored prefixes by
-  `20` minutes while keeping that no-miss shape honest.
+  four more explored prefixes than `prefix-accept-rank-context-v1` by the
+  same 20-minute window, the same retained-prefix surface, a shorter frontier,
+  and still no fallback connectivity or admissibility work, although RSS and
+  summary-build time both rose slightly.
+- Near-term validation should now treat `139` explored prefixes by `20`
+  minutes as the current short-loop checkpoint while deciding whether the
+  repeated short-loop wins are strong enough to reopen a longer continuation.
 
 ## New Local Reads
 
@@ -257,6 +259,53 @@ gate.
 - Longer continuation reads still remain gated behind repeated 20-minute wins,
   so the loop is back in code work with
   `prefix-accept-rank-context-v1` as the short-loop checkpoint to beat.
+- A fresh narrow slice then precomputed clause-side accept-rank facts inside
+  `TerminalClauseNuFacts` and reused them in the compact remaining-one no-miss
+  branches so hot best-rank tie updates stop rescanning the same terminal
+  clause expr for structural signals and ref sets once the compact path has
+  already decided the clause is worth a full accept-rank build.
+- Claim-focused validation stayed green for that slice:
+  - `cargo test -p pen-eval terminal_clause_nu_facts_backfill_missing_bit_cost`
+  - `cargo test -p pen-search prefix_clause_acceptance_rank_matches_full_telescope_rank`
+  - `cargo test -p pen-search claim_replay_fixture_replays_compact_summary_with_parity`
+  - `cargo test -p pen-search claim_`
+  - `cargo test -p pen-search cached_terminal_prefix_rank_summary_prunes_without_reopening_completion_summary`
+  - `cargo test -p pen-search take_terminal_prefix_completion_summary_removes_cached_payload_after_reuse`
+- The release replay harness stayed parity-clean on the stored plateau
+  fixtures while the slice was in place.
+- The checked-in replay gate before the slice was `102513 us` total.
+- The first release build-and-read landed `90263 us` total:
+  - `90263`: `16928 / 22945 / 17849 / 17759 / 14782`
+- Warm rereads with the clause-side accept-rank facts landed `90614 us`,
+  `98305 us`, and `88197 us` total:
+  - `90614`: `16795 / 24703 / 17110 / 17247 / 14759`
+  - `98305`: `20715 / 26426 / 18860 / 17740 / 14564`
+  - `88197`: `16135 / 22658 / 17127 / 17735 / 14542`
+- These are `24 / 74 / 140 / 332 / 335` in order.
+- Every warmed reread beat the checked-in `102513 us` replay gate honestly, so
+  the slice stayed landed and the refreshed stored benchmark artifact was
+  rewritten from a later under-gate reread at `88197 us` total:
+  - `88197`: `16135 / 22658 / 17127 / 17735 / 14542`
+- The earned capped intended-profile rerun was then spent on
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-v1`.
+- Its nearest stored step-`4` checkpoint to `1200000 ms` landed at:
+  - `elapsed_millis = 1191501`
+  - `prefix_states_explored = 139`
+  - `prefix_cache_groups = 40`
+  - `prefix_cache_candidates = 28438`
+  - `frontier_queue_len = 2636`
+  - RSS `= 453021696` bytes
+  - `terminal_summary_build_millis = 1183915`
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- That rerun replaced the current short-loop gate honestly:
+  same retained-prefix surface, four more explored prefixes than
+  `prefix-accept-rank-context-v1`, a shorter frontier, and still no fallback
+  connectivity or admissibility work, although RSS and summary-build time both
+  rose slightly.
+- The lane now has repeated honest 20-minute wins on the same retained-prefix
+  surface (`135` then `139`), so a longer intended-profile continuation is no
+  longer blocked on short-loop proof alone.
 
 ## What Stays Landed
 
@@ -315,74 +364,72 @@ gate.
 - The new local evidence is now materially better:
   the landed prefix-local accept-rank context re-earned the replay gate on
   every warmed release reread, refreshed the checked-in replay benchmark to
-  `102513 us`, and then produced a stronger stored 20-minute checkpoint.
-- The newly spent capped rerun then won at `135` explored prefixes by
-  `1190946 ms`, so the lane has one more honest short-loop improvement even
-  though it still did not finish step `4`.
-- Repeated 20-minute wins are still required before reopening longer
-  continuation reads, so the lane is back in code work with
-  `prefix-accept-rank-context-v1` as the current short-loop gate.
-- The accept-rank-context slice now owns the current stored short-loop run to
-  beat.
+  `102513 us`, and then produced a stronger stored 20-minute checkpoint, while
+  the newer clause-side accept-rank facts reuse then pushed the refreshed
+  replay benchmark down again to `88197 us` and replaced the short-loop gate
+  at `139` explored prefixes by the same 20-minute window.
+- The newest capped rerun therefore adds a second honest short-loop win on the
+  same retained-prefix surface even though the lane still did not finish
+  step `4`.
+- Repeated 20-minute wins now exist, so the next question is whether the newer
+  short-loop gains also move the later intended-profile walls honestly.
+- The clause-accept-rank-facts slice now owns the current stored short-loop
+  run to beat.
   The lane should keep treating `prefix-local-score-v1` as the long-run
-  reference until later capped reruns replace the `135`-prefix checkpoint
-  repeatedly and then eventually beat the longer continuation honestly.
+  reference until a reopened longer continuation proves whether the `139`-
+  prefix checkpoint also moves the later stored walls honestly.
 - The optimization loop now needs shorter, more repeatable intended-profile
   reads.
   We no longer expect the very next slice to beat the full `1095`-prefix stop.
-  Instead, each new slice should first try to beat the current short-loop gate
-  at `135` explored prefixes.
+  Instead, near-term runtime work should either beat the current short-loop
+  gate at `139` explored prefixes or move the later stored step-`4` walls
+  honestly on the reopened continuation.
 
 ## Forward Direction
 
 - Keep `prefix-local-score-v1` as the long-run run to beat and
-  `prefix-accept-rank-context-v1` as the current short-loop checkpoint to
-  beat.
-- Use a hard 20-minute max intended-profile rerun for the next attempts.
-- The accept-rank-context slice already spent one capped rerun and won the
-  short-loop gate once, so the next move is another narrow per-admitted
-  compact-summary cost slice inside
-  `compute_terminal_prefix_completion_summary_from_candidates(...)`.
-- Only launch another capped intended-profile rerun if that next slice stays
-  replay-parity clean and re-earns the refreshed checked-in replay gate
-  honestly.
-- If the next slice loses, drop it and stay on another narrow per-admitted
-  compact-summary cost slice inside
+  `clause-accept-rank-facts-v1` as the current short-loop checkpoint to beat.
+- The clause-side accept-rank-facts slice has now produced repeated honest
+  20-minute wins, so the next move is to reopen one longer intended-profile
+  continuation on the current binary before spending another code slice.
+- Keep the refreshed replay benchmark gate at `88197 us` for later code work.
+- If that reopened continuation fails to move the later stored walls honestly,
+  drop back to another narrow per-admitted compact-summary cost slice inside
   `compute_terminal_prefix_completion_summary_from_candidates(...)` rather
   than retrying the dropped focus-aligned competition-gate/payload-mode hoist,
   the dropped shared compact-bookkeeping fold, or the dropped claim-open-band
   compact local-state hoist.
 - Do not wake the dormant general cached-summary reopen machinery first.
-- Only reopen longer full-profile continuation reads after repeated 20-minute
-  wins show that the lane has materially improved.
+- A longer full-profile continuation is now justified because repeated
+  20-minute wins have shown material short-loop improvement on the same
+  retained-prefix surface.
 
 ## Immediate Next Move
 
 1. Keep `prefix-local-score-v1` frozen as the long-run run to beat.
-2. Keep `prefix-accept-rank-context-v1` frozen as the current short-loop gate
+2. Keep `clause-accept-rank-facts-v1` frozen as the current short-loop gate
    to beat.
-3. Land one new narrow compact-summary per-admitted cost slice inside
-   `compute_terminal_prefix_completion_summary_from_candidates(...)` on top of
-   the current stack.
-4. Keep that next slice only if it preserves replay parity and re-earns or
-   beats the current checked-in replay total of `102513 us` honestly on warmed
-   rereads.
-5. Only then launch one new intended-profile rerun on the current binary for
-   `20` minutes max.
-6. Record the nearest stored step-`4` checkpoint to `1200000 ms` and compare it
-   first against the current short-loop gate:
-   `1190946 ms`, `135` explored prefixes, `40 groups / 28438 candidates`,
-   `frontier_queue_len = 2640`, RSS `= 445005824`,
-   `terminal_summary_build_millis = 1183014`,
+3. Reopen one longer intended-profile continuation on the current binary
+   rather than landing another code slice first.
+4. Prefer `pen-cli resume` on
+   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-v1`
+   if frontier compatibility admits it; otherwise launch one fresh intended
+   rerun on the same release binary and config.
+5. Let that continuation run materially past the `20`-minute window and then
+   inspect matched stored step-`4` checkpoints in this order:
+   `140/163`, then `332/335`, then `408/437/454/484`.
+6. Keep comparing the current `20`-minute gate first against
+   `1191501 ms`, `139` explored prefixes, `40 groups / 28438 candidates`,
+   `frontier_queue_len = 2636`, RSS `= 453021696`,
+   `terminal_summary_build_millis = 1183915`,
    `terminal_summary_admissibility_checks = 0`, and
    `terminal_summary_fallback_connectivity_checks = 0`.
-7. If the next slice does not re-earn replay gate honestly, or if the later
-   rerun still does not beat that checkpoint honestly, drop back to another
-   narrow compact-summary per-admitted cost slice while keeping the dropped
-   focus-aligned competition-gate/payload-mode hoist, the dropped shared
-   compact-bookkeeping fold, and the dropped claim-open-band compact local-
-   state hoist off the table first.
+7. If the longer continuation does not move those later stored walls
+   honestly, drop back to another narrow compact-summary per-admitted cost
+   slice while keeping the dropped focus-aligned competition-gate/payload-mode
+   hoist, the dropped shared compact-bookkeeping fold, and the dropped claim-
+   open-band compact local-state hoist off the table first.
 8. Keep broad cleanup, cached-summary reopen wake-up work, contender-rank
    rewrites, connectivity-first/cache-first rewrites, and deterministic
-   batched parallel reduction dropped until the short-loop runtime wins become
-   strong enough to justify a longer read again.
+   batched parallel reduction dropped until the longer continuation proves the
+   newer short-loop win scales past the next stored walls.

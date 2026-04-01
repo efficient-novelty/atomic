@@ -104,6 +104,12 @@ pub struct TerminalClauseNuFacts {
     lib_refs: Box<[u32]>,
     #[serde(default)]
     clause_bit_cost: u16,
+    #[serde(default)]
+    var_refs: Box<[u32]>,
+    #[serde(default)]
+    max_var_ref: u32,
+    #[serde(default)]
+    acceptance_signals: TerminalClauseAcceptanceSignals,
     is_type_formation: bool,
     is_intro: bool,
     is_elim: bool,
@@ -127,6 +133,22 @@ pub struct TerminalClauseNuFacts {
     is_distributive_law: bool,
     is_polymorphic_temporal_elim: bool,
     is_spatial_temporal_clause: bool,
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct TerminalClauseAcceptanceSignals {
+    pub eliminator_score: u16,
+    pub former_score: u16,
+    pub dependent_motive_density: u16,
+    pub generic_binder_count: u16,
+}
+
+struct TerminalClauseRuntimeFacts {
+    lib_refs: Box<[u32]>,
+    clause_bit_cost: u16,
+    var_refs: Box<[u32]>,
+    max_var_ref: u32,
+    acceptance_signals: TerminalClauseAcceptanceSignals,
 }
 
 impl TelescopeNuProfile {
@@ -491,14 +513,15 @@ impl StructuralNuLibRefs {
 impl TerminalClauseNuFacts {
     pub fn from_clause(clause: &ClauseRec) -> Self {
         let expr = &clause.expr;
-        let mut lib_refs = expr.lib_refs().into_iter().collect::<Vec<_>>();
-        lib_refs.sort_unstable();
-        lib_refs.dedup();
-        let has_lib_pointer = !lib_refs.is_empty();
+        let runtime = TerminalClauseRuntimeFacts::from_expr(expr);
+        let has_lib_pointer = !runtime.lib_refs.is_empty();
         let is_path_con = is_path_con_expr(expr);
         Self {
-            lib_refs: lib_refs.into_boxed_slice(),
-            clause_bit_cost: u16::try_from(expr_bit_length(expr)).expect("bit cost exceeded u16"),
+            lib_refs: runtime.lib_refs,
+            clause_bit_cost: runtime.clause_bit_cost,
+            var_refs: runtime.var_refs,
+            max_var_ref: runtime.max_var_ref,
+            acceptance_signals: runtime.acceptance_signals,
             is_type_formation: is_type_formation(expr),
             is_intro: is_intro_expr(expr),
             is_elim: is_elim_expr(expr),
@@ -544,11 +567,51 @@ impl TerminalClauseNuFacts {
         self.clause_bit_cost
     }
 
+    pub fn lib_refs(&self) -> &[u32] {
+        &self.lib_refs
+    }
+
+    pub fn var_refs(&self) -> &[u32] {
+        &self.var_refs
+    }
+
+    pub fn max_var_ref(&self) -> u32 {
+        self.max_var_ref
+    }
+
+    pub fn acceptance_signals(&self) -> TerminalClauseAcceptanceSignals {
+        self.acceptance_signals
+    }
+
     pub fn with_missing_runtime_fields_from_clause(mut self, clause: &ClauseRec) -> Self {
-        if self.clause_bit_cost == 0 {
-            self.clause_bit_cost = self.clause_bit_cost(clause);
-        }
+        let runtime = TerminalClauseRuntimeFacts::from_expr(&clause.expr);
+        self.lib_refs = runtime.lib_refs;
+        self.clause_bit_cost = runtime.clause_bit_cost;
+        self.var_refs = runtime.var_refs;
+        self.max_var_ref = runtime.max_var_ref;
+        self.acceptance_signals = runtime.acceptance_signals;
         self
+    }
+}
+
+impl TerminalClauseRuntimeFacts {
+    fn from_expr(expr: &Expr) -> Self {
+        let mut lib_refs = expr.lib_refs().into_iter().collect::<Vec<_>>();
+        lib_refs.sort_unstable();
+        lib_refs.dedup();
+
+        let mut var_refs = expr.var_refs().into_iter().collect::<Vec<_>>();
+        var_refs.sort_unstable();
+        var_refs.dedup();
+        let max_var_ref = var_refs.last().copied().unwrap_or(0);
+
+        Self {
+            lib_refs: lib_refs.into_boxed_slice(),
+            clause_bit_cost: u16::try_from(expr_bit_length(expr)).expect("bit cost exceeded u16"),
+            var_refs: var_refs.into_boxed_slice(),
+            max_var_ref,
+            acceptance_signals: terminal_clause_acceptance_signals(expr),
+        }
     }
 }
 
@@ -1169,6 +1232,83 @@ fn library_entry(step_index: u32, library: &Library) -> Option<&LibraryEntry> {
     step_index
         .checked_sub(1)
         .and_then(|index| library.get(index as usize))
+}
+
+fn terminal_clause_acceptance_signals(expr: &Expr) -> TerminalClauseAcceptanceSignals {
+    let mut signals = TerminalClauseAcceptanceSignals::default();
+    accumulate_terminal_clause_acceptance_signals(expr, &mut signals);
+    signals
+}
+
+fn accumulate_terminal_clause_acceptance_signals(
+    expr: &Expr,
+    signals: &mut TerminalClauseAcceptanceSignals,
+) {
+    match expr {
+        Expr::App(function, argument) => {
+            if matches!(function.as_ref(), Expr::Lam(_) | Expr::App(_, _)) {
+                signals.eliminator_score = signals.eliminator_score.saturating_add(1);
+            }
+            accumulate_terminal_clause_acceptance_signals(function, signals);
+            accumulate_terminal_clause_acceptance_signals(argument, signals);
+        }
+        Expr::Lam(body) => {
+            signals.generic_binder_count = signals.generic_binder_count.saturating_add(1);
+            accumulate_terminal_clause_acceptance_signals(body, signals);
+        }
+        Expr::Pi(domain, codomain) | Expr::Sigma(domain, codomain) => {
+            signals.former_score = signals.former_score.saturating_add(1);
+            signals.generic_binder_count = signals.generic_binder_count.saturating_add(1);
+            if expr_contains_var_refs(codomain) {
+                signals.dependent_motive_density =
+                    signals.dependent_motive_density.saturating_add(1);
+            }
+            accumulate_terminal_clause_acceptance_signals(domain, signals);
+            accumulate_terminal_clause_acceptance_signals(codomain, signals);
+        }
+        Expr::Id(ty, left, right) => {
+            accumulate_terminal_clause_acceptance_signals(ty, signals);
+            accumulate_terminal_clause_acceptance_signals(left, signals);
+            accumulate_terminal_clause_acceptance_signals(right, signals);
+        }
+        Expr::Refl(body)
+        | Expr::Susp(body)
+        | Expr::Trunc(body)
+        | Expr::Flat(body)
+        | Expr::Sharp(body)
+        | Expr::Disc(body)
+        | Expr::Shape(body)
+        | Expr::Next(body)
+        | Expr::Eventually(body) => accumulate_terminal_clause_acceptance_signals(body, signals),
+        Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_) => {}
+    }
+}
+
+fn expr_contains_var_refs(expr: &Expr) -> bool {
+    match expr {
+        Expr::Var(_) => true,
+        Expr::App(function, argument)
+        | Expr::Pi(function, argument)
+        | Expr::Sigma(function, argument) => {
+            expr_contains_var_refs(function) || expr_contains_var_refs(argument)
+        }
+        Expr::Lam(body)
+        | Expr::Refl(body)
+        | Expr::Susp(body)
+        | Expr::Trunc(body)
+        | Expr::Flat(body)
+        | Expr::Sharp(body)
+        | Expr::Disc(body)
+        | Expr::Shape(body)
+        | Expr::Next(body)
+        | Expr::Eventually(body) => expr_contains_var_refs(body),
+        Expr::Id(ty, left, right) => {
+            expr_contains_var_refs(ty)
+                || expr_contains_var_refs(left)
+                || expr_contains_var_refs(right)
+        }
+        Expr::Univ | Expr::Lib(_) | Expr::PathCon(_) => false,
+    }
 }
 
 fn is_distributive_law(expr: &Expr) -> bool {
@@ -2025,6 +2165,9 @@ mod tests {
         let facts = TerminalClauseNuFacts::from_clause(&clause);
         let mut missing = facts.clone();
         missing.clause_bit_cost = 0;
+        missing.var_refs = Box::default();
+        missing.max_var_ref = 0;
+        missing.acceptance_signals = super::TerminalClauseAcceptanceSignals::default();
 
         assert_eq!(missing.clause_bit_cost(&clause), facts.clause_bit_cost);
         assert_eq!(

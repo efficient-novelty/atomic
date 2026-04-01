@@ -6464,6 +6464,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                             .as_ref()
                                             .expect("compact accept rank context should exist"),
                                         terminal_clause.clause,
+                                        terminal_clause.nu_facts,
                                         score.exact_nu,
                                         score.bit_kappa_used,
                                         clause_kappa_used,
@@ -6846,6 +6847,7 @@ fn compute_terminal_prefix_completion_summary_from_candidates(
                                         .as_ref()
                                         .expect("compact accept rank context should exist"),
                                     terminal_clause.clause,
+                                    terminal_clause.nu_facts,
                                     score.exact_nu,
                                     score.bit_kappa_used,
                                     clause_kappa_used,
