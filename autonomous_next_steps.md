@@ -73,8 +73,17 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - `partial_prefix_bound_prunes = 21`
   - `remaining_one_algebraic_prunes = 0`
   - `terminal_summary_build_millis > 0`
-- The next blocker is therefore exact partial-prefix screening on the promoted
-  step-`14` claim Hilbert band, not claim band selection or root generation.
+- The first captured surviving exact prunes are now explained:
+  - compact summary bound `= direct exact` bound on the terminal-filtered
+    surface
+  - raw filtered catalog exact walk `= same` bound
+  - each of the first three captured prefixes has `3` admitted terminal
+    candidates
+  - each tops out at `exact_nu = 40` with `clause_kappa = 9`, so
+    `rho = 40/9` and `CannotClearBar` is honest
+- The next blocker is therefore the divergent accepted history itself, or a
+  later still-uncaptured exact-screen family, not claim band selection, root
+  generation, or a first-prune compact-summary mismatch.
 
 ## Do This Next
 
@@ -91,12 +100,15 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 1. Keep the landed `claim_step_open` and `claim_root_seeding` payloads in
    place while debugging the fix.
-2. Use them to decide whether the step-`14` zero-frontier loss comes from:
+2. Treat the new first-prune exact-screen regression as part of the surface.
+   It now proves that the first captured prunes are not coming from:
    - claim terminal filtering / terminal admissibility
    - exact terminal-summary bound construction
    - `exact_terminal_prefix_bound_decision_from_bound(...)`
-   - direct exact bar-clearance on the divergent accepted history
-3. Treat the new enriched failure-note shape as part of the regression surface.
+3. Use the same diagnostics to decide whether the remaining zero-frontier loss
+   is now just a genuinely non-winning divergent accepted history or whether a
+   later captured prune exposes a different residual family.
+4. Treat the enriched failure-note shape as part of the regression surface.
 
 ### 3. Build A Reproducer Around The Finished Failure
 
@@ -108,15 +120,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
    - `claim_debt_axes = 7..7`
    - `roots_enqueued = 1`
    - `remaining_one_algebraic_prunes = 0`
-3. Capture the first remaining-one step-`14` prefixes that still get
-   `CannotClearBar` and compare:
-   - the compact terminal-summary bound
-   - the direct exact assessment on the same prefix
-4. Decide whether the remaining zero-candidate failure comes from:
-   - claim terminal filtering / terminal admissibility
-   - exact terminal-summary bound construction
-   - `exact_terminal_prefix_bound_decision_from_bound(...)`
-   - a genuinely non-winning divergent accepted history
+3. Keep the new first-prune capture green. For the first three captured
+   remaining-one exact prunes it now proves:
+   - compact summary bound `= direct exact` bound
+   - raw filtered catalog exact walk `= same` bound
+   - admitted candidates `= 3`
+   - `exact_nu = 40`, `clause_kappa = 9`, so `rho = 40/9`
+4. Extend that capture across the rest of the `21` exact prunes and decide
+   whether:
+   - they all share the same honest `40/9` ceiling
+   - later captured prunes split into a different failure family
+   - the accepted path on steps `10..13` has already moved onto a non-winning
+     step-`14` branch
 
 ### 4. Validation Order After The Fix
 

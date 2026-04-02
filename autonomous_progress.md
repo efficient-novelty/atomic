@@ -56,6 +56,10 @@ gate.
   failure from the divergent accepted prefix and now localizes the surviving
   blocker:
   reference steps `1..9`, then the stored simple chain on steps `10..13`.
+- A new exact-screen regression now captures the first remaining-one
+  step-`14` prefixes that get pruned on the real divergent discovery run and
+  compares the cached compact summary against direct exact checks on the same
+  prefix surface.
 
 ## Latest Full-Profile Outcome
 
@@ -105,8 +109,18 @@ gate.
   - `partial_prefix_bound_prunes = 21`
   - `remaining_one_algebraic_prunes = 0`
   - `terminal_summary_build_millis > 0`
-- The immediate blocker is now exact partial-prefix screening on the promoted
-  step-`14` claim Hilbert band, not claim band selection or root generation.
+- The first captured surviving exact prunes are now explained on stored test
+  evidence:
+  - compact summary bound `= direct exact` bound on the terminal-filtered
+    surface
+  - raw filtered catalog exact walk `= same` bound
+  - each of the first three captured prefixes has `3` admitted terminal
+    candidates
+  - each tops out at `exact_nu = 40` with `clause_kappa = 9`, so
+    `rho = 40/9` and `CannotClearBar` is honest
+- The immediate blocker is now the divergent accepted history itself, or a
+  later still-uncaptured exact-screen family, not claim band selection, root
+  generation, or a first-prune compact-summary mismatch.
 
 ## Current Reference Runs
 
@@ -192,11 +206,15 @@ gate.
     `remaining_one_algebraic_prunes = 0` and terminal summary build now runs
   - the reproducer still dies with `21` exact partial-prefix prunes, zero
     terminal bar prunes, and zero terminal rank prunes
-- The likely diagnosis surface is the path between:
-  - claim open-band terminal clause filtering / terminal admissibility
-  - exact terminal prefix completion summary construction
-  - `exact_terminal_prefix_bound_decision_from_bound(...)`
-  - direct exact bar-clearance on the divergent accepted history
+- The first captured remaining-one exact prunes are no longer ambiguous:
+  - claim terminal filtering does not hide a bar clearer on those prefixes
+  - compact terminal-summary construction matches direct exact assessment
+  - `exact_terminal_prefix_bound_decision_from_bound(...)` is returning the
+    same honest `CannotClearBar` outcome that direct exact returns
+- The open diagnosis question is now whether all `21` exact prunes share that
+  same `nu = 40`, `kappa = 9` ceiling and therefore point back to an already
+  non-winning accepted divergence on steps `10` through `13`, or whether later
+  captured prunes split into a different failure family.
 - The compact terminal-summary path remains worth optimizing later, but it is
   no longer the first engineering dollar to spend.
 
@@ -209,9 +227,9 @@ gate.
   failure is explained.
 - Keep the landed late-step diagnostics and divergent-prefix reproducer green
   while localizing the zero-frontier loss.
-- Use the new reproducer state to decide whether the remaining narrow fix
-  belongs in claim terminal filtering, terminal-summary bound construction, or
-  exact bar-clearance on the divergent history itself.
+- Use the new first-prune diagnosis to decide whether the remaining narrow fix
+  belongs in backtracking the accepted divergence on steps `10` through `13`
+  or in a later still-uncaptured exact-screen family.
 - After that fix lands and replay parity holds, spend one capped intended
   rerun before committing to another full long rerun.
 
@@ -226,12 +244,13 @@ gate.
 2. Keep the landed divergent-prefix reproducer green with the promoted
    `claim_step_open = 9..9`, `roots_enqueued = 1`, and
    `remaining_one_algebraic_prunes = 0` state.
-3. Capture the first remaining-one step-`14` prefixes that still get
-   `CannotClearBar` and compare their compact terminal-summary bound against a
-   direct exact assessment on the same promoted Hilbert-band surface.
-4. Patch the narrowest honest exact-screen path that explains or removes those
-   surviving `partial_prefix_bound_prunes` without waking guarded, replay,
-   realistic-shadow, or demo-only fallback behavior.
+3. Extend the new first-prune capture past the first three prefixes and decide
+   whether all `21` remaining-one exact prunes share the same
+   `exact_nu = 40`, `clause_kappa = 9` ceiling.
+4. If that ceiling stays uniform, trace back from accepted steps `10` through
+   `13` to the earliest divergence that removes every viable step-`14`
+   bar-clearer; otherwise patch the narrower residual exact-screen family that
+   later captured prefixes expose.
 5. Run the targeted claim tests for the reproducer plus the late-step claim
    acceptance surface.
 6. Only if that stays clean, spend one capped intended-profile rerun against

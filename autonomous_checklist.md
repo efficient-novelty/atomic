@@ -29,14 +29,19 @@ It lists only work that is still open.
   now promotes that divergent prefix to `claim_band = 9..9`, enqueues one
   root, reaches exact terminal-summary work, and still dies with exact
   partial-prefix pruning.
+- The first three captured remaining-one exact prunes are now explained on
+  test evidence: compact summary, terminal-filtered exact, and raw filtered
+  exact all agree on `CannotClearBar` with `3` admitted candidates at
+  `exact_nu = 40`, `clause_kappa = 9`.
 - The current blocker is late-step claim viability/correctness, not inability
   to escape step `4`.
 
 ## 1. Runtime Improvement Loop
 
-- [ ] Explain why the promoted step-`14` claim Hilbert-band prefixes still all
-      get `CannotClearBar` in exact partial-prefix screening after terminal
-      summary begins.
+- [ ] Determine whether all `21` promoted step-`14` exact partial-prefix
+      prunes share the same honest `exact_nu = 40`, `clause_kappa = 9`
+      ceiling seen on the first captured prefixes, and trace the earliest
+      accepted divergence if they do.
 - [ ] Require every serious runtime slice to prove replay-harness parity plus
       either fewer exact-`nu` evaluations or lower measured aggregation time
       before another full-profile rerun.

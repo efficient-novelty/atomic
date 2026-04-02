@@ -5084,6 +5084,50 @@ fn can_process_exact_two_step_terminal_surface_now(
     prefix_frontier_work_key(last_terminal_prefix) < prefix_frontier_work_key(frontier_head)
 }
 
+#[cfg(test)]
+thread_local! {
+    static PRUNED_TERMINAL_PREFIX_CAPTURE: std::cell::RefCell<Option<Vec<OnlinePrefixWorkItem>>> =
+        const { std::cell::RefCell::new(None) };
+}
+
+#[cfg(test)]
+fn start_pruned_terminal_prefix_capture() {
+    PRUNED_TERMINAL_PREFIX_CAPTURE.with(|capture| {
+        *capture.borrow_mut() = Some(Vec::new());
+    });
+}
+
+#[cfg(test)]
+fn finish_pruned_terminal_prefix_capture() -> Vec<OnlinePrefixWorkItem> {
+    PRUNED_TERMINAL_PREFIX_CAPTURE.with(|capture| capture.borrow_mut().take().unwrap_or_default())
+}
+
+#[cfg(test)]
+fn maybe_capture_pruned_terminal_prefix(
+    work_item: &OnlinePrefixWorkItem,
+    decision: ExactPartialPrefixBoundDecision,
+) {
+    if work_item.remaining_clause_slots != 1
+        || !matches!(decision, ExactPartialPrefixBoundDecision::CannotClearBar)
+    {
+        return;
+    }
+
+    PRUNED_TERMINAL_PREFIX_CAPTURE.with(|capture| {
+        let mut capture = capture.borrow_mut();
+        let Some(capture) = capture.as_mut() else {
+            return;
+        };
+        if capture
+            .iter()
+            .any(|existing| existing.signature == work_item.signature)
+        {
+            return;
+        }
+        capture.push(work_item.clone());
+    });
+}
+
 fn screen_prefix_for_frontier(
     step_index: u32,
     library: &Library,
@@ -5123,6 +5167,8 @@ fn screen_prefix_for_frontier(
                 .remaining_one_telemetry
                 .remaining_one_bar_prunes_pre_materialize += 1;
         }
+        #[cfg(test)]
+        maybe_capture_pruned_terminal_prefix(work_item, decision);
         return (decision, false);
     }
 
@@ -5162,6 +5208,9 @@ fn screen_prefix_for_frontier(
             ExactPartialPrefixBoundDecision::CanClearBar => {}
         }
     }
+
+    #[cfg(test)]
+    maybe_capture_pruned_terminal_prefix(work_item, decision);
 
     (decision, true)
 }
@@ -5511,12 +5560,15 @@ fn exact_partial_prefix_bound_decision(
     if let Some(decision) =
         prefix_legality_cache.partial_prefix_bound_decision(&work_item.signature)
     {
-        return match decision {
+        let decision = match decision {
             PartialPrefixBoundDecision::CanClearBar => ExactPartialPrefixBoundDecision::CanClearBar,
             PartialPrefixBoundDecision::CannotClearBar => {
                 ExactPartialPrefixBoundDecision::CannotClearBar
             }
         };
+        #[cfg(test)]
+        maybe_capture_pruned_terminal_prefix(work_item, decision);
+        return decision;
     }
 
     if work_item.remaining_clause_slots == 1 {
@@ -5541,6 +5593,8 @@ fn exact_partial_prefix_bound_decision(
             prefix_legality_cache
                 .store_partial_prefix_bound_decision(work_item.signature.clone(), cacheable);
         }
+        #[cfg(test)]
+        maybe_capture_pruned_terminal_prefix(work_item, decision);
         return decision;
     }
 
@@ -8829,7 +8883,9 @@ mod tests {
     use crate::bounds::PrefixBound;
     use crate::branch_bound::AcceptRank;
     use crate::config::{RuntimeConfig, SearchProfile};
-    use crate::enumerate::{EnumerationContext, LateFamilySurface, build_clause_catalog};
+    use crate::enumerate::{
+        ClauseCatalog, EnumerationContext, LateFamilySurface, build_clause_catalog,
+    };
     use crate::expand::{evaluate_candidate, evaluate_checked_candidate};
     use crate::narrative::{NarrativeEventKind, StepPhase, narrative_progress_snapshot};
     use crate::prefix_cache::{
@@ -8858,7 +8914,10 @@ mod tests {
             PackagePolicy, StrictAdmissibility, StructuralFamily, assess_strict_admissibility,
             passes_strict_admissibility, strict_admissibility, strict_admissibility_for_mode,
         },
-        connectivity::{ConnectivityWitness, analyze_connectivity, passes_connectivity},
+        connectivity::{
+            ConnectivityWitness, TerminalClauseConnectivityFacts, analyze_connectivity,
+            passes_connectivity,
+        },
         obligations::{RetentionClass, RetentionFocus, RetentionPolicy, summarize_structural_debt},
     };
     use std::cmp::Reverse;
@@ -8948,6 +9007,211 @@ mod tests {
             ]));
         }
         prefix
+    }
+
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    struct DirectTerminalAssessment {
+        generated_candidate_count: usize,
+        admitted_candidate_count: usize,
+        bound: Option<PrefixBound>,
+        can_clear_bar: bool,
+    }
+
+    fn direct_terminal_assessment_from_raw_options(
+        step_index: u32,
+        library: &Library,
+        admissibility: StrictAdmissibility,
+        objective_bar: Rational,
+        nu_history: &[(u32, u32)],
+        prefix_telescope: &Telescope,
+        last_clause_options: &[ClauseRec],
+    ) -> DirectTerminalAssessment {
+        let mut admitted_candidate_count = 0usize;
+        let mut bound: Option<PrefixBound> = None;
+        let mut can_clear_bar = false;
+
+        for clause in last_clause_options {
+            let mut telescope = prefix_telescope.clone();
+            telescope.clauses.push(clause.clone());
+            if !passes_connectivity(library, &telescope) {
+                continue;
+            }
+
+            let admissibility_decision =
+                assess_strict_admissibility(step_index, library, &telescope, admissibility);
+            if !admissibility_decision.is_admitted() {
+                continue;
+            }
+
+            admitted_candidate_count += 1;
+            let exact_nu = u16::try_from(structural_nu(&telescope, library, nu_history).total)
+                .expect("nu exceeded u16");
+            let clause_kappa_used = u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+            let bit_kappa_used =
+                u16::try_from(telescope.bit_cost()).expect("bit cost exceeded u16");
+            if let Some(bound) = bound.as_mut() {
+                bound.absorb_completion(exact_nu, clause_kappa_used, bit_kappa_used);
+            } else {
+                bound = Some(PrefixBound::singleton(
+                    exact_nu,
+                    clause_kappa_used,
+                    bit_kappa_used,
+                ));
+            }
+            can_clear_bar |=
+                Rational::new(i64::from(exact_nu), i64::from(clause_kappa_used)) >= objective_bar;
+        }
+
+        DirectTerminalAssessment {
+            generated_candidate_count: last_clause_options.len(),
+            admitted_candidate_count,
+            bound,
+            can_clear_bar,
+        }
+    }
+
+    fn direct_terminal_assessment_from_terminal_candidates(
+        step_index: u32,
+        library: &Library,
+        admissibility: StrictAdmissibility,
+        objective_bar: Rational,
+        nu_history: &[(u32, u32)],
+        prefix_telescope: &Telescope,
+        terminal_clauses: &super::TerminalPrefixClauseCandidates<'_>,
+    ) -> DirectTerminalAssessment {
+        let mut generated_candidate_count = 0usize;
+        let mut admitted_candidate_count = 0usize;
+        let mut bound: Option<PrefixBound> = None;
+        let mut can_clear_bar = false;
+
+        let mut assess_clause =
+            |clause: &ClauseRec,
+             _connectivity_facts: Option<&TerminalClauseConnectivityFacts>,
+             cached_admissibility_decision: Option<&AdmissibilityDecision>| {
+                generated_candidate_count += 1;
+                let mut telescope = prefix_telescope.clone();
+                telescope.clauses.push(clause.clone());
+
+                if !passes_connectivity(library, &telescope) {
+                    return;
+                }
+
+                let admissibility_decision =
+                    cached_admissibility_decision.cloned().unwrap_or_else(|| {
+                        assess_strict_admissibility(step_index, library, &telescope, admissibility)
+                    });
+                if !admissibility_decision.is_admitted() {
+                    return;
+                }
+
+                admitted_candidate_count += 1;
+                let exact_nu = u16::try_from(structural_nu(&telescope, library, nu_history).total)
+                    .expect("nu exceeded u16");
+                let clause_kappa_used =
+                    u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                let bit_kappa_used =
+                    u16::try_from(telescope.bit_cost()).expect("bit cost exceeded u16");
+                if let Some(bound) = bound.as_mut() {
+                    bound.absorb_completion(exact_nu, clause_kappa_used, bit_kappa_used);
+                } else {
+                    bound = Some(PrefixBound::singleton(
+                        exact_nu,
+                        clause_kappa_used,
+                        bit_kappa_used,
+                    ));
+                }
+                can_clear_bar |= Rational::new(i64::from(exact_nu), i64::from(clause_kappa_used))
+                    >= objective_bar;
+            };
+
+        match terminal_clauses {
+            super::TerminalPrefixClauseCandidates::General(clauses) => {
+                for clause in clauses {
+                    assess_clause(
+                        clause.clause,
+                        clause.connectivity_facts,
+                        clause.cached_admissibility_decision.as_ref(),
+                    );
+                }
+            }
+            super::TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(clauses) => {
+                for clause in clauses {
+                    assess_clause(clause.clause, clause.connectivity_facts, None);
+                }
+            }
+        }
+
+        DirectTerminalAssessment {
+            generated_candidate_count,
+            admitted_candidate_count,
+            bound,
+            can_clear_bar,
+        }
+    }
+
+    struct DivergentStepFourteenPrunedTerminalSurface {
+        library: Library,
+        nu_history: Vec<(u32, u32)>,
+        admissibility: StrictAdmissibility,
+        objective_bar: Rational,
+        clause_catalog: ClauseCatalog,
+        prefix_legality_cache: PrefixLegalityCache,
+        pruned_terminal_prefixes: Vec<OnlinePrefixWorkItem>,
+    }
+
+    fn divergent_step_fourteen_pruned_terminal_surface(
+        limit: usize,
+    ) -> DivergentStepFourteenPrunedTerminalSurface {
+        let prefix = claim_long_rerun_v3_divergent_prefix();
+        let (library, history, nu_history) = history_from_prefix(&prefix);
+        let admissibility =
+            strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let structural_debt = summarize_structural_debt(&library, 2);
+        let objective_bar = compute_bar(2, 14, &history).bar;
+        let enumeration_context = discovery_enumeration_context(&library, admissibility, false);
+        let clause_kappa = admissibility.min_clause_kappa;
+        assert_eq!(
+            admissibility.min_clause_kappa,
+            admissibility.max_clause_kappa
+        );
+        let clause_catalog = build_clause_catalog(enumeration_context, clause_kappa);
+        let mut demo_step_budget = None;
+        let mut demo_narrative = None;
+        let mut progress_observer = None;
+
+        super::start_pruned_terminal_prefix_capture();
+        let discovery = discover_realistic_shadow_candidates(
+            14,
+            &library,
+            &history,
+            structural_debt,
+            admissibility,
+            structural_debt.retention_policy(),
+            objective_bar,
+            &nu_history,
+            &mut demo_step_budget,
+            std::time::Instant::now(),
+            &mut demo_narrative,
+            &mut progress_observer,
+        )
+        .expect("divergent step-14 discovery should run");
+        let mut pruned_terminal_prefixes = super::finish_pruned_terminal_prefix_capture();
+        pruned_terminal_prefixes.truncate(limit);
+
+        assert!(
+            !pruned_terminal_prefixes.is_empty(),
+            "expected the divergent step-14 surface to produce remaining-one exact prunes"
+        );
+
+        DivergentStepFourteenPrunedTerminalSurface {
+            library,
+            nu_history,
+            admissibility,
+            objective_bar,
+            clause_catalog,
+            prefix_legality_cache: discovery.prefix_legality_cache,
+            pruned_terminal_prefixes,
+        }
     }
 
     #[derive(Default)]
@@ -10510,6 +10774,62 @@ mod tests {
         let reference_admissibility = strict_admissibility(14, 2, &library_until(13));
         assert_eq!(reference_admissibility.min_clause_kappa, 9);
         assert_eq!(reference_admissibility.max_clause_kappa, 9);
+    }
+
+    #[test]
+    fn divergent_step_fourteen_pruned_terminal_prefixes_match_direct_exact_assessment() {
+        let surface = divergent_step_fourteen_pruned_terminal_surface(3);
+
+        for (index, work_item) in surface.pruned_terminal_prefixes.iter().enumerate() {
+            let mut summary_cache = surface.prefix_legality_cache.clone();
+            let summary = summary_cache
+                .terminal_prefix_completion_summary(&work_item.signature)
+                .expect("pruned remaining-one prefix should retain its cached summary");
+            let mut cache = surface.prefix_legality_cache.clone();
+            let terminal_clauses = super::terminal_prefix_clause_candidates(
+                14,
+                &surface.library,
+                surface.admissibility,
+                &work_item.signature,
+                work_item.next_clauses(&surface.clause_catalog),
+                work_item.next_clause_connectivity_facts(&surface.clause_catalog),
+                work_item.next_clause_nu_facts(&surface.clause_catalog),
+                &mut cache,
+                None,
+            );
+            let filtered_direct = direct_terminal_assessment_from_terminal_candidates(
+                14,
+                &surface.library,
+                surface.admissibility,
+                surface.objective_bar,
+                &surface.nu_history,
+                &work_item.prefix_telescope,
+                &terminal_clauses,
+            );
+            let raw_direct = direct_terminal_assessment_from_raw_options(
+                14,
+                &surface.library,
+                surface.admissibility,
+                surface.objective_bar,
+                &surface.nu_history,
+                &work_item.prefix_telescope,
+                work_item.next_clauses(&surface.clause_catalog),
+            );
+
+            assert_eq!(summary.bound, filtered_direct.bound);
+            assert_eq!(
+                super::exact_terminal_prefix_bound_decision_from_bound(
+                    surface.objective_bar,
+                    summary.bound,
+                ),
+                super::ExactPartialPrefixBoundDecision::CannotClearBar
+            );
+            assert!(!filtered_direct.can_clear_bar);
+            assert_eq!(
+                raw_direct, filtered_direct,
+                "pruned_prefix[{index}] should not hide a bar clearer behind terminal filtering"
+            );
+        }
     }
 
     #[test]
