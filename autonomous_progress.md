@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Progress
 
-Last updated: 2026-04-02
+Last updated: 2026-04-03
 
 This file is the live operating brief for `desktop_claim_shadow`.
 Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next
@@ -113,6 +113,34 @@ gate.
   - step-`13` structural-delta regression
   - forced local step-`13` operator-band reopen
   - late-step step-`13` viability-tie acceptance regression
+- The claim live-checkpoint / step-summary persistence check is also green on
+  repo tests.
+- The release replay harness is now re-earned on the tracked plateau corpus:
+  `target/release/xtask.exe claim-replay-harness benchmark
+  tests/fixtures/claim_runtime/remaining_one_plateau_fixtures.json 10`
+  completed without any replay mismatch on all `5` stored surfaces.
+- A new capped intended-profile validation read,
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-late-accept-capped-v1`,
+  now exists on clean-tree repo head `44b9871e65546a210c4ed71dcd31b91f8e6c521c`
+  with release binary hash
+  `d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f`.
+- That capped read was intentionally stopped after an external `1260 s` wall,
+  so its `run.json` still shows `status = "running"` and the authoritative
+  evidence is the stored `reports/steps/step-04-live.ndjson` stream.
+- The last stored checkpoint at or before `1200000 ms` on that run is:
+  - `elapsed_millis = 1199122`
+  - `prefix_states_explored = 141`
+  - `prefix_cache_groups = 41`
+  - `prefix_cache_candidates = 29249`
+  - `frontier_queue_len = 2634`
+  - RSS `= 466993152`
+  - `terminal_summary_build_millis = 1191657`
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- The same capped read re-entered the older `41 groups / 29249 candidates`
+  continuation surface by prefix state `140` at `1190118 ms`:
+  - `1778 ms` slower than `long-rerun-v1` at the same `140`-state wall
+  - `5881 ms` faster than `long-rerun-v2` at the same `140`-state wall
 
 ## Latest Full-Profile Outcome
 
@@ -177,9 +205,9 @@ gate.
 - The stored failure is still the admitted `kappa = 9` family that first
   appears once step `13` diverges, but the code now has a local repair for the
   raw step-`13` acceptance fork that used to strand step `14`.
-- The next blocker is no longer finding that late-step repair; it is proving
-  replay parity and then re-earning a capped intended-profile read on the
-  repaired path.
+- The next blocker is no longer replay parity or the capped intended-profile
+  read. Those are now re-earned locally, so the next blocker is one fresh
+  full-profile rerun on the repaired claim path.
 
 ## Current Reference Runs
 
@@ -197,6 +225,42 @@ gate.
   - `terminal_summary_build_millis = 1183915`
   - `terminal_summary_admissibility_checks = 0`
   - `terminal_summary_fallback_connectivity_checks = 0`
+
+### Capped Intended-Profile Validation Read
+
+- Run:
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-late-accept-capped-v1`
+- Launch surface:
+  - clean-tree repo head
+    `44b9871e65546a210c4ed71dcd31b91f8e6c521c`
+  - release binary hash
+    `d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f`
+  - externally stopped after `1260 s`, so use `step-04-live.ndjson` as the
+    authoritative record
+- Last stored checkpoint at or before `1200000 ms`:
+  - `elapsed_millis = 1199122`
+  - `prefix_states_explored = 141`
+  - `prefix_cache_groups = 41`
+  - `prefix_cache_candidates = 29249`
+  - `frontier_queue_len = 2634`
+  - RSS `= 466993152`
+  - `terminal_summary_build_millis = 1191657`
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- Matching continuation wall on the same run:
+  - prefix state `140` reached at `1190118 ms`
+  - `prefix_cache_groups = 41`
+  - `prefix_cache_candidates = 29249`
+  - RSS `= 463450112`
+  - `terminal_summary_build_millis = 1182710`
+- Last stored checkpoint before the external stop:
+  - `elapsed_millis = 1258330`
+  - `prefix_states_explored = 148`
+  - `prefix_cache_groups = 41`
+  - `prefix_cache_candidates = 29249`
+  - `frontier_queue_len = 2627`
+  - RSS `= 487518208`
+  - `terminal_summary_build_millis = 1250519`
 
 ### Later-Wall Step-4 Reference Through `576`
 
@@ -251,8 +315,8 @@ gate.
 - Step `4` summary build is still the main measured runtime bucket when the run
   is inside step `4`, but `long-rerun-v3` proved that the current preserved
   binary can clear that wall and advance into late steps.
-- The late-step claim correctness slice now has a landed local repair, so the
-  next blocker is validation of that repair rather than discovering the fork.
+- The late-step claim correctness slice now has a landed local repair, and the
+  short validation gate for that repair is now earned locally.
 - The strongest current clues are:
   - widening replay divergence on steps `10` through `13`
   - the step-`14` band mismatch is now locally repaired in test:
@@ -300,23 +364,34 @@ gate.
   - no local step-`13` repair candidate survives that divergent history
   - the current step-`14` exact-screen path therefore still looks honest on
     stored test evidence
+- The replay / runtime validation surface is now stronger too:
+  - the release replay harness cleanly replays the tracked
+    `remaining_one_plateau` corpus on all `5` stored surfaces
+  - the capped intended-profile read is already past the old `139`-prefix
+    short-loop gate by `1200000 ms`
+  - that same read is back on the older `41 groups / 29249 candidates`
+    continuation surface by prefix state `140`
 - The compact terminal-summary path remains worth optimizing later, but it is
   no longer the first engineering dollar to spend.
+- The next honest question is now whether a fresh full-profile rerun reaches
+  late steps on the repaired path, not whether the lane can still hold the
+  short validation gate locally.
 
 ## Forward Direction
 
 - Keep the current short-loop gate and step-`4` continuation references frozen
-  as regression checks.
-- Do not launch `v4` first.
-- Do not prioritize another step-`4` micro-optimization before the repaired
-  step-`13` path proves itself on replay parity and a capped intended-profile
-  rerun.
-- Keep the landed late-step diagnostics, divergent-prefix reproducer, and new
-  step-`13` viability-tie regression green.
-- Treat the upstream repair as landed locally:
-  the next narrow task is validation, not more local band loosening.
-- After replay parity holds, spend one capped intended rerun before committing
-  to another full long rerun.
+  as regression checks, and add the new capped intended-profile read to that
+  frozen validation set.
+- Keep the landed late-step diagnostics, divergent-prefix reproducer, replay
+  harness corpus, and new step-`13` viability-tie regression green.
+- Treat the upstream repair and its short validation as earned locally:
+  the next narrow task is a fresh full-profile rerun, not more local band
+  loosening.
+- Use the new capped intended-profile read as the early honesty gate for the
+  next rerun.
+- Return to step-`4` micro-optimization only if the fresh full-profile rerun
+  falls materially behind that capped gate or reopens a new short-loop
+  regression.
 
 ## Immediate Next Move
 
@@ -324,39 +399,27 @@ gate.
    `clause-accept-rank-facts-v1`,
    `clause-accept-rank-facts-long-rerun-v1`,
    `clause-accept-rank-facts-long-rerun-v2`, and
-   `clause-accept-rank-facts-long-rerun-v3`
+   `clause-accept-rank-facts-long-rerun-v3`, plus
+   `clause-accept-rank-facts-late-accept-capped-v1`
    as the current evidence set.
-2. Keep the landed divergent-prefix reproducer green with the promoted
-   `claim_step_open = 9..9`, `roots_enqueued = 1`, and
-   `remaining_one_algebraic_prunes = 0` state.
-3. Keep the new full-sweep exact-prune regression green. It now proves that
-   the `21` captured remaining-one exact prunes split into:
-   - `9` prefixes with `3` admitted candidates at `40/9`
-   - `2` prefixes with `0` admitted terminal candidates and no bound
-   - `10` prefixes with `3` admitted candidates at `41/9`
-4. Keep the new hybrid cutover regression green. It now proves that:
-   - the reference step-`14` winner already carries `54` zero-admitted prunes
-   - step `13` is the first divergence that flips step `14` into failure
-   - that cutover adds `27` admitted `kappa = 9` prunes at `50/9` and `51/9`
-5. Keep the new step-`13` structural-delta regression green. It now proves
-   that:
-   - the reference step-`13` winner closes operator-bundle debt with a
-     metric-bearing `kappa = 7`, `nu = 46`, `lib_refs = {11,12}` shell
-   - the step-`13`-only cutover swaps in a non-metric
-     `kappa = 3`, `nu = 29`, `lib_refs = {11}` shell
-   - step `14` therefore reopens operator-bundle debt instead of the
-     reference Hilbert-functional package
-   - the admitted `50/9` and `51/9` families live on that reopened
-     operator-bundle surface
-6. Keep the new forced local step-`13` operator-band regression green. It now
-   proves that even reopening `7..7` locally on the already-divergent
-   step-`10..12` history still exact-screens every root before enqueue.
-7. Keep the new late-step claim acceptance regression green. It now proves
-   that:
-   - the raw divergent step-`13` structural tie-break still picks a dead-end
-     shell
-   - exactly one same-primary-tier survivor keeps step `14` alive
-   - `desktop_claim_shadow` now chooses that viable shell
-8. Re-run the replay harness in release mode for the repaired claim surface.
-9. Only if replay parity stays clean, spend one capped intended-profile rerun against
-   the `139`-prefix short-loop gate before authorizing another full rerun.
+2. Keep the landed divergent-prefix reproducer, full-sweep exact-prune split,
+   hybrid cutover, structural-delta, forced local reopen, and late-step claim
+   acceptance regressions green.
+3. Keep the release replay harness green on
+   `tests/fixtures/claim_runtime/remaining_one_plateau_fixtures.json`.
+4. Launch one fresh full-profile release rerun on the repaired claim binary.
+   Prefer
+   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`.
+5. Do not use `pen-cli resume` first for that rerun; start clean.
+6. During early step `4`, compare first against the new capped validation gate:
+   - by `1200000 ms`, expect at least the re-earned
+     `141`-prefix / `41 groups` / `29249 candidates` surface
+   - keep `terminal_summary_admissibility_checks = 0`
+   - keep `terminal_summary_fallback_connectivity_checks = 0`
+7. If the fresh rerun falls materially behind that gate, stop and localize the
+   new step-`4` regression before spending more late-step analysis.
+8. If the rerun reaches step `14`, compare first against `long-rerun-v3` to
+   see whether the old zero-candidate failure is gone, delayed, or replaced by
+   a new blocker.
+9. If the rerun reaches step `15`, move immediately to compare, benchmark, and
+   certification work on that stored bundle.

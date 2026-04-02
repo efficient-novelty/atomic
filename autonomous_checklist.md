@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-04-02
+Last updated: 2026-04-03
 
 This checklist is the live signoff gate for `desktop_claim_shadow`.
 It lists only work that is still open.
@@ -64,9 +64,23 @@ It lists only work that is still open.
   - exactly one same-primary-tier survivor keeps step `14` alive
   - `desktop_claim_shadow` now prefers that viable shell before the later
     structural tie-break fields
-- The current blocker is replay parity plus capped intended-profile validation
-  of that repair, not inability to escape step `4` or a missing late-step
-  diagnosis.
+- The release replay harness is now re-earned on the tracked
+  `remaining_one_plateau` corpus, and the claim live-checkpoint persistence
+  check is green.
+- A new capped intended-profile validation read,
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-late-accept-capped-v1`,
+  is now past the old short-loop gate by `1200000 ms` with:
+  - `prefix_states_explored = 141`
+  - `prefix_cache_groups = 41`
+  - `prefix_cache_candidates = 29249`
+  - `frontier_queue_len = 2634`
+  - RSS `= 466993152`
+  - `terminal_summary_build_millis = 1191657`
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- The current blocker is now one fresh full-profile rerun on that validated
+  binary, not replay parity, the capped intended-profile gate, inability to
+  escape step `4`, or a missing late-step diagnosis.
 
 ## 1. Runtime Improvement Loop
 
