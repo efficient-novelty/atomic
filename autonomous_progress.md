@@ -79,6 +79,21 @@ gate.
     - `18` at `exact_nu = 51`
   - earlier divergences on steps `10..12` only deform that already-failing
     admitted family; they are not needed to trigger the failure
+- A new step-`13` structural-delta regression now explains that cutover:
+  - the reference step-`13` winner stays at `kappa = 7`, `nu = 46`,
+    `lib_refs = {11,12}`, and keeps metric capability
+  - replacing only step `13` with the stored divergent acceptance drops that
+    slot to `kappa = 3`, `nu = 29`, `lib_refs = {11}`, and no metric
+    capability
+  - step `14` therefore reopens operator-bundle claim debt instead of opening
+    the reference Hilbert-functional package
+  - the admitted `50/9` and `51/9` families now localize to that reopened
+    operator-bundle surface
+- The targeted claim regression slice is green on repo tests:
+  - divergent step-`14` reproducer
+  - full-sweep exact-prune family split
+  - hybrid step-`13` cutover
+  - step-`13` structural-delta regression
 
 ## Latest Full-Profile Outcome
 
@@ -243,9 +258,15 @@ gate.
   - the reference step-`14` winner already coexists with a `54`-prefix
     zero-admitted remaining-one prune family
   - step `13` is the earliest divergence that flips step `14` into failure
-  - the new admitted `kappa = 9` failure family therefore localizes to the
-    step-`13` accepted divergence itself, or to a narrower admissibility /
-    exact-screen bug that only that step-`13` acceptance opens
+  - the new step-`13` structural-delta regression now shows why:
+    - the reference winner closes operator-bundle debt with a metric-bearing
+      `kappa = 7`, `nu = 46`, `lib_refs = {11,12}` shell
+    - the step-`13`-only cutover swaps in a non-metric
+      `kappa = 3`, `nu = 29`, `lib_refs = {11}` shell
+    - step `14` therefore reopens operator-bundle debt instead of the
+      reference Hilbert-functional package
+    - the admitted `50/9` and `51/9` families live on that reopened
+      operator-bundle surface
 - The compact terminal-summary path remains worth optimizing later, but it is
   no longer the first engineering dollar to spend.
 
@@ -285,10 +306,20 @@ gate.
    - the reference step-`14` winner already carries `54` zero-admitted prunes
    - step `13` is the first divergence that flips step `14` into failure
    - that cutover adds `27` admitted `kappa = 9` prunes at `50/9` and `51/9`
-5. Compare the divergent accepted step-`13` telescope against the reference
-   step-`13` winner and trace which structural delta creates those admitted
-   `50/9` and `51/9` step-`14` families.
-6. Run the targeted claim tests for the reproducer plus the late-step claim
-   acceptance surface.
-7. Only if that stays clean, spend one capped intended-profile rerun against
+5. Keep the new step-`13` structural-delta regression green. It now proves
+   that:
+   - the reference step-`13` winner closes operator-bundle debt with a
+     metric-bearing `kappa = 7`, `nu = 46`, `lib_refs = {11,12}` shell
+   - the step-`13`-only cutover swaps in a non-metric
+     `kappa = 3`, `nu = 29`, `lib_refs = {11}` shell
+   - step `14` therefore reopens operator-bundle debt instead of the
+     reference Hilbert-functional package
+   - the admitted `50/9` and `51/9` families live on that reopened
+     operator-bundle surface
+6. Use that regression to decide whether the honest narrow fix belongs in
+   backtracking the divergent step-`13` acceptance or in tightening the
+   reopened operator-bundle step-`14` surface / exact-screen path it unlocks.
+7. Only after that fix lands, rerun the targeted claim tests plus replay
+   parity for the reproducer and late-step claim surface.
+8. Only if that stays clean, spend one capped intended-profile rerun against
    the `139`-prefix short-loop gate before authorizing another full rerun.

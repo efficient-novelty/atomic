@@ -9256,6 +9256,28 @@ mod tests {
         step_fourteen_pruned_terminal_surface_from_prefix(&prefix, limit)
     }
 
+    fn claim_step_open_from_prefix(
+        prefix: &[Telescope],
+        step_index: u32,
+    ) -> super::ClaimStepOpenDiagnostics {
+        let (library, _, _) = history_from_prefix(prefix);
+        let structural_debt = summarize_structural_debt(&library, 2);
+        let admissibility = strict_admissibility_for_mode(
+            step_index,
+            2,
+            &library,
+            AdmissibilityMode::DesktopClaimShadow,
+        );
+        let enumeration_context = discovery_enumeration_context(&library, admissibility, false);
+        super::claim_step_open_diagnostics(
+            step_index,
+            structural_debt,
+            admissibility,
+            enumeration_context,
+        )
+        .expect("late-step claim-open diagnostics should exist")
+    }
+
     fn step_fourteen_exact_prune_family_summary(
         prefix: &[Telescope],
         limit: usize,
@@ -10950,10 +10972,8 @@ mod tests {
 
     #[test]
     fn divergent_step_fourteen_exact_prunes_split_into_three_honest_families() {
-        let summary = step_fourteen_exact_prune_family_summary(
-            &claim_long_rerun_v3_divergent_prefix(),
-            21,
-        );
+        let summary =
+            step_fourteen_exact_prune_family_summary(&claim_long_rerun_v3_divergent_prefix(), 21);
         assert_eq!(
             summary.captured_prefixes, 21,
             "the divergent step-14 reproducer should still localize to the stored 21 exact prunes"
@@ -10972,6 +10992,97 @@ mod tests {
             .into_iter()
             .collect(),
             "the 21 captured step-14 exact prunes should now split into the observed zero-admitted, 40/9, and 41/9 families"
+        );
+    }
+
+    #[test]
+    fn step_thirteen_divergence_reopens_operator_bundle_claim_debt_before_the_admitted_step_fourteen_failure_family()
+     {
+        let reference_prefix = claim_long_rerun_v3_hybrid_prefix(None);
+        let divergent_prefix = claim_long_rerun_v3_hybrid_prefix(Some(13));
+        let reference_step_thirteen = &reference_prefix[12];
+        let divergent_step_thirteen = &divergent_prefix[12];
+
+        assert_eq!(*reference_step_thirteen, Telescope::reference(13));
+        assert_eq!(reference_step_thirteen.kappa(), 7);
+        assert_eq!(
+            reference_step_thirteen.lib_refs(),
+            [11_u32, 12_u32].into_iter().collect()
+        );
+        assert_eq!(divergent_step_thirteen.kappa(), 3);
+        assert_eq!(
+            divergent_step_thirteen.lib_refs(),
+            [11_u32].into_iter().collect()
+        );
+
+        let (reference_library, reference_history, _) = history_from_prefix(&reference_prefix);
+        let (divergent_library, divergent_history, _) = history_from_prefix(&divergent_prefix);
+        let reference_step_thirteen_record = reference_history
+            .iter()
+            .find(|record| record.step_index == 13)
+            .expect("reference step 13 should exist");
+        let divergent_step_thirteen_record = divergent_history
+            .iter()
+            .find(|record| record.step_index == 13)
+            .expect("divergent step 13 should exist");
+
+        assert_eq!(reference_step_thirteen_record.kappa, 7);
+        assert_eq!(reference_step_thirteen_record.nu, 46);
+        assert_eq!(divergent_step_thirteen_record.kappa, 3);
+        assert_eq!(divergent_step_thirteen_record.nu, 29);
+
+        let reference_entry = reference_library
+            .last()
+            .expect("reference step 13 library entry should exist");
+        let divergent_entry = divergent_library
+            .last()
+            .expect("divergent step 13 library entry should exist");
+        assert!(reference_entry.capabilities.has_metric);
+        assert_eq!(reference_entry.library_refs, 2);
+        assert!(!divergent_entry.capabilities.has_metric);
+        assert_eq!(divergent_entry.library_refs, 1);
+
+        let reference_debt = summarize_structural_debt(&reference_library, 2);
+        let divergent_debt = summarize_structural_debt(&divergent_library, 2);
+        assert_eq!(reference_debt.operator_bundle_entries, 1);
+        assert!(!reference_debt.requires_operator_bundle_package());
+        assert!(reference_debt.requires_hilbert_functional_package());
+        assert_eq!(divergent_debt.operator_bundle_entries, 0);
+        assert!(divergent_debt.requires_operator_bundle_package());
+        assert!(!divergent_debt.requires_hilbert_functional_package());
+
+        let reference_step_open = claim_step_open_from_prefix(&reference_prefix, 14);
+        let divergent_step_open = claim_step_open_from_prefix(&divergent_prefix, 14);
+        assert!(!reference_step_open.package_flags.operator_bundle);
+        assert!(reference_step_open.package_flags.hilbert_functional);
+        assert!(divergent_step_open.package_flags.operator_bundle);
+        assert!(!divergent_step_open.package_flags.hilbert_functional);
+
+        let reference_summary =
+            step_fourteen_exact_prune_family_summary(&reference_prefix, usize::MAX);
+        let divergent_summary =
+            step_fourteen_exact_prune_family_summary(&divergent_prefix, usize::MAX);
+        assert!(!reference_summary.family_counts.contains_key(&(
+            3_usize,
+            Some(50_u16),
+            Some(9_u16)
+        )));
+        assert!(!reference_summary.family_counts.contains_key(&(
+            3_usize,
+            Some(51_u16),
+            Some(9_u16)
+        )));
+        assert_eq!(
+            divergent_summary
+                .family_counts
+                .get(&(3_usize, Some(50_u16), Some(9_u16))),
+            Some(&9_usize)
+        );
+        assert_eq!(
+            divergent_summary
+                .family_counts
+                .get(&(3_usize, Some(51_u16), Some(9_u16))),
+            Some(&18_usize)
         );
     }
 

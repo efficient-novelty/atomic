@@ -97,9 +97,24 @@ This note is the exact next work order for `desktop_claim_shadow`.
     admitted `kappa = 9` prunes at `50/9` and `51/9`
   - earlier divergences on steps `10..12` only deform that already-failing
     admitted family
-- The next blocker is therefore the admitted step-`13`-driven `kappa = 9`
-  failure family, not claim band selection, root generation, the reference
-  zero-admitted family, or a first-prune compact-summary mismatch.
+- A new step-`13` structural-delta regression now explains that cutover:
+  - the reference step-`13` winner stays at `kappa = 7`, `nu = 46`,
+    `lib_refs = {11,12}`, and keeps metric capability
+  - the step-`13`-only cutover swaps in a non-metric
+    `kappa = 3`, `nu = 29`, `lib_refs = {11}` shell
+  - step `14` therefore reopens operator-bundle claim debt instead of opening
+    the reference Hilbert-functional package
+  - the admitted `50/9` and `51/9` families now localize to that reopened
+    operator-bundle surface
+- The targeted claim regression slice is green on repo tests:
+  - divergent step-`14` reproducer
+  - full-sweep exact-prune family split
+  - hybrid step-`13` cutover
+  - step-`13` structural-delta regression
+- The next blocker is therefore the reopened step-`14` operator-bundle failure
+  family driven by the step-`13` structural delta, not claim band selection,
+  root generation, the reference zero-admitted family, or a first-prune
+  compact-summary mismatch.
 
 ## Do This Next
 
@@ -152,9 +167,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
      remaining-one prunes
    - step `13` is the first divergence that flips step `14` into failure
    - that cutover adds `27` admitted `kappa = 9` prunes at `50/9` and `51/9`
-6. Compare the divergent accepted step-`13` telescope against the reference
-   step-`13` winner and trace which structural delta creates those admitted
-   `50/9` and `51/9` step-`14` families.
+6. Keep the new step-`13` structural-delta regression green. It now proves
+   that:
+   - the reference step-`13` winner closes operator-bundle debt with a
+     metric-bearing `kappa = 7`, `nu = 46`, `lib_refs = {11,12}` shell
+   - the step-`13`-only cutover swaps in a non-metric
+     `kappa = 3`, `nu = 29`, `lib_refs = {11}` shell
+   - step `14` therefore reopens operator-bundle debt instead of the
+     reference Hilbert-functional package
+   - the admitted `50/9` and `51/9` families live on that reopened
+     operator-bundle surface
+7. Use that comparison to decide whether the narrow honest fix belongs in
+   backtracking the divergent step-`13` acceptance or in tightening the
+   reopened operator-bundle step-`14` surface / exact-screen path it unlocks.
 
 ### 4. Validation Order After The Fix
 

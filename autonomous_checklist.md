@@ -41,15 +41,24 @@ It lists only work that is still open.
     remaining-one prunes
   - step `13` is the first divergence that flips step `14` into failure
   - that cutover adds `27` admitted `kappa = 9` prunes at `50/9` and `51/9`
+- A new step-`13` structural-delta regression now identifies that cutover:
+  - the reference step-`13` winner closes operator-bundle debt with a
+    metric-bearing `kappa = 7`, `nu = 46`, `lib_refs = {11,12}` shell
+  - the step-`13`-only cutover swaps in a non-metric
+    `kappa = 3`, `nu = 29`, `lib_refs = {11}` shell
+  - step `14` therefore reopens operator-bundle claim debt instead of opening
+    the reference Hilbert-functional package
+  - the admitted `50/9` and `51/9` families localize to that reopened
+    operator-bundle surface
 - The current blocker is late-step claim viability/correctness, not inability
   to escape step `4`.
 
 ## 1. Runtime Improvement Loop
 
-- [ ] Compare the divergent accepted step-`13` telescope against the
-      reference step-`13` winner and identify which structural delta creates
-      the admitted `50/9` and `51/9` step-`14` failure families on top of the
-      zero-admitted baseline that the reference path already survives.
+- [ ] Use the landed step-`13` structural-delta regression to decide whether
+      the narrow honest fix belongs in backtracking the divergent accepted
+      step-`13` shell or in tightening the reopened operator-bundle step-`14`
+      surface / exact-screen path it unlocks.
 - [ ] Require every serious runtime slice to prove replay-harness parity plus
       either fewer exact-`nu` evaluations or lower measured aggregation time
       before another full-profile rerun.
