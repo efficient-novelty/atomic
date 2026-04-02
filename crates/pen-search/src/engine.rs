@@ -11225,6 +11225,72 @@ mod tests {
     }
 
     #[test]
+    fn divergent_step_thirteen_history_cannot_be_repaired_by_forcing_local_operator_band() {
+        let prefix = claim_long_rerun_v3_hybrid_prefix(Some(10));
+        let (library, history, nu_history) = history_from_prefix(&prefix[..12]);
+        let structural_debt = summarize_structural_debt(&library, 2);
+        let admissibility =
+            strict_admissibility_for_mode(13, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = compute_bar(2, 13, &history).bar;
+        let forced_operator_band = StrictAdmissibility {
+            min_clause_kappa: 7,
+            max_clause_kappa: 7,
+            max_expr_nodes: 7,
+            max_path_dimension: 0,
+            include_trunc: false,
+            include_modal: false,
+            include_temporal: false,
+            ..admissibility
+        };
+        let mut demo_step_budget = None;
+        let mut demo_narrative = None;
+        let mut progress_observer = None;
+
+        assert_eq!(admissibility.min_clause_kappa, 3);
+        assert_eq!(admissibility.max_clause_kappa, 3);
+        assert_eq!(structural_debt.differential_entries, 2);
+        assert_eq!(structural_debt.differential_coupled_entries, 2);
+        assert_eq!(structural_debt.curvature_entries, 0);
+
+        let discovery = discover_realistic_shadow_candidates(
+            13,
+            &library,
+            &history,
+            structural_debt,
+            forced_operator_band,
+            structural_debt.retention_policy(),
+            objective_bar,
+            &nu_history,
+            &mut demo_step_budget,
+            std::time::Instant::now(),
+            &mut demo_narrative,
+            &mut progress_observer,
+        )
+        .expect("forced step-13 operator-band discovery should still run");
+
+        assert!(
+            discovery.claim_root_seeding.roots_seen > 0,
+            "the forced local repair should still enumerate step-13 operator-band roots"
+        );
+        assert_eq!(
+            discovery.claim_root_seeding.roots_enqueued, 0,
+            "the already-divergent step-10..12 history should not have a surviving local step-13 repair root"
+        );
+        assert_eq!(
+            discovery.claim_root_seeding.roots_rejected_by_exact_screen,
+            discovery.claim_root_seeding.roots_seen
+        );
+        assert_eq!(
+            discovery.partial_prefix_bound_prunes,
+            discovery.claim_root_seeding.roots_seen
+        );
+        assert!(
+            discovery.candidates.is_empty(),
+            "forcing a local step-13 operator band should not synthesize a new surviving candidate under the divergent history"
+        );
+    }
+
+    #[test]
     fn claim_terminal_prefix_completion_summary_matches_direct_exact_assessment() {
         let strict_steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
         let mut library: Library = Vec::new();

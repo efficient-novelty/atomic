@@ -106,15 +106,23 @@ This note is the exact next work order for `desktop_claim_shadow`.
     the reference Hilbert-functional package
   - the admitted `50/9` and `51/9` families now localize to that reopened
     operator-bundle surface
+- A new forced step-`13` operator-band regression now closes the remaining
+  diagnosis fork:
+  - under the already-divergent steps `10..12`, the natural claim step-`13`
+    band is still only `3..3`
+  - forcing a local `7..7` reopen there still enumerates roots but
+    exact-screen prunes all of them before any root is enqueued
+  - that forced local repair yields zero surviving candidates
 - The targeted claim regression slice is green on repo tests:
   - divergent step-`14` reproducer
   - full-sweep exact-prune family split
   - hybrid step-`13` cutover
   - step-`13` structural-delta regression
-- The next blocker is therefore the reopened step-`14` operator-bundle failure
-  family driven by the step-`13` structural delta, not claim band selection,
-  root generation, the reference zero-admitted family, or a first-prune
-  compact-summary mismatch.
+  - forced local step-`13` operator-band reopen
+- The next blocker is therefore upstream history repair / backtracking before
+  or at the divergent step-`13` shell, not claim band selection, root
+  generation, the reference zero-admitted family, or a first-prune
+  compact-summary mismatch on the current step-`14` exact-screen path.
 
 ## Do This Next
 
@@ -136,9 +144,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
    - claim terminal filtering / terminal admissibility
    - exact terminal-summary bound construction
    - `exact_terminal_prefix_bound_decision_from_bound(...)`
-3. Use the same diagnostics to decide whether the remaining zero-frontier loss
-   is now just a genuinely non-winning divergent accepted history or whether
-   the divergent step-`13` acceptance exposes a narrower residual family.
+3. Treat the same diagnostics as having closed that branch decision:
+   the remaining zero-frontier loss is now consistent with a genuinely
+   non-winning divergent accepted history, not with a narrower step-`14`
+   exact-screen bug on the currently tested surface.
 4. Treat the enriched failure-note shape as part of the regression surface.
 
 ### 3. Build A Reproducer Around The Finished Failure
@@ -177,15 +186,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
      reference Hilbert-functional package
    - the admitted `50/9` and `51/9` families live on that reopened
      operator-bundle surface
-7. Use that comparison to decide whether the narrow honest fix belongs in
-   backtracking the divergent step-`13` acceptance or in tightening the
-   reopened operator-bundle step-`14` surface / exact-screen path it unlocks.
+7. Keep the new forced local step-`13` operator-band regression green. It now
+   proves that even reopening `7..7` locally on the already-divergent
+   step-`10..12` history still exact-screens every root before enqueue.
+8. Treat that branch decision as closed:
+   the honest narrow fix now belongs in upstream history repair /
+   backtracking, not in loosening the current step-`14` exact-screen path.
 
 ### 4. Validation Order After The Fix
 
 1. Run the targeted claim tests needed by the slice.
    Keep at least:
    - the divergent step-`14` reproducer
+   - the forced local step-`13` operator-band reopen regression
    - the late-step claim acceptance regression
    - the live-checkpoint / step-summary persistence checks
 2. Re-run the replay harness in release mode.
@@ -223,14 +236,15 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - the dropped focus-aligned competition-gate/payload-mode hoist
 - the dropped shared compact-bookkeeping fold
 - the dropped claim-open-band compact local-state hoist
+- local step-`13` band-widening experiments with no earlier-history repair
 - contender-rank helper rewrites
 - timing-only slices with no new late-step explanation or new step-`14`
   localization
 
 ## Keep Or Branch Decision
 
-- Stay code-first until the step-`14` zero-candidate failure is explained and
-  fixed.
+- Stay code-first on upstream history repair / backtracking until the
+  step-`14` zero-candidate failure is removed on a replay-backed claim path.
 - Keep the current short-loop gate and stored step-`4` continuation references
   frozen as regression checks.
 - Return to long reruns only after a regression-backed late-step fix keeps

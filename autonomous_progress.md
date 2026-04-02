@@ -89,11 +89,21 @@ gate.
     the reference Hilbert-functional package
   - the admitted `50/9` and `51/9` families now localize to that reopened
     operator-bundle surface
+- A new forced step-`13` operator-band regression now closes the remaining
+  diagnosis fork:
+  - under the already-divergent steps `10..12`, the natural claim step-`13`
+    band is still only `3..3`
+  - forcing a local `7..7` reopen at step `13` still enumerates roots but
+    exact-screen prunes all of them before any root is enqueued
+  - that forced local repair yields zero surviving candidates
+  - the honest next fix therefore belongs in upstream history repair /
+    backtracking, not in loosening the current step-`14` exact-screen path
 - The targeted claim regression slice is green on repo tests:
   - divergent step-`14` reproducer
   - full-sweep exact-prune family split
   - hybrid step-`13` cutover
   - step-`13` structural-delta regression
+  - forced local step-`13` operator-band reopen
 
 ## Latest Full-Profile Outcome
 
@@ -267,6 +277,12 @@ gate.
       reference Hilbert-functional package
     - the admitted `50/9` and `51/9` families live on that reopened
       operator-bundle surface
+- The remaining branch decision is now closed too:
+  - a forced local step-`13` `7..7` reopen on the already-divergent
+    step-`10..12` history still exact-screens every root before enqueue
+  - no local step-`13` repair candidate survives that divergent history
+  - the current step-`14` exact-screen path therefore still looks honest on
+    stored test evidence
 - The compact terminal-summary path remains worth optimizing later, but it is
   no longer the first engineering dollar to spend.
 
@@ -279,10 +295,10 @@ gate.
   failure is explained.
 - Keep the landed late-step diagnostics and divergent-prefix reproducer green
   while localizing the zero-frontier loss.
-- Use the new step-`13` cutover regression to decide whether the remaining
-  narrow fix belongs in backtracking the accepted step-`13` divergence or in a
-  narrower admissibility / exact-screen bug that the divergent step-`13`
-  telescope opens.
+- Treat the new forced step-`13` operator-band regression as closing that
+  branch decision:
+  the remaining narrow fix is upstream history repair / backtracking, not a
+  looser step-`14` exact-screen rule.
 - After that fix lands and replay parity holds, spend one capped intended
   rerun before committing to another full long rerun.
 
@@ -316,10 +332,13 @@ gate.
      reference Hilbert-functional package
    - the admitted `50/9` and `51/9` families live on that reopened
      operator-bundle surface
-6. Use that regression to decide whether the honest narrow fix belongs in
-   backtracking the divergent step-`13` acceptance or in tightening the
-   reopened operator-bundle step-`14` surface / exact-screen path it unlocks.
-7. Only after that fix lands, rerun the targeted claim tests plus replay
+6. Keep the new forced local step-`13` operator-band regression green. It now
+   proves that even reopening `7..7` locally on the already-divergent
+   step-`10..12` history still exact-screens every root before enqueue.
+7. Treat that branch decision as closed:
+   the honest narrow fix now belongs in upstream history repair /
+   backtracking, not in loosening the current step-`14` exact-screen path.
+8. Only after that fix lands, rerun the targeted claim tests plus replay
    parity for the reproducer and late-step claim surface.
-8. Only if that stays clean, spend one capped intended-profile rerun against
+9. Only if that stays clean, spend one capped intended-profile rerun against
    the `139`-prefix short-loop gate before authorizing another full rerun.

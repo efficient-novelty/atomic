@@ -50,15 +50,22 @@ It lists only work that is still open.
     the reference Hilbert-functional package
   - the admitted `50/9` and `51/9` families localize to that reopened
     operator-bundle surface
+- A new forced local step-`13` operator-band regression now closes the old
+  fork in the diagnosis:
+  - under the already-divergent steps `10..12`, the natural claim step-`13`
+    band is still `3..3`
+  - forcing a local `7..7` reopen there still exact-screens every root before
+    enqueue, leaving zero surviving candidates
+  - the remaining honest fix therefore belongs in upstream history repair /
+    backtracking, not in loosening the current step-`14` exact-screen path
 - The current blocker is late-step claim viability/correctness, not inability
   to escape step `4`.
 
 ## 1. Runtime Improvement Loop
 
-- [ ] Use the landed step-`13` structural-delta regression to decide whether
-      the narrow honest fix belongs in backtracking the divergent accepted
-      step-`13` shell or in tightening the reopened operator-bundle step-`14`
-      surface / exact-screen path it unlocks.
+- [ ] Land the upstream history repair / backtracking fix that the new forced
+      local step-`13` operator-band regression now requires; do not loosen the
+      honest step-`14` exact-screen path first.
 - [ ] Require every serious runtime slice to prove replay-harness parity plus
       either fewer exact-`nu` evaluations or lower measured aggregation time
       before another full-profile rerun.
