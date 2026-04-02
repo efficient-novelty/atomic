@@ -75,10 +75,25 @@ It lists only work that is still open.
 - That rerun was manually stopped at `578` explored prefixes with
   `frontier_queue_len = 2197`, RSS `= 1744551936`, and still
   `0` fallback/admissibility checks.
-- The next open runtime question is now whether that same smaller retained
-  surface can also move materially past the older `1038` wall, then the older
-  `1095` stop, or reach step `5`.
-- Neither `clause-accept-rank-facts-v1` nor the newer longer rerun persisted a
+- A second fresh intended-profile rerun on the same binary/config then
+  re-earned the matched `140/163/332/335` walls while keeping the same
+  no-miss shape:
+  - `140`: `1195999 / 1188793` with `41 groups / 29249 candidates`
+  - `163`: `1390249 / 1381921` with `41 groups / 29249 candidates`
+  - `332`: `2874771 / 2858216` with `42 groups / 29529 candidates`
+  - `335`: `2901198 / 2884494` with `43 groups / 29809 candidates`
+  These pairs are `elapsed_millis / terminal_summary_build_millis`.
+- That second rerun was slightly slower than
+  `clause-accept-rank-facts-long-rerun-v1` at each matched wall and was then
+  manually stopped at `345` explored prefixes with
+  `frontier_queue_len = 2430`, RSS `= 1056485376`, and still
+  `0` fallback/admissibility checks, so `long-rerun-v1` remains the current
+  later-wall winner through `576`.
+- The next open runtime question is now whether another fresh rerun can carry
+  that same smaller retained surface honestly back through `576`, then move
+  materially past the older `1038` wall, then the older `1095` stop, or reach
+  step `5`.
+- Neither `clause-accept-rank-facts-v1` nor either longer rerun persisted a
   resumable step-`4` frontier generation, so the next continuation still needs
   another fresh intended rerun rather than `pen-cli resume`.
 - A later local-only focus-aligned competition-gate/payload-mode hoist stayed

@@ -274,19 +274,43 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - No step-`4` frontier artifacts were persisted on that rerun either, so the
   next longer continuation still needs another fresh intended rerun rather
   than `pen-cli resume`.
+- A second fresh intended-profile rerun was then launched as
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v2`
+  on the same release binary and config because neither the short-loop winner
+  nor the first longer rerun stored a resumable step-`4` frontier generation.
+- That rerun re-earned the matched later walls through `335` while keeping the
+  same no-miss shape and retained surfaces:
+  - `140`: `1195999 / 1188793` with `41 groups / 29249 candidates`
+  - `163`: `1390249 / 1381921` with `41 groups / 29249 candidates`
+  - `332`: `2874771 / 2858216` with `42 groups / 29529 candidates`
+  - `335`: `2901198 / 2884494` with `43 groups / 29809 candidates`
+  These pairs are `elapsed_millis / terminal_summary_build_millis`.
+- Each matched wall landed slightly slower than
+  `clause-accept-rank-facts-long-rerun-v1`, so the rerun did not replace the
+  current later-wall reference even though it corroborated the same compact
+  retained surface through `335`.
+- The rerun was then manually stopped at `345` explored prefixes with
+  `elapsed_millis = 2990691`, `terminal_summary_build_millis = 2973493`,
+  `frontier_queue_len = 2430`, RSS `= 1056485376`, and still
+  `0` fallback/admissibility checks.
+- No step-`4` frontier artifacts were persisted on that rerun either, so the
+  next longer continuation still needs another fresh intended rerun rather
+  than `pen-cli resume`.
 
 ## Do This Next
 
-### 1. Spend The Next Slice On Another Longer Continuation, Not A Code Change
+### 1. Spend The Next Slice On Yet Another Longer Continuation, Not A Code Change
 
 Keep the clause-side accept-rank-facts slice landed.
 It already re-earned replay gate comfortably, spent one capped rerun, then won
-the short-loop checkpoint again at `139` explored prefixes, and now also owns
-one honest longer rerun through `576`.
+the short-loop checkpoint again at `139` explored prefixes, then owned one
+honest longer rerun through `576`, and now also has a second fresh rerun that
+re-earned the same `140/163/332/335` middle walls without replacing the
+current `576` winner.
 The next move is still not another fresh code slice first.
 Reopen one more longer intended-profile continuation on the current binary and
-see whether the lane can now move honestly from the new `576` wall toward
-`1038/1095` or step `5`.
+see whether the lane can now carry that corroborated `335` surface back
+through `576` and then toward `1038/1095` or step `5`.
 
 ### 2. Run The Next Validation Slice In This Order
 
@@ -294,23 +318,26 @@ see whether the lane can now move honestly from the new `576` wall toward
    unchanged.
 2. Do not prefer `pen-cli resume` first on either
    `clause-accept-rank-facts-v1` or
-   `clause-accept-rank-facts-long-rerun-v1`.
-   Neither stored a resumable step-`4` frontier generation, so launch one
-   fresh intended `desktop_claim_shadow` rerun on the same release binary and
-   config instead.
-3. Let that continuation run materially past the `20`-minute window.
+   `clause-accept-rank-facts-long-rerun-v1` or
+   `clause-accept-rank-facts-long-rerun-v2`.
+   None stored a resumable step-`4` frontier generation, so launch one fresh
+   intended `desktop_claim_shadow` rerun on the same release binary and config
+   instead.
+3. Let that continuation run materially past the `20`-minute window and past
+   the corroborated `335` surface.
 4. Re-earn the later stored step-`4` checkpoints in this order:
-   `576`, then `1038`, then `1095`, then step `5`.
+   `408`, `437`, `454`, `484`, `576`, then `1038`, then `1095`, then step `5`.
 5. Keep comparing the `20`-minute checkpoint first against the current
    short-loop target from `clause-accept-rank-facts-v1`.
    Then compare later checkpoints first against
+   `clause-accept-rank-facts-long-rerun-v2` through `335`, then against
    `clause-accept-rank-facts-long-rerun-v1` through `576`, and keep
-   `prefix-local-score-v1` as the farther continuation reference behind it at
-   `1038/1095`.
-6. If the next fresh rerun cannot keep the new `576` continuation surface
-   honestly, or if later stored reads lose the retained-prefix story before
-   `1038`, return to code work with another narrow per-admitted compact-summary
-   cost slice inside
+   `prefix-local-score-v1` as the farther continuation reference behind them
+   at `1038/1095`.
+6. If the next fresh rerun cannot keep the corroborated `335` surface
+   honestly, cannot keep the new `576` continuation surface honestly, or if
+   later stored reads lose the retained-prefix story before `1038`, return to
+   code work with another narrow per-admitted compact-summary cost slice inside
    `compute_terminal_prefix_completion_summary_from_candidates(...)`, but do
    not retry the dropped focus-aligned competition-gate/payload-mode hoist,
    the dropped shared compact-bookkeeping fold, or the dropped
@@ -320,8 +347,9 @@ see whether the lane can now move honestly from the new `576` wall toward
 ### 3. Keep Rule For The Next Longer Read
 
 Treat the reopened continuation as real progress only if the stored later
-step-`4` checkpoints keep the same no-miss shape and then move materially
-beyond the new `576` wall toward `1038/1095` or step `5`.
+step-`4` checkpoints keep the same no-miss shape, re-earn
+`408/437/454/484/576` after the corroborated `335` surface, and then move
+materially beyond the new `576` wall toward `1038/1095` or step `5`.
 
 ### 4. Short-Loop Beat Rule
 
@@ -359,7 +387,9 @@ current landed binary.
 After that continuation:
 
 - keep `clause-accept-rank-facts-long-rerun-v1` as the current later-wall
-  reference through `576`
+  reference through `576` unless the next rerun replaces it honestly
+- keep `clause-accept-rank-facts-long-rerun-v2` as the current corroborating
+  middle-wall read through `335` unless the next rerun replaces it honestly
 - keep `prefix-local-score-v1` as the farther stored continuation reference to
   beat at `1038/1095`
 - keep `clause-accept-rank-facts-v1` as the current short-loop gate until a
@@ -384,6 +414,8 @@ After that continuation:
 - Stay on runtime work while the intended profile still stalls in step `4`.
 - Keep `clause-accept-rank-facts-long-rerun-v1` as the nearer continuation
   reference through `576` until a later slice replaces it honestly.
+- Keep `clause-accept-rank-facts-long-rerun-v2` as a corroborating middle-wall
+  read through `335`, but do not treat it as the later-wall winner.
 - Keep the stopped `1095`-prefix read from `prefix-local-score-v1` as the
   farther continuation reference until a later rerun reaches `1038/1095`
   honestly or reaches step `5`.
