@@ -9,9 +9,10 @@ use pen_search::config::{RuntimeConfig, SearchProfile};
 use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
 use pen_search::engine::{
     AtomicSearchProgressObserver, AtomicSearchStep, CandidateScoreDistribution,
-    DedupePruneEvidence, DemoBucketReport, DemoBudgetSeed, DemoClosureStats, DemoFunnelStats,
-    DemoPhaseStats, ExactScreenReasonStats, FrontierRetentionOutcome, MinimalityPruneEvidence,
-    StepLiveCheckpoint, search_bootstrap_from_prefix_for_config_with_runtime_and_seed,
+    ClaimRootSeedingDiagnostics, ClaimStepOpenDiagnostics, DedupePruneEvidence, DemoBucketReport,
+    DemoBudgetSeed, DemoClosureStats, DemoFunnelStats, DemoPhaseStats, ExactScreenReasonStats,
+    FrontierRetentionOutcome, MinimalityPruneEvidence, StepLiveCheckpoint,
+    search_bootstrap_from_prefix_for_config_with_runtime_and_seed,
     search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observer,
     search_bootstrap_from_prefix_for_profile_with_runtime,
     search_bootstrap_prefix_for_config_with_runtime,
@@ -161,6 +162,10 @@ pub struct StepSearchStats {
     pub demo_closure: DemoClosureStats,
     #[serde(default)]
     pub demo_bucket_stats: Vec<DemoBucketReport>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub claim_step_open: Option<ClaimStepOpenDiagnostics>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub claim_root_seeding: Option<ClaimRootSeedingDiagnostics>,
     #[serde(default)]
     pub search_timing: SearchTiming,
     #[serde(default)]
@@ -1065,6 +1070,8 @@ fn replay_reference_steps_raw_with_progress(
                 demo_funnel: DemoFunnelStats::default(),
                 demo_closure: DemoClosureStats::default(),
                 demo_bucket_stats: Vec::new(),
+                claim_step_open: None,
+                claim_root_seeding: None,
                 search_timing: SearchTiming::default(),
                 prefix_frontier_hot_states: 0,
                 prefix_frontier_cold_states: 0,
@@ -1777,6 +1784,8 @@ fn step_to_report_with_provenance(
             demo_funnel: step.demo_funnel,
             demo_closure: step.demo_closure,
             demo_bucket_stats: step.demo_bucket_stats,
+            claim_step_open: step.claim_step_open,
+            claim_root_seeding: step.claim_root_seeding,
             search_timing: step.search_timing,
             prefix_frontier_hot_states: step.prefix_frontier_hot_states,
             prefix_frontier_cold_states: step.prefix_frontier_cold_states,
@@ -2098,6 +2107,8 @@ fn reevaluate_prefix_steps(telescopes: &[Telescope], window_depth: u16) -> Resul
                 demo_funnel: DemoFunnelStats::default(),
                 demo_closure: DemoClosureStats::default(),
                 demo_bucket_stats: Vec::new(),
+                claim_step_open: None,
+                claim_root_seeding: None,
                 search_timing: SearchTiming::default(),
                 prefix_frontier_hot_states: 0,
                 prefix_frontier_cold_states: 0,
@@ -2838,6 +2849,38 @@ mod tests {
         );
         assert!(debug.contains("demo buckets:"));
         assert!(debug.contains("exact-screen reasons:"));
+    }
+
+    #[test]
+    fn claim_step_reports_include_late_step_open_and_root_seeding_diagnostics() {
+        let prefix = (1..=12)
+            .map(pen_core::telescope::Telescope::reference)
+            .collect::<Vec<_>>();
+        let mut generated =
+            pen_search::engine::search_bootstrap_from_prefix_for_profile_with_runtime(
+                &prefix,
+                13,
+                2,
+                pen_search::config::SearchProfile::DesktopClaimShadow,
+                FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("late claim step should build");
+        let late = super::step_to_report(generated.pop().expect("late claim step"));
+        let serialized = serde_json::to_string(&late).expect("late claim step should serialize");
+
+        let claim_step_open = late
+            .search_stats
+            .claim_step_open
+            .expect("late claim step should record claim-open diagnostics");
+        let claim_root_seeding = late
+            .search_stats
+            .claim_root_seeding
+            .expect("late claim step should record root-seeding diagnostics");
+        assert_eq!(claim_step_open.kappa_min, 7);
+        assert_eq!(claim_step_open.kappa_max, 7);
+        assert!(claim_root_seeding.roots_seen > 0);
+        assert!(serialized.contains("\"claim_step_open\""));
+        assert!(serialized.contains("\"claim_root_seeding\""));
     }
 
     #[test]

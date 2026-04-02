@@ -53,7 +53,9 @@ use pen_type::admissibility::{
 use pen_type::check::{CheckResult, check_telescope};
 use pen_type::connectivity::TerminalClauseConnectivityFacts;
 use pen_type::connectivity::passes_connectivity;
-use pen_type::obligations::{RetentionClass, RetentionPolicy, summarize_structural_debt};
+use pen_type::obligations::{
+    ClaimAnchorPolicy, RetentionClass, RetentionPolicy, StructuralDebt, summarize_structural_debt,
+};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 use std::collections::{BTreeMap, BTreeSet};
@@ -503,6 +505,71 @@ impl ExactScreenReasonStats {
     }
 }
 
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ClaimAnchorPolicyDiagnostics {
+    #[default]
+    None,
+    Loop,
+    Modal,
+}
+
+impl From<ClaimAnchorPolicy> for ClaimAnchorPolicyDiagnostics {
+    fn from(value: ClaimAnchorPolicy) -> Self {
+        match value {
+            ClaimAnchorPolicy::None => Self::None,
+            ClaimAnchorPolicy::Loop => Self::Loop,
+            ClaimAnchorPolicy::Modal => Self::Modal,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(default)]
+pub struct ClaimDebtAxesDiagnostics {
+    pub kappa_min: u16,
+    pub kappa_max: u16,
+    pub path_pressure: u8,
+    pub trunc_pressure: u8,
+    pub coupling_pressure: u8,
+    pub support_pressure: u8,
+    pub modal_pressure: u8,
+    pub temporal_pressure: u8,
+    pub reanchor_pressure: u8,
+    pub closure_pressure: u8,
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(default)]
+pub struct ClaimPackageFlags {
+    pub operator_bundle: bool,
+    pub hilbert_functional: bool,
+    pub temporal_shell: bool,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct ClaimStepOpenDiagnostics {
+    pub kappa_min: u16,
+    pub kappa_max: u16,
+    pub late_family_surface: LateFamilySurface,
+    pub claim_widening_band7_active: bool,
+    pub claim_widening_band8_active: bool,
+    pub claim_widening_band9_active: bool,
+    pub historical_anchor_ref: Option<u32>,
+    pub anchor_policy: ClaimAnchorPolicyDiagnostics,
+    pub claim_debt_axes: ClaimDebtAxesDiagnostics,
+    pub package_flags: ClaimPackageFlags,
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(default)]
+pub struct ClaimRootSeedingDiagnostics {
+    pub roots_seen: usize,
+    pub roots_rejected_by_insert_root: usize,
+    pub roots_rejected_by_exact_screen: usize,
+    pub roots_enqueued: usize,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AtomicSearchStep {
     pub step_index: u32,
@@ -540,6 +607,8 @@ pub struct AtomicSearchStep {
     pub demo_funnel: DemoFunnelStats,
     pub demo_closure: DemoClosureStats,
     pub demo_bucket_stats: Vec<DemoBucketReport>,
+    pub claim_step_open: Option<ClaimStepOpenDiagnostics>,
+    pub claim_root_seeding: Option<ClaimRootSeedingDiagnostics>,
     pub search_timing: SearchTiming,
     pub prefix_frontier_hot_states: usize,
     pub prefix_frontier_cold_states: usize,
@@ -623,6 +692,10 @@ pub struct StepLiveCheckpoint {
     pub exact_screen_prunes: usize,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub claim_surface: Option<EnumerationSurfaceDiagnostics>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub claim_step_open: Option<ClaimStepOpenDiagnostics>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub claim_root_seeding: Option<ClaimRootSeedingDiagnostics>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub remaining_one_telemetry: Option<RemainingOneTelemetry>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -826,6 +899,7 @@ struct RealisticShadowDiscovery {
     partial_prefix_bound_checks: usize,
     partial_prefix_bound_prunes: usize,
     terminal_prefix_bar_prunes: usize,
+    claim_root_seeding: ClaimRootSeedingDiagnostics,
     remaining_one_telemetry: RemainingOneTelemetry,
 }
 
@@ -880,6 +954,49 @@ fn remaining_one_summary_kernel_activation_context(
 
 fn claim_live_checkpoint_enabled(mode: AdmissibilityMode, step_index: u32) -> bool {
     matches!(mode, AdmissibilityMode::DesktopClaimShadow) && (step_index == 4 || step_index == 5)
+}
+
+fn claim_step_open_diagnostics(
+    step_index: u32,
+    structural_debt: StructuralDebt,
+    admissibility: StrictAdmissibility,
+    enumeration_context: EnumerationContext,
+) -> Option<ClaimStepOpenDiagnostics> {
+    if !matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
+        || step_index < DEMO_LATE_FLOOR_START_STEP
+    {
+        return None;
+    }
+
+    let claim_axes = structural_debt.claim_debt_axes();
+    let surface = enumeration_context.surface_diagnostics();
+    Some(ClaimStepOpenDiagnostics {
+        kappa_min: admissibility.min_clause_kappa,
+        kappa_max: admissibility.max_clause_kappa,
+        late_family_surface: surface.late_family_surface,
+        claim_widening_band7_active: surface.claim_widening_band7_active,
+        claim_widening_band8_active: surface.claim_widening_band8_active,
+        claim_widening_band9_active: surface.claim_widening_band9_active,
+        historical_anchor_ref: admissibility.historical_anchor_ref,
+        anchor_policy: structural_debt.claim_anchor_policy().into(),
+        claim_debt_axes: ClaimDebtAxesDiagnostics {
+            kappa_min: claim_axes.kappa_min,
+            kappa_max: claim_axes.kappa_max,
+            path_pressure: claim_axes.path_pressure,
+            trunc_pressure: claim_axes.trunc_pressure,
+            coupling_pressure: claim_axes.coupling_pressure,
+            support_pressure: claim_axes.support_pressure,
+            modal_pressure: claim_axes.modal_pressure,
+            temporal_pressure: claim_axes.temporal_pressure,
+            reanchor_pressure: claim_axes.reanchor_pressure,
+            closure_pressure: claim_axes.closure_pressure,
+        },
+        package_flags: ClaimPackageFlags {
+            operator_bundle: structural_debt.requires_operator_bundle_package(),
+            hilbert_functional: structural_debt.requires_hilbert_functional_package(),
+            temporal_shell: structural_debt.requires_temporal_shell_package(),
+        },
+    })
 }
 
 fn discovery_enumeration_context(
@@ -2925,6 +3042,13 @@ fn search_next_step(
         .map(|record| (record.step_index, record.nu))
         .collect::<Vec<_>>();
     let mut demo_bucket_stats = BTreeMap::new();
+    let claim_step_open = claim_step_open_diagnostics(
+        step_index,
+        structural_debt,
+        admissibility,
+        discovery_enumeration_context(library, admissibility, demo_step_budget.is_some()),
+    );
+    let mut claim_root_seeding = None;
 
     if matches!(
         admissibility_mode,
@@ -2936,6 +3060,7 @@ fn search_next_step(
             step_index,
             library,
             history,
+            structural_debt,
             admissibility,
             retention_policy,
             objective_bar,
@@ -2962,6 +3087,9 @@ fn search_next_step(
         prefix_cache = discovery.prefix_cache;
         candidates = discovery.candidates;
         demo_bucket_stats = discovery.demo_bucket_stats;
+        claim_root_seeding = (matches!(admissibility_mode, AdmissibilityMode::DesktopClaimShadow)
+            && step_index >= DEMO_LATE_FLOOR_START_STEP)
+            .then_some(discovery.claim_root_seeding);
         prefixes_created = discovery.prefixes_created;
         prefix_states_explored = discovery.prefix_states_explored;
         generated_raw_surface = discovery.raw_generated_surface;
@@ -3128,6 +3256,8 @@ fn search_next_step(
                     + incremental_terminal_clause_filter_prunes
                     + incremental_terminal_rank_prunes,
                 claim_surface: None,
+                claim_step_open: None,
+                claim_root_seeding: None,
                 remaining_one_telemetry: None,
                 note: Some("claim_materialize_entry".to_owned()),
             },
@@ -3210,6 +3340,8 @@ fn search_next_step(
                             + incremental_terminal_clause_filter_prunes
                             + incremental_terminal_rank_prunes,
                         claim_surface: None,
+                        claim_step_open: None,
+                        claim_root_seeding: None,
                         remaining_one_telemetry: None,
                         note: Some("claim_proof_close_progress".to_owned()),
                     },
@@ -3476,6 +3608,19 @@ fn search_next_step(
     }
 
     if candidates.is_empty() {
+        if let (Some(claim_step_open), Some(claim_root_seeding)) =
+            (claim_step_open, claim_root_seeding)
+        {
+            bail!(
+                "no atomic candidates were generated for step {step_index} (claim_band={}..{} roots_seen={} roots_rejected_by_insert_root={} roots_rejected_by_exact_screen={} roots_enqueued={})",
+                claim_step_open.kappa_min,
+                claim_step_open.kappa_max,
+                claim_root_seeding.roots_seen,
+                claim_root_seeding.roots_rejected_by_insert_root,
+                claim_root_seeding.roots_rejected_by_exact_screen,
+                claim_root_seeding.roots_enqueued
+            );
+        }
         bail!("no atomic candidates were generated for step {step_index}");
     }
     if demo_step_budget.is_some() && !demo_proof_close_entered {
@@ -3661,6 +3806,8 @@ fn search_next_step(
         ),
         demo_phase,
         demo_bucket_stats,
+        claim_step_open,
+        claim_root_seeding,
         search_timing,
         prefix_frontier.frontier.hot.len(),
         prefix_frontier.frontier.cold.len(),
@@ -3736,6 +3883,8 @@ fn build_step_result(
     exact_screen_reasons: ExactScreenReasonStats,
     demo_phase: DemoPhaseStats,
     demo_bucket_stats: BTreeMap<DemoBucketKey, DemoBucketStats>,
+    claim_step_open: Option<ClaimStepOpenDiagnostics>,
+    claim_root_seeding: Option<ClaimRootSeedingDiagnostics>,
     search_timing: SearchTiming,
     prefix_frontier_hot_states: usize,
     prefix_frontier_cold_states: usize,
@@ -3830,6 +3979,8 @@ fn build_step_result(
         demo_funnel,
         demo_closure,
         demo_bucket_stats: demo_bucket_reports(&demo_bucket_stats),
+        claim_step_open,
+        claim_root_seeding,
         search_timing,
         prefix_frontier_hot_states,
         prefix_frontier_cold_states,
@@ -4033,6 +4184,7 @@ fn discover_realistic_shadow_candidates(
     step_index: u32,
     library: &Library,
     history: &[DiscoveryRecord],
+    structural_debt: StructuralDebt,
     admissibility: StrictAdmissibility,
     retention_policy: RetentionPolicy,
     objective_bar: Rational,
@@ -4059,8 +4211,14 @@ fn discover_realistic_shadow_candidates(
     let enumeration_context =
         discovery_enumeration_context(library, admissibility, demo_step_budget.is_some());
     let mut last_checkpoint_elapsed_millis = 0u64;
-    let claim_surface = claim_live_checkpoint_enabled(admissibility.mode, step_index)
+    let claim_surface = matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
         .then(|| enumeration_context.surface_diagnostics());
+    let claim_step_open = claim_step_open_diagnostics(
+        step_index,
+        structural_debt,
+        admissibility,
+        enumeration_context,
+    );
 
     for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
         if claim_replay::capture_should_stop() {
@@ -4108,6 +4266,10 @@ fn discover_realistic_shadow_candidates(
         if clause_catalog.is_empty() {
             continue;
         }
+        discovery.claim_root_seeding = ClaimRootSeedingDiagnostics {
+            roots_seen: clause_catalog.clauses_at(0).len(),
+            ..ClaimRootSeedingDiagnostics::default()
+        };
         let raw_catalog_clause_widths =
             raw_clause_catalog_widths(enumeration_context, clause_kappa);
         maybe_emit_claim_live_checkpoint(
@@ -4140,6 +4302,8 @@ fn discover_realistic_shadow_candidates(
                     + discovery.terminal_prefix_bar_prunes
                     + discovery.connectivity_prunes,
                 claim_surface: claim_surface.clone(),
+                claim_step_open,
+                claim_root_seeding: Some(discovery.claim_root_seeding),
                 remaining_one_telemetry: Some(discovery.remaining_one_telemetry),
                 note: Some("claim_regular_clause_catalog".to_owned()),
             },
@@ -4170,6 +4334,7 @@ fn discover_realistic_shadow_candidates(
                 admissibility,
                 enumeration_context.late_family_surface,
             ) {
+                discovery.claim_root_seeding.roots_rejected_by_insert_root += 1;
                 continue;
             }
 
@@ -4198,6 +4363,7 @@ fn discover_realistic_shadow_candidates(
                     if performed_exact_check {
                         discovery.partial_prefix_bound_checks += 1;
                     }
+                    discovery.claim_root_seeding.roots_enqueued += 1;
                     frontier.push(work_item);
                 }
                 ExactPartialPrefixBoundDecision::CannotClearBar => {
@@ -4205,12 +4371,53 @@ fn discover_realistic_shadow_candidates(
                         discovery.partial_prefix_bound_checks += 1;
                     }
                     discovery.partial_prefix_bound_prunes += 1;
+                    discovery.claim_root_seeding.roots_rejected_by_exact_screen += 1;
                 }
                 ExactPartialPrefixBoundDecision::Unknown => {
+                    discovery.claim_root_seeding.roots_enqueued += 1;
                     frontier.push(work_item);
                 }
             }
         }
+
+        maybe_emit_claim_live_checkpoint(
+            progress_observer,
+            &mut last_checkpoint_elapsed_millis,
+            StepLiveCheckpoint {
+                step_index,
+                phase: LiveStepCheckpointPhase::Discovery,
+                elapsed_millis: elapsed_millis(step_start.elapsed()),
+                clause_kappa: Some(clause_kappa),
+                raw_catalog_clause_widths: raw_catalog_clause_widths.clone(),
+                raw_catalog_telescope_count: Some(
+                    raw_catalog_clause_widths
+                        .iter()
+                        .copied()
+                        .fold(1usize, usize::saturating_mul),
+                ),
+                generated_raw_surface: discovery.raw_generated_surface,
+                enumerated_candidates: discovery.enumerated_candidates,
+                well_formed_candidates: discovery.well_formed_candidates,
+                admissibility_rejections: discovery.admissibility_rejections,
+                prefixes_created: discovery.prefixes_created,
+                prefix_states_explored: discovery.prefix_states_explored,
+                frontier_queue_len: frontier.len(),
+                candidate_pool_len: discovery.candidates.len(),
+                prefix_cache_groups: discovery.prefix_cache.len(),
+                prefix_cache_candidates: discovery.prefix_cache.candidate_count(),
+                legality_cache_entries: discovery.prefix_legality_cache.entry_counts().into(),
+                exact_screen_prunes: discovery.partial_prefix_bound_prunes
+                    + discovery.terminal_prefix_bar_prunes
+                    + discovery.terminal_rank_prunes
+                    + discovery.connectivity_prunes,
+                claim_surface: claim_surface.clone(),
+                claim_step_open,
+                claim_root_seeding: Some(discovery.claim_root_seeding),
+                remaining_one_telemetry: Some(discovery.remaining_one_telemetry),
+                note: Some("claim_root_seeding_summary".to_owned()),
+            },
+            true,
+        );
 
         while !frontier.is_empty() {
             if claim_replay::capture_should_stop() {
@@ -4247,6 +4454,8 @@ fn discover_realistic_shadow_candidates(
                         + discovery.terminal_rank_prunes
                         + discovery.connectivity_prunes,
                     claim_surface: claim_surface.clone(),
+                    claim_step_open,
+                    claim_root_seeding: Some(discovery.claim_root_seeding),
                     remaining_one_telemetry: Some(discovery.remaining_one_telemetry),
                     note: Some("claim_regular_frontier_progress".to_owned()),
                 },
@@ -4665,6 +4874,8 @@ fn discover_demo_early_exhaustive_candidates(
                 legality_cache_entries: discovery.prefix_legality_cache.entry_counts().into(),
                 exact_screen_prunes: discovery.connectivity_prunes,
                 claim_surface: claim_surface.clone(),
+                claim_step_open: None,
+                claim_root_seeding: None,
                 remaining_one_telemetry: Some(discovery.remaining_one_telemetry),
                 note: Some("claim_early_exhaustive_catalog".to_owned()),
             },
@@ -4702,6 +4913,8 @@ fn discover_demo_early_exhaustive_candidates(
                     legality_cache_entries: discovery.prefix_legality_cache.entry_counts().into(),
                     exact_screen_prunes: discovery.connectivity_prunes,
                     claim_surface: claim_surface.clone(),
+                    claim_step_open: None,
+                    claim_root_seeding: None,
                     remaining_one_telemetry: Some(discovery.remaining_one_telemetry),
                     note: Some("claim_early_exhaustive_progress".to_owned()),
                 },
@@ -8587,18 +8800,19 @@ fn absorb_elapsed_duration(millis: &mut u64, micros: &mut u64, duration: Duratio
 #[cfg(test)]
 mod tests {
     use super::{
-        AtomicSearchStep, DemoBreadthHarvestExitReason, DemoBucketSelectionContext,
-        DemoBudgetController, DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed,
-        DemoClosurePressure, DemoNarrativeRuntime, DemoProofCloseEntryReason,
-        DemoProofCloseOrderMode, DemoProofCloseOverrunReason, DemoStepBudget,
-        LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem, SearchBucketTaxonomy,
-        create_online_prefix_work_item,
+        AtomicSearchProgressObserver, AtomicSearchStep, ClaimAnchorPolicyDiagnostics,
+        DemoBreadthHarvestExitReason, DemoBucketSelectionContext, DemoBudgetController,
+        DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed, DemoClosurePressure,
+        DemoNarrativeRuntime, DemoProofCloseEntryReason, DemoProofCloseOrderMode,
+        DemoProofCloseOverrunReason, DemoStepBudget, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
+        SearchBucketTaxonomy, StepLiveCheckpoint, create_online_prefix_work_item,
         demo_materialize_to_proof_close_handoff_reason_for_pressure, demo_proof_close_group_order,
         demo_proof_close_order_mode, demo_proof_close_order_mode_with_closure_pressure,
         discovery_enumeration_context, exact_partial_prefix_bound_decision,
         maybe_retune_demo_budget_live, pop_best_prefix, search_bootstrap_from_prefix,
-        search_bootstrap_from_prefix_for_profile_with_runtime, search_bootstrap_prefix,
-        search_bootstrap_prefix_for_config_with_runtime,
+        search_bootstrap_from_prefix_for_profile_with_runtime,
+        search_bootstrap_from_prefix_for_profile_with_runtime_and_observer,
+        search_bootstrap_prefix, search_bootstrap_prefix_for_config_with_runtime,
         sort_terminal_prefix_group_candidates_for_certification, supports_live_atomic_search,
         terminal_prefix_clause_candidates,
     };
@@ -8683,6 +8897,40 @@ mod tests {
         }
 
         (library, history, nu_history)
+    }
+
+    fn claim_long_rerun_v3_divergent_prefix() -> Vec<Telescope> {
+        fn formation_pi(domain: Expr, codomain: Expr) -> ClauseRec {
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(Box::new(domain), Box::new(codomain)),
+            )
+        }
+
+        let mut prefix = reference_prefix(9);
+        for lib_ref in 8..=11 {
+            prefix.push(Telescope::new(vec![
+                formation_pi(Expr::Var(1), Expr::Var(1)),
+                formation_pi(Expr::Var(1), Expr::Var(1)),
+                formation_pi(Expr::Lib(lib_ref), Expr::Var(1)),
+            ]));
+        }
+        prefix
+    }
+
+    #[derive(Default)]
+    struct LiveCheckpointRecorder {
+        checkpoints: Vec<StepLiveCheckpoint>,
+    }
+
+    impl AtomicSearchProgressObserver for LiveCheckpointRecorder {
+        fn on_step_started(&mut self, _step_index: u32) {}
+
+        fn on_step_completed(&mut self, _step: &AtomicSearchStep) {}
+
+        fn on_step_live_checkpoint(&mut self, checkpoint: &StepLiveCheckpoint) {
+            self.checkpoints.push(checkpoint.clone());
+        }
     }
 
     fn demo_runtime_config_10m() -> RuntimeConfig {
@@ -10121,6 +10369,73 @@ mod tests {
                     .all(|bucket| { bucket.bucket_label.contains("structural_generic") })
             );
         }
+    }
+
+    #[test]
+    fn divergent_claim_prefix_reproduces_step_fourteen_zero_candidate_open_band() {
+        let prefix = claim_long_rerun_v3_divergent_prefix();
+        let mut recorder = LiveCheckpointRecorder::default();
+
+        let error = search_bootstrap_from_prefix_for_profile_with_runtime_and_observer(
+            &prefix,
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            Some(&mut recorder),
+        )
+        .expect_err("divergent claim prefix should still fail at step 14");
+
+        let error_text = error.to_string();
+        assert!(error_text.contains("no atomic candidates were generated for step 14"));
+        assert!(error_text.contains("claim_band=7..7"));
+        assert!(error_text.contains("roots_seen="));
+
+        let checkpoint = recorder
+            .checkpoints
+            .iter()
+            .rev()
+            .find(|checkpoint| {
+                checkpoint.step_index == 14
+                    && checkpoint.note.as_deref() == Some("claim_root_seeding_summary")
+            })
+            .expect("step 14 root-seeding checkpoint");
+        assert_eq!(checkpoint.clause_kappa, Some(7));
+        assert_eq!(
+            checkpoint.raw_catalog_clause_widths,
+            vec![3, 1, 1, 1, 1, 1, 1]
+        );
+        let claim_step_open = checkpoint
+            .claim_step_open
+            .expect("late-step claim-open diagnostics");
+        assert_eq!(claim_step_open.kappa_min, 7);
+        assert_eq!(claim_step_open.kappa_max, 7);
+        assert_eq!(
+            claim_step_open.late_family_surface,
+            LateFamilySurface::ClaimGeneric
+        );
+        assert_eq!(
+            claim_step_open.anchor_policy,
+            ClaimAnchorPolicyDiagnostics::None
+        );
+        assert!(claim_step_open.package_flags.operator_bundle);
+        assert!(!claim_step_open.package_flags.hilbert_functional);
+        assert!(!claim_step_open.package_flags.temporal_shell);
+
+        let root_seeding = checkpoint
+            .claim_root_seeding
+            .expect("late-step root-seeding diagnostics");
+        assert_eq!(root_seeding.roots_seen, 3);
+        assert_eq!(root_seeding.roots_enqueued, 0);
+        assert_eq!(
+            root_seeding.roots_rejected_by_insert_root
+                + root_seeding.roots_rejected_by_exact_screen,
+            root_seeding.roots_seen
+        );
+
+        let reference_admissibility = strict_admissibility(14, 2, &library_until(13));
+        assert_eq!(reference_admissibility.min_clause_kappa, 9);
+        assert_eq!(reference_admissibility.max_clause_kappa, 9);
     }
 
     #[test]

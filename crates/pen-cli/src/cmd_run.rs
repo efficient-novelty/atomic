@@ -846,6 +846,8 @@ fn step_live_checkpoint_event(
             },
             "exact_screen_prunes": checkpoint.exact_screen_prunes,
             "claim_surface": checkpoint.claim_surface,
+            "claim_step_open": checkpoint.claim_step_open,
+            "claim_root_seeding": checkpoint.claim_root_seeding,
             "remaining_one_telemetry": checkpoint.remaining_one_telemetry,
             "observed_process_rss_bytes": current_process_rss_bytes().unwrap_or(0),
             "note": checkpoint.note,
@@ -886,6 +888,8 @@ fn append_live_checkpoint_artifact(run_dir: &Path, checkpoint: &StepLiveCheckpoi
             "legality_cache_entries": checkpoint.legality_cache_entries,
             "exact_screen_prunes": checkpoint.exact_screen_prunes,
             "claim_surface": checkpoint.claim_surface,
+            "claim_step_open": checkpoint.claim_step_open,
+            "claim_root_seeding": checkpoint.claim_root_seeding,
             "remaining_one_telemetry": checkpoint.remaining_one_telemetry,
             "observed_process_rss_bytes": current_process_rss_bytes().unwrap_or(0),
             "note": checkpoint.note,
@@ -1725,6 +1729,39 @@ mod tests {
                 claim_widening_band8_active: false,
                 claim_widening_band9_active: false,
             }),
+            claim_step_open: Some(pen_search::engine::ClaimStepOpenDiagnostics {
+                kappa_min: 7,
+                kappa_max: 7,
+                late_family_surface: pen_search::enumerate::LateFamilySurface::ClaimGeneric,
+                claim_widening_band7_active: false,
+                claim_widening_band8_active: false,
+                claim_widening_band9_active: false,
+                historical_anchor_ref: None,
+                anchor_policy: pen_search::engine::ClaimAnchorPolicyDiagnostics::None,
+                claim_debt_axes: pen_search::engine::ClaimDebtAxesDiagnostics {
+                    kappa_min: 7,
+                    kappa_max: 7,
+                    path_pressure: 0,
+                    trunc_pressure: 0,
+                    coupling_pressure: 2,
+                    support_pressure: 1,
+                    modal_pressure: 0,
+                    temporal_pressure: 0,
+                    reanchor_pressure: 0,
+                    closure_pressure: 1,
+                },
+                package_flags: pen_search::engine::ClaimPackageFlags {
+                    operator_bundle: false,
+                    hilbert_functional: false,
+                    temporal_shell: false,
+                },
+            }),
+            claim_root_seeding: Some(pen_search::engine::ClaimRootSeedingDiagnostics {
+                roots_seen: 3,
+                roots_rejected_by_insert_root: 1,
+                roots_rejected_by_exact_screen: 2,
+                roots_enqueued: 0,
+            }),
             remaining_one_telemetry: Some(pen_search::engine::RemainingOneTelemetry {
                 remaining_one_prefixes_seen: 21,
                 remaining_one_cached_bound_hits: 8,
@@ -1773,6 +1810,9 @@ mod tests {
         assert!(telemetry.contains("\"observed_process_rss_bytes\""));
         assert!(telemetry.contains("\"claim_surface\""));
         assert!(telemetry.contains("\"claim_generic\""));
+        assert!(telemetry.contains("\"claim_step_open\""));
+        assert!(telemetry.contains("\"claim_root_seeding\""));
+        assert!(telemetry.contains("\"roots_rejected_by_exact_screen\":2"));
         assert!(telemetry.contains("\"remaining_one_telemetry\""));
         assert!(telemetry.contains("\"terminal_prefix_clause_filter_micros\":23456"));
         assert!(telemetry.contains("\"terminal_summary_exact_nu_millis\":37"));
@@ -1787,6 +1827,8 @@ mod tests {
         .expect("step 4 live checkpoints should exist");
         assert!(live_step_four.contains("\"note\":\"claim_early_exhaustive_catalog\""));
         assert!(live_step_four.contains("\"observed_process_rss_bytes\""));
+        assert!(live_step_four.contains("\"claim_step_open\""));
+        assert!(live_step_four.contains("\"roots_seen\":3"));
         assert!(live_step_four.contains("\"remaining_one_prefixes_seen\":21"));
         assert!(live_step_four.contains("\"terminal_summary_plateau_activations\":1"));
         assert!(live_step_four.contains("\"terminal_summary_build_micros\":33333"));

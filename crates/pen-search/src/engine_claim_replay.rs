@@ -277,7 +277,8 @@ pub fn capture_claim_remaining_one_replay_fixtures_with_seed(
         &library,
         AdmissibilityMode::DesktopClaimShadow,
     );
-    let retention_policy = summarize_structural_debt(&library, window_depth).retention_policy();
+    let structural_debt = summarize_structural_debt(&library, window_depth);
+    let retention_policy = structural_debt.retention_policy();
     let nu_history = history
         .iter()
         .map(|record| (record.step_index, record.nu))
@@ -295,6 +296,7 @@ pub fn capture_claim_remaining_one_replay_fixtures_with_seed(
         step_index,
         &library,
         &history,
+        structural_debt,
         admissibility,
         retention_policy,
         objective_bar,
