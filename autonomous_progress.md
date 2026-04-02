@@ -96,14 +96,23 @@ gate.
   - forcing a local `7..7` reopen at step `13` still enumerates roots but
     exact-screen prunes all of them before any root is enqueued
   - that forced local repair yields zero surviving candidates
-  - the honest next fix therefore belongs in upstream history repair /
-    backtracking, not in loosening the current step-`14` exact-screen path
+  - the raw structural tie-break on that divergent step-`13` surface is
+    therefore the live fork, not a looser step-`14` exact-screen rule
+- A new claim-only late-step acceptance repair now lands that fork in code:
+  - under the divergent steps `10..12` history, the raw step-`13`
+    structural tie-break still picks a dead-end `kappa = 3`, `nu = 23` shell
+  - the same step-`13` surface still has exactly one other survivor in the
+    same primary acceptance tier (`overshoot` plus `clause_kappa`) that keeps
+    step `14` alive
+  - `desktop_claim_shadow` now prefers that viable shell before applying the
+    secondary structural tie-breakers
 - The targeted claim regression slice is green on repo tests:
   - divergent step-`14` reproducer
   - full-sweep exact-prune family split
   - hybrid step-`13` cutover
   - step-`13` structural-delta regression
   - forced local step-`13` operator-band reopen
+  - late-step step-`13` viability-tie acceptance regression
 
 ## Latest Full-Profile Outcome
 
@@ -165,10 +174,12 @@ gate.
     `clause_kappa = 9`
   - all `21` remain honest `CannotClearBar` outcomes; none hide a bar clearer
     behind claim terminal filtering
-- The immediate blocker is now the admitted `kappa = 9` failure family that
-  first appears once step `13` diverges, not claim band selection, root
-  generation, or the zero-admitted family that the reference path already
-  survives.
+- The stored failure is still the admitted `kappa = 9` family that first
+  appears once step `13` diverges, but the code now has a local repair for the
+  raw step-`13` acceptance fork that used to strand step `14`.
+- The next blocker is no longer finding that late-step repair; it is proving
+  replay parity and then re-earning a capped intended-profile read on the
+  repaired path.
 
 ## Current Reference Runs
 
@@ -240,8 +251,8 @@ gate.
 - Step `4` summary build is still the main measured runtime bucket when the run
   is inside step `4`, but `long-rerun-v3` proved that the current preserved
   binary can clear that wall and advance into late steps.
-- The next blocker is late-step claim correctness/viability, not inability to
-  escape step `4`.
+- The late-step claim correctness slice now has a landed local repair, so the
+  next blocker is validation of that repair rather than discovering the fork.
 - The strongest current clues are:
   - widening replay divergence on steps `10` through `13`
   - the step-`14` band mismatch is now locally repaired in test:
@@ -254,6 +265,12 @@ gate.
     `remaining_one_algebraic_prunes = 0` and terminal summary build now runs
   - the reproducer still dies with `21` exact partial-prefix prunes, zero
     terminal bar prunes, and zero terminal rank prunes
+- The new acceptance repair closes the raw step-`13` tie fork:
+  - under the divergent steps `10..12` history, the unpatched structural
+    ranking still prefers a dead-end `kappa = 3`, `nu = 23` shell
+  - exactly one same-primary-tier survivor keeps step `14` alive
+  - the claim lane now uses that next-step viability read before the later
+    structural tie-break fields
 - The captured remaining-one exact prunes are no longer ambiguous:
   - `19` of the `21` captured prefixes retain cached compact bounds that
     match direct exact assessment
@@ -291,16 +308,15 @@ gate.
 - Keep the current short-loop gate and step-`4` continuation references frozen
   as regression checks.
 - Do not launch `v4` first.
-- Do not prioritize another step-`4` micro-optimization before the step-`14`
-  failure is explained.
-- Keep the landed late-step diagnostics and divergent-prefix reproducer green
-  while localizing the zero-frontier loss.
-- Treat the new forced step-`13` operator-band regression as closing that
-  branch decision:
-  the remaining narrow fix is upstream history repair / backtracking, not a
-  looser step-`14` exact-screen rule.
-- After that fix lands and replay parity holds, spend one capped intended
-  rerun before committing to another full long rerun.
+- Do not prioritize another step-`4` micro-optimization before the repaired
+  step-`13` path proves itself on replay parity and a capped intended-profile
+  rerun.
+- Keep the landed late-step diagnostics, divergent-prefix reproducer, and new
+  step-`13` viability-tie regression green.
+- Treat the upstream repair as landed locally:
+  the next narrow task is validation, not more local band loosening.
+- After replay parity holds, spend one capped intended rerun before committing
+  to another full long rerun.
 
 ## Immediate Next Move
 
@@ -335,10 +351,12 @@ gate.
 6. Keep the new forced local step-`13` operator-band regression green. It now
    proves that even reopening `7..7` locally on the already-divergent
    step-`10..12` history still exact-screens every root before enqueue.
-7. Treat that branch decision as closed:
-   the honest narrow fix now belongs in upstream history repair /
-   backtracking, not in loosening the current step-`14` exact-screen path.
-8. Only after that fix lands, rerun the targeted claim tests plus replay
-   parity for the reproducer and late-step claim surface.
-9. Only if that stays clean, spend one capped intended-profile rerun against
+7. Keep the new late-step claim acceptance regression green. It now proves
+   that:
+   - the raw divergent step-`13` structural tie-break still picks a dead-end
+     shell
+   - exactly one same-primary-tier survivor keeps step `14` alive
+   - `desktop_claim_shadow` now chooses that viable shell
+8. Re-run the replay harness in release mode for the repaired claim surface.
+9. Only if replay parity stays clean, spend one capped intended-profile rerun against
    the `139`-prefix short-loop gate before authorizing another full rerun.

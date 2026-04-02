@@ -113,16 +113,24 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - forcing a local `7..7` reopen there still enumerates roots but
     exact-screen prunes all of them before any root is enqueued
   - that forced local repair yields zero surviving candidates
+- A new claim-only late-step acceptance repair now lands the remaining fork:
+  - under the divergent steps `10..12` history, the raw step-`13`
+    structural tie-break still picks a dead-end `kappa = 3`, `nu = 23` shell
+  - that same step-`13` surface still has exactly one other survivor in the
+    same primary acceptance tier (`overshoot` plus `clause_kappa`) that keeps
+    step `14` alive
+  - `desktop_claim_shadow` now prefers that viable shell before the later
+    structural tie-break fields
 - The targeted claim regression slice is green on repo tests:
   - divergent step-`14` reproducer
   - full-sweep exact-prune family split
   - hybrid step-`13` cutover
   - step-`13` structural-delta regression
   - forced local step-`13` operator-band reopen
-- The next blocker is therefore upstream history repair / backtracking before
-  or at the divergent step-`13` shell, not claim band selection, root
-  generation, the reference zero-admitted family, or a first-prune
-  compact-summary mismatch on the current step-`14` exact-screen path.
+  - late-step step-`13` viability-tie acceptance regression
+- The next blocker is now replay parity plus one capped intended-profile read
+  on the repaired claim path, not more local diagnosis of the same step-`13`
+  fork.
 
 ## Do This Next
 
@@ -135,7 +143,7 @@ This note is the exact next work order for `desktop_claim_shadow`.
    The earlier longer runs still do not expose a resumable step-`4` frontier
    generation, and the immediate question is now late-step failure repair.
 
-### 2. Use The Landed Diagnostics First
+### 2. Use The Landed Diagnostics And Repair First
 
 1. Keep the landed `claim_step_open` and `claim_root_seeding` payloads in
    place while debugging the fix.
@@ -149,6 +157,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
    non-winning divergent accepted history, not with a narrower step-`14`
    exact-screen bug on the currently tested surface.
 4. Treat the enriched failure-note shape as part of the regression surface.
+5. Treat the new late-step acceptance helper as part of the surface too:
+   it is now the narrow upstream repair for the divergent step-`13`
+   acceptance fork.
 
 ### 3. Build A Reproducer Around The Finished Failure
 
@@ -189,14 +200,20 @@ This note is the exact next work order for `desktop_claim_shadow`.
 7. Keep the new forced local step-`13` operator-band regression green. It now
    proves that even reopening `7..7` locally on the already-divergent
    step-`10..12` history still exact-screens every root before enqueue.
-8. Treat that branch decision as closed:
-   the honest narrow fix now belongs in upstream history repair /
-   backtracking, not in loosening the current step-`14` exact-screen path.
+8. Keep the new late-step claim acceptance regression green. It now proves
+   that:
+   - the raw divergent step-`13` structural tie-break still picks a dead-end
+     shell
+   - exactly one same-primary-tier survivor keeps step `14` alive
+   - `desktop_claim_shadow` now chooses that viable shell
+9. Treat the old branch decision as closed:
+   the upstream history repair is now landed locally, so the next work is
+   validation rather than more local band loosening.
 
 ### 4. Validation Order After The Fix
 
-1. Run the targeted claim tests needed by the slice.
-   Keep at least:
+1. Keep the targeted claim tests needed by the slice green.
+   The local repo run now covered at least:
    - the divergent step-`14` reproducer
    - the forced local step-`13` operator-band reopen regression
    - the late-step claim acceptance regression
@@ -243,8 +260,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 ## Keep Or Branch Decision
 
-- Stay code-first on upstream history repair / backtracking until the
-  step-`14` zero-candidate failure is removed on a replay-backed claim path.
+- Stay validation-first on the landed step-`13` acceptance repair until replay
+  parity and a capped intended-profile rerun either confirm it or localize the
+  next defect.
 - Keep the current short-loop gate and stored step-`4` continuation references
   frozen as regression checks.
 - Return to long reruns only after a regression-backed late-step fix keeps

@@ -1,9 +1,10 @@
 use crate::accept::{
-    AcceptanceOutcome, acceptance_rank, acceptance_rank_context_for_prefix,
-    acceptance_rank_for_prefix_clause, acceptance_rank_for_telescope, select_acceptance,
+    AcceptanceOutcome, acceptance_outcome_for_candidate, acceptance_rank,
+    acceptance_rank_context_for_prefix, acceptance_rank_for_prefix_clause,
+    acceptance_rank_for_telescope, select_acceptance,
 };
 use crate::bounds::PrefixBound;
-use crate::branch_bound::{AcceptRank, better_rank};
+use crate::branch_bound::{AcceptRank, better_rank, same_primary_rank_tier};
 use crate::config::{DemoConfig, RuntimeConfig, SearchProfile};
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{
@@ -2982,6 +2983,30 @@ fn search_next_step(
     demo_step_budget: Option<DemoStepBudget>,
     progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
 ) -> Result<AtomicSearchStep> {
+    search_next_step_internal(
+        step_index,
+        window_depth,
+        library,
+        history,
+        admissibility_mode,
+        retention_runtime,
+        demo_step_budget,
+        progress_observer,
+        true,
+    )
+}
+
+fn search_next_step_internal(
+    step_index: u32,
+    window_depth: u16,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility_mode: AdmissibilityMode,
+    retention_runtime: FrontierRuntimeLimits,
+    demo_step_budget: Option<DemoStepBudget>,
+    progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
+    allow_claim_viability_tiebreak: bool,
+) -> Result<AtomicSearchStep> {
     let step_start = Instant::now();
     let mut last_live_checkpoint_elapsed_millis = 0u64;
     let structural_debt = summarize_structural_debt(library, window_depth);
@@ -3705,8 +3730,18 @@ fn search_next_step(
     if retained.is_empty() {
         bail!("no semantically minimal candidates survived for step {step_index}");
     }
-    let acceptance = select_acceptance(objective_bar, &retained)
-        .ok_or_else(|| anyhow::anyhow!("no candidate cleared the bar at step {step_index}"))?;
+    let acceptance = select_acceptance_for_step(
+        step_index,
+        window_depth,
+        library,
+        history,
+        admissibility_mode,
+        retention_runtime,
+        objective_bar,
+        &retained,
+        allow_claim_viability_tiebreak,
+    )
+    .ok_or_else(|| anyhow::anyhow!("no candidate cleared the bar at step {step_index}"))?;
     let frontier_retention = build_frontier_retention(
         objective_bar,
         retention_policy,
@@ -4113,6 +4148,118 @@ fn build_demo_closure_stats(funnel: &DemoFunnelStats) -> DemoClosureStats {
         frontier_certified_nonwinning,
         closure_percent,
     }
+}
+
+fn should_apply_claim_viability_tiebreak(
+    admissibility_mode: AdmissibilityMode,
+    step_index: u32,
+) -> bool {
+    matches!(admissibility_mode, AdmissibilityMode::DesktopClaimShadow)
+        && (DEMO_LATE_SPILL_START_STEP..LIVE_BOOTSTRAP_MAX_STEP).contains(&step_index)
+}
+
+fn claim_candidate_keeps_next_step_alive(
+    step_index: u32,
+    window_depth: u16,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility_mode: AdmissibilityMode,
+    retention_runtime: FrontierRuntimeLimits,
+    candidate: &ExpandedCandidate,
+) -> bool {
+    let mut next_history = history.to_vec();
+    next_history.push(DiscoveryRecord::new(
+        step_index,
+        u32::from(candidate.nu),
+        u32::from(candidate.clause_kappa),
+    ));
+
+    let mut next_library = library.clone();
+    next_library.push(LibraryEntry::from_telescope(&candidate.telescope, library));
+
+    let mut progress_observer: Option<&mut dyn AtomicSearchProgressObserver> = None;
+    search_next_step_internal(
+        step_index + 1,
+        window_depth,
+        &next_library,
+        &next_history,
+        admissibility_mode,
+        retention_runtime,
+        None,
+        &mut progress_observer,
+        false,
+    )
+    .is_ok()
+}
+
+fn select_acceptance_for_step(
+    step_index: u32,
+    window_depth: u16,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility_mode: AdmissibilityMode,
+    retention_runtime: FrontierRuntimeLimits,
+    objective_bar: Rational,
+    retained: &[ExpandedCandidate],
+    allow_claim_viability_tiebreak: bool,
+) -> Option<AcceptanceOutcome> {
+    let baseline = select_acceptance(objective_bar, retained)?;
+    if !allow_claim_viability_tiebreak
+        || !should_apply_claim_viability_tiebreak(admissibility_mode, step_index)
+    {
+        return Some(baseline);
+    }
+
+    let accepted_candidate = retained
+        .iter()
+        .find(|candidate| candidate.candidate_hash == baseline.accepted.candidate_hash)?;
+    let accepted_rank = acceptance_rank(objective_bar, accepted_candidate)?;
+    let tied_candidates = retained
+        .iter()
+        .filter_map(|candidate| {
+            acceptance_rank(objective_bar, candidate).map(|rank| (candidate, rank))
+        })
+        .filter(|(_, rank)| same_primary_rank_tier(rank, &accepted_rank))
+        .map(|(candidate, _)| candidate)
+        .collect::<Vec<_>>();
+    if tied_candidates.len() <= 1 {
+        return Some(baseline);
+    }
+
+    let viable_tied_candidates = tied_candidates
+        .into_iter()
+        .filter(|candidate| {
+            claim_candidate_keeps_next_step_alive(
+                step_index,
+                window_depth,
+                library,
+                history,
+                admissibility_mode,
+                retention_runtime,
+                candidate,
+            )
+        })
+        .collect::<Vec<_>>();
+    if viable_tied_candidates.is_empty() {
+        return Some(baseline);
+    }
+
+    let selected_candidate = viable_tied_candidates
+        .into_iter()
+        .filter_map(|candidate| {
+            acceptance_rank(objective_bar, candidate).map(|rank| (candidate, rank))
+        })
+        .min_by(|(_, left), (_, right)| left.cmp(right))
+        .map(|(candidate, _)| candidate)?;
+    if selected_candidate.candidate_hash == accepted_candidate.candidate_hash {
+        return Some(baseline);
+    }
+
+    Some(acceptance_outcome_for_candidate(
+        objective_bar,
+        retained,
+        selected_candidate,
+    ))
 }
 
 fn admissibility_mode_for_profile(search_profile: SearchProfile) -> AdmissibilityMode {
@@ -8869,7 +9016,8 @@ mod tests {
         DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed, DemoClosurePressure,
         DemoNarrativeRuntime, DemoProofCloseEntryReason, DemoProofCloseOrderMode,
         DemoProofCloseOverrunReason, DemoStepBudget, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
-        SearchBucketTaxonomy, StepLiveCheckpoint, create_online_prefix_work_item,
+        SearchBucketTaxonomy, StepLiveCheckpoint, acceptance_rank,
+        claim_candidate_keeps_next_step_alive, create_online_prefix_work_item,
         demo_materialize_to_proof_close_handoff_reason_for_pressure, demo_proof_close_group_order,
         demo_proof_close_order_mode, demo_proof_close_order_mode_with_closure_pressure,
         discover_realistic_shadow_candidates, discovery_enumeration_context,
@@ -8877,6 +9025,7 @@ mod tests {
         search_bootstrap_from_prefix, search_bootstrap_from_prefix_for_profile_with_runtime,
         search_bootstrap_from_prefix_for_profile_with_runtime_and_observer,
         search_bootstrap_prefix, search_bootstrap_prefix_for_config_with_runtime,
+        search_next_step_internal, select_acceptance_for_step,
         sort_terminal_prefix_group_candidates_for_certification, supports_live_atomic_search,
         terminal_prefix_clause_candidates,
     };
@@ -11287,6 +11436,89 @@ mod tests {
         assert!(
             discovery.candidates.is_empty(),
             "forcing a local step-13 operator band should not synthesize a new surviving candidate under the divergent history"
+        );
+    }
+
+    #[test]
+    fn divergent_step_thirteen_acceptance_prefers_step_fourteen_viable_tied_candidate() {
+        let prefix = claim_long_rerun_v3_hybrid_prefix(Some(10));
+        let (library, history, _) = history_from_prefix(&prefix[..12]);
+        let mut progress_observer = None;
+        let step = search_next_step_internal(
+            13,
+            2,
+            &library,
+            &history,
+            AdmissibilityMode::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            None,
+            &mut progress_observer,
+            false,
+        )
+        .expect("step 13 should still build");
+
+        let accepted_candidate = step
+            .retained_candidates
+            .iter()
+            .find(|candidate| candidate.candidate_hash == step.accepted.candidate_hash)
+            .expect("accepted step-13 candidate should still be retained");
+        let accepted_rank = acceptance_rank(step.objective_bar, accepted_candidate)
+            .expect("accepted step-13 candidate should still clear the bar");
+        let tied_candidates = step
+            .retained_candidates
+            .iter()
+            .filter_map(|candidate| {
+                acceptance_rank(step.objective_bar, candidate).map(|rank| (candidate, rank))
+            })
+            .filter(|(_, rank)| crate::branch_bound::same_primary_rank_tier(rank, &accepted_rank))
+            .map(|(candidate, _)| candidate)
+            .collect::<Vec<_>>();
+        assert_eq!(
+            tied_candidates.len(),
+            2,
+            "the divergent step-13 surface should still expose the primary-rank viability split"
+        );
+
+        let viable_hashes = tied_candidates
+            .iter()
+            .filter_map(|candidate| {
+                claim_candidate_keeps_next_step_alive(
+                    13,
+                    2,
+                    &library,
+                    &history,
+                    AdmissibilityMode::DesktopClaimShadow,
+                    crate::diversify::FrontierRuntimeLimits::unlimited(),
+                    candidate,
+                )
+                .then_some(candidate.candidate_hash.clone())
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            viable_hashes.len(),
+            1,
+            "exactly one tied step-13 candidate should keep step 14 alive"
+        );
+        assert_ne!(
+            step.accepted.candidate_hash, viable_hashes[0],
+            "the raw structural tie-break should still point at the dead-end step-13 shell"
+        );
+
+        let repaired_acceptance = select_acceptance_for_step(
+            13,
+            2,
+            &library,
+            &history,
+            AdmissibilityMode::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            step.objective_bar,
+            &step.retained_candidates,
+            true,
+        )
+        .expect("claim acceptance should still select a bar clearer");
+        assert_eq!(
+            repaired_acceptance.accepted.candidate_hash, viable_hashes[0],
+            "claim acceptance should pick the tied step-13 shell that preserves next-step viability"
         );
     }
 

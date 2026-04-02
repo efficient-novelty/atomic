@@ -28,6 +28,14 @@ pub fn select_acceptance(
         .min_by(|(_, left), (_, right)| left.cmp(right))?
         .0;
 
+    Some(acceptance_outcome_for_candidate(bar, candidates, best))
+}
+
+pub(crate) fn acceptance_outcome_for_candidate(
+    bar: Rational,
+    candidates: &[ExpandedCandidate],
+    best: &ExpandedCandidate,
+) -> AcceptanceOutcome {
     let overshoot = best.rho - bar;
     let accepted = AcceptedCandidate {
         candidate_hash: best.candidate_hash.clone(),
@@ -43,10 +51,10 @@ pub fn select_acceptance(
 
     let near_misses = collect_near_misses(bar, candidates, &best.canonical_hash);
 
-    Some(AcceptanceOutcome {
+    AcceptanceOutcome {
         accepted,
         near_misses,
-    })
+    }
 }
 
 pub(crate) fn acceptance_rank(bar: Rational, candidate: &ExpandedCandidate) -> Option<AcceptRank> {

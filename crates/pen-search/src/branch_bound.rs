@@ -48,9 +48,16 @@ pub fn better_rank(left: &AcceptRank, right: &AcceptRank) -> bool {
     left < right
 }
 
+pub fn same_primary_rank_tier(left: &AcceptRank, right: &AcceptRank) -> bool {
+    left.overshoot == right.overshoot && left.clause_kappa == right.clause_kappa
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{AcceptRank, BranchDecision, PruneClass, better_rank, sound_prune_by_bar};
+    use super::{
+        AcceptRank, BranchDecision, PruneClass, better_rank, same_primary_rank_tier,
+        sound_prune_by_bar,
+    };
     use crate::bounds::PrefixBound;
     use pen_core::canonical::CanonKey;
     use pen_core::rational::Rational;
@@ -100,5 +107,34 @@ mod tests {
         };
 
         assert!(better_rank(&lower, &higher));
+    }
+
+    #[test]
+    fn primary_rank_tier_ignores_secondary_structural_tiebreaks() {
+        let left = AcceptRank {
+            overshoot: Rational::new(1, 10),
+            clause_kappa: 4,
+            descending_eliminator_score: Reverse(3),
+            descending_former_score: Reverse(2),
+            descending_dependent_motive_density: Reverse(2),
+            descending_library_reference_density: Reverse(1),
+            descending_generic_binder_count: Reverse(4),
+            descending_closure_score: Reverse(3),
+            max_var_ref: 3,
+            bit_kappa: 78,
+            descending_nu: Reverse(17),
+            canonical_key: CanonKey("a".to_owned()),
+        };
+        let right = AcceptRank {
+            descending_former_score: Reverse(5),
+            descending_dependent_motive_density: Reverse(6),
+            descending_generic_binder_count: Reverse(7),
+            bit_kappa: 80,
+            canonical_key: CanonKey("b".to_owned()),
+            ..left.clone()
+        };
+
+        assert!(same_primary_rank_tier(&left, &right));
+        assert_ne!(left, right);
     }
 }

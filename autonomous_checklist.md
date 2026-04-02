@@ -56,16 +56,20 @@ It lists only work that is still open.
     band is still `3..3`
   - forcing a local `7..7` reopen there still exact-screens every root before
     enqueue, leaving zero surviving candidates
-  - the remaining honest fix therefore belongs in upstream history repair /
-    backtracking, not in loosening the current step-`14` exact-screen path
-- The current blocker is late-step claim viability/correctness, not inability
-  to escape step `4`.
+  - the raw step-`13` structural tie-break was therefore the live fork, not a
+    looser step-`14` exact-screen rule
+- A new claim-only late-step acceptance repair now lands that fork in code:
+  - under the divergent steps `10..12` history, the raw step-`13`
+    structural tie-break still picks a dead-end `kappa = 3`, `nu = 23` shell
+  - exactly one same-primary-tier survivor keeps step `14` alive
+  - `desktop_claim_shadow` now prefers that viable shell before the later
+    structural tie-break fields
+- The current blocker is replay parity plus capped intended-profile validation
+  of that repair, not inability to escape step `4` or a missing late-step
+  diagnosis.
 
 ## 1. Runtime Improvement Loop
 
-- [ ] Land the upstream history repair / backtracking fix that the new forced
-      local step-`13` operator-band regression now requires; do not loosen the
-      honest step-`14` exact-screen path first.
 - [ ] Require every serious runtime slice to prove replay-harness parity plus
       either fewer exact-`nu` evaluations or lower measured aggregation time
       before another full-profile rerun.
