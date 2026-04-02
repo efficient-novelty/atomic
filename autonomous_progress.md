@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Progress
 
-Last updated: 2026-04-01
+Last updated: 2026-04-02
 
 This file is the live operating brief for `desktop_claim_shadow`.
 Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next
@@ -13,9 +13,13 @@ gate.
 - `desktop_claim_shadow` is not signoff-ready.
 - The current short step-`4` baseline is
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
-- The current long-run run to beat is
+- The current later-wall continuation winner through the stored `576` read is
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v1`.
+- The current farthest stored step-`4` continuation to beat is still
   `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`.
 - The previous full-profile speed winner was
+  `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`.
+- The earlier full-profile speed winner before that was
   `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`.
 - The previous deeper continuation target was
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
@@ -37,7 +41,7 @@ gate.
 ## Current Run To Beat
 
 - Run:
-  `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v1`
 - Status:
   manually stopped during step `4`.
   `run.json` still says `status = "running"`,
@@ -46,30 +50,48 @@ gate.
   The authoritative evidence is
   `reports/steps/step-04-live.ndjson`.
 - Final stored read before stopping:
-  - `prefix_states_explored = 1095`
+  - `prefix_states_explored = 578`
   - `prefix_cache_groups = 43`
-  - `prefix_cache_candidates = 122481`
-  - `elapsed_millis = 10815742`
-  - `terminal_summary_build_millis = 10751697`
-  - RSS `= 3175555072` bytes
-  - `frontier_queue_len = 1680`
-- This run materially passed both earlier stored walls:
+  - `prefix_cache_candidates = 29809`
+  - `elapsed_millis = 5015917`
+  - `terminal_summary_build_millis = 4987295`
+  - RSS `= 1744551936` bytes
+  - `frontier_queue_len = 2197`
+- This run materially passed every earlier stored wall through `576`:
+  - at `140`:
+    `1188340 / 1181188` with `41 groups / 29249 candidates`
+  - at `163`:
+    `1381425 / 1373168` with `41 groups / 29249 candidates`
+  - at `332`:
+    `2853118 / 2836752` with `42 groups / 29529 candidates`
+  - at `335`:
+    `2879368 / 2862850` with `43 groups / 29809 candidates`
+  - at `408`:
+    `3511930 / 3491831` with `43 groups / 29809 candidates`
+  - at `437`:
+    `3770964 / 3749419` with `43 groups / 29809 candidates`
+  - at `454`:
+    `3922561 / 3900177` with `43 groups / 29809 candidates`
+  - at `484`:
+    `4183978 / 4160100` with `43 groups / 29809 candidates`
   - at `576`:
-    `5632051 / 5598470` with `43 groups / 122481 candidates`
-  - at `1038`:
-    `10238225 / 10177832` with `43 groups / 122481 candidates`
+    `4997082 / 4968579` with `43 groups / 29809 candidates`
   These pairs are `elapsed_millis / terminal_summary_build_millis`.
 - The later-surface shape still stayed no-miss on stored evidence:
   - `terminal_summary_admissibility_checks = 0`
   - `terminal_summary_fallback_connectivity_checks = 0`
 - Cached-summary reopen stayed dormant:
-  - `remaining_one_materialized_from_cached_summary = 0`
+  - `remaining_one_materialized_from_cached_summary = 43`
   - `remaining_one_prefixes_seen = 0`
-  - `remaining_one_materialized_compact_direct = 43`
+  - `remaining_one_materialized_compact_direct = 0`
+- `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`
+  still remains the farthest stored step-`4` continuation behind it:
+  it stopped at `1095` explored prefixes after `10815742 ms`.
 
 ## 20-Minute Validation Gate
 
-- Future intended-profile attempts now stop after `20` minutes max.
+- Capped intended-profile validation reruns still stop after `20` minutes max
+  unless the lane explicitly spends another earned longer continuation.
 - `prefix-local-score-v1` remains the long-run reference.
   Its nearest stored step-`4` checkpoint to `1200000 ms` is still the original
   short-loop gate that later slices had to beat:
@@ -120,8 +142,9 @@ gate.
   and still no fallback connectivity or admissibility work, although RSS and
   summary-build time both rose slightly.
 - Near-term validation should now treat `139` explored prefixes by `20`
-  minutes as the current short-loop checkpoint while deciding whether the
-  repeated short-loop wins are strong enough to reopen a longer continuation.
+  minutes as the current short-loop checkpoint while treating
+  `clause-accept-rank-facts-long-rerun-v1` as the current later-wall
+  continuation reference through `576`.
 
 ## New Local Reads
 
@@ -306,6 +329,45 @@ gate.
 - The lane now has repeated honest 20-minute wins on the same retained-prefix
   surface (`135` then `139`), so a longer intended-profile continuation is no
   longer blocked on short-loop proof alone.
+- A fresh longer intended-profile rerun was then launched as
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v1`
+  because neither `clause-accept-rank-facts-v1` nor the stored inspect surface
+  exposed a resumable step-`4` frontier generation, so `pen-cli resume` would
+  only have replayed step `4` from the step-`3` checkpoint instead of
+  continuing the in-flight frontier honestly.
+- The rerun reused the same stored config and the same release binary hash
+  (`278c311ddf5e416b09d24923dc392388aaf5817c65f0c60f856ebde7466140a5`)
+  as the earlier short-loop winner.
+- It then beat `prefix-local-score-v1` honestly at every matched later
+  checkpoint through `576` while keeping the same no-miss shape and the same
+  frontier queue lengths at the matched prefix counts, but on a much smaller
+  retained candidate surface:
+  - `140`: `1188340 / 1181188` with `41 groups / 29249 candidates`,
+    `frontier_queue_len = 2635`, RSS `= 459980800`
+  - `163`: `1381425 / 1373168` with `41 groups / 29249 candidates`,
+    `frontier_queue_len = 2612`, RSS `= 528904192`
+  - `332`: `2853118 / 2836752` with `42 groups / 29529 candidates`,
+    `frontier_queue_len = 2443`, RSS `= 1022218240`
+  - `335`: `2879368 / 2862850` with `43 groups / 29809 candidates`,
+    `frontier_queue_len = 2440`, RSS `= 1030688768`
+  - `408`: `3511930 / 3491831` with `43 groups / 29809 candidates`,
+    `frontier_queue_len = 2367`, RSS `= 1247543296`
+  - `437`: `3770964 / 3749419` with `43 groups / 29809 candidates`,
+    `frontier_queue_len = 2338`, RSS `= 1330483200`
+  - `454`: `3922561 / 3900177` with `43 groups / 29809 candidates`,
+    `frontier_queue_len = 2321`, RSS `= 1379835904`
+  - `484`: `4183978 / 4160100` with `43 groups / 29809 candidates`,
+    `frontier_queue_len = 2291`, RSS `= 1468563456`
+  - `576`: `4997082 / 4968579` with `43 groups / 29809 candidates`,
+    `frontier_queue_len = 2199`, RSS `= 1738993664`
+  These pairs are `elapsed_millis / terminal_summary_build_millis`.
+- The rerun was then manually stopped at `578` explored prefixes with
+  `elapsed_millis = 5015917`, `terminal_summary_build_millis = 4987295`,
+  `frontier_queue_len = 2197`, RSS `= 1744551936`, and still
+  `0` fallback/admissibility checks.
+- No step-`4` frontier artifacts were persisted on that rerun either, so a
+  future longer continuation still needs another fresh rerun rather than a
+  true frontier-backed resume.
 
 ## What Stays Landed
 
@@ -351,8 +413,9 @@ gate.
 
 - The old early RSS cliff is still gone. This remains a step-`4` throughput
   problem, not a return of the allocator-failure story.
-- The latest stopped run proved that the lane can move materially past both the
-  old `576` wall and the old `1038` wall, but it still did not finish step `4`.
+- The latest stopped rerun proved that the newer short-loop gains do move the
+  later intended-profile walls honestly through `576`, but the lane still did
+  not reach the older `1038` wall and still did not finish step `4`.
 - The decisive later surfaces remain effectively no-miss surfaces:
   stored later reads keep
   `terminal_summary_admissibility_checks = 0` and
@@ -371,65 +434,90 @@ gate.
 - The newest capped rerun therefore adds a second honest short-loop win on the
   same retained-prefix surface even though the lane still did not finish
   step `4`.
-- Repeated 20-minute wins now exist, so the next question is whether the newer
-  short-loop gains also move the later intended-profile walls honestly.
+- Repeated 20-minute wins now exist, and the reopened longer rerun has now
+  shown that those gains also move the later intended-profile walls honestly
+  through `576`.
 - The clause-accept-rank-facts slice now owns the current stored short-loop
-  run to beat.
-  The lane should keep treating `prefix-local-score-v1` as the long-run
-  reference until a reopened longer continuation proves whether the `139`-
-  prefix checkpoint also moves the later stored walls honestly.
+  run to beat, while
+  `clause-accept-rank-facts-long-rerun-v1` now owns the nearer later-wall
+  continuation reference through `576`.
+  `prefix-local-score-v1` still remains the farthest stored step-`4`
+  continuation to beat at `1095`, so the next question is whether the newer
+  compact retained surface can also re-earn `1038/1095` honestly or reach
+  step `5`.
+- Because neither the original short-loop winner nor the newer longer rerun
+  persisted a resumable step-`4` frontier generation, the next continuation
+  still needs another fresh intended-profile rerun rather than `pen-cli resume`
+  first.
 - The optimization loop now needs shorter, more repeatable intended-profile
   reads.
-  We no longer expect the very next slice to beat the full `1095`-prefix stop.
-  Instead, near-term runtime work should either beat the current short-loop
-  gate at `139` explored prefixes or move the later stored step-`4` walls
-  honestly on the reopened continuation.
+  The next slice no longer needs to prove `140/163`, `332/335`,
+  `408/437/454/484`, or `576` again from scratch.
+  Instead, near-term runtime work should keep the `139`-prefix short-loop gate
+  honest while pushing the later continuation farther toward `1038/1095` or
+  step `5`.
 
 ## Forward Direction
 
-- Keep `prefix-local-score-v1` as the long-run run to beat and
-  `clause-accept-rank-facts-v1` as the current short-loop checkpoint to beat.
+- Keep `clause-accept-rank-facts-v1` as the current short-loop checkpoint to
+  beat.
+- Keep `clause-accept-rank-facts-long-rerun-v1` as the current later-wall
+  continuation reference through `576`.
+- Keep `prefix-local-score-v1` as the farthest stored step-`4` continuation to
+  beat at `1038/1095` until a later rerun replaces it honestly or reaches
+  step `5`.
 - The clause-side accept-rank-facts slice has now produced repeated honest
-  20-minute wins, so the next move is to reopen one longer intended-profile
-  continuation on the current binary before spending another code slice.
+  20-minute wins and one honest longer rerun through `576`, so the next move
+  is another fresh longer intended-profile rerun on the same binary before
+  spending another code slice.
 - Keep the refreshed replay benchmark gate at `88197 us` for later code work.
-- If that reopened continuation fails to move the later stored walls honestly,
-  drop back to another narrow per-admitted compact-summary cost slice inside
+- If that next fresh rerun cannot re-earn the new `576` continuation surface
+  honestly or loses the no-miss retained-prefix story before `1038`, drop back
+  to another narrow per-admitted compact-summary cost slice inside
   `compute_terminal_prefix_completion_summary_from_candidates(...)` rather
   than retrying the dropped focus-aligned competition-gate/payload-mode hoist,
   the dropped shared compact-bookkeeping fold, or the dropped claim-open-band
   compact local-state hoist.
 - Do not wake the dormant general cached-summary reopen machinery first.
-- A longer full-profile continuation is now justified because repeated
-  20-minute wins have shown material short-loop improvement on the same
-  retained-prefix surface.
+- A further longer full-profile rerun is now justified because the first fresh
+  longer continuation already moved the later stored walls honestly through
+  `576`.
 
 ## Immediate Next Move
 
-1. Keep `prefix-local-score-v1` frozen as the long-run run to beat.
-2. Keep `clause-accept-rank-facts-v1` frozen as the current short-loop gate
+1. Keep `clause-accept-rank-facts-v1` frozen as the current short-loop gate
    to beat.
-3. Reopen one longer intended-profile continuation on the current binary
-   rather than landing another code slice first.
-4. Prefer `pen-cli resume` on
-   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-v1`
-   if frontier compatibility admits it; otherwise launch one fresh intended
-   rerun on the same release binary and config.
-5. Let that continuation run materially past the `20`-minute window and then
+2. Keep
+   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v1`
+   frozen as the current later-wall continuation reference through `576`.
+3. Keep `prefix-local-score-v1` frozen as the farthest stored step-`4`
+   continuation target to beat at `1038/1095`.
+4. Launch one fresh intended rerun on the same release binary and config
+   rather than using `pen-cli resume` first, because neither the earlier
+   short-loop winner nor the newer longer rerun stored a resumable step-`4`
+   frontier generation.
+5. Let that fresh rerun run materially past the new `576` reference and then
    inspect matched stored step-`4` checkpoints in this order:
-   `140/163`, then `332/335`, then `408/437/454/484`.
+   `576`, then `1038`, then `1095`, then step `5`.
 6. Keep comparing the current `20`-minute gate first against
    `1191501 ms`, `139` explored prefixes, `40 groups / 28438 candidates`,
    `frontier_queue_len = 2636`, RSS `= 453021696`,
    `terminal_summary_build_millis = 1183915`,
    `terminal_summary_admissibility_checks = 0`, and
    `terminal_summary_fallback_connectivity_checks = 0`.
-7. If the longer continuation does not move those later stored walls
-   honestly, drop back to another narrow compact-summary per-admitted cost
-   slice while keeping the dropped focus-aligned competition-gate/payload-mode
-   hoist, the dropped shared compact-bookkeeping fold, and the dropped claim-
-   open-band compact local-state hoist off the table first.
-8. Keep broad cleanup, cached-summary reopen wake-up work, contender-rank
+7. Keep comparing the later continuation first against the new `576` read from
+   `clause-accept-rank-facts-long-rerun-v1`
+   (`4997082 / 4968579`, `43 groups / 29809 candidates`,
+   `frontier_queue_len = 2199`, RSS `= 1738993664`, and still
+   `0` fallback/admissibility checks), then against the older
+   `prefix-local-score-v1` `1038/1095` walls behind it.
+8. If the next fresh rerun cannot keep that `576` surface honestly or cannot
+   move materially toward `1038`, drop back to another narrow compact-summary
+   per-admitted cost slice while keeping the dropped
+   focus-aligned competition-gate/payload-mode hoist, the dropped shared
+   compact-bookkeeping fold, and the dropped claim-open-band compact local-
+   state hoist off the table first.
+9. Keep broad cleanup, cached-summary reopen wake-up work, contender-rank
    rewrites, connectivity-first/cache-first rewrites, and deterministic
    batched parallel reduction dropped until the longer continuation proves the
    newer short-loop win scales past the next stored walls.

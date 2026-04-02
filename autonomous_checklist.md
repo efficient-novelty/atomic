@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-04-01
+Last updated: 2026-04-02
 
 This checklist is the live signoff gate for `desktop_claim_shadow`.
 It lists only work that is still open.
@@ -10,9 +10,11 @@ It lists only work that is still open.
 - The claim lane still does not have a signoff-ready full-profile bundle.
 - The current short step-`4` baseline is
   `runs/codex-claim-release-step4-kernel-open-band-handoff-v1`.
-- The current full-profile speed winner is
+- The current later-wall continuation winner through the stored `576` wall is
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v1`.
+- The current farthest stored step-`4` continuation to beat is still
   `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`.
-- The previous full-profile speed winner was
+- The previous full-profile speed winner before that was
   `runs/codex-claim-release-full-aggregation-open-band-structural-nu-facts-v1`.
 - The current deeper continuation target is
   `runs/codex-claim-release-full-aggregation-open-band-prefix-nu-context-v2`.
@@ -57,8 +59,28 @@ It lists only work that is still open.
   `terminal_summary_build_millis = 1183915`, and still
   `0` fallback/admissibility checks.
 - The lane now has repeated honest 20-minute wins on the same retained-prefix
-  surface, so the next open runtime question is whether a longer continuation
-  also moves the later stored step-`4` walls honestly.
+  surface, and a fresh longer intended-profile rerun on the same binary/config
+  then moved the later stored step-`4` walls honestly through `576` while
+  keeping the same no-miss shape:
+  - `140`: `1188340 / 1181188` with `41 groups / 29249 candidates`
+  - `163`: `1381425 / 1373168` with `41 groups / 29249 candidates`
+  - `332`: `2853118 / 2836752` with `42 groups / 29529 candidates`
+  - `335`: `2879368 / 2862850` with `43 groups / 29809 candidates`
+  - `408`: `3511930 / 3491831` with `43 groups / 29809 candidates`
+  - `437`: `3770964 / 3749419` with `43 groups / 29809 candidates`
+  - `454`: `3922561 / 3900177` with `43 groups / 29809 candidates`
+  - `484`: `4183978 / 4160100` with `43 groups / 29809 candidates`
+  - `576`: `4997082 / 4968579` with `43 groups / 29809 candidates`
+  These pairs are `elapsed_millis / terminal_summary_build_millis`.
+- That rerun was manually stopped at `578` explored prefixes with
+  `frontier_queue_len = 2197`, RSS `= 1744551936`, and still
+  `0` fallback/admissibility checks.
+- The next open runtime question is now whether that same smaller retained
+  surface can also move materially past the older `1038` wall, then the older
+  `1095` stop, or reach step `5`.
+- Neither `clause-accept-rank-facts-v1` nor the newer longer rerun persisted a
+  resumable step-`4` frontier generation, so the next continuation still needs
+  another fresh intended rerun rather than `pen-cli resume`.
 - A later local-only focus-aligned competition-gate/payload-mode hoist stayed
   parity-clean in tests and replay parity, but its warm rereads landed
   `136040 us`, `137054 us`, and `140843 us` total after a `130405 us`
@@ -85,10 +107,6 @@ It lists only work that is still open.
 - [ ] Require every serious runtime slice to prove replay-harness parity plus
       either fewer exact-`nu` evaluations or lower measured aggregation time
       before another full-profile rerun.
-- [ ] On a later contender, re-earn `140/163` on the intended profile.
-- [ ] After that, re-earn `332/335` on the intended profile.
-- [ ] After that, re-earn `408/437/454/484` on the intended profile.
-- [ ] Move materially past the current winner's stored `576` wall.
 - [ ] Move materially past the deeper continuation target's stored `1038` wall
       or reach step `5`.
 - [ ] Finish one intended-profile claim run through step `15`.
