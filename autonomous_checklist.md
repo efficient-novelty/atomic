@@ -29,19 +29,21 @@ It lists only work that is still open.
   now promotes that divergent prefix to `claim_band = 9..9`, enqueues one
   root, reaches exact terminal-summary work, and still dies with exact
   partial-prefix pruning.
-- The first three captured remaining-one exact prunes are now explained on
-  test evidence: compact summary, terminal-filtered exact, and raw filtered
-  exact all agree on `CannotClearBar` with `3` admitted candidates at
-  `exact_nu = 40`, `clause_kappa = 9`.
+- The full `21`-prune remaining-one exact sweep is now explained on test
+  evidence:
+  - `9` prefixes keep the honest `40/9` ceiling with `3` admitted candidates
+  - `2` prefixes admit zero terminal candidates and retain no cached bound
+  - `10` prefixes keep an honest later `41/9` ceiling with `3` admitted
+    candidates
 - The current blocker is late-step claim viability/correctness, not inability
   to escape step `4`.
 
 ## 1. Runtime Improvement Loop
 
-- [ ] Determine whether all `21` promoted step-`14` exact partial-prefix
-      prunes share the same honest `exact_nu = 40`, `clause_kappa = 9`
-      ceiling seen on the first captured prefixes, and trace the earliest
-      accepted divergence if they do.
+- [ ] Trace why the `21` promoted step-`14` exact partial-prefix prunes split
+      into a `40/9` family, a two-prefix zero-admitted gap, and a later
+      `41/9` family, and identify the earliest accepted divergence or
+      narrower residual exact-screen bug behind the later families.
 - [ ] Require every serious runtime slice to prove replay-harness parity plus
       either fewer exact-`nu` evaluations or lower measured aggregation time
       before another full-profile rerun.

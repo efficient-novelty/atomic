@@ -8921,7 +8921,7 @@ mod tests {
         obligations::{RetentionClass, RetentionFocus, RetentionPolicy, summarize_structural_debt},
     };
     use std::cmp::Reverse;
-    use std::collections::BTreeMap;
+    use std::collections::{BTreeMap, BTreeSet};
     use std::sync::Arc;
     use std::time::Duration;
 
@@ -10830,6 +10830,106 @@ mod tests {
                 "pruned_prefix[{index}] should not hide a bar clearer behind terminal filtering"
             );
         }
+    }
+
+    #[test]
+    fn divergent_step_fourteen_exact_prunes_split_into_three_honest_families() {
+        let surface = divergent_step_fourteen_pruned_terminal_surface(21);
+        assert_eq!(
+            surface.pruned_terminal_prefixes.len(),
+            21,
+            "the divergent step-14 reproducer should still localize to the stored 21 exact prunes"
+        );
+
+        let mut families = BTreeSet::new();
+        let mut cached_bound_count = 0usize;
+        for (index, work_item) in surface.pruned_terminal_prefixes.iter().enumerate() {
+            let mut summary_cache = surface.prefix_legality_cache.clone();
+            let summary = summary_cache
+                .terminal_prefix_completion_summary(&work_item.signature)
+                .expect("pruned remaining-one prefix should retain its cached summary");
+            let mut cache = surface.prefix_legality_cache.clone();
+            let terminal_clauses = super::terminal_prefix_clause_candidates(
+                14,
+                &surface.library,
+                surface.admissibility,
+                &work_item.signature,
+                work_item.next_clauses(&surface.clause_catalog),
+                work_item.next_clause_connectivity_facts(&surface.clause_catalog),
+                work_item.next_clause_nu_facts(&surface.clause_catalog),
+                &mut cache,
+                None,
+            );
+            let filtered_direct = direct_terminal_assessment_from_terminal_candidates(
+                14,
+                &surface.library,
+                surface.admissibility,
+                surface.objective_bar,
+                &surface.nu_history,
+                &work_item.prefix_telescope,
+                &terminal_clauses,
+            );
+            let raw_direct = direct_terminal_assessment_from_raw_options(
+                14,
+                &surface.library,
+                surface.admissibility,
+                surface.objective_bar,
+                &surface.nu_history,
+                &work_item.prefix_telescope,
+                work_item.next_clauses(&surface.clause_catalog),
+            );
+
+            let filtered_bound = filtered_direct.bound;
+            let raw_bound = raw_direct.bound;
+
+            if let Some(summary_bound) = summary.bound {
+                cached_bound_count += 1;
+                assert_eq!(
+                    Some(summary_bound),
+                    filtered_bound,
+                    "pruned_prefix[{index}] changed the compact summary bound"
+                );
+                assert_eq!(
+                    super::exact_terminal_prefix_bound_decision_from_bound(
+                        surface.objective_bar,
+                        Some(summary_bound),
+                    ),
+                    super::ExactPartialPrefixBoundDecision::CannotClearBar
+                );
+            }
+            assert_eq!(
+                raw_bound, filtered_bound,
+                "pruned_prefix[{index}] changed the raw filtered exact walk bound"
+            );
+            assert_eq!(
+                raw_direct.admitted_candidate_count,
+                filtered_direct.admitted_candidate_count,
+                "pruned_prefix[{index}] changed the admitted terminal count between raw and filtered exact walks"
+            );
+            assert!(!filtered_direct.can_clear_bar);
+            assert!(!raw_direct.can_clear_bar);
+            if let Some(filtered_bound) = filtered_bound {
+                families.insert((
+                    filtered_direct.admitted_candidate_count,
+                    filtered_bound.nu_upper_bound,
+                    filtered_bound.clause_kappa_used,
+                ));
+            } else {
+                families.insert((filtered_direct.admitted_candidate_count, 0, 0));
+            }
+        }
+
+        assert_eq!(
+            cached_bound_count, 19,
+            "only the two zero-admitted prefixes should lack cached compact bounds"
+        );
+        assert_eq!(
+            families,
+            [(0_usize, 0_u16, 0_u16), (3_usize, 40_u16, 9_u16), (3_usize, 41_u16, 9_u16)]
+                .into_iter()
+                .collect(),
+            "the 21 captured step-14 exact prunes should now split into the observed zero-admitted, 40/9, and 41/9 families"
+        );
     }
 
     #[test]

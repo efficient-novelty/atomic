@@ -81,9 +81,15 @@ This note is the exact next work order for `desktop_claim_shadow`.
     candidates
   - each tops out at `exact_nu = 40` with `clause_kappa = 9`, so
     `rho = 40/9` and `CannotClearBar` is honest
-- The next blocker is therefore the divergent accepted history itself, or a
-  later still-uncaptured exact-screen family, not claim band selection, root
-  generation, or a first-prune compact-summary mismatch.
+- The full `21`-prune sweep is now also localized on stored test evidence:
+  - `9` captured prefixes land in that same honest `40/9` family
+  - `2` captured prefixes admit zero terminal candidates and retain no cached
+    bound
+  - `10` captured prefixes land in a later honest `41/9` family
+  - raw and terminal-filtered exact walks agree on all `21` captured prunes
+- The next blocker is therefore the divergent accepted history itself, or the
+  newly captured zero-admitted / `41/9` exact-screen families, not claim band
+  selection, root generation, or a first-prune compact-summary mismatch.
 
 ## Do This Next
 
@@ -100,14 +106,14 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 1. Keep the landed `claim_step_open` and `claim_root_seeding` payloads in
    place while debugging the fix.
-2. Treat the new first-prune exact-screen regression as part of the surface.
-   It now proves that the first captured prunes are not coming from:
+2. Treat the new exact-screen regressions as part of the surface.
+   They now prove that the first captured `40/9` prunes are not coming from:
    - claim terminal filtering / terminal admissibility
    - exact terminal-summary bound construction
    - `exact_terminal_prefix_bound_decision_from_bound(...)`
 3. Use the same diagnostics to decide whether the remaining zero-frontier loss
-   is now just a genuinely non-winning divergent accepted history or whether a
-   later captured prune exposes a different residual family.
+   is now just a genuinely non-winning divergent accepted history or whether
+   the later zero-admitted / `41/9` split exposes a narrower residual family.
 4. Treat the enriched failure-note shape as part of the regression surface.
 
 ### 3. Build A Reproducer Around The Finished Failure
@@ -126,12 +132,14 @@ This note is the exact next work order for `desktop_claim_shadow`.
    - raw filtered catalog exact walk `= same` bound
    - admitted candidates `= 3`
    - `exact_nu = 40`, `clause_kappa = 9`, so `rho = 40/9`
-4. Extend that capture across the rest of the `21` exact prunes and decide
-   whether:
-   - they all share the same honest `40/9` ceiling
-   - later captured prunes split into a different failure family
-   - the accepted path on steps `10..13` has already moved onto a non-winning
-     step-`14` branch
+4. Keep the new full-sweep exact-prune capture green. It now proves that the
+   `21` exact prunes split into:
+   - `9` prefixes with `3` admitted candidates at `40/9`
+   - `2` prefixes with `0` admitted terminal candidates and no cached bound
+   - `10` prefixes with `3` admitted candidates at `41/9`
+5. Trace whether the accepted path on steps `10..13` has already moved onto a
+   non-winning step-`14` branch or whether the zero-admitted / `41/9` split
+   exposes a narrower residual admissibility / exact-screen bug.
 
 ### 4. Validation Order After The Fix
 

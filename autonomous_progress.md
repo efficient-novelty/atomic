@@ -56,10 +56,17 @@ gate.
   failure from the divergent accepted prefix and now localizes the surviving
   blocker:
   reference steps `1..9`, then the stored simple chain on steps `10..13`.
-- A new exact-screen regression now captures the first remaining-one
-  step-`14` prefixes that get pruned on the real divergent discovery run and
-  compares the cached compact summary against direct exact checks on the same
-  prefix surface.
+- New exact-screen regressions now cover both the first captured
+  remaining-one step-`14` prefixes and the full `21`-prefix divergent sweep:
+  - the first captured prefixes still compare cached compact summary against
+    direct exact checks on the same prefix surface
+  - the full sweep now proves the `21` exact prunes split into three honest
+    direct-exact families:
+    - `9` prefixes with `3` admitted candidates at `exact_nu = 40`,
+      `clause_kappa = 9`
+    - `2` prefixes with `0` admitted terminal candidates and no cached bound
+    - `10` prefixes with `3` admitted candidates at `exact_nu = 41`,
+      `clause_kappa = 9`
 
 ## Latest Full-Profile Outcome
 
@@ -109,17 +116,20 @@ gate.
   - `partial_prefix_bound_prunes = 21`
   - `remaining_one_algebraic_prunes = 0`
   - `terminal_summary_build_millis > 0`
-- The first captured surviving exact prunes are now explained on stored test
+- The captured surviving exact prunes are now explained on stored test
   evidence:
-  - compact summary bound `= direct exact` bound on the terminal-filtered
-    surface
-  - raw filtered catalog exact walk `= same` bound
-  - each of the first three captured prefixes has `3` admitted terminal
-    candidates
-  - each tops out at `exact_nu = 40` with `clause_kappa = 9`, so
-    `rho = 40/9` and `CannotClearBar` is honest
-- The immediate blocker is now the divergent accepted history itself, or a
-  later still-uncaptured exact-screen family, not claim band selection, root
+  - the first `9` captured prefixes keep cached compact bounds that match
+    direct exact, with `3` admitted terminal candidates at
+    `exact_nu = 40`, `clause_kappa = 9`
+  - the next `2` captured prefixes admit zero terminal candidates and
+    therefore carry no cached bound
+  - the final `10` captured prefixes again keep cached compact bounds that
+    match direct exact, but top out at `exact_nu = 41`,
+    `clause_kappa = 9`
+  - all `21` remain honest `CannotClearBar` outcomes; none hide a bar clearer
+    behind claim terminal filtering
+- The immediate blocker is now the later split exact-screen families or the
+  already divergent accepted history, not claim band selection, root
   generation, or a first-prune compact-summary mismatch.
 
 ## Current Reference Runs
@@ -206,15 +216,21 @@ gate.
     `remaining_one_algebraic_prunes = 0` and terminal summary build now runs
   - the reproducer still dies with `21` exact partial-prefix prunes, zero
     terminal bar prunes, and zero terminal rank prunes
-- The first captured remaining-one exact prunes are no longer ambiguous:
-  - claim terminal filtering does not hide a bar clearer on those prefixes
-  - compact terminal-summary construction matches direct exact assessment
-  - `exact_terminal_prefix_bound_decision_from_bound(...)` is returning the
-    same honest `CannotClearBar` outcome that direct exact returns
-- The open diagnosis question is now whether all `21` exact prunes share that
-  same `nu = 40`, `kappa = 9` ceiling and therefore point back to an already
-  non-winning accepted divergence on steps `10` through `13`, or whether later
-  captured prunes split into a different failure family.
+- The captured remaining-one exact prunes are no longer ambiguous:
+  - `19` of the `21` captured prefixes retain cached compact bounds that
+    match direct exact assessment
+  - raw and terminal-filtered exact walks agree on all `21` captured prunes
+  - the sweep now splits into three honest families:
+    - `9` prefixes with `3` admitted candidates at `exact_nu = 40`,
+      `clause_kappa = 9`
+    - `2` prefixes with `0` admitted terminal candidates and no bound
+    - `10` prefixes with `3` admitted candidates at `exact_nu = 41`,
+      `clause_kappa = 9`
+- The open diagnosis question is no longer whether later captured prunes
+  split; they do. The next question is whether the zero-admitted pair and the
+  `41/9` family come from an already non-winning accepted divergence on
+  steps `10` through `13` or from a narrower residual admissibility /
+  exact-screen bug.
 - The compact terminal-summary path remains worth optimizing later, but it is
   no longer the first engineering dollar to spend.
 
@@ -227,9 +243,9 @@ gate.
   failure is explained.
 - Keep the landed late-step diagnostics and divergent-prefix reproducer green
   while localizing the zero-frontier loss.
-- Use the new first-prune diagnosis to decide whether the remaining narrow fix
-  belongs in backtracking the accepted divergence on steps `10` through `13`
-  or in a later still-uncaptured exact-screen family.
+- Use the new three-family exact-prune split to decide whether the remaining
+  narrow fix belongs in backtracking the accepted divergence on steps `10`
+  through `13` or in the later zero-admitted / `41/9` exact-screen family.
 - After that fix lands and replay parity holds, spend one capped intended
   rerun before committing to another full long rerun.
 
@@ -244,13 +260,14 @@ gate.
 2. Keep the landed divergent-prefix reproducer green with the promoted
    `claim_step_open = 9..9`, `roots_enqueued = 1`, and
    `remaining_one_algebraic_prunes = 0` state.
-3. Extend the new first-prune capture past the first three prefixes and decide
-   whether all `21` remaining-one exact prunes share the same
-   `exact_nu = 40`, `clause_kappa = 9` ceiling.
-4. If that ceiling stays uniform, trace back from accepted steps `10` through
-   `13` to the earliest divergence that removes every viable step-`14`
-   bar-clearer; otherwise patch the narrower residual exact-screen family that
-   later captured prefixes expose.
+3. Keep the new full-sweep exact-prune regression green. It now proves that
+   the `21` captured remaining-one exact prunes split into:
+   - `9` prefixes with `3` admitted candidates at `40/9`
+   - `2` prefixes with `0` admitted terminal candidates and no bound
+   - `10` prefixes with `3` admitted candidates at `41/9`
+4. Trace back from accepted steps `10` through `13` to the earliest
+   divergence, or the narrowest residual admissibility / exact-screen bug,
+   that creates the zero-admitted pair and the later `41/9` family.
 5. Run the targeted claim tests for the reproducer plus the late-step claim
    acceptance surface.
 6. Only if that stays clean, spend one capped intended-profile rerun against
