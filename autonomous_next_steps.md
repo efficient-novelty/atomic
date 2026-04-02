@@ -87,9 +87,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
     bound
   - `10` captured prefixes land in a later honest `41/9` family
   - raw and terminal-filtered exact walks agree on all `21` captured prunes
-- The next blocker is therefore the divergent accepted history itself, or the
-  newly captured zero-admitted / `41/9` exact-screen families, not claim band
-  selection, root generation, or a first-prune compact-summary mismatch.
+- A new hybrid-prefix cutover regression now localizes the earliest failure:
+  - the pure reference step-`13` history still reaches step `14`
+  - that winning reference surface already carries `54` zero-admitted
+    remaining-one exact prunes
+  - replacing only step `13` with the stored divergent acceptance is already
+    enough to make step `14` fail
+  - that cutover preserves the same `54` zero-admitted baseline but adds `27`
+    admitted `kappa = 9` prunes at `50/9` and `51/9`
+  - earlier divergences on steps `10..12` only deform that already-failing
+    admitted family
+- The next blocker is therefore the admitted step-`13`-driven `kappa = 9`
+  failure family, not claim band selection, root generation, the reference
+  zero-admitted family, or a first-prune compact-summary mismatch.
 
 ## Do This Next
 
@@ -113,7 +123,7 @@ This note is the exact next work order for `desktop_claim_shadow`.
    - `exact_terminal_prefix_bound_decision_from_bound(...)`
 3. Use the same diagnostics to decide whether the remaining zero-frontier loss
    is now just a genuinely non-winning divergent accepted history or whether
-   the later zero-admitted / `41/9` split exposes a narrower residual family.
+   the divergent step-`13` acceptance exposes a narrower residual family.
 4. Treat the enriched failure-note shape as part of the regression surface.
 
 ### 3. Build A Reproducer Around The Finished Failure
@@ -137,9 +147,14 @@ This note is the exact next work order for `desktop_claim_shadow`.
    - `9` prefixes with `3` admitted candidates at `40/9`
    - `2` prefixes with `0` admitted terminal candidates and no cached bound
    - `10` prefixes with `3` admitted candidates at `41/9`
-5. Trace whether the accepted path on steps `10..13` has already moved onto a
-   non-winning step-`14` branch or whether the zero-admitted / `41/9` split
-   exposes a narrower residual admissibility / exact-screen bug.
+5. Keep the new hybrid cutover regression green. It now proves that:
+   - the reference step-`14` winner already carries `54` zero-admitted
+     remaining-one prunes
+   - step `13` is the first divergence that flips step `14` into failure
+   - that cutover adds `27` admitted `kappa = 9` prunes at `50/9` and `51/9`
+6. Compare the divergent accepted step-`13` telescope against the reference
+   step-`13` winner and trace which structural delta creates those admitted
+   `50/9` and `51/9` step-`14` families.
 
 ### 4. Validation Order After The Fix
 

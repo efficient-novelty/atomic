@@ -67,6 +67,18 @@ gate.
     - `2` prefixes with `0` admitted terminal candidates and no cached bound
     - `10` prefixes with `3` admitted candidates at `exact_nu = 41`,
       `clause_kappa = 9`
+- A new hybrid-prefix regression now traces the earliest late-step cutover:
+  - the pure reference step-`13` history still reaches step `14`
+  - that winning reference surface already carries `54` zero-admitted
+    remaining-one exact prunes and no cached compact bounds
+  - replacing only step `13` with the stored divergent acceptance is already
+    enough to make step `14` fail
+  - that step-`13` cutover preserves the same `54` zero-admitted baseline but
+    adds `27` admitted `kappa = 9` prunes:
+    - `9` at `exact_nu = 50`
+    - `18` at `exact_nu = 51`
+  - earlier divergences on steps `10..12` only deform that already-failing
+    admitted family; they are not needed to trigger the failure
 
 ## Latest Full-Profile Outcome
 
@@ -128,9 +140,10 @@ gate.
     `clause_kappa = 9`
   - all `21` remain honest `CannotClearBar` outcomes; none hide a bar clearer
     behind claim terminal filtering
-- The immediate blocker is now the later split exact-screen families or the
-  already divergent accepted history, not claim band selection, root
-  generation, or a first-prune compact-summary mismatch.
+- The immediate blocker is now the admitted `kappa = 9` failure family that
+  first appears once step `13` diverges, not claim band selection, root
+  generation, or the zero-admitted family that the reference path already
+  survives.
 
 ## Current Reference Runs
 
@@ -226,11 +239,13 @@ gate.
     - `2` prefixes with `0` admitted terminal candidates and no bound
     - `10` prefixes with `3` admitted candidates at `exact_nu = 41`,
       `clause_kappa = 9`
-- The open diagnosis question is no longer whether later captured prunes
-  split; they do. The next question is whether the zero-admitted pair and the
-  `41/9` family come from an already non-winning accepted divergence on
-  steps `10` through `13` or from a narrower residual admissibility /
-  exact-screen bug.
+- The hybrid cutover is now no longer ambiguous either:
+  - the reference step-`14` winner already coexists with a `54`-prefix
+    zero-admitted remaining-one prune family
+  - step `13` is the earliest divergence that flips step `14` into failure
+  - the new admitted `kappa = 9` failure family therefore localizes to the
+    step-`13` accepted divergence itself, or to a narrower admissibility /
+    exact-screen bug that only that step-`13` acceptance opens
 - The compact terminal-summary path remains worth optimizing later, but it is
   no longer the first engineering dollar to spend.
 
@@ -243,9 +258,10 @@ gate.
   failure is explained.
 - Keep the landed late-step diagnostics and divergent-prefix reproducer green
   while localizing the zero-frontier loss.
-- Use the new three-family exact-prune split to decide whether the remaining
-  narrow fix belongs in backtracking the accepted divergence on steps `10`
-  through `13` or in the later zero-admitted / `41/9` exact-screen family.
+- Use the new step-`13` cutover regression to decide whether the remaining
+  narrow fix belongs in backtracking the accepted step-`13` divergence or in a
+  narrower admissibility / exact-screen bug that the divergent step-`13`
+  telescope opens.
 - After that fix lands and replay parity holds, spend one capped intended
   rerun before committing to another full long rerun.
 
@@ -265,10 +281,14 @@ gate.
    - `9` prefixes with `3` admitted candidates at `40/9`
    - `2` prefixes with `0` admitted terminal candidates and no bound
    - `10` prefixes with `3` admitted candidates at `41/9`
-4. Trace back from accepted steps `10` through `13` to the earliest
-   divergence, or the narrowest residual admissibility / exact-screen bug,
-   that creates the zero-admitted pair and the later `41/9` family.
-5. Run the targeted claim tests for the reproducer plus the late-step claim
+4. Keep the new hybrid cutover regression green. It now proves that:
+   - the reference step-`14` winner already carries `54` zero-admitted prunes
+   - step `13` is the first divergence that flips step `14` into failure
+   - that cutover adds `27` admitted `kappa = 9` prunes at `50/9` and `51/9`
+5. Compare the divergent accepted step-`13` telescope against the reference
+   step-`13` winner and trace which structural delta creates those admitted
+   `50/9` and `51/9` step-`14` families.
+6. Run the targeted claim tests for the reproducer plus the late-step claim
    acceptance surface.
-6. Only if that stays clean, spend one capped intended-profile rerun against
+7. Only if that stays clean, spend one capped intended-profile rerun against
    the `139`-prefix short-loop gate before authorizing another full rerun.

@@ -35,15 +35,21 @@ It lists only work that is still open.
   - `2` prefixes admit zero terminal candidates and retain no cached bound
   - `10` prefixes keep an honest later `41/9` ceiling with `3` admitted
     candidates
+- A new hybrid cutover regression now proves that the zero-admitted family is
+  not the blocker:
+  - the reference step-`14` winner already coexists with `54` zero-admitted
+    remaining-one prunes
+  - step `13` is the first divergence that flips step `14` into failure
+  - that cutover adds `27` admitted `kappa = 9` prunes at `50/9` and `51/9`
 - The current blocker is late-step claim viability/correctness, not inability
   to escape step `4`.
 
 ## 1. Runtime Improvement Loop
 
-- [ ] Trace why the `21` promoted step-`14` exact partial-prefix prunes split
-      into a `40/9` family, a two-prefix zero-admitted gap, and a later
-      `41/9` family, and identify the earliest accepted divergence or
-      narrower residual exact-screen bug behind the later families.
+- [ ] Compare the divergent accepted step-`13` telescope against the
+      reference step-`13` winner and identify which structural delta creates
+      the admitted `50/9` and `51/9` step-`14` failure families on top of the
+      zero-admitted baseline that the reference path already survives.
 - [ ] Require every serious runtime slice to prove replay-harness parity plus
       either fewer exact-`nu` evaluations or lower measured aggregation time
       before another full-profile rerun.

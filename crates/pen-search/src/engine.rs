@@ -8921,7 +8921,7 @@ mod tests {
         obligations::{RetentionClass, RetentionFocus, RetentionPolicy, summarize_structural_debt},
     };
     use std::cmp::Reverse;
-    use std::collections::{BTreeMap, BTreeSet};
+    use std::collections::BTreeMap;
     use std::sync::Arc;
     use std::time::Duration;
 
@@ -9005,6 +9005,22 @@ mod tests {
                 formation_pi(Expr::Var(1), Expr::Var(1)),
                 formation_pi(Expr::Lib(lib_ref), Expr::Var(1)),
             ]));
+        }
+        prefix
+    }
+
+    fn claim_long_rerun_v3_hybrid_prefix(divergent_from_step: Option<u32>) -> Vec<Telescope> {
+        let mut prefix = reference_prefix(13);
+        let divergent = claim_long_rerun_v3_divergent_prefix();
+        if let Some(start_step) = divergent_from_step {
+            assert!(
+                (10..=13).contains(&start_step),
+                "hybrid divergent suffix must start inside steps 10..13"
+            );
+            for step_index in start_step..=13 {
+                let slot = usize::try_from(step_index - 1).expect("step index exceeded usize");
+                prefix[slot] = divergent[slot].clone();
+            }
         }
         prefix
     }
@@ -9156,14 +9172,29 @@ mod tests {
         objective_bar: Rational,
         clause_catalog: ClauseCatalog,
         prefix_legality_cache: PrefixLegalityCache,
+        raw_generated_surface: usize,
+        roots_seen: usize,
+        roots_enqueued: usize,
+        partial_prefix_bound_prunes: usize,
         pruned_terminal_prefixes: Vec<OnlinePrefixWorkItem>,
     }
 
-    fn divergent_step_fourteen_pruned_terminal_surface(
+    #[derive(Clone, Debug, Default, Eq, PartialEq)]
+    struct StepFourteenExactPruneFamilySummary {
+        raw_generated_surface: usize,
+        roots_seen: usize,
+        roots_enqueued: usize,
+        partial_prefix_bound_prunes: usize,
+        captured_prefixes: usize,
+        cached_bound_count: usize,
+        family_counts: BTreeMap<(usize, Option<u16>, Option<u16>), usize>,
+    }
+
+    fn step_fourteen_pruned_terminal_surface_from_prefix(
+        prefix: &[Telescope],
         limit: usize,
     ) -> DivergentStepFourteenPrunedTerminalSurface {
-        let prefix = claim_long_rerun_v3_divergent_prefix();
-        let (library, history, nu_history) = history_from_prefix(&prefix);
+        let (library, history, nu_history) = history_from_prefix(prefix);
         let admissibility =
             strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::DesktopClaimShadow);
         let structural_debt = summarize_structural_debt(&library, 2);
@@ -9210,7 +9241,92 @@ mod tests {
             objective_bar,
             clause_catalog,
             prefix_legality_cache: discovery.prefix_legality_cache,
+            raw_generated_surface: discovery.raw_generated_surface,
+            roots_seen: discovery.claim_root_seeding.roots_seen,
+            roots_enqueued: discovery.claim_root_seeding.roots_enqueued,
+            partial_prefix_bound_prunes: discovery.partial_prefix_bound_prunes,
             pruned_terminal_prefixes,
+        }
+    }
+
+    fn divergent_step_fourteen_pruned_terminal_surface(
+        limit: usize,
+    ) -> DivergentStepFourteenPrunedTerminalSurface {
+        let prefix = claim_long_rerun_v3_divergent_prefix();
+        step_fourteen_pruned_terminal_surface_from_prefix(&prefix, limit)
+    }
+
+    fn step_fourteen_exact_prune_family_summary(
+        prefix: &[Telescope],
+        limit: usize,
+    ) -> StepFourteenExactPruneFamilySummary {
+        let surface = step_fourteen_pruned_terminal_surface_from_prefix(prefix, limit);
+        let mut family_counts = BTreeMap::new();
+        let mut cached_bound_count = 0usize;
+        for work_item in &surface.pruned_terminal_prefixes {
+            let mut summary_cache = surface.prefix_legality_cache.clone();
+            let summary = summary_cache
+                .terminal_prefix_completion_summary(&work_item.signature)
+                .expect("pruned remaining-one prefix should retain its cached summary");
+            let mut cache = surface.prefix_legality_cache.clone();
+            let terminal_clauses = super::terminal_prefix_clause_candidates(
+                14,
+                &surface.library,
+                surface.admissibility,
+                &work_item.signature,
+                work_item.next_clauses(&surface.clause_catalog),
+                work_item.next_clause_connectivity_facts(&surface.clause_catalog),
+                work_item.next_clause_nu_facts(&surface.clause_catalog),
+                &mut cache,
+                None,
+            );
+            let filtered_direct = direct_terminal_assessment_from_terminal_candidates(
+                14,
+                &surface.library,
+                surface.admissibility,
+                surface.objective_bar,
+                &surface.nu_history,
+                &work_item.prefix_telescope,
+                &terminal_clauses,
+            );
+            let raw_direct = direct_terminal_assessment_from_raw_options(
+                14,
+                &surface.library,
+                surface.admissibility,
+                surface.objective_bar,
+                &surface.nu_history,
+                &work_item.prefix_telescope,
+                work_item.next_clauses(&surface.clause_catalog),
+            );
+
+            if summary.bound.is_some() {
+                cached_bound_count += 1;
+            }
+            assert_eq!(summary.bound, filtered_direct.bound);
+            assert_eq!(raw_direct.bound, filtered_direct.bound);
+            assert_eq!(
+                raw_direct.admitted_candidate_count,
+                filtered_direct.admitted_candidate_count
+            );
+            assert!(!filtered_direct.can_clear_bar);
+            assert!(!raw_direct.can_clear_bar);
+
+            let key = (
+                filtered_direct.admitted_candidate_count,
+                filtered_direct.bound.map(|bound| bound.nu_upper_bound),
+                filtered_direct.bound.map(|bound| bound.clause_kappa_used),
+            );
+            *family_counts.entry(key).or_insert(0) += 1;
+        }
+
+        StepFourteenExactPruneFamilySummary {
+            raw_generated_surface: surface.raw_generated_surface,
+            roots_seen: surface.roots_seen,
+            roots_enqueued: surface.roots_enqueued,
+            partial_prefix_bound_prunes: surface.partial_prefix_bound_prunes,
+            captured_prefixes: surface.pruned_terminal_prefixes.len(),
+            cached_bound_count,
+            family_counts,
         }
     }
 
@@ -10834,102 +10950,167 @@ mod tests {
 
     #[test]
     fn divergent_step_fourteen_exact_prunes_split_into_three_honest_families() {
-        let surface = divergent_step_fourteen_pruned_terminal_surface(21);
-        assert_eq!(
-            surface.pruned_terminal_prefixes.len(),
+        let summary = step_fourteen_exact_prune_family_summary(
+            &claim_long_rerun_v3_divergent_prefix(),
             21,
+        );
+        assert_eq!(
+            summary.captured_prefixes, 21,
             "the divergent step-14 reproducer should still localize to the stored 21 exact prunes"
         );
-
-        let mut families = BTreeSet::new();
-        let mut cached_bound_count = 0usize;
-        for (index, work_item) in surface.pruned_terminal_prefixes.iter().enumerate() {
-            let mut summary_cache = surface.prefix_legality_cache.clone();
-            let summary = summary_cache
-                .terminal_prefix_completion_summary(&work_item.signature)
-                .expect("pruned remaining-one prefix should retain its cached summary");
-            let mut cache = surface.prefix_legality_cache.clone();
-            let terminal_clauses = super::terminal_prefix_clause_candidates(
-                14,
-                &surface.library,
-                surface.admissibility,
-                &work_item.signature,
-                work_item.next_clauses(&surface.clause_catalog),
-                work_item.next_clause_connectivity_facts(&surface.clause_catalog),
-                work_item.next_clause_nu_facts(&surface.clause_catalog),
-                &mut cache,
-                None,
-            );
-            let filtered_direct = direct_terminal_assessment_from_terminal_candidates(
-                14,
-                &surface.library,
-                surface.admissibility,
-                surface.objective_bar,
-                &surface.nu_history,
-                &work_item.prefix_telescope,
-                &terminal_clauses,
-            );
-            let raw_direct = direct_terminal_assessment_from_raw_options(
-                14,
-                &surface.library,
-                surface.admissibility,
-                surface.objective_bar,
-                &surface.nu_history,
-                &work_item.prefix_telescope,
-                work_item.next_clauses(&surface.clause_catalog),
-            );
-
-            let filtered_bound = filtered_direct.bound;
-            let raw_bound = raw_direct.bound;
-
-            if let Some(summary_bound) = summary.bound {
-                cached_bound_count += 1;
-                assert_eq!(
-                    Some(summary_bound),
-                    filtered_bound,
-                    "pruned_prefix[{index}] changed the compact summary bound"
-                );
-                assert_eq!(
-                    super::exact_terminal_prefix_bound_decision_from_bound(
-                        surface.objective_bar,
-                        Some(summary_bound),
-                    ),
-                    super::ExactPartialPrefixBoundDecision::CannotClearBar
-                );
-            }
-            assert_eq!(
-                raw_bound, filtered_bound,
-                "pruned_prefix[{index}] changed the raw filtered exact walk bound"
-            );
-            assert_eq!(
-                raw_direct.admitted_candidate_count,
-                filtered_direct.admitted_candidate_count,
-                "pruned_prefix[{index}] changed the admitted terminal count between raw and filtered exact walks"
-            );
-            assert!(!filtered_direct.can_clear_bar);
-            assert!(!raw_direct.can_clear_bar);
-            if let Some(filtered_bound) = filtered_bound {
-                families.insert((
-                    filtered_direct.admitted_candidate_count,
-                    filtered_bound.nu_upper_bound,
-                    filtered_bound.clause_kappa_used,
-                ));
-            } else {
-                families.insert((filtered_direct.admitted_candidate_count, 0, 0));
-            }
-        }
-
         assert_eq!(
-            cached_bound_count, 19,
+            summary.cached_bound_count, 19,
             "only the two zero-admitted prefixes should lack cached compact bounds"
         );
         assert_eq!(
-            families,
-            [(0_usize, 0_u16, 0_u16), (3_usize, 40_u16, 9_u16), (3_usize, 41_u16, 9_u16)]
-                .into_iter()
-                .collect(),
+            summary.family_counts,
+            [
+                ((0_usize, None, None), 2_usize),
+                ((3_usize, Some(40_u16), Some(9_u16)), 9_usize),
+                ((3_usize, Some(41_u16), Some(9_u16)), 10_usize),
+            ]
+            .into_iter()
+            .collect(),
             "the 21 captured step-14 exact prunes should now split into the observed zero-admitted, 40/9, and 41/9 families"
         );
+    }
+
+    #[test]
+    fn step_thirteen_divergence_is_the_first_step_fourteen_failure_cutover() {
+        let variants = [
+            (
+                "reference",
+                None,
+                true,
+                157_usize,
+                18_usize,
+                54_usize,
+                0_usize,
+                [((0_usize, None, None), 54_usize)]
+                    .into_iter()
+                    .collect::<BTreeMap<_, _>>(),
+            ),
+            (
+                "diverge_from_13",
+                Some(13),
+                false,
+                40_usize,
+                21_usize,
+                81_usize,
+                27_usize,
+                [
+                    ((0_usize, None, None), 54_usize),
+                    ((3_usize, Some(50_u16), Some(9_u16)), 9_usize),
+                    ((3_usize, Some(51_u16), Some(9_u16)), 18_usize),
+                ]
+                .into_iter()
+                .collect::<BTreeMap<_, _>>(),
+            ),
+            (
+                "diverge_from_12",
+                Some(12),
+                false,
+                40_usize,
+                21_usize,
+                81_usize,
+                27_usize,
+                [
+                    ((0_usize, None, None), 54_usize),
+                    ((3_usize, Some(45_u16), Some(9_u16)), 9_usize),
+                    ((3_usize, Some(46_u16), Some(9_u16)), 18_usize),
+                ]
+                .into_iter()
+                .collect::<BTreeMap<_, _>>(),
+            ),
+            (
+                "diverge_from_11",
+                Some(11),
+                false,
+                40_usize,
+                21_usize,
+                81_usize,
+                27_usize,
+                [
+                    ((0_usize, None, None), 54_usize),
+                    ((3_usize, Some(39_u16), Some(9_u16)), 9_usize),
+                    ((3_usize, Some(40_u16), Some(9_u16)), 18_usize),
+                ]
+                .into_iter()
+                .collect::<BTreeMap<_, _>>(),
+            ),
+            (
+                "diverge_from_10",
+                Some(10),
+                false,
+                40_usize,
+                21_usize,
+                81_usize,
+                27_usize,
+                [
+                    ((0_usize, None, None), 54_usize),
+                    ((3_usize, Some(40_u16), Some(9_u16)), 9_usize),
+                    ((3_usize, Some(41_u16), Some(9_u16)), 18_usize),
+                ]
+                .into_iter()
+                .collect::<BTreeMap<_, _>>(),
+            ),
+        ];
+
+        for (
+            label,
+            divergent_from_step,
+            expect_search_ok,
+            expected_raw_generated_surface,
+            expected_partial_prefix_bound_prunes,
+            expected_captured_prefixes,
+            expected_cached_bound_count,
+            expected_family_counts,
+        ) in variants
+        {
+            let prefix = claim_long_rerun_v3_hybrid_prefix(divergent_from_step);
+            let outcome = search_bootstrap_from_prefix_for_profile_with_runtime(
+                &prefix,
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            );
+            let summary = step_fourteen_exact_prune_family_summary(&prefix, usize::MAX);
+
+            assert_eq!(
+                outcome.is_ok(),
+                expect_search_ok,
+                "{label} changed whether step 14 can still complete"
+            );
+            assert_eq!(
+                summary.raw_generated_surface, expected_raw_generated_surface,
+                "{label} changed the raw step-14 surface width"
+            );
+            assert_eq!(
+                summary.roots_seen, 1,
+                "{label} changed the promoted late-step root count"
+            );
+            assert_eq!(
+                summary.roots_enqueued, 1,
+                "{label} changed the enqueued late-step root count"
+            );
+            assert_eq!(
+                summary.partial_prefix_bound_prunes, expected_partial_prefix_bound_prunes,
+                "{label} changed the exact partial-prefix prune total"
+            );
+            assert_eq!(
+                summary.captured_prefixes, expected_captured_prefixes,
+                "{label} changed the full captured remaining-one prune surface"
+            );
+            assert_eq!(
+                summary.cached_bound_count, expected_cached_bound_count,
+                "{label} changed the number of cached compact bounds on the captured prune surface"
+            );
+            assert_eq!(
+                summary.family_counts, expected_family_counts,
+                "{label} changed the captured exact-prune family split"
+            );
+        }
     }
 
     #[test]
