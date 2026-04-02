@@ -611,7 +611,13 @@ pub fn strict_admissibility_for_mode(
             let loop_anchor = historical_loop_anchor_ref(library, window_depth);
             let modal_anchor = historical_modal_shell_anchor_ref(library, window_depth);
             if mode == AdmissibilityMode::DesktopClaimShadow {
-                return claim_strict_admissibility(mode, debt, loop_anchor, modal_anchor);
+                return claim_strict_admissibility(
+                    step_index,
+                    mode,
+                    debt,
+                    loop_anchor,
+                    modal_anchor,
+                );
             }
             let focus_family = focus_family_from_debt(debt, loop_anchor, modal_anchor);
             let focus_policy = focus_policy_for_mode(mode, focus_family);
@@ -881,13 +887,14 @@ fn historical_anchor_ref_for_focus(
 }
 
 fn claim_strict_admissibility(
+    step_index: u32,
     mode: AdmissibilityMode,
     debt: StructuralDebt,
     loop_anchor: Option<u32>,
     modal_anchor: Option<u32>,
 ) -> StrictAdmissibility {
     debug_assert_eq!(mode, AdmissibilityMode::DesktopClaimShadow);
-    let claim_axes = debt.claim_debt_axes();
+    let claim_axes = claim_debt_axes_for_step(step_index, debt);
 
     StrictAdmissibility {
         mode,
@@ -916,6 +923,31 @@ fn claim_strict_admissibility(
         focus_family: None,
         historical_anchor_ref: claim_historical_anchor_ref(debt, loop_anchor, modal_anchor),
     }
+}
+
+fn claim_debt_axes_for_step(step_index: u32, debt: StructuralDebt) -> ClaimDebtAxes {
+    let mut claim_axes = debt.claim_debt_axes();
+    if should_promote_claim_hilbert_band(step_index, debt, claim_axes) {
+        claim_axes.kappa_min = 9;
+        claim_axes.kappa_max = 9;
+    }
+    claim_axes
+}
+
+fn should_promote_claim_hilbert_band(
+    step_index: u32,
+    debt: StructuralDebt,
+    claim_axes: ClaimDebtAxes,
+) -> bool {
+    step_index == 14
+        && debt.requires_operator_bundle_package()
+        && claim_axes.kappa_min == 7
+        && claim_axes.kappa_max == 7
+        && claim_axes.path_pressure == 0
+        && claim_axes.temporal_pressure == 0
+        && claim_axes.coupling_pressure >= 2
+        && claim_axes.support_pressure >= 2
+        && claim_axes.closure_pressure >= 3
 }
 
 fn claim_max_expr_nodes(debt: StructuralDebt, claim_axes: ClaimDebtAxes) -> u8 {

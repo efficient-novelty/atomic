@@ -43,7 +43,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - step `11`: `nu_delta = -10`, `clause_kappa_delta = -2`
   - step `12`: `nu_delta = -17`, `clause_kappa_delta = -3`
   - step `13`: `nu_delta = -27`, `clause_kappa_delta = -4`
-- Step `14` never entered real search. Its only live checkpoint shows:
+- Step `14` never entered real search on the stored full-profile run. Its only
+  live checkpoint there shows:
   - `clause_kappa = 7`
   - `raw_catalog_clause_widths = [3,1,1,1,1,1,1]`
   - `raw_catalog_telescope_count = 3`
@@ -55,15 +56,25 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - `claim_root_seeding` on claim live checkpoints and step summaries
   - enriched late-step zero-candidate failure notes with claim band plus root
     counts
-- The new targeted reproducer now confirms the divergent step-`14` opening:
-  - claim band `7..7`
+- The new targeted reproducer now promotes and re-localizes that divergent
+  step-`14` opening:
+  - claim band `9..9`
   - late-family surface `claim_generic`
   - operator-band opener `= true`
   - hilbert / temporal openers `= false`
-  - `roots_seen = 3`
-  - `roots_enqueued = 0`
-- The next blocker is therefore late-step claim viability and root generation,
-  not another step-`4` continuation read.
+  - raw debt axes still `kappa = 7..7`
+  - `raw_catalog_clause_widths = [1,3,1,1,1,3,3,3,3]`
+  - `roots_seen = 1`
+  - `roots_enqueued = 1`
+  - `raw_generated_surface = 40`
+  - `prefixes_created = 40`
+  - `prefix_states_explored = 10`
+  - `partial_prefix_bound_checks = 21`
+  - `partial_prefix_bound_prunes = 21`
+  - `remaining_one_algebraic_prunes = 0`
+  - `terminal_summary_build_millis > 0`
+- The next blocker is therefore exact partial-prefix screening on the promoted
+  step-`14` claim Hilbert band, not claim band selection or root generation.
 
 ## Do This Next
 
@@ -81,10 +92,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
 1. Keep the landed `claim_step_open` and `claim_root_seeding` payloads in
    place while debugging the fix.
 2. Use them to decide whether the step-`14` zero-frontier loss comes from:
-   - claim debt / clause-band selection
-   - clause-catalog construction
-   - `PrefixLegalityCache::insert_root(...)`
-   - `screen_prefix_for_frontier(...)`
+   - claim terminal filtering / terminal admissibility
+   - exact terminal-summary bound construction
+   - `exact_terminal_prefix_bound_decision_from_bound(...)`
+   - direct exact bar-clearance on the divergent accepted history
 3. Treat the new enriched failure-note shape as part of the regression surface.
 
 ### 3. Build A Reproducer Around The Finished Failure
@@ -92,13 +103,20 @@ This note is the exact next work order for `desktop_claim_shadow`.
 1. Keep the landed reproducer around the finished claim history green:
    reference steps `1..9`, then the stored divergent simple chain on
    steps `10..13`.
-2. Compare that divergent history against the reference-style late-step claim
-   tests that expect the step-`14` Hilbert band to open at `kappa = 9`.
-3. Localize whether the zero-candidate failure comes from:
-   - claim debt / clause-band selection
-   - clause-catalog construction
-   - `PrefixLegalityCache::insert_root(...)`
-   - `screen_prefix_for_frontier(...)`
+2. Keep the promoted reproducer expectations green:
+   - `claim_step_open = 9..9`
+   - `claim_debt_axes = 7..7`
+   - `roots_enqueued = 1`
+   - `remaining_one_algebraic_prunes = 0`
+3. Capture the first remaining-one step-`14` prefixes that still get
+   `CannotClearBar` and compare:
+   - the compact terminal-summary bound
+   - the direct exact assessment on the same prefix
+4. Decide whether the remaining zero-candidate failure comes from:
+   - claim terminal filtering / terminal admissibility
+   - exact terminal-summary bound construction
+   - `exact_terminal_prefix_bound_decision_from_bound(...)`
+   - a genuinely non-winning divergent accepted history
 
 ### 4. Validation Order After The Fix
 
@@ -126,7 +144,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 ### 5. Optimization Order After Step-14 Is Viable
 
-1. First priority: restore non-zero step-`14` search and late-step progress.
+1. First priority: keep the restored non-zero step-`14` search and repair the
+   surviving exact-screen blocker on that promoted Hilbert-band surface.
 2. Second priority: if the failure is fixed and the lane is back to being
    runtime-limited, return to the compact terminal-summary path, especially its
    connectivity, exact-`nu`, and aggregation costs.

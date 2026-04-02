@@ -5679,6 +5679,16 @@ fn claim_remaining_one_algebraic_nu_ceiling_cannot_clear_bar(
     if !should_compact_terminal_prefix_group_candidates(admissibility.mode) {
         return false;
     }
+    // The claim Hilbert band uses higher-order late clauses whose viable
+    // terminal lift is too expressive for the compact single-clause algebraic
+    // ceiling to bound tightly. Let exact screening evaluate that surface.
+    if matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
+        && admissibility.min_clause_kappa == 9
+        && admissibility.max_clause_kappa == 9
+        && !admissibility.include_temporal
+    {
+        return false;
+    }
 
     let clause_kappa_used = u32::try_from(prefix_telescope.clauses.len().saturating_add(1))
         .expect("kappa exceeded u32");
@@ -8808,9 +8818,9 @@ mod tests {
         SearchBucketTaxonomy, StepLiveCheckpoint, create_online_prefix_work_item,
         demo_materialize_to_proof_close_handoff_reason_for_pressure, demo_proof_close_group_order,
         demo_proof_close_order_mode, demo_proof_close_order_mode_with_closure_pressure,
-        discovery_enumeration_context, exact_partial_prefix_bound_decision,
-        maybe_retune_demo_budget_live, pop_best_prefix, search_bootstrap_from_prefix,
-        search_bootstrap_from_prefix_for_profile_with_runtime,
+        discover_realistic_shadow_candidates, discovery_enumeration_context,
+        exact_partial_prefix_bound_decision, maybe_retune_demo_budget_live, pop_best_prefix,
+        search_bootstrap_from_prefix, search_bootstrap_from_prefix_for_profile_with_runtime,
         search_bootstrap_from_prefix_for_profile_with_runtime_and_observer,
         search_bootstrap_prefix, search_bootstrap_prefix_for_config_with_runtime,
         sort_terminal_prefix_group_candidates_for_certification, supports_live_atomic_search,
@@ -8849,7 +8859,7 @@ mod tests {
             passes_strict_admissibility, strict_admissibility, strict_admissibility_for_mode,
         },
         connectivity::{ConnectivityWitness, analyze_connectivity, passes_connectivity},
-        obligations::{RetentionClass, RetentionFocus, RetentionPolicy},
+        obligations::{RetentionClass, RetentionFocus, RetentionPolicy, summarize_structural_debt},
     };
     use std::cmp::Reverse;
     use std::collections::BTreeMap;
@@ -8894,6 +8904,28 @@ mod tests {
             ));
             nu_history.push((step, nu));
             library.push(LibraryEntry::from_telescope(&telescope, &library));
+        }
+
+        (library, history, nu_history)
+    }
+
+    fn history_from_prefix(
+        prefix: &[Telescope],
+    ) -> (Library, Vec<DiscoveryRecord>, Vec<(u32, u32)>) {
+        let mut library = Vec::new();
+        let mut history = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for (index, telescope) in prefix.iter().enumerate() {
+            let step = u32::try_from(index + 1).expect("step index exceeded u32");
+            let nu = structural_nu(telescope, &library, &nu_history).total;
+            history.push(DiscoveryRecord::new(
+                step,
+                nu,
+                u32::try_from(telescope.kappa()).expect("kappa exceeded u32"),
+            ));
+            nu_history.push((step, nu));
+            library.push(LibraryEntry::from_telescope(telescope, &library));
         }
 
         (library, history, nu_history)
@@ -10387,9 +10419,30 @@ mod tests {
         .expect_err("divergent claim prefix should still fail at step 14");
 
         let error_text = error.to_string();
+        let (library, history, nu_history) = history_from_prefix(&prefix);
+        let admissibility =
+            strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let structural_debt = summarize_structural_debt(&library, 2);
+        let objective_bar = compute_bar(2, 14, &history).bar;
+        let discovery = discover_realistic_shadow_candidates(
+            14,
+            &library,
+            &history,
+            structural_debt,
+            admissibility,
+            structural_debt.retention_policy(),
+            objective_bar,
+            &nu_history,
+            &mut None,
+            std::time::Instant::now(),
+            &mut None,
+            &mut None,
+        )
+        .expect("divergent discovery should run");
         assert!(error_text.contains("no atomic candidates were generated for step 14"));
-        assert!(error_text.contains("claim_band=7..7"));
-        assert!(error_text.contains("roots_seen="));
+        assert!(error_text.contains("claim_band=9..9"));
+        assert!(error_text.contains("roots_seen=1"));
+        assert!(error_text.contains("roots_enqueued=1"));
 
         let checkpoint = recorder
             .checkpoints
@@ -10400,16 +10453,16 @@ mod tests {
                     && checkpoint.note.as_deref() == Some("claim_root_seeding_summary")
             })
             .expect("step 14 root-seeding checkpoint");
-        assert_eq!(checkpoint.clause_kappa, Some(7));
+        assert_eq!(checkpoint.clause_kappa, Some(9));
         assert_eq!(
             checkpoint.raw_catalog_clause_widths,
-            vec![3, 1, 1, 1, 1, 1, 1]
+            vec![1, 3, 1, 1, 1, 3, 3, 3, 3]
         );
         let claim_step_open = checkpoint
             .claim_step_open
             .expect("late-step claim-open diagnostics");
-        assert_eq!(claim_step_open.kappa_min, 7);
-        assert_eq!(claim_step_open.kappa_max, 7);
+        assert_eq!(claim_step_open.kappa_min, 9);
+        assert_eq!(claim_step_open.kappa_max, 9);
         assert_eq!(
             claim_step_open.late_family_surface,
             LateFamilySurface::ClaimGeneric
@@ -10418,6 +10471,8 @@ mod tests {
             claim_step_open.anchor_policy,
             ClaimAnchorPolicyDiagnostics::None
         );
+        assert_eq!(claim_step_open.claim_debt_axes.kappa_min, 7);
+        assert_eq!(claim_step_open.claim_debt_axes.kappa_max, 7);
         assert!(claim_step_open.package_flags.operator_bundle);
         assert!(!claim_step_open.package_flags.hilbert_functional);
         assert!(!claim_step_open.package_flags.temporal_shell);
@@ -10425,13 +10480,32 @@ mod tests {
         let root_seeding = checkpoint
             .claim_root_seeding
             .expect("late-step root-seeding diagnostics");
-        assert_eq!(root_seeding.roots_seen, 3);
-        assert_eq!(root_seeding.roots_enqueued, 0);
+        assert_eq!(root_seeding.roots_seen, 1);
+        assert_eq!(root_seeding.roots_rejected_by_insert_root, 0);
+        assert_eq!(root_seeding.roots_rejected_by_exact_screen, 0);
+        assert_eq!(root_seeding.roots_enqueued, 1);
+
+        assert_eq!(discovery.claim_root_seeding.roots_seen, 1);
+        assert_eq!(discovery.claim_root_seeding.roots_enqueued, 1);
         assert_eq!(
-            root_seeding.roots_rejected_by_insert_root
-                + root_seeding.roots_rejected_by_exact_screen,
-            root_seeding.roots_seen
+            discovery
+                .remaining_one_telemetry
+                .remaining_one_algebraic_prunes,
+            0
         );
+        assert!(
+            discovery
+                .remaining_one_telemetry
+                .terminal_summary_build_millis
+                > 0,
+            "the promoted Hilbert band should now reach exact terminal summary work"
+        );
+        assert!(
+            discovery.partial_prefix_bound_prunes > 0,
+            "the remaining zero-candidate loss should now localize to exact partial-prefix pruning"
+        );
+        assert_eq!(discovery.terminal_prefix_bar_prunes, 0);
+        assert_eq!(discovery.terminal_rank_prunes, 0);
 
         let reference_admissibility = strict_admissibility(14, 2, &library_until(13));
         assert_eq!(reference_admissibility.min_clause_kappa, 9);

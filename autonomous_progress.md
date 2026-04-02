@@ -45,8 +45,16 @@ gate.
 - Late-step zero-candidate failures now enrich the thrown failure note with the
   claim band plus those root-seeding counts, so the next failed run will not
   collapse to a bare `no atomic candidates` string.
+- Claim admissibility now promotes the divergent step-`14` reproducer from the
+  raw operator-stage debt band (`claim_debt_axes = 7..7`) into the effective
+  claim Hilbert band (`claim_step_open = 9..9`) once the late-step structural
+  pressure is saturated.
+- The claim Hilbert-band remaining-one algebraic ceiling now stands down on
+  that promoted step-`14` surface, so exact terminal summary work can run
+  instead of pruning the reproducer before summary build.
 - A targeted regression now reproduces the stored `long-rerun-v3` step-`14`
-  failure from the divergent accepted prefix:
+  failure from the divergent accepted prefix and now localizes the surviving
+  blocker:
   reference steps `1..9`, then the stored simple chain on steps `10..13`.
 
 ## Latest Full-Profile Outcome
@@ -72,22 +80,33 @@ gate.
   - step `11`: `nu_delta = -10`, `clause_kappa_delta = -2`
   - step `12`: `nu_delta = -17`, `clause_kappa_delta = -3`
   - step `13`: `nu_delta = -27`, `clause_kappa_delta = -4`
-- Step `14` never entered real search. Its only live checkpoint shows:
+- Step `14` never entered real search on the stored full-profile run. Its only
+  live checkpoint there shows:
   - `clause_kappa = 7`
   - `raw_catalog_clause_widths = [3,1,1,1,1,1,1]`
   - `raw_catalog_telescope_count = 3`
   - `generated_raw_surface = 0`
   - `frontier_queue_len = 0`
   - `candidate_pool_len = 0`
-- The new reproducer now confirms the same divergent late-step opening in test:
-  - claim band `7..7`
+- The new reproducer now advances that same divergent late-step opening farther
+  than the stored run ever reached:
+  - claim band `9..9`
   - late-family surface `claim_generic`
   - operator-band opener `= true`
   - hilbert / temporal openers `= false`
-  - `roots_seen = 3`
-  - `roots_enqueued = 0`
-- The immediate blocker is therefore late-step claim viability and root
-  generation, not another step-`4` continuation read.
+  - raw debt axes still `kappa = 7..7`
+  - `raw_catalog_clause_widths = [1,3,1,1,1,3,3,3,3]`
+  - `roots_seen = 1`
+  - `roots_enqueued = 1`
+  - `raw_generated_surface = 40`
+  - `prefixes_created = 40`
+  - `prefix_states_explored = 10`
+  - `partial_prefix_bound_checks = 21`
+  - `partial_prefix_bound_prunes = 21`
+  - `remaining_one_algebraic_prunes = 0`
+  - `terminal_summary_build_millis > 0`
+- The immediate blocker is now exact partial-prefix screening on the promoted
+  step-`14` claim Hilbert band, not claim band selection or root generation.
 
 ## Current Reference Runs
 
@@ -163,17 +182,21 @@ gate.
   escape step `4`.
 - The strongest current clues are:
   - widening replay divergence on steps `10` through `13`
-  - the step-`14` opening band/candidate mismatch
-  - the collapse from a raw clause catalog to zero generated roots before any
-    frontier work begins
-  - the new claim-open diagnostics show that the divergent history still
-    carries the operator-band opener but never reaches the reference-style
-    Hilbert `kappa = 9` band
+  - the step-`14` band mismatch is now locally repaired in test:
+    `claim_step_open = 9..9` while `claim_debt_axes` still report `7..7`
+  - root generation is no longer the live blocker on the reproducer:
+    one promoted Hilbert-band root survives `insert_root(...)` and enters the
+    frontier
+  - the claim Hilbert-band algebraic ceiling is no longer the live blocker on
+    that reproducer:
+    `remaining_one_algebraic_prunes = 0` and terminal summary build now runs
+  - the reproducer still dies with `21` exact partial-prefix prunes, zero
+    terminal bar prunes, and zero terminal rank prunes
 - The likely diagnosis surface is the path between:
-  - claim debt / admissibility band selection
-  - late-step clause-catalog construction
-  - `PrefixLegalityCache::insert_root(...)`
-  - `screen_prefix_for_frontier(...)`
+  - claim open-band terminal clause filtering / terminal admissibility
+  - exact terminal prefix completion summary construction
+  - `exact_terminal_prefix_bound_decision_from_bound(...)`
+  - direct exact bar-clearance on the divergent accepted history
 - The compact terminal-summary path remains worth optimizing later, but it is
   no longer the first engineering dollar to spend.
 
@@ -186,9 +209,9 @@ gate.
   failure is explained.
 - Keep the landed late-step diagnostics and divergent-prefix reproducer green
   while localizing the zero-frontier loss.
-- Use the new claim-open and root-seeding payloads to decide whether the next
-  narrow fix belongs in band selection, clause-catalog construction,
-  `insert_root(...)`, or `screen_prefix_for_frontier(...)`.
+- Use the new reproducer state to decide whether the remaining narrow fix
+  belongs in claim terminal filtering, terminal-summary bound construction, or
+  exact bar-clearance on the divergent history itself.
 - After that fix lands and replay parity holds, spend one capped intended
   rerun before committing to another full long rerun.
 
@@ -200,14 +223,15 @@ gate.
    `clause-accept-rank-facts-long-rerun-v2`, and
    `clause-accept-rank-facts-long-rerun-v3`
    as the current evidence set.
-2. Run the landed divergent-prefix reproducer and inspect the new
-   `claim_step_open` plus `claim_root_seeding` payloads together.
-3. Localize whether the three lost step-`14` roots die in
-   `insert_root(...)`, exact-screen rejection, or earlier band/catalog
-   selection.
-4. Patch the narrowest honest late-step path that restores non-zero step-`14`
-   search without waking guarded, replay, realistic-shadow, or demo-only
-   fallback behavior.
+2. Keep the landed divergent-prefix reproducer green with the promoted
+   `claim_step_open = 9..9`, `roots_enqueued = 1`, and
+   `remaining_one_algebraic_prunes = 0` state.
+3. Capture the first remaining-one step-`14` prefixes that still get
+   `CannotClearBar` and compare their compact terminal-summary bound against a
+   direct exact assessment on the same promoted Hilbert-band surface.
+4. Patch the narrowest honest exact-screen path that explains or removes those
+   surviving `partial_prefix_bound_prunes` without waking guarded, replay,
+   realistic-shadow, or demo-only fallback behavior.
 5. Run the targeted claim tests for the reproducer plus the late-step claim
    acceptance surface.
 6. Only if that stays clean, spend one capped intended-profile rerun against

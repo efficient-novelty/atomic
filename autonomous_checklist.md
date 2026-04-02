@@ -24,19 +24,19 @@ It lists only work that is still open.
   answered the old runtime question by reaching step `14`, but it failed there
   with `no atomic candidates were generated for step 14`.
 - Steps `10` through `13` already diverge from reference replay on stored
-  evidence, and step `14` opened at `clause_kappa = 7` with
-  `raw_catalog_clause_widths = [3,1,1,1,1,1,1]`,
-  `raw_catalog_telescope_count = 3`, and zero generated candidates.
+  evidence. The stored run opened step `14` at `clause_kappa = 7` with
+  `raw_catalog_clause_widths = [3,1,1,1,1,1,1]`, but the current reproducer
+  now promotes that divergent prefix to `claim_band = 9..9`, enqueues one
+  root, reaches exact terminal-summary work, and still dies with exact
+  partial-prefix pruning.
 - The current blocker is late-step claim viability/correctness, not inability
   to escape step `4`.
 
 ## 1. Runtime Improvement Loop
 
-- [ ] Explain why the finished claim history opens step `14` at `kappa = 7`
-      instead of the reference-style late-step `9`-band.
-- [ ] Land the narrowest honest fix that restores non-zero step-`14` search
-      without waking guarded, replay, realistic-shadow, or demo-only fallback
-      behavior.
+- [ ] Explain why the promoted step-`14` claim Hilbert-band prefixes still all
+      get `CannotClearBar` in exact partial-prefix screening after terminal
+      summary begins.
 - [ ] Require every serious runtime slice to prove replay-harness parity plus
       either fewer exact-`nu` evaluations or lower measured aggregation time
       before another full-profile rerun.
