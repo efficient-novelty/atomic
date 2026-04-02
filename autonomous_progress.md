@@ -44,6 +44,24 @@ gate.
   `clause-accept-rank-facts-long-rerun-v1` at each matched checkpoint and was
   manually stopped at `345`, so `long-rerun-v1` remains the current later-wall
   continuation reference through `576`.
+- A third fresh intended-profile rerun is now in flight as
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v3`.
+  It was launched on `2026-04-02 08:15:29 +02:00` from the current repo head
+  `6f3bc1a00fb6ff46e048109b2a5176542105ab73`, while still reusing the preserved
+  release binary hash
+  `278c311ddf5e416b09d24923dc392388aaf5817c65f0c60f856ebde7466140a5` and the
+  same `desktop_claim_shadow_1h` config as `v1` and `v2`.
+  Its latest observed live step-`4` read at `437337 ms` has
+  `prefix_states_explored = 52`,
+  `prefix_cache_groups = 39`,
+  `prefix_cache_candidates = 27814`,
+  `frontier_queue_len = 2723`,
+  RSS `= 212336640` bytes,
+  `terminal_summary_build_millis = 434229`,
+  `terminal_summary_admissibility_checks = 0`, and
+  `terminal_summary_fallback_connectivity_checks = 0`.
+  No matched `20`-minute or later-wall checkpoint exists yet, so
+  `long-rerun-v1` still remains the current later-wall continuation reference.
 
 ## Current Run To Beat
 
@@ -402,6 +420,31 @@ gate.
 - No step-`4` frontier artifacts were persisted on that rerun either, so the
   next longer continuation still needs another fresh intended-profile rerun
   rather than true frontier-backed resume.
+- A third fresh intended-profile rerun was then launched as
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v3`
+  on `2026-04-02 08:15:29 +02:00`.
+  Its `run.json` records the current repo head
+  `6f3bc1a00fb6ff46e048109b2a5176542105ab73`, but it still reuses the same
+  preserved release binary hash
+  `278c311ddf5e416b09d24923dc392388aaf5817c65f0c60f856ebde7466140a5` and the
+  same `desktop_claim_shadow_1h` config as `v1` and `v2`.
+- Older runs still expose only step checkpoints plus an empty
+  `checkpoints/frontier/` directory, so `v3` was launched as another fresh run
+  rather than `pen-cli resume`, and its authoritative in-flight evidence is
+  again `reports/steps/step-04-live.ndjson`.
+- The latest observed live step-`4` read on `v3` at `437337 ms` has
+  `prefix_states_explored = 52`,
+  `prefix_cache_groups = 39`,
+  `prefix_cache_candidates = 27814`,
+  `frontier_queue_len = 2723`,
+  RSS `= 212336640` bytes,
+  `terminal_summary_build_millis = 434229`,
+  `terminal_summary_admissibility_checks = 0`, and
+  `terminal_summary_fallback_connectivity_checks = 0`.
+- `v3` is therefore healthy and in flight, but it has not yet reached the
+  stored `20`-minute gate or any later-wall checkpoint, so `v1` still remains
+  the later-wall reference through `576` and `v2` still remains the
+  corroborating middle-wall read through `335`.
 
 ## What Stays Landed
 
@@ -483,17 +526,17 @@ gate.
   continuation to beat at `1095`, so the next question is whether the newer
   compact retained surface can also re-earn `1038/1095` honestly or reach
   step `5`.
-- Because neither the original short-loop winner nor either longer rerun
-  persisted a resumable step-`4` frontier generation, the next continuation
-  still needs another fresh intended-profile rerun rather than `pen-cli resume`
-  first.
+- Because neither the original short-loop winner nor either stopped longer
+  rerun persisted a resumable step-`4` frontier generation, the lane has now
+  launched `long-rerun-v3` as another fresh intended-profile rerun rather than
+  `pen-cli resume`.
 - The optimization loop now needs shorter, more repeatable intended-profile
   reads.
   The next slice no longer needs to prove `140/163` or `332/335` from scratch;
   `long-rerun-v2` has already re-earned those middle walls on the current
   landed binary.
   Instead, near-term runtime work should keep the `139`-prefix short-loop gate
-  honest while pushing a fresh continuation back through
+  honest while pushing the in-flight `long-rerun-v3` continuation back through
   `408/437/454/484/576` and then farther toward `1038/1095` or step `5`.
 
 ## Forward Direction
@@ -505,14 +548,20 @@ gate.
 - Keep `clause-accept-rank-facts-long-rerun-v2` as the freshest corroborating
   middle-wall read through `335` without promoting it to the later-wall
   reference.
+- Keep
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v3`
+  running as the active fresh continuation on the preserved
+  `278c311ddf5e416b09d24923dc392388aaf5817c65f0c60f856ebde7466140a5` binary
+  until it either produces matched stored checkpoints, reaches step `5`, or
+  clearly loses the retained-prefix story.
 - Keep `prefix-local-score-v1` as the farthest stored step-`4` continuation to
   beat at `1038/1095` until a later rerun replaces it honestly or reaches
   step `5`.
 - The clause-side accept-rank-facts slice has now produced repeated honest
   20-minute wins, one honest longer rerun through `576`, and a second fresh
-  corroborating rerun through `335`, so the next move is still another fresh
-  longer intended-profile rerun on the same binary before spending another
-  code slice.
+  corroborating rerun through `335`, so the next move is now to keep reading
+  the already launched `long-rerun-v3` continuation on the same binary before
+  spending another code slice or opening `v4`.
 - Keep the refreshed replay benchmark gate at `88197 us` for later code work.
 - If that next fresh rerun cannot keep the corroborated `335` surface honestly,
   cannot re-earn the `576` continuation surface honestly, or loses the
@@ -539,11 +588,15 @@ gate.
    frozen as the latest corroborating middle-wall read through `335`.
 4. Keep `prefix-local-score-v1` frozen as the farthest stored step-`4`
    continuation target to beat at `1038/1095`.
-5. Launch one fresh intended rerun on the same release binary and config
-   rather than using `pen-cli resume` first, because neither the earlier
-   short-loop winner nor either longer rerun stored a resumable step-`4`
-   frontier generation.
-6. Let that fresh rerun run materially past the corroborated `335` surface and
+5. Keep
+   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v3`
+   running on the preserved
+   `278c311ddf5e416b09d24923dc392388aaf5817c65f0c60f856ebde7466140a5` release
+   binary and the same `desktop_claim_shadow_1h` config, rather than using
+   `pen-cli resume` first or launching `v4`, because neither the earlier
+   short-loop winner nor either stopped longer rerun stored a resumable
+   step-`4` frontier generation.
+6. Let `long-rerun-v3` run materially past the corroborated `335` surface and
    then inspect matched stored step-`4` checkpoints in this order:
    `408`, `437`, `454`, `484`, `576`, then `1038`, then `1095`, then step `5`.
 7. Keep comparing the current `20`-minute gate first against
@@ -552,17 +605,17 @@ gate.
    `terminal_summary_build_millis = 1183915`,
    `terminal_summary_admissibility_checks = 0`, and
    `terminal_summary_fallback_connectivity_checks = 0`.
-8. Keep comparing the later continuation first against the corroborated
+8. Keep comparing `long-rerun-v3` first against the corroborated
    `140/163/332/335` reads from `clause-accept-rank-facts-long-rerun-v2`, then
    against the `408/437/454/484/576` reads from
    `clause-accept-rank-facts-long-rerun-v1`, then against the older
    `prefix-local-score-v1` `1038/1095` walls behind them.
-9. If the next fresh rerun cannot keep the corroborated `335` surface honestly,
+9. If `long-rerun-v3` cannot keep the corroborated `335` surface honestly,
    cannot re-earn `576`, or cannot move materially toward `1038`, drop back to
-   another narrow compact-summary per-admitted cost slice while keeping the dropped
-   focus-aligned competition-gate/payload-mode hoist, the dropped shared
-   compact-bookkeeping fold, and the dropped claim-open-band compact local-
-   state hoist off the table first.
+   another narrow compact-summary per-admitted cost slice while keeping the
+   dropped focus-aligned competition-gate/payload-mode hoist, the dropped
+   shared compact-bookkeeping fold, and the dropped claim-open-band compact
+   local-state hoist off the table first.
 10. Keep broad cleanup, cached-summary reopen wake-up work, contender-rank
    rewrites, connectivity-first/cache-first rewrites, and deterministic
    batched parallel reduction dropped until the longer continuation proves the

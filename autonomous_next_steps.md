@@ -296,10 +296,30 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - No step-`4` frontier artifacts were persisted on that rerun either, so the
   next longer continuation still needs another fresh intended rerun rather
   than `pen-cli resume`.
+- A third fresh intended-profile rerun is now in flight as
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v3`.
+  It was launched on `2026-04-02 08:15:29 +02:00` from repo head
+  `6f3bc1a00fb6ff46e048109b2a5176542105ab73`, while still reusing the preserved
+  release binary hash
+  `278c311ddf5e416b09d24923dc392388aaf5817c65f0c60f856ebde7466140a5` and the
+  same `desktop_claim_shadow_1h` config as `v1` and `v2`.
+- Its latest observed live step-`4` read at `437337 ms` has
+  `prefix_states_explored = 52`,
+  `prefix_cache_groups = 39`,
+  `prefix_cache_candidates = 27814`,
+  `frontier_queue_len = 2723`,
+  RSS `= 212336640` bytes,
+  `terminal_summary_build_millis = 434229`,
+  `terminal_summary_admissibility_checks = 0`, and
+  `terminal_summary_fallback_connectivity_checks = 0`.
+- No matched `20`-minute or later-wall checkpoint exists yet for `v3`, so
+  `long-rerun-v1` still remains the later-wall continuation reference through
+  `576` and `long-rerun-v2` still remains the corroborating middle-wall read
+  through `335`.
 
 ## Do This Next
 
-### 1. Spend The Next Slice On Yet Another Longer Continuation, Not A Code Change
+### 1. Keep The Fresh Longer Continuation Running, Not A Code Change
 
 Keep the clause-side accept-rank-facts slice landed.
 It already re-earned replay gate comfortably, spent one capped rerun, then won
@@ -307,10 +327,11 @@ the short-loop checkpoint again at `139` explored prefixes, then owned one
 honest longer rerun through `576`, and now also has a second fresh rerun that
 re-earned the same `140/163/332/335` middle walls without replacing the
 current `576` winner.
-The next move is still not another fresh code slice first.
-Reopen one more longer intended-profile continuation on the current binary and
-see whether the lane can now carry that corroborated `335` surface back
-through `576` and then toward `1038/1095` or step `5`.
+The next move is still not another fresh code slice first, and it is also not
+another fresh rerun first.
+Keep `long-rerun-v3` running on the current preserved binary and see whether
+the lane can now carry that corroborated `335` surface back through `576` and
+then toward `1038/1095` or step `5`.
 
 ### 2. Run The Next Validation Slice In This Order
 
@@ -320,21 +341,22 @@ through `576` and then toward `1038/1095` or step `5`.
    `clause-accept-rank-facts-v1` or
    `clause-accept-rank-facts-long-rerun-v1` or
    `clause-accept-rank-facts-long-rerun-v2`.
-   None stored a resumable step-`4` frontier generation, so launch one fresh
-   intended `desktop_claim_shadow` rerun on the same release binary and config
-   instead.
-3. Let that continuation run materially past the `20`-minute window and past
-   the corroborated `335` surface.
+   None stored a resumable step-`4` frontier generation, so keep the already
+   launched fresh intended rerun
+   `clause-accept-rank-facts-long-rerun-v3` running on the same release binary
+   and config instead of launching `v4`.
+3. Let `long-rerun-v3` run materially past the `20`-minute window and past the
+   corroborated `335` surface.
 4. Re-earn the later stored step-`4` checkpoints in this order:
    `408`, `437`, `454`, `484`, `576`, then `1038`, then `1095`, then step `5`.
 5. Keep comparing the `20`-minute checkpoint first against the current
    short-loop target from `clause-accept-rank-facts-v1`.
-   Then compare later checkpoints first against
+   Then compare `long-rerun-v3` later checkpoints first against
    `clause-accept-rank-facts-long-rerun-v2` through `335`, then against
    `clause-accept-rank-facts-long-rerun-v1` through `576`, and keep
    `prefix-local-score-v1` as the farther continuation reference behind them
    at `1038/1095`.
-6. If the next fresh rerun cannot keep the corroborated `335` surface
+6. If `long-rerun-v3` cannot keep the corroborated `335` surface
    honestly, cannot keep the new `576` continuation surface honestly, or if
    later stored reads lose the retained-prefix story before `1038`, return to
    code work with another narrow per-admitted compact-summary cost slice inside
@@ -346,7 +368,7 @@ through `576` and then toward `1038/1095` or step `5`.
 
 ### 3. Keep Rule For The Next Longer Read
 
-Treat the reopened continuation as real progress only if the stored later
+Treat `long-rerun-v3` as real progress only if the stored later
 step-`4` checkpoints keep the same no-miss shape, re-earn
 `408/437/454/484/576` after the corroborated `335` surface, and then move
 materially beyond the new `576` wall toward `1038/1095` or step `5`.
@@ -381,21 +403,23 @@ Interpretation rule:
 ### 5. When To Allow Another Long Read
 
 Repeated `20`-minute wins now exist, and one longer continuation has already
-cleared `576` honestly, so another longer continuation is allowed on the
-current landed binary.
+cleared `576` honestly, so the third longer continuation is already running on
+the current landed binary.
 
-After that continuation:
+After `long-rerun-v3`:
 
 - keep `clause-accept-rank-facts-long-rerun-v1` as the current later-wall
-  reference through `576` unless the next rerun replaces it honestly
+  reference through `576` unless `v3` replaces it honestly
 - keep `clause-accept-rank-facts-long-rerun-v2` as the current corroborating
-  middle-wall read through `335` unless the next rerun replaces it honestly
+  middle-wall read through `335` unless `v3` replaces it honestly
 - keep `prefix-local-score-v1` as the farther stored continuation reference to
   beat at `1038/1095`
 - keep `clause-accept-rank-facts-v1` as the current short-loop gate until a
   later contender replaces it honestly
-- return to code work first if the longer continuation fails to move the later
-  stored walls honestly beyond `576`
+- return to code work first if `v3` fails to move the later stored walls
+  honestly beyond `576`
+- do not launch `v4` until `v3` either reaches a clear stopping point or
+  proves that the retained-prefix story has already failed
 
 ## Do Not Reopen First
 
@@ -412,6 +436,10 @@ After that continuation:
 ## Keep Or Branch Decision
 
 - Stay on runtime work while the intended profile still stalls in step `4`.
+- Keep `clause-accept-rank-facts-long-rerun-v3` as the active continuation in
+  flight while it is still producing honest step-`4` evidence; do not launch
+  another rerun or return to code work first unless `v3` stalls, stops, or
+  loses the retained-prefix story.
 - Keep `clause-accept-rank-facts-long-rerun-v1` as the nearer continuation
   reference through `576` until a later slice replaces it honestly.
 - Keep `clause-accept-rank-facts-long-rerun-v2` as a corroborating middle-wall
