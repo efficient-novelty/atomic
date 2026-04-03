@@ -63,9 +63,21 @@ gate.
   - `claim_benchmark.txt` / `claim_benchmark.json`
 - Those audits use the guarded baseline
   `runs/codex-guarded-claim-cert-v1`.
-- No claim-lane code change landed this turn:
-  the repo stayed on the pre-repair search behavior while the new
-  step-`9` diagnostics were localized and documented.
+- A narrow claim-lane code change now lands on top of that stored `v5`
+  evidence surface:
+  claim incumbent pruning preserves same-primary accepted-rank ties on
+  steps `9..12`, so mid-claim parity candidates are no longer discarded
+  before final selection on secondary structural tiebreaks alone.
+- A new unit regression now proves the guarded step-`11` completion:
+  - is still present in the claim remaining-one terminal-clause catalog on
+    the live divergent history
+  - still survives the full remaining-one summary and the compact survivor
+    sketch even with an incumbent present
+  - now survives into the retained claim candidate pool instead of being
+    dropped by incumbent pruning
+- No fresh full-profile rerun or stored audit refresh landed yet, so the
+  frozen `v5` run, compare report, claim certificate, and benchmark bundle
+  remain the authoritative stored evidence surface this turn.
 - New stored-evidence regressions now freeze that `v5` audit surface in-tree:
   - compare assertions pin the step-`9`, step-`11`, and step-`12`
     accepted-hash / trajectory forks
@@ -286,6 +298,16 @@ gate.
     collapse onto the same observed step-`10` / step-`11` continuation while
     step `11` itself remains unresolved, so step `9` cannot be honestly
     closed before the step-`11` same-primary fork is repaired
+- A new local step-`11` diagnostic plus narrow incumbent-pruning repair now
+  refines that blocker:
+  - the guarded step-`11` completion is still present in the claim
+    remaining-one clause catalog on the divergent claim history
+  - it still survives the full remaining-one summary and the compact
+    survivor sketch even with an incumbent present
+  - it now survives into the retained candidate pool on steps `9..12`
+  - so step `11` is no longer best described as raw generation loss or
+    compact-summary loss; the remaining question is final same-primary
+    selection among retained candidates
 - The new stored full-profile bundle also changes what counts as the next
   honest engineering dollar:
   - do not reopen runtime-only step-`4` surgery first
@@ -306,7 +328,8 @@ gate.
   reason counts, prune-class counts, and manifest provenance green.
 - Prioritize targeted local diagnosis and repair for:
   - the step-`9` accepted-hash fork
-  - the step-`11` accepted-hash fork
+  - the step-`11` final same-primary accepted-hash selection, now that the
+    guarded completion survives into retained candidates
   - the step-`12` `nu / kappa` drop
   - the late generated-floor collapse at steps `11..15`
 - Launch the next clean-start full-profile rerun only after the local repair
@@ -314,17 +337,20 @@ gate.
 
 ## Immediate Next Move
 
-1. Use the new stored compare regression to localize the step-`9`
-   same-`nu` / same-`kappa` winner fork in code.
+1. Keep the new step-`11` retained-pool regression green:
+   the guarded completion must stay visible through terminal-clause
+   generation, compact summary, survivor sketch, and retained-pool
+   preservation on the live claim history.
 2. Start the next repair at step `11`, not at raw step-`9` generation:
-   determine whether the guarded step-`11` telescope is still missing before
-   final selection or is present but losing on a secondary accept-rank tie.
-3. Re-run the step-`9` tie diagnostic only after the step-`11` fork is
-   repaired, since the current step-`9` tied set still shares the same
-   observed step-`10` / step-`11` continuation.
+   determine why final claim acceptance still picks a non-guarded
+   same-`nu` / same-`kappa` winner once the guarded completion survives into
+   retained candidates.
+3. Re-run the step-`9` tie diagnostic only after the step-`11` final
+   selection fork is repaired, since the current step-`9` tied set still
+   shares the same observed step-`10` / step-`11` continuation.
 4. Use the repaired step-`9` / step-`11` path to explain and then close the
    step-`12` `33/5` versus guarded `34 / 6` drop plus the late generated-floor
    collapse at steps `11..15`.
 5. Only then land the narrowest honest parity/floor fix, and only then launch
-   `long-rerun-v6` and re-run compare, certification, and
-   benchmark against the repaired bundle.
+   `long-rerun-v6` and re-run compare, certification, and benchmark against
+   the repaired bundle.

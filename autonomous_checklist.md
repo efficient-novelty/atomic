@@ -29,6 +29,11 @@ It lists only work that is still open.
 - Stored `v5` compare / certification / benchmark regression tests now pin
   those current parity and breadth failures in-tree, so the next change has to
   move real stored behavior rather than only the narrative around it.
+- A new local claim regression now proves the guarded step-`11` completion
+  survives the current claim terminal-clause catalog, full remaining-one
+  summary, compact survivor sketch, and retained candidate pool on the live
+  divergent history; no stored rerun has consumed that repair yet, so the
+  signoff surface is still the frozen `v5` evidence set.
 - The old `v3` step-`14` zero-candidate failure is therefore no longer the
   first blocker.
 - The current blocker is stored parity plus stored breadth on the completed

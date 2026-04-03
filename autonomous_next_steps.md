@@ -121,6 +121,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - but the tied step-`9` candidates still collapse onto the same observed
     step-`10` / step-`11` continuation while step `11` remains unresolved,
     so step `9` should not be treated as a closed local selection bug yet
+- A new local step-`11` diagnostic and narrow incumbent-pruning repair now
+  extend that localization:
+  - the guarded step-`11` closing clause is still present in the claim
+    remaining-one terminal-clause catalog on the divergent step-`10` history
+  - the guarded step-`11` completion still survives the full remaining-one
+    summary and the compact survivor sketch even with an incumbent present
+  - claim incumbent pruning now preserves same-primary accepted-rank ties on
+    steps `9..12`, so that guarded step-`11` completion now survives into the
+    retained claim candidate pool
+  - step `11` is therefore no longer best explained as raw generation loss or
+    compact-summary loss; the remaining blocker is final same-primary
+    selection among retained candidates
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -155,36 +167,42 @@ This note is the exact next work order for `desktop_claim_shadow`.
 1. Keep the new step-`9` diagnostic read fixed:
    the guarded telescope is still present in claim enumeration and still
    survives direct claim admissibility / remaining-one clause filtering.
-2. Move the active repair target to the step-`11`
+2. Keep the new step-`11` retained-pool diagnostic read fixed:
+   the guarded step-`11` completion now survives terminal-clause generation,
+   full summary, compact survivor sketch, and retained-pool preservation on
+   the live claim history.
+3. Move the active repair target to the step-`11`
    same-`nu` / same-`kappa` accepted-hash fork:
-   determine whether the guarded step-`11` telescope is still missing before
-   final selection or is present but losing on a secondary accept-rank tie.
-3. Only revisit step `9` final selection after step `11` is repaired, since
+   determine why final claim acceptance still selects a non-guarded winner
+   once the guarded completion survives into retained candidates.
+4. Only revisit step `9` final selection after step `11` is repaired, since
    the current step-`9` tied candidates still share the same observed
    step-`10` / step-`11` continuation.
-4. Then localize the step-`12` drop from guarded `34 / 6` to claim `33 / 5`.
-5. Use the repaired step-`9` / step-`11` / step-`12` chain to explain the
+5. Then localize the step-`12` drop from guarded `34 / 6` to claim `33 / 5`.
+6. Use the repaired step-`9` / step-`11` / step-`12` chain to explain the
    late generated-floor collapse at
    steps `11..15`, especially:
    - step `13`: `9`
    - step `14`: `157`
    - step `15`: `780`
-6. Keep the step-`1` breadth miss on the checklist, but do not confuse that
+7. Keep the step-`1` breadth miss on the checklist, but do not confuse that
    longstanding signoff floor with the new claim-specific mid/late parity fork.
 
 ### 4. Use The New Regressions To Drive The Local Repair
 
 1. Keep the stored compare regression green for the step-`9`
    same-`nu` / same-`kappa` accepted-hash fork.
-2. Keep the stored compare regression green for the step-`11`
+2. Keep the new step-`11` retained-pool regression green so same-primary
+   claim ties are not silently pruned before final selection on steps `9..12`.
+3. Keep the stored compare regression green for the step-`11`
    same-`nu` / same-`kappa` accepted-hash fork.
-3. Keep the stored compare regression green for the step-`12`
+4. Keep the stored compare regression green for the step-`12`
    guarded `34 / 6` versus claim `33 / 5` drop.
-4. Keep the stored certification / benchmark assertions green for the
+5. Keep the stored certification / benchmark assertions green for the
    step-`1` breadth miss and the late generated-floor snapshot at
    steps `10..15` so the next fix cannot silently reshuffle the stored
    failure surface.
-5. Keep the existing pre-flight gate green while the local repair lands.
+6. Keep the existing pre-flight gate green while the local repair lands.
 
 ### 5. Only Rerun After The Local Repair Exists
 

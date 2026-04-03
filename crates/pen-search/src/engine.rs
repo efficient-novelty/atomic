@@ -3465,7 +3465,12 @@ fn search_next_step_internal(
             if let (Some(group_best_rank), Some(incumbent_rank)) =
                 (&group.best_accept_rank, &incumbent_terminal_rank)
             {
-                if !better_rank(group_best_rank, incumbent_rank) {
+                if !accept_rank_can_survive_incumbent(
+                    group_best_rank,
+                    incumbent_rank,
+                    admissibility.mode,
+                    step_index,
+                ) {
                     incremental_terminal_rank_prunes += group.candidates.len();
                     demo_bucket_stats
                         .entry(bucket_key.clone())
@@ -3545,7 +3550,12 @@ fn search_next_step_internal(
                 if let (Some(candidate_rank), Some(incumbent_rank)) =
                     (&group_candidate.accept_rank, &incumbent_terminal_rank)
                 {
-                    if !better_rank(candidate_rank, incumbent_rank) {
+                    if !accept_rank_can_survive_incumbent(
+                        candidate_rank,
+                        incumbent_rank,
+                        admissibility.mode,
+                        step_index,
+                    ) {
                         incremental_terminal_rank_prunes += 1;
                         demo_bucket_stats
                             .entry(bucket_key.clone())
@@ -4701,12 +4711,16 @@ fn discover_realistic_shadow_candidates(
                             None,
                             group.admissible_terminal_candidates,
                             discovery.terminal_rank_incumbent.as_ref(),
+                            admissibility.mode,
+                            step_index,
                         )
                     } else {
                         cached_terminal_prefix_rank_prune_count(
                             &work_item.signature,
                             discovery.terminal_rank_incumbent.as_ref(),
                             &mut discovery.prefix_legality_cache,
+                            admissibility.mode,
+                            step_index,
                         )
                     };
                 if let Some(pruned_candidates) = cached_rank_prune_count {
@@ -4721,7 +4735,12 @@ fn discover_realistic_shadow_candidates(
                     best_prefix_group_accept_rank(&group.candidates),
                     discovery.terminal_rank_incumbent.as_ref(),
                 ) {
-                    if !better_rank(&group_best_rank, incumbent_rank) {
+                    if !accept_rank_can_survive_incumbent(
+                        &group_best_rank,
+                        incumbent_rank,
+                        admissibility.mode,
+                        step_index,
+                    ) {
                         discovery.terminal_rank_prunes += group.candidates.len();
                         discovery
                             .remaining_one_telemetry
@@ -5442,12 +5461,16 @@ fn process_prepared_exact_two_step_terminal_surface(
                     None,
                     group.admissible_terminal_candidates,
                     discovery.terminal_rank_incumbent.as_ref(),
+                    admissibility.mode,
+                    step_index,
                 )
             } else {
                 cached_terminal_prefix_rank_prune_count(
                     &terminal_prefix.signature,
                     discovery.terminal_rank_incumbent.as_ref(),
                     &mut discovery.prefix_legality_cache,
+                    admissibility.mode,
+                    step_index,
                 )
             };
         if let Some(pruned_candidates) = cached_rank_prune_count {
@@ -5462,7 +5485,12 @@ fn process_prepared_exact_two_step_terminal_surface(
             best_prefix_group_accept_rank(&group.candidates),
             discovery.terminal_rank_incumbent.as_ref(),
         ) {
-            if !better_rank(&group_best_rank, incumbent_rank) {
+            if !accept_rank_can_survive_incumbent(
+                &group_best_rank,
+                incumbent_rank,
+                admissibility.mode,
+                step_index,
+            ) {
                 discovery.terminal_rank_prunes += group.candidates.len();
                 discovery
                     .remaining_one_telemetry
@@ -7628,6 +7656,8 @@ fn claim_try_summary_prune_before_materialization(
         summary.best_accept_primary_rank.as_ref(),
         admitted_terminal_candidates,
         discovery.terminal_rank_incumbent.as_ref(),
+        admissibility.mode,
+        step_index,
     ) else {
         discovery
             .prefix_legality_cache
@@ -8268,16 +8298,35 @@ fn best_prefix_group_accept_rank(candidates: &[PrefixGroupCandidate]) -> Option<
     best
 }
 
+fn accept_rank_can_survive_incumbent(
+    candidate_rank: &AcceptRank,
+    incumbent_rank: &AcceptRank,
+    admissibility_mode: AdmissibilityMode,
+    step_index: u32,
+) -> bool {
+    better_rank(candidate_rank, incumbent_rank)
+        || (matches!(admissibility_mode, AdmissibilityMode::DesktopClaimShadow)
+            && (9..=12).contains(&step_index)
+            && same_primary_rank_tier(candidate_rank, incumbent_rank))
+}
+
 fn terminal_prefix_rank_prune_count(
     best_accept_rank: Option<&AcceptRank>,
     best_accept_primary_rank: Option<&TerminalPrefixPrimaryRank>,
     admitted_candidate_count: usize,
     incumbent_rank: Option<&AcceptRank>,
+    admissibility_mode: AdmissibilityMode,
+    step_index: u32,
 ) -> Option<usize> {
     let incumbent_rank = incumbent_rank?;
     if let Some(best_accept_rank) = best_accept_rank {
-        return (!better_rank(best_accept_rank, incumbent_rank))
-            .then_some(admitted_candidate_count);
+        return (!accept_rank_can_survive_incumbent(
+            best_accept_rank,
+            incumbent_rank,
+            admissibility_mode,
+            step_index,
+        ))
+        .then_some(admitted_candidate_count);
     }
 
     let best_accept_primary_rank = best_accept_primary_rank?;
@@ -8292,6 +8341,8 @@ fn cached_terminal_prefix_rank_prune_count(
     prefix_signature: &PrefixSignature,
     incumbent_rank: Option<&AcceptRank>,
     prefix_legality_cache: &mut PrefixLegalityCache,
+    admissibility_mode: AdmissibilityMode,
+    step_index: u32,
 ) -> Option<usize> {
     let incumbent_rank = incumbent_rank?;
     let rank_summary = prefix_legality_cache.terminal_prefix_rank_summary(prefix_signature)?;
@@ -8300,6 +8351,8 @@ fn cached_terminal_prefix_rank_prune_count(
         rank_summary.best_accept_primary_rank.as_ref(),
         rank_summary.admitted_candidate_count,
         Some(incumbent_rank),
+        admissibility_mode,
+        step_index,
     )
 }
 
@@ -11601,6 +11654,172 @@ mod tests {
     }
 
     #[test]
+    fn claim_step_eleven_keeps_the_guarded_completion_in_the_retained_pool() {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            10,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 10 should build");
+        let claim_prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let (library, history, nu_history) = history_from_prefix(&claim_prefix);
+        let target = Telescope::reference(11);
+        let prefix = Telescope::new(target.clauses[..4].to_vec());
+        let target_clause = target.clauses[4].clone();
+        let admissibility =
+            strict_admissibility_for_mode(11, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 5);
+        let signature = PrefixSignature::new(11, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            signature.clone(),
+            5,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+
+        let terminal_clauses = super::terminal_prefix_clause_candidates(
+            11,
+            &library,
+            admissibility,
+            &signature,
+            clause_catalog.clauses_at(4),
+            Some(clause_catalog.terminal_connectivity_facts_at(4)),
+            clause_catalog.terminal_nu_facts_at(4),
+            &mut cache,
+            None,
+        );
+        let target_clause_present = match &terminal_clauses {
+            super::TerminalPrefixClauseCandidates::General(clauses)
+            | super::TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(clauses) => clauses
+                .iter()
+                .any(|candidate| candidate.clause == &target_clause),
+        };
+        let summary = super::compute_terminal_prefix_completion_summary_from_candidates(
+            11,
+            &library,
+            admissibility,
+            compute_bar(2, 11, &history).bar,
+            &nu_history,
+            &signature,
+            &prefix,
+            super::TerminalPrefixSummaryPayload::Full,
+            terminal_clauses,
+            None,
+            &mut cache,
+            None,
+            None,
+        );
+        let target_completion = summary
+            .evaluations
+            .as_ref()
+            .expect("full summary should keep evaluations")
+            .iter()
+            .find_map(|evaluation| match evaluation {
+                TerminalPrefixClauseEvaluation::Admitted { completion, .. }
+                    if completion.telescope == target =>
+                {
+                    Some((completion.exact_nu, completion.bit_kappa_used))
+                }
+                _ => None,
+            });
+        let target_completion_present = summary
+            .evaluations
+            .as_ref()
+            .expect("full summary should keep evaluations")
+            .iter()
+            .any(|evaluation| {
+                matches!(
+                    evaluation,
+                    TerminalPrefixClauseEvaluation::Admitted { completion, .. }
+                        if completion.telescope == target
+                )
+            });
+        let step = super::search_bootstrap_prefix_for_profile_with_runtime(
+            11,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim step 11 should build")
+        .into_iter()
+        .last()
+        .expect("claim step 11 should exist");
+        let retained_target = step
+            .retained_candidates
+            .iter()
+            .any(|candidate| candidate.telescope == target);
+        let accepted_rank = acceptance_rank(step.objective_bar, &step.accepted)
+            .expect("accepted step-11 candidate should clear the bar");
+        let compact_summary = super::compute_terminal_prefix_completion_summary_from_candidates(
+            11,
+            &library,
+            admissibility,
+            compute_bar(2, 11, &history).bar,
+            &nu_history,
+            &signature,
+            &prefix,
+            super::TerminalPrefixSummaryPayload::Compact,
+            super::terminal_prefix_clause_candidates(
+                11,
+                &library,
+                admissibility,
+                &signature,
+                clause_catalog.clauses_at(4),
+                Some(clause_catalog.terminal_connectivity_facts_at(4)),
+                clause_catalog.terminal_nu_facts_at(4),
+                &mut cache,
+                None,
+            ),
+            Some(&accepted_rank),
+            &mut cache,
+            None,
+            None,
+        );
+        let target_compact_survivor = match &compact_summary.compact_survivor_sketch {
+            Some(sketch) => sketch.survivors.iter().find_map(|survivor| {
+                clause_catalog
+                    .clauses_at(4)
+                    .get(survivor.clause_index)
+                    .is_some_and(|clause| clause == &target_clause)
+                    .then_some((survivor.exact_nu, survivor.bit_kappa_used))
+            }),
+            None => None,
+        };
+
+        assert!(
+            target_clause_present,
+            "the guarded step-11 closing clause should stay visible in the claim terminal clause catalog"
+        );
+        assert_eq!(
+            target_completion,
+            Some((26, 79)),
+            "the guarded step-11 completion should stay exact-admitted on the divergent claim history"
+        );
+        assert!(
+            target_completion_present,
+            "the guarded step-11 completion should stay visible in the full remaining-one summary"
+        );
+        assert_eq!(
+            target_compact_survivor,
+            Some((26, 79)),
+            "the guarded step-11 completion should stay visible in the compact survivor sketch even with an incumbent"
+        );
+        assert!(
+            retained_target,
+            "the guarded step-11 completion should survive claim incumbent pruning into the retained candidate pool"
+        );
+    }
+
+    #[test]
     fn claim_terminal_prefix_completion_summary_matches_direct_exact_assessment() {
         let strict_steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
         let mut library: Library = Vec::new();
@@ -14114,6 +14333,8 @@ mod tests {
             &signature,
             Some(&incumbent),
             &mut cache,
+            AdmissibilityMode::RealisticShadow,
+            15,
         )
         .expect("equal incumbent should prune the cached terminal prefix");
 
