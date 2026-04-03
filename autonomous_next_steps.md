@@ -161,15 +161,20 @@ This note is the exact next work order for `desktop_claim_shadow`.
     then the shallower formation-clause var reach, then lower bit cost
   - every current same-primary tied step-`12` survivor still collapses onto
     one observed step-`13..15` continuation and the same late generated counts
-    `9`, `12027`, and `780`
+    `33`, `12027`, and `780`
   - the step-`12` accepted-hash fork is therefore now closed locally and does
     not explain the late generated-floor collapse by itself
 - A new local late-surface repair now sharpens that remaining blocker:
-  - on the repaired step-`12` history, step `13` still opens only `3` raw
-    claim telescopes from singleton-heavy widths `[3,1,1,1,1,1,1]`,
-    exact-prunes `2 / 3` roots immediately, and materializes only one
-    `2`-terminal bucket before acceptance, so that floor miss is still baked
-    in before proof-close
+  - on the repaired step-`12` history, a new scoped claim-only step-`13`
+    widening now lifts claim-open from singleton-heavy widths
+    `[3,1,1,1,1,1,1]` / raw `3` / generated `9` to
+    `[3,1,3,3,1,1,1]` / raw `27` / generated `33` without changing the
+    accepted guarded metric shell or the observed
+    `step-13 -> step-15` continuation
+  - that widened step-`13` surface now keeps all `3` roots alive at step-open
+    and shifts the remaining local loss mostly into exact
+    legality/connectivity rejection (`24`), partial-prefix bar failure (`12`),
+    and incumbent dominance (`2`) before proof-close
   - step `14` no longer shares that thin-path profile locally:
     the widened claim `kappa = 9` catalog now opens `19683` raw telescopes,
     keeps `3` roots alive, and lifts live generated prefixes to `12027`
@@ -192,10 +197,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
     aggregate
 - A new local step-`13` catalog regression now freezes the repaired
   breadth read more precisely:
-  claim-open still sits at `kappa = 7..7` on `LateFamilySurface::ClaimGeneric`
-  with raw widths `[3,1,1,1,1,1,1]` before proof-close, so the first late
-  breadth miss is now pinned to singleton-heavy band-`7` catalog width rather
-  than a hidden proof-close-only collapse.
+  claim-open now sits at `kappa = 7..7` on `LateFamilySurface::ClaimGeneric`
+  with scoped widths `[3,1,3,3,1,1,1]`, raw catalog `27`, and live generated
+  prefixes `33` before proof-close while the guarded step-`13` metric shell
+  stays accepted, so the next late read is no longer pure catalog-open
+  starvation but the residual exact-screen losses on that widened surface.
 - A follow-up exploratory global step-`13` widening was also run locally but
   not landed:
   - widening the claim-generic band-`7` widths from `[3,1,1,1,1,1,1]` to
@@ -258,11 +264,15 @@ This note is the exact next work order for `desktop_claim_shadow`.
 7. Keep the new step-`12` continuation-collapse read fixed:
    all current same-primary tied step-`12` survivors still collapse onto one
    observed step-`13..15` continuation and the same late generated counts
-   `9`, `12027`, and `780`.
+   `33`, `12027`, and `780`.
 8. Keep the new late-surface diagnostic read fixed:
-   - repaired step `13` still opens only `3` raw claim telescopes from
-     singleton-heavy widths `[3,1,1,1,1,1,1]` and exact-prunes `2 / 3`
-     roots before proof-close
+   - repaired step `13` now opens a scoped widened claim surface with raw
+     widths `[3,1,3,3,1,1,1]`, raw catalog `27`, `3` surviving roots, and
+     live generated prefixes `33` while preserving the guarded accepted
+     metric shell
+   - most remaining widened step-`13` loss now falls into exact
+     legality/connectivity rejection (`24`), partial-prefix bar failure (`12`),
+     and incumbent dominance (`2`) before proof-close
    - repaired step `14` now opens `19683` raw claim telescopes on the promoted
      `kappa = 9` band, keeps `3` roots alive, and lifts live generated
      prefixes to `12027` before proof-close
@@ -274,13 +284,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
      telescopes but still loses `512` prefixes to partial-prefix bar failure
      before proof-close
 9. Split the common late floor collapse into its actual subproblems:
-   - step `13` is still too thin at claim step-open / catalog width to ever
-     reach the current stored floors, and the new regression now freezes that
-     exact bottleneck at raw widths `[3,1,1,1,1,1,1]`; the rejected global
-     widening branch proved raw `2187` / generated `615` is reachable but also
-     proved that direct reland breaks unrelated guardrails, so the next repair
-     must be a narrower claim-only widening path plus a follow-up read on the
-     residual exact-screen losses
+   - step `13` is no longer blocked by a pure singleton-heavy catalog-open:
+     the landed scoped widening now reaches raw widths `[3,1,3,3,1,1,1]`,
+     raw catalog `27`, and live generated prefixes `33`, while the rejected
+     global branch still bounds the much larger reachable ceiling
+     (`2187` / `615`); the next repair is therefore the residual exact-screen
+     loss on the landed widened surface, not another blind catalog reland
    - step `14` is now locally widened enough that it should stay on the guard
      rail as a regression rather than reopening as the first breadth blocker
    - step `15` remains the first late floor where the canonical catalog is
@@ -320,11 +329,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
    raw structural winners inside the repaired `34 / 6` tier.
 10. Keep the new step-`12` continuation-collapse regression green so the tied
     same-primary step-`12` set stays pinned to one observed step-`13..15`
-    continuation with generated counts `9`, `12027`, and `780` while the
+    continuation with generated counts `33`, `12027`, and `780` while the
     remaining late floor collapse is repaired.
-11. Keep the new step-`13` singleton-heavy catalog regression green so the
-    repaired step-`12` chain keeps reporting claim-open `kappa = 7..7` with
-    raw widths `[3,1,1,1,1,1,1]` before proof-close.
+11. Keep the new step-`13` scoped-widening regression green so the repaired
+    step-`12` chain keeps reporting claim-open `kappa = 7..7` with raw
+    widths `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated prefixes `33`,
+    and the guarded accepted metric shell before proof-close.
 12. Keep the step-`4` claim prefix-memo, realistic-shadow, demo-lane, and
     divergent step-`13` / step-`14` guardrails green while exploring any
     step-`13` widening path:

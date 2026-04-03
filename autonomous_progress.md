@@ -127,15 +127,20 @@ gate.
     curvature shell
   - every current same-primary tied step-`12` survivor still collapses onto
     one observed step-`13..15` continuation and the same late generated counts
-    `9`, `12027`, and `780`
+    `33`, `12027`, and `780`
   - the step-`12` accepted-hash fork is therefore now closed locally and does
     not explain the late generated-floor collapse by itself
 - A new local late-surface repair now sharpens the remaining blocker further:
-  - on the repaired step-`12` history, step `13` still opens only `3` raw
-    claim telescopes from singleton-heavy widths `[3,1,1,1,1,1,1]`,
-    exact-prunes `2 / 3` roots immediately, and materializes only one
-    `2`-terminal bucket before acceptance, so that floor miss is still baked
-    in before proof-close
+  - on the repaired step-`12` history, a new scoped claim-only step-`13`
+    widening now lifts claim-open from singleton-heavy widths
+    `[3,1,1,1,1,1,1]` / raw `3` / generated `9` to
+    `[3,1,3,3,1,1,1]` / raw `27` / generated `33` without changing the
+    accepted guarded metric shell or the observed
+    `step-13 -> step-15` continuation
+  - that widened step-`13` surface now keeps all `3` roots alive at step-open
+    and shifts the remaining local loss mostly into exact
+    legality/connectivity rejection (`24`), partial-prefix bar failure (`12`),
+    and incumbent dominance (`2`) before proof-close
   - step `14` no longer shares that thin-path profile locally:
     the widened claim `kappa = 9` catalog now opens `19683` raw telescopes,
     keeps `3` roots alive, and lifts live generated prefixes to `12027`
@@ -162,10 +167,11 @@ gate.
     breadth-hit-`0` aggregate bundle
 - A new local step-`13` catalog regression now freezes the repaired
   breadth read more precisely:
-  claim-open still sits at `kappa = 7..7` on `LateFamilySurface::ClaimGeneric`
-  with raw widths `[3,1,1,1,1,1,1]` before proof-close, so the first late
-  breadth miss is now pinned to singleton-heavy band-`7` catalog width rather
-  than a hidden proof-close-only collapse.
+  claim-open now sits at `kappa = 7..7` on `LateFamilySurface::ClaimGeneric`
+  with scoped widths `[3,1,3,3,1,1,1]`, raw catalog `27`, and live generated
+  prefixes `33` before proof-close while the guarded step-`13` metric shell
+  stays accepted, so the next late read is no longer pure catalog-open
+  starvation but the residual exact-screen losses on that widened surface.
 - A follow-up exploratory step-`13` widening pass was also run locally but was
   not landed:
   - a naive global claim-generic band-`7` widening lifted the repaired
@@ -424,18 +430,23 @@ gate.
   - live claim step `12` now also accepts the guarded same-primary curvature
     shell instead of a richer local rival
   - every current same-primary tied step-`12` survivor still collapses onto
-    one observed step-`13..15` path with late generated counts `9`, `12027`,
+    one observed step-`13..15` path with late generated counts `33`, `12027`,
     and `780`
   - so the remaining local blocker is no longer a live step-`12`
     `nu / kappa`, retained-pool, or accepted-hash miss; it is the late
     generated-floor collapse at steps `13..15` on top of the repaired
     step-`9` / `11` / `12` chain
-- A new late-surface diagnostic now explains where that collapse actually
+- A new scoped step-`13` widening now explains where that collapse still
   starts:
-  - step `13` is already too thin at claim step-open itself:
-    only `3` raw catalog telescopes from singleton-heavy widths
-    `[3,1,1,1,1,1,1]`, `2 / 3` roots exact-pruned, and one surviving
-    `2`-terminal bucket
+  - the repaired claim lane no longer stalls at a singleton-heavy
+    `3`-telescope step-open:
+    step `13` now widens to raw widths `[3,1,3,3,1,1,1]`, raw catalog `27`,
+    `3` surviving roots, and live generated prefixes `33` while preserving
+    the guarded accepted metric shell
+  - that means the remaining step-`13` loss is now visibly downstream of
+    catalog-open, with most widened-surface pressure falling into exact
+    legality/connectivity rejection (`24`), partial-prefix bar failure (`12`),
+    and incumbent dominance (`2`)
   - step `14` is no longer thin on the repaired local chain:
     widening the claim `kappa = 9` catalog now yields `19683` raw telescopes,
     `3` surviving roots, and `12027` live generated prefixes before
@@ -453,7 +464,9 @@ gate.
     incumbent dominance instead of disappearing
   - and that same reland breaks unrelated claim prefix-memo,
     realistic-shadow, demo-lane, and divergent late-step guardrails, so the
-    next fix must be narrower than a global band-`7` change
+    narrower next fix had to stay claim-only and repaired-history-specific;
+    that scoped widening is now landed, so the remaining work is the residual
+    exact-screen losses on that widened step-`13` surface
 - The new stored full-profile bundle also changes what counts as the next
   honest engineering dollar:
   - do not reopen runtime-only step-`4` surgery first
@@ -474,14 +487,13 @@ gate.
   reason counts, prune-class counts, and manifest provenance green.
 - Prioritize targeted local diagnosis and repair for:
   - the step-`9` accepted-hash fork
-  - a narrower claim-only step-`13` widening path that can improve the
-    singleton-heavy `[3,1,1,1,1,1,1]` claim-generic band-`7` catalog on the
-    repaired step-`12` chain without waking claim prefix-memo,
-    realistic-shadow, demo-lane, or divergent late-step guardrails
-  - the residual step-`13` exact-screen losses that remain after widening,
-    since the rejected global branch already showed legality/connectivity
-    rejection, partial-prefix bar failure, and incumbent dominance becoming
-    the dominant sinks there
+  - the landed scoped claim-only step-`13` widening regression:
+    claim-open widths `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated
+    prefixes `33`, guarded accepted metric shell preserved, and the same
+    observed `step-13 -> step-15` continuation preserved
+  - the residual step-`13` exact-screen losses on that widened surface:
+    legality/connectivity rejection (`24`), partial-prefix bar failure (`12`),
+    and incumbent dominance (`2`)
   - keeping the widened step-`14` catalog plus same-primary continuation
     selector stable until a stored rerun consumes it
   - the step-`15` exact partial-prefix bar path, which still cuts a
@@ -520,7 +532,7 @@ gate.
 8. Keep the new step-`12` continuation-collapse regression green:
    every current same-primary tied step-`12` survivor must still collapse onto
    one observed step-`13..15` continuation with generated counts
-   `9`, `12027`, and `780`.
+   `33`, `12027`, and `780`.
 9. Keep the new widened step-`14` regression green:
    the repaired step-`12` chain must keep reporting a step-`14` raw catalog
    of `19683`, `3` surviving roots, and `12027` live generated prefixes
@@ -534,14 +546,14 @@ gate.
     the exploratory branch widened repaired step `13` to raw `2187` /
     generated `615`, but it also disturbed claim prefix-memo,
     realistic-shadow, demo-lane, and divergent late-step guardrails.
-12. Move the next repair to a narrower claim-only step-`13` widening path:
-    scope it to the repaired step-`12` history, or an equivalent claim-only
-    gate, so the catalog can widen without waking unrelated surfaces.
-13. Once that scoped widening exists, inspect the remaining step-`13`
-    exact-screen losses:
-    the rejected global branch already showed legality/connectivity
-    rejection, partial-prefix bar failure, and incumbent dominance becoming
-    the main sinks there.
+12. Keep the new scoped claim-only step-`13` widening regression green:
+    the repaired step-`12` chain must keep reporting claim-open widths
+    `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated prefixes `33`, and
+    the guarded accepted metric shell at step `13`.
+13. Inspect the remaining step-`13` exact-screen losses on that widened
+    surface:
+    legality/connectivity rejection (`24`), partial-prefix bar failure (`12`),
+    and incumbent dominance (`2`) are now the dominant sinks there.
 14. Treat step `15` as the separate remaining exact-screen problem:
     inspect why the restored canonical temporal-shell catalog still loses
     `512` prefixes to partial-prefix bar failure before proof-close.

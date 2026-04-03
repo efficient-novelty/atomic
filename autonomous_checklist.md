@@ -19,9 +19,14 @@ It lists only work that is still open.
 - Local step-`11` and step-`12` repairs are landed, but no stored rerun has
   consumed them yet.
 - The remaining local late blocker is now split cleanly:
-  - step `13` is pinned to a singleton-heavy claim-generic band-`7` catalog
-    with raw widths `[3,1,1,1,1,1,1]`, only `3` raw telescopes, and
-    `2 / 3` roots exact-pruned before proof-close
+  - a scoped claim-only widening is now landed at step `13`:
+    claim-open widens to raw widths `[3,1,3,3,1,1,1]`, raw catalog `27`, and
+    live generated prefixes `33` while preserving the guarded accepted metric
+    shell and the same observed `step-13 -> step-15` continuation
+  - the remaining step-`13` loss is now residual exact screening on that
+    widened surface:
+    legality/connectivity rejection `24`, partial-prefix bar failure `12`,
+    and incumbent dominance `2`
   - step `14` is now a guardrail rather than the first blocker:
     raw `19683`, `3` surviving roots, `12027` live generated prefixes, and a
     selector that preserves the canonical step-`15` continuation
@@ -32,8 +37,9 @@ It lists only work that is still open.
   - it can lift the repaired local step-`13` read to raw `2187` /
     generated `615`
   - but it also disturbs claim prefix-memo, realistic-shadow, demo-lane, and
-    divergent late-step guardrails, so the remaining open work is a scoped
-    claim-only widening path plus the residual exact-screen losses
+    divergent late-step guardrails, so the remaining open work is the residual
+    exact-screen losses on the landed scoped widening plus the step-`15`
+    exact-screen path
 - Claim-policy honesty, fallback honesty, narrative/event completeness,
   exact-screen reason completeness, prune-class completeness, and manifest
   completeness are already earned on the stored full-profile run.

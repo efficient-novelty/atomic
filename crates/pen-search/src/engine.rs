@@ -12680,6 +12680,12 @@ mod tests {
             late_steps
         };
         let observed_late_path = continue_late_path(target_candidate);
+        let guarded_step_thirteen =
+            profile_step_from_reference_prefix(13, SearchProfile::StrictCanonGuarded);
+        assert_eq!(
+            observed_late_path[0].1, guarded_step_thirteen.accepted.candidate_hash,
+            "the scoped step-13 widening should keep the guarded metric shell as the accepted late-step shell"
+        );
         assert_eq!(
             observed_late_path
                 .iter()
@@ -12687,7 +12693,7 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(13, 46, 7, 9), (14, 62, 9, 12027), (15, 103, 8, 780)],
+            vec![(13, 46, 7, 33), (14, 62, 9, 12027), (15, 103, 8, 780)],
             "the repaired step-12 tie set should now collapse onto the widened step-14 surface while restoring the canonical step-15 continuation"
         );
         let alternate_candidate = tied_candidates
@@ -12705,7 +12711,7 @@ mod tests {
     }
 
     #[test]
-    fn repaired_claim_step_twelve_late_path_is_catalog_thin_before_proof_close() {
+    fn repaired_claim_step_twelve_late_path_has_scoped_step_thirteen_widening_before_proof_close() {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             11,
             2,
@@ -12783,7 +12789,10 @@ mod tests {
             step_thirteen_open.late_family_surface,
             LateFamilySurface::ClaimGeneric
         );
-        assert_eq!(step_thirteen_open.anchor_policy, ClaimAnchorPolicyDiagnostics::None);
+        assert_eq!(
+            step_thirteen_open.anchor_policy,
+            ClaimAnchorPolicyDiagnostics::None
+        );
         assert_eq!(step_thirteen_open.claim_debt_axes.kappa_min, 7);
         assert_eq!(step_thirteen_open.claim_debt_axes.kappa_max, 7);
         assert!(step_thirteen_open.package_flags.operator_bundle);
@@ -12791,38 +12800,47 @@ mod tests {
         assert!(!step_thirteen_open.package_flags.temporal_shell);
         assert_eq!(
             step_thirteen_catalog.raw_catalog_clause_widths,
-            vec![3, 1, 1, 1, 1, 1, 1]
+            vec![3, 1, 3, 3, 1, 1, 1]
         );
-        assert_eq!(step_thirteen_catalog.raw_catalog_telescope_count, Some(3));
-        assert_eq!(step_thirteen.demo_funnel.generated_raw_prefixes, 9);
+        assert_eq!(step_thirteen_catalog.raw_catalog_telescope_count, Some(27));
+        assert_eq!(step_thirteen.telescope, Telescope::reference(13));
+        assert_eq!(step_thirteen.demo_funnel.generated_raw_prefixes, 33);
         assert_eq!(
             step_thirteen.claim_root_seeding,
             Some(ClaimRootSeedingDiagnostics {
                 roots_seen: 3,
                 roots_rejected_by_insert_root: 0,
-                roots_rejected_by_exact_screen: 2,
-                roots_enqueued: 1,
+                roots_rejected_by_exact_screen: 0,
+                roots_enqueued: 3,
             })
         );
         assert_eq!(
             step_thirteen_roots.claim_root_seeding,
             step_thirteen.claim_root_seeding
         );
-        assert_eq!(step_thirteen.incremental_partial_prefix_bound_prunes, 2);
+        assert_eq!(step_thirteen.incremental_partial_prefix_bound_prunes, 12);
         assert_eq!(
             step_thirteen
                 .exact_screen_reasons
                 .partial_prefix_bar_failure,
-            2
+            12
         );
-        assert_eq!(step_thirteen.exact_screen_reasons.incumbent_dominance, 0);
+        assert_eq!(
+            step_thirteen
+                .exact_screen_reasons
+                .legality_connectivity_exact_rejection,
+            24
+        );
+        assert_eq!(step_thirteen.exact_screen_reasons.incumbent_dominance, 2);
         assert!(
             step_thirteen.demo_bucket_stats.iter().any(|bucket| {
-                bucket.stats.generated_terminal_candidates == 2
-                    && bucket.stats.exact_screened_terminal_candidates == 2
+                bucket.stats.generated_terminal_candidates == 4
+                    && bucket.stats.admissible_terminal_candidates == 4
+                    && bucket.stats.exact_screened_terminal_candidates == 4
+                    && bucket.stats.pruned_terminal_candidates == 2
                     && bucket.stats.fully_scored_terminal_candidates == 1
             }),
-            "step 13 should already be thin at the terminal-prefix bucket surface"
+            "the scoped step-13 widening should still collapse most of the added surface before proof-close"
         );
 
         history.push(DiscoveryRecord::new(
