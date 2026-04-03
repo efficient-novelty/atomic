@@ -3239,6 +3239,7 @@ fn search_next_step_internal(
         build_prefix_frontier_plan(
             prefix_states_explored,
             step_index,
+            admissibility_mode,
             objective_bar,
             retention_policy,
             retention_runtime,
@@ -5961,6 +5962,8 @@ fn claim_remaining_one_algebraic_nu_ceiling_cannot_clear_bar(
     if !should_compact_terminal_prefix_group_candidates(admissibility.mode) {
         return false;
     }
+    let clause_kappa_used = u32::try_from(prefix_telescope.clauses.len().saturating_add(1))
+        .expect("kappa exceeded u32");
     // The claim Hilbert band uses higher-order late clauses whose viable
     // terminal lift is too expressive for the compact single-clause algebraic
     // ceiling to bound tightly. Let exact screening evaluate that surface.
@@ -5971,9 +5974,19 @@ fn claim_remaining_one_algebraic_nu_ceiling_cannot_clear_bar(
     {
         return false;
     }
+    // The claim modal 5..6 slice can also hide a viable six-clause curvature
+    // continuation behind a too-low single-clause ceiling. Let exact
+    // screening evaluate that open-band surface instead of pruning it early.
+    if matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
+        && clause_kappa_used == 6
+        && admissibility.min_clause_kappa == 5
+        && admissibility.max_clause_kappa == 6
+        && admissibility.include_modal
+        && !admissibility.include_temporal
+    {
+        return false;
+    }
 
-    let clause_kappa_used = u32::try_from(prefix_telescope.clauses.len().saturating_add(1))
-        .expect("kappa exceeded u32");
     let exact_nu_upper_bound = structural_nu_single_clause_upper_bound(
         prefix_telescope,
         library,
@@ -8841,6 +8854,7 @@ fn prefix_frontier_work_key(item: &OnlinePrefixWorkItem) -> (usize, usize, u8, u
 fn build_prefix_frontier_plan(
     explored: usize,
     step_index: u32,
+    admissibility_mode: AdmissibilityMode,
     objective_bar: Rational,
     retention_policy: RetentionPolicy,
     retention_runtime: FrontierRuntimeLimits,
@@ -8905,6 +8919,31 @@ fn build_prefix_frontier_plan(
         cold: Vec::new(),
     };
     ordered.compact_sorted();
+    let claim_same_primary_retained =
+        if matches!(admissibility_mode, AdmissibilityMode::DesktopClaimShadow)
+            && (9..=12).contains(&step_index)
+        {
+            if let Some(best_rank) = prefix_cache
+                .iter()
+                .filter_map(|(_, group)| group.best_accept_rank.clone())
+                .min()
+            {
+                prefix_cache
+                    .iter()
+                    .filter_map(|(signature, group)| {
+                        group
+                            .best_accept_rank
+                            .as_ref()
+                            .filter(|rank| same_primary_rank_tier(rank, &best_rank))
+                            .map(|_| signature.clone())
+                    })
+                    .collect::<BTreeSet<_>>()
+            } else {
+                BTreeSet::new()
+            }
+        } else {
+            BTreeSet::new()
+        };
     let items_by_state = items
         .into_iter()
         .map(|item| (item.record.state_id, item))
@@ -8917,6 +8956,10 @@ fn build_prefix_frontier_plan(
             .get(&record.state_id)
             .expect("state lookup")
             .clone();
+        if claim_same_primary_retained.contains(&item.signature) {
+            hot_items.push(item);
+            continue;
+        }
         let count = class_counts.entry(item.retention_class).or_insert(0usize);
         if *count < retention_policy.quota_for(item.retention_class) {
             *count += 1;
@@ -9121,14 +9164,16 @@ mod tests {
         DemoBreadthHarvestExitReason, DemoBucketSelectionContext, DemoBudgetController,
         DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed, DemoClosurePressure,
         DemoNarrativeRuntime, DemoProofCloseEntryReason, DemoProofCloseOrderMode,
-        DemoProofCloseOverrunReason, DemoStepBudget, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
+        DemoProofCloseOverrunReason, DemoStepBudget, ExactPartialPrefixBoundDecision,
+        LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem, RealisticShadowDiscovery,
         SearchBucketTaxonomy, StepLiveCheckpoint, acceptance_rank,
         claim_candidate_keeps_next_step_alive, create_online_prefix_work_item,
         demo_materialize_to_proof_close_handoff_reason_for_pressure, demo_proof_close_group_order,
         demo_proof_close_order_mode, demo_proof_close_order_mode_with_closure_pressure,
         discover_realistic_shadow_candidates, discovery_enumeration_context,
         exact_partial_prefix_bound_decision, maybe_retune_demo_budget_live, pop_best_prefix,
-        search_bootstrap_from_prefix, search_bootstrap_from_prefix_for_profile_with_runtime,
+        screen_prefix_for_frontier, search_bootstrap_from_prefix,
+        search_bootstrap_from_prefix_for_profile_with_runtime,
         search_bootstrap_from_prefix_for_profile_with_runtime_and_observer,
         search_bootstrap_prefix, search_bootstrap_prefix_for_config_with_runtime,
         search_next_step_internal, select_acceptance_for_step,
@@ -11707,7 +11752,7 @@ mod tests {
     }
 
     #[test]
-    fn claim_step_eleven_same_primary_fork_collapses_to_the_same_step_twelve_continuation() {
+    fn claim_step_eleven_same_primary_fork_now_collapses_to_one_step_twelve_34_6_continuation() {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             10,
             2,
@@ -11721,6 +11766,16 @@ mod tests {
             .collect::<Vec<_>>();
         let (library, history, _) = history_from_prefix(&claim_prefix);
         let target = Telescope::reference(11);
+        let observed_step_twelve = super::search_bootstrap_prefix_for_profile_with_runtime(
+            12,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim step 12 should build")
+        .into_iter()
+        .last()
+        .expect("claim step 12 should exist");
         let step = super::search_bootstrap_prefix_for_profile_with_runtime(
             11,
             2,
@@ -11820,12 +11875,11 @@ mod tests {
         assert_eq!(
             continued_outcomes,
             std::collections::BTreeSet::from([(
-                "blake3:5e24909f7a6fa684855b9ac49fea80daa93bc6fde25c7db0bed15575d7d80108"
-                    .to_owned(),
-                33,
-                5,
+                observed_step_twelve.accepted.candidate_hash,
+                observed_step_twelve.accepted.nu,
+                observed_step_twelve.accepted.clause_kappa,
             )]),
-            "same-primary step-11 survivors should still collapse onto the observed step-12 33/5 continuation"
+            "same-primary step-11 survivors should now collapse onto one observed step-12 34/6 continuation"
         );
     }
 
@@ -11877,13 +11931,19 @@ mod tests {
             .expect("guarded step-11 completion should still clear the bar");
 
         assert_eq!(structural_accept_rank.overshoot, target_rank.overshoot);
-        assert_eq!(structural_accept_rank.clause_kappa, target_rank.clause_kappa);
+        assert_eq!(
+            structural_accept_rank.clause_kappa,
+            target_rank.clause_kappa
+        );
         assert!(
-            structural_accepted_candidate.signals.former_score > target_candidate.signals.former_score,
+            structural_accepted_candidate.signals.former_score
+                > target_candidate.signals.former_score,
             "the raw structural winner should still be the richer former shell"
         );
         assert!(
-            structural_accepted_candidate.signals.dependent_motive_density
+            structural_accepted_candidate
+                .signals
+                .dependent_motive_density
                 > target_candidate.signals.dependent_motive_density,
             "the raw structural winner should still carry the denser dependent motive shell"
         );
@@ -12065,6 +12125,237 @@ mod tests {
         assert!(
             retained_target,
             "the guarded step-11 completion should survive claim incumbent pruning into the retained candidate pool"
+        );
+    }
+
+    #[test]
+    fn claim_step_twelve_guarded_curvature_shell_survives_screening_while_hash_parity_stays_open() {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            11,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 11 should build");
+        let claim_prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let (library, history, nu_history) = history_from_prefix(&claim_prefix);
+        let admissibility =
+            strict_admissibility_for_mode(12, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let step = search_next_step_internal(
+            12,
+            2,
+            &library,
+            &history,
+            AdmissibilityMode::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            None,
+            &mut None,
+            false,
+        )
+        .expect("claim step 12 should build");
+        let target = Telescope::reference(12);
+        let preterminal_prefix = Telescope::new(target.clauses[..4].to_vec());
+        let preterminal_clause = target.clauses[4].clone();
+        let prefix = Telescope::new(target.clauses[..5].to_vec());
+        let target_clause = target.clauses[5].clone();
+        let objective_bar = compute_bar(2, 12, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 6);
+        let preterminal_signature = PrefixSignature::new(12, &library, &preterminal_prefix);
+        let signature = PrefixSignature::new(12, &library, &prefix);
+        let mut cache = PrefixLegalityCache::default();
+        assert!(cache.insert_root(
+            preterminal_signature.clone(),
+            6,
+            &library,
+            &preterminal_prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        let preterminal_work_item = create_online_prefix_work_item(
+            6,
+            preterminal_prefix.clone(),
+            preterminal_signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut cache,
+        );
+        let preterminal_clause_present = preterminal_work_item
+            .next_clauses(&clause_catalog)
+            .iter()
+            .any(|clause| *clause == preterminal_clause);
+        assert!(cache.insert_child(
+            &preterminal_signature,
+            signature.clone(),
+            &library,
+            &preterminal_clause,
+            admissibility,
+        ));
+        assert!(cache.insert_root(
+            signature.clone(),
+            6,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        let terminal_clauses = super::terminal_prefix_clause_candidates(
+            12,
+            &library,
+            admissibility,
+            &signature,
+            clause_catalog.clauses_at(5),
+            Some(clause_catalog.terminal_connectivity_facts_at(5)),
+            clause_catalog.terminal_nu_facts_at(5),
+            &mut cache,
+            None,
+        );
+        let target_clause_present = match &terminal_clauses {
+            super::TerminalPrefixClauseCandidates::General(clauses)
+            | super::TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(clauses) => clauses
+                .iter()
+                .any(|candidate| candidate.clause == &target_clause),
+        };
+        let summary = super::compute_terminal_prefix_completion_summary_from_candidates(
+            12,
+            &library,
+            admissibility,
+            compute_bar(2, 12, &history).bar,
+            &nu_history,
+            &signature,
+            &prefix,
+            super::TerminalPrefixSummaryPayload::Full,
+            terminal_clauses,
+            None,
+            &mut cache,
+            None,
+            None,
+        );
+        let target_completion = summary
+            .evaluations
+            .as_ref()
+            .expect("full summary should keep evaluations")
+            .iter()
+            .find_map(|evaluation| match evaluation {
+                TerminalPrefixClauseEvaluation::Admitted { completion, .. }
+                    if completion.telescope == target =>
+                {
+                    Some((completion.exact_nu, completion.bit_kappa_used))
+                }
+                _ => None,
+            });
+        let accepted_rank = acceptance_rank(step.objective_bar, &step.accepted)
+            .expect("accepted step-12 candidate should clear the bar");
+        let target_work_item = create_online_prefix_work_item(
+            6,
+            prefix.clone(),
+            signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut cache,
+        );
+        let mut probe_discovery = RealisticShadowDiscovery::default();
+        probe_discovery.prefix_legality_cache = cache.clone();
+        probe_discovery.terminal_rank_incumbent = Some(accepted_rank.clone());
+        let (target_screen_decision, _) = screen_prefix_for_frontier(
+            12,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog,
+            &target_work_item,
+            &mut probe_discovery,
+        );
+        let compact_summary = super::compute_terminal_prefix_completion_summary_from_candidates(
+            12,
+            &library,
+            admissibility,
+            compute_bar(2, 12, &history).bar,
+            &nu_history,
+            &signature,
+            &prefix,
+            super::TerminalPrefixSummaryPayload::Compact,
+            super::terminal_prefix_clause_candidates(
+                12,
+                &library,
+                admissibility,
+                &signature,
+                clause_catalog.clauses_at(5),
+                Some(clause_catalog.terminal_connectivity_facts_at(5)),
+                clause_catalog.terminal_nu_facts_at(5),
+                &mut cache,
+                None,
+            ),
+            Some(&accepted_rank),
+            &mut cache,
+            None,
+            None,
+        );
+        let target_compact_survivor = match &compact_summary.compact_survivor_sketch {
+            Some(sketch) => sketch.survivors.iter().find_map(|survivor| {
+                clause_catalog
+                    .clauses_at(5)
+                    .get(survivor.clause_index)
+                    .is_some_and(|clause| clause == &target_clause)
+                    .then_some((survivor.exact_nu, survivor.bit_kappa_used))
+            }),
+            None => None,
+        };
+        let target_evaluation = evaluate_candidate(&library, &history, target.clone())
+            .expect("target step-12 evaluates");
+        let target_minimality = analyze_semantic_minimality(
+            12,
+            step.objective_bar,
+            admissibility,
+            &target,
+            &library,
+            &nu_history,
+        );
+        let guarded_step_twelve =
+            profile_step_from_reference_prefix(12, SearchProfile::StrictCanonGuarded);
+
+        assert!(
+            target_minimality.is_minimal(),
+            "claim open-band minimality should no longer prune the guarded step-12 shell using a worse-ranked detachable subbundle"
+        );
+        assert!(
+            preterminal_clause_present,
+            "the guarded step-12 fourth-clause prefix should still expose the guarded fifth clause"
+        );
+        assert_eq!(
+            target_screen_decision,
+            ExactPartialPrefixBoundDecision::CanClearBar,
+            "the guarded step-12 remaining-one prefix should now survive claim exact screening"
+        );
+        assert!(target_clause_present);
+        assert_eq!(target_completion, Some((34, 121)));
+        assert_eq!(
+            target_compact_survivor,
+            Some((34, 121)),
+            "the guarded step-12 completion should stay visible in the compact survivor sketch"
+        );
+        assert_eq!(target_evaluation.nu, 34);
+        assert_eq!(target_evaluation.clause_kappa, 6);
+        assert_eq!(step.accepted.nu, guarded_step_twelve.accepted.nu);
+        assert_eq!(
+            step.accepted.clause_kappa,
+            guarded_step_twelve.accepted.clause_kappa
+        );
+        assert_ne!(
+            step.accepted.candidate_hash, guarded_step_twelve.accepted.candidate_hash,
+            "step-12 accepted-hash parity should still be the remaining local blocker after the 34/6 recovery"
+        );
+        assert!(
+            step.retained_candidates
+                .iter()
+                .all(|candidate| candidate.candidate_hash != target_evaluation.candidate_hash),
+            "the guarded step-12 curvature shell should still be absent from the retained pool while the same-primary hash fork remains open"
         );
     }
 

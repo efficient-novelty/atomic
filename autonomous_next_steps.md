@@ -135,12 +135,27 @@ This note is the exact next work order for `desktop_claim_shadow`.
     survivor over the richer raw structural winner by preferring the leaner
     former/binder shell first, then stronger dependent density within that
     lean tier, then lower bit cost
-  - every current same-primary tied step-`11` survivor still collapses onto
-    the same observed step-`12` accepted hash / `nu` / `kappa` (`33 / 5`)
+  - every current same-primary tied step-`11` survivor now collapses onto one
+    observed step-`12` accepted hash / `nu` / `kappa` at guarded `34 / 6`, not
+    the old `33 / 5` drop
   - step `11` is therefore no longer best explained as raw generation loss,
     compact-summary loss, a simple one-step viability miss, or an unresolved
-    local selector; the remaining blocker is the step-`12` drop on top of
-    that repaired step-`11` history
+    local selector; the old step-`12` `33 / 5` drop is no longer the next
+    blocker on that repaired step-`11` history
+- A new local step-`12` minimality and exact-screen repair now extends that
+  localization:
+  - the guarded step-`12` curvature shell is still enumerated and
+    exact-admitted on the repaired live claim history
+  - it now also survives preterminal clause exposure, full remaining-one
+    summary, compact survivor sketch, semantic minimality, and exact
+    remaining-one screening on that history
+  - live claim step `12` now recovers guarded `nu = 34`, `kappa = 6`
+    instead of the old `33 / 5` drop
+  - but live claim step `12` still accepts a different same-primary
+    `34 / 6` hash, and the guarded curvature shell still does not survive
+    into the retained claim candidate pool
+  - the remaining local blocker is therefore now the step-`12`
+    same-primary retained-pool / accepted-hash fork inside `34 / 6`
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -184,16 +199,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
    the richer raw structural winner on the live divergent history.
 4. Keep the new step-`11` continuation-collapse read fixed:
    all current same-primary tied step-`11` survivors still keep step `12`
-   alive and still collapse onto the same observed claim step-`12`
-   accepted hash / `nu` / `kappa` (`33 / 5`).
+   alive and now collapse onto one observed claim step-`12`
+   accepted hash / `nu` / `kappa` at `34 / 6`.
 5. Keep step `9` final selection deferred while the current tied step-`9`
    candidates still share the same observed step-`10` / repaired-step-`11`
    continuation.
-6. Move the active repair target to the step-`12` drop from guarded `34 / 6`
-   to claim `33 / 5`:
-   inspect why every current same-primary step-`11` survivor, including the
-   repaired guarded winner, still collapses onto that observed step-`12`
-   continuation.
+6. Move the active repair target to the step-`12` same-primary
+   retained-pool / accepted-hash fork inside guarded `34 / 6`:
+   inspect why the guarded curvature shell now survives exact screening but
+   still does not survive into the retained claim candidate pool, and why a
+   different same-primary `34 / 6` hash is accepted instead.
 7. Use the repaired step-`9` / step-`11` / step-`12` chain to explain the
    late generated-floor collapse at
    steps `11..15`, especially:
@@ -213,17 +228,22 @@ This note is the exact next work order for `desktop_claim_shadow`.
    continues to choose the guarded same-primary survivor over richer raw
    structural winners on the live divergent history.
 4. Keep the new step-`11` continuation-collapse regression green so the
-   current tied same-primary set stays pinned to the observed step-`12`
-   `33 / 5` continuation while the step-`12` drop is repaired.
+   current tied same-primary set stays pinned to one observed step-`12`
+   `34 / 6` continuation while the step-`12` same-primary hash fork is
+   repaired.
 5. Keep the stored compare regression green for the step-`11`
    same-`nu` / same-`kappa` accepted-hash fork.
-6. Keep the stored compare regression green for the step-`12`
-   guarded `34 / 6` versus claim `33 / 5` drop.
-7. Keep the stored certification / benchmark assertions green for the
+6. Keep the new step-`12` exact-screen / minimality regression green so the
+   guarded curvature shell keeps surviving preterminal clause exposure, full
+   summary, compact survivor sketch, semantic minimality, and exact
+   remaining-one screening on the repaired live history.
+7. Keep the stored compare regression green for the step-`12`
+   guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
+8. Keep the stored certification / benchmark assertions green for the
    step-`1` breadth miss and the late generated-floor snapshot at
    steps `10..15` so the next fix cannot silently reshuffle the stored
    failure surface.
-8. Keep the existing pre-flight gate green while the local repair lands.
+9. Keep the existing pre-flight gate green while the local repair lands.
 
 ### 5. Only Rerun After The Local Repair Exists
 

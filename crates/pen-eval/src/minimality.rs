@@ -2,7 +2,7 @@ use crate::scc::{ClauseIx, terminal_clause_sccs, terminal_scc_sub_bundles};
 use crate::{bar::compute_rho, nu::compute_native_nu};
 use pen_core::{library::Library, rational::Rational, telescope::Telescope};
 use pen_type::{
-    admissibility::{StrictAdmissibility, passes_strict_admissibility},
+    admissibility::{AdmissibilityMode, StrictAdmissibility, passes_strict_admissibility},
     check::{CheckResult, check_telescope},
 };
 
@@ -50,6 +50,11 @@ pub fn analyze_semantic_minimality(
     history: &[(u32, u32)],
 ) -> SemanticMinimalityWitness {
     let structural = analyze_minimality(telescope);
+    let parent_clause_kappa = u32::try_from(telescope.kappa()).expect("kappa should fit in u32");
+    let parent_rho = compute_rho(
+        compute_native_nu(telescope, library, history).total,
+        parent_clause_kappa,
+    );
     let admissible_bar_clear_subbundles = structural
         .detachable_subbundles
         .iter()
@@ -64,9 +69,23 @@ pub fn analyze_semantic_minimality(
                 return false;
             }
 
-            compute_rho(native.total, clause_kappa)
-                .map(|rho| rho >= objective_bar)
-                .unwrap_or(false)
+            let Some(rho) = compute_rho(native.total, clause_kappa) else {
+                return false;
+            };
+            if rho < objective_bar {
+                return false;
+            }
+
+            if matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
+                && admissibility.focus_family.is_none()
+                && parent_rho.as_ref().is_some_and(|parent| {
+                    rho > *parent || (rho == *parent && clause_kappa > parent_clause_kappa)
+                })
+            {
+                return false;
+            }
+
+            true
         })
         .cloned()
         .collect();

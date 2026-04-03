@@ -29,18 +29,21 @@ It lists only work that is still open.
 - Stored `v5` compare / certification / benchmark regression tests now pin
   those current parity and breadth failures in-tree, so the next change has to
   move real stored behavior rather than only the narrative around it.
-- A new local claim regression now proves the guarded step-`11` completion
-  survives the current claim terminal-clause catalog, full remaining-one
-  summary, compact survivor sketch, and retained candidate pool on the live
-  divergent history; no stored rerun has consumed that repair yet, so the
-  signoff surface is still the frozen `v5` evidence set.
-- A follow-up local selector repair now makes live claim step-`11`
-  acceptance prefer the guarded same-primary survivor over the richer raw
-  structural winner on the live divergent history, while a follow-up
-  regression still proves the current same-primary step-`11` tied set
-  collapses onto the same observed claim step-`12` accepted hash / `nu` /
-  `kappa` (`33 / 5`); the step-`11` selector is therefore no longer the
-  remaining local blocker.
+- Local step-`11` retained-pool and selector repairs are now landed:
+  the guarded same-primary completion survives the current claim
+  terminal-clause catalog, full remaining-one summary, compact survivor
+  sketch, retained candidate pool, and final live selection on the divergent
+  history; no stored rerun has consumed that repair yet, so the signoff
+  surface is still the frozen `v5` evidence set.
+- A follow-up local step-`12` minimality and exact-screen repair now keeps
+  the guarded curvature shell alive through preterminal clause exposure, full
+  remaining-one summary, compact survivor sketch, semantic minimality, and
+  exact remaining-one screening on that repaired live history.
+- The current same-primary step-`11` survivors now collapse onto one observed
+  live claim step-`12` continuation at guarded `34 / 6`, not the old
+  `33 / 5` drop; however, live claim step `12` still accepts a different
+  same-primary `34 / 6` hash, and the guarded curvature shell still does not
+  survive into the retained claim candidate pool.
 - The old `v3` step-`14` zero-candidate failure is therefore no longer the
   first blocker.
 - The current blocker is stored parity plus stored breadth on the completed
@@ -53,8 +56,9 @@ It lists only work that is still open.
     picks the guarded same-primary survivor and no stored rerun has consumed
     that repair yet
   - step `12` still drops to `nu = 33`, `kappa = 5` versus guarded `34 / 6`,
-    and the current same-primary step-`11` survivors all collapse onto that
-    observed `33 / 5` continuation
+    while the repaired live local path now reaches guarded `34 / 6` but still
+    accepts a different same-primary hash and still fails to retain the
+    guarded curvature shell
   - step `13` and step `14` recover the guarded accepted hashes but stay one
     `nu` low
   - step `15` returns the guarded `DCT` hash / `nu` / `kappa`
