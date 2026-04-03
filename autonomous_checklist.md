@@ -50,6 +50,17 @@ It lists only work that is still open.
   still collapse onto one observed local step-`13..15` path with generated
   counts `9`, `157`, and `780`, so the closed local step-`12` hash fork does
   not explain the late floor collapse by itself.
+- A new local late-floor diagnostic now shows where that repaired late path is
+  still too thin:
+  - step `13` opens only `3` raw claim telescopes, exact-prunes `2 / 3` roots,
+    and reaches only one `2`-terminal bucket before acceptance
+  - step `14` opens only `243` raw claim telescopes on the promoted
+    `kappa = 9` band, keeps one root alive, and still concentrates the
+    surviving width inside one `84`-terminal small cluster with `80`
+    incumbent-dominance prunes
+  - step `15` still opens `6561` raw claim telescopes, but `512`
+    partial-prefix bar failures cut that live generated surface to `780`
+    before proof-close
 - The old `v3` step-`14` zero-candidate failure is therefore no longer the
   first blocker.
 - The current blocker is stored parity plus stored breadth on the completed

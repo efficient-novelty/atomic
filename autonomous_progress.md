@@ -130,6 +130,20 @@ gate.
     `9`, `157`, and `780`
   - the step-`12` accepted-hash fork is therefore now closed locally and does
     not explain the late generated-floor collapse by itself
+- A new local late-floor diagnostic now sharpens that remaining blocker:
+  - on the repaired step-`12` history, step `13` opens only `3` raw claim
+    telescopes, exact-prunes `2 / 3` roots immediately, and materializes only
+    one `2`-terminal bucket before acceptance, so the current step-`13` floor
+    miss is already baked in before proof-close
+  - step `14` then opens only `243` raw claim telescopes on the promoted
+    `kappa = 9` Hilbert band, keeps exactly one root alive, and still spends
+    almost all surviving width inside one `84`-terminal small cluster with
+    `80` incumbent-dominance prunes, so the current step-`14` floor miss is
+    also already baked in before proof-close
+  - step `15` still opens a broader `6561`-telescope claim catalog, but
+    `512` exact partial-prefix bar failures shrink that live generated surface
+    to `780` before proof-close, so step `15` is now the first late floor miss
+    that is not ruled out at catalog-open alone
 - No fresh full-profile rerun or stored audit refresh landed yet, so the
   frozen `v5` run, compare report, claim certificate, and benchmark bundle
   remain the authoritative stored evidence surface this turn.
@@ -383,9 +397,20 @@ gate.
     one observed step-`13..15` path with late generated counts `9`, `157`,
     and `780`
   - so the remaining local blocker is no longer a live step-`12`
-    `nu / kappa`, retained-pool, or accepted-hash miss; it is the common late
+    `nu / kappa`, retained-pool, or accepted-hash miss; it is the late
     generated-floor collapse at steps `13..15` on top of the repaired
     step-`9` / `11` / `12` chain
+- A new late-surface diagnostic now explains where that collapse actually
+  starts:
+  - step `13` is already too thin at claim step-open itself:
+    only `3` raw catalog telescopes, `2 / 3` roots exact-pruned, and one
+    surviving `2`-terminal bucket
+  - step `14` is also too thin before proof-close:
+    only `243` raw catalog telescopes, one surviving root, and one dominant
+    `84`-terminal small cluster with `80` incumbent-dominance prunes
+  - step `15` is different:
+    its raw claim catalog is still broad at `6561`, but exact
+    partial-prefix bar failures dominate there (`512`) before proof-close
 - The new stored full-profile bundle also changes what counts as the next
   honest engineering dollar:
   - do not reopen runtime-only step-`4` surgery first
@@ -406,10 +431,12 @@ gate.
   reason counts, prune-class counts, and manifest provenance green.
 - Prioritize targeted local diagnosis and repair for:
   - the step-`9` accepted-hash fork
-  - the late generated-floor collapse at steps `11..15`
-    especially the common step-`13..15` path that still lands at
-    `9`, `157`, and `780` generated raw prefixes after the repaired
-    step-`12` selector
+  - late claim admissibility / catalog breadth at steps `13` and `14`,
+    which are now proven too thin before proof-close on the repaired
+    step-`12` chain
+  - the step-`15` exact partial-prefix bar path, which still cuts a
+    `6561`-telescope raw catalog down to `780` generated prefixes before
+    proof-close
 - Launch the next clean-start full-profile rerun only after the local repair
   is green against those stored parity/floor regressions.
 
@@ -444,13 +471,22 @@ gate.
    every current same-primary tied step-`12` survivor must still collapse onto
    one observed step-`13..15` continuation with generated counts
    `9`, `157`, and `780`.
-9. Move the next repair to the common late path, not back to raw step-`9`
-   generation:
-   explain why the repaired step-`12` tie set still thins to `9` generated
-   prefixes at step `13`, then only `157` and `780` at steps `14` and `15`.
-10. Re-run the step-`9` tie diagnostic only after the common late collapse is
-    better understood, since the current tied step-`9` set still shares the
-    same observed step-`10` / repaired-step-`11` / repaired-step-`12` chain.
-11. Only then land the narrowest honest parity/floor fix, and only then launch
+9. Keep the new late-thin-path regression green:
+   the repaired step-`12` chain must keep reporting step `13` raw catalog
+   `3` with roots `3 -> 1`, step `14` raw catalog `243` with one surviving
+   root, and step `15` raw catalog `6561` with `512`
+   partial-prefix bar failures until a real late-surface fix lands.
+10. Move the next repair to late claim breadth itself, not back to raw
+    step-`9` generation:
+    widen the honest claim step-open / catalog surface at steps `13` and `14`
+    before blaming proof-close for those two floor misses.
+11. Treat step `15` as a separate exact-screen problem:
+    inspect why the broader temporal-shell catalog still loses `512`
+    prefixes to partial-prefix bar failure before proof-close.
+12. Re-run the step-`9` tie diagnostic only after the late step-open and
+    step-`15` exact-screen stories are better understood, since the current
+    tied step-`9` set still shares the same observed repaired
+    step-`10..12` chain.
+13. Only then land the narrowest honest parity/floor fix, and only then launch
     `long-rerun-v6` and re-run compare, certification, and benchmark against
     the repaired bundle.

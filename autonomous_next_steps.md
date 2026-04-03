@@ -164,6 +164,20 @@ This note is the exact next work order for `desktop_claim_shadow`.
     `9`, `157`, and `780`
   - the step-`12` accepted-hash fork is therefore now closed locally and does
     not explain the late generated-floor collapse by itself
+- A new local late-floor diagnostic now sharpens that remaining blocker:
+  - on the repaired step-`12` history, step `13` opens only `3` raw claim
+    telescopes, exact-prunes `2 / 3` roots immediately, and materializes only
+    one `2`-terminal bucket before acceptance, so that floor miss is already
+    baked in before proof-close
+  - step `14` then opens only `243` raw claim telescopes on the promoted
+    `kappa = 9` Hilbert band, keeps exactly one root alive, and still spends
+    almost all surviving width inside one `84`-terminal small cluster with
+    `80` incumbent-dominance prunes, so that floor miss is also already baked
+    in before proof-close
+  - step `15` still opens a broader `6561`-telescope claim catalog, but
+    `512` exact partial-prefix bar failures shrink that live generated surface
+    to `780` before proof-close, so step `15` is now the first late floor miss
+    that is not ruled out at catalog-open alone
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -219,12 +233,24 @@ This note is the exact next work order for `desktop_claim_shadow`.
    all current same-primary tied step-`12` survivors still collapse onto one
    observed step-`13..15` continuation and the same late generated counts
    `9`, `157`, and `780`.
-8. Move the active repair target from the closed local step-`12` hash fork to
-   the common late generated-floor collapse at steps `13..15`:
-   inspect why the repaired step-`12` tie set still thins to `9` generated
-   prefixes at step `13`, then only `157` and `780` at steps `14` and `15`.
-9. Keep the step-`1` breadth miss on the checklist, but do not confuse that
-   longstanding signoff floor with the new claim-specific mid/late parity fork.
+8. Keep the new late-thin-path diagnostic read fixed:
+   - repaired step `13` opens only `3` raw claim telescopes and exact-prunes
+     `2 / 3` roots before proof-close
+   - repaired step `14` opens only `243` raw claim telescopes on the promoted
+     `kappa = 9` band and still concentrates the surviving width inside one
+     `84`-terminal small cluster with `80` incumbent-dominance prunes
+   - repaired step `15` opens `6561` raw claim telescopes but still loses
+     `512` prefixes to partial-prefix bar failure before proof-close
+9. Split the common late floor collapse into its actual subproblems:
+   - step `13` and step `14` are already too thin at claim step-open / catalog
+     width to ever reach the current stored floors, so inspect claim
+     admissibility and claim-generic catalog breadth there first
+   - step `15` is the first late floor where the catalog is broad enough but
+     exact partial-prefix bar failure still dominates, so inspect that exact
+     screen path separately
+10. Keep the step-`1` breadth miss on the checklist, but do not confuse that
+    longstanding signoff floor with the new claim-specific mid/late parity
+    fork.
 
 ### 4. Use The New Regressions To Drive The Local Repair
 
@@ -258,13 +284,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
     same-primary step-`12` set stays pinned to one observed step-`13..15`
     continuation with generated counts `9`, `157`, and `780` while the common
     late floor collapse is repaired.
-11. Keep the stored compare regression green for the step-`12`
+11. Keep the new late-thin-path regression green so the repaired step-`12`
+    chain keeps reporting step `13` raw catalog `3` with roots `3 -> 1`,
+    step `14` raw catalog `243` with one surviving root, and step `15`
+    raw catalog `6561` with `512` partial-prefix bar failures until the
+    late-surface repair is intentionally moved.
+12. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
-12. Keep the stored certification / benchmark assertions green for the
-   step-`1` breadth miss and the late generated-floor snapshot at
-   steps `10..15` so the next fix cannot silently reshuffle the stored
-   failure surface.
-13. Keep the existing pre-flight gate green while the local repair lands.
+13. Keep the stored certification / benchmark assertions green for the
+    step-`1` breadth miss and the late generated-floor snapshot at
+    steps `10..15` so the next fix cannot silently reshuffle the stored
+    failure surface.
+14. Keep the existing pre-flight gate green while the local repair lands.
 
 ### 5. Only Rerun After The Local Repair Exists
 

@@ -9286,6 +9286,7 @@ fn absorb_elapsed_duration(millis: &mut u64, micros: &mut u64, duration: Duratio
 mod tests {
     use super::{
         AtomicSearchProgressObserver, AtomicSearchStep, ClaimAnchorPolicyDiagnostics,
+        ClaimRootSeedingDiagnostics,
         DemoBreadthHarvestExitReason, DemoBucketSelectionContext, DemoBudgetController,
         DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed, DemoClosurePressure,
         DemoNarrativeRuntime, DemoProofCloseEntryReason, DemoProofCloseOrderMode,
@@ -12630,6 +12631,190 @@ mod tests {
                 "every current same-primary step-12 survivor should still collapse onto the same observed step-13 to step-15 continuation"
             );
         }
+    }
+
+    #[test]
+    fn repaired_claim_step_twelve_late_path_is_catalog_thin_before_proof_close() {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            11,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 11 should build");
+        let claim_prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let (mut library, mut history, _) = history_from_prefix(&claim_prefix);
+        let mut progress_observer = None;
+        let step_twelve = super::search_next_step(
+            12,
+            2,
+            &library,
+            &history,
+            AdmissibilityMode::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            None,
+            &mut progress_observer,
+        )
+        .expect("live claim step 12 should build");
+        history.push(DiscoveryRecord::new(
+            12,
+            u32::from(step_twelve.accepted.nu),
+            u32::from(step_twelve.accepted.clause_kappa),
+        ));
+        library.push(LibraryEntry::from_telescope(
+            &step_twelve.telescope,
+            &library,
+        ));
+
+        let inspect_late_step = |step_index, library: &Library, history: &[DiscoveryRecord]| {
+            let mut recorder = LiveCheckpointRecorder::default();
+            let mut progress_observer: Option<&mut dyn AtomicSearchProgressObserver> =
+                Some(&mut recorder);
+            let step = super::search_next_step(
+                step_index,
+                2,
+                library,
+                history,
+                AdmissibilityMode::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+                None,
+                &mut progress_observer,
+            )
+            .expect("late continuation should build");
+            let catalog_checkpoint = recorder
+                .checkpoints
+                .iter()
+                .find(|checkpoint| checkpoint.note.as_deref() == Some("claim_regular_clause_catalog"))
+                .expect("late claim step should emit the regular catalog checkpoint")
+                .clone();
+            let root_summary = recorder
+                .checkpoints
+                .iter()
+                .find(|checkpoint| checkpoint.note.as_deref() == Some("claim_root_seeding_summary"))
+                .expect("late claim step should emit the root seeding summary checkpoint")
+                .clone();
+            (step, catalog_checkpoint, root_summary)
+        };
+
+        let (step_thirteen, step_thirteen_catalog, step_thirteen_roots) =
+            inspect_late_step(13, &library, &history);
+        assert_eq!(step_thirteen_catalog.raw_catalog_telescope_count, Some(3));
+        assert_eq!(step_thirteen.demo_funnel.generated_raw_prefixes, 9);
+        assert_eq!(
+            step_thirteen.claim_root_seeding,
+            Some(ClaimRootSeedingDiagnostics {
+                roots_seen: 3,
+                roots_rejected_by_insert_root: 0,
+                roots_rejected_by_exact_screen: 2,
+                roots_enqueued: 1,
+            })
+        );
+        assert_eq!(
+            step_thirteen_roots.claim_root_seeding,
+            step_thirteen.claim_root_seeding
+        );
+        assert_eq!(step_thirteen.incremental_partial_prefix_bound_prunes, 2);
+        assert_eq!(step_thirteen.exact_screen_reasons.partial_prefix_bar_failure, 2);
+        assert_eq!(step_thirteen.exact_screen_reasons.incumbent_dominance, 0);
+        assert!(
+            step_thirteen
+                .demo_bucket_stats
+                .iter()
+                .any(|bucket| {
+                    bucket.stats.generated_terminal_candidates == 2
+                        && bucket.stats.exact_screened_terminal_candidates == 2
+                        && bucket.stats.fully_scored_terminal_candidates == 1
+                }),
+            "step 13 should already be thin at the terminal-prefix bucket surface"
+        );
+
+        history.push(DiscoveryRecord::new(
+            13,
+            u32::from(step_thirteen.accepted.nu),
+            u32::from(step_thirteen.accepted.clause_kappa),
+        ));
+        library.push(LibraryEntry::from_telescope(
+            &step_thirteen.telescope,
+            &library,
+        ));
+
+        let (step_fourteen, step_fourteen_catalog, step_fourteen_roots) =
+            inspect_late_step(14, &library, &history);
+        assert_eq!(step_fourteen_catalog.raw_catalog_telescope_count, Some(243));
+        assert_eq!(step_fourteen.demo_funnel.generated_raw_prefixes, 157);
+        assert_eq!(
+            step_fourteen.claim_root_seeding,
+            Some(ClaimRootSeedingDiagnostics {
+                roots_seen: 1,
+                roots_rejected_by_insert_root: 0,
+                roots_rejected_by_exact_screen: 0,
+                roots_enqueued: 1,
+            })
+        );
+        assert_eq!(
+            step_fourteen_roots.claim_root_seeding,
+            step_fourteen.claim_root_seeding
+        );
+        assert_eq!(step_fourteen.incremental_partial_prefix_bound_prunes, 18);
+        assert_eq!(step_fourteen.exact_screen_reasons.partial_prefix_bar_failure, 18);
+        assert_eq!(step_fourteen.exact_screen_reasons.incumbent_dominance, 80);
+        assert!(
+            step_fourteen
+                .demo_bucket_stats
+                .iter()
+                .any(|bucket| {
+                    bucket.stats.generated_terminal_candidates == 84
+                        && bucket.stats.exact_screened_terminal_candidates == 84
+                        && bucket.stats.pruned_terminal_candidates == 80
+                        && bucket.stats.fully_scored_terminal_candidates == 1
+                }),
+            "step 14 should still be dominated by one small-cluster terminal bucket"
+        );
+
+        history.push(DiscoveryRecord::new(
+            14,
+            u32::from(step_fourteen.accepted.nu),
+            u32::from(step_fourteen.accepted.clause_kappa),
+        ));
+        library.push(LibraryEntry::from_telescope(
+            &step_fourteen.telescope,
+            &library,
+        ));
+
+        let (step_fifteen, step_fifteen_catalog, step_fifteen_roots) =
+            inspect_late_step(15, &library, &history);
+        assert_eq!(step_fifteen_catalog.raw_catalog_telescope_count, Some(6561));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 780);
+        assert_eq!(
+            step_fifteen.claim_root_seeding,
+            Some(ClaimRootSeedingDiagnostics {
+                roots_seen: 3,
+                roots_rejected_by_insert_root: 0,
+                roots_rejected_by_exact_screen: 0,
+                roots_enqueued: 3,
+            })
+        );
+        assert_eq!(
+            step_fifteen_roots.claim_root_seeding,
+            step_fifteen.claim_root_seeding
+        );
+        assert_eq!(step_fifteen.incremental_partial_prefix_bound_prunes, 512);
+        assert_eq!(step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 512);
+        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 0);
+        assert!(
+            step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .any(|bucket| {
+                    bucket.stats.generated_terminal_candidates == 12
+                        && bucket.stats.admissible_terminal_candidates == 2
+                        && bucket.stats.exact_screened_terminal_candidates == 2
+                }),
+            "step 15 should still leave only a tiny surviving temporal terminal cluster"
+        );
     }
 
     #[test]
