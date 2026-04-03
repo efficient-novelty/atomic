@@ -1,11 +1,11 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-04-02
+Last updated: 2026-04-03
 Status: active
 
-This file is the staged path from the current mixed claim-lane state to final
-claim signoff. It is intentionally strategic and forward-looking rather than a
-run diary.
+This file is the staged path from the current completed-but-not-certified
+claim-lane state to final signoff. It is intentionally strategic and
+forward-looking rather than a run diary.
 
 ## Objective
 
@@ -20,140 +20,126 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 ## Current Strategic Position
 
-- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v3`
-  proved that the current preserved claim binary can escape step `4`, reach
-  step `13`, and open step `14`. The old "can this lane reach step `5`?"
-  question is now closed on stored evidence.
-- The same run failed at step `14` with
-  `failure_note = "no atomic candidates were generated for step 14"`.
-- Step `13` itself is not the new blocker. Its stored summary completed in
-  `336 ms`, exact-screened `4353` terminals, closed `99%` of the frontier,
-  and accepted a `kappa = 3`, `nu = 19` candidate.
-- The accepted claim path is already drifting before the failure:
-  steps `10` through `13` all diverge from reference replay, with widening
-  `nu` and `clause_kappa` deltas by step `13`.
-- Step `14` never entered real search on the failed run. Its only live
-  checkpoint shows `clause_kappa = 7`,
-  `raw_catalog_clause_widths = [3,1,1,1,1,1,1]`,
-  `raw_catalog_telescope_count = 3`,
-  `generated_raw_surface = 0`,
-  `frontier_queue_len = 0`, and `candidate_pool_len = 0`.
-- The new divergent-prefix reproducer plus current claim code now promote that
-  same late-step opening into `claim_step_open = 9..9`, enqueue one root, and
-  reach exact terminal-summary work, but the reproducer still dies with exact
-  partial-prefix pruning after summary build starts.
-- The compact terminal-summary path is still the main measured cost inside
-  step `4`, but step-`4` throughput is no longer the immediate blocker for the
-  next cycle. The immediate blocker is late-step claim viability and the
-  step-`14` zero-candidate failure.
-- Keep the current short-loop/runtime references for regression checks:
-  - short-loop gate:
-    `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-v1`
-  - later-wall step-`4` continuation reference through `576`:
-    `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v1`
-  - corroborating middle-wall read through `335`:
-    `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v2`
-  - older farthest stored step-`4` stop at `1095`:
-    `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`
+- A completed clean-start full-profile bundle now exists:
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v5`
+  finishes through step `15` on clean-tree repo head
+  `c1fbb51d4fc9a620cd2ce95c9c3eadfe1a54fc65` with release binary hash
+  `c42758f96c8171900651503d7f2a0ffe9915966c41edea98d8f1e296fc772a4e`.
+- Stored compare, certification, and benchmark outputs now exist beside that
+  `v5` run and are the current authoritative evidence surface.
+- The pre-flight gate, one fresh full-profile completion through step `15`,
+  claim-policy honesty, fallback honesty, narrative/event completeness,
+  exact-screen reason completeness, prune-class completeness, and manifest
+  completeness are now earned on stored evidence.
+- Runtime is no longer the first blocker on the stored slice:
+  the current benchmark bundle records `408 ms` and passes the provisional
+  runtime threshold.
+- The old `v3` step-`14` zero-candidate opening and the old step-`4` runtime
+  wall are no longer the first blockers.
+- Local step-`11` and step-`12` retained-pool, selector, minimality, and
+  cache-key repairs are now landed and guarded by tests, but no stored rerun
+  has consumed them yet.
+- The remaining late local blocker is now split into two concrete subproblems:
+  - step `13` still opens on a singleton-heavy claim-generic band-`7` catalog
+    with raw widths `[3,1,1,1,1,1,1]`, only `3` raw telescopes, and
+    `2 / 3` roots exact-pruned before proof-close
+  - step `15` still opens a broad raw `6561`-telescope catalog on the restored
+    canonical branch, but exact partial-prefix bar failure still removes `512`
+    prefixes before proof-close
+- Step `14` is now a local guardrail, not the first blocker:
+  the repaired chain keeps a widened `kappa = 9` catalog with raw `19683`,
+  `3` surviving roots, `12027` live generated prefixes, and a selector that
+  preserves the canonical step-`15` continuation.
+- Accepted-hash parity is still open on stored `v5`, with the earliest stored
+  fork at step `9`; that fork should stay secondary until the step-`13` and
+  step-`15` breadth story is repaired honestly.
 
 ## Optimization Thesis
 
-The next cycle should spend engineering time on late-step diagnosis and repair,
-not on another long rerun first.
+The next cycle should spend engineering time on local parity-plus-breadth
+repair, not on another full-profile rerun first.
 
 The highest-value work is:
 
-1. explain why the promoted step-`14` Hilbert-band prefixes still all get
-   `CannotClearBar` in exact partial-prefix screening after terminal summary
-   begins
-2. compare the compact terminal-summary bound against a direct exact
-   assessment on the same divergent remaining-one prefixes
-3. turn that surviving exact-screen failure into a regression-backed fix
-   before spending another
-   intended-profile rerun
+1. widen the honest claim-generic step-`13` band-`7` catalog without waking
+   realistic-only or demo-only surfaces
+2. inspect and repair the canonical step-`15` exact partial-prefix bar path as
+   its own problem
+3. revisit step `9` final selection only if parity still diverges after the
+   late-surface repair lands locally
 
-The compact terminal-summary path should be optimized again only after late-step
-viability is restored. Do not delete or bypass that summary path outright; it is
-part of the claim-lane exact prune/materialization algorithm, not just
-diagnostic scaffolding.
+Treat the stored `v5` audit bundle plus the landed local regressions as the
+current guardrails. Keep the replay harness corpus and benchmark inputs frozen
+until real stored behavior changes.
 
 ## Decision Rules
 
 - Trust stored artifacts over terminal impressions.
-- Treat `long-rerun-v3` as closing the old step-`4` escape question; do not
-  launch another long rerun just to reconfirm that the lane can leave
-  step `4`.
-- Require claim-focused tests plus replay-harness parity before any new
-  intended-profile rerun.
-- Prefer narrow instrumentation and regression-backed fixes over broad frontier
-  rewrites.
-- Do not accept a "fix" that only hides the failure by waking guarded, replay,
-  realistic-shadow, or demo-only fallback behavior.
-- Keep the current short-loop gate and stored step-`4` continuation references
-  as regression checks, not as the primary open question.
+- Treat completed `v5` as the canonical stored claim bundle until `v6` exists.
+- Require targeted claim regressions plus replay-harness parity before any new
+  full-profile rerun.
+- Prefer narrow, regression-backed fixes over broad frontier rewrites.
+- Do not accept a "fix" that only wakes guarded, replay, realistic-shadow, or
+  demo-only behavior.
+- Keep user-facing and paper-facing wording at `bounded live recovery` until a
+  passing certificate exists.
 
-## Active Phase: Step-14 Failure Diagnosis And Repair
+## Active Phase: Stored Parity And Breadth Repair
 
 Goal:
 
-- turn `no atomic candidates were generated for step 14` into a reproducible,
-  test-backed bug and land the narrowest honest fix
+- turn the completed-but-failing `v5` lane into a locally repaired,
+  rerun-ready parity-plus-breadth candidate
 
 Loop:
 
-1. capture the late-step debt/band/package state from the finished claim
-   history
-2. add accounting between `claim_regular_clause_catalog` and the first
-   frontier/candidate creation
-3. reproduce the step-`14` failure in tests on the divergent claim history
-4. patch the narrowest band-selection, clause-catalog, or root-screen path
-   that restores non-zero step-`14` search
-5. rerun targeted claim tests plus replay parity
-6. only then spend a capped intended-profile rerun
-7. only spend another full long rerun if the capped read stays honest
+1. keep the stored compare / certification / benchmark regressions green
+2. keep the landed local step-`11` / step-`12` parity repairs green
+3. widen the step-`13` claim-open / catalog surface honestly
+4. inspect and repair the step-`15` exact partial-prefix bar path on the
+   canonical branch
+5. re-evaluate step `9` only after the late breadth story is clearer
+6. rerun targeted claim tests plus replay parity
+7. only then launch `long-rerun-v6`
+8. only treat certification as newly in reach if `v6` keeps step-`15`
+   completion while closing parity and breadth failures
 
 Current slice order:
 
-1. emit claim debt axes, min/max `kappa`, late-family surface, historical
-   anchor, and package flags at late step open
-2. emit root-seeding counts after clause catalog construction:
-   `roots_seen`, `roots_rejected_by_insert_root`,
-   `roots_rejected_by_exact_screen`, and `roots_enqueued`
-3. keep the divergent reproducer green with
-   `claim_step_open = 9..9`, `claim_debt_axes = 7..7`,
-   `roots_enqueued = 1`, and `remaining_one_algebraic_prunes = 0`
-4. explain why the surviving promoted step-`14` prefixes still get exact
-   partial-prefix `CannotClearBar`
-5. revisit step-`4` compact-summary cost only after step-`14` viability is
-   restored
+1. step-`13` claim-generic band-`7` catalog breadth
+2. step-`15` exact partial-prefix bar path
+3. step-`9` final selection if it still matters after the late repair
+4. compare / benchmark / certification refresh only after `v6` exists
 
 Do not reopen first:
 
-- another fresh long rerun
-- more step-`4` summary-build micro-optimizations first
-- dormant cached-summary reopen wake-up work
-- broad frontier rewrites
-- compare, benchmark, or certification work before the late-step repair lands
+- another clean-start full-profile rerun before the local repair is green
+- a `resume`-based restart of stopped `v4`
+- another runtime-only step-`4` micro-optimization slice first
+- replay-fixture recapture or benchmark-file churn first
+- stronger wording or runtime-threshold freeze before a passing certificate
+  exists
 
 ## Phase 2: Re-Earn One Full-Profile Claim Run
 
 Goal:
 
-- complete one intended-profile claim run through step `15` after the
-  step-`14` failure is fixed
+- produce one new stored full-profile bundle (`v6`) that consumes the local
+  repairs
 
 Required output:
 
 - one canonical run directory from the disclosed desktop
-- accepted parity through step `15`
-- honest breadth evidence through the required floors
-- complete reason and prune accounting
+- full-profile completion through step `15`
+- accepted-hash parity through step `15`
+- early and late breadth floors passed from stored evidence
+- complete reason, prune, narrative, and manifest surfaces preserved
 
 ## Phase 3: Freeze Signoff Artifacts
 
 Goal:
 
-- turn the finished run into the auditable claim bundle
+- turn the repaired bundle into the auditable claim signoff surface
 
 Required output:
 
@@ -171,14 +157,16 @@ Goal:
 Required output:
 
 - user-facing and paper-facing wording updated only after certification passes
+- stronger sentence tied explicitly to the stored claim certificate and
+  disclosed desktop bundle
 
-## Non-Goals Until Step-14 Is Fixed
+## Non-Goals Until `v6` Is Real
 
-- another `v4` rerun first
-- claiming step-`4` runtime is the current blocker
-- timing-only slices with no new late-step explanation
-- broad metadata-only cleanup
-- stronger user-facing language
+- another runtime-only slice first
+- raw step-`9` enumeration or terminal-clause-filter theories before the late
+  breadth story is clearer
+- metadata-only cleanup in place of parity / breadth repair
+- stronger user-facing language before a passing certificate exists
 
 ## Success Condition
 
@@ -188,8 +176,8 @@ disclosed desktop shows all of the following at the same time:
 - full-profile completion through step `15`
 - no silent guarded, replay, realistic-shadow, or demo-only fallback
 - accepted parity through step `15`
-- breadth gates passed honestly from stored evidence
-- complete reason and prune accounting
-- the step-`14` zero-candidate failure is gone on the winning claim path
-- benchmark and manifest data sufficient for certification
-- passing compare and certification outputs
+- early and late breadth gates passed from stored evidence
+- the step-`13` and step-`15` floor pressure is repaired on the winning claim
+  path
+- complete reason, prune, narrative, and manifest data
+- passing compare, benchmark, and certification outputs

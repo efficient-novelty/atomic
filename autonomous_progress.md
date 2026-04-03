@@ -32,7 +32,7 @@ gate.
   and the stopped rerun
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`
   remain frozen as the pre-repair early-runtime evidence set.
-- The short pre-flight gate was rerun this turn on clean-tree repo head
+- The short pre-flight gate was rerun on clean-tree repo head
   `c1fbb51d4fc9a620cd2ce95c9c3eadfe1a54fc65` with release binary hash
   `c42758f96c8171900651503d7f2a0ffe9915966c41edea98d8f1e296fc772a4e`:
   - targeted `desktop_claim_shadow` regressions green
@@ -132,9 +132,10 @@ gate.
     not explain the late generated-floor collapse by itself
 - A new local late-surface repair now sharpens the remaining blocker further:
   - on the repaired step-`12` history, step `13` still opens only `3` raw
-    claim telescopes, exact-prunes `2 / 3` roots immediately, and materializes
-    only one `2`-terminal bucket before acceptance, so that floor miss is
-    still baked in before proof-close
+    claim telescopes from singleton-heavy widths `[3,1,1,1,1,1,1]`,
+    exact-prunes `2 / 3` roots immediately, and materializes only one
+    `2`-terminal bucket before acceptance, so that floor miss is still baked
+    in before proof-close
   - step `14` no longer shares that thin-path profile locally:
     the widened claim `kappa = 9` catalog now opens `19683` raw telescopes,
     keeps `3` roots alive, and lifts live generated prefixes to `12027`
@@ -149,9 +150,9 @@ gate.
     that live generated surface to `780` before proof-close, so step `15`
     remains the first late floor miss that is not ruled out at catalog-open
     alone
-- No fresh full-profile rerun or stored audit refresh landed yet, so the
-  frozen `v5` run, compare report, claim certificate, and benchmark bundle
-  remain the authoritative stored evidence surface this turn.
+- No fresh full-profile rerun or stored audit refresh has consumed those local
+  repairs yet, so the frozen `v5` run, compare report, claim certificate, and
+  benchmark bundle remain the authoritative stored evidence surface.
 - New stored-evidence regressions now freeze that `v5` audit surface in-tree:
   - compare assertions pin the step-`9`, step-`11`, and step-`12`
     accepted-hash / trajectory forks
@@ -377,9 +378,9 @@ gate.
     no longer best explained as raw generation loss or terminal-clause
     filtering loss
   - however, that same experiment shows the tied step-`9` candidates still
-    collapse onto the same observed step-`10` / repaired-step-`11`
-    continuation while step `12` itself remains unresolved, so step `9`
-    cannot be honestly closed before the step-`12` drop is better understood
+    collapse onto the same observed repaired step-`10..12` chain, so step `9`
+    still should not be treated as a closed local selection bug while the late
+    step-`13` / step-`15` breadth story remains open
 - A new local step-`11` diagnostic plus narrow incumbent-pruning and selector
   repairs now refine that blocker:
   - the guarded step-`11` completion is still present in the claim
@@ -407,7 +408,7 @@ gate.
   - live claim step `12` now also accepts the guarded same-primary curvature
     shell instead of a richer local rival
   - every current same-primary tied step-`12` survivor still collapses onto
-    one observed step-`13..15` path with late generated counts `9`, `157`,
+    one observed step-`13..15` path with late generated counts `9`, `12027`,
     and `780`
   - so the remaining local blocker is no longer a live step-`12`
     `nu / kappa`, retained-pool, or accepted-hash miss; it is the late

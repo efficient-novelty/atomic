@@ -119,9 +119,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
     no longer best explained as raw generation loss or terminal-clause
     filtering loss
   - but the tied step-`9` candidates still collapse onto the same observed
-    step-`10` / repaired-step-`11` continuation while step `12` remains
-    unresolved, so step `9` should not be treated as a closed local selection
-    bug yet
+    repaired step-`10..12` chain, so step `9` should not be treated as a
+    closed local selection bug while the late step-`13` / step-`15` breadth
+    story remains open
 - A new local step-`11` diagnostic and narrow incumbent-pruning plus selector
   repairs now extend that localization:
   - the guarded step-`11` closing clause is still present in the claim
@@ -236,8 +236,7 @@ This note is the exact next work order for `desktop_claim_shadow`.
    alive and now collapse onto one observed claim step-`12`
    accepted hash / `nu` / `kappa` at `34 / 6`.
 5. Keep step `9` final selection deferred while the current tied step-`9`
-   candidates still share the same observed step-`10` / repaired-step-`11`
-   continuation.
+   candidates still share the same observed repaired step-`10..12` chain.
 6. Keep the new step-`12` selector read fixed:
    live claim step `12` now prefers the guarded same-primary curvature shell
    over richer raw structural winners inside the retained `34 / 6` tier.
