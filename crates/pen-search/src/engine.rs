@@ -9408,8 +9408,8 @@ mod tests {
             passes_strict_admissibility, strict_admissibility, strict_admissibility_for_mode,
         },
         connectivity::{
-            ConnectivityWitness, TerminalClauseConnectivityFacts, analyze_connectivity,
-            passes_connectivity,
+            ConnectivityWitness, HistoricalReanchorSummary, TerminalClauseConnectivityFacts,
+            analyze_connectivity, passes_connectivity,
         },
         obligations::{RetentionClass, RetentionFocus, RetentionPolicy, summarize_structural_debt},
     };
@@ -9981,15 +9981,21 @@ mod tests {
                 admitted, 0,
                 "captured exact-prune prefixes should stay zero-admitted on the current surface"
             );
-            if disconnected > 0 && trivially_derivable == 0 && other_exact_legality == 0
+            if disconnected > 0
+                && trivially_derivable == 0
+                && other_exact_legality == 0
                 && structural_debt_cap == 0
             {
                 summary.all_disconnected_prefixes += 1;
-            } else if disconnected == 0 && trivially_derivable > 0 && other_exact_legality == 0
+            } else if disconnected == 0
+                && trivially_derivable > 0
+                && other_exact_legality == 0
                 && structural_debt_cap == 0
             {
                 summary.trivially_derivable_only_prefixes += 1;
-            } else if disconnected > 0 && trivially_derivable > 0 && other_exact_legality == 0
+            } else if disconnected > 0
+                && trivially_derivable > 0
+                && other_exact_legality == 0
                 && structural_debt_cap == 0
             {
                 summary.mixed_disconnect_and_trivial_prefixes += 1;
@@ -11856,7 +11862,7 @@ mod tests {
 
     #[test]
     fn current_claim_step_fifteen_zero_admitted_prunes_reduce_to_disconnect_and_trivial_derivability()
-    {
+     {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             14,
             2,
@@ -11887,7 +11893,7 @@ mod tests {
 
     #[test]
     fn current_claim_step_fifteen_zero_admitted_connectivity_surface_is_structurally_connected_but_unqualified()
-    {
+     {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             14,
             2,
@@ -11914,6 +11920,61 @@ mod tests {
             summary.structurally_connected_via_historical_reanchor_candidates,
             0
         );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_zero_admitted_connectivity_surface_reports_reanchor_prefix_progress()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let mut matched_prefix_counts = BTreeMap::new();
+        let mut first_mismatch_counts = BTreeMap::new();
+        let mut full_prefix_matches = 0usize;
+
+        for work_item in &surface.pruned_terminal_prefixes {
+            let summary = HistoricalReanchorSummary::from_telescope(
+                &surface.library,
+                &work_item.prefix_telescope,
+            );
+            *matched_prefix_counts
+                .entry(summary.matched_clause_count())
+                .or_insert(0usize) += 1;
+            *first_mismatch_counts
+                .entry(summary.first_mismatch_position())
+                .or_insert(0usize) += 1;
+            if summary.matched_clause_count() == work_item.prefix_telescope.clauses.len() {
+                full_prefix_matches += 1;
+            }
+        }
+
+        assert_eq!(
+            matched_prefix_counts,
+            [
+                (0_usize, 1458_usize),
+                (1, 486),
+                (2, 162),
+                (3, 54),
+                (4, 18),
+                (5, 6),
+            ]
+            .into_iter()
+            .collect(),
+            "captured step-15 zero-admitted prefixes should already fall off the historical-reanchor shell by clause 5 or earlier"
+        );
+        assert_eq!(
+            first_mismatch_counts,
+            [
+                (Some(0_usize), 1458_usize),
+                (Some(1), 486),
+                (Some(2), 162),
+                (Some(3), 54),
+                (Some(4), 18),
+                (Some(5), 6),
+            ]
+            .into_iter()
+            .collect(),
+            "the captured step-15 exact-prune surface should not preserve a full seven-clause reanchor prefix anywhere"
+        );
+        assert_eq!(full_prefix_matches, 0);
     }
 
     #[test]

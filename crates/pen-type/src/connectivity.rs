@@ -136,6 +136,8 @@ pub struct HistoricalReanchorSummary {
     temporal_shell_anchor_ref: Option<u32>,
     temporal_shell_prefix_matches: bool,
     clause_count: usize,
+    matched_clause_count: usize,
+    first_mismatch_position: Option<usize>,
 }
 
 impl HistoricalReanchorSummary {
@@ -153,6 +155,8 @@ impl HistoricalReanchorSummary {
             temporal_shell_anchor_ref,
             temporal_shell_prefix_matches: temporal_shell_anchor_ref.is_some(),
             clause_count: 0,
+            matched_clause_count: 0,
+            first_mismatch_position: None,
         }
     }
 
@@ -170,6 +174,11 @@ impl HistoricalReanchorSummary {
 
         self.temporal_shell_prefix_matches =
             matches_temporal_shell_clause(position, &clause.expr, anchor);
+        if self.temporal_shell_prefix_matches {
+            self.matched_clause_count += 1;
+        } else {
+            self.first_mismatch_position = Some(position);
+        }
         self
     }
 
@@ -177,6 +186,14 @@ impl HistoricalReanchorSummary {
         self.temporal_shell_anchor_ref.is_some()
             && self.temporal_shell_prefix_matches
             && self.clause_count == 8
+    }
+
+    pub fn matched_clause_count(self) -> usize {
+        self.matched_clause_count
+    }
+
+    pub fn first_mismatch_position(self) -> Option<usize> {
+        self.first_mismatch_position
     }
 }
 
@@ -1003,6 +1020,8 @@ mod tests {
         let step_fifteen_reanchor_allowed = step_fifteen_reanchor
             .extend(&step_fifteen_last_clause)
             .allows_historical_reanchor();
+        assert_eq!(step_fifteen_reanchor.matched_clause_count(), 7);
+        assert_eq!(step_fifteen_reanchor.first_mismatch_position(), None);
         assert!(step_fifteen_extended.structurally_connected());
         assert!(!step_fifteen_extended.passes_without_reanchor());
         assert_eq!(
@@ -1085,6 +1104,8 @@ mod tests {
         let step_fifteen_reanchor_allowed = step_fifteen_reanchor
             .extend(&step_fifteen_last_clause)
             .allows_historical_reanchor();
+        assert_eq!(step_fifteen_reanchor.matched_clause_count(), 7);
+        assert_eq!(step_fifteen_reanchor.first_mismatch_position(), None);
         assert_eq!(
             step_fifteen_summary.terminal_decision(
                 &step_fifteen_library,

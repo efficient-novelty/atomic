@@ -215,6 +215,17 @@ This note is the exact next work order for `desktop_claim_shadow`.
     temporal-shell surface
   - the next repair is therefore qualifier / reanchor evidence on that
     connected surface, not raw dependency-edge generation
+- A new follow-up step-`15` reanchor-prefix regression now sharpens that same
+  blocker further:
+  - across those captured `2184` zero-admitted exact-prune families,
+    historical-reanchor prefix progress now breaks at clause positions `0..5`
+    with counts `1458`, `486`, `162`, `54`, `18`, and `6`
+  - none of those captured families preserve a full seven-clause temporal-shell
+    prefix, so the current qualifier miss never reaches the last two
+    temporal-shell clause slots intact
+  - the next repair should therefore inspect earlier temporal-shell prefix
+    qualification on the canonical branch rather than just widening the
+    terminal clause matcher in isolation
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -332,10 +343,13 @@ This note is the exact next work order for `desktop_claim_shadow`.
     zero-admitted families with no cached compact bounds; the new
     connectivity regressions now prove all `6552` generated terminal options
     there are structurally connected but still unqualified `NeedsFallback`
-    candidates with `0` historical reanchor hits, so inspect qualifier /
-    reanchor evidence on that connected surface rather than generic
-    partial-prefix bar arithmetic, raw dependency-edge generation, or claim
-    admissibility
+    candidates with `0` historical reanchor hits, and the follow-up
+    reanchor-prefix regression now proves those captured families already fall
+    off the temporal-shell prefix by clause `5` or earlier with no full
+    seven-clause matches, so inspect earlier qualifier / reanchor evidence on
+    that connected surface rather than generic partial-prefix bar arithmetic,
+    raw dependency-edge generation, claim admissibility, or the terminal
+    clause slot alone
 10. Keep the step-`1` breadth miss on the checklist, but do not confuse that
     longstanding signoff floor with the new claim-specific mid/late parity
     fork.
@@ -399,14 +413,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
     options, `0` structural disconnections, `0` historical reanchor hits, and
     `0` admissibility rejections across those captured `2184` exact prunes
     while the next repair targets qualifier / reanchor evidence there.
-17. Keep the stored compare regression green for the step-`12`
+17. Keep the new step-`15` reanchor-prefix regression green so the repaired
+    canonical temporal-shell path continues to report no full seven-clause
+    reanchor-prefix matches across those captured `2184` exact prunes and the
+    current mismatch split stays localized to clause positions `0..5` with
+    counts `1458`, `486`, `162`, `54`, `18`, and `6`.
+18. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
-18. Keep the stored certification / benchmark assertions green for the
+19. Keep the stored certification / benchmark assertions green for the
     step-`1` breadth miss and the late generated-floor snapshot at
     steps `10..15` so the next fix cannot silently reshuffle the stored
     failure surface.
-19. Keep the existing pre-flight gate green while the local repair lands.
-20. Do not reland either exploratory temporal-reanchor matcher variant
+20. Keep the existing pre-flight gate green while the local repair lands.
+21. Do not reland either exploratory temporal-reanchor matcher variant
     directly:
     the broad reland displaced the canonical step-`15` continuation to
     `60 / 8 / 9840`, and the narrower late-shell-only reland still displaced
@@ -442,6 +461,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - a direct temporal-reanchor matcher reland first:
   both the broad `60 / 8 / 9840` branch and the narrower
   `89 / 8 / 780` branch disturbed the canonical step-`15` continuation
+- a terminal-clause-only step-`15` qualifier tweak first:
+  the new reanchor-prefix regression now proves the captured exact-prune
+  surface already falls off the temporal-shell prefix by clause `5` or earlier
+  and never reaches a full seven-clause reanchor prefix
 
 ## Keep Or Branch Decision
 

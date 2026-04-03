@@ -41,7 +41,11 @@ It lists only work that is still open.
     disconnect before admissibility, and the new follow-up connectivity
     classification now proves those options are all structurally connected but
     still unqualified `NeedsFallback` candidates with `0` historical reanchor
-    hits
+    hits; the new reanchor-prefix regression now also proves those exact-pruned
+    families already fall off the temporal-shell prefix by clause `5` or
+    earlier with no full seven-clause reanchor-prefix matches, so the open
+    step-`15` work is earlier qualifier evidence on the canonical branch, not
+    just the terminal-clause slot
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /

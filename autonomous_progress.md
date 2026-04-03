@@ -182,6 +182,17 @@ gate.
   - the remaining local step-`15` problem is therefore qualifier / reanchor
     evidence on the existing connected surface, not raw dependency-edge
     generation
+- A new follow-up step-`15` reanchor-prefix regression now sharpens that same
+  blocker one layer further:
+  - across the captured `2184` zero-admitted exact-prune families, historical
+    reanchor prefix progress now breaks at clause positions `0..5` with counts
+    `1458`, `486`, `162`, `54`, `18`, and `6`
+  - none of those captured families preserve a full seven-clause temporal-shell
+    prefix, so the current missed qualifier surface never even reaches the last
+    two temporal-shell clause slots intact
+  - the next step-`15` repair should therefore inspect earlier temporal-shell
+    prefix qualification on the canonical branch, not just the terminal clause
+    matcher in isolation
 - A follow-up exploratory step-`15` temporal-reanchor broadening pass was also
   run locally but was not landed:
   - a broad temporal-shell matcher expansion collapsed the captured exact-prune
@@ -497,7 +508,10 @@ gate.
     regression now proves those options are all structurally connected but
     still unqualified (`NeedsFallback`) with `0` historical reanchor hits, so
     the remaining local repair is qualifier / reanchor evidence on that
-    connected terminal-clause surface rather than generic claim admissibility
+    connected terminal-clause surface rather than generic claim admissibility;
+    the new reanchor-prefix regression now also proves those captured families
+    already fall off the temporal-shell prefix by clause `5` or earlier, so
+    the next repair is not just the last-clause slot in isolation
 - A follow-up exploratory global step-`13` widening now bounds the next repair
   more honestly:
   - naive band-`7` widening can lift the repaired step-`13` local read to raw
@@ -546,7 +560,10 @@ gate.
     surface now frozen as structurally connected but still unqualified
     `NeedsFallback` candidates with `0` historical reanchor hits while the raw
     `6561`-telescope catalog still narrows to `780` generated prefixes before
-    proof-close
+    proof-close; those captured families now also fall off the historical
+    reanchor prefix by clause `5` or earlier, so the next repair should inspect
+    earlier temporal-shell qualifier evidence rather than only the terminal
+    clause slot
   - avoiding a direct temporal-reanchor matcher reland first:
     both the broad `60 / 8 / 9840` branch and the narrower `89 / 8 / 780`
     branch disturbed the canonical step-`15` continuation and were reverted
@@ -612,8 +629,11 @@ gate.
     those captured families are now a pure qualifier / reanchor miss on an
     already connected surface (`6552 / 6552` `NeedsFallback`, `0` structural
     disconnections, `0` historical reanchor hits, `0` admissibility
-    rejections), so do not treat that remaining loss as generic bar
-    bookkeeping, raw dependency-edge generation, or a claim admissibility miss.
+    rejections), and the follow-up reanchor-prefix regression now proves those
+    captured families already fall off the temporal-shell prefix by clause `5`
+    or earlier with no full seven-clause prefix matches, so do not treat that
+    remaining loss as generic bar bookkeeping, raw dependency-edge generation,
+    a claim admissibility miss, or a terminal-clause-only matcher bug.
 15. Do not reland either exploratory temporal-reanchor matcher variant
     directly:
     the broad reland displaced the canonical step-`15` continuation to
