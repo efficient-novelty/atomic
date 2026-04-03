@@ -268,6 +268,19 @@ gate.
   - the next step-`13` repair should therefore target structural
     connectivity on that widened operator-band surface rather than terminal
     clause filtering, qualifier fallback, or another blind catalog reland
+- A new follow-up step-`13` structural-connectivity repair now closes that
+  widened-surface blocker on the repaired step-`12` chain:
+  - claim operator-bundle seed and action variants now satisfy structural
+    connectivity on the scoped widened band-`7` surface
+  - the guarded step-`13` metric shell stays accepted on the repaired live
+    chain
+  - live generated prefixes on that repaired step-`13` surface now lift from
+    `33` to `123`
+  - exact connectivity rejections, partial-prefix bar failures, and captured
+    zero-admitted exact prunes on that repaired step-`13` surface are now all
+    `0`
+  - the remaining repaired step-`13` loss now shows up as live
+    terminal-rank pruning (`25`) rather than exact-screen connectivity
 - A follow-up exploratory step-`13` widening pass was also run locally but was
   not landed:
   - a naive global claim-generic band-`7` widening lifted the repaired
@@ -526,7 +539,7 @@ gate.
   - live claim step `12` now also accepts the guarded same-primary curvature
     shell instead of a richer local rival
   - every current same-primary tied step-`12` survivor still collapses onto
-    one observed step-`13..15` path with late generated counts `33`, `12027`,
+    one observed step-`13..15` path with late generated counts `123`, `12027`,
     and `780`
   - so the remaining local blocker is no longer a live step-`12`
     `nu / kappa`, retained-pool, or accepted-hash miss; it is the late
@@ -537,12 +550,14 @@ gate.
   - the repaired claim lane no longer stalls at a singleton-heavy
     `3`-telescope step-open:
     step `13` now widens to raw widths `[3,1,3,3,1,1,1]`, raw catalog `27`,
-    `3` surviving roots, and live generated prefixes `33` while preserving
+    `3` surviving roots, and live generated prefixes `123` while preserving
     the guarded accepted metric shell
   - that means the remaining step-`13` loss is now visibly downstream of
-    catalog-open, with most widened-surface pressure falling into exact
-    legality/connectivity rejection (`24`), partial-prefix bar failure (`12`),
-    and incumbent dominance (`2`)
+    catalog-open and no longer an exact-screen connectivity problem on the
+    repaired branch:
+    exact connectivity rejection, partial-prefix bar failure, and captured
+    zero-admitted exact prunes are all now `0` there, while the remaining
+    widened-surface pressure shows up as live terminal-rank pruning (`25`)
   - step `14` is no longer thin on the repaired local chain:
     widening the claim `kappa = 9` catalog now yields `19683` raw telescopes,
     `3` surviving roots, and `12027` live generated prefixes before
@@ -598,16 +613,17 @@ gate.
   reason counts, prune-class counts, and manifest provenance green.
 - Prioritize targeted local diagnosis and repair for:
   - the step-`9` accepted-hash fork
-  - the landed scoped claim-only step-`13` widening regression:
+  - the landed scoped claim-only step-`13` widening plus follow-up
+    structural-connectivity repair:
     claim-open widths `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated
-    prefixes `33`, guarded accepted metric shell preserved, and the same
+    prefixes `123`, guarded accepted metric shell preserved, and the same
     observed `step-13 -> step-15` continuation preserved
-  - the residual step-`13` exact-screen losses on that widened surface, now
-    localized to `12` partial-prefix bar prunes plus `24`
-    structurally-disconnected zero-admitted exact prunes with `0`
-    terminal-clause-filter and `0` `NeedsFallback` traffic, so the next
-    repair there should focus on structural connectivity rather than
-    terminal filtering or fallback qualification
+  - the remaining step-`13` terminal-rank pressure on that widened repaired
+    surface:
+    exact connectivity rejections, partial-prefix bar failures, and captured
+    zero-admitted exact prunes are now `0`, so the next repair there should
+    focus on terminal-rank / incumbent-dominance pressure rather than
+    structural connectivity, terminal filtering, or fallback qualification
   - keeping the widened step-`14` catalog plus same-primary continuation
     selector stable until a stored rerun consumes it
   - the step-`15` canonical temporal-shell exact-prune surface, which now
@@ -668,7 +684,7 @@ gate.
 8. Keep the new step-`12` continuation-collapse regression green:
    every current same-primary tied step-`12` survivor must still collapse onto
    one observed step-`13..15` continuation with generated counts
-   `33`, `12027`, and `780`.
+   `123`, `12027`, and `780`.
 9. Keep the new widened step-`14` regression green:
    the repaired step-`12` chain must keep reporting a step-`14` raw catalog
    of `19683`, `3` surviving roots, and `12027` live generated prefixes
@@ -682,21 +698,20 @@ gate.
     the exploratory branch widened repaired step `13` to raw `2187` /
     generated `615`, but it also disturbed claim prefix-memo,
     realistic-shadow, demo-lane, and divergent late-step guardrails.
-12. Keep the new scoped claim-only step-`13` widening regression green:
+12. Keep the new scoped claim-only step-`13` widening plus structural-
+    connectivity repair regressions green:
     the repaired step-`12` chain must keep reporting claim-open widths
-    `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated prefixes `33`, and
+    `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated prefixes `123`, and
     the guarded accepted metric shell at step `13`.
-13. Keep the new step-`13` exact-prune/connectivity regression green:
-    the repaired widened surface must keep reporting `24` connectivity
-    prunes, `0` terminal-clause-filter prunes, `24` captured zero-admitted
-    exact prunes, and `24` structurally disconnected terminal options with
-    `0` `NeedsFallback` and `0` exact-legality rejections.
-14. Treat the next step-`13` repair as structural connectivity on that
-    captured widened surface:
-    do not treat the remaining step-`13` sink as a terminal-clause-filter
-    bug, a fallback/reanchor qualification miss, or another blind catalog
-    widening target while those `24` captured prefixes stay purely
-    disconnected.
+13. Keep the new repaired step-`13` exact-screen-clear regression green:
+    the repaired widened surface must keep reporting `0` connectivity prunes,
+    `0` terminal-clause-filter prunes, `0` partial-prefix bar prunes,
+    `0` captured zero-admitted exact prunes, and `25` live terminal-rank
+    prunes on the surviving surface.
+14. Treat the next step-`13` repair as terminal-rank / incumbent-dominance
+    pressure on that widened repaired surface:
+    do not reopen structural connectivity, terminal filtering, fallback
+    qualification, or another blind catalog widening target first.
 15. Treat step `15` as the separate remaining exact-screen problem:
     inspect why the restored canonical temporal-shell path still collapses
     into `2184` captured zero-admitted exact-prune families and `512`

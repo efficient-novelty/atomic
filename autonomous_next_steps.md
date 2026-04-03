@@ -276,6 +276,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next step-`13` repair should therefore target structural
     connectivity on that widened operator-band surface rather than terminal
     clause filtering, qualifier fallback, or another blind catalog reland
+- A new follow-up step-`13` structural-connectivity repair now updates that
+  local read again:
+  - claim operator-bundle seed and action variants now satisfy structural
+    connectivity on the scoped widened band-`7` surface
+  - the guarded step-`13` metric shell stays accepted on the repaired live
+    chain
+  - live generated prefixes on that repaired step-`13` surface now lift from
+    `33` to `123`
+  - exact connectivity rejections, partial-prefix bar failures, and captured
+    zero-admitted exact prunes on that repaired step-`13` surface are now all
+    `0`
+  - the remaining repaired step-`13` loss now shows up as live
+    terminal-rank pruning (`25`) rather than exact-screen connectivity
 - A follow-up exploratory global step-`13` widening was also run locally but
   not landed:
   - widening the claim-generic band-`7` widths from `[3,1,1,1,1,1,1]` to
@@ -359,15 +372,15 @@ This note is the exact next work order for `desktop_claim_shadow`.
 7. Keep the new step-`12` continuation-collapse read fixed:
    all current same-primary tied step-`12` survivors still collapse onto one
    observed step-`13..15` continuation and the same late generated counts
-   `33`, `12027`, and `780`.
+   `123`, `12027`, and `780`.
 8. Keep the new late-surface diagnostic read fixed:
    - repaired step `13` now opens a scoped widened claim surface with raw
      widths `[3,1,3,3,1,1,1]`, raw catalog `27`, `3` surviving roots, and
-     live generated prefixes `33` while preserving the guarded accepted
+     live generated prefixes `123` while preserving the guarded accepted
      metric shell
-   - most remaining widened step-`13` loss now falls into exact
-     legality/connectivity rejection (`24`), partial-prefix bar failure (`12`),
-     and incumbent dominance (`2`) before proof-close
+   - the repaired widened step-`13` surface now clears exact connectivity and
+     partial-prefix bar screening entirely on that branch, and the remaining
+     local loss there is live terminal-rank pruning (`25`) before proof-close
    - repaired step `14` now opens `19683` raw claim telescopes on the promoted
      `kappa = 9` band, keeps `3` roots alive, and lifts live generated
      prefixes to `12027` before proof-close
@@ -380,14 +393,14 @@ This note is the exact next work order for `desktop_claim_shadow`.
      before proof-close
 9. Split the common late floor collapse into its actual subproblems:
    - step `13` is no longer blocked by a pure singleton-heavy catalog-open:
-     the landed scoped widening now reaches raw widths `[3,1,3,3,1,1,1]`,
-     raw catalog `27`, and live generated prefixes `33`, while the rejected
-     global branch still bounds the much larger reachable ceiling
-     (`2187` / `615`); the next repair is therefore the residual exact-screen
-     loss on the landed widened surface, now localized to `12`
-     partial-prefix bar prunes plus `24` structurally disconnected
-     zero-admitted exact prunes with `0` terminal-clause-filter and `0`
-     `NeedsFallback` traffic, not another blind catalog reland
+     the landed scoped widening plus follow-up structural-connectivity repair
+     now reach raw widths `[3,1,3,3,1,1,1]`, raw catalog `27`, and live
+     generated prefixes `123`, while the rejected global branch still bounds
+     the much larger reachable ceiling (`2187` / `615`); the next repair is
+     therefore terminal-rank / incumbent-dominance pressure on that repaired
+     widened surface, not exact-screen connectivity, partial-prefix bar math,
+     terminal-clause filtering, fallback qualification, or another blind
+     catalog reland
    - step `14` is now locally widened enough that it should stay on the guard
      rail as a regression rather than reopening as the first breadth blocker
   - step `15` remains the first late floor, but the new captured exact-prune
@@ -442,19 +455,20 @@ This note is the exact next work order for `desktop_claim_shadow`.
    raw structural winners inside the repaired `34 / 6` tier.
 10. Keep the new step-`12` continuation-collapse regression green so the tied
     same-primary step-`12` set stays pinned to one observed step-`13..15`
-    continuation with generated counts `33`, `12027`, and `780` while the
+    continuation with generated counts `123`, `12027`, and `780` while the
     remaining late floor collapse is repaired.
-11. Keep the new step-`13` scoped-widening regression green so the repaired
-    step-`12` chain keeps reporting claim-open `kappa = 7..7` with raw
-    widths `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated prefixes `33`,
-    and the guarded accepted metric shell before proof-close.
-    Keep the paired step-`13` exact-prune/connectivity regression green too:
-    the same repaired chain should still report `24` connectivity prunes,
-    `0` terminal-clause-filter prunes, `24` captured zero-admitted exact
-    prunes, and `24` structurally disconnected terminal options with `0`
-    `NeedsFallback` and `0` exact-legality rejections so the next repair
-    stays focused on structural connectivity rather than terminal filtering
-    or fallback qualification.
+11. Keep the new step-`13` scoped-widening plus structural-connectivity repair
+    regressions green so the repaired step-`12` chain keeps reporting
+    claim-open `kappa = 7..7` with raw widths `[3,1,3,3,1,1,1]`, raw
+    catalog `27`, live generated prefixes `123`, and the guarded accepted
+    metric shell before proof-close.
+    Keep the paired repaired step-`13` exact-screen-clear regression green
+    too: the same repaired chain should still report `0` connectivity
+    prunes, `0` terminal-clause-filter prunes, `0` partial-prefix bar
+    prunes, `0` captured zero-admitted exact prunes, and `25` live
+    terminal-rank prunes so the next repair stays focused on terminal-rank /
+    incumbent-dominance pressure rather than structural connectivity,
+    terminal filtering, or fallback qualification.
 12. Keep the step-`4` claim prefix-memo, realistic-shadow, demo-lane, and
     divergent step-`13` / step-`14` guardrails green while exploring any
     step-`13` widening path:

@@ -19,22 +19,19 @@ It lists only work that is still open.
 - Local step-`11` and step-`12` repairs are landed, but no stored rerun has
   consumed them yet.
 - The remaining local late blocker is now split cleanly:
-  - a scoped claim-only widening is now landed at step `13`:
-    claim-open widens to raw widths `[3,1,3,3,1,1,1]`, raw catalog `27`, and
-    live generated prefixes `33` while preserving the guarded accepted metric
-    shell and the same observed `step-13 -> step-15` continuation
-  - the remaining step-`13` loss is now residual exact screening on that
-    widened surface, and the new exact-prune/connectivity regression
-    localizes it more precisely:
-    `12` partial-prefix bar failures stop before terminal expansion, while
-    the remaining `24` legality/connectivity losses are all zero-admitted
-    captured exact prunes with `0` terminal-clause-filter traffic and
-    `0` cached compact bounds; all `24` generated terminal options on that
-    captured surface are structurally disconnected before fallback, with
-    `0` `NeedsFallback` candidates and `0` exact-legality rejections, so the
-    open step-`13` work is structural connectivity on the widened
-    operator-band surface rather than terminal filtering or fallback
-    qualification
+  - a scoped claim-only widening plus follow-up structural-connectivity repair
+    are now landed at step `13`:
+    claim-open still widens to raw widths `[3,1,3,3,1,1,1]`, raw catalog `27`,
+    and the guarded accepted metric shell, but the repaired live surface now
+    reaches `123` generated prefixes on the same observed `step-13 -> step-15`
+    continuation
+  - that repaired widened step-`13` surface no longer loses prefixes to exact
+    connectivity or partial-prefix bar screening:
+    connectivity rejections, partial-prefix bar failures, and captured
+    zero-admitted exact prunes are all now `0` on the repaired branch
+  - the remaining open step-`13` work is now terminal-rank pruning on that
+    widened operator-band surface (`25` live terminal-rank prunes), not
+    structural connectivity, terminal filtering, or fallback qualification
   - step `14` is now a guardrail rather than the first blocker:
     raw `19683`, `3` surviving roots, `12027` live generated prefixes, and a
     selector that preserves the canonical step-`15` continuation
@@ -68,9 +65,9 @@ It lists only work that is still open.
   - it can lift the repaired local step-`13` read to raw `2187` /
     generated `615`
   - but it also disturbs claim prefix-memo, realistic-shadow, demo-lane, and
-    divergent late-step guardrails, so the remaining open work is the residual
-    exact-screen losses on the landed scoped widening plus the step-`15`
-    exact-screen path
+    divergent late-step guardrails, so the remaining open work is the
+    terminal-rank pressure on the landed repaired widening plus the
+    step-`15` exact-screen path
 - A direct temporal-reanchor matcher reland is also now ruled out as the
   direct next step-`15` fix:
   - a broad reland displaced the canonical step-`15` continuation to

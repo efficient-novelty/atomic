@@ -707,33 +707,14 @@ fn is_higher_order_bridge_clause(expr: &Expr) -> bool {
 }
 
 fn is_operator_action_clause(expr: &Expr) -> bool {
-    matches!(
-        expr,
-        Expr::Lam(body)
-            if matches!(
-                body.as_ref(),
-                Expr::App(function, argument)
-                    if matches!(function.as_ref(), Expr::Var(1))
-                        && matches!(argument.as_ref(), Expr::Var(2))
-            )
-    )
+    matches!(expr, Expr::Lam(body) if is_operator_action_application(body))
 }
 
 fn is_operator_bundle_seed_clause(expr: &Expr) -> bool {
     matches!(
         expr,
         Expr::Sigma(left, right)
-            if matches!(
-                left.as_ref(),
-                Expr::Pi(domain, codomain)
-                    if matches!(domain.as_ref(), Expr::Var(1))
-                        && matches!(codomain.as_ref(), Expr::Var(1))
-            ) && matches!(
-                right.as_ref(),
-                Expr::Pi(domain, codomain)
-                    if matches!(domain.as_ref(), Expr::Var(1))
-                        && matches!(codomain.as_ref(), Expr::Var(1))
-            )
+            if is_operator_bundle_seed_arm(left) && is_operator_bundle_seed_arm(right)
     )
 }
 
@@ -744,6 +725,45 @@ fn is_operator_bundle_closure_clause(expr: &Expr) -> bool {
             if matches!(domain.as_ref(), Expr::Lib(_))
                 && (matches!(codomain.as_ref(), Expr::Lib(_))
                     || matches!(codomain.as_ref(), Expr::Var(1)))
+    )
+}
+
+fn is_operator_action_application(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::App(function, argument)
+            if matches!(function.as_ref(), Expr::Var(1))
+                && matches!(argument.as_ref(), Expr::Var(2))
+    ) || matches!(
+        expr,
+        Expr::App(function, argument)
+            if matches!(function.as_ref(), Expr::Var(1) | Expr::Var(2))
+                && matches!(
+                    argument.as_ref(),
+                    Expr::App(inner_function, inner_argument)
+                        if matches!(
+                            (function.as_ref(), inner_function.as_ref(), inner_argument.as_ref()),
+                            (Expr::Var(1), Expr::Var(2), Expr::Var(1))
+                                | (Expr::Var(2), Expr::Var(1), Expr::Var(2))
+                        )
+                )
+    )
+}
+
+fn is_operator_bundle_seed_arm(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(domain.as_ref(), Expr::Var(1))
+                && (
+                    matches!(codomain.as_ref(), Expr::Var(1))
+                        || matches!(
+                            codomain.as_ref(),
+                            Expr::Pi(inner_domain, inner_codomain)
+                                if matches!(inner_domain.as_ref(), Expr::Var(1))
+                                    && matches!(inner_codomain.as_ref(), Expr::Var(1))
+                        )
+                )
     )
 }
 
@@ -1295,6 +1315,74 @@ mod tests {
             }
         );
         assert!(passes_connectivity(&library, &Telescope::reference(13)));
+    }
+
+    #[test]
+    fn connectivity_accepts_claim_operator_bundle_seed_variants() {
+        let library = library_until(12);
+
+        for seed_expr in [
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                )),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                )),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ] {
+            let mut telescope = Telescope::reference(13);
+            telescope.clauses[0].expr = seed_expr;
+            let witness = analyze_connectivity(&library, &telescope);
+            assert_eq!(
+                witness,
+                ConnectivityWitness {
+                    connected: true,
+                    references_active_window: true,
+                    self_contained: false,
+                    max_lib_ref: 12,
+                    historical_reanchor: false,
+                }
+            );
+            assert!(passes_connectivity(&library, &telescope));
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_claim_operator_bundle_action_variants() {
+        let library = library_until(12);
+
+        for action_expr in [
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::App(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+            ))),
+        ] {
+            let mut telescope = Telescope::reference(13);
+            telescope.clauses[3].expr = action_expr;
+            let witness = analyze_connectivity(&library, &telescope);
+            assert_eq!(
+                witness,
+                ConnectivityWitness {
+                    connected: true,
+                    references_active_window: true,
+                    self_contained: false,
+                    max_lib_ref: 12,
+                    historical_reanchor: false,
+                }
+            );
+            assert!(passes_connectivity(&library, &telescope));
+        }
     }
 
     #[test]
