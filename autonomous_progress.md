@@ -63,6 +63,9 @@ gate.
   - `claim_benchmark.txt` / `claim_benchmark.json`
 - Those audits use the guarded baseline
   `runs/codex-guarded-claim-cert-v1`.
+- No claim-lane code change landed this turn:
+  the repo stayed on the pre-repair search behavior while the new
+  step-`9` diagnostics were localized and documented.
 - New stored-evidence regressions now freeze that `v5` audit surface in-tree:
   - compare assertions pin the step-`9`, step-`11`, and step-`12`
     accepted-hash / trajectory forks
@@ -268,6 +271,21 @@ gate.
     especially steps `13..15`
   - step `15` still returns the accepted executable canon, so the lane is
     now failing by taking a too-thin or wrong route to the same endpoint
+- A new local step-`9` diagnostic pass narrows the earliest fork further:
+  - the guarded step-`9` telescope is still present in late claim
+    enumeration (`81` `kappa = 4` claim telescopes)
+  - it still passes claim open-band admissibility and connectivity on the
+    guarded step-`8` prefix
+  - the guarded step-`9` three-clause prefix still exposes the guarded
+    closing clause through the claim remaining-one terminal-clause filter
+  - a local no-drop frontier experiment can carry that guarded step-`9`
+    telescope into the retained claim candidate set, so the earliest fork is
+    no longer best explained as raw generation loss or terminal-clause
+    filtering loss
+  - however, that same experiment shows the tied step-`9` candidates still
+    collapse onto the same observed step-`10` / step-`11` continuation while
+    step `11` itself remains unresolved, so step `9` cannot be honestly
+    closed before the step-`11` same-primary fork is repaired
 - The new stored full-profile bundle also changes what counts as the next
   honest engineering dollar:
   - do not reopen runtime-only step-`4` surgery first
@@ -298,13 +316,15 @@ gate.
 
 1. Use the new stored compare regression to localize the step-`9`
    same-`nu` / same-`kappa` winner fork in code.
-2. Extend that local diagnosis to the step-`11` same-`nu` / same-`kappa`
-   fork and the step-`12` `33/5` versus `34/6` drop.
-3. Explain why the completed claim path still misses the generated-floor
-   targets at steps `11..15`, especially the `9 / 157 / 780` collapse across
-   steps `13..15`.
-4. Land the narrowest honest fix that restores stored parity/floor evidence
-   without regressing the new step-`15` completion, while keeping the new
-   stored-audit regressions green.
-5. Only then launch `long-rerun-v6` and re-run compare, certification, and
+2. Start the next repair at step `11`, not at raw step-`9` generation:
+   determine whether the guarded step-`11` telescope is still missing before
+   final selection or is present but losing on a secondary accept-rank tie.
+3. Re-run the step-`9` tie diagnostic only after the step-`11` fork is
+   repaired, since the current step-`9` tied set still shares the same
+   observed step-`10` / step-`11` continuation.
+4. Use the repaired step-`9` / step-`11` path to explain and then close the
+   step-`12` `33/5` versus guarded `34 / 6` drop plus the late generated-floor
+   collapse at steps `11..15`.
+5. Only then land the narrowest honest parity/floor fix, and only then launch
+   `long-rerun-v6` and re-run compare, certification, and
    benchmark against the repaired bundle.

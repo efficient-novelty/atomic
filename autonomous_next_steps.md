@@ -107,6 +107,20 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - parity success count `= 0`
   - full early breadth hit count `= 0`
   - full late floor hit count `= 0`
+- A new local step-`9` diagnostic pass narrows the earliest fork further:
+  - the guarded step-`9` telescope is still present in claim late
+    enumeration (`81` `kappa = 4` claim telescopes)
+  - it still passes claim open-band admissibility and connectivity on the
+    guarded step-`8` prefix
+  - the guarded step-`9` three-clause prefix still exposes the guarded
+    closing clause through the claim remaining-one terminal-clause filter
+  - a local no-drop frontier experiment can carry that guarded step-`9`
+    telescope into the retained claim candidate set, so the earliest fork is
+    no longer best explained as raw generation loss or terminal-clause
+    filtering loss
+  - but the tied step-`9` candidates still collapse onto the same observed
+    step-`10` / step-`11` continuation while step `11` remains unresolved,
+    so step `9` should not be treated as a closed local selection bug yet
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -138,16 +152,24 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 ### 3. Diagnose The Earliest Remaining Parity And Breadth Forks
 
-1. Localize the step-`9` accepted-hash divergence first:
-   same `nu`, same `kappa`, different winner.
-2. Then localize the step-`11` same-`nu` / same-`kappa` accepted-hash fork.
-3. Then localize the step-`12` drop from guarded `34 / 6` to claim `33 / 5`.
-4. Use those forks to explain the late generated-floor collapse at
+1. Keep the new step-`9` diagnostic read fixed:
+   the guarded telescope is still present in claim enumeration and still
+   survives direct claim admissibility / remaining-one clause filtering.
+2. Move the active repair target to the step-`11`
+   same-`nu` / same-`kappa` accepted-hash fork:
+   determine whether the guarded step-`11` telescope is still missing before
+   final selection or is present but losing on a secondary accept-rank tie.
+3. Only revisit step `9` final selection after step `11` is repaired, since
+   the current step-`9` tied candidates still share the same observed
+   step-`10` / step-`11` continuation.
+4. Then localize the step-`12` drop from guarded `34 / 6` to claim `33 / 5`.
+5. Use the repaired step-`9` / step-`11` / step-`12` chain to explain the
+   late generated-floor collapse at
    steps `11..15`, especially:
    - step `13`: `9`
    - step `14`: `157`
    - step `15`: `780`
-5. Keep the step-`1` breadth miss on the checklist, but do not confuse that
+6. Keep the step-`1` breadth miss on the checklist, but do not confuse that
    longstanding signoff floor with the new claim-specific mid/late parity fork.
 
 ### 4. Use The New Regressions To Drive The Local Repair
@@ -184,6 +206,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - replay-fixture recapture or benchmark-file churn before the parity/floor fix
 - stronger claim wording or runtime-threshold freeze before a passing
   certificate exists
+- another raw step-`9` enumeration or terminal-clause-filter theory first:
+  the guarded step-`9` telescope is already present on both of those
+  diagnostic surfaces
 
 ## Keep Or Branch Decision
 
