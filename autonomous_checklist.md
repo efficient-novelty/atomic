@@ -43,9 +43,14 @@ It lists only work that is still open.
     still unqualified `NeedsFallback` candidates with `0` historical reanchor
     hits; the new reanchor-prefix regression now also proves those exact-pruned
     families already fall off the temporal-shell prefix by clause `5` or
-    earlier with no full seven-clause reanchor-prefix matches, so the open
-    step-`15` work is earlier qualifier evidence on the canonical branch, not
-    just the terminal-clause slot
+    earlier with no full seven-clause reanchor-prefix matches; the new
+    clause-`6` boundary regression now also proves that once those first six
+    temporal-shell clauses are fixed, the captured exact-prune surface has
+    already stopped and only `3` clause-`6` variants remain outside it, with
+    only the exact reference continuation exposing a
+    `KeepWithoutFallback` terminal path, so the open step-`15` work is earlier
+    qualifier evidence on the canonical branch through clause `5` or earlier,
+    not just the clause-`6` / terminal slot
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /

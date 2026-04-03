@@ -11978,6 +11978,144 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_exact_prune_capture_stops_before_clause_six_temporal_variants() {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let admissibility = strict_admissibility_for_mode(
+            15,
+            2,
+            &surface.library,
+            AdmissibilityMode::DesktopClaimShadow,
+        );
+        let clause_catalog = build_clause_catalog(
+            EnumerationContext::from_admissibility(&surface.library, admissibility),
+            8,
+        );
+        let six_clause_prefix = Telescope::new(Telescope::reference(15).clauses[..6].to_vec());
+        let six_clause_signature = PrefixSignature::new(15, &surface.library, &six_clause_prefix);
+        let mut six_clause_cache = PrefixLegalityCache::default();
+        assert!(six_clause_cache.insert_root(
+            six_clause_signature.clone(),
+            8,
+            &surface.library,
+            &six_clause_prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        let six_clause_work_item = create_online_prefix_work_item(
+            8,
+            six_clause_prefix.clone(),
+            six_clause_signature,
+            &surface.library,
+            admissibility,
+            &clause_catalog,
+            &mut six_clause_cache,
+        );
+        assert_eq!(six_clause_work_item.remaining_clause_slots, 2);
+
+        let mut clause_six_match_counts = BTreeMap::new();
+        let clause_six_prefixes = six_clause_work_item
+            .next_clauses(&clause_catalog)
+            .iter()
+            .map(|clause| {
+                let mut prefix = six_clause_prefix.clone();
+                prefix.clauses.push(clause.clone());
+                let summary = HistoricalReanchorSummary::from_telescope(&surface.library, &prefix);
+                *clause_six_match_counts
+                    .entry(summary.matched_clause_count())
+                    .or_insert(0usize) += 1;
+                prefix
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(clause_six_prefixes.len(), 3);
+        assert_eq!(
+            clause_six_match_counts,
+            [(6_usize, 2_usize), (7, 1)].into_iter().collect(),
+            "after the first six temporal-shell clauses are fixed, the claim lane should keep exactly one clause-6 historical-reanchor continuation and two non-reanchor claim variants"
+        );
+        assert!(
+            clause_six_prefixes.iter().all(|prefix| surface
+                .pruned_terminal_prefixes
+                .iter()
+                .all(|work_item| work_item.prefix_telescope != *prefix)),
+            "the captured step-15 exact-prune surface should already stop before the clause-6 temporal-shell variants"
+        );
+
+        let reference_clause_six_prefix =
+            Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let clause_six_terminal_decisions = clause_six_prefixes
+            .iter()
+            .map(|prefix| {
+                let summary = HistoricalReanchorSummary::from_telescope(&surface.library, prefix);
+                let signature = PrefixSignature::new(15, &surface.library, prefix);
+                let mut cache = PrefixLegalityCache::default();
+                assert!(cache.insert_root(
+                    signature.clone(),
+                    8,
+                    &surface.library,
+                    prefix,
+                    admissibility,
+                    LateFamilySurface::ClaimGeneric
+                ));
+                let work_item = create_online_prefix_work_item(
+                    8,
+                    prefix.clone(),
+                    signature.clone(),
+                    &surface.library,
+                    admissibility,
+                    &clause_catalog,
+                    &mut cache,
+                );
+                assert_eq!(work_item.remaining_clause_slots, 1);
+                let connectivity_facts = work_item
+                    .next_clause_connectivity_facts(&clause_catalog)
+                    .expect("clause-6 temporal variants should still expose cached terminal connectivity facts");
+                let decisions = work_item
+                    .next_clauses(&clause_catalog)
+                    .iter()
+                    .zip(connectivity_facts.iter())
+                    .map(|(clause, facts)| {
+                        cache
+                            .terminal_connectivity_with_facts(
+                                &signature,
+                                &surface.library,
+                                clause,
+                                Some(facts),
+                            )
+                            .expect(
+                                "clause-6 temporal variants should still classify all terminal continuations",
+                            )
+                    })
+                    .collect::<Vec<_>>();
+                (prefix.clone(), summary.matched_clause_count(), decisions)
+            })
+            .collect::<Vec<_>>();
+        let reference_decisions = clause_six_terminal_decisions
+            .iter()
+            .find(|(prefix, matched_clause_count, _)| {
+                *matched_clause_count == 7 && *prefix == reference_clause_six_prefix
+            })
+            .expect("the reference clause-6 temporal prefix should still be present");
+        assert_eq!(
+            reference_decisions
+                .2
+                .iter()
+                .filter(|decision| **decision == TerminalConnectivityDecision::KeepWithoutFallback)
+                .count(),
+            1,
+            "the exact clause-6 temporal prefix should still expose exactly one historical-reanchor terminal continuation"
+        );
+        assert!(
+            clause_six_terminal_decisions
+                .iter()
+                .filter(|(_, matched_clause_count, _)| *matched_clause_count == 6)
+                .all(|(_, _, decisions)| decisions
+                    .iter()
+                    .all(|decision| *decision == TerminalConnectivityDecision::NeedsFallback)),
+            "the two non-reference clause-6 claim variants should still stay outside historical reanchor even though they have already escaped the captured exact-prune surface"
+        );
+    }
+
+    #[test]
     fn step_thirteen_divergence_reopens_operator_bundle_claim_debt_before_the_admitted_step_fourteen_failure_family()
      {
         let reference_prefix = claim_long_rerun_v3_hybrid_prefix(None);

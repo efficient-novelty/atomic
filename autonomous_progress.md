@@ -193,6 +193,20 @@ gate.
   - the next step-`15` repair should therefore inspect earlier temporal-shell
     prefix qualification on the canonical branch, not just the terminal clause
     matcher in isolation
+- A new follow-up step-`15` clause-`6` boundary regression now sharpens that
+  same blocker one layer further:
+  - once the first six temporal-shell clauses are fixed, the current claim lane
+    keeps exactly `3` clause-`6` prefixes outside the captured exact-prune
+    surface: the exact historical-reanchor continuation plus `2` non-reanchor
+    claim variants
+  - none of those `3` clause-`6` prefixes belong to the captured `2184`
+    zero-admitted exact-prune families
+  - only the exact clause-`6` prefix still exposes a
+    `KeepWithoutFallback` terminal continuation; the two claim-only clause-`6`
+    variants remain pure `NeedsFallback`
+  - the remaining captured exact-prune blocker is therefore earlier qualifier
+    evidence through clause `5` or earlier; clause `6` is now downstream of
+    that capture boundary
 - A follow-up exploratory step-`15` temporal-reanchor broadening pass was also
   run locally but was not landed:
   - a broad temporal-shell matcher expansion collapsed the captured exact-prune
@@ -523,7 +537,11 @@ gate.
     connected terminal-clause surface rather than generic claim admissibility;
     the new reanchor-prefix regression now also proves those captured families
     already fall off the temporal-shell prefix by clause `5` or earlier, so
-    the next repair is not just the last-clause slot in isolation
+    the next repair is not just the last-clause slot in isolation; the new
+    clause-`6` boundary regression now also proves that once those first six
+    clauses are fixed, the captured exact-prune surface has already stopped, so
+    the remaining repair should stay focused on clause `5` or earlier rather
+    than clause `6`
 - A follow-up exploratory global step-`13` widening now bounds the next repair
   more honestly:
   - naive band-`7` widening can lift the repaired step-`13` local read to raw
@@ -573,9 +591,12 @@ gate.
     `NeedsFallback` candidates with `0` historical reanchor hits while the raw
     `6561`-telescope catalog still narrows to `780` generated prefixes before
     proof-close; those captured families now also fall off the historical
-    reanchor prefix by clause `5` or earlier, so the next repair should inspect
-    earlier temporal-shell qualifier evidence rather than only the terminal
-    clause slot
+    reanchor prefix by clause `5` or earlier, and once those first six clauses
+    are fixed the claim lane now keeps exactly `3` clause-`6` variants outside
+    captured exact prune with only the exact reference continuation exposing a
+    `KeepWithoutFallback` terminal path, so the next repair should inspect
+    earlier temporal-shell qualifier evidence through clause `5` or earlier
+    rather than only the clause-`6` / terminal slot
   - avoiding a direct temporal-reanchor matcher reland first:
     both the broad `60 / 8 / 9840` branch and the narrower `89 / 8 / 780`
     branch disturbed the canonical step-`15` continuation and were reverted
