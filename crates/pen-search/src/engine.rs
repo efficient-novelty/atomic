@@ -9684,6 +9684,21 @@ mod tests {
         family_counts: BTreeMap<(usize, Option<u16>, Option<u16>), usize>,
     }
 
+    #[derive(Clone, Debug, Default, Eq, PartialEq)]
+    struct LateStepZeroAdmittedFailureSummary {
+        captured_prefixes: usize,
+        generated_candidates: usize,
+        disconnected_candidates: usize,
+        trivially_derivable_rejections: usize,
+        other_exact_legality_rejections: usize,
+        structural_debt_cap_rejections: usize,
+        all_disconnected_prefixes: usize,
+        trivially_derivable_only_prefixes: usize,
+        mixed_disconnect_and_trivial_prefixes: usize,
+        other_rejection_prefixes: usize,
+        reason_counts: BTreeMap<String, usize>,
+    }
+
     fn late_step_pruned_terminal_surface_from_prefix(
         prefix: &[Telescope],
         step_index: u32,
@@ -9885,6 +9900,93 @@ mod tests {
             cached_bound_count,
             family_counts,
         }
+    }
+
+    fn late_step_zero_admitted_failure_summary(
+        prefix: &[Telescope],
+        step_index: u32,
+        limit: usize,
+    ) -> LateStepZeroAdmittedFailureSummary {
+        let surface = late_step_pruned_terminal_surface_from_prefix(prefix, step_index, limit);
+        let mut summary = LateStepZeroAdmittedFailureSummary {
+            captured_prefixes: surface.pruned_terminal_prefixes.len(),
+            ..LateStepZeroAdmittedFailureSummary::default()
+        };
+        for work_item in &surface.pruned_terminal_prefixes {
+            let mut disconnected = 0usize;
+            let mut trivially_derivable = 0usize;
+            let mut other_exact_legality = 0usize;
+            let mut structural_debt_cap = 0usize;
+            let mut admitted = 0usize;
+            for clause in work_item.next_clauses(&surface.clause_catalog) {
+                summary.generated_candidates += 1;
+                let mut telescope = work_item.prefix_telescope.clone();
+                telescope.clauses.push(clause.clone());
+                if !passes_connectivity(&surface.library, &telescope) {
+                    disconnected += 1;
+                    summary.disconnected_candidates += 1;
+                    continue;
+                }
+
+                let decision = assess_strict_admissibility(
+                    surface.step_index,
+                    &surface.library,
+                    &telescope,
+                    surface.admissibility,
+                );
+                if decision.is_admitted() {
+                    admitted += 1;
+                    continue;
+                }
+
+                *summary
+                    .reason_counts
+                    .entry(decision.reason.clone())
+                    .or_insert(0) += 1;
+                match decision.class {
+                    AdmissibilityDecisionClass::RejectedByExactLegality
+                        if decision.reason == "trivially_derivable" =>
+                    {
+                        trivially_derivable += 1;
+                        summary.trivially_derivable_rejections += 1;
+                    }
+                    AdmissibilityDecisionClass::RejectedByExactLegality => {
+                        other_exact_legality += 1;
+                        summary.other_exact_legality_rejections += 1;
+                    }
+                    AdmissibilityDecisionClass::RejectedByStructuralDebtCap => {
+                        structural_debt_cap += 1;
+                        summary.structural_debt_cap_rejections += 1;
+                    }
+                    AdmissibilityDecisionClass::AdmittedDeprioritized
+                    | AdmissibilityDecisionClass::AdmittedFocusAligned => {
+                        unreachable!("rejected decision should not be admitted");
+                    }
+                }
+            }
+
+            assert_eq!(
+                admitted, 0,
+                "captured exact-prune prefixes should stay zero-admitted on the current surface"
+            );
+            if disconnected > 0 && trivially_derivable == 0 && other_exact_legality == 0
+                && structural_debt_cap == 0
+            {
+                summary.all_disconnected_prefixes += 1;
+            } else if disconnected == 0 && trivially_derivable > 0 && other_exact_legality == 0
+                && structural_debt_cap == 0
+            {
+                summary.trivially_derivable_only_prefixes += 1;
+            } else if disconnected > 0 && trivially_derivable > 0 && other_exact_legality == 0
+                && structural_debt_cap == 0
+            {
+                summary.mixed_disconnect_and_trivial_prefixes += 1;
+            } else {
+                summary.other_rejection_prefixes += 1;
+            }
+        }
+
+        summary
     }
 
     #[derive(Default)]
@@ -11680,6 +11782,37 @@ mod tests {
             [((0_usize, None, None), 2184_usize)].into_iter().collect(),
             "the captured step-15 exact-prune surface should currently consist only of zero-admitted terminal families"
         );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_zero_admitted_prunes_reduce_to_disconnect_and_trivial_derivability()
+    {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+        assert_eq!(summary.captured_prefixes, 2184);
+        assert_eq!(summary.generated_candidates, 6552);
+        assert_eq!(
+            summary.disconnected_candidates, 6552,
+            "every currently captured step-15 zero-admitted exact prune should lose all three terminal options to connectivity"
+        );
+        assert_eq!(summary.trivially_derivable_rejections, 0);
+        assert_eq!(summary.other_exact_legality_rejections, 0);
+        assert_eq!(summary.structural_debt_cap_rejections, 0);
+        assert_eq!(summary.all_disconnected_prefixes, 2184);
+        assert_eq!(summary.trivially_derivable_only_prefixes, 0);
+        assert_eq!(summary.mixed_disconnect_and_trivial_prefixes, 0);
+        assert_eq!(summary.other_rejection_prefixes, 0);
+        assert!(summary.reason_counts.is_empty());
     }
 
     #[test]

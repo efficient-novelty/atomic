@@ -34,8 +34,11 @@ It lists only work that is still open.
     prefixes to exact partial-prefix bar failure before proof-close; the new
     local exact-prune family read now shows that captured surface as `2184`
     zero-admitted terminal families with no cached compact bounds, so the
-    remaining open work there is admitted-terminal exposure and admissibility
-    on the canonical temporal-shell path rather than generic bound accounting
+    remaining open work there is connected terminal exposure and exact
+    connectivity on the canonical temporal-shell path rather than generic
+    bound accounting or claim admissibility; the new connectivity regression
+    now proves all `6552` generated terminal options on that captured surface
+    disconnect before admissibility
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /

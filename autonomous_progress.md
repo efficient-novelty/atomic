@@ -161,9 +161,16 @@ gate.
   - those captured prefixes therefore are not hiding a bar-clearer behind the
     compact summary path; they currently expose no admitted terminal
     completions at all on the canonical temporal-shell branch
+- A new follow-up step-`15` zero-admitted connectivity regression now sharpens
+  that same late blocker further:
+  - all `6552` generated terminal options across those captured `2184`
+    exact-pruned families currently disconnect before admissibility
+  - there are `0` trivially-derivable, structural-debt-cap, or other
+    exact-legality rejections anywhere on that captured surface
   - step `15` remains the first late floor miss, but the next repair is now
     more specific than generic partial-prefix bar accounting: inspect terminal
-    clause exposure and admissibility on that canonical temporal-shell surface
+    clause exposure and exact connectivity on that canonical temporal-shell
+    surface
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
@@ -463,6 +470,12 @@ gate.
   - step `15` is different:
     its raw claim catalog is still broad at `6561`, but exact
     partial-prefix bar failures dominate there (`512`) before proof-close
+  - the captured zero-admitted exact-prune surface under that branch is now
+    also localized more tightly:
+    all `2184` captured families lose all `6552` generated terminal options to
+    connectivity before admissibility, so the remaining local repair is
+    terminal-clause exposure and exact connectivity rather than generic claim
+    admissibility
 - A follow-up exploratory global step-`13` widening now bounds the next repair
   more honestly:
   - naive band-`7` widening can lift the repaired step-`13` local read to raw
@@ -507,8 +520,10 @@ gate.
     selector stable until a stored rerun consumes it
   - the step-`15` canonical temporal-shell exact-prune surface, which now
     freezes as `2184` captured zero-admitted families with no cached compact
-    bounds while the raw `6561`-telescope catalog still narrows to `780`
-    generated prefixes before proof-close
+    bounds, with all `6552` generated terminal options on that captured
+    surface disconnecting before admissibility while the raw
+    `6561`-telescope catalog still narrows to `780` generated prefixes before
+    proof-close
 - Launch the next clean-start full-profile rerun only after the local repair
   is green against those stored parity/floor regressions.
 
@@ -567,8 +582,11 @@ gate.
 14. Treat step `15` as the separate remaining exact-screen problem:
     inspect why the restored canonical temporal-shell path still collapses
     into `2184` captured zero-admitted exact-prune families and `512`
-    partial-prefix bar failures before proof-close, rather than treating that
-    remaining loss as generic bar bookkeeping.
+    partial-prefix bar failures before proof-close; the new regression shows
+    those captured families are now a pure terminal-connectivity miss
+    (`6552 / 6552` disconnected options, `0` admissibility rejections), so do
+    not treat that remaining loss as generic bar bookkeeping or a claim
+    admissibility miss.
 15. Re-run the step-`9` tie diagnostic only after the step-`13` breadth and
     step-`15` exact-screen stories are better understood, since the current
     tied step-`9` set still shares the same observed repaired

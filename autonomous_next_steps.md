@@ -195,9 +195,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - those captured prefixes therefore are not hiding a bar-clearer behind the
     compact summary path; they currently expose no admitted terminal
     completions at all on the canonical temporal-shell branch
+- A new follow-up step-`15` zero-admitted connectivity regression now sharpens
+  that same late blocker further:
+  - all `6552` generated terminal options across those captured `2184`
+    exact-pruned families currently disconnect before admissibility
+  - there are `0` trivially-derivable, structural-debt-cap, or other
+    exact-legality rejections anywhere on that captured surface
   - step `15` remains the first late floor miss, but the next repair is now
-    specifically terminal clause exposure and admissibility on that canonical
-    temporal-shell surface rather than generic partial-prefix bar math
+    specifically terminal clause exposure and exact connectivity on that
+    canonical temporal-shell surface rather than generic partial-prefix bar
+    math or claim admissibility
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -303,9 +310,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
      rail as a regression rather than reopening as the first breadth blocker
    - step `15` remains the first late floor, but the new captured exact-prune
      regression shows that surface currently localizes to `2184`
-     zero-admitted families with no cached compact bounds, so inspect
-     terminal-clause exposure and admissibility there rather than generic
-     partial-prefix bar arithmetic
+     zero-admitted families with no cached compact bounds; the new
+     connectivity regression now proves all `6552` generated terminal options
+     there disconnect before admissibility, so inspect terminal-clause
+     exposure and exact connectivity there rather than generic
+     partial-prefix bar arithmetic or claim admissibility
 10. Keep the step-`1` breadth miss on the checklist, but do not confuse that
     longstanding signoff floor with the new claim-specific mid/late parity
     fork.
@@ -362,14 +371,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
 15. Keep the new step-`15` exact-prune family regression green so the
     repaired canonical temporal-shell path continues to report `2184`
     captured zero-admitted exact prunes with no cached compact bounds while
-    the next repair targets admitted terminal exposure there.
-16. Keep the stored compare regression green for the step-`12`
+    the next repair targets connected terminal exposure there.
+16. Keep the new step-`15` zero-admitted connectivity regression green so the
+    repaired canonical temporal-shell path continues to report `6552`
+    disconnected terminal options and `0` admissibility rejections across
+    those captured `2184` exact prunes while the next repair targets exact
+    connectivity there.
+17. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
-17. Keep the stored certification / benchmark assertions green for the
+18. Keep the stored certification / benchmark assertions green for the
     step-`1` breadth miss and the late generated-floor snapshot at
     steps `10..15` so the next fix cannot silently reshuffle the stored
     failure surface.
-18. Keep the existing pre-flight gate green while the local repair lands.
+19. Keep the existing pre-flight gate green while the local repair lands.
 
 ### 5. Only Rerun After The Local Repair Exists
 
