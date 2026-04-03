@@ -186,9 +186,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
     branch remains the alternate local path
   - step `15` on the restored canonical branch still opens a broader
     `6561`-telescope claim catalog, but `512` exact partial-prefix bar
-    failures shrink that live generated surface to `780` before proof-close,
-    so step `15` remains the first late floor miss that is not ruled out at
-    catalog-open alone
+    failures shrink that live generated surface to `780` before proof-close
+- A new local step-`15` exact-prune family regression now sharpens that late
+  blocker further:
+  - the captured repaired-canonical step-`15` exact-prune surface now
+    consists of `2184` zero-admitted terminal families with no cached compact
+    bounds
+  - those captured prefixes therefore are not hiding a bar-clearer behind the
+    compact summary path; they currently expose no admitted terminal
+    completions at all on the canonical temporal-shell branch
+  - step `15` remains the first late floor miss, but the next repair is now
+    specifically terminal clause exposure and admissibility on that canonical
+    temporal-shell surface rather than generic partial-prefix bar math
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -292,9 +301,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
      loss on the landed widened surface, not another blind catalog reland
    - step `14` is now locally widened enough that it should stay on the guard
      rail as a regression rather than reopening as the first breadth blocker
-   - step `15` remains the first late floor where the canonical catalog is
-     broad enough but exact partial-prefix bar failure still dominates, so
-     inspect that exact screen path separately
+   - step `15` remains the first late floor, but the new captured exact-prune
+     regression shows that surface currently localizes to `2184`
+     zero-admitted families with no cached compact bounds, so inspect
+     terminal-clause exposure and admissibility there rather than generic
+     partial-prefix bar arithmetic
 10. Keep the step-`1` breadth miss on the checklist, but do not confuse that
     longstanding signoff floor with the new claim-specific mid/late parity
     fork.
@@ -348,13 +359,17 @@ This note is the exact next work order for `desktop_claim_shadow`.
     `62 / 9` survivor that restores the canonical step-`15`
     `DCT 103 / 8` continuation while the broader `78 / 9 / 12027`
     branch remains the alternate local path.
-15. Keep the stored compare regression green for the step-`12`
+15. Keep the new step-`15` exact-prune family regression green so the
+    repaired canonical temporal-shell path continues to report `2184`
+    captured zero-admitted exact prunes with no cached compact bounds while
+    the next repair targets admitted terminal exposure there.
+16. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
-16. Keep the stored certification / benchmark assertions green for the
+17. Keep the stored certification / benchmark assertions green for the
     step-`1` breadth miss and the late generated-floor snapshot at
     steps `10..15` so the next fix cannot silently reshuffle the stored
     failure surface.
-17. Keep the existing pre-flight gate green while the local repair lands.
+18. Keep the existing pre-flight gate green while the local repair lands.
 
 ### 5. Only Rerun After The Local Repair Exists
 

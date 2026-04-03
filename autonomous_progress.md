@@ -152,9 +152,18 @@ gate.
     branch remains the alternate local path
   - step `15` on the restored canonical branch still opens a `6561`-telescope
     claim catalog, but `512` exact partial-prefix bar failures still shrink
-    that live generated surface to `780` before proof-close, so step `15`
-    remains the first late floor miss that is not ruled out at catalog-open
-    alone
+    that live generated surface to `780` before proof-close
+- A new local step-`15` exact-prune family regression now sharpens that late
+  blocker further:
+  - the captured repaired-canonical step-`15` exact-prune surface currently
+    consists of `2184` zero-admitted terminal families with no cached compact
+    bounds
+  - those captured prefixes therefore are not hiding a bar-clearer behind the
+    compact summary path; they currently expose no admitted terminal
+    completions at all on the canonical temporal-shell branch
+  - step `15` remains the first late floor miss, but the next repair is now
+    more specific than generic partial-prefix bar accounting: inspect terminal
+    clause exposure and admissibility on that canonical temporal-shell surface
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
@@ -496,9 +505,10 @@ gate.
     and incumbent dominance (`2`)
   - keeping the widened step-`14` catalog plus same-primary continuation
     selector stable until a stored rerun consumes it
-  - the step-`15` exact partial-prefix bar path, which still cuts a
-    `6561`-telescope raw catalog down to `780` generated prefixes before
-    proof-close
+  - the step-`15` canonical temporal-shell exact-prune surface, which now
+    freezes as `2184` captured zero-admitted families with no cached compact
+    bounds while the raw `6561`-telescope catalog still narrows to `780`
+    generated prefixes before proof-close
 - Launch the next clean-start full-profile rerun only after the local repair
   is green against those stored parity/floor regressions.
 
@@ -555,8 +565,10 @@ gate.
     legality/connectivity rejection (`24`), partial-prefix bar failure (`12`),
     and incumbent dominance (`2`) are now the dominant sinks there.
 14. Treat step `15` as the separate remaining exact-screen problem:
-    inspect why the restored canonical temporal-shell catalog still loses
-    `512` prefixes to partial-prefix bar failure before proof-close.
+    inspect why the restored canonical temporal-shell path still collapses
+    into `2184` captured zero-admitted exact-prune families and `512`
+    partial-prefix bar failures before proof-close, rather than treating that
+    remaining loss as generic bar bookkeeping.
 15. Re-run the step-`9` tie diagnostic only after the step-`13` breadth and
     step-`15` exact-screen stories are better understood, since the current
     tied step-`9` set still shares the same observed repaired

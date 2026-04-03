@@ -9658,8 +9658,9 @@ mod tests {
         }
     }
 
-    struct DivergentStepFourteenPrunedTerminalSurface {
+    struct LateStepPrunedTerminalSurface {
         library: Library,
+        step_index: u32,
         nu_history: Vec<(u32, u32)>,
         admissibility: StrictAdmissibility,
         objective_bar: Rational,
@@ -9673,7 +9674,7 @@ mod tests {
     }
 
     #[derive(Clone, Debug, Default, Eq, PartialEq)]
-    struct StepFourteenExactPruneFamilySummary {
+    struct LateStepExactPruneFamilySummary {
         raw_generated_surface: usize,
         roots_seen: usize,
         roots_enqueued: usize,
@@ -9683,15 +9684,20 @@ mod tests {
         family_counts: BTreeMap<(usize, Option<u16>, Option<u16>), usize>,
     }
 
-    fn step_fourteen_pruned_terminal_surface_from_prefix(
+    fn late_step_pruned_terminal_surface_from_prefix(
         prefix: &[Telescope],
+        step_index: u32,
         limit: usize,
-    ) -> DivergentStepFourteenPrunedTerminalSurface {
+    ) -> LateStepPrunedTerminalSurface {
         let (library, history, nu_history) = history_from_prefix(prefix);
-        let admissibility =
-            strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let admissibility = strict_admissibility_for_mode(
+            step_index,
+            2,
+            &library,
+            AdmissibilityMode::DesktopClaimShadow,
+        );
         let structural_debt = summarize_structural_debt(&library, 2);
-        let objective_bar = compute_bar(2, 14, &history).bar;
+        let objective_bar = compute_bar(2, step_index, &history).bar;
         let enumeration_context = discovery_enumeration_context(&library, admissibility, false);
         let clause_kappa = admissibility.min_clause_kappa;
         assert_eq!(
@@ -9705,7 +9711,7 @@ mod tests {
 
         super::start_pruned_terminal_prefix_capture();
         let discovery = discover_realistic_shadow_candidates(
-            14,
+            step_index,
             &library,
             &history,
             structural_debt,
@@ -9724,11 +9730,12 @@ mod tests {
 
         assert!(
             !pruned_terminal_prefixes.is_empty(),
-            "expected the divergent step-14 surface to produce remaining-one exact prunes"
+            "expected the late-claim surface to produce remaining-one exact prunes"
         );
 
-        DivergentStepFourteenPrunedTerminalSurface {
+        LateStepPrunedTerminalSurface {
             library,
+            step_index,
             nu_history,
             admissibility,
             objective_bar,
@@ -9744,9 +9751,43 @@ mod tests {
 
     fn divergent_step_fourteen_pruned_terminal_surface(
         limit: usize,
-    ) -> DivergentStepFourteenPrunedTerminalSurface {
+    ) -> LateStepPrunedTerminalSurface {
         let prefix = claim_long_rerun_v3_divergent_prefix();
-        step_fourteen_pruned_terminal_surface_from_prefix(&prefix, limit)
+        late_step_pruned_terminal_surface_from_prefix(&prefix, 14, limit)
+    }
+
+    fn current_claim_step_fifteen_pruned_terminal_surface(
+        limit: usize,
+    ) -> LateStepPrunedTerminalSurface {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        late_step_pruned_terminal_surface_from_prefix(&prefix, 15, limit)
+    }
+
+    fn current_claim_step_fifteen_exact_prune_family_summary(
+        limit: usize,
+    ) -> LateStepExactPruneFamilySummary {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        late_step_exact_prune_family_summary(&prefix, 15, limit)
     }
 
     fn claim_step_open_from_prefix(
@@ -9771,11 +9812,12 @@ mod tests {
         .expect("late-step claim-open diagnostics should exist")
     }
 
-    fn step_fourteen_exact_prune_family_summary(
+    fn late_step_exact_prune_family_summary(
         prefix: &[Telescope],
+        step_index: u32,
         limit: usize,
-    ) -> StepFourteenExactPruneFamilySummary {
-        let surface = step_fourteen_pruned_terminal_surface_from_prefix(prefix, limit);
+    ) -> LateStepExactPruneFamilySummary {
+        let surface = late_step_pruned_terminal_surface_from_prefix(prefix, step_index, limit);
         let mut family_counts = BTreeMap::new();
         let mut cached_bound_count = 0usize;
         for work_item in &surface.pruned_terminal_prefixes {
@@ -9785,7 +9827,7 @@ mod tests {
                 .expect("pruned remaining-one prefix should retain its cached summary");
             let mut cache = surface.prefix_legality_cache.clone();
             let terminal_clauses = super::terminal_prefix_clause_candidates(
-                14,
+                surface.step_index,
                 &surface.library,
                 surface.admissibility,
                 &work_item.signature,
@@ -9796,7 +9838,7 @@ mod tests {
                 None,
             );
             let filtered_direct = direct_terminal_assessment_from_terminal_candidates(
-                14,
+                surface.step_index,
                 &surface.library,
                 surface.admissibility,
                 surface.objective_bar,
@@ -9805,7 +9847,7 @@ mod tests {
                 &terminal_clauses,
             );
             let raw_direct = direct_terminal_assessment_from_raw_options(
-                14,
+                surface.step_index,
                 &surface.library,
                 surface.admissibility,
                 surface.objective_bar,
@@ -9834,7 +9876,7 @@ mod tests {
             *family_counts.entry(key).or_insert(0) += 1;
         }
 
-        StepFourteenExactPruneFamilySummary {
+        LateStepExactPruneFamilySummary {
             raw_generated_surface: surface.raw_generated_surface,
             roots_seen: surface.roots_seen,
             roots_enqueued: surface.roots_enqueued,
@@ -11542,27 +11584,101 @@ mod tests {
     }
 
     #[test]
-    fn divergent_step_fourteen_exact_prunes_split_into_three_honest_families() {
+    fn divergent_step_fourteen_first_captured_exact_prunes_stay_in_the_40_9_family() {
         let summary =
-            step_fourteen_exact_prune_family_summary(&claim_long_rerun_v3_divergent_prefix(), 21);
+            late_step_exact_prune_family_summary(&claim_long_rerun_v3_divergent_prefix(), 14, 21);
         assert_eq!(
             summary.captured_prefixes, 21,
             "the divergent step-14 reproducer should still localize to the stored 21 exact prunes"
         );
         assert_eq!(
-            summary.cached_bound_count, 19,
-            "only the two zero-admitted prefixes should lack cached compact bounds"
+            summary.cached_bound_count, 21,
+            "the first captured divergent step-14 exact prunes should all keep compact bounds"
         );
         assert_eq!(
             summary.family_counts,
-            [
-                ((0_usize, None, None), 2_usize),
-                ((3_usize, Some(40_u16), Some(9_u16)), 9_usize),
-                ((3_usize, Some(41_u16), Some(9_u16)), 10_usize),
-            ]
-            .into_iter()
-            .collect(),
-            "the 21 captured step-14 exact prunes should now split into the observed zero-admitted, 40/9, and 41/9 families"
+            [((3_usize, Some(40_u16), Some(9_u16)), 21_usize)]
+                .into_iter()
+                .collect(),
+            "the first captured divergent step-14 exact prunes should stay inside the observed 40/9 admitted family"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment() {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(3);
+
+        for (index, work_item) in surface.pruned_terminal_prefixes.iter().enumerate() {
+            let mut summary_cache = surface.prefix_legality_cache.clone();
+            let summary = summary_cache
+                .terminal_prefix_completion_summary(&work_item.signature)
+                .expect("pruned remaining-one prefix should retain its cached summary");
+            let mut cache = surface.prefix_legality_cache.clone();
+            let terminal_clauses = super::terminal_prefix_clause_candidates(
+                surface.step_index,
+                &surface.library,
+                surface.admissibility,
+                &work_item.signature,
+                work_item.next_clauses(&surface.clause_catalog),
+                work_item.next_clause_connectivity_facts(&surface.clause_catalog),
+                work_item.next_clause_nu_facts(&surface.clause_catalog),
+                &mut cache,
+                None,
+            );
+            let filtered_direct = direct_terminal_assessment_from_terminal_candidates(
+                surface.step_index,
+                &surface.library,
+                surface.admissibility,
+                surface.objective_bar,
+                &surface.nu_history,
+                &work_item.prefix_telescope,
+                &terminal_clauses,
+            );
+            let raw_direct = direct_terminal_assessment_from_raw_options(
+                surface.step_index,
+                &surface.library,
+                surface.admissibility,
+                surface.objective_bar,
+                &surface.nu_history,
+                &work_item.prefix_telescope,
+                work_item.next_clauses(&surface.clause_catalog),
+            );
+
+            assert_eq!(summary.bound, filtered_direct.bound);
+            assert_eq!(
+                super::exact_terminal_prefix_bound_decision_from_bound(
+                    surface.objective_bar,
+                    summary.bound,
+                ),
+                super::ExactPartialPrefixBoundDecision::CannotClearBar
+            );
+            assert!(!filtered_direct.can_clear_bar);
+            assert_eq!(
+                raw_direct, filtered_direct,
+                "pruned_prefix[{index}] should not hide a bar clearer behind terminal filtering"
+            );
+        }
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families() {
+        let summary = current_claim_step_fifteen_exact_prune_family_summary(usize::MAX);
+        assert_eq!(summary.raw_generated_surface, 780);
+        assert_eq!(summary.roots_seen, 3);
+        assert_eq!(summary.roots_enqueued, 3);
+        assert_eq!(summary.partial_prefix_bound_prunes, 512);
+        assert_eq!(
+            summary.captured_prefixes, 2184,
+            "the repaired canonical step-15 surface should still localize to the captured zero-admitted exact prunes"
+        );
+        assert_eq!(
+            summary.cached_bound_count, 0,
+            "no captured step-15 exact prune should currently retain a compact bound because every family is zero-admitted"
+        );
+        assert_eq!(
+            summary.family_counts,
+            [((0_usize, None, None), 2184_usize)].into_iter().collect(),
+            "the captured step-15 exact-prune surface should currently consist only of zero-admitted terminal families"
         );
     }
 
@@ -11630,9 +11746,9 @@ mod tests {
         assert!(!divergent_step_open.package_flags.hilbert_functional);
 
         let reference_summary =
-            step_fourteen_exact_prune_family_summary(&reference_prefix, usize::MAX);
+            late_step_exact_prune_family_summary(&reference_prefix, 14, usize::MAX);
         let divergent_summary =
-            step_fourteen_exact_prune_family_summary(&divergent_prefix, usize::MAX);
+            late_step_exact_prune_family_summary(&divergent_prefix, 14, usize::MAX);
         assert!(!reference_summary.family_counts.contains_key(&(
             3_usize,
             Some(50_u16),
@@ -11757,7 +11873,7 @@ mod tests {
                 SearchProfile::DesktopClaimShadow,
                 crate::diversify::FrontierRuntimeLimits::unlimited(),
             );
-            let summary = step_fourteen_exact_prune_family_summary(&prefix, usize::MAX);
+            let summary = late_step_exact_prune_family_summary(&prefix, 14, usize::MAX);
             assert_eq!(
                 outcome.is_ok(),
                 expect_search_ok,

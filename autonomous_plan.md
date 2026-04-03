@@ -44,8 +44,9 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     with raw widths `[3,1,1,1,1,1,1]`, only `3` raw telescopes, and
     `2 / 3` roots exact-pruned before proof-close
   - step `15` still opens a broad raw `6561`-telescope catalog on the restored
-    canonical branch, but exact partial-prefix bar failure still removes `512`
-    prefixes before proof-close
+    canonical branch, but the new captured exact-prune family read now shows
+    `2184` zero-admitted terminal families with no cached compact bounds while
+    the broader surface still loses `512` prefixes before proof-close
 - Step `14` is now a local guardrail, not the first blocker:
   the repaired chain keeps a widened `kappa = 9` catalog with raw `19683`,
   `3` surviving roots, `12027` live generated prefixes, and a selector that
@@ -70,8 +71,10 @@ The highest-value work is:
    mechanism, that can improve the repaired band-`7` catalog without waking
    claim prefix-memo, realistic-only, demo-only, or divergent late-step
    guardrails
-2. inspect and repair the canonical step-`15` exact partial-prefix bar path as
-   its own problem
+2. inspect and repair the canonical step-`15` terminal exposure /
+   admissibility path as its own problem, now that the captured exact-prune
+   surface is localized to zero-admitted families rather than hidden
+   bar-clearers
 3. revisit step `9` final selection only if parity still diverges after the
    late-surface repair lands locally
 
@@ -105,8 +108,8 @@ Loop:
 2. keep the landed local step-`11` / step-`12` parity repairs green
 3. land a scoped claim-only widening, or equivalent, at step `13` and then
    re-measure the residual exact-screen losses there
-4. inspect and repair the step-`15` exact partial-prefix bar path on the
-   canonical branch
+4. inspect and repair the step-`15` canonical terminal exposure /
+   admissibility path on the repaired branch
 5. re-evaluate step `9` only after the late breadth story is clearer
 6. rerun targeted claim tests plus replay parity
 7. only then launch `long-rerun-v6`
@@ -116,7 +119,7 @@ Loop:
 Current slice order:
 
 1. step-`13` scoped claim-only widening plus residual exact-screen read
-2. step-`15` exact partial-prefix bar path
+2. step-`15` terminal exposure / admissibility path
 3. step-`9` final selection if it still matters after the late repair
 4. compare / benchmark / certification refresh only after `v6` exists
 
