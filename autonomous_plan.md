@@ -50,6 +50,11 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   the repaired chain keeps a widened `kappa = 9` catalog with raw `19683`,
   `3` surviving roots, `12027` live generated prefixes, and a selector that
   preserves the canonical step-`15` continuation.
+- A follow-up exploratory global step-`13` widening was useful but is not
+  landable as-is:
+  it can lift the repaired local step-`13` read to raw `2187` /
+  generated `615`, but it also disturbs claim prefix-memo,
+  realistic-shadow, demo-lane, and divergent late-step guardrails.
 - Accepted-hash parity is still open on stored `v5`, with the earliest stored
   fork at step `9`; that fork should stay secondary until the step-`13` and
   step-`15` breadth story is repaired honestly.
@@ -61,8 +66,10 @@ repair, not on another full-profile rerun first.
 
 The highest-value work is:
 
-1. widen the honest claim-generic step-`13` band-`7` catalog without waking
-   realistic-only or demo-only surfaces
+1. introduce a scoped claim-only step-`13` widening path, or an equivalent
+   mechanism, that can improve the repaired band-`7` catalog without waking
+   claim prefix-memo, realistic-only, demo-only, or divergent late-step
+   guardrails
 2. inspect and repair the canonical step-`15` exact partial-prefix bar path as
    its own problem
 3. revisit step `9` final selection only if parity still diverges after the
@@ -79,6 +86,7 @@ until real stored behavior changes.
 - Require targeted claim regressions plus replay-harness parity before any new
   full-profile rerun.
 - Prefer narrow, regression-backed fixes over broad frontier rewrites.
+- Do not reland the rejected global step-`13` band-`7` widening directly.
 - Do not accept a "fix" that only wakes guarded, replay, realistic-shadow, or
   demo-only behavior.
 - Keep user-facing and paper-facing wording at `bounded live recovery` until a
@@ -95,7 +103,8 @@ Loop:
 
 1. keep the stored compare / certification / benchmark regressions green
 2. keep the landed local step-`11` / step-`12` parity repairs green
-3. widen the step-`13` claim-open / catalog surface honestly
+3. land a scoped claim-only widening, or equivalent, at step `13` and then
+   re-measure the residual exact-screen losses there
 4. inspect and repair the step-`15` exact partial-prefix bar path on the
    canonical branch
 5. re-evaluate step `9` only after the late breadth story is clearer
@@ -106,7 +115,7 @@ Loop:
 
 Current slice order:
 
-1. step-`13` claim-generic band-`7` catalog breadth
+1. step-`13` scoped claim-only widening plus residual exact-screen read
 2. step-`15` exact partial-prefix bar path
 3. step-`9` final selection if it still matters after the late repair
 4. compare / benchmark / certification refresh only after `v6` exists

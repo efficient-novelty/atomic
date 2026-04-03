@@ -166,6 +166,22 @@ gate.
   with raw widths `[3,1,1,1,1,1,1]` before proof-close, so the first late
   breadth miss is now pinned to singleton-heavy band-`7` catalog width rather
   than a hidden proof-close-only collapse.
+- A follow-up exploratory step-`13` widening pass was also run locally but was
+  not landed:
+  - a naive global claim-generic band-`7` widening lifted the repaired
+    claim-open read from raw widths `[3,1,1,1,1,1,1]` / raw `3` /
+    generated `9` to `[3,3,3,3,3,3,3]` / raw `2187` / generated `615`
+  - root seeding on that branch widened cleanly to `roots_seen = 3`,
+    `roots_rejected_by_exact_screen = 0`, and `roots_enqueued = 3`
+  - the remaining step-`13` loss there then shifted mostly into exact
+    legality/connectivity rejection (`1954`), partial-prefix bar failure
+    (`168`), and incumbent dominance (`236`)
+  - the late local path on that branch became
+    `(13,45,7,615) -> (14,61,9,12027) -> (15,103,8,780)`
+  - but that same global reland disturbed unrelated claim prefix-memo,
+    realistic-shadow, demo-lane, and divergent step-`13` / step-`14`
+    guardrails, so it was reverted and should not be treated as the next
+    landable fix by itself
 
 ## Latest Full-Profile Outcome
 
@@ -427,6 +443,17 @@ gate.
   - step `15` is different:
     its raw claim catalog is still broad at `6561`, but exact
     partial-prefix bar failures dominate there (`512`) before proof-close
+- A follow-up exploratory global step-`13` widening now bounds the next repair
+  more honestly:
+  - naive band-`7` widening can lift the repaired step-`13` local read to raw
+    `2187` / generated `615` with `3` seeded roots and no immediate root
+    exact-screen rejection
+  - but once that happens, most remaining loss shifts into exact
+    legality/connectivity rejection, partial-prefix bar failure, and
+    incumbent dominance instead of disappearing
+  - and that same reland breaks unrelated claim prefix-memo,
+    realistic-shadow, demo-lane, and divergent late-step guardrails, so the
+    next fix must be narrower than a global band-`7` change
 - The new stored full-profile bundle also changes what counts as the next
   honest engineering dollar:
   - do not reopen runtime-only step-`4` surgery first
@@ -447,10 +474,14 @@ gate.
   reason counts, prune-class counts, and manifest provenance green.
 - Prioritize targeted local diagnosis and repair for:
   - the step-`9` accepted-hash fork
-  - late claim admissibility / catalog breadth at step `13`, which is still
-    proven too thin before proof-close on the repaired step-`12` chain and is
-    now frozen more precisely as a singleton-heavy
-    `[3,1,1,1,1,1,1]` claim-generic band-`7` catalog
+  - a narrower claim-only step-`13` widening path that can improve the
+    singleton-heavy `[3,1,1,1,1,1,1]` claim-generic band-`7` catalog on the
+    repaired step-`12` chain without waking claim prefix-memo,
+    realistic-shadow, demo-lane, or divergent late-step guardrails
+  - the residual step-`13` exact-screen losses that remain after widening,
+    since the rejected global branch already showed legality/connectivity
+    rejection, partial-prefix bar failure, and incumbent dominance becoming
+    the dominant sinks there
   - keeping the widened step-`14` catalog plus same-primary continuation
     selector stable until a stored rerun consumes it
   - the step-`15` exact partial-prefix bar path, which still cuts a
@@ -499,18 +530,25 @@ gate.
     `62 / 9` survivor that restores the canonical step-`15`
     `DCT 103 / 8` continuation while the broader `78 / 9 / 12027`
     branch remains the alternate local path.
-11. Move the next repair to late claim breadth at step `13`, not back to raw
-    step-`9` generation:
-    widen the honest claim step-open / catalog surface there before blaming
-    proof-close for that floor miss; the repaired claim-open read is now
-    pinned at `kappa = 7..7` with raw widths `[3,1,1,1,1,1,1]`.
-12. Treat step `15` as the separate remaining exact-screen problem:
+11. Do not reland a global band-`7` widening directly:
+    the exploratory branch widened repaired step `13` to raw `2187` /
+    generated `615`, but it also disturbed claim prefix-memo,
+    realistic-shadow, demo-lane, and divergent late-step guardrails.
+12. Move the next repair to a narrower claim-only step-`13` widening path:
+    scope it to the repaired step-`12` history, or an equivalent claim-only
+    gate, so the catalog can widen without waking unrelated surfaces.
+13. Once that scoped widening exists, inspect the remaining step-`13`
+    exact-screen losses:
+    the rejected global branch already showed legality/connectivity
+    rejection, partial-prefix bar failure, and incumbent dominance becoming
+    the main sinks there.
+14. Treat step `15` as the separate remaining exact-screen problem:
     inspect why the restored canonical temporal-shell catalog still loses
     `512` prefixes to partial-prefix bar failure before proof-close.
-13. Re-run the step-`9` tie diagnostic only after the step-`13` breadth and
+15. Re-run the step-`9` tie diagnostic only after the step-`13` breadth and
     step-`15` exact-screen stories are better understood, since the current
     tied step-`9` set still shares the same observed repaired
     step-`10..12` chain.
-14. Only then land the narrowest honest parity/floor fix, and only then launch
+16. Only then land the narrowest honest parity/floor fix, and only then launch
     `long-rerun-v6` and re-run compare, certification, and benchmark against
     the repaired bundle.

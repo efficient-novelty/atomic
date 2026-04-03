@@ -27,6 +27,13 @@ It lists only work that is still open.
     selector that preserves the canonical step-`15` continuation
   - step `15` still opens a raw `6561`-telescope catalog but loses `512`
     prefixes to exact partial-prefix bar failure before proof-close
+- A naive global claim band-`7` widening is now ruled out as the direct next
+  reland:
+  - it can lift the repaired local step-`13` read to raw `2187` /
+    generated `615`
+  - but it also disturbs claim prefix-memo, realistic-shadow, demo-lane, and
+    divergent late-step guardrails, so the remaining open work is a scoped
+    claim-only widening path plus the residual exact-screen losses
 - Claim-policy honesty, fallback honesty, narrative/event completeness,
   exact-screen reason completeness, prune-class completeness, and manifest
   completeness are already earned on the stored full-profile run.

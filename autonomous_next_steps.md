@@ -196,6 +196,21 @@ This note is the exact next work order for `desktop_claim_shadow`.
   with raw widths `[3,1,1,1,1,1,1]` before proof-close, so the first late
   breadth miss is now pinned to singleton-heavy band-`7` catalog width rather
   than a hidden proof-close-only collapse.
+- A follow-up exploratory global step-`13` widening was also run locally but
+  not landed:
+  - widening the claim-generic band-`7` widths from `[3,1,1,1,1,1,1]` to
+    `[3,3,3,3,3,3,3]` lifted the repaired step-`13` read from raw `3` /
+    generated `9` to raw `2187` / generated `615`
+  - root seeding on that branch widened to `roots_seen = 3`,
+    `roots_rejected_by_exact_screen = 0`, and `roots_enqueued = 3`
+  - most remaining loss there shifted into exact legality/connectivity
+    rejection (`1954`), partial-prefix bar failure (`168`), and incumbent
+    dominance (`236`)
+  - the late local path on that branch became
+    `(13,45,7,615) -> (14,61,9,12027) -> (15,103,8,780)`
+  - but that same reland disturbed claim prefix-memo, realistic-shadow,
+    demo-lane, and divergent step-`13` / step-`14` guardrails, so it was
+    reverted and should not be relanded directly
 
 ## Do This Next
 
@@ -261,8 +276,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
 9. Split the common late floor collapse into its actual subproblems:
    - step `13` is still too thin at claim step-open / catalog width to ever
      reach the current stored floors, and the new regression now freezes that
-     exact bottleneck at raw widths `[3,1,1,1,1,1,1]`, so inspect claim
-     admissibility and the claim-generic band-`7` catalog there first
+     exact bottleneck at raw widths `[3,1,1,1,1,1,1]`; the rejected global
+     widening branch proved raw `2187` / generated `615` is reachable but also
+     proved that direct reland breaks unrelated guardrails, so the next repair
+     must be a narrower claim-only widening path plus a follow-up read on the
+     residual exact-screen losses
    - step `14` is now locally widened enough that it should stay on the guard
      rail as a regression rather than reopening as the first breadth blocker
    - step `15` remains the first late floor where the canonical catalog is
@@ -307,21 +325,26 @@ This note is the exact next work order for `desktop_claim_shadow`.
 11. Keep the new step-`13` singleton-heavy catalog regression green so the
     repaired step-`12` chain keeps reporting claim-open `kappa = 7..7` with
     raw widths `[3,1,1,1,1,1,1]` before proof-close.
-12. Keep the new widened step-`14` regression green so the repaired step-`12`
+12. Keep the step-`4` claim prefix-memo, realistic-shadow, demo-lane, and
+    divergent step-`13` / step-`14` guardrails green while exploring any
+    step-`13` widening path:
+    the rejected global branch already showed raw `2187` / generated `615`
+    is not enough to justify waking those unrelated surfaces.
+13. Keep the new widened step-`14` regression green so the repaired step-`12`
     chain keeps reporting step `14` raw catalog `19683` with `3` surviving
     roots and `12027` live generated prefixes before proof-close.
-13. Keep the new step-`14` same-primary continuation selector regression green
+14. Keep the new step-`14` same-primary continuation selector regression green
     so live claim acceptance continues to choose the one same-primary
     `62 / 9` survivor that restores the canonical step-`15`
     `DCT 103 / 8` continuation while the broader `78 / 9 / 12027`
     branch remains the alternate local path.
-14. Keep the stored compare regression green for the step-`12`
+15. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
-15. Keep the stored certification / benchmark assertions green for the
+16. Keep the stored certification / benchmark assertions green for the
     step-`1` breadth miss and the late generated-floor snapshot at
     steps `10..15` so the next fix cannot silently reshuffle the stored
     failure surface.
-16. Keep the existing pre-flight gate green while the local repair lands.
+17. Keep the existing pre-flight gate green while the local repair lands.
 
 ### 5. Only Rerun After The Local Repair Exists
 
@@ -340,6 +363,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - another late-step zero-candidate diagnosis slice first
 - another clean-start full-profile rerun before the local repair is green
   against the new step-`9` / `11` / `12` regressions
+- a naive global claim band-`7` widening reland:
+  the exploratory branch widened step `13` locally but broke unrelated claim
+  prefix-memo, realistic-shadow, demo-lane, and divergent late-step
+  guardrails
 - replay-fixture recapture or benchmark-file churn before the parity/floor fix
 - stronger claim wording or runtime-threshold freeze before a passing
   certificate exists
