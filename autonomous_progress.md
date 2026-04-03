@@ -22,13 +22,27 @@ gate.
 - The older farthest stored step-`4` continuation stop remains
   `runs/codex-claim-release-full-aggregation-open-band-prefix-local-score-v1`
   at `1095` explored prefixes.
-- The latest full-profile run,
+- The latest finished full-profile run,
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v3`,
   reached step `14` and failed with
   `failure_note = "no atomic candidates were generated for step 14"`.
 - The same longer rerun reused the preserved release binary hash
   `278c311ddf5e416b09d24923dc392388aaf5817c65f0c60f856ebde7466140a5`
   from repo head `6f3bc1a00fb6ff46e048109b2a5176542105ab73`.
+- A fresh full-profile rerun,
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`,
+  is now live on clean-tree repo head
+  `140297377964dab9e0333782af3eec370bd784e7` with the same validated release
+  binary hash
+  `d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f`.
+- Its authoritative `run.json` state currently remains:
+  - `status = "running"`
+  - `completed_step = 3`
+  - `active_step = 4`
+  - `active_band = 1`
+  - `frontier_epoch = 0`
+- Use `reports/steps/step-04-live.ndjson` as the authoritative in-flight
+  evidence for that rerun until step `4` accepts.
 - The claim lane now records late-step `claim_step_open` diagnostics in live
   checkpoints and persisted step summaries:
   - `kappa_min` / `kappa_max`
@@ -119,6 +133,10 @@ gate.
   `target/release/xtask.exe claim-replay-harness benchmark
   tests/fixtures/claim_runtime/remaining_one_plateau_fixtures.json 10`
   completed without any replay mismatch on all `5` stored surfaces.
+- The short pre-flight gate was rechecked again this turn on that clean tree:
+  - targeted claim regressions green
+  - claim live-checkpoint persistence green
+  - release replay harness benchmark replays all `5` stored surfaces
 - A new capped intended-profile validation read,
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-late-accept-capped-v1`,
   now exists on clean-tree repo head `44b9871e65546a210c4ed71dcd31b91f8e6c521c`
@@ -141,6 +159,21 @@ gate.
   continuation surface by prefix state `140` at `1190118 ms`:
   - `1778 ms` slower than `long-rerun-v1` at the same `140`-state wall
   - `5881 ms` faster than `long-rerun-v2` at the same `140`-state wall
+- The latest observed step-`4` live checkpoint on `long-rerun-v4` in this turn
+  is:
+  - `elapsed_millis = 375106`
+  - `prefix_states_explored = 45`
+  - `prefix_cache_groups = 39`
+  - `prefix_cache_candidates = 27814`
+  - `frontier_queue_len = 2730`
+  - RSS `= 190398464`
+  - `terminal_summary_build_millis = 372333`
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- That live checkpoint is still short of the `1200000 ms` gate, but it shows
+  no early reopen of the old honesty miss: both zero-count checks are intact
+  and the rerun is still tracking toward the stored
+  `41 groups / 29249 candidates` continuation surface.
 
 ## Latest Full-Profile Outcome
 
@@ -373,9 +406,9 @@ gate.
     continuation surface by prefix state `140`
 - The compact terminal-summary path remains worth optimizing later, but it is
   no longer the first engineering dollar to spend.
-- The next honest question is now whether a fresh full-profile rerun reaches
-  late steps on the repaired path, not whether the lane can still hold the
-  short validation gate locally.
+- The fresh full-profile rerun is now in flight, so the next honest question
+  is whether it re-earns the `1200000 ms` gate and then reaches late steps on
+  the repaired path.
 
 ## Forward Direction
 
@@ -385,11 +418,11 @@ gate.
 - Keep the landed late-step diagnostics, divergent-prefix reproducer, replay
   harness corpus, and new step-`13` viability-tie regression green.
 - Treat the upstream repair and its short validation as earned locally:
-  the next narrow task is a fresh full-profile rerun, not more local band
-  loosening.
+  the live `v4` rerun should stay full-rerun-first unless it proves a new
+  short-loop miss.
 - Use the new capped intended-profile read as the early honesty gate for the
-  next rerun.
-- Return to step-`4` micro-optimization only if the fresh full-profile rerun
+  live `v4` rerun.
+- Return to step-`4` micro-optimization only if the active full-profile rerun
   falls materially behind that capped gate or reopens a new short-loop
   regression.
 
@@ -407,19 +440,19 @@ gate.
    acceptance regressions green.
 3. Keep the release replay harness green on
    `tests/fixtures/claim_runtime/remaining_one_plateau_fixtures.json`.
-4. Launch one fresh full-profile release rerun on the repaired claim binary.
-   Prefer
-   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`.
-5. Do not use `pen-cli resume` first for that rerun; start clean.
-6. During early step `4`, compare first against the new capped validation gate:
+4. Keep the fresh clean-start rerun
+   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`
+   running; do not restart it or swap to `pen-cli resume`.
+5. During early step `4`, compare `v4` first against the new capped validation
+   gate:
    - by `1200000 ms`, expect at least the re-earned
      `141`-prefix / `41 groups` / `29249 candidates` surface
    - keep `terminal_summary_admissibility_checks = 0`
    - keep `terminal_summary_fallback_connectivity_checks = 0`
-7. If the fresh rerun falls materially behind that gate, stop and localize the
+6. If the live rerun falls materially behind that gate, stop and localize the
    new step-`4` regression before spending more late-step analysis.
-8. If the rerun reaches step `14`, compare first against `long-rerun-v3` to
+7. If `v4` reaches step `14`, compare first against `long-rerun-v3` to
    see whether the old zero-candidate failure is gone, delayed, or replaced by
    a new blocker.
-9. If the rerun reaches step `15`, move immediately to compare, benchmark, and
+8. If `v4` reaches step `15`, move immediately to compare, benchmark, and
    certification work on that stored bundle.

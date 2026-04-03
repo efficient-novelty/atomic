@@ -78,9 +78,29 @@ It lists only work that is still open.
   - `terminal_summary_build_millis = 1191657`
   - `terminal_summary_admissibility_checks = 0`
   - `terminal_summary_fallback_connectivity_checks = 0`
-- The current blocker is now one fresh full-profile rerun on that validated
-  binary, not replay parity, the capped intended-profile gate, inability to
-  escape step `4`, or a missing late-step diagnosis.
+- A fresh clean-start full-profile rerun,
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`,
+  is now live on clean-tree repo head
+  `140297377964dab9e0333782af3eec370bd784e7` with the same validated release
+  binary hash
+  `d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f`.
+- Its authoritative `run.json` state still shows:
+  - `status = "running"`
+  - `completed_step = 3`
+  - `active_step = 4`
+- The latest observed step-`4` live checkpoint in this turn is:
+  - `elapsed_millis = 375106`
+  - `prefix_states_explored = 45`
+  - `prefix_cache_groups = 39`
+  - `prefix_cache_candidates = 27814`
+  - `frontier_queue_len = 2730`
+  - RSS `= 190398464`
+  - `terminal_summary_build_millis = 372333`
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- The current blocker is now letting that live `v4` rerun either re-earn the
+  capped `1200000 ms` gate or expose a new regression/failure surface, not
+  relaunching the rerun itself.
 
 ## 1. Runtime Improvement Loop
 

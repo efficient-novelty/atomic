@@ -23,6 +23,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v3`
 - Keep the latest capped intended-profile validation read:
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-late-accept-capped-v1`
+- Keep the active fresh full-profile rerun path:
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`
 - Keep the preserved release binary hash that all three longer reruns reused:
   `278c311ddf5e416b09d24923dc392388aaf5817c65f0c60f856ebde7466140a5`
 
@@ -159,10 +161,37 @@ This note is the exact next work order for `desktop_claim_shadow`.
   continuation surface by prefix state `140` at `1190118 ms`:
   - `1778 ms` slower than `long-rerun-v1` at the same `140`-state wall
   - `5881 ms` faster than `long-rerun-v2` at the same `140`-state wall
+- The short pre-flight gate was rerun this turn on clean-tree repo head
+  `140297377964dab9e0333782af3eec370bd784e7`:
+  - targeted claim regressions green
+  - claim live-checkpoint persistence green
+  - release replay harness benchmark replays all `5` stored surfaces
+- A fresh clean-start full-profile rerun,
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`,
+  is now live on that clean-tree head with the same validated release binary
+  hash `d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f`.
+- Its authoritative `run.json` state currently remains:
+  - `status = "running"`
+  - `completed_step = 3`
+  - `active_step = 4`
+- The latest observed step-`4` live checkpoint on `v4` in this turn is:
+  - `elapsed_millis = 375106`
+  - `prefix_states_explored = 45`
+  - `prefix_cache_groups = 39`
+  - `prefix_cache_candidates = 27814`
+  - `frontier_queue_len = 2730`
+  - RSS `= 190398464`
+  - `terminal_summary_build_millis = 372333`
+  - `terminal_summary_admissibility_checks = 0`
+  - `terminal_summary_fallback_connectivity_checks = 0`
+- That checkpoint is still short of the `1200000 ms` honesty gate, but it
+  shows no early regression signal and is still tracking toward the stored
+  `41 groups / 29249 candidates` continuation surface.
 - Replay parity plus the capped intended-profile read are now both earned on
   the repaired claim path.
-- The next blocker is now one fresh full-profile rerun on that validated
-  binary, not more local diagnosis of the same step-`13` fork.
+- The current blocker is now letting the live `v4` rerun reach the
+  `1200000 ms` gate and later late-step comparison points, not launching a new
+  rerun or reopening the same step-`13` fork first.
 
 ## Do This Next
 
@@ -191,23 +220,24 @@ This note is the exact next work order for `desktop_claim_shadow`.
    `d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f`
    as the validated binary for the next full rerun.
 
-### 3. Spend One Fresh Full-Profile Rerun
+### 3. Keep The Fresh Full-Profile Rerun Live
 
-1. Launch one fresh full-profile release rerun on the repaired claim binary.
-   Prefer
-   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`.
-2. Do not use `pen-cli resume` first for that rerun; start clean.
-3. During early step `4`, compare first against the capped validation gate:
+1. Keep
+   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`
+   running on the clean-start path; do not restart it or swap to
+   `pen-cli resume`.
+2. During early step `4`, compare `v4` first against the capped validation
+   gate:
    - by `1200000 ms`, expect at least the re-earned
      `141`-prefix / `41 groups` / `29249 candidates` surface
    - keep `terminal_summary_admissibility_checks = 0`
    - keep `terminal_summary_fallback_connectivity_checks = 0`
-4. If the rerun falls materially behind that gate, stop and localize the new
+3. If the live rerun falls materially behind that gate, stop and localize the
    short-loop regression before spending more late-step diagnosis time.
-5. If the rerun reaches step `14`, compare first against `long-rerun-v3` to
+4. If `v4` reaches step `14`, compare first against `long-rerun-v3` to
    see whether the old zero-candidate failure is gone, delayed, or replaced by
    a new blocker.
-6. If the rerun reaches step `15`, move immediately to compare, benchmark, and
+5. If `v4` reaches step `15`, move immediately to compare, benchmark, and
    certification work on that stored bundle.
 
 ### 4. Only Reopen Local Diagnosis If The New Rerun Fails
@@ -231,7 +261,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 ## Do Not Reopen First
 
-- a resume-based reopen instead of the planned fresh `v4` rerun
+- a resume-based restart or second rerun before the live clean-start `v4`
+  evidence is evaluated
 - dormant cached-summary reopen wake-up work
 - broad frontier rewrites
 - the dropped focus-aligned competition-gate/payload-mode hoist
@@ -249,8 +280,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
 ## Keep Or Branch Decision
 
 - Stay full-rerun-first on the landed step-`13` acceptance repair now that
-  replay parity and the capped intended-profile read both confirm it locally.
+  replay parity and the capped intended-profile read both confirm it locally
+  and `v4` is already live.
 - Keep the current short-loop gate, stored step-`4` continuation references,
   and the new capped intended-profile read frozen as regression checks.
-- Return to local diagnosis only if the fresh full-profile rerun falls behind
-  the new capped gate or still fails with new late-step evidence.
+- Return to local diagnosis only if the live `v4` rerun falls behind the new
+  capped gate or still fails with new late-step evidence.
