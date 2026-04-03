@@ -9523,6 +9523,13 @@ mod tests {
         .expect("demo config should parse")
     }
 
+    fn claim_runtime_config_smoke() -> RuntimeConfig {
+        RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/desktop_claim_shadow_smoke.toml"
+        ))
+        .expect("claim smoke config should parse")
+    }
+
     fn dummy_work_item(
         remaining_clause_slots: usize,
         next_clause_count: usize,
@@ -10950,6 +10957,77 @@ mod tests {
                     .demo_bucket_stats
                     .iter()
                     .all(|bucket| { bucket.bucket_label.contains("structural_generic") })
+            );
+        }
+    }
+
+    #[test]
+    fn desktop_claim_shadow_early_steps_keep_guarded_profile_parity() {
+        for step_index in 4..=8 {
+            let guarded_step =
+                profile_step_from_reference_prefix(step_index, SearchProfile::StrictCanonGuarded);
+            let claim_step =
+                profile_step_from_reference_prefix(step_index, SearchProfile::DesktopClaimShadow);
+
+            assert_eq!(claim_step.telescope, Telescope::reference(step_index));
+            assert_eq!(claim_step.telescope, guarded_step.telescope);
+            assert_eq!(
+                claim_step.accepted.candidate_hash, guarded_step.accepted.candidate_hash,
+                "step {step_index} changed accepted hash parity"
+            );
+            assert_eq!(
+                claim_step.accepted.canonical_hash, guarded_step.accepted.canonical_hash,
+                "step {step_index} changed canonical parity"
+            );
+            assert_eq!(
+                claim_step.accepted.nu, guarded_step.accepted.nu,
+                "step {step_index} changed accepted nu parity"
+            );
+            assert_eq!(
+                claim_step.accepted.clause_kappa, guarded_step.accepted.clause_kappa,
+                "step {step_index} changed accepted kappa parity"
+            );
+        }
+    }
+
+    #[test]
+    fn desktop_claim_shadow_smoke_config_keeps_guarded_parity_through_step_eight() {
+        let claim_steps = search_bootstrap_prefix_for_config_with_runtime(
+            8,
+            2,
+            &claim_runtime_config_smoke(),
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim smoke steps should build");
+        let guarded_steps = search_bootstrap_prefix(8, 2).expect("guarded steps should build");
+
+        for step_index in 4..=8 {
+            let claim_step = claim_steps
+                .iter()
+                .find(|step| step.step_index == step_index)
+                .expect("claim step should exist");
+            let guarded_step = guarded_steps
+                .iter()
+                .find(|step| step.step_index == step_index)
+                .expect("guarded step should exist");
+
+            assert_eq!(claim_step.telescope, Telescope::reference(step_index));
+            assert_eq!(claim_step.telescope, guarded_step.telescope);
+            assert_eq!(
+                claim_step.accepted.candidate_hash, guarded_step.accepted.candidate_hash,
+                "step {step_index} changed accepted hash parity under the smoke config"
+            );
+            assert_eq!(
+                claim_step.accepted.canonical_hash, guarded_step.accepted.canonical_hash,
+                "step {step_index} changed canonical parity under the smoke config"
+            );
+            assert_eq!(
+                claim_step.accepted.nu, guarded_step.accepted.nu,
+                "step {step_index} changed accepted nu parity under the smoke config"
+            );
+            assert_eq!(
+                claim_step.accepted.clause_kappa, guarded_step.accepted.clause_kappa,
+                "step {step_index} changed accepted kappa parity under the smoke config"
             );
         }
     }

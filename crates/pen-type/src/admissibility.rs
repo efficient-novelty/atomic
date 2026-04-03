@@ -611,6 +611,17 @@ pub fn strict_admissibility_for_mode(
             let loop_anchor = historical_loop_anchor_ref(library, window_depth);
             let modal_anchor = historical_modal_shell_anchor_ref(library, window_depth);
             if mode == AdmissibilityMode::DesktopClaimShadow {
+                if let Some(focus_family) =
+                    claim_guarded_early_focus_family(step_index, debt, loop_anchor, modal_anchor)
+                {
+                    return structural_focus_strict_admissibility(
+                        mode,
+                        debt,
+                        Some(focus_family),
+                        loop_anchor,
+                        modal_anchor,
+                    );
+                }
                 return claim_strict_admissibility(
                     step_index,
                     mode,
@@ -620,46 +631,59 @@ pub fn strict_admissibility_for_mode(
                 );
             }
             let focus_family = focus_family_from_debt(debt, loop_anchor, modal_anchor);
-            let focus_policy = focus_policy_for_mode(mode, focus_family);
-            let package_policies = PackagePolicies::with_focus(focus_family, focus_policy);
-            let (min_clause_kappa, max_clause_kappa) =
-                clause_band_for_mode(mode, focus_family, debt);
-
-            StrictAdmissibility {
+            structural_focus_strict_admissibility(
                 mode,
-                min_clause_kappa,
-                max_clause_kappa,
-                ambient_depth: 2,
-                max_expr_nodes: max_expr_nodes_for_mode(mode, focus_family, max_clause_kappa),
-                max_path_dimension: max_path_dimension_for_focus(focus_family, debt),
-                include_trunc: include_trunc_for_focus(focus_family, debt),
-                include_modal: include_modal_for_focus(focus_family, debt),
-                include_temporal: include_temporal_for_focus(focus_family, debt),
-                quota_per_bucket: debt.quota_per_bucket(),
-                require_former_eliminator_package: package_policies.former_eliminator.is_required(),
-                require_initial_hit_package: package_policies.initial_hit.is_required(),
-                require_truncation_hit_package: package_policies.truncation_hit.is_required(),
-                require_higher_hit_package: package_policies.higher_hit.is_required(),
-                require_sphere_lift_package: package_policies.sphere_lift.is_required(),
-                require_axiomatic_bundle_package: package_policies.axiomatic_bundle.is_required(),
-                require_modal_shell_package: package_policies.modal_shell.is_required(),
-                require_connection_shell_package: package_policies.connection_shell.is_required(),
-                require_curvature_shell_package: package_policies.curvature_shell.is_required(),
-                require_operator_bundle_package: package_policies.operator_bundle.is_required(),
-                require_hilbert_functional_package: package_policies
-                    .hilbert_functional
-                    .is_required(),
-                require_temporal_shell_package: package_policies.temporal_shell.is_required(),
-                package_policies,
+                debt,
                 focus_family,
-                historical_anchor_ref: historical_anchor_ref_for_focus(
-                    mode,
-                    focus_family,
-                    loop_anchor,
-                    modal_anchor,
-                ),
-            }
+                loop_anchor,
+                modal_anchor,
+            )
         }
+    }
+}
+
+fn structural_focus_strict_admissibility(
+    mode: AdmissibilityMode,
+    debt: StructuralDebt,
+    focus_family: Option<StructuralFamily>,
+    loop_anchor: Option<u32>,
+    modal_anchor: Option<u32>,
+) -> StrictAdmissibility {
+    let focus_policy = focus_policy_for_mode(mode, focus_family);
+    let package_policies = PackagePolicies::with_focus(focus_family, focus_policy);
+    let (min_clause_kappa, max_clause_kappa) = clause_band_for_mode(mode, focus_family, debt);
+
+    StrictAdmissibility {
+        mode,
+        min_clause_kappa,
+        max_clause_kappa,
+        ambient_depth: 2,
+        max_expr_nodes: max_expr_nodes_for_mode(mode, focus_family, max_clause_kappa),
+        max_path_dimension: max_path_dimension_for_focus(focus_family, debt),
+        include_trunc: include_trunc_for_focus(focus_family, debt),
+        include_modal: include_modal_for_focus(focus_family, debt),
+        include_temporal: include_temporal_for_focus(focus_family, debt),
+        quota_per_bucket: debt.quota_per_bucket(),
+        require_former_eliminator_package: package_policies.former_eliminator.is_required(),
+        require_initial_hit_package: package_policies.initial_hit.is_required(),
+        require_truncation_hit_package: package_policies.truncation_hit.is_required(),
+        require_higher_hit_package: package_policies.higher_hit.is_required(),
+        require_sphere_lift_package: package_policies.sphere_lift.is_required(),
+        require_axiomatic_bundle_package: package_policies.axiomatic_bundle.is_required(),
+        require_modal_shell_package: package_policies.modal_shell.is_required(),
+        require_connection_shell_package: package_policies.connection_shell.is_required(),
+        require_curvature_shell_package: package_policies.curvature_shell.is_required(),
+        require_operator_bundle_package: package_policies.operator_bundle.is_required(),
+        require_hilbert_functional_package: package_policies.hilbert_functional.is_required(),
+        require_temporal_shell_package: package_policies.temporal_shell.is_required(),
+        package_policies,
+        focus_family,
+        historical_anchor_ref: historical_anchor_ref_for_focus(
+            mode,
+            focus_family,
+            loop_anchor,
+            modal_anchor,
+        ),
     }
 }
 
@@ -922,6 +946,28 @@ fn claim_strict_admissibility(
         package_policies: PackagePolicies::default(),
         focus_family: None,
         historical_anchor_ref: claim_historical_anchor_ref(debt, loop_anchor, modal_anchor),
+    }
+}
+
+fn claim_guarded_early_focus_family(
+    step_index: u32,
+    debt: StructuralDebt,
+    loop_anchor: Option<u32>,
+    modal_anchor: Option<u32>,
+) -> Option<StructuralFamily> {
+    if !(4..=8).contains(&step_index) {
+        return None;
+    }
+
+    match focus_family_from_debt(debt, loop_anchor, modal_anchor) {
+        Some(
+            focus_family @ (StructuralFamily::FormerEliminator
+            | StructuralFamily::InitialHit
+            | StructuralFamily::TruncationHit
+            | StructuralFamily::HigherHit
+            | StructuralFamily::SphereLift),
+        ) => Some(focus_family),
+        _ => None,
     }
 }
 
@@ -2312,13 +2358,69 @@ mod tests {
     }
 
     #[test]
-    fn claim_shadow_uses_structural_claim_debt_without_named_focus_family() {
+    fn claim_shadow_preserves_guarded_structural_focus_packages_through_step_eight() {
         let cases = [
-            (4, 3, 3, 0, false, false, None),
-            (5, 3, 3, 1, false, false, None),
-            (6, 3, 3, 1, false, false, None),
-            (7, 3, 3, 2, false, false, None),
-            (8, 5, 5, 3, false, false, None),
+            (4, StructuralFamily::FormerEliminator, 3, 3, 0, false, false),
+            (5, StructuralFamily::InitialHit, 3, 3, 1, false, false),
+            (6, StructuralFamily::TruncationHit, 3, 3, 1, true, false),
+            (7, StructuralFamily::HigherHit, 3, 3, 2, false, false),
+            (8, StructuralFamily::SphereLift, 5, 5, 3, false, false),
+        ];
+
+        for (
+            step,
+            focus_family,
+            min_clause_kappa,
+            max_clause_kappa,
+            max_path_dimension,
+            include_trunc,
+            include_modal,
+        ) in cases
+        {
+            let library = library_until(step - 1);
+            let admissibility = strict_admissibility_for_mode(
+                step,
+                2,
+                &library,
+                AdmissibilityMode::DesktopClaimShadow,
+            );
+
+            assert_eq!(
+                admissibility.focus_family,
+                Some(focus_family),
+                "step {step}"
+            );
+            assert_eq!(
+                admissibility.required_focus_family(),
+                Some(focus_family),
+                "step {step}"
+            );
+            assert_eq!(
+                admissibility.policy_for(focus_family),
+                PackagePolicy::Require,
+                "step {step}"
+            );
+            assert_eq!(
+                admissibility.min_clause_kappa, min_clause_kappa,
+                "step {step}"
+            );
+            assert_eq!(
+                admissibility.max_clause_kappa, max_clause_kappa,
+                "step {step}"
+            );
+            assert_eq!(
+                admissibility.max_path_dimension, max_path_dimension,
+                "step {step}"
+            );
+            assert_eq!(admissibility.include_trunc, include_trunc, "step {step}");
+            assert_eq!(admissibility.include_modal, include_modal, "step {step}");
+            assert!(!admissibility.include_temporal, "step {step}");
+        }
+    }
+
+    #[test]
+    fn claim_shadow_uses_structural_claim_debt_without_named_focus_family_after_step_eight() {
+        let cases = [
             (9, 4, 4, 0, false, false, Some(5)),
             (10, 4, 4, 0, true, false, Some(7)),
             (11, 5, 6, 0, true, false, None),

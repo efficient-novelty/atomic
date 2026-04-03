@@ -196,23 +196,23 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - `roots_enqueued = 85`
   - `generated_raw_surface = 90`
   - `frontier_queue_len = 85`
-- Replay parity is still not restored end-to-end:
-  - steps `1..7` still match guarded `nu / kappa`
-  - step `8` is the first visible `nu / kappa` mismatch:
-    claim `11 / 3` versus guarded `18 / 5`
-  - `replay_ablation = diverges_from_reference_replay` already starts at
-    step `4`, so the structural fork predates the visible `nu / kappa` drift
-- The replay-ablation root cause is now localized earlier than the late-step
-  repair:
-  - claim step `4` uses open-band claim admissibility instead of the guarded
-    former-eliminator focus gate
-  - with `[demo] enabled = true`, claim step `4` also runs the early
-    exhaustive discovery branch
-  - the claim step-`4` winner therefore comes from a wider structural surface
-    and takes a different accepted hash before late-step divergence appears
+- The old earliest replay fork is now repaired locally in code and tests:
+  - `DesktopClaimShadow` now preserves the guarded structural focus packages
+    through steps `4..8` before later claim-debt widening resumes
+  - targeted profile-path checks now keep accepted hash plus `nu / kappa`
+    parity through steps `4..8`
+  - targeted smoke-config checks now keep that same parity through the
+    demo-enabled early-exhaustive path
+  - the claim live-checkpoint persistence test is still green
+  - the release replay harness benchmark still replays all `5` stored plateau
+    surfaces
+- Stored full-profile replay parity is still not re-earned on disk:
+  - no fresh clean-start rerun exists yet after the early-parity repair
+  - the frozen `v1` / `v2` / `v3` / capped / stopped-`v4` artifacts remain
+    the pre-repair evidence set
 - Replay parity plus the capped intended-profile read remain valuable local
-  guards, but the current blocker is now fixing that early step-`4` replay
-  fork before spending another full rerun.
+  guards, but the current blocker is now the next clean-start full-profile
+  rerun on the repaired binary, not more local early-step diagnosis.
 
 ## Do This Next
 
@@ -243,39 +243,36 @@ This note is the exact next work order for `desktop_claim_shadow`.
    `d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f`
    as the validated binary for the next full rerun.
 
-### 3. Repair The Earliest Replay Fork
+### 3. Treat The Early Replay Gate As Earned
 
-1. Localize and repair the step-`4` claim-versus-guarded admissibility split.
-2. Keep the demo-enabled early-exhaustive claim step-`4` path under the same
-   parity check; do not treat the landed late-step viability regressions as
-   sufficient proof of replay parity.
-3. Re-run targeted parity checks that compare accepted hash plus `nu / kappa`
-   through at least steps `4..8`.
+1. Treat the repaired steps-`4..8` parity slice as green on both:
+   - the plain profile path
+   - the demo-enabled smoke-config early-exhaustive path
+2. Keep those targeted parity checks in the pre-flight gate; do not treat the
+   landed late-step regressions alone as sufficient proof of replay parity.
+3. Keep the repaired early structural focus progression in place unless a new
+   stored rerun produces contradictory evidence.
 
-### 4. Relaunch Only After Early Parity Holds
+### 4. Launch The Next Full-Profile Rerun
 
-1. Start a fresh clean-start full-profile rerun only after that targeted
-   parity slice is green.
+1. Start a fresh clean-start full-profile rerun on the repaired binary.
 2. Do not `resume` the stopped `v4` bundle.
-3. On the next rerun, compare early step `4` first against the capped
-   validation gate, then compare step `14` against `long-rerun-v3` only after
-   early replay parity holds.
+3. Compare early step `4` first against:
+   - the capped `1200000 ms` validation gate
+   - the stored `v1` / `v2` continuation walls
 
-### 5. Optimization Order After Replay Parity
+### 5. Evaluate The Rerun Before More Local Surgery
 
-1. First priority: keep restored guarded replay parity through steps `4..8`
-   while preserving the re-earned `1200000 ms` honesty gate.
-2. Second priority: once parity holds, use the next full rerun to decide
-   whether the surviving blocker is still late-step exact screening, runtime,
-   or both.
-3. Do not spend more time on late-step-only diagnosis before the early
-   step-`4` fork is closed.
+1. Only after the early step-`4` gate still holds, compare late step `14`
+   against `long-rerun-v3`.
+2. Use that rerun to decide whether the surviving blocker is still late-step
+   exact screening, runtime, or both.
+3. Do not spend more time on local early-step or late-step-only diagnosis
+   before that repaired full-profile rerun exists on disk.
 
 ## Do Not Reopen First
 
 - a `resume`-based restart of the stopped `v4` run
-- another clean-start full rerun before the early step-`4` replay divergence
-  is fixed or explicitly justified
 - dormant cached-summary reopen wake-up work
 - broad frontier rewrites
 - the dropped focus-aligned competition-gate/payload-mode hoist
@@ -286,17 +283,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - contender-rank helper rewrites
 - timing-only slices with no new late-step explanation or new step-`14`
   localization
+- another local early-step admissibility rewrite with no new stored rerun
+  evidence
 - replay-fixture recapture or benchmark-file churn before a new full rerun
 - compare / benchmark / certification work before a new full-profile run
   reaches step `15`
 
 ## Keep Or Branch Decision
 
-- Branch back to local early-step parity repair before another full rerun:
-  the stopped `v4` evidence already disproved the old step-`14`
-  zero-candidate opening but still diverges structurally at step `4`.
+- Keep the current lane on the fresh clean-start full-profile rerun:
+  the local early-step parity repair is now landed and green, so the next
+  missing evidence is the repaired run itself.
 - Keep the current short-loop gate, stored step-`4` continuation references,
   the capped intended-profile read, and the stopped `v4` bundle frozen as
   regression checks.
-- Return to another full rerun only after targeted steps `4..8` parity checks
-  are green.
+- Return to another local code slice only if that rerun reopens a new blocker
+  that the current targeted tests did not predict.

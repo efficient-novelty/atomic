@@ -23,14 +23,19 @@ It lists only work that is still open.
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v3`,
   answered the old runtime question by reaching step `14`, but it failed there
   with `no atomic candidates were generated for step 14`.
-- The accepted claim path is still not replay-parity correct on stored
-  evidence:
-  - steps `1..7` still match guarded `nu / kappa`
-  - step `8` is the first visible `nu / kappa` mismatch:
-    claim `11 / 3` versus guarded `18 / 5`
-  - `replay_ablation = diverges_from_reference_replay` already starts at
-    step `4`, so the structural replay fork predates the visible
-    `nu / kappa` drift
+- The old earliest replay fork is now repaired locally in code and tests:
+  - `DesktopClaimShadow` now preserves the guarded structural focus packages
+    through steps `4..8` before later claim-debt widening resumes
+  - targeted profile-path checks now keep accepted hash plus `nu / kappa`
+    parity through steps `4..8`
+  - targeted smoke-config checks now keep that same parity through the
+    demo-enabled early-exhaustive path
+  - the claim live-checkpoint persistence test and the stored replay-harness
+    benchmark remain green after the repair
+- Stored full-profile replay parity is still open on disk:
+  - no fresh clean-start rerun exists yet on the repaired binary
+  - the frozen `v1` / `v2` / `v3` / capped / stopped-`v4` artifacts therefore
+    remain the pre-repair evidence set
 - The stored late-step reproducer still matters, but it is no longer the first
   blocker. The stored `v3` run opened step `14` at `clause_kappa = 7` with
   `raw_catalog_clause_widths = [3,1,1,1,1,1,1]`, while the current reproducer
@@ -108,14 +113,9 @@ It lists only work that is still open.
     `frontier_queue_len = 85`
 - The old zero-candidate step-`14` opening is therefore no longer the first
   blocker.
-- The current blocker is the earlier step-`4` replay-ablation fork:
-  - claim step `4` uses open-band claim admissibility instead of the guarded
-    former-eliminator focus gate
-  - with `[demo] enabled = true`, claim step `4` also uses the early
-    exhaustive discovery branch
-  - the stopped claim step-`4` summary retains `7` candidates after an
-    `open_band_structural` surface, while guarded step `4` keeps only `4`
-    `focus_former_eliminator` survivors
+- The current blocker is re-earning a fresh clean-start full-profile run on
+  the repaired binary, then checking whether step `4` still holds the capped
+  honesty gate before comparing the surviving late-step behavior.
 
 ## 1. Runtime Improvement Loop
 

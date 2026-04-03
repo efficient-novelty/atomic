@@ -184,14 +184,19 @@ gate.
   - `roots_enqueued = 85`
   - `generated_raw_surface = 90`
   - `frontier_queue_len = 85`
-- The accepted claim path still diverges from guarded replay much earlier than
-  step `14`:
-  - steps `1..7` still match the guarded `nu / kappa` values
-  - step `8` is the first visible `nu / kappa` mismatch:
-    claim `11 / 3` versus guarded `18 / 5`
-  - `replay_ablation = diverges_from_reference_replay` already starts at
-    step `4`, so the structural replay fork predates the visible
-    `nu / kappa` drift
+- The old earliest replay fork is now repaired locally in code and tests:
+  - `DesktopClaimShadow` now preserves the guarded structural focus packages
+    through steps `4..8` before later claim-debt widening resumes
+  - targeted profile-path checks now keep accepted hash plus `nu / kappa`
+    parity through steps `4..8`
+  - targeted smoke-config checks now keep that same parity through the
+    demo-enabled early-exhaustive path
+  - the claim live-checkpoint persistence test and the stored replay-harness
+    benchmark are still green after the repair
+- Stored full-profile replay parity is still open on disk:
+  - no fresh clean-start rerun exists yet on the repaired binary
+  - the frozen `v1` / `v2` / `v3` / capped / stopped-`v4` artifacts therefore
+    remain the pre-repair evidence set
 
 ## Latest Full-Profile Outcome
 
@@ -372,27 +377,11 @@ gate.
     no longer the first failure surface
   - the stopped `v4` rerun already re-earned the `1200000 ms` step-`4` gate,
     completed through step `13`, and entered nonzero step-`14` search
-- The earliest replay divergence is now localized at step `4`:
-  - step `4` already flips `replay_ablation` while still matching guarded
-    `nu = 5`, `kappa = 3`
-  - the guarded step-`4` winner hash is
-    `blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407`
-  - the stopped claim `v4` step-`4` winner hash is
-    `blake3:2b006725f19f845dd2ceafa9193e0deb7865fd41ad73f89310f73522f0d5b8e7`
-  - guarded step `4` keeps only `4` `focus_former_eliminator` survivors,
-    while the claim step-`4` summary retains `7` candidates after an
-    `open_band_structural` surface with
-    `reason_counts["open_band_structural"] = 67999657383`
-- The code-level root cause is now the early claim-versus-guarded policy split,
-  not the already-landed late step-`13` viability repair:
-  - `DesktopClaimShadow` switches to claim strict admissibility for steps
-    `> 3`, so it drops the guarded `focus_family_from_debt(...)` gate that
-    would otherwise force the former-eliminator package at step `4`
-  - with `[demo] enabled = true`, claim step `4` also routes through the
-    early exhaustive discovery branch before later frontier pruning
-  - the accepted claim step-`4` shell is therefore chosen from a structurally
-    wider surface than guarded replay, and that shell cannot satisfy the
-    guarded former-eliminator package
+- The early claim-versus-guarded policy split is now closed locally:
+  - the repaired claim admissibility keeps the guarded former-eliminator /
+    hit / sphere package progression through steps `4..8`
+  - that closes the old step-`4` accepted-hash fork on both the plain profile
+    path and the smoke-config early-exhaustive path
 - The replay / runtime validation surface is still stronger too:
   - the release replay harness cleanly replays the tracked
     `remaining_one_plateau` corpus on all `5` stored surfaces
@@ -400,25 +389,29 @@ gate.
     short-loop gate by `1200000 ms`
   - that same read is back on the older `41 groups / 29249 candidates`
     continuation surface by prefix state `140`
-- The next honest engineering dollar is therefore restoring guarded early-step
-  replay parity around step `4`, then rechecking steps `4..8`, not spending
-  another full rerun first.
+- The next honest engineering dollar is therefore re-earning stored
+  full-profile evidence on the repaired binary:
+  - launch a fresh clean-start intended-profile rerun
+  - compare early step `4` first against the capped honesty gate and the
+    stored continuation walls
+  - only then decide whether the surviving blocker is still late-step exact
+    screening, runtime, or both
 
 ## Forward Direction
 
 - Keep the current short-loop gate, step-`4` continuation references, capped
   intended-profile read, and stopped `v4` bundle frozen as regression checks.
 - Keep the landed late-step diagnostics, divergent-prefix reproducer, replay
-  harness corpus, and step-`13` viability-tie regression green, but treat them
-  as secondary guards now that the first replay fork is localized earlier.
-- Prioritize localizing and repairing the earliest step-`4`
-  claim-versus-guarded admissibility split, then recheck parity through
-  steps `4..8`.
-- Launch another full-profile rerun only after that early replay parity slice
-  is restored or an intentional divergence is explicitly justified in stored
-  evidence.
-- Return to step-`4` micro-optimization only if the parity repair keeps the
-  same search surface but materially regresses the capped honesty gate.
+  harness corpus, step-`13` viability-tie regression, and early parity checks
+  green.
+- Prioritize a fresh clean-start full-profile rerun on the repaired binary;
+  do not spend more local diagnosis time on the old early-step fork unless the
+  rerun produces new contradictory evidence.
+- Compare early step `4` first against the capped honesty gate and the stored
+  continuation walls, then compare late step `14` against `long-rerun-v3`
+  only after the early gate still holds.
+- Return to step-`4` micro-optimization only if the repaired parity slice
+  materially regresses the capped honesty gate on stored rerun evidence.
 
 ## Immediate Next Move
 
@@ -432,14 +425,12 @@ gate.
    bundle as the current evidence set.
 2. Keep the landed divergent-prefix reproducer, full-sweep exact-prune split,
    hybrid cutover, structural-delta, forced local reopen, late-step claim
-   acceptance regressions, and release replay harness green.
-3. Localize and repair the earliest step-`4` replay fork between the claim
-   open-band admissibility / early-exhaustive path and the guarded
-   former-eliminator focus gate.
-4. Add or rerun targeted parity checks that compare accepted hash plus
-   `nu / kappa` through at least steps `4..8`.
-5. Only after that parity slice is green, launch a fresh clean-start
-   full-profile rerun; do not `resume` the stopped `v4` bundle.
-6. On the next full rerun, compare early step `4` first against the capped
-   `1200000 ms` gate, then compare late step `14` against `long-rerun-v3`
-   only after early replay parity holds.
+   acceptance regressions, claim live-checkpoint persistence, and release
+   replay harness green.
+3. Launch a fresh clean-start full-profile rerun on the repaired binary; do
+   not `resume` the stopped `v4` bundle.
+4. On that rerun, compare early step `4` first against the capped
+   `1200000 ms` gate plus the stored `v1` / `v2` continuation walls.
+5. Only after the early gate still holds, compare late step `14` against
+   `long-rerun-v3` and decide whether the surviving blocker is exact
+   screening, runtime, or both.
