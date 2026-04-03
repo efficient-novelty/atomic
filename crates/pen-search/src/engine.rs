@@ -11654,6 +11654,129 @@ mod tests {
     }
 
     #[test]
+    fn claim_step_eleven_same_primary_fork_collapses_to_the_same_step_twelve_continuation() {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            10,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 10 should build");
+        let claim_prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let (library, history, _) = history_from_prefix(&claim_prefix);
+        let target = Telescope::reference(11);
+        let step = super::search_bootstrap_prefix_for_profile_with_runtime(
+            11,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim step 11 should build")
+        .into_iter()
+        .last()
+        .expect("claim step 11 should exist");
+        let target_candidate = step
+            .retained_candidates
+            .iter()
+            .find(|candidate| candidate.telescope == target)
+            .expect("guarded step-11 completion should stay retained");
+
+        let structural_acceptance =
+            super::select_acceptance(step.objective_bar, &step.retained_candidates)
+                .expect("raw structural acceptance should still select a bar clearer");
+        let structural_accepted_candidate = step
+            .retained_candidates
+            .iter()
+            .find(|candidate| {
+                candidate.candidate_hash == structural_acceptance.accepted.candidate_hash
+            })
+            .expect("raw structural winner should still be retained");
+        let structural_accept_rank =
+            acceptance_rank(step.objective_bar, structural_accepted_candidate)
+                .expect("raw structural winner should still clear the bar");
+        let tied_candidates = step
+            .retained_candidates
+            .iter()
+            .filter_map(|candidate| {
+                acceptance_rank(step.objective_bar, candidate).map(|rank| (candidate, rank))
+            })
+            .filter(|(_, rank)| {
+                crate::branch_bound::same_primary_rank_tier(rank, &structural_accept_rank)
+            })
+            .map(|(candidate, _)| candidate)
+            .collect::<Vec<_>>();
+        assert!(
+            tied_candidates.len() > 1,
+            "the divergent step-11 surface should still expose a same-primary acceptance fork"
+        );
+
+        let continuation_outcomes = tied_candidates
+            .iter()
+            .filter_map(|candidate| {
+                let mut next_history = history.clone();
+                next_history.push(DiscoveryRecord::new(
+                    11,
+                    u32::from(candidate.nu),
+                    u32::from(candidate.clause_kappa),
+                ));
+                let mut next_library = library.clone();
+                next_library.push(LibraryEntry::from_telescope(&candidate.telescope, &library));
+                let mut progress_observer = None;
+                search_next_step_internal(
+                    12,
+                    2,
+                    &next_library,
+                    &next_history,
+                    AdmissibilityMode::DesktopClaimShadow,
+                    crate::diversify::FrontierRuntimeLimits::unlimited(),
+                    None,
+                    &mut progress_observer,
+                    false,
+                )
+                .ok()
+                .map(|continuation| {
+                    (
+                        candidate.candidate_hash.clone(),
+                        continuation.accepted.candidate_hash,
+                        continuation.accepted.nu,
+                        continuation.accepted.clause_kappa,
+                    )
+                })
+            })
+            .collect::<Vec<_>>();
+        let continued_outcomes = continuation_outcomes
+            .iter()
+            .map(|(_, accepted_hash, nu, clause_kappa)| (accepted_hash.clone(), *nu, *clause_kappa))
+            .collect::<std::collections::BTreeSet<_>>();
+        assert_eq!(
+            continuation_outcomes.len(),
+            tied_candidates.len(),
+            "every tied step-11 survivor should still keep step 12 alive"
+        );
+        assert_ne!(
+            structural_acceptance.accepted.candidate_hash, target_candidate.candidate_hash,
+            "the raw structural tie-break should still miss the guarded step-11 survivor"
+        );
+        assert_eq!(
+            step.accepted.candidate_hash, structural_acceptance.accepted.candidate_hash,
+            "live claim step-11 acceptance should still be the raw structural winner"
+        );
+        assert_eq!(
+            continued_outcomes,
+            std::collections::BTreeSet::from([(
+                "blake3:5e24909f7a6fa684855b9ac49fea80daa93bc6fde25c7db0bed15575d7d80108"
+                    .to_owned(),
+                33,
+                5,
+            )]),
+            "same-primary step-11 survivors should still collapse onto the observed step-12 33/5 continuation"
+        );
+    }
+
+    #[test]
     fn claim_step_eleven_keeps_the_guarded_completion_in_the_retained_pool() {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             10,

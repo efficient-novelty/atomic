@@ -34,6 +34,11 @@ It lists only work that is still open.
   summary, compact survivor sketch, and retained candidate pool on the live
   divergent history; no stored rerun has consumed that repair yet, so the
   signoff surface is still the frozen `v5` evidence set.
+- A follow-up local regression now proves the current same-primary step-`11`
+  tied set still collapses onto the same observed claim step-`12`
+  accepted hash / `nu` / `kappa` (`33 / 5`), so the remaining step-`11`
+  blocker is local same-primary selection rather than a simple one-step
+  viability miss.
 - The old `v3` step-`14` zero-candidate failure is therefore no longer the
   first blocker.
 - The current blocker is stored parity plus stored breadth on the completed
