@@ -151,11 +151,13 @@ This note is the exact next work order for `desktop_claim_shadow`.
     remaining-one screening on that history
   - live claim step `12` now recovers guarded `nu = 34`, `kappa = 6`
     instead of the old `33 / 5` drop
+  - a follow-up cache-key repair now also keeps that guarded curvature shell
+    alive into the retained claim candidate pool by keying exact multi-step
+    partial-prefix bounds on `(prefix_signature, clause_kappa)`
   - but live claim step `12` still accepts a different same-primary
-    `34 / 6` hash, and the guarded curvature shell still does not survive
-    into the retained claim candidate pool
+    `34 / 6` hash
   - the remaining local blocker is therefore now the step-`12`
-    same-primary retained-pool / accepted-hash fork inside `34 / 6`
+    accepted-hash fork inside the retained same-primary `34 / 6` tier
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -204,11 +206,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
 5. Keep step `9` final selection deferred while the current tied step-`9`
    candidates still share the same observed step-`10` / repaired-step-`11`
    continuation.
-6. Move the active repair target to the step-`12` same-primary
-   retained-pool / accepted-hash fork inside guarded `34 / 6`:
-   inspect why the guarded curvature shell now survives exact screening but
-   still does not survive into the retained claim candidate pool, and why a
-   different same-primary `34 / 6` hash is accepted instead.
+6. Move the active repair target to the step-`12` accepted-hash fork inside
+   the retained same-primary guarded `34 / 6` tier:
+   inspect which retained same-primary survivor wins after the new
+   `clause_kappa` cache-key repair, why the guarded curvature shell still
+   loses final selection, and how those rival step-`12` survivors continue
+   into steps `13..15`.
 7. Use the repaired step-`9` / step-`11` / step-`12` chain to explain the
    late generated-floor collapse at
    steps `11..15`, especially:
@@ -237,13 +240,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
    guarded curvature shell keeps surviving preterminal clause exposure, full
    summary, compact survivor sketch, semantic minimality, and exact
    remaining-one screening on the repaired live history.
-7. Keep the stored compare regression green for the step-`12`
+7. Keep the new step-`12` retained-pool regression green so the guarded
+   curvature shell stays present in the retained candidate pool after the
+   cross-band cache-key repair.
+8. Keep the new step-`12` cache-key regression green so a modal `5`-clause
+   `CannotClearBar` result cannot poison the guarded `6`-clause continuation
+   on the same preterminal prefix.
+9. Keep the stored compare regression green for the step-`12`
    guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
-8. Keep the stored certification / benchmark assertions green for the
+10. Keep the stored certification / benchmark assertions green for the
    step-`1` breadth miss and the late generated-floor snapshot at
    steps `10..15` so the next fix cannot silently reshuffle the stored
    failure surface.
-9. Keep the existing pre-flight gate green while the local repair lands.
+11. Keep the existing pre-flight gate green while the local repair lands.
 
 ### 5. Only Rerun After The Local Repair Exists
 

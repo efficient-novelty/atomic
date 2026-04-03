@@ -336,7 +336,7 @@ pub struct PrefixLegalityCache {
     family_filters: BTreeMap<PrefixSignature, PrefixFamilyFilterSummary>,
     family_surfaces: BTreeMap<PrefixSignature, LateFamilySurface>,
     terminal_prefix_completions: BTreeMap<PrefixSignature, TerminalPrefixCompletionSummary>,
-    partial_prefix_bounds: BTreeMap<PrefixSignature, PartialPrefixBoundDecision>,
+    partial_prefix_bounds: BTreeMap<(PrefixSignature, u16), PartialPrefixBoundDecision>,
     stats: PrefixLegalityCacheStats,
 }
 
@@ -415,8 +415,11 @@ impl PrefixLegalityCache {
     pub fn partial_prefix_bound_decision(
         &mut self,
         signature: &PrefixSignature,
+        clause_kappa: u16,
     ) -> Option<PartialPrefixBoundDecision> {
-        let decision = *self.partial_prefix_bounds.get(signature)?;
+        let decision = *self
+            .partial_prefix_bounds
+            .get(&(signature.clone(), clause_kappa))?;
         self.stats.partial_prefix_bound_hits += 1;
         Some(decision)
     }
@@ -424,9 +427,11 @@ impl PrefixLegalityCache {
     pub fn store_partial_prefix_bound_decision(
         &mut self,
         signature: PrefixSignature,
+        clause_kappa: u16,
         decision: PartialPrefixBoundDecision,
     ) {
-        self.partial_prefix_bounds.insert(signature, decision);
+        self.partial_prefix_bounds
+            .insert((signature, clause_kappa), decision);
     }
 
     pub fn family_option_count(&self, signature: &PrefixSignature) -> Option<u8> {
@@ -1451,13 +1456,15 @@ mod tests {
 
         cache.store_partial_prefix_bound_decision(
             signature.clone(),
+            5,
             PartialPrefixBoundDecision::CanClearBar,
         );
 
         assert_eq!(
-            cache.partial_prefix_bound_decision(&signature),
+            cache.partial_prefix_bound_decision(&signature, 5),
             Some(PartialPrefixBoundDecision::CanClearBar)
         );
+        assert_eq!(cache.partial_prefix_bound_decision(&signature, 6), None);
         assert_eq!(cache.stats().partial_prefix_bound_hits, 1);
     }
 }

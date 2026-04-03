@@ -99,6 +99,12 @@ gate.
   subbundles prune the guarded step-`12` curvature shell, and the claim
   remaining-one algebraic ceiling no longer screens that shell out early on
   the modal `5..6` slice.
+- A second follow-up claim-lane code change now repairs the local step-`12`
+  retained-pool miss:
+  exact multi-step partial-prefix bound memoization now keys on
+  `(prefix_signature, clause_kappa)`, so the modal `5`-clause
+  `CannotClearBar` result no longer poisons the guarded `6`-clause
+  continuation on the same preterminal prefix.
 - New unit regressions now freeze the post-repair step-`12` read:
   - every current same-primary tied step-`11` survivor still collapses onto
     one observed live claim step-`12` continuation
@@ -106,12 +112,13 @@ gate.
   - the guarded step-`12` curvature shell now survives preterminal clause
     exposure, full remaining-one summary, compact survivor sketch, semantic
     minimality, and exact remaining-one screening on the repaired live history
+  - it now also survives into the retained candidate pool on that repaired
+    live history
   - but live claim step-`12` acceptance still picks a different same-primary
-    `34 / 6` hash, and the guarded curvature shell still does not survive into
-    the retained candidate pool
+    `34 / 6` hash
   - the next honest local blocker is therefore no longer the step-`12`
-    `33 / 5` drop, but the step-`12` same-primary retained-pool / accepted-hash
-    fork inside `34 / 6`
+    `33 / 5` drop or the retained-pool miss, but the step-`12`
+    accepted-hash fork inside the retained same-primary `34 / 6` tier
 - No fresh full-profile rerun or stored audit refresh landed yet, so the
   frozen `v5` run, compare report, claim certificate, and benchmark bundle
   remain the authoritative stored evidence surface this turn.
@@ -358,11 +365,13 @@ gate.
     remaining-one exact screen on that history
   - live claim step `12` now recovers guarded `nu = 34`, `kappa = 6`
     instead of the old `33 / 5` drop
-  - however, the guarded step-`12` curvature shell still does not survive into
-    the retained candidate pool, and live claim step `12` still accepts a
-    different same-primary `34 / 6` hash
-  - so the remaining local blocker is now a step-`12` same-primary hash fork,
-    not a step-`12` `nu / kappa` miss
+  - exact multi-step partial-prefix caching now also keeps that guarded shell
+    alive into the retained candidate pool
+  - however, live claim step `12` still accepts a different same-primary
+    `34 / 6` hash
+  - so the remaining local blocker is now a step-`12` accepted-hash fork
+    inside the retained same-primary `34 / 6` tier, not a step-`12`
+    `nu / kappa` or retained-pool miss
 - The new stored full-profile bundle also changes what counts as the next
   honest engineering dollar:
   - do not reopen runtime-only step-`4` surgery first
@@ -383,9 +392,10 @@ gate.
   reason counts, prune-class counts, and manifest provenance green.
 - Prioritize targeted local diagnosis and repair for:
   - the step-`9` accepted-hash fork
-  - the step-`12` same-primary retained-pool / accepted-hash fork, now that
-    the old `33 / 5` drop is repaired locally and every tied step-`11`
-    survivor now collapses onto one observed `34 / 6` continuation
+  - the step-`12` accepted-hash fork inside the retained same-primary
+    `34 / 6` tier, now that the old `33 / 5` drop and the retained-pool miss
+    are repaired locally and every tied step-`11` survivor now collapses onto
+    one observed `34 / 6` continuation
   - the late generated-floor collapse at steps `11..15`
 - Launch the next clean-start full-profile rerun only after the local repair
   is green against those stored parity/floor regressions.
@@ -407,17 +417,24 @@ gate.
    the guarded curvature shell must keep surviving preterminal clause
    exposure, full summary, compact survivor sketch, semantic minimality, and
    exact remaining-one screening on the repaired live history.
-5. Start the next repair at step `12`, not at raw step-`9` generation:
-   localize why the guarded step-`12` curvature shell still does not survive
-   into the retained candidate pool, and why live claim step `12` still
-   accepts a different same-primary `34 / 6` hash.
-6. Re-run the step-`9` tie diagnostic only after the step-`12`
+5. Keep the new step-`12` retained-pool regression green:
+   the guarded curvature shell must stay present in the retained candidate
+   pool once the cross-band partial-prefix cache is keyed by `clause_kappa`.
+6. Keep the new step-`12` cache-key regression green:
+   a modal `5`-clause `CannotClearBar` result must not poison the guarded
+   `6`-clause continuation on the same preterminal prefix.
+7. Start the next repair at step `12`, not at raw step-`9` generation:
+   localize why live claim step `12` still accepts a different same-primary
+   `34 / 6` hash after the guarded curvature shell survives into retention,
+   and compare how those retained same-primary survivors continue into
+   steps `13..15`.
+8. Re-run the step-`9` tie diagnostic only after the step-`12`
    same-primary hash fork is better understood, since the current step-`9`
    tied set still shares the same observed step-`10` / repaired-step-`11`
    continuation.
-7. Use the repaired step-`9` / step-`11` path to explain and then close the
+9. Use the repaired step-`9` / step-`11` path to explain and then close the
    remaining step-`12` accepted-hash fork inside `34 / 6` plus the late
    generated-floor collapse at steps `11..15`.
-8. Only then land the narrowest honest parity/floor fix, and only then launch
+10. Only then land the narrowest honest parity/floor fix, and only then launch
    `long-rerun-v6` and re-run compare, certification, and benchmark against
    the repaired bundle.

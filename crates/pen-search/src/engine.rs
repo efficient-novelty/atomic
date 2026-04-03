@@ -5753,10 +5753,15 @@ fn collapse_single_continuation_chain_inner(
 fn store_partial_prefix_bound_decision_for_signatures(
     prefix_legality_cache: &mut PrefixLegalityCache,
     signatures: Vec<PrefixSignature>,
+    clause_kappa: u16,
     decision: PartialPrefixBoundDecision,
 ) {
     for signature in signatures {
-        prefix_legality_cache.store_partial_prefix_bound_decision(signature, decision);
+        prefix_legality_cache.store_partial_prefix_bound_decision(
+            signature,
+            clause_kappa,
+            decision,
+        );
     }
 }
 
@@ -5786,8 +5791,8 @@ fn exact_partial_prefix_bound_decision(
         return ExactPartialPrefixBoundDecision::Unknown;
     }
 
-    if let Some(decision) =
-        prefix_legality_cache.partial_prefix_bound_decision(&work_item.signature)
+    if let Some(decision) = prefix_legality_cache
+        .partial_prefix_bound_decision(&work_item.signature, work_item.clause_kappa)
     {
         let decision = match decision {
             PartialPrefixBoundDecision::CanClearBar => ExactPartialPrefixBoundDecision::CanClearBar,
@@ -5819,8 +5824,11 @@ fn exact_partial_prefix_bound_decision(
             remaining_one_summary_kernel_activation,
         );
         if let Some(cacheable) = decision.cacheable_partial_decision() {
-            prefix_legality_cache
-                .store_partial_prefix_bound_decision(work_item.signature.clone(), cacheable);
+            prefix_legality_cache.store_partial_prefix_bound_decision(
+                work_item.signature.clone(),
+                work_item.clause_kappa,
+                cacheable,
+            );
         }
         #[cfg(test)]
         maybe_capture_pruned_terminal_prefix(work_item, decision);
@@ -5891,6 +5899,7 @@ fn exact_partial_prefix_bound_decision(
             store_partial_prefix_bound_decision_for_signatures(
                 prefix_legality_cache,
                 signatures,
+                work_item.clause_kappa,
                 cacheable,
             );
         }
@@ -5899,6 +5908,7 @@ fn exact_partial_prefix_bound_decision(
             ExactPartialPrefixBoundDecision::CanClearBar => {
                 prefix_legality_cache.store_partial_prefix_bound_decision(
                     work_item.signature.clone(),
+                    work_item.clause_kappa,
                     PartialPrefixBoundDecision::CanClearBar,
                 );
                 return ExactPartialPrefixBoundDecision::CanClearBar;
@@ -5912,6 +5922,7 @@ fn exact_partial_prefix_bound_decision(
 
     prefix_legality_cache.store_partial_prefix_bound_decision(
         work_item.signature.clone(),
+        work_item.clause_kappa,
         PartialPrefixBoundDecision::CannotClearBar,
     );
     ExactPartialPrefixBoundDecision::CannotClearBar
@@ -5933,8 +5944,11 @@ fn cached_terminal_prefix_queue_entry_bound_decision(
     }
     let decision = exact_terminal_prefix_bound_decision_from_bound(objective_bar, bound);
     if let Some(cacheable) = decision.cacheable_partial_decision() {
-        prefix_legality_cache
-            .store_partial_prefix_bound_decision(work_item.signature.clone(), cacheable);
+        prefix_legality_cache.store_partial_prefix_bound_decision(
+            work_item.signature.clone(),
+            work_item.clause_kappa,
+            cacheable,
+        );
     }
     Some(decision)
 }
@@ -7618,6 +7632,7 @@ fn claim_try_summary_prune_before_materialization(
             .prefix_legality_cache
             .store_partial_prefix_bound_decision(
                 prefix_signature.clone(),
+                clause_kappa,
                 PartialPrefixBoundDecision::CannotClearBar,
             );
         discovery.terminal_prefix_bar_prunes += 1;
@@ -12319,7 +12334,6 @@ mod tests {
         );
         let guarded_step_twelve =
             profile_step_from_reference_prefix(12, SearchProfile::StrictCanonGuarded);
-
         assert!(
             target_minimality.is_minimal(),
             "claim open-band minimality should no longer prune the guarded step-12 shell using a worse-ranked detachable subbundle"
@@ -12347,15 +12361,127 @@ mod tests {
             step.accepted.clause_kappa,
             guarded_step_twelve.accepted.clause_kappa
         );
-        assert_ne!(
-            step.accepted.candidate_hash, guarded_step_twelve.accepted.candidate_hash,
-            "step-12 accepted-hash parity should still be the remaining local blocker after the 34/6 recovery"
-        );
         assert!(
             step.retained_candidates
                 .iter()
-                .all(|candidate| candidate.candidate_hash != target_evaluation.candidate_hash),
-            "the guarded step-12 curvature shell should still be absent from the retained pool while the same-primary hash fork remains open"
+                .any(|candidate| candidate.candidate_hash == target_evaluation.candidate_hash),
+            "the guarded step-12 curvature shell should now stay in the retained pool once the cross-band bound cache stops poisoning the 6-clause continuation"
+        );
+        assert_ne!(
+            step.accepted.candidate_hash, guarded_step_twelve.accepted.candidate_hash,
+            "step-12 accepted-hash parity should still be the remaining local blocker after the guarded curvature shell survives into the retained pool"
+        );
+    }
+
+    #[test]
+    fn claim_partial_prefix_bound_cache_distinguishes_clause_kappa_for_step_twelve_preterminal() {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            11,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 11 should build");
+        let claim_prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let (library, history, nu_history) = history_from_prefix(&claim_prefix);
+        let admissibility =
+            strict_admissibility_for_mode(12, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = compute_bar(2, 12, &history).bar;
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog_five = build_clause_catalog(context, 5);
+        let clause_catalog_six = build_clause_catalog(context, 6);
+        let target = Telescope::reference(12);
+        let preterminal_prefix = Telescope::new(target.clauses[..4].to_vec());
+        let preterminal_signature = PrefixSignature::new(12, &library, &preterminal_prefix);
+        let mut cache = PrefixLegalityCache::default();
+
+        assert!(cache.insert_root(
+            preterminal_signature.clone(),
+            5,
+            &library,
+            &preterminal_prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        let remaining_one_work_item = create_online_prefix_work_item(
+            5,
+            preterminal_prefix.clone(),
+            preterminal_signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog_five,
+            &mut cache,
+        );
+        let mut remaining_one_budget = super::EXACT_PARTIAL_PREFIX_BOUND_BUDGET;
+        let remaining_one_decision = exact_partial_prefix_bound_decision(
+            12,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog_five,
+            &remaining_one_work_item,
+            &mut cache,
+            &mut remaining_one_budget,
+            None,
+            None,
+            None,
+        );
+        assert_eq!(
+            remaining_one_decision,
+            super::ExactPartialPrefixBoundDecision::CannotClearBar
+        );
+        assert_eq!(
+            cache.partial_prefix_bound_decision(&preterminal_signature, 5),
+            Some(PartialPrefixBoundDecision::CannotClearBar)
+        );
+
+        assert!(cache.insert_root(
+            preterminal_signature.clone(),
+            6,
+            &library,
+            &preterminal_prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        let remaining_two_work_item = create_online_prefix_work_item(
+            6,
+            preterminal_prefix,
+            preterminal_signature.clone(),
+            &library,
+            admissibility,
+            &clause_catalog_six,
+            &mut cache,
+        );
+        let mut remaining_two_budget = super::EXACT_PARTIAL_PREFIX_BOUND_BUDGET;
+        let remaining_two_decision = exact_partial_prefix_bound_decision(
+            12,
+            &library,
+            admissibility,
+            objective_bar,
+            &nu_history,
+            &clause_catalog_six,
+            &remaining_two_work_item,
+            &mut cache,
+            &mut remaining_two_budget,
+            None,
+            None,
+            None,
+        );
+        assert_eq!(
+            remaining_two_decision,
+            super::ExactPartialPrefixBoundDecision::CanClearBar
+        );
+        assert_eq!(
+            cache.partial_prefix_bound_decision(&preterminal_signature, 5),
+            Some(PartialPrefixBoundDecision::CannotClearBar)
+        );
+        assert_eq!(
+            cache.partial_prefix_bound_decision(&preterminal_signature, 6),
+            Some(PartialPrefixBoundDecision::CanClearBar)
         );
     }
 
@@ -12754,7 +12880,7 @@ mod tests {
         assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
 
         let cached = cache
-            .partial_prefix_bound_decision(&signature)
+            .partial_prefix_bound_decision(&signature, work_item.clause_kappa)
             .expect("claim terminal decision should be cached after the first exact check");
         assert_eq!(
             cached,
@@ -14755,7 +14881,7 @@ mod tests {
         assert_ne!(first, super::ExactPartialPrefixBoundDecision::Unknown);
 
         let cached = cache
-            .partial_prefix_bound_decision(&signature)
+            .partial_prefix_bound_decision(&signature, work_item.clause_kappa)
             .expect("terminal decision should be cached after the first exact check");
         assert_eq!(
             cached,

@@ -39,11 +39,15 @@ It lists only work that is still open.
   the guarded curvature shell alive through preterminal clause exposure, full
   remaining-one summary, compact survivor sketch, semantic minimality, and
   exact remaining-one screening on that repaired live history.
+- A second follow-up local step-`12` cache-key repair now also keeps that
+  guarded curvature shell alive into the retained claim candidate pool by
+  keying exact multi-step partial-prefix bounds on
+  `(prefix_signature, clause_kappa)`.
 - The current same-primary step-`11` survivors now collapse onto one observed
   live claim step-`12` continuation at guarded `34 / 6`, not the old
   `33 / 5` drop; however, live claim step `12` still accepts a different
-  same-primary `34 / 6` hash, and the guarded curvature shell still does not
-  survive into the retained claim candidate pool.
+  same-primary `34 / 6` hash even after the guarded curvature shell survives
+  into the retained claim candidate pool.
 - The old `v3` step-`14` zero-candidate failure is therefore no longer the
   first blocker.
 - The current blocker is stored parity plus stored breadth on the completed
@@ -56,9 +60,9 @@ It lists only work that is still open.
     picks the guarded same-primary survivor and no stored rerun has consumed
     that repair yet
   - step `12` still drops to `nu = 33`, `kappa = 5` versus guarded `34 / 6`,
-    while the repaired live local path now reaches guarded `34 / 6` but still
-    accepts a different same-primary hash and still fails to retain the
-    guarded curvature shell
+    while the repaired live local path now reaches guarded `34 / 6`, retains
+    the guarded curvature shell, and still accepts a different same-primary
+    hash
   - step `13` and step `14` recover the guarded accepted hashes but stay one
     `nu` low
   - step `15` returns the guarded `DCT` hash / `nu` / `kappa`
