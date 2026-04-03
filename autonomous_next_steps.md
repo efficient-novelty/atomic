@@ -253,6 +253,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
   prefixes `33` before proof-close while the guarded step-`13` metric shell
   stays accepted, so the next late read is no longer pure catalog-open
   starvation but the residual exact-screen losses on that widened surface.
+- A new follow-up step-`13` exact-prune/connectivity regression now freezes
+  that residual widened-surface loss more precisely:
+  - the widened step-`13` exact-screen split is now fixed at
+    `24` connectivity prunes, `0` terminal-clause-filter prunes,
+    `12` partial-prefix bar prunes, and `2` incumbent prunes
+  - the captured widened step-`13` exact-prune surface now consists of
+    `24` zero-admitted remaining-one prefixes with no cached compact bounds
+  - all `24` generated terminal options on that captured surface are now
+    frozen as structurally disconnected before fallback, with `0`
+    `NeedsFallback` candidates and `0` exact-legality rejections
+  - the next step-`13` repair should therefore target structural
+    connectivity on that widened operator-band surface rather than terminal
+    clause filtering, qualifier fallback, or another blind catalog reland
 - A follow-up exploratory global step-`13` widening was also run locally but
   not landed:
   - widening the claim-generic band-`7` widths from `[3,1,1,1,1,1,1]` to
@@ -361,7 +374,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
      raw catalog `27`, and live generated prefixes `33`, while the rejected
      global branch still bounds the much larger reachable ceiling
      (`2187` / `615`); the next repair is therefore the residual exact-screen
-     loss on the landed widened surface, not another blind catalog reland
+     loss on the landed widened surface, now localized to `12`
+     partial-prefix bar prunes plus `24` structurally disconnected
+     zero-admitted exact prunes with `0` terminal-clause-filter and `0`
+     `NeedsFallback` traffic, not another blind catalog reland
    - step `14` is now locally widened enough that it should stay on the guard
      rail as a regression rather than reopening as the first breadth blocker
   - step `15` remains the first late floor, but the new captured exact-prune
@@ -418,6 +434,13 @@ This note is the exact next work order for `desktop_claim_shadow`.
     step-`12` chain keeps reporting claim-open `kappa = 7..7` with raw
     widths `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated prefixes `33`,
     and the guarded accepted metric shell before proof-close.
+    Keep the paired step-`13` exact-prune/connectivity regression green too:
+    the same repaired chain should still report `24` connectivity prunes,
+    `0` terminal-clause-filter prunes, `24` captured zero-admitted exact
+    prunes, and `24` structurally disconnected terminal options with `0`
+    `NeedsFallback` and `0` exact-legality rejections so the next repair
+    stays focused on structural connectivity rather than terminal filtering
+    or fallback qualification.
 12. Keep the step-`4` claim prefix-memo, realistic-shadow, demo-lane, and
     divergent step-`13` / step-`14` guardrails green while exploring any
     step-`13` widening path:
@@ -491,6 +514,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
   the exploratory branch widened step `13` locally but broke unrelated claim
   prefix-memo, realistic-shadow, demo-lane, and divergent late-step
   guardrails
+- a step-`13` terminal-clause-filter or fallback/reanchor theory first:
+  the new widened-surface regression now shows the captured step-`13`
+  loss is `24` structurally disconnected zero-admitted prefixes with `0`
+  terminal-clause-filter and `0` `NeedsFallback` traffic
 - replay-fixture recapture or benchmark-file churn before the parity/floor fix
 - stronger claim wording or runtime-threshold freeze before a passing
   certificate exists

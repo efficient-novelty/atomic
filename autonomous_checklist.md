@@ -24,9 +24,17 @@ It lists only work that is still open.
     live generated prefixes `33` while preserving the guarded accepted metric
     shell and the same observed `step-13 -> step-15` continuation
   - the remaining step-`13` loss is now residual exact screening on that
-    widened surface:
-    legality/connectivity rejection `24`, partial-prefix bar failure `12`,
-    and incumbent dominance `2`
+    widened surface, and the new exact-prune/connectivity regression
+    localizes it more precisely:
+    `12` partial-prefix bar failures stop before terminal expansion, while
+    the remaining `24` legality/connectivity losses are all zero-admitted
+    captured exact prunes with `0` terminal-clause-filter traffic and
+    `0` cached compact bounds; all `24` generated terminal options on that
+    captured surface are structurally disconnected before fallback, with
+    `0` `NeedsFallback` candidates and `0` exact-legality rejections, so the
+    open step-`13` work is structural connectivity on the widened
+    operator-band surface rather than terminal filtering or fallback
+    qualification
   - step `14` is now a guardrail rather than the first blocker:
     raw `19683`, `3` surviving roots, `12027` live generated prefixes, and a
     selector that preserves the canonical step-`15` continuation

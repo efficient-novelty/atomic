@@ -13559,6 +13559,111 @@ mod tests {
     }
 
     #[test]
+    fn repaired_claim_step_thirteen_exact_screen_losses_localize_to_structural_disconnects() {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            11,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 11 should build");
+        let claim_prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let (mut library, mut history, _) = history_from_prefix(&claim_prefix);
+        let mut progress_observer = None;
+        let step_twelve = super::search_next_step(
+            12,
+            2,
+            &library,
+            &history,
+            AdmissibilityMode::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            None,
+            &mut progress_observer,
+        )
+        .expect("live claim step 12 should build");
+        history.push(DiscoveryRecord::new(
+            12,
+            u32::from(step_twelve.accepted.nu),
+            u32::from(step_twelve.accepted.clause_kappa),
+        ));
+        library.push(LibraryEntry::from_telescope(
+            &step_twelve.telescope,
+            &library,
+        ));
+
+        let mut progress_observer = None;
+        let step_thirteen = super::search_next_step(
+            13,
+            2,
+            &library,
+            &history,
+            AdmissibilityMode::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            None,
+            &mut progress_observer,
+        )
+        .expect("step 13 should build");
+        let prefix = claim_prefix
+            .into_iter()
+            .chain(std::iter::once(step_twelve.telescope.clone()))
+            .collect::<Vec<_>>();
+        let exact_prune_summary = late_step_exact_prune_family_summary(&prefix, 13, usize::MAX);
+        let zero_admitted_summary =
+            late_step_zero_admitted_failure_summary(&prefix, 13, usize::MAX);
+        let connectivity_summary = late_step_terminal_connectivity_summary(&prefix, 13, usize::MAX);
+
+        assert_eq!(step_thirteen.incremental_connectivity_prunes, 24);
+        assert_eq!(step_thirteen.incremental_terminal_clause_filter_prunes, 0);
+        assert_eq!(step_thirteen.incremental_terminal_rank_prunes, 2);
+        assert_eq!(step_thirteen.incremental_terminal_prefix_bar_prunes, 0);
+        assert_eq!(step_thirteen.incremental_partial_prefix_bound_prunes, 12);
+        assert_eq!(
+            exact_prune_summary,
+            LateStepExactPruneFamilySummary {
+                raw_generated_surface: 33,
+                roots_seen: 3,
+                roots_enqueued: 3,
+                partial_prefix_bound_prunes: 12,
+                captured_prefixes: 24,
+                cached_bound_count: 0,
+                family_counts: [((0_usize, None, None), 24_usize)].into_iter().collect(),
+            }
+        );
+        assert_eq!(
+            zero_admitted_summary,
+            LateStepZeroAdmittedFailureSummary {
+                captured_prefixes: 24,
+                generated_candidates: 24,
+                disconnected_candidates: 24,
+                trivially_derivable_rejections: 0,
+                other_exact_legality_rejections: 0,
+                structural_debt_cap_rejections: 0,
+                all_disconnected_prefixes: 24,
+                trivially_derivable_only_prefixes: 0,
+                mixed_disconnect_and_trivial_prefixes: 0,
+                other_rejection_prefixes: 0,
+                reason_counts: BTreeMap::new(),
+            }
+        );
+        assert_eq!(
+            connectivity_summary,
+            LateStepTerminalConnectivitySummary {
+                captured_prefixes: 24,
+                generated_candidates: 24,
+                prune_disconnected_candidates: 24,
+                needs_fallback_candidates: 0,
+                keep_without_fallback_candidates: 0,
+                structurally_disconnected_candidates: 24,
+                structurally_connected_but_unqualified_candidates: 0,
+                structurally_connected_via_historical_reanchor_candidates: 0,
+            }
+        );
+    }
+
+    #[test]
     fn claim_partial_prefix_bound_cache_distinguishes_clause_kappa_for_step_twelve_preterminal() {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             11,

@@ -245,6 +245,19 @@ gate.
   prefixes `33` before proof-close while the guarded step-`13` metric shell
   stays accepted, so the next late read is no longer pure catalog-open
   starvation but the residual exact-screen losses on that widened surface.
+- A new follow-up step-`13` exact-prune/connectivity regression now sharpens
+  that same widened-surface blocker further:
+  - the widened step-`13` exact-screen split is now fixed at
+    `24` connectivity prunes, `0` terminal-clause-filter prunes,
+    `12` partial-prefix bar prunes, and `2` incumbent prunes
+  - the captured widened step-`13` exact-prune surface now consists of
+    `24` zero-admitted remaining-one prefixes with no cached compact bounds
+  - all `24` generated terminal options on that captured surface are now
+    frozen as structurally disconnected before fallback, with `0`
+    `NeedsFallback` candidates and `0` exact-legality rejections
+  - the next step-`13` repair should therefore target structural
+    connectivity on that widened operator-band surface rather than terminal
+    clause filtering, qualifier fallback, or another blind catalog reland
 - A follow-up exploratory step-`13` widening pass was also run locally but was
   not landed:
   - a naive global claim-generic band-`7` widening lifted the repaired
@@ -579,9 +592,12 @@ gate.
     claim-open widths `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated
     prefixes `33`, guarded accepted metric shell preserved, and the same
     observed `step-13 -> step-15` continuation preserved
-  - the residual step-`13` exact-screen losses on that widened surface:
-    legality/connectivity rejection (`24`), partial-prefix bar failure (`12`),
-    and incumbent dominance (`2`)
+  - the residual step-`13` exact-screen losses on that widened surface, now
+    localized to `12` partial-prefix bar prunes plus `24`
+    structurally-disconnected zero-admitted exact prunes with `0`
+    terminal-clause-filter and `0` `NeedsFallback` traffic, so the next
+    repair there should focus on structural connectivity rather than
+    terminal filtering or fallback qualification
   - keeping the widened step-`14` catalog plus same-primary continuation
     selector stable until a stored rerun consumes it
   - the step-`15` canonical temporal-shell exact-prune surface, which now
@@ -656,11 +672,18 @@ gate.
     the repaired step-`12` chain must keep reporting claim-open widths
     `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated prefixes `33`, and
     the guarded accepted metric shell at step `13`.
-13. Inspect the remaining step-`13` exact-screen losses on that widened
-    surface:
-    legality/connectivity rejection (`24`), partial-prefix bar failure (`12`),
-    and incumbent dominance (`2`) are now the dominant sinks there.
-14. Treat step `15` as the separate remaining exact-screen problem:
+13. Keep the new step-`13` exact-prune/connectivity regression green:
+    the repaired widened surface must keep reporting `24` connectivity
+    prunes, `0` terminal-clause-filter prunes, `24` captured zero-admitted
+    exact prunes, and `24` structurally disconnected terminal options with
+    `0` `NeedsFallback` and `0` exact-legality rejections.
+14. Treat the next step-`13` repair as structural connectivity on that
+    captured widened surface:
+    do not treat the remaining step-`13` sink as a terminal-clause-filter
+    bug, a fallback/reanchor qualification miss, or another blind catalog
+    widening target while those `24` captured prefixes stay purely
+    disconnected.
+15. Treat step `15` as the separate remaining exact-screen problem:
     inspect why the restored canonical temporal-shell path still collapses
     into `2184` captured zero-admitted exact-prune families and `512`
     partial-prefix bar failures before proof-close; the new regression shows
@@ -673,20 +696,20 @@ gate.
     remaining loss as generic bar bookkeeping, raw dependency-edge generation,
     a claim admissibility miss, a terminal-clause-only matcher bug, or a
     direct early clause-`2` / clause-`3` bridge-matcher expansion.
-15. Do not reland either exploratory temporal-reanchor matcher variant
+16. Do not reland either exploratory temporal-reanchor matcher variant
     directly:
     the broad reland displaced the canonical step-`15` continuation to
     `60 / 8 / 9840`, and the narrower late-shell-only reland still displaced
     it to `89 / 8 / 780`.
-16. Do not reland the exploratory early clause-`2` / clause-`3`
+17. Do not reland the exploratory early clause-`2` / clause-`3`
     reanchor-bridge matcher variants directly:
     the clause-`3`-only branch displaced the canonical step-`15`
     continuation to `88 / 8 / 795`, and the clause-`2` plus clause-`3`
     branch displaced it to `74 / 8 / 828`.
-17. Re-run the step-`9` tie diagnostic only after the step-`13` breadth and
+18. Re-run the step-`9` tie diagnostic only after the step-`13` breadth and
     step-`15` exact-screen stories are better understood, since the current
     tied step-`9` set still shares the same observed repaired
     step-`10..12` chain.
-18. Only then land the narrowest honest parity/floor fix, and only then launch
+19. Only then land the narrowest honest parity/floor fix, and only then launch
     `long-rerun-v6` and re-run compare, certification, and benchmark against
     the repaired bundle.
