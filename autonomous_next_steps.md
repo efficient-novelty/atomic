@@ -161,23 +161,28 @@ This note is the exact next work order for `desktop_claim_shadow`.
     then the shallower formation-clause var reach, then lower bit cost
   - every current same-primary tied step-`12` survivor still collapses onto
     one observed step-`13..15` continuation and the same late generated counts
-    `9`, `157`, and `780`
+    `9`, `12027`, and `780`
   - the step-`12` accepted-hash fork is therefore now closed locally and does
     not explain the late generated-floor collapse by itself
-- A new local late-floor diagnostic now sharpens that remaining blocker:
-  - on the repaired step-`12` history, step `13` opens only `3` raw claim
-    telescopes, exact-prunes `2 / 3` roots immediately, and materializes only
-    one `2`-terminal bucket before acceptance, so that floor miss is already
-    baked in before proof-close
-  - step `14` then opens only `243` raw claim telescopes on the promoted
-    `kappa = 9` Hilbert band, keeps exactly one root alive, and still spends
-    almost all surviving width inside one `84`-terminal small cluster with
-    `80` incumbent-dominance prunes, so that floor miss is also already baked
-    in before proof-close
-  - step `15` still opens a broader `6561`-telescope claim catalog, but
-    `512` exact partial-prefix bar failures shrink that live generated surface
-    to `780` before proof-close, so step `15` is now the first late floor miss
-    that is not ruled out at catalog-open alone
+- A new local late-surface repair now sharpens that remaining blocker:
+  - on the repaired step-`12` history, step `13` still opens only `3` raw
+    claim telescopes, exact-prunes `2 / 3` roots immediately, and materializes
+    only one `2`-terminal bucket before acceptance, so that floor miss is
+    still baked in before proof-close
+  - step `14` no longer shares that thin-path profile locally:
+    the widened claim `kappa = 9` catalog now opens `19683` raw telescopes,
+    keeps `3` roots alive, and lifts live generated prefixes to `12027`
+    before proof-close on the repaired step-`12` chain
+  - that widened step-`14` surface now exposes a `4`-way same-primary
+    `62 / 9` continuation fork; live claim acceptance now prefers the one
+    same-primary survivor that restores the canonical step-`15`
+    `DCT 103 / 8` continuation while the broader `78 / 9 / 12027`
+    branch remains the alternate local path
+  - step `15` on the restored canonical branch still opens a broader
+    `6561`-telescope claim catalog, but `512` exact partial-prefix bar
+    failures shrink that live generated surface to `780` before proof-close,
+    so step `15` remains the first late floor miss that is not ruled out at
+    catalog-open alone
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -232,22 +237,29 @@ This note is the exact next work order for `desktop_claim_shadow`.
 7. Keep the new step-`12` continuation-collapse read fixed:
    all current same-primary tied step-`12` survivors still collapse onto one
    observed step-`13..15` continuation and the same late generated counts
-   `9`, `157`, and `780`.
-8. Keep the new late-thin-path diagnostic read fixed:
-   - repaired step `13` opens only `3` raw claim telescopes and exact-prunes
-     `2 / 3` roots before proof-close
-   - repaired step `14` opens only `243` raw claim telescopes on the promoted
-     `kappa = 9` band and still concentrates the surviving width inside one
-     `84`-terminal small cluster with `80` incumbent-dominance prunes
-   - repaired step `15` opens `6561` raw claim telescopes but still loses
-     `512` prefixes to partial-prefix bar failure before proof-close
+   `9`, `12027`, and `780`.
+8. Keep the new late-surface diagnostic read fixed:
+   - repaired step `13` still opens only `3` raw claim telescopes and
+     exact-prunes `2 / 3` roots before proof-close
+   - repaired step `14` now opens `19683` raw claim telescopes on the promoted
+     `kappa = 9` band, keeps `3` roots alive, and lifts live generated
+     prefixes to `12027` before proof-close
+   - that widened step-`14` surface now exposes a `4`-way same-primary
+     `62 / 9` continuation fork, and live claim acceptance now prefers the
+     one survivor that restores the canonical step-`15` `DCT 103 / 8`
+     continuation
+   - the restored canonical step `15` branch still opens `6561` raw claim
+     telescopes but still loses `512` prefixes to partial-prefix bar failure
+     before proof-close
 9. Split the common late floor collapse into its actual subproblems:
-   - step `13` and step `14` are already too thin at claim step-open / catalog
-     width to ever reach the current stored floors, so inspect claim
-     admissibility and claim-generic catalog breadth there first
-   - step `15` is the first late floor where the catalog is broad enough but
-     exact partial-prefix bar failure still dominates, so inspect that exact
-     screen path separately
+   - step `13` is still too thin at claim step-open / catalog width to ever
+     reach the current stored floors, so inspect claim admissibility and the
+     claim-generic band-`7` catalog there first
+   - step `14` is now locally widened enough that it should stay on the guard
+     rail as a regression rather than reopening as the first breadth blocker
+   - step `15` remains the first late floor where the canonical catalog is
+     broad enough but exact partial-prefix bar failure still dominates, so
+     inspect that exact screen path separately
 10. Keep the step-`1` breadth miss on the checklist, but do not confuse that
     longstanding signoff floor with the new claim-specific mid/late parity
     fork.
@@ -282,20 +294,23 @@ This note is the exact next work order for `desktop_claim_shadow`.
    raw structural winners inside the repaired `34 / 6` tier.
 10. Keep the new step-`12` continuation-collapse regression green so the tied
     same-primary step-`12` set stays pinned to one observed step-`13..15`
-    continuation with generated counts `9`, `157`, and `780` while the common
-    late floor collapse is repaired.
-11. Keep the new late-thin-path regression green so the repaired step-`12`
-    chain keeps reporting step `13` raw catalog `3` with roots `3 -> 1`,
-    step `14` raw catalog `243` with one surviving root, and step `15`
-    raw catalog `6561` with `512` partial-prefix bar failures until the
-    late-surface repair is intentionally moved.
-12. Keep the stored compare regression green for the step-`12`
+    continuation with generated counts `9`, `12027`, and `780` while the
+    remaining late floor collapse is repaired.
+11. Keep the new widened step-`14` regression green so the repaired step-`12`
+    chain keeps reporting step `14` raw catalog `19683` with `3` surviving
+    roots and `12027` live generated prefixes before proof-close.
+12. Keep the new step-`14` same-primary continuation selector regression green
+    so live claim acceptance continues to choose the one same-primary
+    `62 / 9` survivor that restores the canonical step-`15`
+    `DCT 103 / 8` continuation while the broader `78 / 9 / 12027`
+    branch remains the alternate local path.
+13. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
-13. Keep the stored certification / benchmark assertions green for the
+14. Keep the stored certification / benchmark assertions green for the
     step-`1` breadth miss and the late generated-floor snapshot at
     steps `10..15` so the next fix cannot silently reshuffle the stored
     failure surface.
-14. Keep the existing pre-flight gate green while the local repair lands.
+15. Keep the existing pre-flight gate green while the local repair lands.
 
 ### 5. Only Rerun After The Local Repair Exists
 

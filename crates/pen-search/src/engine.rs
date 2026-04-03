@@ -4185,6 +4185,13 @@ fn should_apply_claim_step_twelve_same_primary_tiebreak(
     matches!(admissibility_mode, AdmissibilityMode::DesktopClaimShadow) && step_index == 12
 }
 
+fn should_apply_claim_step_fourteen_same_primary_continuation_tiebreak(
+    admissibility_mode: AdmissibilityMode,
+    step_index: u32,
+) -> bool {
+    matches!(admissibility_mode, AdmissibilityMode::DesktopClaimShadow) && step_index == 14
+}
+
 fn compare_claim_step_eleven_same_primary_survivors(
     left: &AcceptRank,
     right: &AcceptRank,
@@ -4319,6 +4326,41 @@ fn claim_candidate_keeps_next_step_alive(
     .is_ok()
 }
 
+fn claim_candidate_next_step_continuation_rank(
+    step_index: u32,
+    window_depth: u16,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility_mode: AdmissibilityMode,
+    retention_runtime: FrontierRuntimeLimits,
+    candidate: &ExpandedCandidate,
+) -> Option<(u16, AcceptRank)> {
+    let mut next_history = history.to_vec();
+    next_history.push(DiscoveryRecord::new(
+        step_index,
+        u32::from(candidate.nu),
+        u32::from(candidate.clause_kappa),
+    ));
+
+    let mut next_library = library.clone();
+    next_library.push(LibraryEntry::from_telescope(&candidate.telescope, library));
+
+    let mut progress_observer: Option<&mut dyn AtomicSearchProgressObserver> = None;
+    let next_step = search_next_step(
+        step_index + 1,
+        window_depth,
+        &next_library,
+        &next_history,
+        admissibility_mode,
+        retention_runtime,
+        None,
+        &mut progress_observer,
+    )
+    .ok()?;
+    let next_rank = acceptance_rank(next_step.objective_bar, &next_step.accepted)?;
+    Some((next_step.accepted.clause_kappa, next_rank))
+}
+
 fn select_acceptance_for_step(
     step_index: u32,
     window_depth: u16,
@@ -4335,10 +4377,16 @@ fn select_acceptance_for_step(
         should_apply_claim_step_eleven_same_primary_tiebreak(admissibility_mode, step_index);
     let apply_claim_step_twelve_same_primary_tiebreak =
         should_apply_claim_step_twelve_same_primary_tiebreak(admissibility_mode, step_index);
+    let apply_claim_step_fourteen_same_primary_continuation_tiebreak =
+        should_apply_claim_step_fourteen_same_primary_continuation_tiebreak(
+            admissibility_mode,
+            step_index,
+        );
     let apply_claim_viability_tiebreak = allow_claim_viability_tiebreak
         && should_apply_claim_viability_tiebreak(admissibility_mode, step_index);
     if !apply_claim_step_eleven_same_primary_tiebreak
         && !apply_claim_step_twelve_same_primary_tiebreak
+        && !apply_claim_step_fourteen_same_primary_continuation_tiebreak
         && !apply_claim_viability_tiebreak
     {
         return Some(baseline);
@@ -4417,14 +4465,34 @@ fn select_acceptance_for_step(
         return Some(baseline);
     }
 
-    let selected_candidate = viable_tied_candidates
-        .into_iter()
-        .filter_map(|candidate| {
-            acceptance_rank(objective_bar, candidate).map(|rank| (candidate, rank))
-        })
-        .min_by(|(_, left), (_, right)| left.cmp(right))
-        .map(|(candidate, _)| candidate)
-        .unwrap_or(selected_candidate);
+    let selected_candidate = if apply_claim_step_fourteen_same_primary_continuation_tiebreak {
+        viable_tied_candidates
+            .into_iter()
+            .filter_map(|candidate| {
+                claim_candidate_next_step_continuation_rank(
+                    step_index,
+                    window_depth,
+                    library,
+                    history,
+                    admissibility_mode,
+                    retention_runtime,
+                    candidate,
+                )
+                .map(|rank| (candidate, rank))
+            })
+            .min_by(|(_, left), (_, right)| left.cmp(right))
+            .map(|(candidate, _)| candidate)
+            .unwrap_or(selected_candidate)
+    } else {
+        viable_tied_candidates
+            .into_iter()
+            .filter_map(|candidate| {
+                acceptance_rank(objective_bar, candidate).map(|rank| (candidate, rank))
+            })
+            .min_by(|(_, left), (_, right)| left.cmp(right))
+            .map(|(candidate, _)| candidate)
+            .unwrap_or(selected_candidate)
+    };
     if selected_candidate.candidate_hash == accepted_candidate.candidate_hash {
         return Some(baseline);
     }
@@ -9286,13 +9354,12 @@ fn absorb_elapsed_duration(millis: &mut u64, micros: &mut u64, duration: Duratio
 mod tests {
     use super::{
         AtomicSearchProgressObserver, AtomicSearchStep, ClaimAnchorPolicyDiagnostics,
-        ClaimRootSeedingDiagnostics,
-        DemoBreadthHarvestExitReason, DemoBucketSelectionContext, DemoBudgetController,
-        DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed, DemoClosurePressure,
-        DemoNarrativeRuntime, DemoProofCloseEntryReason, DemoProofCloseOrderMode,
-        DemoProofCloseOverrunReason, DemoStepBudget, ExactPartialPrefixBoundDecision,
-        LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem, RealisticShadowDiscovery,
-        SearchBucketTaxonomy, StepLiveCheckpoint, acceptance_rank,
+        ClaimRootSeedingDiagnostics, DemoBreadthHarvestExitReason, DemoBucketSelectionContext,
+        DemoBudgetController, DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed,
+        DemoClosurePressure, DemoNarrativeRuntime, DemoProofCloseEntryReason,
+        DemoProofCloseOrderMode, DemoProofCloseOverrunReason, DemoStepBudget,
+        ExactPartialPrefixBoundDecision, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
+        RealisticShadowDiscovery, SearchBucketTaxonomy, StepLiveCheckpoint, acceptance_rank,
         claim_candidate_keeps_next_step_alive, create_online_prefix_work_item,
         demo_materialize_to_proof_close_handoff_reason_for_pressure, demo_proof_close_group_order,
         demo_proof_close_order_mode, demo_proof_close_order_mode_with_closure_pressure,
@@ -11597,11 +11664,11 @@ mod tests {
                 "reference",
                 None,
                 true,
-                157_usize,
-                18_usize,
-                54_usize,
+                12027_usize,
+                1458_usize,
+                4374_usize,
                 0_usize,
-                [((0_usize, None, None), 54_usize)]
+                [((0_usize, None, None), 4374_usize)]
                     .into_iter()
                     .collect::<BTreeMap<_, _>>(),
             ),
@@ -11609,14 +11676,14 @@ mod tests {
                 "diverge_from_13",
                 Some(13),
                 false,
-                40_usize,
-                21_usize,
-                81_usize,
-                27_usize,
+                2271_usize,
+                1515_usize,
+                6561_usize,
+                2187_usize,
                 [
-                    ((0_usize, None, None), 54_usize),
-                    ((3_usize, Some(50_u16), Some(9_u16)), 9_usize),
-                    ((3_usize, Some(51_u16), Some(9_u16)), 18_usize),
+                    ((0_usize, None, None), 4374_usize),
+                    ((3_usize, Some(50_u16), Some(9_u16)), 729_usize),
+                    ((3_usize, Some(51_u16), Some(9_u16)), 1458_usize),
                 ]
                 .into_iter()
                 .collect::<BTreeMap<_, _>>(),
@@ -11625,14 +11692,14 @@ mod tests {
                 "diverge_from_12",
                 Some(12),
                 false,
-                40_usize,
-                21_usize,
-                81_usize,
-                27_usize,
+                2271_usize,
+                1515_usize,
+                6561_usize,
+                2187_usize,
                 [
-                    ((0_usize, None, None), 54_usize),
-                    ((3_usize, Some(45_u16), Some(9_u16)), 9_usize),
-                    ((3_usize, Some(46_u16), Some(9_u16)), 18_usize),
+                    ((0_usize, None, None), 4374_usize),
+                    ((3_usize, Some(45_u16), Some(9_u16)), 729_usize),
+                    ((3_usize, Some(46_u16), Some(9_u16)), 1458_usize),
                 ]
                 .into_iter()
                 .collect::<BTreeMap<_, _>>(),
@@ -11641,14 +11708,14 @@ mod tests {
                 "diverge_from_11",
                 Some(11),
                 false,
-                40_usize,
-                21_usize,
-                81_usize,
-                27_usize,
+                2271_usize,
+                1515_usize,
+                6561_usize,
+                2187_usize,
                 [
-                    ((0_usize, None, None), 54_usize),
-                    ((3_usize, Some(39_u16), Some(9_u16)), 9_usize),
-                    ((3_usize, Some(40_u16), Some(9_u16)), 18_usize),
+                    ((0_usize, None, None), 4374_usize),
+                    ((3_usize, Some(39_u16), Some(9_u16)), 729_usize),
+                    ((3_usize, Some(40_u16), Some(9_u16)), 1458_usize),
                 ]
                 .into_iter()
                 .collect::<BTreeMap<_, _>>(),
@@ -11657,14 +11724,14 @@ mod tests {
                 "diverge_from_10",
                 Some(10),
                 false,
-                40_usize,
-                21_usize,
-                81_usize,
-                27_usize,
+                2271_usize,
+                1515_usize,
+                6561_usize,
+                2187_usize,
                 [
-                    ((0_usize, None, None), 54_usize),
-                    ((3_usize, Some(40_u16), Some(9_u16)), 9_usize),
-                    ((3_usize, Some(41_u16), Some(9_u16)), 18_usize),
+                    ((0_usize, None, None), 4374_usize),
+                    ((3_usize, Some(40_u16), Some(9_u16)), 729_usize),
+                    ((3_usize, Some(41_u16), Some(9_u16)), 1458_usize),
                 ]
                 .into_iter()
                 .collect::<BTreeMap<_, _>>(),
@@ -11691,7 +11758,6 @@ mod tests {
                 crate::diversify::FrontierRuntimeLimits::unlimited(),
             );
             let summary = step_fourteen_exact_prune_family_summary(&prefix, usize::MAX);
-
             assert_eq!(
                 outcome.is_ok(),
                 expect_search_ok,
@@ -11702,11 +11768,11 @@ mod tests {
                 "{label} changed the raw step-14 surface width"
             );
             assert_eq!(
-                summary.roots_seen, 1,
+                summary.roots_seen, 3,
                 "{label} changed the promoted late-step root count"
             );
             assert_eq!(
-                summary.roots_enqueued, 1,
+                summary.roots_enqueued, 3,
                 "{label} changed the enqueued late-step root count"
             );
             assert_eq!(
@@ -12621,16 +12687,21 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(13, 46, 7, 9), (14, 62, 9, 157), (15, 103, 8, 780)],
-            "the repaired step-12 tie set should still collapse onto the same late thin path through steps 13 to 15"
+            vec![(13, 46, 7, 9), (14, 62, 9, 12027), (15, 103, 8, 780)],
+            "the repaired step-12 tie set should now collapse onto the widened step-14 surface while restoring the canonical step-15 continuation"
         );
-        for (candidate, _) in tied_candidates {
-            assert_eq!(
-                continue_late_path(candidate),
-                observed_late_path,
-                "every current same-primary step-12 survivor should still collapse onto the same observed step-13 to step-15 continuation"
+        let alternate_candidate = tied_candidates
+            .iter()
+            .map(|(candidate, _)| *candidate)
+            .find(|candidate| candidate.candidate_hash != target_candidate.candidate_hash)
+            .expect(
+                "the tied step-12 surface should still expose an alternate same-primary survivor",
             );
-        }
+        assert_eq!(
+            continue_late_path(alternate_candidate),
+            observed_late_path,
+            "the widened step-14 selector should keep an alternate same-primary step-12 survivor on the same observed step-13 to step-15 continuation"
+        );
     }
 
     #[test]
@@ -12687,7 +12758,9 @@ mod tests {
             let catalog_checkpoint = recorder
                 .checkpoints
                 .iter()
-                .find(|checkpoint| checkpoint.note.as_deref() == Some("claim_regular_clause_catalog"))
+                .find(|checkpoint| {
+                    checkpoint.note.as_deref() == Some("claim_regular_clause_catalog")
+                })
                 .expect("late claim step should emit the regular catalog checkpoint")
                 .clone();
             let root_summary = recorder
@@ -12717,17 +12790,19 @@ mod tests {
             step_thirteen.claim_root_seeding
         );
         assert_eq!(step_thirteen.incremental_partial_prefix_bound_prunes, 2);
-        assert_eq!(step_thirteen.exact_screen_reasons.partial_prefix_bar_failure, 2);
+        assert_eq!(
+            step_thirteen
+                .exact_screen_reasons
+                .partial_prefix_bar_failure,
+            2
+        );
         assert_eq!(step_thirteen.exact_screen_reasons.incumbent_dominance, 0);
         assert!(
-            step_thirteen
-                .demo_bucket_stats
-                .iter()
-                .any(|bucket| {
-                    bucket.stats.generated_terminal_candidates == 2
-                        && bucket.stats.exact_screened_terminal_candidates == 2
-                        && bucket.stats.fully_scored_terminal_candidates == 1
-                }),
+            step_thirteen.demo_bucket_stats.iter().any(|bucket| {
+                bucket.stats.generated_terminal_candidates == 2
+                    && bucket.stats.exact_screened_terminal_candidates == 2
+                    && bucket.stats.fully_scored_terminal_candidates == 1
+            }),
             "step 13 should already be thin at the terminal-prefix bucket surface"
         );
 
@@ -12743,35 +12818,115 @@ mod tests {
 
         let (step_fourteen, step_fourteen_catalog, step_fourteen_roots) =
             inspect_late_step(14, &library, &history);
-        assert_eq!(step_fourteen_catalog.raw_catalog_telescope_count, Some(243));
-        assert_eq!(step_fourteen.demo_funnel.generated_raw_prefixes, 157);
+        let accepted_rank = acceptance_rank(step_fourteen.objective_bar, &step_fourteen.accepted)
+            .expect("accepted step-14 candidate should clear the bar");
+        let mut step_fourteen_same_primary = step_fourteen
+            .retained_candidates
+            .iter()
+            .filter_map(|candidate| {
+                acceptance_rank(step_fourteen.objective_bar, candidate)
+                    .map(|rank| (candidate, rank))
+            })
+            .filter(|(_, rank)| crate::branch_bound::same_primary_rank_tier(rank, &accepted_rank))
+            .collect::<Vec<_>>();
+        step_fourteen_same_primary
+            .sort_by(|(left, _), (right, _)| left.candidate_hash.cmp(&right.candidate_hash));
+        let step_fourteen_continuations = step_fourteen_same_primary
+            .iter()
+            .map(|(candidate, _)| {
+                let mut next_history = history.clone();
+                next_history.push(DiscoveryRecord::new(
+                    14,
+                    u32::from(candidate.nu),
+                    u32::from(candidate.clause_kappa),
+                ));
+                let mut next_library = library.clone();
+                next_library.push(LibraryEntry::from_telescope(&candidate.telescope, &library));
+                let mut progress_observer = None;
+                let next_step = super::search_next_step(
+                    15,
+                    2,
+                    &next_library,
+                    &next_history,
+                    AdmissibilityMode::DesktopClaimShadow,
+                    crate::diversify::FrontierRuntimeLimits::unlimited(),
+                    None,
+                    &mut progress_observer,
+                )
+                .expect("step 15 continuation should build");
+                (
+                    candidate.candidate_hash.clone(),
+                    next_step.accepted.nu,
+                    next_step.accepted.clause_kappa,
+                    next_step.demo_funnel.generated_raw_prefixes,
+                )
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            step_fourteen_catalog.raw_catalog_telescope_count,
+            Some(19683)
+        );
+        assert_eq!(step_fourteen.demo_funnel.generated_raw_prefixes, 12027);
         assert_eq!(
             step_fourteen.claim_root_seeding,
             Some(ClaimRootSeedingDiagnostics {
-                roots_seen: 1,
+                roots_seen: 3,
                 roots_rejected_by_insert_root: 0,
                 roots_rejected_by_exact_screen: 0,
-                roots_enqueued: 1,
+                roots_enqueued: 3,
             })
         );
         assert_eq!(
             step_fourteen_roots.claim_root_seeding,
             step_fourteen.claim_root_seeding
         );
-        assert_eq!(step_fourteen.incremental_partial_prefix_bound_prunes, 18);
-        assert_eq!(step_fourteen.exact_screen_reasons.partial_prefix_bar_failure, 18);
-        assert_eq!(step_fourteen.exact_screen_reasons.incumbent_dominance, 80);
-        assert!(
+        assert_eq!(step_fourteen.incremental_partial_prefix_bound_prunes, 1458);
+        assert_eq!(
             step_fourteen
-                .demo_bucket_stats
-                .iter()
-                .any(|bucket| {
-                    bucket.stats.generated_terminal_candidates == 84
-                        && bucket.stats.exact_screened_terminal_candidates == 84
-                        && bucket.stats.pruned_terminal_candidates == 80
-                        && bucket.stats.fully_scored_terminal_candidates == 1
-                }),
-            "step 14 should still be dominated by one small-cluster terminal bucket"
+                .exact_screen_reasons
+                .partial_prefix_bar_failure,
+            1458
+        );
+        assert_eq!(step_fourteen.exact_screen_reasons.incumbent_dominance, 6551);
+        assert!(
+            step_fourteen.demo_bucket_stats.iter().any(|bucket| {
+                bucket.stats.generated_terminal_candidates == 6579
+                    && bucket.stats.exact_screened_terminal_candidates == 6579
+                    && bucket.stats.pruned_terminal_candidates == 6551
+                    && bucket.stats.fully_scored_terminal_candidates == 4
+            }),
+            "step 14 should now widen the claim catalog well before proof-close"
+        );
+        assert_eq!(
+            step_fourteen_continuations.len(),
+            4,
+            "the widened step-14 claim surface should expose a same-primary continuation fork"
+        );
+        let accepted_step_fourteen_continuation = step_fourteen_continuations
+            .iter()
+            .find(|(candidate_hash, _, _, _)| {
+                *candidate_hash == step_fourteen.accepted.candidate_hash
+            })
+            .expect("accepted step-14 continuation should still be present");
+        assert_eq!(
+            (
+                accepted_step_fourteen_continuation.1,
+                accepted_step_fourteen_continuation.2,
+                accepted_step_fourteen_continuation.3,
+            ),
+            (103, 8, 780),
+            "live claim step-14 acceptance should now prefer the same-primary survivor that restores the canonical step-15 continuation"
+        );
+        assert!(
+            step_fourteen_continuations.iter().any(
+                |(candidate_hash, nu, clause_kappa, generated)| {
+                    *candidate_hash != step_fourteen.accepted.candidate_hash
+                        && *nu == 78
+                        && *clause_kappa == 9
+                        && *generated == 12027
+                }
+            ),
+            "the step-14 same-primary fork should still retain the broader 78/9 continuation as the alternate branch"
         );
 
         history.push(DiscoveryRecord::new(
@@ -12802,17 +12957,17 @@ mod tests {
             step_fifteen.claim_root_seeding
         );
         assert_eq!(step_fifteen.incremental_partial_prefix_bound_prunes, 512);
-        assert_eq!(step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 512);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
+            512
+        );
         assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 0);
         assert!(
-            step_fifteen
-                .demo_bucket_stats
-                .iter()
-                .any(|bucket| {
-                    bucket.stats.generated_terminal_candidates == 12
-                        && bucket.stats.admissible_terminal_candidates == 2
-                        && bucket.stats.exact_screened_terminal_candidates == 2
-                }),
+            step_fifteen.demo_bucket_stats.iter().any(|bucket| {
+                bucket.stats.generated_terminal_candidates == 12
+                    && bucket.stats.admissible_terminal_candidates == 2
+                    && bucket.stats.exact_screened_terminal_candidates == 2
+            }),
             "step 15 should still leave only a tiny surviving temporal terminal cluster"
         );
     }

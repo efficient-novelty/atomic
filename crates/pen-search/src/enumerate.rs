@@ -664,13 +664,29 @@ fn claim_generic_band9_clauses(position: usize, context: EnumerationContext) -> 
     let previous = latest - 1;
     let older = latest - 2;
     match position {
-        0 => vec![Expr::Sigma(
-            Box::new(Expr::Pi(
+        0 => vec![
+            Expr::Sigma(
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
+                )),
                 Box::new(Expr::Var(1)),
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
-            )),
-            Box::new(Expr::Var(1)),
-        )],
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
+                )),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Univ))),
+                )),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ],
         1 => vec![
             Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1))),
             Expr::Pi(
@@ -682,18 +698,54 @@ fn claim_generic_band9_clauses(position: usize, context: EnumerationContext) -> 
                 Box::new(Expr::Var(1)),
             ),
         ],
-        2 => vec![Expr::Pi(
-            Box::new(Expr::Var(1)),
-            Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-        )],
-        3 => vec![Expr::Pi(
-            Box::new(Expr::Lam(Box::new(Expr::Var(1)))),
-            Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
-        )],
-        4 => vec![Expr::Sigma(
-            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-        )],
+        2 => vec![
+            Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Var(2)),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Var(1)),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        3 => vec![
+            Expr::Pi(
+                Box::new(Expr::Lam(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Var(1)),
+                )))),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Lam(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Sigma(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+            ),
+        ],
+        4 => vec![
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+            Expr::Sigma(
+                Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                )),
+                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+            ),
+        ],
         5 => vec![
             Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
             Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
@@ -4363,7 +4415,7 @@ mod tests {
         let claim_raw = enumerate_raw_telescopes(claim_context, 9);
         let realistic_raw = enumerate_raw_telescopes(realistic_context, 9);
 
-        assert_eq!(claim_widths, vec![1, 3, 1, 1, 1, 3, 3, 3, 3]);
+        assert_eq!(claim_widths, vec![3, 3, 3, 3, 3, 3, 3, 3, 3]);
         assert!(
             claim_widths
                 .iter()

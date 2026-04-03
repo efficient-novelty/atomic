@@ -48,19 +48,22 @@ It lists only work that is still open.
   repaired `34 / 6` tier.
 - All current same-primary step-`12` survivors, including that guarded shell,
   still collapse onto one observed local step-`13..15` path with generated
-  counts `9`, `157`, and `780`, so the closed local step-`12` hash fork does
-  not explain the late floor collapse by itself.
-- A new local late-floor diagnostic now shows where that repaired late path is
-  still too thin:
-  - step `13` opens only `3` raw claim telescopes, exact-prunes `2 / 3` roots,
-    and reaches only one `2`-terminal bucket before acceptance
-  - step `14` opens only `243` raw claim telescopes on the promoted
-    `kappa = 9` band, keeps one root alive, and still concentrates the
-    surviving width inside one `84`-terminal small cluster with `80`
-    incumbent-dominance prunes
-  - step `15` still opens `6561` raw claim telescopes, but `512`
-    partial-prefix bar failures cut that live generated surface to `780`
+  counts `9`, `12027`, and `780`, so the closed local step-`12` hash fork does
+  not explain the remaining step-`13` / step-`15` floor misses by itself.
+- A new local late-surface repair now changes that read:
+  - step `13` still opens only `3` raw claim telescopes, exact-prunes
+    `2 / 3` roots, and reaches only one `2`-terminal bucket before acceptance
+  - step `14` no longer shares that thin-path shape locally:
+    the widened claim `kappa = 9` catalog now opens `19683` raw telescopes,
+    keeps `3` roots alive, and lifts live generated prefixes to `12027`
     before proof-close
+  - that widened step-`14` surface now exposes a `4`-way same-primary
+    `62 / 9` continuation fork, and live claim acceptance now chooses the one
+    same-primary survivor that restores the canonical step-`15`
+    `DCT 103 / 8` continuation
+  - step `15` on that restored canonical branch still opens `6561` raw
+    claim telescopes, but `512` partial-prefix bar failures still cut that
+    live generated surface to `780` before proof-close
 - The old `v3` step-`14` zero-candidate failure is therefore no longer the
   first blocker.
 - The current blocker is stored parity plus stored breadth on the completed
@@ -76,7 +79,9 @@ It lists only work that is still open.
     while the repaired live local path now reaches guarded `34 / 6`, retains
     the guarded curvature shell, and now also accepts that guarded shell
   - step `13` and step `14` recover the guarded accepted hashes but stay one
-    `nu` low
+    `nu` low on stored `v5`; locally, step `14` now has a widened
+    same-primary repair that preserves the canonical step-`15` continuation
+    without a fresh stored rerun yet
   - step `15` returns the guarded `DCT` hash / `nu` / `kappa`
 - The stored claim certificate is still `attention` because:
   - accepted-hash parity fails
