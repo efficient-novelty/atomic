@@ -4168,6 +4168,33 @@ fn should_apply_claim_viability_tiebreak(
         && (DEMO_LATE_SPILL_START_STEP..LIVE_BOOTSTRAP_MAX_STEP).contains(&step_index)
 }
 
+fn should_apply_claim_step_eleven_same_primary_tiebreak(
+    admissibility_mode: AdmissibilityMode,
+    step_index: u32,
+) -> bool {
+    matches!(admissibility_mode, AdmissibilityMode::DesktopClaimShadow) && step_index == 11
+}
+
+fn compare_claim_step_eleven_same_primary_survivors(
+    left: &AcceptRank,
+    right: &AcceptRank,
+) -> Ordering {
+    left.descending_former_score
+        .0
+        .cmp(&right.descending_former_score.0)
+        .then_with(|| {
+            left.descending_generic_binder_count
+                .0
+                .cmp(&right.descending_generic_binder_count.0)
+        })
+        .then_with(|| {
+            left.descending_dependent_motive_density
+                .cmp(&right.descending_dependent_motive_density)
+        })
+        .then_with(|| left.bit_kappa.cmp(&right.bit_kappa))
+        .then_with(|| left.cmp(right))
+}
+
 fn claim_candidate_keeps_next_step_alive(
     step_index: u32,
     window_depth: u16,
@@ -4214,9 +4241,11 @@ fn select_acceptance_for_step(
     allow_claim_viability_tiebreak: bool,
 ) -> Option<AcceptanceOutcome> {
     let baseline = select_acceptance(objective_bar, retained)?;
-    if !allow_claim_viability_tiebreak
-        || !should_apply_claim_viability_tiebreak(admissibility_mode, step_index)
-    {
+    let apply_claim_step_eleven_same_primary_tiebreak =
+        should_apply_claim_step_eleven_same_primary_tiebreak(admissibility_mode, step_index);
+    let apply_claim_viability_tiebreak = allow_claim_viability_tiebreak
+        && should_apply_claim_viability_tiebreak(admissibility_mode, step_index);
+    if !apply_claim_step_eleven_same_primary_tiebreak && !apply_claim_viability_tiebreak {
         return Some(baseline);
     }
 
@@ -4230,14 +4259,37 @@ fn select_acceptance_for_step(
             acceptance_rank(objective_bar, candidate).map(|rank| (candidate, rank))
         })
         .filter(|(_, rank)| same_primary_rank_tier(rank, &accepted_rank))
-        .map(|(candidate, _)| candidate)
         .collect::<Vec<_>>();
     if tied_candidates.len() <= 1 {
         return Some(baseline);
     }
 
+    let mut selected_candidate = accepted_candidate;
+    if apply_claim_step_eleven_same_primary_tiebreak {
+        selected_candidate = tied_candidates
+            .iter()
+            .min_by(|(_, left), (_, right)| {
+                compare_claim_step_eleven_same_primary_survivors(left, right)
+            })
+            .map(|(candidate, _)| *candidate)
+            .unwrap_or(selected_candidate);
+    }
+
+    if !apply_claim_viability_tiebreak {
+        return if selected_candidate.candidate_hash == accepted_candidate.candidate_hash {
+            Some(baseline)
+        } else {
+            Some(acceptance_outcome_for_candidate(
+                objective_bar,
+                retained,
+                selected_candidate,
+            ))
+        };
+    }
+
     let viable_tied_candidates = tied_candidates
-        .into_iter()
+        .iter()
+        .map(|(candidate, _)| *candidate)
         .filter(|candidate| {
             claim_candidate_keeps_next_step_alive(
                 step_index,
@@ -4260,7 +4312,8 @@ fn select_acceptance_for_step(
             acceptance_rank(objective_bar, candidate).map(|rank| (candidate, rank))
         })
         .min_by(|(_, left), (_, right)| left.cmp(right))
-        .map(|(candidate, _)| candidate)?;
+        .map(|(candidate, _)| candidate)
+        .unwrap_or(selected_candidate);
     if selected_candidate.candidate_hash == accepted_candidate.candidate_hash {
         return Some(baseline);
     }
@@ -11761,8 +11814,8 @@ mod tests {
             "the raw structural tie-break should still miss the guarded step-11 survivor"
         );
         assert_eq!(
-            step.accepted.candidate_hash, structural_acceptance.accepted.candidate_hash,
-            "live claim step-11 acceptance should still be the raw structural winner"
+            step.accepted.candidate_hash, target_candidate.candidate_hash,
+            "live claim step-11 acceptance should now prefer the guarded same-primary survivor"
         );
         assert_eq!(
             continued_outcomes,
@@ -11773,6 +11826,79 @@ mod tests {
                 5,
             )]),
             "same-primary step-11 survivors should still collapse onto the observed step-12 33/5 continuation"
+        );
+    }
+
+    #[test]
+    fn claim_step_eleven_acceptance_prefers_guarded_leaner_same_primary_shell() {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            10,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 10 should build");
+        let claim_prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let (_, _, _) = history_from_prefix(&claim_prefix);
+        let target = Telescope::reference(11);
+        let step = super::search_bootstrap_prefix_for_profile_with_runtime(
+            11,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim step 11 should build")
+        .into_iter()
+        .last()
+        .expect("claim step 11 should exist");
+
+        let structural_acceptance =
+            super::select_acceptance(step.objective_bar, &step.retained_candidates)
+                .expect("raw structural acceptance should still select a bar clearer");
+        let structural_accepted_candidate = step
+            .retained_candidates
+            .iter()
+            .find(|candidate| {
+                candidate.candidate_hash == structural_acceptance.accepted.candidate_hash
+            })
+            .expect("raw structural winner should still be retained");
+        let structural_accept_rank =
+            acceptance_rank(step.objective_bar, structural_accepted_candidate)
+                .expect("raw structural winner should still clear the bar");
+        let target_candidate = step
+            .retained_candidates
+            .iter()
+            .find(|candidate| candidate.telescope == target)
+            .expect("guarded step-11 completion should stay retained");
+        let target_rank = acceptance_rank(step.objective_bar, target_candidate)
+            .expect("guarded step-11 completion should still clear the bar");
+
+        assert_eq!(structural_accept_rank.overshoot, target_rank.overshoot);
+        assert_eq!(structural_accept_rank.clause_kappa, target_rank.clause_kappa);
+        assert!(
+            structural_accepted_candidate.signals.former_score > target_candidate.signals.former_score,
+            "the raw structural winner should still be the richer former shell"
+        );
+        assert!(
+            structural_accepted_candidate.signals.dependent_motive_density
+                > target_candidate.signals.dependent_motive_density,
+            "the raw structural winner should still carry the denser dependent motive shell"
+        );
+        assert!(
+            structural_accepted_candidate.signals.generic_binder_count
+                > target_candidate.signals.generic_binder_count,
+            "the raw structural winner should still be the heavier binder shell"
+        );
+        assert!(
+            target_rank.bit_kappa < structural_accept_rank.bit_kappa,
+            "the guarded step-11 survivor should still be the lower-bit-cost same-primary tie"
+        );
+        assert_eq!(
+            step.accepted.candidate_hash, target_candidate.candidate_hash,
+            "live claim acceptance should now prefer the lower-bit-cost guarded step-11 survivor"
         );
     }
 

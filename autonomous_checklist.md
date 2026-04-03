@@ -34,20 +34,27 @@ It lists only work that is still open.
   summary, compact survivor sketch, and retained candidate pool on the live
   divergent history; no stored rerun has consumed that repair yet, so the
   signoff surface is still the frozen `v5` evidence set.
-- A follow-up local regression now proves the current same-primary step-`11`
-  tied set still collapses onto the same observed claim step-`12`
-  accepted hash / `nu` / `kappa` (`33 / 5`), so the remaining step-`11`
-  blocker is local same-primary selection rather than a simple one-step
-  viability miss.
+- A follow-up local selector repair now makes live claim step-`11`
+  acceptance prefer the guarded same-primary survivor over the richer raw
+  structural winner on the live divergent history, while a follow-up
+  regression still proves the current same-primary step-`11` tied set
+  collapses onto the same observed claim step-`12` accepted hash / `nu` /
+  `kappa` (`33 / 5`); the step-`11` selector is therefore no longer the
+  remaining local blocker.
 - The old `v3` step-`14` zero-candidate failure is therefore no longer the
   first blocker.
 - The current blocker is stored parity plus stored breadth on the completed
   run:
   - compare says accepted hashes diverge from guarded replay at steps `9`,
     `11`, and `12`
-  - step `9` and step `11` both keep guarded `nu / kappa` but still accept a
-    different winner
-  - step `12` drops to `nu = 33`, `kappa = 5` versus guarded `34 / 6`
+  - step `9` still keeps guarded `nu / kappa` but accepts a different winner
+    on the stored `v5` run
+  - step `11` still diverges on stored `v5`, but the live local selector now
+    picks the guarded same-primary survivor and no stored rerun has consumed
+    that repair yet
+  - step `12` still drops to `nu = 33`, `kappa = 5` versus guarded `34 / 6`,
+    and the current same-primary step-`11` survivors all collapse onto that
+    observed `33 / 5` continuation
   - step `13` and step `14` recover the guarded accepted hashes but stay one
     `nu` low
   - step `15` returns the guarded `DCT` hash / `nu` / `kappa`

@@ -119,10 +119,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
     no longer best explained as raw generation loss or terminal-clause
     filtering loss
   - but the tied step-`9` candidates still collapse onto the same observed
-    step-`10` / step-`11` continuation while step `11` remains unresolved,
-    so step `9` should not be treated as a closed local selection bug yet
-- A new local step-`11` diagnostic and narrow incumbent-pruning repair now
-  extend that localization:
+    step-`10` / repaired-step-`11` continuation while step `12` remains
+    unresolved, so step `9` should not be treated as a closed local selection
+    bug yet
+- A new local step-`11` diagnostic and narrow incumbent-pruning plus selector
+  repairs now extend that localization:
   - the guarded step-`11` closing clause is still present in the claim
     remaining-one terminal-clause catalog on the divergent step-`10` history
   - the guarded step-`11` completion still survives the full remaining-one
@@ -130,12 +131,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - claim incumbent pruning now preserves same-primary accepted-rank ties on
     steps `9..12`, so that guarded step-`11` completion now survives into the
     retained claim candidate pool
+  - live claim step-`11` acceptance now prefers the guarded same-primary
+    survivor over the richer raw structural winner by preferring the leaner
+    former/binder shell first, then stronger dependent density within that
+    lean tier, then lower bit cost
   - every current same-primary tied step-`11` survivor still collapses onto
     the same observed step-`12` accepted hash / `nu` / `kappa` (`33 / 5`)
   - step `11` is therefore no longer best explained as raw generation loss,
-    compact-summary loss, or a simple one-step viability miss; the remaining
-    blocker is the local same-primary selection rule among retained
-    candidates
+    compact-summary loss, a simple one-step viability miss, or an unresolved
+    local selector; the remaining blocker is the step-`12` drop on top of
+    that repaired step-`11` history
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -174,19 +179,21 @@ This note is the exact next work order for `desktop_claim_shadow`.
    the guarded step-`11` completion now survives terminal-clause generation,
    full summary, compact survivor sketch, and retained-pool preservation on
    the live claim history.
-3. Keep the new step-`11` continuation-collapse read fixed:
+3. Keep the new step-`11` selector read fixed:
+   live claim acceptance now prefers the guarded same-primary survivor over
+   the richer raw structural winner on the live divergent history.
+4. Keep the new step-`11` continuation-collapse read fixed:
    all current same-primary tied step-`11` survivors still keep step `12`
    alive and still collapse onto the same observed claim step-`12`
    accepted hash / `nu` / `kappa` (`33 / 5`).
-4. Move the active repair target to the step-`11`
-   same-`nu` / same-`kappa` accepted-hash fork:
-   inspect the local same-primary ordering fields that still select the
-   non-guarded hash once pruning is removed, rather than trying a one-step
-   viability tiebreak first.
-5. Only revisit step `9` final selection after step `11` is repaired, since
-   the current step-`9` tied candidates still share the same observed
-   step-`10` / step-`11` continuation.
-6. Then localize the step-`12` drop from guarded `34 / 6` to claim `33 / 5`.
+5. Keep step `9` final selection deferred while the current tied step-`9`
+   candidates still share the same observed step-`10` / repaired-step-`11`
+   continuation.
+6. Move the active repair target to the step-`12` drop from guarded `34 / 6`
+   to claim `33 / 5`:
+   inspect why every current same-primary step-`11` survivor, including the
+   repaired guarded winner, still collapses onto that observed step-`12`
+   continuation.
 7. Use the repaired step-`9` / step-`11` / step-`12` chain to explain the
    late generated-floor collapse at
    steps `11..15`, especially:
@@ -202,18 +209,21 @@ This note is the exact next work order for `desktop_claim_shadow`.
    same-`nu` / same-`kappa` accepted-hash fork.
 2. Keep the new step-`11` retained-pool regression green so same-primary
    claim ties are not silently pruned before final selection on steps `9..12`.
-3. Keep the new step-`11` continuation-collapse regression green so the
+3. Keep the new step-`11` selector regression green so live claim acceptance
+   continues to choose the guarded same-primary survivor over richer raw
+   structural winners on the live divergent history.
+4. Keep the new step-`11` continuation-collapse regression green so the
    current tied same-primary set stays pinned to the observed step-`12`
-   `33 / 5` continuation until the local selection rule is repaired.
-4. Keep the stored compare regression green for the step-`11`
+   `33 / 5` continuation while the step-`12` drop is repaired.
+5. Keep the stored compare regression green for the step-`11`
    same-`nu` / same-`kappa` accepted-hash fork.
-5. Keep the stored compare regression green for the step-`12`
+6. Keep the stored compare regression green for the step-`12`
    guarded `34 / 6` versus claim `33 / 5` drop.
-6. Keep the stored certification / benchmark assertions green for the
+7. Keep the stored certification / benchmark assertions green for the
    step-`1` breadth miss and the late generated-floor snapshot at
    steps `10..15` so the next fix cannot silently reshuffle the stored
    failure surface.
-7. Keep the existing pre-flight gate green while the local repair lands.
+8. Keep the existing pre-flight gate green while the local repair lands.
 
 ### 5. Only Rerun After The Local Repair Exists
 
