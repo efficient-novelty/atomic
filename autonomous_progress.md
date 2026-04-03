@@ -159,6 +159,12 @@ gate.
     step-`10..15` late generated-floor snapshot
   - benchmark assertions pin the single-run `408 ms` / parity-`0` /
     breadth-hit-`0` aggregate bundle
+- A new local step-`13` catalog regression now freezes the repaired
+  breadth read more precisely:
+  claim-open still sits at `kappa = 7..7` on `LateFamilySurface::ClaimGeneric`
+  with raw widths `[3,1,1,1,1,1,1]` before proof-close, so the first late
+  breadth miss is now pinned to singleton-heavy band-`7` catalog width rather
+  than a hidden proof-close-only collapse.
 
 ## Latest Full-Profile Outcome
 
@@ -410,8 +416,9 @@ gate.
 - A new late-surface diagnostic now explains where that collapse actually
   starts:
   - step `13` is already too thin at claim step-open itself:
-    only `3` raw catalog telescopes, `2 / 3` roots exact-pruned, and one
-    surviving `2`-terminal bucket
+    only `3` raw catalog telescopes from singleton-heavy widths
+    `[3,1,1,1,1,1,1]`, `2 / 3` roots exact-pruned, and one surviving
+    `2`-terminal bucket
   - step `14` is no longer thin on the repaired local chain:
     widening the claim `kappa = 9` catalog now yields `19683` raw telescopes,
     `3` surviving roots, and `12027` live generated prefixes before
@@ -440,7 +447,9 @@ gate.
 - Prioritize targeted local diagnosis and repair for:
   - the step-`9` accepted-hash fork
   - late claim admissibility / catalog breadth at step `13`, which is still
-    proven too thin before proof-close on the repaired step-`12` chain
+    proven too thin before proof-close on the repaired step-`12` chain and is
+    now frozen more precisely as a singleton-heavy
+    `[3,1,1,1,1,1,1]` claim-generic band-`7` catalog
   - keeping the widened step-`14` catalog plus same-primary continuation
     selector stable until a stored rerun consumes it
   - the step-`15` exact partial-prefix bar path, which still cuts a
@@ -492,7 +501,8 @@ gate.
 11. Move the next repair to late claim breadth at step `13`, not back to raw
     step-`9` generation:
     widen the honest claim step-open / catalog surface there before blaming
-    proof-close for that floor miss.
+    proof-close for that floor miss; the repaired claim-open read is now
+    pinned at `kappa = 7..7` with raw widths `[3,1,1,1,1,1,1]`.
 12. Treat step `15` as the separate remaining exact-screen problem:
     inspect why the restored canonical temporal-shell catalog still loses
     `512` prefixes to partial-prefix bar failure before proof-close.

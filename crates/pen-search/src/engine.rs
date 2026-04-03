@@ -12774,6 +12774,25 @@ mod tests {
 
         let (step_thirteen, step_thirteen_catalog, step_thirteen_roots) =
             inspect_late_step(13, &library, &history);
+        let step_thirteen_open = step_thirteen_roots
+            .claim_step_open
+            .expect("step 13 should still emit claim-open diagnostics");
+        assert_eq!(step_thirteen_open.kappa_min, 7);
+        assert_eq!(step_thirteen_open.kappa_max, 7);
+        assert_eq!(
+            step_thirteen_open.late_family_surface,
+            LateFamilySurface::ClaimGeneric
+        );
+        assert_eq!(step_thirteen_open.anchor_policy, ClaimAnchorPolicyDiagnostics::None);
+        assert_eq!(step_thirteen_open.claim_debt_axes.kappa_min, 7);
+        assert_eq!(step_thirteen_open.claim_debt_axes.kappa_max, 7);
+        assert!(step_thirteen_open.package_flags.operator_bundle);
+        assert!(!step_thirteen_open.package_flags.hilbert_functional);
+        assert!(!step_thirteen_open.package_flags.temporal_shell);
+        assert_eq!(
+            step_thirteen_catalog.raw_catalog_clause_widths,
+            vec![3, 1, 1, 1, 1, 1, 1]
+        );
         assert_eq!(step_thirteen_catalog.raw_catalog_telescope_count, Some(3));
         assert_eq!(step_thirteen.demo_funnel.generated_raw_prefixes, 9);
         assert_eq!(

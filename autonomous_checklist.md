@@ -52,7 +52,10 @@ It lists only work that is still open.
   not explain the remaining step-`13` / step-`15` floor misses by itself.
 - A new local late-surface repair now changes that read:
   - step `13` still opens only `3` raw claim telescopes, exact-prunes
-    `2 / 3` roots, and reaches only one `2`-terminal bucket before acceptance
+    `2 / 3` roots, and reaches only one `2`-terminal bucket before acceptance;
+    the repaired claim-open regression now pins that bottleneck more sharply
+    at singleton-heavy raw widths `[3,1,1,1,1,1,1]` on the claim-generic
+    band-`7` catalog
   - step `14` no longer shares that thin-path shape locally:
     the widened claim `kappa = 9` catalog now opens `19683` raw telescopes,
     keeps `3` roots alive, and lifts live generated prefixes to `12027`

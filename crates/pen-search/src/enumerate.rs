@@ -4358,6 +4358,17 @@ mod tests {
     }
 
     #[test]
+    fn claim_generic_step_thirteen_raw_catalog_is_still_singleton_heavy() {
+        let library = library_until(12);
+        let admissibility =
+            strict_admissibility_for_mode(13, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = context_from_admissibility(&library, admissibility);
+
+        assert_eq!(raw_clause_catalog_widths(claim_context, 7), vec![3, 1, 1, 1, 1, 1, 1]);
+        assert_eq!(enumerate_raw_telescopes(claim_context, 7).len(), 3);
+    }
+
+    #[test]
     fn claim_generic_kappa_eight_catalog_adds_modal_temporal_exchange_variants() {
         let library = library_until(14);
         let admissibility =
