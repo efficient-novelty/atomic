@@ -107,6 +107,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - parity success count `= 0`
   - full early breadth hit count `= 0`
   - full late floor hit count `= 0`
+- New stored-audit regressions now freeze that `v5` evidence surface:
+  - compare locks the step-`9`, step-`11`, and step-`12` parity forks
+  - certification locks the step-`1` breadth miss and the step-`10..15`
+    generated-floor snapshot
+  - benchmark locks the single-run `408 ms` / parity-`0` / breadth-hit-`0`
+    aggregate
 
 ## Do This Next
 
@@ -144,14 +150,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
 5. Keep the step-`1` breadth miss on the checklist, but do not confuse that
    longstanding signoff floor with the new claim-specific mid/late parity fork.
 
-### 4. Land Targeted Regressions Before Another Full Rerun
+### 4. Use The New Regressions To Drive The Local Repair
 
-1. Add a targeted regression for the step-`9` accepted-hash parity miss.
-2. Add a targeted regression for the step-`11` accepted-hash parity miss.
-3. Add a targeted regression for the step-`12` `nu / kappa` parity miss.
-4. Add targeted stored-summary assertions for the late generated-floor misses
-   so the next fix cannot silently re-collapse breadth while still finishing.
-5. Keep the existing pre-flight gate green while those new regressions land.
+1. Keep the stored compare regression green for the step-`9`
+   same-`nu` / same-`kappa` accepted-hash fork.
+2. Keep the stored compare regression green for the step-`11`
+   same-`nu` / same-`kappa` accepted-hash fork.
+3. Keep the stored compare regression green for the step-`12`
+   guarded `34 / 6` versus claim `33 / 5` drop.
+4. Keep the stored certification / benchmark assertions green for the
+   step-`1` breadth miss and the late generated-floor snapshot at
+   steps `10..15` so the next fix cannot silently reshuffle the stored
+   failure surface.
+5. Keep the existing pre-flight gate green while the local repair lands.
 
 ### 5. Only Rerun After The Local Repair Exists
 
@@ -168,8 +179,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - a `resume`-based restart of the stopped `v4` run
 - another runtime-only step-`4` micro-optimization slice first
 - another late-step zero-candidate diagnosis slice first
-- another clean-start full-profile rerun before the new step-`9` / `11` / `12`
-  regressions exist
+- another clean-start full-profile rerun before the local repair is green
+  against the new step-`9` / `11` / `12` regressions
 - replay-fixture recapture or benchmark-file churn before the parity/floor fix
 - stronger claim wording or runtime-threshold freeze before a passing
   certificate exists
@@ -181,6 +192,6 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - Keep the current short-loop gate, stored step-`4` continuation references,
   the capped intended-profile read, stopped `v4`, and completed `v5` frozen as
   regression checks.
-- Return to another runtime-only slice only if the new targeted parity/floor
+- Return to another runtime-only slice only if the stored targeted parity/floor
   regressions prove the stored failure is just an accounting bug rather than a
   real search divergence.

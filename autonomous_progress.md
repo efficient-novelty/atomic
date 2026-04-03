@@ -63,6 +63,13 @@ gate.
   - `claim_benchmark.txt` / `claim_benchmark.json`
 - Those audits use the guarded baseline
   `runs/codex-guarded-claim-cert-v1`.
+- New stored-evidence regressions now freeze that `v5` audit surface in-tree:
+  - compare assertions pin the step-`9`, step-`11`, and step-`12`
+    accepted-hash / trajectory forks
+  - certification assertions pin the step-`1` breadth miss plus the
+    step-`10..15` late generated-floor snapshot
+  - benchmark assertions pin the single-run `408 ms` / parity-`0` /
+    breadth-hit-`0` aggregate bundle
 
 ## Latest Full-Profile Outcome
 
@@ -275,26 +282,29 @@ gate.
   `v1`, `v2`, `v3`, capped `v1`, stopped `v4`, and completed `v5`.
 - Treat the pre-flight gate, the completed full-profile rerun, and the stored
   compare / certification / benchmark outputs as earned.
+- Keep the new stored `v5` compare / certification / benchmark regressions
+  green as the local parity-plus-breadth guardrail.
 - Keep the claim-policy metadata, narrative/event artifacts, exact-screen
   reason counts, prune-class counts, and manifest provenance green.
-- Prioritize targeted local diagnosis and regression capture for:
+- Prioritize targeted local diagnosis and repair for:
   - the step-`9` accepted-hash fork
   - the step-`11` accepted-hash fork
   - the step-`12` `nu / kappa` drop
   - the late generated-floor collapse at steps `11..15`
-- Launch the next clean-start full-profile rerun only after those parity/floor
-  regressions exist and the local repair is green.
+- Launch the next clean-start full-profile rerun only after the local repair
+  is green against those stored parity/floor regressions.
 
 ## Immediate Next Move
 
-1. Turn the step-`9` accepted-hash divergence into a narrow targeted
-   regression-backed reproducer.
-2. Do the same for the step-`11` same-`nu` / same-`kappa` accepted-hash fork
-   and the step-`12` `33/5` versus `34/6` drop.
+1. Use the new stored compare regression to localize the step-`9`
+   same-`nu` / same-`kappa` winner fork in code.
+2. Extend that local diagnosis to the step-`11` same-`nu` / same-`kappa`
+   fork and the step-`12` `33/5` versus `34/6` drop.
 3. Explain why the completed claim path still misses the generated-floor
    targets at steps `11..15`, especially the `9 / 157 / 780` collapse across
    steps `13..15`.
 4. Land the narrowest honest fix that restores stored parity/floor evidence
-   without regressing the new step-`15` completion.
+   without regressing the new step-`15` completion, while keeping the new
+   stored-audit regressions green.
 5. Only then launch `long-rerun-v6` and re-run compare, certification, and
    benchmark against the repaired bundle.

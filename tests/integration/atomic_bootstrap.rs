@@ -1346,6 +1346,274 @@ fn claim_benchmark_script_aggregates_runtime_floor_and_manifest_evidence() {
 }
 
 #[test]
+fn stored_claim_v5_compare_freezes_step_9_step_11_step_12_parity_forks() {
+    let root = temp_dir("claim-v5-compare");
+    let guarded_dir = workspace_root()
+        .join("runs")
+        .join("codex-guarded-claim-cert-v1");
+    let claim_dir = workspace_root().join("runs").join(
+        "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v5",
+    );
+    let json_out = root.join("claim-v5-compare.json");
+
+    assert!(
+        guarded_dir.join("run.json").exists(),
+        "stored guarded claim baseline is missing at {}",
+        guarded_dir.display()
+    );
+    assert!(
+        claim_dir.join("run.json").exists(),
+        "stored claim v5 bundle is missing at {}",
+        claim_dir.display()
+    );
+
+    let stdout = assert_success(run_compare_runs([
+        "--baseline",
+        "guarded",
+        "--lane",
+        &format!("guarded={}", guarded_dir.to_string_lossy()),
+        "--lane",
+        &format!("claim={}", claim_dir.to_string_lossy()),
+        "--json-out",
+        &json_out.to_string_lossy(),
+    ]));
+
+    assert!(stdout.contains("accepted hashes: diverges at step 9, step 11, step 12"));
+    assert!(
+        stdout.contains(
+            "trajectory: diverges at step 9, step 11, step 12, step 13, step 14, step 15"
+        )
+    );
+
+    let summary = read_json(&json_out);
+    let claim_lane = summary["lanes"]
+        .as_array()
+        .expect("lanes")
+        .iter()
+        .find(|lane| lane["label"].as_str() == Some("claim"))
+        .expect("claim lane");
+
+    let hash_deltas = claim_lane["accepted_hashes_vs_baseline"]["deltas"]
+        .as_array()
+        .expect("accepted hash deltas");
+    let hash_steps = hash_deltas
+        .iter()
+        .map(|delta| delta["step_index"].as_u64().expect("delta step"))
+        .collect::<Vec<_>>();
+    assert_eq!(hash_steps, vec![9, 11, 12]);
+
+    let trajectory_deltas = claim_lane["trajectory_vs_baseline"]["deltas"]
+        .as_array()
+        .expect("trajectory deltas");
+    let step9 = trajectory_deltas
+        .iter()
+        .find(|delta| delta["step_index"].as_u64() == Some(9))
+        .expect("step 9 delta");
+    let step11 = trajectory_deltas
+        .iter()
+        .find(|delta| delta["step_index"].as_u64() == Some(11))
+        .expect("step 11 delta");
+    let step12 = trajectory_deltas
+        .iter()
+        .find(|delta| delta["step_index"].as_u64() == Some(12))
+        .expect("step 12 delta");
+
+    assert_eq!(
+        step9["baseline"]["nu"].as_u64(),
+        step9["current"]["nu"].as_u64()
+    );
+    assert_eq!(
+        step9["baseline"]["clause_kappa"].as_u64(),
+        step9["current"]["clause_kappa"].as_u64()
+    );
+    assert_ne!(
+        step9["baseline"]["candidate_hash"].as_str(),
+        step9["current"]["candidate_hash"].as_str()
+    );
+
+    assert_eq!(
+        step11["baseline"]["nu"].as_u64(),
+        step11["current"]["nu"].as_u64()
+    );
+    assert_eq!(
+        step11["baseline"]["clause_kappa"].as_u64(),
+        step11["current"]["clause_kappa"].as_u64()
+    );
+    assert_ne!(
+        step11["baseline"]["candidate_hash"].as_str(),
+        step11["current"]["candidate_hash"].as_str()
+    );
+
+    assert_eq!(step12["baseline"]["nu"].as_u64(), Some(34));
+    assert_eq!(step12["current"]["nu"].as_u64(), Some(33));
+    assert_eq!(step12["baseline"]["clause_kappa"].as_u64(), Some(6));
+    assert_eq!(step12["current"]["clause_kappa"].as_u64(), Some(5));
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn stored_claim_v5_certificate_freezes_late_generated_floor_misses() {
+    let root = temp_dir("claim-v5-certificate");
+    let guarded_dir = workspace_root()
+        .join("runs")
+        .join("codex-guarded-claim-cert-v1");
+    let claim_dir = workspace_root().join("runs").join(
+        "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v5",
+    );
+    let json_out = root.join("claim-certificate.json");
+
+    let output = run_claim_certify([
+        "--guarded-run",
+        &guarded_dir.to_string_lossy(),
+        "--claim-run",
+        &claim_dir.to_string_lossy(),
+        "--runtime-threshold-ms",
+        "600000",
+        "--json-out",
+        &json_out.to_string_lossy(),
+    ]);
+    let stdout = String::from_utf8_lossy(&output.stdout).to_string()
+        + &String::from_utf8_lossy(&output.stderr);
+
+    assert!(
+        !output.status.success(),
+        "stored claim v5 certificate should stay failing until the parity and breadth repair lands\nstdout:\n{}",
+        stdout
+    );
+    assert!(stdout.contains(
+        "late_generated_floors: fail - late generated floors failed at step 11, step 12, step 13, step 14, step 15"
+    ));
+
+    let certificate = read_json(&json_out);
+    assert_eq!(
+        certificate["failing_checks"].as_array(),
+        Some(&vec![
+            serde_json::Value::from("accepted_hash_parity"),
+            serde_json::Value::from("early_breadth"),
+            serde_json::Value::from("late_generated_floors"),
+        ])
+    );
+
+    let early_steps = certificate["checks"]["early_breadth"]["steps"]
+        .as_array()
+        .expect("early breadth steps");
+    assert_eq!(early_steps.len(), 1);
+    assert_eq!(early_steps[0]["step_index"].as_u64(), Some(1));
+    assert_eq!(early_steps[0]["actual"].as_u64(), Some(546));
+    assert_eq!(early_steps[0]["target"].as_u64(), Some(2144));
+    assert_eq!(early_steps[0]["status"].as_str(), Some("miss"));
+
+    let late_steps = certificate["checks"]["late_generated_floors"]["steps"]
+        .as_array()
+        .expect("late floor steps");
+    let late_snapshot = late_steps
+        .iter()
+        .map(|step| {
+            (
+                step["step_index"].as_u64().expect("step index"),
+                step["actual"].as_u64().expect("actual"),
+                step["target"].as_u64().expect("target"),
+                step["status"].as_str().expect("status").to_owned(),
+            )
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(
+        late_snapshot,
+        vec![
+            (10, 1428, 500, "hit".to_owned()),
+            (11, 546, 800, "miss".to_owned()),
+            (12, 930, 1200, "miss".to_owned()),
+            (13, 9, 2200, "miss".to_owned()),
+            (14, 157, 3500, "miss".to_owned()),
+            (15, 780, 5000, "miss".to_owned()),
+        ]
+    );
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
+fn stored_claim_v5_benchmark_freezes_runtime_and_floor_counts() {
+    let root = temp_dir("claim-v5-benchmark");
+    let guarded_dir = workspace_root()
+        .join("runs")
+        .join("codex-guarded-claim-cert-v1");
+    let claim_dir = workspace_root().join("runs").join(
+        "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v5",
+    );
+    let json_out = root.join("claim-benchmark.json");
+
+    let stdout = assert_success(run_claim_benchmark([
+        "--guarded-run",
+        &guarded_dir.to_string_lossy(),
+        "--claim-run",
+        &claim_dir.to_string_lossy(),
+        "--runtime-threshold-ms",
+        "600000",
+        "--json-out",
+        &json_out.to_string_lossy(),
+    ]));
+
+    assert!(stdout.contains("claim run count: 1"));
+    assert!(stdout.contains("completed step-15 count: 1"));
+    assert!(stdout.contains("parity success count: 0"));
+
+    let summary = read_json(&json_out);
+    assert_eq!(summary["aggregate"]["claim_run_count"].as_u64(), Some(1));
+    assert_eq!(
+        summary["aggregate"]["completed_step_15_count"].as_u64(),
+        Some(1)
+    );
+    assert_eq!(
+        summary["aggregate"]["parity_success_count"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
+        summary["aggregate"]["full_early_breadth_hit_count"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
+        summary["aggregate"]["full_late_floor_hit_count"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
+        summary["aggregate"]["runtime_threshold_pass_count"].as_u64(),
+        Some(1)
+    );
+    assert_eq!(
+        summary["aggregate"]["runtime_ms"]["median_ms"].as_u64(),
+        Some(408)
+    );
+    assert_eq!(
+        summary["aggregate"]["step_floor_hit_counts"]["late"]["10"].as_u64(),
+        Some(1)
+    );
+    assert_eq!(
+        summary["aggregate"]["step_floor_hit_counts"]["late"]["11"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
+        summary["aggregate"]["step_floor_hit_counts"]["late"]["12"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
+        summary["aggregate"]["step_floor_hit_counts"]["late"]["13"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
+        summary["aggregate"]["step_floor_hit_counts"]["late"]["14"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
+        summary["aggregate"]["step_floor_hit_counts"]["late"]["15"].as_u64(),
+        Some(0)
+    );
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
 fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
     let root = temp_dir("workstream4-rollout");
     let root_arg = root.to_string_lossy().to_string();

@@ -26,6 +26,9 @@ It lists only work that is still open.
   `c42758f96c8171900651503d7f2a0ffe9915966c41edea98d8f1e296fc772a4e`.
 - A compare report, claim certificate, and benchmark bundle now also exist
   beside that `v5` run and make the remaining signoff gaps explicit.
+- Stored `v5` compare / certification / benchmark regression tests now pin
+  those current parity and breadth failures in-tree, so the next change has to
+  move real stored behavior rather than only the narrative around it.
 - The old `v3` step-`14` zero-candidate failure is therefore no longer the
   first blocker.
 - The current blocker is stored parity plus stored breadth on the completed
