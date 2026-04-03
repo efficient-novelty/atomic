@@ -207,6 +207,16 @@ gate.
   - the remaining captured exact-prune blocker is therefore earlier qualifier
     evidence through clause `5` or earlier; clause `6` is now downstream of
     that capture boundary
+- A new follow-up step-`15` isolated-prefix regression now sharpens that same
+  blocker one layer further:
+  - on the otherwise exact seven-clause temporal-shell prefix, the captured
+    exact-prune surface now contains exactly `2` isolated claim-only variants
+    at each early clause position `0..5`
+  - all `12` of those single early deviations still classify all `3` terminal
+    continuations as `NeedsFallback` and remain zero-admitted
+  - the remaining step-`15` repair is therefore clause-local qualifier /
+    reanchor evidence at positions `0..5` themselves, not a multi-deviation
+    interaction, clause-`6`, or terminal-slot problem
 - A follow-up exploratory step-`15` temporal-reanchor broadening pass was also
   run locally but was not landed:
   - a broad temporal-shell matcher expansion collapsed the captured exact-prune
@@ -610,9 +620,13 @@ gate.
     reanchor prefix by clause `5` or earlier, and once those first six clauses
     are fixed the claim lane now keeps exactly `3` clause-`6` variants outside
     captured exact prune with only the exact reference continuation exposing a
-    `KeepWithoutFallback` terminal path, so the next repair should inspect
-    earlier temporal-shell qualifier evidence through clause `5` or earlier
-    rather than only the clause-`6` / terminal slot
+    `KeepWithoutFallback` terminal path; the new isolated-prefix regression now
+    also proves each of the `12` single early claim-only deviations on the
+    otherwise exact seven-clause prefix still leaves all `3` terminal
+    continuations at `NeedsFallback` and zero-admitted, so the next repair
+    should inspect clause-local earlier temporal-shell qualifier evidence
+    through clause `5` or earlier rather than only the clause-`6` / terminal
+    slot or a multi-early-deviation interaction
   - avoiding a direct temporal-reanchor matcher reland first:
     both the broad `60 / 8 / 9840` branch and the narrower `89 / 8 / 780`
     branch disturbed the canonical step-`15` continuation and were reverted
@@ -692,10 +706,14 @@ gate.
     disconnections, `0` historical reanchor hits, `0` admissibility
     rejections), and the follow-up reanchor-prefix regression now proves those
     captured families already fall off the temporal-shell prefix by clause `5`
-    or earlier with no full seven-clause prefix matches, so do not treat that
-    remaining loss as generic bar bookkeeping, raw dependency-edge generation,
-    a claim admissibility miss, a terminal-clause-only matcher bug, or a
-    direct early clause-`2` / clause-`3` bridge-matcher expansion.
+    or earlier with no full seven-clause prefix matches; the isolated-prefix
+    regression now also proves every single early claim-only deviation at
+    clause positions `0..5` already keeps all `3` terminal continuations at
+    `NeedsFallback` and zero-admitted on the otherwise exact suffix, so do not
+    treat that remaining loss as generic bar bookkeeping, raw dependency-edge
+    generation, a claim admissibility miss, a terminal-clause-only matcher
+    bug, a multi-deviation-only interaction, or a direct early clause-`2` /
+    clause-`3` bridge-matcher expansion.
 16. Do not reland either exploratory temporal-reanchor matcher variant
     directly:
     the broad reland displaced the canonical step-`15` continuation to

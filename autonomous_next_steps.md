@@ -240,6 +240,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the remaining captured exact-prune blocker is therefore earlier qualifier
     evidence through clause `5` or earlier; clause `6` is now downstream of
     that capture boundary
+- A new follow-up step-`15` isolated-prefix regression now sharpens that same
+  blocker further:
+  - on the otherwise exact seven-clause temporal-shell prefix, the captured
+    exact-prune surface now contains exactly `2` isolated claim-only variants
+    at each early clause position `0..5`
+  - all `12` of those single early deviations still classify all `3` terminal
+    continuations as `NeedsFallback` and remain zero-admitted
+  - the next repair should therefore target clause-local qualifier /
+    reanchor evidence at positions `0..5` themselves rather than a
+    multi-deviation interaction, clause `6`, or the terminal slot alone
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -390,10 +400,14 @@ This note is the exact next work order for `desktop_claim_shadow`.
     off the temporal-shell prefix by clause `5` or earlier with no full
     seven-clause matches; the new clause-`6` boundary regression now also
     proves that once those first six clauses are fixed, the captured surface
-    has already stopped and only `3` clause-`6` variants remain outside it, so
-    inspect earlier qualifier / reanchor evidence on that connected surface
-    rather than generic partial-prefix bar arithmetic, raw dependency-edge
-    generation, claim admissibility, or the clause-`6` / terminal slot alone
+    has already stopped and only `3` clause-`6` variants remain outside it;
+    the new isolated-prefix regression now further proves each of the `12`
+    single early claim-only deviations on the otherwise exact seven-clause
+    prefix still leaves all `3` terminal continuations at `NeedsFallback` and
+    zero-admitted, so inspect earlier clause-local qualifier / reanchor
+    evidence on that connected surface rather than generic partial-prefix bar
+    arithmetic, raw dependency-edge generation, claim admissibility, a
+    multi-deviation-only interaction, or the clause-`6` / terminal slot alone
 10. Keep the step-`1` breadth miss on the checklist, but do not confuse that
     longstanding signoff floor with the new claim-specific mid/late parity
     fork.
@@ -475,19 +489,24 @@ This note is the exact next work order for `desktop_claim_shadow`.
     surface, with only the exact reference continuation exposing a
     `KeepWithoutFallback` terminal path while the two claim-only clause-`6`
     variants remain pure `NeedsFallback`.
-19. Keep the stored compare regression green for the step-`12`
+19. Keep the new step-`15` isolated-prefix regression green so each early
+    clause position `0..5` still contributes exactly `2` isolated claim-only
+    deviations on the otherwise exact seven-clause prefix, and all `12` such
+    prefixes still leave all `3` terminal continuations at `NeedsFallback`
+    with `0` admitted candidates.
+20. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
-20. Keep the stored certification / benchmark assertions green for the
+21. Keep the stored certification / benchmark assertions green for the
     step-`1` breadth miss and the late generated-floor snapshot at
     steps `10..15` so the next fix cannot silently reshuffle the stored
     failure surface.
-21. Keep the existing pre-flight gate green while the local repair lands.
-22. Do not reland either exploratory temporal-reanchor matcher variant
+22. Keep the existing pre-flight gate green while the local repair lands.
+23. Do not reland either exploratory temporal-reanchor matcher variant
     directly:
     the broad reland displaced the canonical step-`15` continuation to
     `60 / 8 / 9840`, and the narrower late-shell-only reland still displaced
     it to `89 / 8 / 780`.
-23. Do not reland the exploratory early clause-`2` / clause-`3`
+24. Do not reland the exploratory early clause-`2` / clause-`3`
     reanchor-bridge matcher variants directly:
     the clause-`3`-only branch displaced the canonical step-`15`
     continuation to `88 / 8 / 795`, and the clause-`2` plus clause-`3`

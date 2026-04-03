@@ -12116,6 +12116,106 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_single_early_temporal_variants_still_need_fallback_on_exact_suffix()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let mut isolated_prefix_counts = BTreeMap::new();
+
+        for position in 0..6 {
+            let isolated_prefixes = surface
+                .pruned_terminal_prefixes
+                .iter()
+                .filter(|work_item| {
+                    let clauses = &work_item.prefix_telescope.clauses;
+                    clauses[..position] == reference_prefix.clauses[..position]
+                        && clauses[position] != reference_prefix.clauses[position]
+                        && clauses[position + 1..] == reference_prefix.clauses[position + 1..]
+                })
+                .collect::<Vec<_>>();
+            isolated_prefix_counts.insert(position, isolated_prefixes.len());
+            assert_eq!(
+                isolated_prefixes.len(),
+                2,
+                "each early temporal-shell clause should still expose exactly two isolated claim-only deviations on the otherwise exact seven-clause prefix"
+            );
+
+            for work_item in isolated_prefixes {
+                let summary = HistoricalReanchorSummary::from_telescope(
+                    &surface.library,
+                    &work_item.prefix_telescope,
+                );
+                assert_eq!(summary.matched_clause_count(), position);
+                assert_eq!(summary.first_mismatch_position(), Some(position));
+
+                let terminal_clauses = work_item.next_clauses(&surface.clause_catalog);
+                assert_eq!(terminal_clauses.len(), 3);
+                let mut cache = surface.prefix_legality_cache.clone();
+                let connectivity_facts = work_item
+                    .next_clause_connectivity_facts(&surface.clause_catalog)
+                    .expect("isolated temporal prefixes should still expose cached terminal connectivity facts");
+                let decisions = terminal_clauses
+                    .iter()
+                    .zip(connectivity_facts.iter())
+                    .map(|(clause, facts)| {
+                        cache
+                            .terminal_connectivity_with_facts(
+                                &work_item.signature,
+                                &surface.library,
+                                clause,
+                                Some(facts),
+                            )
+                            .expect(
+                                "isolated temporal prefixes should still classify every terminal continuation",
+                            )
+                    })
+                    .collect::<Vec<_>>();
+                assert!(
+                    decisions
+                        .iter()
+                        .all(|decision| *decision == TerminalConnectivityDecision::NeedsFallback),
+                    "a single early claim-only temporal deviation should already keep all terminal continuations outside historical reanchor on the otherwise exact suffix"
+                );
+
+                let direct = direct_terminal_assessment_from_raw_options(
+                    surface.step_index,
+                    &surface.library,
+                    surface.admissibility,
+                    surface.objective_bar,
+                    &surface.nu_history,
+                    &work_item.prefix_telescope,
+                    terminal_clauses,
+                );
+                assert_eq!(
+                    direct,
+                    DirectTerminalAssessment {
+                        generated_candidate_count: 3,
+                        admitted_candidate_count: 0,
+                        bound: None,
+                        can_clear_bar: false,
+                    },
+                    "isolated early temporal deviations should still be zero-admitted even when the rest of the prefix is exact"
+                );
+            }
+        }
+
+        assert_eq!(
+            isolated_prefix_counts,
+            [
+                (0_usize, 2_usize),
+                (1, 2),
+                (2, 2),
+                (3, 2),
+                (4, 2),
+                (5, 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the captured step-15 exact-prune surface should still contain every isolated early temporal-shell deviation on the otherwise exact suffix"
+        );
+    }
+
+    #[test]
     fn step_thirteen_divergence_reopens_operator_bundle_claim_debt_before_the_admitted_step_fourteen_failure_family()
      {
         let reference_prefix = claim_long_rerun_v3_hybrid_prefix(None);

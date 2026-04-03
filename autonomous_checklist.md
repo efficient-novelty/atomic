@@ -56,9 +56,13 @@ It lists only work that is still open.
     temporal-shell clauses are fixed, the captured exact-prune surface has
     already stopped and only `3` clause-`6` variants remain outside it, with
     only the exact reference continuation exposing a
-    `KeepWithoutFallback` terminal path, so the open step-`15` work is earlier
-    qualifier evidence on the canonical branch through clause `5` or earlier,
-    not just the clause-`6` / terminal slot
+    `KeepWithoutFallback` terminal path; the new isolated-prefix regression now
+    also proves each of the `12` single early claim-only deviations on the
+    otherwise exact seven-clause prefix still leaves all `3` terminal
+    continuations at `NeedsFallback` and zero-admitted, so the open step-`15`
+    work is earlier clause-local qualifier evidence on the canonical branch
+    through clause `5` or earlier, not just the clause-`6` / terminal slot or
+    a multi-deviation interaction
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /
