@@ -62,6 +62,16 @@ It lists only work that is still open.
   - both variants were reverted, so the remaining open work is narrower
     qualifier / reanchor evidence on the connected captured surface rather
     than a generic temporal-shell matcher expansion
+- A direct early clause-`2` / clause-`3` reanchor-bridge matcher reland is
+  now also ruled out as the direct next step-`15` fix:
+  - a clause-`3`-only reland displaced the canonical step-`15` continuation to
+    `88 / 8 / 795`
+  - a clause-`2` plus clause-`3` reland displaced it further to
+    `74 / 8 / 828`
+  - both variants were reverted and the baseline step-`15`
+    `103 / 8 / 780` surface was revalidated afterwards, so the remaining open
+    work is narrower qualifier evidence on the current connected captured
+    surface rather than direct early bridge-matcher expansion
 - Claim-policy honesty, fallback honesty, narrative/event completeness,
   exact-screen reason completeness, prune-class completeness, and manifest
   completeness are already earned on the stored full-profile run.

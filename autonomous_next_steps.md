@@ -263,6 +263,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
     continuation to `89 / 8 / 780`
   - both variants were reverted, so the next step-`15` repair should not be a
     direct matcher broadening reland
+- A second follow-up exploratory early-bridge reanchor pass was also run
+  locally but not landed:
+  - broadening only the clause-`3` historical-reanchor anchor to accept the
+    flat-bridge argument displaced the canonical step-`15` continuation from
+    `103 / 8 / 780` to `88 / 8 / 795`
+  - widening the earlier clause-`2` plus clause-`3` bridge pair displaced the
+    canonical continuation further to `74 / 8 / 828`
+  - both variants were reverted, and the current step-`15`
+    `103 / 8 / 780` baseline plus the exact-prune / connectivity /
+    reanchor-prefix regressions were revalidated afterwards
+  - the next step-`15` repair should therefore not directly broaden the early
+    clause-`2` / clause-`3` reanchor bridge matcher either
 
 ## Do This Next
 
@@ -430,6 +442,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
     the broad reland displaced the canonical step-`15` continuation to
     `60 / 8 / 9840`, and the narrower late-shell-only reland still displaced
     it to `89 / 8 / 780`.
+22. Do not reland the exploratory early clause-`2` / clause-`3`
+    reanchor-bridge matcher variants directly:
+    the clause-`3`-only branch displaced the canonical step-`15`
+    continuation to `88 / 8 / 795`, and the clause-`2` plus clause-`3`
+    branch displaced it to `74 / 8 / 828`.
 
 ### 5. Only Rerun After The Local Repair Exists
 
@@ -465,6 +482,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
   the new reanchor-prefix regression now proves the captured exact-prune
   surface already falls off the temporal-shell prefix by clause `5` or earlier
   and never reaches a full seven-clause reanchor prefix
+- a direct early clause-`2` / clause-`3` reanchor-bridge matcher reland
+  first:
+  the clause-`3`-only branch already displaced the canonical step-`15`
+  continuation to `88 / 8 / 795`, and the clause-`2` plus clause-`3`
+  branch displaced it further to `74 / 8 / 828`
 
 ## Keep Or Branch Decision
 

@@ -202,6 +202,18 @@ gate.
     continuation to `89 / 8 / 780`
   - both variants were reverted, so the next step-`15` repair should not be a
     direct matcher broadening reland
+- A second follow-up exploratory early-bridge reanchor pass was also run
+  locally but was not landed:
+  - broadening only the clause-`3` historical-reanchor anchor to accept the
+    flat-bridge argument displaced the canonical step-`15` continuation from
+    `103 / 8 / 780` to `88 / 8 / 795`
+  - widening the earlier clause-`2` plus clause-`3` bridge pair displaced the
+    canonical continuation further to `74 / 8 / 828`
+  - both variants were reverted, and the current step-`15`
+    `103 / 8 / 780` baseline plus the exact-prune / connectivity /
+    reanchor-prefix regressions were revalidated afterwards
+  - the next step-`15` repair should therefore not directly broaden the early
+    clause-`2` / clause-`3` reanchor bridge matcher either
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
@@ -567,6 +579,11 @@ gate.
   - avoiding a direct temporal-reanchor matcher reland first:
     both the broad `60 / 8 / 9840` branch and the narrower `89 / 8 / 780`
     branch disturbed the canonical step-`15` continuation and were reverted
+  - avoiding a direct early clause-`2` / clause-`3` reanchor-bridge matcher
+    reland first:
+    the clause-`3`-only branch displaced the canonical continuation to
+    `88 / 8 / 795`, and the clause-`2` plus clause-`3` branch displaced it to
+    `74 / 8 / 828`, so both were reverted as well
 - Launch the next clean-start full-profile rerun only after the local repair
   is green against those stored parity/floor regressions.
 
@@ -633,16 +650,22 @@ gate.
     captured families already fall off the temporal-shell prefix by clause `5`
     or earlier with no full seven-clause prefix matches, so do not treat that
     remaining loss as generic bar bookkeeping, raw dependency-edge generation,
-    a claim admissibility miss, or a terminal-clause-only matcher bug.
+    a claim admissibility miss, a terminal-clause-only matcher bug, or a
+    direct early clause-`2` / clause-`3` bridge-matcher expansion.
 15. Do not reland either exploratory temporal-reanchor matcher variant
     directly:
     the broad reland displaced the canonical step-`15` continuation to
     `60 / 8 / 9840`, and the narrower late-shell-only reland still displaced
     it to `89 / 8 / 780`.
-16. Re-run the step-`9` tie diagnostic only after the step-`13` breadth and
+16. Do not reland the exploratory early clause-`2` / clause-`3`
+    reanchor-bridge matcher variants directly:
+    the clause-`3`-only branch displaced the canonical step-`15`
+    continuation to `88 / 8 / 795`, and the clause-`2` plus clause-`3`
+    branch displaced it to `74 / 8 / 828`.
+17. Re-run the step-`9` tie diagnostic only after the step-`13` breadth and
     step-`15` exact-screen stories are better understood, since the current
     tied step-`9` set still shares the same observed repaired
     step-`10..12` chain.
-17. Only then land the narrowest honest parity/floor fix, and only then launch
+18. Only then land the narrowest honest parity/floor fix, and only then launch
     `long-rerun-v6` and re-run compare, certification, and benchmark against
     the repaired bundle.
