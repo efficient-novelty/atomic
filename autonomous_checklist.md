@@ -38,7 +38,10 @@ It lists only work that is still open.
     connectivity on the canonical temporal-shell path rather than generic
     bound accounting or claim admissibility; the new connectivity regression
     now proves all `6552` generated terminal options on that captured surface
-    disconnect before admissibility
+    disconnect before admissibility, and the new follow-up connectivity
+    classification now proves those options are all structurally connected but
+    still unqualified `NeedsFallback` candidates with `0` historical reanchor
+    hits
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /
@@ -47,6 +50,14 @@ It lists only work that is still open.
     divergent late-step guardrails, so the remaining open work is the residual
     exact-screen losses on the landed scoped widening plus the step-`15`
     exact-screen path
+- A direct temporal-reanchor matcher reland is also now ruled out as the
+  direct next step-`15` fix:
+  - a broad reland displaced the canonical step-`15` continuation to
+    `60 / 8 / 9840`
+  - a narrower late-shell-only reland still displaced it to `89 / 8 / 780`
+  - both variants were reverted, so the remaining open work is narrower
+    qualifier / reanchor evidence on the connected captured surface rather
+    than a generic temporal-shell matcher expansion
 - Claim-policy honesty, fallback honesty, narrative/event completeness,
   exact-screen reason completeness, prune-class completeness, and manifest
   completeness are already earned on the stored full-profile run.

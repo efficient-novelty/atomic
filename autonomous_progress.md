@@ -171,6 +171,26 @@ gate.
     more specific than generic partial-prefix bar accounting: inspect terminal
     clause exposure and exact connectivity on that canonical temporal-shell
     surface
+- A new follow-up step-`15` connectivity-classification regression now sharpens
+  that same blocker one layer further:
+  - those `6552` generated terminal options are not structurally disconnected
+  - all `6552` are instead structurally connected but still fail as
+    `NeedsFallback` candidates
+  - none currently qualify active-window connectivity, self-contained
+    connectivity, or historical reanchor on that captured canonical
+    temporal-shell surface
+  - the remaining local step-`15` problem is therefore qualifier / reanchor
+    evidence on the existing connected surface, not raw dependency-edge
+    generation
+- A follow-up exploratory step-`15` temporal-reanchor broadening pass was also
+  run locally but was not landed:
+  - a broad temporal-shell matcher expansion collapsed the captured exact-prune
+    surface, but it also displaced the canonical step-`15` continuation from
+    `103 / 8 / 780` to `60 / 8 / 9840`
+  - a narrower late-shell-only reanchor reland still displaced the canonical
+    continuation to `89 / 8 / 780`
+  - both variants were reverted, so the next step-`15` repair should not be a
+    direct matcher broadening reland
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
@@ -473,9 +493,11 @@ gate.
   - the captured zero-admitted exact-prune surface under that branch is now
     also localized more tightly:
     all `2184` captured families lose all `6552` generated terminal options to
-    connectivity before admissibility, so the remaining local repair is
-    terminal-clause exposure and exact connectivity rather than generic claim
-    admissibility
+    connectivity before admissibility, and the new connectivity-classification
+    regression now proves those options are all structurally connected but
+    still unqualified (`NeedsFallback`) with `0` historical reanchor hits, so
+    the remaining local repair is qualifier / reanchor evidence on that
+    connected terminal-clause surface rather than generic claim admissibility
 - A follow-up exploratory global step-`13` widening now bounds the next repair
   more honestly:
   - naive band-`7` widening can lift the repaired step-`13` local read to raw
@@ -521,9 +543,13 @@ gate.
   - the step-`15` canonical temporal-shell exact-prune surface, which now
     freezes as `2184` captured zero-admitted families with no cached compact
     bounds, with all `6552` generated terminal options on that captured
-    surface disconnecting before admissibility while the raw
+    surface now frozen as structurally connected but still unqualified
+    `NeedsFallback` candidates with `0` historical reanchor hits while the raw
     `6561`-telescope catalog still narrows to `780` generated prefixes before
     proof-close
+  - avoiding a direct temporal-reanchor matcher reland first:
+    both the broad `60 / 8 / 9840` branch and the narrower `89 / 8 / 780`
+    branch disturbed the canonical step-`15` continuation and were reverted
 - Launch the next clean-start full-profile rerun only after the local repair
   is green against those stored parity/floor regressions.
 
@@ -583,14 +609,20 @@ gate.
     inspect why the restored canonical temporal-shell path still collapses
     into `2184` captured zero-admitted exact-prune families and `512`
     partial-prefix bar failures before proof-close; the new regression shows
-    those captured families are now a pure terminal-connectivity miss
-    (`6552 / 6552` disconnected options, `0` admissibility rejections), so do
-    not treat that remaining loss as generic bar bookkeeping or a claim
-    admissibility miss.
-15. Re-run the step-`9` tie diagnostic only after the step-`13` breadth and
+    those captured families are now a pure qualifier / reanchor miss on an
+    already connected surface (`6552 / 6552` `NeedsFallback`, `0` structural
+    disconnections, `0` historical reanchor hits, `0` admissibility
+    rejections), so do not treat that remaining loss as generic bar
+    bookkeeping, raw dependency-edge generation, or a claim admissibility miss.
+15. Do not reland either exploratory temporal-reanchor matcher variant
+    directly:
+    the broad reland displaced the canonical step-`15` continuation to
+    `60 / 8 / 9840`, and the narrower late-shell-only reland still displaced
+    it to `89 / 8 / 780`.
+16. Re-run the step-`9` tie diagnostic only after the step-`13` breadth and
     step-`15` exact-screen stories are better understood, since the current
     tied step-`9` set still shares the same observed repaired
     step-`10..12` chain.
-16. Only then land the narrowest honest parity/floor fix, and only then launch
+17. Only then land the narrowest honest parity/floor fix, and only then launch
     `long-rerun-v6` and re-run compare, certification, and benchmark against
     the repaired bundle.

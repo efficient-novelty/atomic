@@ -9385,8 +9385,8 @@ mod tests {
         PrefixCache, PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature,
     };
     use crate::prefix_memo::{
-        PartialPrefixBoundDecision, PrefixLegalityCache, TerminalPrefixClauseEvaluation,
-        TerminalPrefixCompletion,
+        PartialPrefixBoundDecision, PrefixLegalityCache, TerminalConnectivityDecision,
+        TerminalPrefixClauseEvaluation, TerminalPrefixCompletion,
     };
     use pen_core::{
         canonical::CanonKey,
@@ -9699,6 +9699,18 @@ mod tests {
         reason_counts: BTreeMap<String, usize>,
     }
 
+    #[derive(Clone, Debug, Default, Eq, PartialEq)]
+    struct LateStepTerminalConnectivitySummary {
+        captured_prefixes: usize,
+        generated_candidates: usize,
+        prune_disconnected_candidates: usize,
+        needs_fallback_candidates: usize,
+        keep_without_fallback_candidates: usize,
+        structurally_disconnected_candidates: usize,
+        structurally_connected_but_unqualified_candidates: usize,
+        structurally_connected_via_historical_reanchor_candidates: usize,
+    }
+
     fn late_step_pruned_terminal_surface_from_prefix(
         prefix: &[Telescope],
         step_index: u32,
@@ -9983,6 +9995,64 @@ mod tests {
                 summary.mixed_disconnect_and_trivial_prefixes += 1;
             } else {
                 summary.other_rejection_prefixes += 1;
+            }
+        }
+
+        summary
+    }
+
+    fn late_step_terminal_connectivity_summary(
+        prefix: &[Telescope],
+        step_index: u32,
+        limit: usize,
+    ) -> LateStepTerminalConnectivitySummary {
+        let surface = late_step_pruned_terminal_surface_from_prefix(prefix, step_index, limit);
+        let mut summary = LateStepTerminalConnectivitySummary {
+            captured_prefixes: surface.pruned_terminal_prefixes.len(),
+            ..LateStepTerminalConnectivitySummary::default()
+        };
+
+        for work_item in &surface.pruned_terminal_prefixes {
+            let mut cache = surface.prefix_legality_cache.clone();
+            let connectivity_facts = work_item
+                .next_clause_connectivity_facts(&surface.clause_catalog)
+                .expect("captured claim terminal prefixes should still expose connectivity facts");
+            for (clause, connectivity_facts) in work_item
+                .next_clauses(&surface.clause_catalog)
+                .iter()
+                .zip(connectivity_facts.iter())
+            {
+                summary.generated_candidates += 1;
+                let decision = cache
+                    .terminal_connectivity_with_facts(
+                        &work_item.signature,
+                        &surface.library,
+                        clause,
+                        Some(connectivity_facts),
+                    )
+                    .expect("captured claim terminal prefix should still reuse connectivity facts");
+                match decision {
+                    TerminalConnectivityDecision::PruneDisconnected => {
+                        summary.prune_disconnected_candidates += 1;
+                    }
+                    TerminalConnectivityDecision::NeedsFallback => {
+                        summary.needs_fallback_candidates += 1;
+                    }
+                    TerminalConnectivityDecision::KeepWithoutFallback => {
+                        summary.keep_without_fallback_candidates += 1;
+                    }
+                }
+
+                let mut telescope = work_item.prefix_telescope.clone();
+                telescope.clauses.push(clause.clone());
+                let witness = analyze_connectivity(&surface.library, &telescope);
+                if !witness.connected {
+                    summary.structurally_disconnected_candidates += 1;
+                } else if witness.historical_reanchor {
+                    summary.structurally_connected_via_historical_reanchor_candidates += 1;
+                } else if !witness.references_active_window && !witness.self_contained {
+                    summary.structurally_connected_but_unqualified_candidates += 1;
+                }
             }
         }
 
@@ -11813,6 +11883,37 @@ mod tests {
         assert_eq!(summary.mixed_disconnect_and_trivial_prefixes, 0);
         assert_eq!(summary.other_rejection_prefixes, 0);
         assert!(summary.reason_counts.is_empty());
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_zero_admitted_connectivity_surface_is_structurally_connected_but_unqualified()
+    {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let summary = late_step_terminal_connectivity_summary(&prefix, 15, usize::MAX);
+        assert_eq!(summary.captured_prefixes, 2184);
+        assert_eq!(summary.generated_candidates, 6552);
+        assert_eq!(summary.prune_disconnected_candidates, 0);
+        assert_eq!(summary.needs_fallback_candidates, 6552);
+        assert_eq!(summary.keep_without_fallback_candidates, 0);
+        assert_eq!(summary.structurally_disconnected_candidates, 0);
+        assert_eq!(
+            summary.structurally_connected_but_unqualified_candidates,
+            6552
+        );
+        assert_eq!(
+            summary.structurally_connected_via_historical_reanchor_candidates,
+            0
+        );
     }
 
     #[test]

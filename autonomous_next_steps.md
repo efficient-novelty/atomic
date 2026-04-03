@@ -205,6 +205,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
     specifically terminal clause exposure and exact connectivity on that
     canonical temporal-shell surface rather than generic partial-prefix bar
     math or claim admissibility
+- A new follow-up step-`15` connectivity-classification regression now sharpens
+  that same blocker further:
+  - those `6552` generated terminal options are not structurally disconnected
+  - all `6552` are instead structurally connected but still fail as
+    `NeedsFallback` candidates
+  - none currently qualify active-window connectivity, self-contained
+    connectivity, or historical reanchor on that captured canonical
+    temporal-shell surface
+  - the next repair is therefore qualifier / reanchor evidence on that
+    connected surface, not raw dependency-edge generation
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -233,6 +243,15 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - but that same reland disturbed claim prefix-memo, realistic-shadow,
     demo-lane, and divergent step-`13` / step-`14` guardrails, so it was
     reverted and should not be relanded directly
+- A follow-up exploratory step-`15` temporal-reanchor broadening was also run
+  locally but not landed:
+  - a broad temporal-shell matcher expansion collapsed the captured exact-prune
+    surface, but it also displaced the canonical step-`15` continuation from
+    `103 / 8 / 780` to `60 / 8 / 9840`
+  - a narrower late-shell-only reanchor reland still displaced the canonical
+    continuation to `89 / 8 / 780`
+  - both variants were reverted, so the next step-`15` repair should not be a
+    direct matcher broadening reland
 
 ## Do This Next
 
@@ -308,13 +327,15 @@ This note is the exact next work order for `desktop_claim_shadow`.
      loss on the landed widened surface, not another blind catalog reland
    - step `14` is now locally widened enough that it should stay on the guard
      rail as a regression rather than reopening as the first breadth blocker
-   - step `15` remains the first late floor, but the new captured exact-prune
-     regression shows that surface currently localizes to `2184`
-     zero-admitted families with no cached compact bounds; the new
-     connectivity regression now proves all `6552` generated terminal options
-     there disconnect before admissibility, so inspect terminal-clause
-     exposure and exact connectivity there rather than generic
-     partial-prefix bar arithmetic or claim admissibility
+  - step `15` remains the first late floor, but the new captured exact-prune
+    regression shows that surface currently localizes to `2184`
+    zero-admitted families with no cached compact bounds; the new
+    connectivity regressions now prove all `6552` generated terminal options
+    there are structurally connected but still unqualified `NeedsFallback`
+    candidates with `0` historical reanchor hits, so inspect qualifier /
+    reanchor evidence on that connected surface rather than generic
+    partial-prefix bar arithmetic, raw dependency-edge generation, or claim
+    admissibility
 10. Keep the step-`1` breadth miss on the checklist, but do not confuse that
     longstanding signoff floor with the new claim-specific mid/late parity
     fork.
@@ -372,11 +393,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
     repaired canonical temporal-shell path continues to report `2184`
     captured zero-admitted exact prunes with no cached compact bounds while
     the next repair targets connected terminal exposure there.
-16. Keep the new step-`15` zero-admitted connectivity regression green so the
+16. Keep the new step-`15` zero-admitted connectivity regressions green so the
     repaired canonical temporal-shell path continues to report `6552`
-    disconnected terminal options and `0` admissibility rejections across
-    those captured `2184` exact prunes while the next repair targets exact
-    connectivity there.
+    structurally connected but still unqualified `NeedsFallback` terminal
+    options, `0` structural disconnections, `0` historical reanchor hits, and
+    `0` admissibility rejections across those captured `2184` exact prunes
+    while the next repair targets qualifier / reanchor evidence there.
 17. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
 18. Keep the stored certification / benchmark assertions green for the
@@ -384,6 +406,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
     steps `10..15` so the next fix cannot silently reshuffle the stored
     failure surface.
 19. Keep the existing pre-flight gate green while the local repair lands.
+20. Do not reland either exploratory temporal-reanchor matcher variant
+    directly:
+    the broad reland displaced the canonical step-`15` continuation to
+    `60 / 8 / 9840`, and the narrower late-shell-only reland still displaced
+    it to `89 / 8 / 780`.
 
 ### 5. Only Rerun After The Local Repair Exists
 
@@ -412,6 +439,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - another raw step-`9` enumeration or terminal-clause-filter theory first:
   the guarded step-`9` telescope is already present on both of those
   diagnostic surfaces
+- a direct temporal-reanchor matcher reland first:
+  both the broad `60 / 8 / 9840` branch and the narrower
+  `89 / 8 / 780` branch disturbed the canonical step-`15` continuation
 
 ## Keep Or Branch Decision
 
