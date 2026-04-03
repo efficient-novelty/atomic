@@ -1,0 +1,839 @@
+{
+  "step_index": 4,
+  "label": "Pi",
+  "search_profile": "desktop_claim_shadow",
+  "objective_bar": {
+    "num": 3,
+    "den": 2
+  },
+  "accepted": {
+    "candidate_hash": "blake3:2b006725f19f845dd2ceafa9193e0deb7865fd41ad73f89310f73522f0d5b8e7",
+    "canonical_hash": "blake3:fac36d6ebdf9de068dbd3fc7560f8510c3d702b25c13a7bcbbbbad0f863b45dd",
+    "bit_kappa": 39,
+    "clause_kappa": 3,
+    "nu": 5,
+    "rho": {
+      "num": 5,
+      "den": 3
+    },
+    "overshoot": {
+      "num": 1,
+      "den": 6
+    },
+    "shape_fingerprint": "0xdefa881b5e5ed5f0",
+    "support_fingerprint": "0xa36915eccf2236b7"
+  },
+  "telescope": {
+    "clauses": [
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            "Univ",
+            "Univ"
+          ]
+        }
+      },
+      {
+        "role": "elimination",
+        "expr": {
+          "App": [
+            {
+              "Lam": "Univ"
+            },
+            {
+              "Var": 1
+            }
+          ]
+        }
+      },
+      {
+        "role": "elimination",
+        "expr": {
+          "App": [
+            {
+              "Lam": {
+                "Lam": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "Lib": 2
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "trace": [
+    "source=structural-ast",
+    "nu_g=1",
+    "nu_h=0",
+    "nu_c=4",
+    "bonus_distributive=0",
+    "bonus_universe_poly=0",
+    "bonus_infinitesimal_shift=0",
+    "nu_total=5",
+    "node_trace_count=12",
+    "node=entry1|ctor=Pi",
+    "node=entry1/0|ctor=Univ",
+    "node=entry1/1|ctor=Univ",
+    "node=entry2|ctor=App",
+    "node=entry2/0|ctor=Lam",
+    "node=entry2/0/0|ctor=Univ",
+    "node=entry2/1|ctor=Var",
+    "node=entry3|ctor=App",
+    "node=entry3/0|ctor=Lam",
+    "node=entry3/0/0|ctor=Lam",
+    "node=entry3/0/0/0|ctor=Var",
+    "node=entry3/1|ctor=Lib"
+  ],
+  "near_misses": [
+    {
+      "candidate_hash": "blake3:1a1ee4bdc8531c5af5585a44cd45c97273a1c9fb36a81b85dcd696cfc707a2cb",
+      "canonical_hash": "blake3:1b9f746209a0081870817c10299dfff6446692e9bc6cba63e1d51215f47b6b06",
+      "bit_kappa": 32,
+      "clause_kappa": 3,
+      "nu": 5,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:48b563a7460e3c160a0f84ddab85cbef193533206fc84b698ad6e008b725fd76",
+      "canonical_hash": "blake3:279ec55475b495b9a310199307ce549d91c1c0c39afb170cd9c826ee95f0cb71",
+      "bit_kappa": 26,
+      "clause_kappa": 3,
+      "nu": 5,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:b785e22fbf14a8c1a2291d8270dd7290180cfcdf00897c7a9b479f251fe88879",
+      "canonical_hash": "blake3:3ac2f9aede34bf9648f0c40742279ba676e1b42b99bb4179352a3375aa720267",
+      "bit_kappa": 32,
+      "clause_kappa": 3,
+      "nu": 5,
+      "status": "bar_clear_higher_overshoot"
+    }
+  ],
+  "search_stats": {
+    "enumerated_candidates": 67999657383,
+    "well_formed_candidates": 67999657383,
+    "malformed_rejections": 0,
+    "malformed_rejection_reasons": {},
+    "admissibility_rejections": 0,
+    "admissibility_diagnostics": {
+      "exact_legality_rejections": 0,
+      "structural_debt_cap_rejections": 0,
+      "admitted_deprioritized": 0,
+      "admitted_focus_aligned": 67999657383,
+      "reason_counts": {
+        "open_band_structural": 67999657383
+      }
+    },
+    "full_telescopes_evaluated": 7,
+    "evaluated_candidates": 7,
+    "canonical_candidates": 7,
+    "semantically_minimal_candidates": 7,
+    "canonical_dedupe_prunes": 0,
+    "semantic_minimality_prunes": 0,
+    "dedupe_prunes": 0,
+    "minimality_prunes": 0,
+    "heuristic_drops": 0,
+    "prefixes_created": 12889875,
+    "prefix_states_explored": 2775,
+    "prefix_states_merged_by_signature": 29766,
+    "prefix_states_exact_pruned": 0,
+    "prefix_states_heuristic_dropped": 38,
+    "incremental_legality_cache_hits": 98973927854,
+    "incremental_connectivity_shortcuts": 67999662255,
+    "incremental_connectivity_fallbacks": 0,
+    "incremental_connectivity_prunes": 24826127758,
+    "incremental_clause_family_filter_hits": 0,
+    "incremental_clause_family_prunes": 0,
+    "incremental_active_window_clause_filter_hits": 0,
+    "incremental_active_window_clause_filter_prunes": 0,
+    "incremental_terminal_clause_filter_hits": 12889875,
+    "incremental_terminal_clause_filter_prunes": 120,
+    "incremental_trivial_derivability_hits": 98981350125,
+    "incremental_trivial_derivability_prunes": 120,
+    "incremental_terminal_admissibility_hits": 98981350005,
+    "incremental_terminal_admissibility_rejections": 0,
+    "incremental_terminal_prefix_completion_hits": 12887143,
+    "incremental_terminal_prefix_rank_hits": 0,
+    "incremental_terminal_rank_prunes": 67999498890,
+    "incremental_partial_prefix_bound_hits": 0,
+    "incremental_partial_prefix_bound_checks": 2542,
+    "incremental_partial_prefix_bound_prunes": 0,
+    "incremental_terminal_prefix_bar_prunes": 0,
+    "prune_classes": {
+      "quotient_dedupe": 0,
+      "sound_minimality": 92825626888,
+      "heuristic_shaping": 38
+    },
+    "exact_screen_reasons": {
+      "partial_prefix_bar_failure": 0,
+      "terminal_prefix_completion_failure": 0,
+      "incumbent_dominance": 67999498890,
+      "legality_connectivity_exact_rejection": 24826127878
+    },
+    "demo_phase": {
+      "materialize_full_evals": 0,
+      "proof_close_reserved_millis": 0,
+      "proof_close_elapsed_millis": 0,
+      "proof_close_remaining_millis": 0,
+      "proof_close_reserve_overrun_millis": 0,
+      "proof_close_reserve_exhausted": false,
+      "proof_close_frontier_total_groups": 0,
+      "proof_close_frontier_groups_closed": 0,
+      "proof_close_frontier_groups_remaining": 0,
+      "proof_close_closure_percent": 0,
+      "proof_close_full_evals": 0,
+      "proof_close_overrun_full_evals": 0,
+      "materialize_soft_cap_triggered": false
+    },
+    "demo_funnel": {
+      "generated_raw_prefixes": 92839653655,
+      "canonical_prefix_signatures": 12889875,
+      "well_formed_terminals": 67999657383,
+      "hard_admissible": 67999657383,
+      "exact_bound_screened": 7,
+      "exact_bound_pruned": 0,
+      "heuristic_dropped": 38,
+      "full_telescopes_evaluated": 7,
+      "bar_clearers": 7,
+      "semantically_minimal_clearers": 7,
+      "winner_overshoot": {
+        "num": 1,
+        "den": 6
+      }
+    },
+    "demo_closure": {
+      "frontier_total_seen": 7,
+      "frontier_certified_nonwinning": 0,
+      "closure_percent": 0
+    },
+    "demo_bucket_stats": [
+      {
+        "bucket_label": "k3:structural_generic:local_plain:local_only:broad",
+        "bucket_key": {
+          "clause_kappa": 3,
+          "taxonomy": "structural_generic",
+          "category": "local_plain",
+          "support_profile": "local_only",
+          "width": "broad"
+        },
+        "generated_terminal_candidates": 18994299,
+        "admissible_terminal_candidates": 5109389,
+        "exact_screened_terminal_candidates": 5109389,
+        "pruned_terminal_candidates": 5030828,
+        "fully_scored_terminal_candidates": 5,
+        "best_overshoot": {
+          "num": 1,
+          "den": 6
+        }
+      },
+      {
+        "bucket_label": "k3:structural_generic:reference_support:library_backed:broad",
+        "bucket_key": {
+          "clause_kappa": 3,
+          "taxonomy": "structural_generic",
+          "category": "reference_support",
+          "support_profile": "library_backed",
+          "width": "broad"
+        },
+        "generated_terminal_candidates": 304153794,
+        "admissible_terminal_candidates": 253084276,
+        "exact_screened_terminal_candidates": 253084276,
+        "pruned_terminal_candidates": 253084276,
+        "fully_scored_terminal_candidates": 0
+      },
+      {
+        "bucket_label": "k3:structural_generic:bridge_reanchor:library_backed:broad",
+        "bucket_key": {
+          "clause_kappa": 3,
+          "taxonomy": "structural_generic",
+          "category": "bridge_reanchor",
+          "support_profile": "library_backed",
+          "width": "broad"
+        },
+        "generated_terminal_candidates": 3804170811,
+        "admissible_terminal_candidates": 3042093083,
+        "exact_screened_terminal_candidates": 3042093083,
+        "pruned_terminal_candidates": 3042049865,
+        "fully_scored_terminal_candidates": 0
+      },
+      {
+        "bucket_label": "k3:structural_generic:support_form:local_only:broad",
+        "bucket_key": {
+          "clause_kappa": 3,
+          "taxonomy": "structural_generic",
+          "category": "support_form",
+          "support_profile": "local_only",
+          "width": "broad"
+        },
+        "generated_terminal_candidates": 474864954,
+        "admissible_terminal_candidates": 129735494,
+        "exact_screened_terminal_candidates": 129735494,
+        "pruned_terminal_candidates": 129717183,
+        "fully_scored_terminal_candidates": 2,
+        "best_overshoot": {
+          "num": 1,
+          "den": 6
+        }
+      },
+      {
+        "bucket_label": "k3:structural_generic:support_form:library_backed:broad",
+        "bucket_key": {
+          "clause_kappa": 3,
+          "taxonomy": "structural_generic",
+          "category": "support_form",
+          "support_profile": "library_backed",
+          "width": "broad"
+        },
+        "generated_terminal_candidates": 11420183628,
+        "admissible_terminal_candidates": 9706817580,
+        "exact_screened_terminal_candidates": 9706817580,
+        "pruned_terminal_candidates": 9706817580,
+        "fully_scored_terminal_candidates": 0
+      },
+      {
+        "bucket_label": "k3:structural_generic:binder_heavy:local_only:broad",
+        "bucket_key": {
+          "clause_kappa": 3,
+          "taxonomy": "structural_generic",
+          "category": "binder_heavy",
+          "support_profile": "local_only",
+          "width": "broad"
+        },
+        "generated_terminal_candidates": 6741057204,
+        "admissible_terminal_candidates": 1960127886,
+        "exact_screened_terminal_candidates": 1960127886,
+        "pruned_terminal_candidates": 1960061071,
+        "fully_scored_terminal_candidates": 0
+      },
+      {
+        "bucket_label": "k3:structural_generic:binder_heavy:library_backed:broad",
+        "bucket_key": {
+          "clause_kappa": 3,
+          "taxonomy": "structural_generic",
+          "category": "binder_heavy",
+          "support_profile": "library_backed",
+          "width": "broad"
+        },
+        "generated_terminal_candidates": 70062666219,
+        "admissible_terminal_candidates": 52902850105,
+        "exact_screened_terminal_candidates": 52902850105,
+        "pruned_terminal_candidates": 52902738087,
+        "fully_scored_terminal_candidates": 0
+      }
+    ],
+    "search_timing": {
+      "step_wall_clock_millis": 26707939,
+      "candidate_discovery_wall_clock_millis": 26707926,
+      "prefix_frontier_planning_wall_clock_millis": 0,
+      "selection_wall_clock_millis": 0
+    },
+    "prefix_frontier_hot_states": 3,
+    "prefix_frontier_cold_states": 2,
+    "retained_candidates": 7,
+    "frontier_hot_states": 7,
+    "frontier_cold_states": 0,
+    "frontier_resident_cold_states": 0,
+    "frontier_spill_states": 0,
+    "frontier_drops": 0,
+    "scored_candidate_distribution": {
+      "candidate_count": 7,
+      "clears_bar": 7,
+      "below_bar": 0,
+      "clause_kappa_counts": {
+        "3": 7
+      },
+      "nu_summary": {
+        "min": 5,
+        "median": 5,
+        "max": 5,
+        "average": {
+          "num": 5,
+          "den": 1
+        }
+      },
+      "rho_summary": {
+        "min": {
+          "num": 5,
+          "den": 3
+        },
+        "median": {
+          "num": 5,
+          "den": 3
+        },
+        "max": {
+          "num": 5,
+          "den": 3
+        },
+        "average": {
+          "num": 5,
+          "den": 3
+        }
+      }
+    }
+  },
+  "candidate_reports": [
+    {
+      "status": "accepted_minimal_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:2b006725f19f845dd2ceafa9193e0deb7865fd41ad73f89310f73522f0d5b8e7",
+      "canonical_hash": "blake3:fac36d6ebdf9de068dbd3fc7560f8510c3d702b25c13a7bcbbbbad0f863b45dd",
+      "bit_kappa": 39,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 3 clauses; reuses Step02 (Unit).",
+      "library_refs": [
+        "Step02 (Unit)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Universe) -> Universe)",
+        "c02 [elimination] ((fun x1 -> Universe) x1)",
+        "c03 [elimination] ((fun x1 -> (fun x2 -> x2)) Step02 (Unit))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "structural_support",
+      "candidate_hash": "blake3:1a1ee4bdc8531c5af5585a44cd45c97273a1c9fb36a81b85dcd696cfc707a2cb",
+      "canonical_hash": "blake3:1b9f746209a0081870817c10299dfff6446692e9bc6cba63e1d51215f47b6b06",
+      "bit_kappa": 32,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 3 clauses; reuses Step03 (Witness).",
+      "library_refs": [
+        "Step03 (Witness)"
+      ],
+      "clauses": [
+        "c01 [formation] Universe",
+        "c02 [elimination] ((fun x1 -> Universe) x1)",
+        "c03 [elimination] ((fun x1 -> (fun x2 -> x2)) Step03 (Witness))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "structural_support",
+      "candidate_hash": "blake3:48b563a7460e3c160a0f84ddab85cbef193533206fc84b698ad6e008b725fd76",
+      "canonical_hash": "blake3:279ec55475b495b9a310199307ce549d91c1c0c39afb170cd9c826ee95f0cb71",
+      "bit_kappa": 26,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 3 clauses; reuses Step02 (Unit).",
+      "library_refs": [
+        "Step02 (Unit)"
+      ],
+      "clauses": [
+        "c01 [formation] Universe",
+        "c02 [formation] Universe",
+        "c03 [introduction] (fun x1 -> ((fun x2 -> Step02 (Unit)) x2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "structural_support",
+      "candidate_hash": "blake3:b785e22fbf14a8c1a2291d8270dd7290180cfcdf00897c7a9b479f251fe88879",
+      "canonical_hash": "blake3:3ac2f9aede34bf9648f0c40742279ba676e1b42b99bb4179352a3375aa720267",
+      "bit_kappa": 32,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 3 clauses; reuses Step03 (Witness).",
+      "library_refs": [
+        "Step03 (Witness)"
+      ],
+      "clauses": [
+        "c01 [formation] Universe",
+        "c02 [elimination] ((fun x1 -> Universe) x1)",
+        "c03 [elimination] ((fun x1 -> (fun x2 -> Step03 (Witness))) x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "structural_support",
+      "candidate_hash": "blake3:18e1938cbdaad55b2b1f32f7bdbeed22861e9ff358584b3579d2be89be543bbe",
+      "canonical_hash": "blake3:625510fdc5505f5fc49920c8dbbf0f74773ae0df74909f203e0e804adfb9eb93",
+      "bit_kappa": 26,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 3 clauses; reuses Step03 (Witness).",
+      "library_refs": [
+        "Step03 (Witness)"
+      ],
+      "clauses": [
+        "c01 [formation] Universe",
+        "c02 [formation] Universe",
+        "c03 [elimination] ((fun x1 -> x2) (fun x1 -> Step03 (Witness)))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "structural_support",
+      "candidate_hash": "blake3:241eb7a225bd5ee7c03f9021a182526ee6c21e04e96135582c9b3d8997c2b5d7",
+      "canonical_hash": "blake3:9b11f9cbdd23d4f74f701cfb9da9ec0596d92e68039449800eaf110074f24b1a",
+      "bit_kappa": 26,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 3 clauses; reuses Step03 (Witness).",
+      "library_refs": [
+        "Step03 (Witness)"
+      ],
+      "clauses": [
+        "c01 [formation] Universe",
+        "c02 [formation] Universe",
+        "c03 [elimination] ((fun x1 -> Step03 (Witness)) (fun x1 -> x2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:042a9e51f918a4289bcba5f7baee72ee9bc2872a6e615f724e9f89ed5ef6d4b8",
+      "canonical_hash": "blake3:f126e6dc0736561d2fcee829d4b02fbdd57d07477ada4e1242bf47a4133b126a",
+      "bit_kappa": 39,
+      "clause_kappa": 3,
+      "nu": 5,
+      "rho": {
+        "num": 5,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1,
+        "den": 6
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 3 clauses; reuses Step02 (Unit).",
+      "library_refs": [
+        "Step02 (Unit)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Universe) -> Universe)",
+        "c02 [elimination] ((fun x1 -> Universe) x1)",
+        "c03 [elimination] ((fun x1 -> (fun x2 -> Step02 (Unit))) x1)"
+      ]
+    }
+  ],
+  "prune_reports": [],
+  "frontier_policy": {
+    "focus": "former",
+    "focus_quota": 1,
+    "bridge_quota": 1,
+    "support_quota": 1,
+    "macro_quota": 0,
+    "cold_limit": 4
+  },
+  "frontier_pressure": {
+    "governor_state": "green",
+    "pressure_action": "none",
+    "rss_bytes": 1342177760,
+    "observed_process_rss_bytes": 49975296,
+    "rss_gap_bytes": -1292202464,
+    "hot_frontier_bytes": 192,
+    "cold_frontier_bytes": 128,
+    "dedupe_bytes": 160,
+    "hot_count": 3,
+    "cold_candidate_count": 40,
+    "requested_cold_limit": 2,
+    "retained_cold_limit": 2,
+    "resident_cold_limit": 2,
+    "spill_backed_cold_records": 0,
+    "dropped_cold_records": 38
+  },
+  "prefix_frontier": {
+    "hot_states": [
+      {
+        "state_id": 17179869188,
+        "parent_state_id": 0,
+        "last_clause_id": 2,
+        "obligation_set_id": 4,
+        "shape_hash64": 2235590197957319478,
+        "support_hash64": 16702685629517478510,
+        "nu_lower_bound": 0,
+        "nu_upper_bound": 6,
+        "bit_kappa_used": 16,
+        "clause_kappa_used": 3,
+        "depth": 2,
+        "step_index": 4,
+        "band_index": 3,
+        "flags": 3328,
+        "priority_key": 805310514,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 17179869214,
+        "parent_state_id": 0,
+        "last_clause_id": 2,
+        "obligation_set_id": 4,
+        "shape_hash64": 14085347722741540500,
+        "support_hash64": 5524927413697166955,
+        "nu_lower_bound": 1,
+        "nu_upper_bound": 7,
+        "bit_kappa_used": 20,
+        "clause_kappa_used": 3,
+        "depth": 2,
+        "step_index": 4,
+        "band_index": 3,
+        "flags": 2304,
+        "priority_key": 805377074,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 17179869218,
+        "parent_state_id": 0,
+        "last_clause_id": 2,
+        "obligation_set_id": 4,
+        "shape_hash64": 15682802376536314725,
+        "support_hash64": 1797921991831061823,
+        "nu_lower_bound": 0,
+        "nu_upper_bound": 8,
+        "bit_kappa_used": 19,
+        "clause_kappa_used": 3,
+        "depth": 2,
+        "step_index": 4,
+        "band_index": 3,
+        "flags": 1280,
+        "priority_key": 805311282,
+        "worker_hint": 0
+      }
+    ],
+    "cold_states": [
+      {
+        "state_id": 17179869190,
+        "parent_state_id": 0,
+        "last_clause_id": 2,
+        "obligation_set_id": 4,
+        "shape_hash64": 3364627157092591426,
+        "support_hash64": 8387104893114013255,
+        "nu_lower_bound": 1,
+        "nu_upper_bound": 8,
+        "bit_kappa_used": 27,
+        "clause_kappa_used": 3,
+        "depth": 2,
+        "step_index": 4,
+        "band_index": 3,
+        "flags": 3584,
+        "priority_key": 805378866,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 17179869217,
+        "parent_state_id": 0,
+        "last_clause_id": 2,
+        "obligation_set_id": 4,
+        "shape_hash64": 15642675200663998040,
+        "support_hash64": 14322174669382809559,
+        "nu_lower_bound": 1,
+        "nu_upper_bound": 7,
+        "bit_kappa_used": 20,
+        "clause_kappa_used": 3,
+        "depth": 2,
+        "step_index": 4,
+        "band_index": 3,
+        "flags": 2560,
+        "priority_key": 805377074,
+        "worker_hint": 0
+      }
+    ],
+    "dedupe_keys": [
+      "blake3:1c5faf089eba21dec8a1214f22fed1eedcd972ed735dedc19bc128af3f6d3a9e",
+      "blake3:1e06d6afeec8c038267908846256b069e735e698d20512ba4a836cba1d125739",
+      "blake3:6d5263af254fbb52979dde85efc14aaa16c6e3195011d832054bcfb2c4554be9",
+      "blake3:afb1899aa01169e5f19ff4a25a276fde7ee7c06379b0d247371e1620a6cda210",
+      "blake3:d76fb9f7f7106478b13a9a0b0b74299348911eac27f3c9abe6e78d7fcbb6d2e5"
+    ]
+  },
+  "provenance": "atomic_bootstrap_search",
+  "canon_evidence": {
+    "charged_clause_kappa": 3,
+    "bar_distance": {
+      "num": 1,
+      "den": 6
+    },
+    "clears_bar": true,
+    "late_step_claim": {
+      "status": "not_applicable",
+      "adopted_step": 0,
+      "adopted_label": "",
+      "adopted_nu": 0,
+      "matches_accepted": false,
+      "note": ""
+    }
+  },
+  "replay_ablation": {
+    "status": "diverges_from_reference_replay",
+    "reference_candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+    "reference_canonical_hash": "blake3:c7a99c10bbc01197aec9fa0c4605b4763dda6dc22ea95310fae37e9ff5ee65a1",
+    "rho_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "objective_bar_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "overshoot_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "nu_delta": 0,
+    "clause_kappa_delta": 0,
+    "note": "current provenance atomic_bootstrap_search diverges from reference replay"
+  },
+  "narrative_events": [
+    {
+      "step_index": 4,
+      "ordinal": 1,
+      "kind": "step_open",
+      "message": "opened step 4 with bar 3/2 and clause band 3..3",
+      "detail": "mode=desktop_claim_shadow exact_legality_rejections=0 structural_cap_rejections=0 admitted_focus_aligned=67999657383 admitted_deprioritized=0",
+      "progress": {
+        "elapsed_millis": 26707939,
+        "generated_surface": 92839653655,
+        "exact_screened_surface": 7,
+        "full_telescopes_evaluated": 7
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 2,
+      "kind": "surface_summary",
+      "message": "generated 92839653655 structural candidates; 67999657383 were well formed and 0 were rejected by admissibility",
+      "detail": "malformed=0 full_evaluated=7 canonical=7 semantically_minimal=7",
+      "progress": {
+        "elapsed_millis": 26707939,
+        "generated_surface": 92839653655,
+        "exact_screened_surface": 7,
+        "full_telescopes_evaluated": 7
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 3,
+      "kind": "prefix_summary",
+      "message": "prefix frontier created=12889875 explored=2775 merged=29766 exact_pruned=0 heuristic_dropped=38",
+      "detail": "hot_states=3 cold_states=2 frontier_window=5",
+      "progress": {
+        "elapsed_millis": 26707939,
+        "generated_surface": 92839653655,
+        "exact_screened_surface": 7,
+        "full_telescopes_evaluated": 7
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 4,
+      "kind": "memo_summary",
+      "message": "memo path hits: legality=98973927854 active_window=0 terminal_completion=12887143 partial_bounds=0",
+      "detail": "connectivity_shortcuts=67999662255 clause_family_prunes=0 terminal_rank_prunes=67999498890 terminal_prefix_bar_prunes=0",
+      "progress": {
+        "elapsed_millis": 26707939,
+        "generated_surface": 92839653655,
+        "exact_screened_surface": 7,
+        "full_telescopes_evaluated": 7
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 5,
+      "kind": "frontier_summary",
+      "message": "retained 7 candidates with frontier hot=3 cold=2 dropped=0",
+      "detail": "pressure_state=green pressure_action=none resident_cold=0 spill_backed=0",
+      "progress": {
+        "elapsed_millis": 26707939,
+        "generated_surface": 92839653655,
+        "exact_screened_surface": 7,
+        "full_telescopes_evaluated": 7
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 6,
+      "kind": "acceptance_summary",
+      "phase": "seal",
+      "message": "accepted blake3:2b006725f19f845dd2ceafa9193e0deb7865fd41ad73f89310f73522f0d5b8e7 with overshoot 1/6 (nu=5 kappa=3)",
+      "detail": "bar_clearers=7 near_misses=3 candidate_hash=blake3:2b006725f19f845dd2ceafa9193e0deb7865fd41ad73f89310f73522f0d5b8e7 canonical_hash=blake3:fac36d6ebdf9de068dbd3fc7560f8510c3d702b25c13a7bcbbbbad0f863b45dd",
+      "progress": {
+        "elapsed_millis": 26707939,
+        "generated_surface": 92839653655,
+        "exact_screened_surface": 7,
+        "full_telescopes_evaluated": 7
+      }
+    },
+    {
+      "step_index": 4,
+      "ordinal": 7,
+      "kind": "step_complete",
+      "phase": "seal",
+      "message": "completed step 4 in 26707939 ms",
+      "detail": "discovery_ms=26707926 frontier_plan_ms=0 selection_ms=0",
+      "progress": {
+        "elapsed_millis": 26707939,
+        "generated_surface": 92839653655,
+        "exact_screened_surface": 7,
+        "full_telescopes_evaluated": 7
+      }
+    }
+  ]
+}

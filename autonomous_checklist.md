@@ -23,9 +23,17 @@ It lists only work that is still open.
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v3`,
   answered the old runtime question by reaching step `14`, but it failed there
   with `no atomic candidates were generated for step 14`.
-- Steps `10` through `13` already diverge from reference replay on stored
-  evidence. The stored run opened step `14` at `clause_kappa = 7` with
-  `raw_catalog_clause_widths = [3,1,1,1,1,1,1]`, but the current reproducer
+- The accepted claim path is still not replay-parity correct on stored
+  evidence:
+  - steps `1..7` still match guarded `nu / kappa`
+  - step `8` is the first visible `nu / kappa` mismatch:
+    claim `11 / 3` versus guarded `18 / 5`
+  - `replay_ablation = diverges_from_reference_replay` already starts at
+    step `4`, so the structural replay fork predates the visible
+    `nu / kappa` drift
+- The stored late-step reproducer still matters, but it is no longer the first
+  blocker. The stored `v3` run opened step `14` at `clause_kappa = 7` with
+  `raw_catalog_clause_widths = [3,1,1,1,1,1,1]`, while the current reproducer
   now promotes that divergent prefix to `claim_band = 9..9`, enqueues one
   root, reaches exact terminal-summary work, and still dies with exact
   partial-prefix pruning.
@@ -78,29 +86,36 @@ It lists only work that is still open.
   - `terminal_summary_build_millis = 1191657`
   - `terminal_summary_admissibility_checks = 0`
   - `terminal_summary_fallback_connectivity_checks = 0`
-- A fresh clean-start full-profile rerun,
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`,
-  is now live on clean-tree repo head
-  `140297377964dab9e0333782af3eec370bd784e7` with the same validated release
-  binary hash
-  `d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f`.
-- Its authoritative `run.json` state still shows:
-  - `status = "running"`
-  - `completed_step = 3`
-  - `active_step = 4`
-- The latest observed step-`4` live checkpoint in this turn is:
-  - `elapsed_millis = 375106`
-  - `prefix_states_explored = 45`
-  - `prefix_cache_groups = 39`
-  - `prefix_cache_candidates = 27814`
-  - `frontier_queue_len = 2730`
-  - RSS `= 190398464`
-  - `terminal_summary_build_millis = 372333`
-  - `terminal_summary_admissibility_checks = 0`
-  - `terminal_summary_fallback_connectivity_checks = 0`
-- The current blocker is now letting that live `v4` rerun either re-earn the
-  capped `1200000 ms` gate or expose a new regression/failure surface, not
-  relaunching the rerun itself.
+- The stopped `v4` rerun now adds stronger frozen evidence:
+  - it was manually stopped after entering step `14` on clean-tree repo head
+    `140297377964dab9e0333782af3eec370bd784e7` with release binary hash
+    `d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f`
+  - no residual `pen-cli.exe` process remains, and its persisted `run.json`
+    is now a stale last-write snapshot that still says
+    `status = "running"`, `completed_step = 13`, `active_step = 14`,
+    `active_band = 3`, `frontier_epoch = 10`
+  - by `1194315 ms`, it re-earned the old step-`4` gate at
+    `139` explored prefixes, `40` cache groups, `28438` cached candidates,
+    queue `2636`, RSS `459812864`, with both zero-count summary checks still
+    at `0`
+  - by `1202537 ms`, it re-entered the older
+    `41 groups / 29249 candidates` continuation surface at `140` explored
+    prefixes
+  - it then completed steps `4` through `13` and entered real step-`14`
+    search with `raw_catalog_clause_widths = [168,168,168]`,
+    `roots_seen = 90`, `roots_rejected_by_insert_root = 5`,
+    `roots_enqueued = 85`, `generated_raw_surface = 90`, and
+    `frontier_queue_len = 85`
+- The old zero-candidate step-`14` opening is therefore no longer the first
+  blocker.
+- The current blocker is the earlier step-`4` replay-ablation fork:
+  - claim step `4` uses open-band claim admissibility instead of the guarded
+    former-eliminator focus gate
+  - with `[demo] enabled = true`, claim step `4` also uses the early
+    exhaustive discovery branch
+  - the stopped claim step-`4` summary retains `7` candidates after an
+    `open_band_structural` surface, while guarded step `4` keeps only `4`
+    `focus_former_eliminator` survivors
 
 ## 1. Runtime Improvement Loop
 

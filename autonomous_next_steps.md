@@ -23,10 +23,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v3`
 - Keep the latest capped intended-profile validation read:
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-late-accept-capped-v1`
-- Keep the active fresh full-profile rerun path:
+- Keep the stopped fresh full-profile rerun evidence path:
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`
-- Keep the preserved release binary hash that all three longer reruns reused:
+- Keep the preserved `long-rerun-v3` release binary hash:
   `278c311ddf5e416b09d24923dc392388aaf5817c65f0c60f856ebde7466140a5`
+- Keep the validated capped-read / stopped-`v4` release binary hash:
+  `d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f`
 
 ## Current Read
 
@@ -168,30 +170,49 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - release replay harness benchmark replays all `5` stored surfaces
 - A fresh clean-start full-profile rerun,
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`,
-  is now live on that clean-tree head with the same validated release binary
-  hash `d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f`.
-- Its authoritative `run.json` state currently remains:
+  was manually stopped after it entered step `14`.
+- No residual `pen-cli.exe` process remains from that rerun.
+- Because the process was killed externally, its persisted `run.json` is now a
+  stale last-write snapshot that still says:
   - `status = "running"`
-  - `completed_step = 3`
-  - `active_step = 4`
-- The latest observed step-`4` live checkpoint on `v4` in this turn is:
-  - `elapsed_millis = 375106`
-  - `prefix_states_explored = 45`
-  - `prefix_cache_groups = 39`
-  - `prefix_cache_candidates = 27814`
-  - `frontier_queue_len = 2730`
-  - RSS `= 190398464`
-  - `terminal_summary_build_millis = 372333`
-  - `terminal_summary_admissibility_checks = 0`
-  - `terminal_summary_fallback_connectivity_checks = 0`
-- That checkpoint is still short of the `1200000 ms` honesty gate, but it
-  shows no early regression signal and is still tracking toward the stored
-  `41 groups / 29249 candidates` continuation surface.
-- Replay parity plus the capped intended-profile read are now both earned on
-  the repaired claim path.
-- The current blocker is now letting the live `v4` rerun reach the
-  `1200000 ms` gate and later late-step comparison points, not launching a new
-  rerun or reopening the same step-`13` fork first.
+  - `completed_step = 13`
+  - `active_step = 14`
+  - `active_band = 3`
+  - `frontier_epoch = 10`
+- Its frozen step-`4` evidence re-earned the old honesty/continuation gate:
+  - the last stored checkpoint at or before `1200000 ms` reached
+    `139` explored prefixes, `40` cache groups, `28438` cached candidates,
+    queue `2636`, RSS `459812864`, and kept both zero-count summary checks at
+    `0`
+  - the first stored `140`-state checkpoint then re-entered the older
+    `41 groups / 29249 candidates` continuation surface at `1202537 ms`
+- The same stopped rerun then completed steps `4` through `13`, accepted
+  step `13` at `nu = 19`, `kappa = 3`, and entered real step-`14` search.
+- Its frozen step-`14` root seeding disproves the old zero-candidate opening
+  as the first blocker:
+  - `raw_catalog_clause_widths = [168,168,168]`
+  - `roots_seen = 90`
+  - `roots_rejected_by_insert_root = 5`
+  - `roots_enqueued = 85`
+  - `generated_raw_surface = 90`
+  - `frontier_queue_len = 85`
+- Replay parity is still not restored end-to-end:
+  - steps `1..7` still match guarded `nu / kappa`
+  - step `8` is the first visible `nu / kappa` mismatch:
+    claim `11 / 3` versus guarded `18 / 5`
+  - `replay_ablation = diverges_from_reference_replay` already starts at
+    step `4`, so the structural fork predates the visible `nu / kappa` drift
+- The replay-ablation root cause is now localized earlier than the late-step
+  repair:
+  - claim step `4` uses open-band claim admissibility instead of the guarded
+    former-eliminator focus gate
+  - with `[demo] enabled = true`, claim step `4` also runs the early
+    exhaustive discovery branch
+  - the claim step-`4` winner therefore comes from a wider structural surface
+    and takes a different accepted hash before late-step divergence appears
+- Replay parity plus the capped intended-profile read remain valuable local
+  guards, but the current blocker is now fixing that early step-`4` replay
+  fork before spending another full rerun.
 
 ## Do This Next
 
@@ -201,7 +222,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
    stored evidence set.
 2. Add
    `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-late-accept-capped-v1`
-   to that frozen evidence set.
+   and the stopped
+   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`
+   bundle to that frozen evidence set.
 3. Keep the replay harness corpus and benchmark files frozen; do not recapture
    fixtures first.
 
@@ -220,49 +243,39 @@ This note is the exact next work order for `desktop_claim_shadow`.
    `d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f`
    as the validated binary for the next full rerun.
 
-### 3. Keep The Fresh Full-Profile Rerun Live
+### 3. Repair The Earliest Replay Fork
 
-1. Keep
-   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4`
-   running on the clean-start path; do not restart it or swap to
-   `pen-cli resume`.
-2. During early step `4`, compare `v4` first against the capped validation
-   gate:
-   - by `1200000 ms`, expect at least the re-earned
-     `141`-prefix / `41 groups` / `29249 candidates` surface
-   - keep `terminal_summary_admissibility_checks = 0`
-   - keep `terminal_summary_fallback_connectivity_checks = 0`
-3. If the live rerun falls materially behind that gate, stop and localize the
-   short-loop regression before spending more late-step diagnosis time.
-4. If `v4` reaches step `14`, compare first against `long-rerun-v3` to
-   see whether the old zero-candidate failure is gone, delayed, or replaced by
-   a new blocker.
-5. If `v4` reaches step `15`, move immediately to compare, benchmark, and
-   certification work on that stored bundle.
+1. Localize and repair the step-`4` claim-versus-guarded admissibility split.
+2. Keep the demo-enabled early-exhaustive claim step-`4` path under the same
+   parity check; do not treat the landed late-step viability regressions as
+   sufficient proof of replay parity.
+3. Re-run targeted parity checks that compare accepted hash plus `nu / kappa`
+   through at least steps `4..8`.
 
-### 4. Only Reopen Local Diagnosis If The New Rerun Fails
+### 4. Relaunch Only After Early Parity Holds
 
-1. If `v4` still fails at step `14`, use the landed `claim_step_open`,
-   `claim_root_seeding`, and enriched failure-note diagnostics first.
-2. If `v4` fails before step `14`, compare against the new capped gate before
-   reopening step-`13` tie-break work.
-3. Do not reopen earlier branch decisions first while the validated full rerun
-   remains unspent.
+1. Start a fresh clean-start full-profile rerun only after that targeted
+   parity slice is green.
+2. Do not `resume` the stopped `v4` bundle.
+3. On the next rerun, compare early step `4` first against the capped
+   validation gate, then compare step `14` against `long-rerun-v3` only after
+   early replay parity holds.
 
-### 5. Optimization Order After Step-14 Is Viable
+### 5. Optimization Order After Replay Parity
 
-1. First priority: keep the restored non-zero step-`14` search and repair the
-   surviving exact-screen blocker on that promoted Hilbert-band surface.
-2. Second priority: if the failure is fixed and the lane is back to being
-   runtime-limited, return to the compact terminal-summary path, especially its
-   connectivity, exact-`nu`, and aggregation costs.
-3. Do not revisit step-`4` micro-optimization first while the late-step claim
-   path is still broken.
+1. First priority: keep restored guarded replay parity through steps `4..8`
+   while preserving the re-earned `1200000 ms` honesty gate.
+2. Second priority: once parity holds, use the next full rerun to decide
+   whether the surviving blocker is still late-step exact screening, runtime,
+   or both.
+3. Do not spend more time on late-step-only diagnosis before the early
+   step-`4` fork is closed.
 
 ## Do Not Reopen First
 
-- a resume-based restart or second rerun before the live clean-start `v4`
-  evidence is evaluated
+- a `resume`-based restart of the stopped `v4` run
+- another clean-start full rerun before the early step-`4` replay divergence
+  is fixed or explicitly justified
 - dormant cached-summary reopen wake-up work
 - broad frontier rewrites
 - the dropped focus-aligned competition-gate/payload-mode hoist
@@ -279,10 +292,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 ## Keep Or Branch Decision
 
-- Stay full-rerun-first on the landed step-`13` acceptance repair now that
-  replay parity and the capped intended-profile read both confirm it locally
-  and `v4` is already live.
+- Branch back to local early-step parity repair before another full rerun:
+  the stopped `v4` evidence already disproved the old step-`14`
+  zero-candidate opening but still diverges structurally at step `4`.
 - Keep the current short-loop gate, stored step-`4` continuation references,
-  and the new capped intended-profile read frozen as regression checks.
-- Return to local diagnosis only if the live `v4` rerun falls behind the new
-  capped gate or still fails with new late-step evidence.
+  the capped intended-profile read, and the stopped `v4` bundle frozen as
+  regression checks.
+- Return to another full rerun only after targeted steps `4..8` parity checks
+  are green.

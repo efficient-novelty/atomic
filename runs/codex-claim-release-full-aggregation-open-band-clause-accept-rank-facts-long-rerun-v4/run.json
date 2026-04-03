@@ -3,7 +3,7 @@
   "run_id": "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4",
   "status": "running",
   "created_utc": "2026-04-03T00:28:57.1084003Z",
-  "updated_utc": "2026-04-03T00:28:57.4863246Z",
+  "updated_utc": "2026-04-03T07:54:09.1413311Z",
   "workspace_version": "0.1.0",
   "compat": {
     "ast_schema_hash": "blake3:fc9be9ae20ab7277941ba7c98fcb9b7b0a78f699e595d3268656144a3f0b21bf",
@@ -42,10 +42,10 @@
     "binary_sha256": "d3601f87cea1ff639d7c2ed19e604b1a815a65374790f6240910f7bebf3a711f"
   },
   "position": {
-    "completed_step": 3,
-    "active_step": 4,
-    "active_band": 1,
-    "frontier_epoch": 0
+    "completed_step": 13,
+    "active_step": 14,
+    "active_band": 3,
+    "frontier_epoch": 10
   },
   "artifacts": {
     "telemetry": "telemetry.ndjson",

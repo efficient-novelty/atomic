@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "run_id": "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v4",
+  "step_index": 4,
+  "accepted_utc": "2026-04-03T07:54:04.8622119Z",
+  "compat": {
+    "ast_schema_hash": "blake3:fc9be9ae20ab7277941ba7c98fcb9b7b0a78f699e595d3268656144a3f0b21bf",
+    "type_rules_hash": "blake3:39c261a0e90bde0cfa2affee542db9a2519e4b8cd95c008e3fa0ed59cd38ac2e",
+    "evaluator_hash": "blake3:dc3ad0d7c757a4b498bd4cfc56446e05af84df38049161883ab8592b18df4792",
+    "search_semantics_hash": "blake3:f3572c8c8c9e01202de7df3840fda6eb4458c2f10104b509a36610d2f6dc80ea"
+  },
+  "objective": {
+    "bar": {
+      "num": 3,
+      "den": 2
+    },
+    "exact_clause_kappa": 3,
+    "bit_band": {
+      "min": 39,
+      "max": 39
+    }
+  },
+  "accepted": {
+    "candidate_hash": "blake3:2b006725f19f845dd2ceafa9193e0deb7865fd41ad73f89310f73522f0d5b8e7",
+    "canonical_hash": "blake3:fac36d6ebdf9de068dbd3fc7560f8510c3d702b25c13a7bcbbbbad0f863b45dd",
+    "bit_kappa": 39,
+    "clause_kappa": 3,
+    "nu": 5,
+    "rho": {
+      "num": 5,
+      "den": 3
+    },
+    "overshoot": {
+      "num": 1,
+      "den": 6
+    },
+    "shape_fingerprint": "0xdefa881b5e5ed5f0",
+    "support_fingerprint": "0xa36915eccf2236b7"
+  },
+  "library_snapshot": {
+    "window_depth": 2,
+    "entries": [
+      {
+        "step": 2,
+        "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "step": 3,
+        "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Lib": 2
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "near_misses": [
+    {
+      "candidate_hash": "blake3:1a1ee4bdc8531c5af5585a44cd45c97273a1c9fb36a81b85dcd696cfc707a2cb",
+      "canonical_hash": "blake3:1b9f746209a0081870817c10299dfff6446692e9bc6cba63e1d51215f47b6b06",
+      "bit_kappa": 32,
+      "clause_kappa": 3,
+      "nu": 5,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:48b563a7460e3c160a0f84ddab85cbef193533206fc84b698ad6e008b725fd76",
+      "canonical_hash": "blake3:279ec55475b495b9a310199307ce549d91c1c0c39afb170cd9c826ee95f0cb71",
+      "bit_kappa": 26,
+      "clause_kappa": 3,
+      "nu": 5,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:b785e22fbf14a8c1a2291d8270dd7290180cfcdf00897c7a9b479f251fe88879",
+      "canonical_hash": "blake3:3ac2f9aede34bf9648f0c40742279ba676e1b42b99bb4179352a3375aa720267",
+      "bit_kappa": 32,
+      "clause_kappa": 3,
+      "nu": 5,
+      "status": "bar_clear_higher_overshoot"
+    }
+  ],
+  "stats": {
+    "frontier_scanned": 2775,
+    "typed_prefixes": 5,
+    "sound_prunes": 0,
+    "heuristic_drops": 38
+  }
+}

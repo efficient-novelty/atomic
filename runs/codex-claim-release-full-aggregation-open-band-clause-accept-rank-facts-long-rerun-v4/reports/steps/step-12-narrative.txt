@@ -1,0 +1,63 @@
+step 12 claim narrative
+label        Curvature
+profile      claim-1h
+accepted     blake3:f1c908d42f6a64592b0965373e1a407a9eb07bc8a24d90091474bf8913424d91 nu=17 kappa=3 overshoot=1087/1869
+time         [#...............] 351ms / 35.0s (within limit)
+generated    [################] 1438118 / 1200 generated (hit)
+exact_screen [################] 4353 / 400 screened (hit)
+full_eval    [#...............] 2 / 50 evaluated (within limit)
+closure      [################] 99% frontier_total=4353 certified_nonwinning=4351
+phase_eval   materialize=0 proof_close=0 overrun=0 cap=none cap_triggered=false breadth_exit=none proof_close_reason=none overrun_reason=none
+proof_close  reserve=0ms elapsed=0ms remaining=0ms reserve_overrun=0ms exhausted=false groups_closed=0/0 groups_remaining=0 closure=0%
+timing       discovery=351ms frontier_plan=0ms selection=0ms
+funnel       enumerated=626406 well_formed=626406 malformed=0 admissibility_rejected=0 scored=2 canonical=2 semantically_minimal=2
+demo_funnel  raw=1438118 canonical_prefixes=10285 hard_admissible=626406 exact_pruned=4351 heuristic_dropped=4 bar_clearers=2 semantically_minimal_clearers=2 winner_overshoot=1087/1869
+exact_reasons partial_prefix_bar=0 terminal_completion=4351 incumbent_dominance=297653 legality_connectivity=801647
+prune_totals quotient_dedupe=0 sound_minimality=1103759 heuristic_shaping=4
+prefixes     created=10285 explored=85 merged=97 exact_pruned=4351 heuristic_dropped=4 hot=2 cold=2
+memo         legality_hits=1501354 active_window_hits=0 terminal_completion_hits=8874 partial_bound_hits=0 terminal_rank_prunes=297653
+demo_buckets k3:structural_generic:support_form:library_backed:broad gen=507472 adm=288936 screen=288936 pruned=288936 scored=0 best=none | k3:structural_generic:binder_heavy:library_backed:broad gen=502642 adm=230062 screen=230062 pruned=229418 scored=0 best=none | k3:structural_generic:reference_support:library_backed:broad gen=120195 adm=65139 screen=65139 pruned=65053 scored=0 best=none | ... 5 more
+
+events
+  [step_open] opened step 12 with bar 3168/623 and clause band 3..3
+    mode=desktop_claim_shadow exact_legality_rejections=0 structural_cap_rejections=0 admitted_focus_aligned=626406 admitted_deprioritized=0
+  [surface_summary] generated 1438118 structural candidates; 626406 were well formed and 0 were rejected by admissibility
+    malformed=0 full_evaluated=2 canonical=2 semantically_minimal=2
+  [prefix_summary] prefix frontier created=10285 explored=85 merged=97 exact_pruned=4351 heuristic_dropped=4
+    hot_states=2 cold_states=2 frontier_window=4
+  [memo_summary] memo path hits: legality=1501354 active_window=0 terminal_completion=8874 partial_bounds=0
+    connectivity_shortcuts=626788 clause_family_prunes=0 terminal_rank_prunes=297653 terminal_prefix_bar_prunes=4351
+  [frontier_summary] retained 2 candidates with frontier hot=2 cold=2 dropped=0
+    pressure_state=green pressure_action=none resident_cold=0 spill_backed=0
+  [acceptance_summary seal] accepted blake3:f1c908d42f6a64592b0965373e1a407a9eb07bc8a24d90091474bf8913424d91 with overshoot 1087/1869 (nu=17 kappa=3)
+    bar_clearers=2 near_misses=1 candidate_hash=blake3:f1c908d42f6a64592b0965373e1a407a9eb07bc8a24d90091474bf8913424d91 canonical_hash=blake3:f0a906e1a63a4c511424de20dd00d4938b9fc7fe19b22f8f9e5a64e9617a1342
+  [step_complete seal] completed step 12 in 351 ms
+    discovery_ms=351 frontier_plan_ms=0 selection_ms=0
+
+retained candidates
+  accepted blake3:f1c908d42f6a64592b0965373e1a407a9eb07bc8a24d90091474bf8913424d91 rho=17/3 distance=1087/1869 frontier=hot headline=Axiomatic candidate with 3 clauses; reuses Step10 (Cohesion).
+  bar_clearer blake3:ff740f6a2ef1fbb15817141b63eac99b658327aed15922ed4abc75b7221f52e0 rho=17/3 distance=1087/1869 frontier=hot headline=Axiomatic candidate with 3 clauses; reuses Step10 (Cohesion).
+
+prunes
+  totals quotient_dedupe=0 sound_minimality=1103759 heuristic_shaping=4
+  sampled: none
+
+accepted trace
+  source=structural-ast
+  nu_g=0
+  nu_h=0
+  nu_c=17
+  bonus_distributive=0
+  bonus_universe_poly=0
+  bonus_infinitesimal_shift=0
+  nu_total=17
+  node_trace_count=9
+  node=entry1|ctor=Pi
+  node=entry1/0|ctor=Var
+  node=entry1/1|ctor=Var
+  node=entry2|ctor=Pi
+  node=entry2/0|ctor=Var
+  node=entry2/1|ctor=Var
+  node=entry3|ctor=Pi
+  node=entry3/0|ctor=Lib
+  node=entry3/1|ctor=Var
