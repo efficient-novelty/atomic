@@ -154,10 +154,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - a follow-up cache-key repair now also keeps that guarded curvature shell
     alive into the retained claim candidate pool by keying exact multi-step
     partial-prefix bounds on `(prefix_signature, clause_kappa)`
-  - but live claim step `12` still accepts a different same-primary
-    `34 / 6` hash
-  - the remaining local blocker is therefore now the step-`12`
-    accepted-hash fork inside the retained same-primary `34 / 6` tier
+  - a third follow-up selector repair now also makes live claim step `12`
+    prefer the guarded same-primary curvature shell over richer raw
+    structural winners by preferring the leaner former/binder shell first,
+    then the stronger introduction application spine within that lean tier,
+    then the shallower formation-clause var reach, then lower bit cost
+  - every current same-primary tied step-`12` survivor still collapses onto
+    one observed step-`13..15` continuation and the same late generated counts
+    `9`, `157`, and `780`
+  - the step-`12` accepted-hash fork is therefore now closed locally and does
+    not explain the late generated-floor collapse by itself
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -206,19 +212,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
 5. Keep step `9` final selection deferred while the current tied step-`9`
    candidates still share the same observed step-`10` / repaired-step-`11`
    continuation.
-6. Move the active repair target to the step-`12` accepted-hash fork inside
-   the retained same-primary guarded `34 / 6` tier:
-   inspect which retained same-primary survivor wins after the new
-   `clause_kappa` cache-key repair, why the guarded curvature shell still
-   loses final selection, and how those rival step-`12` survivors continue
-   into steps `13..15`.
-7. Use the repaired step-`9` / step-`11` / step-`12` chain to explain the
-   late generated-floor collapse at
-   steps `11..15`, especially:
-   - step `13`: `9`
-   - step `14`: `157`
-   - step `15`: `780`
-8. Keep the step-`1` breadth miss on the checklist, but do not confuse that
+6. Keep the new step-`12` selector read fixed:
+   live claim step `12` now prefers the guarded same-primary curvature shell
+   over richer raw structural winners inside the retained `34 / 6` tier.
+7. Keep the new step-`12` continuation-collapse read fixed:
+   all current same-primary tied step-`12` survivors still collapse onto one
+   observed step-`13..15` continuation and the same late generated counts
+   `9`, `157`, and `780`.
+8. Move the active repair target from the closed local step-`12` hash fork to
+   the common late generated-floor collapse at steps `13..15`:
+   inspect why the repaired step-`12` tie set still thins to `9` generated
+   prefixes at step `13`, then only `157` and `780` at steps `14` and `15`.
+9. Keep the step-`1` breadth miss on the checklist, but do not confuse that
    longstanding signoff floor with the new claim-specific mid/late parity fork.
 
 ### 4. Use The New Regressions To Drive The Local Repair
@@ -246,13 +251,20 @@ This note is the exact next work order for `desktop_claim_shadow`.
 8. Keep the new step-`12` cache-key regression green so a modal `5`-clause
    `CannotClearBar` result cannot poison the guarded `6`-clause continuation
    on the same preterminal prefix.
-9. Keep the stored compare regression green for the step-`12`
-   guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
-10. Keep the stored certification / benchmark assertions green for the
+9. Keep the new step-`12` selector regression green so live claim acceptance
+   continues to choose the guarded same-primary curvature shell over richer
+   raw structural winners inside the repaired `34 / 6` tier.
+10. Keep the new step-`12` continuation-collapse regression green so the tied
+    same-primary step-`12` set stays pinned to one observed step-`13..15`
+    continuation with generated counts `9`, `157`, and `780` while the common
+    late floor collapse is repaired.
+11. Keep the stored compare regression green for the step-`12`
+    guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
+12. Keep the stored certification / benchmark assertions green for the
    step-`1` breadth miss and the late generated-floor snapshot at
    steps `10..15` so the next fix cannot silently reshuffle the stored
    failure surface.
-11. Keep the existing pre-flight gate green while the local repair lands.
+13. Keep the existing pre-flight gate green while the local repair lands.
 
 ### 5. Only Rerun After The Local Repair Exists
 

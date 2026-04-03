@@ -36,6 +36,8 @@ use crate::scheduler::build_schedule;
 use crate::state::{FrontierStateRecV1, PrefixState};
 use crate::worker::run_worker_batch;
 use anyhow::{Result, bail};
+use pen_core::clause::ClauseRole;
+use pen_core::expr::Expr;
 use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::rational::Rational;
@@ -4176,6 +4178,13 @@ fn should_apply_claim_step_eleven_same_primary_tiebreak(
     matches!(admissibility_mode, AdmissibilityMode::DesktopClaimShadow) && step_index == 11
 }
 
+fn should_apply_claim_step_twelve_same_primary_tiebreak(
+    admissibility_mode: AdmissibilityMode,
+    step_index: u32,
+) -> bool {
+    matches!(admissibility_mode, AdmissibilityMode::DesktopClaimShadow) && step_index == 12
+}
+
 fn compare_claim_step_eleven_same_primary_survivors(
     left: &AcceptRank,
     right: &AcceptRank,
@@ -4194,6 +4203,86 @@ fn compare_claim_step_eleven_same_primary_survivors(
         })
         .then_with(|| left.bit_kappa.cmp(&right.bit_kappa))
         .then_with(|| left.cmp(right))
+}
+
+fn compare_claim_step_twelve_same_primary_survivors(
+    left_candidate: &ExpandedCandidate,
+    left_rank: &AcceptRank,
+    right_candidate: &ExpandedCandidate,
+    right_rank: &AcceptRank,
+) -> Ordering {
+    left_candidate
+        .signals
+        .former_score
+        .cmp(&right_candidate.signals.former_score)
+        .then_with(|| {
+            left_candidate
+                .signals
+                .generic_binder_count
+                .cmp(&right_candidate.signals.generic_binder_count)
+        })
+        .then_with(|| {
+            left_candidate
+                .signals
+                .dependent_motive_density
+                .cmp(&right_candidate.signals.dependent_motive_density)
+        })
+        .then_with(|| {
+            claim_introduction_application_count(&right_candidate.telescope).cmp(
+                &claim_introduction_application_count(&left_candidate.telescope),
+            )
+        })
+        .then_with(|| {
+            claim_formation_max_var_ref(&left_candidate.telescope)
+                .cmp(&claim_formation_max_var_ref(&right_candidate.telescope))
+        })
+        .then_with(|| left_rank.bit_kappa.cmp(&right_rank.bit_kappa))
+        .then_with(|| left_rank.cmp(right_rank))
+}
+
+fn claim_introduction_application_count(telescope: &Telescope) -> u16 {
+    telescope
+        .clauses
+        .iter()
+        .filter(|clause| matches!(clause.role, ClauseRole::Introduction))
+        .fold(0u16, |count, clause| {
+            count.saturating_add(expr_application_count(&clause.expr))
+        })
+}
+
+fn expr_application_count(expr: &Expr) -> u16 {
+    match expr {
+        Expr::App(left, right) => 1u16
+            .saturating_add(expr_application_count(left))
+            .saturating_add(expr_application_count(right)),
+        Expr::Lam(body)
+        | Expr::Refl(body)
+        | Expr::Susp(body)
+        | Expr::Trunc(body)
+        | Expr::Flat(body)
+        | Expr::Sharp(body)
+        | Expr::Disc(body)
+        | Expr::Shape(body)
+        | Expr::Next(body)
+        | Expr::Eventually(body) => expr_application_count(body),
+        Expr::Pi(left, right) | Expr::Sigma(left, right) => {
+            expr_application_count(left).saturating_add(expr_application_count(right))
+        }
+        Expr::Id(ty, left, right) => expr_application_count(ty)
+            .saturating_add(expr_application_count(left))
+            .saturating_add(expr_application_count(right)),
+        Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_) => 0,
+    }
+}
+
+fn claim_formation_max_var_ref(telescope: &Telescope) -> u32 {
+    telescope
+        .clauses
+        .iter()
+        .filter(|clause| matches!(clause.role, ClauseRole::Formation))
+        .filter_map(|clause| clause.expr.var_refs().iter().next_back().copied())
+        .max()
+        .unwrap_or(0)
 }
 
 fn claim_candidate_keeps_next_step_alive(
@@ -4244,9 +4333,14 @@ fn select_acceptance_for_step(
     let baseline = select_acceptance(objective_bar, retained)?;
     let apply_claim_step_eleven_same_primary_tiebreak =
         should_apply_claim_step_eleven_same_primary_tiebreak(admissibility_mode, step_index);
+    let apply_claim_step_twelve_same_primary_tiebreak =
+        should_apply_claim_step_twelve_same_primary_tiebreak(admissibility_mode, step_index);
     let apply_claim_viability_tiebreak = allow_claim_viability_tiebreak
         && should_apply_claim_viability_tiebreak(admissibility_mode, step_index);
-    if !apply_claim_step_eleven_same_primary_tiebreak && !apply_claim_viability_tiebreak {
+    if !apply_claim_step_eleven_same_primary_tiebreak
+        && !apply_claim_step_twelve_same_primary_tiebreak
+        && !apply_claim_viability_tiebreak
+    {
         return Some(baseline);
     }
 
@@ -4272,6 +4366,22 @@ fn select_acceptance_for_step(
             .min_by(|(_, left), (_, right)| {
                 compare_claim_step_eleven_same_primary_survivors(left, right)
             })
+            .map(|(candidate, _)| *candidate)
+            .unwrap_or(selected_candidate);
+    }
+    if apply_claim_step_twelve_same_primary_tiebreak {
+        selected_candidate = tied_candidates
+            .iter()
+            .min_by(
+                |(left_candidate, left_rank), (right_candidate, right_rank)| {
+                    compare_claim_step_twelve_same_primary_survivors(
+                        left_candidate,
+                        left_rank,
+                        right_candidate,
+                        right_rank,
+                    )
+                },
+            )
             .map(|(candidate, _)| *candidate)
             .unwrap_or(selected_candidate);
     }
@@ -12144,7 +12254,8 @@ mod tests {
     }
 
     #[test]
-    fn claim_step_twelve_guarded_curvature_shell_survives_screening_while_hash_parity_stays_open() {
+    fn claim_step_twelve_guarded_curvature_shell_survives_screening_and_wins_same_primary_selection()
+     {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             11,
             2,
@@ -12159,7 +12270,7 @@ mod tests {
         let (library, history, nu_history) = history_from_prefix(&claim_prefix);
         let admissibility =
             strict_admissibility_for_mode(12, 2, &library, AdmissibilityMode::DesktopClaimShadow);
-        let step = search_next_step_internal(
+        let structural_step = search_next_step_internal(
             12,
             2,
             &library,
@@ -12171,6 +12282,18 @@ mod tests {
             false,
         )
         .expect("claim step 12 should build");
+        let mut progress_observer = None;
+        let live_step = super::search_next_step(
+            12,
+            2,
+            &library,
+            &history,
+            AdmissibilityMode::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            None,
+            &mut progress_observer,
+        )
+        .expect("live claim step 12 should build");
         let target = Telescope::reference(12);
         let preterminal_prefix = Telescope::new(target.clauses[..4].to_vec());
         let preterminal_clause = target.clauses[4].clone();
@@ -12263,8 +12386,19 @@ mod tests {
                 }
                 _ => None,
             });
-        let accepted_rank = acceptance_rank(step.objective_bar, &step.accepted)
-            .expect("accepted step-12 candidate should clear the bar");
+        let structural_acceptance = super::select_acceptance(
+            structural_step.objective_bar,
+            &structural_step.retained_candidates,
+        )
+        .expect("raw structural acceptance should still select a bar clearer");
+        let target_candidate = structural_step
+            .retained_candidates
+            .iter()
+            .find(|candidate| candidate.telescope == target)
+            .expect("guarded step-12 candidate should stay retained");
+        let accepted_rank =
+            acceptance_rank(structural_step.objective_bar, &structural_step.accepted)
+                .expect("accepted structural step-12 candidate should clear the bar");
         let target_work_item = create_online_prefix_work_item(
             6,
             prefix.clone(),
@@ -12326,7 +12460,7 @@ mod tests {
             .expect("target step-12 evaluates");
         let target_minimality = analyze_semantic_minimality(
             12,
-            step.objective_bar,
+            structural_step.objective_bar,
             admissibility,
             &target,
             &library,
@@ -12356,21 +12490,146 @@ mod tests {
         );
         assert_eq!(target_evaluation.nu, 34);
         assert_eq!(target_evaluation.clause_kappa, 6);
-        assert_eq!(step.accepted.nu, guarded_step_twelve.accepted.nu);
+        assert_ne!(
+            structural_acceptance.accepted.candidate_hash, target_candidate.candidate_hash,
+            "the raw structural tie-break should still miss the guarded step-12 curvature shell"
+        );
         assert_eq!(
-            step.accepted.clause_kappa,
+            live_step.accepted.candidate_hash, guarded_step_twelve.accepted.candidate_hash,
+            "live claim step-12 acceptance should now prefer the guarded curvature shell inside the same-primary 34/6 tier"
+        );
+        assert_eq!(live_step.accepted.nu, guarded_step_twelve.accepted.nu);
+        assert_eq!(
+            live_step.accepted.clause_kappa,
             guarded_step_twelve.accepted.clause_kappa
         );
         assert!(
-            step.retained_candidates
+            structural_step
+                .retained_candidates
                 .iter()
                 .any(|candidate| candidate.candidate_hash == target_evaluation.candidate_hash),
             "the guarded step-12 curvature shell should now stay in the retained pool once the cross-band bound cache stops poisoning the 6-clause continuation"
         );
-        assert_ne!(
-            step.accepted.candidate_hash, guarded_step_twelve.accepted.candidate_hash,
-            "step-12 accepted-hash parity should still be the remaining local blocker after the guarded curvature shell survives into the retained pool"
+    }
+
+    #[test]
+    fn claim_step_twelve_same_primary_fork_now_collapses_to_one_step_thirteen_to_fifteen_surface() {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            11,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 11 should build");
+        let claim_prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let (library, history, _) = history_from_prefix(&claim_prefix);
+        let mut progress_observer = None;
+        let live_step = super::search_next_step(
+            12,
+            2,
+            &library,
+            &history,
+            AdmissibilityMode::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            None,
+            &mut progress_observer,
+        )
+        .expect("live claim step 12 should build");
+        let accepted_candidate = live_step
+            .retained_candidates
+            .iter()
+            .find(|candidate| candidate.candidate_hash == live_step.accepted.candidate_hash)
+            .expect("accepted step-12 candidate should stay retained");
+        let accepted_rank = acceptance_rank(live_step.objective_bar, accepted_candidate)
+            .expect("accepted step-12 candidate should clear the bar");
+        let target = Telescope::reference(12);
+        let tied_candidates = live_step
+            .retained_candidates
+            .iter()
+            .filter_map(|candidate| {
+                acceptance_rank(live_step.objective_bar, candidate).map(|rank| (candidate, rank))
+            })
+            .filter(|(_, rank)| crate::branch_bound::same_primary_rank_tier(rank, &accepted_rank))
+            .collect::<Vec<_>>();
+        let target_candidate = live_step
+            .retained_candidates
+            .iter()
+            .find(|candidate| candidate.telescope == target)
+            .expect("guarded step-12 candidate should stay retained");
+        assert!(
+            tied_candidates.len() > 1,
+            "the repaired step-12 surface should still expose a same-primary 34/6 tie set"
         );
+        assert!(
+            tied_candidates
+                .iter()
+                .any(|(candidate, _)| candidate.candidate_hash == target_candidate.candidate_hash),
+            "the guarded step-12 curvature shell should stay inside the tied same-primary set"
+        );
+
+        let continue_late_path = |candidate: &crate::expand::ExpandedCandidate| {
+            let mut next_history = history.clone();
+            next_history.push(DiscoveryRecord::new(
+                12,
+                u32::from(candidate.nu),
+                u32::from(candidate.clause_kappa),
+            ));
+            let mut next_library = library.clone();
+            next_library.push(LibraryEntry::from_telescope(&candidate.telescope, &library));
+            let mut late_steps = Vec::new();
+            for step_index in 13..=15 {
+                let mut progress_observer = None;
+                let next_step = super::search_next_step(
+                    step_index,
+                    2,
+                    &next_library,
+                    &next_history,
+                    AdmissibilityMode::DesktopClaimShadow,
+                    crate::diversify::FrontierRuntimeLimits::unlimited(),
+                    None,
+                    &mut progress_observer,
+                )
+                .expect("late continuation should build");
+                late_steps.push((
+                    step_index,
+                    next_step.accepted.candidate_hash.clone(),
+                    next_step.accepted.nu,
+                    next_step.accepted.clause_kappa,
+                    next_step.demo_funnel.generated_raw_prefixes,
+                ));
+                next_history.push(DiscoveryRecord::new(
+                    step_index,
+                    u32::from(next_step.accepted.nu),
+                    u32::from(next_step.accepted.clause_kappa),
+                ));
+                next_library.push(LibraryEntry::from_telescope(
+                    &next_step.telescope,
+                    &next_library,
+                ));
+            }
+            late_steps
+        };
+        let observed_late_path = continue_late_path(target_candidate);
+        assert_eq!(
+            observed_late_path
+                .iter()
+                .map(|(step_index, _, nu, clause_kappa, generated)| {
+                    (*step_index, *nu, *clause_kappa, *generated)
+                })
+                .collect::<Vec<_>>(),
+            vec![(13, 46, 7, 9), (14, 62, 9, 157), (15, 103, 8, 780)],
+            "the repaired step-12 tie set should still collapse onto the same late thin path through steps 13 to 15"
+        );
+        for (candidate, _) in tied_candidates {
+            assert_eq!(
+                continue_late_path(candidate),
+                observed_late_path,
+                "every current same-primary step-12 survivor should still collapse onto the same observed step-13 to step-15 continuation"
+            );
+        }
     }
 
     #[test]
