@@ -14266,6 +14266,177 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_nearby_clause_three_anchor_swaps_still_fail_local_reanchor() {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let anchor = admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let reference = Telescope::reference(15);
+        let reference_prefix = Telescope::new(reference.clauses[..7].to_vec());
+        let reference_terminal = reference
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let canonical_bit_kappa = u16::try_from(pen_core::encode::telescope_bit_cost(&reference))
+            .expect("bit cost exceeded u16");
+        let canonical_rank = super::acceptance_rank_for_telescope(
+            compute_bar(2, 15, &history).bar,
+            &reference,
+            103,
+            canonical_bit_kappa,
+            8,
+        )
+        .expect("reference step-15 telescope should clear the bar");
+
+        let candidate_anchors = [anchor.saturating_sub(1), anchor + 1]
+            .into_iter()
+            .filter(|index| *index >= 1 && *index <= library.len() as u32)
+            .collect::<Vec<_>>();
+        let arg_variants = [
+            ("exact", Expr::Next(Box::new(Expr::Var(1)))),
+            (
+                "claim_flat",
+                Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+            ),
+            (
+                "claim_eventual",
+                Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+            ),
+            (
+                "demo_sharp",
+                Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+            ),
+            (
+                "demo_next",
+                Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
+            ),
+        ];
+        let mut observed_profiles = BTreeMap::new();
+
+        for candidate_anchor in candidate_anchors {
+            for (label, argument) in &arg_variants {
+                let mut telescope = reference_prefix.clone();
+                telescope.clauses[3] = ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(candidate_anchor)),
+                        Box::new(argument.clone()),
+                    ))),
+                );
+                telescope.clauses.push(reference_terminal.clone());
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let admissibility_decision =
+                    assess_strict_admissibility(15, &library, &telescope, admissibility);
+                let rank = if admissibility_decision.is_admitted() {
+                    let exact_nu =
+                        u16::try_from(structural_nu(&telescope, &library, &nu_history).total)
+                            .expect("nu exceeded u16");
+                    let bit_kappa_used =
+                        u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                            .expect("bit cost exceeded u16");
+                    let clause_kappa_used =
+                        u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                    super::acceptance_rank_for_telescope(
+                        compute_bar(2, 15, &history).bar,
+                        &telescope,
+                        exact_nu,
+                        bit_kappa_used,
+                        clause_kappa_used,
+                    )
+                    .map(|accept_rank| {
+                        (
+                            exact_nu,
+                            clause_kappa_used,
+                            accept_rank < canonical_rank,
+                            accept_rank.overshoot,
+                        )
+                    })
+                } else {
+                    None
+                };
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    witness.connected,
+                    "nearby clause-3 anchor swap {candidate_anchor}/{label} should stay structurally connected on the exact suffix"
+                );
+                assert!(
+                    !witness.historical_reanchor,
+                    "nearby clause-3 anchor swap {candidate_anchor}/{label} should still fall off the historical-reanchor shell at clause 3"
+                );
+                assert!(
+                    admissibility_decision.is_admitted(),
+                    "nearby clause-3 anchor swap {candidate_anchor}/{label} should still be locally admissible on the exact suffix"
+                );
+                assert_eq!(reanchor.matched_clause_count(), 3);
+                assert_eq!(reanchor.first_mismatch_position(), Some(3));
+                observed_profiles.insert(
+                    (candidate_anchor, *label),
+                    rank.map(
+                        |(nu, _clause_kappa_used, stronger_than_canonical, overshoot)| {
+                            (nu, stronger_than_canonical, overshoot)
+                        },
+                    ),
+                );
+            }
+        }
+
+        assert_eq!(
+            observed_profiles,
+            [
+                (
+                    (9_u32, "exact"),
+                    Some((65_u16, true, Rational::new(15375, 21112)))
+                ),
+                ((9, "claim_flat"), None),
+                ((9, "claim_eventual"), None),
+                ((9, "demo_sharp"), None),
+                ((9, "demo_next"), None),
+                (
+                    (11, "exact"),
+                    Some((117_u16, false, Rational::new(152603, 21112)))
+                ),
+                (
+                    (11, "claim_flat"),
+                    Some((102_u16, true, Rational::new(56509, 10556)))
+                ),
+                (
+                    (11, "claim_eventual"),
+                    Some((102_u16, true, Rational::new(56509, 10556)))
+                ),
+                (
+                    (11, "demo_sharp"),
+                    Some((102_u16, true, Rational::new(56509, 10556)))
+                ),
+                (
+                    (11, "demo_next"),
+                    Some((102_u16, true, Rational::new(56509, 10556)))
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "nearby clause-3 anchor swaps should still fail local reanchor at clause 3: the anchor-9 neighborhood either stays below bar or reopens a stronger-than-canonical 65/8 profile, while the anchor-11 neighborhood stays outside historical reanchor too and only the exact argument avoids outranking the canonical branch"
+        );
+    }
+
+    #[test]
     fn step_thirteen_divergence_reopens_operator_bundle_claim_debt_before_the_admitted_step_fourteen_failure_family()
      {
         let reference_prefix = claim_long_rerun_v3_hybrid_prefix(None);

@@ -121,10 +121,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the repaired step-`13` chain still clears exact connectivity,
     partial-prefix bar, captured zero-admitted exact prunes, and live
     terminal-rank pressure
-- No new source repair landed in this verification turn, so the next work
-  order stays the same: keep those guardrails green and target narrower
-  clause-local qualifier / reanchor evidence at positions `2..3` on the
-  canonical step-`15` branch.
+- No new source repair landed in this turn either; the latest source change
+  is diagnostic only, so the next work order stays the same: keep those
+  guardrails green and target narrower clause-local qualifier / reanchor
+  evidence at positions `2..3` on the canonical step-`15` branch.
 - A new local step-`9` diagnostic pass narrows the earliest fork further:
   - the guarded step-`9` telescope is still present in claim late
     enumeration (`81` `kappa = 4` claim telescopes)
@@ -396,6 +396,23 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next repair should therefore stay off any undiscovered exact-suffix
     clause-catalog reland too and keep targeting narrower qualifier evidence
     on the canonical branch itself
+- A new nearby clause-`3` anchor-swap regression now sharpens that same late
+  blocker further:
+  - on the otherwise exact suffix, swapping clause `3` from the exact
+    historical anchor `10` to nearby library refs `9` or `11` still leaves
+    every tested clause structurally connected, locally admissible, outside
+    historical reanchor, and first mismatching the temporal-shell prefix
+    exactly at clause `3`
+  - the nearby anchor-`9` exact-argument swap still reopens an unsafe
+    stronger-than-canonical `65 / 8` profile while the lifted anchor-`9`
+    neighbors stay below bar
+  - the nearby anchor-`11` exact-argument swap reaches only a noncanonical
+    `117 / 8` bar-clearer without restoring qualifier evidence, while the
+    lifted anchor-`11` neighbors all reopen unsafe stronger-than-canonical
+    `102 / 8` profiles
+  - the next repair should therefore stay off any simple nearby clause-`3`
+    anchor retarget too and keep targeting narrower qualifier evidence on the
+    canonical branch itself
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -731,6 +748,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
     variants each, and those variants should still stay structurally
     connected, locally admissible, outside historical reanchor, and pinned to
     the unsafe isolated profiles `89 / 8` and `88 / 8` respectively.
+    Keep the new nearby clause-`3` anchor-swap regression green too:
+    on the otherwise exact suffix, swapping clause `3` from the exact
+    historical anchor `10` to nearby library refs `9` or `11` should still
+    leave every tested clause structurally connected, locally admissible,
+    outside historical reanchor, and first mismatching at clause `3`; the
+    anchor-`9` exact-argument swap should still reopen unsafe `65 / 8` while
+    the lifted anchor-`9` neighbors stay below bar, and the anchor-`11`
+    exact-argument swap should still reach only a noncanonical `117 / 8`
+    bar-clearer without restoring qualifier evidence while the lifted
+    anchor-`11` neighbors reopen unsafe `102 / 8` profiles.
     Keep the new nearby clause-`2` / clause-`3` temporal-replacement
     regression green too: swapping the current claim-only variants for nearby
     demo-style temporal neighbors should still stay outside historical
@@ -827,6 +854,13 @@ This note is the exact next work order for `desktop_claim_shadow`.
   still stay outside historical reanchor and still collapse onto those same
   unsafe isolated `89 / 8` and `88 / 8` profiles on the otherwise exact
   suffix
+- a simple nearby clause-`3` anchor retarget first:
+  the nearby anchor-`9` / anchor-`11` exact-suffix neighborhoods still all
+  fall off historical reanchor at clause `3`; anchor-`9` exact still
+  reopens unsafe `65 / 8`, the lifted anchor-`9` neighbors stay below bar,
+  anchor-`11` exact only reaches a noncanonical `117 / 8` bar-clearer
+  without qualifier evidence, and the lifted anchor-`11` neighbors reopen
+  unsafe `102 / 8` profiles
 
 ## Keep Or Branch Decision
 

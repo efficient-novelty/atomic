@@ -77,9 +77,10 @@ gate.
   - the repaired step-`13` chain still clears exact connectivity,
     partial-prefix bar, captured zero-admitted exact prunes, and live
     terminal-rank pressure
-- No new source repair landed in this verification turn; the next honest
-  change is still narrower clause-local qualifier / reanchor evidence on the
-  canonical branch at positions `2..3`.
+- No new source repair landed in this turn either; the latest source change
+  is diagnostic only, so the next honest change is still narrower
+  clause-local qualifier / reanchor evidence on the canonical branch at
+  positions `2..3`.
 - A narrow claim-lane code change now lands on top of that stored `v5`
   evidence surface:
   claim incumbent pruning preserves same-primary accepted-rank ties on
@@ -443,6 +444,20 @@ gate.
   admissible, outside historical reanchor, and pinned to the unsafe
   `88 / 8` exact-terminal profile, so the remaining open work is not hiding
   behind an undiscovered exact-suffix clause-catalog branch either
+- A new nearby clause-`3` anchor-swap regression now narrows that same
+  step-`15` blocker further:
+  on the otherwise exact suffix, swapping clause `3` from the exact
+  historical anchor `10` to nearby library refs `9` or `11` still leaves
+  every tested clause structurally connected, locally admissible, outside
+  historical reanchor, and first mismatching the temporal-shell prefix
+  exactly at clause `3`; the nearby anchor-`9` exact-argument swap still
+  reopens an unsafe stronger-than-canonical `65 / 8` profile while the
+  lifted anchor-`9` neighbors stay below bar, and the nearby anchor-`11`
+  exact-argument swap reaches only a noncanonical `117 / 8` bar-clearer
+  without restoring qualifier evidence while the lifted anchor-`11`
+  neighbors all reopen unsafe stronger-than-canonical `102 / 8` profiles,
+  so the remaining open work is not a simple nearby clause-`3` anchor
+  retarget either
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
@@ -1002,8 +1017,8 @@ gate.
     admissibility miss, a terminal-clause-only matcher bug, a multi-
     deviation-only interaction, a later-suffix interaction, a direct early
     clause-`2` / clause-`3` bridge-matcher expansion, a direct paired
-    clause-`2` / clause-`3` matcher reland, or a simple nearby clause-catalog
-    swap.
+    clause-`2` / clause-`3` matcher reland, a simple nearby clause-catalog
+    swap, or a nearby clause-`3` anchor retarget.
 16. Do not reland either exploratory temporal-reanchor matcher variant
     directly:
     the broad reland displaced the canonical step-`15` continuation to

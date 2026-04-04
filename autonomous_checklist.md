@@ -134,6 +134,18 @@ It lists only work that is still open.
     reanchor, and pinned to the same unsafe isolated profiles `89 / 8` and
     `88 / 8`, so the remaining open work is not hiding behind an undiscovered
     exact-suffix clause-catalog branch either
+  - a new nearby clause-`3` anchor-swap regression now narrows that same
+    open step-`15` work further:
+    on the otherwise exact suffix, swapping clause `3` from the exact
+    historical anchor `10` to nearby library refs `9` or `11` still leaves
+    every tested clause structurally connected, locally admissible, outside
+    historical reanchor, and first mismatching at clause `3`; the nearby
+    anchor-`9` exact-argument swap still reopens unsafe `65 / 8`, the lifted
+    anchor-`9` neighbors stay below bar, the nearby anchor-`11`
+    exact-argument swap reaches only a noncanonical `117 / 8` bar-clearer
+    without qualifier evidence, and the lifted anchor-`11` neighbors reopen
+    unsafe `102 / 8` profiles, so the remaining open work is not a simple
+    nearby clause-`3` anchor retarget either
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /
@@ -182,6 +194,16 @@ It lists only work that is still open.
     `89 / 8` and `88 / 8` recovery profiles, so the remaining open work is
     narrower clause-local qualifier evidence rather than a neighboring
     temporal-clause substitution
+- A simple nearby clause-`3` anchor retarget is now also ruled out as the
+  direct next step-`15` fix:
+  - the nearby anchor-`9` / anchor-`11` exact-suffix neighborhoods still all
+    stay outside historical reanchor and first mismatch at clause `3`
+  - anchor-`9` exact still reopens unsafe `65 / 8`, the lifted anchor-`9`
+    neighbors stay below bar, anchor-`11` exact only reaches a noncanonical
+    `117 / 8` bar-clearer without qualifier evidence, and the lifted
+    anchor-`11` neighbors reopen unsafe `102 / 8` profiles, so the remaining
+    open work is narrower clause-local qualifier evidence rather than a
+    nearby clause-`3` historical-anchor retarget
 - Claim-policy honesty, fallback honesty, narrative/event completeness,
   exact-screen reason completeness, prune-class completeness, and manifest
   completeness are already earned on the stored full-profile run.
