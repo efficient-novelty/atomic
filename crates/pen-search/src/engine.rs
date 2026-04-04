@@ -4172,6 +4172,13 @@ fn should_apply_claim_viability_tiebreak(
         && (DEMO_LATE_SPILL_START_STEP..LIVE_BOOTSTRAP_MAX_STEP).contains(&step_index)
 }
 
+fn should_apply_claim_step_nine_same_primary_tiebreak(
+    admissibility_mode: AdmissibilityMode,
+    step_index: u32,
+) -> bool {
+    matches!(admissibility_mode, AdmissibilityMode::DesktopClaimShadow) && step_index == 9
+}
+
 fn should_apply_claim_step_eleven_same_primary_tiebreak(
     admissibility_mode: AdmissibilityMode,
     step_index: u32,
@@ -4211,6 +4218,52 @@ fn claim_same_primary_incumbent_relief_active(
                 && history.last().is_some_and(|record| {
                     record.step_index == 12 && record.nu == 34 && record.kappa == 6
                 })))
+}
+
+fn claim_step_nine_matches_axiomatic_bundle(
+    telescope: &Telescope,
+    library: &Library,
+    historical_anchor_ref: Option<u32>,
+) -> bool {
+    let Some(anchor) = historical_anchor_ref else {
+        return false;
+    };
+    let latest = library.len() as u32;
+    if latest < 2 {
+        return false;
+    }
+    let previous = latest - 1;
+
+    telescope.path_dimensions().is_empty()
+        && telescope.clauses.len() == 4
+        && matches!(
+            &telescope.clauses[0].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lib(index) if *index == latest)
+                    && matches!(codomain.as_ref(), Expr::Lib(index) if *index == previous)
+        )
+        && matches!(
+            &telescope.clauses[1].expr,
+            Expr::App(function, argument)
+                if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
+                    && matches!(argument.as_ref(), Expr::Var(1))
+        )
+        && matches!(
+            &telescope.clauses[2].expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(function.as_ref(), Expr::Lib(index) if *index == latest)
+                            && matches!(argument.as_ref(), Expr::Lib(index) if *index == previous)
+                )
+        )
+        && matches!(
+            &telescope.clauses[3].expr,
+            Expr::Pi(domain, codomain)
+                if matches!(domain.as_ref(), Expr::Lib(index) if *index == previous)
+                    && matches!(codomain.as_ref(), Expr::Lib(index) if *index == latest)
+        )
 }
 
 fn compare_claim_step_eleven_same_primary_survivors(
@@ -4421,6 +4474,8 @@ fn select_acceptance_for_step(
     allow_claim_viability_tiebreak: bool,
 ) -> Option<AcceptanceOutcome> {
     let baseline = select_acceptance(objective_bar, retained)?;
+    let apply_claim_step_nine_same_primary_tiebreak =
+        should_apply_claim_step_nine_same_primary_tiebreak(admissibility_mode, step_index);
     let apply_claim_step_eleven_same_primary_tiebreak =
         should_apply_claim_step_eleven_same_primary_tiebreak(admissibility_mode, step_index);
     let apply_claim_step_twelve_same_primary_tiebreak =
@@ -4434,7 +4489,8 @@ fn select_acceptance_for_step(
         );
     let apply_claim_viability_tiebreak = allow_claim_viability_tiebreak
         && should_apply_claim_viability_tiebreak(admissibility_mode, step_index);
-    if !apply_claim_step_eleven_same_primary_tiebreak
+    if !apply_claim_step_nine_same_primary_tiebreak
+        && !apply_claim_step_eleven_same_primary_tiebreak
         && !apply_claim_step_twelve_same_primary_tiebreak
         && !apply_claim_step_thirteen_same_primary_tiebreak
         && !apply_claim_step_fourteen_same_primary_continuation_tiebreak
@@ -4459,6 +4515,23 @@ fn select_acceptance_for_step(
     }
 
     let mut selected_candidate = accepted_candidate;
+    if apply_claim_step_nine_same_primary_tiebreak {
+        let historical_anchor_ref =
+            strict_admissibility_for_mode(step_index, window_depth, library, admissibility_mode)
+                .historical_anchor_ref;
+        selected_candidate = tied_candidates
+            .iter()
+            .filter(|(candidate, _)| {
+                claim_step_nine_matches_axiomatic_bundle(
+                    &candidate.telescope,
+                    library,
+                    historical_anchor_ref,
+                )
+            })
+            .min_by(|(_, left), (_, right)| left.cmp(right))
+            .map(|(candidate, _)| *candidate)
+            .unwrap_or(selected_candidate);
+    }
     if apply_claim_step_eleven_same_primary_tiebreak {
         selected_candidate = tied_candidates
             .iter()
@@ -15102,6 +15175,71 @@ mod tests {
         assert_eq!(
             repaired_acceptance.accepted.candidate_hash, viable_hashes[0],
             "claim acceptance should pick the tied step-13 shell that preserves next-step viability"
+        );
+    }
+
+    #[test]
+    fn claim_step_nine_same_primary_fork_prefers_the_guarded_axiomatic_bundle() {
+        let step = profile_step_from_reference_prefix(9, SearchProfile::DesktopClaimShadow);
+        let guarded_step = profile_step_from_reference_prefix(9, SearchProfile::StrictCanonGuarded);
+        let (library, _, _) = reference_history_until(8);
+        let admissibility =
+            strict_admissibility_for_mode(9, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let accepted_candidate = step
+            .retained_candidates
+            .iter()
+            .find(|candidate| candidate.candidate_hash == step.accepted.candidate_hash)
+            .expect("accepted step-9 candidate should stay retained");
+        let accepted_rank = acceptance_rank(step.objective_bar, accepted_candidate)
+            .expect("accepted step-9 candidate should clear the bar");
+        let structural_acceptance =
+            super::select_acceptance(step.objective_bar, &step.retained_candidates)
+                .expect("raw structural acceptance should still select a bar clearer");
+        let target_candidate = step
+            .retained_candidates
+            .iter()
+            .find(|candidate| candidate.candidate_hash == guarded_step.accepted.candidate_hash)
+            .expect("guarded step-9 candidate should stay retained");
+        let tied_candidates = step
+            .retained_candidates
+            .iter()
+            .filter_map(|candidate| {
+                acceptance_rank(step.objective_bar, candidate).map(|rank| (candidate, rank))
+            })
+            .filter(|(_, rank)| crate::branch_bound::same_primary_rank_tier(rank, &accepted_rank))
+            .collect::<Vec<_>>();
+        let exact_bundle_matches = tied_candidates
+            .iter()
+            .filter(|(candidate, _)| {
+                super::claim_step_nine_matches_axiomatic_bundle(
+                    &candidate.telescope,
+                    &library,
+                    admissibility.historical_anchor_ref,
+                )
+            })
+            .map(|(candidate, _)| candidate.candidate_hash.clone())
+            .collect::<Vec<_>>();
+
+        assert!(
+            tied_candidates.len() > 1,
+            "the guarded step-9 prefix should still expose a same-primary acceptance fork"
+        );
+        assert_eq!(
+            exact_bundle_matches,
+            vec![guarded_step.accepted.candidate_hash.clone()],
+            "exactly one tied step-9 survivor should match the guarded historical-anchor axiomatic bundle"
+        );
+        assert_ne!(
+            structural_acceptance.accepted.candidate_hash, target_candidate.candidate_hash,
+            "the raw structural tie-break should still miss the guarded step-9 axiomatic bundle"
+        );
+        assert!(
+            accepted_candidate.bit_kappa > structural_acceptance.accepted.bit_kappa,
+            "the repaired step-9 selector should now override the cheaper same-primary tie in favor of the guarded axiomatic bundle"
+        );
+        assert_eq!(
+            step.accepted.candidate_hash, target_candidate.candidate_hash,
+            "live claim step-9 acceptance should now prefer the guarded historical-anchor axiomatic bundle"
         );
     }
 

@@ -65,24 +65,27 @@ gate.
   `runs/codex-guarded-claim-cert-v1`.
 - The current repo head `217b5fc6612a72c3e160309cea97fc32797a127d`
   has now revalidated the targeted local guardrails that frame the remaining
-  late repair:
-  - clause-`2` / clause-`3` claim variants stay fenced out of historical
-    reanchor even with the exact reference terminal
-  - the captured step-`15` zero-admitted surface still first falls off the
-    historical-reanchor shell only at clause positions `2..3`
-  - mixed clause-`2` / clause-`3` claim-only surfaces still restore the exact
-    reference terminal under forced reanchor only with a clause-`6` deviation
-  - isolated clause-`2` / clause-`3` contexts still expose no safe
-    reference-terminal pocket
-  - the repaired step-`13` chain still clears exact connectivity,
-    partial-prefix bar, captured zero-admitted exact prunes, and live
-    terminal-rank pressure
-- No new source repair landed in this turn either; the latest source change
-  is diagnostic only, so the next honest change is still narrower
-  clause-local qualifier / reanchor evidence on the canonical branch at
-  positions `2..3`, with the nearby clause-`3` anchor-`11` exact-argument
-  neighborhood on clause-`2` replacements now the narrowest still-fenced
-  local opening.
+  parity repair:
+  - the guarded step-`9` telescope is still present, admissible, and
+    retainable on the guarded step-`8` prefix
+  - the landed step-`11` / step-`12` repairs still preserve their guarded
+    downstream continuations locally
+  - the landed step-`13` / step-`14` / step-`15` later-surface repairs remain
+    green as guardrails and continue to preserve the canonical step-`15`
+    continuation on their repaired branch
+- A new narrow step-`9` same-primary selector repair now lands on top of that
+  stored `v5` evidence surface:
+  - the guarded step-`9` telescope still stays retained inside the local
+    same-primary `17 / 4` tie set on the guarded step-`8` prefix
+  - exactly one tied step-`9` survivor now matches the exact historical-anchor
+    axiomatic bundle under claim admissibility on that prefix
+  - live claim step-`9` acceptance now prefers that guarded exact-bundle
+    survivor over the cheaper same-primary structural winner, while the raw
+    structural selector still picks the old cheaper `70`-bit variant
+  - the new step-`9` selector regression, the downstream step-`11` /
+    step-`12` / step-`13` / step-`14` / step-`15` claim guardrails, the late
+    divergent step-`13` / step-`14` guardrails, and the stored `v5` compare
+    regression were all rerun green after this repair
 - A narrow claim-lane code change now lands on top of that stored `v5`
   evidence surface:
   claim incumbent pruning preserves same-primary accepted-rank ties on
@@ -734,16 +737,22 @@ gate.
   blocker:
   `v5` reaches step `14`, seeds roots, accepts a survivor there, and advances
   to step `15`.
-- The current blocker is now stored parity plus stored breadth:
-  - accepted-hash parity is still open through step `15`
-  - the earliest claim-specific accepted-hash divergence is step `9`
-  - the largest generated-floor collapse now localizes at steps `11..15`,
-    with the local step-`14` catalog miss now repaired and the remaining live
-    floor pressure concentrated at step `13` plus the canonical step-`15`
-    exact-screen path
-  - step `15` still returns the accepted executable canon, so the lane is
-    now failing by taking a too-thin or wrong route to the same endpoint
-- A new local step-`9` diagnostic pass narrows the earliest fork further:
+- The current blocker is now stored ordinal parity plus stored breadth:
+  - accepted-hash parity is still open through step `15` on stored evidence
+  - the earliest stored claim-specific accepted-hash divergence is still
+    step `9` on `v5`, but a local step-`9` selector repair now exists on the
+    guarded step-`8` prefix
+  - the downstream step `11` and step `12` local repairs plus the current
+    step-`13` / step-`14` / step-`15` guardrails have now been rerun green on
+    top of that repaired local tree
+  - the current step-`13` / step-`14` / step-`15` local surfaces remain
+    useful guardrails, but further widening is deferred until the canonical
+    path is stable and correct through step `15`
+  - step `15` still returns the accepted executable canon, so the next honest
+    move is now a fresh stored rerun and audit refresh rather than another
+    pre-rerun selector theory
+- A new local step-`9` diagnostic plus selector repair now closes the earliest
+  local fork:
   - the guarded step-`9` telescope is still present in late claim
     enumeration (`81` `kappa = 4` claim telescopes)
   - it still passes claim open-band admissibility and connectivity on the
@@ -754,10 +763,12 @@ gate.
     telescope into the retained claim candidate set, so the earliest fork is
     no longer best explained as raw generation loss or terminal-clause
     filtering loss
-  - however, that same experiment shows the tied step-`9` candidates still
-    collapse onto the same observed repaired step-`10..12` chain, so step `9`
-    still should not be treated as a closed local selection bug while the late
-    step-`13` / step-`15` breadth story remains open
+  - the tied step-`9` candidates still collapse onto the same observed
+    repaired step-`10..12` chain, so the final local fix stays narrowly on
+    step-`9` same-primary final selection rather than on generation or later
+    viability
+  - exactly one tied step-`9` survivor matches the guarded historical-anchor
+    axiomatic bundle, and live claim step `9` now accepts that survivor
 - A new local step-`11` diagnostic plus narrow incumbent-pruning and selector
   repairs now refine that blocker:
   - the guarded step-`11` completion is still present in the claim
@@ -849,8 +860,9 @@ gate.
   honest engineering dollar:
   - do not reopen runtime-only step-`4` surgery first
   - do not reopen late-step zero-candidate diagnosis first
-  - first localize the earliest parity fork and the late generated-floor
-    collapse that remain on the completed run
+  - do not reopen another pre-rerun step-`9` selector theory first
+  - first rerun the repaired local tree and refresh stored compare /
+    certification / benchmark evidence
 - No residual `pen-cli.exe` process remains from the `v5` rerun.
 
 ## Forward Direction
@@ -859,204 +871,32 @@ gate.
   `v1`, `v2`, `v3`, capped `v1`, stopped `v4`, and completed `v5`.
 - Treat the pre-flight gate, the completed full-profile rerun, and the stored
   compare / certification / benchmark outputs as earned.
+- Treat the new local step-`9` selector regression and its downstream
+  step-`11` / step-`12` / step-`13` / step-`14` / step-`15` guardrail reruns
+  as the current local proof that the earliest parity fork is repaired.
 - Keep the new stored `v5` compare / certification / benchmark regressions
   green as the local parity-plus-breadth guardrail.
 - Keep the claim-policy metadata, narrative/event artifacts, exact-screen
   reason counts, prune-class counts, and manifest provenance green.
-- Prioritize targeted local diagnosis and repair for:
-  - the step-`9` accepted-hash fork
-  - the landed scoped claim-only step-`13` widening plus follow-up
-    structural-connectivity plus repaired-chain incumbent-relief repairs:
-    claim-open widths `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated
-    prefixes `123`, guarded accepted metric shell preserved, and the same
-    observed `step-13 -> step-15` continuation preserved
-  - treating step `13` as a repaired local guardrail rather than the next
-    live blocker:
-    exact connectivity rejections, partial-prefix bar failures, captured
-    zero-admitted exact prunes, and live terminal-rank prunes are now all `0`
-    on the repaired `34 / 6` chain, while the divergent step-`13` guardrail
-    remains intact
-  - keeping the widened step-`14` catalog plus same-primary continuation
-    selector stable until a stored rerun consumes it
-  - the step-`15` canonical temporal-shell exact-prune surface, which now
-    freezes as `1944` captured zero-admitted families with no cached compact
-    bounds after the narrow clause-`0` / clause-`1` and clause-`4` /
-    clause-`5` historical-reanchor repairs land, with all `5832` generated
-    terminal options on that captured
-    surface now frozen as structurally connected but still unqualified
-    `NeedsFallback` candidates with `0` historical reanchor hits while the raw
-    `6561`-telescope catalog now narrows to `1794` generated prefixes before
-    proof-close on the canonical `DCT 103 / 8` continuation; the repaired
-    branch now pays `468` partial-prefix bar failures plus `80`
-    incumbent-dominance prunes, the surviving temporal terminal cluster has
-    widened to `732` generated / `82` admitted / `82` exact-screened /
-    `80` pruned, and the remaining captured families now first fall off the
-    historical reanchor prefix only at clause positions `2..3` with counts
-    `1458` and `486`; clause positions `0`, `1`, `4`, and `5` are no
-    longer present on the captured isolated-prefix surface, clause `6` still
-    stays downstream of that capture boundary, and the new exact-terminal-only
-    isolated recovery regression now further fences the earlier bridge slots:
-    clause positions `2` and `3` still reopen stronger local `89 / 8` and
-    `88 / 8` rivals even without lifted terminal closures, and the new
-    clause-`2` / clause-`3` pair-surface regression now shows that every
-    remaining pairing still recovers only through stronger-than-canonical
-    exact-terminal profiles (`74 / 8`, `75 / 8`, `88 / 8`, `89 / 8`, or
-    `60 / 8`) even when forced reanchor sometimes restores the reference
-    terminal locally on mixed pair surfaces, and the new nearby clause-`2` /
-    clause-`3` temporal-replacement regression now shows that simple
-    demo-style clause swaps still collapse onto the same unsafe isolated
-    `89 / 8` and `88 / 8` profiles, and the new nearby clause-`2` /
-    clause-`3` pair-replacement regression now shows that broadening both
-    positions together across that same local neighborhood still collapses all
-    `16` exact-terminal-only paired recoveries onto one unsafe `74 / 8`
-    profile, so the next repair should focus on clause-local temporal
-    qualifier evidence at positions `2..3` while keeping isolated recovery,
-    paired recovery, and broader nearby clause-catalog relands fenced and
-    preserving the exact reference terminal continuation
-  - avoiding a direct temporal-reanchor matcher reland first:
-    both the broad `60 / 8 / 9840` branch and the narrower `89 / 8 / 780`
-    branch disturbed the canonical step-`15` continuation and were reverted
-  - avoiding a direct early clause-`2` / clause-`3` reanchor-bridge matcher
-    reland first:
-    the clause-`3`-only branch displaced the canonical continuation to
-    `88 / 8 / 795`, and the clause-`2` plus clause-`3` branch displaced it to
-    `74 / 8 / 828`, so both were reverted as well; the new clause-`2` /
-    clause-`3` pair-surface regression now also shows that no direct paired
-    reland is honest on the current captured surface either
-- Launch the next clean-start full-profile rerun only after the local repair
-  is green against those stored parity/floor regressions.
+- Keep the current step-`13` / step-`14` / step-`15` surfaces green as
+  guardrails without widening any bands further.
+- Launch the next clean-start full-profile rerun now that the local repair is
+  green against the stored parity/floor regressions.
 
 ## Immediate Next Move
 
-1. Keep the new step-`11` retained-pool regression green:
-   the guarded completion must stay visible through terminal-clause
-   generation, compact summary, survivor sketch, and retained-pool
-   preservation on the live claim history.
-2. Keep the new step-`11` selector regression green:
-   live claim acceptance must keep preferring the guarded same-primary
-   survivor over richer raw structural winners on the live divergent history.
-3. Keep the new step-`11` continuation-collapse regression green:
-   all current same-primary tied step-`11` survivors still keep step `12`
-   alive and now collapse onto one observed step-`12` `34 / 6`
-   continuation.
-4. Keep the new step-`12` exact-screen / minimality regression green:
-   the guarded curvature shell must keep surviving preterminal clause
-   exposure, full summary, compact survivor sketch, semantic minimality, and
-   exact remaining-one screening on the repaired live history.
-5. Keep the new step-`12` retained-pool regression green:
-   the guarded curvature shell must stay present in the retained candidate
-   pool once the cross-band partial-prefix cache is keyed by `clause_kappa`.
-6. Keep the new step-`12` cache-key regression green:
-   a modal `5`-clause `CannotClearBar` result must not poison the guarded
-   `6`-clause continuation on the same preterminal prefix.
-7. Keep the new step-`12` selector regression green:
-   live claim acceptance must keep preferring the guarded same-primary
-   curvature shell over richer raw structural winners inside the repaired
-   `34 / 6` tier.
-8. Keep the new step-`12` continuation-collapse regression green:
-   every current same-primary tied step-`12` survivor must still collapse onto
-   one observed step-`13..15` continuation with generated counts
-   `123`, `12027`, and `1794`.
-9. Keep the new widened step-`14` regression green:
-   the repaired step-`12` chain must keep reporting a step-`14` raw catalog
-   of `19683`, `3` surviving roots, and `12027` live generated prefixes
-   before proof-close on the widened claim `kappa = 9` surface.
-10. Keep the new step-`14` same-primary continuation selector regression green:
-    live claim acceptance must keep choosing the one same-primary
-    `62 / 9` survivor that restores the canonical step-`15`
-    `DCT 103 / 8` continuation while the broader `78 / 9 / 12027`
-    branch remains the alternate local path.
-11. Do not reland a global band-`7` widening directly:
-    the exploratory branch widened repaired step `13` to raw `2187` /
-    generated `615`, but it also disturbed claim prefix-memo,
-    realistic-shadow, demo-lane, and divergent late-step guardrails.
-12. Keep the new scoped claim-only step-`13` widening plus structural-
-    connectivity plus repaired-chain incumbent-relief regressions green:
-    the repaired step-`12` chain must keep reporting claim-open widths
-    `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated prefixes `123`, and
-    the guarded accepted metric shell at step `13`.
-13. Keep the new repaired step-`13` exact-screen-clear regression green:
-    the repaired widened surface must keep reporting `0` connectivity prunes,
-    `0` terminal-clause-filter prunes, `0` partial-prefix bar prunes,
-    `0` captured zero-admitted exact prunes, and `0` live terminal-rank
-    prunes on the surviving repaired `34 / 6` surface.
-14. Treat step `13` as a repaired guardrail rather than the next late blocker:
-    do not reopen structural connectivity, terminal filtering,
-    incumbent-dominance relief, or another blind catalog widening target
-    first while step `15` remains open.
-15. Treat step `15` as the separate remaining exact-screen problem:
-    inspect why the restored canonical temporal-shell path still collapses
-    into `1944` captured zero-admitted exact-prune families, `468`
-    partial-prefix bar failures, and `80` incumbent-dominance prunes before
-    proof-close; the new regression shows those captured families are now a
-    pure qualifier / reanchor miss on an already connected surface
-    (`5832 / 5832` `NeedsFallback`, `0` structural
-    disconnections, `0` historical reanchor hits, `0` admissibility
-    rejections), and the follow-up reanchor-prefix regression now proves those
-    captured families already fall off the temporal-shell prefix only at
-    clause positions `2..3` with no full seven-clause prefix matches; the
-    isolated-prefix regression now also proves clause positions `0`, `1`,
-    `4`, and `5` are repaired out of the captured surface while the remaining
-    isolated claim-only deviations at clause positions `2..3` still keep all `3`
-    terminal continuations at `NeedsFallback` and zero-admitted on the
-    otherwise exact suffix, and the follow-up variant-product regression now
-    proves each such remaining local variant stays blocked across every later
-    claim suffix combination before the clause-`6` boundary, while the new
-    forced-reanchor recovery regression proves each remaining isolated local
-    variant would recover all `3` terminal continuations as
-    `KeepWithoutFallback`, admitted, and bar-clearing on the otherwise exact
-    suffix, while the new forced-reanchor winner regression now also proves
-    that a direct local reanchor flip still routes those isolated exact-suffix
-    recoveries into noncanonical `75 / 8` and `74 / 8` terminal
-    winners instead of the reference terminal clause, and the new
-    exact-terminal-only isolated recovery regression now proves that even
-    keeping the terminal fixed still reopens stronger local `89 / 8` and
-    `88 / 8` clause-`2` / clause-`3` rivals, while the new clause-`2` /
-    clause-`3` pair-surface regression now proves every remaining pairing
-    still recovers only through stronger-than-canonical exact-terminal
-    profiles (`74 / 8`, `75 / 8`, `88 / 8`, `89 / 8`, or `60 / 8`), the new
-    mixed-pair reference-terminal winner regression now proves that even the
-    forced-reanchor cases that do restore the exact reference terminal stay
-    pinned to the unsafe `60 / 8` profile, the new mixed clause-`2` /
-    clause-`3` reference-terminal context regression now proves those unsafe
-    reference-terminal wins already require a clause-`6` deviation and already
-    span every repaired-side subset of positions `0`, `1`, `4`, and `5`, and
-    the new nearby clause-`2` /
-    clause-`3` temporal-replacement regression now proves simple demo-style
-    clause swaps still collapse onto those same unsafe isolated profiles,
-    while the new nearby clause-`2` / clause-`3` pair-replacement regression
-    now proves that broadening both positions together across that same local
-    neighborhood still stays outside historical reanchor and still collapses
-    all `16` exact-terminal-only paired recoveries onto the same unsafe
-    `74 / 8` profile, and the new mixed clause-`2` replacement plus nearby
-    clause-`3` anchor-swap regression now proves the nearby anchor-`9`
-    neighborhood stays below bar across every current clause-`2`
-    claim/demo replacement while the nearby anchor-`11` exact-argument swap
-    reaches only a canonical-primary-but-still-unqualified `103 / 8`
-    bar-clearer there and the lifted anchor-`11` neighbors still reopen
-    unsafe `88 / 8`, so do not treat that remaining loss
-    as generic bar bookkeeping, raw dependency-edge generation, a claim
-    admissibility miss, a terminal-clause-only matcher bug, a multi-
-    deviation-only interaction, a later-suffix interaction, a direct early
-    clause-`2` / clause-`3` bridge-matcher expansion, a direct paired
-    clause-`2` / clause-`3` matcher reland, a simple nearby clause-catalog
-    swap, or a nearby clause-`3` anchor retarget.
-16. Do not reland either exploratory temporal-reanchor matcher variant
-    directly:
-    the broad reland displaced the canonical step-`15` continuation to
-    `60 / 8 / 9840`, and the narrower late-shell-only reland still displaced
-    it to `89 / 8 / 780`.
-17. Do not reland the exploratory early clause-`2` / clause-`3`
-    reanchor-bridge matcher variants directly:
-    the clause-`3`-only branch displaced the canonical step-`15`
-    continuation to `88 / 8 / 795`, and the clause-`2` plus clause-`3`
-    branch displaced it to `74 / 8 / 828`, and the new clause-`2` /
-    clause-`3` pair-surface regression now shows the remaining paired claim
-    surfaces are still unsafe to reland directly too.
-18. Re-run the step-`9` tie diagnostic only after the step-`13` breadth and
-    step-`15` exact-screen stories are better understood, since the current
-    tied step-`9` set still shares the same observed repaired
-    step-`10..12` chain.
-19. Only then land the narrowest honest parity/floor fix, and only then launch
-    `long-rerun-v6` and re-run compare, certification, and benchmark against
-    the repaired bundle.
+1. Launch `long-rerun-v6` on the current repaired local tree; do not resume
+   the stopped `v4` run and do not recapture replay fixtures first.
+2. Re-run compare, certification, and benchmark on that new full-profile
+   bundle.
+3. Keep the current step-`13` / step-`14` / step-`15` later-surface guardrails
+   frozen while `v6` runs:
+   the repaired step-`12` chain should still report step `13`
+   `[3,1,3,3,1,1,1]` / `27` / `123`, step `14` `19683` / `12027`, and the
+   canonical step-`15` continuation `DCT 103 / 8 / 1794`.
+4. Do not broaden any claim search band further, and do not reland the
+   rejected global band-`7` widening, temporal-reanchor matcher, or early
+   clause-`2` / clause-`3` bridge expansions while waiting for the repaired
+   stored rerun.
+5. Keep the step-`1` breadth miss and the stored late-floor misses on the
+   checklist until `v6` proves otherwise from stored evidence alone.

@@ -16,213 +16,33 @@ It lists only work that is still open.
   - accepted hashes diverge from guarded replay at steps `9`, `11`, and `12`
   - early breadth still misses at step `1` (`546` versus target `2144`)
   - late generated floors still miss at steps `11..15`
-- Local step-`11`, step-`12`, step-`13`, step-`14`, and narrow step-`15`
-  clause-`0` / clause-`1` plus clause-`4` / clause-`5` repairs are landed,
-  but no stored rerun has consumed them yet.
-- The remaining local late blocker is now split cleanly:
-  - a scoped claim-only widening plus follow-up structural-connectivity plus
-    repaired-chain incumbent-relief repairs are now landed at step `13`:
-    claim-open still widens to raw widths `[3,1,3,3,1,1,1]`, raw catalog `27`,
-    and the guarded accepted metric shell, but the repaired live surface now
-    reaches `123` generated prefixes on the same observed `step-13 -> step-15`
-    continuation
-  - that repaired widened step-`13` surface no longer loses prefixes to exact
-    connectivity or partial-prefix bar screening:
-    connectivity rejections, partial-prefix bar failures, and captured
-    zero-admitted exact prunes are all now `0` on the repaired branch
-  - that repaired widened step-`13` surface now also clears live
-    terminal-rank pruning (`0`) on the repaired guarded step-`12` `34 / 6`
-    chain while the divergent step-`13` viability-split guardrail stays
-    intact, so step `13` is now a guardrail rather than the next open late
-    blocker
-  - step `14` is now a guardrail rather than the first blocker:
-    raw `19683`, `3` surviving roots, `12027` live generated prefixes, and a
-    selector that preserves the canonical step-`15` continuation
-  - step `15` still opens a raw `6561`-telescope catalog, but the repaired
-    canonical branch now narrows to `1794` generated prefixes on the same
-    `DCT 103 / 8` continuation after paying `468` exact partial-prefix bar
-    failures plus `80` incumbent-dominance prunes before proof-close; the
-    captured exact-prune surface is now `1944` zero-admitted terminal
-    families with no cached compact bounds, and all `5832` generated terminal
-    options on that surface are structurally connected but still unqualified
-    `NeedsFallback` candidates with `0` historical reanchor hits and `0`
-    admissibility rejections
-  - the remaining step-`15` mismatch is now localized more tightly:
-    historical-reanchor prefix progress first breaks only at clause positions
-    `2..3` with counts `1458` and `486`, while clause positions `0`, `1`,
-    `4`, and `5` are repaired out of the captured isolated-prefix surface and
-    clause `6` stays downstream of that capture boundary
-  - the remaining isolated deviations are now `4` total, with exactly `2`
-    claim-only variants at each clause position `2` and `3`;
-    those local variants still stay blocked across every later claim suffix
-    combination before the clause-`6` boundary and still leave all `3`
-    terminal continuations zero-admitted `NeedsFallback`
-  - the forced-reanchor recovery and winner reads now apply only to clause
-    positions `2..3`: each remaining isolated local variant would recover all
-    `3` terminal continuations as `KeepWithoutFallback`, admitted, and
-    bar-clearing on the otherwise exact suffix if clause-local qualifier
-    evidence were restored, but a direct local reanchor flip still never
-    restores the canonical reference terminal clause and instead stays on the
-    noncanonical `75 / 8` and `74 / 8` winner profiles, so the
-    open step-`15` work is still clause-local qualifier evidence on the
-    canonical branch at positions `2..3` while preserving the exact reference
-    terminal continuation
-  - a new exact-terminal-only isolated recovery regression now narrows that
-    open step-`15` work further:
-    clause positions `2` and `3` still reopen stronger local exact-terminal
-    recovered profiles at `89 / 8` and `88 / 8`, so direct clause-`2` /
-    clause-`3` isolated recovery remains fenced while the repaired
-    clause-`4` / clause-`5` qualifier work stays on the guardrail
-  - a new clause-`2` / clause-`3` pair-surface regression now narrows that
-    same open step-`15` work further:
-    all `8` remaining clause-`2` / clause-`3` claim-only pairings stay
-    present with `243` captured prefixes each through the later suffix fan-out,
-    exact-terminal-only recovery on every pairing still admits and bar-clears
-    all `243` prefixes but always outranks the canonical `DCT 103 / 8`
-    continuation, and forced clause-local reanchor on the mixed pair surfaces
-    still admits all `729` terminal continuations while keeping only `405`
-    bar clearers and splitting winners with the exact reference terminal
-    winning on `162 / 243` prefixes there; a new mixed-pair
-    reference-terminal winner regression now also proves those wins stay
-    pinned to the unsafe `60 / 8` profile and still all outrank the canonical
-    continuation, so the remaining open work is not any direct paired
-    clause-`2` / clause-`3` reland either
-  - a new nearby clause-`2` / clause-`3` temporal-replacement regression now
-    narrows that same open step-`15` work further:
-    swapping the current claim-only clause-`2` or clause-`3` variants for
-    nearby demo-style temporal neighbors still leaves every exact-terminal-only
-    isolated recovery on the same unsafe `89 / 8` or `88 / 8` profile while
-    staying structurally connected, locally admissible, and outside
-    historical reanchor on the otherwise exact suffix, so the remaining open
-    work is not a simple clause-catalog swap either
-  - a new nearby clause-`2` / clause-`3` pair-replacement regression now
-    narrows that same open step-`15` work further:
-    pairing any nearby claim-or-demo temporal replacement at clause positions
-    `2` and `3` on the otherwise exact suffix still leaves all `16`
-    non-reference pairs structurally connected, locally admissible, and
-    outside historical reanchor, and every such exact-terminal-only paired
-    recovery now collapses onto the same unsafe `74 / 8` profile, so the
-    remaining open work is not a broader local replacement-neighborhood reland
-    either
-  - a new mixed clause-`2` / clause-`3` reference-terminal context regression
-    now narrows that same open step-`15` work further:
-    every mixed claim-only clause-`2` / clause-`3` surface that restores the
-    exact reference terminal under forced reanchor still does so only when
-    clause `6` also deviates, and those unsafe `60 / 8` reference-terminal
-    wins already span every repaired-side subset of clause positions `0`,
-    `1`, `4`, and `5` on top of that clause-`6` deviation, including the
-    minimal clause-`6`-only context, so the remaining open work is not hiding
-    behind repaired-side exactness or a clause-`6`-mediated reland either
-  - a new isolated clause-`2` / clause-`3` context regression now narrows
-    that same open step-`15` work further:
-    every remaining isolated clause-`2` or clause-`3` claim-only surface now
-    already spans all `32` repaired-side / clause-`6` context masks on the
-    captured step-`15` surface, yet forced clause-local reanchor still never
-    restores the exact reference terminal anywhere on that isolated context
-    set, and exact-terminal-only isolated recovery still collapses clause-`3`
-    contexts only onto unsafe `88 / 8` or `74 / 8` profiles plus clause-`2`
-    contexts only onto unsafe `89 / 8` or `75 / 8` profiles depending on
-    whether clause `6` also deviates, so the remaining open work is not
-    hiding behind repaired-side exactness or isolated clause-`6` context
-    either
-  - a new exact-suffix clause-`2` / clause-`3` catalog regression now narrows
-    that same open step-`15` work further:
-    on the otherwise exact suffix, the live step-`15` claim catalogs at
-    clause positions `2` and `3` still expose only the two known
-    non-reference claim variants each, and those exact-suffix variants still
-    stay structurally connected, locally admissible, outside historical
-    reanchor, and pinned to the same unsafe isolated profiles `89 / 8` and
-    `88 / 8`, so the remaining open work is not hiding behind an undiscovered
-    exact-suffix clause-catalog branch either
-  - a new nearby clause-`3` anchor-swap regression now narrows that same
-    open step-`15` work further:
-    on the otherwise exact suffix, swapping clause `3` from the exact
-    historical anchor `10` to nearby library refs `9` or `11` still leaves
-    every tested clause structurally connected, locally admissible, outside
-    historical reanchor, and first mismatching at clause `3`; the nearby
-    anchor-`9` exact-argument swap still reopens unsafe `65 / 8`, the lifted
-    anchor-`9` neighbors stay below bar, the nearby anchor-`11`
-    exact-argument swap reaches only a noncanonical `117 / 8` bar-clearer
-    without qualifier evidence, and the lifted anchor-`11` neighbors reopen
-    unsafe `102 / 8` profiles, so the remaining open work is not a simple
-    nearby clause-`3` anchor retarget either
-  - a new mixed clause-`2` replacement plus nearby clause-`3` anchor-swap
-    regression now narrows that same open step-`15` work further again:
-    pairing any current clause-`2` claim/demo replacement with the nearby
-    clause-`3` anchor-`9` neighborhood still leaves all `5` tested
-    exact-suffix variants locally admissible but below bar and outside
-    historical reanchor; pairing those same clause-`2` replacements with the
-    nearby clause-`3` anchor-`11` exact-argument swap yields a
-    canonical-primary-but-still-unqualified `103 / 8` bar-clearer, while the
-    lifted anchor-`11` neighbors still reopen unsafe `88 / 8`, so the
-    remaining open work is not a simple nearby clause-`3` anchor retarget or
-    a direct clause-`2` replacement reland either
-- A naive global claim band-`7` widening is now ruled out as the direct next
-  reland:
-  - it can lift the repaired local step-`13` read to raw `2187` /
-    generated `615`
-  - but it also disturbs claim prefix-memo, realistic-shadow, demo-lane, and
-    divergent late-step guardrails, so the remaining open work is the
-    step-`15` exact-screen path rather than another blind step-`13` reland
-- A direct temporal-reanchor matcher reland is also now ruled out as the
-  direct next step-`15` fix:
-  - a broad reland displaced the canonical step-`15` continuation to
-    `60 / 8 / 9840`
-  - a narrower late-shell-only reland still displaced it to `89 / 8 / 780`
-  - both variants were reverted, so the remaining open work is narrower
-    qualifier / reanchor evidence on the connected captured surface rather
-    than a generic temporal-shell matcher expansion
-- A direct early clause-`2` / clause-`3` reanchor-bridge matcher reland is
-  now also ruled out as the direct next step-`15` fix:
-  - a clause-`3`-only reland displaced the canonical step-`15` continuation to
-    `88 / 8 / 795`
-  - a clause-`2` plus clause-`3` reland displaced it further to
-    `74 / 8 / 828`
-  - both variants were reverted and the baseline step-`15`
-    `103 / 8 / 1794` surface was revalidated afterwards, so the remaining open
-    work is narrower qualifier evidence on the current connected captured
-    surface rather than direct early bridge-matcher expansion
-- A direct paired clause-`2` / clause-`3` reland is now also ruled out as
-  the direct next step-`15` fix:
-  - the new pair-surface regression shows every remaining pairing still
-    recovers only through stronger-than-canonical exact-terminal profiles
-  - mixed pair surfaces sometimes restore the exact reference terminal under
-    forced reanchor, but only on an unsafe surface that still outranks the
-    canonical continuation overall
-- A direct isolated exact-terminal clause-`2` / clause-`3` recovery reland
-  is now also ruled out as the direct next step-`15` fix:
-  - the new local regression shows those earlier isolated recoveries still
-    reopen stronger local `89 / 8` and `88 / 8` rivals even without lifted
-    terminal closures
-  - clause positions `4` and `5` stay on canonical-primary `103 / 8`, so the
-    remaining open work can stay later-clause-scoped before revisiting the
-    earlier bridge slots
-- A simple nearby clause-`2` / clause-`3` temporal clause-catalog swap is now
-  also ruled out as the direct next step-`15` fix:
-  - nearby demo-style replacements still stay outside historical reanchor on
-    the otherwise exact suffix
-  - those replacements still collapse onto the same unsafe isolated
-    `89 / 8` and `88 / 8` recovery profiles, so the remaining open work is
-    narrower clause-local qualifier evidence rather than a neighboring
-    temporal-clause substitution
-- A simple nearby clause-`3` anchor retarget is now also ruled out as the
-  direct next step-`15` fix:
-  - the nearby anchor-`9` / anchor-`11` exact-suffix neighborhoods still all
-    stay outside historical reanchor and first mismatch at clause `3`
-  - anchor-`9` exact still reopens unsafe `65 / 8`, the lifted anchor-`9`
-    neighbors stay below bar, anchor-`11` exact only reaches a noncanonical
-    `117 / 8` bar-clearer without qualifier evidence, and the lifted
-    anchor-`11` neighbors reopen unsafe `102 / 8` profiles, so the remaining
-    open work is narrower clause-local qualifier evidence rather than a
-    nearby clause-`3` historical-anchor retarget
+- A local step-`9` same-primary selector repair is now landed and guarded by
+  tests, but the stored `v5` bundle still records the old step-`9` /
+  step-`11` / step-`12` parity forks until `v6` is rerun.
+- Local step-`11` and step-`12` repairs have now been rerun green on top of
+  that repaired local step-`9` selector and should stay frozen as downstream
+  guardrails until stored evidence catches up.
+- Local step-`13`, step-`14`, and narrow step-`15` repairs are also landed and
+  should stay frozen as guardrails:
+  - step `13` currently reports `[3,1,3,3,1,1,1]` / `27` / `123`
+  - step `14` currently reports `19683` / `12027`
+  - step `15` currently preserves `DCT 103 / 8 / 1794`
+- No new per-step claim search-band expansion should land before the canonical
+  accepted path is stable and correct through step `15`.
+- Keep the step-`1` breadth miss on the checklist, but do not confuse that
+  signoff floor with the ordinal parity repair.
 - Claim-policy honesty, fallback honesty, narrative/event completeness,
   exact-screen reason completeness, prune-class completeness, and manifest
   completeness are already earned on the stored full-profile run.
 
 ## 1. Stored Claim Evidence
 
-- [ ] Preserve accepted-hash parity through step `15` on a stored full-profile
+- [ ] Restore accepted-hash parity first at step `9` on a stored full-profile
       bundle.
+- [ ] Re-earn accepted-hash parity through steps `10..15` in ordinal order on
+      top of the repaired step-`9` prefix.
+- [ ] Defer any new per-step claim search-band expansion until the canonical
+      accepted path through step `15` is stable and correct.
 - [ ] Restore step `1` generated raw count to exactly `2144`.
 - [ ] Re-earn the required generated-count floors from stored evidence:
       step `10 >= 500`, step `11 >= 800`, step `12 >= 1200`,
