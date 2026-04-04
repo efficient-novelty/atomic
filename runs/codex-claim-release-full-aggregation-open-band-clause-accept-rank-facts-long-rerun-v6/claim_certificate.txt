@@ -1,0 +1,15 @@
+Claim Certification: attention
+claim run: C:\DEV\atomic\runs\codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v6
+guarded run: C:\DEV\atomic\runs\codex-guarded-claim-cert-v1
+runtime threshold ms: 600000
+accepted_hash_parity: pass - accepted hashes match guarded through step 15
+search_policy: pass - claim search policy matches the expected claim-specific metadata
+fallback_honesty: pass - no replay or non-claim fallback evidence detected
+narrative_artifacts: pass - claim narrative artifacts are complete
+early_breadth: fail - early breadth failed at step 1
+late_generated_floors: fail - late generated floors failed at step 11, step 13, step 15
+runtime_threshold: pass - stored runtime 2904 ms is within the certified threshold
+exact_screen_reason_completeness: pass - exact-screen reasons are fully persisted in step artifacts
+prune_class_completeness: pass - prune class counts are fully persisted in step artifacts
+manifest_completeness: pass - manifest includes all required provenance fields
+failing checks: early_breadth, late_generated_floors

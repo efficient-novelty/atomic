@@ -1,0 +1,203 @@
+{
+  "certificate_version": 1,
+  "checks": {
+    "accepted_hash_parity": {
+      "baseline_missing_steps": [],
+      "detail": "accepted hashes match guarded through step 15",
+      "lane_missing_steps": [],
+      "matches_baseline": true,
+      "status": "pass"
+    },
+    "early_breadth": {
+      "detail": "early breadth failed at step 1",
+      "status": "fail",
+      "steps": [
+        {
+          "actual": 546,
+          "status": "miss",
+          "step_index": 1,
+          "target": 2144
+        }
+      ]
+    },
+    "exact_screen_reason_completeness": {
+      "coverage": {
+        "derived_steps": [],
+        "expected_steps": 15,
+        "missing_steps": [],
+        "persisted_steps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "source_counts": {
+          "summary": 15
+        },
+        "status": "complete",
+        "totals": {
+          "incumbent_dominance": 6804,
+          "legality_connectivity_exact_rejection": 15144,
+          "partial_prefix_bar_failure": 1992,
+          "terminal_prefix_completion_failure": 158
+        }
+      },
+      "detail": "exact-screen reasons are fully persisted in step artifacts",
+      "status": "pass"
+    },
+    "fallback_honesty": {
+      "detail": "no replay or non-claim fallback evidence detected",
+      "reference_replay_steps": [],
+      "resume_steps": [],
+      "run_mode": "atomic_search_bootstrap",
+      "status": "pass",
+      "unexpected_provenance": []
+    },
+    "late_generated_floors": {
+      "detail": "late generated floors failed at step 11, step 13, step 15",
+      "status": "fail",
+      "steps": [
+        {
+          "actual": 1428,
+          "status": "hit",
+          "step_index": 10,
+          "target": 500
+        },
+        {
+          "actual": 330,
+          "status": "miss",
+          "step_index": 11,
+          "target": 800
+        },
+        {
+          "actual": 1338,
+          "status": "hit",
+          "step_index": 12,
+          "target": 1200
+        },
+        {
+          "actual": 123,
+          "status": "miss",
+          "step_index": 13,
+          "target": 2200
+        },
+        {
+          "actual": 12027,
+          "status": "hit",
+          "step_index": 14,
+          "target": 3500
+        },
+        {
+          "actual": 1794,
+          "status": "miss",
+          "step_index": 15,
+          "target": 5000
+        }
+      ]
+    },
+    "manifest_completeness": {
+      "detail": "manifest includes all required provenance fields",
+      "missing_fields": [],
+      "present_fields": {
+        "arch": "x86_64",
+        "binary_sha256": "bdcbf9b0c6386a5fd2e0e7388c2637a15486c962f47041530075dff3e50a5385",
+        "build_profile": "release",
+        "cargo_lock_sha256": "0e69f79462261b9360797a7ff7874f6da9177a1c08815eb48b2ae2cba4096dab",
+        "cpu_model": "AMD Ryzen 5 7600 6-Core Processor",
+        "dirty_tree": false,
+        "git_commit_sha": "629b59861d521555cfd214a602bedec4f44c67d0",
+        "logical_cpus": 12,
+        "os": "windows",
+        "physical_core_count": 6,
+        "ram_bytes": 16217264128,
+        "resolved_worker_count": 8,
+        "target_cpu": "default",
+        "target_triple": "x86_64-pc-windows-msvc"
+      },
+      "status": "pass"
+    },
+    "narrative_artifacts": {
+      "artifact_status": "complete",
+      "detail": "claim narrative artifacts are complete",
+      "missing_event_steps": [],
+      "missing_narrative_steps": [],
+      "status": "pass"
+    },
+    "prune_class_completeness": {
+      "coverage": {
+        "derived_steps": [],
+        "expected_steps": 15,
+        "missing_steps": [],
+        "persisted_steps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "source_counts": {
+          "summary": 15
+        },
+        "status": "complete",
+        "totals": {
+          "heuristic_shaping": 88,
+          "quotient_dedupe": 0,
+          "sound_minimality": 24098
+        }
+      },
+      "detail": "prune class counts are fully persisted in step artifacts",
+      "status": "pass"
+    },
+    "runtime_threshold": {
+      "detail": "stored runtime 2904 ms is within the certified threshold",
+      "status": "pass",
+      "threshold_ms": 600000,
+      "total_runtime_ms": 2904
+    },
+    "search_policy": {
+      "actual": {
+        "bucket_policy": "structural_generic",
+        "guidance_style": "claim_debt_guided",
+        "late_expansion_policy": "claim_generic"
+      },
+      "detail": "claim search policy matches the expected claim-specific metadata",
+      "expected": {
+        "bucket_policy": "structural_generic",
+        "guidance_style": "claim_debt_guided",
+        "late_expansion_policy": "claim_generic"
+      },
+      "mismatches": [],
+      "status": "pass"
+    }
+  },
+  "claim_run": "C:\\DEV\\atomic\\runs\\codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v6",
+  "failing_checks": [
+    "early_breadth",
+    "late_generated_floors"
+  ],
+  "generated_utc": "2026-04-04T20:40:02.157572+00:00",
+  "guarded_run": "C:\\DEV\\atomic\\runs\\codex-guarded-claim-cert-v1",
+  "runtime_threshold_ms": 600000,
+  "status": "attention"
+}

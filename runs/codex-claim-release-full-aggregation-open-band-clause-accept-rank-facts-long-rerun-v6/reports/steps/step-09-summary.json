@@ -1,0 +1,2821 @@
+{
+  "step_index": 9,
+  "label": "Hopf",
+  "search_profile": "desktop_claim_shadow",
+  "objective_bar": {
+    "num": 1768,
+    "den": 441
+  },
+  "accepted": {
+    "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+    "canonical_hash": "blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+    "bit_kappa": 78,
+    "clause_kappa": 4,
+    "nu": 17,
+    "rho": {
+      "num": 17,
+      "den": 4
+    },
+    "overshoot": {
+      "num": 425,
+      "den": 1764
+    },
+    "shape_fingerprint": "0x7673f0b547538a8d",
+    "support_fingerprint": "0xa8a6d8be9494884e"
+  },
+  "telescope": {
+    "clauses": [
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Lib": 8
+            },
+            {
+              "Lib": 7
+            }
+          ]
+        }
+      },
+      {
+        "role": "introduction",
+        "expr": {
+          "App": [
+            {
+              "Lib": 5
+            },
+            {
+              "Var": 1
+            }
+          ]
+        }
+      },
+      {
+        "role": "introduction",
+        "expr": {
+          "Lam": {
+            "App": [
+              {
+                "Lib": 8
+              },
+              {
+                "Lib": 7
+              }
+            ]
+          }
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Lib": 7
+            },
+            {
+              "Lib": 8
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "trace": [
+    "source=structural-ast",
+    "nu_g=0",
+    "nu_h=0",
+    "nu_c=17",
+    "bonus_distributive=0",
+    "bonus_universe_poly=0",
+    "bonus_infinitesimal_shift=0",
+    "nu_total=17",
+    "node_trace_count=13",
+    "node=entry1|ctor=Pi",
+    "node=entry1/0|ctor=Lib",
+    "node=entry1/1|ctor=Lib",
+    "node=entry2|ctor=App",
+    "node=entry2/0|ctor=Lib",
+    "node=entry2/1|ctor=Var",
+    "node=entry3|ctor=Lam",
+    "node=entry3/0|ctor=App",
+    "node=entry3/0/0|ctor=Lib",
+    "node=entry3/0/1|ctor=Lib",
+    "node=entry4|ctor=Pi",
+    "node=entry4/0|ctor=Lib",
+    "node=entry4/1|ctor=Lib"
+  ],
+  "near_misses": [
+    {
+      "candidate_hash": "blake3:c68e96683d7c48ee65b08bdd6b837024093a883172a0ed894b5dcd4250b78167",
+      "canonical_hash": "blake3:533f7ea85cce4cb1e51d126f2dac12bbaf0a8e76f7becd0363bc3e7059b52320",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:208488a9cdcb74d81b054dd0ae400db296b586482a17acb29c1d3c6681da3f8e",
+      "canonical_hash": "blake3:019f52ce183bea5bbe0788b027e4e4cb7096abcd401ae886c60f1ac4ec9b77f0",
+      "bit_kappa": 82,
+      "clause_kappa": 4,
+      "nu": 17,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:127c17d11903653e0ae65a8922be98df4956cfb232faa4f82585f1ed98301ee8",
+      "canonical_hash": "blake3:a628c033e7c1fde6858af3b2f600a7511131ae9896ff8e44583a113f9a6cf8c7",
+      "bit_kappa": 76,
+      "clause_kappa": 4,
+      "nu": 17,
+      "status": "bar_clear_higher_overshoot"
+    }
+  ],
+  "search_stats": {
+    "enumerated_candidates": 81,
+    "well_formed_candidates": 81,
+    "malformed_rejections": 0,
+    "malformed_rejection_reasons": {},
+    "admissibility_rejections": 0,
+    "admissibility_diagnostics": {
+      "exact_legality_rejections": 0,
+      "structural_debt_cap_rejections": 0,
+      "admitted_deprioritized": 0,
+      "admitted_focus_aligned": 81,
+      "reason_counts": {
+        "open_band_structural": 81
+      }
+    },
+    "full_telescopes_evaluated": 63,
+    "evaluated_candidates": 63,
+    "canonical_candidates": 63,
+    "semantically_minimal_candidates": 63,
+    "canonical_dedupe_prunes": 0,
+    "semantic_minimality_prunes": 0,
+    "dedupe_prunes": 0,
+    "minimality_prunes": 0,
+    "heuristic_drops": 0,
+    "prefixes_created": 39,
+    "prefix_states_explored": 12,
+    "prefix_states_merged_by_signature": 42,
+    "prefix_states_exact_pruned": 6,
+    "prefix_states_heuristic_dropped": 0,
+    "incremental_legality_cache_hits": 129,
+    "incremental_connectivity_shortcuts": 81,
+    "incremental_connectivity_fallbacks": 0,
+    "incremental_connectivity_prunes": 0,
+    "incremental_clause_family_filter_hits": 0,
+    "incremental_clause_family_prunes": 0,
+    "incremental_active_window_clause_filter_hits": 0,
+    "incremental_active_window_clause_filter_prunes": 0,
+    "incremental_terminal_clause_filter_hits": 27,
+    "incremental_terminal_clause_filter_prunes": 0,
+    "incremental_trivial_derivability_hits": 81,
+    "incremental_trivial_derivability_prunes": 0,
+    "incremental_terminal_admissibility_hits": 81,
+    "incremental_terminal_admissibility_rejections": 0,
+    "incremental_terminal_prefix_completion_hits": 48,
+    "incremental_terminal_prefix_rank_hits": 0,
+    "incremental_terminal_rank_prunes": 0,
+    "incremental_partial_prefix_bound_hits": 3,
+    "incremental_partial_prefix_bound_checks": 12,
+    "incremental_partial_prefix_bound_prunes": 0,
+    "incremental_terminal_prefix_bar_prunes": 6,
+    "prune_classes": {
+      "quotient_dedupe": 0,
+      "sound_minimality": 6,
+      "heuristic_shaping": 0
+    },
+    "exact_screen_reasons": {
+      "partial_prefix_bar_failure": 0,
+      "terminal_prefix_completion_failure": 6,
+      "incumbent_dominance": 0,
+      "legality_connectivity_exact_rejection": 0
+    },
+    "demo_phase": {
+      "materialize_full_evals": 0,
+      "proof_close_reserved_millis": 0,
+      "proof_close_elapsed_millis": 0,
+      "proof_close_remaining_millis": 0,
+      "proof_close_reserve_overrun_millis": 0,
+      "proof_close_reserve_exhausted": false,
+      "proof_close_frontier_total_groups": 0,
+      "proof_close_frontier_groups_closed": 0,
+      "proof_close_frontier_groups_remaining": 0,
+      "proof_close_closure_percent": 0,
+      "proof_close_full_evals": 0,
+      "proof_close_overrun_full_evals": 0,
+      "materialize_soft_cap_triggered": false
+    },
+    "demo_funnel": {
+      "generated_raw_prefixes": 120,
+      "canonical_prefix_signatures": 39,
+      "well_formed_terminals": 81,
+      "hard_admissible": 81,
+      "exact_bound_screened": 69,
+      "exact_bound_pruned": 6,
+      "heuristic_dropped": 0,
+      "full_telescopes_evaluated": 63,
+      "bar_clearers": 63,
+      "semantically_minimal_clearers": 63,
+      "winner_overshoot": {
+        "num": 425,
+        "den": 1764
+      }
+    },
+    "demo_closure": {
+      "frontier_total_seen": 69,
+      "frontier_certified_nonwinning": 6,
+      "closure_percent": 8
+    },
+    "demo_bucket_stats": [
+      {
+        "bucket_label": "k4:structural_generic:support_form:library_backed:small_cluster",
+        "bucket_key": {
+          "clause_kappa": 4,
+          "taxonomy": "structural_generic",
+          "category": "support_form",
+          "support_profile": "library_backed",
+          "width": "small_cluster"
+        },
+        "generated_terminal_candidates": 144,
+        "admissible_terminal_candidates": 144,
+        "exact_screened_terminal_candidates": 144,
+        "pruned_terminal_candidates": 18,
+        "fully_scored_terminal_candidates": 63,
+        "best_overshoot": {
+          "num": 425,
+          "den": 1764
+        }
+      }
+    ],
+    "search_timing": {
+      "step_wall_clock_millis": 27,
+      "candidate_discovery_wall_clock_millis": 25,
+      "prefix_frontier_planning_wall_clock_millis": 0,
+      "selection_wall_clock_millis": 0
+    },
+    "prefix_frontier_hot_states": 21,
+    "prefix_frontier_cold_states": 0,
+    "retained_candidates": 63,
+    "frontier_hot_states": 63,
+    "frontier_cold_states": 0,
+    "frontier_resident_cold_states": 0,
+    "frontier_spill_states": 0,
+    "frontier_drops": 0,
+    "scored_candidate_distribution": {
+      "candidate_count": 63,
+      "clears_bar": 63,
+      "below_bar": 0,
+      "clause_kappa_counts": {
+        "4": 63
+      },
+      "nu_summary": {
+        "min": 17,
+        "median": 17,
+        "max": 17,
+        "average": {
+          "num": 17,
+          "den": 1
+        }
+      },
+      "rho_summary": {
+        "min": {
+          "num": 17,
+          "den": 4
+        },
+        "median": {
+          "num": 17,
+          "den": 4
+        },
+        "max": {
+          "num": 17,
+          "den": 4
+        },
+        "average": {
+          "num": 17,
+          "den": 4
+        }
+      }
+    }
+  },
+  "candidate_reports": [
+    {
+      "status": "accepted_minimal_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+      "canonical_hash": "blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:208488a9cdcb74d81b054dd0ae400db296b586482a17acb29c1d3c6681da3f8e",
+      "canonical_hash": "blake3:019f52ce183bea5bbe0788b027e4e4cb7096abcd401ae886c60f1ac4ec9b77f0",
+      "bit_kappa": 82,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:651f7a7c4c2263bb1620bc3367f164d3ecb099fcd832fb22cbfb4d6ca29e8ce5",
+      "canonical_hash": "blake3:0261e0b0af0bb3ccac98fd544beaf601f42b394abc6e8c663fe37cc921c55525",
+      "bit_kappa": 72,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:e6e51fdf69f0956027312bb22ce1ebf371a5050ff1d14551d5caa099db39e51d",
+      "canonical_hash": "blake3:08255c47bcfdf3ad407725bcf0975614221f26baee444b5e5258c5596e7734b5",
+      "bit_kappa": 74,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:dac5ff435325c60560b4e7bfdbba4aadc6fff33fbe92579604d518c2fdfbaab7",
+      "canonical_hash": "blake3:21edfe1d8105609c46f9f992f931716775739f09ff1f35c1b63646d3badfbb2d",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:7e4f85d193549efd0c8da3d60eba07cdbf5f688962b3bb10d1b3be43a69d4a56",
+      "canonical_hash": "blake3:224c72a51564c99ac7e26f1e263ad412a1f0de3f11812989d63df827c717d554",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:2cb1689b69f0763a94a747526356de5ac2683a0a0a09554f66ab060836004397",
+      "canonical_hash": "blake3:2976e3a1884ac2f3289ec93052ef64cf755115c1be02ff323b19d19c81b08d2e",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:d7d68dfb85e6476d75e1d74f1da130ff9b6efabde9cdf74ecb8f027aac7ee850",
+      "canonical_hash": "blake3:303326aa95571103e2d513c8ea75d8239d7e3cf90f92614fa47a9c4dbd726322",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:b659f3aa3461c8db0bec3882d76c1a199b98635ed689cca8cf6b325572a2ee04",
+      "canonical_hash": "blake3:404feb723b3d027e67bfdce5b3921d310d7c298bb06c48368738c7f41b8c9e19",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:d20d597f424d8268dde94311150355df56294451c96a1d27a90191431da20910",
+      "canonical_hash": "blake3:4a7b2f61126aab451ab8bf09023322c2e9140e64a21d955353cf6ee8aad14e5e",
+      "bit_kappa": 76,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:c68e96683d7c48ee65b08bdd6b837024093a883172a0ed894b5dcd4250b78167",
+      "canonical_hash": "blake3:533f7ea85cce4cb1e51d126f2dac12bbaf0a8e76f7becd0363bc3e7059b52320",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:42fdaf0abe6245ed1bf57c3d1e7cabbb53b46a2d79799d20c89ebdcc5480ee8b",
+      "canonical_hash": "blake3:549d6da760f561626aa8551e4a40e62ec2ae7a546f79c69552009fe3cf29cbf6",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:74bb25b46a9d309f04be69233d33002af414f174ea85d6a9acf3bb6e2886a0ed",
+      "canonical_hash": "blake3:562bd34bdfc07c23502ab4aac43581402c98a66ee9fd89aa44bb5103c92750d3",
+      "bit_kappa": 72,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step07 (S2) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:b2808540f46d5fd04c1dbac087ec4bbc74a034cfcebbb87e8bf03852c59338c5",
+      "canonical_hash": "blake3:5924795af6f04cac3234a028aef731680cf14ad43f2e9ce6fed57ed7a0928544",
+      "bit_kappa": 74,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step07 (S2) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:308b156fe996ad5559b7b5ff0f1fd9faeaf12cafbc5c80d775ceeca7fcf045cc",
+      "canonical_hash": "blake3:59f2118a6e5458d421be8cbb30c6a0ca114e1a3e880f656948c4ea9388994a6e",
+      "bit_kappa": 70,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step07 (S2) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:44c9f9e1f41d862a0ac4578406dc8fd8cd86ccfef8aeecea18757ebca190eda2",
+      "canonical_hash": "blake3:5b26335e8515e4606aa15ee2da21c4bf82a10d46de21f367d2ba1b8fcda29b3b",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:8c5aa8166491a078789782613fac3d68fcdf11baf07d28c6dce6df88761128e7",
+      "canonical_hash": "blake3:5c5f58a2359128a57b46272e6d74204290631f61c524c3a03d74d98e1a9f8080",
+      "bit_kappa": 72,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:2d6f06cadde5a4e76b6709d16fa6957d9abeb3b86367a67f75d4b577b7dbcb7b",
+      "canonical_hash": "blake3:5d95faba9a1ee870e238da21a99b32e9c38f18cadc19224896af5670bc14af7a",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:06973f9aacd0a64ef7290921ac41bb2e1f05e5b0ec656c9013889bb5b354c364",
+      "canonical_hash": "blake3:6189801dbae9b3c7dd013fb23c629fa4dbe7ef385c3fe550d1614203dae00342",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:2e7aa9578db138d87a9afbc45b1cb0c88fa5db9f31374638b56ea18100778585",
+      "canonical_hash": "blake3:689fce7028558cf88d3539acafa004c7d429c3e468cb9a9a8772625cb3e29445",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:f337eb32c109814f931bf9d32d5896ffc67dadf3e17033fc2de99aa27a7e7ac9",
+      "canonical_hash": "blake3:6a6041f0622fa255ebcd7d071c0ae1870704d1fa54862b2208f33f9b7ade81de",
+      "bit_kappa": 72,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:f509ba57d7ec44c1b8dfb99f93e51bb3c2ceef6938ac55b079871c6e07eedbfd",
+      "canonical_hash": "blake3:6ef77a4dd6d8eb61ed0b242af658ee77a3151b7727bca2399987559cfd8298ee",
+      "bit_kappa": 74,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:62d233237bd0f4ed427ea72da82bf840de9cee93d6a1164c194786dd98cfa4bb",
+      "canonical_hash": "blake3:7406c8f46e4c01e82c9dc6c51ec53a73d88e25abf1614d707d200d72cfdc7ea0",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:0a6a98e61502b178690b3f23dc3746388c2999424440e9b77e7dad6385a8e02a",
+      "canonical_hash": "blake3:740876f7a17b5366d467aca1288efe0ca63a692604270b7ece485c02bf82f0f2",
+      "bit_kappa": 72,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:1ff144f502f74333a0c2f5313c1d7c21adc90dccdcf47243d36f49ecab785c28",
+      "canonical_hash": "blake3:790818d290d04af860eff7758e3e72ef2496319741acebc114986251a47b133a",
+      "bit_kappa": 76,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:02ae81959c54c5aaba55ce39482f430f2da988f3e32d91f356b681efa7803ebb",
+      "canonical_hash": "blake3:792efa8c7a65fc82b629b81d485569770cc0586b6f04f9df491dc30ed417b30e",
+      "bit_kappa": 76,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:63c21942f2561bd46090494908ac05603050f1eba4532c65ac94f35534d8790d",
+      "canonical_hash": "blake3:7c92786919595722510233c31b2d2ad7fa0de4193445b1df39fd94ec58339ddb",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:9a43a4188e2a58ce5e3f06cd614b39de6148804fe97b62cdf39d17c8c32ff069",
+      "canonical_hash": "blake3:7e8e1b6a568fb539f9021e430dde78c6b22758b8ad3c6db3f1864e43e526a78b",
+      "bit_kappa": 76,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:c33a4cbfdda5d1dc05de3f192c3914d07c917c7bb4a00d4131fcd45baf304a1a",
+      "canonical_hash": "blake3:86954dade80d95db5beeac8027ec06194b8a576095f645115f2ea72daa076f8f",
+      "bit_kappa": 72,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:ea167820c9052d95f2e5339eb46fc1a6f858d3c6d7ff0022e12a471b8c48691f",
+      "canonical_hash": "blake3:8755edf36ddf120df058b4ee9af83c93e65ee2b804de617009fbe5c88c722591",
+      "bit_kappa": 70,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:6f3949d72ef2d42c202b055e14f2934f45787ad8fd44eca1052ac406220ba27a",
+      "canonical_hash": "blake3:877fcf649add261c0fe8d33e79f054ae23e8626c86f9e17644701aac372de16f",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:f26b0df351c762a7a156d626d228afcca7034f03521e00d692f2d670308105e5",
+      "canonical_hash": "blake3:8a70d8a3fa600f3df4a970084670a5db7f6b25b9397e2e86637e4b3e41f3efea",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:a6647a9ebb7f25d78fb8588dfb6728c5b7ea863adfdcccb7a5b3bdcfae38cc51",
+      "canonical_hash": "blake3:8d9880652facdc1bac30c928fc7a0c81e77849db3435109862f05e93847a8b17",
+      "bit_kappa": 74,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:228fb0e5a38eba6d2bc3111c6505aedc3b35bcc4faa892a0693b0d877d1564ba",
+      "canonical_hash": "blake3:8e0a250004df11c1fa25ca67178542882c6670dfd609e5f8c31612e8ff8fad56",
+      "bit_kappa": 82,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:a82fa8664e937f1470357dc54b955514009b2f3b9ae6577f9ed5b1471c90254b",
+      "canonical_hash": "blake3:8f34044833b597f05894cb5460504ad222612fa734e6b716c7336ead53fc0c57",
+      "bit_kappa": 72,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:1a65027720e96dd528101cc2a9ea656e8f96e9ac1fa902b56a179d835345812e",
+      "canonical_hash": "blake3:90072bbfc73e51ae995b076ef08fb2c073c958c475d599ef3db721bac1bb210d",
+      "bit_kappa": 74,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:234c2cd0a8f0934bb85a3cbd80fa51faa6b335caf4a6b28e900979eb43309395",
+      "canonical_hash": "blake3:93460ebacb858b57eb3c275039ac7cfe6e7c811db9a32cb3adff49929de39eab",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:e02499dbe724b56291e0f7a6230f93b3b479a3ed0943060b81ea80daaf1bb88d",
+      "canonical_hash": "blake3:937d5c58d44dcba125a69985e0d1deb77698cf7ad5a6d67ac665d6400828c90f",
+      "bit_kappa": 82,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:67c7d4058c67da3f6fd50e5e7140e9480359dc524a7c964b3b99d91ee093960d",
+      "canonical_hash": "blake3:9fc317264327cb6d2196aad6871928cc612fe6816829e20cfc0a5cfb91223162",
+      "bit_kappa": 74,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:f81bed73dce0b08fe089320e1070ed9b5110c40519b94a248966df402e46e60a",
+      "canonical_hash": "blake3:a0be2affffc805997d6a7b3e6d230792fb5187bd4bb56c45937ea1ff773d9a37",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:10bfbb3495700c58fc65c9cf6cf8b1fb223220155ff19355b2d5d44a823fc6f2",
+      "canonical_hash": "blake3:a407aac86d535d98d9d081dfa2fb27f4e19e2a86e1f2694c27a6284348a5f9f8",
+      "bit_kappa": 74,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:1cd75ccb6140c3c2768d227ea35977226e43138975f584a104437410c67530ee",
+      "canonical_hash": "blake3:a5a1eeeadd5e240757e584fb792478451c2e10ebb78e632144e53e5cb13c4e1c",
+      "bit_kappa": 82,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:127c17d11903653e0ae65a8922be98df4956cfb232faa4f82585f1ed98301ee8",
+      "canonical_hash": "blake3:a628c033e7c1fde6858af3b2f600a7511131ae9896ff8e44583a113f9a6cf8c7",
+      "bit_kappa": 76,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:017f2fa22b90877156b3e9d263ecff88b2bb89494dfb30a96746340017468ed8",
+      "canonical_hash": "blake3:a79ae16f5a5968c59325e262f55a6dc7e210a41c9bcae3bb8bf2b21e49bfba38",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:a1b1ec8493e695f97abdf218b3184529abfb77ee25e305a589f939fed2c2e460",
+      "canonical_hash": "blake3:ac3051dd892b493ddaf628166148c4b1d5a24ff016a1ade8a5b22842e66253fe",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:4608a1edf543c3935b98dd90b4a44f637ede0e517d3d77f2672484ecb3c0831f",
+      "canonical_hash": "blake3:b5f4907f1bb25f5ee356112bb2e475b3c8190dd5e9d71bb45e8ded8c21fb441d",
+      "bit_kappa": 72,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step07 (S2) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:bb0551b3767d0115716ff5cb117098e2636457da670cc4c5489c899304270e32",
+      "canonical_hash": "blake3:bce099ad207b56fbc346f734c8ef37cd88d29f3dbe46037e92c5ecf765e9b657",
+      "bit_kappa": 72,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step07 (S2) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:cb225cd19a04ad63aba4c0e33f9370262bac5241c55d1be87f90b3afba597155",
+      "canonical_hash": "blake3:bd0445d2b8e317b7b5206e512db644b88ecced67770ea8eff8c24d48d11ca487",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:e3b93bb2d800ec82a0f72dce50985517077dee85df465358be1e4ae41612c73e",
+      "canonical_hash": "blake3:bdc98a2bf34b212d5b6584973dd66f366012717403d96738b7dea4c81671dd1c",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:9c0748616e383f1b1bd0238a856aadd2ec3dfc9b281281a6df3444c20b3b5ba6",
+      "canonical_hash": "blake3:c140ca59f42fedef7abc99f43250f041370555bd467e7183622f3a59c3fea684",
+      "bit_kappa": 74,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step07 (S2) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:c14bce3817eee507de1a109663efba4546c4c427e3f3747cce54b589fa2c834d",
+      "canonical_hash": "blake3:c1a48d65f05b5fb5b920344ab7e174385fcdc231976c9402a4f303aac236e72c",
+      "bit_kappa": 78,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:6fcad7dbb0560b0eadf3d9d50792a34d05eff5d55c69dff5f489b2769e5385cd",
+      "canonical_hash": "blake3:c5ccdf88b5f16360cbf8c70f1186f7c80a4cafe5a21ae5759fc4a70b03a6ed87",
+      "bit_kappa": 72,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step07 (S2) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:ba2eae170b164ada625fc92f46402bfa9cea062b4419e68a7d00bb23c1ed2320",
+      "canonical_hash": "blake3:ca30b64e0ad1072a576040ed020155a63c709c503684e78ce4a2db618b587b3d",
+      "bit_kappa": 76,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:aaf1f6f02cbbe01fba79ab4b715cf4e8996436ec28f40b5bb108f8087c599ace",
+      "canonical_hash": "blake3:cbc1e2417d4122059737b44230bb8d7206348069d8e64f8225d4b46f6fc963b2",
+      "bit_kappa": 70,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step07 (S2) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:7ee40bb477be8e74dfc747291eb2b0e9b859e589ffbc60db67e30a9edc963368",
+      "canonical_hash": "blake3:cec17457066da003b0c85388f23324c8143e6abc3e1fa1867e8d85a9fdfc19a0",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:7a0f4dc271129fcc83941d9c045539e0999d7e6a219acc51c46057a8bbcf2741",
+      "canonical_hash": "blake3:d2af7b6e032bc81ad1e60c8e854369de0f819d5c072c06cd3a9c680d335f7e65",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step08 (S3) Step07 (S2)))",
+        "c04 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:52fbee57532e48be87eed4929559c967fe283873f6d3ebfbf97c7022a404915e",
+      "canonical_hash": "blake3:d303bbac544b1e20c8673469851af958f3ba13303b2edce354a913cdcc54cb08",
+      "bit_kappa": 74,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:85215eb00e65e1d1a6979b5e496a86dfd7606481dc5aef0e59ece3b0c970f27f",
+      "canonical_hash": "blake3:d7d4162330961df524c1fed46d45084db11acc2deae8e914d41a14bf0b70cd6e",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:483a18a277d272d6c637cbc2fe1574a8a58179a66662c575eb6a6e67ab5989f9",
+      "canonical_hash": "blake3:dd3edb03167d1895d5efb189911b1a4eb34580b44d63cc2b1009e9862d3e2930",
+      "bit_kappa": 72,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step07 (S2) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:366f0254c616c6dc56aedb16d1c271a38caa865a67c8db8a3a341e4bf12e6d33",
+      "canonical_hash": "blake3:e920b6b7703572fa3bbf6c7774e1ee7bc4ba8232fe31ce2d74312f826628d092",
+      "bit_kappa": 72,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:070206c2d51ad71f9a114fb8d38c0071d76e5e1aac0a600c00aaf9d690dbee68",
+      "canonical_hash": "blake3:ea03adf9c812f1a53c6631e7fd02ebc7b37227a2d93a9e85213ee404fc97ce40",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step08 (S3))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:2c2e3833312b2769513a48906ff14ac9de8b97cc5b12bf894c446cc290d3c7bb",
+      "canonical_hash": "blake3:eb11f452585ab275e481e0144bdf0b00b4c8a7c49d502f56dfb4b60fbff80dc2",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step08 (S3))",
+        "c02 [introduction] (Step05 (S1) x2)",
+        "c03 [introduction] (fun x1 -> (Step07 (S2) Step08 (S3)))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:22c38fc4b6c4a49b798ef023cb920915b77bda24e26a8a158851a3fa9a33385b",
+      "canonical_hash": "blake3:f8519d682825bba675f376be5948ec65190e457e8d64ae17185f8baaa23ae45b",
+      "bit_kappa": 70,
+      "clause_kappa": 4,
+      "nu": 17,
+      "rho": {
+        "num": 17,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 425,
+        "den": 1764
+      },
+      "telescope_class": "Map",
+      "headline": "Map candidate with 4 clauses; reuses Step05 (S1), Step07 (S2), Step08 (S3).",
+      "library_refs": [
+        "Step05 (S1)",
+        "Step07 (S2)",
+        "Step08 (S3)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step08 (S3)) -> Step07 (S2))",
+        "c02 [introduction] (Step05 (S1) x1)",
+        "c03 [introduction] (fun x1 -> (Step05 (S1) x1))",
+        "c04 [formation] ((x1 : Step07 (S2)) -> Step07 (S2))"
+      ]
+    }
+  ],
+  "prune_reports": [],
+  "frontier_policy": {
+    "focus": "axiomatic",
+    "focus_quota": 2,
+    "bridge_quota": 2,
+    "support_quota": 1,
+    "macro_quota": 0,
+    "cold_limit": 6
+  },
+  "frontier_pressure": {
+    "governor_state": "green",
+    "pressure_action": "none",
+    "rss_bytes": 1342179296,
+    "observed_process_rss_bytes": 23490560,
+    "rss_gap_bytes": -1318688736,
+    "hot_frontier_bytes": 1344,
+    "cold_frontier_bytes": 0,
+    "dedupe_bytes": 672,
+    "hot_count": 21,
+    "cold_candidate_count": 0,
+    "requested_cold_limit": 0,
+    "retained_cold_limit": 0,
+    "resident_cold_limit": 0,
+    "spill_backed_cold_records": 0,
+    "dropped_cold_records": 0
+  },
+  "prefix_frontier": {
+    "hot_states": [
+      {
+        "state_id": 38654705666,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 841657461178337774,
+        "support_hash64": 516011558361478569,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 70,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074873923,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705676,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 11157133777423023243,
+        "support_hash64": 4221134274503896843,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 70,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074873923,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705678,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 11900594040883011641,
+        "support_hash64": 4814994856307200932,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 70,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074873923,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705679,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 12996632934463845085,
+        "support_hash64": 11795848005432583261,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 70,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074873923,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705664,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 345716615838776155,
+        "support_hash64": 1177762915714710504,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 72,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074874435,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705671,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 5580631250290708886,
+        "support_hash64": 16842136255467631756,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 72,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074874435,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705675,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 8974476947291296843,
+        "support_hash64": 549183419107579188,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 72,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074874435,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705680,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 13737980864220529202,
+        "support_hash64": 9662525387899699987,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 72,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074874435,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705674,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 8454128836941977697,
+        "support_hash64": 3674657371676287987,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 74,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074874947,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705667,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 1078185338120174157,
+        "support_hash64": 13679761201224621492,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 76,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074875459,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705672,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 6639327619300272815,
+        "support_hash64": 6105424379740301032,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 76,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074875459,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705681,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 14874338348536995249,
+        "support_hash64": 6044991933121985156,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 76,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074875459,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705682,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 15994631411607928418,
+        "support_hash64": 9479219635465631955,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 76,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074875459,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705665,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 613050363658806876,
+        "support_hash64": 10562218076744726932,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 78,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074875971,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705668,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 3516907009379074282,
+        "support_hash64": 8599090113636842323,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 78,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074875971,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705669,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 3744262541070066764,
+        "support_hash64": 17346929292806292207,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 78,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074875971,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705673,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 7637330576945524497,
+        "support_hash64": 1539034357171393210,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 78,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074875971,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705677,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 11166509054861062903,
+        "support_hash64": 8071787984896210949,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 78,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074875971,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705683,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 16028394844052543891,
+        "support_hash64": 18052278294922100749,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 78,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074875971,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705670,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 4197271378851133777,
+        "support_hash64": 6556770291974330546,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 80,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074876483,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 38654705684,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 9,
+        "shape_hash64": 16817950497481114560,
+        "support_hash64": 16567471617273478343,
+        "nu_lower_bound": 17,
+        "nu_upper_bound": 17,
+        "bit_kappa_used": 80,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 9,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074876483,
+        "worker_hint": 0
+      }
+    ],
+    "cold_states": [],
+    "dedupe_keys": [
+      "blake3:04c86b6fbf4d5c60531d6ebda495710f688846dfef311269007fe1f1e3084f75",
+      "blake3:1009ae8174be541b518c4fe7cba6bec146fca2f6cbb297db60a430c426fac559",
+      "blake3:2cf56a60ba1fd0852daa7c761ddd5abf58c51ad5227a15801a1fc86fe4f83e4a",
+      "blake3:2dbc3757e4383b0e0527ca922564bfd3cc7b098cfad306d38f84f4e2dbf2e26b",
+      "blake3:41b73702032fff4688f7995d3d6eddc27f883f00000f62cc5a54ef0f5e73bca6",
+      "blake3:55551d391ae613965eedf110b3ad357003b1304927308a4f6ea29d7644d0afc5",
+      "blake3:5ce71119d8d611af3904209e2b146fa89b2709a8ff6c2865803fe12a6ff3fa7c",
+      "blake3:5facf96c52a2bab14e72fd8a08328b22f23dc13c32ba73c935b619d22b3aa01a",
+      "blake3:6446874f7d667098c67ee6e956d0c0719e5f45c697eb0aa45a1bd78ad1290dcc",
+      "blake3:65eb126f55c0a767ca3aac48ce2388045866f43f087899c6d6a6a00acedacb3a",
+      "blake3:6e471b3661dd77970e5e49c51f343da876fae8815be91fadd3fa9dbb244b5bd8",
+      "blake3:7916c1dde7381e5ec23d6425b9a5852ed55a33976ce425fbd12a123139b5f74a",
+      "blake3:7edca3df0f09edf4f0a7029395bf6686b5f40993540b0e63cf50ef95b1e9fe6a",
+      "blake3:8e4c2c1689f912baffcdc2c289d33ec50f7a026412fc2a030abcb42f11912332",
+      "blake3:8f89e116b66c7df8d87b91b4316600b0e2a28643c875b72a0afdc23ce212febe",
+      "blake3:b12c76b313f29cf13f92a874bb8b98eaf80a2cb392893f8725ea0548ed8e6833",
+      "blake3:beb02d69a5a971003cb21a73be9f6bcc6e417dffb58aed6af0e6863ec57f17ee",
+      "blake3:c45dd959b209d8427b2bd75590d3591fd36902ddeddfa45545a435780cb06907",
+      "blake3:d16f9eaad2ea5a32d4b5150e8ef27e785a72647193dffcaeb71458feadfccd89",
+      "blake3:d992d81dad1445ffcc724bb8c0cf0b4e32c74088b5158038378db8272d6627cb",
+      "blake3:ed6c8890a5e0251e410f6850c6f6f548d6a24b6cc281b2655cf836b1b94be796"
+    ]
+  },
+  "provenance": "atomic_bootstrap_search",
+  "canon_evidence": {
+    "charged_clause_kappa": 4,
+    "bar_distance": {
+      "num": 425,
+      "den": 1764
+    },
+    "clears_bar": true,
+    "late_step_claim": {
+      "status": "not_applicable",
+      "adopted_step": 0,
+      "adopted_label": "",
+      "adopted_nu": 0,
+      "matches_accepted": false,
+      "note": ""
+    }
+  },
+  "replay_ablation": {
+    "status": "matches_reference_replay",
+    "reference_candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+    "reference_canonical_hash": "blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+    "rho_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "objective_bar_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "overshoot_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "nu_delta": 0,
+    "clause_kappa_delta": 0,
+    "note": "matches reference replay baseline"
+  },
+  "narrative_events": [
+    {
+      "step_index": 9,
+      "ordinal": 1,
+      "kind": "step_open",
+      "message": "opened step 9 with bar 1768/441 and clause band 4..4",
+      "detail": "mode=desktop_claim_shadow exact_legality_rejections=0 structural_cap_rejections=0 admitted_focus_aligned=81 admitted_deprioritized=0",
+      "progress": {
+        "elapsed_millis": 27,
+        "generated_surface": 120,
+        "exact_screened_surface": 69,
+        "full_telescopes_evaluated": 63
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 2,
+      "kind": "surface_summary",
+      "message": "generated 120 structural candidates; 81 were well formed and 0 were rejected by admissibility",
+      "detail": "malformed=0 full_evaluated=63 canonical=63 semantically_minimal=63",
+      "progress": {
+        "elapsed_millis": 27,
+        "generated_surface": 120,
+        "exact_screened_surface": 69,
+        "full_telescopes_evaluated": 63
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 3,
+      "kind": "prefix_summary",
+      "message": "prefix frontier created=39 explored=12 merged=42 exact_pruned=6 heuristic_dropped=0",
+      "detail": "hot_states=21 cold_states=0 frontier_window=21",
+      "progress": {
+        "elapsed_millis": 27,
+        "generated_surface": 120,
+        "exact_screened_surface": 69,
+        "full_telescopes_evaluated": 63
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 4,
+      "kind": "memo_summary",
+      "message": "memo path hits: legality=129 active_window=0 terminal_completion=48 partial_bounds=3",
+      "detail": "connectivity_shortcuts=81 clause_family_prunes=0 terminal_rank_prunes=0 terminal_prefix_bar_prunes=6",
+      "progress": {
+        "elapsed_millis": 27,
+        "generated_surface": 120,
+        "exact_screened_surface": 69,
+        "full_telescopes_evaluated": 63
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 5,
+      "kind": "frontier_summary",
+      "message": "retained 63 candidates with frontier hot=21 cold=0 dropped=0",
+      "detail": "pressure_state=green pressure_action=none resident_cold=0 spill_backed=0",
+      "progress": {
+        "elapsed_millis": 27,
+        "generated_surface": 120,
+        "exact_screened_surface": 69,
+        "full_telescopes_evaluated": 63
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 6,
+      "kind": "acceptance_summary",
+      "phase": "seal",
+      "message": "accepted blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491 with overshoot 425/1764 (nu=17 kappa=4)",
+      "detail": "bar_clearers=63 near_misses=3 candidate_hash=blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491 canonical_hash=blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+      "progress": {
+        "elapsed_millis": 27,
+        "generated_surface": 120,
+        "exact_screened_surface": 69,
+        "full_telescopes_evaluated": 63
+      }
+    },
+    {
+      "step_index": 9,
+      "ordinal": 7,
+      "kind": "step_complete",
+      "phase": "seal",
+      "message": "completed step 9 in 27 ms",
+      "detail": "discovery_ms=25 frontier_plan_ms=0 selection_ms=0",
+      "progress": {
+        "elapsed_millis": 27,
+        "generated_surface": 120,
+        "exact_screened_surface": 69,
+        "full_telescopes_evaluated": 63
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "governor_state": "green",
+  "pressure_action": "none",
+  "rss_bytes": 1342181201,
+  "cold_frontier_bytes": 0,
+  "worker_scratch_bytes": 536870912,
+  "checkpoint_bytes": 268435456,
+  "spill_buffer_bytes": 536870912,
+  "resident_cold_records": 0,
+  "spilled_cold_records": 0,
+  "dedupe_segment_count": 1,
+  "checksums": [
+    {
+      "file_name": "hot-000.bin",
+      "sha256": "8182a0888fcd999200362290fcfd670138504965b6d501b4f4f04227abf828a7",
+      "bytes": 1536
+    },
+    {
+      "file_name": "dedupe-000.txt",
+      "sha256": "39be252432031796ac1382d9da8f5a521acc3cb2151e916da041fbc8bb756008",
+      "bytes": 1728
+    }
+  ]
+}

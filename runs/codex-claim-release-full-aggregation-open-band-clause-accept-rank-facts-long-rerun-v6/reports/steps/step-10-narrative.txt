@@ -1,0 +1,69 @@
+step 10 claim narrative
+label        Cohesion
+profile      claim-1h
+accepted     blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e nu=19 kappa=4 overshoot=97/340
+time         [#...............] 29ms / 15.0s (within limit)
+generated    [################] 1428 / 500 generated (hit)
+exact_screen [################] 228 / 120 screened (hit)
+full_eval    [################] 81 / 25 evaluated (over limit)
+closure      [###########.....] 64% frontier_total=228 certified_nonwinning=147
+phase_eval   materialize=0 proof_close=0 overrun=0 cap=none cap_triggered=false breadth_exit=none proof_close_reason=none overrun_reason=none
+proof_close  reserve=0ms elapsed=0ms remaining=0ms reserve_overrun=0ms exhausted=false groups_closed=0/0 groups_remaining=0 closure=0%
+timing       discovery=27ms frontier_plan=0ms selection=0ms
+funnel       enumerated=597 well_formed=597 malformed=0 admissibility_rejected=0 scored=81 canonical=81 semantically_minimal=81
+demo_funnel  raw=1428 canonical_prefixes=240 hard_admissible=597 exact_pruned=147 heuristic_dropped=0 bar_clearers=81 semantically_minimal_clearers=81 winner_overshoot=97/340
+exact_reasons partial_prefix_bar=3 terminal_completion=144 incumbent_dominance=0 legality_connectivity=609
+prune_totals quotient_dedupe=0 sound_minimality=756 heuristic_shaping=0
+prefixes     created=240 explored=39 merged=54 exact_pruned=147 heuristic_dropped=0 hot=27 cold=0
+memo         legality_hits=1776 active_window_hits=0 terminal_completion_hits=225 partial_bound_hits=15 terminal_rank_prunes=0
+demo_buckets k4:structural_generic:modal_operator:library_backed:broad gen=864 adm=354 screen=354 pruned=354 scored=0 best=none | k4:structural_generic:modal_operator:local_only:broad gen=324 adm=162 screen=162 pruned=0 scored=0 best=none | k4:structural_generic:support_form:library_backed:broad gen=162 adm=162 screen=162 pruned=162 scored=0 best=none | ... 1 more
+
+events
+  [step_open] opened step 10 with bar 759/170 and clause band 4..4
+    mode=desktop_claim_shadow exact_legality_rejections=0 structural_cap_rejections=0 admitted_focus_aligned=597 admitted_deprioritized=0
+  [surface_summary] generated 1428 structural candidates; 597 were well formed and 0 were rejected by admissibility
+    malformed=0 full_evaluated=81 canonical=81 semantically_minimal=81
+  [prefix_summary] prefix frontier created=240 explored=39 merged=54 exact_pruned=147 heuristic_dropped=0
+    hot_states=27 cold_states=0 frontier_window=27
+  [memo_summary] memo path hits: legality=1776 active_window=0 terminal_completion=225 partial_bounds=15
+    connectivity_shortcuts=693 clause_family_prunes=0 terminal_rank_prunes=0 terminal_prefix_bar_prunes=144
+  [frontier_summary] retained 81 candidates with frontier hot=27 cold=0 dropped=0
+    pressure_state=green pressure_action=none resident_cold=0 spill_backed=0
+  [acceptance_summary seal] accepted blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e with overshoot 97/340 (nu=19 kappa=4)
+    bar_clearers=81 near_misses=3 candidate_hash=blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e canonical_hash=blake3:09bed8af6371d3ac8be4c5d4bd59321753f2a027ff9685808b8bab6ce8ac4ef5
+  [step_complete seal] completed step 10 in 29 ms
+    discovery_ms=27 frontier_plan_ms=0 selection_ms=0
+
+retained candidates
+  accepted blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e rho=19/4 distance=97/340 frontier=hot headline=Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.
+  bar_clearer blake3:341ef52157699bb81507740c6dc0bacc75ab81d8e6e3c1a9d4292de7215d7ce4 rho=19/4 distance=97/340 frontier=hot headline=Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.
+  bar_clearer blake3:a4474d3bac770678a70d2cee841c9b2412660f8084cee7089b2fdfd87ff2f79a rho=19/4 distance=97/340 frontier=hot headline=Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.
+  bar_clearer blake3:c70b3c1a71481e13a55db6642dd74a41755b0832648fbd97e983aa3aa3f4d193 rho=19/4 distance=97/340 frontier=hot headline=Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.
+  bar_clearer blake3:58d59fcb81438d0f45ad3de730d15e70379312467ce8134dc0939ce9737acf55 rho=19/4 distance=97/340 frontier=hot headline=Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.
+  bar_clearer blake3:0d1f1f4bf6731506b69c9dfb480d34911f10b774d24a63ad13d6d30cf6f10217 rho=19/4 distance=97/340 frontier=hot headline=Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.
+  bar_clearer blake3:0259fbdd74ace8994f42eea6dcd1c2bad7feac0f7b6553a64e258454e485cb74 rho=19/4 distance=97/340 frontier=hot headline=Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.
+  bar_clearer blake3:1c59268bd4e0289e2218fb482f34a9baeec0fa1f7e9e147f447b958e5be2a8ee rho=19/4 distance=97/340 frontier=hot headline=Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.
+  ... 73 more retained candidates
+
+prunes
+  totals quotient_dedupe=0 sound_minimality=756 heuristic_shaping=0
+  sampled: none
+
+accepted trace
+  source=structural-ast
+  nu_g=2
+  nu_h=0
+  nu_c=17
+  bonus_distributive=0
+  bonus_universe_poly=0
+  bonus_infinitesimal_shift=0
+  nu_total=19
+  node_trace_count=8
+  node=entry1|ctor=Flat
+  node=entry1/0|ctor=Var
+  node=entry2|ctor=Sharp
+  node=entry2/0|ctor=Var
+  node=entry3|ctor=Disc
+  node=entry3/0|ctor=Var
+  node=entry4|ctor=Shape
+  node=entry4/0|ctor=Var

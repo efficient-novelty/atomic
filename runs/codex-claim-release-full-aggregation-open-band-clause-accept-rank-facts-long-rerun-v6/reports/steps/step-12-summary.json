@@ -1,0 +1,2715 @@
+{
+  "step_index": 12,
+  "label": "Curvature",
+  "search_profile": "desktop_claim_shadow",
+  "objective_bar": {
+    "num": 8208,
+    "den": 1513
+  },
+  "accepted": {
+    "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+    "canonical_hash": "blake3:fd636363062e2cc44259d330cd96e319979d8ae7ff02eb065599bb2541d03cac",
+    "bit_kappa": 121,
+    "clause_kappa": 6,
+    "nu": 34,
+    "rho": {
+      "num": 17,
+      "den": 3
+    },
+    "overshoot": {
+      "num": 1097,
+      "den": 4539
+    },
+    "shape_fingerprint": "0xb8dbddf0518ad973",
+    "support_fingerprint": "0xbd5c4a1091ef1ff5"
+  },
+  "telescope": {
+    "clauses": [
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Lib": 11
+            },
+            {
+              "Pi": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Var": 1
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "role": "introduction",
+        "expr": {
+          "Lam": {
+            "App": [
+              {
+                "Lib": 11
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Var": 1
+            },
+            {
+              "Lib": 11
+            }
+          ]
+        }
+      },
+      {
+        "role": "introduction",
+        "expr": {
+          "App": [
+            {
+              "Lib": 11
+            },
+            {
+              "App": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "role": "introduction",
+        "expr": {
+          "Lam": {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Lib": 11
+            },
+            {
+              "Lib": 11
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "trace": [
+    "source=structural-ast",
+    "nu_g=2",
+    "nu_h=0",
+    "nu_c=32",
+    "bonus_distributive=0",
+    "bonus_universe_poly=0",
+    "bonus_infinitesimal_shift=0",
+    "nu_total=34",
+    "node_trace_count=24",
+    "node=entry1|ctor=Pi",
+    "node=entry1/0|ctor=Lib",
+    "node=entry1/1|ctor=Pi",
+    "node=entry1/1/0|ctor=Var",
+    "node=entry1/1/1|ctor=Var",
+    "node=entry2|ctor=Lam",
+    "node=entry2/0|ctor=App",
+    "node=entry2/0/0|ctor=Lib",
+    "node=entry2/0/1|ctor=Var",
+    "node=entry3|ctor=Pi",
+    "node=entry3/0|ctor=Var",
+    "node=entry3/1|ctor=Lib",
+    "node=entry4|ctor=App",
+    "node=entry4/0|ctor=Lib",
+    "node=entry4/1|ctor=App",
+    "node=entry4/1/0|ctor=Var",
+    "node=entry4/1/1|ctor=Var",
+    "node=entry5|ctor=Lam",
+    "node=entry5/0|ctor=Pi",
+    "node=entry5/0/0|ctor=Var",
+    "node=entry5/0/1|ctor=Var",
+    "node=entry6|ctor=Pi",
+    "node=entry6/0|ctor=Lib",
+    "node=entry6/1|ctor=Lib"
+  ],
+  "near_misses": [
+    {
+      "candidate_hash": "blake3:8108e31d4f22571579f0149afd04c5b12184e1a02b4cf1d486534fe3432175b0",
+      "canonical_hash": "blake3:88083aaa57bb63fe23804a9e6cbe40377b7b748b5e76c3ca96f0ce53191688d6",
+      "bit_kappa": 119,
+      "clause_kappa": 6,
+      "nu": 34,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:36c40086f59a96aab93fc30eb254f8084a569cd4feba5cbb5783fb4ee058a2f0",
+      "canonical_hash": "blake3:1ca4b5268b4669bac3bc78831bcd6d9e9a56871820cb48e105fa7a53a03c906d",
+      "bit_kappa": 124,
+      "clause_kappa": 6,
+      "nu": 34,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:6b636a991031bb12427f73020a70e63367f1b9b32985198846a9e1c4237b77e4",
+      "canonical_hash": "blake3:51115ffcb02d7975d9de57e7243fae55aea6b6303e850056d5600c48d8b70a6b",
+      "bit_kappa": 111,
+      "clause_kappa": 6,
+      "nu": 34,
+      "status": "bar_clear_higher_overshoot"
+    }
+  ],
+  "search_stats": {
+    "enumerated_candidates": 405,
+    "well_formed_candidates": 405,
+    "malformed_rejections": 0,
+    "malformed_rejection_reasons": {},
+    "admissibility_rejections": 0,
+    "admissibility_diagnostics": {
+      "exact_legality_rejections": 0,
+      "structural_debt_cap_rejections": 0,
+      "admitted_deprioritized": 0,
+      "admitted_focus_aligned": 405,
+      "reason_counts": {
+        "open_band_structural": 405
+      }
+    },
+    "full_telescopes_evaluated": 44,
+    "evaluated_candidates": 44,
+    "canonical_candidates": 44,
+    "semantically_minimal_candidates": 44,
+    "canonical_dedupe_prunes": 0,
+    "semantic_minimality_prunes": 0,
+    "dedupe_prunes": 0,
+    "minimality_prunes": 0,
+    "heuristic_drops": 0,
+    "prefixes_created": 447,
+    "prefix_states_explored": 147,
+    "prefix_states_merged_by_signature": 138,
+    "prefix_states_exact_pruned": 7,
+    "prefix_states_heuristic_dropped": 63,
+    "incremental_legality_cache_hits": 1681,
+    "incremental_connectivity_shortcuts": 405,
+    "incremental_connectivity_fallbacks": 0,
+    "incremental_connectivity_prunes": 486,
+    "incremental_clause_family_filter_hits": 0,
+    "incremental_clause_family_prunes": 0,
+    "incremental_active_window_clause_filter_hits": 0,
+    "incremental_active_window_clause_filter_prunes": 0,
+    "incremental_terminal_clause_filter_hits": 297,
+    "incremental_terminal_clause_filter_prunes": 0,
+    "incremental_trivial_derivability_hits": 891,
+    "incremental_trivial_derivability_prunes": 0,
+    "incremental_terminal_admissibility_hits": 891,
+    "incremental_terminal_admissibility_rejections": 0,
+    "incremental_terminal_prefix_completion_hits": 400,
+    "incremental_terminal_prefix_rank_hits": 0,
+    "incremental_terminal_rank_prunes": 92,
+    "incremental_partial_prefix_bound_hits": 48,
+    "incremental_partial_prefix_bound_checks": 150,
+    "incremental_partial_prefix_bound_prunes": 3,
+    "incremental_terminal_prefix_bar_prunes": 4,
+    "prune_classes": {
+      "quotient_dedupe": 0,
+      "sound_minimality": 585,
+      "heuristic_shaping": 63
+    },
+    "exact_screen_reasons": {
+      "partial_prefix_bar_failure": 3,
+      "terminal_prefix_completion_failure": 4,
+      "incumbent_dominance": 92,
+      "legality_connectivity_exact_rejection": 486
+    },
+    "demo_phase": {
+      "materialize_full_evals": 0,
+      "proof_close_reserved_millis": 0,
+      "proof_close_elapsed_millis": 0,
+      "proof_close_remaining_millis": 0,
+      "proof_close_reserve_overrun_millis": 0,
+      "proof_close_reserve_exhausted": false,
+      "proof_close_frontier_total_groups": 0,
+      "proof_close_frontier_groups_closed": 0,
+      "proof_close_frontier_groups_remaining": 0,
+      "proof_close_closure_percent": 0,
+      "proof_close_full_evals": 0,
+      "proof_close_overrun_full_evals": 0,
+      "materialize_soft_cap_triggered": false
+    },
+    "demo_funnel": {
+      "generated_raw_prefixes": 1338,
+      "canonical_prefix_signatures": 447,
+      "well_formed_terminals": 405,
+      "hard_admissible": 405,
+      "exact_bound_screened": 51,
+      "exact_bound_pruned": 7,
+      "heuristic_dropped": 63,
+      "full_telescopes_evaluated": 44,
+      "bar_clearers": 44,
+      "semantically_minimal_clearers": 44,
+      "winner_overshoot": {
+        "num": 1097,
+        "den": 4539
+      }
+    },
+    "demo_closure": {
+      "frontier_total_seen": 51,
+      "frontier_certified_nonwinning": 7,
+      "closure_percent": 13
+    },
+    "demo_bucket_stats": [
+      {
+        "bucket_label": "k5:structural_generic:binder_heavy:library_backed:small_cluster",
+        "bucket_key": {
+          "clause_kappa": 5,
+          "taxonomy": "structural_generic",
+          "category": "binder_heavy",
+          "support_profile": "library_backed",
+          "width": "small_cluster"
+        },
+        "generated_terminal_candidates": 279,
+        "admissible_terminal_candidates": 279,
+        "exact_screened_terminal_candidates": 279,
+        "pruned_terminal_candidates": 51,
+        "fully_scored_terminal_candidates": 6,
+        "best_overshoot": {
+          "num": 8889,
+          "den": 7565
+        }
+      },
+      {
+        "bucket_label": "k6:structural_generic:binder_heavy:library_backed:single",
+        "bucket_key": {
+          "clause_kappa": 6,
+          "taxonomy": "structural_generic",
+          "category": "binder_heavy",
+          "support_profile": "library_backed",
+          "width": "single"
+        },
+        "generated_terminal_candidates": 0,
+        "admissible_terminal_candidates": 0,
+        "exact_screened_terminal_candidates": 0,
+        "pruned_terminal_candidates": 0,
+        "fully_scored_terminal_candidates": 34,
+        "best_overshoot": {
+          "num": 1097,
+          "den": 4539
+        }
+      },
+      {
+        "bucket_label": "k6:structural_generic:binder_heavy:library_backed:small_cluster",
+        "bucket_key": {
+          "clause_kappa": 6,
+          "taxonomy": "structural_generic",
+          "category": "binder_heavy",
+          "support_profile": "library_backed",
+          "width": "small_cluster"
+        },
+        "generated_terminal_candidates": 921,
+        "admissible_terminal_candidates": 435,
+        "exact_screened_terminal_candidates": 435,
+        "pruned_terminal_candidates": 53,
+        "fully_scored_terminal_candidates": 4,
+        "best_overshoot": {
+          "num": 1097,
+          "den": 4539
+        }
+      }
+    ],
+    "claim_step_open": {
+      "kappa_min": 5,
+      "kappa_max": 6,
+      "late_family_surface": "claim_generic",
+      "claim_widening_band7_active": true,
+      "claim_widening_band8_active": true,
+      "claim_widening_band9_active": false,
+      "historical_anchor_ref": null,
+      "anchor_policy": "none",
+      "claim_debt_axes": {
+        "kappa_min": 5,
+        "kappa_max": 6,
+        "path_pressure": 0,
+        "trunc_pressure": 0,
+        "coupling_pressure": 2,
+        "support_pressure": 2,
+        "modal_pressure": 1,
+        "temporal_pressure": 0,
+        "reanchor_pressure": 0,
+        "closure_pressure": 3
+      },
+      "package_flags": {
+        "operator_bundle": false,
+        "hilbert_functional": false,
+        "temporal_shell": false
+      }
+    },
+    "claim_root_seeding": {
+      "roots_seen": 3,
+      "roots_rejected_by_insert_root": 0,
+      "roots_rejected_by_exact_screen": 0,
+      "roots_enqueued": 3
+    },
+    "search_timing": {
+      "step_wall_clock_millis": 55,
+      "candidate_discovery_wall_clock_millis": 53,
+      "prefix_frontier_planning_wall_clock_millis": 0,
+      "selection_wall_clock_millis": 0
+    },
+    "prefix_frontier_hot_states": 38,
+    "prefix_frontier_cold_states": 2,
+    "retained_candidates": 44,
+    "frontier_hot_states": 44,
+    "frontier_cold_states": 0,
+    "frontier_resident_cold_states": 0,
+    "frontier_spill_states": 0,
+    "frontier_drops": 0,
+    "scored_candidate_distribution": {
+      "candidate_count": 44,
+      "clears_bar": 44,
+      "below_bar": 0,
+      "clause_kappa_counts": {
+        "5": 6,
+        "6": 38
+      },
+      "nu_summary": {
+        "min": 33,
+        "median": 34,
+        "max": 35,
+        "average": {
+          "num": 373,
+          "den": 11
+        }
+      },
+      "rho_summary": {
+        "min": {
+          "num": 17,
+          "den": 3
+        },
+        "median": {
+          "num": 17,
+          "den": 3
+        },
+        "max": {
+          "num": 33,
+          "den": 5
+        },
+        "average": {
+          "num": 3829,
+          "den": 660
+        }
+      }
+    }
+  },
+  "candidate_reports": [
+    {
+      "status": "accepted_minimal_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+      "canonical_hash": "blake3:fd636363062e2cc44259d330cd96e319979d8ae7ff02eb065599bb2541d03cac",
+      "bit_kappa": 121,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Step11 (Connections) x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:36c40086f59a96aab93fc30eb254f8084a569cd4feba5cbb5783fb4ee058a2f0",
+      "canonical_hash": "blake3:1ca4b5268b4669bac3bc78831bcd6d9e9a56871820cb48e105fa7a53a03c906d",
+      "bit_kappa": 124,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Step11 (Connections) x1))",
+        "c03 [formation] ((x1 : (Flat x2)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:04f6845f42f641cda7f8efe47c2860964a6b637e44aa082c458bb4ec48297b5e",
+      "canonical_hash": "blake3:1f40b4591b7ba3baac8719a04a21525ada66b9127dd1d02423dc54e4b01354be",
+      "bit_kappa": 118,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> (Step11 (Connections) x1))",
+        "c03 [formation] ((x1 : (Flat x2)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:5a67d451725fea206621ace335b63aec9aa31aaef5d88a13fa9fdf45343d423a",
+      "canonical_hash": "blake3:235e847af26ca55e7c2bf2083b60268a3a21525d603713260ea8d455c3d497e9",
+      "bit_kappa": 119,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:21c13a69ae40ac133dde378a3369c46a93da1da3f1e9f6f8695fab3406f4ed54",
+      "canonical_hash": "blake3:283ebf67bc813a52eb810e17fbdece45fb72ca397fe1dbb63ab466bea7064ff5",
+      "bit_kappa": 110,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:8c21cc5ba0a62748c150245c0cdac7808cfd92317f7db5f43daed45c815b90a2",
+      "canonical_hash": "blake3:29e4204c3d23de32af3acdc2124bd97e46d5d495a92c0bc9040cef56a765a998",
+      "bit_kappa": 120,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:7599be3ac766eda6efa59617d806fbaab0611d8a821f83354d9b809d38330949",
+      "canonical_hash": "blake3:43cb8fcd63e52e5724fdfb82264302469e4c9a2a80b20933fe9104588c474c37",
+      "bit_kappa": 123,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> (Step11 (Connections) x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:6b636a991031bb12427f73020a70e63367f1b9b32985198846a9e1c4237b77e4",
+      "canonical_hash": "blake3:51115ffcb02d7975d9de57e7243fae55aea6b6303e850056d5600c48d8b70a6b",
+      "bit_kappa": 111,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:946e63d6855a7602d0681c020e8de398d2669521fd0d8607014e0c5c2fafcc5b",
+      "canonical_hash": "blake3:6150e8d23163293973526d412e4b67f35f1a1de6eb383164fff875eae27848e5",
+      "bit_kappa": 122,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : (Flat x1)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:ceb54982eb62f1e406b34e82a78eafcf5025c307e327e8a3550c89896d5d01a5",
+      "canonical_hash": "blake3:6befa0eb28717bfbe35b219fac4cd15481c1501c810ff562cecbf02dd04cc636",
+      "bit_kappa": 115,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> (Step11 (Connections) x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:6d91be2c7a0652be03acd6996c6286a5e8528bd31586a4a01d350429ee4a4c16",
+      "canonical_hash": "blake3:722259c388a1bf483ec7eef4ae77dc69459c2d63b22b74526501385c0565c295",
+      "bit_kappa": 116,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Step11 (Connections) x1))",
+        "c03 [formation] ((x1 : (Flat x2)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:649189e99d50c4344b036a54a10402a8807a52b1f006c31b290380d61e575ce3",
+      "canonical_hash": "blake3:74ad527a3ad670ff33da782dfdaaeeb5a0b636cc732c61988c0a3fa92828c0f9",
+      "bit_kappa": 118,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:a82c9bd2d46ab539aeb2f24a36d8d4d30e409f3e7960dd54e93b7c34e0bffc2a",
+      "canonical_hash": "blake3:754215b5014ea829301dffc1c2b557c7477b8dad65e043d5b7b02c7f17fdf6b5",
+      "bit_kappa": 116,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : (Flat x2)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:7d03b29e7fded4ee7a143612a9157d15ee02afe1c65264952b9bd07532088a45",
+      "canonical_hash": "blake3:7bcb3e5836be2efd6eaec058e122def04acd1a738af03bdf07b0cc7db13c4eb4",
+      "bit_kappa": 113,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : (Flat x1)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:79e64966daa6095911a21f79fa41200dc4563524337789d0dfdd67b1a3fb60c2",
+      "canonical_hash": "blake3:87ecc3cd5d14fc8a82cf5ab777ba178a5d39803e768184fe590965c813d1d96a",
+      "bit_kappa": 111,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : (Flat x1)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:8108e31d4f22571579f0149afd04c5b12184e1a02b4cf1d486534fe3432175b0",
+      "canonical_hash": "blake3:88083aaa57bb63fe23804a9e6cbe40377b7b748b5e76c3ca96f0ce53191688d6",
+      "bit_kappa": 119,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : (Flat x1)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:e263abad5eeedf57dc53d31858365d3da3377d1e6f476bfe7ce333a69b7fb0d1",
+      "canonical_hash": "blake3:914806c90809f17914f8bb40d379273679228a004877919f3253eb015cf7ee0c",
+      "bit_kappa": 114,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : (Flat x2)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:3cbd81104a197260dfc25c7f6443bd7c5a539fbd93f6d2e7a099b04ab664ab0b",
+      "canonical_hash": "blake3:93d9da34deeb0f5d48b2090353ddb495ef0fe535cf24bf34e0737d22adecd242",
+      "bit_kappa": 121,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : (Flat x1)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:5f130a73a5cd0294393b80931d3f21a27357af13b0354bd2b4b107c80e20d789",
+      "canonical_hash": "blake3:992cc88bba4b95b58de72680036f10770c5997cafb91a7b2665c1f57e9de3a82",
+      "bit_kappa": 120,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : (Flat x1)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:8c6f74ca837d272e2dce4c523c2b84de63d745178f8e63876b12ab042dc2f4ef",
+      "canonical_hash": "blake3:a40efa3d1cb95bf7287cdc95b50978a48551d3c76018222fb6078aec7f4df18b",
+      "bit_kappa": 113,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : (Flat x2)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:d75a947f773ab6ee2fffd58402f84628257cf8c3996ace5f61fa087442c2ccfd",
+      "canonical_hash": "blake3:ac1b73e7c3097ad480e1b1572e9bb5807da76ac8a3830a885881617fa06f3317",
+      "bit_kappa": 122,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Step11 (Connections) x1))",
+        "c03 [formation] ((x1 : (Flat x1)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:bd13728d4f48f173b72ade8e29316d9984503c325e2511048a666b699c532a04",
+      "canonical_hash": "blake3:b6b2a6a0b4da6a1b7ef6916a4af5e128e8702592c8eaba80513ee81e888de16d",
+      "bit_kappa": 115,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : (Flat x2)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:b680c2f72ce15ada717662884ec96ea22ae31159636b3d997a4733aaf4eb32ec",
+      "canonical_hash": "blake3:c1afcf71c191d1d712c290ec8a77d07a2473b2ed2a98df015af7bcfb34b7d4bd",
+      "bit_kappa": 126,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> (Step11 (Connections) x1))",
+        "c03 [formation] ((x1 : (Flat x2)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:7d1396d9ef9d15d30764421fc49b092cccd36af707ecaad8a91ed17558321d37",
+      "canonical_hash": "blake3:c2f50daffec77bac7b13083ea0541742a86078bf8ffcadc574ea4b976b8282c4",
+      "bit_kappa": 121,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : (Flat x2)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:d33316d779cffc44835c2d1837af123ba20b38f2afd66b28f3cf344a0e76bd0f",
+      "canonical_hash": "blake3:c3fb5f19b9b35a0c484282e05cf85f28e9af56ae17825ca5e5d14b3f87649270",
+      "bit_kappa": 124,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : (Flat x2)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:deaff1e01248a4e0b026e2d2775555056f5ad3ff64f7523d295095d841b015dc",
+      "canonical_hash": "blake3:c97033f566f1d8fb71ab688bddf5c26c6cf9251641786c2f61d0b63faa9cb384",
+      "bit_kappa": 112,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:7afdbfae1727fdbbd6260d05e7f4d63dbd510b91f7b67e49a8eba26ffb00d4b1",
+      "canonical_hash": "blake3:cdb011226b0dd552abde2c2b81f18616f1436776324678157268150e3952a8ab",
+      "bit_kappa": 121,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:a5e914d3dc5796d92b994ef8febca15f7858aae435384c051a835c1f4ddeefc4",
+      "canonical_hash": "blake3:d23c32dc97b52d12f7d59979621d23b4ac8c5d8bf41b3118623e2cf875836108",
+      "bit_kappa": 122,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : (Flat x2)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:350bdba6244a6574d32939cdffb76bc783c603227debd12804761892ca009ff9",
+      "canonical_hash": "blake3:d6c3ea2d06998fa3f36a48992f9228139f77de52f0b89f056369194127b5645e",
+      "bit_kappa": 114,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Step11 (Connections) x1))",
+        "c03 [formation] ((x1 : (Flat x1)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:c8b1edb6f470882a05ebf72831b6cfbac5797297ee84ed3f6edfa8e10d596c9c",
+      "canonical_hash": "blake3:d9645ccda2a3e892cc490ff245f7b1201beb78af689ed1c1fa14b5dc57eb4b10",
+      "bit_kappa": 123,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : (Flat x2)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:680389a50751a8aceaefbc690c2a9ac14487e3910a7aa1edc2cc46778c764d7d",
+      "canonical_hash": "blake3:de4bddf2e19eb6ebf7873101bd01d37e6832253227734a6ca94d6aad38d21128",
+      "bit_kappa": 114,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : (Flat x1)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:289996da0db44df5db18542d156562e49a6816130c9081b68ec0d632b332d47c",
+      "canonical_hash": "blake3:de517f45818081875c1d05e0133de042eda712300feeac05b56f52ded683b823",
+      "bit_kappa": 112,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : (Flat x1)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:4d3ffb11820ef448ad2b424375a4f076c1ce8f2104c8eed994bb1d63565c019d",
+      "canonical_hash": "blake3:e630688b71fd8b4608c72ece181250f45329aa02b565bf8a106e0a227947b9a8",
+      "bit_kappa": 113,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Step11 (Connections) x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:cb3afeecca1dbc28907dd7e432078a6909ba1a21ed0073f9a3d8ee54eaf3ba2d",
+      "canonical_hash": "blake3:e70661b3c9c3d41e4bf5e70996c8f58012de1107deae81237a03224c36fbf47e",
+      "bit_kappa": 124,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> (Step11 (Connections) x1))",
+        "c03 [formation] ((x1 : (Flat x1)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) (x1 x2))",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:cc792840bc25fed4366fd6bc4cd1412f83f3d6bd76763f326650217a56eca83f",
+      "canonical_hash": "blake3:eb5546f57e0720ee25721c7c6972d704d19ac073b8731bb56b8b47da5656012b",
+      "bit_kappa": 116,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> (Step11 (Connections) x1))",
+        "c03 [formation] ((x1 : (Flat x1)) -> x1)",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:aa453d0e6a4b2ecb5bd5ed911250e2072942c0d1f8e0163af2c063ea99784ecc",
+      "canonical_hash": "blake3:f49d80c2246a1a4517d01804ac341574486ea6f740618ae9ae2ac5101ae056d0",
+      "bit_kappa": 113,
+      "clause_kappa": 6,
+      "nu": 34,
+      "rho": {
+        "num": 17,
+        "den": 3
+      },
+      "distance_to_bar": {
+        "num": 1097,
+        "den": 4539
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x2) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:b2e6ca415f21272c0484d68f9875e5ac3ecee762faf8d3b82dcd85c52dcc0850",
+      "canonical_hash": "blake3:a98ca026be59396ccb980cd99b3f5ea49284957fbb9f295a3864f7f3edc19e82",
+      "bit_kappa": 110,
+      "clause_kappa": 6,
+      "nu": 35,
+      "rho": {
+        "num": 35,
+        "den": 6
+      },
+      "distance_to_bar": {
+        "num": 3707,
+        "den": 9078
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step10 (Cohesion), Step11 (Connections).",
+      "library_refs": [
+        "Step10 (Cohesion)",
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step10 (Cohesion)) -> Step11 (Connections))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:e1b29c4c5901c6597a7d43b44369b4531e0dad5b309a72d284291d0d514b11ea",
+      "canonical_hash": "blake3:db18fbf7305db67826d36c2d57759d8171b369bcbb36d1846e6845511644ac56",
+      "bit_kappa": 110,
+      "clause_kappa": 6,
+      "nu": 35,
+      "rho": {
+        "num": 35,
+        "den": 6
+      },
+      "distance_to_bar": {
+        "num": 3707,
+        "den": 9078
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 6 clauses; reuses Step10 (Cohesion), Step11 (Connections).",
+      "library_refs": [
+        "Step10 (Cohesion)",
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c06 [formation] ((x1 : Step11 (Connections)) -> Step10 (Cohesion))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:75107593aa95048a632f7d53d56a724d4617a2d4b35914f10949b6908cdfd3bf",
+      "canonical_hash": "blake3:2dd1d29cf8bd4811b9a263ed3795e991d1b635c965489a4ce91ac89a19b6c882",
+      "bit_kappa": 88,
+      "clause_kappa": 5,
+      "nu": 33,
+      "rho": {
+        "num": 33,
+        "den": 5
+      },
+      "distance_to_bar": {
+        "num": 8889,
+        "den": 7565
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 5 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:73d172e45004d87a7049dad99979ba79a9b419f2a726fc41e15645ca92f42639",
+      "canonical_hash": "blake3:4597fcfc38b83c32b672512b37329a722ff75e90af821c9b403015db045a966e",
+      "bit_kappa": 86,
+      "clause_kappa": 5,
+      "nu": 33,
+      "rho": {
+        "num": 33,
+        "den": 5
+      },
+      "distance_to_bar": {
+        "num": 8889,
+        "den": 7565
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 5 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> (Flat x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:9f34bb22553903dc48b73dfc6f2e2e418573ca0e32cd5df780c71a7ea12d2bef",
+      "canonical_hash": "blake3:4e051e8bfaf7a5e6f036f01c69000d5cbe2f7e2c3d678e0fff2b10101681b0a0",
+      "bit_kappa": 85,
+      "clause_kappa": 5,
+      "nu": 33,
+      "rho": {
+        "num": 33,
+        "den": 5
+      },
+      "distance_to_bar": {
+        "num": 8889,
+        "den": 7565
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 5 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> (Flat x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:9ee3cc03e60349f51c74735e95d1a6ddc79358a13c272aa48c9346e901ab2ce6",
+      "canonical_hash": "blake3:668e6ace7e9a958e4bb7a2682f46f002c9b37d60ae9023cf06146d149111360c",
+      "bit_kappa": 78,
+      "clause_kappa": 5,
+      "nu": 33,
+      "rho": {
+        "num": 33,
+        "den": 5
+      },
+      "distance_to_bar": {
+        "num": 8889,
+        "den": 7565
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 5 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:b8bdfa192b7fb229985c3de000756bbe19476b5c7cdf109f377ff2c49f8df326",
+      "canonical_hash": "blake3:aee36426dee6a5dbfe82ea7c220ca174ac34ce76d6d4798de90cc2c2176dfb22",
+      "bit_kappa": 79,
+      "clause_kappa": 5,
+      "nu": 33,
+      "rho": {
+        "num": 33,
+        "den": 5
+      },
+      "distance_to_bar": {
+        "num": 8889,
+        "den": 7565
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 5 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> (Sigma x1 (fun x2 -> x1)))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:e2c5491f6cddae187c863e30960b2d2ea403689abde029a71d6b139c67cf4ff7",
+      "canonical_hash": "blake3:efe4dd5519e58a668c290d27b7eed8ce930d5e4d13de6f4e5c93ad69bf0a4540",
+      "bit_kappa": 87,
+      "clause_kappa": 5,
+      "nu": 33,
+      "rho": {
+        "num": 33,
+        "den": 5
+      },
+      "distance_to_bar": {
+        "num": 8889,
+        "den": 7565
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 5 clauses; reuses Step11 (Connections).",
+      "library_refs": [
+        "Step11 (Connections)"
+      ],
+      "clauses": [
+        "c01 [formation] ((x1 : Step11 (Connections)) -> ((x2 : x1) -> x2))",
+        "c02 [introduction] (fun x1 -> ((x2 : x1) -> x1))",
+        "c03 [formation] ((x1 : x1) -> Step11 (Connections))",
+        "c04 [introduction] (Step11 (Connections) x1)",
+        "c05 [introduction] (fun x1 -> ((x2 : x1) -> x1))"
+      ]
+    }
+  ],
+  "prune_reports": [],
+  "frontier_policy": {
+    "focus": "axiomatic",
+    "focus_quota": 2,
+    "bridge_quota": 2,
+    "support_quota": 1,
+    "macro_quota": 0,
+    "cold_limit": 6
+  },
+  "frontier_pressure": {
+    "governor_state": "green",
+    "pressure_action": "none",
+    "rss_bytes": 1342181120,
+    "observed_process_rss_bytes": 24879104,
+    "rss_gap_bytes": -1317302016,
+    "hot_frontier_bytes": 2432,
+    "cold_frontier_bytes": 128,
+    "dedupe_bytes": 1280,
+    "hot_count": 38,
+    "cold_candidate_count": 65,
+    "requested_cold_limit": 2,
+    "retained_cold_limit": 2,
+    "resident_cold_limit": 2,
+    "spill_backed_cold_records": 0,
+    "dropped_cold_records": 63
+  },
+  "prefix_frontier": {
+    "hot_states": [
+      {
+        "state_id": 51539607571,
+        "parent_state_id": 0,
+        "last_clause_id": 4,
+        "obligation_set_id": 12,
+        "shape_hash64": 8567635824012725405,
+        "support_hash64": 15767580291739608516,
+        "nu_lower_bound": 33,
+        "nu_upper_bound": 33,
+        "bit_kappa_used": 78,
+        "clause_kappa_used": 5,
+        "depth": 4,
+        "step_index": 12,
+        "band_index": 5,
+        "flags": 3328,
+        "priority_key": 1344360020,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607554,
+        "parent_state_id": 0,
+        "last_clause_id": 4,
+        "obligation_set_id": 12,
+        "shape_hash64": 2436656955139091962,
+        "support_hash64": 11151086899789050996,
+        "nu_lower_bound": 33,
+        "nu_upper_bound": 33,
+        "bit_kappa_used": 79,
+        "clause_kappa_used": 5,
+        "depth": 4,
+        "step_index": 12,
+        "band_index": 5,
+        "flags": 3328,
+        "priority_key": 1344360276,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607634,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 12716898713774647433,
+        "support_hash64": 9457325390898794658,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 110,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612869221,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607591,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 10440944479107156,
+        "support_hash64": 2694764381526833456,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 111,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612869477,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607604,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 5463645197358922714,
+        "support_hash64": 5356633183956411800,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 111,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612869477,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607619,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 8452747282031697425,
+        "support_hash64": 13097794186800436354,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 112,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612869733,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607648,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 15419818212623752132,
+        "support_hash64": 8230145172767007487,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 112,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612869733,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607617,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 8412290511429936061,
+        "support_hash64": 15157918912084200127,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 113,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612869989,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607621,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 9106353566298597842,
+        "support_hash64": 16498791057108374254,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 113,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612869989,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607626,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 10659849223423584038,
+        "support_hash64": 17337563751883561287,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 113,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612869989,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607638,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 13607329539452207441,
+        "support_hash64": 5332061134957002499,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 113,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612869989,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607603,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 4743589972395324836,
+        "support_hash64": 10162836465270343314,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 114,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612870245,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607630,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 11728526329500811909,
+        "support_hash64": 3686526486730739808,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 114,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612870245,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607651,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 17507972213498160864,
+        "support_hash64": 8138373111482941216,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 114,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612870245,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607596,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 1392563643294267366,
+        "support_hash64": 5984400011687186166,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 115,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612870501,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607605,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 5524379583417838230,
+        "support_hash64": 5719338181734187834,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 115,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612870501,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607600,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 3457987946308142053,
+        "support_hash64": 15224990319754206909,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 116,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612870757,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607633,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 12367456390683174180,
+        "support_hash64": 9741528983084626251,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 116,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612870757,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607644,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 13971267174421820421,
+        "support_hash64": 16794753347054717826,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 116,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612870757,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607608,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 5868532734037395923,
+        "support_hash64": 8643044882929770949,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 118,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612871269,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607611,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 7449049697429151171,
+        "support_hash64": 12140291377564272136,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 118,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612871269,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607624,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 9996934506341339602,
+        "support_hash64": 1368071802230361052,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 119,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612871525,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607654,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 17835274193234332885,
+        "support_hash64": 5700945039454939540,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 119,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612871525,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607602,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 4351131178184131930,
+        "support_hash64": 11400394110157262364,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 120,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612871781,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607640,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 13659736132963767771,
+        "support_hash64": 13578159790731799965,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 120,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612871781,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607610,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 6249342578267946808,
+        "support_hash64": 11766329953460514940,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 121,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612872037,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607620,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 8842193205221841715,
+        "support_hash64": 12308188505977595231,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 121,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612872037,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607627,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 11427494560875188135,
+        "support_hash64": 7506303419989654178,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 121,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612872037,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607650,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 17079164699025789135,
+        "support_hash64": 8123082364085861422,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 121,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612872037,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607593,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 160609733145195024,
+        "support_hash64": 15354382780701960341,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 122,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612872293,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607607,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 5832480220022447954,
+        "support_hash64": 9616735057697760637,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 122,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612872293,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607645,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 14311504386311577090,
+        "support_hash64": 8007619527326792921,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 122,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612872293,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607601,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 3600271367295063483,
+        "support_hash64": 17831881527608513220,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 123,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612872549,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607636,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 12980034857566917079,
+        "support_hash64": 9692291842316176232,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 123,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612872549,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607623,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 9937641490349494496,
+        "support_hash64": 4884557483226122180,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 124,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612872805,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607646,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 14547689132398522604,
+        "support_hash64": 6880748502106536966,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 124,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612872805,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607649,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 15510459539401743490,
+        "support_hash64": 10089146063701008769,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 124,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612872805,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607606,
+        "parent_state_id": 0,
+        "last_clause_id": 5,
+        "obligation_set_id": 12,
+        "shape_hash64": 5749669846314655531,
+        "support_hash64": 8877249411343394767,
+        "nu_lower_bound": 34,
+        "nu_upper_bound": 35,
+        "bit_kappa_used": 126,
+        "clause_kappa_used": 6,
+        "depth": 5,
+        "step_index": 12,
+        "band_index": 6,
+        "flags": 3328,
+        "priority_key": 1612873317,
+        "worker_hint": 0
+      }
+    ],
+    "cold_states": [
+      {
+        "state_id": 51539607579,
+        "parent_state_id": 0,
+        "last_clause_id": 4,
+        "obligation_set_id": 12,
+        "shape_hash64": 11419732280256800261,
+        "support_hash64": 14563391964078125025,
+        "nu_lower_bound": 33,
+        "nu_upper_bound": 33,
+        "bit_kappa_used": 79,
+        "clause_kappa_used": 5,
+        "depth": 4,
+        "step_index": 12,
+        "band_index": 5,
+        "flags": 3584,
+        "priority_key": 1344360276,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 51539607561,
+        "parent_state_id": 0,
+        "last_clause_id": 4,
+        "obligation_set_id": 12,
+        "shape_hash64": 4412908810344304919,
+        "support_hash64": 9599810993019613651,
+        "nu_lower_bound": 33,
+        "nu_upper_bound": 33,
+        "bit_kappa_used": 80,
+        "clause_kappa_used": 5,
+        "depth": 4,
+        "step_index": 12,
+        "band_index": 5,
+        "flags": 3584,
+        "priority_key": 1344360532,
+        "worker_hint": 0
+      }
+    ],
+    "dedupe_keys": [
+      "blake3:0c8529ac8d50a3e2bdf122fc0766ef57caed7d0200dafbcefd3b17a5715b1dcf",
+      "blake3:12f5920a02aeee0d4b39e9616968a0f5013759389a47bdf683eb8e2c67e07227",
+      "blake3:1796588f151567b9146c5d53df8b831ca16e34832089c12c68750ebde316943f",
+      "blake3:1d6889e2f58be905faefc0078dfce16a4d84f4c0fcf75bcc86bbb36ce066b35f",
+      "blake3:1d8d8472dc29224af7f3b6eea77f3c9548c0f38abfefae31caa20d834718743a",
+      "blake3:1f166fb4d61b4047db95bcd767dd8f8a4538bb9fe4dbdd1bd1b8347844dff124",
+      "blake3:25b262904c8acb9f4fbaa8839db415481b582aaa0228b8e58b72021bcf218a21",
+      "blake3:2baf86b92fc8df8021ee6577f6e41f5ed840b424d3a579991badd439275f27d5",
+      "blake3:31cc71e98e1cc9a359bf00ba438507e5ee47bb83388e5e6ec77f4709eea325c0",
+      "blake3:334c61deb98ba52809b7741ff1a8a4ea79c8c61589e1dd692edaf3fe2778956d",
+      "blake3:351d39db17d94a7f0b9ff23c1402a729d67c8c8a5aeacf507b9ff99b9624f51a",
+      "blake3:43847394d6d9c6cb13882394390954d9744c2496f61b44e79f1d4d53e69b590b",
+      "blake3:459549c35c13a36bff8046ed570c917b0739f5b2f13199841578c2ee2d64e409",
+      "blake3:487702396744dc0248e90ac8b1c421280b0a736d5bb4d154e4a496c1b2bb3ccb",
+      "blake3:48f4ceec0214e27888966e87228f0a61757a24740cb92b42623b502e614b482d",
+      "blake3:505a215db600e1a2b6ea3e6d55389714c4f19fd0ad2ce91007fd92b451e6833a",
+      "blake3:54d9439ee5fbce2031581ec7995cef82e3aeaf93a3d7e166bb8dc4b349bddd98",
+      "blake3:5e24909f7a6fa684855b9ac49fea80daa93bc6fde25c7db0bed15575d7d80108",
+      "blake3:6f1b188525513f302f7630216498566f0e930e5c50ccd94bc32d3cfb8f9159ba",
+      "blake3:71b840b96c614a6bae22dabe58104b2fcfc058c3bdda386e511cb50826c434b7",
+      "blake3:75107593aa95048a632f7d53d56a724d4617a2d4b35914f10949b6908cdfd3bf",
+      "blake3:758f853fcc16b78e7155b67438e4b34ba6151edba0e8f26fd419f4d3648e0a97",
+      "blake3:772bf90c6e562451767e786729e66182c4d34e9501dadb8deb93580b566108f3",
+      "blake3:8b84cdc57211c83ee1acc9bfcb8577dcbe52499cfac5a687b25a0d4d022387a1",
+      "blake3:8ea31dd3b9d6b4f0e88406143cc55f4aeed0f1d3b003f4e8f8d185576478424f",
+      "blake3:90411a7b608be32d780929c8bcdce2cbc0f717ea4940490f524d155a3588a3e2",
+      "blake3:9c88737d05427e08e841464e0add3b19ef4c02549b1651281ae1d22c87070de6",
+      "blake3:a3a21e894c1a65d09c3d07e548cdfdbd5c38165308e426f0597199f38b0b29ff",
+      "blake3:a5875467df0e4ed7d8f6e7779844e6caa1d968449908dded13fd678b4ce8aff2",
+      "blake3:a602b63f8c4d1e0fbc12a4fffdab7c94960014525882b4b435a3a9963806750d",
+      "blake3:a9554e6345f608a76415faa4495bd2cfd3a89387b833487369602d3583fbde7e",
+      "blake3:b9cf634d1c30f0c87c32987d3568d083c9f3dad54231ab1122e6b384f6f05c43",
+      "blake3:bd7b7c8f8305fdf000a340312ecc05fd3b34870cd46ca805bbf357fa38a6f2b5",
+      "blake3:db6c9f47db9c28f00dc679fe235f8ca0e0865eb896cc89dff45b966626e6690e",
+      "blake3:dc76da73672ebe0ebeaa918d4013045f63caa8a816bac89973107111d91bd719",
+      "blake3:e1c2f06dea6ff65c101a59db08f6c5b567e8e66df601a4637bbff205ed75557d",
+      "blake3:e1f1dd5a20e70fad4c6cbeadc07c766ad6ec5edb9d2db064e0d326dcf1463b82",
+      "blake3:e2c5491f6cddae187c863e30960b2d2ea403689abde029a71d6b139c67cf4ff7",
+      "blake3:edceb034ceae251ea7c3c5f7328587f1ad1547a12617ed096f03ca7df368c038",
+      "blake3:ee094ab5a9582bdfa75fd5e635fe57327ab454664f848001897fbed7f37d1627"
+    ]
+  },
+  "provenance": "atomic_bootstrap_search",
+  "canon_evidence": {
+    "charged_clause_kappa": 6,
+    "bar_distance": {
+      "num": 1097,
+      "den": 4539
+    },
+    "clears_bar": true,
+    "late_step_claim": {
+      "status": "not_applicable",
+      "adopted_step": 0,
+      "adopted_label": "",
+      "adopted_nu": 0,
+      "matches_accepted": false,
+      "note": ""
+    }
+  },
+  "replay_ablation": {
+    "status": "matches_reference_replay",
+    "reference_candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+    "reference_canonical_hash": "blake3:fd636363062e2cc44259d330cd96e319979d8ae7ff02eb065599bb2541d03cac",
+    "rho_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "objective_bar_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "overshoot_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "nu_delta": 0,
+    "clause_kappa_delta": 0,
+    "note": "matches reference replay baseline"
+  },
+  "narrative_events": [
+    {
+      "step_index": 12,
+      "ordinal": 1,
+      "kind": "step_open",
+      "message": "opened step 12 with bar 8208/1513 and clause band 5..6",
+      "detail": "mode=desktop_claim_shadow exact_legality_rejections=0 structural_cap_rejections=0 admitted_focus_aligned=405 admitted_deprioritized=0",
+      "progress": {
+        "elapsed_millis": 55,
+        "generated_surface": 1338,
+        "exact_screened_surface": 51,
+        "full_telescopes_evaluated": 44
+      }
+    },
+    {
+      "step_index": 12,
+      "ordinal": 2,
+      "kind": "surface_summary",
+      "message": "generated 1338 structural candidates; 405 were well formed and 0 were rejected by admissibility",
+      "detail": "malformed=0 full_evaluated=44 canonical=44 semantically_minimal=44",
+      "progress": {
+        "elapsed_millis": 55,
+        "generated_surface": 1338,
+        "exact_screened_surface": 51,
+        "full_telescopes_evaluated": 44
+      }
+    },
+    {
+      "step_index": 12,
+      "ordinal": 3,
+      "kind": "prefix_summary",
+      "message": "prefix frontier created=447 explored=147 merged=138 exact_pruned=7 heuristic_dropped=63",
+      "detail": "hot_states=38 cold_states=2 frontier_window=40",
+      "progress": {
+        "elapsed_millis": 55,
+        "generated_surface": 1338,
+        "exact_screened_surface": 51,
+        "full_telescopes_evaluated": 44
+      }
+    },
+    {
+      "step_index": 12,
+      "ordinal": 4,
+      "kind": "memo_summary",
+      "message": "memo path hits: legality=1681 active_window=0 terminal_completion=400 partial_bounds=48",
+      "detail": "connectivity_shortcuts=405 clause_family_prunes=0 terminal_rank_prunes=92 terminal_prefix_bar_prunes=4",
+      "progress": {
+        "elapsed_millis": 55,
+        "generated_surface": 1338,
+        "exact_screened_surface": 51,
+        "full_telescopes_evaluated": 44
+      }
+    },
+    {
+      "step_index": 12,
+      "ordinal": 5,
+      "kind": "frontier_summary",
+      "message": "retained 44 candidates with frontier hot=38 cold=2 dropped=0",
+      "detail": "pressure_state=green pressure_action=none resident_cold=0 spill_backed=0",
+      "progress": {
+        "elapsed_millis": 55,
+        "generated_surface": 1338,
+        "exact_screened_surface": 51,
+        "full_telescopes_evaluated": 44
+      }
+    },
+    {
+      "step_index": 12,
+      "ordinal": 6,
+      "kind": "acceptance_summary",
+      "phase": "seal",
+      "message": "accepted blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb with overshoot 1097/4539 (nu=34 kappa=6)",
+      "detail": "bar_clearers=44 near_misses=3 candidate_hash=blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb canonical_hash=blake3:fd636363062e2cc44259d330cd96e319979d8ae7ff02eb065599bb2541d03cac",
+      "progress": {
+        "elapsed_millis": 55,
+        "generated_surface": 1338,
+        "exact_screened_surface": 51,
+        "full_telescopes_evaluated": 44
+      }
+    },
+    {
+      "step_index": 12,
+      "ordinal": 7,
+      "kind": "step_complete",
+      "phase": "seal",
+      "message": "completed step 12 in 55 ms",
+      "detail": "discovery_ms=53 frontier_plan_ms=0 selection_ms=0",
+      "progress": {
+        "elapsed_millis": 55,
+        "generated_surface": 1338,
+        "exact_screened_surface": 51,
+        "full_telescopes_evaluated": 44
+      }
+    }
+  ]
+}

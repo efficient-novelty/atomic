@@ -1,0 +1,92 @@
+step 15 claim narrative
+label        DCT
+profile      claim-1h
+accepted     blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4 nu=103 kappa=8 overshoot=115657/21112
+time         [#...............] 90ms / 1m30s (within limit)
+generated    [######..........] 1794 / 5000 generated (miss)
+exact_screen [#####...........] 469 / 1800 screened (miss)
+full_eval    [#...............] 1 / 120 evaluated (within limit)
+closure      [################] 99% frontier_total=469 certified_nonwinning=468
+phase_eval   materialize=0 proof_close=0 overrun=0 cap=none cap_triggered=false breadth_exit=none proof_close_reason=none overrun_reason=none
+proof_close  reserve=0ms elapsed=0ms remaining=0ms reserve_overrun=0ms exhausted=false groups_closed=0/0 groups_remaining=0 closure=0%
+timing       discovery=90ms frontier_plan=0ms selection=0ms
+funnel       enumerated=81 well_formed=81 malformed=0 admissibility_rejected=0 scored=1 canonical=1 semantically_minimal=1
+demo_funnel  raw=1794 canonical_prefixes=1065 hard_admissible=81 exact_pruned=468 heuristic_dropped=0 bar_clearers=1 semantically_minimal_clearers=1 winner_overshoot=115657/21112
+exact_reasons partial_prefix_bar=468 terminal_completion=0 incumbent_dominance=80 legality_connectivity=0
+prune_totals quotient_dedupe=0 sound_minimality=548 heuristic_shaping=0
+prefixes     created=1065 explored=354 merged=0 exact_pruned=468 heuristic_dropped=0 hot=1 cold=0
+memo         legality_hits=11109 active_window_hits=0 terminal_completion_hits=244 partial_bound_hits=669 terminal_rank_prunes=80
+demo_buckets k8:structural_generic:temporal_operator:library_backed:small_cluster gen=732 adm=82 screen=82 pruned=80 scored=0 best=none | k8:structural_generic:temporal_operator:library_backed:single gen=0 adm=0 screen=0 pruned=0 scored=1 best=115657/21112
+
+events
+  [step_open] opened step 15 with bar 19520/2639 and clause band 8..8
+    mode=desktop_claim_shadow exact_legality_rejections=0 structural_cap_rejections=0 admitted_focus_aligned=81 admitted_deprioritized=0
+  [surface_summary] generated 1794 structural candidates; 81 were well formed and 0 were rejected by admissibility
+    malformed=0 full_evaluated=1 canonical=1 semantically_minimal=1
+  [prefix_summary] prefix frontier created=1065 explored=354 merged=0 exact_pruned=468 heuristic_dropped=0
+    hot_states=1 cold_states=0 frontier_window=1
+  [memo_summary] memo path hits: legality=11109 active_window=0 terminal_completion=244 partial_bounds=669
+    connectivity_shortcuts=81 clause_family_prunes=0 terminal_rank_prunes=80 terminal_prefix_bar_prunes=0
+  [frontier_summary] retained 1 candidates with frontier hot=1 cold=0 dropped=0
+    pressure_state=green pressure_action=none resident_cold=0 spill_backed=0
+  [acceptance_summary seal] accepted blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4 with overshoot 115657/21112 (nu=103 kappa=8)
+    bar_clearers=1 near_misses=0 candidate_hash=blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4 canonical_hash=blake3:6f4b65c28060999af4bac3fa46a9da3bd8e1bbdbc99f41ecc94291012a0573a4
+  [step_complete seal] completed step 15 in 90 ms
+    discovery_ms=90 frontier_plan_ms=0 selection_ms=0
+
+retained candidates
+  accepted blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4 rho=103/8 distance=115657/21112 frontier=hot headline=Synthesis candidate with 8 clauses; reuses Step10 (Cohesion); contains temporal structure.
+
+prunes
+  totals quotient_dedupe=0 sound_minimality=548 heuristic_shaping=0
+  sampled: none
+
+accepted trace
+  source=structural-ast
+  nu_g=2
+  nu_h=15
+  nu_c=86
+  bonus_distributive=38
+  bonus_universe_poly=42
+  bonus_infinitesimal_shift=15
+  nu_total=103
+  node_trace_count=39
+  node=entry1|ctor=Next
+  node=entry1/0|ctor=Var
+  node=entry2|ctor=Eventually
+  node=entry2/0|ctor=Var
+  node=entry3|ctor=Pi
+  node=entry3/0|ctor=Next
+  node=entry3/0/0|ctor=Var
+  node=entry3/1|ctor=Eventually
+  node=entry3/1/0|ctor=Var
+  node=entry4|ctor=Lam
+  node=entry4/0|ctor=App
+  node=entry4/0/0|ctor=Lib
+  node=entry4/0/1|ctor=Next
+  node=entry4/0/1/0|ctor=Var
+  node=entry5|ctor=Pi
+  node=entry5/0|ctor=Flat
+  node=entry5/0/0|ctor=Next
+  node=entry5/0/0/0|ctor=Var
+  node=entry5/1|ctor=Next
+  node=entry5/1/0|ctor=Flat
+  node=entry5/1/0/0|ctor=Var
+  node=entry6|ctor=Pi
+  node=entry6/0|ctor=Sharp
+  node=entry6/0/0|ctor=Eventually
+  node=entry6/0/0/0|ctor=Var
+  node=entry6/1|ctor=Eventually
+  node=entry6/1/0|ctor=Sharp
+  node=entry6/1/0/0|ctor=Var
+  node=entry7|ctor=Lam
+  node=entry7/0|ctor=App
+  node=entry7/0/0|ctor=Eventually
+  node=entry7/0/0/0|ctor=Var
+  node=entry7/0/1|ctor=Var
+  node=entry8|ctor=Pi
+  node=entry8/0|ctor=Next
+  node=entry8/0/0|ctor=Next
+  node=entry8/0/0/0|ctor=Var
+  node=entry8/1|ctor=Next
+  node=entry8/1/0|ctor=Var

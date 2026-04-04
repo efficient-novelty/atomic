@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "run_id": "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v6",
+  "step_index": 9,
+  "accepted_utc": "2026-04-04T20:39:46.6532251Z",
+  "compat": {
+    "ast_schema_hash": "blake3:fc9be9ae20ab7277941ba7c98fcb9b7b0a78f699e595d3268656144a3f0b21bf",
+    "type_rules_hash": "blake3:39c261a0e90bde0cfa2affee542db9a2519e4b8cd95c008e3fa0ed59cd38ac2e",
+    "evaluator_hash": "blake3:dc3ad0d7c757a4b498bd4cfc56446e05af84df38049161883ab8592b18df4792",
+    "search_semantics_hash": "blake3:f3572c8c8c9e01202de7df3840fda6eb4458c2f10104b509a36610d2f6dc80ea"
+  },
+  "objective": {
+    "bar": {
+      "num": 1768,
+      "den": 441
+    },
+    "exact_clause_kappa": 4,
+    "bit_band": {
+      "min": 78,
+      "max": 78
+    }
+  },
+  "accepted": {
+    "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+    "canonical_hash": "blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+    "bit_kappa": 78,
+    "clause_kappa": 4,
+    "nu": 17,
+    "rho": {
+      "num": 17,
+      "den": 4
+    },
+    "overshoot": {
+      "num": 425,
+      "den": 1764
+    },
+    "shape_fingerprint": "0x7673f0b547538a8d",
+    "support_fingerprint": "0xa8a6d8be9494884e"
+  },
+  "library_snapshot": {
+    "window_depth": 2,
+    "entries": [
+      {
+        "step": 7,
+        "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Var": 1
+              }
+            },
+            {
+              "role": "path_attach",
+              "expr": {
+                "PathCon": 2
+              }
+            }
+          ]
+        }
+      },
+      {
+        "step": 8,
+        "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Var": 1
+              }
+            },
+            {
+              "role": "path_attach",
+              "expr": {
+                "PathCon": 3
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Var": 2
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "near_misses": [
+    {
+      "candidate_hash": "blake3:c68e96683d7c48ee65b08bdd6b837024093a883172a0ed894b5dcd4250b78167",
+      "canonical_hash": "blake3:533f7ea85cce4cb1e51d126f2dac12bbaf0a8e76f7becd0363bc3e7059b52320",
+      "bit_kappa": 80,
+      "clause_kappa": 4,
+      "nu": 17,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:208488a9cdcb74d81b054dd0ae400db296b586482a17acb29c1d3c6681da3f8e",
+      "canonical_hash": "blake3:019f52ce183bea5bbe0788b027e4e4cb7096abcd401ae886c60f1ac4ec9b77f0",
+      "bit_kappa": 82,
+      "clause_kappa": 4,
+      "nu": 17,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:127c17d11903653e0ae65a8922be98df4956cfb232faa4f82585f1ed98301ee8",
+      "canonical_hash": "blake3:a628c033e7c1fde6858af3b2f600a7511131ae9896ff8e44583a113f9a6cf8c7",
+      "bit_kappa": 76,
+      "clause_kappa": 4,
+      "nu": 17,
+      "status": "bar_clear_higher_overshoot"
+    }
+  ],
+  "stats": {
+    "frontier_scanned": 12,
+    "typed_prefixes": 21,
+    "sound_prunes": 6,
+    "heuristic_drops": 0
+  }
+}

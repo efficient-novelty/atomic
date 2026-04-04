@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "run_id": "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v6",
+  "step_index": 10,
+  "accepted_utc": "2026-04-04T20:39:46.6988785Z",
+  "compat": {
+    "ast_schema_hash": "blake3:fc9be9ae20ab7277941ba7c98fcb9b7b0a78f699e595d3268656144a3f0b21bf",
+    "type_rules_hash": "blake3:39c261a0e90bde0cfa2affee542db9a2519e4b8cd95c008e3fa0ed59cd38ac2e",
+    "evaluator_hash": "blake3:dc3ad0d7c757a4b498bd4cfc56446e05af84df38049161883ab8592b18df4792",
+    "search_semantics_hash": "blake3:f3572c8c8c9e01202de7df3840fda6eb4458c2f10104b509a36610d2f6dc80ea"
+  },
+  "objective": {
+    "bar": {
+      "num": 759,
+      "den": 170
+    },
+    "exact_clause_kappa": 4,
+    "bit_band": {
+      "min": 45,
+      "max": 45
+    }
+  },
+  "accepted": {
+    "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+    "canonical_hash": "blake3:09bed8af6371d3ac8be4c5d4bd59321753f2a027ff9685808b8bab6ce8ac4ef5",
+    "bit_kappa": 45,
+    "clause_kappa": 4,
+    "nu": 19,
+    "rho": {
+      "num": 19,
+      "den": 4
+    },
+    "overshoot": {
+      "num": 97,
+      "den": 340
+    },
+    "shape_fingerprint": "0xc9b559ee9694ac12",
+    "support_fingerprint": "0xf0ae35b0541ca3bd"
+  },
+  "library_snapshot": {
+    "window_depth": 2,
+    "entries": [
+      {
+        "step": 8,
+        "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Var": 1
+              }
+            },
+            {
+              "role": "path_attach",
+              "expr": {
+                "PathCon": 3
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Var": 2
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "step": 9,
+        "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 8
+                  },
+                  {
+                    "Lib": 7
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Lib": 5
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 8
+                    },
+                    {
+                      "Lib": 7
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 7
+                  },
+                  {
+                    "Lib": 8
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "near_misses": [
+    {
+      "candidate_hash": "blake3:567a950ec99284aa4158cb6f836368784fe49706bd2cefaf6f63d52968927bb9",
+      "canonical_hash": "blake3:aedf6149089ba0a0fa0de3cac160315ebcf62247dadca5feeb5d2acaa4a1260a",
+      "bit_kappa": 54,
+      "clause_kappa": 4,
+      "nu": 19,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:58d59fcb81438d0f45ad3de730d15e70379312467ce8134dc0939ce9737acf55",
+      "canonical_hash": "blake3:017489b3573ccae32fb3d7d6bfd26dc1a0c4bdb59d46907edc0865bd295389e4",
+      "bit_kappa": 49,
+      "clause_kappa": 4,
+      "nu": 19,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:12932771897b766fd277bc497f2e27d12cd7e776ea103e1f38e9048fd0be4e36",
+      "canonical_hash": "blake3:215ec3dc0d7423b1e03cc8c668897cc42ca7ed8a043a22165f03c4f6096f2a46",
+      "bit_kappa": 47,
+      "clause_kappa": 4,
+      "nu": 19,
+      "status": "bar_clear_higher_overshoot"
+    }
+  ],
+  "stats": {
+    "frontier_scanned": 39,
+    "typed_prefixes": 27,
+    "sound_prunes": 147,
+    "heuristic_drops": 0
+  }
+}

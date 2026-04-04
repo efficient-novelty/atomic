@@ -1,0 +1,177 @@
+{
+  "aggregate": {
+    "claim_run_count": 1,
+    "completed_step_15_count": 1,
+    "full_early_breadth_hit_count": 0,
+    "full_late_floor_hit_count": 0,
+    "parity_success_count": 1,
+    "runtime_ms": {
+      "max_ms": 2904,
+      "median_ms": 2904,
+      "min_ms": 2904,
+      "p90_ms": 2904,
+      "samples": 1
+    },
+    "runtime_threshold_pass_count": 1,
+    "step_floor_hit_counts": {
+      "early": {
+        "1": 0
+      },
+      "late": {
+        "10": 1,
+        "11": 0,
+        "12": 1,
+        "13": 0,
+        "14": 1,
+        "15": 0
+      }
+    }
+  },
+  "benchmark_version": 1,
+  "generated_utc": "2026-04-04T20:40:06.043408+00:00",
+  "guarded_run": "C:\\DEV\\atomic\\runs\\codex-guarded-claim-cert-v1",
+  "runs": [
+    {
+      "claim_run": "C:\\DEV\\atomic\\runs\\codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v6",
+      "completed_step": 15,
+      "early_breadth": {
+        "detail": "early breadth failed at step 1",
+        "status": "fail",
+        "steps": [
+          {
+            "actual": 546,
+            "status": "miss",
+            "step_index": 1,
+            "target": 2144
+          }
+        ]
+      },
+      "late_generated_floors": {
+        "detail": "late generated floors failed at step 11, step 13, step 15",
+        "status": "fail",
+        "steps": [
+          {
+            "actual": 1428,
+            "status": "hit",
+            "step_index": 10,
+            "target": 500
+          },
+          {
+            "actual": 330,
+            "status": "miss",
+            "step_index": 11,
+            "target": 800
+          },
+          {
+            "actual": 1338,
+            "status": "hit",
+            "step_index": 12,
+            "target": 1200
+          },
+          {
+            "actual": 123,
+            "status": "miss",
+            "step_index": 13,
+            "target": 2200
+          },
+          {
+            "actual": 12027,
+            "status": "hit",
+            "step_index": 14,
+            "target": 3500
+          },
+          {
+            "actual": 1794,
+            "status": "miss",
+            "step_index": 15,
+            "target": 5000
+          }
+        ]
+      },
+      "manifest_completeness": {
+        "detail": "manifest includes all required provenance fields",
+        "missing_fields": [],
+        "present_fields": {
+          "arch": "x86_64",
+          "binary_sha256": "bdcbf9b0c6386a5fd2e0e7388c2637a15486c962f47041530075dff3e50a5385",
+          "build_profile": "release",
+          "cargo_lock_sha256": "0e69f79462261b9360797a7ff7874f6da9177a1c08815eb48b2ae2cba4096dab",
+          "cpu_model": "AMD Ryzen 5 7600 6-Core Processor",
+          "dirty_tree": false,
+          "git_commit_sha": "629b59861d521555cfd214a602bedec4f44c67d0",
+          "logical_cpus": 12,
+          "os": "windows",
+          "physical_core_count": 6,
+          "ram_bytes": 16217264128,
+          "resolved_worker_count": 8,
+          "target_cpu": "default",
+          "target_triple": "x86_64-pc-windows-msvc"
+        },
+        "status": "pass"
+      },
+      "manifest_snapshot": {
+        "build": {
+          "binary_sha256": "bdcbf9b0c6386a5fd2e0e7388c2637a15486c962f47041530075dff3e50a5385",
+          "cargo_lock_sha256": "0e69f79462261b9360797a7ff7874f6da9177a1c08815eb48b2ae2cba4096dab",
+          "dirty_tree": false,
+          "git_commit_sha": "629b59861d521555cfd214a602bedec4f44c67d0",
+          "profile": "release",
+          "target_cpu": "default",
+          "target_triple": "x86_64-pc-windows-msvc"
+        },
+        "host": {
+          "arch": "x86_64",
+          "cpu_model": "AMD Ryzen 5 7600 6-Core Processor",
+          "logical_cpus": 12,
+          "os": "windows",
+          "physical_core_count": 6,
+          "ram_bytes": 16217264128
+        },
+        "position": {
+          "active_band": 8,
+          "active_step": 16,
+          "completed_step": 15,
+          "frontier_epoch": 12
+        },
+        "run_mode": null,
+        "runtime": {
+          "resolved_worker_count": 8
+        },
+        "search_policy": {
+          "bucket_policy": "structural_generic",
+          "guidance_style": "claim_debt_guided",
+          "late_expansion_policy": "claim_generic"
+        },
+        "search_profile": "desktop_claim_shadow"
+      },
+      "parity": {
+        "baseline_missing_steps": [],
+        "detail": "accepted hashes match guarded through step 15",
+        "lane_missing_steps": [],
+        "matches_baseline": true,
+        "status": "pass"
+      },
+      "runtime_ms": 2904,
+      "runtime_threshold": {
+        "detail": "stored runtime 2904 ms is within the certified threshold",
+        "status": "pass",
+        "threshold_ms": 600000,
+        "total_runtime_ms": 2904
+      },
+      "step_floor_hits": {
+        "early": {
+          "1": false
+        },
+        "late": {
+          "10": true,
+          "11": false,
+          "12": true,
+          "13": false,
+          "14": true,
+          "15": false
+        }
+      }
+    }
+  ],
+  "runtime_threshold_ms": 600000
+}

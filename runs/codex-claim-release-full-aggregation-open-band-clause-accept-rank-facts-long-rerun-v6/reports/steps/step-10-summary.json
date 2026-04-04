@@ -1,0 +1,3220 @@
+{
+  "step_index": 10,
+  "label": "Cohesion",
+  "search_profile": "desktop_claim_shadow",
+  "objective_bar": {
+    "num": 759,
+    "den": 170
+  },
+  "accepted": {
+    "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+    "canonical_hash": "blake3:09bed8af6371d3ac8be4c5d4bd59321753f2a027ff9685808b8bab6ce8ac4ef5",
+    "bit_kappa": 45,
+    "clause_kappa": 4,
+    "nu": 19,
+    "rho": {
+      "num": 19,
+      "den": 4
+    },
+    "overshoot": {
+      "num": 97,
+      "den": 340
+    },
+    "shape_fingerprint": "0xc9b559ee9694ac12",
+    "support_fingerprint": "0xf0ae35b0541ca3bd"
+  },
+  "telescope": {
+    "clauses": [
+      {
+        "role": "formation",
+        "expr": {
+          "Flat": {
+            "Var": 1
+          }
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Sharp": {
+            "Var": 1
+          }
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Disc": {
+            "Var": 1
+          }
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Shape": {
+            "Var": 1
+          }
+        }
+      }
+    ]
+  },
+  "trace": [
+    "source=structural-ast",
+    "nu_g=2",
+    "nu_h=0",
+    "nu_c=17",
+    "bonus_distributive=0",
+    "bonus_universe_poly=0",
+    "bonus_infinitesimal_shift=0",
+    "nu_total=19",
+    "node_trace_count=8",
+    "node=entry1|ctor=Flat",
+    "node=entry1/0|ctor=Var",
+    "node=entry2|ctor=Sharp",
+    "node=entry2/0|ctor=Var",
+    "node=entry3|ctor=Disc",
+    "node=entry3/0|ctor=Var",
+    "node=entry4|ctor=Shape",
+    "node=entry4/0|ctor=Var"
+  ],
+  "near_misses": [
+    {
+      "candidate_hash": "blake3:567a950ec99284aa4158cb6f836368784fe49706bd2cefaf6f63d52968927bb9",
+      "canonical_hash": "blake3:aedf6149089ba0a0fa0de3cac160315ebcf62247dadca5feeb5d2acaa4a1260a",
+      "bit_kappa": 54,
+      "clause_kappa": 4,
+      "nu": 19,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:58d59fcb81438d0f45ad3de730d15e70379312467ce8134dc0939ce9737acf55",
+      "canonical_hash": "blake3:017489b3573ccae32fb3d7d6bfd26dc1a0c4bdb59d46907edc0865bd295389e4",
+      "bit_kappa": 49,
+      "clause_kappa": 4,
+      "nu": 19,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:12932771897b766fd277bc497f2e27d12cd7e776ea103e1f38e9048fd0be4e36",
+      "canonical_hash": "blake3:215ec3dc0d7423b1e03cc8c668897cc42ca7ed8a043a22165f03c4f6096f2a46",
+      "bit_kappa": 47,
+      "clause_kappa": 4,
+      "nu": 19,
+      "status": "bar_clear_higher_overshoot"
+    }
+  ],
+  "search_stats": {
+    "enumerated_candidates": 597,
+    "well_formed_candidates": 597,
+    "malformed_rejections": 0,
+    "malformed_rejection_reasons": {},
+    "admissibility_rejections": 0,
+    "admissibility_diagnostics": {
+      "exact_legality_rejections": 0,
+      "structural_debt_cap_rejections": 0,
+      "admitted_deprioritized": 0,
+      "admitted_focus_aligned": 597,
+      "reason_counts": {
+        "open_band_structural": 597
+      }
+    },
+    "full_telescopes_evaluated": 81,
+    "evaluated_candidates": 81,
+    "canonical_candidates": 81,
+    "semantically_minimal_candidates": 81,
+    "canonical_dedupe_prunes": 0,
+    "semantic_minimality_prunes": 0,
+    "dedupe_prunes": 0,
+    "minimality_prunes": 0,
+    "heuristic_drops": 0,
+    "prefixes_created": 240,
+    "prefix_states_explored": 39,
+    "prefix_states_merged_by_signature": 54,
+    "prefix_states_exact_pruned": 147,
+    "prefix_states_heuristic_dropped": 0,
+    "incremental_legality_cache_hits": 1776,
+    "incremental_connectivity_shortcuts": 693,
+    "incremental_connectivity_fallbacks": 72,
+    "incremental_connectivity_prunes": 609,
+    "incremental_clause_family_filter_hits": 0,
+    "incremental_clause_family_prunes": 0,
+    "incremental_active_window_clause_filter_hits": 0,
+    "incremental_active_window_clause_filter_prunes": 0,
+    "incremental_terminal_clause_filter_hits": 243,
+    "incremental_terminal_clause_filter_prunes": 0,
+    "incremental_trivial_derivability_hits": 1458,
+    "incremental_trivial_derivability_prunes": 0,
+    "incremental_terminal_admissibility_hits": 1458,
+    "incremental_terminal_admissibility_rejections": 0,
+    "incremental_terminal_prefix_completion_hits": 225,
+    "incremental_terminal_prefix_rank_hits": 0,
+    "incremental_terminal_rank_prunes": 0,
+    "incremental_partial_prefix_bound_hits": 15,
+    "incremental_partial_prefix_bound_checks": 15,
+    "incremental_partial_prefix_bound_prunes": 3,
+    "incremental_terminal_prefix_bar_prunes": 144,
+    "prune_classes": {
+      "quotient_dedupe": 0,
+      "sound_minimality": 756,
+      "heuristic_shaping": 0
+    },
+    "exact_screen_reasons": {
+      "partial_prefix_bar_failure": 3,
+      "terminal_prefix_completion_failure": 144,
+      "incumbent_dominance": 0,
+      "legality_connectivity_exact_rejection": 609
+    },
+    "demo_phase": {
+      "materialize_full_evals": 0,
+      "proof_close_reserved_millis": 0,
+      "proof_close_elapsed_millis": 0,
+      "proof_close_remaining_millis": 0,
+      "proof_close_reserve_overrun_millis": 0,
+      "proof_close_reserve_exhausted": false,
+      "proof_close_frontier_total_groups": 0,
+      "proof_close_frontier_groups_closed": 0,
+      "proof_close_frontier_groups_remaining": 0,
+      "proof_close_closure_percent": 0,
+      "proof_close_full_evals": 0,
+      "proof_close_overrun_full_evals": 0,
+      "materialize_soft_cap_triggered": false
+    },
+    "demo_funnel": {
+      "generated_raw_prefixes": 1428,
+      "canonical_prefix_signatures": 240,
+      "well_formed_terminals": 597,
+      "hard_admissible": 597,
+      "exact_bound_screened": 228,
+      "exact_bound_pruned": 147,
+      "heuristic_dropped": 0,
+      "full_telescopes_evaluated": 81,
+      "bar_clearers": 81,
+      "semantically_minimal_clearers": 81,
+      "winner_overshoot": {
+        "num": 97,
+        "den": 340
+      }
+    },
+    "demo_closure": {
+      "frontier_total_seen": 228,
+      "frontier_certified_nonwinning": 147,
+      "closure_percent": 64
+    },
+    "demo_bucket_stats": [
+      {
+        "bucket_label": "k4:structural_generic:support_form:library_backed:broad",
+        "bucket_key": {
+          "clause_kappa": 4,
+          "taxonomy": "structural_generic",
+          "category": "support_form",
+          "support_profile": "library_backed",
+          "width": "broad"
+        },
+        "generated_terminal_candidates": 162,
+        "admissible_terminal_candidates": 162,
+        "exact_screened_terminal_candidates": 162,
+        "pruned_terminal_candidates": 162,
+        "fully_scored_terminal_candidates": 0
+      },
+      {
+        "bucket_label": "k4:structural_generic:modal_operator:local_only:small_cluster",
+        "bucket_key": {
+          "clause_kappa": 4,
+          "taxonomy": "structural_generic",
+          "category": "modal_operator",
+          "support_profile": "local_only",
+          "width": "small_cluster"
+        },
+        "generated_terminal_candidates": 0,
+        "admissible_terminal_candidates": 0,
+        "exact_screened_terminal_candidates": 0,
+        "pruned_terminal_candidates": 0,
+        "fully_scored_terminal_candidates": 81,
+        "best_overshoot": {
+          "num": 97,
+          "den": 340
+        }
+      },
+      {
+        "bucket_label": "k4:structural_generic:modal_operator:local_only:broad",
+        "bucket_key": {
+          "clause_kappa": 4,
+          "taxonomy": "structural_generic",
+          "category": "modal_operator",
+          "support_profile": "local_only",
+          "width": "broad"
+        },
+        "generated_terminal_candidates": 324,
+        "admissible_terminal_candidates": 162,
+        "exact_screened_terminal_candidates": 162,
+        "pruned_terminal_candidates": 0,
+        "fully_scored_terminal_candidates": 0
+      },
+      {
+        "bucket_label": "k4:structural_generic:modal_operator:library_backed:broad",
+        "bucket_key": {
+          "clause_kappa": 4,
+          "taxonomy": "structural_generic",
+          "category": "modal_operator",
+          "support_profile": "library_backed",
+          "width": "broad"
+        },
+        "generated_terminal_candidates": 864,
+        "admissible_terminal_candidates": 354,
+        "exact_screened_terminal_candidates": 354,
+        "pruned_terminal_candidates": 354,
+        "fully_scored_terminal_candidates": 0
+      }
+    ],
+    "claim_step_open": {
+      "kappa_min": 4,
+      "kappa_max": 4,
+      "late_family_surface": "claim_generic",
+      "claim_widening_band7_active": false,
+      "claim_widening_band8_active": false,
+      "claim_widening_band9_active": false,
+      "historical_anchor_ref": 7,
+      "anchor_policy": "loop",
+      "claim_debt_axes": {
+        "kappa_min": 4,
+        "kappa_max": 4,
+        "path_pressure": 3,
+        "trunc_pressure": 1,
+        "coupling_pressure": 0,
+        "support_pressure": 3,
+        "modal_pressure": 1,
+        "temporal_pressure": 0,
+        "reanchor_pressure": 1,
+        "closure_pressure": 2
+      },
+      "package_flags": {
+        "operator_bundle": false,
+        "hilbert_functional": false,
+        "temporal_shell": false
+      }
+    },
+    "claim_root_seeding": {
+      "roots_seen": 6,
+      "roots_rejected_by_insert_root": 0,
+      "roots_rejected_by_exact_screen": 0,
+      "roots_enqueued": 6
+    },
+    "search_timing": {
+      "step_wall_clock_millis": 29,
+      "candidate_discovery_wall_clock_millis": 27,
+      "prefix_frontier_planning_wall_clock_millis": 0,
+      "selection_wall_clock_millis": 0
+    },
+    "prefix_frontier_hot_states": 27,
+    "prefix_frontier_cold_states": 0,
+    "retained_candidates": 81,
+    "frontier_hot_states": 81,
+    "frontier_cold_states": 0,
+    "frontier_resident_cold_states": 0,
+    "frontier_spill_states": 0,
+    "frontier_drops": 0,
+    "scored_candidate_distribution": {
+      "candidate_count": 81,
+      "clears_bar": 81,
+      "below_bar": 0,
+      "clause_kappa_counts": {
+        "4": 81
+      },
+      "nu_summary": {
+        "min": 19,
+        "median": 19,
+        "max": 19,
+        "average": {
+          "num": 19,
+          "den": 1
+        }
+      },
+      "rho_summary": {
+        "min": {
+          "num": 19,
+          "den": 4
+        },
+        "median": {
+          "num": 19,
+          "den": 4
+        },
+        "max": {
+          "num": 19,
+          "den": 4
+        },
+        "average": {
+          "num": 19,
+          "den": 4
+        }
+      }
+    }
+  },
+  "candidate_reports": [
+    {
+      "status": "accepted_minimal_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+      "canonical_hash": "blake3:09bed8af6371d3ac8be4c5d4bd59321753f2a027ff9685808b8bab6ce8ac4ef5",
+      "bit_kappa": 45,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:341ef52157699bb81507740c6dc0bacc75ab81d8e6e3c1a9d4292de7215d7ce4",
+      "canonical_hash": "blake3:003a431e66f01bac3747b4daa968253149bcab2064187968bc5496cdc4fcb33c",
+      "bit_kappa": 56,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:a4474d3bac770678a70d2cee841c9b2412660f8084cee7089b2fdfd87ff2f79a",
+      "canonical_hash": "blake3:0138da53e32f4a07552d1eab4a41041ff9231d70e7188f8487cc2d4499b915bb",
+      "bit_kappa": 54,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:c70b3c1a71481e13a55db6642dd74a41755b0832648fbd97e983aa3aa3f4d193",
+      "canonical_hash": "blake3:015064ed32074072add36f0dc7dc32c54d4bbec28df8fb353159f0d36ba8b33d",
+      "bit_kappa": 56,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:58d59fcb81438d0f45ad3de730d15e70379312467ce8134dc0939ce9737acf55",
+      "canonical_hash": "blake3:017489b3573ccae32fb3d7d6bfd26dc1a0c4bdb59d46907edc0865bd295389e4",
+      "bit_kappa": 49,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:0d1f1f4bf6731506b69c9dfb480d34911f10b774d24a63ad13d6d30cf6f10217",
+      "canonical_hash": "blake3:036b3c15c35e39eeb92811f36f7a4229290ba5e2b0abab818453b3fa29166705",
+      "bit_kappa": 51,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:0259fbdd74ace8994f42eea6dcd1c2bad7feac0f7b6553a64e258454e485cb74",
+      "canonical_hash": "blake3:05ae5a789bc28df37fdf76052d7de5a14086a254b43f3ba5b8a7a5f045e47956",
+      "bit_kappa": 55,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:1c59268bd4e0289e2218fb482f34a9baeec0fa1f7e9e147f447b958e5be2a8ee",
+      "canonical_hash": "blake3:088278041db8cdf7379020ec6644f6476ec9b68da57a8271dc26a9cfcce6f973",
+      "bit_kappa": 59,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:32405b4c022462928e1fdedf090dea13eaf012aa3cce2805e7e57ed66d9d514f",
+      "canonical_hash": "blake3:1113b48f9c6f2b194623078d51088a91ebb2f11e8dabc287de9dd0931a7a8353",
+      "bit_kappa": 62,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:15813c2c3aea117a3d23b4767970bdcc61aba9be235f3339024b58c4e93d95cc",
+      "canonical_hash": "blake3:129cad283d3cb5498c476d0daf4bd1be803e3566e38b4514a7eec725be1f7d51",
+      "bit_kappa": 67,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:d3f5d07edcf786af26978b5f6adae3479f609d2c20f7a801f80229f432735d92",
+      "canonical_hash": "blake3:168a11d6bb71611589ee1adfa45f6cbef689af601637e8b3a416b2ed94e525da",
+      "bit_kappa": 49,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:56dde7c9d3c9cf932b1b3aed89b7263a5e8f9e458abe7224e61e492d69074108",
+      "canonical_hash": "blake3:1dc0fb1a1eb02ddce5b1e95204f66ab01bfd433520a4b3fe5a2c38d36068a53e",
+      "bit_kappa": 57,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:12932771897b766fd277bc497f2e27d12cd7e776ea103e1f38e9048fd0be4e36",
+      "canonical_hash": "blake3:215ec3dc0d7423b1e03cc8c668897cc42ca7ed8a043a22165f03c4f6096f2a46",
+      "bit_kappa": 47,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:2de7b8c38d0f8e2b63a2a02433ae4ed2d0acc2f4e4c934772f03016c8c620981",
+      "canonical_hash": "blake3:2277dafc44da9bf671c3419644ab35421d63d74173844d419ace0ac5310f758a",
+      "bit_kappa": 63,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:babbeb27eab23497ecae6b05f6ed0b30e0c1691640cd32cc015441d60b4b6357",
+      "canonical_hash": "blake3:23a599969f92b4fc24d76ad3a6322c77315d51b7e6d656c7b6056b4650131f0f",
+      "bit_kappa": 60,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:4c9158d52457d09d7a8c27604280a927671aa020c3e26230129237bcbe4eadc0",
+      "canonical_hash": "blake3:25d0b9367cf7fbd44b93e1deeb4af1bf3735cef8fb5c35a05ee93492cb666f24",
+      "bit_kappa": 59,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:8281a9efb77ce002e72f44501b43f4f6c688c943fa3b6e6c125afbea8b595c9a",
+      "canonical_hash": "blake3:2ce909a41b848a3a20cd282bc85393fa566d62364a5561f0c85863add0e3d343",
+      "bit_kappa": 47,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:e098513e48e7e36a045b1448e29270d38905597522a858ef662d99eb3054fbc6",
+      "canonical_hash": "blake3:326e5fccf6e09ccb4b65c418a4647102fcc6758d1c78b181505ea1895afdf258",
+      "bit_kappa": 74,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:9a34b9f1866334020e698af1df6ab213f7a235a6805e5cb7bdd6afa4157ba84e",
+      "canonical_hash": "blake3:32a2140d297ef6150f47eb596739289840a3c34619670014b7f1eae4b4e9d931",
+      "bit_kappa": 68,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:1474b83faa9db4cfd760c5adeddec570ff144d067da460705bf718ab18377bd0",
+      "canonical_hash": "blake3:32bce636625b1fad04889b851f10278896c379d9b6dc8dde71d84532a02b052b",
+      "bit_kappa": 61,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:8ce922ae7b947c723a971878c67bbb7f90c149964b282c29165816f48bef8ff6",
+      "canonical_hash": "blake3:37fe288fc0bbd0f416437392afc13f731834a154bf6cd5bc1cb5cf0e86af731b",
+      "bit_kappa": 54,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:58457444d1319cc297a8f974841aea4229ba4022f92e60863a7cb889977dcbe0",
+      "canonical_hash": "blake3:3f7c019e6a93d646377ad1e9dfbbc1d99dbb82296d57c70e932c29e18e6f5f1f",
+      "bit_kappa": 56,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:8f2552a5a41a62d9e3ca641839ae1bdd45bd9156f3fc6cfdd508dfacdabe8636",
+      "canonical_hash": "blake3:3f9a2ae9fac53e7b96938ca155ac1892c49fad80f59abf2ab631f8e513e18d39",
+      "bit_kappa": 61,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:201c8de422b5fcff6a4e5b5421ec053971dc384adfc3fcdb81c7b0f3e8c71dfa",
+      "canonical_hash": "blake3:46617e4dc2778f808dc9cf5fe55f8803c0023911d28b5177bfa4cef77cc982c0",
+      "bit_kappa": 58,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:60691972fd64df1f152a898d9d3a5ec1377a347c7000b3f0ff3ba5e4dfc68618",
+      "canonical_hash": "blake3:4b423cdee1b69ba64a9e7452de538d53fcb73dfc533806761974508c41503457",
+      "bit_kappa": 47,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:7ef1d3c904fbfc5a7922a7478fb67f55d36ec55b10a75c6ca4bb4ea907fa222f",
+      "canonical_hash": "blake3:4c664f25eb69b154fa756c9fc254ac0c70cdcaf1c906e815a1e1786af0e58a03",
+      "bit_kappa": 49,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:2f5869bb0370ff54be441020eabe227f0a7f3961c57ce0a19f0a2a2beceab9f7",
+      "canonical_hash": "blake3:52ead7e4f55f1868bc6490998dd4452083eb5bc27a59596255f1fb399a7dd99e",
+      "bit_kappa": 51,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:ee2b85fcdae75e44bf1a521047726f9ae3b45b01a1b1ad81eed68cce1d891e12",
+      "canonical_hash": "blake3:54f75a445ff964b00fb1d176ce7a55f83d68cf402e1afa7f8f7de8f7d7473248",
+      "bit_kappa": 54,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:18f7cc9abb84d959b2a93842fca8e6438504b89f3194b0a144566cfee11c8ed3",
+      "canonical_hash": "blake3:57d84b55a14ab99fc4e576396f295d7f1dfcdd9dcba48bde16d8a8efce79c28d",
+      "bit_kappa": 54,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:8958bbc17e29deab3b0dccb204369036752fa4642643e0b68f9118fc1a2c1a37",
+      "canonical_hash": "blake3:589fd2667d567daefebc0e5e9df29df3e9c4b25b88f4d18bc00ee0bba2e364db",
+      "bit_kappa": 64,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:50e5b7810bd68c085d73bb9a8e59a641e194091510d558d0d806a14bd3106eb4",
+      "canonical_hash": "blake3:5ff130284f6b7af37bebe32582e82c6b92843a0999f57e6b5bb8577cc4ee7e50",
+      "bit_kappa": 53,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:265f2de62e308fb6e56fdacd899b856de56c84b3c711b50b3e2d4a1f9aa7e88c",
+      "canonical_hash": "blake3:6a890fd00cc1cfbd3e0f522db8a8d90b3ac88fda69546160ad41db329b5abb74",
+      "bit_kappa": 61,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:41b872902f43c1c6b5ac0702a2a355054f2f143d15ca9a3780fe656da416261a",
+      "canonical_hash": "blake3:6dcf1a9e30d8116b07a377904f60fad54b6b088f0fb949c3a5ae0987305e8309",
+      "bit_kappa": 56,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:78d151a624e1182a985dd197321b26a4292bf701407fea90921ba1420d51a930",
+      "canonical_hash": "blake3:70f9d8c3042f774b710429279cea8ca519864913afb76e414880eaf03f00d026",
+      "bit_kappa": 66,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:496b96e03497ca48008bc974e627ff076943d2828c90e3e9852433bd0f2eb1db",
+      "canonical_hash": "blake3:725d1345a7868e57363021897e9997deae2fa6b215a954f7942d354790d20b8c",
+      "bit_kappa": 59,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:8b80be77024ebc5945c27c528699187d86fe40ac4242fc5d1b046f4e31d4299f",
+      "canonical_hash": "blake3:7784a6b3b33feff28c1424a8bffb95f90610fa799600dcd259d1419c0cc0e893",
+      "bit_kappa": 54,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:ef76553f4a7cf894af3b8aa76b308eb75129d5bcb114b9eaa1adb294a0bb9de6",
+      "canonical_hash": "blake3:7b83e8cbea263e90415290e1d1c4824f5ce3d78c8c7e9c4e8b1fd8898a553cc0",
+      "bit_kappa": 51,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:089ff59aa063cffa55c78202c08fd3e28bd6bc1943c711807e1289e912062a2f",
+      "canonical_hash": "blake3:7c1c7a34dd51e033498f06d32539192e68f55c53e93341edf7626fe732b83cc4",
+      "bit_kappa": 69,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:dcdc50d5ef0accc5df1d94533c096efabf5faf2f29f3b27b840b4f0d09c2c9d7",
+      "canonical_hash": "blake3:7cc70086e0b3b13e79066bf8e8f2517a000032083e0fe106c80a1f463ce0218f",
+      "bit_kappa": 49,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:46b1a680a522daa6badd74510ff18d080d5f8d9ceeed665ef38c584e55d32c05",
+      "canonical_hash": "blake3:7f23f320511274404d2e924c1b8f65b2cfc7ea75a4ba76290ede39feb23e2f20",
+      "bit_kappa": 59,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:1cd1f0a0b8d06e030584391740c4eb41d5b5b07dac7e4fa6c65ffabfc31e0503",
+      "canonical_hash": "blake3:7f526a295dd9bb53a17497fde9ca68bb416da52e379cab19a0b1adf559101af2",
+      "bit_kappa": 64,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:da5f26b1611323018ed5176e2a86a0d1564312197f31fb59fba9898bfe056105",
+      "canonical_hash": "blake3:7f5a43dfe3035dc306b07b21781a66174600b381fa178d27c32f7f97807d118c",
+      "bit_kappa": 60,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:d0e7a1cfa6b1a6ed059a9b90a774b8783fc068c11b371bdda618cbddca61dd56",
+      "canonical_hash": "blake3:7fec35d3fe4c6bede320650542ce6c80f2e79cf039e5a14e39d961af9a149cc6",
+      "bit_kappa": 47,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:cf2d4d3c1553e301594639493ea93677cfc8c1433d8554370db73b2c46306d92",
+      "canonical_hash": "blake3:82009f01a166cd400088f36fcd788376df1c29e7c5bc1d1445f6f7e977d6184d",
+      "bit_kappa": 57,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:7488d7bccc38e540d0cc467774be8724f9a3b3de6783dd279c7778f251165a2f",
+      "canonical_hash": "blake3:834ea00b536a8e15c31884035745df0ba6ef3ad289c8a88fae9f4a82ab88a6f9",
+      "bit_kappa": 56,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:9278e0fe8092bace4d0fb2aefa0cfba1f08c85591d520e7003d0be9543eaa256",
+      "canonical_hash": "blake3:839a3315e0a537f7522362c531ac162e9ec0489adaa3b6e0718ac0259574202a",
+      "bit_kappa": 52,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:f2da7dfc50788efe9c99b30e35a6d75e56f3903efac9768c09a56bfcc759f210",
+      "canonical_hash": "blake3:8bc77196ff4ad003d3377f0cd25b570c26dd577ba018d44a82d9e4e3aec3f160",
+      "bit_kappa": 69,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:03d151abd6e33c14f4357be855d15979eb5b54b6951ff23d667d590535d695b0",
+      "canonical_hash": "blake3:8bd062aedf0d21e1cc1c4b00f154a1283a7d0110111cacfa93f6a7fc3f7ee074",
+      "bit_kappa": 63,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:f1fc147756c952b0ba5cd0c9cad0a62050540bf45c306006cfd5f61c954f1e74",
+      "canonical_hash": "blake3:8c8c75b52d2a352eef9bd97073d9af7d8dc6872d9068bd44d81483a6dadd1576",
+      "bit_kappa": 53,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:04cda65be57c29b13557f22e854d151be25e969e03b2370be1bb0c2febf13e7c",
+      "canonical_hash": "blake3:96aed3d5fcdbec37c47e865ad63c1f3eaf55694279885f2f2ff6af669205879f",
+      "bit_kappa": 54,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:423eeb7ab865b6ff75b30fccb08e434c62d366b541badc6180118f9423c831c8",
+      "canonical_hash": "blake3:9bb4025eb3d1e0678c833ef2cfd17e77ac89b2353937ee963537762988aa8331",
+      "bit_kappa": 67,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:07e4fe775c0db30e9bea55898074c31b8d9750c495a86eb9e55624bda1aa9d6b",
+      "canonical_hash": "blake3:9de158666b4fb8d1c0e16cd6f07819e4b217495d07bcd864b1fe8780f371fa29",
+      "bit_kappa": 64,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:b87d9931735e2a8cb5d5c0a98c5a9f68b49ed3d58b3142e39fb01fee9030ef53",
+      "canonical_hash": "blake3:a1e33af0ea5fdfc74be7d0b6b4209fe8d431d3f89d4b66dc9880e8838a629ae4",
+      "bit_kappa": 57,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:dc247341c475964dfbde3766fd1715283d3f9cdd85f98a4621dc7d79c4e4d4c1",
+      "canonical_hash": "blake3:a5410a9134f2dc2ca20a4e281e21a92da8f23edd538b138ede044e6a8a948ee0",
+      "bit_kappa": 51,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:7cccbcb70b76cc376d0a7a47ee1896bee54c91bad48a27c55cef9381937a9a04",
+      "canonical_hash": "blake3:a8e463a79554517688a81cccb4c7be7ebc1f05e5db94bd4ebc15aad546fcd276",
+      "bit_kappa": 55,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:0340fe77cd28004d376610a1f4db0fba27bdae6dd41e61e94d50c28f4162a55a",
+      "canonical_hash": "blake3:ae0480ed915ff148e6b1b57bfc4dc5faee92d467b7db7661c4e631019971535c",
+      "bit_kappa": 62,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:567a950ec99284aa4158cb6f836368784fe49706bd2cefaf6f63d52968927bb9",
+      "canonical_hash": "blake3:aedf6149089ba0a0fa0de3cac160315ebcf62247dadca5feeb5d2acaa4a1260a",
+      "bit_kappa": 54,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:55033eb3e9c57d3794f92ca1ba1d5962f6c4502b011a7736ae4c7b1b41ec8c31",
+      "canonical_hash": "blake3:b334569cbae25fe515ee54a7b03502367dd998fd6cffb2f2df640b00535f499b",
+      "bit_kappa": 63,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:d0e7483ae0548f82b83f735ff3f2a0388993285838622f26eb6b1134375412e5",
+      "canonical_hash": "blake3:b480389b74d046dc9f3e5f564b50e7a45b2300531be4369393b34349383ed6fa",
+      "bit_kappa": 62,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:f23be7c54a8558efebe9288d0859151d2fb1e7badf9fe4abe4597a395a77190b",
+      "canonical_hash": "blake3:bab1a86224b2558801545143427160fcdd9b7bc6adcd01caa9f9bb86c2a9137c",
+      "bit_kappa": 56,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:7f7e284d659d828b1cfa2b9b5656b4382101f3ef48f7444be7491a5887dc034b",
+      "canonical_hash": "blake3:c4810d20d9c45ceda4d7c0d62c59fc60fee5b45d315be5bc721458a4b72db426",
+      "bit_kappa": 56,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:a97c0e791d4e1c6f5324e7d199c0df2ef47bef216d1d00fcdfafa2dd75d8a516",
+      "canonical_hash": "blake3:c5577d2820706d9cce1e7334925fe8e9f563333645714bb6b27a10e856f16192",
+      "bit_kappa": 56,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:8b0b7763e3a39247855d1e5d5bf4151d14eace3b75df861d404b284d7d5970e9",
+      "canonical_hash": "blake3:c63b89d5e111874dd14181dfe27798ccbdee31fdeb21a0ac6a138740f92caa10",
+      "bit_kappa": 67,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:5f3327a50b24cf70730ffb67693ccadbbaa2ff4c35f8e17c89f7154f8c0530df",
+      "canonical_hash": "blake3:c922246846c29e6a7bbb054c0d507856490745508fdf8fd4427766c977d956ee",
+      "bit_kappa": 61,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:3b8d8abba08c11e73aa4b6489da9e0e19a80dd613a4075bec9c7058f5a412779",
+      "canonical_hash": "blake3:cbe0041dcb5fabebdf86d749ec015a4d999f7c5ca6feafc5cef265cd7049638a",
+      "bit_kappa": 56,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:321581bb4a2df720c58c5cccf59205172306d425f7051b9660b868bcb234803f",
+      "canonical_hash": "blake3:cc535fd2d43c075f0b373b493160d53d6ecedd2a4b1c16ace49d731b757b92ee",
+      "bit_kappa": 69,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:1bfaa07cd38d915f1d25b6071542338f33c327cb3745a1537af1d97a9c4bf03a",
+      "canonical_hash": "blake3:cd37e55f37ea6f20bd88bb131ca0d2512a5214446089fb3039b302984a3761c2",
+      "bit_kappa": 52,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:67688af799393bd65d662085f0df967119a6b435237b2433e90485f714fef80b",
+      "canonical_hash": "blake3:cddc37c636893b7741cd0208186640f2425edff97097ba949c736118a20b1765",
+      "bit_kappa": 58,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:456f2d8fecbd1127285eb4713f8b848d1c63df26e448b1188d7a33e1a6fffc3c",
+      "canonical_hash": "blake3:d15f9f87873b3c55c598da7cc6cb0c8d191d7f3ab93bdc096346ed65e708f3dc",
+      "bit_kappa": 60,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:c6b0bcf58dfbf5d086591ca0fa98673a740c205bf7ef9362cdf438a4f04da9c6",
+      "canonical_hash": "blake3:d3302b9f50e3cf3e4fc07f847ffb4977a34255900d57ae6a92828490ba3ed4ba",
+      "bit_kappa": 49,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:87093496c55297dd6062960a6557f93224e65501c4742a24aefdffa6f6772ae8",
+      "canonical_hash": "blake3:dc27509f9a0ad02080649a9a72532933fbbca173ccc92990a991f586cf24d357",
+      "bit_kappa": 58,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:2de3531522803ecf272a9cabe05443d3d6323473cf97ca76c8ff68cbc0c750d5",
+      "canonical_hash": "blake3:e3458fb31d8532b88c5bd42bda12f95082dcdebdf6e8e49d6458e45a42a2dd89",
+      "bit_kappa": 61,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:287a0a1ace99765670638d5ce6301460a6241fc7a6d184d58e4b1227d7bdb260",
+      "canonical_hash": "blake3:e6c79cd990767c47ea5f53737979528d8d2eb1b3090ae3ceb879ca037c9b7856",
+      "bit_kappa": 62,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:19aae5a23496312d68e586fd03639fc6d76d6ad7ccb01a08b8d8753c8bc64d4c",
+      "canonical_hash": "blake3:e6fa16e1436963a4b71b97076b0c94115ae6fa15d3e1c8e471334be53cf9fbb2",
+      "bit_kappa": 54,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x2)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:a738aea47ca97467a7c0da3ff10a1e6214239195030476ad6dc745480d3d9e42",
+      "canonical_hash": "blake3:efe04e9714e139ce6a7a67f1e345cba572cbfb844f16a1dbd1914fed5b0c2f4e",
+      "bit_kappa": 54,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:3ffb7aa7f887474d9cc0e7a3f6208af4589a1a2e28f6a37b6e72c705f0880b4d",
+      "canonical_hash": "blake3:f452b371020a7a04263778fecd6e795b08f1219175b2e8238f48f76dc83f60db",
+      "bit_kappa": 52,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:4b858be1a85c40e48e0a65d31f858e81d623e1271c6337a229a656e180cefdac",
+      "canonical_hash": "blake3:f597d51ceaa3bc6740469b2b5e01e8f6adefd9b6894b36edc226d5648889b3bb",
+      "bit_kappa": 55,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:8d20a717318b2c910d9c991edc25dae39d93a49784ce732edf77fbd329ae6c0a",
+      "canonical_hash": "blake3:f59f48bf80d951f33a034b85cb4982fc0436a5e6d3028fc66ebc880555e5fd44",
+      "bit_kappa": 62,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x1)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:a9eeae8c4fe4607bdc44917684789be471b572c1f94d644bef0384911a06ce2e",
+      "canonical_hash": "blake3:f6ed65f7057b3694d8f904b5db9065c6d88d753802338eba9539b7089f4e9f15",
+      "bit_kappa": 49,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp x2)",
+        "c03 [formation] (Disc x1)",
+        "c04 [formation] (Shape x2)"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:f69987aae43d3f73406231dffa9399705cea26b93aa42398c3b6d5e5b2ec3f22",
+      "canonical_hash": "blake3:fcfc1cd11b7216869898aa6ce642e6423c194ffa7f55b8463acad9e464a60405",
+      "bit_kappa": 62,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat (Shape x1))",
+        "c02 [formation] (Sharp x1)",
+        "c03 [formation] (Disc x2)",
+        "c04 [formation] (Shape (Sharp x1))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:09a3b5cbb312486aae19e3e19906d0a9bf3aaae0d834b0f57f8420baa8013a80",
+      "canonical_hash": "blake3:fd4bc5bec8371baa84fba934416ab595e6e36817e8f9c27fc30560f23c099d33",
+      "bit_kappa": 61,
+      "clause_kappa": 4,
+      "nu": 19,
+      "rho": {
+        "num": 19,
+        "den": 4
+      },
+      "distance_to_bar": {
+        "num": 97,
+        "den": 340
+      },
+      "telescope_class": "Modal",
+      "headline": "Modal candidate with 4 clauses; uses only the current local scope; contains modal structure.",
+      "library_refs": [],
+      "clauses": [
+        "c01 [formation] (Flat x1)",
+        "c02 [formation] (Sharp (Flat x1))",
+        "c03 [formation] (Disc (Flat x1))",
+        "c04 [formation] (Shape x2)"
+      ]
+    }
+  ],
+  "prune_reports": [],
+  "frontier_policy": {
+    "focus": "modal",
+    "focus_quota": 2,
+    "bridge_quota": 1,
+    "support_quota": 1,
+    "macro_quota": 0,
+    "cold_limit": 6
+  },
+  "frontier_pressure": {
+    "governor_state": "green",
+    "pressure_action": "none",
+    "rss_bytes": 1342179872,
+    "observed_process_rss_bytes": 24018944,
+    "rss_gap_bytes": -1318160928,
+    "hot_frontier_bytes": 1728,
+    "cold_frontier_bytes": 0,
+    "dedupe_bytes": 864,
+    "hot_count": 27,
+    "cold_candidate_count": 0,
+    "requested_cold_limit": 0,
+    "retained_cold_limit": 0,
+    "resident_cold_limit": 0,
+    "spill_backed_cold_records": 0,
+    "dropped_cold_records": 0
+  },
+  "prefix_frontier": {
+    "hot_states": [
+      {
+        "state_id": 42949672976,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 13160184013985729173,
+        "support_hash64": 2295296197429820253,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 45,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074998595,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672975,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 12828921149517797960,
+        "support_hash64": 10672281732546010276,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 47,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074999107,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672982,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 16013948808745813471,
+        "support_hash64": 8327562125883700007,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 47,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074999107,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672983,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 16883214194173916504,
+        "support_hash64": 5775152504881369385,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 47,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074999107,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672963,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 3524838067015285443,
+        "support_hash64": 10317626836691737875,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 49,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074999619,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672977,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 13726464096765895488,
+        "support_hash64": 18054894007363676823,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 49,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074999619,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672984,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 17558748169494112404,
+        "support_hash64": 1633080229742240324,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 49,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1074999619,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672969,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 10529965973607011298,
+        "support_hash64": 2597354467137426506,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 51,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075000131,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672960,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 51985975508896175,
+        "support_hash64": 2991516904516892780,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 52,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075000387,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672970,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 10738553575612464417,
+        "support_hash64": 8868259302412183289,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 52,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075000387,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672980,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 15730078894860233047,
+        "support_hash64": 5741384893887704858,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 53,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075000643,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672973,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 12345710714838690031,
+        "support_hash64": 6247567634660216438,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 54,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075000899,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672978,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 14351207706653888028,
+        "support_hash64": 1946405356444136748,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 54,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075000899,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672985,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 17868252631187059614,
+        "support_hash64": 3910729366054397236,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 54,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075000899,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672986,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 18064477868344566396,
+        "support_hash64": 11441031136556596421,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 54,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075000899,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672961,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 335640648982793627,
+        "support_hash64": 12313270157179868187,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 55,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075001155,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672967,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 7336815273412792695,
+        "support_hash64": 1191353466017250720,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 55,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075001155,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672968,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 9731733148030892370,
+        "support_hash64": 14531559790570208278,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 56,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075001411,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672974,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 12624042531841178428,
+        "support_hash64": 2754669299927723301,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 56,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075001411,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672964,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 4413101463870067622,
+        "support_hash64": 11395067697487442215,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 57,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075001667,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672971,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 11148004151415155863,
+        "support_hash64": 5451737512265269509,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 59,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075002179,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672965,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 4476404658589265991,
+        "support_hash64": 3211345754226854591,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 60,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075002435,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672966,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 7022209847357430174,
+        "support_hash64": 3137759584120746816,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 60,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075002435,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672981,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 15996234804623291975,
+        "support_hash64": 6238767921971654800,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 61,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075002691,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672972,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 11264428862097236733,
+        "support_hash64": 1496105171454720787,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 62,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075002947,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672979,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 15398878492166244786,
+        "support_hash64": 13960464459282188663,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 62,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075002947,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 42949672962,
+        "parent_state_id": 0,
+        "last_clause_id": 3,
+        "obligation_set_id": 10,
+        "shape_hash64": 1314065150623359176,
+        "support_hash64": 14131887237410495365,
+        "nu_lower_bound": 19,
+        "nu_upper_bound": 19,
+        "bit_kappa_used": 67,
+        "clause_kappa_used": 4,
+        "depth": 3,
+        "step_index": 10,
+        "band_index": 4,
+        "flags": 3328,
+        "priority_key": 1075004227,
+        "worker_hint": 0
+      }
+    ],
+    "cold_states": [],
+    "dedupe_keys": [
+      "blake3:14bf632d1a3365eb62df1c1f457cdf0634ceef0fde2708429d3777b0f3e7c8a6",
+      "blake3:1f4a248bb1d9dec55636b1ed1a131144e8ba27f4e8bf6af75eb3dc8457b39850",
+      "blake3:21a26fcae47f69f750054f621d7fb4c174c7065dd3ac37824e7efb865465735c",
+      "blake3:24527e3d89563507ae5b4c607b5e43f1e8cf732dfbc6520984a9085a7b284656",
+      "blake3:34e38123620140360dc7e26127b64c4a977eed5273279f4e5fcd605402810c15",
+      "blake3:4650848ca7c0a575b8911df030464455ef9904be80a11b81462de9eaa0d181ad",
+      "blake3:47e1e40ab9fa412080473727b2468999f8e007aa47c73d66123a050307b9721e",
+      "blake3:47e5c0fdbfd920ad91a85da2a42710fb0b8c878c0c7355023ed2bb9d80fe752d",
+      "blake3:487629aa208aa65067ceafce171508c91a6dfb64440e8b7234204443aa399711",
+      "blake3:4c161df24b895a5546c141e769e1945dd1673901e22f14f23ac19ba09b0ae182",
+      "blake3:5073d672dfe9531b784c95404298b494ffc612a277060c914c6712ef4c931036",
+      "blake3:57afe56a006eb5f308c70f1b5d1af1fed70ca735668c698beb778594afb8db8a",
+      "blake3:7a52d85892138c580c29367a6755b72b62ac8b9b41ca95d22a4956d9b33ee84c",
+      "blake3:82a990f49edf5ad20bf92aa5b50a394007a916ebe927663e535d2bc1784a7f3d",
+      "blake3:89bf4eda1f82d3c0a080ac6f11e5ad9d967a2eed4d5ffbb9ec923049bfb99690",
+      "blake3:8e1c528f07c820c2de10e89870058005122f7a0db90ea10b9dce4b15a3ab757d",
+      "blake3:8e8944b1037eda4641664829d405b457dedab30c4e82ea385effae22f15c10f7",
+      "blake3:92c0afd345d328423ead38b53b8da673d8e067dcf0c033e0180c548e2af162f0",
+      "blake3:936683e9a44efa4d86373e6ce6fda0bb34b935d9a6b86a57172098c26d06deff",
+      "blake3:9504cea7b3f1bbfb98b33697fa18cef1904bdeaf00696484e1a26e937efad068",
+      "blake3:9ad2793d0f9796c130f4146c3976a38f0465b87a2b759ac0701289e053a22747",
+      "blake3:a2a5a4df1cbeb4ab6fa25e464768f0435922bc749d726a5fe54b7691d6c62594",
+      "blake3:b2590ae30562c2755ce7299eed396cd4401a460579bb0c34648a68b55b48e864",
+      "blake3:ba6c29809144c77bde6159e3aba93f666cdec850b2e9953bed52f2d6fb3efbd1",
+      "blake3:d7d141c6fde8e07e65f2b86c44d8d7e4e1a32a0c5b7614e8bdc2c16e240c78cd",
+      "blake3:e24421e1cfb46674a18d8d1d662e2206ea9f55e3ac567c2d4480d835fc589c6a",
+      "blake3:e55584e795b6c48a7459527a95061b473f57d08bfdc316a2ffdc5ca9374e581b"
+    ]
+  },
+  "provenance": "atomic_bootstrap_search",
+  "canon_evidence": {
+    "charged_clause_kappa": 4,
+    "bar_distance": {
+      "num": 97,
+      "den": 340
+    },
+    "clears_bar": true,
+    "late_step_claim": {
+      "status": "not_applicable",
+      "adopted_step": 0,
+      "adopted_label": "",
+      "adopted_nu": 0,
+      "matches_accepted": false,
+      "note": ""
+    }
+  },
+  "replay_ablation": {
+    "status": "matches_reference_replay",
+    "reference_candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+    "reference_canonical_hash": "blake3:09bed8af6371d3ac8be4c5d4bd59321753f2a027ff9685808b8bab6ce8ac4ef5",
+    "rho_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "objective_bar_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "overshoot_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "nu_delta": 0,
+    "clause_kappa_delta": 0,
+    "note": "matches reference replay baseline"
+  },
+  "narrative_events": [
+    {
+      "step_index": 10,
+      "ordinal": 1,
+      "kind": "step_open",
+      "message": "opened step 10 with bar 759/170 and clause band 4..4",
+      "detail": "mode=desktop_claim_shadow exact_legality_rejections=0 structural_cap_rejections=0 admitted_focus_aligned=597 admitted_deprioritized=0",
+      "progress": {
+        "elapsed_millis": 29,
+        "generated_surface": 1428,
+        "exact_screened_surface": 228,
+        "full_telescopes_evaluated": 81
+      }
+    },
+    {
+      "step_index": 10,
+      "ordinal": 2,
+      "kind": "surface_summary",
+      "message": "generated 1428 structural candidates; 597 were well formed and 0 were rejected by admissibility",
+      "detail": "malformed=0 full_evaluated=81 canonical=81 semantically_minimal=81",
+      "progress": {
+        "elapsed_millis": 29,
+        "generated_surface": 1428,
+        "exact_screened_surface": 228,
+        "full_telescopes_evaluated": 81
+      }
+    },
+    {
+      "step_index": 10,
+      "ordinal": 3,
+      "kind": "prefix_summary",
+      "message": "prefix frontier created=240 explored=39 merged=54 exact_pruned=147 heuristic_dropped=0",
+      "detail": "hot_states=27 cold_states=0 frontier_window=27",
+      "progress": {
+        "elapsed_millis": 29,
+        "generated_surface": 1428,
+        "exact_screened_surface": 228,
+        "full_telescopes_evaluated": 81
+      }
+    },
+    {
+      "step_index": 10,
+      "ordinal": 4,
+      "kind": "memo_summary",
+      "message": "memo path hits: legality=1776 active_window=0 terminal_completion=225 partial_bounds=15",
+      "detail": "connectivity_shortcuts=693 clause_family_prunes=0 terminal_rank_prunes=0 terminal_prefix_bar_prunes=144",
+      "progress": {
+        "elapsed_millis": 29,
+        "generated_surface": 1428,
+        "exact_screened_surface": 228,
+        "full_telescopes_evaluated": 81
+      }
+    },
+    {
+      "step_index": 10,
+      "ordinal": 5,
+      "kind": "frontier_summary",
+      "message": "retained 81 candidates with frontier hot=27 cold=0 dropped=0",
+      "detail": "pressure_state=green pressure_action=none resident_cold=0 spill_backed=0",
+      "progress": {
+        "elapsed_millis": 29,
+        "generated_surface": 1428,
+        "exact_screened_surface": 228,
+        "full_telescopes_evaluated": 81
+      }
+    },
+    {
+      "step_index": 10,
+      "ordinal": 6,
+      "kind": "acceptance_summary",
+      "phase": "seal",
+      "message": "accepted blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e with overshoot 97/340 (nu=19 kappa=4)",
+      "detail": "bar_clearers=81 near_misses=3 candidate_hash=blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e canonical_hash=blake3:09bed8af6371d3ac8be4c5d4bd59321753f2a027ff9685808b8bab6ce8ac4ef5",
+      "progress": {
+        "elapsed_millis": 29,
+        "generated_surface": 1428,
+        "exact_screened_surface": 228,
+        "full_telescopes_evaluated": 81
+      }
+    },
+    {
+      "step_index": 10,
+      "ordinal": 7,
+      "kind": "step_complete",
+      "phase": "seal",
+      "message": "completed step 10 in 29 ms",
+      "detail": "discovery_ms=27 frontier_plan_ms=0 selection_ms=0",
+      "progress": {
+        "elapsed_millis": 29,
+        "generated_surface": 1428,
+        "exact_screened_surface": 228,
+        "full_telescopes_evaluated": 81
+      }
+    }
+  ]
+}
