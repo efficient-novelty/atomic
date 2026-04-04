@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Progress
 
-Last updated: 2026-04-03
+Last updated: 2026-04-04
 
 This file is the live operating brief for `desktop_claim_shadow`.
 Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next
@@ -279,8 +279,18 @@ gate.
   - exact connectivity rejections, partial-prefix bar failures, and captured
     zero-admitted exact prunes on that repaired step-`13` surface are now all
     `0`
-  - the remaining repaired step-`13` loss now shows up as live
-    terminal-rank pruning (`25`) rather than exact-screen connectivity
+- A new follow-up step-`13` repaired-chain incumbent-relief repair now closes
+  the last widened-surface step-`13` blocker on that same repaired chain:
+  - claim proof-close now preserves same-primary incumbent ties on step `13`
+    when the repaired live history reaches guarded step-`12` `34 / 6`
+  - the guarded step-`13` metric shell and the observed
+    `step-13 -> step-15` continuation stay unchanged on that repaired chain
+  - the widened repaired step-`13` surface now also clears live terminal-rank
+    pruning entirely (`0`) while keeping exact connectivity rejections,
+    partial-prefix bar failures, and captured zero-admitted exact prunes at `0`
+  - the divergent step-`13` viability-split guardrail stays intact on the
+    unrepaired branch, so this relief remains scoped to the repaired
+    `34 / 6` history rather than reopening the broader divergent surface
 - A follow-up exploratory step-`13` widening pass was also run locally but was
   not landed:
   - a naive global claim-generic band-`7` widening lifted the repaired
@@ -556,8 +566,11 @@ gate.
     catalog-open and no longer an exact-screen connectivity problem on the
     repaired branch:
     exact connectivity rejection, partial-prefix bar failure, and captured
-    zero-admitted exact prunes are all now `0` there, while the remaining
-    widened-surface pressure shows up as live terminal-rank pruning (`25`)
+    zero-admitted exact prunes are all now `0` there
+  - a follow-up repaired-chain incumbent-relief pass now also clears the last
+    live step-`13` terminal-rank pressure on that repaired `34 / 6` history:
+    live terminal-rank prunes are now `0` there too while the guarded metric
+    shell and the same observed `step-13 -> step-15` continuation stay fixed
   - step `14` is no longer thin on the repaired local chain:
     widening the claim `kappa = 9` catalog now yields `19683` raw telescopes,
     `3` surviving roots, and `12027` live generated prefixes before
@@ -614,16 +627,16 @@ gate.
 - Prioritize targeted local diagnosis and repair for:
   - the step-`9` accepted-hash fork
   - the landed scoped claim-only step-`13` widening plus follow-up
-    structural-connectivity repair:
+    structural-connectivity plus repaired-chain incumbent-relief repairs:
     claim-open widths `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated
     prefixes `123`, guarded accepted metric shell preserved, and the same
     observed `step-13 -> step-15` continuation preserved
-  - the remaining step-`13` terminal-rank pressure on that widened repaired
-    surface:
-    exact connectivity rejections, partial-prefix bar failures, and captured
-    zero-admitted exact prunes are now `0`, so the next repair there should
-    focus on terminal-rank / incumbent-dominance pressure rather than
-    structural connectivity, terminal filtering, or fallback qualification
+  - treating step `13` as a repaired local guardrail rather than the next
+    live blocker:
+    exact connectivity rejections, partial-prefix bar failures, captured
+    zero-admitted exact prunes, and live terminal-rank prunes are now all `0`
+    on the repaired `34 / 6` chain, while the divergent step-`13` guardrail
+    remains intact
   - keeping the widened step-`14` catalog plus same-primary continuation
     selector stable until a stored rerun consumes it
   - the step-`15` canonical temporal-shell exact-prune surface, which now
@@ -699,19 +712,19 @@ gate.
     generated `615`, but it also disturbed claim prefix-memo,
     realistic-shadow, demo-lane, and divergent late-step guardrails.
 12. Keep the new scoped claim-only step-`13` widening plus structural-
-    connectivity repair regressions green:
+    connectivity plus repaired-chain incumbent-relief regressions green:
     the repaired step-`12` chain must keep reporting claim-open widths
     `[3,1,3,3,1,1,1]`, raw catalog `27`, live generated prefixes `123`, and
     the guarded accepted metric shell at step `13`.
 13. Keep the new repaired step-`13` exact-screen-clear regression green:
     the repaired widened surface must keep reporting `0` connectivity prunes,
     `0` terminal-clause-filter prunes, `0` partial-prefix bar prunes,
-    `0` captured zero-admitted exact prunes, and `25` live terminal-rank
-    prunes on the surviving surface.
-14. Treat the next step-`13` repair as terminal-rank / incumbent-dominance
-    pressure on that widened repaired surface:
-    do not reopen structural connectivity, terminal filtering, fallback
-    qualification, or another blind catalog widening target first.
+    `0` captured zero-admitted exact prunes, and `0` live terminal-rank
+    prunes on the surviving repaired `34 / 6` surface.
+14. Treat step `13` as a repaired guardrail rather than the next late blocker:
+    do not reopen structural connectivity, terminal filtering,
+    incumbent-dominance relief, or another blind catalog widening target
+    first while step `15` remains open.
 15. Treat step `15` as the separate remaining exact-screen problem:
     inspect why the restored canonical temporal-shell path still collapses
     into `2184` captured zero-admitted exact-prune families and `512`

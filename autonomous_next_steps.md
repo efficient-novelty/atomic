@@ -1,6 +1,6 @@
 # Autonomous Claim Lane: Next Operational Slice
 
-Last updated: 2026-04-03
+Last updated: 2026-04-04
 
 This note is the exact next work order for `desktop_claim_shadow`.
 
@@ -287,8 +287,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - exact connectivity rejections, partial-prefix bar failures, and captured
     zero-admitted exact prunes on that repaired step-`13` surface are now all
     `0`
-  - the remaining repaired step-`13` loss now shows up as live
-    terminal-rank pruning (`25`) rather than exact-screen connectivity
+- A new follow-up step-`13` repaired-chain incumbent-relief repair now closes
+  the last widened-surface step-`13` blocker on that same repaired chain:
+  - claim proof-close now preserves same-primary incumbent ties on step `13`
+    when the repaired live history reaches guarded step-`12` `34 / 6`
+  - the guarded step-`13` metric shell and the observed
+    `step-13 -> step-15` continuation stay unchanged on that repaired chain
+  - the widened repaired step-`13` surface now also clears live terminal-rank
+    pruning entirely (`0`) while keeping exact connectivity rejections,
+    partial-prefix bar failures, and captured zero-admitted exact prunes at `0`
+  - the divergent step-`13` viability-split guardrail stays intact on the
+    unrepaired branch, so this relief remains scoped to the repaired
+    `34 / 6` history rather than reopening the broader divergent surface
 - A follow-up exploratory global step-`13` widening was also run locally but
   not landed:
   - widening the claim-generic band-`7` widths from `[3,1,1,1,1,1,1]` to
@@ -379,8 +389,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
      live generated prefixes `123` while preserving the guarded accepted
      metric shell
    - the repaired widened step-`13` surface now clears exact connectivity and
-     partial-prefix bar screening entirely on that branch, and the remaining
-     local loss there is live terminal-rank pruning (`25`) before proof-close
+     partial-prefix bar screening entirely on that branch
+   - a follow-up repaired-chain incumbent-relief pass now also clears live
+     terminal-rank pruning there (`0`) on the repaired guarded
+     step-`12` `34 / 6` chain while preserving the same observed
+     `step-13 -> step-15` continuation and leaving the divergent step-`13`
+     guardrail intact
    - repaired step `14` now opens `19683` raw claim telescopes on the promoted
      `kappa = 9` band, keeps `3` roots alive, and lifts live generated
      prefixes to `12027` before proof-close
@@ -395,12 +409,14 @@ This note is the exact next work order for `desktop_claim_shadow`.
    - step `13` is no longer blocked by a pure singleton-heavy catalog-open:
      the landed scoped widening plus follow-up structural-connectivity repair
      now reach raw widths `[3,1,3,3,1,1,1]`, raw catalog `27`, and live
-     generated prefixes `123`, while the rejected global branch still bounds
-     the much larger reachable ceiling (`2187` / `615`); the next repair is
-     therefore terminal-rank / incumbent-dominance pressure on that repaired
-     widened surface, not exact-screen connectivity, partial-prefix bar math,
-     terminal-clause filtering, fallback qualification, or another blind
-     catalog reland
+     generated prefixes `123`, and the follow-up repaired-chain
+     incumbent-relief pass now also keeps exact connectivity rejections,
+     partial-prefix bar failures, captured zero-admitted exact prunes, and
+     live terminal-rank prunes all at `0` on the repaired guarded
+     `34 / 6` chain while the rejected global branch still bounds the much
+     larger reachable ceiling (`2187` / `615`); step `13` should therefore
+     now stay on the guard rail as a repaired local surface rather than reopen
+     as the next late blocker
    - step `14` is now locally widened enough that it should stay on the guard
      rail as a regression rather than reopening as the first breadth blocker
   - step `15` remains the first late floor, but the new captured exact-prune
@@ -462,13 +478,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
     claim-open `kappa = 7..7` with raw widths `[3,1,3,3,1,1,1]`, raw
     catalog `27`, live generated prefixes `123`, and the guarded accepted
     metric shell before proof-close.
-    Keep the paired repaired step-`13` exact-screen-clear regression green
-    too: the same repaired chain should still report `0` connectivity
-    prunes, `0` terminal-clause-filter prunes, `0` partial-prefix bar
-    prunes, `0` captured zero-admitted exact prunes, and `25` live
-    terminal-rank prunes so the next repair stays focused on terminal-rank /
-    incumbent-dominance pressure rather than structural connectivity,
-    terminal filtering, or fallback qualification.
+    Keep the paired repaired step-`13` exact-screen-clear plus incumbent-
+    relief regression green too: the same repaired chain should still report
+    `0` connectivity prunes, `0` terminal-clause-filter prunes,
+    `0` partial-prefix bar prunes, `0` captured zero-admitted exact prunes,
+    and `0` live terminal-rank prunes while the divergent step-`13`
+    viability-split guardrail stays intact.
 12. Keep the step-`4` claim prefix-memo, realistic-shadow, demo-lane, and
     divergent step-`13` / step-`14` guardrails green while exploring any
     step-`13` widening path:

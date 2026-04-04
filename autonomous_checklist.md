@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-04-03
+Last updated: 2026-04-04
 
 This checklist is the live signoff gate for `desktop_claim_shadow`.
 It lists only work that is still open.
@@ -19,8 +19,8 @@ It lists only work that is still open.
 - Local step-`11` and step-`12` repairs are landed, but no stored rerun has
   consumed them yet.
 - The remaining local late blocker is now split cleanly:
-  - a scoped claim-only widening plus follow-up structural-connectivity repair
-    are now landed at step `13`:
+  - a scoped claim-only widening plus follow-up structural-connectivity plus
+    repaired-chain incumbent-relief repairs are now landed at step `13`:
     claim-open still widens to raw widths `[3,1,3,3,1,1,1]`, raw catalog `27`,
     and the guarded accepted metric shell, but the repaired live surface now
     reaches `123` generated prefixes on the same observed `step-13 -> step-15`
@@ -29,9 +29,11 @@ It lists only work that is still open.
     connectivity or partial-prefix bar screening:
     connectivity rejections, partial-prefix bar failures, and captured
     zero-admitted exact prunes are all now `0` on the repaired branch
-  - the remaining open step-`13` work is now terminal-rank pruning on that
-    widened operator-band surface (`25` live terminal-rank prunes), not
-    structural connectivity, terminal filtering, or fallback qualification
+  - that repaired widened step-`13` surface now also clears live
+    terminal-rank pruning (`0`) on the repaired guarded step-`12` `34 / 6`
+    chain while the divergent step-`13` viability-split guardrail stays
+    intact, so step `13` is now a guardrail rather than the next open late
+    blocker
   - step `14` is now a guardrail rather than the first blocker:
     raw `19683`, `3` surviving roots, `12027` live generated prefixes, and a
     selector that preserves the canonical step-`15` continuation
@@ -66,8 +68,7 @@ It lists only work that is still open.
     generated `615`
   - but it also disturbs claim prefix-memo, realistic-shadow, demo-lane, and
     divergent late-step guardrails, so the remaining open work is the
-    terminal-rank pressure on the landed repaired widening plus the
-    step-`15` exact-screen path
+    step-`15` exact-screen path rather than another blind step-`13` reland
 - A direct temporal-reanchor matcher reland is also now ruled out as the
   direct next step-`15` fix:
   - a broad reland displaced the canonical step-`15` continuation to
