@@ -343,6 +343,29 @@ gate.
     captured isolated surface, while clause-`2` / clause-`3` still reopen the
     stronger local `89 / 8` and `88 / 8` rivals if isolated recovery is
     granted
+- A new local clause-`2` / clause-`3` pair-surface regression now sharpens
+  that same step-`15` blocker further:
+  - all `8` remaining claim-only clause-`2` / clause-`3` pairings stay
+    present across the captured repaired-canonical surface with `243`
+    prefixes each through the later-suffix fan-out
+  - exact-terminal-only local recovery on any such pair still admits and
+    bar-clears all `243` prefixes, but every recovered profile still outranks
+    the canonical `DCT 103 / 8` continuation
+  - the clause-`2` exact / clause-`3` claim-only pairs stay pinned to unsafe
+    exact-terminal profiles `74 / 8` and `88 / 8`
+  - the clause-`2` claim-only / clause-`3` exact pairs stay pinned to unsafe
+    exact-terminal profiles `75 / 8` and `89 / 8`
+  - the mixed claim-only clause-`2` / clause-`3` pair surfaces stay pinned to
+    unsafe exact-terminal profiles `60 / 8` and `74 / 8`
+  - forced clause-local reanchor across those mixed pair surfaces now admits
+    all `729` terminal continuations but keeps only `405` bar-clearing
+    winners, with the exact reference terminal winning on `162 / 243`
+    prefixes there while the rest still split to the two non-reference
+    closures
+  - the next step-`15` repair should therefore stay off any direct
+    clause-`2` / clause-`3` matcher or paired reanchor reland and instead
+    target narrower qualifier evidence on the canonical branch without
+    reopening those stronger local rivals
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
@@ -766,11 +789,15 @@ gate.
     stays downstream of that capture boundary, and the new exact-terminal-only
     isolated recovery regression now further fences the earlier bridge slots:
     clause positions `2` and `3` still reopen stronger local `89 / 8` and
-    `88 / 8` rivals even without lifted terminal closures, so the next repair
-    should focus on clause-local temporal qualifier evidence at positions
-    `2..3` while keeping clause-`2` / clause-`3` isolated recovery fenced and
-    preserving the exact reference
-    terminal continuation
+    `88 / 8` rivals even without lifted terminal closures, and the new
+    clause-`2` / clause-`3` pair-surface regression now shows that every
+    remaining pairing still recovers only through stronger-than-canonical
+    exact-terminal profiles (`74 / 8`, `75 / 8`, `88 / 8`, `89 / 8`, or
+    `60 / 8`) even when forced reanchor sometimes restores the reference
+    terminal locally on mixed pair surfaces, so the next repair should focus
+    on clause-local temporal qualifier evidence at positions `2..3` while
+    keeping both isolated and paired clause-`2` / clause-`3` recovery fenced
+    and preserving the exact reference terminal continuation
   - avoiding a direct temporal-reanchor matcher reland first:
     both the broad `60 / 8 / 9840` branch and the narrower `89 / 8 / 780`
     branch disturbed the canonical step-`15` continuation and were reverted
@@ -778,7 +805,9 @@ gate.
     reland first:
     the clause-`3`-only branch displaced the canonical continuation to
     `88 / 8 / 795`, and the clause-`2` plus clause-`3` branch displaced it to
-    `74 / 8 / 828`, so both were reverted as well
+    `74 / 8 / 828`, so both were reverted as well; the new clause-`2` /
+    clause-`3` pair-surface regression now also shows that no direct paired
+    reland is honest on the current captured surface either
 - Launch the next clean-start full-profile rerun only after the local repair
   is green against those stored parity/floor regressions.
 
@@ -867,12 +896,16 @@ gate.
     winners instead of the reference terminal clause, and the new
     exact-terminal-only isolated recovery regression now proves that even
     keeping the terminal fixed still reopens stronger local `89 / 8` and
-    `88 / 8` clause-`2` / clause-`3` rivals, so do not treat that
-    remaining loss as generic bar bookkeeping, raw
+    `88 / 8` clause-`2` / clause-`3` rivals, while the new clause-`2` /
+    clause-`3` pair-surface regression now proves every remaining pairing
+    still recovers only through stronger-than-canonical exact-terminal
+    profiles (`74 / 8`, `75 / 8`, `88 / 8`, `89 / 8`, or `60 / 8`) even when
+    mixed pair surfaces sometimes restore the reference terminal under forced
+    reanchor, so do not treat that remaining loss as generic bar bookkeeping, raw
     dependency-edge generation, a claim admissibility miss, a terminal-clause-
     only matcher bug, a multi-deviation-only interaction, a later-suffix
-    interaction, or a direct early clause-`2` / clause-`3` bridge-matcher
-    expansion.
+    interaction, a direct early clause-`2` / clause-`3` bridge-matcher
+    expansion, or a direct paired clause-`2` / clause-`3` matcher reland.
 16. Do not reland either exploratory temporal-reanchor matcher variant
     directly:
     the broad reland displaced the canonical step-`15` continuation to
@@ -882,7 +915,9 @@ gate.
     reanchor-bridge matcher variants directly:
     the clause-`3`-only branch displaced the canonical step-`15`
     continuation to `88 / 8 / 795`, and the clause-`2` plus clause-`3`
-    branch displaced it to `74 / 8 / 828`.
+    branch displaced it to `74 / 8 / 828`, and the new clause-`2` /
+    clause-`3` pair-surface regression now shows the remaining paired claim
+    surfaces are still unsafe to reland directly too.
 18. Re-run the step-`9` tie diagnostic only after the step-`13` breadth and
     step-`15` exact-screen stories are better understood, since the current
     tied step-`9` set still shares the same observed repaired

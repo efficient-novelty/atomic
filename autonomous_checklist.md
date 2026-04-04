@@ -73,6 +73,17 @@ It lists only work that is still open.
     recovered profiles at `89 / 8` and `88 / 8`, so direct clause-`2` /
     clause-`3` isolated recovery remains fenced while the repaired
     clause-`4` / clause-`5` qualifier work stays on the guardrail
+  - a new clause-`2` / clause-`3` pair-surface regression now narrows that
+    same open step-`15` work further:
+    all `8` remaining clause-`2` / clause-`3` claim-only pairings stay
+    present with `243` captured prefixes each through the later suffix fan-out,
+    exact-terminal-only recovery on every pairing still admits and bar-clears
+    all `243` prefixes but always outranks the canonical `DCT 103 / 8`
+    continuation, and forced clause-local reanchor on the mixed pair surfaces
+    still admits all `729` terminal continuations while keeping only `405`
+    bar clearers and splitting winners with the exact reference terminal
+    winning on `162 / 243` prefixes there, so the remaining open work is not
+    any direct paired clause-`2` / clause-`3` reland either
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /
@@ -98,6 +109,13 @@ It lists only work that is still open.
     `103 / 8 / 1794` surface was revalidated afterwards, so the remaining open
     work is narrower qualifier evidence on the current connected captured
     surface rather than direct early bridge-matcher expansion
+- A direct paired clause-`2` / clause-`3` reland is now also ruled out as
+  the direct next step-`15` fix:
+  - the new pair-surface regression shows every remaining pairing still
+    recovers only through stronger-than-canonical exact-terminal profiles
+  - mixed pair surfaces sometimes restore the exact reference terminal under
+    forced reanchor, but only on an unsafe surface that still outranks the
+    canonical continuation overall
 - A direct isolated exact-terminal clause-`2` / clause-`3` recovery reland
   is now also ruled out as the direct next step-`15` fix:
   - the new local regression shows those earlier isolated recoveries still

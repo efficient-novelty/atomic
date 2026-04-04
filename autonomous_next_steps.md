@@ -283,6 +283,29 @@ This note is the exact next work order for `desktop_claim_shadow`.
     reference terminal continuation; do not broaden the repaired clause-`0` /
     clause-`1` / clause-`4` / clause-`5` prefix acceptance to lifted terminal
     closures
+- A new local clause-`2` / clause-`3` pair-surface regression now sharpens
+  that same late blocker further:
+  - all `8` remaining claim-only clause-`2` / clause-`3` pairings stay
+    present across the captured repaired-canonical surface with `243`
+    prefixes each through the later-suffix fan-out
+  - exact-terminal-only local recovery on any such pair still admits and
+    bar-clears all `243` prefixes, but every recovered profile still outranks
+    the canonical `DCT 103 / 8` continuation
+  - the clause-`2` exact / clause-`3` claim-only pairs stay pinned to unsafe
+    exact-terminal profiles `74 / 8` and `88 / 8`
+  - the clause-`2` claim-only / clause-`3` exact pairs stay pinned to unsafe
+    exact-terminal profiles `75 / 8` and `89 / 8`
+  - the mixed claim-only clause-`2` / clause-`3` pair surfaces stay pinned to
+    unsafe exact-terminal profiles `60 / 8` and `74 / 8`
+  - forced clause-local reanchor across those mixed pair surfaces now admits
+    all `729` terminal continuations but keeps only `405` bar-clearing
+    winners, with the exact reference terminal winning on `162 / 243`
+    prefixes there while the rest still split to the two non-reference
+    closures
+  - the next repair should therefore stay off any direct clause-`2` /
+    clause-`3` matcher or paired reanchor reland and instead target narrower
+    qualifier evidence on the canonical branch without reopening those
+    stronger local rivals
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -583,6 +606,15 @@ This note is the exact next work order for `desktop_claim_shadow`.
     rivals, so direct clause-`2` / clause-`3` isolated recovery remains
     fenced while the repaired clause-`4` / clause-`5` qualifier work stays on
     the guardrail.
+    Keep the new clause-`2` / clause-`3` pair-surface regression green too:
+    all `8` remaining pairings should stay pinned at `243` captured prefixes
+    each, exact-terminal-only recovery on every pairing should still admit
+    and bar-clear all `243` prefixes while staying stronger than the
+    canonical `DCT 103 / 8` profile, and forced clause-local reanchor on the
+    mixed pair surfaces should still admit all `729` terminal continuations,
+    keep only `405` bar clearers, and split winners with the exact reference
+    terminal winning on `162 / 243` prefixes there, so both isolated and
+    paired clause-`2` / clause-`3` direct recovery remain fenced.
 20. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
 21. Keep the stored certification / benchmark assertions green for the
@@ -599,7 +631,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
     reanchor-bridge matcher variants directly:
     the clause-`3`-only branch displaced the canonical step-`15`
     continuation to `88 / 8 / 795`, and the clause-`2` plus clause-`3`
-    branch displaced it to `74 / 8 / 828`.
+    branch displaced it to `74 / 8 / 828`, and the new clause-`2` /
+    clause-`3` pair-surface regression now shows the remaining paired claim
+    surfaces are still unsafe to reland directly too.
 
 ### 5. Only Rerun After The Local Repair Exists
 
@@ -650,6 +684,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
   the clause-`3`-only branch already displaced the canonical step-`15`
   continuation to `88 / 8 / 795`, and the clause-`2` plus clause-`3`
   branch displaced it further to `74 / 8 / 828`
+- a direct paired clause-`2` / clause-`3` matcher reland first:
+  the new pair-surface regression now shows every remaining pairing still
+  recovers only through stronger-than-canonical exact-terminal profiles even
+  when mixed pair surfaces sometimes restore the exact reference terminal
+  under forced reanchor
 - a direct isolated exact-terminal clause-`2` / clause-`3` recovery reland
   first:
   the new local regression now shows that even without lifted terminal
