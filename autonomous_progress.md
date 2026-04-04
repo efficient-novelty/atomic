@@ -362,6 +362,12 @@ gate.
     winners, with the exact reference terminal winning on `162 / 243`
     prefixes there while the rest still split to the two non-reference
     closures
+  - a new mixed-pair reference-terminal winner regression now sharpens that
+    same read further:
+    even when forced clause-local reanchor on those mixed pair surfaces does
+    restore the exact reference terminal, those wins still occur only on the
+    unsafe `60 / 8` profile and still all outrank the canonical
+    `DCT 103 / 8` continuation
   - the next step-`15` repair should therefore stay off any direct
     clause-`2` / clause-`3` matcher or paired reanchor reland and instead
     target narrower qualifier evidence on the canonical branch without
@@ -914,11 +920,13 @@ gate.
     `88 / 8` clause-`2` / clause-`3` rivals, while the new clause-`2` /
     clause-`3` pair-surface regression now proves every remaining pairing
     still recovers only through stronger-than-canonical exact-terminal
-    profiles (`74 / 8`, `75 / 8`, `88 / 8`, `89 / 8`, or `60 / 8`) even when
-    mixed pair surfaces sometimes restore the reference terminal under forced
-    reanchor, and the new nearby clause-`2` / clause-`3` temporal-replacement
-    regression now proves simple demo-style clause swaps still collapse onto
-    those same unsafe isolated profiles, so do not treat that remaining loss
+    profiles (`74 / 8`, `75 / 8`, `88 / 8`, `89 / 8`, or `60 / 8`), the new
+    mixed-pair reference-terminal winner regression now proves that even the
+    forced-reanchor cases that do restore the exact reference terminal stay
+    pinned to the unsafe `60 / 8` profile, and the new nearby clause-`2` /
+    clause-`3` temporal-replacement regression now proves simple demo-style
+    clause swaps still collapse onto those same unsafe isolated profiles, so
+    do not treat that remaining loss
     as generic bar bookkeeping, raw dependency-edge generation, a claim
     admissibility miss, a terminal-clause-only matcher bug, a multi-
     deviation-only interaction, a later-suffix interaction, a direct early

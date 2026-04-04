@@ -13041,8 +13041,216 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_mixed_clause_two_three_reference_terminal_wins_still_outrank_the_canonical_profile()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let clause_two_variants = [
+            reference_prefix.clauses[2].clone(),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                    Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                ),
+            ),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                        Expr::Var(1),
+                    ))))),
+                ),
+            ),
+        ];
+        let clause_three_variants = [
+            reference_prefix.clauses[3].clone(),
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor)),
+                    Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                ))),
+            ),
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor)),
+                    Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                        1,
+                    )))))),
+                ))),
+            ),
+        ];
+        let canonical_bit_kappa = u16::try_from(pen_core::encode::telescope_bit_cost(
+            &Telescope::reference(15),
+        ))
+        .expect("bit cost exceeded u16");
+        let canonical_rank = super::acceptance_rank_for_telescope(
+            surface.objective_bar,
+            &Telescope::reference(15),
+            103,
+            canonical_bit_kappa,
+            8,
+        )
+        .expect("reference step-15 telescope should clear the bar");
+        let mut reference_terminal_win_counts = BTreeMap::<(usize, usize), usize>::new();
+        let mut stronger_reference_terminal_win_counts = BTreeMap::<(usize, usize), usize>::new();
+        let mut reference_terminal_profiles =
+            BTreeMap::<(usize, usize), BTreeSet<(u16, Rational)>>::new();
+
+        for work_item in &surface.pruned_terminal_prefixes {
+            let clause_two_index = clause_two_variants
+                .iter()
+                .position(|clause| *clause == work_item.prefix_telescope.clauses[2])
+                .expect("unexpected clause-2 variant on captured step-15 surface");
+            let clause_three_index = clause_three_variants
+                .iter()
+                .position(|clause| *clause == work_item.prefix_telescope.clauses[3])
+                .expect("unexpected clause-3 variant on captured step-15 surface");
+            let key = (clause_two_index, clause_three_index);
+
+            let connectivity_summary =
+                ConnectivitySummary::from_telescope(&surface.library, &work_item.prefix_telescope);
+            let mut forced_ranks = Vec::new();
+            for clause in work_item.next_clauses(&surface.clause_catalog) {
+                let decision =
+                    connectivity_summary.terminal_decision(&surface.library, clause, true);
+                if !matches!(decision, ConnectivityTerminalDecision::KeepWithoutFallback) {
+                    continue;
+                }
+
+                let mut telescope = work_item.prefix_telescope.clone();
+                telescope.clauses.push(clause.clone());
+                let admissibility_decision = assess_strict_admissibility(
+                    surface.step_index,
+                    &surface.library,
+                    &telescope,
+                    surface.admissibility,
+                );
+                if !admissibility_decision.is_admitted() {
+                    continue;
+                }
+
+                let exact_nu = u16::try_from(
+                    structural_nu(&telescope, &surface.library, &surface.nu_history).total,
+                )
+                .expect("nu exceeded u16");
+                let bit_kappa_used =
+                    u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                        .expect("bit cost exceeded u16");
+                let clause_kappa_used =
+                    u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                let Some(accept_rank) = super::acceptance_rank_for_telescope(
+                    surface.objective_bar,
+                    &telescope,
+                    exact_nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
+                ) else {
+                    continue;
+                };
+                forced_ranks.push((clause.clone(), accept_rank));
+            }
+
+            if let Some((best_clause, best_rank)) = forced_ranks
+                .iter()
+                .min_by(|left, right| left.1.cmp(&right.1))
+            {
+                if *best_clause == reference_terminal {
+                    *reference_terminal_win_counts.entry(key).or_insert(0usize) += 1;
+                    if *best_rank < canonical_rank {
+                        *stronger_reference_terminal_win_counts
+                            .entry(key)
+                            .or_insert(0usize) += 1;
+                    }
+                    reference_terminal_profiles
+                        .entry(key)
+                        .or_default()
+                        .insert((best_rank.descending_nu.0, best_rank.overshoot.clone()));
+                } else if *best_clause != next_lift_terminal
+                    && *best_clause != eventual_lift_terminal
+                {
+                    panic!("unexpected forced winner clause: {:?}", best_clause.expr);
+                }
+            }
+        }
+
+        let expected_reference_terminal_wins = [
+            ((1_usize, 1_usize), 162_usize),
+            ((1, 2), 162),
+            ((2, 1), 162),
+            ((2, 2), 162),
+        ]
+        .into_iter()
+        .collect();
+        assert_eq!(
+            reference_terminal_win_counts, expected_reference_terminal_wins,
+            "only the mixed clause-2/clause-3 claim-only pairings should sometimes restore the reference terminal under forced reanchor"
+        );
+        assert_eq!(
+            stronger_reference_terminal_win_counts, expected_reference_terminal_wins,
+            "those mixed-pair reference-terminal wins should still all outrank the canonical step-15 profile, so restoring the reference terminal there is not yet the same as preserving the canonical branch"
+        );
+        assert_eq!(
+            reference_terminal_profiles,
+            [
+                (
+                    (1_usize, 1_usize),
+                    [(60_u16, Rational::new(545, 5278))].into_iter().collect()
+                ),
+                (
+                    (1, 2),
+                    [(60_u16, Rational::new(545, 5278))].into_iter().collect()
+                ),
+                (
+                    (2, 1),
+                    [(60_u16, Rational::new(545, 5278))].into_iter().collect()
+                ),
+                (
+                    (2, 2),
+                    [(60_u16, Rational::new(545, 5278))].into_iter().collect()
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "even the mixed-pair surfaces that restore the exact reference terminal under forced reanchor should still stay pinned to the narrower unsafe 60/8 profile rather than the canonical branch"
+        );
+    }
+
+    #[test]
     fn current_claim_step_fifteen_nearby_clause_two_three_temporal_replacements_still_collapse_to_same_unsafe_isolated_profiles()
-    {
+     {
         let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
         let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
         let reference_terminal = Telescope::reference(15)

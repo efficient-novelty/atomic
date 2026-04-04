@@ -82,8 +82,11 @@ It lists only work that is still open.
     continuation, and forced clause-local reanchor on the mixed pair surfaces
     still admits all `729` terminal continuations while keeping only `405`
     bar clearers and splitting winners with the exact reference terminal
-    winning on `162 / 243` prefixes there, so the remaining open work is not
-    any direct paired clause-`2` / clause-`3` reland either
+    winning on `162 / 243` prefixes there; a new mixed-pair
+    reference-terminal winner regression now also proves those wins stay
+    pinned to the unsafe `60 / 8` profile and still all outrank the canonical
+    continuation, so the remaining open work is not any direct paired
+    clause-`2` / clause-`3` reland either
   - a new nearby clause-`2` / clause-`3` temporal-replacement regression now
     narrows that same open step-`15` work further:
     swapping the current claim-only clause-`2` or clause-`3` variants for

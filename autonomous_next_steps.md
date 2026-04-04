@@ -302,6 +302,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
     winners, with the exact reference terminal winning on `162 / 243`
     prefixes there while the rest still split to the two non-reference
     closures
+  - a new mixed-pair reference-terminal winner regression now sharpens that
+    same read further:
+    even when forced clause-local reanchor on those mixed pair surfaces does
+    restore the exact reference terminal, those wins still occur only on the
+    unsafe `60 / 8` profile and still all outrank the canonical
+    `DCT 103 / 8` continuation
   - the next repair should therefore stay off any direct clause-`2` /
     clause-`3` matcher or paired reanchor reland and instead target narrower
     qualifier evidence on the canonical branch without reopening those
@@ -625,8 +631,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
     canonical `DCT 103 / 8` profile, and forced clause-local reanchor on the
     mixed pair surfaces should still admit all `729` terminal continuations,
     keep only `405` bar clearers, and split winners with the exact reference
-    terminal winning on `162 / 243` prefixes there, so both isolated and
-    paired clause-`2` / clause-`3` direct recovery remain fenced.
+    terminal winning on `162 / 243` prefixes there.
+    Keep the new mixed-pair reference-terminal winner regression green too:
+    those mixed-pair reference-terminal wins should still stay pinned to the
+    unsafe `60 / 8` profile and still all outrank the canonical
+    `DCT 103 / 8` continuation, so both isolated and paired clause-`2` /
+    clause-`3` direct recovery remain fenced.
     Keep the new nearby clause-`2` / clause-`3` temporal-replacement
     regression green too: swapping the current claim-only variants for nearby
     demo-style temporal neighbors should still stay outside historical
