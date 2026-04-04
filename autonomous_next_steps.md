@@ -107,6 +107,24 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - parity success count `= 0`
   - full early breadth hit count `= 0`
   - full late floor hit count `= 0`
+- The current repo head `217b5fc6612a72c3e160309cea97fc32797a127d`
+  has now revalidated the targeted local guardrails before another repair
+  lands:
+  - clause-`2` / clause-`3` claim variants stay fenced out of historical
+    reanchor even with the exact reference terminal
+  - the captured step-`15` zero-admitted surface still first falls off the
+    historical-reanchor shell only at clause positions `2..3`
+  - mixed clause-`2` / clause-`3` claim-only surfaces still restore the exact
+    reference terminal under forced reanchor only with a clause-`6` deviation
+  - isolated clause-`2` / clause-`3` contexts still expose no safe
+    reference-terminal pocket
+  - the repaired step-`13` chain still clears exact connectivity,
+    partial-prefix bar, captured zero-admitted exact prunes, and live
+    terminal-rank pressure
+- No new source repair landed in this verification turn, so the next work
+  order stays the same: keep those guardrails green and target narrower
+  clause-local qualifier / reanchor evidence at positions `2..3` on the
+  canonical step-`15` branch.
 - A new local step-`9` diagnostic pass narrows the earliest fork further:
   - the guarded step-`9` telescope is still present in claim late
     enumeration (`81` `kappa = 4` claim telescopes)
