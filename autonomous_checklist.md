@@ -146,6 +146,17 @@ It lists only work that is still open.
     without qualifier evidence, and the lifted anchor-`11` neighbors reopen
     unsafe `102 / 8` profiles, so the remaining open work is not a simple
     nearby clause-`3` anchor retarget either
+  - a new mixed clause-`2` replacement plus nearby clause-`3` anchor-swap
+    regression now narrows that same open step-`15` work further again:
+    pairing any current clause-`2` claim/demo replacement with the nearby
+    clause-`3` anchor-`9` neighborhood still leaves all `5` tested
+    exact-suffix variants locally admissible but below bar and outside
+    historical reanchor; pairing those same clause-`2` replacements with the
+    nearby clause-`3` anchor-`11` exact-argument swap yields a
+    canonical-primary-but-still-unqualified `103 / 8` bar-clearer, while the
+    lifted anchor-`11` neighbors still reopen unsafe `88 / 8`, so the
+    remaining open work is not a simple nearby clause-`3` anchor retarget or
+    a direct clause-`2` replacement reland either
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /

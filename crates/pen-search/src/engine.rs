@@ -14437,6 +14437,298 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_clause_two_replacements_plus_nearby_clause_three_anchor_swaps_still_offer_no_safe_local_reland()
+     {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let anchor = admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let reference = Telescope::reference(15);
+        let reference_prefix = Telescope::new(reference.clauses[..7].to_vec());
+        let reference_terminal = reference
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let canonical_bit_kappa = u16::try_from(pen_core::encode::telescope_bit_cost(&reference))
+            .expect("bit cost exceeded u16");
+        let canonical_rank = super::acceptance_rank_for_telescope(
+            compute_bar(2, 15, &history).bar,
+            &reference,
+            103,
+            canonical_bit_kappa,
+            8,
+        )
+        .expect("reference step-15 telescope should clear the bar");
+
+        let clause_two_variants = [
+            (
+                "claim_flat_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                    ),
+                ),
+            ),
+            (
+                "claim_sharp_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+            ),
+            (
+                "demo_sharp_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                    ),
+                ),
+            ),
+            (
+                "demo_flat_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(
+                            1,
+                        )))))),
+                    ),
+                ),
+            ),
+        ];
+        let candidate_anchors = [anchor.saturating_sub(1), anchor + 1]
+            .into_iter()
+            .filter(|index| *index >= 1 && *index <= library.len() as u32)
+            .collect::<Vec<_>>();
+        let arg_variants = [
+            ("exact", Expr::Next(Box::new(Expr::Var(1)))),
+            (
+                "claim_flat",
+                Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+            ),
+            (
+                "claim_eventual",
+                Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+            ),
+            (
+                "demo_sharp",
+                Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+            ),
+            (
+                "demo_next",
+                Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
+            ),
+        ];
+        let mut below_bar_counts = BTreeMap::new();
+        let mut canonical_primary_counts = BTreeMap::new();
+        let mut stronger_counts = BTreeMap::new();
+        let mut anchor_eleven_profiles = BTreeMap::new();
+
+        for (clause_two_label, clause_two) in clause_two_variants {
+            for candidate_anchor in &candidate_anchors {
+                for (arg_label, argument) in &arg_variants {
+                    let mut telescope = reference_prefix.clone();
+                    telescope.clauses[2] = clause_two.clone();
+                    telescope.clauses[3] = ClauseRec::new(
+                        ClauseRole::Introduction,
+                        Expr::Lam(Box::new(Expr::App(
+                            Box::new(Expr::Lib(*candidate_anchor)),
+                            Box::new(argument.clone()),
+                        ))),
+                    );
+                    telescope.clauses.push(reference_terminal.clone());
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let admissibility_decision =
+                        assess_strict_admissibility(15, &library, &telescope, admissibility);
+                    let rank = if admissibility_decision.is_admitted() {
+                        let exact_nu =
+                            u16::try_from(structural_nu(&telescope, &library, &nu_history).total)
+                                .expect("nu exceeded u16");
+                        let bit_kappa_used =
+                            u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                                .expect("bit cost exceeded u16");
+                        let clause_kappa_used =
+                            u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                        super::acceptance_rank_for_telescope(
+                            compute_bar(2, 15, &history).bar,
+                            &telescope,
+                            exact_nu,
+                            bit_kappa_used,
+                            clause_kappa_used,
+                        )
+                        .map(|accept_rank| {
+                            (
+                                exact_nu,
+                                accept_rank < canonical_rank,
+                                accept_rank.overshoot,
+                            )
+                        })
+                    } else {
+                        None
+                    };
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        witness.connected,
+                        "mixed clause-2 replacement {clause_two_label} plus clause-3 anchor swap {candidate_anchor}/{arg_label} should stay structurally connected on the exact suffix"
+                    );
+                    assert!(
+                        !witness.historical_reanchor,
+                        "mixed clause-2 replacement {clause_two_label} plus clause-3 anchor swap {candidate_anchor}/{arg_label} should still stay outside historical reanchor"
+                    );
+                    assert!(
+                        admissibility_decision.is_admitted(),
+                        "mixed clause-2 replacement {clause_two_label} plus clause-3 anchor swap {candidate_anchor}/{arg_label} should still be locally admissible on the exact suffix"
+                    );
+                    assert_eq!(reanchor.matched_clause_count(), 2);
+                    assert_eq!(reanchor.first_mismatch_position(), Some(2));
+                    if *candidate_anchor == 9 {
+                        assert!(
+                            rank.is_none(),
+                            "the nearby clause-3 anchor-9 neighborhood should still stay below bar even when clause 2 already deviates via {clause_two_label}"
+                        );
+                        *below_bar_counts.entry(clause_two_label).or_insert(0usize) += 1;
+                        continue;
+                    }
+
+                    let (nu, stronger_than_canonical, overshoot) = rank.expect(
+                        "the nearby clause-3 anchor-11 neighborhood should still expose a bar clearer once clause 2 already deviates",
+                    );
+                    if *arg_label == "exact" {
+                        assert_eq!(
+                            (nu, stronger_than_canonical, overshoot.clone()),
+                            (103_u16, false, Rational::new(115657, 21112)),
+                            "the nearby clause-3 anchor-11 exact-argument swap should reach only a canonical-primary-but-still-unqualified profile once clause 2 already deviates"
+                        );
+                        *canonical_primary_counts
+                            .entry(clause_two_label)
+                            .or_insert(0usize) += 1;
+                    } else {
+                        assert_eq!(
+                            (nu, stronger_than_canonical, overshoot.clone()),
+                            (88_u16, true, Rational::new(9509, 2639)),
+                            "lifted nearby clause-3 anchor-11 neighbors should still reopen the same unsafe 88/8 rival even when clause 2 already deviates"
+                        );
+                        *stronger_counts.entry(clause_two_label).or_insert(0usize) += 1;
+                    }
+                    anchor_eleven_profiles
+                        .entry(clause_two_label)
+                        .or_insert_with(BTreeSet::new)
+                        .insert((nu, stronger_than_canonical, overshoot));
+                }
+            }
+        }
+
+        assert_eq!(
+            below_bar_counts,
+            [
+                ("claim_flat_domain", 5_usize),
+                ("claim_sharp_codomain", 5),
+                ("demo_flat_codomain", 5),
+                ("demo_sharp_domain", 5),
+            ]
+            .into_iter()
+            .collect(),
+            "the nearby clause-3 anchor-9 neighborhood should still stay below bar across every current clause-2 claim/demo replacement"
+        );
+        assert_eq!(
+            canonical_primary_counts,
+            [
+                ("claim_flat_domain", 1_usize),
+                ("claim_sharp_codomain", 1),
+                ("demo_flat_codomain", 1),
+                ("demo_sharp_domain", 1),
+            ]
+            .into_iter()
+            .collect(),
+            "the nearby clause-3 anchor-11 exact-argument swap should expose exactly one canonical-primary local bar clearer for each current clause-2 claim/demo replacement, but it still does not restore historical reanchor"
+        );
+        assert_eq!(
+            stronger_counts,
+            [
+                ("claim_flat_domain", 4_usize),
+                ("claim_sharp_codomain", 4),
+                ("demo_flat_codomain", 4),
+                ("demo_sharp_domain", 4),
+            ]
+            .into_iter()
+            .collect(),
+            "the lifted nearby clause-3 anchor-11 neighborhood should still reopen the same unsafe stronger-than-canonical 88/8 rival across every current clause-2 claim/demo replacement"
+        );
+        assert_eq!(
+            anchor_eleven_profiles,
+            [
+                (
+                    "claim_flat_domain",
+                    [
+                        (88_u16, true, Rational::new(9509, 2639)),
+                        (103_u16, false, Rational::new(115657, 21112)),
+                    ]
+                    .into_iter()
+                    .collect()
+                ),
+                (
+                    "claim_sharp_codomain",
+                    [
+                        (88_u16, true, Rational::new(9509, 2639)),
+                        (103_u16, false, Rational::new(115657, 21112)),
+                    ]
+                    .into_iter()
+                    .collect()
+                ),
+                (
+                    "demo_flat_codomain",
+                    [
+                        (88_u16, true, Rational::new(9509, 2639)),
+                        (103_u16, false, Rational::new(115657, 21112)),
+                    ]
+                    .into_iter()
+                    .collect()
+                ),
+                (
+                    "demo_sharp_domain",
+                    [
+                        (88_u16, true, Rational::new(9509, 2639)),
+                        (103_u16, false, Rational::new(115657, 21112)),
+                    ]
+                    .into_iter()
+                    .collect()
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "mixed clause-2 replacements plus nearby clause-3 anchor swaps should still collapse onto one below-bar anchor-9 neighborhood plus one split anchor-11 neighborhood: a canonical-primary-but-unqualified exact swap and the same unsafe lifted 88/8 rivals"
+        );
+    }
+
+    #[test]
     fn step_thirteen_divergence_reopens_operator_bundle_claim_debt_before_the_admitted_step_fourteen_failure_family()
      {
         let reference_prefix = claim_long_rerun_v3_hybrid_prefix(None);

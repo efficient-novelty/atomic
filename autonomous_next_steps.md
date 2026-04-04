@@ -124,7 +124,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - No new source repair landed in this turn either; the latest source change
   is diagnostic only, so the next work order stays the same: keep those
   guardrails green and target narrower clause-local qualifier / reanchor
-  evidence at positions `2..3` on the canonical step-`15` branch.
+  evidence at positions `2..3` on the canonical step-`15` branch, with the
+  nearby clause-`3` anchor-`11` exact-argument neighborhood on clause-`2`
+  replacements now the narrowest still-fenced local opening.
 - A new local step-`9` diagnostic pass narrows the earliest fork further:
   - the guarded step-`9` telescope is still present in claim late
     enumeration (`81` `kappa = 4` claim telescopes)
@@ -413,6 +415,22 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next repair should therefore stay off any simple nearby clause-`3`
     anchor retarget too and keep targeting narrower qualifier evidence on the
     canonical branch itself
+- A new mixed clause-`2` replacement plus nearby clause-`3` anchor-swap
+  regression now sharpens that same late blocker further again:
+  - pairing any current clause-`2` claim/demo replacement with the nearby
+    clause-`3` anchor-`9` neighborhood still leaves all `5` tested
+    exact-suffix variants structurally connected, locally admissible, outside
+    historical reanchor, and below bar
+  - pairing those same clause-`2` replacements with the nearby clause-`3`
+    anchor-`11` exact-argument swap now reaches only a
+    canonical-primary-but-still-unqualified `103 / 8` bar-clearer, while the
+    lifted anchor-`11` neighbors on those same clause-`2` replacement
+    contexts still reopen the unsafe stronger-than-canonical `88 / 8`
+    profile
+  - the next repair should therefore stay off any simple nearby clause-`3`
+    anchor retarget or direct clause-`2` replacement reland too; if that
+    anchor-`11` neighborhood matters, it has to be isolated without relanding
+    the lifted anchor-`11` variants
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -758,6 +776,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
     exact-argument swap should still reach only a noncanonical `117 / 8`
     bar-clearer without restoring qualifier evidence while the lifted
     anchor-`11` neighbors reopen unsafe `102 / 8` profiles.
+    Keep the new mixed clause-`2` replacement plus nearby clause-`3`
+    anchor-swap regression green too: pairing any current clause-`2`
+    claim/demo replacement with the nearby clause-`3` anchor-`9`
+    neighborhood should still stay below bar on the exact suffix, while the
+    nearby clause-`3` anchor-`11` exact-argument swap should still expose
+    exactly one canonical-primary-but-still-unqualified `103 / 8`
+    bar-clearer per clause-`2` replacement and the lifted anchor-`11`
+    neighbors should still reopen the unsafe `88 / 8` profile, so any future
+    use of that anchor-`11` neighborhood has to isolate the exact-argument
+    qualifier evidence without relanding the lifted anchor-`11` variants.
     Keep the new nearby clause-`2` / clause-`3` temporal-replacement
     regression green too: swapping the current claim-only variants for nearby
     demo-style temporal neighbors should still stay outside historical

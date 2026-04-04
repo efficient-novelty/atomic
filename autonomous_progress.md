@@ -80,7 +80,9 @@ gate.
 - No new source repair landed in this turn either; the latest source change
   is diagnostic only, so the next honest change is still narrower
   clause-local qualifier / reanchor evidence on the canonical branch at
-  positions `2..3`.
+  positions `2..3`, with the nearby clause-`3` anchor-`11` exact-argument
+  neighborhood on clause-`2` replacements now the narrowest still-fenced
+  local opening.
 - A narrow claim-lane code change now lands on top of that stored `v5`
   evidence surface:
   claim incumbent pruning preserves same-primary accepted-rank ties on
@@ -458,6 +460,20 @@ gate.
   neighbors all reopen unsafe stronger-than-canonical `102 / 8` profiles,
   so the remaining open work is not a simple nearby clause-`3` anchor
   retarget either
+- A new mixed clause-`2` replacement plus nearby clause-`3` anchor-swap
+  regression now narrows that same step-`15` blocker further again:
+  pairing any current clause-`2` claim/demo replacement with the nearby
+  clause-`3` anchor-`9` neighborhood still leaves all `5` tested exact-suffix
+  variants structurally connected, locally admissible, outside historical
+  reanchor, and below bar; pairing those same clause-`2` replacements with
+  the nearby clause-`3` anchor-`11` exact-argument swap now reaches only a
+  canonical-primary-but-still-unqualified `103 / 8` bar-clearer, while the
+  lifted anchor-`11` neighbors on those same clause-`2` replacement contexts
+  still reopen the unsafe stronger-than-canonical `88 / 8` profile, so the
+  remaining open work is not a simple nearby clause-`3` anchor retarget or a
+  direct clause-`2` replacement reland either; if that anchor-`11`
+  neighborhood matters, the next repair must isolate the exact-argument
+  qualifier evidence without relanding the lifted anchor-`11` variants
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
@@ -1012,7 +1028,13 @@ gate.
     now proves that broadening both positions together across that same local
     neighborhood still stays outside historical reanchor and still collapses
     all `16` exact-terminal-only paired recoveries onto the same unsafe
-    `74 / 8` profile, so do not treat that remaining loss
+    `74 / 8` profile, and the new mixed clause-`2` replacement plus nearby
+    clause-`3` anchor-swap regression now proves the nearby anchor-`9`
+    neighborhood stays below bar across every current clause-`2`
+    claim/demo replacement while the nearby anchor-`11` exact-argument swap
+    reaches only a canonical-primary-but-still-unqualified `103 / 8`
+    bar-clearer there and the lifted anchor-`11` neighbors still reopen
+    unsafe `88 / 8`, so do not treat that remaining loss
     as generic bar bookkeeping, raw dependency-edge generation, a claim
     admissibility miss, a terminal-clause-only matcher bug, a multi-
     deviation-only interaction, a later-suffix interaction, a direct early
