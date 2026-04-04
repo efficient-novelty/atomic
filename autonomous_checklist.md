@@ -125,6 +125,15 @@ It lists only work that is still open.
     whether clause `6` also deviates, so the remaining open work is not
     hiding behind repaired-side exactness or isolated clause-`6` context
     either
+  - a new exact-suffix clause-`2` / clause-`3` catalog regression now narrows
+    that same open step-`15` work further:
+    on the otherwise exact suffix, the live step-`15` claim catalogs at
+    clause positions `2` and `3` still expose only the two known
+    non-reference claim variants each, and those exact-suffix variants still
+    stay structurally connected, locally admissible, outside historical
+    reanchor, and pinned to the same unsafe isolated profiles `89 / 8` and
+    `88 / 8`, so the remaining open work is not hiding behind an undiscovered
+    exact-suffix clause-catalog branch either
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /

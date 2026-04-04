@@ -13920,7 +13920,8 @@ mod tests {
 
             let mut mask = 0u8;
             for (position, bit) in repaired_side_positions {
-                if work_item.prefix_telescope.clauses[position] != reference_prefix.clauses[position]
+                if work_item.prefix_telescope.clauses[position]
+                    != reference_prefix.clauses[position]
                 {
                     mask |= bit;
                 }
@@ -14093,6 +14094,174 @@ mod tests {
             .into_iter()
             .collect(),
             "exact-terminal-only isolated recovery should still collapse clause-3 claim-only contexts onto unsafe 88/8 or 74/8 profiles and clause-2 claim-only contexts onto unsafe 89/8 or 75/8 profiles depending only on whether clause 6 also deviates"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_suffix_clause_two_three_catalog_still_contains_only_known_unsafe_claim_variants()
+     {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let reference = Telescope::reference(15);
+        let reference_terminal = reference
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let canonical_bit_kappa = u16::try_from(pen_core::encode::telescope_bit_cost(&reference))
+            .expect("bit cost exceeded u16");
+        let canonical_rank = super::acceptance_rank_for_telescope(
+            compute_bar(2, 15, &history).bar,
+            &reference,
+            103,
+            canonical_bit_kappa,
+            8,
+        )
+        .expect("reference step-15 telescope should clear the bar");
+        let mut stronger_counts = BTreeMap::new();
+        let mut observed_profiles = BTreeMap::<usize, BTreeSet<(u16, Rational)>>::new();
+        let mut observed_exprs = BTreeMap::<usize, BTreeSet<String>>::new();
+
+        for position in [2_usize, 3] {
+            let mut non_reference_count = 0usize;
+            for clause in clause_catalog.clauses_at(position).iter() {
+                if *clause == reference.clauses[position] {
+                    continue;
+                }
+                non_reference_count += 1;
+
+                let mut telescope = reference.clone();
+                telescope.clauses[position] = clause.clone();
+                telescope.clauses[7] = reference_terminal.clone();
+                let witness = analyze_connectivity(&library, &telescope);
+                let admissibility_decision =
+                    assess_strict_admissibility(15, &library, &telescope, admissibility);
+                let rank = if admissibility_decision.is_admitted() {
+                    let exact_nu =
+                        u16::try_from(structural_nu(&telescope, &library, &nu_history).total)
+                            .expect("nu exceeded u16");
+                    let bit_kappa_used =
+                        u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                            .expect("bit cost exceeded u16");
+                    let clause_kappa_used =
+                        u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                    super::acceptance_rank_for_telescope(
+                        compute_bar(2, 15, &history).bar,
+                        &telescope,
+                        exact_nu,
+                        bit_kappa_used,
+                        clause_kappa_used,
+                    )
+                    .map(|accept_rank| {
+                        (
+                            exact_nu,
+                            clause_kappa_used,
+                            accept_rank < canonical_rank,
+                            accept_rank.overshoot,
+                        )
+                    })
+                } else {
+                    None
+                };
+                assert!(
+                    witness.connected,
+                    "every non-reference exact-suffix clause-{position} catalog option should stay structurally connected on the canonical step-15 suffix"
+                );
+                assert!(
+                    !witness.historical_reanchor,
+                    "every non-reference exact-suffix clause-{position} catalog option should stay outside historical reanchor, so the remaining repair is not a simple catalog reland"
+                );
+                assert!(
+                    admissibility_decision.is_admitted(),
+                    "every non-reference exact-suffix clause-{position} catalog option should still be locally admissible"
+                );
+                let (exact_nu, _clause_kappa_used, stronger_than_canonical, overshoot) =
+                    rank.expect("non-reference exact-suffix clause should still clear the bar");
+                assert!(
+                    stronger_than_canonical,
+                    "every non-reference exact-suffix clause-{position} catalog option should still outrank the canonical step-15 profile"
+                );
+                *stronger_counts.entry(position).or_insert(0usize) += 1;
+                observed_profiles
+                    .entry(position)
+                    .or_default()
+                    .insert((exact_nu, overshoot));
+                observed_exprs
+                    .entry(position)
+                    .or_default()
+                    .insert(format!("{:?}", clause.expr));
+            }
+            assert_eq!(
+                non_reference_count, 2,
+                "the live step-15 claim catalog should still expose exactly two non-reference clause-{position} options on the exact suffix"
+            );
+        }
+
+        assert_eq!(
+            stronger_counts,
+            [(2_usize, 2_usize), (3, 2)].into_iter().collect(),
+            "the live exact-suffix clause-2 and clause-3 catalogs should still consist only of the two known stronger-than-canonical claim variants"
+        );
+        assert_eq!(
+            observed_profiles,
+            [
+                (
+                    2_usize,
+                    [(89_u16, Rational::new(78711, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    3,
+                    [(88_u16, Rational::new(9509, 2639))].into_iter().collect()
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "the live exact-suffix clause-2 and clause-3 catalogs should still collapse onto the same unsafe isolated recovery profiles as the captured claim variants"
+        );
+        assert_eq!(
+            observed_exprs,
+            [
+                (
+                    2_usize,
+                    [
+                        "Pi(Next(Flat(Var(1))), Eventually(Var(1)))".to_string(),
+                        "Pi(Next(Var(1)), Eventually(Sharp(Var(1))))".to_string(),
+                    ]
+                    .into_iter()
+                    .collect()
+                ),
+                (
+                    3,
+                    [
+                        "Lam(App(Lib(10), Next(Eventually(Var(1)))))".to_string(),
+                        "Lam(App(Lib(10), Next(Flat(Var(1)))))".to_string(),
+                    ]
+                    .into_iter()
+                    .collect()
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "the live exact-suffix clause-2 and clause-3 catalogs should still expose only the currently known claim variants, so the remaining work is narrower qualifier evidence rather than an undiscovered local catalog branch"
         );
     }
 

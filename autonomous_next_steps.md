@@ -381,6 +381,21 @@ This note is the exact next work order for `desktop_claim_shadow`.
     clause-`3` relands even behind repaired-side exactness or clause-`6`
     context and keep targeting narrower qualifier evidence on the canonical
     branch itself
+- A new exact-suffix clause-`2` / clause-`3` catalog regression now sharpens
+  that same late blocker further:
+  - on the otherwise exact suffix, the live step-`15` claim catalog at clause
+    position `2` still exposes only the two known non-reference claim
+    variants
+  - both of those clause-`2` catalog variants stay structurally connected,
+    locally admissible, outside historical reanchor, and pinned to the unsafe
+    `89 / 8` exact-terminal profile
+  - clause position `3` likewise still exposes only the two known
+    non-reference claim variants, and both stay structurally connected,
+    locally admissible, outside historical reanchor, and pinned to the unsafe
+    `88 / 8` exact-terminal profile
+  - the next repair should therefore stay off any undiscovered exact-suffix
+    clause-catalog reland too and keep targeting narrower qualifier evidence
+    on the canonical branch itself
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -710,6 +725,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
     collapse clause-`3` contexts only onto unsafe `88 / 8` or `74 / 8`
     profiles plus clause-`2` contexts only onto unsafe `89 / 8` or `75 / 8`
     profiles depending on whether clause `6` also deviates.
+    Keep the new exact-suffix clause-`2` / clause-`3` catalog regression
+    green too: the live exact-suffix step-`15` claim catalogs at clause
+    positions `2` and `3` should still expose exactly two non-reference claim
+    variants each, and those variants should still stay structurally
+    connected, locally admissible, outside historical reanchor, and pinned to
+    the unsafe isolated profiles `89 / 8` and `88 / 8` respectively.
     Keep the new nearby clause-`2` / clause-`3` temporal-replacement
     regression green too: swapping the current claim-only variants for nearby
     demo-style temporal neighbors should still stay outside historical

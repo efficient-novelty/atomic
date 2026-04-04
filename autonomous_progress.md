@@ -432,6 +432,17 @@ gate.
   clause `6` and `75 / 8` with claim-only clause `6`, so no safe isolated
   clause-`2` / clause-`3` pocket is hiding behind repaired-side exactness or
   clause-`6` context either
+- A new exact-suffix clause-`2` / clause-`3` catalog regression now narrows
+  that same step-`15` blocker further:
+  on the otherwise exact suffix, the live step-`15` claim catalog at clause
+  position `2` still exposes only the two known non-reference claim variants,
+  and both stay structurally connected, locally admissible, outside
+  historical reanchor, and pinned to the unsafe `89 / 8` exact-terminal
+  profile; clause position `3` likewise still exposes only the two known
+  non-reference claim variants, and both stay structurally connected, locally
+  admissible, outside historical reanchor, and pinned to the unsafe
+  `88 / 8` exact-terminal profile, so the remaining open work is not hiding
+  behind an undiscovered exact-suffix clause-catalog branch either
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
