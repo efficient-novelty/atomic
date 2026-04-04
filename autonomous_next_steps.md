@@ -306,6 +306,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
     clause-`3` matcher or paired reanchor reland and instead target narrower
     qualifier evidence on the canonical branch without reopening those
     stronger local rivals
+- A new nearby clause-`2` / clause-`3` temporal-replacement regression now
+  sharpens that same late blocker further:
+  - swapping the current claim-only clause-`2` variants for nearby demo-style
+    temporal neighbors still leaves every exact-terminal-only isolated recovery
+    on the same unsafe `89 / 8` profile
+  - swapping the current claim-only clause-`3` variants for nearby demo-style
+    temporal neighbors still leaves every exact-terminal-only isolated recovery
+    on the same unsafe `88 / 8` profile
+  - those nearby replacements also stay structurally connected, locally
+    admissible, and outside historical reanchor on the otherwise exact suffix,
+    so a simple clause-catalog swap is not enough to repair the missing
+    clause-local qualifier evidence
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -615,6 +627,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
     keep only `405` bar clearers, and split winners with the exact reference
     terminal winning on `162 / 243` prefixes there, so both isolated and
     paired clause-`2` / clause-`3` direct recovery remain fenced.
+    Keep the new nearby clause-`2` / clause-`3` temporal-replacement
+    regression green too: swapping the current claim-only variants for nearby
+    demo-style temporal neighbors should still stay outside historical
+    reanchor and still collapse onto the same unsafe isolated `89 / 8` and
+    `88 / 8` profiles, so a simple clause-catalog swap remains fenced.
 20. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
 21. Keep the stored certification / benchmark assertions green for the
@@ -694,6 +711,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
   the new local regression now shows that even without lifted terminal
   closures those earlier isolated recoveries still reopen stronger local
   `89 / 8` and `88 / 8` rivals on the otherwise exact suffix
+- a simple nearby clause-`2` / clause-`3` temporal clause-catalog swap first:
+  the new local regression now shows that demo-style neighboring replacements
+  still stay outside historical reanchor and still collapse onto those same
+  unsafe isolated `89 / 8` and `88 / 8` profiles on the otherwise exact
+  suffix
 
 ## Keep Or Branch Decision
 

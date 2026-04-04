@@ -84,6 +84,14 @@ It lists only work that is still open.
     bar clearers and splitting winners with the exact reference terminal
     winning on `162 / 243` prefixes there, so the remaining open work is not
     any direct paired clause-`2` / clause-`3` reland either
+  - a new nearby clause-`2` / clause-`3` temporal-replacement regression now
+    narrows that same open step-`15` work further:
+    swapping the current claim-only clause-`2` or clause-`3` variants for
+    nearby demo-style temporal neighbors still leaves every exact-terminal-only
+    isolated recovery on the same unsafe `89 / 8` or `88 / 8` profile while
+    staying structurally connected, locally admissible, and outside
+    historical reanchor on the otherwise exact suffix, so the remaining open
+    work is not a simple clause-catalog swap either
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /
@@ -124,6 +132,14 @@ It lists only work that is still open.
   - clause positions `4` and `5` stay on canonical-primary `103 / 8`, so the
     remaining open work can stay later-clause-scoped before revisiting the
     earlier bridge slots
+- A simple nearby clause-`2` / clause-`3` temporal clause-catalog swap is now
+  also ruled out as the direct next step-`15` fix:
+  - nearby demo-style replacements still stay outside historical reanchor on
+    the otherwise exact suffix
+  - those replacements still collapse onto the same unsafe isolated
+    `89 / 8` and `88 / 8` recovery profiles, so the remaining open work is
+    narrower clause-local qualifier evidence rather than a neighboring
+    temporal-clause substitution
 - Claim-policy honesty, fallback honesty, narrative/event completeness,
   exact-screen reason completeness, prune-class completeness, and manifest
   completeness are already earned on the stored full-profile run.

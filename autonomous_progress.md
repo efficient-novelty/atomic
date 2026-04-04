@@ -366,6 +366,18 @@ gate.
     clause-`2` / clause-`3` matcher or paired reanchor reland and instead
     target narrower qualifier evidence on the canonical branch without
     reopening those stronger local rivals
+- A new nearby clause-`2` / clause-`3` temporal-replacement regression now
+  sharpens that same step-`15` blocker further:
+  - swapping the current claim-only clause-`2` variants for nearby demo-style
+    temporal neighbors still leaves every exact-terminal-only isolated recovery
+    on the same unsafe `89 / 8` profile
+  - swapping the current claim-only clause-`3` variants for nearby demo-style
+    temporal neighbors still leaves every exact-terminal-only isolated recovery
+    on the same unsafe `88 / 8` profile
+  - those nearby replacements also stay structurally connected, locally
+    admissible, and outside historical reanchor on the otherwise exact suffix,
+    so a simple clause-catalog swap is not enough to repair the missing
+    clause-local qualifier evidence
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
@@ -794,10 +806,13 @@ gate.
     remaining pairing still recovers only through stronger-than-canonical
     exact-terminal profiles (`74 / 8`, `75 / 8`, `88 / 8`, `89 / 8`, or
     `60 / 8`) even when forced reanchor sometimes restores the reference
-    terminal locally on mixed pair surfaces, so the next repair should focus
-    on clause-local temporal qualifier evidence at positions `2..3` while
-    keeping both isolated and paired clause-`2` / clause-`3` recovery fenced
-    and preserving the exact reference terminal continuation
+    terminal locally on mixed pair surfaces, and the new nearby clause-`2` /
+    clause-`3` temporal-replacement regression now shows that simple
+    demo-style clause swaps still collapse onto the same unsafe isolated
+    `89 / 8` and `88 / 8` profiles, so the next repair should focus on
+    clause-local temporal qualifier evidence at positions `2..3` while
+    keeping isolated recovery, paired recovery, and nearby clause-catalog
+    swaps fenced and preserving the exact reference terminal continuation
   - avoiding a direct temporal-reanchor matcher reland first:
     both the broad `60 / 8 / 9840` branch and the narrower `89 / 8 / 780`
     branch disturbed the canonical step-`15` continuation and were reverted
@@ -901,11 +916,15 @@ gate.
     still recovers only through stronger-than-canonical exact-terminal
     profiles (`74 / 8`, `75 / 8`, `88 / 8`, `89 / 8`, or `60 / 8`) even when
     mixed pair surfaces sometimes restore the reference terminal under forced
-    reanchor, so do not treat that remaining loss as generic bar bookkeeping, raw
-    dependency-edge generation, a claim admissibility miss, a terminal-clause-
-    only matcher bug, a multi-deviation-only interaction, a later-suffix
-    interaction, a direct early clause-`2` / clause-`3` bridge-matcher
-    expansion, or a direct paired clause-`2` / clause-`3` matcher reland.
+    reanchor, and the new nearby clause-`2` / clause-`3` temporal-replacement
+    regression now proves simple demo-style clause swaps still collapse onto
+    those same unsafe isolated profiles, so do not treat that remaining loss
+    as generic bar bookkeeping, raw dependency-edge generation, a claim
+    admissibility miss, a terminal-clause-only matcher bug, a multi-
+    deviation-only interaction, a later-suffix interaction, a direct early
+    clause-`2` / clause-`3` bridge-matcher expansion, a direct paired
+    clause-`2` / clause-`3` matcher reland, or a simple nearby clause-catalog
+    swap.
 16. Do not reland either exploratory temporal-reanchor matcher variant
     directly:
     the broad reland displaced the canonical step-`15` continuation to

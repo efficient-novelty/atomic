@@ -13041,6 +13041,211 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_nearby_clause_two_three_temporal_replacements_still_collapse_to_same_unsafe_isolated_profiles()
+    {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let candidate_sets = [
+            (
+                2_usize,
+                vec![
+                    (
+                        "claim_flat_domain",
+                        ClauseRec::new(
+                            ClauseRole::Formation,
+                            Expr::Pi(
+                                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                            ),
+                        ),
+                    ),
+                    (
+                        "claim_sharp_codomain",
+                        ClauseRec::new(
+                            ClauseRole::Formation,
+                            Expr::Pi(
+                                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                                    Expr::Var(1),
+                                ))))),
+                            ),
+                        ),
+                    ),
+                    (
+                        "demo_sharp_domain",
+                        ClauseRec::new(
+                            ClauseRole::Formation,
+                            Expr::Pi(
+                                Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+                                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                            ),
+                        ),
+                    ),
+                    (
+                        "demo_flat_codomain",
+                        ClauseRec::new(
+                            ClauseRole::Formation,
+                            Expr::Pi(
+                                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                                Box::new(Expr::Eventually(Box::new(Expr::Flat(Box::new(
+                                    Expr::Var(1),
+                                ))))),
+                            ),
+                        ),
+                    ),
+                ],
+            ),
+            (
+                3_usize,
+                vec![
+                    (
+                        "claim_flat_arg",
+                        ClauseRec::new(
+                            ClauseRole::Introduction,
+                            Expr::Lam(Box::new(Expr::App(
+                                Box::new(Expr::Lib(anchor)),
+                                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                            ))),
+                        ),
+                    ),
+                    (
+                        "claim_eventual_arg",
+                        ClauseRec::new(
+                            ClauseRole::Introduction,
+                            Expr::Lam(Box::new(Expr::App(
+                                Box::new(Expr::Lib(anchor)),
+                                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(
+                                    Expr::Var(1),
+                                ))))),
+                            ))),
+                        ),
+                    ),
+                    (
+                        "demo_sharp_arg",
+                        ClauseRec::new(
+                            ClauseRole::Introduction,
+                            Expr::Lam(Box::new(Expr::App(
+                                Box::new(Expr::Lib(anchor)),
+                                Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+                            ))),
+                        ),
+                    ),
+                    (
+                        "demo_next_arg",
+                        ClauseRec::new(
+                            ClauseRole::Introduction,
+                            Expr::Lam(Box::new(Expr::App(
+                                Box::new(Expr::Lib(anchor)),
+                                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                            ))),
+                        ),
+                    ),
+                ],
+            ),
+        ];
+        let canonical_bit_kappa = u16::try_from(pen_core::encode::telescope_bit_cost(
+            &Telescope::reference(15),
+        ))
+        .expect("bit cost exceeded u16");
+        let canonical_rank = super::acceptance_rank_for_telescope(
+            surface.objective_bar,
+            &Telescope::reference(15),
+            103,
+            canonical_bit_kappa,
+            8,
+        )
+        .expect("reference step-15 telescope should clear the bar");
+        let mut stronger_counts = BTreeMap::new();
+        let mut observed_profiles = BTreeMap::new();
+
+        for (position, candidates) in candidate_sets {
+            for (label, clause) in candidates {
+                let mut telescope = reference_prefix.clone();
+                telescope.clauses[position] = clause;
+                telescope.clauses.push(reference_terminal.clone());
+                let witness = analyze_connectivity(&surface.library, &telescope);
+                let admissibility = assess_strict_admissibility(
+                    surface.step_index,
+                    &surface.library,
+                    &telescope,
+                    surface.admissibility,
+                );
+                let nu = u16::try_from(
+                    structural_nu(&telescope, &surface.library, &surface.nu_history).total,
+                )
+                .expect("nu exceeded u16");
+                let bit_kappa_used =
+                    u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                        .expect("bit cost exceeded u16");
+                let clause_kappa_used =
+                    u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                let rank = super::acceptance_rank_for_telescope(
+                    surface.objective_bar,
+                    &telescope,
+                    nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
+                )
+                .expect("nearby clause replacement should still clear the bar");
+                assert!(
+                    witness.connected,
+                    "nearby clause-{position} temporal replacement {label} should still stay structurally connected on the exact suffix"
+                );
+                assert!(
+                    !witness.historical_reanchor,
+                    "nearby clause-{position} temporal replacement {label} should stay outside historical reanchor, so a simple clause-catalog swap is not enough to repair the local qualifier evidence"
+                );
+                assert!(
+                    admissibility.is_admitted(),
+                    "nearby clause-{position} temporal replacement {label} should still be locally admissible on the exact suffix"
+                );
+                assert!(
+                    rank < canonical_rank,
+                    "nearby clause-{position} temporal replacement {label} should still outrank the canonical step-15 profile under exact-terminal-only local recovery"
+                );
+                *stronger_counts.entry(position).or_insert(0usize) += 1;
+                observed_profiles
+                    .entry(position)
+                    .or_insert_with(BTreeSet::new)
+                    .insert((nu, rank.overshoot.clone()));
+            }
+        }
+
+        assert_eq!(
+            stronger_counts,
+            [(2_usize, 4_usize), (3, 4)].into_iter().collect(),
+            "all nearby clause-2 and clause-3 temporal replacements should still remain stronger-than-canonical under exact-terminal-only isolated recovery"
+        );
+        assert_eq!(
+            observed_profiles,
+            [
+                (
+                    2_usize,
+                    [(89_u16, Rational::new(78711, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    3,
+                    [(88_u16, Rational::new(9509, 2639))].into_iter().collect()
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "nearby clause-2 and clause-3 temporal replacements should still collapse onto the same unsafe isolated recovery profiles as the current claim variants"
+        );
+    }
+
+    #[test]
     fn step_thirteen_divergence_reopens_operator_bundle_claim_debt_before_the_admitted_step_fourteen_failure_family()
      {
         let reference_prefix = claim_long_rerun_v3_hybrid_prefix(None);
