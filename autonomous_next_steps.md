@@ -334,6 +334,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
     unsafe `74 / 8` profile
   - broadening that local replacement neighborhood therefore still does not
     supply safe qualifier evidence on the canonical branch
+- A new mixed clause-`2` / clause-`3` reference-terminal context regression
+  now sharpens that same late blocker further:
+  - every mixed claim-only clause-`2` / clause-`3` surface that restores the
+    exact reference terminal under forced reanchor still does so only when
+    clause `6` also deviates
+  - those unsafe `60 / 8` reference-terminal wins already span every
+    repaired-side subset of clause positions `0`, `1`, `4`, and `5` on top
+    of that clause-`6` deviation, including the minimal clause-`6`-only
+    context
+  - the next repair should therefore stay off any clause-`6`-mediated reland
+    too and keep targeting narrower clause-`2` / clause-`3` qualifier
+    evidence on the canonical branch itself
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -647,6 +659,14 @@ This note is the exact next work order for `desktop_claim_shadow`.
     unsafe `60 / 8` profile and still all outrank the canonical
     `DCT 103 / 8` continuation, so both isolated and paired clause-`2` /
     clause-`3` direct recovery remain fenced.
+    Keep the new mixed clause-`2` / clause-`3` reference-terminal context
+    regression green too: every mixed claim-only clause-`2` / clause-`3`
+    surface that restores the exact reference terminal under forced reanchor
+    should still require a claim-only clause-`6` deviation and should
+    already span every repaired-side subset of positions `0`, `1`, `4`, and
+    `5` on top of that clause-`6` deviation, so no safe reference-terminal
+    pocket is hiding behind repaired-side exactness or a clause-`6`-mediated
+    reland.
     Keep the new nearby clause-`2` / clause-`3` temporal-replacement
     regression green too: swapping the current claim-only variants for nearby
     demo-style temporal neighbors should still stay outside historical

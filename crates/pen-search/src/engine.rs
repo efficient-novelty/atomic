@@ -13249,6 +13249,188 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_mixed_clause_two_three_reference_terminal_wins_require_clause_six_deviation()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let clause_two_variants = [
+            reference_prefix.clauses[2].clone(),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                    Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                ),
+            ),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                        Expr::Var(1),
+                    ))))),
+                ),
+            ),
+        ];
+        let clause_three_variants = [
+            reference_prefix.clauses[3].clone(),
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor)),
+                    Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                ))),
+            ),
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor)),
+                    Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                        1,
+                    )))))),
+                ))),
+            ),
+        ];
+        let repaired_side_positions = [
+            (0_usize, 1_u8),
+            (1, 1 << 1),
+            (4, 1 << 2),
+            (5, 1 << 3),
+            (6, 1 << 4),
+        ];
+        let mut context_counts = BTreeMap::<(usize, usize, u8), usize>::new();
+
+        for work_item in &surface.pruned_terminal_prefixes {
+            let clause_two_index = clause_two_variants
+                .iter()
+                .position(|clause| *clause == work_item.prefix_telescope.clauses[2])
+                .expect("unexpected clause-2 variant on captured step-15 surface");
+            let clause_three_index = clause_three_variants
+                .iter()
+                .position(|clause| *clause == work_item.prefix_telescope.clauses[3])
+                .expect("unexpected clause-3 variant on captured step-15 surface");
+            if clause_two_index == 0 || clause_three_index == 0 {
+                continue;
+            }
+
+            let connectivity_summary =
+                ConnectivitySummary::from_telescope(&surface.library, &work_item.prefix_telescope);
+            let mut forced_ranks = Vec::new();
+            for clause in work_item.next_clauses(&surface.clause_catalog) {
+                let decision =
+                    connectivity_summary.terminal_decision(&surface.library, clause, true);
+                if !matches!(decision, ConnectivityTerminalDecision::KeepWithoutFallback) {
+                    continue;
+                }
+
+                let mut telescope = work_item.prefix_telescope.clone();
+                telescope.clauses.push(clause.clone());
+                let admissibility_decision = assess_strict_admissibility(
+                    surface.step_index,
+                    &surface.library,
+                    &telescope,
+                    surface.admissibility,
+                );
+                if !admissibility_decision.is_admitted() {
+                    continue;
+                }
+
+                let exact_nu = u16::try_from(
+                    structural_nu(&telescope, &surface.library, &surface.nu_history).total,
+                )
+                .expect("nu exceeded u16");
+                let bit_kappa_used =
+                    u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                        .expect("bit cost exceeded u16");
+                let clause_kappa_used =
+                    u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                let Some(accept_rank) = super::acceptance_rank_for_telescope(
+                    surface.objective_bar,
+                    &telescope,
+                    exact_nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
+                ) else {
+                    continue;
+                };
+                forced_ranks.push((clause.clone(), accept_rank));
+            }
+
+            let Some((best_clause, _)) = forced_ranks
+                .iter()
+                .min_by(|left, right| left.1.cmp(&right.1))
+            else {
+                continue;
+            };
+            if *best_clause != reference_terminal {
+                assert!(
+                    *best_clause == next_lift_terminal || *best_clause == eventual_lift_terminal,
+                    "unexpected forced winner clause: {:?}",
+                    best_clause.expr
+                );
+                continue;
+            }
+
+            let mut side_deviation_mask = 0u8;
+            for (position, bit) in repaired_side_positions {
+                if work_item.prefix_telescope.clauses[position]
+                    != reference_prefix.clauses[position]
+                {
+                    side_deviation_mask |= bit;
+                }
+            }
+            *context_counts
+                .entry((clause_two_index, clause_three_index, side_deviation_mask))
+                .or_insert(0usize) += 1;
+        }
+
+        let expected_context_counts = [(1_usize, 1_usize), (1, 2), (2, 1), (2, 2)]
+            .into_iter()
+            .flat_map(|key| {
+                (0u8..16).map(move |optional_mask| {
+                    let mask = optional_mask | (1 << 4);
+                    let deviation_count = mask.count_ones() as usize;
+                    ((key.0, key.1, mask), 1usize << deviation_count)
+                })
+            })
+            .collect::<BTreeMap<_, _>>();
+
+        assert_eq!(
+            context_counts, expected_context_counts,
+            "mixed clause-2/clause-3 surfaces should only restore the reference terminal under forced reanchor when clause 6 also deviates, and those unsafe reference-terminal wins should already span every repaired-side subset of positions 0, 1, 4, and 5 on top of that clause-6 deviation"
+        );
+    }
+
+    #[test]
     fn current_claim_step_fifteen_nearby_clause_two_three_temporal_replacements_still_collapse_to_same_unsafe_isolated_profiles()
      {
         let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
@@ -13506,9 +13688,9 @@ mod tests {
                     ClauseRole::Formation,
                     Expr::Pi(
                         Box::new(Expr::Next(Box::new(Expr::Var(1)))),
-                        Box::new(Expr::Eventually(Box::new(Expr::Flat(Box::new(
-                            Expr::Var(1),
-                        ))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(
+                            1,
+                        )))))),
                     ),
                 ),
             ),
@@ -13530,9 +13712,9 @@ mod tests {
                     ClauseRole::Introduction,
                     Expr::Lam(Box::new(Expr::App(
                         Box::new(Expr::Lib(anchor)),
-                        Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(
-                            Expr::Var(1),
-                        ))))),
+                        Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                            1,
+                        )))))),
                     ))),
                 ),
             ),

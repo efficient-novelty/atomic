@@ -104,6 +104,15 @@ It lists only work that is still open.
     recovery now collapses onto the same unsafe `74 / 8` profile, so the
     remaining open work is not a broader local replacement-neighborhood reland
     either
+  - a new mixed clause-`2` / clause-`3` reference-terminal context regression
+    now narrows that same open step-`15` work further:
+    every mixed claim-only clause-`2` / clause-`3` surface that restores the
+    exact reference terminal under forced reanchor still does so only when
+    clause `6` also deviates, and those unsafe `60 / 8` reference-terminal
+    wins already span every repaired-side subset of clause positions `0`,
+    `1`, `4`, and `5` on top of that clause-`6` deviation, including the
+    minimal clause-`6`-only context, so the remaining open work is not hiding
+    behind repaired-side exactness or a clause-`6`-mediated reland either
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /

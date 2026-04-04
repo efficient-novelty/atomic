@@ -394,6 +394,15 @@ gate.
     unsafe `74 / 8` profile
   - broadening that local replacement neighborhood therefore still does not
     supply safe qualifier evidence on the canonical branch
+  - a new mixed clause-`2` / clause-`3` reference-terminal context regression
+    now narrows that same step-`15` blocker further:
+    every mixed claim-only clause-`2` / clause-`3` surface that restores the
+    exact reference terminal under forced reanchor still does so only when
+    clause `6` also deviates, and those unsafe `60 / 8` reference-terminal
+    wins already span every repaired-side subset of clause positions `0`,
+    `1`, `4`, and `5` on top of that clause-`6` deviation, including the
+    minimal clause-`6`-only context, so the remaining open work is not hiding
+    behind repaired-side exactness or a clause-`6`-mediated reland either
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
@@ -937,7 +946,11 @@ gate.
     profiles (`74 / 8`, `75 / 8`, `88 / 8`, `89 / 8`, or `60 / 8`), the new
     mixed-pair reference-terminal winner regression now proves that even the
     forced-reanchor cases that do restore the exact reference terminal stay
-    pinned to the unsafe `60 / 8` profile, and the new nearby clause-`2` /
+    pinned to the unsafe `60 / 8` profile, the new mixed clause-`2` /
+    clause-`3` reference-terminal context regression now proves those unsafe
+    reference-terminal wins already require a clause-`6` deviation and already
+    span every repaired-side subset of positions `0`, `1`, `4`, and `5`, and
+    the new nearby clause-`2` /
     clause-`3` temporal-replacement regression now proves simple demo-style
     clause swaps still collapse onto those same unsafe isolated profiles,
     while the new nearby clause-`2` / clause-`3` pair-replacement regression
