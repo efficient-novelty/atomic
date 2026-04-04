@@ -13825,6 +13825,278 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_isolated_clause_two_three_contexts_still_expose_no_safe_reference_terminal_pocket()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let clause_two_variants = [
+            reference_prefix.clauses[2].clone(),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                    Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                ),
+            ),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                        Expr::Var(1),
+                    ))))),
+                ),
+            ),
+        ];
+        let clause_three_variants = [
+            reference_prefix.clauses[3].clone(),
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor)),
+                    Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                ))),
+            ),
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor)),
+                    Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                        1,
+                    )))))),
+                ))),
+            ),
+        ];
+
+        let repaired_side_positions = [(0usize, 1u8), (1, 1 << 1), (4, 1 << 2), (5, 1 << 3)];
+        let clause_six_bit = 1 << 4;
+        let mut context_masks = BTreeMap::<(usize, usize), BTreeSet<u8>>::new();
+        let mut reference_terminal_wins = BTreeMap::<(usize, usize), usize>::new();
+        let mut exact_terminal_profiles =
+            BTreeMap::<(usize, usize, bool), BTreeSet<(u16, Rational)>>::new();
+
+        for work_item in &surface.pruned_terminal_prefixes {
+            let clause_two_index = clause_two_variants
+                .iter()
+                .position(|clause| *clause == work_item.prefix_telescope.clauses[2])
+                .expect("unexpected clause-2 variant on captured step-15 surface");
+            let clause_three_index = clause_three_variants
+                .iter()
+                .position(|clause| *clause == work_item.prefix_telescope.clauses[3])
+                .expect("unexpected clause-3 variant on captured step-15 surface");
+            let isolated = (clause_two_index == 0) ^ (clause_three_index == 0);
+            if !isolated {
+                continue;
+            }
+
+            let mut mask = 0u8;
+            for (position, bit) in repaired_side_positions {
+                if work_item.prefix_telescope.clauses[position] != reference_prefix.clauses[position]
+                {
+                    mask |= bit;
+                }
+            }
+            if work_item.prefix_telescope.clauses[6] != reference_prefix.clauses[6] {
+                mask |= clause_six_bit;
+            }
+            let key = (clause_two_index, clause_three_index);
+            let clause_six_deviates = mask & clause_six_bit != 0;
+            context_masks.entry(key).or_default().insert(mask);
+
+            let mut recovered = work_item.prefix_telescope.clone();
+            recovered.clauses.push(reference_terminal.clone());
+            let admissibility_decision = assess_strict_admissibility(
+                surface.step_index,
+                &surface.library,
+                &recovered,
+                surface.admissibility,
+            );
+            if admissibility_decision.is_admitted() {
+                let exact_nu = u16::try_from(
+                    structural_nu(&recovered, &surface.library, &surface.nu_history).total,
+                )
+                .expect("nu exceeded u16");
+                let bit_kappa_used =
+                    u16::try_from(pen_core::encode::telescope_bit_cost(&recovered))
+                        .expect("bit cost exceeded u16");
+                let clause_kappa_used =
+                    u16::try_from(recovered.kappa()).expect("kappa exceeded u16");
+                let accept_rank = super::acceptance_rank_for_telescope(
+                    surface.objective_bar,
+                    &recovered,
+                    exact_nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
+                )
+                .expect("reference-terminal isolated recovery should clear the bar");
+                exact_terminal_profiles
+                    .entry((key.0, key.1, clause_six_deviates))
+                    .or_default()
+                    .insert((exact_nu, accept_rank.overshoot.clone()));
+            }
+
+            let connectivity_summary =
+                ConnectivitySummary::from_telescope(&surface.library, &work_item.prefix_telescope);
+            let mut forced_ranks = Vec::new();
+            for clause in work_item.next_clauses(&surface.clause_catalog) {
+                let decision =
+                    connectivity_summary.terminal_decision(&surface.library, clause, true);
+                if !matches!(decision, ConnectivityTerminalDecision::KeepWithoutFallback) {
+                    continue;
+                }
+
+                let mut telescope = work_item.prefix_telescope.clone();
+                telescope.clauses.push(clause.clone());
+                let admissibility_decision = assess_strict_admissibility(
+                    surface.step_index,
+                    &surface.library,
+                    &telescope,
+                    surface.admissibility,
+                );
+                if !admissibility_decision.is_admitted() {
+                    continue;
+                }
+
+                let exact_nu = u16::try_from(
+                    structural_nu(&telescope, &surface.library, &surface.nu_history).total,
+                )
+                .expect("nu exceeded u16");
+                let bit_kappa_used =
+                    u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                        .expect("bit cost exceeded u16");
+                let clause_kappa_used =
+                    u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                let Some(accept_rank) = super::acceptance_rank_for_telescope(
+                    surface.objective_bar,
+                    &telescope,
+                    exact_nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
+                ) else {
+                    continue;
+                };
+                forced_ranks.push((clause.clone(), accept_rank));
+            }
+
+            if let Some((best_clause, _)) = forced_ranks
+                .iter()
+                .min_by(|left, right| left.1.cmp(&right.1))
+            {
+                if *best_clause == reference_terminal {
+                    *reference_terminal_wins.entry(key).or_insert(0usize) += 1;
+                } else {
+                    assert!(
+                        *best_clause == next_lift_terminal
+                            || *best_clause == eventual_lift_terminal,
+                        "unexpected forced winner clause: {:?}",
+                        best_clause.expr
+                    );
+                }
+            }
+        }
+
+        let full_context_masks = (0u8..32).collect::<BTreeSet<_>>();
+        assert_eq!(
+            context_masks,
+            [
+                ((0_usize, 1_usize), full_context_masks.clone()),
+                ((0, 2), full_context_masks.clone()),
+                ((1, 0), full_context_masks.clone()),
+                ((2, 0), full_context_masks),
+            ]
+            .into_iter()
+            .collect(),
+            "every remaining isolated clause-2 or clause-3 claim-only surface should already span every repaired-side subset plus both exact and claim-only clause-6 contexts on the captured step-15 surface"
+        );
+        assert_eq!(
+            reference_terminal_wins,
+            BTreeMap::new(),
+            "forced clause-local reanchor should still never restore the exact reference terminal on any isolated clause-2 or clause-3 context, so no safe isolated pocket is hiding behind repaired-side exactness or clause-6 deviation"
+        );
+        assert_eq!(
+            exact_terminal_profiles,
+            [
+                (
+                    (0_usize, 1_usize, false),
+                    [(88_u16, Rational::new(9509, 2639))].into_iter().collect()
+                ),
+                (
+                    (0, 1, true),
+                    [(74_u16, Rational::new(19563, 10556))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    (0, 2, false),
+                    [(88_u16, Rational::new(9509, 2639))].into_iter().collect()
+                ),
+                (
+                    (0, 2, true),
+                    [(74_u16, Rational::new(19563, 10556))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    (1, 0, false),
+                    [(89_u16, Rational::new(78711, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    (1, 0, true),
+                    [(75_u16, Rational::new(41765, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    (2, 0, false),
+                    [(89_u16, Rational::new(78711, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    (2, 0, true),
+                    [(75_u16, Rational::new(41765, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "exact-terminal-only isolated recovery should still collapse clause-3 claim-only contexts onto unsafe 88/8 or 74/8 profiles and clause-2 claim-only contexts onto unsafe 89/8 or 75/8 profiles depending only on whether clause 6 also deviates"
+        );
+    }
+
+    #[test]
     fn step_thirteen_divergence_reopens_operator_bundle_claim_debt_before_the_admitted_step_fourteen_failure_family()
      {
         let reference_prefix = claim_long_rerun_v3_hybrid_prefix(None);

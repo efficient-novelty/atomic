@@ -403,6 +403,18 @@ gate.
     `1`, `4`, and `5` on top of that clause-`6` deviation, including the
     minimal clause-`6`-only context, so the remaining open work is not hiding
     behind repaired-side exactness or a clause-`6`-mediated reland either
+- A new isolated clause-`2` / clause-`3` context regression now narrows that
+  same step-`15` blocker further:
+  every remaining isolated clause-`2` or clause-`3` claim-only surface now
+  already spans all `32` repaired-side / clause-`6` context masks on the
+  captured step-`15` surface, yet forced clause-local reanchor still never
+  restores the exact reference terminal anywhere on that isolated context set;
+  exact-terminal-only isolated recovery also still collapses only onto unsafe
+  clause-`3` profiles `88 / 8` with exact clause `6` and `74 / 8` with
+  claim-only clause `6`, plus unsafe clause-`2` profiles `89 / 8` with exact
+  clause `6` and `75 / 8` with claim-only clause `6`, so no safe isolated
+  clause-`2` / clause-`3` pocket is hiding behind repaired-side exactness or
+  clause-`6` context either
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.

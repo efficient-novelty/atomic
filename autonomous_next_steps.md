@@ -346,6 +346,23 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next repair should therefore stay off any clause-`6`-mediated reland
     too and keep targeting narrower clause-`2` / clause-`3` qualifier
     evidence on the canonical branch itself
+- A new isolated clause-`2` / clause-`3` context regression now sharpens that
+  same late blocker further:
+  - every remaining isolated clause-`2` or clause-`3` claim-only surface now
+    already spans all `32` repaired-side / clause-`6` context masks on the
+    captured step-`15` surface
+  - forced clause-local reanchor still never restores the exact reference
+    terminal anywhere on that isolated context set
+  - exact-terminal-only isolated recovery now also sharpens that same read:
+    clause-`3` claim-only contexts still collapse only onto unsafe `88 / 8`
+    profiles with exact clause `6` and unsafe `74 / 8` profiles with
+    claim-only clause `6`, while clause-`2` claim-only contexts still
+    collapse only onto unsafe `89 / 8` and `75 / 8` profiles across that same
+    clause-`6` split
+  - the next repair should therefore stay off isolated clause-`2` /
+    clause-`3` relands even behind repaired-side exactness or clause-`6`
+    context and keep targeting narrower qualifier evidence on the canonical
+    branch itself
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -667,6 +684,14 @@ This note is the exact next work order for `desktop_claim_shadow`.
     `5` on top of that clause-`6` deviation, so no safe reference-terminal
     pocket is hiding behind repaired-side exactness or a clause-`6`-mediated
     reland.
+    Keep the new isolated clause-`2` / clause-`3` context regression green
+    too: every remaining isolated claim-only clause-`2` / clause-`3` surface
+    should still span all `32` repaired-side / clause-`6` context masks while
+    forced clause-local reanchor still never restores the exact reference
+    terminal there, and exact-terminal-only isolated recovery should still
+    collapse clause-`3` contexts only onto unsafe `88 / 8` or `74 / 8`
+    profiles plus clause-`2` contexts only onto unsafe `89 / 8` or `75 / 8`
+    profiles depending on whether clause `6` also deviates.
     Keep the new nearby clause-`2` / clause-`3` temporal-replacement
     regression green too: swapping the current claim-only variants for nearby
     demo-style temporal neighbors should still stay outside historical

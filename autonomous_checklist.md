@@ -113,6 +113,18 @@ It lists only work that is still open.
     `1`, `4`, and `5` on top of that clause-`6` deviation, including the
     minimal clause-`6`-only context, so the remaining open work is not hiding
     behind repaired-side exactness or a clause-`6`-mediated reland either
+  - a new isolated clause-`2` / clause-`3` context regression now narrows
+    that same open step-`15` work further:
+    every remaining isolated clause-`2` or clause-`3` claim-only surface now
+    already spans all `32` repaired-side / clause-`6` context masks on the
+    captured step-`15` surface, yet forced clause-local reanchor still never
+    restores the exact reference terminal anywhere on that isolated context
+    set, and exact-terminal-only isolated recovery still collapses clause-`3`
+    contexts only onto unsafe `88 / 8` or `74 / 8` profiles plus clause-`2`
+    contexts only onto unsafe `89 / 8` or `75 / 8` profiles depending on
+    whether clause `6` also deviates, so the remaining open work is not
+    hiding behind repaired-side exactness or isolated clause-`6` context
+    either
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /
