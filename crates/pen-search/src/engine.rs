@@ -9509,7 +9509,7 @@ mod tests {
         obligations::{RetentionClass, RetentionFocus, RetentionPolicy, summarize_structural_debt},
     };
     use std::cmp::Reverse;
-    use std::collections::BTreeMap;
+    use std::collections::{BTreeMap, BTreeSet};
     use std::sync::Arc;
     use std::time::Duration;
 
@@ -12422,6 +12422,184 @@ mod tests {
             .into_iter()
             .collect(),
             "every isolated early claim-only temporal-shell deviation should become a fully admitted, bar-clearing local surface if the missing clause-local reanchor evidence were restored"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_forced_reanchor_on_isolated_temporal_variants_still_chooses_noncanonical_terminal_winners()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let mut forced_winner_counts = BTreeMap::new();
+        let mut forced_rank_profiles = BTreeMap::new();
+        let mut reference_terminal_wins = 0usize;
+        let mut next_lift_terminal_wins = 0usize;
+        let mut eventual_lift_terminal_wins = 0usize;
+
+        for position in 0..6 {
+            for work_item in surface.pruned_terminal_prefixes.iter().filter(|work_item| {
+                let clauses = &work_item.prefix_telescope.clauses;
+                clauses[..position] == reference_prefix.clauses[..position]
+                    && clauses[position] != reference_prefix.clauses[position]
+                    && clauses[position + 1..] == reference_prefix.clauses[position + 1..]
+            }) {
+                let connectivity_summary = ConnectivitySummary::from_telescope(
+                    &surface.library,
+                    &work_item.prefix_telescope,
+                );
+                let mut forced_ranks = Vec::new();
+                for clause in work_item.next_clauses(&surface.clause_catalog) {
+                    let decision =
+                        connectivity_summary.terminal_decision(&surface.library, clause, true);
+                    if !matches!(decision, ConnectivityTerminalDecision::KeepWithoutFallback) {
+                        continue;
+                    }
+
+                    let mut telescope = work_item.prefix_telescope.clone();
+                    telescope.clauses.push(clause.clone());
+                    let admissibility_decision = assess_strict_admissibility(
+                        surface.step_index,
+                        &surface.library,
+                        &telescope,
+                        surface.admissibility,
+                    );
+                    if !admissibility_decision.is_admitted() {
+                        continue;
+                    }
+
+                    let exact_nu = u16::try_from(
+                        structural_nu(&telescope, &surface.library, &surface.nu_history).total,
+                    )
+                    .expect("nu exceeded u16");
+                    let bit_kappa_used =
+                        u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                            .expect("bit cost exceeded u16");
+                    let clause_kappa_used =
+                        u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                    let accept_rank = super::acceptance_rank_for_telescope(
+                        surface.objective_bar,
+                        &telescope,
+                        exact_nu,
+                        bit_kappa_used,
+                        clause_kappa_used,
+                    )
+                    .expect("forced-reanchor completion should clear the bar");
+                    forced_ranks.push((clause.clone(), accept_rank, telescope));
+                }
+                forced_ranks.sort_by(|left, right| left.1.cmp(&right.1));
+                let (best_clause, best_rank, _) = forced_ranks
+                    .first()
+                    .expect("forced-reanchor isolated prefix should still admit terminal winners");
+                let position_counts = forced_winner_counts
+                    .entry(position)
+                    .or_insert((0usize, 0usize, 0usize));
+                if *best_clause == reference_terminal {
+                    reference_terminal_wins += 1;
+                    position_counts.0 += 1;
+                } else if *best_clause == next_lift_terminal {
+                    next_lift_terminal_wins += 1;
+                    position_counts.1 += 1;
+                } else if *best_clause == eventual_lift_terminal {
+                    eventual_lift_terminal_wins += 1;
+                    position_counts.2 += 1;
+                } else {
+                    panic!(
+                        "unexpected forced-reanchor winner at position {position}: {:?}",
+                        best_clause.expr
+                    );
+                }
+                forced_rank_profiles
+                    .entry(position)
+                    .or_insert_with(BTreeSet::new)
+                    .insert((best_rank.descending_nu.0, best_rank.overshoot.clone()));
+            }
+        }
+
+        assert_eq!(reference_terminal_wins, 0);
+        assert_eq!(next_lift_terminal_wins, 6);
+        assert_eq!(eventual_lift_terminal_wins, 6);
+        assert_eq!(
+            forced_winner_counts,
+            [
+                (0_usize, (0_usize, 0_usize, 2_usize)),
+                (1, (0, 2, 0)),
+                (2, (0, 1, 1)),
+                (3, (0, 2, 0)),
+                (4, (0, 0, 2)),
+                (5, (0, 1, 1)),
+            ]
+            .into_iter()
+            .collect(),
+            "forced clause-local reanchor on the otherwise exact suffix should still split isolated early claim-only temporal deviations between the two non-reference terminal closures instead of restoring the canonical terminal clause"
+        );
+        assert_eq!(
+            forced_rank_profiles,
+            [
+                (
+                    0_usize,
+                    [(89_u16, Rational::new(78711, 21112))]
+                        .into_iter()
+                        .collect(),
+                ),
+                (
+                    1,
+                    [(89_u16, Rational::new(78711, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    2,
+                    [(75_u16, Rational::new(41765, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    3,
+                    [(74_u16, Rational::new(19563, 10556))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    4,
+                    [(89_u16, Rational::new(78711, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    5,
+                    [(89_u16, Rational::new(78711, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "each isolated early temporal-shell position should still collapse onto a position-local noncanonical winner profile under forced clause-local reanchor"
         );
     }
 

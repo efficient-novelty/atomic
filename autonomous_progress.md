@@ -236,6 +236,20 @@ gate.
   - the remaining step-`15` repair is therefore a pure clause-local qualifier /
     reanchor evidence miss at positions `0..5` themselves, not downstream
     admissibility or bar arithmetic once the suffix is fixed
+- A new follow-up step-`15` forced-reanchor winner regression now sharpens
+  that same blocker one layer further:
+  - on that same otherwise exact suffix, forcing clause-local reanchor on each
+    isolated early claim-only temporal-shell deviation still never restores the
+    canonical reference terminal clause
+  - those `12` local forced-recovery surfaces now split `6 / 6` between the
+    two non-reference claim terminal closures, with `0` reference-terminal
+    winners
+  - the position-local best-rank profiles are now fixed at `89 / 8` for
+    positions `0`, `1`, `4`, and `5`, `75 / 8` for position `2`, and
+    `74 / 8` for position `3`
+  - the next step-`15` repair therefore cannot be a simple historical-reanchor
+    bool flip on those local variants; it must restore clause-local qualifier
+    evidence while still preserving the canonical terminal continuation
 - A follow-up exploratory step-`15` temporal-reanchor broadening pass was also
   run locally but was not landed:
   - a broad temporal-shell matcher expansion collapsed the captured exact-prune
@@ -677,10 +691,15 @@ gate.
     forced-reanchor recovery regression now also proves each such isolated
     local variant would recover all `3` terminal continuations as
     `KeepWithoutFallback`, admitted, and bar-clearing on the otherwise exact
-    suffix, so the next repair should inspect clause-local earlier
-    temporal-shell qualifier evidence through clause `5` or earlier rather
-    than only the clause-`6` / terminal slot, downstream admissibility / bar
-    arithmetic, or a multi-early-deviation interaction
+    suffix, while the new forced-reanchor winner regression now also proves
+    that such a direct local reanchor flip still splits those isolated exact-
+    suffix recoveries between the two non-reference terminal closures and
+    never restores the canonical reference terminal clause, so the next repair
+    should inspect clause-local earlier temporal-shell qualifier evidence
+    through clause `5` or earlier while separately preserving the canonical
+    terminal continuation rather than only the clause-`6` / terminal slot,
+    downstream admissibility / bar arithmetic, or a multi-early-deviation
+    interaction
   - avoiding a direct temporal-reanchor matcher reland first:
     both the broad `60 / 8 / 9840` branch and the narrower `89 / 8 / 780`
     branch disturbed the canonical step-`15` continuation and were reverted
@@ -768,11 +787,15 @@ gate.
     clause-`6` boundary, while the new forced-reanchor recovery regression
     proves each isolated local variant would recover all `3` terminal
     continuations as `KeepWithoutFallback`, admitted, and bar-clearing on the
-    otherwise exact suffix, so do not treat that remaining loss as generic bar
-    bookkeeping, raw dependency-edge generation, a claim admissibility miss, a
-    terminal-clause-only matcher bug, a multi-deviation-only interaction, a
-    later-suffix interaction, or a direct early clause-`2` / clause-`3`
-    bridge-matcher expansion.
+    otherwise exact suffix, while the new forced-reanchor winner regression
+    now also proves that a direct local reanchor flip still routes those
+    isolated exact-suffix recoveries into noncanonical `89 / 8`, `75 / 8`,
+    and `74 / 8` terminal winners instead of the reference terminal clause, so
+    do not treat that remaining loss as generic bar bookkeeping, raw
+    dependency-edge generation, a claim admissibility miss, a terminal-clause-
+    only matcher bug, a multi-deviation-only interaction, a later-suffix
+    interaction, or a direct early clause-`2` / clause-`3` bridge-matcher
+    expansion.
 16. Do not reland either exploratory temporal-reanchor matcher variant
     directly:
     the broad reland displaced the canonical step-`15` continuation to

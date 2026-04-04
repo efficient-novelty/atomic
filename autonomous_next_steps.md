@@ -269,6 +269,20 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next repair should therefore stay on clause-local qualifier /
     reanchor evidence itself at positions `0..5` rather than reopening
     downstream admissibility or bar arithmetic on that exact suffix
+- A new follow-up step-`15` forced-reanchor winner regression now sharpens
+  that same blocker further:
+  - on that same otherwise exact suffix, forcing clause-local reanchor on each
+    isolated early claim-only temporal-shell deviation still never restores the
+    canonical reference terminal clause
+  - those `12` local forced-recovery surfaces now split `6 / 6` between the
+    two non-reference claim terminal closures, with `0` reference-terminal
+    winners
+  - the position-local best-rank profiles are now fixed at `89 / 8` for
+    positions `0`, `1`, `4`, and `5`, `75 / 8` for position `2`, and
+    `74 / 8` for position `3`
+  - the next step-`15` repair therefore cannot be a simple historical-reanchor
+    bool flip on those local variants; it must restore clause-local qualifier
+    evidence while still preserving the canonical terminal continuation
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -554,6 +568,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
     local variant should still recover all `3` terminal continuations as
     `KeepWithoutFallback`, admitted, and bar-clearing on the otherwise exact
     suffix once clause-local qualifier evidence is supplied.
+    Keep the new forced-reanchor winner regression green too: that same direct
+    local reanchor flip should still never restore the canonical reference
+    terminal clause and should instead split the `12` isolated exact-suffix
+    recoveries `6 / 6` between the two non-reference terminal closures with
+    the fixed position-local `89 / 8`, `75 / 8`, and `74 / 8` winner profiles.
 20. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
 21. Keep the stored certification / benchmark assertions green for the
@@ -610,6 +629,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
   the new reanchor-prefix regression now proves the captured exact-prune
   surface already falls off the temporal-shell prefix by clause `5` or earlier
   and never reaches a full seven-clause reanchor prefix
+- a simple historical-reanchor bool flip on the isolated early claim-only
+  temporal variants first:
+  the new forced-reanchor winner regression now shows that even on the
+  otherwise exact suffix such a direct reland still never restores the
+  canonical reference terminal clause and instead splits into the two
+  non-reference terminal closures
 - a direct early clause-`2` / clause-`3` reanchor-bridge matcher reland
   first:
   the clause-`3`-only branch already displaced the canonical step-`15`

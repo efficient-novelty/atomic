@@ -63,11 +63,15 @@ It lists only work that is still open.
     the new forced-reanchor recovery regression now further proves that on the
     otherwise exact suffix each such isolated local variant would recover all
     `3` terminal continuations as `KeepWithoutFallback`, admitted, and
-    bar-clearing if clause-local reanchor evidence were restored, so the open
-    step-`15` work is pure earlier clause-local qualifier evidence on the
-    canonical branch through clause `5` or earlier, not the clause-`6` /
-    terminal slot, a multi-deviation interaction, or a later-suffix
-    interaction
+    bar-clearing if clause-local reanchor evidence were restored; the new
+    forced-reanchor winner regression now also proves that such a direct local
+    reanchor flip still never restores the canonical reference terminal clause
+    and instead splits those isolated exact-suffix recoveries between the two
+    non-reference terminal closures, so the open step-`15` work is pure
+    earlier clause-local qualifier evidence on the canonical branch through
+    clause `5` or earlier while preserving the canonical terminal
+    continuation, not the clause-`6` / terminal slot, a multi-deviation
+    interaction, or a later-suffix interaction
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /
