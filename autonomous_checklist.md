@@ -95,6 +95,15 @@ It lists only work that is still open.
     staying structurally connected, locally admissible, and outside
     historical reanchor on the otherwise exact suffix, so the remaining open
     work is not a simple clause-catalog swap either
+  - a new nearby clause-`2` / clause-`3` pair-replacement regression now
+    narrows that same open step-`15` work further:
+    pairing any nearby claim-or-demo temporal replacement at clause positions
+    `2` and `3` on the otherwise exact suffix still leaves all `16`
+    non-reference pairs structurally connected, locally admissible, and
+    outside historical reanchor, and every such exact-terminal-only paired
+    recovery now collapses onto the same unsafe `74 / 8` profile, so the
+    remaining open work is not a broader local replacement-neighborhood reland
+    either
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /

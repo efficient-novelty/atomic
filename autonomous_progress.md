@@ -384,6 +384,16 @@ gate.
     admissible, and outside historical reanchor on the otherwise exact suffix,
     so a simple clause-catalog swap is not enough to repair the missing
     clause-local qualifier evidence
+- A new nearby clause-`2` / clause-`3` pair-replacement regression now
+  sharpens that same step-`15` blocker further:
+  - pairing any nearby claim-or-demo temporal replacement at clause positions
+    `2` and `3` on the otherwise exact suffix still leaves all `16`
+    non-reference pairs structurally connected, locally admissible, and
+    outside historical reanchor
+  - every such exact-terminal-only paired recovery now collapses onto the same
+    unsafe `74 / 8` profile
+  - broadening that local replacement neighborhood therefore still does not
+    supply safe qualifier evidence on the canonical branch
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
@@ -815,10 +825,14 @@ gate.
     terminal locally on mixed pair surfaces, and the new nearby clause-`2` /
     clause-`3` temporal-replacement regression now shows that simple
     demo-style clause swaps still collapse onto the same unsafe isolated
-    `89 / 8` and `88 / 8` profiles, so the next repair should focus on
-    clause-local temporal qualifier evidence at positions `2..3` while
-    keeping isolated recovery, paired recovery, and nearby clause-catalog
-    swaps fenced and preserving the exact reference terminal continuation
+    `89 / 8` and `88 / 8` profiles, and the new nearby clause-`2` /
+    clause-`3` pair-replacement regression now shows that broadening both
+    positions together across that same local neighborhood still collapses all
+    `16` exact-terminal-only paired recoveries onto one unsafe `74 / 8`
+    profile, so the next repair should focus on clause-local temporal
+    qualifier evidence at positions `2..3` while keeping isolated recovery,
+    paired recovery, and broader nearby clause-catalog relands fenced and
+    preserving the exact reference terminal continuation
   - avoiding a direct temporal-reanchor matcher reland first:
     both the broad `60 / 8 / 9840` branch and the narrower `89 / 8 / 780`
     branch disturbed the canonical step-`15` continuation and were reverted
@@ -925,8 +939,12 @@ gate.
     forced-reanchor cases that do restore the exact reference terminal stay
     pinned to the unsafe `60 / 8` profile, and the new nearby clause-`2` /
     clause-`3` temporal-replacement regression now proves simple demo-style
-    clause swaps still collapse onto those same unsafe isolated profiles, so
-    do not treat that remaining loss
+    clause swaps still collapse onto those same unsafe isolated profiles,
+    while the new nearby clause-`2` / clause-`3` pair-replacement regression
+    now proves that broadening both positions together across that same local
+    neighborhood still stays outside historical reanchor and still collapses
+    all `16` exact-terminal-only paired recoveries onto the same unsafe
+    `74 / 8` profile, so do not treat that remaining loss
     as generic bar bookkeeping, raw dependency-edge generation, a claim
     admissibility miss, a terminal-clause-only matcher bug, a multi-
     deviation-only interaction, a later-suffix interaction, a direct early

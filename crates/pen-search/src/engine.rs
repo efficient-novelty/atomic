@@ -13454,6 +13454,195 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_nearby_clause_two_three_pair_replacements_still_outrank_the_canonical_profile()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let clause_two_candidates = vec![
+            (
+                "claim_flat_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                    ),
+                ),
+            ),
+            (
+                "claim_sharp_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+            ),
+            (
+                "demo_sharp_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                    ),
+                ),
+            ),
+            (
+                "demo_flat_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Flat(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+            ),
+        ];
+        let clause_three_candidates = vec![
+            (
+                "claim_flat_arg",
+                ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor)),
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                    ))),
+                ),
+            ),
+            (
+                "claim_eventual_arg",
+                ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor)),
+                        Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ))),
+                ),
+            ),
+            (
+                "demo_sharp_arg",
+                ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor)),
+                        Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+                    ))),
+                ),
+            ),
+            (
+                "demo_next_arg",
+                ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor)),
+                        Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                    ))),
+                ),
+            ),
+        ];
+        let canonical_bit_kappa = u16::try_from(pen_core::encode::telescope_bit_cost(
+            &Telescope::reference(15),
+        ))
+        .expect("bit cost exceeded u16");
+        let canonical_rank = super::acceptance_rank_for_telescope(
+            surface.objective_bar,
+            &Telescope::reference(15),
+            103,
+            canonical_bit_kappa,
+            8,
+        )
+        .expect("reference step-15 telescope should clear the bar");
+        let mut observed_profiles = BTreeMap::new();
+
+        for (clause_two_label, clause_two) in &clause_two_candidates {
+            for (clause_three_label, clause_three) in &clause_three_candidates {
+                let mut telescope = reference_prefix.clone();
+                telescope.clauses[2] = clause_two.clone();
+                telescope.clauses[3] = clause_three.clone();
+                telescope.clauses.push(reference_terminal.clone());
+                let witness = analyze_connectivity(&surface.library, &telescope);
+                let admissibility = assess_strict_admissibility(
+                    surface.step_index,
+                    &surface.library,
+                    &telescope,
+                    surface.admissibility,
+                );
+                let nu = u16::try_from(
+                    structural_nu(&telescope, &surface.library, &surface.nu_history).total,
+                )
+                .expect("nu exceeded u16");
+                let bit_kappa_used =
+                    u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                        .expect("bit cost exceeded u16");
+                let clause_kappa_used =
+                    u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                let rank = super::acceptance_rank_for_telescope(
+                    surface.objective_bar,
+                    &telescope,
+                    nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
+                )
+                .expect("paired nearby clause replacements should still clear the bar");
+
+                assert!(
+                    witness.connected,
+                    "paired nearby clause-2/clause-3 replacements should stay structurally connected on the exact suffix"
+                );
+                assert!(
+                    !witness.historical_reanchor,
+                    "paired nearby clause-2/clause-3 replacements should stay outside historical reanchor, so the local qualifier gap is still open"
+                );
+                assert!(
+                    admissibility.is_admitted(),
+                    "paired nearby clause-2/clause-3 replacements should still be locally admissible on the exact suffix"
+                );
+                assert!(
+                    rank < canonical_rank,
+                    "paired nearby clause-2/clause-3 replacements should still outrank the canonical step-15 profile under exact-terminal-only recovery"
+                );
+                observed_profiles.insert(
+                    (*clause_two_label, *clause_three_label),
+                    (nu, rank.overshoot.clone()),
+                );
+            }
+        }
+
+        assert_eq!(
+            observed_profiles.len(),
+            clause_two_candidates.len() * clause_three_candidates.len(),
+            "every paired nearby clause-2/clause-3 replacement should still stay on the exact suffix surface"
+        );
+        assert_eq!(
+            observed_profiles
+                .values()
+                .cloned()
+                .collect::<BTreeSet<(u16, Rational)>>(),
+            [(74_u16, Rational::new(19563, 10556))]
+                .into_iter()
+                .collect(),
+            "paired nearby clause-2/clause-3 replacements should still collapse onto the same unsafe 74/8 exact-terminal profile, so broadening the local replacement neighborhood is not yet a safe repair"
+        );
+    }
+
+    #[test]
     fn step_thirteen_divergence_reopens_operator_bundle_claim_debt_before_the_admitted_step_fourteen_failure_family()
      {
         let reference_prefix = claim_long_rerun_v3_hybrid_prefix(None);

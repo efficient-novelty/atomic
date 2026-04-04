@@ -324,6 +324,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
     admissible, and outside historical reanchor on the otherwise exact suffix,
     so a simple clause-catalog swap is not enough to repair the missing
     clause-local qualifier evidence
+- A new nearby clause-`2` / clause-`3` pair-replacement regression now
+  sharpens that same late blocker further:
+  - pairing any nearby claim-or-demo temporal replacement at clause positions
+    `2` and `3` on the otherwise exact suffix still leaves all `16`
+    non-reference pairs structurally connected, locally admissible, and
+    outside historical reanchor
+  - every such exact-terminal-only paired recovery now collapses onto the same
+    unsafe `74 / 8` profile
+  - broadening that local replacement neighborhood therefore still does not
+    supply safe qualifier evidence on the canonical branch
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -642,6 +652,13 @@ This note is the exact next work order for `desktop_claim_shadow`.
     demo-style temporal neighbors should still stay outside historical
     reanchor and still collapse onto the same unsafe isolated `89 / 8` and
     `88 / 8` profiles, so a simple clause-catalog swap remains fenced.
+    Keep the new nearby clause-`2` / clause-`3` pair-replacement regression
+    green too: broadening both positions together across that same nearby
+    claim/demo neighborhood on the otherwise exact suffix should still stay
+    outside historical reanchor and still collapse all `16`
+    exact-terminal-only paired recoveries onto the same unsafe `74 / 8`
+    profile, so broader local replacement-neighborhood relands remain fenced
+    too.
 20. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
 21. Keep the stored certification / benchmark assertions green for the
