@@ -226,6 +226,16 @@ gate.
   - the remaining step-`15` repair is therefore not hiding in later-suffix
     interaction on that captured surface; it is clause-local qualifier /
     reanchor evidence on those exact local variants themselves
+- A new follow-up step-`15` forced-reanchor recovery regression now sharpens
+  that same blocker one layer further:
+  - on each of those `12` isolated early claim-only temporal-shell deviations,
+    restoring clause-local reanchor evidence would flip all `3` terminal
+    continuations to `KeepWithoutFallback`
+  - all `36` of those forced-reanchor local continuations are admitted and
+    bar-clearing on the otherwise exact suffix
+  - the remaining step-`15` repair is therefore a pure clause-local qualifier /
+    reanchor evidence miss at positions `0..5` themselves, not downstream
+    admissibility or bar arithmetic once the suffix is fixed
 - A follow-up exploratory step-`15` temporal-reanchor broadening pass was also
   run locally but was not landed:
   - a broad temporal-shell matcher expansion collapsed the captured exact-prune
@@ -663,10 +673,14 @@ gate.
     otherwise exact seven-clause prefix still leaves all `3` terminal
     continuations at `NeedsFallback` and zero-admitted, and the follow-up
     variant-product regression now proves each of those `12` local variants
-    stays captured across its full later claim suffix fan-out too, so the next
-    repair should inspect clause-local earlier temporal-shell qualifier
-    evidence through clause `5` or earlier rather than only the clause-`6` /
-    terminal slot or a multi-early-deviation interaction
+    stays captured across its full later claim suffix fan-out too; the new
+    forced-reanchor recovery regression now also proves each such isolated
+    local variant would recover all `3` terminal continuations as
+    `KeepWithoutFallback`, admitted, and bar-clearing on the otherwise exact
+    suffix, so the next repair should inspect clause-local earlier
+    temporal-shell qualifier evidence through clause `5` or earlier rather
+    than only the clause-`6` / terminal slot, downstream admissibility / bar
+    arithmetic, or a multi-early-deviation interaction
   - avoiding a direct temporal-reanchor matcher reland first:
     both the broad `60 / 8 / 9840` branch and the narrower `89 / 8 / 780`
     branch disturbed the canonical step-`15` continuation and were reverted
@@ -751,7 +765,10 @@ gate.
     `NeedsFallback` and zero-admitted on the otherwise exact suffix, and the
     follow-up variant-product regression now proves each such local variant
     stays blocked across every later claim suffix combination before the
-    clause-`6` boundary, so do not treat that remaining loss as generic bar
+    clause-`6` boundary, while the new forced-reanchor recovery regression
+    proves each isolated local variant would recover all `3` terminal
+    continuations as `KeepWithoutFallback`, admitted, and bar-clearing on the
+    otherwise exact suffix, so do not treat that remaining loss as generic bar
     bookkeeping, raw dependency-edge generation, a claim admissibility miss, a
     terminal-clause-only matcher bug, a multi-deviation-only interaction, a
     later-suffix interaction, or a direct early clause-`2` / clause-`3`

@@ -41,29 +41,33 @@ It lists only work that is still open.
     prefixes to exact partial-prefix bar failure before proof-close; the new
     local exact-prune family read now shows that captured surface as `2184`
     zero-admitted terminal families with no cached compact bounds, so the
-    remaining open work there is connected terminal exposure and exact
-    connectivity on the canonical temporal-shell path rather than generic
-    bound accounting or claim admissibility; the new connectivity regression
-    now proves all `6552` generated terminal options on that captured surface
-    disconnect before admissibility, and the new follow-up connectivity
-    classification now proves those options are all structurally connected but
-    still unqualified `NeedsFallback` candidates with `0` historical reanchor
-    hits; the new reanchor-prefix regression now also proves those exact-pruned
-    families already fall off the temporal-shell prefix by clause `5` or
-    earlier with no full seven-clause reanchor-prefix matches; the new
-    clause-`6` boundary regression now also proves that once those first six
-    temporal-shell clauses are fixed, the captured exact-prune surface has
-    already stopped and only `3` clause-`6` variants remain outside it, with
-    only the exact reference continuation exposing a
-    `KeepWithoutFallback` terminal path; the new isolated-prefix regression now
-    also proves each of the `12` single early claim-only deviations on the
-    otherwise exact seven-clause prefix still leaves all `3` terminal
-    continuations at `NeedsFallback` and zero-admitted, and the follow-up
-    variant-product regression now proves each of those `12` local variants
-    stays captured across its full later claim suffix fan-out too, so the open
-    step-`15` work is earlier clause-local qualifier evidence on the canonical
-    branch through clause `5` or earlier, not just the clause-`6` / terminal
-    slot, a multi-deviation interaction, or a later-suffix interaction
+    remaining open work there is no longer generic bound accounting,
+    connected-terminal exposure, or claim admissibility; the new connectivity
+    regression now proves all `6552` generated terminal options on that
+    captured surface disconnect before admissibility, and the new follow-up
+    connectivity classification now proves those options are all structurally
+    connected but still unqualified `NeedsFallback` candidates with `0`
+    historical reanchor hits; the new reanchor-prefix regression now also
+    proves those exact-pruned families already fall off the temporal-shell
+    prefix by clause `5` or earlier with no full seven-clause
+    reanchor-prefix matches; the new clause-`6` boundary regression now also
+    proves that once those first six temporal-shell clauses are fixed, the
+    captured exact-prune surface has already stopped and only `3` clause-`6`
+    variants remain outside it, with only the exact reference continuation
+    exposing a `KeepWithoutFallback` terminal path; the new isolated-prefix
+    regression now also proves each of the `12` single early claim-only
+    deviations on the otherwise exact seven-clause prefix still leaves all `3`
+    terminal continuations at `NeedsFallback` and zero-admitted, and the
+    follow-up variant-product regression now proves each of those `12` local
+    variants stays captured across its full later claim suffix fan-out too;
+    the new forced-reanchor recovery regression now further proves that on the
+    otherwise exact suffix each such isolated local variant would recover all
+    `3` terminal continuations as `KeepWithoutFallback`, admitted, and
+    bar-clearing if clause-local reanchor evidence were restored, so the open
+    step-`15` work is pure earlier clause-local qualifier evidence on the
+    canonical branch through clause `5` or earlier, not the clause-`6` /
+    terminal slot, a multi-deviation interaction, or a later-suffix
+    interaction
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /

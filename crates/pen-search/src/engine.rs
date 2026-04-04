@@ -1,26 +1,26 @@
 use crate::accept::{
-    acceptance_outcome_for_candidate, acceptance_rank, acceptance_rank_context_for_prefix,
-    acceptance_rank_for_prefix_clause, acceptance_rank_for_telescope, select_acceptance,
-    AcceptanceOutcome,
+    AcceptanceOutcome, acceptance_outcome_for_candidate, acceptance_rank,
+    acceptance_rank_context_for_prefix, acceptance_rank_for_prefix_clause,
+    acceptance_rank_for_telescope, select_acceptance,
 };
 use crate::bounds::PrefixBound;
-use crate::branch_bound::{better_rank, same_primary_rank_tier, AcceptRank};
+use crate::branch_bound::{AcceptRank, better_rank, same_primary_rank_tier};
 use crate::config::{DemoConfig, RuntimeConfig, SearchProfile};
-use crate::diversify::{plan_pressure_cold_retention, FrontierPressure, FrontierRuntimeLimits};
+use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{
+    ClauseCatalog, EnumerationContext, EnumerationSurfaceDiagnostics, LateFamilySurface,
     build_clause_catalog, enumerate_next_clauses, enumerate_raw_telescopes, enumerate_telescopes,
-    raw_clause_catalog_widths, ClauseCatalog, EnumerationContext, EnumerationSurfaceDiagnostics,
-    LateFamilySurface,
+    raw_clause_catalog_widths,
 };
 use crate::expand::{
-    evaluate_candidate, evaluate_checked_candidate, structural_signals_for_telescope,
-    ExpandedCandidate,
+    ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate,
+    structural_signals_for_telescope,
 };
 use crate::frontier::FrontierWindow;
 use crate::narrative::{
+    NarrativeEvent, NarrativeEventKind, NarrativeProgressSnapshot, NarrativeRecorder, StepPhase,
     append_step_narrative_events, exact_screened_surface_from_counts,
-    generated_surface_from_counts, narrative_progress_snapshot, NarrativeEvent, NarrativeEventKind,
-    NarrativeProgressSnapshot, NarrativeRecorder, StepPhase,
+    generated_surface_from_counts, narrative_progress_snapshot,
 };
 use crate::prefix_cache::{
     PrefixCache, PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature,
@@ -31,11 +31,11 @@ use crate::prefix_memo::{
     TerminalPrefixCompletionSummary, TerminalPrefixPrimaryRank, TerminalPrefixSurvivorSketch,
     TerminalPrefixSurvivorSketchEntry,
 };
-use crate::priority::{build_priority_key, PriorityInputs};
+use crate::priority::{PriorityInputs, build_priority_key};
 use crate::scheduler::build_schedule;
 use crate::state::{FrontierStateRecV1, PrefixState};
 use crate::worker::run_worker_batch;
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use pen_core::clause::ClauseRole;
 use pen_core::expr::Expr;
 use pen_core::ids::{ClauseId, ObligationSetId, StateId};
@@ -43,22 +43,22 @@ use pen_core::library::{Library, LibraryEntry};
 use pen_core::rational::Rational;
 use pen_core::stats::StructuralStats;
 use pen_core::telescope::Telescope;
-use pen_eval::bar::{compute_bar, DiscoveryRecord};
+use pen_eval::bar::{DiscoveryRecord, compute_bar};
 use pen_eval::minimality::analyze_semantic_minimality;
 use pen_eval::nu::{
-    structural_nu, structural_nu_single_clause_upper_bound, SingleClauseStructuralNuCaps,
-    SingleClauseStructuralNuContext, TerminalClauseNuFacts,
+    SingleClauseStructuralNuCaps, SingleClauseStructuralNuContext, TerminalClauseNuFacts,
+    structural_nu, structural_nu_single_clause_upper_bound,
 };
 use pen_store::manifest::{NearMiss, SearchTiming};
 use pen_type::admissibility::{
-    assess_strict_admissibility, strict_admissibility_for_mode, AdmissibilityDecision,
-    AdmissibilityDecisionClass, AdmissibilityDiagnostics, AdmissibilityMode, StrictAdmissibility,
+    AdmissibilityDecision, AdmissibilityDecisionClass, AdmissibilityDiagnostics, AdmissibilityMode,
+    StrictAdmissibility, assess_strict_admissibility, strict_admissibility_for_mode,
 };
-use pen_type::check::{check_telescope, CheckResult};
-use pen_type::connectivity::passes_connectivity;
+use pen_type::check::{CheckResult, check_telescope};
 use pen_type::connectivity::TerminalClauseConnectivityFacts;
+use pen_type::connectivity::passes_connectivity;
 use pen_type::obligations::{
-    summarize_structural_debt, ClaimAnchorPolicy, RetentionClass, RetentionPolicy, StructuralDebt,
+    ClaimAnchorPolicy, RetentionClass, RetentionPolicy, StructuralDebt, summarize_structural_debt,
 };
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
@@ -9447,7 +9447,14 @@ fn absorb_elapsed_duration(millis: &mut u64, micros: &mut u64, duration: Duratio
 #[cfg(test)]
 mod tests {
     use super::{
-        acceptance_rank, claim_candidate_keeps_next_step_alive, create_online_prefix_work_item,
+        AtomicSearchProgressObserver, AtomicSearchStep, ClaimAnchorPolicyDiagnostics,
+        ClaimRootSeedingDiagnostics, DemoBreadthHarvestExitReason, DemoBucketSelectionContext,
+        DemoBudgetController, DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed,
+        DemoClosurePressure, DemoNarrativeRuntime, DemoProofCloseEntryReason,
+        DemoProofCloseOrderMode, DemoProofCloseOverrunReason, DemoStepBudget,
+        ExactPartialPrefixBoundDecision, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
+        RealisticShadowDiscovery, SearchBucketTaxonomy, StepLiveCheckpoint, acceptance_rank,
+        claim_candidate_keeps_next_step_alive, create_online_prefix_work_item,
         demo_materialize_to_proof_close_handoff_reason_for_pressure, demo_proof_close_group_order,
         demo_proof_close_order_mode, demo_proof_close_order_mode_with_closure_pressure,
         discover_realistic_shadow_candidates, discovery_enumeration_context,
@@ -9458,23 +9465,16 @@ mod tests {
         search_bootstrap_prefix, search_bootstrap_prefix_for_config_with_runtime,
         search_next_step_internal, select_acceptance_for_step,
         sort_terminal_prefix_group_candidates_for_certification, supports_live_atomic_search,
-        terminal_prefix_clause_candidates, AtomicSearchProgressObserver, AtomicSearchStep,
-        ClaimAnchorPolicyDiagnostics, ClaimRootSeedingDiagnostics, DemoBreadthHarvestExitReason,
-        DemoBucketSelectionContext, DemoBudgetController, DemoBudgetFeedback,
-        DemoBudgetRetuneAction, DemoBudgetSeed, DemoClosurePressure, DemoNarrativeRuntime,
-        DemoProofCloseEntryReason, DemoProofCloseOrderMode, DemoProofCloseOverrunReason,
-        DemoStepBudget, ExactPartialPrefixBoundDecision, OnlinePrefixWorkItem,
-        RealisticShadowDiscovery, SearchBucketTaxonomy, StepLiveCheckpoint,
-        LIVE_BOOTSTRAP_MAX_STEP,
+        terminal_prefix_clause_candidates,
     };
     use crate::bounds::PrefixBound;
     use crate::branch_bound::AcceptRank;
     use crate::config::{RuntimeConfig, SearchProfile};
     use crate::enumerate::{
-        build_clause_catalog, ClauseCatalog, EnumerationContext, LateFamilySurface,
+        ClauseCatalog, EnumerationContext, LateFamilySurface, build_clause_catalog,
     };
     use crate::expand::{evaluate_candidate, evaluate_checked_candidate};
-    use crate::narrative::{narrative_progress_snapshot, NarrativeEventKind, StepPhase};
+    use crate::narrative::{NarrativeEventKind, StepPhase, narrative_progress_snapshot};
     use crate::prefix_cache::{
         PrefixCache, PrefixCandidateGroup, PrefixGroupCandidate, PrefixSignature,
     };
@@ -9491,22 +9491,22 @@ mod tests {
         telescope::{Telescope, TelescopeClass},
     };
     use pen_eval::{
-        bar::{compute_bar, DiscoveryRecord},
+        bar::{DiscoveryRecord, compute_bar},
         minimality::analyze_semantic_minimality,
-        nu::{structural_nu, TerminalClauseNuFacts},
+        nu::{TerminalClauseNuFacts, structural_nu},
     };
     use pen_type::{
         admissibility::{
-            assess_strict_admissibility, passes_strict_admissibility, strict_admissibility,
-            strict_admissibility_for_mode, AdmissibilityDecision, AdmissibilityDecisionClass,
-            AdmissibilityMode, PackagePolicies, PackagePolicy, StrictAdmissibility,
-            StructuralFamily,
+            AdmissibilityDecision, AdmissibilityDecisionClass, AdmissibilityMode, PackagePolicies,
+            PackagePolicy, StrictAdmissibility, StructuralFamily, assess_strict_admissibility,
+            passes_strict_admissibility, strict_admissibility, strict_admissibility_for_mode,
         },
         connectivity::{
-            analyze_connectivity, passes_connectivity, ConnectivityWitness,
-            HistoricalReanchorSummary, TerminalClauseConnectivityFacts,
+            ConnectivitySummary, ConnectivityTerminalDecision, ConnectivityWitness,
+            HistoricalReanchorSummary, TerminalClauseConnectivityFacts, analyze_connectivity,
+            passes_connectivity,
         },
-        obligations::{summarize_structural_debt, RetentionClass, RetentionFocus, RetentionPolicy},
+        obligations::{RetentionClass, RetentionFocus, RetentionPolicy, summarize_structural_debt},
     };
     use std::cmp::Reverse;
     use std::collections::BTreeMap;
@@ -10764,11 +10764,13 @@ mod tests {
             ..DemoStepBudget::default()
         };
 
-        assert!(maybe_retune_demo_budget_live(
-            &mut budget,
-            &narrative_progress_snapshot(4_999, 400, 100, 0),
-        )
-        .is_none());
+        assert!(
+            maybe_retune_demo_budget_live(
+                &mut budget,
+                &narrative_progress_snapshot(4_999, 400, 100, 0),
+            )
+            .is_none()
+        );
         assert_eq!(budget.discovery_budget_millis, 30_000);
         assert_eq!(budget.proof_close_reserve_millis, 30_000);
         assert_eq!(budget.live_rebalance_borrowed_millis, 0);
@@ -11003,10 +11005,11 @@ mod tests {
         assert!(step.narrative_events.iter().any(|event| {
             event.kind == NarrativeEventKind::PhaseChange && event.phase == Some(StepPhase::Seal)
         }));
-        assert!(step
-            .narrative_events
-            .iter()
-            .any(|event| event.kind == NarrativeEventKind::BudgetPulse));
+        assert!(
+            step.narrative_events
+                .iter()
+                .any(|event| event.kind == NarrativeEventKind::BudgetPulse)
+        );
     }
 
     #[test]
@@ -11578,10 +11581,12 @@ mod tests {
         assert!(claim_step.demo_bucket_stats.iter().all(|bucket| {
             bucket.bucket_key.taxonomy == SearchBucketTaxonomy::StructuralGeneric
         }));
-        assert!(claim_step
-            .demo_bucket_stats
-            .iter()
-            .all(|bucket| bucket.bucket_label.contains("structural_generic")));
+        assert!(
+            claim_step
+                .demo_bucket_stats
+                .iter()
+                .all(|bucket| bucket.bucket_label.contains("structural_generic"))
+        );
 
         let serialized =
             serde_json::to_string(&claim_step.demo_bucket_stats).expect("bucket stats serialize");
@@ -11601,10 +11606,12 @@ mod tests {
             assert!(claim_step.demo_bucket_stats.iter().all(|bucket| {
                 bucket.bucket_key.taxonomy == SearchBucketTaxonomy::StructuralGeneric
             }));
-            assert!(claim_step
-                .demo_bucket_stats
-                .iter()
-                .all(|bucket| { bucket.bucket_label.contains("structural_generic") }));
+            assert!(
+                claim_step
+                    .demo_bucket_stats
+                    .iter()
+                    .all(|bucket| { bucket.bucket_label.contains("structural_generic") })
+            );
         }
     }
 
@@ -11944,8 +11951,8 @@ mod tests {
     }
 
     #[test]
-    fn current_claim_step_fifteen_zero_admitted_prunes_reduce_to_disconnect_and_trivial_derivability(
-    ) {
+    fn current_claim_step_fifteen_zero_admitted_prunes_reduce_to_disconnect_and_trivial_derivability()
+     {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             14,
             2,
@@ -11975,8 +11982,8 @@ mod tests {
     }
 
     #[test]
-    fn current_claim_step_fifteen_zero_admitted_connectivity_surface_is_structurally_connected_but_unqualified(
-    ) {
+    fn current_claim_step_fifteen_zero_admitted_connectivity_surface_is_structurally_connected_but_unqualified()
+     {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             14,
             2,
@@ -12006,8 +12013,8 @@ mod tests {
     }
 
     #[test]
-    fn current_claim_step_fifteen_zero_admitted_connectivity_surface_reports_reanchor_prefix_progress(
-    ) {
+    fn current_claim_step_fifteen_zero_admitted_connectivity_surface_reports_reanchor_prefix_progress()
+     {
         let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
         let mut matched_prefix_counts = BTreeMap::new();
         let mut first_mismatch_counts = BTreeMap::new();
@@ -12199,8 +12206,8 @@ mod tests {
     }
 
     #[test]
-    fn current_claim_step_fifteen_single_early_temporal_variants_still_need_fallback_on_exact_suffix(
-    ) {
+    fn current_claim_step_fifteen_single_early_temporal_variants_still_need_fallback_on_exact_suffix()
+     {
         let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
         let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
         let mut isolated_prefix_counts = BTreeMap::new();
@@ -12331,8 +12338,96 @@ mod tests {
     }
 
     #[test]
-    fn step_thirteen_divergence_reopens_operator_bundle_claim_debt_before_the_admitted_step_fourteen_failure_family(
-    ) {
+    fn current_claim_step_fifteen_isolated_temporal_variants_expose_clause_local_forced_reanchor_recovery_surface()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let mut forced_recovery_counts = BTreeMap::new();
+
+        for position in 0..6 {
+            let isolated_prefixes = surface
+                .pruned_terminal_prefixes
+                .iter()
+                .filter(|work_item| {
+                    let clauses = &work_item.prefix_telescope.clauses;
+                    clauses[..position] == reference_prefix.clauses[..position]
+                        && clauses[position] != reference_prefix.clauses[position]
+                        && clauses[position + 1..] == reference_prefix.clauses[position + 1..]
+                })
+                .collect::<Vec<_>>();
+            let mut forced_keep_without_fallback = 0usize;
+            let mut forced_admitted = 0usize;
+            let mut forced_bar_clearers = 0usize;
+
+            for work_item in isolated_prefixes {
+                let connectivity_summary = ConnectivitySummary::from_telescope(
+                    &surface.library,
+                    &work_item.prefix_telescope,
+                );
+                for clause in work_item.next_clauses(&surface.clause_catalog) {
+                    let decision =
+                        connectivity_summary.terminal_decision(&surface.library, clause, true);
+                    if !matches!(decision, ConnectivityTerminalDecision::KeepWithoutFallback) {
+                        continue;
+                    }
+                    forced_keep_without_fallback += 1;
+
+                    let mut telescope = work_item.prefix_telescope.clone();
+                    telescope.clauses.push(clause.clone());
+                    let admissibility_decision = assess_strict_admissibility(
+                        surface.step_index,
+                        &surface.library,
+                        &telescope,
+                        surface.admissibility,
+                    );
+                    if !admissibility_decision.is_admitted() {
+                        continue;
+                    }
+
+                    forced_admitted += 1;
+                    let exact_nu = u16::try_from(
+                        structural_nu(&telescope, &surface.library, &surface.nu_history).total,
+                    )
+                    .expect("nu exceeded u16");
+                    let clause_kappa_used =
+                        u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                    if Rational::new(i64::from(exact_nu), i64::from(clause_kappa_used))
+                        >= surface.objective_bar
+                    {
+                        forced_bar_clearers += 1;
+                    }
+                }
+            }
+
+            forced_recovery_counts.insert(
+                position,
+                (
+                    forced_keep_without_fallback,
+                    forced_admitted,
+                    forced_bar_clearers,
+                ),
+            );
+        }
+
+        assert_eq!(
+            forced_recovery_counts,
+            [
+                (0_usize, (6_usize, 6_usize, 6_usize)),
+                (1, (6, 6, 6)),
+                (2, (6, 6, 6)),
+                (3, (6, 6, 6)),
+                (4, (6, 6, 6)),
+                (5, (6, 6, 6)),
+            ]
+            .into_iter()
+            .collect(),
+            "every isolated early claim-only temporal-shell deviation should become a fully admitted, bar-clearing local surface if the missing clause-local reanchor evidence were restored"
+        );
+    }
+
+    #[test]
+    fn step_thirteen_divergence_reopens_operator_bundle_claim_debt_before_the_admitted_step_fourteen_failure_family()
+     {
         let reference_prefix = claim_long_rerun_v3_hybrid_prefix(None);
         let divergent_prefix = claim_long_rerun_v3_hybrid_prefix(Some(13));
         let reference_step_thirteen = &reference_prefix[12];
@@ -13085,8 +13180,8 @@ mod tests {
     }
 
     #[test]
-    fn claim_step_twelve_guarded_curvature_shell_survives_screening_and_wins_same_primary_selection(
-    ) {
+    fn claim_step_twelve_guarded_curvature_shell_survives_screening_and_wins_same_primary_selection()
+     {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             11,
             2,
@@ -14788,12 +14883,14 @@ mod tests {
                 .expect("terminal prefix should cache an exact best accept rank"),
         );
 
-        assert!(discovery
-            .prefix_legality_cache
-            .terminal_prefix_completion_summary(&signature)
-            .expect("terminal prefix should cache a pruning summary")
-            .evaluations
-            .is_none());
+        assert!(
+            discovery
+                .prefix_legality_cache
+                .terminal_prefix_completion_summary(&signature)
+                .expect("terminal prefix should cache a pruning summary")
+                .evaluations
+                .is_none()
+        );
 
         assert!(super::claim_try_summary_prune_before_materialization(
             15,
@@ -15821,14 +15918,17 @@ mod tests {
         let realistic_step =
             profile_step_from_reference_prefix(10, SearchProfile::RealisticFrontierShadow);
         assert!(!realistic_step.demo_bucket_stats.is_empty());
-        assert!(realistic_step
-            .demo_bucket_stats
-            .iter()
-            .all(|bucket| { bucket.bucket_key.taxonomy == SearchBucketTaxonomy::SemanticFamily }));
-        assert!(realistic_step
-            .demo_bucket_stats
-            .iter()
-            .any(|bucket| !bucket.bucket_label.contains("structural_generic")));
+        assert!(
+            realistic_step.demo_bucket_stats.iter().all(|bucket| {
+                bucket.bucket_key.taxonomy == SearchBucketTaxonomy::SemanticFamily
+            })
+        );
+        assert!(
+            realistic_step
+                .demo_bucket_stats
+                .iter()
+                .any(|bucket| !bucket.bucket_label.contains("structural_generic"))
+        );
     }
 
     #[test]

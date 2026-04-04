@@ -259,6 +259,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next repair should therefore stay on clause-local qualifier /
     reanchor evidence for those exact local variants rather than reopening a
     later-suffix interaction theory on the captured surface
+- A new follow-up step-`15` forced-reanchor recovery regression now sharpens
+  that same blocker further:
+  - on each of those `12` isolated early claim-only temporal-shell deviations,
+    restoring clause-local reanchor evidence would flip all `3` terminal
+    continuations to `KeepWithoutFallback`
+  - all `36` of those forced-reanchor local continuations are admitted and
+    bar-clearing on the otherwise exact suffix
+  - the next repair should therefore stay on clause-local qualifier /
+    reanchor evidence itself at positions `0..5` rather than reopening
+    downstream admissibility or bar arithmetic on that exact suffix
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -444,10 +454,14 @@ This note is the exact next work order for `desktop_claim_shadow`.
     prefix still leaves all `3` terminal continuations at `NeedsFallback` and
     zero-admitted, and the follow-up variant-product regression now proves
     each of those `12` local variants stays captured across its full later
-    claim suffix fan-out too, so inspect earlier clause-local qualifier /
-    reanchor evidence on that connected surface rather than generic
-    partial-prefix bar arithmetic, raw dependency-edge generation, claim
-    admissibility, a multi-deviation-only interaction, a later-suffix
+    claim suffix fan-out too, while the new forced-reanchor recovery
+    regression now proves each isolated local variant would recover all `3`
+    terminal continuations as `KeepWithoutFallback`, admitted, and
+    bar-clearing on the otherwise exact suffix, so inspect earlier
+    clause-local qualifier / reanchor evidence on that connected surface
+    rather than generic partial-prefix bar arithmetic, raw dependency-edge
+    generation, claim admissibility, downstream admissibility / bar
+    bookkeeping, a multi-deviation-only interaction, a later-suffix
     interaction, or the clause-`6` / terminal slot alone
 10. Keep the step-`1` breadth miss on the checklist, but do not confuse that
     longstanding signoff floor with the new claim-specific mid/late parity
@@ -536,6 +550,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
     each such local variant still stays captured across every later claim
     suffix combination before the clause-`6` boundary, and all resulting
     continuations still leave `0` admitted candidates.
+    Keep the new forced-reanchor recovery regression green too: each isolated
+    local variant should still recover all `3` terminal continuations as
+    `KeepWithoutFallback`, admitted, and bar-clearing on the otherwise exact
+    suffix once clause-local qualifier evidence is supplied.
 20. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
 21. Keep the stored certification / benchmark assertions green for the
