@@ -11931,13 +11931,13 @@ mod tests {
     #[test]
     fn current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families() {
         let summary = current_claim_step_fifteen_exact_prune_family_summary(usize::MAX);
-        assert_eq!(summary.raw_generated_surface, 780);
+        assert_eq!(summary.raw_generated_surface, 930);
         assert_eq!(summary.roots_seen, 3);
         assert_eq!(summary.roots_enqueued, 3);
-        assert_eq!(summary.partial_prefix_bound_prunes, 512);
+        assert_eq!(summary.partial_prefix_bound_prunes, 540);
         assert_eq!(
-            summary.captured_prefixes, 2184,
-            "the repaired canonical step-15 surface should still localize to the captured zero-admitted exact prunes"
+            summary.captured_prefixes, 2160,
+            "the repaired canonical step-15 surface should now shed the clause-0 and clause-1 claim-only temporal variants from the captured zero-admitted exact-prune surface"
         );
         assert_eq!(
             summary.cached_bound_count, 0,
@@ -11945,7 +11945,7 @@ mod tests {
         );
         assert_eq!(
             summary.family_counts,
-            [((0_usize, None, None), 2184_usize)].into_iter().collect(),
+            [((0_usize, None, None), 2160_usize)].into_iter().collect(),
             "the captured step-15 exact-prune surface should currently consist only of zero-admitted terminal families"
         );
     }
@@ -11965,16 +11965,16 @@ mod tests {
             .map(|step| step.telescope)
             .collect::<Vec<_>>();
         let summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
-        assert_eq!(summary.captured_prefixes, 2184);
-        assert_eq!(summary.generated_candidates, 6552);
+        assert_eq!(summary.captured_prefixes, 2160);
+        assert_eq!(summary.generated_candidates, 6480);
         assert_eq!(
-            summary.disconnected_candidates, 6552,
+            summary.disconnected_candidates, 6480,
             "every currently captured step-15 zero-admitted exact prune should lose all three terminal options to connectivity"
         );
         assert_eq!(summary.trivially_derivable_rejections, 0);
         assert_eq!(summary.other_exact_legality_rejections, 0);
         assert_eq!(summary.structural_debt_cap_rejections, 0);
-        assert_eq!(summary.all_disconnected_prefixes, 2184);
+        assert_eq!(summary.all_disconnected_prefixes, 2160);
         assert_eq!(summary.trivially_derivable_only_prefixes, 0);
         assert_eq!(summary.mixed_disconnect_and_trivial_prefixes, 0);
         assert_eq!(summary.other_rejection_prefixes, 0);
@@ -11996,15 +11996,15 @@ mod tests {
             .map(|step| step.telescope)
             .collect::<Vec<_>>();
         let summary = late_step_terminal_connectivity_summary(&prefix, 15, usize::MAX);
-        assert_eq!(summary.captured_prefixes, 2184);
-        assert_eq!(summary.generated_candidates, 6552);
+        assert_eq!(summary.captured_prefixes, 2160);
+        assert_eq!(summary.generated_candidates, 6480);
         assert_eq!(summary.prune_disconnected_candidates, 0);
-        assert_eq!(summary.needs_fallback_candidates, 6552);
+        assert_eq!(summary.needs_fallback_candidates, 6480);
         assert_eq!(summary.keep_without_fallback_candidates, 0);
         assert_eq!(summary.structurally_disconnected_candidates, 0);
         assert_eq!(
             summary.structurally_connected_but_unqualified_candidates,
-            6552
+            6480
         );
         assert_eq!(
             summary.structurally_connected_via_historical_reanchor_candidates,
@@ -12038,31 +12038,22 @@ mod tests {
 
         assert_eq!(
             matched_prefix_counts,
-            [
-                (0_usize, 1458_usize),
-                (1, 486),
-                (2, 162),
-                (3, 54),
-                (4, 18),
-                (5, 6),
-            ]
-            .into_iter()
-            .collect(),
-            "captured step-15 zero-admitted prefixes should already fall off the historical-reanchor shell by clause 5 or earlier"
+            [(2_usize, 1458_usize), (3, 486), (4, 162), (5, 54),]
+                .into_iter()
+                .collect(),
+            "captured step-15 zero-admitted prefixes should now stay repaired through clause positions 0 and 1 and only fall off the historical-reanchor shell at clause positions 2..5"
         );
         assert_eq!(
             first_mismatch_counts,
             [
-                (Some(0_usize), 1458_usize),
-                (Some(1), 486),
-                (Some(2), 162),
-                (Some(3), 54),
-                (Some(4), 18),
-                (Some(5), 6),
+                (Some(2_usize), 1458_usize),
+                (Some(3), 486),
+                (Some(4), 162),
+                (Some(5), 54),
             ]
             .into_iter()
             .collect(),
-            "the captured step-15 exact-prune surface should not preserve a full seven-clause reanchor prefix anywhere"
+            "the captured step-15 exact-prune surface should now preserve the repaired clause-0 and clause-1 prefixes and only lose the historical-reanchor shell at clause positions 2..5"
         );
         assert_eq!(full_prefix_matches, 0);
     }
@@ -12224,10 +12215,11 @@ mod tests {
                 })
                 .collect::<Vec<_>>();
             isolated_prefix_counts.insert(position, isolated_prefixes.len());
+            let expected_isolated_count = if position < 2 { 0 } else { 2 };
             assert_eq!(
                 isolated_prefixes.len(),
-                2,
-                "each early temporal-shell clause should still expose exactly two isolated claim-only deviations on the otherwise exact seven-clause prefix"
+                expected_isolated_count,
+                "clause positions 0 and 1 should now be repaired out of the captured temporal-shell surface, while positions 2..5 should still expose exactly two isolated claim-only deviations on the otherwise exact seven-clause prefix"
             );
 
             for work_item in isolated_prefixes {
@@ -12291,10 +12283,10 @@ mod tests {
 
         assert_eq!(
             isolated_prefix_counts,
-            [(0_usize, 2_usize), (1, 2), (2, 2), (3, 2), (4, 2), (5, 2),]
+            [(0_usize, 0_usize), (1, 0), (2, 2), (3, 2), (4, 2), (5, 2),]
                 .into_iter()
                 .collect(),
-            "the captured step-15 exact-prune surface should still contain every isolated early temporal-shell deviation on the otherwise exact suffix"
+            "the captured step-15 exact-prune surface should now exclude the repaired clause-0 and clause-1 temporal deviations while still containing the remaining isolated clause-2..5 deviations"
         );
     }
 
@@ -12323,16 +12315,24 @@ mod tests {
                 }
             }
 
-            let expected_suffix_count = 3_usize.pow((6 - position) as u32);
+            let expected_suffix_count = if position < 2 {
+                0
+            } else {
+                3_usize.pow((8 - position) as u32)
+            };
             let mut observed_counts = variant_counts
                 .into_iter()
                 .map(|(_, count)| count)
                 .collect::<Vec<_>>();
             observed_counts.sort_unstable();
+            let expected_counts = if position < 2 {
+                Vec::new()
+            } else {
+                vec![expected_suffix_count, expected_suffix_count]
+            };
             assert_eq!(
-                observed_counts,
-                vec![expected_suffix_count, expected_suffix_count],
-                "each isolated claim-only variant at temporal-shell clause position {position} should stay captured across every later claim suffix combination before the clause-6 boundary"
+                observed_counts, expected_counts,
+                "clause positions 0 and 1 should now be repaired out of the captured surface, while each remaining isolated claim-only variant at temporal-shell clause position {position} should still stay captured across every later claim suffix combination before the clause-6 boundary"
             );
         }
     }
@@ -12412,8 +12412,8 @@ mod tests {
         assert_eq!(
             forced_recovery_counts,
             [
-                (0_usize, (6_usize, 6_usize, 6_usize)),
-                (1, (6, 6, 6)),
+                (0_usize, (0_usize, 0_usize, 0_usize)),
+                (1, (0, 0, 0)),
                 (2, (6, 6, 6)),
                 (3, (6, 6, 6)),
                 (4, (6, 6, 6)),
@@ -12421,7 +12421,7 @@ mod tests {
             ]
             .into_iter()
             .collect(),
-            "every isolated early claim-only temporal-shell deviation should become a fully admitted, bar-clearing local surface if the missing clause-local reanchor evidence were restored"
+            "the repaired clause-0 and clause-1 variants should no longer appear on the captured isolated surface, while each remaining isolated clause-2..5 deviation would still become a fully admitted, bar-clearing local surface if the missing clause-local reanchor evidence were restored"
         );
     }
 
@@ -12541,13 +12541,11 @@ mod tests {
         }
 
         assert_eq!(reference_terminal_wins, 0);
-        assert_eq!(next_lift_terminal_wins, 6);
-        assert_eq!(eventual_lift_terminal_wins, 6);
+        assert_eq!(next_lift_terminal_wins, 4);
+        assert_eq!(eventual_lift_terminal_wins, 4);
         assert_eq!(
             forced_winner_counts,
             [
-                (0_usize, (0_usize, 0_usize, 2_usize)),
-                (1, (0, 2, 0)),
                 (2, (0, 1, 1)),
                 (3, (0, 2, 0)),
                 (4, (0, 0, 2)),
@@ -12555,23 +12553,11 @@ mod tests {
             ]
             .into_iter()
             .collect(),
-            "forced clause-local reanchor on the otherwise exact suffix should still split isolated early claim-only temporal deviations between the two non-reference terminal closures instead of restoring the canonical terminal clause"
+            "the repaired clause-0 and clause-1 variants should disappear from the captured isolated surface, while forced clause-local reanchor on the remaining clause-2..5 deviations should still split between the two non-reference terminal closures instead of restoring the canonical terminal clause"
         );
         assert_eq!(
             forced_rank_profiles,
             [
-                (
-                    0_usize,
-                    [(89_u16, Rational::new(78711, 21112))]
-                        .into_iter()
-                        .collect(),
-                ),
-                (
-                    1,
-                    [(89_u16, Rational::new(78711, 21112))]
-                        .into_iter()
-                        .collect()
-                ),
                 (
                     2,
                     [(75_u16, Rational::new(41765, 21112))]
@@ -12599,7 +12585,7 @@ mod tests {
             ]
             .into_iter()
             .collect(),
-            "each isolated early temporal-shell position should still collapse onto a position-local noncanonical winner profile under forced clause-local reanchor"
+            "each remaining isolated temporal-shell position should still collapse onto a position-local noncanonical winner profile under forced clause-local reanchor"
         );
     }
 
@@ -13730,7 +13716,7 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(13, 46, 7, 123), (14, 62, 9, 12027), (15, 103, 8, 780)],
+            vec![(13, 46, 7, 123), (14, 62, 9, 12027), (15, 103, 8, 930)],
             "the repaired step-12 tie set should now collapse onto the widened step-14 surface while restoring the canonical step-15 continuation"
         );
         let alternate_candidate = tied_candidates
@@ -13976,7 +13962,7 @@ mod tests {
                 accepted_step_fourteen_continuation.2,
                 accepted_step_fourteen_continuation.3,
             ),
-            (103, 8, 780),
+            (103, 8, 930),
             "live claim step-14 acceptance should now prefer the same-primary survivor that restores the canonical step-15 continuation"
         );
         assert!(
@@ -14004,7 +13990,7 @@ mod tests {
         let (step_fifteen, step_fifteen_catalog, step_fifteen_roots) =
             inspect_late_step(15, &library, &history);
         assert_eq!(step_fifteen_catalog.raw_catalog_telescope_count, Some(6561));
-        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 780);
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 930);
         assert_eq!(
             step_fifteen.claim_root_seeding,
             Some(ClaimRootSeedingDiagnostics {
@@ -14018,19 +14004,20 @@ mod tests {
             step_fifteen_roots.claim_root_seeding,
             step_fifteen.claim_root_seeding
         );
-        assert_eq!(step_fifteen.incremental_partial_prefix_bound_prunes, 512);
+        assert_eq!(step_fifteen.incremental_partial_prefix_bound_prunes, 540);
         assert_eq!(
             step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
-            512
+            540
         );
-        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 0);
+        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 8);
         assert!(
             step_fifteen.demo_bucket_stats.iter().any(|bucket| {
-                bucket.stats.generated_terminal_candidates == 12
-                    && bucket.stats.admissible_terminal_candidates == 2
-                    && bucket.stats.exact_screened_terminal_candidates == 2
+                bucket.stats.generated_terminal_candidates == 84
+                    && bucket.stats.admissible_terminal_candidates == 10
+                    && bucket.stats.exact_screened_terminal_candidates == 10
+                    && bucket.stats.pruned_terminal_candidates == 8
             }),
-            "step 15 should still leave only a tiny surviving temporal terminal cluster"
+            "step 15 should now widen the surviving temporal terminal cluster while keeping it tightly localized"
         );
     }
 

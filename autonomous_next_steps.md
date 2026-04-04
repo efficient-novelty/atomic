@@ -161,7 +161,7 @@ This note is the exact next work order for `desktop_claim_shadow`.
     then the shallower formation-clause var reach, then lower bit cost
   - every current same-primary tied step-`12` survivor still collapses onto
     one observed step-`13..15` continuation and the same late generated counts
-    `33`, `12027`, and `780`
+    `123`, `12027`, and `930`
   - the step-`12` accepted-hash fork is therefore now closed locally and does
     not explain the late generated-floor collapse by itself
 - A new local late-surface repair now sharpens that remaining blocker:
@@ -185,104 +185,49 @@ This note is the exact next work order for `desktop_claim_shadow`.
     `DCT 103 / 8` continuation while the broader `78 / 9 / 12027`
     branch remains the alternate local path
   - step `15` on the restored canonical branch still opens a broader
-    `6561`-telescope claim catalog, but `512` exact partial-prefix bar
-    failures shrink that live generated surface to `780` before proof-close
-- A new local step-`15` exact-prune family regression now sharpens that late
-  blocker further:
+    `6561`-telescope claim catalog, but the repaired live surface now narrows
+    to `930` generated prefixes before proof-close on the canonical
+    `DCT 103 / 8` continuation after paying `540` exact partial-prefix bar
+    failures plus `8` incumbent-dominance prunes
+- A new narrow clause-`0` / clause-`1` historical-reanchor repair now sharpens
+  that late blocker further:
   - the captured repaired-canonical step-`15` exact-prune surface now
-    consists of `2184` zero-admitted terminal families with no cached compact
+    consists of `2160` zero-admitted terminal families with no cached compact
     bounds
-  - those captured prefixes therefore are not hiding a bar-clearer behind the
-    compact summary path; they currently expose no admitted terminal
-    completions at all on the canonical temporal-shell branch
-- A new follow-up step-`15` zero-admitted connectivity regression now sharpens
-  that same late blocker further:
-  - all `6552` generated terminal options across those captured `2184`
-    exact-pruned families currently disconnect before admissibility
-  - there are `0` trivially-derivable, structural-debt-cap, or other
-    exact-legality rejections anywhere on that captured surface
-  - step `15` remains the first late floor miss, but the next repair is now
-    specifically terminal clause exposure and exact connectivity on that
-    canonical temporal-shell surface rather than generic partial-prefix bar
-    math or claim admissibility
-- A new follow-up step-`15` connectivity-classification regression now sharpens
-  that same blocker further:
-  - those `6552` generated terminal options are not structurally disconnected
-  - all `6552` are instead structurally connected but still fail as
-    `NeedsFallback` candidates
-  - none currently qualify active-window connectivity, self-contained
-    connectivity, or historical reanchor on that captured canonical
-    temporal-shell surface
-  - the next repair is therefore qualifier / reanchor evidence on that
-    connected surface, not raw dependency-edge generation
-- A new follow-up step-`15` reanchor-prefix regression now sharpens that same
-  blocker further:
-  - across those captured `2184` zero-admitted exact-prune families,
-    historical-reanchor prefix progress now breaks at clause positions `0..5`
-    with counts `1458`, `486`, `162`, `54`, `18`, and `6`
-  - none of those captured families preserve a full seven-clause temporal-shell
-    prefix, so the current qualifier miss never reaches the last two
-    temporal-shell clause slots intact
-  - the next repair should therefore inspect earlier temporal-shell prefix
-    qualification on the canonical branch rather than just widening the
-    terminal clause matcher in isolation
-- A new follow-up step-`15` clause-`6` boundary regression now sharpens that
-  same blocker further:
-  - once the first six temporal-shell clauses are fixed, the current claim lane
-    keeps exactly `3` clause-`6` prefixes outside the captured exact-prune
-    surface: the exact historical-reanchor continuation plus `2` non-reanchor
-    claim variants
-  - none of those `3` clause-`6` prefixes belong to the captured `2184`
-    zero-admitted exact-prune families
-  - only the exact clause-`6` prefix still exposes a
-    `KeepWithoutFallback` terminal continuation; the two claim-only clause-`6`
+  - all `6480` generated terminal options across that captured surface are now
+    structurally connected but still fail as `NeedsFallback` candidates, with
+    `0` structural disconnections, `0` admissibility rejections, and `0`
+    historical reanchor hits
+  - the surviving temporal terminal cluster on the repaired canonical branch
+    has widened to `84` generated / `10` admitted / `10` exact-screened /
+    `8` pruned while preserving the canonical `DCT 103 / 8` continuation
+  - across those captured `2160` exact-prune families, historical-reanchor
+    prefix progress now first breaks only at clause positions `2..5` with
+    counts `1458`, `486`, `162`, and `54`; clause positions `0` and `1` are
+    now repaired out of the captured isolated-prefix surface
+  - the clause-`6` boundary remains downstream of that capture:
+    once the first six temporal-shell clauses are fixed, the repaired claim
+    lane still keeps exactly `3` clause-`6` prefixes outside the captured
+    surface, with only the exact reference continuation exposing a
+    `KeepWithoutFallback` terminal path while the two claim-only clause-`6`
     variants remain pure `NeedsFallback`
-  - the remaining captured exact-prune blocker is therefore earlier qualifier
-    evidence through clause `5` or earlier; clause `6` is now downstream of
-    that capture boundary
-- A new follow-up step-`15` isolated-prefix regression now sharpens that same
-  blocker further:
-  - on the otherwise exact seven-clause temporal-shell prefix, the captured
-    exact-prune surface now contains exactly `2` isolated claim-only variants
-    at each early clause position `0..5`
-  - all `12` of those single early deviations still classify all `3` terminal
-    continuations as `NeedsFallback` and remain zero-admitted
-  - the next repair should therefore target clause-local qualifier /
-    reanchor evidence at positions `0..5` themselves rather than a
-    multi-deviation interaction, clause `6`, or the terminal slot alone
-- A new follow-up step-`15` variant-product regression now sharpens that same
-  blocker further:
-  - for each early clause position `0..5`, those `2` isolated claim-only
-    local variants each stay captured across every later claim suffix
-    combination before the clause-`6` boundary, with per-variant suffix counts
-    `729`, `243`, `81`, `27`, `9`, and `3`
+  - the isolated-prefix and variant-product regressions now localize the
+    remaining miss to clause positions `2..5` themselves:
+    each remaining position contributes exactly `2` isolated claim-only
+    deviations on the otherwise exact seven-clause prefix, with per-variant
+    later-suffix counts `81`, `27`, `9`, and `3`, and all resulting
+    continuations still remain zero-admitted `NeedsFallback`
+  - the forced-reanchor recovery regression now proves each remaining isolated
+    local variant would recover all `3` terminal continuations as
+    `KeepWithoutFallback`, admitted, and bar-clearing on the otherwise exact
+    suffix, but the forced-reanchor winner regression also proves a direct
+    local reanchor flip still never restores the canonical reference terminal
+    clause: the remaining local best-rank profiles stay `75 / 8` at clause
+    `2`, `74 / 8` at clause `3`, and `89 / 8` at clauses `4` and `5`
   - the next repair should therefore stay on clause-local qualifier /
-    reanchor evidence for those exact local variants rather than reopening a
-    later-suffix interaction theory on the captured surface
-- A new follow-up step-`15` forced-reanchor recovery regression now sharpens
-  that same blocker further:
-  - on each of those `12` isolated early claim-only temporal-shell deviations,
-    restoring clause-local reanchor evidence would flip all `3` terminal
-    continuations to `KeepWithoutFallback`
-  - all `36` of those forced-reanchor local continuations are admitted and
-    bar-clearing on the otherwise exact suffix
-  - the next repair should therefore stay on clause-local qualifier /
-    reanchor evidence itself at positions `0..5` rather than reopening
-    downstream admissibility or bar arithmetic on that exact suffix
-- A new follow-up step-`15` forced-reanchor winner regression now sharpens
-  that same blocker further:
-  - on that same otherwise exact suffix, forcing clause-local reanchor on each
-    isolated early claim-only temporal-shell deviation still never restores the
-    canonical reference terminal clause
-  - those `12` local forced-recovery surfaces now split `6 / 6` between the
-    two non-reference claim terminal closures, with `0` reference-terminal
-    winners
-  - the position-local best-rank profiles are now fixed at `89 / 8` for
-    positions `0`, `1`, `4`, and `5`, `75 / 8` for position `2`, and
-    `74 / 8` for position `3`
-  - the next step-`15` repair therefore cannot be a simple historical-reanchor
-    bool flip on those local variants; it must restore clause-local qualifier
-    evidence while still preserving the canonical terminal continuation
+    reanchor evidence at positions `2..5` while preserving the exact
+    reference terminal continuation; do not broaden the repaired clause-`0` /
+    clause-`1` prefix acceptance to lifted terminal closures
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -363,7 +308,7 @@ This note is the exact next work order for `desktop_claim_shadow`.
     `103 / 8 / 780` to `88 / 8 / 795`
   - widening the earlier clause-`2` plus clause-`3` bridge pair displaced the
     canonical continuation further to `74 / 8 / 828`
-  - both variants were reverted, and the current step-`15`
+  - both variants were reverted, and the then-current step-`15`
     `103 / 8 / 780` baseline plus the exact-prune / connectivity /
     reanchor-prefix regressions were revalidated afterwards
   - the next step-`15` repair should therefore not directly broaden the early
@@ -452,30 +397,30 @@ This note is the exact next work order for `desktop_claim_shadow`.
      as the next late blocker
    - step `14` is now locally widened enough that it should stay on the guard
      rail as a regression rather than reopening as the first breadth blocker
-  - step `15` remains the first late floor, but the new captured exact-prune
-    regression shows that surface currently localizes to `2184`
-    zero-admitted families with no cached compact bounds; the new
-    connectivity regressions now prove all `6552` generated terminal options
-    there are structurally connected but still unqualified `NeedsFallback`
-    candidates with `0` historical reanchor hits, and the follow-up
-    reanchor-prefix regression now proves those captured families already fall
-    off the temporal-shell prefix by clause `5` or earlier with no full
-    seven-clause matches; the new clause-`6` boundary regression now also
-    proves that once those first six clauses are fixed, the captured surface
-    has already stopped and only `3` clause-`6` variants remain outside it;
-    the new isolated-prefix regression now further proves each of the `12`
-    single early claim-only deviations on the otherwise exact seven-clause
-    prefix still leaves all `3` terminal continuations at `NeedsFallback` and
-    zero-admitted, and the follow-up variant-product regression now proves
-    each of those `12` local variants stays captured across its full later
-    claim suffix fan-out too, while the new forced-reanchor recovery
-    regression now proves each isolated local variant would recover all `3`
-    terminal continuations as `KeepWithoutFallback`, admitted, and
-    bar-clearing on the otherwise exact suffix, so inspect earlier
-    clause-local qualifier / reanchor evidence on that connected surface
-    rather than generic partial-prefix bar arithmetic, raw dependency-edge
-    generation, claim admissibility, downstream admissibility / bar
-    bookkeeping, a multi-deviation-only interaction, a later-suffix
+  - step `15` remains the first late floor, but the updated captured
+    exact-prune regression now shows that surface localizes to `2160`
+    zero-admitted families with no cached compact bounds while the live
+    canonical branch stays fixed at `DCT 103 / 8 / 930`; the connectivity
+    regressions now prove all `6480` generated terminal options there are
+    structurally connected but still unqualified `NeedsFallback` candidates
+    with `0` historical reanchor hits and `0` admissibility rejections, and
+    the follow-up reanchor-prefix regression now proves those captured
+    families already fall off the temporal-shell prefix only at clause
+    positions `2..5` with no full seven-clause matches while clause positions
+    `0` and `1` stay repaired out of the captured isolated-prefix surface;
+    the clause-`6` boundary regression still proves only `3` clause-`6`
+    variants remain outside the captured surface once the first six clauses
+    are fixed, while the updated isolated-prefix / variant-product
+    regressions now localize the remaining miss to `8` isolated claim-only
+    deviations, two each at clause positions `2`, `3`, `4`, and `5`, each
+    blocked across its later-suffix fan-out; the forced-reanchor recovery
+    regression still proves each remaining isolated local variant would
+    recover all `3` terminal continuations as `KeepWithoutFallback`,
+    admitted, and bar-clearing on the otherwise exact suffix, so inspect
+    clause-local qualifier / reanchor evidence at positions `2..5` on that
+    connected surface rather than generic partial-prefix bar arithmetic, raw
+    dependency-edge generation, claim admissibility, downstream admissibility
+    / bar bookkeeping, a multi-deviation-only interaction, a later-suffix
     interaction, or the clause-`6` / terminal slot alone
 10. Keep the step-`1` breadth miss on the checklist, but do not confuse that
     longstanding signoff floor with the new claim-specific mid/late parity
@@ -509,10 +454,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
 9. Keep the new step-`12` selector regression green so live claim acceptance
    continues to choose the guarded same-primary curvature shell over richer
    raw structural winners inside the repaired `34 / 6` tier.
-10. Keep the new step-`12` continuation-collapse regression green so the tied
-    same-primary step-`12` set stays pinned to one observed step-`13..15`
-    continuation with generated counts `123`, `12027`, and `780` while the
-    remaining late floor collapse is repaired.
+ 10. Keep the new step-`12` continuation-collapse regression green so the tied
+     same-primary step-`12` set stays pinned to one observed step-`13..15`
+     continuation with generated counts `123`, `12027`, and `930` while the
+     remaining late floor collapse is repaired.
 11. Keep the new step-`13` scoped-widening plus structural-connectivity repair
     regressions green so the repaired step-`12` chain keeps reporting
     claim-open `kappa = 7..7` with raw widths `[3,1,3,3,1,1,1]`, raw
@@ -538,20 +483,21 @@ This note is the exact next work order for `desktop_claim_shadow`.
     `DCT 103 / 8` continuation while the broader `78 / 9 / 12027`
     branch remains the alternate local path.
 15. Keep the new step-`15` exact-prune family regression green so the
-    repaired canonical temporal-shell path continues to report `2184`
+    repaired canonical temporal-shell path continues to report `2160`
     captured zero-admitted exact prunes with no cached compact bounds while
-    the next repair targets connected terminal exposure there.
+    the live canonical continuation stays fixed at `DCT 103 / 8 / 930`.
 16. Keep the new step-`15` zero-admitted connectivity regressions green so the
-    repaired canonical temporal-shell path continues to report `6552`
+    repaired canonical temporal-shell path continues to report `6480`
     structurally connected but still unqualified `NeedsFallback` terminal
     options, `0` structural disconnections, `0` historical reanchor hits, and
-    `0` admissibility rejections across those captured `2184` exact prunes
+    `0` admissibility rejections across those captured `2160` exact prunes
     while the next repair targets qualifier / reanchor evidence there.
 17. Keep the new step-`15` reanchor-prefix regression green so the repaired
     canonical temporal-shell path continues to report no full seven-clause
-    reanchor-prefix matches across those captured `2184` exact prunes and the
-    current mismatch split stays localized to clause positions `0..5` with
-    counts `1458`, `486`, `162`, `54`, `18`, and `6`.
+    reanchor-prefix matches across those captured `2160` exact prunes and the
+    current mismatch split stays localized to clause positions `2..5` with
+    counts `1458`, `486`, `162`, and `54`, while clause positions `0` and `1`
+    stay repaired out of the captured surface.
 18. Keep the new step-`15` clause-`6` boundary regression green so once the
     first six temporal-shell clauses are fixed, the repaired claim lane still
     keeps exactly `3` clause-`6` prefixes outside the captured exact-prune
@@ -559,20 +505,20 @@ This note is the exact next work order for `desktop_claim_shadow`.
     `KeepWithoutFallback` terminal path while the two claim-only clause-`6`
     variants remain pure `NeedsFallback`.
 19. Keep the new step-`15` isolated-prefix plus variant-product regressions
-    green so each early clause position `0..5` still contributes exactly `2`
-    isolated claim-only deviations on the otherwise exact seven-clause prefix,
-    each such local variant still stays captured across every later claim
-    suffix combination before the clause-`6` boundary, and all resulting
-    continuations still leave `0` admitted candidates.
-    Keep the new forced-reanchor recovery regression green too: each isolated
-    local variant should still recover all `3` terminal continuations as
-    `KeepWithoutFallback`, admitted, and bar-clearing on the otherwise exact
-    suffix once clause-local qualifier evidence is supplied.
+    green so each remaining clause position `2..5` still contributes exactly
+    `2` isolated claim-only deviations on the otherwise exact seven-clause
+    prefix, with per-variant later-suffix counts `81`, `27`, `9`, and `3`,
+    while clause positions `0` and `1` stay absent from that captured
+    surface and all resulting continuations still leave `0` admitted
+    candidates.
+    Keep the new forced-reanchor recovery regression green too: each remaining
+    isolated local variant should still recover all `3` terminal
+    continuations as `KeepWithoutFallback`, admitted, and bar-clearing on the
+    otherwise exact suffix once clause-local qualifier evidence is supplied.
     Keep the new forced-reanchor winner regression green too: that same direct
     local reanchor flip should still never restore the canonical reference
-    terminal clause and should instead split the `12` isolated exact-suffix
-    recoveries `6 / 6` between the two non-reference terminal closures with
-    the fixed position-local `89 / 8`, `75 / 8`, and `74 / 8` winner profiles.
+    terminal clause and should instead stay pinned to the fixed remaining
+    noncanonical winner profiles `75 / 8`, `74 / 8`, and `89 / 8`.
 20. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
 21. Keep the stored certification / benchmark assertions green for the

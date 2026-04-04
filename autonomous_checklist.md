@@ -16,7 +16,8 @@ It lists only work that is still open.
   - accepted hashes diverge from guarded replay at steps `9`, `11`, and `12`
   - early breadth still misses at step `1` (`546` versus target `2144`)
   - late generated floors still miss at steps `11..15`
-- Local step-`11` and step-`12` repairs are landed, but no stored rerun has
+- Local step-`11`, step-`12`, step-`13`, step-`14`, and narrow step-`15`
+  clause-`0` / clause-`1` repairs are landed, but no stored rerun has
   consumed them yet.
 - The remaining local late blocker is now split cleanly:
   - a scoped claim-only widening plus follow-up structural-connectivity plus
@@ -37,41 +38,35 @@ It lists only work that is still open.
   - step `14` is now a guardrail rather than the first blocker:
     raw `19683`, `3` surviving roots, `12027` live generated prefixes, and a
     selector that preserves the canonical step-`15` continuation
-  - step `15` still opens a raw `6561`-telescope catalog but loses `512`
-    prefixes to exact partial-prefix bar failure before proof-close; the new
-    local exact-prune family read now shows that captured surface as `2184`
-    zero-admitted terminal families with no cached compact bounds, so the
-    remaining open work there is no longer generic bound accounting,
-    connected-terminal exposure, or claim admissibility; the new connectivity
-    regression now proves all `6552` generated terminal options on that
-    captured surface disconnect before admissibility, and the new follow-up
-    connectivity classification now proves those options are all structurally
-    connected but still unqualified `NeedsFallback` candidates with `0`
-    historical reanchor hits; the new reanchor-prefix regression now also
-    proves those exact-pruned families already fall off the temporal-shell
-    prefix by clause `5` or earlier with no full seven-clause
-    reanchor-prefix matches; the new clause-`6` boundary regression now also
-    proves that once those first six temporal-shell clauses are fixed, the
-    captured exact-prune surface has already stopped and only `3` clause-`6`
-    variants remain outside it, with only the exact reference continuation
-    exposing a `KeepWithoutFallback` terminal path; the new isolated-prefix
-    regression now also proves each of the `12` single early claim-only
-    deviations on the otherwise exact seven-clause prefix still leaves all `3`
-    terminal continuations at `NeedsFallback` and zero-admitted, and the
-    follow-up variant-product regression now proves each of those `12` local
-    variants stays captured across its full later claim suffix fan-out too;
-    the new forced-reanchor recovery regression now further proves that on the
-    otherwise exact suffix each such isolated local variant would recover all
+  - step `15` still opens a raw `6561`-telescope catalog, but the repaired
+    canonical branch now narrows to `930` generated prefixes on the same
+    `DCT 103 / 8` continuation after paying `540` exact partial-prefix bar
+    failures plus `8` incumbent-dominance prunes before proof-close; the
+    captured exact-prune surface is now `2160` zero-admitted terminal
+    families with no cached compact bounds, and all `6480` generated terminal
+    options on that surface are structurally connected but still unqualified
+    `NeedsFallback` candidates with `0` historical reanchor hits and `0`
+    admissibility rejections
+  - the remaining step-`15` mismatch is now localized more tightly:
+    historical-reanchor prefix progress first breaks only at clause positions
+    `2..5` with counts `1458`, `486`, `162`, and `54`, while clause
+    positions `0` and `1` are repaired out of the captured isolated-prefix
+    surface and clause `6` stays downstream of that capture boundary
+  - the remaining isolated deviations are now `8` total, with exactly `2`
+    claim-only variants at each clause position `2`, `3`, `4`, and `5`;
+    those local variants still stay blocked across every later claim suffix
+    combination before the clause-`6` boundary and still leave all `3`
+    terminal continuations zero-admitted `NeedsFallback`
+  - the forced-reanchor recovery and winner reads now apply only to clause
+    positions `2..5`: each remaining isolated local variant would recover all
     `3` terminal continuations as `KeepWithoutFallback`, admitted, and
-    bar-clearing if clause-local reanchor evidence were restored; the new
-    forced-reanchor winner regression now also proves that such a direct local
-    reanchor flip still never restores the canonical reference terminal clause
-    and instead splits those isolated exact-suffix recoveries between the two
-    non-reference terminal closures, so the open step-`15` work is pure
-    earlier clause-local qualifier evidence on the canonical branch through
-    clause `5` or earlier while preserving the canonical terminal
-    continuation, not the clause-`6` / terminal slot, a multi-deviation
-    interaction, or a later-suffix interaction
+    bar-clearing on the otherwise exact suffix if clause-local qualifier
+    evidence were restored, but a direct local reanchor flip still never
+    restores the canonical reference terminal clause and instead stays on the
+    noncanonical `75 / 8`, `74 / 8`, and `89 / 8` winner profiles, so the
+    open step-`15` work is still clause-local qualifier evidence on the
+    canonical branch at positions `2..5` while preserving the exact reference
+    terminal continuation
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /
@@ -94,7 +89,7 @@ It lists only work that is still open.
   - a clause-`2` plus clause-`3` reland displaced it further to
     `74 / 8 / 828`
   - both variants were reverted and the baseline step-`15`
-    `103 / 8 / 780` surface was revalidated afterwards, so the remaining open
+    `103 / 8 / 930` surface was revalidated afterwards, so the remaining open
     work is narrower qualifier evidence on the current connected captured
     surface rather than direct early bridge-matcher expansion
 - Claim-policy honesty, fallback honesty, narrative/event completeness,
