@@ -294,6 +294,20 @@ gate.
     isolated-prefix surface, so the remaining local repair is now clause-
     local qualifier evidence at positions `2..5` while preserving the exact
     reference terminal continuation
+- A new local exact-terminal-only isolated-recovery regression now sharpens
+  that same step-`15` blocker further:
+  - on the otherwise exact suffix, granting isolated exact-terminal recovery
+    to the remaining clause-`2..5` temporal deviations would still create
+    stronger-than-canonical local recovered profiles only at clause positions
+    `2` and `3`
+  - those unsafe exact-terminal recovered profiles are now fixed at
+    `89 / 8` for clause `2` and `88 / 8` for clause `3`
+  - the same exact-terminal-only recovery now stays on canonical-primary
+    `103 / 8` profiles at clause positions `4` and `5`
+  - that exact-terminal-only branch was not landed, and the canonical
+    `DCT 103 / 8 / 930` continuation plus the current step-`15`
+    exact-prune / connectivity / isolated-variant guardrails were
+    revalidated afterwards
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
@@ -713,9 +727,15 @@ gate.
     historical reanchor prefix only at clause positions `2..5` with counts
     `1458`, `486`, `162`, and `54`; clause positions `0` and `1` are no
     longer present on the captured isolated-prefix surface, clause `6` still
-    stays downstream of that capture boundary, and the next repair should
-    therefore focus on clause-local temporal qualifier evidence at positions
-    `2..5` while preserving the exact reference terminal continuation
+    stays downstream of that capture boundary, and the new exact-terminal-only
+    isolated recovery regression now further fences the earlier bridge slots:
+    clause positions `2` and `3` still reopen stronger local `89 / 8` and
+    `88 / 8` rivals even without lifted terminal closures, while clause
+    positions `4` and `5` stay on canonical-primary `103 / 8` recovered
+    profiles, so the next repair should focus on clause-local temporal
+    qualifier evidence at positions `2..5` while keeping clause-`2` /
+    clause-`3` isolated recovery fenced and preserving the exact reference
+    terminal continuation
   - avoiding a direct temporal-reanchor matcher reland first:
     both the broad `60 / 8 / 9840` branch and the narrower `89 / 8 / 780`
     branch disturbed the canonical step-`15` continuation and were reverted
@@ -809,7 +829,11 @@ gate.
     suffix, while the new forced-reanchor winner regression now also proves
     that a direct local reanchor flip still routes those isolated exact-suffix
     recoveries into noncanonical `89 / 8`, `75 / 8`, and `74 / 8` terminal
-    winners instead of the reference terminal clause, so do not treat that
+    winners instead of the reference terminal clause, and the new
+    exact-terminal-only isolated recovery regression now proves that even
+    keeping the terminal fixed still reopens stronger local `89 / 8` and
+    `88 / 8` clause-`2` / clause-`3` rivals while clause `4` / clause `5`
+    stay on canonical-primary `103 / 8`, so do not treat that
     remaining loss as generic bar bookkeeping, raw
     dependency-edge generation, a claim admissibility miss, a terminal-clause-
     only matcher bug, a multi-deviation-only interaction, a later-suffix

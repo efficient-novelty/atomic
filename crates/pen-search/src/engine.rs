@@ -12426,6 +12426,126 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_exact_terminal_only_isolated_recovery_still_reopens_clause_two_three_rivals()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let canonical_bit_kappa = u16::try_from(pen_core::encode::telescope_bit_cost(
+            &Telescope::reference(15),
+        ))
+        .expect("bit cost exceeded u16");
+        let canonical_rank = super::acceptance_rank_for_telescope(
+            surface.objective_bar,
+            &Telescope::reference(15),
+            103,
+            canonical_bit_kappa,
+            8,
+        )
+        .expect("reference step-15 telescope should clear the bar");
+        let mut recovered_counts = BTreeMap::new();
+        let mut recovered_profiles = BTreeMap::new();
+
+        for position in 0..6 {
+            let isolated_prefixes = surface
+                .pruned_terminal_prefixes
+                .iter()
+                .filter(|work_item| {
+                    let clauses = &work_item.prefix_telescope.clauses;
+                    clauses[..position] == reference_prefix.clauses[..position]
+                        && clauses[position] != reference_prefix.clauses[position]
+                        && clauses[position + 1..] == reference_prefix.clauses[position + 1..]
+                })
+                .collect::<Vec<_>>();
+            let mut clears = 0usize;
+            let mut profiles = BTreeSet::new();
+
+            for work_item in isolated_prefixes {
+                let mut telescope = work_item.prefix_telescope.clone();
+                telescope.clauses.push(reference_terminal.clone());
+                let admissibility_decision = assess_strict_admissibility(
+                    surface.step_index,
+                    &surface.library,
+                    &telescope,
+                    surface.admissibility,
+                );
+                if !admissibility_decision.is_admitted() {
+                    continue;
+                }
+
+                let exact_nu = u16::try_from(
+                    structural_nu(&telescope, &surface.library, &surface.nu_history).total,
+                )
+                .expect("nu exceeded u16");
+                let bit_kappa_used =
+                    u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                        .expect("bit cost exceeded u16");
+                let clause_kappa_used =
+                    u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                let accept_rank = super::acceptance_rank_for_telescope(
+                    surface.objective_bar,
+                    &telescope,
+                    exact_nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
+                )
+                .expect("reference-terminal isolated recovery should clear the bar");
+                if accept_rank < canonical_rank {
+                    clears += 1;
+                }
+                profiles.insert((exact_nu, accept_rank.overshoot.clone()));
+            }
+
+            recovered_counts.insert(position, clears);
+            recovered_profiles.insert(position, profiles);
+        }
+
+        assert_eq!(
+            recovered_counts,
+            [(0_usize, 0_usize), (1, 0), (2, 2), (3, 2), (4, 0), (5, 0),]
+                .into_iter()
+                .collect(),
+            "isolated exact-terminal recovery would still produce stronger-than-canonical local rivals at clause positions 2 and 3, while positions 4 and 5 stay on the canonical primary profile"
+        );
+        assert_eq!(
+            recovered_profiles,
+            [
+                (0_usize, BTreeSet::new()),
+                (1, BTreeSet::new()),
+                (
+                    2,
+                    [(89_u16, Rational::new(78711, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    3,
+                    [(88_u16, Rational::new(9509, 2639))].into_iter().collect()
+                ),
+                (
+                    4,
+                    [(103_u16, Rational::new(115657, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+                (
+                    5,
+                    [(103_u16, Rational::new(115657, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "exact-terminal-only local recovery would still create stronger isolated clause-2 and clause-3 rivals, so those early bridge positions should remain fenced while later clause-4 and clause-5 qualifier work stays in play"
+        );
+    }
+
+    #[test]
     fn current_claim_step_fifteen_forced_reanchor_on_isolated_temporal_variants_still_chooses_noncanonical_terminal_winners()
      {
         let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);

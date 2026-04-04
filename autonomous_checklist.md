@@ -67,6 +67,13 @@ It lists only work that is still open.
     open step-`15` work is still clause-local qualifier evidence on the
     canonical branch at positions `2..5` while preserving the exact reference
     terminal continuation
+  - a new exact-terminal-only isolated recovery regression now narrows that
+    open step-`15` work further:
+    clause positions `2` and `3` still reopen stronger local exact-terminal
+    recovered profiles at `89 / 8` and `88 / 8`, while clause positions `4`
+    and `5` stay on canonical-primary `103 / 8`, so direct clause-`2` /
+    clause-`3` isolated recovery remains fenced while later clause-`4` /
+    clause-`5` qualifier evidence stays in play
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /
@@ -92,6 +99,14 @@ It lists only work that is still open.
     `103 / 8 / 930` surface was revalidated afterwards, so the remaining open
     work is narrower qualifier evidence on the current connected captured
     surface rather than direct early bridge-matcher expansion
+- A direct isolated exact-terminal clause-`2` / clause-`3` recovery reland
+  is now also ruled out as the direct next step-`15` fix:
+  - the new local regression shows those earlier isolated recoveries still
+    reopen stronger local `89 / 8` and `88 / 8` rivals even without lifted
+    terminal closures
+  - clause positions `4` and `5` stay on canonical-primary `103 / 8`, so the
+    remaining open work can stay later-clause-scoped before revisiting the
+    earlier bridge slots
 - Claim-policy honesty, fallback honesty, narrative/event completeness,
   exact-screen reason completeness, prune-class completeness, and manifest
   completeness are already earned on the stored full-profile run.

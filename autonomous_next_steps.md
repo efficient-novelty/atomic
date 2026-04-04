@@ -228,6 +228,20 @@ This note is the exact next work order for `desktop_claim_shadow`.
     reanchor evidence at positions `2..5` while preserving the exact
     reference terminal continuation; do not broaden the repaired clause-`0` /
     clause-`1` prefix acceptance to lifted terminal closures
+- A new local exact-terminal-only isolated recovery regression now sharpens
+  that same late blocker again:
+  - on the otherwise exact suffix, granting isolated exact-terminal recovery
+    to the remaining clause-`2..5` temporal deviations would still create
+    stronger-than-canonical local recovered profiles only at clause positions
+    `2` and `3`
+  - those unsafe exact-terminal recovered profiles are now fixed at
+    `89 / 8` for clause `2` and `88 / 8` for clause `3`
+  - the same exact-terminal-only recovery now stays on canonical-primary
+    `103 / 8` profiles at clause positions `4` and `5`
+  - that exact-terminal-only branch was not landed, so the next repair should
+    keep clause-`2` / clause-`3` isolated recovery fenced and can use clause-
+    `4` / clause-`5` qualifier evidence as the later local opening while the
+    canonical `DCT 103 / 8 / 930` continuation stays frozen
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -408,20 +422,25 @@ This note is the exact next work order for `desktop_claim_shadow`.
     families already fall off the temporal-shell prefix only at clause
     positions `2..5` with no full seven-clause matches while clause positions
     `0` and `1` stay repaired out of the captured isolated-prefix surface;
-    the clause-`6` boundary regression still proves only `3` clause-`6`
-    variants remain outside the captured surface once the first six clauses
-    are fixed, while the updated isolated-prefix / variant-product
-    regressions now localize the remaining miss to `8` isolated claim-only
-    deviations, two each at clause positions `2`, `3`, `4`, and `5`, each
-    blocked across its later-suffix fan-out; the forced-reanchor recovery
-    regression still proves each remaining isolated local variant would
-    recover all `3` terminal continuations as `KeepWithoutFallback`,
-    admitted, and bar-clearing on the otherwise exact suffix, so inspect
+   the clause-`6` boundary regression still proves only `3` clause-`6`
+   variants remain outside the captured surface once the first six clauses
+   are fixed, while the updated isolated-prefix / variant-product
+   regressions now localize the remaining miss to `8` isolated claim-only
+   deviations, two each at clause positions `2`, `3`, `4`, and `5`, each
+   blocked across its later-suffix fan-out; the forced-reanchor recovery
+   regression still proves each remaining isolated local variant would
+   recover all `3` terminal continuations as `KeepWithoutFallback`,
+   admitted, and bar-clearing on the otherwise exact suffix, so inspect
     clause-local qualifier / reanchor evidence at positions `2..5` on that
     connected surface rather than generic partial-prefix bar arithmetic, raw
     dependency-edge generation, claim admissibility, downstream admissibility
     / bar bookkeeping, a multi-deviation-only interaction, a later-suffix
-    interaction, or the clause-`6` / terminal slot alone
+    interaction, or the clause-`6` / terminal slot alone; the new
+    exact-terminal-only isolated recovery regression now further fences the
+    earlier bridge positions by proving clause `2` and clause `3` still
+    reopen stronger local `89 / 8` and `88 / 8` recovered rivals even
+    without lifted terminal closures, while clause `4` and clause `5` stay on
+    canonical-primary `103 / 8` recovered profiles
 10. Keep the step-`1` breadth miss on the checklist, but do not confuse that
     longstanding signoff floor with the new claim-specific mid/late parity
     fork.
@@ -519,6 +538,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
     local reanchor flip should still never restore the canonical reference
     terminal clause and should instead stay pinned to the fixed remaining
     noncanonical winner profiles `75 / 8`, `74 / 8`, and `89 / 8`.
+    Keep the new exact-terminal-only isolated recovery regression green too:
+    even without lifted terminal closures, clause positions `2` and `3`
+    should still reopen stronger local `89 / 8` and `88 / 8` recovered
+    rivals while clause positions `4` and `5` stay on canonical-primary
+    `103 / 8`, so direct clause-`2` / clause-`3` isolated recovery remains
+    fenced while later clause-`4` / clause-`5` qualifier work stays in play.
 20. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
 21. Keep the stored certification / benchmark assertions green for the
@@ -586,6 +611,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
   the clause-`3`-only branch already displaced the canonical step-`15`
   continuation to `88 / 8 / 795`, and the clause-`2` plus clause-`3`
   branch displaced it further to `74 / 8 / 828`
+- a direct isolated exact-terminal clause-`2` / clause-`3` recovery reland
+  first:
+  the new local regression now shows that even without lifted terminal
+  closures those earlier isolated recoveries still reopen stronger local
+  `89 / 8` and `88 / 8` rivals on the otherwise exact suffix
 
 ## Keep Or Branch Decision
 
