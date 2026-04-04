@@ -250,6 +250,15 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next repair should therefore target clause-local qualifier /
     reanchor evidence at positions `0..5` themselves rather than a
     multi-deviation interaction, clause `6`, or the terminal slot alone
+- A new follow-up step-`15` variant-product regression now sharpens that same
+  blocker further:
+  - for each early clause position `0..5`, those `2` isolated claim-only
+    local variants each stay captured across every later claim suffix
+    combination before the clause-`6` boundary, with per-variant suffix counts
+    `729`, `243`, `81`, `27`, `9`, and `3`
+  - the next repair should therefore stay on clause-local qualifier /
+    reanchor evidence for those exact local variants rather than reopening a
+    later-suffix interaction theory on the captured surface
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
@@ -433,10 +442,13 @@ This note is the exact next work order for `desktop_claim_shadow`.
     the new isolated-prefix regression now further proves each of the `12`
     single early claim-only deviations on the otherwise exact seven-clause
     prefix still leaves all `3` terminal continuations at `NeedsFallback` and
-    zero-admitted, so inspect earlier clause-local qualifier / reanchor
-    evidence on that connected surface rather than generic partial-prefix bar
-    arithmetic, raw dependency-edge generation, claim admissibility, a
-    multi-deviation-only interaction, or the clause-`6` / terminal slot alone
+    zero-admitted, and the follow-up variant-product regression now proves
+    each of those `12` local variants stays captured across its full later
+    claim suffix fan-out too, so inspect earlier clause-local qualifier /
+    reanchor evidence on that connected surface rather than generic
+    partial-prefix bar arithmetic, raw dependency-edge generation, claim
+    admissibility, a multi-deviation-only interaction, a later-suffix
+    interaction, or the clause-`6` / terminal slot alone
 10. Keep the step-`1` breadth miss on the checklist, but do not confuse that
     longstanding signoff floor with the new claim-specific mid/late parity
     fork.
@@ -518,11 +530,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
     surface, with only the exact reference continuation exposing a
     `KeepWithoutFallback` terminal path while the two claim-only clause-`6`
     variants remain pure `NeedsFallback`.
-19. Keep the new step-`15` isolated-prefix regression green so each early
-    clause position `0..5` still contributes exactly `2` isolated claim-only
-    deviations on the otherwise exact seven-clause prefix, and all `12` such
-    prefixes still leave all `3` terminal continuations at `NeedsFallback`
-    with `0` admitted candidates.
+19. Keep the new step-`15` isolated-prefix plus variant-product regressions
+    green so each early clause position `0..5` still contributes exactly `2`
+    isolated claim-only deviations on the otherwise exact seven-clause prefix,
+    each such local variant still stays captured across every later claim
+    suffix combination before the clause-`6` boundary, and all resulting
+    continuations still leave `0` admitted candidates.
 20. Keep the stored compare regression green for the step-`12`
     guarded `34 / 6` versus stored-`v5` claim `33 / 5` drop.
 21. Keep the stored certification / benchmark assertions green for the

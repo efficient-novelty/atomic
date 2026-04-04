@@ -58,10 +58,12 @@ It lists only work that is still open.
     `KeepWithoutFallback` terminal path; the new isolated-prefix regression now
     also proves each of the `12` single early claim-only deviations on the
     otherwise exact seven-clause prefix still leaves all `3` terminal
-    continuations at `NeedsFallback` and zero-admitted, so the open step-`15`
-    work is earlier clause-local qualifier evidence on the canonical branch
-    through clause `5` or earlier, not just the clause-`6` / terminal slot or
-    a multi-deviation interaction
+    continuations at `NeedsFallback` and zero-admitted, and the follow-up
+    variant-product regression now proves each of those `12` local variants
+    stays captured across its full later claim suffix fan-out too, so the open
+    step-`15` work is earlier clause-local qualifier evidence on the canonical
+    branch through clause `5` or earlier, not just the clause-`6` / terminal
+    slot, a multi-deviation interaction, or a later-suffix interaction
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /
