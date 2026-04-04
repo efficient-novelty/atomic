@@ -17,8 +17,8 @@ It lists only work that is still open.
   - early breadth still misses at step `1` (`546` versus target `2144`)
   - late generated floors still miss at steps `11..15`
 - Local step-`11`, step-`12`, step-`13`, step-`14`, and narrow step-`15`
-  clause-`0` / clause-`1` repairs are landed, but no stored rerun has
-  consumed them yet.
+  clause-`0` / clause-`1` plus clause-`4` / clause-`5` repairs are landed,
+  but no stored rerun has consumed them yet.
 - The remaining local late blocker is now split cleanly:
   - a scoped claim-only widening plus follow-up structural-connectivity plus
     repaired-chain incumbent-relief repairs are now landed at step `13`:
@@ -39,41 +39,40 @@ It lists only work that is still open.
     raw `19683`, `3` surviving roots, `12027` live generated prefixes, and a
     selector that preserves the canonical step-`15` continuation
   - step `15` still opens a raw `6561`-telescope catalog, but the repaired
-    canonical branch now narrows to `930` generated prefixes on the same
-    `DCT 103 / 8` continuation after paying `540` exact partial-prefix bar
-    failures plus `8` incumbent-dominance prunes before proof-close; the
-    captured exact-prune surface is now `2160` zero-admitted terminal
-    families with no cached compact bounds, and all `6480` generated terminal
+    canonical branch now narrows to `1794` generated prefixes on the same
+    `DCT 103 / 8` continuation after paying `468` exact partial-prefix bar
+    failures plus `80` incumbent-dominance prunes before proof-close; the
+    captured exact-prune surface is now `1944` zero-admitted terminal
+    families with no cached compact bounds, and all `5832` generated terminal
     options on that surface are structurally connected but still unqualified
     `NeedsFallback` candidates with `0` historical reanchor hits and `0`
     admissibility rejections
   - the remaining step-`15` mismatch is now localized more tightly:
     historical-reanchor prefix progress first breaks only at clause positions
-    `2..5` with counts `1458`, `486`, `162`, and `54`, while clause
-    positions `0` and `1` are repaired out of the captured isolated-prefix
-    surface and clause `6` stays downstream of that capture boundary
-  - the remaining isolated deviations are now `8` total, with exactly `2`
-    claim-only variants at each clause position `2`, `3`, `4`, and `5`;
+    `2..3` with counts `1458` and `486`, while clause positions `0`, `1`,
+    `4`, and `5` are repaired out of the captured isolated-prefix surface and
+    clause `6` stays downstream of that capture boundary
+  - the remaining isolated deviations are now `4` total, with exactly `2`
+    claim-only variants at each clause position `2` and `3`;
     those local variants still stay blocked across every later claim suffix
     combination before the clause-`6` boundary and still leave all `3`
     terminal continuations zero-admitted `NeedsFallback`
   - the forced-reanchor recovery and winner reads now apply only to clause
-    positions `2..5`: each remaining isolated local variant would recover all
+    positions `2..3`: each remaining isolated local variant would recover all
     `3` terminal continuations as `KeepWithoutFallback`, admitted, and
     bar-clearing on the otherwise exact suffix if clause-local qualifier
     evidence were restored, but a direct local reanchor flip still never
     restores the canonical reference terminal clause and instead stays on the
-    noncanonical `75 / 8`, `74 / 8`, and `89 / 8` winner profiles, so the
+    noncanonical `75 / 8` and `74 / 8` winner profiles, so the
     open step-`15` work is still clause-local qualifier evidence on the
-    canonical branch at positions `2..5` while preserving the exact reference
+    canonical branch at positions `2..3` while preserving the exact reference
     terminal continuation
   - a new exact-terminal-only isolated recovery regression now narrows that
     open step-`15` work further:
     clause positions `2` and `3` still reopen stronger local exact-terminal
-    recovered profiles at `89 / 8` and `88 / 8`, while clause positions `4`
-    and `5` stay on canonical-primary `103 / 8`, so direct clause-`2` /
-    clause-`3` isolated recovery remains fenced while later clause-`4` /
-    clause-`5` qualifier evidence stays in play
+    recovered profiles at `89 / 8` and `88 / 8`, so direct clause-`2` /
+    clause-`3` isolated recovery remains fenced while the repaired
+    clause-`4` / clause-`5` qualifier work stays on the guardrail
 - A naive global claim band-`7` widening is now ruled out as the direct next
   reland:
   - it can lift the repaired local step-`13` read to raw `2187` /
@@ -96,7 +95,7 @@ It lists only work that is still open.
   - a clause-`2` plus clause-`3` reland displaced it further to
     `74 / 8 / 828`
   - both variants were reverted and the baseline step-`15`
-    `103 / 8 / 930` surface was revalidated afterwards, so the remaining open
+    `103 / 8 / 1794` surface was revalidated afterwards, so the remaining open
     work is narrower qualifier evidence on the current connected captured
     surface rather than direct early bridge-matcher expansion
 - A direct isolated exact-terminal clause-`2` / clause-`3` recovery reland

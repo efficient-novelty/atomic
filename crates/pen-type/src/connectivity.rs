@@ -814,31 +814,7 @@ fn matches_historical_reanchor_clause(position: usize, expr: &Expr, anchor: u32)
                 )
         ),
         4 => matches_temporal_flat_next_bridge(expr),
-        5 => matches!(
-            expr,
-            Expr::Pi(domain, codomain)
-                if matches!(
-                    domain.as_ref(),
-                    Expr::Sharp(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                ) && matches!(
-                    codomain.as_ref(),
-                    Expr::Eventually(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Sharp(inner)
-                                if matches!(inner.as_ref(), Expr::Var(1))
-                                    || matches!(
-                                        inner.as_ref(),
-                                        Expr::Eventually(deeper)
-                                            if matches!(deeper.as_ref(), Expr::Var(1))
-                                    )
-                        )
-                )
-        ),
+        5 => matches_temporal_sharp_eventually_bridge(expr),
         6 => matches!(
             expr,
             Expr::Lam(body)
@@ -891,6 +867,11 @@ fn matches_temporal_eventually_reanchor_clause(expr: &Expr) -> bool {
 }
 
 fn matches_temporal_flat_next_bridge(expr: &Expr) -> bool {
+    matches_reference_temporal_flat_next_bridge(expr)
+        || matches_claim_temporal_flat_next_bridge(expr)
+}
+
+fn matches_reference_temporal_flat_next_bridge(expr: &Expr) -> bool {
     matches!(
         expr,
         Expr::Pi(domain, codomain)
@@ -936,6 +917,144 @@ fn matches_temporal_flat_next_bridge(expr: &Expr) -> bool {
                                 )
                         )
                 )
+            )
+    )
+}
+
+fn matches_claim_temporal_flat_next_bridge(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Flat(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Next(inner)
+                            if matches!(
+                                inner.as_ref(),
+                                Expr::Eventually(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                            )
+                    )
+            ) && matches!(
+                codomain.as_ref(),
+                Expr::Next(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
+            )
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Flat(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Next(inner)
+                            if matches!(
+                                inner.as_ref(),
+                                Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                            )
+                    )
+            ) && matches!(
+                codomain.as_ref(),
+                Expr::Next(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Flat(inner)
+                            if matches!(
+                                inner.as_ref(),
+                                Expr::Next(deeper)
+                                    if matches!(
+                                        deeper.as_ref(),
+                                        Expr::Eventually(deeper_inner)
+                                            if matches!(deeper_inner.as_ref(), Expr::Var(1))
+                                    )
+                            )
+                    )
+            )
+    )
+}
+
+fn matches_temporal_sharp_eventually_bridge(expr: &Expr) -> bool {
+    matches_reference_temporal_sharp_eventually_bridge(expr)
+        || matches_claim_temporal_sharp_eventually_bridge(expr)
+}
+
+fn matches_reference_temporal_sharp_eventually_bridge(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Sharp(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
+            ) && matches!(
+                codomain.as_ref(),
+                Expr::Eventually(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Sharp(inner)
+                            if matches!(inner.as_ref(), Expr::Var(1))
+                                || matches!(
+                                    inner.as_ref(),
+                                    Expr::Eventually(deeper)
+                                        if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                    )
+            )
+    )
+}
+
+fn matches_claim_temporal_sharp_eventually_bridge(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Sharp(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
+            ) && matches!(
+                codomain.as_ref(),
+                Expr::Eventually(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Sharp(inner)
+                            if matches!(
+                                inner.as_ref(),
+                                Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                            )
+                    )
+            )
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Sharp(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Eventually(inner)
+                            if matches!(
+                                inner.as_ref(),
+                                Expr::Flat(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                            )
+                    )
+            ) && matches!(
+                codomain.as_ref(),
+                Expr::Eventually(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
             )
     )
 }
@@ -1661,6 +1780,109 @@ mod tests {
                 assert!(
                     !reanchor.allows_historical_reanchor(),
                     "claim temporal clause-{position} variant should not reanchor through the lifted terminal clause"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 10,
+                        historical_reanchor: false,
+                    }
+                );
+                assert!(!passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_claim_clause_two_three_variants_fenced_even_with_reference_terminal() {
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for position in 2..=3 {
+            for variant in claim_temporal_variant_exprs(position, anchor) {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[position].expr = variant;
+                telescope.clauses[7] = reference_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    !reanchor.allows_historical_reanchor(),
+                    "claim temporal clause-{position} variant should stay fenced even with the exact reference terminal"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 10,
+                        historical_reanchor: false,
+                    }
+                );
+                assert!(!passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_claim_clause_four_five_variants_when_the_terminal_stays_reference() {
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for position in 4..=5 {
+            for variant in claim_temporal_variant_exprs(position, anchor) {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[position].expr = variant;
+                telescope.clauses[7] = reference_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    reanchor.allows_historical_reanchor(),
+                    "claim temporal clause-{position} variant should now stay historically reanchorable when the terminal clause remains exact"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 10,
+                        historical_reanchor: true,
+                    }
+                );
+                assert!(passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_claim_clause_four_five_variants_outside_historical_reanchor_when_the_terminal_lifts()
+     {
+        let library = library_until(14);
+        let lifted_terminal = next_lift_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for position in 4..=5 {
+            for variant in claim_temporal_variant_exprs(position, anchor) {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[position].expr = variant;
+                telescope.clauses[7] = lifted_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    !reanchor.allows_historical_reanchor(),
+                    "claim temporal clause-{position} variant should not reanchor through a lifted terminal clause"
                 );
                 assert_eq!(
                     witness,
