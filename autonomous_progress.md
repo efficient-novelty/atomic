@@ -575,6 +575,18 @@ gate.
   direct clause-`2` replacement reland either; if that anchor-`11`
   neighborhood matters, the next repair must isolate the exact-argument
   qualifier evidence without relanding the lifted anchor-`11` variants
+- A new anchor-`11` exact-argument rank regression now narrows that same
+  step-`15` blocker further again:
+  on every current mixed clause-`2` claim/demo replacement, the nearby
+  clause-`3` anchor-`11` exact-argument pocket now freezes as a full-rank
+  `103 / 8` bar-clearer that matches the canonical `DCT 103 / 8` winner on
+  overshoot, clause `kappa`, eliminator/former/density/library/binder/
+  closure signals, max var reach, and `nu`, but it still loses cleanly on
+  higher bit cost `236` versus canonical `229`; the lifted anchor-`11`
+  neighbors still reopen the unsafe `88 / 8` rival, so any future repair
+  that touches that neighborhood must isolate the exact-argument qualifier
+  evidence without relanding the lifted variants or replacing the canonical
+  accepted path
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.

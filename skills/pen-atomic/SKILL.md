@@ -54,7 +54,12 @@ Treat these as current repo truths:
   also pinned by
   `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
   so the current breadth miss anatomy is executable in-tree rather than
-  notes-only; user-facing
+  notes-only; the nearby clause-`3` anchor-`11` exact-argument pocket on the
+  remaining clause-`2` / clause-`3` blocker is now also frozen more tightly:
+  on every current mixed clause-`2` claim/demo replacement it matches the
+  canonical `DCT 103 / 8` winner on full primary and structural rank signals
+  and still loses only on higher bit cost `236` versus `229`, while the
+  lifted anchor-`11` neighbors remain unsafe `88 / 8` rivals; user-facing
   wording stays at `bounded live recovery` until stored breadth and
   certification pass
 - the accepted executable late-step canon is the current Rust truth, including
@@ -389,6 +394,11 @@ Focus on:
   position-`1` / position-`4` reland and the
   position-`0` / position-`4` / position-`5` / position-`6` reland are now
   frozen as executable regressions on the repaired step-`12` chain
+- treating the nearby clause-`3` anchor-`11` neighborhood as diagnosis-only
+  until it is isolated correctly:
+  only the exact-argument pocket currently stays non-winning cleanly, and it
+  does so by losing to the canonical step-`15` winner on bit cost
+  `236` versus `229`; do not reland the lifted anchor-`11` variants
 
 ### If you are working on reporting or evidence
 

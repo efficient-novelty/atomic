@@ -156,6 +156,16 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - the current reverted code still keeps the exact guarded step-`13` shell
     out of the retained pool on that second widened surface, so neither
     widened probe is safe to land raw
+- the nearby clause-`3` anchor-`11` exact-argument pocket on the remaining
+  step-`15` clause-`2` / clause-`3` blocker is now frozen more tightly too:
+  on every current mixed clause-`2` claim/demo replacement, that pocket is a
+  full-rank `103 / 8` bar-clearer that matches the canonical `DCT 103 / 8`
+  winner on overshoot, clause `kappa`, eliminator/former/density/library/
+  binder/closure signals, max var reach, and `nu`, and still loses only on
+  higher bit cost `236` versus canonical `229`; the lifted anchor-`11`
+  neighbors still reopen the unsafe `88 / 8` rival, so any future repair
+  there must isolate the exact-argument qualifier evidence without relanding
+  the lifted variants or replacing the canonical accepted path
 
 ## Current Operational Blockers
 
@@ -207,6 +217,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 5. Keep stored step `15 = 1794 / 5000` and step `1 = 546 / 2144` in view
    beside that work; do not reopen another stored step-`11` rerun first now
    that clean-tree `v10` already re-earns stored step `11 = 1338 / 800`.
+6. If the nearby clause-`3` anchor-`11` neighborhood is explored again, keep
+   the new bit-cost read explicit: only the exact-argument pocket stays
+   non-winning cleanly, and it does so by losing to the canonical winner on
+   bit cost `236` versus `229`; do not reland the lifted anchor-`11`
+   variants.
 
 ## First Reads
 

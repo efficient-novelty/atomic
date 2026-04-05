@@ -14953,6 +14953,233 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_anchor_eleven_exact_argument_pocket_is_canonical_tie_clean_but_bit_cost_worse()
+     {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+        let mut nu_history = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            nu_history.push((step.step_index, u32::from(step.accepted.nu)));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let anchor = admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let reference = Telescope::reference(15);
+        let reference_prefix = Telescope::new(reference.clauses[..7].to_vec());
+        let reference_terminal = reference
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let canonical_bit_kappa = u16::try_from(pen_core::encode::telescope_bit_cost(&reference))
+            .expect("bit cost exceeded u16");
+        let canonical_rank = super::acceptance_rank_for_telescope(
+            compute_bar(2, 15, &history).bar,
+            &reference,
+            103,
+            canonical_bit_kappa,
+            8,
+        )
+        .expect("reference step-15 telescope should clear the bar");
+        let exact_argument = Expr::Next(Box::new(Expr::Var(1)));
+        let anchor_eleven = anchor + 1;
+        assert!(
+            anchor_eleven <= library.len() as u32,
+            "the nearby anchor-11 pocket should stay in range on step 15 history"
+        );
+
+        let clause_two_variants = [
+            (
+                "claim_flat_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                    ),
+                ),
+            ),
+            (
+                "claim_sharp_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+            ),
+            (
+                "demo_sharp_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                    ),
+                ),
+            ),
+            (
+                "demo_flat_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(
+                            1,
+                        )))))),
+                    ),
+                ),
+            ),
+        ];
+        let mut observed_rank_deltas = BTreeMap::new();
+
+        for (label, clause_two) in clause_two_variants {
+            let mut telescope = reference_prefix.clone();
+            telescope.clauses[2] = clause_two;
+            telescope.clauses[3] = ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor_eleven)),
+                    Box::new(exact_argument.clone()),
+                ))),
+            );
+            telescope.clauses.push(reference_terminal.clone());
+
+            let witness = analyze_connectivity(&library, &telescope);
+            let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+            let admissibility_decision =
+                assess_strict_admissibility(15, &library, &telescope, admissibility);
+            assert!(witness.connected);
+            assert!(!witness.historical_reanchor);
+            assert_eq!(reanchor.matched_clause_count(), 2);
+            assert_eq!(reanchor.first_mismatch_position(), Some(2));
+            assert!(admissibility_decision.is_admitted());
+
+            let rank = super::acceptance_rank_for_telescope(
+                compute_bar(2, 15, &history).bar,
+                &telescope,
+                u16::try_from(structural_nu(&telescope, &library, &nu_history).total)
+                    .expect("nu exceeded u16"),
+                u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                    .expect("bit cost exceeded u16"),
+                u16::try_from(telescope.kappa()).expect("kappa exceeded u16"),
+            )
+            .expect("anchor-11 exact-argument pocket should still clear the bar");
+            assert!(
+                super::better_rank(&canonical_rank, &rank),
+                "the canonical step-15 winner should still beat the anchor-11 exact-argument pocket on full acceptance rank"
+            );
+            assert!(
+                !super::better_rank(&rank, &canonical_rank),
+                "the anchor-11 exact-argument pocket should stay non-winning even after mixed clause-2 replacement"
+            );
+            observed_rank_deltas.insert(
+                label,
+                (
+                    rank.overshoot.clone(),
+                    rank.clause_kappa,
+                    rank.descending_eliminator_score,
+                    rank.descending_former_score,
+                    rank.descending_dependent_motive_density,
+                    rank.descending_library_reference_density,
+                    rank.max_var_ref,
+                    rank.descending_generic_binder_count,
+                    rank.descending_closure_score,
+                    rank.bit_kappa,
+                    rank.descending_nu,
+                ),
+            );
+        }
+
+        assert_eq!(
+            observed_rank_deltas,
+            [
+                (
+                    "claim_flat_domain",
+                    (
+                        canonical_rank.overshoot.clone(),
+                        canonical_rank.clause_kappa,
+                        canonical_rank.descending_eliminator_score,
+                        canonical_rank.descending_former_score,
+                        canonical_rank.descending_dependent_motive_density,
+                        canonical_rank.descending_library_reference_density,
+                        canonical_rank.max_var_ref,
+                        canonical_rank.descending_generic_binder_count,
+                        canonical_rank.descending_closure_score,
+                        236_u16,
+                        canonical_rank.descending_nu,
+                    ),
+                ),
+                (
+                    "claim_sharp_codomain",
+                    (
+                        canonical_rank.overshoot.clone(),
+                        canonical_rank.clause_kappa,
+                        canonical_rank.descending_eliminator_score,
+                        canonical_rank.descending_former_score,
+                        canonical_rank.descending_dependent_motive_density,
+                        canonical_rank.descending_library_reference_density,
+                        canonical_rank.max_var_ref,
+                        canonical_rank.descending_generic_binder_count,
+                        canonical_rank.descending_closure_score,
+                        236_u16,
+                        canonical_rank.descending_nu,
+                    ),
+                ),
+                (
+                    "demo_flat_codomain",
+                    (
+                        canonical_rank.overshoot.clone(),
+                        canonical_rank.clause_kappa,
+                        canonical_rank.descending_eliminator_score,
+                        canonical_rank.descending_former_score,
+                        canonical_rank.descending_dependent_motive_density,
+                        canonical_rank.descending_library_reference_density,
+                        canonical_rank.max_var_ref,
+                        canonical_rank.descending_generic_binder_count,
+                        canonical_rank.descending_closure_score,
+                        236_u16,
+                        canonical_rank.descending_nu,
+                    ),
+                ),
+                (
+                    "demo_sharp_domain",
+                    (
+                        canonical_rank.overshoot.clone(),
+                        canonical_rank.clause_kappa,
+                        canonical_rank.descending_eliminator_score,
+                        canonical_rank.descending_former_score,
+                        canonical_rank.descending_dependent_motive_density,
+                        canonical_rank.descending_library_reference_density,
+                        canonical_rank.max_var_ref,
+                        canonical_rank.descending_generic_binder_count,
+                        canonical_rank.descending_closure_score,
+                        236_u16,
+                        canonical_rank.descending_nu,
+                    ),
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "the anchor-11 exact-argument pocket should now be frozen as a structurally tie-clean 103/8 rival that differs from the canonical step-15 winner only by higher bit cost"
+        );
+    }
+
+    #[test]
     fn step_thirteen_divergence_reopens_operator_bundle_claim_debt_before_the_admitted_step_fourteen_failure_family()
      {
         let reference_prefix = claim_long_rerun_v3_hybrid_prefix(None);

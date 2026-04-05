@@ -412,6 +412,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
     anchor retarget or direct clause-`2` replacement reland too; if that
     anchor-`11` neighborhood matters, it has to be isolated without relanding
     the lifted anchor-`11` variants
+- A new anchor-`11` exact-argument rank regression now sharpens that same
+  late blocker further again:
+  - on every current mixed clause-`2` claim/demo replacement, the nearby
+    clause-`3` anchor-`11` exact-argument pocket now freezes as a full-rank
+    `103 / 8` bar-clearer
+  - that pocket now matches the canonical `DCT 103 / 8` winner on overshoot,
+    clause `kappa`, eliminator/former/density/library/binder/closure signals,
+    max var reach, and `nu`, and still loses only on higher bit cost
+    `236` versus canonical `229`
+  - the lifted nearby anchor-`11` neighbors still reopen the unsafe `88 / 8`
+    rival, so the next repair should only touch that neighborhood if it can
+    isolate the exact-argument qualifier evidence without relanding the
+    lifted variants or replacing the canonical accepted path
 - New stored-audit regressions now freeze that `v5` evidence surface:
   - compare locks the step-`9`, step-`11`, and step-`12` parity forks
   - certification locks the step-`1` breadth miss and the step-`10..15`
