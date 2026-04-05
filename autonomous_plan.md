@@ -43,17 +43,21 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     the mixed custom step-`13` catalog reproduces raw widths
     `[3,5,3,3,5,1,1]`, raw `675`, live generated `2223`, accepted
     `45 / 7`, and the shifted repaired step-`14` winner profile `61 / 9`
-  - widening positions `0`, `4`, `5`, and `6` while keeping position `1`
-    exact lifts the repaired local read to
-    `[5,1,3,3,5,3,3]` / raw `2025` / generated `2995` and preserves the
-    guarded step-`14` / step-`15` accepted hashes, but it still replaces the
-    guarded step-`13` accepted hash with a non-reference `46 / 7` shell
-  - on that second widened surface, the exact guarded step-`13` telescope
-    still evaluates and clears the bar locally, but continuing from it no
-    longer reproduces the guarded step-`14` accepted hash
+  - that second unsafe position-`0` / position-`4` / position-`5` /
+    position-`6` reland is now also frozen as an executable negative-control
+    regression on the repaired step-`12` chain:
+    the mixed custom step-`13` catalog uses the full demo slices at positions
+    `0` and `4` plus the original three-option demo slice at positions `5`
+    and `6`, reproducing raw widths `[5,1,3,3,5,3,3]`, raw `2025`,
+    live generated `2995`, accepted `46 / 7`, and the guarded accepted hashes
+    at steps `14` and `15`
+  - the current reverted code still keeps the exact guarded step-`13` shell
+    out of the retained pool on that second widened surface, so it remains
+    diagnosis only and not a landed parity repair
 - Those probes were reverted. They are diagnosis, not landed repairs, and the
-  first position-`1` / position-`4` reland is now covered by an executable
-  regression instead of doc-only memory.
+  position-`1` / position-`4` reland plus the
+  position-`0` / position-`4` / position-`5` / position-`6` reland are now
+  both covered by executable regressions instead of doc-only memory.
 
 ## Optimization Thesis
 

@@ -131,13 +131,17 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     the mixed custom step-`13` catalog reproduces raw widths
     `[3,5,3,3,5,1,1]`, raw `675`, live generated `2223`, accepted
     `45 / 7`, and the shifted repaired step-`14` winner profile `61 / 9`
-  - `[5,1,3,3,5,3,3]` / raw `2025` / generated `2995` reopens the local
-    floor while preserving the guarded step-`14` / step-`15` accepted hashes,
-    but it still replaces the guarded step-`13` accepted hash with a
-    non-reference `46 / 7` shell
-  - the exact guarded step-`13` telescope still clears bar on that second
-    widened surface, but continuing from it no longer reproduces the guarded
-    step-`14` accepted hash, so neither widened probe is safe to land raw
+  - that second unsafe position-`0` / position-`4` / position-`5` /
+    position-`6` reland is now also frozen as an executable negative-control
+    regression on the repaired step-`12` chain:
+    the mixed custom step-`13` catalog uses the full demo slices at positions
+    `0` and `4` plus the original three-option demo slice at positions `5`
+    and `6`, reproducing raw widths `[5,1,3,3,5,3,3]`, raw `2025`,
+    live generated `2995`, accepted `46 / 7`, and the guarded accepted hashes
+    at steps `14` and `15`
+  - the current reverted code still keeps the exact guarded step-`13` shell
+    out of the retained pool on that second widened surface, so neither
+    widened probe is safe to land raw
 
 ## Current Operational Blockers
 
@@ -185,9 +189,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    is needed before changing more search code.
    Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they prove the missing floor can be reopened locally, but neither one yet
-   preserves accepted-hash parity through step `14`; the first
-   position-`1` / position-`4` reland is now also frozen as an executable
-   regression on the repaired step-`12` chain.
+   preserves accepted-hash parity through step `14`; both the
+   position-`1` / position-`4` reland and the
+   position-`0` / position-`4` / position-`5` / position-`6` reland are now
+   frozen as executable regressions on the repaired step-`12` chain.
 4. Keep stored step `15` and step `1` in view beside that work:
    `1794 / 5000` and `546 / 2144`.
 5. Do not reopen another stored step-`11` rerun first now that clean-tree

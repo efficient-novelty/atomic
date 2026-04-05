@@ -28,9 +28,10 @@ It lists only work that is still open.
 - Two newer local step-`13` widened probes are now frozen as negative
   controls only:
   `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` can reopen the local floor, but
-  neither one yet preserves accepted-hash parity through step `14`; the first
-  position-`1` / position-`4` reland is now also frozen as an executable
-  regression on the repaired step-`12` chain.
+  neither one yet preserves accepted-hash parity through step `14`; both the
+  position-`1` / position-`4` reland and the
+  position-`0` / position-`4` / position-`5` / position-`6` reland are now
+  frozen as executable regressions on the repaired step-`12` chain.
 - The stored `v9` certificate now also carries step-level breadth diagnosis
   for the open misses, so step `13` / step `15` catalog widths, root seeding,
   exact-screen pressure, and the full stored step-open pressure signature are

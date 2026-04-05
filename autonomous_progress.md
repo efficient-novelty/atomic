@@ -968,18 +968,17 @@ gate.
     the mixed custom step-`13` catalog reproduces raw widths
     `[3,5,3,3,5,1,1]`, raw `675`, live generated `2223`, accepted
     `45 / 7`, and the shifted repaired step-`14` winner profile `61 / 9`
-  - widening positions `0`, `4`, `5`, and `6` while keeping position `1`
-    exact lifts the local read further to
-    `[5,1,3,3,5,3,3]` / raw `2025` / generated `2995` and preserves the
-    guarded accepted hashes at steps `14` and `15`, but the accepted step-`13`
-    hash still flips to a non-reference `46 / 7` shell
-  - on that second widened surface, the exact guarded step-`13` telescope
-    still evaluates and clears bar locally, but continuing from it no longer
-    reproduces the guarded step-`14` accepted hash
-  - a naive local guarded-step-`13` retention/selection attempt on top of that
-    second widened surface was also explored and reverted: it recovers the
-    guarded step-`13` shell into the retained pool but still does not close
-    the full step-`13 -> step-14` accepted-hash parity story
+  - that second unsafe position-`0` / position-`4` / position-`5` /
+    position-`6` reland is now also frozen as an executable negative-control
+    regression on the repaired step-`12` chain:
+    the mixed custom step-`13` catalog uses the full demo slices at positions
+    `0` and `4` plus the original three-option demo slice at positions `5`
+    and `6`, reproducing raw widths `[5,1,3,3,5,3,3]`, raw `2025`,
+    live generated `2995`, accepted `46 / 7`, and the guarded accepted hashes
+    at steps `14` and `15`
+  - the current reverted code still keeps the exact guarded step-`13` shell
+    out of the retained pool on that second widened surface, so it remains
+    diagnosis only and not a landed parity repair
   - the next honest local repair is therefore a parity-preserving clause-local
     step-`13` widening/retention change, not a raw reland of either new
     exploratory widened surface
@@ -1030,9 +1029,10 @@ gate.
 - Treat the new `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` local step-`13`
   widenings as negative controls only:
   they prove missing breadth can be re-opened locally, but neither one yet
-  preserves accepted-hash parity through step `14`; the first
-  position-`1` / position-`4` reland is now also frozen as an executable
-  regression rather than doc-only guidance.
+  preserves accepted-hash parity through step `14`; both the
+  position-`1` / position-`4` reland and the
+  position-`0` / position-`4` / position-`5` / position-`6` reland are now
+  frozen as executable regressions rather than doc-only guidance.
 - Keep step `1` on the checklist as a separate stored early breadth blocker.
 - Keep step `15` on the checklist as the remaining later stored floor miss on
   the canonical branch.

@@ -374,9 +374,10 @@ Focus on:
   `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]`, as negative controls only:
   they reopen the local floor but still leave accepted-hash parity open, so
   the next live repair is narrower step-`13` parity-preserving breadth work,
-  not a raw reland of either widened surface; the first
-  position-`1` / position-`4` reland is now also frozen as an executable
-  regression on the repaired step-`12` chain
+  not a raw reland of either widened surface; both the
+  position-`1` / position-`4` reland and the
+  position-`0` / position-`4` / position-`5` / position-`6` reland are now
+  frozen as executable regressions on the repaired step-`12` chain
 
 ### If you are working on reporting or evidence
 

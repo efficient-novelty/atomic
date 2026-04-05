@@ -16779,6 +16779,98 @@ mod tests {
     }
 
     #[test]
+    fn step_thirteen_positions_zero_four_five_six_negative_control_reopens_local_floor_but_still_breaks_step_thirteen_parity()
+     {
+        let (library, history) = repaired_claim_step_twelve_library_and_history();
+        let admissibility =
+            strict_admissibility_for_mode(13, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = EnumerationContext::from_admissibility(&library, admissibility);
+        let mut demo_context = claim_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let claim_catalog = build_clause_catalog(claim_context, 7);
+        let demo_catalog = build_clause_catalog(demo_context, 7);
+        let mixed_catalog = build_clause_catalog_from_options(
+            7,
+            (0..7)
+                .map(|position| match position {
+                    0 | 4 => demo_catalog.clauses_at(position).to_vec(),
+                    5 | 6 => demo_catalog.clauses_at(position)[..3].to_vec(),
+                    _ => claim_catalog.clauses_at(position).to_vec(),
+                })
+                .collect(),
+        );
+        let raw_widths = (0..usize::from(mixed_catalog.clause_kappa()))
+            .map(|position| mixed_catalog.clauses_at(position).len())
+            .collect::<Vec<_>>();
+        let mut progress_observer = None;
+        let step_thirteen = search_next_step_internal_with_clause_catalog_override(
+            13,
+            2,
+            &library,
+            &history,
+            AdmissibilityMode::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            None,
+            &mut progress_observer,
+            Some(&mixed_catalog),
+            true,
+        )
+        .expect("the second mixed step-13 negative-control surface should still build");
+        let guarded_step_thirteen =
+            profile_step_from_reference_prefix(13, SearchProfile::StrictCanonGuarded);
+        let guarded_step_fourteen =
+            profile_step_from_reference_prefix(14, SearchProfile::StrictCanonGuarded);
+        let guarded_step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::StrictCanonGuarded);
+        let accepted_late_path =
+            continue_late_path_from_candidate(13, 15, &library, &history, &step_thirteen.accepted);
+
+        assert_eq!(raw_widths, vec![5, 1, 3, 3, 5, 3, 3]);
+        assert_eq!(raw_widths.iter().product::<usize>(), 2025);
+        assert_eq!(step_thirteen.demo_funnel.generated_raw_prefixes, 2995);
+        assert!(
+            step_thirteen.demo_funnel.generated_raw_prefixes >= 2200,
+            "the position-0/4/5/6 widening should still reopen the local step-13 floor"
+        );
+        assert_eq!(
+            (
+                step_thirteen.accepted.nu,
+                step_thirteen.accepted.clause_kappa
+            ),
+            (46, 7)
+        );
+        assert_ne!(
+            step_thirteen.accepted.candidate_hash, guarded_step_thirteen.accepted.candidate_hash,
+            "the position-0/4/5/6 widening should stay an unsafe negative control by displacing the guarded step-13 shell"
+        );
+        assert_eq!(
+            accepted_late_path
+                .iter()
+                .map(|(step_index, _, nu, clause_kappa, generated)| {
+                    (*step_index, *nu, *clause_kappa, *generated)
+                })
+                .collect::<Vec<_>>(),
+            vec![(14, 62, 9, 12027), (15, 103, 8, 1794)],
+            "the position-0/4/5/6 widening should keep the guarded step-14 and step-15 winner profiles even while step-13 parity stays open"
+        );
+        assert_eq!(
+            accepted_late_path[0].1, guarded_step_fourteen.accepted.candidate_hash,
+            "the second widened surface should still preserve the guarded step-14 accepted hash on its own accepted late path"
+        );
+        assert_eq!(
+            accepted_late_path[1].1, guarded_step_fifteen.accepted.candidate_hash,
+            "the second widened surface should still preserve the guarded step-15 accepted hash on its own accepted late path"
+        );
+        assert!(
+            !step_thirteen
+                .retained_candidates
+                .iter()
+                .any(|candidate| candidate.telescope == Telescope::reference(13)),
+            "the current reverted code should still keep the exact guarded step-13 shell out of the retained pool on the second widened surface"
+        );
+    }
+
+    #[test]
     fn claim_partial_prefix_bound_cache_distinguishes_clause_kappa_for_step_twelve_preterminal() {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             11,

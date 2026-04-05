@@ -456,18 +456,17 @@ This note is the exact next work order for `desktop_claim_shadow`.
     the mixed custom step-`13` catalog reproduces raw widths
     `[3,5,3,3,5,1,1]`, raw `675`, live generated `2223`, accepted
     `45 / 7`, and the shifted repaired step-`14` winner profile `61 / 9`
-  - widening positions `0`, `4`, `5`, and `6` while keeping position `1`
-    exact lifts the repaired local read to
-    `[5,1,3,3,5,3,3]` / raw `2025` / generated `2995` and preserves the
-    guarded accepted hashes at steps `14` and `15`, but the accepted
-    step-`13` hash still flips to a non-reference `46 / 7` shell
-  - on that second widened surface, the exact guarded step-`13` telescope
-    still evaluates and clears bar locally, but continuing from it no longer
-    reproduces the guarded step-`14` accepted hash
-  - a naive guarded step-`13` retention/selection reland on top of that
-    second widened surface was also explored and reverted:
-    it recovers the guarded step-`13` shell into the retained pool but still
-    does not close full step-`13 -> step-14` accepted-hash parity
+  - that second unsafe position-`0` / position-`4` / position-`5` /
+    position-`6` reland is now also frozen as an executable negative-control
+    regression on the repaired step-`12` chain:
+    the mixed custom step-`13` catalog uses the full demo slices at positions
+    `0` and `4` plus the original three-option demo slice at positions `5`
+    and `6`, reproducing raw widths `[5,1,3,3,5,3,3]`, raw `2025`,
+    live generated `2995`, accepted `46 / 7`, and the guarded accepted hashes
+    at steps `14` and `15`
+  - the current reverted code still keeps the exact guarded step-`13` shell
+    out of the retained pool on that second widened surface, so it remains
+    diagnosis only and not a landed parity repair
   - the next repair should therefore target a parity-preserving clause-local
     step-`13` widening/retention change rather than relanding either new
     exploratory widened surface raw
@@ -561,12 +560,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
    keep the stored canonical counts frozen at step `13`
    `[3,1,3,3,1,1,1]` / `27` / `123`, step `14` `19683` / `12027`, and
    step `15` `DCT 103 / 8 / 1794`.
-5. Keep the new executable step-`13` negative-control regression green:
+5. Keep the two executable step-`13` negative-control regressions green:
    widening only operator-bundle formation positions `1` and `4` to the
    demo-like custom surface should still reopen the local floor to
    `[3,5,3,3,5,1,1]` / raw `675` / generated `2223`, but it must also keep
    the unsafe `45 / 7 -> 61 / 9` repaired late path so it remains diagnosis,
-   not a landed repair.
+   not a landed repair;
+   widening positions `0`, `4`, `5`, and `6` via the mixed custom surface
+   (full demo slices at positions `0` and `4`, original three-option demo
+   slices at positions `5` and `6`) should still reopen the local floor to
+   `[5,1,3,3,5,3,3]` / raw `2025` / generated `2995` while preserving the
+   guarded step-`14` / step-`15` accepted hashes but displacing step `13` to
+   a non-reference `46 / 7` shell.
 6. Keep the stored certification / benchmark snapshot green for the current
    breadth surface:
    step `1` `546 / 2144`, step `10` `1428 / 500`, step `11` `1338 / 800`,
@@ -592,7 +597,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
    `45 / 7 -> 61 / 9` path and is now frozen as an executable regression,
    while `[5,1,3,3,5,3,3]` proves the floor can be reopened while preserving
    guarded step-`14` / step-`15` hashes but still loses the guarded
-   step-`13` accepted hash.
+   step-`13` accepted hash and is now also frozen as an executable
+   regression.
 3. Keep the stored step-`15` miss in view beside that work:
    `1794 / 5000`; the current stored read there is broad `6561` catalog-open
    with `468` partial-prefix bar failures plus `80` incumbent-dominance
