@@ -66,6 +66,17 @@ It lists only work that is still open.
   non-winning spread is only bit cost `236..290`, and the earliest mismatch
   positions across that surface stay at clause positions `0`, `1`, `2`, `4`,
   and `5` with counts `162`, `54`, `18`, `6`, and `2`.
+- A new local omitted-side-variant regression now proves the next safe opening
+  is narrower than a raw catalog reland:
+  omitted demo-only temporal-shell side variants at clause positions `0`,
+  `1`, `4`, and `5` all stay structurally connected, locally admissible, and
+  same-primary `103 / 8` / `115657 / 21112` non-winners around the live
+  anchor-`11` exact-argument pocket, but a reverted raw position-`0` probe
+  that lifted local step `15` only to `4285` also reopened the repaired
+  clause-`0` zero-admitted capture to `2835` families / `891`
+  reanchor-prefix misses, so the next landed repair must isolate one of those
+  openings onto the existing `small_cluster` path instead of broadening the
+  whole position-`0` catalog.
 - No broader per-step claim search-band expansion should land beyond that
   isolated anchor-`11` pocket before a new local repair proves more is
   necessary on this parity-clean stored chain.

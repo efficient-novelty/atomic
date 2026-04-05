@@ -15825,6 +15825,405 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning()
+    {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let anchor_eleven = anchor + 1;
+        let exact_argument = Expr::Next(Box::new(Expr::Var(1)));
+        let canonical_bit_kappa = u16::try_from(pen_core::encode::telescope_bit_cost(
+            &Telescope::reference(15),
+        ))
+        .expect("bit cost exceeded u16");
+        let canonical_rank = super::acceptance_rank_for_telescope(
+            surface.objective_bar,
+            &Telescope::reference(15),
+            103,
+            canonical_bit_kappa,
+            8,
+        )
+        .expect("reference step-15 telescope should clear the bar");
+        let clause_two_variants = [
+            (
+                "claim_flat_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                    ),
+                ),
+            ),
+            (
+                "claim_sharp_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+            ),
+        ];
+        let side_variants = [
+            (
+                0_usize,
+                "demo_sharp_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+                ),
+            ),
+            (
+                0_usize,
+                "demo_next_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
+                ),
+            ),
+            (
+                1_usize,
+                "demo_flat_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                ),
+            ),
+            (
+                1_usize,
+                "demo_eventually_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Eventually(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+                ),
+            ),
+            (
+                4_usize,
+                "demo_sharp_bridge",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Sharp(
+                            Box::new(Expr::Var(1)),
+                        )))))),
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Sharp(
+                            Box::new(Expr::Var(1)),
+                        )))))),
+                    ),
+                ),
+            ),
+            (
+                4_usize,
+                "demo_sharp_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                        Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Flat(
+                            Box::new(Expr::Var(1)),
+                        )))))),
+                    ),
+                ),
+            ),
+            (
+                5_usize,
+                "demo_sharp_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                            Expr::Sharp(Box::new(Expr::Var(1))),
+                        ))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+            ),
+            (
+                5_usize,
+                "demo_flat_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Flat(Box::new(Expr::Var(1))),
+                        ))))),
+                    ),
+                ),
+            ),
+        ];
+        let mut observed = BTreeMap::new();
+
+        for (clause_two_label, clause_two) in clause_two_variants {
+            for (position, side_label, side_clause) in side_variants.iter() {
+                let mut telescope = reference_prefix.clone();
+                telescope.clauses[2] = clause_two.clone();
+                telescope.clauses[3] = ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor_eleven)),
+                        Box::new(exact_argument.clone()),
+                    ))),
+                );
+                telescope.clauses[*position] = side_clause.clone();
+                telescope.clauses.push(reference_terminal.clone());
+
+                let witness = analyze_connectivity(&surface.library, &telescope);
+                let admissibility_decision = assess_strict_admissibility(
+                    surface.step_index,
+                    &surface.library,
+                    &telescope,
+                    surface.admissibility,
+                );
+                let exact_nu = u16::try_from(
+                    structural_nu(&telescope, &surface.library, &surface.nu_history).total,
+                )
+                .expect("nu exceeded u16");
+                let bit_kappa_used =
+                    u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                        .expect("bit cost exceeded u16");
+                let rank = super::acceptance_rank_for_telescope(
+                    surface.objective_bar,
+                    &telescope,
+                    exact_nu,
+                    bit_kappa_used,
+                    u16::try_from(telescope.kappa()).expect("kappa exceeded u16"),
+                );
+                observed.insert(
+                    format!("{clause_two_label}:{position}:{side_label}"),
+                    (
+                        witness.connected,
+                        witness.historical_reanchor,
+                        admissibility_decision.is_admitted(),
+                        exact_nu,
+                        bit_kappa_used,
+                        rank.as_ref()
+                            .map(|candidate_rank| candidate_rank < &canonical_rank),
+                        rank.as_ref().map(|candidate_rank| candidate_rank.overshoot.clone()),
+                    ),
+                );
+            }
+        }
+
+        assert_eq!(
+            observed,
+            [
+                (
+                    "claim_flat_domain:0:demo_next_domain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        245_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_flat_domain:0:demo_sharp_domain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        243_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_flat_domain:1:demo_eventually_codomain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        245_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_flat_domain:1:demo_flat_codomain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        243_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_flat_domain:4:demo_sharp_bridge".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        250_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_flat_domain:4:demo_sharp_codomain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        243_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_flat_domain:5:demo_flat_codomain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        243_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_flat_domain:5:demo_sharp_domain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        243_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_sharp_codomain:0:demo_next_domain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        245_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_sharp_codomain:0:demo_sharp_domain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        243_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_sharp_codomain:1:demo_eventually_codomain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        245_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_sharp_codomain:1:demo_flat_codomain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        243_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_sharp_codomain:4:demo_sharp_bridge".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        250_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_sharp_codomain:4:demo_sharp_codomain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        243_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_sharp_codomain:5:demo_flat_codomain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        243_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+                (
+                    "claim_sharp_codomain:5:demo_sharp_domain".to_string(),
+                    (
+                        true,
+                        false,
+                        true,
+                        103_u16,
+                        243_u16,
+                        Some(false),
+                        Some(Rational::new(115657, 21112)),
+                    ),
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "the omitted demo-only side variants around the live anchor-11 exact-argument pocket should stay structurally connected, locally admissible, and same-primary 103/8 non-winners on bit cost alone, so the next step-15 repair can isolate one of those openings without relanding the raw global catalog"
+        );
+    }
+
+    #[test]
     fn step_thirteen_divergence_reopens_operator_bundle_claim_debt_before_the_admitted_step_fourteen_failure_family()
      {
         let reference_prefix = claim_long_rerun_v3_hybrid_prefix(None);

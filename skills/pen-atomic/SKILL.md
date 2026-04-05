@@ -77,7 +77,16 @@ Treat these as current repo truths:
   `236..290` across first mismatches at clause positions `0`, `1`, `2`, `4`,
   and `5`, so the next repair stays on that narrow summary-stage
   small-cluster incumbent surface rather than reopening the single pocket or
-  proof-close ordering first; user-facing wording stays at
+  proof-close ordering first; a newer
+  `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
+  regression now also proves that omitted demo-only side variants at clause
+  positions `0`, `1`, `4`, and `5` are already structurally connected,
+  locally admissible, same-primary `103 / 8` non-winners around the live
+  anchor-`11` exact-argument pocket, while a reverted raw position-`0` reland
+  that lifted local step `15` only to `4285` also reopened the repaired
+  clause-`0` zero-admitted capture, so the next landed repair must isolate one
+  of those side openings onto the current `small_cluster` path instead of
+  broadening the raw position-`0` temporal-shell catalog; user-facing wording stays at
   `bounded live recovery` until stored breadth and certification pass
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`

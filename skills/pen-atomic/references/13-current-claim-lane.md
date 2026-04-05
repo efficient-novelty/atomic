@@ -213,6 +213,23 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - the earliest first-mismatch positions across that still-pruned surface are
     now frozen at clause positions `0`, `1`, `2`, `4`, and `5` with counts
     `162`, `54`, `18`, `6`, and `2`
+- a new local omitted-side-variant regression now sharpens the next safe move
+  on that same repaired anchor-`11` pocket without landing another widening
+  yet:
+  - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
+    now pins that the omitted demo-only temporal-shell side variants at clause
+    positions `0`, `1`, `4`, and `5` all stay structurally connected, locally
+    admissible, and same-primary `103 / 8` / `115657 / 21112` on top of the
+    current live claim clause-`2` + anchor-`11` exact-argument pocket
+  - those omitted side variants still stay outside historical reanchor there
+    and still lose only on higher bit cost `243`, `245`, or `250`
+  - a non-landed raw position-`0` reland probe briefly lifted the local
+    step-`15` generated surface to `4285`, but it also reopened the repaired
+    clause-`0` zero-admitted capture to `2835` families / `891`
+    reanchor-prefix misses, so that broad catalog reland was reverted
+  - the next landed repair should therefore isolate one of those omitted side
+    openings onto the existing anchor-`11` `small_cluster` path instead of
+    broadening the raw position-`0` temporal-shell catalog first
 
 ## Current Operational Blockers
 
@@ -265,7 +282,13 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    the isolated `single` survivor bucket fenced while the next repair works
    against the remaining `small_cluster` `242`-incumbent surface, now pinned
    more tightly as a summary-stage same-primary `103 / 8` bit-cost spread with
-   first mismatches at clause positions `0`, `1`, `2`, `4`, and `5`.
+   first mismatches at clause positions `0`, `1`, `2`, `4`, and `5`; the new
+   omitted-side-variant regression now proves that several demo-only side
+   openings around the live anchor-`11` pocket are already rank-safe, while
+   the reverted raw position-`0` reland proves that broadening that side
+   globally reopens the old captured clause-`0` surface, so the next landed
+   repair must isolate one of those openings onto the current `small_cluster`
+   path instead of broadening the whole position-`0` catalog.
 4. Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they still prove local breadth can be reopened unsafely, but they are not
    the landed repair.
@@ -278,6 +301,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    non-winning by losing to the canonical winner on bit cost `236` versus
    `229`, clause `6` still fences the unsafe `89 / 8` rival, and the lifted
    anchor-`11` variants must stay out.
+7. Do not reland the raw global position-`0` temporal-shell widening first:
+   the exploratory probe lifted local step `15` only to `4285` and reopened
+   the repaired clause-`0` zero-admitted capture, so any next opening there
+   has to be isolated onto the live anchor-`11` `small_cluster` path.
 
 ## First Reads
 

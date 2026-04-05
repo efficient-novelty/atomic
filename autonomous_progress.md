@@ -153,6 +153,25 @@ gate.
   - the earliest first-mismatch positions across that still-pruned surface are
     now frozen at clause positions `0`, `1`, `2`, `4`, and `5` with counts
     `162`, `54`, `18`, `6`, and `2`
+- A new local step-`15` omitted-side-variant regression now sharpens the next
+  safe opening on that same repaired anchor-`11` pocket without relanding any
+  new widening yet:
+  - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
+    now pins that the omitted demo-only temporal-shell side variants at clause
+    positions `0`, `1`, `4`, and `5` all stay structurally connected, locally
+    admissible, and same-primary `103 / 8` / `115657 / 21112` on top of the
+    current live claim clause-`2` + anchor-`11` exact-argument pocket
+  - those omitted side variants still stay outside historical reanchor there
+    and still lose only on higher bit cost `243`, `245`, or `250`, so they are
+    candidate-safe surface openings rather than hidden stronger winners
+  - a non-landed raw position-`0` reland probe briefly lifted the local
+    step-`15` generated surface from `3972` to `4285`, but it also reopened the
+    old clause-`0` zero-admitted capture to `2835` families and restored
+    `891` clause-`0` historical-reanchor misses, so that broad catalog reland
+    was reverted
+  - the next repair should therefore isolate one of those omitted side
+    openings onto the existing anchor-`11` `small_cluster` path instead of
+    broadening the raw position-`0` temporal-shell catalog first
 - The remaining stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)
@@ -1154,7 +1173,12 @@ gate.
    step `15`; the next move is another parity-preserving local step-`15`
    repair on the remaining summary-stage `small_cluster` same-primary
    `103 / 8` incumbent surface, not another rerun setup pass and not a
-   proof-close reland.
+   proof-close reland; the new omitted-side-variant regression now proves that
+   several demo-only side openings around the live anchor-`11` pocket are
+   already safe on rank, but the reverted raw position-`0` reland also proves
+   that widening that side globally reopens the old captured clause-`0`
+   surface, so the next landed repair must isolate one of those openings onto
+   the current `small_cluster` path instead of broadening the whole catalog.
 4. Launch the next clean full-profile claim rerun only after that next local
    step-`15` repair is regression-backed and parity-clean, then refresh
    compare / benchmark / certification immediately afterwards and keep

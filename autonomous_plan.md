@@ -78,6 +78,21 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     at overshoot `115657 / 21112`
   - the remaining repair target is the `small_cluster` bucket at
     `2190` generated / `244` admitted / `244` exact-screened / `242` pruned
+- A newer executable omitted-side-variant regression now sharpens that same
+  `small_cluster` target without landing another widening yet:
+  - the omitted demo-only temporal-shell side variants at clause positions
+    `0`, `1`, `4`, and `5` all stay structurally connected, locally
+    admissible, and same-primary `103 / 8` / `115657 / 21112` on top of the
+    current live claim clause-`2` + anchor-`11` exact-argument pocket
+  - those omitted side variants still stay outside historical reanchor there
+    and still lose only on higher bit cost `243`, `245`, or `250`
+  - a non-landed raw position-`0` reland probe briefly lifted the local
+    step-`15` generated surface to `4285`, but it also reopened the repaired
+    clause-`0` zero-admitted capture to `2835` families / `891`
+    reanchor-prefix misses, so that broad catalog reland was reverted
+  - the next landed repair should therefore isolate one of those omitted side
+    openings onto the existing anchor-`11` `small_cluster` path instead of
+    broadening the raw position-`0` temporal-shell catalog first
 - Two new non-landed local step-`13` probes now sharpen the safe search space:
   - widening only operator-bundle formation positions `1` and `4` to
     demo-like variants lifts the repaired local read to
@@ -118,7 +133,9 @@ The highest-value work is:
    `1` explicit on the checklist
 3. use the `v11` certificate and `step-15-live.ndjson` to land the next
    parity-preserving local step-`15` repair against the residual
-   `468`-bar / `242`-incumbent surface
+   `468`-bar / `242`-incumbent surface, now using the omitted-side-variant
+   regression as the safe local opening and the reverted raw position-`0`
+   probe as the explicit "do not reland this globally" boundary
 4. launch the next clean full-profile rerun only after that next local repair
    is regression-backed
 5. refresh compare / benchmark / certification on the next stored bundle
@@ -177,7 +194,9 @@ Current slice order:
    step-`15` repair against the remaining `468` partial-prefix bar failures
    and `242` incumbent-dominance prunes, keeping the isolated `single`
    survivor bucket fenced while the next repair works against the
-   `small_cluster` pressure
+   `small_cluster` pressure and isolates one of the now-proven-safe omitted
+   side openings onto that path rather than broadening the raw position-`0`
+   catalog
 3. rerun only after that next local repair is regression-backed
 4. revisit stored step `1` from the next evidence bundle once step `15` moves
 
@@ -190,6 +209,7 @@ Do not reopen first:
 - another stored/local step-`11` rerun first
 - a raw reland of the exploratory `[3,5,3,3,5,1,1]` or
   `[5,1,3,3,5,3,3]` step-`13` widenings
+- a raw global position-`0` temporal-shell reland on step `15`
 - replay-fixture recapture or benchmark-file churn first
 - stronger wording or runtime-threshold freeze before a passing certificate
   exists

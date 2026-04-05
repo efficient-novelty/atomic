@@ -132,6 +132,23 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next repair should therefore stay on that narrow summary-stage
     same-primary `small_cluster` incumbent surface rather than reopening
     proof-close ordering or the isolated `single` pocket first
+- A new local step-`15` omitted-side-variant regression now sharpens that same
+  next move again without landing another widening yet:
+  - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
+    now pins that the omitted demo-only temporal-shell side variants at clause
+    positions `0`, `1`, `4`, and `5` all stay structurally connected, locally
+    admissible, and same-primary `103 / 8` / `115657 / 21112` on top of the
+    current live claim clause-`2` + anchor-`11` exact-argument pocket
+  - those omitted side variants still stay outside historical reanchor there
+    and still lose only on higher bit cost `243`, `245`, or `250`
+  - a non-landed raw position-`0` reland probe briefly lifted the local
+    step-`15` generated surface to `4285`, but it also reopened the old
+    clause-`0` zero-admitted capture to `2835` families with
+    `891` clause-`0` historical-reanchor misses, so that broad catalog reland
+    was reverted
+  - the next repair should therefore isolate one of those omitted side
+    openings onto the existing anchor-`11` `small_cluster` path instead of
+    broadening the raw position-`0` temporal-shell catalog first
 - New stored-evidence regressions now freeze that canonical `v11`
   diagnosis in-tree:
   - `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
@@ -715,7 +732,13 @@ This note is the exact next work order for `desktop_claim_shadow`.
    the `small_cluster` pressure; that pressure is now pinned more tightly as
    `242` summary-stage same-primary `103 / 8` incumbents with bit costs
    `236..290` and earliest first mismatches at clause positions
-   `0`, `1`, `2`, `4`, and `5`.
+   `0`, `1`, `2`, `4`, and `5`; the new omitted-side-variant regression now
+   also proves that several demo-only side openings around the live
+   anchor-`11` pocket are already rank-safe, while the reverted raw
+   position-`0` reland proves that broadening that side globally reopens the
+   old captured clause-`0` surface, so the next landed repair must isolate one
+   of those openings onto the current `small_cluster` path instead of
+   broadening the whole position-`0` catalog.
 4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
    hits so the next repair cannot silently reshuffle the canonical branch.
 5. Keep step `1 = 546 / 2144` on the checklist as the separate stored early
@@ -749,6 +772,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - a raw reland of the newer `[3,5,3,3,5,1,1]` or `[5,1,3,3,5,3,3]`
   step-`13` widenings first:
   those probes reopen local breadth but still leave accepted-hash parity open
+- a raw global position-`0` temporal-shell reland first:
+  the exploratory probe lifted local step `15` only to `4285` but also
+  reopened the repaired clause-`0` zero-admitted capture
 - a direct early clause-`2` / clause-`3` reanchor-bridge matcher reland
   first:
   those exploratory branches already displaced the canonical step-`15`
