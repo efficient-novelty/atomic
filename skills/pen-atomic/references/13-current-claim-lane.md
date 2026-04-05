@@ -261,6 +261,20 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - the earliest first-mismatch positions across that still-pruned surface are
     now frozen at clause positions `0`, `1`, `2`, `4`, and `5` with counts
     `162`, `54`, `22`, `6`, and `2`
+- a new non-landed blanket step-`15` same-primary retention probe was also
+  run and reverted against that same repaired canonical chain:
+  - enabling same-primary incumbent relief across the whole local step-`15`
+    chain kept live generated prefixes flat at `4030` and kept
+    partial-prefix bar failures at `472`
+  - it did collapse incumbent-dominance prunes from `246` to `0`, but it also
+    unfenced the isolated `single` pocket from `1` to `4` fully scored
+    non-winning terminals
+  - the surviving temporal `small_cluster` aggregate widened from
+    `2226 / 248 / 248 / 246` to `2964 / 494 / 494 / 0`, so that broad
+    retention probe changed the local exact-screen anatomy without raising the
+    generated floor
+  - because it neither lifted the local floor nor preserved the isolated
+    `single` fence, it was reverted
 - a new local omitted-side-variant regression now sharpens the next safe move
   on that same repaired anchor-`11` pocket without landing another widening
   yet:
@@ -296,9 +310,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - so clause `4` is now consumed only as a fenced tiny pocket, and the next
     landed repair should not be another raw isolated clause-`4` reland or a
     raw isolated clause-`5` late-side reland either; any future use of those
-    openings will need extra qualifier / reanchor evidence or summary-stage
-    retention changes that keep them on the `small_cluster` path instead of
-    the captured clause-`2` / clause-`3` surface
+    openings will need extra qualifier / reanchor evidence or narrower
+    summary-stage retention changes that keep them on the `small_cluster`
+    path instead of the captured clause-`2` / clause-`3` surface; the
+    reverted blanket same-primary-relief probe already proved that a full
+    step-`15` incumbent-retention reland is too broad
 
 ## Current Operational Blockers
 

@@ -154,6 +154,22 @@ gate.
   - the earliest first-mismatch positions across that still-pruned surface are
     now frozen at clause positions `0`, `1`, `2`, `4`, and `5` with counts
     `162`, `54`, `22`, `6`, and `2`
+- A new non-landed blanket step-`15` same-primary retention probe was also
+  run and reverted against that same repaired canonical chain:
+  - enabling same-primary incumbent relief across the whole local step-`15`
+    chain kept live generated prefixes flat at `4030` and kept
+    partial-prefix bar failures at `472`
+  - it did collapse incumbent-dominance prunes from `246` to `0`, but it also
+    unfenced the isolated `single` pocket from `1` to `4` fully scored
+    non-winning terminals
+  - the surviving temporal `small_cluster` aggregate widened from
+    `2226 / 248 / 248 / 246` to `2964 / 494 / 494 / 0`, so the probe changed
+    the local exact-screen anatomy without raising the generated floor
+  - because that blanket relief did not lift the local floor and broke the
+    intended isolated-`single` fence, it was reverted
+  - the next landed repair must therefore stay narrower than blanket
+    step-`15` same-primary incumbent relief while keeping the isolated
+    `single` pocket fenced
 - The newer local step-`15` omitted-side-variant regression still sharpens
   the next safe opening on that same repaired anchor-`11` pocket, but the
   clause-`4` read is now narrower than before:
@@ -231,7 +247,9 @@ gate.
     reland first:
     the next landed repair should now target summary-stage retention on top of
     the current `4030` local surface rather than another raw clause-`4`, raw
-    clause-`5`, or raw position-`0` reland
+    clause-`5`, or raw position-`0` reland, but the reverted blanket
+    same-primary-relief probe now also proves that a full step-`15`
+    incumbent-retention reland is too broad
 - The remaining stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)

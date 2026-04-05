@@ -105,9 +105,14 @@ Treat these as current repo truths:
   reopening the captured clause-`2` / clause-`3` surface; the newer
   clause-`5` `demo_sharp_domain` pocket is now also consumed narrowly on top
   of that clause-`4` repair, so the next landed repair should now build on
-  the fenced `4030` local surface via summary-stage retention rather than
-  broadening raw position `0` or relanding another broad clause-`4` /
-  clause-`5` injection; user-facing wording stays at
+  the fenced `4030` local surface via narrower summary-stage retention rather
+  than broadening raw position `0` or relanding another broad clause-`4` /
+  clause-`5` injection; a reverted blanket step-`15` same-primary relief
+  probe kept generated breadth flat at `4030`, collapsed incumbent-dominance
+  to `0`, widened the `small_cluster` aggregate to `2964 / 494 / 494 / 0`,
+  and unfenced the isolated `single` pocket to `4` fully scored non-winning
+  terminals, so that broad incumbent-retention reland is now also outside the
+  landed path; user-facing wording stays at
   `bounded live recovery` until stored breadth and certification pass
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`

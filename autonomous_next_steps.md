@@ -132,6 +132,23 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next repair should therefore stay on that narrow summary-stage
     same-primary `small_cluster` incumbent surface rather than reopening
     proof-close ordering or the isolated `single` pocket first
+- A new non-landed blanket step-`15` same-primary retention probe was also
+  run and reverted against that same repaired canonical chain:
+  - enabling same-primary incumbent relief across the whole local step-`15`
+    chain kept live generated prefixes flat at `4030` and kept
+    partial-prefix bar failures at `472`
+  - it did collapse incumbent-dominance prunes from `246` to `0`, but it also
+    unfenced the isolated `single` pocket from `1` to `4` fully scored
+    non-winning terminals
+  - the surviving temporal `small_cluster` aggregate widened from
+    `2226 / 248 / 248 / 246` to `2964 / 494 / 494 / 0`, so that broad
+    retention probe changed the local exact-screen anatomy without raising the
+    generated floor
+  - because it neither lifted the local floor nor preserved the isolated
+    `single` fence, it was reverted
+  - the next landed repair must therefore stay narrower than blanket
+    step-`15` same-primary incumbent relief while keeping the isolated
+    `single` pocket fenced
 - The newer local step-`15` omitted-side-variant regression still sharpens
   that same next move, but the clause-`4` read is now narrower than before:
   - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
@@ -800,8 +817,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
    `0`, `1`, `2`, `4`, and `5`. The clause-`4` `demo_sharp_codomain`
    reopening plus the clause-`5` `demo_sharp_domain` reopening are now both
    consumed narrowly and must stay fenced as a tiny noncanonical pocket, so
-   the next landed repair should come from summary-stage retention rather than
-   another raw clause-`4`, raw clause-`5`, or raw position-`0` reland.
+   the next landed repair should come from narrower summary-stage retention
+   rather than another raw clause-`4`, raw clause-`5`, or raw position-`0`
+   reland; the reverted blanket same-primary-relief probe already proved that
+   a full step-`15` incumbent-retention reland is too broad because it leaves
+   generated breadth flat while unfencing the isolated `single` pocket.
 4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
    hits so the next repair cannot silently reshuffle the canonical branch.
 5. Keep step `1 = 546 / 2144` on the checklist as the separate stored early
@@ -844,6 +864,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
   side pocket, while the reverted pocket-gated probes only lifted local
   step `15` to `3980` or `3974` and still reopened the captured
   clause-`2` / clause-`3` surface
+- a blanket step-`15` same-primary incumbent-relief reland first:
+  the reverted probe kept local generated breadth flat at `4030`, collapsed
+  incumbent-dominance to `0`, widened the `small_cluster` aggregate to
+  `2964 / 494 / 494 / 0`, and unfenced the isolated `single` pocket to `4`
+  fully scored non-winning terminals
 - a direct early clause-`2` / clause-`3` reanchor-bridge matcher reland
   first:
   those exploratory branches already displaced the canonical step-`15`
