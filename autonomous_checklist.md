@@ -84,6 +84,14 @@ It lists only work that is still open.
   only a tiny `3`-generated / `1`-admitted / `1`-pruned local surface, so the
   next landed repair still needs to stay family-local rather than reopen
   bucket-global same-primary relief.
+- A newer raw-terminal regression now sharpens that same residual blocker
+  further:
+  `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
+  now pins that each of those same three fenced families still sits on the
+  same raw three-terminal shell, with the reference terminal staying the
+  same-primary `103 / 8` non-winner at bit cost `236` while both
+  `next_lift` and `eventual_lift` stay connected, locally admissible, and
+  stronger-than-canonical `89 / 8` rivals at bit cost `254`.
 - A new local omitted-side-variant regression now proves the next safe opening
   is narrower than a raw catalog reland:
   omitted demo-only temporal-shell side variants at clause positions `0`,
@@ -118,7 +126,9 @@ It lists only work that is still open.
   cleared, and the next gain now needs to target the residual `3`
   single-bucket incumbent prunes on top of the current `4030` local surface,
   starting from those clause-`0` / clause-`2` / clause-`5` fenced prefix
-  families rather than reopening the whole side-pocket neighborhood.
+  families rather than reopening the whole side-pocket neighborhood, while
+  also keeping the newly frozen unsafe `89 / 8` lifted terminals fenced on
+  each of those same family shells.
 - No broader per-step claim search-band expansion should land beyond that
   isolated anchor-`11` pocket before a new local repair proves more is
   necessary on this parity-clean stored chain.

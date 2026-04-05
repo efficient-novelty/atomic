@@ -111,6 +111,14 @@ Treat these as current repo truths:
   `1`-pruned surface, so the next repair should stay family-local rather than
   relanding bucket-global same-primary relief from those preserved broader
   group-surface counts; a newer
+  `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
+  regression now also pins that each of those same three families still sits
+  on the same raw three-terminal shell, with the reference terminal staying a
+  same-primary `103 / 8` non-winner at bit cost `236` while the neighboring
+  `next_lift` and `eventual_lift` terminals remain connected, locally
+  admissible, and stronger-than-canonical `89 / 8` rivals at bit cost `254`,
+  so the next repair still has to keep those unsafe lifted terminals fenced;
+  a newer
   `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
   regression now also proves that omitted demo-only side variants at clause
   positions `0`, `1`, `4`, and `5` are already structurally connected,

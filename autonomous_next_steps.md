@@ -167,6 +167,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
     `2964 / 494 / 494 / 0` `small_cluster` surface
   - the next landed repair should therefore keep using those preserved counts
     only as diagnosis and stay family-local rather than bucket-global
+- A newer local step-`15` raw-terminal regression now sharpens that same
+  blocker another step further on those exact three families:
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
+    now pins that each fenced proof-close family still sits on the same raw
+    three-terminal shell
+  - within each shell, the reference terminal remains the same-primary
+    `103 / 8` non-winner at bit cost `236`, while both the `next_lift` and
+    `eventual_lift` terminals stay connected, locally admissible, and
+    stronger-than-canonical `89 / 8` rivals at bit cost `254`
+  - the next landed repair therefore cannot blindly reland those residual
+    families through broader same-primary retention or raw local terminal
+    recovery; it still has to keep those unsafe `89 / 8` lifts fenced
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -883,6 +895,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
    same-primary-retention anatomy (`0` incumbent-dominance prunes but `4`
    retained step-`15` candidates on the same `2964 / 494 / 494 / 0`
    `small_cluster` surface).
+   `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
+   now further pins that every one of those same three families still sits
+   beside two unsafe stronger-than-canonical `89 / 8` lifted terminals, so
+   the next landed repair must keep those lifts fenced instead of blindly
+   relanding broader local terminal recovery on the same family shell.
 4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
    hits so the next repair cannot silently reshuffle the canonical branch.
 5. Keep step `1 = 546 / 2144` on the checklist as the separate stored early

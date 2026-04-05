@@ -319,6 +319,18 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     `2964 / 494 / 494 / 0` `small_cluster` surface
   - the next landed repair should therefore keep using those preserved counts
     only as diagnosis and stay family-local rather than bucket-global
+- a new local step-`15` raw-terminal regression now sharpens that same
+  blocker one step further on those exact three families:
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
+    now pins that each of those same fenced proof-close families still sits
+    on the same raw three-terminal shell
+  - within each shell, the reference terminal remains the same-primary
+    `103 / 8` non-winner at bit cost `236`, while both `next_lift` and
+    `eventual_lift` stay connected, locally admissible, and
+    stronger-than-canonical `89 / 8` rivals at bit cost `254`
+  - the next landed repair therefore cannot blindly reland those residual
+    families through broader same-primary retention or raw local terminal
+    recovery; it still has to keep those unsafe `89 / 8` lifts fenced
 - a new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -390,7 +402,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   stored step `13` is already closed and the anchor-`11` step-`15` repair is
   already consumed on canonical `v11`, so the next move is the next local
   step-`15` diagnosis / repair on that residual stored `3972 / 5000` surface
-  while keeping the newer local `4030` guardrail surface fenced
+  while keeping the newer local `4030` guardrail surface fenced and while
+  keeping the newly frozen unsafe `89 / 8` lifted terminals fenced on the
+  three residual single-bucket family shells
 - the canonical repaired late chain must stay frozen while breadth is
   re-earned:
   - step `12` should keep the guarded `34 / 6` continuation

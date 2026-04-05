@@ -150,6 +150,19 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     `115657 / 21112` with bit cost `236`
   - those residual groups now localize to exactly three first-mismatch prefix
     families at clause positions `0`, `2`, and `5`
+- A newer executable
+  `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
+  regression now sharpens that same local blocker further:
+  - each of those same three fenced families still sits on the same raw
+    three-terminal shell
+  - the reference terminal there stays a same-primary `103 / 8` non-winner
+    at bit cost `236`
+  - the neighboring `next_lift` and `eventual_lift` terminals there still
+    stay connected, locally admissible, and stronger-than-canonical
+    `89 / 8` rivals at bit cost `254`
+  - the next landed repair therefore still has to keep those unsafe lifted
+    terminals fenced rather than blindly relanding broader same-primary or raw
+    local-terminal retention on that family shell
 - A newer executable omitted-side-variant regression now sharpens that same
   `small_cluster` target without landing another widening yet:
   - the omitted demo-only temporal-shell side variants at clause positions
@@ -298,7 +311,11 @@ Current slice order:
    `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_pin_the_exact_claim_family_labels`
    green so that the exact residual surface stays frozen as clause-`0`
    `claim_flat_domain`, clause-`2` `claim_flat_domain` plus the anchor-`11`
-   exact-argument pocket, and clause-`5` `claim_flat_codomain`
+   exact-argument pocket, and clause-`5` `claim_flat_codomain`; keep
+   `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
+   green too so the next step-`15` repair still respects that each of those
+   three families sits beside two unsafe stronger-than-canonical `89 / 8`
+   lifted terminals
 3. rerun only after that next local repair is regression-backed
 4. revisit stored step `1` from the next evidence bundle once step `15` moves
 

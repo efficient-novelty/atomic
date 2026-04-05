@@ -18759,6 +18759,231 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let canonical_rank = super::acceptance_rank_for_telescope(
+            surface.objective_bar,
+            &Telescope::reference(15),
+            103,
+            u16::try_from(pen_core::encode::telescope_bit_cost(&Telescope::reference(
+                15,
+            )))
+            .expect("bit cost exceeded u16"),
+            8,
+        )
+        .expect("reference step-15 telescope should clear the bar");
+        let captures = {
+            super::start_incumbent_pruned_terminal_group_capture();
+            let _ = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            super::finish_incumbent_pruned_terminal_group_capture()
+        };
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let mut profiles = BTreeMap::new();
+
+        let mut prefix_legality_cache = PrefixLegalityCache::default();
+        for capture in captures {
+            let label = current_claim_step_fifteen_proof_close_incumbent_family_label(
+                &capture.prefix_telescope,
+            );
+
+            let signature = PrefixSignature::new(15, &surface.library, &capture.prefix_telescope);
+            let work_item = create_online_prefix_work_item(
+                8,
+                capture.prefix_telescope.clone(),
+                signature,
+                &surface.library,
+                surface.admissibility,
+                &surface.clause_catalog,
+                &mut prefix_legality_cache,
+            );
+            let connectivity_summary =
+                ConnectivitySummary::from_telescope(&surface.library, &capture.prefix_telescope);
+            let mut terminal_profiles = BTreeMap::new();
+            for clause in work_item.next_clauses(&surface.clause_catalog) {
+                let clause_label = if *clause == reference_terminal {
+                    "reference"
+                } else if *clause == next_lift_terminal {
+                    "next_lift"
+                } else if *clause == eventual_lift_terminal {
+                    "eventual_lift"
+                } else {
+                    "other"
+                };
+                let decision =
+                    connectivity_summary.terminal_decision(&surface.library, clause, true);
+                let mut telescope = work_item.prefix_telescope.clone();
+                telescope.clauses.push(clause.clone());
+                let admissibility_decision = assess_strict_admissibility(
+                    surface.step_index,
+                    &surface.library,
+                    &telescope,
+                    surface.admissibility,
+                );
+                let accept_rank = if admissibility_decision.is_admitted() {
+                    let exact_nu = u16::try_from(
+                        structural_nu(&telescope, &surface.library, &surface.nu_history).total,
+                    )
+                    .expect("nu exceeded u16");
+                    let bit_kappa_used =
+                        u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                            .expect("bit cost exceeded u16");
+                    let clause_kappa_used =
+                        u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                    super::acceptance_rank_for_telescope(
+                        surface.objective_bar,
+                        &telescope,
+                        exact_nu,
+                        bit_kappa_used,
+                        clause_kappa_used,
+                    )
+                    .map(|rank| {
+                        (
+                            exact_nu,
+                            bit_kappa_used,
+                            super::better_rank(&rank, &canonical_rank),
+                            rank.overshoot,
+                        )
+                    })
+                } else {
+                    None
+                };
+                terminal_profiles.insert(
+                    clause_label.to_string(),
+                    (decision, admissibility_decision.is_admitted(), accept_rank),
+                );
+            }
+            profiles.insert(label, terminal_profiles);
+        }
+
+        assert_eq!(
+            profiles,
+            [
+                (
+                    "clause-0 claim_flat_domain".to_string(),
+                    [
+                        (
+                            "eventual_lift".to_string(),
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                true,
+                                Some((89_u16, 254_u16, true, Rational::new(78711, 21112))),
+                            ),
+                        ),
+                        (
+                            "next_lift".to_string(),
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                true,
+                                Some((89_u16, 254_u16, true, Rational::new(78711, 21112))),
+                            ),
+                        ),
+                        (
+                            "reference".to_string(),
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                true,
+                                Some((103_u16, 236_u16, false, Rational::new(115657, 21112))),
+                            ),
+                        ),
+                    ]
+                    .into_iter()
+                    .collect(),
+                ),
+                (
+                    "clause-2 claim_flat_domain plus anchor-11 exact-argument".to_string(),
+                    [
+                        (
+                            "eventual_lift".to_string(),
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                true,
+                                Some((89_u16, 254_u16, true, Rational::new(78711, 21112))),
+                            ),
+                        ),
+                        (
+                            "next_lift".to_string(),
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                true,
+                                Some((89_u16, 254_u16, true, Rational::new(78711, 21112))),
+                            ),
+                        ),
+                        (
+                            "reference".to_string(),
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                true,
+                                Some((103_u16, 236_u16, false, Rational::new(115657, 21112))),
+                            ),
+                        ),
+                    ]
+                    .into_iter()
+                    .collect(),
+                ),
+                (
+                    "clause-5 claim_flat_codomain".to_string(),
+                    [
+                        (
+                            "eventual_lift".to_string(),
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                true,
+                                Some((89_u16, 254_u16, true, Rational::new(78711, 21112))),
+                            ),
+                        ),
+                        (
+                            "next_lift".to_string(),
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                true,
+                                Some((89_u16, 254_u16, true, Rational::new(78711, 21112))),
+                            ),
+                        ),
+                        (
+                            "reference".to_string(),
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                true,
+                                Some((103_u16, 236_u16, false, Rational::new(115657, 21112))),
+                            ),
+                        ),
+                    ]
+                    .into_iter()
+                    .collect(),
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "each residual single-bucket family should still sit beside the same raw three-terminal shell: one same-primary 103/8 reference terminal and two unsafe stronger-than-canonical 89/8 lifts, so the next repair cannot blindly reland those families through broader same-primary retention"
+        );
+    }
+
+    #[test]
     fn repaired_claim_step_thirteen_repaired_chain_clears_exact_screen_and_terminal_rank_pressure()
     {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(

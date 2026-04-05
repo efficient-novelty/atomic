@@ -192,6 +192,18 @@ gate.
     `small_cluster` surface
   - the next landed repair should therefore use those preserved surface counts
     only as diagnosis and stay family-local, not bucket-global
+- A newer local step-`15` raw-terminal regression now sharpens that same
+  blocker further on those exact three families:
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
+    now pins that each of the three fenced proof-close families still sits on
+    the same raw three-terminal shell
+  - within each shell, the reference terminal remains the same-primary
+    `103 / 8` non-winner at bit cost `236`, while both the `next_lift` and
+    `eventual_lift` terminals stay connected, locally admissible, and
+    stronger-than-canonical `89 / 8` rivals at bit cost `254`
+  - the next landed repair therefore cannot blindly reland those residual
+    families through broader same-primary retention or raw local terminal
+    recovery; it still has to keep those unsafe `89 / 8` lifts fenced
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -323,6 +335,9 @@ gate.
     regression is green
   - the new
     `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
+    regression is green
+  - the new
+    `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
     regression is green
   - the new
     `connectivity_accepts_clause_four_demo_sharp_codomain_only_on_the_exact_anchor_eleven_side_pocket`
@@ -1334,7 +1349,11 @@ gate.
    now makes those three families explicit as clause-`0`
    `claim_flat_domain`, clause-`2` `claim_flat_domain` plus the
    anchor-`11` exact-argument pocket, and clause-`5`
-   `claim_flat_codomain`. The next move is therefore not another rerun setup pass, not another raw
+   `claim_flat_codomain`.
+   `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
+   now further pins that each of those same families still sits beside two
+   unsafe stronger-than-canonical `89 / 8` lifted terminals, so the next move
+   is therefore not another rerun setup pass, not another raw
    clause-`4` / raw clause-`5` / raw global position-`0` reland, and not a
    blanket same-primary-retention reland; it should be the next
    parity-preserving step-`15` repair against those residual `3`
