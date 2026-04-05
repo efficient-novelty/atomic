@@ -55,17 +55,15 @@ It lists only work that is still open.
 - The current exact-screened step-`15` survivor surface is now frozen by
   `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`:
   one library-backed temporal-operator `single` bucket carries the isolated
-  non-winning pocket at overshoot `115657 / 21112`, and one
-  library-backed temporal-operator `small_cluster` bucket carries the
-  remaining `2226` / `248` / `248` / `246` pressure.
-- The remaining step-`15` `small_cluster` incumbent surface is now frozen more
-  tightly by
-  `current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning`:
-  all `246` remaining prunes happen during summary-stage exact screening,
-  every one stays on the same-primary `103 / 8` / `115657 / 21112` tier, the
-  non-winning spread is only bit cost `236..290`, and the earliest mismatch
-  positions across that surface stay at clause positions `0`, `1`, `2`, `4`,
-  and `5` with counts `162`, `54`, `22`, `6`, and `2`.
+  non-winning pocket at overshoot `115657 / 21112` plus the residual `3`
+  incumbent-dominance prunes, and one library-backed temporal-operator
+  `small_cluster` bucket now carries `2964 / 494 / 494 / 0`.
+- A newer local step-`15` small-cluster relief is now landed and frozen by
+  `current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain`:
+  the old `246`-candidate summary-stage `small_cluster` incumbent wall is now
+  gone, local incumbent-dominance pressure has fallen to `3`, live generated
+  prefixes still stay at `4030` with `472` partial-prefix bar failures, and
+  the isolated fully scored `single` pocket stays fenced.
 - A new local omitted-side-variant regression now proves the next safe opening
   is narrower than a raw catalog reland:
   omitted demo-only temporal-shell side variants at clause positions `0`,
@@ -87,19 +85,18 @@ It lists only work that is still open.
   reanchor-prefix misses, and the clause-`5`-only pocket-gated probe only
   reached `3974` and still reopened the capture to `1950` families / `1464`
   clause-`2` misses.
-- A newer narrower clause-`5` side-pocket reland is now landed locally on top
+- A newer narrower clause-`5` side-pocket reland remains landed locally on top
   of the clause-`4` pocket:
-  it lifts the repaired local step-`15` guardrail surface to `4030`, keeps
-  `472` partial-prefix bar failures fixed, raises the remaining incumbent
-  pressure to `246`, keeps the captured zero-admitted surface tightly
-  localized at `1956` families / `5868` connected-but-unqualified terminal
-  options, and keeps the clause-`4` / clause-`5` side pocket tiny and
-  noncanonical.
+  it lifts the repaired local step-`15` guardrail surface to `4030`,
+  keeps the captured zero-admitted surface tightly localized at
+  `1956` families / `5868` connected-but-unqualified terminal options, and
+  keeps the clause-`4` / clause-`5` side pocket tiny and noncanonical.
 - The next landed repair should therefore not be another raw clause-`4`
-  reland:
+  reland or another blanket same-primary-retention pass:
   clause `4` plus the local clause-`5` `demo_sharp_domain` opening are now
-  consumed as fenced local pockets, so the next gain needs summary-stage
-  retention on top of the current `4030` local surface.
+  consumed as fenced local pockets, the small-cluster summary wall is already
+  cleared, and the next gain now needs to target the residual `3`
+  single-bucket incumbent prunes on top of the current `4030` local surface.
 - No broader per-step claim search-band expansion should land beyond that
   isolated anchor-`11` pocket before a new local repair proves more is
   necessary on this parity-clean stored chain.

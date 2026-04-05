@@ -106,15 +106,41 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - the captured zero-admitted surface still stays tightly localized at
     `1956` families / `5868` connected-but-unqualified terminal options, so
     the clause-`2` / clause-`3` capture remains fenced
+- A newer local step-`15` small-cluster relief now lands on top of that
+  clause-`5` pocket:
+  - the repaired local late chain still accepts `DCT 103 / 8`, and live
+    generated prefixes stay fixed at `4030`
+  - the remaining local pressure is now `472` partial-prefix bar failures plus
+    only `3` incumbent-dominance prunes, with
+    legality/connectivity exact rejection still at `0`
+  - the local surviving temporal terminal cluster now widens further to
+    `2964` generated / `494` admitted / `494` exact-screened / `0` pruned
+  - the isolated `single` pocket still stays fenced as one fully scored
+    non-winning terminal at overshoot `115657 / 21112`, while the remaining
+    incumbent pressure now survives only as `3` residual `single`-bucket
+    prunes rather than as the old `246`-candidate `small_cluster` wall
+  - the captured zero-admitted surface still stays tightly localized at
+    `1956` families / `5868` connected-but-unqualified terminal options, so
+    the landed relief changes only the incumbent screen and not the broader
+    clause-`2` / clause-`3` capture boundary
 - A new executable step-`15` survivor-bucket regression now freezes that
   post-repair split more tightly:
   - exactly two
     `k8:structural_generic:temporal_operator:library_backed` buckets remain
     on the canonical repaired surface
   - the isolated `single` bucket carries one fully scored non-winning pocket
-    at overshoot `115657 / 21112`
-  - the remaining repair target is the `small_cluster` bucket at
-    `2226` generated / `248` admitted / `248` exact-screened / `246` pruned
+    at overshoot `115657 / 21112` plus the residual `3`
+    incumbent-dominance prunes
+  - the `small_cluster` bucket is now no longer the incumbent wall:
+    it holds `2964` generated / `494` admitted / `494` exact-screened /
+    `0` pruned
+- A newer executable
+  `current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain`
+  regression now freezes that new local state more tightly:
+  - summary-stage incumbent capture on the `small_cluster` surface is now `0`
+  - local incumbent-dominance pressure is now only `3`
+  - the isolated `single` pocket stays fenced even though the
+    `small_cluster` wall is no longer dying during exact screening
 - A newer executable omitted-side-variant regression now sharpens that same
   `small_cluster` target without landing another widening yet:
   - the omitted demo-only temporal-shell side variants at clause positions
@@ -148,8 +174,8 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - so clause `4` is now consumed only as a fenced tiny pocket, and the next
     landed repair can no longer be another raw isolated clause-`4` reland or
     a raw isolated clause-`5` reland either; any further gain will need
-    additional qualifier / reanchor evidence or summary-stage retention
-    changes that keep the captured clause-`2` / clause-`3` surface fenced
+    additional qualifier / reanchor evidence or residual-incumbent work that
+    keeps the captured clause-`2` / clause-`3` surface fenced
 - Two new non-landed local step-`13` probes now sharpen the safe search space:
   - widening only operator-bundle formation positions `1` and `4` to
     demo-like variants lifts the repaired local read to
@@ -189,12 +215,13 @@ The highest-value work is:
 2. keep the stored step-`13` hit, the new `v11` stored diagnosis, and step
    `1` explicit on the checklist
 3. use the `v11` certificate and `step-15-live.ndjson` to land the next
-   parity-preserving local step-`15` repair against the current post-clause-`5`
-   `472`-bar / `246`-incumbent surface, keeping the new `4030` guardrail
+   parity-preserving local step-`15` repair against the current post-relief
+   `472`-bar / `3`-incumbent surface, keeping the new `4030` guardrail
    stable, treating the raw position-`0` probe as the explicit "do not reland
    this globally" boundary, and treating clause `4` plus the local
    clause-`5` `demo_sharp_domain` opening as already consumed by a fenced tiny
-   side pocket so the next gain comes from summary-stage retention instead
+   side pocket so the next gain now comes from the residual `single`-bucket
+   incumbent pressure rather than from the old `small_cluster` summary wall
 4. launch the next clean full-profile rerun only after that next local repair
    is regression-backed
 5. refresh compare / benchmark / certification on the next stored bundle
@@ -251,10 +278,11 @@ Current slice order:
    frozen negative controls green
 2. use the stored `v11` certificate and live checkpoints to localize the next
    step-`15` repair against the remaining local `472` partial-prefix bar
-   failures and `246` incumbent-dominance prunes, keeping the isolated
+   failures and `3` incumbent-dominance prunes, keeping the isolated
    `single` survivor bucket fenced, keeping the newly reopened clause-`4`
    side pocket fenced as tiny and noncanonical, and working against the
-   `small_cluster` pressure without broadening the raw position-`0` catalog
+   residual `single`-bucket pressure without broadening the raw
+   position-`0` catalog
 3. rerun only after that next local repair is regression-backed
 4. revisit stored step `1` from the next evidence bundle once step `15` moves
 

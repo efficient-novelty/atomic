@@ -135,25 +135,32 @@ gate.
     now pins exactly two
     `k8:structural_generic:temporal_operator:library_backed` buckets at
     step `15`
-  - the isolated `single` bucket still carries just one fully scored
-    non-winning pocket with overshoot `115657 / 21112`
-  - the remaining exact-screened pressure still stays concentrated in the
-    `small_cluster` bucket with `2226` generated / `248` admitted /
-    `248` exact-screened / `246` pruned
+  - the isolated `single` bucket still carries the one fully scored
+    non-winning pocket with overshoot `115657 / 21112`, and it now also
+    absorbs the residual `3` incumbent-dominance prunes that remain after the
+    new small-cluster relief
+  - the remaining exact-screened pressure no longer dies inside the
+    `small_cluster` bucket:
+    it now widens to `2964` generated / `494` admitted / `494`
+    exact-screened / `0` pruned
   - the accepted canonical step-`15` winner still remains the only retained
     candidate there and keeps bit cost `229`
-- A newer local step-`15` small-cluster incumbent-surface regression now
-  freezes that remaining exact-screened pressure more tightly too:
-  - `current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning`
-    now pins that all `246` remaining `small_cluster` prunes happen during
-    summary-stage exact screening rather than later proof-close materialization
-  - every one of those remaining pruned candidates still sits on the same
-    primary `103 / 8` tier with overshoot `115657 / 21112`
-  - the remaining non-winning spread there is now only secondary bit cost,
-    from `236` through `290`, above the canonical winner's `229`
-  - the earliest first-mismatch positions across that still-pruned surface are
-    now frozen at clause positions `0`, `1`, `2`, `4`, and `5` with counts
-    `162`, `54`, `22`, `6`, and `2`
+- A newer local step-`15` small-cluster relief now lands on top of that
+  clause-`5` pocket:
+  - `current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain`
+    now pins that the old `246`-candidate summary-stage `small_cluster`
+    incumbent wall has collapsed entirely
+  - local step-`15` incumbent-dominance prunes now fall from `246` to `3`
+    while live generated prefixes stay `4030` and partial-prefix bar failures
+    stay `472`
+  - the remaining incumbent pressure no longer sits on the same-primary
+    `small_cluster` surface; it now survives only as `3` residual
+    `single`-bucket prunes while the isolated fully scored non-winning pocket
+    stays fenced
+  - the captured zero-admitted surface still stays tightly localized at
+    `1956` families / `5868` connected-but-unqualified terminal options, so
+    the landed relief changes only the incumbent screen and not the broader
+    clause-`2` / clause-`3` capture boundary
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -245,11 +252,11 @@ gate.
   - the clause-`4` / clause-`5` side pocket still stays tiny and
     noncanonical, so the next safe move is no longer another side-pocket
     reland first:
-    the next landed repair should now target summary-stage retention on top of
-    the current `4030` local surface rather than another raw clause-`4`, raw
-    clause-`5`, or raw position-`0` reland, but the reverted blanket
-    same-primary-relief probe now also proves that a full step-`15`
-    incumbent-retention reland is too broad
+    the landed small-cluster relief has now consumed that summary-stage
+    retention move, so the next repair should target the residual
+    `3` single-bucket incumbent prunes on top of the current `4030`
+    local surface rather than another raw clause-`4`, raw clause-`5`, raw
+    position-`0`, or blanket same-primary-retention reland
 - The remaining stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)
@@ -277,9 +284,12 @@ gate.
   - the stored `v5` compare / certification / benchmark freeze regressions
     remain green
 - The current local step-`15` diagnostic suite was rerun green again after
-  landing the fenced clause-`5` side-pocket repair on top of the clause-`4`
-  pocket:
+  landing the narrow step-`15` small-cluster relief on top of the fenced
+  clause-`5` side-pocket repair:
   - all current `current_claim_step_fifteen_*` engine regressions are green
+  - the new
+    `current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain`
+    regression is green
   - the new
     `connectivity_accepts_clause_four_demo_sharp_codomain_only_on_the_exact_anchor_eleven_side_pocket`
     regression is green
@@ -289,14 +299,14 @@ gate.
   - `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
     is green
   - `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts` is green
-- The executable late-path guardrails are now synced to that same clause-`5`
-  local surface too:
+- The executable late-path guardrails are now synced to that same
+  small-cluster-relief local surface too:
   - `repaired_claim_step_twelve_late_path_has_scoped_step_thirteen_widening_before_proof_close`
     now freezes the repaired canonical continuation through
     `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 4030`
   - the step-`15` late-path guardrails now freeze the current
-    `4030` / `246` / `2226 / 248 / 248 / 246` local surface rather than the
-    older clause-`4`-only `4004` / `244` / `2208 / 246 / 246 / 244` read
+    `4030` / `3` / `2964 / 494 / 494 / 0` local surface rather than the
+    older clause-`5`-only `4030` / `246` / `2226 / 248 / 248 / 246` read
   - the `[5,1,3,3,5,3,3]` step-`13` negative control still preserves guarded
     step-`14` / step-`15` accepted hashes while now also observing the current
     local step-`15` generated surface at `4030`
@@ -1230,9 +1240,11 @@ gate.
   guardrails:
   step `13` should now stay at `[5,1,3,3,5,3,2]` / `1350` / `2320` with the
   guarded accepted hash, step `14` should stay `19683` / `12027`, the latest
-  local post-`v11` step `15` guardrail should stay `DCT 103 / 8 / 4030`, and
-  stored canonical `v11` step `15` should still stay `DCT 103 / 8 / 3972`
-  until another full rerun consumes the new local repair.
+  local post-`v11` step `15` guardrail should stay `DCT 103 / 8 / 4030`
+  with `472` partial-prefix bar failures, `3` incumbent-dominance prunes, and
+  a `2964 / 494 / 494 / 0` `small_cluster` surface plus the fenced
+  `single` pocket, and stored canonical `v11` step `15` should still stay
+  `DCT 103 / 8 / 3972` until another full rerun consumes the new local repair.
 - Use the stored `v11` certificate and the late-step live checkpoints as the
   first diagnosis surface for the remaining misses; they now expose raw
   catalog widths, root seeding, exact-screen pressure, and the full stored
@@ -1271,17 +1283,19 @@ gate.
 3. Use the stored `v11` certificate and late-step live checkpoints as the
    first diagnosis surface for the residual stored `3972 / 5000` miss at
    step `15`, but keep the new local post-`v11` guardrail explicit while
-   doing so: the fenced clause-`5` side-pocket reland now lifts the repaired
-   local late chain to `DCT 103 / 8 / 4030`, with `472` partial-prefix bar
-   failures, `246` incumbent-dominance prunes, a widened temporal
-   `small_cluster` at `2226 / 248 / 248 / 246`, and a still-tight captured
-   surface at `1956` families / `5868` connected-but-unqualified terminal
-   options. The clause-`4` / clause-`5` pocket now stays doubly fenced and
-   noncanonical, so the next move is not another rerun setup pass, not a
-   proof-close reland, and not another raw clause-`4` / raw clause-`5` /
-   raw global position-`0` reland; it should be the next parity-preserving
-   step-`15` repair on top of this `4030` surface, most likely via
-   summary-stage retention that preserves the current fenced side pocket.
+   doing so: the landed small-cluster relief now keeps the repaired local
+   late chain at `DCT 103 / 8 / 4030`, with `472` partial-prefix bar
+   failures, only `3` incumbent-dominance prunes, a widened temporal
+   `small_cluster` at `2964 / 494 / 494 / 0`, the isolated `single` pocket
+   still fenced as one fully scored non-winner plus `3` residual single-bucket
+   prunes, and the still-tight captured surface at
+   `1956` families / `5868` connected-but-unqualified terminal options. The
+   clause-`4` / clause-`5` pocket still stays doubly fenced and noncanonical,
+   so the next move is not another rerun setup pass, not another raw
+   clause-`4` / raw clause-`5` / raw global position-`0` reland, and not a
+   blanket same-primary-retention reland; it should be the next
+   parity-preserving step-`15` repair against those residual `3`
+   single-bucket incumbent prunes on top of this `4030` surface.
 4. Launch the next clean full-profile claim rerun only after that next local
    step-`15` repair is regression-backed and parity-clean, then refresh
    compare / benchmark / certification immediately afterwards and keep
