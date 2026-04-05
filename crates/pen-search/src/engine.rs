@@ -16718,6 +16718,234 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let anchor_eleven = anchor + 1;
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let clause_two_variants = [
+            (
+                "claim_flat_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                    ),
+                ),
+            ),
+            (
+                "claim_sharp_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+            ),
+        ];
+        let side_variants = [
+            (
+                0_usize,
+                "demo_sharp_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+                ),
+            ),
+            (
+                0_usize,
+                "demo_next_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
+                ),
+            ),
+            (
+                1_usize,
+                "demo_flat_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                ),
+            ),
+            (
+                1_usize,
+                "demo_eventually_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Eventually(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+                ),
+            ),
+            (
+                4_usize,
+                "demo_sharp_bridge",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Sharp(
+                            Box::new(Expr::Var(1)),
+                        )))))),
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Sharp(
+                            Box::new(Expr::Var(1)),
+                        )))))),
+                    ),
+                ),
+            ),
+            (
+                4_usize,
+                "demo_sharp_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                        Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Flat(
+                            Box::new(Expr::Var(1)),
+                        )))))),
+                    ),
+                ),
+            ),
+            (
+                5_usize,
+                "demo_sharp_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                            Expr::Sharp(Box::new(Expr::Var(1))),
+                        ))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+            ),
+            (
+                5_usize,
+                "demo_flat_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Flat(Box::new(Expr::Var(1))),
+                        ))))),
+                    ),
+                ),
+            ),
+        ];
+        let lifted_terminals = [
+            ("next_lift", next_lift_terminal),
+            ("eventual_lift", eventual_lift_terminal),
+        ];
+        let mut fenced_variant_counts = BTreeMap::new();
+
+        for (clause_two_label, clause_two) in clause_two_variants {
+            for (position, side_label, side_clause) in side_variants.iter() {
+                for (_terminal_label, lifted_terminal) in lifted_terminals.iter() {
+                    let mut telescope = reference_prefix.clone();
+                    telescope.clauses[2] = clause_two.clone();
+                    telescope.clauses[3] = ClauseRec::new(
+                        ClauseRole::Introduction,
+                        Expr::Lam(Box::new(Expr::App(
+                            Box::new(Expr::Lib(anchor_eleven)),
+                            Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        ))),
+                    );
+                    telescope.clauses[*position] = side_clause.clone();
+                    telescope.clauses.push(lifted_terminal.clone());
+
+                    let witness = analyze_connectivity(&surface.library, &telescope);
+                    let reanchor =
+                        HistoricalReanchorSummary::from_telescope(&surface.library, &telescope);
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 11,
+                            historical_reanchor: false,
+                        },
+                        "the omitted anchor-11 side variants should stay structurally connected but outside historical reanchor once the terminal lifts"
+                    );
+                    assert!(
+                        !reanchor.allows_historical_reanchor(),
+                        "the omitted anchor-11 side variants should not reopen historical reanchor on the unsafe lifted terminals"
+                    );
+                    assert!(
+                        !passes_connectivity(&surface.library, &telescope),
+                        "the omitted anchor-11 side variants should still fence the unsafe lifted terminals out of the live claim path"
+                    );
+                    *fenced_variant_counts
+                        .entry(format!("{clause_two_label}:{position}:{side_label}"))
+                        .or_insert(0usize) += 1;
+                }
+            }
+        }
+
+        assert_eq!(
+            fenced_variant_counts,
+            [
+                ("claim_flat_domain:0:demo_next_domain".to_string(), 2_usize),
+                ("claim_flat_domain:0:demo_sharp_domain".to_string(), 2),
+                (
+                    "claim_flat_domain:1:demo_eventually_codomain".to_string(),
+                    2
+                ),
+                ("claim_flat_domain:1:demo_flat_codomain".to_string(), 2),
+                ("claim_flat_domain:4:demo_sharp_bridge".to_string(), 2),
+                ("claim_flat_domain:4:demo_sharp_codomain".to_string(), 2),
+                ("claim_flat_domain:5:demo_flat_codomain".to_string(), 2),
+                ("claim_flat_domain:5:demo_sharp_domain".to_string(), 2),
+                ("claim_sharp_codomain:0:demo_next_domain".to_string(), 2),
+                ("claim_sharp_codomain:0:demo_sharp_domain".to_string(), 2),
+                (
+                    "claim_sharp_codomain:1:demo_eventually_codomain".to_string(),
+                    2
+                ),
+                ("claim_sharp_codomain:1:demo_flat_codomain".to_string(), 2),
+                ("claim_sharp_codomain:4:demo_sharp_bridge".to_string(), 2),
+                ("claim_sharp_codomain:4:demo_sharp_codomain".to_string(), 2),
+                ("claim_sharp_codomain:5:demo_flat_codomain".to_string(), 2),
+                ("claim_sharp_codomain:5:demo_sharp_domain".to_string(), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "every omitted demo-only side variant around the exact anchor-11 pocket should still keep both unsafe lifted terminals fenced, so any future reland there must stay reference-terminal-local rather than reopening the old 89/8 shell"
+        );
+    }
+
+    #[test]
     fn current_claim_step_fifteen_clause_four_side_pocket_capture_stays_tiny_and_noncanonical() {
         let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
         let reference_terminal = Telescope::reference(15)

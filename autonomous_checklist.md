@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-04-05
+Last updated: 2026-04-06
 
 This checklist is the live signoff gate for `desktop_claim_shadow`.
 It lists only work that is still open.
@@ -105,7 +105,11 @@ It lists only work that is still open.
   the repaired clause-`0` zero-admitted capture to `2835` families / `891`
   reanchor-prefix misses, so the next landed repair must stay isolated onto
   the existing `small_cluster` path instead of broadening the whole
-  position-`0` catalog.
+  position-`0` catalog. A newer
+  `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
+  regression now also proves that every one of those omitted side variants
+  keeps both unsafe lifted terminals fenced once the terminal moves, so any
+  future reland there has to stay reference-terminal-local.
 - The older raw isolated late-side probes are no longer the live boundary by
   themselves:
   the clause-`4`-only pocket-gated probe only reached `3980` and reopened the

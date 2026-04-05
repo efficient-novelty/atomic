@@ -358,6 +358,12 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     clause-`1`, and clause-`5` variants still stay outside historical
     reanchor there and still lose only on higher bit cost `243`, `245`, or
     `250`
+  - a newer
+    `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
+    regression now further pins that every one of those omitted side variants
+    stays structurally connected but outside historical reanchor once the
+    terminal lifts, so both unsafe `next_lift` and `eventual_lift`
+    terminals remain fenced there
   - a non-landed raw position-`0` reland probe briefly lifted the local
     step-`15` generated surface to `4285`, but it also reopened the repaired
     clause-`0` zero-admitted capture to `2835` families / `891`
@@ -382,9 +388,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     raw isolated clause-`5` late-side reland either; any future use of those
     openings will need extra qualifier / reanchor evidence or narrower
     residual-incumbent work that keeps them on the repaired path instead of
-    the captured clause-`2` / clause-`3` surface; the reverted blanket
-    same-primary-relief probe already proved that a full step-`15`
-    incumbent-retention reland is too broad
+    the captured clause-`2` / clause-`3` surface, and the new lifted-terminal
+    fence regression means any future omitted-side reland there must stay
+    reference-terminal-local too; the reverted blanket same-primary-relief
+    probe already proved that a full step-`15` incumbent-retention reland is
+    too broad
 
 ## Current Operational Blockers
 

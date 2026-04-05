@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-04-05
+Last updated: 2026-04-06
 Status: active
 
 This file is the staged path from the current parity-clean-but-not-certified
@@ -178,6 +178,13 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     step-`15` generated surface to `4285`, but it also reopened the repaired
     clause-`0` zero-admitted capture to `2835` families / `891`
     reanchor-prefix misses, so that broad catalog reland was reverted
+  - a newer executable
+    `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
+    regression now sharpens that same opening further:
+    every omitted demo-only side variant around the exact anchor-`11` pocket
+    still stays structurally connected but outside historical reanchor once
+    the terminal lifts, so both unsafe `89 / 8` lifted terminals remain
+    fenced there
   - that guidance is now partly consumed:
     the clause-`5` `demo_sharp_domain` opening has since been isolated onto
     the existing clause-`4` anchor-`11` side pocket, while the raw
@@ -315,7 +322,10 @@ Current slice order:
    `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
    green too so the next step-`15` repair still respects that each of those
    three families sits beside two unsafe stronger-than-canonical `89 / 8`
-   lifted terminals
+   lifted terminals, and keep
+   `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
+   green so any future omitted-side opening stays reference-terminal-local
+   instead of reopening that lifted shell
 3. rerun only after that next local repair is regression-backed
 4. revisit stored step `1` from the next evidence bundle once step `15` moves
 

@@ -1,6 +1,6 @@
 # Autonomous Claim Lane: Next Operational Slice
 
-Last updated: 2026-04-05
+Last updated: 2026-04-06
 
 This note is the exact next work order for `desktop_claim_shadow`.
 
@@ -209,14 +209,23 @@ This note is the exact next work order for `desktop_claim_shadow`.
     historical reanchor there
   - those omitted side variants still lose only on higher bit cost `243`,
     `245`, or `250`
+  - a newer lifted-terminal fence regression now sharpens that same opening
+    one step further:
+    `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
+    now pins that every one of those omitted side variants stays
+    structurally connected but outside historical reanchor once the terminal
+    lifts, so both unsafe `next_lift` and `eventual_lift` terminals remain
+    fenced there
   - a non-landed raw position-`0` reland probe briefly lifted the local
     step-`15` generated surface to `4285`, but it also reopened the old
     clause-`0` zero-admitted capture to `2835` families with
     `891` clause-`0` historical-reanchor misses, so that broad catalog reland
     was reverted
   - the next repair should therefore keep isolating one of those omitted side
-    openings onto the existing anchor-`11` `small_cluster` path instead of
-    broadening the raw position-`0` temporal-shell catalog first
+    openings onto the existing anchor-`11` `small_cluster` path only if it
+    stays reference-terminal-local, instead of broadening the raw
+    position-`0` temporal-shell catalog first or reopening the old lifted
+    shell
 - The earlier raw isolated late-side reland probes are now split more cleanly:
   - a clause-`4`-only demo-sharp-codomain opening, gated on canonical clauses
     `0` and `1` plus the live claim clause-`2` + anchor-`11` exact-argument
@@ -897,9 +906,13 @@ This note is the exact next work order for `desktop_claim_shadow`.
    `small_cluster` surface).
    `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
    now further pins that every one of those same three families still sits
-   beside two unsafe stronger-than-canonical `89 / 8` lifted terminals, so
-   the next landed repair must keep those lifts fenced instead of blindly
-   relanding broader local terminal recovery on the same family shell.
+   beside two unsafe stronger-than-canonical `89 / 8` lifted terminals, and
+   `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
+   now also pins that the nearby omitted demo-only side variants keep those
+   same lifts fenced once the terminal moves. The next landed repair must
+   therefore keep any future side-pocket use reference-terminal-local instead
+   of blindly relanding broader local terminal recovery on the same family
+   shell.
 4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
    hits so the next repair cannot silently reshuffle the canonical branch.
 5. Keep step `1 = 546 / 2144` on the checklist as the separate stored early

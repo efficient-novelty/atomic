@@ -131,6 +131,10 @@ Treat these as current repo truths:
   reopened the repaired clause-`0` zero-admitted capture, and the older raw
   clause-`4` / clause-`5` probes only reached `3980` or `3974` while
   reopening the captured clause-`2` / clause-`3` surface; the newer
+  `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
+  regression now also pins that every one of those omitted side variants
+  stays structurally connected but outside historical reanchor once the
+  terminal lifts, so both unsafe lifted terminals remain fenced there; the newer
   clause-`5` `demo_sharp_domain` pocket is now also consumed narrowly on top
   of that clause-`4` repair, and the landed small-cluster relief has now
   consumed that summary-stage move too, so the next repair should target the

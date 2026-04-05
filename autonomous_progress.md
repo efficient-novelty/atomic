@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Progress
 
-Last updated: 2026-04-05
+Last updated: 2026-04-06
 
 This file is the live operating brief for `desktop_claim_shadow`.
 Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next
@@ -235,14 +235,22 @@ gate.
   - those omitted side variants still lose only on higher bit cost `243`,
     `245`, or `250`, so they remain candidate-safe surface openings rather
     than hidden stronger winners
+  - a newer lifted-terminal fence regression now sharpens that same opening
+    one step further:
+    `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
+    now pins that every one of those omitted side variants stays
+    structurally connected but outside historical reanchor once the terminal
+    lifts, so both unsafe `next_lift` and `eventual_lift` terminals remain
+    fenced there
   - a non-landed raw position-`0` reland probe briefly lifted the local
     step-`15` generated surface from `3972` to `4285`, but it also reopened the
     old clause-`0` zero-admitted capture to `2835` families and restored
     `891` clause-`0` historical-reanchor misses, so that broad catalog reland
     was reverted
   - the next repair should therefore keep isolating one of those omitted side
-    openings onto the existing anchor-`11` `small_cluster` path instead of
-    broadening the raw position-`0` temporal-shell catalog first
+    openings onto the existing anchor-`11` `small_cluster` path only if it
+    stays reference-terminal-local, instead of broadening the raw
+    position-`0` temporal-shell catalog or reopening the old lifted shell
 - The earlier raw isolated late-side reland probes are now split more cleanly:
   - a clause-`4`-only demo-sharp-codomain opening, gated on canonical clauses
     `0` and `1` plus the live claim clause-`2` + anchor-`11` exact-argument
