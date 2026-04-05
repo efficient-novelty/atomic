@@ -19,17 +19,19 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 ## Current Strategic Position
 
-- The current canonical stored claim bundle is clean-tree completed `v10`:
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v10`
-  on repo head `6939b71063e4aec9598b293560c0c233981bc169` with release binary
-  hash `d003dd29c599ba86b7ef410b1c7849f89a0fe45d33dc42508e368f4c2a7c473a`.
+- The current canonical stored claim bundle is clean-tree completed `v11`:
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v11`
+  on repo head `4e38f2463b429bcbebe16cc6d7c5eac7ef2de050` with release binary
+  hash `64535f9e6c2e2a77c1bdeeb1f848abbeb0312f9b454bce42f27c68b3b852271c`.
 - Stored compare, certification, and benchmark outputs now exist beside that
-  `v10` run and are the current authoritative evidence surface.
-- The stored `v10` certificate plus the frozen `step-15-live.ndjson`
-  provenance are now also pinned by
-  `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
+  `v11` run and are the current authoritative evidence surface.
+- The stored `v11` certificate plus the frozen `step-15-live.ndjson`
+  provenance are now pinned by
+  `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
+  and the refreshed `v11` benchmark bundle is pinned by
+  `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts`,
   so the current canonical breadth diagnosis is executable in-tree.
-- Stored accepted-hash parity is earned on `v10` through step `15`.
+- Stored accepted-hash parity is earned on `v11` through step `15`.
 - Runtime, manifest completeness, fallback honesty, narrative/event
   completeness, exact-screen reason completeness, and prune-class completeness
   are all earned on stored evidence.
@@ -37,17 +39,18 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - the stored claim-open surface now widens to
     `[5,1,3,3,5,3,2]` / raw `1350` / generated `2320`
   - the guarded step-`13` metric shell stays accepted there and keeps the
-    canonical `62 / 9 / 12027 -> 103 / 8 / 1794` continuation through
+    canonical `62 / 9 / 12027 -> 103 / 8 / 3972` continuation through
     steps `14` and `15`
   - the stored step-`13` surface now seeds `5` roots and pays
     `576` legality/connectivity exact rejections plus `401` heuristic drops
     before proof-close
 - The remaining blockers are stored breadth misses on the canonical chain:
-  step `1 = 546 / 2144` and step `15 = 1794 / 5000`.
+  step `1 = 546 / 2144` and step `15 = 3972 / 5000`.
 - Step `15` is now the remaining stored late-floor miss, and the next honest
   local engineering dollar is stored step-`15` diagnosis / repair on top of
-  `v10`, not another rerun first and not another step-`13` theory pass.
-- A new narrow local step-`15` repair now consumes that diagnosis:
+  `v11`, not another rerun first and not another step-`13` theory pass.
+- The narrow local step-`15` anchor-`11` repair has now been consumed on
+  stored evidence:
   - mixed live claim clause-`2` prefixes now expose exactly one additional
     clause-`3` option, the isolated anchor-`11` exact-argument pocket, while
     reference clause-`2` prefixes and the lifted anchor-`11` neighbors stay
@@ -56,12 +59,13 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     isolated pocket across every repaired-side subset of clause positions
     `0`, `1`, `4`, and `5`, while clause `6` still stays the safety boundary
     that reopens the unsafe `89 / 8` rival
-  - on the repaired canonical late chain, step `15` still accepts
-    `DCT 103 / 8`, but live generated prefixes now lift from `1794` to
-    `3972`
-  - step-`15` partial-prefix bar failures stay `468` while incumbent-
-    dominance prunes rise from `80` to `242`
-  - the surviving temporal terminal cluster now widens to
+  - on the stored canonical late chain, step `15` still accepts
+    `DCT 103 / 8`, and stored generated prefixes have now lifted from `1794`
+    to `3972`
+  - the remaining stored gap is now `1028`, with step-`15`
+    partial-prefix bar failures still at `468`, incumbent-dominance prunes
+    now at `242`, and legality/connectivity exact rejections now at `0`
+  - the stored surviving temporal terminal cluster now widens to
     `2190` generated / `244` admitted / `244` exact-screened / `242` pruned,
     and one isolated fully scored non-winning anchor-`11` terminal pocket is
     now frozen with overshoot `115657 / 21112`
@@ -93,28 +97,31 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 ## Optimization Thesis
 
-The next cycle should spend engineering time on consuming that local
-step-`15` repair on stored evidence while keeping step `1` explicit, not on
-another round of step-`15` diagnosis or step-`13` theory first.
+The next cycle should spend engineering time on the residual stored step-`15`
+gap on canonical `v11` while keeping step `1` explicit, not on another rerun
+setup pass or another round of step-`13` theory first.
 
 The highest-value work is:
 
 1. keep the current step-`11` / step-`12` / step-`13..15` local guardrails
    green on the repaired chain
-2. keep the stored step-`13` hit frozen and step `1` explicit on the
-   checklist
-3. launch the next clean full-profile rerun on top of the regression-backed
-   local step-`15` repair
-4. refresh compare / benchmark / certification on the new stored bundle
+2. keep the stored step-`13` hit, the new `v11` stored diagnosis, and step
+   `1` explicit on the checklist
+3. use the `v11` certificate and `step-15-live.ndjson` to land the next
+   parity-preserving local step-`15` repair against the residual
+   `468`-bar / `242`-incumbent surface
+4. launch the next clean full-profile rerun only after that next local repair
+   is regression-backed
+5. refresh compare / benchmark / certification on the next stored bundle
 
-Treat `v10` plus its stored audit bundle as the current canonical guardrail.
+Treat `v11` plus its stored audit bundle as the current canonical guardrail.
 Keep the replay harness corpus and benchmark inputs frozen until real stored
 behavior changes.
 
 ## Decision Rules
 
 - Trust stored artifacts over terminal impressions.
-- Treat clean-tree completed `v10` as the canonical stored claim bundle until a
+- Treat clean-tree completed `v11` as the canonical stored claim bundle until a
   newer parity-and-breadth candidate exists.
 - Require targeted claim regressions plus replay-harness parity before any new
   full-profile rerun.
@@ -133,19 +140,20 @@ behavior changes.
 
 Goal:
 
-- turn the parity-clean-but-breadth-failing `v10` lane into a rerun-ready
+- turn the parity-clean-but-breadth-failing `v11` lane into the next
+  rerun-ready
   candidate by repairing the remaining stored late-floor miss at step `15`
   while preserving accepted-hash parity through step `15` and keeping stored
   step `13` closed
 
 Loop:
 
-1. keep the stored `v10` compare / certification / benchmark regressions green
+1. keep the stored `v11` compare / certification / benchmark regressions green
 2. keep the local step-`11` breadth and step-`12` selector guardrails green
 3. keep the current step-`13` / step-`14` / step-`15` canonical guardrails
    green until a replacement is explicitly proved
-4. use the stored `v10` certificate and `step-15-live.ndjson` first
-5. land a parity-preserving step-`15` repair
+4. use the stored `v11` certificate and `step-15-live.ndjson` first
+5. land a parity-preserving next step-`15` repair
 6. rerun targeted claim tests plus replay parity on that repair
 7. launch the next clean full-profile rerun
 8. refresh compare / benchmark / certification on that new stored bundle
@@ -154,16 +162,18 @@ Loop:
 
 Current slice order:
 
-1. hold the stored step-`13` hit, the stored `v10` diagnosis freeze, and the
+1. hold the stored step-`13` hit, the stored `v11` diagnosis freeze, and the
    frozen negative controls green
-2. keep the new local step-`15` repair green on the repaired canonical chain
-3. rerun and refresh stored compare / benchmark / certification
-4. revisit stored step `1` from the new evidence bundle once step `15` moves
+2. use the stored `v11` certificate and live checkpoints to localize the next
+   step-`15` repair against the remaining `468` partial-prefix bar failures
+   and `242` incumbent-dominance prunes
+3. rerun only after that next local repair is regression-backed
+4. revisit stored step `1` from the next evidence bundle once step `15` moves
 
 Do not reopen first:
 
 - another fresh step-`13` widening theory pass before the rerun consumes the
-  landed local step-`15` repair
+  next landed local step-`15` repair
 - a `resume`-based restart of stopped `v4`
 - another runtime-only step-`4` micro-optimization slice first
 - another stored/local step-`11` rerun first
@@ -177,7 +187,7 @@ Do not reopen first:
 
 Goal:
 
-- produce one new stored full-profile bundle beyond `v10` that consumes the
+- produce one new stored full-profile bundle beyond `v11` that consumes the
   remaining stored breadth repair
 
 Required output:

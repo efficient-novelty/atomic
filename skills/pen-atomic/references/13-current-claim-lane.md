@@ -8,10 +8,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - `desktop_claim_shadow` exists as a separate profile and config family.
 - The lane is not yet certified and should still be described with the safer
   `bounded live recovery` wording.
-- The current canonical stored claim bundle is clean-tree completed `v10`:
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v10`.
+- The current canonical stored claim bundle is clean-tree completed `v11`:
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v11`.
 - Stored compare, certification, and benchmark outputs now exist beside that
-  `v10` bundle, and they already treat accepted-hash parity, claim-policy
+  `v11` bundle, and they already treat accepted-hash parity, claim-policy
   honesty, fallback honesty, narrative/event completeness, exact-screen
   reason coverage, prune-class coverage, and manifest completeness as earned.
 - Claim admissibility now uses structural claim debt and anchor hints, without
@@ -79,37 +79,40 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   stored run reaches the step-15 claim signoff surface.
 - `scripts/certify_claim_lane.py` now emits a stored pass/fail certificate from
   claim artifacts and currently fails honestly on missing breadth, missing
-  generated-floor evidence; the current `v10` certificate still flags
+  generated-floor evidence; the current `v11` certificate still flags
   `early_breadth` plus `late_generated_floors`, and it now also records
   step-level breadth diagnosis for failing steps from the stored summaries
   plus late-step live checkpoints; that diagnosis now also preserves the full
   stored step-open pressure signature, including active widening bands,
   package flags, and claim-debt `path` / `trunc` pressure.
-- the canonical `v10` certificate plus the frozen `step-15-live.ndjson`
-  provenance are now also pinned by
-  `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
-  so the current breadth miss anatomy is executable in-tree rather than
-  notes-only
+- the canonical `v11` certificate plus the frozen `step-15-live.ndjson`
+  provenance are now pinned by
+  `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
+  the refreshed benchmark bundle is pinned by
+  `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts`, and the
+  current breadth miss anatomy is executable in-tree rather than notes-only
 - `scripts/benchmark_claim_lane.py` now aggregates stored claim runs into a
   benchmark bundle with runtime percentiles, parity counts, breadth-floor hit
   counts, and manifest snapshots; it still needs a breadth-clean stored claim
   bundle before those numbers can justify a stronger sentence.
-- The current stored breadth snapshot on canonical `v10` is:
+- The current stored breadth snapshot on canonical `v11` is:
   - step `1`: `546 / 2144`
   - step `10`: `1428 / 500`
   - step `11`: `1338 / 800`
   - step `12`: `1338 / 1200`
   - step `13`: `2320 / 2200`
   - step `14`: `12027 / 3500`
-  - step `15`: `1794 / 5000`
+  - step `15`: `3972 / 5000`
 - The stored certificate now makes the remaining miss split directly visible:
   - step `1` still shows raw catalog widths `[18,36]`, raw catalog `648`,
     seeded roots `18` seen / `16` enqueued, and `435`
     legality/connectivity exact rejections before proof-close
   - step `15` still shows raw catalog `6561`, seeded roots `3`, then
-    `468` partial-prefix bar failures plus `80` incumbent-dominance prunes,
-    together with the `claim_generic` `kappa 8..8` temporal-shell opening,
-    modal anchor ref `10`, and active widening bands `7,8,9`
+    `468` partial-prefix bar failures plus `242` incumbent-dominance prunes,
+    `0` legality/connectivity exact rejections, `243` well-formed
+    candidates, and `469` exact-bound-screened candidates, together with the
+    `claim_generic` `kappa 8..8` temporal-shell opening, modal anchor ref
+    `10`, and active widening bands `7,8,9`
 - A fresh stored rerun stack has now consumed the guarded local step-`11`
   breadth repair:
   - the connected claim step-`11` surface now holds
@@ -123,6 +126,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - clean-tree `v9` restores accepted-hash parity through step `15`
   - clean-tree `v10` then keeps that parity while re-earning stored
     step `13` as a breadth hit beside stored steps `11` and `12`
+  - clean-tree `v11` now consumes the isolated anchor-`11` step-`15` repair
+    on stored evidence while keeping those stored step `11` / `12` / `13`
+    hits intact
 - the repo-level autonomy docs now treat claim-policy separation, failed-run
   evidence preservation, and one parity-clean full-profile stored bundle as
   baseline; the live blocker is diagnosing the remaining stored breadth misses
@@ -132,7 +138,7 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     `[5,1,3,3,5,3,2]` / raw `1350` / generated `2320`
   - the guarded step-`13` metric shell now stays accepted on that stored
     surface while the canonical step-`14` / step-`15` continuation remains
-    `62 / 9 / 12027 -> 103 / 8 / 1794`
+    `62 / 9 / 12027 -> 103 / 8 / 3972`
   - that stored step-`13` surface now records `576`
     legality/connectivity exact rejections plus `401` heuristic drops before
     proof-close
@@ -166,8 +172,8 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   neighbors still reopen the unsafe `88 / 8` rival, so any future repair
   there must isolate the exact-argument qualifier evidence without relanding
   the lifted variants or replacing the canonical accepted path
-- a new narrow local step-`15` anchor-`11` exact-argument repair now consumes
-  that read on the live claim chain:
+- the narrow step-`15` anchor-`11` exact-argument repair has now been consumed
+  on stored evidence:
   mixed live claim clause-`2` prefixes now expose exactly one additional
   clause-`3` option, the isolated anchor-`11` exact-argument pocket, while
   reference clause-`2` prefixes and the lifted anchor-`11` neighbors stay out
@@ -175,37 +181,37 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   regain historical reanchor on that isolated pocket across every repaired-
   side subset of clause positions `0`, `1`, `4`, and `5`, but clause `6`
   still stays the local safety boundary that reopens the unsafe `89 / 8`
-  rival; on the repaired canonical late chain, step `15` still accepts
-  `DCT 103 / 8`, but live generated prefixes now lift from `1794` to `3972`,
-  partial-prefix bar failures stay `468`, incumbent-dominance prunes rise from
-  `80` to `242`, and the surviving temporal terminal cluster now widens to
-  `2190` generated / `244` admitted / `244` exact-screened / `242` pruned
+  rival; on the stored canonical late chain, step `15` still accepts
+  `DCT 103 / 8`, stored generated prefixes now sit at `3972`, the remaining
+  stored gap is `1028`, partial-prefix bar failures stay `468`,
+  incumbent-dominance prunes now sit at `242`, legality/connectivity exact
+  rejections are now `0`, and the surviving temporal terminal cluster now
+  widens to `2190` generated / `244` admitted / `244` exact-screened /
+  `242` pruned
 
 ## Current Operational Blockers
 
 - the lane still does not have a signoff-ready certified bundle even though
-  stored `v10` now passes accepted-hash parity and the compare/certification/
+  stored `v11` now passes accepted-hash parity and the compare/certification/
   benchmark infrastructure is live
 - stored breadth still fails honestly on the canonical chain:
   - early breadth still misses at step `1` (`546` versus `2144`)
-  - late generated floors still miss only at step `15` (`1794` versus `5000`)
+  - late generated floors still miss only at step `15` (`3972` versus `5000`)
   - stored breadth already hits at step `10`, step `11`, step `12`,
     step `13`, and step `14`
 - step `15` is now the remaining stored late-floor miss on the clean
   canonical bundle
 - the next rerun or step-`13` theory pass is no longer the first move:
-  stored step `13` is already closed and the local step-`15` repair is now
-  landed, so the next move is the clean rerun / audit refresh that consumes
-  that repair on top of canonical `v10`
+  stored step `13` is already closed and the anchor-`11` step-`15` repair is
+  already consumed on canonical `v11`, so the next move is the next local
+  step-`15` diagnosis / repair on that residual `3972 / 5000` surface
 - the canonical repaired late chain must stay frozen while breadth is
   re-earned:
   - step `12` should keep the guarded `34 / 6` continuation
   - stored step `13` should stay at `[5,1,3,3,5,3,2]` / `1350` / `2320`
     with the guarded accepted hash
   - step `14` should stay at `19683` / `12027`
-  - local repaired step `15` should now stay on `DCT 103 / 8 / 3972`
-  - stored canonical `v10` step `15` still stays frozen at
-    `DCT 103 / 8 / 1794` until the rerun consumes that local repair
+  - stored canonical step `15` should now stay on `DCT 103 / 8 / 3972`
 - step `1` remains a separate stored early breadth blocker even if late-step
   repairs continue to land
 - benchmark evidence is still too weak for a passing claim certificate until a
@@ -214,26 +220,28 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 
 ## Immediate Next Slice
 
-1. Freeze clean-tree completed `v10` as the current canonical stored claim
-   bundle, keep clean `v6` as the pre-step-`11` breadth baseline, and keep
-   completed `v5` as the pre-parity reference surface.
-2. Hold the current local guardrails green before reopening any new theory:
-   the step-`11` connected surface should stay at `243 + 729 = 972`, the
-   guarded step-`11` shell should stay accepted, the repaired step-`12`
-   `34 / 6` continuation should stay fixed, and the current
-   step-`13..15` surfaces should stay frozen on the canonical branch; keep
-   `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
-   green there too.
-3. Treat the new isolated anchor-`11` step-`15` repair as the current local
-   rerun candidate; launch the next clean full-profile rerun and refresh
-   compare / benchmark / certification instead of reopening another
-   diagnosis-only pass or step-`13` theory first.
+1. Freeze clean-tree completed `v11` as the current canonical stored claim
+   bundle, keep clean `v10` as the pre-anchor-`11` stored baseline, keep clean
+   `v6` as the pre-step-`11` breadth baseline, and keep completed `v5` as the
+   pre-parity reference surface.
+2. Hold the current local and stored guardrails green before reopening any new
+   theory: the step-`11` connected surface should stay at `243 + 729 = 972`,
+   the guarded step-`11` shell should stay accepted, the repaired step-`12`
+   `34 / 6` continuation should stay fixed, the stored step-`13..15`
+   canonical surfaces should stay frozen on the repaired branch, and
+   `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
+   plus `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts` should
+   stay green there too.
+3. Treat the residual stored `3972 / 5000` step-`15` gap as the current local
+   diagnosis target; use the `v11` certificate and `step-15-live.ndjson`
+   first, and do not spend another cycle on rerun setup or step-`13` theory
+   before the next parity-preserving local repair is regression-backed.
 4. Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they still prove local breadth can be reopened unsafely, but they are not
    the landed repair.
-5. Keep stored step `15 = 1794 / 5000` and step `1 = 546 / 2144` in view
+5. Keep stored step `15 = 3972 / 5000` and step `1 = 546 / 2144` in view
    beside that work; do not reopen another stored step-`11` rerun first now
-   that clean-tree `v10` already re-earns stored step `11 = 1338 / 800`.
+   that clean-tree `v11` already keeps stored step `11 = 1338 / 800`.
 6. If the nearby clause-`3` anchor-`11` neighborhood is touched again, keep
    the live repair boundary explicit: only the exact-argument pocket is
    landed, it is isolated to the current claim clause-`2` variants, it stays

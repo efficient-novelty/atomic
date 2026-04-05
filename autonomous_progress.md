@@ -54,10 +54,10 @@ gate.
   - `v8` restored accepted-hash parity and the stored step-`11` floor, but it
     was recorded with `dirty_tree = true`
 - The current authoritative stored full-profile bundle is
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v10`
-  on clean-tree repo head `6939b71063e4aec9598b293560c0c233981bc169` with
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v11`
+  on clean-tree repo head `4e38f2463b429bcbebe16cc6d7c5eac7ef2de050` with
   release binary hash
-  `d003dd29c599ba86b7ef410b1c7849f89a0fe45d33dc42508e368f4c2a7c473a`.
+  `64535f9e6c2e2a77c1bdeeb1f848abbeb0312f9b454bce42f27c68b3b852271c`.
 - Its authoritative `run.json` state is:
   - `status = "completed"`
   - `completed_step = 15`
@@ -66,14 +66,14 @@ gate.
   - `frontier_epoch = 12`
   - `resolved_worker_count = 8`
   - `dirty_tree = false`
-- The new `v10` bundle now stores the full claim artifact surface through
+- The new `v11` bundle now stores the full claim artifact surface through
   step `15`:
   - run manifest with complete host/build/git/binary provenance
   - step summaries through `step-15-summary.json`
   - live-checkpoint streams through `step-15-live.ndjson`
   - per-step narratives and event streams through step `15`
   - frontier and step checkpoints for the completed run
-- Stored audit outputs now also exist under that `v10` run directory:
+- Stored audit outputs now also exist under that `v11` run directory:
   - `claim-compare.txt` / `claim-compare.json`
   - `claim_certificate.txt` / `claim_certificate.json`
   - `claim_benchmark.txt` / `claim_benchmark.json`
@@ -86,7 +86,7 @@ gate.
     existing catalog, root-seeding, and exact-screen read
 - Those audits use the guarded baseline
   `runs/codex-guarded-claim-cert-v1`.
-- The clean-tree stored `v10` compare audit is ready:
+- The clean-tree stored `v11` compare audit is ready:
   - trajectory matches guarded through step `15`
   - accepted hashes match guarded through step `15`
   - replay ablation now matches reference replay on `01..15`
@@ -94,7 +94,7 @@ gate.
     step `11`, step `12`, step `13`, step `14`, and step `15`
   - admissibility diagnostics still diverge at step `9..15`
   - late-step competition still diverges at step `10..15`
-- The clean-tree stored `v10` certification result is honest and narrower:
+- The clean-tree stored `v11` certification result is honest and narrower:
   - status `= "attention"`
   - failing checks:
     - `early_breadth`
@@ -114,21 +114,20 @@ gate.
       legality/connectivity exact rejections before proof-close
     - step `15` still opens `6561`, seeds `3` roots, and then loses stored
       breadth under `468` partial-prefix bar failures plus
-      `80` incumbent-dominance prunes, and now prints the
+      `242` incumbent-dominance prunes, with `0`
+      legality/connectivity exact rejections, and now prints the
       `claim_generic` `kappa 8..8` temporal-shell opening with modal anchor
       ref `10` and active widening bands `7,8,9`
-- A new stored-evidence regression now freezes that canonical `v10`
+- New stored-evidence regressions now freeze that canonical `v11`
   diagnosis in-tree:
-  - `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
+  - `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
     now pins the stored step-`1` miss, the full late-floor table on
-    `10..15`, and the fact that only step `15` still misses there
-  - the same regression also pins the frozen `step-15-live.ndjson`
-    provenance note sequence
+    `10..15`, the fact that only step `15` still misses there, and the
+    frozen `step-15-live.ndjson` provenance note sequence
     `claim_regular_clause_catalog -> claim_root_seeding_summary`
-  - that live-note regression also freezes the canonical step-`15`
-    `6561 -> 1794` temporal-shell opening at modal anchor `10`, active
-    widening bands `7/8/9`, and the stored root-seeding / terminal-summary
-    checkpoint counts that feed the certificate diagnosis
+  - `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts`
+    now pins the refreshed single-run `3965 ms` / parity-`1` / early-`0` /
+    late-`0` benchmark bundle
 - The remaining stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)
@@ -136,22 +135,23 @@ gate.
   - step `12`: `1338` versus target `1200` (`hit`)
   - step `13`: `2320` versus target `2200` (`hit`)
   - step `14`: `12027` versus target `3500` (`hit`)
-  - step `15`: `1794` versus target `5000` (`miss`)
+  - step `15`: `3972` versus target `5000` (`miss`)
 - The new benchmark bundle proves runtime and stored parity are now earned on
   the current bundle:
   - claim run count `= 1`
   - completed step-`15` count `= 1`
-  - runtime `= 3849 ms`
+  - runtime `= 3965 ms`
   - parity success count `= 1`
   - full early breadth hit count `= 0`
   - full late floor hit count `= 0`
-- The current repo head `6939b71063e4aec9598b293560c0c233981bc169`
+- The current repo head `4e38f2463b429bcbebe16cc6d7c5eac7ef2de050`
   now stores the canonical rerun and refreshed audit bundle that frame the
   remaining breadth repair:
   - the step-`9` / step-`11` / step-`12` claim selector regressions are green
   - the repaired step-`12` same-primary selector regression is green
   - the current step-`13` / step-`14` / step-`15` guardrails are green
   - claim live-checkpoint persistence is green
+  - the new stored `v11` certificate / benchmark freeze regressions are green
   - the stored `v5` compare / certification / benchmark freeze regressions
     remain green
 - The parity-preserving step-`13` breadth repair is now earned on stored
@@ -160,7 +160,7 @@ gate.
     `[5,1,3,3,5,3,2]` / raw `1350` / generated `2320`
   - the guarded step-`13` metric shell now stays accepted on that stored
     surface, with the same observed canonical continuation
-    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 1794`
+    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 3972`
   - step-`13` root seeding now rises to `5` seen / `5` enqueued on the
     stored canonical branch
   - the stored step-`13` surface now records `576`
@@ -862,11 +862,11 @@ gate.
 
 - The old early RSS cliff remains gone.
 - Step `4` throughput is no longer the blocker that determines the next slice:
-  the clean-tree stored `v10` run completes the full claim profile in one
+  the clean-tree stored `v11` run completes the full claim profile in one
   clean-start pass.
 - The old `v3` step-`14` zero-candidate opening is also no longer the first
   blocker:
-  `v10` reaches step `14`, seeds roots, accepts a survivor there, and advances
+  `v11` reaches step `14`, seeds roots, accepts a survivor there, and advances
   to step `15`.
 - Stored ordinal parity is now re-earned on the clean canonical bundle after
   the transient `v7` step-`12` fork and the dirty-tree `v8` confirmation pass:
@@ -877,13 +877,13 @@ gate.
     exact-screen / prune / manifest coverage remain complete
 - The current blocker is now stored breadth on the canonical chain:
   - early breadth still misses at step `1` (`546` versus `2144`)
-  - late generated floors now hit at steps `10`, `11`, `12`, and `14`
-  - late generated floors still miss at steps `13` and `15` with stored
-    counts `123` and `1794`
-  - step `13` is now the earliest remaining stored late-floor miss
+  - late generated floors now hit at steps `10`, `11`, `12`, `13`, and `14`
+  - late generated floors still miss only at step `15` with stored count
+    `3972`
   - the stored certificate now exposes the miss anatomy directly:
-    step `13` is still narrow before exact screening, while step `15`
-    still loses breadth later under bar and incumbent pressure
+    step `15` now loses the remaining breadth later under `468`
+    partial-prefix bar failures and `242` incumbent-dominance prunes after
+    connectivity exact rejection has already fallen to `0`
 - Search-space, admissibility, and late-step competition deltas remain honest
   comparison-backed differences, but they are no longer parity blockers as
   long as accepted hashes stay aligned.
@@ -1050,16 +1050,16 @@ gate.
   - do not reopen another step-`13` theory slice first
   - do not reopen another rerun first; start from stored step `15` as the
     remaining late-floor miss on the clean canonical bundle
-- No residual `pen-cli.exe` process remains from the `v10` rerun.
+- No residual `pen-cli.exe` process remains from the `v11` rerun.
 
 ## Forward Direction
 
 - Freeze the current evidence set:
   `v1`, `v2`, `v3`, capped `v1`, stopped `v4`, completed `v5`, clean
   baseline `v6`, transient diagnostics `v7` / `v8`, clean canonical `v9`,
-  and clean canonical `v10`.
+  clean canonical `v10`, and clean canonical `v11`.
 - Treat the pre-flight gate, the clean canonical full-profile rerun, the
-  stored `v10` compare readiness, and the `v10` claim audit readiness as
+  stored `v11` compare readiness, and the `v11` claim audit readiness as
   earned.
 - Treat the new local step-`9` selector regression and its downstream
   step-`11` / step-`12` / step-`13` / step-`14` / step-`15` guardrail reruns
@@ -1067,7 +1067,8 @@ gate.
   while breadth is fixed.
 - Keep the stored `v5` audit-freeze regressions green as the pre-parity
   comparison surface, keep stored `v6` frozen as the pre-step-`11` breadth
-  baseline, and keep the stored `v10` compare / certification /
+  baseline, keep stored `v10` frozen as the pre-anchor-`11` stored baseline,
+  and keep the stored `v11` compare / certification /
   benchmark outputs green as the current breadth guardrail.
 - Keep the claim-policy metadata, narrative/event artifacts, exact-screen
   reason counts, prune-class counts, manifest provenance, and runtime-threshold
@@ -1081,17 +1082,15 @@ gate.
 - Keep the current local step-`13` / step-`14` / step-`15` surfaces green as
   guardrails:
   step `13` should now stay at `[5,1,3,3,5,3,2]` / `1350` / `2320` with the
-  guarded accepted hash, while step `14` stays `19683` / `12027`, the local
-  repaired step `15` now stays `DCT 103 / 8 / 3972`, and stored canonical
-  `v10` step `15` remains frozen at `DCT 103 / 8 / 1794` until the next rerun
-  consumes that local repair.
-- Use the stored `v10` certificate and the late-step live checkpoints as the
+  guarded accepted hash, while step `14` stays `19683` / `12027` and stored
+  canonical step `15` now stays `DCT 103 / 8 / 3972`.
+- Use the stored `v11` certificate and the late-step live checkpoints as the
   first diagnosis surface for the remaining misses; they now expose raw
   catalog widths, root seeding, exact-screen pressure, and the full stored
   step-open pressure envelope for the open steps.
-- Treat stored `v10` step `15 = 1794 / 5000` as the remaining stored
+- Treat stored `v11` step `15 = 3972 / 5000` as the remaining stored
   late-floor miss; do not reopen step `11` or step `13` first now that stored
-  step `11` re-earns `1338 / 800` and stored step `13` now re-earns
+  step `11` re-earns `1338 / 800` and stored step `13` re-earns
   `2320 / 2200` on the clean canonical bundle.
 - Treat the new `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` local step-`13`
   widenings as negative controls only:
@@ -1106,25 +1105,28 @@ gate.
 
 ## Immediate Next Move
 
-1. Freeze `long-rerun-v10` as the current canonical stored claim bundle, keep
-   `v6` as the clean pre-step-`11` breadth baseline, and keep `v5` as the
-   pre-parity completed reference; do not resume the stopped `v4` run and do
-   not recapture replay fixtures first.
-2. Hold the current pre-flight gate, the stored `v10` compare readiness, the
+1. Freeze `long-rerun-v11` as the current canonical stored claim bundle, keep
+   clean `v10` as the pre-anchor-`11` stored baseline, keep `v6` as the clean
+   pre-step-`11` breadth baseline, and keep `v5` as the pre-parity completed
+   reference; do not resume the stopped `v4` run and do not recapture replay
+   fixtures first.
+2. Hold the current pre-flight gate, the stored `v11` compare readiness, the
    new local step-`11` breadth guardrails, the repaired step-`12`
    same-primary selector, the stored step-`13`
-   `[5,1,3,3,5,3,2]` / `1350` / `2320` accepted surface, the new local
-   isolated anchor-`11` step-`15` repair, the stored
-   `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
-   regression, and the current step-`14` / step-`15` later-surface guardrails
+   `[5,1,3,3,5,3,2]` / `1350` / `2320` accepted surface, the stored
+   `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
+   and `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts`
+   regressions, and the current step-`14` / step-`15` later-surface guardrails
    green.
-3. Launch the next clean full-profile claim rerun on top of that
-   regression-backed local step-`15` repair; only treat the canonical stored
-   bundle as moved once the rerun preserves accepted-hash parity through
-   step `15` and consumes more stored breadth than `v10`.
-4. Refresh compare / benchmark / certification on that new stored bundle
-   immediately after the rerun and keep step `1 = 546 / 2144` explicit as the
-   separate stored early breadth blocker unless the rerun itself changes it.
+3. Use the stored `v11` certificate and late-step live checkpoints as the
+   first diagnosis surface for the residual stored `3972 / 5000` miss at
+   step `15`; the next move is another parity-preserving local step-`15`
+   repair, not another rerun setup pass.
+4. Launch the next clean full-profile claim rerun only after that next local
+   step-`15` repair is regression-backed and parity-clean, then refresh
+   compare / benchmark / certification immediately afterwards and keep
+   step `1 = 546 / 2144` explicit as the separate stored early breadth blocker
+   unless the rerun itself changes it.
 5. Keep the two frozen step-`13` negative controls and the rejected global
    band-`7` / temporal-reanchor / early bridge expansions out of the landed
-   path while the rerun / audit refresh is pending.
+   path while the residual stored step-`15` diagnosis is pending.
