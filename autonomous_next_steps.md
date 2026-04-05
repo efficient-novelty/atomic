@@ -234,6 +234,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - claim live-checkpoint persistence green
   - stored `v11` certificate / benchmark freeze regressions green
   - stored `v5` compare / certification / benchmark freeze regressions green
+- The executable late-path guardrails are now also synced to the clause-`5`
+  side-pocket state:
+  - `repaired_claim_step_twelve_late_path_has_scoped_step_thirteen_widening_before_proof_close`
+    now freezes the repaired canonical local continuation through
+    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 4030`
+  - the step-`15` local guardrails now freeze `4030`, `246`
+    incumbent-dominance prunes, and the `2226 / 248 / 248 / 246`
+    `small_cluster` surface instead of the older clause-`4`-only
+    `4004` / `244` / `2208 / 246 / 246 / 244` read
+  - the frozen `[5,1,3,3,5,3,3]` step-`13` negative control still preserves
+    guarded step-`14` / step-`15` hashes while now also observing that same
+    repaired local `4030` step-`15` surface
 - The parity-preserving step-`13` breadth repair is now earned on stored
   evidence:
   - on the canonical repaired chain, claim-open now widens to

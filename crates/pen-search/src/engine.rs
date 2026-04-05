@@ -18051,8 +18051,8 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(13, 46, 7, 2320), (14, 62, 9, 12027), (15, 103, 8, 4004)],
-            "the repaired step-12 tie set should now collapse onto the parity-preserving widened step-13 surface while restoring the canonical step-15 continuation"
+            vec![(13, 46, 7, 2320), (14, 62, 9, 12027), (15, 103, 8, 4030)],
+            "the repaired step-12 tie set should now collapse onto the parity-preserving widened step-13 surface while restoring the latest canonical step-15 continuation"
         );
         let alternate_candidate = tied_candidates
             .iter()
@@ -18300,8 +18300,8 @@ mod tests {
                 accepted_step_fourteen_continuation.2,
                 accepted_step_fourteen_continuation.3,
             ),
-            (103, 8, 4004),
-            "live claim step-14 acceptance should now prefer the same-primary survivor that restores the broadened canonical step-15 continuation"
+            (103, 8, 4030),
+            "live claim step-14 acceptance should now prefer the same-primary survivor that restores the latest broadened canonical step-15 continuation"
         );
         assert!(
             step_fourteen_continuations.iter().any(
@@ -18328,7 +18328,7 @@ mod tests {
         let (step_fifteen, step_fifteen_catalog, step_fifteen_roots) =
             inspect_late_step(15, &library, &history);
         assert_eq!(step_fifteen_catalog.raw_catalog_telescope_count, Some(6561));
-        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4004);
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4030);
         assert_eq!(
             step_fifteen.claim_root_seeding,
             Some(ClaimRootSeedingDiagnostics {
@@ -18347,7 +18347,7 @@ mod tests {
             step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
             472
         );
-        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 244);
+        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 246);
         assert!(
             step_fifteen.demo_bucket_stats.iter().any(|bucket| {
                 bucket.stats.generated_terminal_candidates == 0
@@ -18361,12 +18361,12 @@ mod tests {
         );
         assert!(
             step_fifteen.demo_bucket_stats.iter().any(|bucket| {
-                bucket.stats.generated_terminal_candidates == 2208
-                    && bucket.stats.admissible_terminal_candidates == 246
-                    && bucket.stats.exact_screened_terminal_candidates == 246
-                    && bucket.stats.pruned_terminal_candidates == 244
+                bucket.stats.generated_terminal_candidates == 2226
+                    && bucket.stats.admissible_terminal_candidates == 248
+                    && bucket.stats.exact_screened_terminal_candidates == 248
+                    && bucket.stats.pruned_terminal_candidates == 246
             }),
-            "step 15 should now widen the surviving temporal terminal cluster again after the clause-4 side-pocket repair while keeping the canonical continuation"
+            "step 15 should now widen the surviving temporal terminal cluster again after the clause-5 side-pocket repair while keeping the canonical continuation"
         );
     }
 
@@ -18944,7 +18944,7 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(14, 62, 9, 12027), (15, 103, 8, 4004)],
+            vec![(14, 62, 9, 12027), (15, 103, 8, 4030)],
             "the position-0/4/5/6 widening should keep the guarded step-14 and step-15 winner profiles even while step-13 parity stays open"
         );
         assert_eq!(

@@ -73,7 +73,10 @@ Treat these as current repo truths:
   repair now reopens only the `demo_sharp_domain` clause-`5` option once that
   exact clause-`4` side pocket is already present and counts it as historical
   reanchor only there, lifting the current local guardrail surface again to
-  `DCT 103 / 8 / 4030`; the current executable step-`15` survivor-bucket
+  `DCT 103 / 8 / 4030`; the executable repaired late-path and negative-control
+  guardrails are now also synced to that same `4030` / `246` /
+  `2226 / 248 / 248 / 246` local surface end to end; the current executable
+  step-`15` survivor-bucket
   regression now freezes that latest exact-screened split as one
   library-backed temporal-operator `small_cluster` bucket at
   `2226` generated / `248` admitted / `248` exact-screened / `246` pruned

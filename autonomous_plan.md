@@ -251,7 +251,7 @@ Current slice order:
    frozen negative controls green
 2. use the stored `v11` certificate and live checkpoints to localize the next
    step-`15` repair against the remaining local `472` partial-prefix bar
-   failures and `244` incumbent-dominance prunes, keeping the isolated
+   failures and `246` incumbent-dominance prunes, keeping the isolated
    `single` survivor bucket fenced, keeping the newly reopened clause-`4`
    side pocket fenced as tiny and noncanonical, and working against the
    `small_cluster` pressure without broadening the raw position-`0` catalog
