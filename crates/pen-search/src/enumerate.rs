@@ -2278,6 +2278,36 @@ pub fn build_clause_catalog(base_context: EnumerationContext, clause_kappa: u16)
     }
 }
 
+#[cfg_attr(not(test), allow(dead_code))]
+pub(crate) fn build_clause_catalog_from_options(
+    clause_kappa: u16,
+    options_by_position: Vec<Vec<ClauseRec>>,
+) -> ClauseCatalog {
+    assert_eq!(options_by_position.len(), usize::from(clause_kappa));
+
+    let mut terminal_connectivity_facts_by_position = Vec::with_capacity(usize::from(clause_kappa));
+    let mut terminal_nu_facts_by_position = Vec::with_capacity(usize::from(clause_kappa));
+    for clauses in &options_by_position {
+        let connectivity_facts = clauses
+            .iter()
+            .map(TerminalClauseConnectivityFacts::from_clause)
+            .collect::<Vec<_>>();
+        let nu_facts = clauses
+            .iter()
+            .map(TerminalClauseNuFacts::from_clause)
+            .collect::<Vec<_>>();
+        terminal_connectivity_facts_by_position.push(connectivity_facts);
+        terminal_nu_facts_by_position.push(nu_facts);
+    }
+
+    ClauseCatalog {
+        clause_kappa,
+        options_by_position,
+        terminal_connectivity_facts_by_position,
+        terminal_nu_facts_by_position,
+    }
+}
+
 fn clauses_for_position(
     base_context: EnumerationContext,
     clause_kappa: u16,
@@ -4405,18 +4435,9 @@ mod tests {
         assert_eq!(
             final_clause_counts,
             BTreeMap::from([
-                (
-                    "{\"Pi\":[{\"Lib\":10},{\"Lib\":10}]}".to_owned(),
-                    243usize,
-                ),
-                (
-                    "{\"Pi\":[{\"Lib\":10},{\"Lib\":9}]}".to_owned(),
-                    243usize,
-                ),
-                (
-                    "{\"Pi\":[{\"Lib\":9},{\"Lib\":10}]}".to_owned(),
-                    243usize,
-                ),
+                ("{\"Pi\":[{\"Lib\":10},{\"Lib\":10}]}".to_owned(), 243usize,),
+                ("{\"Pi\":[{\"Lib\":10},{\"Lib\":9}]}".to_owned(), 243usize,),
+                ("{\"Pi\":[{\"Lib\":9},{\"Lib\":10}]}".to_owned(), 243usize,),
             ])
         );
         assert_eq!(total, 972);

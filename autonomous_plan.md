@@ -38,6 +38,11 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     demo-like variants lifts the repaired local read to
     `[3,5,3,3,5,1,1]` / raw `675` / generated `2223`, but it changes the
     accepted late path to `45 / 7 -> 61 / 9`
+  - that first unsafe position-`1` / position-`4` reland is now frozen as an
+    executable negative-control regression on the repaired step-`12` chain:
+    the mixed custom step-`13` catalog reproduces raw widths
+    `[3,5,3,3,5,1,1]`, raw `675`, live generated `2223`, accepted
+    `45 / 7`, and the shifted repaired step-`14` winner profile `61 / 9`
   - widening positions `0`, `4`, `5`, and `6` while keeping position `1`
     exact lifts the repaired local read to
     `[5,1,3,3,5,3,3]` / raw `2025` / generated `2995` and preserves the
@@ -46,7 +51,9 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - on that second widened surface, the exact guarded step-`13` telescope
     still evaluates and clears the bar locally, but continuing from it no
     longer reproduces the guarded step-`14` accepted hash
-- Those probes were reverted. They are diagnosis, not landed repairs.
+- Those probes were reverted. They are diagnosis, not landed repairs, and the
+  first position-`1` / position-`4` reland is now covered by an executable
+  regression instead of doc-only memory.
 
 ## Optimization Thesis
 

@@ -451,6 +451,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
     `[3,5,3,3,5,1,1]` / raw `675` / generated `2223`, but it also changes the
     accepted late path to `45 / 7 -> 61 / 9` before step `15`, so that reland
     is not safe
+  - that first unsafe position-`1` / position-`4` reland is now frozen as an
+    executable negative-control regression on the repaired step-`12` chain:
+    the mixed custom step-`13` catalog reproduces raw widths
+    `[3,5,3,3,5,1,1]`, raw `675`, live generated `2223`, accepted
+    `45 / 7`, and the shifted repaired step-`14` winner profile `61 / 9`
   - widening positions `0`, `4`, `5`, and `6` while keeping position `1`
     exact lifts the repaired local read to
     `[5,1,3,3,5,3,3]` / raw `2025` / generated `2995` and preserves the
@@ -556,12 +561,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
    keep the stored canonical counts frozen at step `13`
    `[3,1,3,3,1,1,1]` / `27` / `123`, step `14` `19683` / `12027`, and
    step `15` `DCT 103 / 8 / 1794`.
-5. Keep the stored certification / benchmark snapshot green for the current
+5. Keep the new executable step-`13` negative-control regression green:
+   widening only operator-bundle formation positions `1` and `4` to the
+   demo-like custom surface should still reopen the local floor to
+   `[3,5,3,3,5,1,1]` / raw `675` / generated `2223`, but it must also keep
+   the unsafe `45 / 7 -> 61 / 9` repaired late path so it remains diagnosis,
+   not a landed repair.
+6. Keep the stored certification / benchmark snapshot green for the current
    breadth surface:
    step `1` `546 / 2144`, step `10` `1428 / 500`, step `11` `1338 / 800`,
    step `12` `1338 / 1200`, step `13` `123 / 2200`, step `14`
    `12027 / 3500`, and step `15` `1794 / 5000`.
-6. Do not reland the rejected global band-`7` widening or the rejected late
+7. Do not reland the rejected global band-`7` widening or the rejected late
    reanchor / early bridge expansions while breadth is still open.
 
 ### 4. Diagnose The Remaining Stored Breadth Evidence
@@ -578,9 +589,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
    operator-bundle opening with active widening bands `7,8`.
    Keep the two newer local widened probes as negative controls only:
    `[3,5,3,3,5,1,1]` proves the floor can be reopened at the cost of an unsafe
-   `45 / 7 -> 61 / 9` path, while `[5,1,3,3,5,3,3]` proves the floor can be
-   reopened while preserving guarded step-`14` / step-`15` hashes but still
-   loses the guarded step-`13` accepted hash.
+   `45 / 7 -> 61 / 9` path and is now frozen as an executable regression,
+   while `[5,1,3,3,5,3,3]` proves the floor can be reopened while preserving
+   guarded step-`14` / step-`15` hashes but still loses the guarded
+   step-`13` accepted hash.
 3. Keep the stored step-`15` miss in view beside that work:
    `1794 / 5000`; the current stored read there is broad `6561` catalog-open
    with `468` partial-prefix bar failures plus `80` incumbent-dominance

@@ -126,6 +126,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   diagnosis more tightly:
   - `[3,5,3,3,5,1,1]` / raw `675` / generated `2223` reopens the local floor
     but changes the accepted late path to `45 / 7 -> 61 / 9`
+  - that first unsafe position-`1` / position-`4` reland is now frozen as an
+    executable negative-control regression on the repaired step-`12` chain:
+    the mixed custom step-`13` catalog reproduces raw widths
+    `[3,5,3,3,5,1,1]`, raw `675`, live generated `2223`, accepted
+    `45 / 7`, and the shifted repaired step-`14` winner profile `61 / 9`
   - `[5,1,3,3,5,3,3]` / raw `2025` / generated `2995` reopens the local
     floor while preserving the guarded step-`14` / step-`15` accepted hashes,
     but it still replaces the guarded step-`13` accepted hash with a
@@ -180,7 +185,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    is needed before changing more search code.
    Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they prove the missing floor can be reopened locally, but neither one yet
-   preserves accepted-hash parity through step `14`.
+   preserves accepted-hash parity through step `14`; the first
+   position-`1` / position-`4` reland is now also frozen as an executable
+   regression on the repaired step-`12` chain.
 4. Keep stored step `15` and step `1` in view beside that work:
    `1794 / 5000` and `546 / 2144`.
 5. Do not reopen another stored step-`11` rerun first now that clean-tree

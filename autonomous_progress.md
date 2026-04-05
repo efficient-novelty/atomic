@@ -963,6 +963,11 @@ gate.
     `[3,5,3,3,5,1,1]` / raw `675` / generated `2223`, but it also shifts the
     accepted late path to `45 / 7 -> 61 / 9` before step `15`, so that reland
     is not safe
+  - that first unsafe position-`1` / position-`4` reland is now frozen as an
+    executable negative-control regression on the repaired step-`12` chain:
+    the mixed custom step-`13` catalog reproduces raw widths
+    `[3,5,3,3,5,1,1]`, raw `675`, live generated `2223`, accepted
+    `45 / 7`, and the shifted repaired step-`14` winner profile `61 / 9`
   - widening positions `0`, `4`, `5`, and `6` while keeping position `1`
     exact lifts the local read further to
     `[5,1,3,3,5,3,3]` / raw `2025` / generated `2995` and preserves the
@@ -1025,7 +1030,9 @@ gate.
 - Treat the new `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` local step-`13`
   widenings as negative controls only:
   they prove missing breadth can be re-opened locally, but neither one yet
-  preserves accepted-hash parity through step `14`.
+  preserves accepted-hash parity through step `14`; the first
+  position-`1` / position-`4` reland is now also frozen as an executable
+  regression rather than doc-only guidance.
 - Keep step `1` on the checklist as a separate stored early breadth blocker.
 - Keep step `15` on the checklist as the remaining later stored floor miss on
   the canonical branch.

@@ -3010,6 +3010,32 @@ fn search_next_step_internal(
     progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
     allow_claim_viability_tiebreak: bool,
 ) -> Result<AtomicSearchStep> {
+    search_next_step_internal_with_clause_catalog_override(
+        step_index,
+        window_depth,
+        library,
+        history,
+        admissibility_mode,
+        retention_runtime,
+        demo_step_budget,
+        progress_observer,
+        None,
+        allow_claim_viability_tiebreak,
+    )
+}
+
+fn search_next_step_internal_with_clause_catalog_override(
+    step_index: u32,
+    window_depth: u16,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility_mode: AdmissibilityMode,
+    retention_runtime: FrontierRuntimeLimits,
+    demo_step_budget: Option<DemoStepBudget>,
+    progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
+    clause_catalog_override: Option<&ClauseCatalog>,
+    allow_claim_viability_tiebreak: bool,
+) -> Result<AtomicSearchStep> {
     let step_start = Instant::now();
     let mut last_live_checkpoint_elapsed_millis = 0u64;
     let structural_debt = summarize_structural_debt(library, window_depth);
@@ -3084,7 +3110,7 @@ fn search_next_step_internal(
             | AdmissibilityMode::DemoBreadthShadow
             | AdmissibilityMode::DesktopClaimShadow
     ) {
-        let discovery = discover_realistic_shadow_candidates(
+        let discovery = discover_realistic_shadow_candidates_with_clause_catalog_override(
             step_index,
             library,
             history,
@@ -3097,6 +3123,7 @@ fn search_next_step_internal(
             step_start,
             &mut demo_narrative,
             progress_observer,
+            clause_catalog_override,
         )?;
         let discovery_stop_reason = discovery.stop_reason.or_else(|| {
             demo_step_budget.and_then(|budget| {
@@ -4293,7 +4320,9 @@ fn compare_claim_step_twelve_same_primary_survivors(
     right_rank: &AcceptRank,
 ) -> Ordering {
     claim_introduction_application_count(&right_candidate.telescope)
-        .cmp(&claim_introduction_application_count(&left_candidate.telescope))
+        .cmp(&claim_introduction_application_count(
+            &left_candidate.telescope,
+        ))
         .then_with(|| {
             claim_introduction_former_count(&right_candidate.telescope)
                 .cmp(&claim_introduction_former_count(&left_candidate.telescope))
@@ -4777,6 +4806,44 @@ fn discover_realistic_shadow_candidates(
     demo_narrative: &mut Option<DemoNarrativeRuntime>,
     progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
 ) -> Result<RealisticShadowDiscovery> {
+    discover_realistic_shadow_candidates_with_clause_catalog_override(
+        step_index,
+        library,
+        history,
+        structural_debt,
+        admissibility,
+        retention_policy,
+        objective_bar,
+        nu_history,
+        demo_step_budget,
+        step_start,
+        demo_narrative,
+        progress_observer,
+        None,
+    )
+}
+
+fn clause_catalog_widths(clause_catalog: &ClauseCatalog) -> Vec<usize> {
+    (0..usize::from(clause_catalog.clause_kappa()))
+        .map(|position| clause_catalog.clauses_at(position).len())
+        .collect()
+}
+
+fn discover_realistic_shadow_candidates_with_clause_catalog_override(
+    step_index: u32,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    structural_debt: StructuralDebt,
+    admissibility: StrictAdmissibility,
+    retention_policy: RetentionPolicy,
+    objective_bar: Rational,
+    nu_history: &[(u32, u32)],
+    demo_step_budget: &mut Option<DemoStepBudget>,
+    step_start: Instant,
+    demo_narrative: &mut Option<DemoNarrativeRuntime>,
+    progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
+    clause_catalog_override: Option<&ClauseCatalog>,
+) -> Result<RealisticShadowDiscovery> {
     if demo_step_budget.is_some() && step_index <= 4 {
         return discover_demo_early_exhaustive_candidates(
             step_index,
@@ -4845,7 +4912,10 @@ fn discover_realistic_shadow_candidates(
             continue;
         }
 
-        let clause_catalog = build_clause_catalog(enumeration_context, clause_kappa);
+        let clause_catalog = clause_catalog_override
+            .filter(|catalog| catalog.clause_kappa() == clause_kappa)
+            .cloned()
+            .unwrap_or_else(|| build_clause_catalog(enumeration_context, clause_kappa));
         if clause_catalog.is_empty() {
             continue;
         }
@@ -4853,8 +4923,7 @@ fn discover_realistic_shadow_candidates(
             roots_seen: clause_catalog.clauses_at(0).len(),
             ..ClaimRootSeedingDiagnostics::default()
         };
-        let raw_catalog_clause_widths =
-            raw_clause_catalog_widths(enumeration_context, clause_kappa);
+        let raw_catalog_clause_widths = clause_catalog_widths(&clause_catalog);
         maybe_emit_claim_live_checkpoint(
             progress_observer,
             &mut last_checkpoint_elapsed_millis,
@@ -9579,15 +9648,16 @@ mod tests {
         search_bootstrap_from_prefix_for_profile_with_runtime,
         search_bootstrap_from_prefix_for_profile_with_runtime_and_observer,
         search_bootstrap_prefix, search_bootstrap_prefix_for_config_with_runtime,
-        search_next_step_internal, select_acceptance_for_step,
-        sort_terminal_prefix_group_candidates_for_certification, supports_live_atomic_search,
-        terminal_prefix_clause_candidates,
+        search_next_step_internal, search_next_step_internal_with_clause_catalog_override,
+        select_acceptance_for_step, sort_terminal_prefix_group_candidates_for_certification,
+        supports_live_atomic_search, terminal_prefix_clause_candidates,
     };
     use crate::bounds::PrefixBound;
     use crate::branch_bound::AcceptRank;
     use crate::config::{RuntimeConfig, SearchProfile};
     use crate::enumerate::{
         ClauseCatalog, EnumerationContext, LateFamilySurface, build_clause_catalog,
+        build_clause_catalog_from_options,
     };
     use crate::expand::{evaluate_candidate, evaluate_checked_candidate};
     use crate::narrative::{NarrativeEventKind, StepPhase, narrative_progress_snapshot};
@@ -15688,7 +15758,8 @@ mod tests {
             step.exact_screen_reasons
         );
         assert_eq!(
-            step.exact_screen_reasons.legality_connectivity_exact_rejection,
+            step.exact_screen_reasons
+                .legality_connectivity_exact_rejection,
             0,
             "the step-11 structural-shell widening should no longer leak exact connectivity rejections"
         );
@@ -15924,11 +15995,9 @@ mod tests {
                     )
             })
             .expect("the leaner lam-var same-primary step-12 shell should stay retained");
-        let leaner_same_primary_rank = acceptance_rank(
-            structural_step.objective_bar,
-            leaner_same_primary_candidate,
-        )
-        .expect("the leaner same-primary step-12 shell should still clear the bar");
+        let leaner_same_primary_rank =
+            acceptance_rank(structural_step.objective_bar, leaner_same_primary_candidate)
+                .expect("the leaner same-primary step-12 shell should still clear the bar");
         let richer_intro_former_candidate = structural_step
             .retained_candidates
             .iter()
@@ -15942,11 +16011,9 @@ mod tests {
                     )
             })
             .expect("the richer step-12 double-former same-primary sibling should stay retained");
-        let richer_intro_former_rank = acceptance_rank(
-            structural_step.objective_bar,
-            richer_intro_former_candidate,
-        )
-        .expect("the richer same-primary step-12 sibling should still clear the bar");
+        let richer_intro_former_rank =
+            acceptance_rank(structural_step.objective_bar, richer_intro_former_candidate)
+                .expect("the richer same-primary step-12 sibling should still clear the bar");
         assert!(
             target_minimality.is_minimal(),
             "claim open-band minimality should no longer prune the guarded step-12 shell using a worse-ranked detachable subbundle"
@@ -16545,6 +16612,169 @@ mod tests {
                 structurally_connected_but_unqualified_candidates: 0,
                 structurally_connected_via_historical_reanchor_candidates: 0,
             }
+        );
+    }
+
+    fn repaired_claim_step_twelve_library_and_history() -> (Library, Vec<DiscoveryRecord>) {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            11,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 11 should build");
+        let claim_prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let (mut library, mut history, _) = history_from_prefix(&claim_prefix);
+        let mut progress_observer = None;
+        let step_twelve = super::search_next_step(
+            12,
+            2,
+            &library,
+            &history,
+            AdmissibilityMode::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            None,
+            &mut progress_observer,
+        )
+        .expect("live claim step 12 should build");
+        history.push(DiscoveryRecord::new(
+            12,
+            u32::from(step_twelve.accepted.nu),
+            u32::from(step_twelve.accepted.clause_kappa),
+        ));
+        library.push(LibraryEntry::from_telescope(
+            &step_twelve.telescope,
+            &library,
+        ));
+        (library, history)
+    }
+
+    fn continue_late_path_from_candidate(
+        step_index: u32,
+        end_step: u32,
+        library: &Library,
+        history: &[DiscoveryRecord],
+        candidate: &crate::expand::ExpandedCandidate,
+    ) -> Vec<(u32, String, u16, u16, usize)> {
+        let mut next_history = history.to_vec();
+        next_history.push(DiscoveryRecord::new(
+            step_index,
+            u32::from(candidate.nu),
+            u32::from(candidate.clause_kappa),
+        ));
+        let mut next_library = library.clone();
+        next_library.push(LibraryEntry::from_telescope(&candidate.telescope, library));
+        let mut late_steps = Vec::new();
+        for next_step_index in (step_index + 1)..=end_step {
+            let mut progress_observer = None;
+            let next_step = super::search_next_step(
+                next_step_index,
+                2,
+                &next_library,
+                &next_history,
+                AdmissibilityMode::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+                None,
+                &mut progress_observer,
+            )
+            .expect("late continuation should build");
+            late_steps.push((
+                next_step_index,
+                next_step.accepted.candidate_hash.clone(),
+                next_step.accepted.nu,
+                next_step.accepted.clause_kappa,
+                next_step.demo_funnel.generated_raw_prefixes,
+            ));
+            next_history.push(DiscoveryRecord::new(
+                next_step_index,
+                u32::from(next_step.accepted.nu),
+                u32::from(next_step.accepted.clause_kappa),
+            ));
+            next_library.push(LibraryEntry::from_telescope(
+                &next_step.telescope,
+                &next_library,
+            ));
+        }
+        late_steps
+    }
+
+    #[test]
+    fn step_thirteen_demo_like_positions_one_and_four_negative_control_reopens_local_floor_but_breaks_parity()
+     {
+        let (library, history) = repaired_claim_step_twelve_library_and_history();
+        let admissibility =
+            strict_admissibility_for_mode(13, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = EnumerationContext::from_admissibility(&library, admissibility);
+        let mut demo_context = claim_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+        let claim_catalog = build_clause_catalog(claim_context, 7);
+        let demo_catalog = build_clause_catalog(demo_context, 7);
+        let mixed_catalog = build_clause_catalog_from_options(
+            7,
+            (0..7)
+                .map(|position| match position {
+                    1 | 4 => demo_catalog.clauses_at(position).to_vec(),
+                    _ => claim_catalog.clauses_at(position).to_vec(),
+                })
+                .collect(),
+        );
+        let raw_widths = (0..usize::from(mixed_catalog.clause_kappa()))
+            .map(|position| mixed_catalog.clauses_at(position).len())
+            .collect::<Vec<_>>();
+        let mut progress_observer = None;
+        let step_thirteen = search_next_step_internal_with_clause_catalog_override(
+            13,
+            2,
+            &library,
+            &history,
+            AdmissibilityMode::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            None,
+            &mut progress_observer,
+            Some(&mixed_catalog),
+            true,
+        )
+        .expect("the mixed step-13 negative-control surface should still build");
+        let guarded_step_thirteen =
+            profile_step_from_reference_prefix(13, SearchProfile::StrictCanonGuarded);
+        let guarded_step_fourteen =
+            profile_step_from_reference_prefix(14, SearchProfile::StrictCanonGuarded);
+        let late_path =
+            continue_late_path_from_candidate(13, 14, &library, &history, &step_thirteen.accepted);
+
+        assert_eq!(raw_widths, vec![3, 5, 3, 3, 5, 1, 1]);
+        assert_eq!(raw_widths.iter().product::<usize>(), 675);
+        assert_eq!(step_thirteen.demo_funnel.generated_raw_prefixes, 2223);
+        assert!(
+            step_thirteen.demo_funnel.generated_raw_prefixes >= 2200,
+            "the demo-like position-1/4 widening should still reopen the local step-13 floor"
+        );
+        assert_eq!(
+            (
+                step_thirteen.accepted.nu,
+                step_thirteen.accepted.clause_kappa
+            ),
+            (45, 7)
+        );
+        assert_ne!(
+            step_thirteen.accepted.candidate_hash, guarded_step_thirteen.accepted.candidate_hash,
+            "the position-1/4 widening should stay an unsafe negative control by displacing the guarded step-13 shell"
+        );
+        assert_eq!(
+            late_path
+                .iter()
+                .map(|(step_index, _, nu, clause_kappa, generated)| {
+                    (*step_index, *nu, *clause_kappa, *generated)
+                })
+                .collect::<Vec<_>>(),
+            vec![(14, 61, 9, 12027)]
+        );
+        assert_ne!(
+            late_path[0].2, guarded_step_fourteen.accepted.nu,
+            "the position-1/4 widening should stay a negative control by changing the repaired step-14 winner profile even when the same telescope reappears"
         );
     }
 
