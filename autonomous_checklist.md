@@ -57,33 +57,48 @@ It lists only work that is still open.
   one library-backed temporal-operator `single` bucket carries the isolated
   non-winning pocket at overshoot `115657 / 21112`, and one
   library-backed temporal-operator `small_cluster` bucket carries the
-  remaining `2190` / `244` / `244` / `242` pressure.
+  remaining `2208` / `246` / `246` / `244` pressure.
 - The remaining step-`15` `small_cluster` incumbent surface is now frozen more
   tightly by
   `current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning`:
-  all `242` remaining prunes happen during summary-stage exact screening,
+  all `244` remaining prunes happen during summary-stage exact screening,
   every one stays on the same-primary `103 / 8` / `115657 / 21112` tier, the
   non-winning spread is only bit cost `236..290`, and the earliest mismatch
   positions across that surface stay at clause positions `0`, `1`, `2`, `4`,
-  and `5` with counts `162`, `54`, `18`, `6`, and `2`.
+  and `5` with counts `162`, `54`, `20`, `6`, and `2`.
 - A new local omitted-side-variant regression now proves the next safe opening
   is narrower than a raw catalog reland:
   omitted demo-only temporal-shell side variants at clause positions `0`,
   `1`, `4`, and `5` all stay structurally connected, locally admissible, and
   same-primary `103 / 8` / `115657 / 21112` non-winners around the live
-  anchor-`11` exact-argument pocket, but a reverted raw position-`0` probe
-  that lifted local step `15` only to `4285` also reopened the repaired
-  clause-`0` zero-admitted capture to `2835` families / `891`
-  reanchor-prefix misses, so the next landed repair must isolate one of those
-  openings onto the existing `small_cluster` path instead of broadening the
-  whole position-`0` catalog.
-- Two follow-up isolated late-side reland probes were also reverted:
-  a clause-`4`-only pocket-gated opening only reached `3980` and reopened the
+  anchor-`11` exact-argument pocket; the clause-`4`
+  `demo_sharp_codomain` variant now regains historical reanchor only on that
+  exact side pocket, while the clause-`0`, clause-`1`, and clause-`5` side
+  variants still stay outside historical reanchor there. A reverted raw
+  position-`0` probe that lifted local step `15` only to `4285` also reopened
+  the repaired clause-`0` zero-admitted capture to `2835` families / `891`
+  reanchor-prefix misses, so the next landed repair must stay isolated onto
+  the existing `small_cluster` path instead of broadening the whole
+  position-`0` catalog.
+- The older raw isolated late-side probes are no longer the live boundary by
+  themselves:
+  the clause-`4`-only pocket-gated probe only reached `3980` and reopened the
   zero-admitted capture to `1962` families / `1476` clause-`2`
-  reanchor-prefix misses, while a clause-`5`-only pocket-gated opening only
+  reanchor-prefix misses, and the clause-`5`-only pocket-gated probe only
   reached `3974` and still reopened the capture to `1950` families / `1464`
-  clause-`2` misses, so neither raw later-side injection is the next landed
-  repair.
+  clause-`2` misses.
+- A newer narrower clause-`4` side-pocket reland is now landed locally:
+  it lifts the repaired local step-`15` guardrail surface to `4004`, raises
+  the remaining local pressure to `472` partial-prefix bar failures plus
+  `244` incumbent-dominance prunes, keeps the captured zero-admitted surface
+  tightly localized at `1956` families / `5868` connected-but-unqualified
+  terminal options, and keeps the reopened clause-`4` pocket tiny and
+  noncanonical.
+- The next landed repair should therefore not be another raw clause-`4`
+  reland:
+  clause `4` is now consumed as a fenced local pocket, so the next gain needs
+  clause-`5`-side qualifier / reanchor evidence or summary-stage retention on
+  top of the current `4004` local surface.
 - No broader per-step claim search-band expansion should land beyond that
   isolated anchor-`11` pocket before a new local repair proves more is
   necessary on this parity-clean stored chain.

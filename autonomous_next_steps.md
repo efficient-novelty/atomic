@@ -103,9 +103,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - that stored diagnosis now also preserves the full claim-step-open
     pressure signature for failing steps, including active widening bands,
     package flags, and claim-debt `path` / `trunc` pressure
-- A new local step-`15` survivor-bucket freeze now localizes the remaining
-  exact-screened survivor surface more tightly on the repaired canonical
-  chain:
+- A newer local step-`15` survivor-bucket freeze now localizes the latest
+  post-`v11` exact-screened survivor surface more tightly on the repaired
+  canonical chain:
   - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
     now pins exactly two
     `k8:structural_generic:temporal_operator:library_backed` buckets at
@@ -113,14 +113,14 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the isolated `single` bucket still carries just one fully scored
     non-winning pocket with overshoot `115657 / 21112`
   - the remaining exact-screened pressure still stays concentrated in the
-    `small_cluster` bucket with `2190` generated / `244` admitted /
-    `244` exact-screened / `242` pruned
+    `small_cluster` bucket with `2208` generated / `246` admitted /
+    `246` exact-screened / `244` pruned
   - the accepted canonical step-`15` winner still remains the only retained
     candidate there and keeps bit cost `229`
-- A new local step-`15` small-cluster incumbent-surface regression now
+- A newer local step-`15` small-cluster incumbent-surface regression now
   sharpens that same remaining blocker further:
   - `current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning`
-    now pins that all `242` remaining `small_cluster` prunes happen during
+    now pins that all `244` remaining `small_cluster` prunes happen during
     summary-stage exact screening rather than later proof-close materialization
   - every one of those remaining pruned candidates still stays on the same
     primary `103 / 8` profile with overshoot `115657 / 21112`
@@ -128,28 +128,32 @@ This note is the exact next work order for `desktop_claim_shadow`.
     from `236` through `290`, above the canonical winner's `229`
   - the earliest first-mismatch positions across that still-pruned surface are
     now frozen at clause positions `0`, `1`, `2`, `4`, and `5` with counts
-    `162`, `54`, `18`, `6`, and `2`
+    `162`, `54`, `20`, `6`, and `2`
   - the next repair should therefore stay on that narrow summary-stage
     same-primary `small_cluster` incumbent surface rather than reopening
     proof-close ordering or the isolated `single` pocket first
-- A new local step-`15` omitted-side-variant regression now sharpens that same
-  next move again without landing another widening yet:
+- The newer local step-`15` omitted-side-variant regression still sharpens
+  that same next move, but the clause-`4` read is now narrower than before:
   - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
     now pins that the omitted demo-only temporal-shell side variants at clause
     positions `0`, `1`, `4`, and `5` all stay structurally connected, locally
     admissible, and same-primary `103 / 8` / `115657 / 21112` on top of the
     current live claim clause-`2` + anchor-`11` exact-argument pocket
-  - those omitted side variants still stay outside historical reanchor there
-    and still lose only on higher bit cost `243`, `245`, or `250`
+  - the clause-`4` `demo_sharp_codomain` side variant now regains historical
+    reanchor only on that exact anchor-`11` side pocket, while the omitted
+    side variants at clause positions `0`, `1`, and `5` still stay outside
+    historical reanchor there
+  - those omitted side variants still lose only on higher bit cost `243`,
+    `245`, or `250`
   - a non-landed raw position-`0` reland probe briefly lifted the local
     step-`15` generated surface to `4285`, but it also reopened the old
     clause-`0` zero-admitted capture to `2835` families with
     `891` clause-`0` historical-reanchor misses, so that broad catalog reland
     was reverted
-  - the next repair should therefore isolate one of those omitted side
+  - the next repair should therefore keep isolating one of those omitted side
     openings onto the existing anchor-`11` `small_cluster` path instead of
     broadening the raw position-`0` temporal-shell catalog first
-- Two follow-up isolated late-side reland probes were then tried and reverted:
+- The earlier raw isolated late-side reland probes are now split more cleanly:
   - a clause-`4`-only demo-sharp-codomain opening, gated on canonical clauses
     `0` and `1` plus the live claim clause-`2` + anchor-`11` exact-argument
     pocket, lifted local step `15` generated prefixes only to `3980`, but it
@@ -159,11 +163,26 @@ This note is the exact next work order for `desktop_claim_shadow`.
     `0`, `1`, and `4` plus that same pocket, lifted the local surface only to
     `3974` while still reopening the zero-admitted capture to `1950` families
     with `1464` clause-`2` historical-reanchor-prefix misses
-  - the next repair should therefore not be a raw isolated clause-`4` or
-    clause-`5` late-side reland either; any future use of those openings will
-    need extra qualifier/reanchor evidence or summary-stage retention changes
-    that keep them on the `small_cluster` path instead of feeding the
-    captured clause-`2` / clause-`3` surface
+  - a newer narrower clause-`4` side-pocket repair now lands by reopening only
+    the `demo_sharp_codomain` clause-`4` option on the exact anchor-`11`
+    exact-argument pocket and by counting it as historical reanchor only there
+  - on the repaired local late chain, step `15` still accepts `DCT 103 / 8`,
+    but live generated prefixes now lift from `3972` to `4004` while
+    partial-prefix bar failures rise from `468` to `472` and incumbent-
+    dominance prunes rise from `242` to `244`
+  - the surviving local temporal terminal cluster now widens to
+    `2208` generated / `246` admitted / `246` exact-screened / `244` pruned,
+    while the isolated `single` pocket remains the only fully scored
+    non-winning terminal
+  - the captured zero-admitted surface still stays tightly localized after
+    that reland at `1956` families / `5868` generated terminal options, and
+    historical-reanchor prefix progress there now splits as `1470`
+    clause-`2`-side families plus `486` clause-`3`-side families
+  - the reopened clause-`4` side pocket itself stays tiny and noncanonical, so
+    the next landed repair should not be another raw clause-`4` reland either;
+    clause `4` is now consumed as a fenced local pocket, and any further gain
+    will need clause-`5`-side qualifier / reanchor evidence or summary-stage
+    retention that keeps the captured clause-`2` / clause-`3` surface fenced
 - New stored-evidence regressions now freeze that canonical `v11`
   diagnosis in-tree:
   - `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
@@ -691,17 +710,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
    - stored canonical `v11` step `13` now matches that same
      `[5,1,3,3,5,3,2]` / `1350` / `2320` surface
    - step `14` should stay `19683` / `12027`
-   - stored canonical step `15` should now stay `DCT 103 / 8 / 3972`
+   - local post-`v11` step `15` should now stay `DCT 103 / 8 / 4004`
+   - stored canonical step `15` should still stay `DCT 103 / 8 / 3972`
    - the exact-screened step-`15` survivor surface should stay frozen as one
      library-backed temporal-operator `single` bucket with one fully scored
      non-winning pocket at overshoot `115657 / 21112` plus one
      library-backed temporal-operator `small_cluster` bucket at
-     `2190` generated / `244` admitted / `244` exact-screened / `242`
+     `2208` generated / `246` admitted / `246` exact-screened / `244`
      pruned
    - the remaining `small_cluster` incumbent surface should also stay frozen
-     as `242` summary-stage same-primary `103 / 8` prunes with bit costs
+     as `244` summary-stage same-primary `103 / 8` prunes with bit costs
      `236..290` and earliest first-mismatch counts
-     `162 / 54 / 18 / 6 / 2` at clause positions `0 / 1 / 2 / 4 / 5`
+     `162 / 54 / 20 / 6 / 2` at clause positions `0 / 1 / 2 / 4 / 5`
 5. Keep the two executable step-`13` negative-control regressions green:
    widening only operator-bundle formation positions `1` and `4` to the
    demo-like custom surface should still reopen the local floor to
@@ -739,22 +759,20 @@ This note is the exact next work order for `desktop_claim_shadow`.
    repaired local late chain explicit:
    `[5,1,3,3,5,3,2]` / `1350` / `2320`, `5` seeded roots, and the guarded
    `46 / 7 -> 62 / 9 -> 103 / 8` continuation should remain the canonical
-   breadth-repaired late chain; stored step `15` now carries `3972`
-   generated prefixes there, and the next repair should work against the
-   remaining `468` partial-prefix bar / `242` incumbent-dominance surface
-   rather than the older `1794` read, with the new survivor-bucket freeze
-   keeping the isolated `single` pocket fenced while the next repair targets
-   the `small_cluster` pressure; that pressure is now pinned more tightly as
-   `242` summary-stage same-primary `103 / 8` incumbents with bit costs
+   breadth-repaired late chain; stored step `15` still carries `3972`
+   generated prefixes there, but the current local guardrail surface is now
+   `4004` after the narrow clause-`4` side-pocket reland. The next repair
+   should therefore work against the remaining local `472` partial-prefix bar /
+   `244` incumbent-dominance surface on top of that new guardrail, with the
+   survivor-bucket freeze keeping the isolated `single` pocket fenced while
+   the next repair targets the `small_cluster` pressure now pinned as
+   `244` summary-stage same-primary `103 / 8` incumbents with bit costs
    `236..290` and earliest first mismatches at clause positions
-   `0`, `1`, `2`, `4`, and `5`; the new omitted-side-variant regression now
-   also proves that several demo-only side openings around the live
-   anchor-`11` pocket are already rank-safe, while the reverted raw
-   position-`0` reland proves that broadening that side globally reopens the
-   old captured clause-`0` surface, and the reverted isolated clause-`4` /
-   clause-`5` relands prove that a raw late-side next-clause injection still
-   feeds the captured clause-`2` / clause-`3` surface, so the next landed
-   repair must stay narrower than all three of those raw relands.
+   `0`, `1`, `2`, `4`, and `5`. The clause-`4` `demo_sharp_codomain`
+   reopening is now already consumed narrowly and must stay fenced as a tiny
+   noncanonical pocket, so the next landed repair should come from clause-`5`
+   qualifier / reanchor evidence or summary-stage retention rather than
+   another raw clause-`4`, raw clause-`5`, or raw position-`0` reland.
 4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
    hits so the next repair cannot silently reshuffle the canonical branch.
 5. Keep step `1 = 546 / 2144` on the checklist as the separate stored early
@@ -791,9 +809,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - a raw global position-`0` temporal-shell reland first:
   the exploratory probe lifted local step `15` only to `4285` but also
   reopened the repaired clause-`0` zero-admitted capture
-- a raw isolated clause-`4` or clause-`5` late-side reland first:
-  the reverted pocket-gated probes only lifted local step `15` to `3980` or
-  `3974` and still reopened the captured clause-`2` / clause-`3` surface
+- another raw broad clause-`4` reland or any raw isolated clause-`5`
+  late-side reland first:
+  clause `4` is already consumed narrowly by the fenced exact anchor-`11`
+  side pocket, while the reverted pocket-gated probes only lifted local
+  step `15` to `3980` or `3974` and still reopened the captured
+  clause-`2` / clause-`3` surface
 - a direct early clause-`2` / clause-`3` reanchor-bridge matcher reland
   first:
   those exploratory branches already displaced the canonical step-`15`

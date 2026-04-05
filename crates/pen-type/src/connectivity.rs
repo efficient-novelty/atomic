@@ -138,6 +138,7 @@ pub struct HistoricalReanchorSummary {
     temporal_shell_anchor_ref: Option<u32>,
     temporal_shell_prefix_matches: bool,
     anchor_eleven_claim_pair_matches: bool,
+    anchor_eleven_clause_four_side_pocket_matches: bool,
     clause_count: usize,
     matched_clause_count: usize,
     first_mismatch_position: Option<usize>,
@@ -158,6 +159,7 @@ impl HistoricalReanchorSummary {
             temporal_shell_anchor_ref,
             temporal_shell_prefix_matches: temporal_shell_anchor_ref.is_some(),
             anchor_eleven_claim_pair_matches: temporal_shell_anchor_ref.is_some(),
+            anchor_eleven_clause_four_side_pocket_matches: temporal_shell_anchor_ref.is_some(),
             clause_count: 0,
             matched_clause_count: 0,
             first_mismatch_position: None,
@@ -175,6 +177,13 @@ impl HistoricalReanchorSummary {
         if !self.temporal_shell_prefix_matches {
             self.anchor_eleven_claim_pair_matches = self.anchor_eleven_claim_pair_matches
                 && matches_anchor_eleven_claim_pair_clause(position, &clause.expr, anchor);
+            self.anchor_eleven_clause_four_side_pocket_matches = self
+                .anchor_eleven_clause_four_side_pocket_matches
+                && matches_anchor_eleven_clause_four_side_pocket_clause(
+                    position,
+                    &clause.expr,
+                    anchor,
+                );
             return self;
         }
 
@@ -182,6 +191,9 @@ impl HistoricalReanchorSummary {
             matches_historical_reanchor_clause(position, &clause.expr, anchor);
         self.anchor_eleven_claim_pair_matches = self.anchor_eleven_claim_pair_matches
             && matches_anchor_eleven_claim_pair_clause(position, &clause.expr, anchor);
+        self.anchor_eleven_clause_four_side_pocket_matches = self
+            .anchor_eleven_clause_four_side_pocket_matches
+            && matches_anchor_eleven_clause_four_side_pocket_clause(position, &clause.expr, anchor);
         if self.temporal_shell_prefix_matches {
             self.matched_clause_count += 1;
         } else {
@@ -192,7 +204,9 @@ impl HistoricalReanchorSummary {
 
     pub fn allows_historical_reanchor(self) -> bool {
         self.temporal_shell_anchor_ref.is_some()
-            && (self.temporal_shell_prefix_matches || self.anchor_eleven_claim_pair_matches)
+            && (self.temporal_shell_prefix_matches
+                || self.anchor_eleven_claim_pair_matches
+                || self.anchor_eleven_clause_four_side_pocket_matches)
             && self.clause_count == 8
     }
 
@@ -885,6 +899,35 @@ fn matches_anchor_eleven_claim_pair_clause(position: usize, expr: &Expr, anchor:
     }
 }
 
+fn matches_anchor_eleven_clause_four_side_pocket_clause(
+    position: usize,
+    expr: &Expr,
+    anchor: u32,
+) -> bool {
+    match position {
+        0 => matches_reference_temporal_next_clause(expr),
+        1 => matches_reference_temporal_eventually_clause(expr),
+        2 => matches_claim_temporal_pair_clause_two_variant(expr),
+        3 => matches_anchor_eleven_exact_argument_clause(expr, anchor + 1),
+        4 => matches_anchor_eleven_demo_sharp_codomain_clause(expr),
+        5 => matches_reference_temporal_sharp_eventually_bridge(expr),
+        6 => matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(
+                            function.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        ) && matches!(argument.as_ref(), Expr::Var(2))
+                )
+        ),
+        7 => matches_reference_temporal_terminal_clause(expr),
+        _ => false,
+    }
+}
+
 fn matches_claim_temporal_pair_clause_two_variant(expr: &Expr) -> bool {
     matches!(
         expr,
@@ -931,6 +974,14 @@ fn matches_anchor_eleven_exact_argument_clause(expr: &Expr, anchor: u32) -> bool
     )
 }
 
+fn matches_reference_temporal_next_clause(expr: &Expr) -> bool {
+    matches!(expr, Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1)))
+}
+
+fn matches_reference_temporal_eventually_clause(expr: &Expr) -> bool {
+    matches!(expr, Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1)))
+}
+
 fn matches_temporal_next_reanchor_clause(expr: &Expr) -> bool {
     matches!(
         expr,
@@ -966,6 +1017,32 @@ fn matches_temporal_eventually_reanchor_clause(expr: &Expr) -> bool {
 fn matches_temporal_flat_next_bridge(expr: &Expr) -> bool {
     matches_reference_temporal_flat_next_bridge(expr)
         || matches_claim_temporal_flat_next_bridge(expr)
+}
+
+fn matches_anchor_eleven_demo_sharp_codomain_clause(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Flat(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
+            ) && matches!(
+                codomain.as_ref(),
+                Expr::Next(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Sharp(inner)
+                            if matches!(
+                                inner.as_ref(),
+                                Expr::Flat(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                            )
+                    )
+            )
+    )
 }
 
 fn matches_reference_temporal_flat_next_bridge(expr: &Expr) -> bool {
@@ -2079,6 +2156,55 @@ mod tests {
                 );
                 assert!(passes_connectivity(&library, &telescope));
             }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_clause_four_demo_sharp_codomain_only_on_the_exact_anchor_eleven_side_pocket()
+     {
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            let mut telescope = Telescope::reference(15);
+            telescope.clauses[2].expr = clause_two_variant;
+            telescope.clauses[3] = ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor + 1)),
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                ))),
+            );
+            telescope.clauses[4] = ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                    Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Flat(
+                        Box::new(Expr::Var(1)),
+                    )))))),
+                ),
+            );
+            telescope.clauses[7] = reference_terminal.clone();
+
+            let witness = analyze_connectivity(&library, &telescope);
+            let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+            assert!(
+                reanchor.allows_historical_reanchor(),
+                "the landed clause-4 demo-sharp-codomain opening should now count as historical reanchor only on the exact anchor-11 side pocket"
+            );
+            assert_eq!(
+                witness,
+                ConnectivityWitness {
+                    connected: true,
+                    references_active_window: false,
+                    self_contained: false,
+                    max_lib_ref: 11,
+                    historical_reanchor: true,
+                }
+            );
+            assert!(passes_connectivity(&library, &telescope));
         }
     }
 

@@ -69,6 +69,27 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     `2190` generated / `244` admitted / `244` exact-screened / `242` pruned,
     and one isolated fully scored non-winning anchor-`11` terminal pocket is
     now frozen with overshoot `115657 / 21112`
+- A newer local step-`15` clause-`4` side-pocket repair now lands on top of
+  that stored-`v11` diagnosis:
+  - the `demo_sharp_codomain` clause-`4` opening is now relanded only on the
+    exact anchor-`11` exact-argument pocket and now counts as historical
+    reanchor only there
+  - the repaired local late chain still accepts `DCT 103 / 8`, but live
+    generated prefixes now lift from `3972` to `4004`
+  - the remaining local gap to the late floor is now `996`, with
+    step-`15` partial-prefix bar failures at `472`, incumbent-dominance
+    prunes at `244`, and legality/connectivity exact rejections still at `0`
+  - the local surviving temporal terminal cluster now widens to
+    `2208` generated / `246` admitted / `246` exact-screened / `244` pruned
+  - the captured zero-admitted surface still stays tightly localized at
+    `1956` families / `5868` connected-but-unqualified terminal options, with
+    reanchor-prefix progress now split as `1470` clause-`2`-side families and
+    `486` clause-`3`-side families
+  - the reopened clause-`4` side pocket itself stays tiny and noncanonical:
+    only `6` captured prefixes per live claim clause-`2` variant, exact-
+    terminal recovered profiles limited to the unsafe `89 / 8` rival plus the
+    canonical-primary `103 / 8` tie-clean pocket, and forced reanchor winners
+    there still non-reference terminal variants only
 - A new executable step-`15` survivor-bucket regression now freezes that
   post-repair split more tightly:
   - exactly two
@@ -77,15 +98,18 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - the isolated `single` bucket carries one fully scored non-winning pocket
     at overshoot `115657 / 21112`
   - the remaining repair target is the `small_cluster` bucket at
-    `2190` generated / `244` admitted / `244` exact-screened / `242` pruned
+    `2208` generated / `246` admitted / `246` exact-screened / `244` pruned
 - A newer executable omitted-side-variant regression now sharpens that same
   `small_cluster` target without landing another widening yet:
   - the omitted demo-only temporal-shell side variants at clause positions
     `0`, `1`, `4`, and `5` all stay structurally connected, locally
     admissible, and same-primary `103 / 8` / `115657 / 21112` on top of the
     current live claim clause-`2` + anchor-`11` exact-argument pocket
-  - those omitted side variants still stay outside historical reanchor there
-    and still lose only on higher bit cost `243`, `245`, or `250`
+  - the clause-`4` `demo_sharp_codomain` variant now regains historical
+    reanchor only on that exact side pocket, while the clause-`0`,
+    clause-`1`, and clause-`5` variants still stay outside historical
+    reanchor there and still lose only on higher bit cost `243`, `245`, or
+    `250`
   - a non-landed raw position-`0` reland probe briefly lifted the local
     step-`15` generated surface to `4285`, but it also reopened the repaired
     clause-`0` zero-admitted capture to `2835` families / `891`
@@ -93,7 +117,8 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - the next landed repair should therefore isolate one of those omitted side
     openings onto the existing anchor-`11` `small_cluster` path instead of
     broadening the raw position-`0` temporal-shell catalog first
-- Two follow-up isolated late-side reland probes were then tried and reverted:
+- The older raw isolated late-side reland probes are now bounded more
+  tightly:
   - a clause-`4`-only demo-sharp-codomain opening, gated on canonical clauses
     `0` and `1` plus the live claim clause-`2` + anchor-`11` exact-argument
     pocket, lifted local step `15` generated prefixes only to `3980`, but it
@@ -103,11 +128,11 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     `0`, `1`, and `4` plus that same pocket, lifted the local surface only to
     `3974` while still reopening the zero-admitted capture to `1950` families
     with `1464` clause-`2` historical-reanchor-prefix misses
-  - so the next landed repair can no longer be a raw isolated clause-`4` or
-    clause-`5` late-side reland either; any future use of those openings will
-    need additional qualifier/reanchor evidence or summary-stage retention
-    changes that keep them on the `small_cluster` path instead of the captured
-    clause-`2` / clause-`3` surface
+  - so clause `4` is now consumed only as a fenced tiny pocket, and the next
+    landed repair can no longer be another raw isolated clause-`4` reland or
+    a raw isolated clause-`5` reland either; any further gain will need
+    additional qualifier / reanchor evidence or summary-stage retention
+    changes that keep the captured clause-`2` / clause-`3` surface fenced
 - Two new non-landed local step-`13` probes now sharpen the safe search space:
   - widening only operator-bundle formation positions `1` and `4` to
     demo-like variants lifts the repaired local read to
@@ -147,12 +172,12 @@ The highest-value work is:
 2. keep the stored step-`13` hit, the new `v11` stored diagnosis, and step
    `1` explicit on the checklist
 3. use the `v11` certificate and `step-15-live.ndjson` to land the next
-   parity-preserving local step-`15` repair against the residual
-   `468`-bar / `242`-incumbent surface, now using the omitted-side-variant
-   regression as the safe local opening, the reverted raw position-`0` probe
-   as the explicit "do not reland this globally" boundary, and the reverted
-   isolated clause-`4` / clause-`5` probes as proof that raw late-side
-   next-clause injection also misses the real target
+   parity-preserving local step-`15` repair against the current post-clause-`4`
+   `472`-bar / `244`-incumbent surface, keeping the new `4004` guardrail
+   stable, treating the raw position-`0` probe as the explicit "do not reland
+   this globally" boundary, and treating clause `4` as already consumed by a
+   fenced tiny side pocket so the next gain comes from clause-`5`-side
+   qualifier / reanchor evidence or summary-stage retention instead
 4. launch the next clean full-profile rerun only after that next local repair
    is regression-backed
 5. refresh compare / benchmark / certification on the next stored bundle
@@ -208,12 +233,11 @@ Current slice order:
 1. hold the stored step-`13` hit, the stored `v11` diagnosis freeze, and the
    frozen negative controls green
 2. use the stored `v11` certificate and live checkpoints to localize the next
-   step-`15` repair against the remaining `468` partial-prefix bar failures
-   and `242` incumbent-dominance prunes, keeping the isolated `single`
-   survivor bucket fenced while the next repair works against the
-   `small_cluster` pressure and isolates one of the now-proven-safe omitted
-   side openings onto that path rather than broadening the raw position-`0`
-   catalog
+   step-`15` repair against the remaining local `472` partial-prefix bar
+   failures and `244` incumbent-dominance prunes, keeping the isolated
+   `single` survivor bucket fenced, keeping the newly reopened clause-`4`
+   side pocket fenced as tiny and noncanonical, and working against the
+   `small_cluster` pressure without broadening the raw position-`0` catalog
 3. rerun only after that next local repair is regression-backed
 4. revisit stored step `1` from the next evidence bundle once step `15` moves
 

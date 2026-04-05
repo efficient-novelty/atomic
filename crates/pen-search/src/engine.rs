@@ -6241,6 +6241,55 @@ fn create_online_prefix_work_item(
         })
     }
 
+    fn matches_reference_temporal_clause_zero(clause: &pen_core::clause::ClauseRec) -> bool {
+        clause.role == ClauseRole::Formation
+            && matches!(
+                &clause.expr,
+                Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+            )
+    }
+
+    fn matches_reference_temporal_clause_one(clause: &pen_core::clause::ClauseRec) -> bool {
+        clause.role == ClauseRole::Formation
+            && matches!(
+                &clause.expr,
+                Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+            )
+    }
+
+    fn matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(
+        clause: &pen_core::clause::ClauseRec,
+        anchor: u32,
+    ) -> bool {
+        clause.role == ClauseRole::Introduction
+            && matches!(
+                &clause.expr,
+                Expr::Lam(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::App(function, argument)
+                            if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor + 1)
+                                && matches!(
+                                    argument.as_ref(),
+                                    Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                )
+                    )
+            )
+    }
+
+    fn claim_step_fifteen_anchor_eleven_demo_sharp_codomain_clause() -> pen_core::clause::ClauseRec
+    {
+        pen_core::clause::ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Flat(
+                    Box::new(Expr::Var(1)),
+                )))))),
+            ),
+        )
+    }
+
     fn injected_claim_step_fifteen_anchor_eleven_clause(
         clause_kappa: u16,
         prefix_telescope: &Telescope,
@@ -6264,6 +6313,43 @@ fn create_online_prefix_work_item(
         )
         .then(|| claim_step_fifteen_anchor_eleven_exact_argument_clause(anchor, library))
         .flatten()
+    }
+
+    fn injected_claim_step_fifteen_anchor_eleven_clause_four_side_clause(
+        clause_kappa: u16,
+        prefix_telescope: &Telescope,
+        signature: &PrefixSignature,
+        admissibility: StrictAdmissibility,
+    ) -> Option<pen_core::clause::ClauseRec> {
+        if admissibility.mode != AdmissibilityMode::DesktopClaimShadow
+            || signature.obligation_set_id.get() != 15
+            || clause_kappa != 8
+            || prefix_telescope.clauses.len() != 4
+        {
+            return None;
+        }
+        let anchor = admissibility.historical_anchor_ref?;
+        let clause_zero = prefix_telescope
+            .clauses
+            .first()
+            .expect("step-15 temporal shell prefix should expose clause 0");
+        let clause_one = prefix_telescope
+            .clauses
+            .get(1)
+            .expect("step-15 temporal shell prefix should expose clause 1");
+        let clause_two = prefix_telescope
+            .clauses
+            .get(2)
+            .expect("step-15 temporal shell prefix should expose clause 2");
+        let clause_three = prefix_telescope
+            .clauses
+            .get(3)
+            .expect("step-15 temporal shell prefix should expose clause 3");
+        (matches_reference_temporal_clause_zero(clause_zero)
+            && matches_reference_temporal_clause_one(clause_one)
+            && matches_claim_step_fifteen_anchor_eleven_clause_two_variant(clause_two)
+            && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(clause_three, anchor))
+        .then(claim_step_fifteen_anchor_eleven_demo_sharp_codomain_clause)
     }
 
     fn clone_filtered_terminal_clause_data(
@@ -6318,13 +6404,24 @@ fn create_online_prefix_work_item(
         let catalog_clauses = clause_catalog.clauses_at(prefix_len);
         let catalog_connectivity_facts = clause_catalog.terminal_connectivity_facts_at(prefix_len);
         let catalog_nu_facts = clause_catalog.terminal_nu_facts_at(prefix_len);
-        let injected_clause = injected_claim_step_fifteen_anchor_eleven_clause(
+        let mut injected_clauses = Vec::new();
+        if let Some(clause) = injected_claim_step_fifteen_anchor_eleven_clause(
             clause_kappa,
             &prefix_telescope,
             &signature,
             library,
             admissibility,
-        );
+        ) {
+            injected_clauses.push(clause);
+        }
+        if let Some(clause) = injected_claim_step_fifteen_anchor_eleven_clause_four_side_clause(
+            clause_kappa,
+            &prefix_telescope,
+            &signature,
+            admissibility,
+        ) {
+            injected_clauses.push(clause);
+        }
         let filtered_clauses = prefix_legality_cache.filter_active_window_clauses(
             &signature,
             prefix_len,
@@ -6335,7 +6432,7 @@ fn create_online_prefix_work_item(
         let needs_materialized_filter = matches!(
             filtered_clauses,
             Some(ref clauses) if clauses.len() < catalog_clauses.len()
-        ) || injected_clause.is_some();
+        ) || !injected_clauses.is_empty();
         if needs_materialized_filter {
             let filtered_clauses =
                 filtered_clauses.unwrap_or_else(|| catalog_clauses.iter().collect::<Vec<_>>());
@@ -6346,7 +6443,7 @@ fn create_online_prefix_work_item(
                     catalog_nu_facts,
                     filtered_clauses,
                 );
-            if let Some(clause) = injected_clause {
+            for clause in injected_clauses {
                 if !filtered_clauses.contains(&clause) {
                     filtered_connectivity_facts
                         .push(TerminalClauseConnectivityFacts::from_clause(&clause));
@@ -10362,12 +10459,8 @@ mod tests {
         let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
         let (library, history, nu_history) = history_from_prefix(&prefix);
         let structural_debt = summarize_structural_debt(&library, 2);
-        let admissibility = strict_admissibility_for_mode(
-            15,
-            2,
-            &library,
-            AdmissibilityMode::DesktopClaimShadow,
-        );
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
         let objective_bar = compute_bar(2, 15, &history).bar;
         let mut demo_step_budget = None;
         let mut demo_narrative = None;
@@ -12447,13 +12540,13 @@ mod tests {
     #[test]
     fn current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families() {
         let summary = current_claim_step_fifteen_exact_prune_family_summary(usize::MAX);
-        assert_eq!(summary.raw_generated_surface, 3972);
+        assert_eq!(summary.raw_generated_surface, 4004);
         assert_eq!(summary.roots_seen, 3);
         assert_eq!(summary.roots_enqueued, 3);
-        assert_eq!(summary.partial_prefix_bound_prunes, 468);
+        assert_eq!(summary.partial_prefix_bound_prunes, 472);
         assert_eq!(
-            summary.captured_prefixes, 1944,
-            "the repaired canonical step-15 surface should now shed the clause-4 and clause-5 claim-only temporal variants from the captured zero-admitted exact-prune surface too"
+            summary.captured_prefixes, 1956,
+            "the narrow clause-4 side-pocket repair should still keep the captured step-15 exact-prune surface tightly localized even after it reopens one small anchor-11 pocket"
         );
         assert_eq!(
             summary.cached_bound_count, 0,
@@ -12461,7 +12554,7 @@ mod tests {
         );
         assert_eq!(
             summary.family_counts,
-            [((0_usize, None, None), 1944_usize)].into_iter().collect(),
+            [((0_usize, None, None), 1956_usize)].into_iter().collect(),
             "the captured step-15 exact-prune surface should currently consist only of zero-admitted terminal families"
         );
     }
@@ -12481,16 +12574,16 @@ mod tests {
             .map(|step| step.telescope)
             .collect::<Vec<_>>();
         let summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
-        assert_eq!(summary.captured_prefixes, 1944);
-        assert_eq!(summary.generated_candidates, 5832);
+        assert_eq!(summary.captured_prefixes, 1956);
+        assert_eq!(summary.generated_candidates, 5868);
         assert_eq!(
-            summary.disconnected_candidates, 5832,
+            summary.disconnected_candidates, 5868,
             "every currently captured step-15 zero-admitted exact prune should lose all three terminal options to connectivity"
         );
         assert_eq!(summary.trivially_derivable_rejections, 0);
         assert_eq!(summary.other_exact_legality_rejections, 0);
         assert_eq!(summary.structural_debt_cap_rejections, 0);
-        assert_eq!(summary.all_disconnected_prefixes, 1944);
+        assert_eq!(summary.all_disconnected_prefixes, 1956);
         assert_eq!(summary.trivially_derivable_only_prefixes, 0);
         assert_eq!(summary.mixed_disconnect_and_trivial_prefixes, 0);
         assert_eq!(summary.other_rejection_prefixes, 0);
@@ -12512,15 +12605,15 @@ mod tests {
             .map(|step| step.telescope)
             .collect::<Vec<_>>();
         let summary = late_step_terminal_connectivity_summary(&prefix, 15, usize::MAX);
-        assert_eq!(summary.captured_prefixes, 1944);
-        assert_eq!(summary.generated_candidates, 5832);
+        assert_eq!(summary.captured_prefixes, 1956);
+        assert_eq!(summary.generated_candidates, 5868);
         assert_eq!(summary.prune_disconnected_candidates, 0);
-        assert_eq!(summary.needs_fallback_candidates, 5832);
+        assert_eq!(summary.needs_fallback_candidates, 5868);
         assert_eq!(summary.keep_without_fallback_candidates, 0);
         assert_eq!(summary.structurally_disconnected_candidates, 0);
         assert_eq!(
             summary.structurally_connected_but_unqualified_candidates,
-            5832
+            5868
         );
         assert_eq!(
             summary.structurally_connected_via_historical_reanchor_candidates,
@@ -12554,12 +12647,12 @@ mod tests {
 
         assert_eq!(
             matched_prefix_counts,
-            [(2_usize, 1458_usize), (3, 486),].into_iter().collect(),
-            "captured step-15 zero-admitted prefixes should now stay repaired through clause positions 0, 1, 4, and 5 and only fall off the historical-reanchor shell at clause positions 2 and 3"
+            [(2_usize, 1470_usize), (3, 486),].into_iter().collect(),
+            "captured step-15 zero-admitted prefixes should still stay repaired through clause positions 0, 1, 4, and 5, with only one tiny extra clause-2-side pocket reopened by the new clause-4 reland"
         );
         assert_eq!(
             first_mismatch_counts,
-            [(Some(2_usize), 1458_usize), (Some(3), 486),]
+            [(Some(2_usize), 1470_usize), (Some(3), 486),]
                 .into_iter()
                 .collect(),
             "the captured step-15 exact-prune surface should now preserve the repaired clause-0, clause-1, clause-4, and clause-5 prefixes and only lose the historical-reanchor shell at clause positions 2 and 3"
@@ -12824,18 +12917,15 @@ mod tests {
                 }
             }
 
-            let expected_suffix_count = if position < 2 {
-                0
-            } else {
-                3_usize.pow((8 - position) as u32)
-            };
             let mut observed_counts = variant_counts
                 .into_iter()
                 .map(|(_, count)| count)
                 .collect::<Vec<_>>();
             observed_counts.sort_unstable();
-            let expected_counts = if (2..=3).contains(&position) {
-                vec![expected_suffix_count, expected_suffix_count]
+            let expected_counts = if position == 2 {
+                vec![735, 735]
+            } else if position == 3 {
+                vec![243, 243]
             } else {
                 Vec::new()
             };
@@ -13288,10 +13378,12 @@ mod tests {
                 .iter()
                 .position(|clause| *clause == work_item.prefix_telescope.clauses[2])
                 .expect("unexpected clause-2 variant on captured step-15 surface");
-            let clause_three_index = clause_three_variants
+            let Some(clause_three_index) = clause_three_variants
                 .iter()
                 .position(|clause| *clause == work_item.prefix_telescope.clauses[3])
-                .expect("unexpected clause-3 variant on captured step-15 surface");
+            else {
+                continue;
+            };
             let key = (clause_two_index, clause_three_index);
             *pair_counts.entry(key).or_insert(0usize) += 1;
 
@@ -13650,10 +13742,12 @@ mod tests {
                 .iter()
                 .position(|clause| *clause == work_item.prefix_telescope.clauses[2])
                 .expect("unexpected clause-2 variant on captured step-15 surface");
-            let clause_three_index = clause_three_variants
+            let Some(clause_three_index) = clause_three_variants
                 .iter()
                 .position(|clause| *clause == work_item.prefix_telescope.clauses[3])
-                .expect("unexpected clause-3 variant on captured step-15 surface");
+            else {
+                continue;
+            };
             let key = (clause_two_index, clause_three_index);
 
             let connectivity_summary =
@@ -13850,10 +13944,12 @@ mod tests {
                 .iter()
                 .position(|clause| *clause == work_item.prefix_telescope.clauses[2])
                 .expect("unexpected clause-2 variant on captured step-15 surface");
-            let clause_three_index = clause_three_variants
+            let Some(clause_three_index) = clause_three_variants
                 .iter()
                 .position(|clause| *clause == work_item.prefix_telescope.clauses[3])
-                .expect("unexpected clause-3 variant on captured step-15 surface");
+            else {
+                continue;
+            };
             if clause_two_index == 0 || clause_three_index == 0 {
                 continue;
             }
@@ -14425,10 +14521,12 @@ mod tests {
                 .iter()
                 .position(|clause| *clause == work_item.prefix_telescope.clauses[2])
                 .expect("unexpected clause-2 variant on captured step-15 surface");
-            let clause_three_index = clause_three_variants
+            let Some(clause_three_index) = clause_three_variants
                 .iter()
                 .position(|clause| *clause == work_item.prefix_telescope.clauses[3])
-                .expect("unexpected clause-3 variant on captured step-15 surface");
+            else {
+                continue;
+            };
             let isolated = (clause_two_index == 0) ^ (clause_three_index == 0);
             if !isolated {
                 continue;
@@ -15521,7 +15619,7 @@ mod tests {
             ),
         ];
 
-        for clause_two in claim_clause_two_variants {
+        for clause_two in claim_clause_two_variants.iter().cloned() {
             let mut prefix = reference_prefix.clone();
             prefix.clauses[2] = clause_two;
             let signature = PrefixSignature::new(15, &library, &prefix);
@@ -15567,6 +15665,56 @@ mod tests {
                 "Lam(App(Lib({}), Next(Eventually(Var(1)))))",
                 anchor + 1
             )));
+        }
+
+        for clause_two in claim_clause_two_variants.iter().cloned() {
+            let mut prefix = Telescope::new(Telescope::reference(15).clauses[..4].to_vec());
+            prefix.clauses[2] = clause_two;
+            prefix.clauses[3] = ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor + 1)),
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                ))),
+            );
+            let signature = PrefixSignature::new(15, &library, &prefix);
+            let mut cache = PrefixLegalityCache::default();
+            assert!(cache.insert_root(
+                signature.clone(),
+                8,
+                &library,
+                &prefix,
+                admissibility,
+                LateFamilySurface::ClaimGeneric
+            ));
+            let work_item = create_online_prefix_work_item(
+                8,
+                prefix,
+                signature,
+                &library,
+                admissibility,
+                &clause_catalog,
+                &mut cache,
+            );
+            let observed_exprs = work_item
+                .next_clauses(&clause_catalog)
+                .iter()
+                .map(|clause| format!("{:?}", clause.expr))
+                .collect::<BTreeSet<_>>();
+            assert_eq!(
+                observed_exprs.len(),
+                4,
+                "the narrow clause-4 pocket reland should inject exactly one additional side option beyond the live claim clause-4 catalog"
+            );
+            assert!(
+                observed_exprs.contains("Pi(Flat(Next(Eventually(Var(1)))), Next(Flat(Var(1))))")
+            );
+            assert!(
+                observed_exprs
+                    .contains("Pi(Flat(Next(Next(Var(1)))), Next(Flat(Next(Eventually(Var(1))))))")
+            );
+            assert!(observed_exprs.contains("Pi(Flat(Next(Var(1))), Next(Flat(Var(1))))"));
+            assert!(observed_exprs.contains("Pi(Flat(Next(Var(1))), Next(Sharp(Flat(Var(1)))))"));
         }
 
         let signature = PrefixSignature::new(15, &library, &reference_prefix);
@@ -15826,7 +15974,7 @@ mod tests {
 
     #[test]
     fn current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning()
-    {
+     {
         let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
         let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
         let reference_terminal = Telescope::reference(15)
@@ -16015,7 +16163,8 @@ mod tests {
                         bit_kappa_used,
                         rank.as_ref()
                             .map(|candidate_rank| candidate_rank < &canonical_rank),
-                        rank.as_ref().map(|candidate_rank| candidate_rank.overshoot.clone()),
+                        rank.as_ref()
+                            .map(|candidate_rank| candidate_rank.overshoot.clone()),
                     ),
                 );
             }
@@ -16088,7 +16237,7 @@ mod tests {
                     "claim_flat_domain:4:demo_sharp_codomain".to_string(),
                     (
                         true,
-                        false,
+                        true,
                         true,
                         103_u16,
                         243_u16,
@@ -16184,7 +16333,7 @@ mod tests {
                     "claim_sharp_codomain:4:demo_sharp_codomain".to_string(),
                     (
                         true,
-                        false,
+                        true,
                         true,
                         103_u16,
                         243_u16,
@@ -16220,6 +16369,248 @@ mod tests {
             .into_iter()
             .collect(),
             "the omitted demo-only side variants around the live anchor-11 exact-argument pocket should stay structurally connected, locally admissible, and same-primary 103/8 non-winners on bit cost alone, so the next step-15 repair can isolate one of those openings without relanding the raw global catalog"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_four_side_pocket_capture_stays_tiny_and_noncanonical() {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let exact_argument_clause = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor + 1)),
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+            ))),
+        );
+        let claim_clause_two_variants = [
+            (
+                "claim_flat_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                    ),
+                ),
+            ),
+            (
+                "claim_sharp_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+            ),
+        ];
+        let mut capture_counts = BTreeMap::<&'static str, usize>::new();
+        let mut exact_terminal_profiles =
+            BTreeMap::<&'static str, BTreeSet<(u16, Rational)>>::new();
+        let mut forced_admitted_counts = BTreeMap::<&'static str, usize>::new();
+        let mut forced_bar_clearing_counts = BTreeMap::<&'static str, usize>::new();
+        let mut forced_winner_counts = BTreeMap::<&'static str, (usize, usize, usize)>::new();
+
+        for work_item in &surface.pruned_terminal_prefixes {
+            if work_item.prefix_telescope.clauses[3] != exact_argument_clause {
+                continue;
+            }
+            let label = claim_clause_two_variants
+                .iter()
+                .find_map(|(label, clause)| {
+                    (*clause == work_item.prefix_telescope.clauses[2]).then_some(*label)
+                })
+                .expect("exact-argument side-pocket capture should stay restricted to the two claim clause-2 variants");
+            *capture_counts.entry(label).or_insert(0) += 1;
+
+            let mut recovered = work_item.prefix_telescope.clone();
+            recovered.clauses.push(reference_terminal.clone());
+            let admissibility_decision = assess_strict_admissibility(
+                surface.step_index,
+                &surface.library,
+                &recovered,
+                surface.admissibility,
+            );
+            if admissibility_decision.is_admitted() {
+                let exact_nu = u16::try_from(
+                    structural_nu(&recovered, &surface.library, &surface.nu_history).total,
+                )
+                .expect("nu exceeded u16");
+                let bit_kappa_used =
+                    u16::try_from(pen_core::encode::telescope_bit_cost(&recovered))
+                        .expect("bit cost exceeded u16");
+                let clause_kappa_used =
+                    u16::try_from(recovered.kappa()).expect("kappa exceeded u16");
+                let accept_rank = super::acceptance_rank_for_telescope(
+                    surface.objective_bar,
+                    &recovered,
+                    exact_nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
+                )
+                .expect("the exact-argument side pocket should still clear the bar under exact-terminal-only local recovery");
+                exact_terminal_profiles
+                    .entry(label)
+                    .or_default()
+                    .insert((exact_nu, accept_rank.overshoot));
+            }
+
+            let connectivity_summary =
+                ConnectivitySummary::from_telescope(&surface.library, &work_item.prefix_telescope);
+            let mut forced_ranks = Vec::new();
+            for clause in work_item.next_clauses(&surface.clause_catalog) {
+                let decision =
+                    connectivity_summary.terminal_decision(&surface.library, clause, true);
+                if !matches!(decision, ConnectivityTerminalDecision::KeepWithoutFallback) {
+                    continue;
+                }
+
+                let mut telescope = work_item.prefix_telescope.clone();
+                telescope.clauses.push(clause.clone());
+                let admissibility_decision = assess_strict_admissibility(
+                    surface.step_index,
+                    &surface.library,
+                    &telescope,
+                    surface.admissibility,
+                );
+                if !admissibility_decision.is_admitted() {
+                    continue;
+                }
+                *forced_admitted_counts.entry(label).or_insert(0) += 1;
+
+                let exact_nu = u16::try_from(
+                    structural_nu(&telescope, &surface.library, &surface.nu_history).total,
+                )
+                .expect("nu exceeded u16");
+                let bit_kappa_used =
+                    u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                        .expect("bit cost exceeded u16");
+                let clause_kappa_used =
+                    u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                let Some(accept_rank) = super::acceptance_rank_for_telescope(
+                    surface.objective_bar,
+                    &telescope,
+                    exact_nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
+                ) else {
+                    continue;
+                };
+                *forced_bar_clearing_counts.entry(label).or_insert(0) += 1;
+                forced_ranks.push((clause.clone(), accept_rank));
+            }
+
+            if let Some((best_clause, _)) = forced_ranks
+                .iter()
+                .min_by(|left, right| left.1.cmp(&right.1))
+            {
+                let winners = forced_winner_counts
+                    .entry(label)
+                    .or_insert((0usize, 0usize, 0usize));
+                if *best_clause == reference_terminal {
+                    winners.0 += 1;
+                } else if *best_clause == next_lift_terminal {
+                    winners.1 += 1;
+                } else if *best_clause == eventual_lift_terminal {
+                    winners.2 += 1;
+                }
+            }
+        }
+
+        assert_eq!(
+            capture_counts,
+            [
+                ("claim_flat_domain", 6_usize),
+                ("claim_sharp_codomain", 6_usize)
+            ]
+            .into_iter()
+            .collect(),
+            "the new clause-4 side-pocket reland should stay tiny on the captured surface rather than reopening the broader clause-2/3 family"
+        );
+        assert_eq!(
+            exact_terminal_profiles,
+            [
+                (
+                    "claim_flat_domain",
+                    [
+                        (89_u16, Rational::new(78711, 21112)),
+                        (103_u16, Rational::new(115657, 21112)),
+                    ]
+                    .into_iter()
+                    .collect()
+                ),
+                (
+                    "claim_sharp_codomain",
+                    [
+                        (89_u16, Rational::new(78711, 21112)),
+                        (103_u16, Rational::new(115657, 21112)),
+                    ]
+                    .into_iter()
+                    .collect()
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "the reopened clause-4 side pocket should still stay noncanonical under exact-terminal recovery: it only produces the old unsafe 89/8 rival plus the canonical-primary 103/8 tie-clean pocket"
+        );
+        assert_eq!(
+            forced_admitted_counts,
+            [
+                ("claim_flat_domain", 18_usize),
+                ("claim_sharp_codomain", 18_usize)
+            ]
+            .into_iter()
+            .collect()
+        );
+        assert_eq!(
+            forced_bar_clearing_counts,
+            [
+                ("claim_flat_domain", 18_usize),
+                ("claim_sharp_codomain", 18_usize)
+            ]
+            .into_iter()
+            .collect()
+        );
+        assert_eq!(
+            forced_winner_counts,
+            [
+                ("claim_flat_domain", (0_usize, 3_usize, 3_usize)),
+                ("claim_sharp_codomain", (0_usize, 2_usize, 4_usize)),
+            ]
+            .into_iter()
+            .collect(),
+            "even the tiny reopened clause-4 side pocket should still route only to non-reference terminal winners under forced reanchor"
         );
     }
 
@@ -17513,7 +17904,7 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(13, 46, 7, 2320), (14, 62, 9, 12027), (15, 103, 8, 3972)],
+            vec![(13, 46, 7, 2320), (14, 62, 9, 12027), (15, 103, 8, 4004)],
             "the repaired step-12 tie set should now collapse onto the parity-preserving widened step-13 surface while restoring the canonical step-15 continuation"
         );
         let alternate_candidate = tied_candidates
@@ -17762,7 +18153,7 @@ mod tests {
                 accepted_step_fourteen_continuation.2,
                 accepted_step_fourteen_continuation.3,
             ),
-            (103, 8, 3972),
+            (103, 8, 4004),
             "live claim step-14 acceptance should now prefer the same-primary survivor that restores the broadened canonical step-15 continuation"
         );
         assert!(
@@ -17790,7 +18181,7 @@ mod tests {
         let (step_fifteen, step_fifteen_catalog, step_fifteen_roots) =
             inspect_late_step(15, &library, &history);
         assert_eq!(step_fifteen_catalog.raw_catalog_telescope_count, Some(6561));
-        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 3972);
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4004);
         assert_eq!(
             step_fifteen.claim_root_seeding,
             Some(ClaimRootSeedingDiagnostics {
@@ -17804,12 +18195,12 @@ mod tests {
             step_fifteen_roots.claim_root_seeding,
             step_fifteen.claim_root_seeding
         );
-        assert_eq!(step_fifteen.incremental_partial_prefix_bound_prunes, 468);
+        assert_eq!(step_fifteen.incremental_partial_prefix_bound_prunes, 472);
         assert_eq!(
             step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
-            468
+            472
         );
-        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 242);
+        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 244);
         assert!(
             step_fifteen.demo_bucket_stats.iter().any(|bucket| {
                 bucket.stats.generated_terminal_candidates == 0
@@ -17823,12 +18214,12 @@ mod tests {
         );
         assert!(
             step_fifteen.demo_bucket_stats.iter().any(|bucket| {
-                bucket.stats.generated_terminal_candidates == 2190
-                    && bucket.stats.admissible_terminal_candidates == 244
-                    && bucket.stats.exact_screened_terminal_candidates == 244
-                    && bucket.stats.pruned_terminal_candidates == 242
+                bucket.stats.generated_terminal_candidates == 2208
+                    && bucket.stats.admissible_terminal_candidates == 246
+                    && bucket.stats.exact_screened_terminal_candidates == 246
+                    && bucket.stats.pruned_terminal_candidates == 244
             }),
-            "step 15 should now widen the surviving temporal terminal cluster again after the isolated anchor-11 exact-argument repair while keeping the canonical continuation"
+            "step 15 should now widen the surviving temporal terminal cluster again after the clause-4 side-pocket repair while keeping the canonical continuation"
         );
     }
 
@@ -17866,10 +18257,10 @@ mod tests {
                     "k8:structural_generic:temporal_operator:library_backed:small_cluster"
                         .to_string(),
                     DemoBucketStats {
-                        generated_terminal_candidates: 2190,
-                        admissible_terminal_candidates: 244,
-                        exact_screened_terminal_candidates: 244,
-                        pruned_terminal_candidates: 242,
+                        generated_terminal_candidates: 2208,
+                        admissible_terminal_candidates: 246,
+                        exact_screened_terminal_candidates: 246,
+                        pruned_terminal_candidates: 244,
                         fully_scored_terminal_candidates: 0,
                         best_overshoot: None,
                     },
@@ -17883,20 +18274,19 @@ mod tests {
 
     #[test]
     fn current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning()
-    {
+     {
         let summary = current_claim_step_fifteen_incumbent_prune_summary();
-        assert_eq!(summary.capture_count, 242);
+        assert_eq!(summary.capture_count, 244);
         assert_eq!(
             summary.phase_counts,
-            [("summary", 242_usize)].into_iter().collect(),
+            [("summary", 244_usize)].into_iter().collect(),
             "the remaining step-15 small-cluster pressure should all still be pruned during summary-stage exact screening rather than later proof-close materialization"
         );
         assert_eq!(
             summary.bucket_totals,
             [(
-                "k8:structural_generic:temporal_operator:library_backed:small_cluster"
-                    .to_string(),
-                242_usize,
+                "k8:structural_generic:temporal_operator:library_backed:small_cluster".to_string(),
+                244_usize,
             )]
             .into_iter()
             .collect(),
@@ -17904,7 +18294,7 @@ mod tests {
         );
         assert_eq!(
             summary.primary_profiles,
-            [((Rational::new(115657, 21112), 8_u16, 103_u16), 242_usize)]
+            [((Rational::new(115657, 21112), 8_u16, 103_u16), 244_usize)]
                 .into_iter()
                 .collect(),
             "every remaining step-15 incumbent-pruned small-cluster candidate should stay in the same primary 103/8 tier as the canonical winner"
@@ -17914,7 +18304,7 @@ mod tests {
             [
                 (Some(0_usize), 162_usize),
                 (Some(1), 54),
-                (Some(2), 18),
+                (Some(2), 20),
                 (Some(4), 6),
                 (Some(5), 2),
             ]
@@ -17927,7 +18317,7 @@ mod tests {
             [
                 (236_u16, 5_usize),
                 (238, 4),
-                (243, 9),
+                (243, 11),
                 (245, 17),
                 (247, 6),
                 (250, 7),
@@ -18407,7 +18797,7 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(14, 62, 9, 12027), (15, 103, 8, 3972)],
+            vec![(14, 62, 9, 12027), (15, 103, 8, 4004)],
             "the position-0/4/5/6 widening should keep the guarded step-14 and step-15 winner profiles even while step-13 parity stays open"
         );
         assert_eq!(

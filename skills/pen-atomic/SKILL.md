@@ -62,35 +62,44 @@ Treat these as current repo truths:
   clause-`2` variants only, keeps the lifted anchor-`11` neighbors fenced,
   keeps clause `6` as the local safety boundary, and lifts the stored
   canonical step `15` read from `DCT 103 / 8 / 1794` to
-  `DCT 103 / 8 / 3972`; the remaining stored step-`15` miss is now the
-  residual `468` partial-prefix bar / `242` incumbent-dominance surface on
-  top of that repaired chain; a new executable step-`15` survivor-bucket
-  regression now freezes that final exact-screened split as one
+  `DCT 103 / 8 / 3972`; the remaining stored step-`15` miss on canonical
+  `v11` is still the residual `468` partial-prefix bar / `242`
+  incumbent-dominance surface on top of that repaired chain, but a newer
+  local post-`v11` clause-`4` side-pocket repair now reopens only the
+  `demo_sharp_codomain` clause-`4` option on the exact anchor-`11`
+  exact-argument pocket and counts it as historical reanchor only there,
+  lifting the current local guardrail surface again to
+  `DCT 103 / 8 / 4004`; the current executable step-`15` survivor-bucket
+  regression now freezes that latest exact-screened split as one
   library-backed temporal-operator `small_cluster` bucket at
-  `2190` generated / `244` admitted / `244` exact-screened / `242` pruned
+  `2208` generated / `246` admitted / `246` exact-screened / `244` pruned
   plus the isolated non-winning `single` pocket at overshoot
   `115657 / 21112`; a newer executable
   `current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning`
-  regression now pins that all `242` remaining `small_cluster` prunes happen
+  regression now pins that all `244` remaining `small_cluster` prunes happen
   during summary-stage exact screening, all stay on the same-primary
   `103 / 8` / `115657 / 21112` tier, and differ only by higher bit cost
   `236..290` across first mismatches at clause positions `0`, `1`, `2`, `4`,
-  and `5`, so the next repair stays on that narrow summary-stage
+  and `5` with counts `162 / 54 / 20 / 6 / 2`, so the next repair stays on
+  that narrow summary-stage
   small-cluster incumbent surface rather than reopening the single pocket or
   proof-close ordering first; a newer
   `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
   regression now also proves that omitted demo-only side variants at clause
   positions `0`, `1`, `4`, and `5` are already structurally connected,
   locally admissible, same-primary `103 / 8` non-winners around the live
-  anchor-`11` exact-argument pocket, while a reverted raw position-`0` reland
-  that lifted local step `15` only to `4285` also reopened the repaired
-  clause-`0` zero-admitted capture, so the next landed repair must isolate one
-  of those side openings onto the current `small_cluster` path instead of
-  broadening the raw position-`0` temporal-shell catalog; follow-up isolated
-  clause-`4` and clause-`5` reland probes were also reverted after they only
-  lifted local step `15` to `3980` or `3974` while still reopening the
-  captured clause-`2` / clause-`3` surface, so raw later-side next-clause
-  injection is no longer the immediate repair path either; user-facing wording stays at
+  anchor-`11` exact-argument pocket, with the clause-`4`
+  `demo_sharp_codomain` variant now regaining historical reanchor only on
+  that exact side pocket while the clause-`0`, clause-`1`, and clause-`5`
+  variants stay outside historical reanchor there; a reverted raw
+  position-`0` reland that lifted local step `15` only to `4285` also
+  reopened the repaired clause-`0` zero-admitted capture, and the older raw
+  clause-`4` / clause-`5` probes only reached `3980` or `3974` while
+  reopening the captured clause-`2` / clause-`3` surface, so the next landed
+  repair should now build on the fenced `4004` local surface via
+  clause-`5`-side qualifier / reanchor evidence or summary-stage retention
+  rather than broadening raw position `0` or relanding another broad
+  clause-`4` injection; user-facing wording stays at
   `bounded live recovery` until stored breadth and certification pass
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
@@ -410,15 +419,18 @@ Focus on:
 - treating the stored step-`13` repair as the current late-step truth:
   the canonical repaired branch now stays at
   `[5,1,3,3,5,3,2]` / `1350` / `2320` with the guarded accepted hash and the
-  canonical `62 / 9 / 12027` continuation and stored canonical step `15` now
-  stays `DCT 103 / 8 / 3972`
+  canonical `62 / 9 / 12027` continuation; stored canonical step `15` still
+  stays `DCT 103 / 8 / 3972`, while the latest local post-`v11` guardrail
+  surface now stays `DCT 103 / 8 / 4004`
 - starting from clean-tree `v11` as the canonical stored bundle, but treating
   the next operational move as diagnosis / repair on the residual stored
-  step-`15` `3972 / 5000` gap rather than another rerun setup pass
+  step-`15` `3972 / 5000` gap rather than another rerun setup pass, while
+  keeping the newer local `4004` surface explicit as the guardrail that must
+  not regress
 - treating the remaining step-`15` `small_cluster` incumbent surface as a
   summary-stage same-primary `103 / 8` bit-cost spread, not as a proof-close
   or isolated-single-pocket problem:
-  the current frozen mismatch counts are `162 / 54 / 18 / 6 / 2` at clause
+  the current frozen mismatch counts are `162 / 54 / 20 / 6 / 2` at clause
   positions `0 / 1 / 2 / 4 / 5`
 - moving admissibility, mutation, scheduling, and certification toward
   family-agnostic structural evidence
@@ -529,14 +541,16 @@ Reject designs that:
   rerun showed a retained-prefix plateau inside step `4`; the current
   canonical stored bundle is clean-tree completed `v11`, breadth still fails
   honestly at step `1` and step `15`, but stored step `15` has now lifted to
-  `3972 / 5000`, stored step `13` is re-earned, and the guarded local
-  step-`11` breadth repair plus the narrow step-`12` selector repair are now
-  both re-earned on stored evidence.
+  `3972 / 5000`, stored step `13` is re-earned, the latest local post-`v11`
+  guardrail surface now lifts step `15` further to `4004` via the narrow
+  clause-`4` side-pocket reland, and the guarded local step-`11` breadth
+  repair plus the narrow step-`12` selector repair are now both re-earned on
+  stored evidence.
 - The next operational claim-lane work should focus on clean canonical-bundle
-  diagnosis at stored step `15`, while keeping step `1` explicit and stored
-  step `13` frozen as a hit, rather than on reopening another local
-  step-`11` theory slice, another runtime-only step-`4`
-  micro-optimization, another rerun first, or new step-`13`
-  band/reanchor widening.
+  diagnosis at stored step `15`, while keeping step `1` explicit, stored
+  step `13` frozen as a hit, and the newer `4004` local guardrail surface
+  fenced, rather than on reopening another local step-`11` theory slice,
+  another runtime-only step-`4` micro-optimization, another rerun first, or
+  new step-`13` band/reanchor widening.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
   the track-specific references you actually need.
