@@ -90,6 +90,22 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     terminal recovered profiles limited to the unsafe `89 / 8` rival plus the
     canonical-primary `103 / 8` tie-clean pocket, and forced reanchor winners
     there still non-reference terminal variants only
+- A newer local step-`15` clause-`5` side-pocket repair now lands on top of
+  that clause-`4` pocket:
+  - the `demo_sharp_domain` clause-`5` opening is now relanded only once the
+    exact anchor-`11` clause-`4` side pocket is already present, and it now
+    counts as historical reanchor only on that doubly fenced pocket
+  - the repaired local late chain still accepts `DCT 103 / 8`, and live
+    generated prefixes now lift from `4004` to `4030`
+  - the remaining local gap to the late floor is now `970`, with
+    step-`15` partial-prefix bar failures still at `472`,
+    incumbent-dominance prunes now at `246`, and
+    legality/connectivity exact rejections still at `0`
+  - the local surviving temporal terminal cluster now widens again to
+    `2226` generated / `248` admitted / `248` exact-screened / `246` pruned
+  - the captured zero-admitted surface still stays tightly localized at
+    `1956` families / `5868` connected-but-unqualified terminal options, so
+    the clause-`2` / clause-`3` capture remains fenced
 - A new executable step-`15` survivor-bucket regression now freezes that
   post-repair split more tightly:
   - exactly two
@@ -98,7 +114,7 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - the isolated `single` bucket carries one fully scored non-winning pocket
     at overshoot `115657 / 21112`
   - the remaining repair target is the `small_cluster` bucket at
-    `2208` generated / `246` admitted / `246` exact-screened / `244` pruned
+    `2226` generated / `248` admitted / `248` exact-screened / `246` pruned
 - A newer executable omitted-side-variant regression now sharpens that same
   `small_cluster` target without landing another widening yet:
   - the omitted demo-only temporal-shell side variants at clause positions
@@ -114,9 +130,10 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     step-`15` generated surface to `4285`, but it also reopened the repaired
     clause-`0` zero-admitted capture to `2835` families / `891`
     reanchor-prefix misses, so that broad catalog reland was reverted
-  - the next landed repair should therefore isolate one of those omitted side
-    openings onto the existing anchor-`11` `small_cluster` path instead of
-    broadening the raw position-`0` temporal-shell catalog first
+  - that guidance is now partly consumed:
+    the clause-`5` `demo_sharp_domain` opening has since been isolated onto
+    the existing clause-`4` anchor-`11` side pocket, while the raw
+    position-`0` temporal-shell catalog still stays out
 - The older raw isolated late-side reland probes are now bounded more
   tightly:
   - a clause-`4`-only demo-sharp-codomain opening, gated on canonical clauses
@@ -172,12 +189,12 @@ The highest-value work is:
 2. keep the stored step-`13` hit, the new `v11` stored diagnosis, and step
    `1` explicit on the checklist
 3. use the `v11` certificate and `step-15-live.ndjson` to land the next
-   parity-preserving local step-`15` repair against the current post-clause-`4`
-   `472`-bar / `244`-incumbent surface, keeping the new `4004` guardrail
+   parity-preserving local step-`15` repair against the current post-clause-`5`
+   `472`-bar / `246`-incumbent surface, keeping the new `4030` guardrail
    stable, treating the raw position-`0` probe as the explicit "do not reland
-   this globally" boundary, and treating clause `4` as already consumed by a
-   fenced tiny side pocket so the next gain comes from clause-`5`-side
-   qualifier / reanchor evidence or summary-stage retention instead
+   this globally" boundary, and treating clause `4` plus the local
+   clause-`5` `demo_sharp_domain` opening as already consumed by a fenced tiny
+   side pocket so the next gain comes from summary-stage retention instead
 4. launch the next clean full-profile rerun only after that next local repair
    is regression-backed
 5. refresh compare / benchmark / certification on the next stored bundle

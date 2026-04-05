@@ -209,6 +209,21 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     terminal recovered profiles limited to the unsafe `89 / 8` rival plus the
     canonical-primary `103 / 8` tie-clean pocket, and forced reanchor winners
     there still non-reference terminal variants only
+- a newer local step-`15` clause-`5` side-pocket repair now lands on top of
+  that clause-`4` pocket:
+  - the `demo_sharp_domain` clause-`5` opening is now relanded only once the
+    exact anchor-`11` clause-`4` side pocket is already present, and it now
+    counts as historical reanchor only on that doubly fenced pocket
+  - the repaired local late chain still accepts `DCT 103 / 8`, and live
+    generated prefixes now lift from `4004` to `4030`
+  - the remaining local pressure is now `472` partial-prefix bar failures plus
+    `246` incumbent-dominance prunes, with legality/connectivity exact
+    rejection still at `0`
+  - the local surviving temporal terminal cluster now widens again to
+    `2226` generated / `248` admitted / `248` exact-screened / `246` pruned
+  - the captured zero-admitted surface still stays tightly localized at
+    `1956` families / `5868` connected-but-unqualified terminal options, so
+    the clause-`2` / clause-`3` capture remains fenced
 - a new local step-`15` survivor-bucket regression now freezes that
   exact-screened survivor split more tightly:
   - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
@@ -218,14 +233,14 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - the isolated `single` bucket still carries just one fully scored
     non-winning pocket with overshoot `115657 / 21112`
   - the remaining exact-screened pressure still stays concentrated in the
-    `small_cluster` bucket with `2208` generated / `246` admitted /
-    `246` exact-screened / `244` pruned
+    `small_cluster` bucket with `2226` generated / `248` admitted /
+    `248` exact-screened / `246` pruned
   - the accepted canonical step-`15` winner still remains the only retained
     candidate there and keeps bit cost `229`
 - a new local step-`15` small-cluster incumbent-surface regression now
   freezes that remaining pressure more tightly too:
   - `current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning`
-    now pins that all `244` remaining `small_cluster` prunes happen during
+    now pins that all `246` remaining `small_cluster` prunes happen during
     summary-stage exact screening rather than later proof-close materialization
   - every one of those remaining pruned candidates still stays on the same
     primary `103 / 8` profile with overshoot `115657 / 21112`
@@ -233,7 +248,7 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     from `236` through `290`, above the canonical winner's `229`
   - the earliest first-mismatch positions across that still-pruned surface are
     now frozen at clause positions `0`, `1`, `2`, `4`, and `5` with counts
-    `162`, `54`, `20`, `6`, and `2`
+    `162`, `54`, `22`, `6`, and `2`
 - a new local omitted-side-variant regression now sharpens the next safe move
   on that same repaired anchor-`11` pocket without landing another widening
   yet:
@@ -251,9 +266,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     step-`15` generated surface to `4285`, but it also reopened the repaired
     clause-`0` zero-admitted capture to `2835` families / `891`
     reanchor-prefix misses, so that broad catalog reland was reverted
-  - the next landed repair should therefore isolate one of those omitted side
-    openings onto the existing anchor-`11` `small_cluster` path instead of
-    broadening the raw position-`0` temporal-shell catalog first
+  - that guidance is now partly consumed:
+    the clause-`5` `demo_sharp_domain` opening has since been isolated onto
+    the existing clause-`4` anchor-`11` side pocket, while the raw
+    position-`0` temporal-shell catalog still stays out
 - the older raw isolated late-side reland probes are now bounded more
   tightly:
   - a clause-`4`-only demo-sharp-codomain opening, gated on canonical clauses
@@ -288,7 +304,7 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   stored step `13` is already closed and the anchor-`11` step-`15` repair is
   already consumed on canonical `v11`, so the next move is the next local
   step-`15` diagnosis / repair on that residual stored `3972 / 5000` surface
-  while keeping the newer local `4004` guardrail surface fenced
+  while keeping the newer local `4030` guardrail surface fenced
 - the canonical repaired late chain must stay frozen while breadth is
   re-earned:
   - step `12` should keep the guarded `34 / 6` continuation
@@ -322,18 +338,17 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    first, and do not spend another cycle on rerun setup or step-`13` theory
    before the next parity-preserving local repair is regression-backed; keep
    the isolated `single` survivor bucket fenced while the next repair works
-   against the remaining local `small_cluster` `244`-incumbent surface on top
-   of the new `4004` guardrail, now pinned more tightly as a summary-stage
+   against the remaining local `small_cluster` `246`-incumbent surface on top
+   of the new `4030` guardrail, now pinned more tightly as a summary-stage
    same-primary `103 / 8` bit-cost spread with first mismatches at clause
    positions `0`, `1`, `2`, `4`, and `5`; the newer clause-`4`
-   `demo_sharp_codomain` reopening is now already consumed narrowly and must
+   `demo_sharp_codomain` reopening plus the clause-`5`
+   `demo_sharp_domain` reopening are now already consumed narrowly and must
    stay fenced as a tiny noncanonical pocket, the reverted raw position-`0`
    reland still proves that broadening that side globally reopens the old
-   captured clause-`0` surface, and the older raw clause-`5` probe still
-   proves that late-side next-clause injection alone misses the real target,
-   so the next landed repair should come from clause-`5` qualifier /
-   reanchor evidence or summary-stage retention rather than another raw
-   clause-`4`, raw clause-`5`, or raw position-`0` reland.
+   captured clause-`0` surface, and the next landed repair should therefore
+   come from summary-stage retention rather than another raw clause-`4`, raw
+   clause-`5`, or raw position-`0` reland.
 4. Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they still prove local breadth can be reopened unsafely, but they are not
    the landed repair.
