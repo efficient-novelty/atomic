@@ -10654,6 +10654,47 @@ mod tests {
         summary
     }
 
+    fn current_claim_step_fifteen_proof_close_incumbent_prune_summary()
+    -> LateStepIncumbentPruneSummary {
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+
+        super::start_incumbent_pruned_terminal_group_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let captures = super::finish_incumbent_pruned_terminal_group_capture();
+
+        let mut summary = LateStepIncumbentPruneSummary {
+            capture_count: captures.len(),
+            ..LateStepIncumbentPruneSummary::default()
+        };
+        for capture in captures {
+            *summary.phase_counts.entry(capture.phase).or_insert(0) += 1;
+            *summary
+                .bucket_totals
+                .entry(capture.bucket_label)
+                .or_insert(0) += capture.pruned_candidate_count;
+            let mismatch = capture
+                .prefix_telescope
+                .clauses
+                .iter()
+                .zip(reference_prefix.clauses.iter())
+                .position(|(left, right)| left != right);
+            *summary
+                .mismatch_position_counts
+                .entry(mismatch)
+                .or_insert(0) += capture.pruned_candidate_count;
+            if let Some(rank) = capture.best_accept_rank {
+                *summary.bit_kappa_counts.entry(rank.bit_kappa).or_insert(0) +=
+                    capture.pruned_candidate_count;
+                *summary
+                    .primary_profiles
+                    .entry((rank.overshoot, rank.clause_kappa, rank.descending_nu.0))
+                    .or_insert(0) += capture.pruned_candidate_count;
+            }
+        }
+
+        summary
+    }
+
     fn claim_step_open_from_prefix(
         prefix: &[Telescope],
         step_index: u32,
@@ -18466,7 +18507,7 @@ mod tests {
 
     #[test]
     fn current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain()
-    {
+     {
         let summary = current_claim_step_fifteen_incumbent_prune_summary();
         let step_fifteen =
             profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
@@ -18488,14 +18529,11 @@ mod tests {
             "no summary-stage incumbent captures should remain once the small-cluster relief is scoped onto the canonical step-15 bucket"
         );
         assert_eq!(
-            step_fifteen.exact_screen_reasons.incumbent_dominance,
-            3,
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
             "only three residual incumbent-dominance prunes should remain after the small-cluster relief lands"
         );
         assert_eq!(
-            bucket_stats.get(
-                "k8:structural_generic:temporal_operator:library_backed:single"
-            ),
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
             Some(&DemoBucketStats {
                 generated_terminal_candidates: 0,
                 admissible_terminal_candidates: 0,
@@ -18507,9 +18545,8 @@ mod tests {
             "the isolated single pocket should stay fenced as one fully scored non-winner even after the small-cluster relief"
         );
         assert_eq!(
-            bucket_stats.get(
-                "k8:structural_generic:temporal_operator:library_backed:small_cluster"
-            ),
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
             Some(&DemoBucketStats {
                 generated_terminal_candidates: 2964,
                 admissible_terminal_candidates: 494,
@@ -18519,6 +18556,48 @@ mod tests {
                 best_overshoot: None,
             }),
             "the temporal small-cluster should now survive exact screening intact instead of dying under summary-stage incumbent pruning"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families()
+     {
+        let summary = current_claim_step_fifteen_proof_close_incumbent_prune_summary();
+
+        assert_eq!(summary.capture_count, 3);
+        assert_eq!(
+            summary.phase_counts,
+            [("proof_close_group", 3_usize)].into_iter().collect(),
+            "the remaining step-15 incumbent pressure should now live only in proof-close group pruning, not in earlier summary-stage capture"
+        );
+        assert_eq!(
+            summary.bucket_totals,
+            [(
+                "k8:structural_generic:temporal_operator:library_backed:single".to_string(),
+                3_usize,
+            )]
+            .into_iter()
+            .collect(),
+            "the residual proof-close pressure should stay isolated to the fenced temporal single bucket"
+        );
+        assert_eq!(
+            summary.bit_kappa_counts,
+            [(236_u16, 3_usize)].into_iter().collect(),
+            "the three residual proof-close groups should all stay on the same 236-bit canonical-primary profile"
+        );
+        assert_eq!(
+            summary.mismatch_position_counts,
+            [(Some(0_usize), 1_usize), (Some(2), 1), (Some(5), 1)]
+                .into_iter()
+                .collect(),
+            "the residual single-bucket pressure should stay localized to exactly three first-mismatch families at clause positions 0, 2, and 5"
+        );
+        assert_eq!(
+            summary.primary_profiles,
+            [((Rational::new(115657, 21112), 8_u16, 103_u16,), 3_usize)]
+                .into_iter()
+                .collect(),
+            "every residual proof-close group should still be a same-primary 103/8 non-winner tied on overshoot and differing only on later structural tiebreaks"
         );
     }
 

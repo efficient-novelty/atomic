@@ -161,6 +161,17 @@ gate.
     `1956` families / `5868` connected-but-unqualified terminal options, so
     the landed relief changes only the incumbent screen and not the broader
     clause-`2` / clause-`3` capture boundary
+- A newer local step-`15` proof-close incumbent regression now freezes that
+  residual fenced pressure more tightly:
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
+    now pins that the remaining `3` incumbent-dominance prunes are all
+    `proof_close_group` captures in
+    `k8:structural_generic:temporal_operator:library_backed:single`
+  - all `3` still sit on the same-primary `103 / 8` non-winning profile with
+    overshoot `115657 / 21112` and bit cost `236`
+  - those fenced groups now localize to exactly three first-mismatch prefix
+    families at clause positions `0`, `2`, and `5`, so the next local repair
+    can stay narrower than reopening the whole pocket
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -289,6 +300,9 @@ gate.
   - all current `current_claim_step_fifteen_*` engine regressions are green
   - the new
     `current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain`
+    regression is green
+  - the new
+    `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
     regression is green
   - the new
     `connectivity_accepts_clause_four_demo_sharp_codomain_only_on_the_exact_anchor_eleven_side_pocket`
@@ -1291,11 +1305,17 @@ gate.
    prunes, and the still-tight captured surface at
    `1956` families / `5868` connected-but-unqualified terminal options. The
    clause-`4` / clause-`5` pocket still stays doubly fenced and noncanonical,
-   so the next move is not another rerun setup pass, not another raw
+   and
+   `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
+   now pins those remaining prunes to three `proof_close_group`
+   same-primary `103 / 8` families first diverging at clause positions `0`,
+   `2`, and `5`. The next move is therefore not another rerun setup pass, not another raw
    clause-`4` / raw clause-`5` / raw global position-`0` reland, and not a
    blanket same-primary-retention reland; it should be the next
    parity-preserving step-`15` repair against those residual `3`
-   single-bucket incumbent prunes on top of this `4030` surface.
+   single-bucket incumbent prunes on top of this `4030` surface, starting
+   from those three fenced prefix families instead of reopening the full
+   side-pocket neighborhood.
 4. Launch the next clean full-profile claim rerun only after that next local
    step-`15` repair is regression-backed and parity-clean, then refresh
    compare / benchmark / certification immediately afterwards and keep

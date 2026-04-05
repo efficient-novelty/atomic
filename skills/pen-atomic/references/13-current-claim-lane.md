@@ -241,6 +241,17 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     `1956` families / `5868` connected-but-unqualified terminal options, so
     the landed relief changes only the incumbent screen and not the broader
     clause-`2` / clause-`3` capture boundary
+- a newer local step-`15` proof-close incumbent regression now freezes that
+  remaining fenced pressure more tightly:
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
+    now pins that the remaining `3` incumbent-dominance prunes are all
+    `proof_close_group` captures in the fenced
+    `k8:structural_generic:temporal_operator:library_backed:single` bucket
+  - all `3` still sit on the same-primary `103 / 8` non-winning profile with
+    overshoot `115657 / 21112` and bit cost `236`
+  - those residual groups now localize to exactly three first-mismatch prefix
+    families at clause positions `0`, `2`, and `5`, so the next local repair
+    can stay narrower than reopening the whole pocket
 - the executable repaired late-path and negative-control guardrails are now
   synced to that same latest local state too:
   - `repaired_claim_step_twelve_late_path_has_scoped_step_thirteen_widening_before_proof_close`
@@ -274,6 +285,14 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - local incumbent-dominance pressure now sits at `3`
   - the isolated `single` pocket stays fenced even though the
     `small_cluster` wall is no longer dying during exact screening
+- a new local step-`15` proof-close incumbent regression now freezes that
+  remaining pressure more tightly too:
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
+    now keeps the remaining `3` prunes on `proof_close_group`
+  - those `3` still stay inside the fenced temporal `single` bucket and stay
+    same-primary `103 / 8` non-winners
+  - their first mismatches now stay localized to clause positions `0`, `2`,
+    and `5`
 - a new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -388,7 +407,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    captured clause-`0` surface, and the next landed repair should therefore
    target those residual `single`-bucket incumbent prunes rather than
    another raw clause-`4`, raw clause-`5`, raw position-`0`, or blanket
-   same-primary-retention reland.
+   same-primary-retention reland. The new proof-close incumbent freeze now
+   further localizes that next move to three same-primary `103 / 8` fenced
+   prefix families first diverging at clause positions `0`, `2`, and `5`.
 4. Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they still prove local breadth can be reopened unsafely, but they are not
    the landed repair.

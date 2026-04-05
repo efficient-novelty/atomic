@@ -93,7 +93,14 @@ Treat these as current repo truths:
   `small_cluster` incumbent wall has collapsed entirely while the isolated
   pocket stays fenced, so the next repair now targets the residual
   `single`-bucket incumbent pressure rather than reopening the old
-  small-cluster summary wall first; a newer
+  small-cluster summary wall first; a newer executable
+  `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
+  regression now pins that those remaining `3` incumbent-dominance prunes are
+  all `proof_close_group` captures in the fenced temporal `single` bucket,
+  that they stay same-primary `103 / 8` non-winners at overshoot
+  `115657 / 21112` and bit cost `236`, and that they first diverge only at
+  clause positions `0`, `2`, and `5`, so the next repair can stay narrower
+  than reopening the whole pocket; a newer
   `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
   regression now also proves that omitted demo-only side variants at clause
   positions `0`, `1`, `4`, and `5` are already structurally connected,

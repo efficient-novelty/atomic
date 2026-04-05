@@ -64,6 +64,14 @@ It lists only work that is still open.
   gone, local incumbent-dominance pressure has fallen to `3`, live generated
   prefixes still stay at `4030` with `472` partial-prefix bar failures, and
   the isolated fully scored `single` pocket stays fenced.
+- A newer local step-`15` proof-close incumbent regression now freezes that
+  remaining fenced pressure more tightly:
+  `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
+  now pins that the remaining `3` incumbent-dominance prunes are all
+  `proof_close_group` captures in the fenced temporal `single` bucket, all
+  stay same-primary `103 / 8` non-winners at overshoot `115657 / 21112` and
+  bit cost `236`, and first diverge only at clause positions `0`, `2`, and
+  `5`.
 - A new local omitted-side-variant regression now proves the next safe opening
   is narrower than a raw catalog reland:
   omitted demo-only temporal-shell side variants at clause positions `0`,
@@ -96,7 +104,9 @@ It lists only work that is still open.
   clause `4` plus the local clause-`5` `demo_sharp_domain` opening are now
   consumed as fenced local pockets, the small-cluster summary wall is already
   cleared, and the next gain now needs to target the residual `3`
-  single-bucket incumbent prunes on top of the current `4030` local surface.
+  single-bucket incumbent prunes on top of the current `4030` local surface,
+  starting from those clause-`0` / clause-`2` / clause-`5` fenced prefix
+  families rather than reopening the whole side-pocket neighborhood.
 - No broader per-step claim search-band expansion should land beyond that
   isolated anchor-`11` pocket before a new local repair proves more is
   necessary on this parity-clean stored chain.

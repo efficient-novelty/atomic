@@ -141,6 +141,15 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - local incumbent-dominance pressure is now only `3`
   - the isolated `single` pocket stays fenced even though the
     `small_cluster` wall is no longer dying during exact screening
+- A newer executable
+  `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
+  regression now freezes that remaining proof-close pressure more tightly:
+  - the remaining `3` incumbent-dominance prunes are all
+    `proof_close_group` captures in the fenced temporal `single` bucket
+  - all `3` stay same-primary `103 / 8` non-winners at overshoot
+    `115657 / 21112` with bit cost `236`
+  - those residual groups now localize to exactly three first-mismatch prefix
+    families at clause positions `0`, `2`, and `5`
 - A newer executable omitted-side-variant regression now sharpens that same
   `small_cluster` target without landing another widening yet:
   - the omitted demo-only temporal-shell side variants at clause positions
@@ -221,7 +230,10 @@ The highest-value work is:
    this globally" boundary, and treating clause `4` plus the local
    clause-`5` `demo_sharp_domain` opening as already consumed by a fenced tiny
    side pocket so the next gain now comes from the residual `single`-bucket
-   incumbent pressure rather than from the old `small_cluster` summary wall
+   incumbent pressure rather than from the old `small_cluster` summary wall;
+   the new proof-close incumbent freeze now further localizes that next move
+   to three fenced same-primary `103 / 8` prefix families first diverging at
+   clause positions `0`, `2`, and `5`
 4. launch the next clean full-profile rerun only after that next local repair
    is regression-backed
 5. refresh compare / benchmark / certification on the next stored bundle

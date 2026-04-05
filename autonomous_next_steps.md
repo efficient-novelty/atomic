@@ -133,6 +133,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next repair should therefore target that narrow residual
     `single`-bucket pressure rather than reopening proof-close ordering, the
     old `small_cluster` summary wall, or the isolated pocket itself
+- A newer local step-`15` proof-close incumbent regression now sharpens that
+  same blocker further:
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
+    now pins that the remaining `3` incumbent-dominance prunes are all
+    `proof_close_group` captures in the fenced
+    `k8:structural_generic:temporal_operator:library_backed:single` bucket
+  - all `3` stay on the same-primary `103 / 8` non-winning profile with
+    overshoot `115657 / 21112` and bit cost `236`
+  - those residual groups now localize to exactly three first-mismatch prefix
+    families at clause positions `0`, `2`, and `5`, so the next repair should
+    start from those fenced families rather than reopening the whole local
+    pocket
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -778,6 +790,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
      `current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain`
      should keep summary capture at `0`, keep local incumbent-dominance
      pressure at `3`, and keep the isolated `single` pocket fenced
+   - the residual proof-close incumbent pressure should also stay frozen:
+     `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
+     should keep the remaining `3` prunes on `proof_close_group`,
+     keep them inside the fenced `single` bucket, and keep their first
+     mismatches localized to clause positions `0`, `2`, and `5`
 5. Keep the two executable step-`13` negative-control regressions green:
    widening only operator-bundle formation positions `1` and `4` to the
    demo-like custom surface should still reopen the local floor to
@@ -828,7 +845,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
    consumed narrowly and must stay fenced as a tiny noncanonical pocket, so
    the next landed repair should now target those residual `3`
    single-bucket incumbent prunes rather than another raw clause-`4`, raw
-   clause-`5`, raw position-`0`, or blanket same-primary-relief reland.
+   clause-`5`, raw position-`0`, or blanket same-primary-relief reland. The
+   new proof-close incumbent freeze now further localizes that work to three
+   same-primary `103 / 8` fenced prefix families first diverging at clause
+   positions `0`, `2`, and `5`.
 4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
    hits so the next repair cannot silently reshuffle the canonical branch.
 5. Keep step `1 = 546 / 2144` on the checklist as the separate stored early
