@@ -19,32 +19,30 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 ## Current Strategic Position
 
-- The current canonical stored claim bundle is clean-tree completed `v9`:
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v9`
-  on repo head `67c26eca02cb5546745bdd5ca5b31468e6807f42` with release binary
-  hash `2023ea693e72403b98448ab1bece5048b739a2cb115aafcd2b1580cb941a59bf`.
+- The current canonical stored claim bundle is clean-tree completed `v10`:
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v10`
+  on repo head `6939b71063e4aec9598b293560c0c233981bc169` with release binary
+  hash `d003dd29c599ba86b7ef410b1c7849f89a0fe45d33dc42508e368f4c2a7c473a`.
 - Stored compare, certification, and benchmark outputs now exist beside that
-  `v9` run and are the current authoritative evidence surface.
-- Stored accepted-hash parity is earned on `v9` through step `15`.
+  `v10` run and are the current authoritative evidence surface.
+- Stored accepted-hash parity is earned on `v10` through step `15`.
 - Runtime, manifest completeness, fallback honesty, narrative/event
   completeness, exact-screen reason completeness, and prune-class completeness
   are all earned on stored evidence.
-- The remaining blockers are stored breadth misses on the canonical chain:
-  step `1 = 546 / 2144`, step `13 = 123 / 2200`, step `15 = 1794 / 5000`.
-- Step `13` is still the earliest remaining stored late-floor miss, but the
-  next honest local engineering dollar is now the rerun that captures the
-  landed local repair rather than another step-`13` theory pass first.
-- A new local parity-preserving step-`13` repair is now landed on the
-  repaired step-`12` chain:
-  - the local claim-open surface now widens to
+- Stored step `13` is now re-earned on the canonical chain:
+  - the stored claim-open surface now widens to
     `[5,1,3,3,5,3,2]` / raw `1350` / generated `2320`
-  - the guarded step-`13` metric shell stays accepted on that widened local
-    surface and keeps the canonical `62 / 9 / 12027 -> 103 / 8 / 1794`
-    continuation through steps `14` and `15`
-  - the widened local surface now exposes `576` exact
-    legality/connectivity rejections with a captured zero-admitted
-    exact-prune surface of `135` prefixes / `270` disconnected terminal
-    options before proof-close
+  - the guarded step-`13` metric shell stays accepted there and keeps the
+    canonical `62 / 9 / 12027 -> 103 / 8 / 1794` continuation through
+    steps `14` and `15`
+  - the stored step-`13` surface now seeds `5` roots and pays
+    `576` legality/connectivity exact rejections plus `401` heuristic drops
+    before proof-close
+- The remaining blockers are stored breadth misses on the canonical chain:
+  step `1 = 546 / 2144` and step `15 = 1794 / 5000`.
+- Step `15` is now the remaining stored late-floor miss, and the next honest
+  local engineering dollar is stored step-`15` diagnosis / repair on top of
+  `v10`, not another rerun first and not another step-`13` theory pass.
 - Two new non-landed local step-`13` probes now sharpen the safe search space:
   - widening only operator-bundle formation positions `1` and `4` to
     demo-like variants lifts the repaired local read to
@@ -73,33 +71,34 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 ## Optimization Thesis
 
-The next cycle should spend engineering time on turning that landed local
-step-`13` repair into stored evidence, not on another round of step-`13`
-theory first and not on a raw reland of any exploratory widened surface.
+The next cycle should spend engineering time on the remaining stored
+step-`15` floor while keeping step `1` explicit, not on another rerun first
+and not on another round of step-`13` theory.
 
 The highest-value work is:
 
 1. keep the current step-`11` / step-`12` / step-`13..15` local guardrails
    green on the repaired chain
-2. use stored `v9` certificate plus `step-13-live.ndjson` as the primary
+2. use stored `v10` certificate plus `step-15-live.ndjson` as the primary
    diagnosis surface
-3. keep the landed parity-preserving local step-`13` repair green
-4. launch the next full-profile stored rerun and refresh compare / benchmark /
-   certification
+3. keep the stored step-`13` hit frozen and step `1` explicit on the checklist
+4. land a parity-preserving step-`15` repair, then rerun and refresh compare /
+   benchmark / certification
 
-Treat `v9` plus its stored audit bundle as the current canonical guardrail.
+Treat `v10` plus its stored audit bundle as the current canonical guardrail.
 Keep the replay harness corpus and benchmark inputs frozen until real stored
 behavior changes.
 
 ## Decision Rules
 
 - Trust stored artifacts over terminal impressions.
-- Treat clean-tree completed `v9` as the canonical stored claim bundle until a
+- Treat clean-tree completed `v10` as the canonical stored claim bundle until a
   newer parity-and-breadth candidate exists.
 - Require targeted claim regressions plus replay-harness parity before any new
   full-profile rerun.
-- Repair the earliest remaining stored breadth miss before spending the next
-  cycle on later-step theory that does not close that miss.
+- Keep step `1` explicit as the separate early breadth blocker and repair the
+  remaining stored late-floor miss at step `15` before spending the next cycle
+  on broader late-step theory or another rerun that does not close it.
 - Prefer narrow, regression-backed fixes over broad frontier rewrites.
 - Do not reland the exploratory `[3,5,3,3,5,1,1]` or `[5,1,3,3,5,3,3]`
   step-`13` widenings directly; both still leave accepted-hash parity open.
@@ -108,40 +107,41 @@ behavior changes.
 - Keep user-facing and paper-facing wording at `bounded live recovery` until a
   passing certificate exists.
 
-## Active Phase: Stored Breadth Repair
+## Active Phase: Stored Step-`15` Breadth Repair
 
 Goal:
 
-- turn the parity-clean-but-breadth-failing `v9` lane into a rerun-ready
-  candidate by repairing the earliest stored breadth miss at step `13` while
-  preserving accepted-hash parity through step `15`
+- turn the parity-clean-but-breadth-failing `v10` lane into a rerun-ready
+  candidate by repairing the remaining stored late-floor miss at step `15`
+  while preserving accepted-hash parity through step `15` and keeping stored
+  step `13` closed
 
 Loop:
 
-1. keep the stored `v9` compare / certification / benchmark regressions green
+1. keep the stored `v10` compare / certification / benchmark regressions green
 2. keep the local step-`11` breadth and step-`12` selector guardrails green
 3. keep the current step-`13` / step-`14` / step-`15` canonical guardrails
    green until a replacement is explicitly proved
-4. use the stored certificate and late-step live checkpoints first
-5. rerun targeted claim tests plus replay parity on the landed repair
-6. launch the next clean full-profile rerun
-7. refresh compare / benchmark / certification on that new stored bundle
-8. only treat certification as newly in reach if the rerun keeps step-`15`
+4. use the stored `v10` certificate and `step-15-live.ndjson` first
+5. land a parity-preserving step-`15` repair
+6. rerun targeted claim tests plus replay parity on that repair
+7. launch the next clean full-profile rerun
+8. refresh compare / benchmark / certification on that new stored bundle
+9. only treat certification as newly in reach if the rerun keeps step-`15`
    completion while closing the remaining breadth failures
 
 Current slice order:
 
-1. hold the landed local step-`13` repair and the frozen negative controls
-   green
-2. rerun once that repair is local-green
-3. refresh stored compare / benchmark / certification
-4. revisit stored step `15` and step `1` only after the new stored bundle
-   is in hand
+1. hold the stored step-`13` hit and the frozen negative controls green
+2. diagnose stored step `15` on top of `v10`
+3. land and validate a local step-`15` repair
+4. rerun and refresh stored compare / benchmark / certification
+5. revisit stored step `1` from the new evidence bundle once step `15` moves
 
 Do not reopen first:
 
-- another fresh step-`13` widening theory pass before the landed local repair
-  is rerun
+- another fresh full-profile rerun before a local step-`15` repair is landed
+- another fresh step-`13` widening theory pass before step `15` is diagnosed
 - a `resume`-based restart of stopped `v4`
 - another runtime-only step-`4` micro-optimization slice first
 - another stored/local step-`11` rerun first
@@ -155,8 +155,8 @@ Do not reopen first:
 
 Goal:
 
-- produce one new stored full-profile bundle beyond `v9` that consumes the
-  parity-preserving breadth repair
+- produce one new stored full-profile bundle beyond `v10` that consumes the
+  remaining stored breadth repair
 
 Required output:
 

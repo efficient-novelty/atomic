@@ -9,22 +9,21 @@ It lists only work that is still open.
 
 - The claim lane still does not have a signoff-ready certified bundle.
 - The current authoritative stored evidence surface is the completed
-  `v9` full-profile run plus its compare, certification, and benchmark
+  `v10` full-profile run plus its compare, certification, and benchmark
   outputs:
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v9`.
-- Stored `v9` now passes accepted-hash parity honestly:
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v10`.
+- Stored `v10` now passes accepted-hash parity honestly:
   - trajectory and accepted hashes match guarded replay through step `15`
   - compare signoff is `ready`
   - the claim audit is `ready`
 - The transient `v7` rerun first re-earned stored step `11` but reopened
-  accepted-hash parity at step `12`; clean-tree `v9` now restores that parity
+  accepted-hash parity at step `12`; clean-tree `v10` now restores that parity
   while keeping the stored step-`11` repair.
-- Stored `v9` still fails breadth honestly:
+- Stored `v10` still fails breadth honestly:
   - early breadth still misses at step `1` (`546` versus target `2144`)
-  - late generated floors still miss at step `13` (`123` versus `2200`) and
-    step `15` (`1794` versus `5000`)
-  - late generated floors now hit at step `10`, step `11`, step `12`, and
-    step `14`
+  - late generated floors still miss only at step `15` (`1794` versus `5000`)
+  - late generated floors now hit at step `10`, step `11`, step `12`,
+    step `13`, and step `14`
 - Two newer local step-`13` widened probes are now frozen as negative
   controls only:
   `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` can reopen the local floor, but
@@ -32,21 +31,14 @@ It lists only work that is still open.
   position-`1` / position-`4` reland and the
   position-`0` / position-`4` / position-`5` / position-`6` reland are now
   frozen as executable regressions on the repaired step-`12` chain.
-- The stored `v9` certificate now also carries step-level breadth diagnosis
-  for the open misses, so step `13` / step `15` catalog widths, root seeding,
+- The stored `v10` certificate now also carries step-level breadth diagnosis
+  for the open misses, so step `1` / step `15` catalog widths, root seeding,
   exact-screen pressure, and the full stored step-open pressure signature are
   visible from the bundle itself.
 - The current canonical later surfaces are frozen on stored evidence:
-  - step `13` reports `[3,1,3,3,1,1,1]` / `27` / `123`
+  - step `13` reports `[5,1,3,3,5,3,2]` / `1350` / `2320`
   - step `14` reports `19683` / `12027`
   - step `15` preserves `DCT 103 / 8 / 1794`
-- A new local step-`13` repair is now landed but not yet stored:
-  - the repaired local canonical branch now widens step `13` to
-    `[5,1,3,3,5,3,2]` / `1350` / `2320`
-  - the guarded step-`13` hash stays accepted there and the canonical
-    step-`14` / step-`15` continuation remains unchanged
-  - that local hit still needs a fresh clean rerun before it can close the
-    stored step-`13` checklist item
 - No new per-step claim search-band expansion should land before the stored
   breadth repair proves it is necessary on this parity-clean chain.
 - Claim-policy honesty, fallback honesty, narrative/event completeness,
@@ -57,8 +49,8 @@ It lists only work that is still open.
 ## 1. Stored Claim Evidence
 
 - [ ] Restore step `1` generated raw count to exactly `2144`.
-- [ ] Re-earn the remaining generated-count floors from stored evidence:
-      step `13 >= 2200`, step `15 >= 5000`.
+- [ ] Re-earn the remaining generated-count floor from stored evidence:
+      step `15 >= 5000`.
 - [ ] Keep `full_telescopes_evaluated` within a certified moderate threshold.
 
 Done when:

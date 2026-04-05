@@ -54,10 +54,10 @@ gate.
   - `v8` restored accepted-hash parity and the stored step-`11` floor, but it
     was recorded with `dirty_tree = true`
 - The current authoritative stored full-profile bundle is
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v9`
-  on clean-tree repo head `67c26eca02cb5546745bdd5ca5b31468e6807f42` with
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v10`
+  on clean-tree repo head `6939b71063e4aec9598b293560c0c233981bc169` with
   release binary hash
-  `2023ea693e72403b98448ab1bece5048b739a2cb115aafcd2b1580cb941a59bf`.
+  `d003dd29c599ba86b7ef410b1c7849f89a0fe45d33dc42508e368f4c2a7c473a`.
 - Its authoritative `run.json` state is:
   - `status = "completed"`
   - `completed_step = 15`
@@ -66,27 +66,27 @@ gate.
   - `frontier_epoch = 12`
   - `resolved_worker_count = 8`
   - `dirty_tree = false`
-- The new `v9` bundle now stores the full claim artifact surface through
+- The new `v10` bundle now stores the full claim artifact surface through
   step `15`:
   - run manifest with complete host/build/git/binary provenance
   - step summaries through `step-15-summary.json`
   - live-checkpoint streams through `step-15-live.ndjson`
   - per-step narratives and event streams through step `15`
   - frontier and step checkpoints for the completed run
-- Stored audit outputs now also exist under that `v9` run directory:
+- Stored audit outputs now also exist under that `v10` run directory:
   - `claim-compare.txt` / `claim-compare.json`
   - `claim_certificate.txt` / `claim_certificate.json`
   - `claim_benchmark.txt` / `claim_benchmark.json`
   - the certificate now also records per-step breadth diagnosis from stored
     step summaries plus `step-XX-live.ndjson` checkpoints, so the open
-    step-`13` / step-`15` miss anatomy is queryable without another rerun
+    step-`1` / step-`15` miss anatomy is queryable without another rerun
   - that stored diagnosis now preserves the full claim-step-open pressure
     signature for failing steps too, including active widening bands,
     package flags, and claim-debt `path` / `trunc` pressure alongside the
     existing catalog, root-seeding, and exact-screen read
 - Those audits use the guarded baseline
   `runs/codex-guarded-claim-cert-v1`.
-- The clean-tree stored `v9` compare audit is ready:
+- The clean-tree stored `v10` compare audit is ready:
   - trajectory matches guarded through step `15`
   - accepted hashes match guarded through step `15`
   - replay ablation now matches reference replay on `01..15`
@@ -94,7 +94,7 @@ gate.
     step `11`, step `12`, step `13`, step `14`, and step `15`
   - admissibility diagnostics still diverge at step `9..15`
   - late-step competition still diverges at step `10..15`
-- The clean-tree stored `v9` certification result is honest and narrower:
+- The clean-tree stored `v10` certification result is honest and narrower:
   - status `= "attention"`
   - failing checks:
     - `early_breadth`
@@ -109,10 +109,9 @@ gate.
     - `prune_class_completeness`
     - `manifest_completeness`
   - the stored certificate now makes the current miss split explicit:
-    - step `13` still opens only `[3,1,3,3,1,1,1]` / `27`, seeds `3` roots,
-      shows `0` stored exact-screen losses there, and now prints the
-      `claim_generic` `kappa 7..7` operator-bundle opening with active
-      widening bands `7,8`
+    - step `1` still opens catalog `648` with widths `[18, 36]`, roots
+      `18` seen / `16` enqueued, and `435`
+      legality/connectivity exact rejections before proof-close
     - step `15` still opens `6561`, seeds `3` roots, and then loses stored
       breadth under `468` partial-prefix bar failures plus
       `80` incumbent-dominance prunes, and now prints the
@@ -123,39 +122,39 @@ gate.
   - step `10`: `1428` versus target `500` (`hit`)
   - step `11`: `1338` versus target `800` (`hit`)
   - step `12`: `1338` versus target `1200` (`hit`)
-  - step `13`: `123` versus target `2200` (`miss`)
+  - step `13`: `2320` versus target `2200` (`hit`)
   - step `14`: `12027` versus target `3500` (`hit`)
   - step `15`: `1794` versus target `5000` (`miss`)
 - The new benchmark bundle proves runtime and stored parity are now earned on
   the current bundle:
   - claim run count `= 1`
   - completed step-`15` count `= 1`
-  - runtime `= 2848 ms`
+  - runtime `= 3849 ms`
   - parity success count `= 1`
   - full early breadth hit count `= 0`
   - full late floor hit count `= 0`
-- The current repo head `67c26eca02cb5546745bdd5ca5b31468e6807f42`
-  has now revalidated the targeted local guardrails that frame the remaining
-  breadth repair:
+- The current repo head `6939b71063e4aec9598b293560c0c233981bc169`
+  now stores the canonical rerun and refreshed audit bundle that frame the
+  remaining breadth repair:
   - the step-`9` / step-`11` / step-`12` claim selector regressions are green
   - the repaired step-`12` same-primary selector regression is green
   - the current step-`13` / step-`14` / step-`15` guardrails are green
   - claim live-checkpoint persistence is green
   - the stored `v5` compare / certification / benchmark freeze regressions
     remain green
-- A new local parity-preserving step-`13` breadth repair now lands on top of
-  that repaired chain:
-  - on the repaired step-`12` history, claim-open now widens to
+- The parity-preserving step-`13` breadth repair is now earned on stored
+  evidence:
+  - on the canonical repaired chain, claim-open now widens to
     `[5,1,3,3,5,3,2]` / raw `1350` / generated `2320`
-  - the guarded step-`13` metric shell now stays accepted on that widened
-    local surface, with the same observed canonical continuation
+  - the guarded step-`13` metric shell now stays accepted on that stored
+    surface, with the same observed canonical continuation
     `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 1794`
-  - step-`13` root seeding now rises to `5` seen / `5` enqueued on that
-    repaired canonical branch
-  - the widened local step-`13` surface no longer loses parity in proof-close,
-    but it now records `576` exact legality/connectivity rejections before
-    proof-close with a captured zero-admitted exact-prune surface of
-    `135` prefixes / `270` disconnected terminal options
+  - step-`13` root seeding now rises to `5` seen / `5` enqueued on the
+    stored canonical branch
+  - the stored step-`13` surface now records `576`
+    legality/connectivity exact rejections before proof-close, alongside
+    `774` well-formed candidates, `8` exact-screened / retained candidates,
+    and `401` heuristic drops
   - the two frozen executable negative controls remain unchanged:
     `[3,5,3,3,5,1,1]` still reopens local breadth only on the unsafe
     `45 / 7 -> 61 / 9` path, and `[5,1,3,3,5,3,3]` still preserves guarded
@@ -636,28 +635,29 @@ gate.
 
 ## Latest Full-Profile Outcome
 
-- The clean `v9` rerun is the current canonical stored claim bundle:
-  `desktop_claim_shadow` now has one clean-start full-profile bundle from the
-  disclosed desktop that both finishes through step `15` and preserves
-  accepted-hash parity through step `15`.
+- The clean `v10` rerun is the current canonical stored claim bundle:
+  `desktop_claim_shadow` now has one newer clean-start full-profile bundle
+  from the disclosed desktop that both finishes through step `15` and
+  preserves accepted-hash parity through step `15`.
 - Its terminal summary still shows the accepted executable canon at step `15`
   / `DCT` with `nu = 103`, `kappa = 8`.
-- The old `v3` step-`14` zero-candidate opening and the old stored
-  step-`9` / step-`11` / step-`12` parity fork are no longer live stored
-  blockers:
-  - `v9` reaches step `14`, seeds roots, accepts a survivor, and advances to
+- The old `v3` step-`14` zero-candidate opening, the old stored
+  step-`9` / step-`11` / step-`12` parity fork, and the old stored
+  step-`13` floor miss are no longer live stored blockers:
+  - `v10` reaches step `14`, seeds roots, accepts a survivor, and advances to
     step `15`
   - compare now reports trajectory and accepted hashes matching guarded
     through step `15`
   - replay ablation now records `matches_reference_replay` on every step
     `01..15`
-- The transient stored reruns between `v6` and `v9` also sharpen what changed:
+- The transient stored reruns between `v6` and `v10` also sharpen what changed:
   - dirty-tree `v7` first re-earned stored step `11` but diverged at accepted
     hash parity on step `12`
   - dirty-tree `v8` restored parity and the stored step-`11` floor, but it
     stayed outside clean-tree certification because `dirty_tree = true`
-  - clean-tree `v9` is the first canonical stored bundle that both preserves
-    step-`12` parity and re-earns the stored step-`11` floor
+  - clean-tree `v9` first restored stored parity through step `15`
+  - clean-tree `v10` then re-earns stored step `13` while preserving that
+    same parity-clean later continuation
 - The new compare audit stays explicit about what still differs while
   remaining signoff-ready:
   - search-space counts diverge at step `4`, step `9`, step `10`,
@@ -688,7 +688,7 @@ gate.
   - manifest provenance is complete on the stored release build
 - Runtime is no longer the live blocker on the stored full-profile slice:
   - the benchmark bundle records one completed step-`15` claim run
-  - stored runtime for `v9` is `2848 ms`
+  - stored runtime for `v10` is `3849 ms`
   - parity success count is now `1`
   - the audit passes the provisional `600000 ms` runtime threshold
 - The remaining breadth/floor failures are now concrete on the parity-clean
@@ -699,7 +699,7 @@ gate.
     - step `10`: `1428` against target `500` (`hit`)
     - step `11`: `1338` against target `800` (`hit`)
     - step `12`: `1338` against target `1200` (`hit`)
-    - step `13`: `123` against target `2200` (`miss`)
+    - step `13`: `2320` against target `2200` (`hit`)
     - step `14`: `12027` against target `3500` (`hit`)
     - step `15`: `1794` against target `5000` (`miss`)
 
@@ -771,12 +771,12 @@ gate.
 ### Fresh Completed Full-Profile Claim Bundle
 
 - Run:
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v9`
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v10`
 - Launch surface:
   - clean-tree repo head
-    `67c26eca02cb5546745bdd5ca5b31468e6807f42`
+    `6939b71063e4aec9598b293560c0c233981bc169`
   - release binary hash
-    `2023ea693e72403b98448ab1bece5048b739a2cb115aafcd2b1580cb941a59bf`
+    `d003dd29c599ba86b7ef410b1c7849f89a0fe45d33dc42508e368f4c2a7c473a`
 - Full-profile outcome:
   - `status = "completed"`
   - `completed_step = 15`
@@ -786,7 +786,7 @@ gate.
 - Stored audits under the same run directory:
   - compare report against `runs/codex-guarded-claim-cert-v1` (`ready`)
   - claim certificate (`attention`: `early_breadth`, `late_generated_floors`)
-  - single-run benchmark bundle (`2848 ms`, parity `1`, early `0`, late `0`)
+  - single-run benchmark bundle (`3849 ms`, parity `1`, early `0`, late `0`)
 
 ## Landed Winning Stack
 
@@ -818,11 +818,11 @@ gate.
 
 - The old early RSS cliff remains gone.
 - Step `4` throughput is no longer the blocker that determines the next slice:
-  the clean-tree stored `v9` run completes the full claim profile in one
+  the clean-tree stored `v10` run completes the full claim profile in one
   clean-start pass.
 - The old `v3` step-`14` zero-candidate opening is also no longer the first
   blocker:
-  `v9` reaches step `14`, seeds roots, accepts a survivor there, and advances
+  `v10` reaches step `14`, seeds roots, accepts a survivor there, and advances
   to step `15`.
 - Stored ordinal parity is now re-earned on the clean canonical bundle after
   the transient `v7` step-`12` fork and the dirty-tree `v8` confirmation pass:
@@ -999,31 +999,31 @@ gate.
   - the next honest local repair is therefore a parity-preserving clause-local
     step-`13` widening/retention change, not a raw reland of either new
     exploratory widened surface
-- The clean canonical `v9` bundle also changes what counts as the next honest
+- The clean canonical `v10` bundle also changes what counts as the next honest
   engineering dollar:
   - do not reopen runtime-only step-`4` surgery first
   - do not reopen late-step zero-candidate diagnosis first
-  - do not reopen another pre-rerun step-`9` selector theory first
-  - do not reopen stored/local step-`11` breadth diagnosis first; start from
-    stored step `13` as the earliest remaining late-floor miss on the clean
-    canonical bundle
-- No residual `pen-cli.exe` process remains from the `v9` rerun.
+  - do not reopen another step-`13` theory slice first
+  - do not reopen another rerun first; start from stored step `15` as the
+    remaining late-floor miss on the clean canonical bundle
+- No residual `pen-cli.exe` process remains from the `v10` rerun.
 
 ## Forward Direction
 
 - Freeze the current evidence set:
   `v1`, `v2`, `v3`, capped `v1`, stopped `v4`, completed `v5`, clean
-  baseline `v6`, transient diagnostics `v7` / `v8`, and clean canonical
-  `v9`.
+  baseline `v6`, transient diagnostics `v7` / `v8`, clean canonical `v9`,
+  and clean canonical `v10`.
 - Treat the pre-flight gate, the clean canonical full-profile rerun, the
-  stored `v9` compare readiness, and the `v9` claim audit readiness as earned.
+  stored `v10` compare readiness, and the `v10` claim audit readiness as
+  earned.
 - Treat the new local step-`9` selector regression and its downstream
   step-`11` / step-`12` / step-`13` / step-`14` / step-`15` guardrail reruns
   as the current local proof that parity is repaired and must now stay closed
   while breadth is fixed.
 - Keep the stored `v5` audit-freeze regressions green as the pre-parity
   comparison surface, keep stored `v6` frozen as the pre-step-`11` breadth
-  baseline, and keep the stored `v9` compare / certification /
+  baseline, and keep the stored `v10` compare / certification /
   benchmark outputs green as the current breadth guardrail.
 - Keep the claim-policy metadata, narrative/event artifacts, exact-screen
   reason counts, prune-class counts, manifest provenance, and runtime-threshold
@@ -1039,13 +1039,14 @@ gate.
   step `13` should now stay at `[5,1,3,3,5,3,2]` / `1350` / `2320` with the
   guarded accepted hash, while step `14` stays `19683` / `12027` and step
   `15` stays `DCT 103 / 8 / 1794`.
-- Use the stored `v9` certificate and the late-step live checkpoints as the
+- Use the stored `v10` certificate and the late-step live checkpoints as the
   first diagnosis surface for the remaining misses; they now expose raw
   catalog widths, root seeding, exact-screen pressure, and the full stored
   step-open pressure envelope for the open steps.
-- Treat stored `v9` step `13 = 123 / 2200` as the earliest remaining stored
-  late-floor miss; do not reopen step `11` first now that stored step `11`
-  re-earns `1338 / 800` on the clean canonical bundle.
+- Treat stored `v10` step `15 = 1794 / 5000` as the remaining stored
+  late-floor miss; do not reopen step `11` or step `13` first now that stored
+  step `11` re-earns `1338 / 800` and stored step `13` now re-earns
+  `2320 / 2200` on the clean canonical bundle.
 - Treat the new `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` local step-`13`
   widenings as negative controls only:
   they prove missing breadth can be re-opened locally, but neither one yet
@@ -1059,22 +1060,22 @@ gate.
 
 ## Immediate Next Move
 
-1. Freeze `long-rerun-v9` as the current canonical stored claim bundle, keep
+1. Freeze `long-rerun-v10` as the current canonical stored claim bundle, keep
    `v6` as the clean pre-step-`11` breadth baseline, and keep `v5` as the
    pre-parity completed reference; do not resume the stopped `v4` run and do
    not recapture replay fixtures first.
-2. Hold the current pre-flight gate, the stored `v9` compare readiness, the
+2. Hold the current pre-flight gate, the stored `v10` compare readiness, the
    new local step-`11` breadth guardrails, the repaired step-`12`
-   same-primary selector, the new local step-`13`
+   same-primary selector, the stored step-`13`
    `[5,1,3,3,5,3,2]` / `1350` / `2320` accepted surface, and the current
    step-`14` / step-`15` later-surface guardrails green.
-3. Launch the next clean full-profile `desktop_claim_shadow` rerun on top of
-   that local step-`13` repair and store one new bundle beyond `v9`; do not
-   spend another cycle on step-`13` theory first unless the rerun itself
-   disagrees with the guarded local read.
-4. Refresh compare, benchmark, and certification on that new stored bundle as
-   soon as it finishes, then re-evaluate the remaining stored misses at step
-   `15` and step `1` from the new evidence set.
+3. Resume diagnosis from stored step `15` as the remaining late-floor miss on
+   the canonical bundle, using the `v10` certificate first and
+   `step-15-live.ndjson` only when checkpoint-level timing or note provenance
+   is needed before changing more search code.
+4. Keep step `1 = 546 / 2144` explicit as the separate stored early breadth
+   blocker while step `15` is being diagnosed; do not let stored step-`13`
+   closure paper over that miss.
 5. Keep the two frozen step-`13` negative controls and the rejected global
    band-`7` / temporal-reanchor / early bridge expansions out of the landed
-   path while the rerun and audit refresh are still pending.
+   path while the next step-`15` repair is still pending.
