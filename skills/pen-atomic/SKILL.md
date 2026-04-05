@@ -21,45 +21,31 @@ Treat these as current repo truths:
   runnable `5m`, `10m`, and `15m` profiles plus stored narrative/event
   artifacts
 - `desktop_claim_shadow` now exists as a separate claim-lane scaffold with its
-  own configs, narratives, and policy metadata; it now uses claim-debt
-  admissibility plus a claim-generic late surface, and it now uses a
-  structural-generic claim bucket taxonomy; later `kappa 7-9` mutator packs
-  and claim-path exactness rechecks are now landed in code/tests; the repo now
-  also has claim-specific compare/certification tooling plus richer
-  CPU/build/git/binary manifest fingerprints; failed-run evidence preservation
-  is now landed via incremental run/step/frontier/narrative persistence; claim
-  runs now also record observed-versus-accounted RSS gap data, claim
-  auto-worker resolution is now memory-aware, and claim proof-close now drops
-  cached evaluated terminal payloads to reduce live RSS; claim proof-close now
-  also releases processed retained prefix groups once exact certification
-  starts, and claim terminal-prefix materialization now also consumes cached
-  exact completion summaries from the legality cache after reuse so the claim
-  lane stops holding both copies of the same exact terminal surface; claim
-  materialization now also has a direct compact fast path when no cached
-  completion summary exists, so the claim lane no longer builds and then
-  immediately re-walks a full terminal evaluation vector just to recover the
-  same retained candidates; cloned prefix signatures now also share one
-  serialized exact payload allocation across frontier/cache copies instead of
-  duplicating that string into every clone; claim frontier work items now also
-  reuse the shared clause catalog when no prefix-local filter applies and reuse
-  that same shared serialized prefix key for deterministic queue ordering; the
-  terminal-clause filter path now also reuses the shared clause slice instead
-  of allocating a fresh reference vector at every hot terminal-prefix check,
-  which removed the old step-4 startup RSS cliff and then improved the hot
-  release step-4 checkpoints by about `12-14%` on
-  `codex-claim-release-step4-fastpath-v2` and another about `18-20%` on
-  `codex-claim-release-filter-slice-v1a`; the first intended-profile rerun on
-  that newer binary (`codex-claim-release-full-v1a`) then stayed well below
-  the old RSS failure band but still timed out in step `4`; its stored
-  step-live stream showed the retained prefix cache flattening after prefix
-  state `24`, and the next landed throughput pass now reuses one scratch
-  terminal telescope plus the precomputed prefix bit cost across the hot
-  exact remaining-two loops, while a newer claim-only discovery pass now skips
-  full evaluation for compact terminal candidates that are already below bar
-  or incumbent-dominated and showed a modest early step-`4` smoke gain on
-  `codex-claim-scratch-smoke-v2`; breadth evidence, parity signoff,
-  full-profile runtime stability on the intended `claim-1h` auto-worker
-  profile, and certification pass status still remain open
+  own configs, narratives, and policy metadata; it uses claim-debt
+  admissibility, a claim-generic late surface, and a structural-generic claim
+  bucket taxonomy, and the later `kappa 7-9` mutator packs plus claim-path
+  exactness rechecks are landed in code/tests; the repo also has
+  claim-specific compare/certification/benchmark tooling, richer
+  CPU/build/git/binary manifest fingerprints, and incremental failed-run
+  artifact persistence; claim runs now record observed-versus-accounted RSS
+  gap data, claim auto-worker resolution is memory-aware, claim proof-close
+  drops cached evaluated terminal payloads and releases processed retained
+  prefix groups once exact certification starts, claim terminal-prefix
+  materialization compacts legality-cache reuse plus uncached direct
+  materialization, cloned prefix signatures share one serialized exact payload
+  allocation, and claim frontier items reuse the shared clause catalog plus
+  serialized prefix order key; the current stored canonical bundle is
+  parity-clean completed `v6`, compare/certification/benchmark outputs now
+  exist beside it, and the live claim blocker is no longer step-`4` RSS
+  survival but stored breadth repair on that canonical chain: stored `v6`
+  still misses step `1` (`546 / 2144`), step `11` (`330 / 800`), step `13`
+  (`123 / 2200`), and step `15` (`1794 / 5000`), while a new guarded local
+  step-`11` breadth repair now widens the connected claim surface to
+  `kappa 5 = 243`, `kappa 6 = 729` (total `972`) with `0` exact-screen
+  connectivity rejections; the next operational move is therefore one fresh
+  clean-start full-profile rerun plus compare/certification/benchmark refresh,
+  and user-facing wording stays at `bounded live recovery` until stored
+  breadth and certification pass
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -74,7 +60,7 @@ The current architecture focus is split between three active tracks:
 - stronger exact late-step pruning and ordering on
   `realistic_frontier_shadow`
 - honest breadth, budget, and evidence surfacing on `demo_breadth_shadow`
-- remaining claim-band widening, breadth evidence, and certification work on
+- stored breadth repair, rerun evidence, and certification work on
   `desktop_claim_shadow`
 
 ## Current-State References
@@ -94,7 +80,8 @@ Read only the track-specific detail you need:
   [../../demo_lane_plan.md](../../demo_lane_plan.md), and
   [../../demo_lane_checklist.md](../../demo_lane_checklist.md).
 - For the active autonomy workstream, read
-  [../../autonomous_plan.md](../../autonomous_plan.md) and
+  [../../autonomous_plan.md](../../autonomous_plan.md),
+  [../../autonomous_next_steps.md](../../autonomous_next_steps.md), and
   [../../autonomous_progress.md](../../autonomous_progress.md), plus
   [../../autonomous_checklist.md](../../autonomous_checklist.md).
   These are the operational docs for remaining claim-lane work and
@@ -167,8 +154,9 @@ For most tasks, read in this order:
 5. [../../demo_lane_progress.md](../../demo_lane_progress.md) and
    [../../demo_lane_plan.md](../../demo_lane_plan.md) when the task touches
    `demo_breadth_shadow`
-6. [../../autonomous_progress.md](../../autonomous_progress.md) when the task
-   touches `desktop_claim_shadow`
+6. [../../autonomous_progress.md](../../autonomous_progress.md) and
+   [../../autonomous_next_steps.md](../../autonomous_next_steps.md) when the
+   task touches `desktop_claim_shadow`
 7. [theory/README.md](theory/README.md) when you need the theorem or manuscript
    map
 
@@ -196,7 +184,8 @@ Then branch based on the task.
   for the stable current demo-lane mechanisms and evidence baselines that
   should remain true while later demo-lane changes move.
 - Read [references/13-current-claim-lane.md](references/13-current-claim-lane.md)
-  plus [../../autonomous_plan.md](../../autonomous_plan.md) and
+  plus [../../autonomous_plan.md](../../autonomous_plan.md),
+  [../../autonomous_next_steps.md](../../autonomous_next_steps.md), and
   [../../autonomous_progress.md](../../autonomous_progress.md), plus
   [../../autonomous_checklist.md](../../autonomous_checklist.md) for the
   current claim-lane mixed state, honesty boundary, and remaining autonomy
@@ -335,13 +324,12 @@ Focus on:
 - recording the mixed current state honestly in policy metadata:
   claim-debt admissibility, claim-generic late expansion, and
   structural-generic bucket scheduling are real; `kappa 7-9` mutators and
-  claim-path exactness rechecks are landed, while breadth evidence, stored
-  parity signoff, and certification pass status are still open; manifest
-  completeness and incremental failed-run artifact preservation are now landed,
-  but the intended `desktop_claim_shadow_1h` auto-worker profile still aborts
-  before step-15 completion; use `scripts/compare_runs.py` and
-  `scripts/certify_claim_lane.py` as the current evidence surfaces before
-  changing more search code
+  claim-path exactness rechecks are landed; stored compare, benchmark, and
+  certification outputs now exist for the parity-clean completed `v6` bundle,
+  but certification still fails honestly on stored breadth misses and the lane
+  must stay at `bounded live recovery`; use `scripts/compare_runs.py`,
+  `scripts/benchmark_claim_lane.py`, and `scripts/certify_claim_lane.py` as
+  the current evidence surfaces before changing more search code
 - treat the latest claim-cache work as operational memory work, not just
   metadata work: claim proof-close already drops evaluated terminal payloads
   after ranking and now also releases processed retained prefix groups once
@@ -355,13 +343,21 @@ Focus on:
   across that same remaining-two loop, while the newest claim-only discovery
   pass now skips full evaluation for compact terminal candidates that are
   already below bar or incumbent-dominated and showed a modest early smoke
-  gain; rerun the intended profile before claiming those compactions and
-  throughput gains are sufficient
-- treating the remaining breadth evidence, stored parity signoff, and
-  certification work as downstream of the current full-profile completion
-  problem, which now includes release-build step-4 throughput in addition to
-  any later-step memory pressure, rather than continuing to tune already-landed
-  admissibility, claim-path exactness tests, or bucket labels
+  gain; do not reopen that step-`4` throughput story first unless a fresh
+  stored rerun proves the remaining breadth misses are really runtime fallout
+- treating the current blocker as stored breadth on the canonical chain:
+  stored `v6` still misses step `1` (`546 / 2144`), step `11` (`330 / 800`),
+  step `13` (`123 / 2200`), and step `15` (`1794 / 5000`), while step `10`,
+  step `12`, and step `14` are already stored hits
+- keeping the new guarded local step-`11` breadth repair green:
+  the connected claim surface should stay at `kappa 5 = 243`,
+  `kappa 6 = 729` (total `972`), exact-screen connectivity rejections there
+  should stay at `0`, the guarded step-`11` shell should stay accepted, and
+  the repaired step-`12` `34 / 6` continuation plus the later
+  step-`13..15` guardrails should stay fixed
+- rerunning the repaired local tree clean-start, then refreshing compare,
+  benchmark, and certification on that new stored bundle before reopening
+  another local late-step theory slice
 - moving admissibility, mutation, scheduling, and certification toward
   family-agnostic structural evidence
 - not using stronger words like `unguided` before the certification gate lands
@@ -455,13 +451,15 @@ Reject designs that:
   the hot release step-4 path by about `12-14%` and another about `18-20%`,
   and the newest step-4 throughput pass now reuses one scratch terminal
   telescope plus the precomputed prefix bit cost after the stored full-profile
-  rerun showed a retained-prefix plateau inside step `4`, but breadth
-  evidence, stored parity signoff, full-profile completion on the intended
-  auto-worker claim profile, and certification pass status are still open.
-- The next operational claim-lane work should focus on stored breadth
-  evidence and stored parity signoff only after stabilizing full-profile claim
-  execution on the disclosed machine, rather than on already-landed profile,
-  manifest-field, failed-run artifact persistence, admissibility, bucket
-  scheduling separation, or the now-covered claim-path exactness rechecks.
+  rerun showed a retained-prefix plateau inside step `4`; the current
+  canonical stored bundle is parity-clean completed `v6`, but breadth still
+  fails honestly at step `1`, step `11`, step `13`, and step `15`, and a new
+  guarded local step-`11` breadth repair is landed but not yet re-earned on
+  stored evidence.
+- The next operational claim-lane work should focus on a fresh clean-start
+  stored rerun plus compare / benchmark / certification refresh so the new
+  step-`11` repair can be re-earned on the canonical chain, rather than on
+  reopening another local step-`11` theory slice, another runtime-only
+  step-`4` micro-optimization, or new late-step band/reanchor widening.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
   the track-specific references you actually need.

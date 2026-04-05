@@ -462,6 +462,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - no fresh stored rerun has consumed that repair yet, so stored `v6`
     remains the authoritative breadth surface and still records
     step `11 = 330 / 800`
+  - `skills/pen-atomic` is now synced to that same stored-`v6` /
+    local-step-`11` posture, so future sessions should not use the older
+    step-`4` throughput-first claim summary as their starting point
   - the next operational slice should therefore move off local step-`11`
     diagnosis and onto a fresh stored rerun plus audit refresh
 

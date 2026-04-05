@@ -8,6 +8,12 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - `desktop_claim_shadow` exists as a separate profile and config family.
 - The lane is not yet certified and should still be described with the safer
   `bounded live recovery` wording.
+- The current canonical stored claim bundle is parity-clean completed `v6`:
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v6`.
+- Stored compare, certification, and benchmark outputs now exist beside that
+  `v6` bundle, and they already treat accepted-hash parity, claim-policy
+  honesty, fallback honesty, narrative/event completeness, exact-screen
+  reason coverage, prune-class coverage, and manifest completeness as earned.
 - Claim admissibility now uses structural claim debt and anchor hints, without
   named-family focus progression.
 - Claim late expansion now uses a claim-specific late surface with structural
@@ -73,110 +79,78 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   stored run reaches the step-15 claim signoff surface.
 - `scripts/certify_claim_lane.py` now emits a stored pass/fail certificate from
   claim artifacts and currently fails honestly on missing breadth, missing
-  step-15 parity evidence, and the still-missing full-profile stored claim
-  bundle on the intended auto-worker desktop config.
+  generated-floor evidence; the current `v6` certificate still flags
+  `early_breadth` plus `late_generated_floors`.
 - `scripts/benchmark_claim_lane.py` now aggregates stored claim runs into a
   benchmark bundle with runtime percentiles, parity counts, breadth-floor hit
-  counts, and manifest snapshots; it still needs a real full-profile claim
+  counts, and manifest snapshots; it still needs a breadth-clean stored claim
   bundle before those numbers can justify a stronger sentence.
-- the repo-level autonomy docs now treat claim-policy separation and failed-run
-  evidence preservation as baseline; the live bottleneck is full-profile
-  claim-run memory stability on the intended auto-worker profile
+- The current stored breadth snapshot on canonical `v6` is:
+  - step `1`: `546 / 2144`
+  - step `10`: `1428 / 500`
+  - step `11`: `330 / 800`
+  - step `12`: `1338 / 1200`
+  - step `13`: `123 / 2200`
+  - step `14`: `12027 / 3500`
+  - step `15`: `1794 / 5000`
+- A new guarded local step-`11` breadth repair is landed but not yet consumed
+  by stored evidence:
+  - the connected claim step-`11` surface now holds
+    `kappa 5 = 243`, `kappa 6 = 729` (total `972`)
+  - local exact-screen connectivity rejections there are now `0`
+  - the guarded accepted step-`11` shell stays fixed locally
+  - the repaired step-`12` `34 / 6` continuation and later
+    step-`13..15` guardrails stay fixed locally
+- the repo-level autonomy docs now treat claim-policy separation, failed-run
+  evidence preservation, and one parity-clean full-profile stored bundle as
+  baseline; the live blocker is re-earning stored breadth on the canonical
+  chain, not reopening another step-`4` survival pass first
 
 ## Current Operational Blockers
 
-- the widened claim band `9` still needs stored breadth/floor evidence on the
-  claim lane itself
-- claim-path parity still needs stored signoff evidence even though direct
-  exact prefix-completion behavior is now rechecked by tests under the new
-  structural-generic scheduler surface
-- a full `desktop_claim_shadow_1h` auto-worker run still aborts before
-  step-15 completion on the disclosed machine; the latest attempt failed with
-  `memory allocation of 1212416 bytes failed`
-- the repo can now store the observed-versus-accounted RSS gap for claim steps,
-  and the new step-live checkpoint path can now show which in-memory structures
-  are growing before acceptance, but there is still no full-profile stored run
-  showing whether the new worker cap and combined proof-close group release
-  plus prefix-cache and legality-cache compaction fully remove the live spike
-- a 2026-03-22 claim smoke rerun reached step `4` and recorded about
-  `3.30 GiB` observed RSS after `14.9s` with `2775` frontier groups,
-  `5550` legality summaries, `5084` partial-prefix-bound entries, and
-  `0` retained prefix-cache groups, so the early spike is still in
-  discovery/frontier/legality growth before proof-close on that partial run
-- a follow-up 2026-03-22 smoke rerun (`codex-claim-shared-signature-v1`)
-  kept the comparable early step-`4` checkpoint at about `3.06 GiB` observed
-  RSS after `13.2s`, only about `6.6 MiB` below the prior comparable
-  checkpoint, so sharing cloned signature payloads is real but not the main
-  memory fix
-- a newer 2026-03-22 smoke rerun (`codex-claim-frontier-catalog-reuse-v1`)
-  removed that startup cliff from stored evidence: the old `13.2s` /
-  `3.06 GiB` checkpoint no longer appears, and the first stored step-`4`
-  frontier-progress checkpoint now lands at about `66.4 MiB` observed RSS
-  after `422.9s` with `2774` frontier groups, `10193` legality summaries,
-  `5084` partial-prefix-bound entries, and `13` retained prefix-cache groups,
-  suggesting the old spike was largely frontier queue residency from cloning
-  the full next-clause catalog into each queued item
-- a 2026-03-22 optimized step-5-limited rerun (`codex-claim-release-step5-v1`)
-  then showed that the release claim binary no longer has an early RSS crisis
-  on step `4`: after `1777.1s` it was still only about `167.1 MiB` observed
-  RSS while enumerating `310916028` candidates and exploring `16` prefix
-  states, so the hot blocker there is now exact remaining-two throughput
-- a follow-up optimized step-`4` rerun after the new compact claim
-  materialization fast path (`codex-claim-release-step4-fastpath-v2`) reached
-  the same hot discovery checkpoints about `12-14%` sooner than
-  `codex-claim-release-step5-v1` while keeping observed RSS below about
-  `89.6 MiB`, but the intended full profile still lacks a stored completion
-  bundle
-- a newer optimized step-`4` rerun with the slice-based terminal clause path
-  (`codex-claim-release-filter-slice-v1a`) reached those same hot checkpoints
-  another about `18-20%` sooner than
-  `codex-claim-release-step4-fastpath-v2` while keeping observed RSS below
-  about `84.0 MiB` through prefix state `7`, so the latest evidence says the
-  lane should now be rerun full-profile before reopening another speculative
-  step-`4` rewrite
-- a follow-up intended-profile rerun (`codex-claim-release-full-v1a`) then ran
-  the full `desktop_claim_shadow_1h` shape on that newer binary and did not
-  re-hit the old allocator abort before an external timeout after `3844.7s`;
-  by then step `4` had explored `43` prefix states, enumerated `848047359`
-  candidates, kept the frontier queue at `2732`, and held observed RSS to
-  about `278.2 MiB`, so the current blocker is still step-`4` throughput and
-  frontier drainage rather than the old early RSS cliff
-- that same stored step-live stream also showed the retained prefix cache
-  flattening after `prefix_states_explored = 24`: later checkpoints stayed at
-  `39` groups / `144845` retained candidates while legality summaries kept
-  rising from `140197` to `205199`, so much of the remaining step-`4` time
-  was still repeated exact terminal completion on surfaces that were no longer
-  adding new retained groups
-- a fresh single-worker release smoke rerun (`codex-claim-scratch-smoke-v2`)
-  then exercised that newer claim-only discovery-evaluation gate and was
-  manually stopped after enough evidence to compare early hot checkpoints:
-  - `prefix_states_explored = 5` landed at `499.9s` versus `519.4s` on
-    `codex-claim-scratch-smoke-v1`
-  - `prefix_states_explored = 6` reached `572.7s`
-  - observed RSS stayed below about `82.0 MiB` through that checkpoint
-  - the gain looks directionally real on the smoke profile, but the intended
-    `desktop_claim_shadow_1h` rerun still needs to prove whether it changes
-    the real full-profile bottleneck
-- benchmark evidence is still too weak for a passing claim certificate
+- the lane still does not have a signoff-ready certified bundle even though
+  stored `v6` now passes accepted-hash parity and the compare/certification/
+  benchmark infrastructure is live
+- stored breadth still fails honestly on the canonical chain:
+  - early breadth still misses at step `1` (`546` versus `2144`)
+  - late generated floors still miss at step `11` (`330` versus `800`),
+    step `13` (`123` versus `2200`), and step `15` (`1794` versus `5000`)
+  - stored breadth already hits at step `10`, step `12`, and step `14`
+- the new local step-`11` breadth repair is only locally landed so far:
+  a fresh stored rerun must still prove whether the repaired connected surface
+  closes the canonical stored `330 / 800` miss
+- the canonical repaired late chain must stay frozen while breadth is
+  re-earned:
+  - step `12` should keep the guarded `34 / 6` continuation
+  - step `13` should stay at `[3,1,3,3,1,1,1]` / `27` / `123`
+  - step `14` should stay at `19683` / `12027`
+  - step `15` should stay on `DCT 103 / 8 / 1794`
+- step `1` remains a separate stored early breadth blocker even if late-step
+  repairs continue to land
+- benchmark evidence is still too weak for a passing claim certificate until a
+  fresh stored bundle closes the remaining breadth failures without losing
+  accepted-hash parity
 
 ## Immediate Next Slice
 
-1. Rerun the intended `desktop_claim_shadow_1h` profile on the disclosed
-   machine on the newer binary that now reuses a scratch terminal telescope
-   and skips discovery-time full evaluation for compact claim candidates that
-   are already below bar or incumbent-dominated on the hot remaining-two path,
-   then inspect the stored RSS-gap data again.
-2. If it still stalls in step `4`, use the new stored evidence to decide
-   whether the next narrow fix belongs in earlier incumbent pruning, broader
-   exact bound screening, or some later-step pressure story that still is not
-   visible.
-3. Once a full-profile bundle exists, run the compare, benchmark, and
-   certification scripts against it, then close the remaining breadth/floor
-   and parity misses.
+1. Freeze parity-clean completed `v6` as the current canonical stored claim
+   bundle and keep completed `v5` as the pre-parity reference surface.
+2. Hold the current local guardrails green before reopening any new theory:
+   the step-`11` connected surface should stay at `243 + 729 = 972`, the
+   guarded step-`11` shell should stay accepted, the repaired step-`12`
+   `34 / 6` continuation should stay fixed, and the current
+   step-`13..15` surfaces should stay frozen on the canonical branch.
+3. Launch one fresh clean-start full-profile rerun on the repaired local tree
+   so stored evidence can consume the new local step-`11` breadth repair.
+4. Refresh compare, benchmark, and certification on that new stored bundle.
+5. If stored step `11` still misses, resume diagnosis from the earliest
+   remaining stored late-floor miss on that new canonical bundle while keeping
+   step `1`, step `13`, and step `15` breadth failures in view.
 
 ## First Reads
 
 - [../../autonomous_plan.md](../../autonomous_plan.md)
+- [../../autonomous_next_steps.md](../../autonomous_next_steps.md)
 - [../../autonomous_progress.md](../../autonomous_progress.md)
 - [../../autonomous_checklist.md](../../autonomous_checklist.md)
 - [../../README.md](../../README.md)
@@ -195,8 +169,9 @@ Do:
   as `&&`; use separate commands for staging, commit, and push work
 - keep claim-lane edits narrow and staged; split very large file updates into
   smaller targeted patches when the first broad patch does not land cleanly
-- focus next on release-build step-`4` throughput and full-profile completion,
-  then stored breadth/parity/certification
+- focus next on re-earning stored breadth on the canonical chain, refreshing
+  compare / benchmark / certification on the next stored bundle, and keeping
+  the repaired local step-`11` / step-`12` / step-`13..15` guardrails fixed
 
 Do not:
 
@@ -204,4 +179,10 @@ Do not:
 - switch `bucket_policy` early
 - spend time reopening already-landed claim-policy split work unless a memory
   or evidence bug forces it
+- reopen another local step-`11` selector or raw-connectivity theory first:
+  the current local breadth repair is already landed and guarded
+- reopen another runtime-only step-`4` micro-optimization first unless a fresh
+  stored rerun proves the remaining misses are really runtime fallout
+- reland the rejected global band-`7` widening or the rejected late reanchor /
+  early bridge expansions first while stored breadth is still open
 - call the lane `unguided` yet

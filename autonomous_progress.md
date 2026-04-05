@@ -832,6 +832,10 @@ gate.
   - no fresh stored rerun has consumed that repair yet, so stored `v6`
     remains the authoritative breadth surface and still records
     step `11 = 330 / 800`
+- The `skills/pen-atomic` claim-lane guidance is now synced to that same
+  stored-`v6` / local-step-`11` posture, so future sessions should start from
+  the current stored-breadth-rerun plan instead of the older step-`4`
+  throughput-first framing.
 - A new local step-`12` repair now refines that blocker further:
   - the guarded step-`12` telescope is still enumerated and exact-admitted on
     the repaired live claim history
