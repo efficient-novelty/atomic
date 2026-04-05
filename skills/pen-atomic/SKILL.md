@@ -86,7 +86,11 @@ Treat these as current repo truths:
   that lifted local step `15` only to `4285` also reopened the repaired
   clause-`0` zero-admitted capture, so the next landed repair must isolate one
   of those side openings onto the current `small_cluster` path instead of
-  broadening the raw position-`0` temporal-shell catalog; user-facing wording stays at
+  broadening the raw position-`0` temporal-shell catalog; follow-up isolated
+  clause-`4` and clause-`5` reland probes were also reverted after they only
+  lifted local step `15` to `3980` or `3974` while still reopening the
+  captured clause-`2` / clause-`3` surface, so raw later-side next-clause
+  injection is no longer the immediate repair path either; user-facing wording stays at
   `bounded live recovery` until stored breadth and certification pass
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`

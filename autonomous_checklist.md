@@ -77,6 +77,13 @@ It lists only work that is still open.
   reanchor-prefix misses, so the next landed repair must isolate one of those
   openings onto the existing `small_cluster` path instead of broadening the
   whole position-`0` catalog.
+- Two follow-up isolated late-side reland probes were also reverted:
+  a clause-`4`-only pocket-gated opening only reached `3980` and reopened the
+  zero-admitted capture to `1962` families / `1476` clause-`2`
+  reanchor-prefix misses, while a clause-`5`-only pocket-gated opening only
+  reached `3974` and still reopened the capture to `1950` families / `1464`
+  clause-`2` misses, so neither raw later-side injection is the next landed
+  repair.
 - No broader per-step claim search-band expansion should land beyond that
   isolated anchor-`11` pocket before a new local repair proves more is
   necessary on this parity-clean stored chain.

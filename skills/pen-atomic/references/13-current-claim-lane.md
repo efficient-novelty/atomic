@@ -230,6 +230,21 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - the next landed repair should therefore isolate one of those omitted side
     openings onto the existing anchor-`11` `small_cluster` path instead of
     broadening the raw position-`0` temporal-shell catalog first
+- two follow-up isolated late-side reland probes were then tried and reverted:
+  - a clause-`4`-only demo-sharp-codomain opening, gated on canonical clauses
+    `0` and `1` plus the live claim clause-`2` + anchor-`11` exact-argument
+    pocket, lifted local step `15` generated prefixes only to `3980`, but it
+    also reopened the zero-admitted capture to `1962` families with `1476`
+    clause-`2` historical-reanchor-prefix misses
+  - a clause-`5`-only demo-sharp-domain opening, gated on canonical clauses
+    `0`, `1`, and `4` plus that same pocket, lifted the local surface only to
+    `3974` while still reopening the zero-admitted capture to `1950` families
+    with `1464` clause-`2` historical-reanchor-prefix misses
+  - so the next landed repair should not be a raw isolated clause-`4` or
+    clause-`5` late-side reland either; any future use of those openings will
+    need extra qualifier/reanchor evidence or summary-stage retention changes
+    that keep them on the `small_cluster` path instead of the captured
+    clause-`2` / clause-`3` surface
 
 ## Current Operational Blockers
 
@@ -286,9 +301,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    omitted-side-variant regression now proves that several demo-only side
    openings around the live anchor-`11` pocket are already rank-safe, while
    the reverted raw position-`0` reland proves that broadening that side
-   globally reopens the old captured clause-`0` surface, so the next landed
-   repair must isolate one of those openings onto the current `small_cluster`
-   path instead of broadening the whole position-`0` catalog.
+   globally reopens the old captured clause-`0` surface, and the reverted
+   isolated clause-`4` / clause-`5` relands prove that raw late-side
+   next-clause injection still feeds the captured clause-`2` / clause-`3`
+   surface, so the next landed repair must stay narrower than all three of
+   those raw relands.
 4. Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they still prove local breadth can be reopened unsafely, but they are not
    the landed repair.
@@ -305,6 +322,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    the exploratory probe lifted local step `15` only to `4285` and reopened
    the repaired clause-`0` zero-admitted capture, so any next opening there
    has to be isolated onto the live anchor-`11` `small_cluster` path.
+8. Do not reland a raw isolated clause-`4` or clause-`5` late-side opening
+   first either:
+   the pocket-gated probes only reached `3980` or `3974` and still reopened
+   the captured clause-`2` / clause-`3` surface.
 
 ## First Reads
 

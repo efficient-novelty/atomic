@@ -93,6 +93,21 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - the next landed repair should therefore isolate one of those omitted side
     openings onto the existing anchor-`11` `small_cluster` path instead of
     broadening the raw position-`0` temporal-shell catalog first
+- Two follow-up isolated late-side reland probes were then tried and reverted:
+  - a clause-`4`-only demo-sharp-codomain opening, gated on canonical clauses
+    `0` and `1` plus the live claim clause-`2` + anchor-`11` exact-argument
+    pocket, lifted local step `15` generated prefixes only to `3980`, but it
+    also reopened the zero-admitted capture to `1962` families with `1476`
+    clause-`2` historical-reanchor-prefix misses
+  - a clause-`5`-only demo-sharp-domain opening, gated on canonical clauses
+    `0`, `1`, and `4` plus that same pocket, lifted the local surface only to
+    `3974` while still reopening the zero-admitted capture to `1950` families
+    with `1464` clause-`2` historical-reanchor-prefix misses
+  - so the next landed repair can no longer be a raw isolated clause-`4` or
+    clause-`5` late-side reland either; any future use of those openings will
+    need additional qualifier/reanchor evidence or summary-stage retention
+    changes that keep them on the `small_cluster` path instead of the captured
+    clause-`2` / clause-`3` surface
 - Two new non-landed local step-`13` probes now sharpen the safe search space:
   - widening only operator-bundle formation positions `1` and `4` to
     demo-like variants lifts the repaired local read to
@@ -134,8 +149,10 @@ The highest-value work is:
 3. use the `v11` certificate and `step-15-live.ndjson` to land the next
    parity-preserving local step-`15` repair against the residual
    `468`-bar / `242`-incumbent surface, now using the omitted-side-variant
-   regression as the safe local opening and the reverted raw position-`0`
-   probe as the explicit "do not reland this globally" boundary
+   regression as the safe local opening, the reverted raw position-`0` probe
+   as the explicit "do not reland this globally" boundary, and the reverted
+   isolated clause-`4` / clause-`5` probes as proof that raw late-side
+   next-clause injection also misses the real target
 4. launch the next clean full-profile rerun only after that next local repair
    is regression-backed
 5. refresh compare / benchmark / certification on the next stored bundle

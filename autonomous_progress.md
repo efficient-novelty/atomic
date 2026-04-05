@@ -172,6 +172,23 @@ gate.
   - the next repair should therefore isolate one of those omitted side
     openings onto the existing anchor-`11` `small_cluster` path instead of
     broadening the raw position-`0` temporal-shell catalog first
+- Two follow-up isolated late-side reland probes were then tried and reverted:
+  - a clause-`4`-only demo-sharp-codomain opening, gated on canonical clauses
+    `0` and `1` plus the live claim clause-`2` + anchor-`11` exact-argument
+    pocket, lifted local step `15` generated prefixes only to `3980`, but it
+    also reopened the zero-admitted capture to `1962` families with `1476`
+    clause-`2` historical-reanchor-prefix misses instead of feeding the
+    intended `small_cluster`
+  - a clause-`5`-only demo-sharp-domain opening, gated one clause later on
+    canonical clauses `0`, `1`, and `4` plus that same pocket, lifted the
+    local surface only to `3974` while still reopening the zero-admitted
+    capture to `1950` families with `1464` clause-`2`
+    historical-reanchor-prefix misses
+  - so the next safe move is no longer a raw isolated clause-`4` or
+    clause-`5` late-side reland either; any future use of those openings will
+    need extra qualifier/reanchor evidence or summary-stage retention changes
+    that keep them on the `small_cluster` path instead of sending them back
+    into the captured clause-`2` / clause-`3` surface
 - The remaining stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)
@@ -1177,8 +1194,11 @@ gate.
    several demo-only side openings around the live anchor-`11` pocket are
    already safe on rank, but the reverted raw position-`0` reland also proves
    that widening that side globally reopens the old captured clause-`0`
-   surface, so the next landed repair must isolate one of those openings onto
-   the current `small_cluster` path instead of broadening the whole catalog.
+   surface, and the follow-up isolated clause-`4` / clause-`5` reland probes
+   prove that a raw late-side next-clause injection still feeds the captured
+   clause-`2` / clause-`3` surface instead of the intended `small_cluster`, so
+   the next landed repair must stay narrower than all three of those raw
+   relands.
 4. Launch the next clean full-profile claim rerun only after that next local
    step-`15` repair is regression-backed and parity-clean, then refresh
    compare / benchmark / certification immediately afterwards and keep

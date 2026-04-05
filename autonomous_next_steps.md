@@ -149,6 +149,21 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next repair should therefore isolate one of those omitted side
     openings onto the existing anchor-`11` `small_cluster` path instead of
     broadening the raw position-`0` temporal-shell catalog first
+- Two follow-up isolated late-side reland probes were then tried and reverted:
+  - a clause-`4`-only demo-sharp-codomain opening, gated on canonical clauses
+    `0` and `1` plus the live claim clause-`2` + anchor-`11` exact-argument
+    pocket, lifted local step `15` generated prefixes only to `3980`, but it
+    also reopened the zero-admitted capture to `1962` families with `1476`
+    clause-`2` historical-reanchor-prefix misses
+  - a clause-`5`-only demo-sharp-domain opening, gated on canonical clauses
+    `0`, `1`, and `4` plus that same pocket, lifted the local surface only to
+    `3974` while still reopening the zero-admitted capture to `1950` families
+    with `1464` clause-`2` historical-reanchor-prefix misses
+  - the next repair should therefore not be a raw isolated clause-`4` or
+    clause-`5` late-side reland either; any future use of those openings will
+    need extra qualifier/reanchor evidence or summary-stage retention changes
+    that keep them on the `small_cluster` path instead of feeding the
+    captured clause-`2` / clause-`3` surface
 - New stored-evidence regressions now freeze that canonical `v11`
   diagnosis in-tree:
   - `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
@@ -736,9 +751,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
    also proves that several demo-only side openings around the live
    anchor-`11` pocket are already rank-safe, while the reverted raw
    position-`0` reland proves that broadening that side globally reopens the
-   old captured clause-`0` surface, so the next landed repair must isolate one
-   of those openings onto the current `small_cluster` path instead of
-   broadening the whole position-`0` catalog.
+   old captured clause-`0` surface, and the reverted isolated clause-`4` /
+   clause-`5` relands prove that a raw late-side next-clause injection still
+   feeds the captured clause-`2` / clause-`3` surface, so the next landed
+   repair must stay narrower than all three of those raw relands.
 4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
    hits so the next repair cannot silently reshuffle the canonical branch.
 5. Keep step `1 = 546 / 2144` on the checklist as the separate stored early
@@ -775,6 +791,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - a raw global position-`0` temporal-shell reland first:
   the exploratory probe lifted local step `15` only to `4285` but also
   reopened the repaired clause-`0` zero-admitted capture
+- a raw isolated clause-`4` or clause-`5` late-side reland first:
+  the reverted pocket-gated probes only lifted local step `15` to `3980` or
+  `3974` and still reopened the captured clause-`2` / clause-`3` surface
 - a direct early clause-`2` / clause-`3` reanchor-bridge matcher reland
   first:
   those exploratory branches already displaced the canonical step-`15`
