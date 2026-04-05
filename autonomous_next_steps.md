@@ -117,6 +117,21 @@ This note is the exact next work order for `desktop_claim_shadow`.
     `244` exact-screened / `242` pruned
   - the accepted canonical step-`15` winner still remains the only retained
     candidate there and keeps bit cost `229`
+- A new local step-`15` small-cluster incumbent-surface regression now
+  sharpens that same remaining blocker further:
+  - `current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning`
+    now pins that all `242` remaining `small_cluster` prunes happen during
+    summary-stage exact screening rather than later proof-close materialization
+  - every one of those remaining pruned candidates still stays on the same
+    primary `103 / 8` profile with overshoot `115657 / 21112`
+  - the remaining non-winning spread there is now only secondary bit cost,
+    from `236` through `290`, above the canonical winner's `229`
+  - the earliest first-mismatch positions across that still-pruned surface are
+    now frozen at clause positions `0`, `1`, `2`, `4`, and `5` with counts
+    `162`, `54`, `18`, `6`, and `2`
+  - the next repair should therefore stay on that narrow summary-stage
+    same-primary `small_cluster` incumbent surface rather than reopening
+    proof-close ordering or the isolated `single` pocket first
 - New stored-evidence regressions now freeze that canonical `v11`
   diagnosis in-tree:
   - `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
@@ -651,6 +666,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
      library-backed temporal-operator `small_cluster` bucket at
      `2190` generated / `244` admitted / `244` exact-screened / `242`
      pruned
+   - the remaining `small_cluster` incumbent surface should also stay frozen
+     as `242` summary-stage same-primary `103 / 8` prunes with bit costs
+     `236..290` and earliest first-mismatch counts
+     `162 / 54 / 18 / 6 / 2` at clause positions `0 / 1 / 2 / 4 / 5`
 5. Keep the two executable step-`13` negative-control regressions green:
    widening only operator-bundle formation positions `1` and `4` to the
    demo-like custom surface should still reopen the local floor to
@@ -693,7 +712,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
    remaining `468` partial-prefix bar / `242` incumbent-dominance surface
    rather than the older `1794` read, with the new survivor-bucket freeze
    keeping the isolated `single` pocket fenced while the next repair targets
-   the `small_cluster` pressure.
+   the `small_cluster` pressure; that pressure is now pinned more tightly as
+   `242` summary-stage same-primary `103 / 8` incumbents with bit costs
+   `236..290` and earliest first mismatches at clause positions
+   `0`, `1`, `2`, `4`, and `5`.
 4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
    hits so the next repair cannot silently reshuffle the canonical branch.
 5. Keep step `1 = 546 / 2144` on the checklist as the separate stored early

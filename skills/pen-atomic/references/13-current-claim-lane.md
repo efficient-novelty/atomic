@@ -201,6 +201,18 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     `244` exact-screened / `242` pruned
   - the accepted canonical step-`15` winner still remains the only retained
     candidate there and keeps bit cost `229`
+- a new local step-`15` small-cluster incumbent-surface regression now
+  freezes that remaining pressure more tightly too:
+  - `current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning`
+    now pins that all `242` remaining `small_cluster` prunes happen during
+    summary-stage exact screening rather than later proof-close materialization
+  - every one of those remaining pruned candidates still stays on the same
+    primary `103 / 8` profile with overshoot `115657 / 21112`
+  - the remaining non-winning spread there is now only secondary bit cost,
+    from `236` through `290`, above the canonical winner's `229`
+  - the earliest first-mismatch positions across that still-pruned surface are
+    now frozen at clause positions `0`, `1`, `2`, `4`, and `5` with counts
+    `162`, `54`, `18`, `6`, and `2`
 
 ## Current Operational Blockers
 
@@ -251,7 +263,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    first, and do not spend another cycle on rerun setup or step-`13` theory
    before the next parity-preserving local repair is regression-backed; keep
    the isolated `single` survivor bucket fenced while the next repair works
-   against the remaining `small_cluster` `242`-incumbent surface.
+   against the remaining `small_cluster` `242`-incumbent surface, now pinned
+   more tightly as a summary-stage same-primary `103 / 8` bit-cost spread with
+   first mismatches at clause positions `0`, `1`, `2`, `4`, and `5`.
 4. Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they still prove local breadth can be reopened unsafely, but they are not
    the landed repair.

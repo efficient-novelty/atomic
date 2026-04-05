@@ -58,6 +58,14 @@ It lists only work that is still open.
   non-winning pocket at overshoot `115657 / 21112`, and one
   library-backed temporal-operator `small_cluster` bucket carries the
   remaining `2190` / `244` / `244` / `242` pressure.
+- The remaining step-`15` `small_cluster` incumbent surface is now frozen more
+  tightly by
+  `current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning`:
+  all `242` remaining prunes happen during summary-stage exact screening,
+  every one stays on the same-primary `103 / 8` / `115657 / 21112` tier, the
+  non-winning spread is only bit cost `236..290`, and the earliest mismatch
+  positions across that surface stay at clause positions `0`, `1`, `2`, `4`,
+  and `5` with counts `162`, `54`, `18`, `6`, and `2`.
 - No broader per-step claim search-band expansion should land beyond that
   isolated anchor-`11` pocket before a new local repair proves more is
   necessary on this parity-clean stored chain.

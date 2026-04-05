@@ -141,6 +141,18 @@ gate.
     `244` exact-screened / `242` pruned
   - the accepted canonical step-`15` winner still remains the only retained
     candidate there and keeps bit cost `229`
+- A new local step-`15` small-cluster incumbent-surface regression now
+  freezes that remaining exact-screened pressure more tightly too:
+  - `current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning`
+    now pins that all `242` remaining `small_cluster` prunes happen during
+    summary-stage exact screening rather than later proof-close materialization
+  - every one of those remaining pruned candidates still sits on the same
+    primary `103 / 8` tier with overshoot `115657 / 21112`
+  - the remaining non-winning spread there is now only secondary bit cost,
+    from `236` through `290`, above the canonical winner's `229`
+  - the earliest first-mismatch positions across that still-pruned surface are
+    now frozen at clause positions `0`, `1`, `2`, `4`, and `5` with counts
+    `162`, `54`, `18`, `6`, and `2`
 - The remaining stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)
@@ -168,7 +180,7 @@ gate.
   - the stored `v5` compare / certification / benchmark freeze regressions
     remain green
 - The current local step-`15` diagnostic suite was rerun green after adding
-  that survivor-bucket freeze:
+  that survivor-bucket and small-cluster incumbent freezes:
   - all current `current_claim_step_fifteen_*` engine regressions are green
   - `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
     is green
@@ -1140,7 +1152,9 @@ gate.
 3. Use the stored `v11` certificate and late-step live checkpoints as the
    first diagnosis surface for the residual stored `3972 / 5000` miss at
    step `15`; the next move is another parity-preserving local step-`15`
-   repair, not another rerun setup pass.
+   repair on the remaining summary-stage `small_cluster` same-primary
+   `103 / 8` incumbent surface, not another rerun setup pass and not a
+   proof-close reland.
 4. Launch the next clean full-profile claim rerun only after that next local
    step-`15` repair is regression-backed and parity-clean, then refresh
    compare / benchmark / certification immediately afterwards and keep

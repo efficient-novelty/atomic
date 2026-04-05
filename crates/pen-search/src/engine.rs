@@ -3503,6 +3503,14 @@ fn search_next_step_internal_with_clause_catalog_override(
                     incumbent_rank,
                     allow_same_primary_relief,
                 ) {
+                    #[cfg(test)]
+                    maybe_capture_incumbent_pruned_terminal_group(
+                        "proof_close_group",
+                        bucket_key.label(),
+                        &group.prefix_telescope,
+                        group.candidates.len(),
+                        Some(group_best_rank.clone()),
+                    );
                     incremental_terminal_rank_prunes += group.candidates.len();
                     demo_bucket_stats
                         .entry(bucket_key.clone())
@@ -5264,6 +5272,14 @@ fn discover_realistic_shadow_candidates_with_clause_catalog_override(
                         )
                     };
                 if let Some(pruned_candidates) = cached_rank_prune_count {
+                    #[cfg(test)]
+                    maybe_capture_incumbent_pruned_terminal_group(
+                        "materialized_summary",
+                        bucket_key.label(),
+                        &work_item.prefix_telescope,
+                        pruned_candidates,
+                        group.best_accept_rank.clone(),
+                    );
                     discovery.terminal_rank_prunes += pruned_candidates;
                     discovery
                         .remaining_one_telemetry
@@ -5284,6 +5300,14 @@ fn discover_realistic_shadow_candidates_with_clause_catalog_override(
                             history,
                         ),
                     ) {
+                        #[cfg(test)]
+                        maybe_capture_incumbent_pruned_terminal_group(
+                            "materialized_group",
+                            bucket_key.label(),
+                            &work_item.prefix_telescope,
+                            group.candidates.len(),
+                            Some(group_best_rank.clone()),
+                        );
                         discovery.terminal_rank_prunes += group.candidates.len();
                         discovery
                             .remaining_one_telemetry
@@ -5800,6 +5824,22 @@ thread_local! {
 }
 
 #[cfg(test)]
+#[derive(Clone, Debug)]
+struct IncumbentPrunedTerminalGroupCapture {
+    phase: &'static str,
+    bucket_label: String,
+    prefix_telescope: Telescope,
+    pruned_candidate_count: usize,
+    best_accept_rank: Option<AcceptRank>,
+}
+
+#[cfg(test)]
+thread_local! {
+    static INCUMBENT_PRUNED_TERMINAL_GROUP_CAPTURE: std::cell::RefCell<Option<Vec<IncumbentPrunedTerminalGroupCapture>>> =
+        const { std::cell::RefCell::new(None) };
+}
+
+#[cfg(test)]
 fn start_pruned_terminal_prefix_capture() {
     PRUNED_TERMINAL_PREFIX_CAPTURE.with(|capture| {
         *capture.borrow_mut() = Some(Vec::new());
@@ -5809,6 +5849,19 @@ fn start_pruned_terminal_prefix_capture() {
 #[cfg(test)]
 fn finish_pruned_terminal_prefix_capture() -> Vec<OnlinePrefixWorkItem> {
     PRUNED_TERMINAL_PREFIX_CAPTURE.with(|capture| capture.borrow_mut().take().unwrap_or_default())
+}
+
+#[cfg(test)]
+fn start_incumbent_pruned_terminal_group_capture() {
+    INCUMBENT_PRUNED_TERMINAL_GROUP_CAPTURE.with(|capture| {
+        *capture.borrow_mut() = Some(Vec::new());
+    });
+}
+
+#[cfg(test)]
+fn finish_incumbent_pruned_terminal_group_capture() -> Vec<IncumbentPrunedTerminalGroupCapture> {
+    INCUMBENT_PRUNED_TERMINAL_GROUP_CAPTURE
+        .with(|capture| capture.borrow_mut().take().unwrap_or_default())
 }
 
 #[cfg(test)]
@@ -5834,6 +5887,33 @@ fn maybe_capture_pruned_terminal_prefix(
             return;
         }
         capture.push(work_item.clone());
+    });
+}
+
+#[cfg(test)]
+fn maybe_capture_incumbent_pruned_terminal_group(
+    phase: &'static str,
+    bucket_label: String,
+    prefix_telescope: &Telescope,
+    pruned_candidate_count: usize,
+    best_accept_rank: Option<AcceptRank>,
+) {
+    if pruned_candidate_count == 0 {
+        return;
+    }
+
+    INCUMBENT_PRUNED_TERMINAL_GROUP_CAPTURE.with(|capture| {
+        let mut capture = capture.borrow_mut();
+        let Some(capture) = capture.as_mut() else {
+            return;
+        };
+        capture.push(IncumbentPrunedTerminalGroupCapture {
+            phase,
+            bucket_label,
+            prefix_telescope: prefix_telescope.clone(),
+            pruned_candidate_count,
+            best_accept_rank,
+        });
     });
 }
 
@@ -6031,6 +6111,14 @@ fn process_prepared_exact_two_step_terminal_surface(
                 )
             };
         if let Some(pruned_candidates) = cached_rank_prune_count {
+            #[cfg(test)]
+            maybe_capture_incumbent_pruned_terminal_group(
+                "prepared_summary",
+                bucket_key.label(),
+                &terminal_prefix.prefix_telescope,
+                pruned_candidates,
+                group.best_accept_rank.clone(),
+            );
             discovery.terminal_rank_prunes += pruned_candidates;
             discovery
                 .remaining_one_telemetry
@@ -6047,6 +6135,14 @@ fn process_prepared_exact_two_step_terminal_surface(
                 incumbent_rank,
                 claim_same_primary_incumbent_relief_active(admissibility.mode, step_index, history),
             ) {
+                #[cfg(test)]
+                maybe_capture_incumbent_pruned_terminal_group(
+                    "prepared_group",
+                    bucket_key.label(),
+                    &terminal_prefix.prefix_telescope,
+                    group.candidates.len(),
+                    Some(group_best_rank.clone()),
+                );
                 discovery.terminal_rank_prunes += group.candidates.len();
                 discovery
                     .remaining_one_telemetry
@@ -8350,6 +8446,14 @@ fn claim_try_summary_prune_before_materialization(
         return false;
     };
 
+    #[cfg(test)]
+    maybe_capture_incumbent_pruned_terminal_group(
+        "summary",
+        bucket_key.label(),
+        prefix_telescope,
+        pruned_candidates,
+        summary.best_accept_rank.clone(),
+    );
     discovery.record_demo_bucket_pruned(bucket_key, pruned_candidates);
     record_terminal_prefix_summary_discovery_counts(discovery, &summary);
     discovery.terminal_rank_prunes += pruned_candidates;
@@ -10132,6 +10236,16 @@ mod tests {
         structurally_connected_via_historical_reanchor_candidates: usize,
     }
 
+    #[derive(Clone, Debug, Default, Eq, PartialEq)]
+    struct LateStepIncumbentPruneSummary {
+        capture_count: usize,
+        phase_counts: BTreeMap<&'static str, usize>,
+        bucket_totals: BTreeMap<String, usize>,
+        bit_kappa_counts: BTreeMap<u16, usize>,
+        mismatch_position_counts: BTreeMap<Option<usize>, usize>,
+        primary_profiles: BTreeMap<(Rational, u16, u16), usize>,
+    }
+
     fn late_step_pruned_terminal_surface_from_prefix(
         prefix: &[Telescope],
         step_index: u32,
@@ -10231,6 +10345,82 @@ mod tests {
             .map(|step| step.telescope)
             .collect::<Vec<_>>();
         late_step_exact_prune_family_summary(&prefix, 15, limit)
+    }
+
+    fn current_claim_step_fifteen_incumbent_prune_summary() -> LateStepIncumbentPruneSummary {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let (library, history, nu_history) = history_from_prefix(&prefix);
+        let structural_debt = summarize_structural_debt(&library, 2);
+        let admissibility = strict_admissibility_for_mode(
+            15,
+            2,
+            &library,
+            AdmissibilityMode::DesktopClaimShadow,
+        );
+        let objective_bar = compute_bar(2, 15, &history).bar;
+        let mut demo_step_budget = None;
+        let mut demo_narrative = None;
+        let mut progress_observer = None;
+
+        super::start_incumbent_pruned_terminal_group_capture();
+        let _discovery = super::discover_realistic_shadow_candidates(
+            15,
+            &library,
+            &history,
+            structural_debt,
+            admissibility,
+            structural_debt.retention_policy(),
+            objective_bar,
+            &nu_history,
+            &mut demo_step_budget,
+            std::time::Instant::now(),
+            &mut demo_narrative,
+            &mut progress_observer,
+        )
+        .expect("step-15 discovery should run");
+        let captures = super::finish_incumbent_pruned_terminal_group_capture();
+
+        let mut summary = LateStepIncumbentPruneSummary {
+            capture_count: captures.len(),
+            ..LateStepIncumbentPruneSummary::default()
+        };
+        for capture in captures {
+            *summary.phase_counts.entry(capture.phase).or_insert(0) += 1;
+            *summary
+                .bucket_totals
+                .entry(capture.bucket_label)
+                .or_insert(0) += capture.pruned_candidate_count;
+            let mismatch = capture
+                .prefix_telescope
+                .clauses
+                .iter()
+                .zip(reference_prefix.clauses.iter())
+                .position(|(left, right)| left != right);
+            *summary
+                .mismatch_position_counts
+                .entry(mismatch)
+                .or_insert(0) += 1;
+            if let Some(rank) = capture.best_accept_rank {
+                *summary.bit_kappa_counts.entry(rank.bit_kappa).or_insert(0) += 1;
+                *summary
+                    .primary_profiles
+                    .entry((rank.overshoot, rank.clause_kappa, rank.descending_nu.0))
+                    .or_insert(0) += 1;
+            }
+        }
+
+        summary
     }
 
     fn claim_step_open_from_prefix(
@@ -17289,6 +17479,84 @@ mod tests {
             .into_iter()
             .collect(),
             "the repaired canonical step-15 survivor surface should stay frozen as one library-backed temporal small-cluster bucket plus the isolated non-winning single pocket"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning()
+    {
+        let summary = current_claim_step_fifteen_incumbent_prune_summary();
+        assert_eq!(summary.capture_count, 242);
+        assert_eq!(
+            summary.phase_counts,
+            [("summary", 242_usize)].into_iter().collect(),
+            "the remaining step-15 small-cluster pressure should all still be pruned during summary-stage exact screening rather than later proof-close materialization"
+        );
+        assert_eq!(
+            summary.bucket_totals,
+            [(
+                "k8:structural_generic:temporal_operator:library_backed:small_cluster"
+                    .to_string(),
+                242_usize,
+            )]
+            .into_iter()
+            .collect(),
+            "the remaining step-15 incumbent pressure should stay isolated to the temporal small-cluster bucket"
+        );
+        assert_eq!(
+            summary.primary_profiles,
+            [((Rational::new(115657, 21112), 8_u16, 103_u16), 242_usize)]
+                .into_iter()
+                .collect(),
+            "every remaining step-15 incumbent-pruned small-cluster candidate should stay in the same primary 103/8 tier as the canonical winner"
+        );
+        assert_eq!(
+            summary.mismatch_position_counts,
+            [
+                (Some(0_usize), 162_usize),
+                (Some(1), 54),
+                (Some(2), 18),
+                (Some(4), 6),
+                (Some(5), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the remaining same-primary small-cluster pressure should still first diverge only across the repaired-side clause positions 0, 1, 2, 4, and 5"
+        );
+        assert_eq!(
+            summary.bit_kappa_counts,
+            [
+                (236_u16, 5_usize),
+                (238, 4),
+                (243, 9),
+                (245, 17),
+                (247, 6),
+                (250, 7),
+                (252, 24),
+                (254, 21),
+                (256, 5),
+                (257, 2),
+                (259, 13),
+                (261, 21),
+                (263, 16),
+                (265, 4),
+                (266, 2),
+                (268, 6),
+                (270, 15),
+                (272, 14),
+                (274, 3),
+                (277, 7),
+                (279, 15),
+                (281, 9),
+                (283, 1),
+                (284, 2),
+                (286, 6),
+                (288, 6),
+                (290, 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the remaining step-15 small-cluster surface should stay non-winning only on secondary bit-cost spread above the canonical 229-bit winner"
         );
     }
 

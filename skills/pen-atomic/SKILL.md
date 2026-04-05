@@ -69,8 +69,15 @@ Treat these as current repo truths:
   library-backed temporal-operator `small_cluster` bucket at
   `2190` generated / `244` admitted / `244` exact-screened / `242` pruned
   plus the isolated non-winning `single` pocket at overshoot
-  `115657 / 21112`, so the next repair stays on the small-cluster incumbent
-  surface rather than reopening the single pocket; user-facing wording stays at
+  `115657 / 21112`; a newer executable
+  `current_claim_step_fifteen_small_cluster_incumbent_surface_stays_same_primary_and_non_winning`
+  regression now pins that all `242` remaining `small_cluster` prunes happen
+  during summary-stage exact screening, all stay on the same-primary
+  `103 / 8` / `115657 / 21112` tier, and differ only by higher bit cost
+  `236..290` across first mismatches at clause positions `0`, `1`, `2`, `4`,
+  and `5`, so the next repair stays on that narrow summary-stage
+  small-cluster incumbent surface rather than reopening the single pocket or
+  proof-close ordering first; user-facing wording stays at
   `bounded live recovery` until stored breadth and certification pass
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
@@ -395,6 +402,11 @@ Focus on:
 - starting from clean-tree `v11` as the canonical stored bundle, but treating
   the next operational move as diagnosis / repair on the residual stored
   step-`15` `3972 / 5000` gap rather than another rerun setup pass
+- treating the remaining step-`15` `small_cluster` incumbent surface as a
+  summary-stage same-primary `103 / 8` bit-cost spread, not as a proof-close
+  or isolated-single-pocket problem:
+  the current frozen mismatch counts are `162 / 54 / 18 / 6 / 2` at clause
+  positions `0 / 1 / 2 / 4 / 5`
 - moving admissibility, mutation, scheduling, and certification toward
   family-agnostic structural evidence
 - not using stronger words like `unguided` before the certification gate lands
