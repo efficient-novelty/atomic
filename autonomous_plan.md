@@ -47,6 +47,24 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 - Step `15` is now the remaining stored late-floor miss, and the next honest
   local engineering dollar is stored step-`15` diagnosis / repair on top of
   `v10`, not another rerun first and not another step-`13` theory pass.
+- A new narrow local step-`15` repair now consumes that diagnosis:
+  - mixed live claim clause-`2` prefixes now expose exactly one additional
+    clause-`3` option, the isolated anchor-`11` exact-argument pocket, while
+    reference clause-`2` prefixes and the lifted anchor-`11` neighbors stay
+    out of the live clause-`3` catalog
+  - the live claim clause-`2` variants now regain historical reanchor on that
+    isolated pocket across every repaired-side subset of clause positions
+    `0`, `1`, `4`, and `5`, while clause `6` still stays the safety boundary
+    that reopens the unsafe `89 / 8` rival
+  - on the repaired canonical late chain, step `15` still accepts
+    `DCT 103 / 8`, but live generated prefixes now lift from `1794` to
+    `3972`
+  - step-`15` partial-prefix bar failures stay `468` while incumbent-
+    dominance prunes rise from `80` to `242`
+  - the surviving temporal terminal cluster now widens to
+    `2190` generated / `244` admitted / `244` exact-screened / `242` pruned,
+    and one isolated fully scored non-winning anchor-`11` terminal pocket is
+    now frozen with overshoot `115657 / 21112`
 - Two new non-landed local step-`13` probes now sharpen the safe search space:
   - widening only operator-bundle formation positions `1` and `4` to
     demo-like variants lifts the repaired local read to
@@ -75,19 +93,19 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 ## Optimization Thesis
 
-The next cycle should spend engineering time on the remaining stored
-step-`15` floor while keeping step `1` explicit, not on another rerun first
-and not on another round of step-`13` theory.
+The next cycle should spend engineering time on consuming that local
+step-`15` repair on stored evidence while keeping step `1` explicit, not on
+another round of step-`15` diagnosis or step-`13` theory first.
 
 The highest-value work is:
 
 1. keep the current step-`11` / step-`12` / step-`13..15` local guardrails
    green on the repaired chain
-2. use stored `v10` certificate plus `step-15-live.ndjson` as the primary
-   diagnosis surface
-3. keep the stored step-`13` hit frozen and step `1` explicit on the checklist
-4. land a parity-preserving step-`15` repair, then rerun and refresh compare /
-   benchmark / certification
+2. keep the stored step-`13` hit frozen and step `1` explicit on the
+   checklist
+3. launch the next clean full-profile rerun on top of the regression-backed
+   local step-`15` repair
+4. refresh compare / benchmark / certification on the new stored bundle
 
 Treat `v10` plus its stored audit bundle as the current canonical guardrail.
 Keep the replay harness corpus and benchmark inputs frozen until real stored
@@ -136,16 +154,16 @@ Loop:
 
 Current slice order:
 
-1. hold the stored step-`13` hit and the frozen negative controls green
-2. diagnose stored step `15` on top of `v10`
-3. land and validate a local step-`15` repair
-4. rerun and refresh stored compare / benchmark / certification
-5. revisit stored step `1` from the new evidence bundle once step `15` moves
+1. hold the stored step-`13` hit, the stored `v10` diagnosis freeze, and the
+   frozen negative controls green
+2. keep the new local step-`15` repair green on the repaired canonical chain
+3. rerun and refresh stored compare / benchmark / certification
+4. revisit stored step `1` from the new evidence bundle once step `15` moves
 
 Do not reopen first:
 
-- another fresh full-profile rerun before a local step-`15` repair is landed
-- another fresh step-`13` widening theory pass before step `15` is diagnosed
+- another fresh step-`13` widening theory pass before the rerun consumes the
+  landed local step-`15` repair
 - a `resume`-based restart of stopped `v4`
 - another runtime-only step-`4` micro-optimization slice first
 - another stored/local step-`11` rerun first

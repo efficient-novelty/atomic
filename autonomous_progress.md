@@ -587,6 +587,26 @@ gate.
   that touches that neighborhood must isolate the exact-argument qualifier
   evidence without relanding the lifted variants or replacing the canonical
   accepted path
+- A new narrow local step-`15` anchor-`11` exact-argument repair now lands on
+  top of that diagnosis:
+  - mixed live claim clause-`2` prefixes now expose exactly one additional
+    clause-`3` option, the isolated anchor-`11` exact-argument pocket, while
+    reference clause-`2` prefixes and the lifted anchor-`11` neighbors stay
+    out of the live clause-`3` catalog
+  - the live claim clause-`2` variants now regain historical reanchor on that
+    isolated pocket across every repaired-side subset of clause positions
+    `0`, `1`, `4`, and `5`, but clause `6` still stays the local safety
+    boundary: once clause `6` also deviates, the same pocket reopens the
+    unsafe `89 / 8` rival and remains fenced
+  - on the repaired canonical late chain, step `15` still accepts
+    `DCT 103 / 8`, but live generated prefixes now lift from `1794` to
+    `3972`
+  - step-`15` partial-prefix bar failures stay `468` while incumbent-
+    dominance prunes rise from `80` to `242`
+  - the surviving temporal terminal cluster now widens to
+    `2190` generated / `244` admitted / `244` exact-screened / `242` pruned,
+    and one isolated fully scored non-winning anchor-`11` terminal pocket is
+    now frozen with overshoot `115657 / 21112`
 - No fresh full-profile rerun or stored audit refresh has consumed those local
   repairs yet, so the frozen `v5` run, compare report, claim certificate, and
   benchmark bundle remain the authoritative stored evidence surface.
@@ -1061,8 +1081,10 @@ gate.
 - Keep the current local step-`13` / step-`14` / step-`15` surfaces green as
   guardrails:
   step `13` should now stay at `[5,1,3,3,5,3,2]` / `1350` / `2320` with the
-  guarded accepted hash, while step `14` stays `19683` / `12027` and step
-  `15` stays `DCT 103 / 8 / 1794`.
+  guarded accepted hash, while step `14` stays `19683` / `12027`, the local
+  repaired step `15` now stays `DCT 103 / 8 / 3972`, and stored canonical
+  `v10` step `15` remains frozen at `DCT 103 / 8 / 1794` until the next rerun
+  consumes that local repair.
 - Use the stored `v10` certificate and the late-step live checkpoints as the
   first diagnosis surface for the remaining misses; they now expose raw
   catalog widths, root seeding, exact-screen pressure, and the full stored
@@ -1091,15 +1113,18 @@ gate.
 2. Hold the current pre-flight gate, the stored `v10` compare readiness, the
    new local step-`11` breadth guardrails, the repaired step-`12`
    same-primary selector, the stored step-`13`
-   `[5,1,3,3,5,3,2]` / `1350` / `2320` accepted surface, and the current
-   step-`14` / step-`15` later-surface guardrails green.
-3. Resume diagnosis from stored step `15` as the remaining late-floor miss on
-   the canonical bundle, using the `v10` certificate first and
-   `step-15-live.ndjson` only when checkpoint-level timing or note provenance
-   is needed before changing more search code.
-4. Keep step `1 = 546 / 2144` explicit as the separate stored early breadth
-   blocker while step `15` is being diagnosed; do not let stored step-`13`
-   closure paper over that miss.
+   `[5,1,3,3,5,3,2]` / `1350` / `2320` accepted surface, the new local
+   isolated anchor-`11` step-`15` repair, the stored
+   `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
+   regression, and the current step-`14` / step-`15` later-surface guardrails
+   green.
+3. Launch the next clean full-profile claim rerun on top of that
+   regression-backed local step-`15` repair; only treat the canonical stored
+   bundle as moved once the rerun preserves accepted-hash parity through
+   step `15` and consumes more stored breadth than `v10`.
+4. Refresh compare / benchmark / certification on that new stored bundle
+   immediately after the rerun and keep step `1 = 546 / 2144` explicit as the
+   separate stored early breadth blocker unless the rerun itself changes it.
 5. Keep the two frozen step-`13` negative controls and the rejected global
    band-`7` / temporal-reanchor / early bridge expansions out of the landed
-   path while the next step-`15` repair is still pending.
+   path while the rerun / audit refresh is pending.

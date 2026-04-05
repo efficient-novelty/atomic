@@ -166,6 +166,20 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   neighbors still reopen the unsafe `88 / 8` rival, so any future repair
   there must isolate the exact-argument qualifier evidence without relanding
   the lifted variants or replacing the canonical accepted path
+- a new narrow local step-`15` anchor-`11` exact-argument repair now consumes
+  that read on the live claim chain:
+  mixed live claim clause-`2` prefixes now expose exactly one additional
+  clause-`3` option, the isolated anchor-`11` exact-argument pocket, while
+  reference clause-`2` prefixes and the lifted anchor-`11` neighbors stay out
+  of the live clause-`3` catalog; the live claim clause-`2` variants now
+  regain historical reanchor on that isolated pocket across every repaired-
+  side subset of clause positions `0`, `1`, `4`, and `5`, but clause `6`
+  still stays the local safety boundary that reopens the unsafe `89 / 8`
+  rival; on the repaired canonical late chain, step `15` still accepts
+  `DCT 103 / 8`, but live generated prefixes now lift from `1794` to `3972`,
+  partial-prefix bar failures stay `468`, incumbent-dominance prunes rise from
+  `80` to `242`, and the surviving temporal terminal cluster now widens to
+  `2190` generated / `244` admitted / `244` exact-screened / `242` pruned
 
 ## Current Operational Blockers
 
@@ -180,15 +194,18 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - step `15` is now the remaining stored late-floor miss on the clean
   canonical bundle
 - the next rerun or step-`13` theory pass is no longer the first move:
-  stored step `13` is already closed, so the next move is stored step-`15`
-  diagnosis / repair on top of canonical `v10`
+  stored step `13` is already closed and the local step-`15` repair is now
+  landed, so the next move is the clean rerun / audit refresh that consumes
+  that repair on top of canonical `v10`
 - the canonical repaired late chain must stay frozen while breadth is
   re-earned:
   - step `12` should keep the guarded `34 / 6` continuation
   - stored step `13` should stay at `[5,1,3,3,5,3,2]` / `1350` / `2320`
     with the guarded accepted hash
   - step `14` should stay at `19683` / `12027`
-  - step `15` should stay on `DCT 103 / 8 / 1794`
+  - local repaired step `15` should now stay on `DCT 103 / 8 / 3972`
+  - stored canonical `v10` step `15` still stays frozen at
+    `DCT 103 / 8 / 1794` until the rerun consumes that local repair
 - step `1` remains a separate stored early breadth blocker even if late-step
   repairs continue to land
 - benchmark evidence is still too weak for a passing claim certificate until a
@@ -207,21 +224,22 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    step-`13..15` surfaces should stay frozen on the canonical branch; keep
    `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
    green there too.
-3. Resume diagnosis from stored step `15` on top of canonical `v10`, using
-   the stored certificate first and `step-15-live.ndjson` only when
-   checkpoint-level timing or note provenance is needed before changing more
-   search code; do not rerun or reopen step-`13` theory first.
+3. Treat the new isolated anchor-`11` step-`15` repair as the current local
+   rerun candidate; launch the next clean full-profile rerun and refresh
+   compare / benchmark / certification instead of reopening another
+   diagnosis-only pass or step-`13` theory first.
 4. Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they still prove local breadth can be reopened unsafely, but they are not
    the landed repair.
 5. Keep stored step `15 = 1794 / 5000` and step `1 = 546 / 2144` in view
    beside that work; do not reopen another stored step-`11` rerun first now
    that clean-tree `v10` already re-earns stored step `11 = 1338 / 800`.
-6. If the nearby clause-`3` anchor-`11` neighborhood is explored again, keep
-   the new bit-cost read explicit: only the exact-argument pocket stays
-   non-winning cleanly, and it does so by losing to the canonical winner on
-   bit cost `236` versus `229`; do not reland the lifted anchor-`11`
-   variants.
+6. If the nearby clause-`3` anchor-`11` neighborhood is touched again, keep
+   the live repair boundary explicit: only the exact-argument pocket is
+   landed, it is isolated to the current claim clause-`2` variants, it stays
+   non-winning by losing to the canonical winner on bit cost `236` versus
+   `229`, clause `6` still fences the unsafe `89 / 8` rival, and the lifted
+   anchor-`11` variants must stay out.
 
 ## First Reads
 

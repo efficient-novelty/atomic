@@ -43,8 +43,13 @@ It lists only work that is still open.
   - step `13` reports `[5,1,3,3,5,3,2]` / `1350` / `2320`
   - step `14` reports `19683` / `12027`
   - step `15` preserves `DCT 103 / 8 / 1794`
-- No new per-step claim search-band expansion should land before the stored
-  breadth repair proves it is necessary on this parity-clean chain.
+- A new local step-`15` anchor-`11` exact-argument repair now lifts the
+  repaired canonical chain from `DCT 103 / 8 / 1794` to
+  `DCT 103 / 8 / 3972` while keeping the stored `v10` bundle frozen at
+  `1794` until the next rerun consumes that change.
+- No broader per-step claim search-band expansion should land beyond that
+  isolated anchor-`11` pocket before the stored rerun proves more is
+  necessary on this parity-clean chain.
 - Claim-policy honesty, fallback honesty, narrative/event completeness,
   exact-screen reason completeness, prune-class completeness, manifest
   completeness, and accepted-hash parity are already earned on the stored

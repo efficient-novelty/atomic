@@ -137,6 +137,7 @@ impl LibRefSummary {
 pub struct HistoricalReanchorSummary {
     temporal_shell_anchor_ref: Option<u32>,
     temporal_shell_prefix_matches: bool,
+    anchor_eleven_claim_pair_matches: bool,
     clause_count: usize,
     matched_clause_count: usize,
     first_mismatch_position: Option<usize>,
@@ -156,6 +157,7 @@ impl HistoricalReanchorSummary {
         Self {
             temporal_shell_anchor_ref,
             temporal_shell_prefix_matches: temporal_shell_anchor_ref.is_some(),
+            anchor_eleven_claim_pair_matches: temporal_shell_anchor_ref.is_some(),
             clause_count: 0,
             matched_clause_count: 0,
             first_mismatch_position: None,
@@ -171,11 +173,15 @@ impl HistoricalReanchorSummary {
             return self;
         };
         if !self.temporal_shell_prefix_matches {
+            self.anchor_eleven_claim_pair_matches = self.anchor_eleven_claim_pair_matches
+                && matches_anchor_eleven_claim_pair_clause(position, &clause.expr, anchor);
             return self;
         }
 
         self.temporal_shell_prefix_matches =
             matches_historical_reanchor_clause(position, &clause.expr, anchor);
+        self.anchor_eleven_claim_pair_matches = self.anchor_eleven_claim_pair_matches
+            && matches_anchor_eleven_claim_pair_clause(position, &clause.expr, anchor);
         if self.temporal_shell_prefix_matches {
             self.matched_clause_count += 1;
         } else {
@@ -186,7 +192,7 @@ impl HistoricalReanchorSummary {
 
     pub fn allows_historical_reanchor(self) -> bool {
         self.temporal_shell_anchor_ref.is_some()
-            && self.temporal_shell_prefix_matches
+            && (self.temporal_shell_prefix_matches || self.anchor_eleven_claim_pair_matches)
             && self.clause_count == 8
     }
 
@@ -852,6 +858,77 @@ fn matches_historical_reanchor_clause(position: usize, expr: &Expr, anchor: u32)
         7 => matches_reference_temporal_terminal_clause(expr),
         _ => false,
     }
+}
+
+fn matches_anchor_eleven_claim_pair_clause(position: usize, expr: &Expr, anchor: u32) -> bool {
+    match position {
+        0 => matches_temporal_next_reanchor_clause(expr),
+        1 => matches_temporal_eventually_reanchor_clause(expr),
+        2 => matches_claim_temporal_pair_clause_two_variant(expr),
+        3 => matches_anchor_eleven_exact_argument_clause(expr, anchor + 1),
+        4 => matches_temporal_flat_next_bridge(expr),
+        5 => matches_temporal_sharp_eventually_bridge(expr),
+        6 => matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(
+                            function.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        ) && matches!(argument.as_ref(), Expr::Var(2))
+                )
+        ),
+        7 => matches_reference_temporal_terminal_clause(expr),
+        _ => false,
+    }
+}
+
+fn matches_claim_temporal_pair_clause_two_variant(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Next(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
+            ) && matches!(
+                codomain.as_ref(),
+                Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+            )
+    ) || matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(domain.as_ref(), Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1)))
+                && matches!(
+                codomain.as_ref(),
+                Expr::Eventually(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
+            )
+    )
+}
+
+fn matches_anchor_eleven_exact_argument_clause(expr: &Expr, anchor: u32) -> bool {
+    matches!(
+        expr,
+        Expr::Lam(body)
+            if matches!(
+                body.as_ref(),
+                Expr::App(function, argument)
+                    if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
+                        && matches!(
+                            argument.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+            )
+    )
 }
 
 fn matches_temporal_next_reanchor_clause(expr: &Expr) -> bool {
@@ -1945,6 +2022,101 @@ mod tests {
                         references_active_window: false,
                         self_contained: false,
                         max_lib_ref: 10,
+                        historical_reanchor: false,
+                    }
+                );
+                assert!(!passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_claim_clause_two_anchor_eleven_exact_argument_pocket_across_repaired_side_variants()
+     {
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let side_positions = [(0usize, 0usize), (1, 1), (4, 4), (5, 5)];
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            for mask in 0u8..(1 << side_positions.len()) {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[2].expr = clause_two_variant.clone();
+                telescope.clauses[3] = ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor + 1)),
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    ))),
+                );
+                for (bit_index, position) in side_positions {
+                    if mask & (1 << bit_index) != 0 {
+                        telescope.clauses[position].expr =
+                            claim_temporal_variant_exprs(position, anchor)
+                                .into_iter()
+                                .next()
+                                .expect("repaired side position should expose a claim variant");
+                    }
+                }
+                telescope.clauses[7] = reference_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    reanchor.allows_historical_reanchor(),
+                    "claim clause-2 plus anchor-11 exact-argument pocket should stay historically reanchorable across every repaired-side subset while clause 6 and the terminal stay exact"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 11,
+                        historical_reanchor: true,
+                    }
+                );
+                assert!(passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_claim_clause_two_anchor_eleven_exact_argument_pocket_outside_historical_reanchor_when_clause_six_moves()
+     {
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            for clause_six_variant in claim_temporal_variant_exprs(6, anchor) {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[2].expr = clause_two_variant.clone();
+                telescope.clauses[3] = ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor + 1)),
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    ))),
+                );
+                telescope.clauses[6].expr = clause_six_variant;
+                telescope.clauses[7] = reference_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    !reanchor.allows_historical_reanchor(),
+                    "the isolated anchor-11 exact-argument pocket should stay fenced once clause 6 also deviates"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 11,
                         historical_reanchor: false,
                     }
                 );

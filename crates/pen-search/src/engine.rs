@@ -6089,6 +6089,87 @@ fn create_online_prefix_work_item(
     clause_catalog: &ClauseCatalog,
     prefix_legality_cache: &mut PrefixLegalityCache,
 ) -> OnlinePrefixWorkItem {
+    fn matches_claim_step_fifteen_anchor_eleven_clause_two_variant(
+        clause: &pen_core::clause::ClauseRec,
+    ) -> bool {
+        clause.role == ClauseRole::Formation
+            && matches!(
+                &clause.expr,
+                Expr::Pi(domain, codomain)
+                    if (
+                        matches!(
+                            domain.as_ref(),
+                            Expr::Next(body)
+                                if matches!(
+                                    body.as_ref(),
+                                    Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                )
+                        )
+                    ) && (
+                        matches!(
+                            codomain.as_ref(),
+                            Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+                        )
+                    )
+            )
+            || matches!(
+                &clause.expr,
+                Expr::Pi(domain, codomain)
+                    if matches!(
+                        domain.as_ref(),
+                        Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+                    ) && matches!(
+                        codomain.as_ref(),
+                        Expr::Eventually(body)
+                            if matches!(
+                                body.as_ref(),
+                                Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                            )
+                    )
+            )
+    }
+
+    fn claim_step_fifteen_anchor_eleven_exact_argument_clause(
+        anchor: u32,
+        library: &Library,
+    ) -> Option<pen_core::clause::ClauseRec> {
+        let anchor_eleven = anchor + 1;
+        (anchor_eleven <= library.len() as u32).then(|| {
+            pen_core::clause::ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor_eleven)),
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                ))),
+            )
+        })
+    }
+
+    fn injected_claim_step_fifteen_anchor_eleven_clause(
+        clause_kappa: u16,
+        prefix_telescope: &Telescope,
+        signature: &PrefixSignature,
+        library: &Library,
+        admissibility: StrictAdmissibility,
+    ) -> Option<pen_core::clause::ClauseRec> {
+        if admissibility.mode != AdmissibilityMode::DesktopClaimShadow
+            || signature.obligation_set_id.get() != 15
+            || clause_kappa != 8
+            || prefix_telescope.clauses.len() != 3
+        {
+            return None;
+        }
+        let anchor = admissibility.historical_anchor_ref?;
+        matches_claim_step_fifteen_anchor_eleven_clause_two_variant(
+            prefix_telescope
+                .clauses
+                .get(2)
+                .expect("step-15 temporal shell prefix should expose clause 2"),
+        )
+        .then(|| claim_step_fifteen_anchor_eleven_exact_argument_clause(anchor, library))
+        .flatten()
+    }
+
     fn clone_filtered_terminal_clause_data(
         catalog_clauses: &[pen_core::clause::ClauseRec],
         catalog_connectivity_facts: &[TerminalClauseConnectivityFacts],
@@ -6141,30 +6222,51 @@ fn create_online_prefix_work_item(
         let catalog_clauses = clause_catalog.clauses_at(prefix_len);
         let catalog_connectivity_facts = clause_catalog.terminal_connectivity_facts_at(prefix_len);
         let catalog_nu_facts = clause_catalog.terminal_nu_facts_at(prefix_len);
-        match prefix_legality_cache.filter_active_window_clauses(
+        let injected_clause = injected_claim_step_fifteen_anchor_eleven_clause(
+            clause_kappa,
+            &prefix_telescope,
+            &signature,
+            library,
+            admissibility,
+        );
+        let filtered_clauses = prefix_legality_cache.filter_active_window_clauses(
             &signature,
             prefix_len,
             library,
             admissibility,
             catalog_clauses,
-        ) {
-            Some(filtered_clauses) if filtered_clauses.len() < catalog_clauses.len() => {
-                let filtered_len = filtered_clauses.len();
-                let (filtered_clauses, filtered_connectivity_facts, filtered_nu_facts) =
-                    clone_filtered_terminal_clause_data(
-                        catalog_clauses,
-                        catalog_connectivity_facts,
-                        catalog_nu_facts,
-                        filtered_clauses,
-                    );
-                (
-                    Some(filtered_clauses),
-                    Some(filtered_connectivity_facts),
-                    Some(filtered_nu_facts),
-                    filtered_len,
-                )
+        );
+        let needs_materialized_filter = matches!(
+            filtered_clauses,
+            Some(ref clauses) if clauses.len() < catalog_clauses.len()
+        ) || injected_clause.is_some();
+        if needs_materialized_filter {
+            let filtered_clauses =
+                filtered_clauses.unwrap_or_else(|| catalog_clauses.iter().collect::<Vec<_>>());
+            let (mut filtered_clauses, mut filtered_connectivity_facts, mut filtered_nu_facts) =
+                clone_filtered_terminal_clause_data(
+                    catalog_clauses,
+                    catalog_connectivity_facts,
+                    catalog_nu_facts,
+                    filtered_clauses,
+                );
+            if let Some(clause) = injected_clause {
+                if !filtered_clauses.contains(&clause) {
+                    filtered_connectivity_facts
+                        .push(TerminalClauseConnectivityFacts::from_clause(&clause));
+                    filtered_nu_facts.push(TerminalClauseNuFacts::from_clause(&clause));
+                    filtered_clauses.push(clause);
+                }
             }
-            Some(_) | None => (None, None, None, catalog_clauses.len()),
+            let filtered_len = filtered_clauses.len();
+            (
+                Some(filtered_clauses),
+                Some(filtered_connectivity_facts),
+                Some(filtered_nu_facts),
+                filtered_len,
+            )
+        } else {
+            (None, None, None, catalog_clauses.len())
         }
     };
 
@@ -12155,7 +12257,7 @@ mod tests {
     #[test]
     fn current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families() {
         let summary = current_claim_step_fifteen_exact_prune_family_summary(usize::MAX);
-        assert_eq!(summary.raw_generated_surface, 1794);
+        assert_eq!(summary.raw_generated_surface, 3972);
         assert_eq!(summary.roots_seen, 3);
         assert_eq!(summary.roots_enqueued, 3);
         assert_eq!(summary.partial_prefix_bound_prunes, 468);
@@ -14823,9 +14925,12 @@ mod tests {
                         witness.connected,
                         "mixed clause-2 replacement {clause_two_label} plus clause-3 anchor swap {candidate_anchor}/{arg_label} should stay structurally connected on the exact suffix"
                     );
-                    assert!(
-                        !witness.historical_reanchor,
-                        "mixed clause-2 replacement {clause_two_label} plus clause-3 anchor swap {candidate_anchor}/{arg_label} should still stay outside historical reanchor"
+                    assert_eq!(
+                        witness.historical_reanchor,
+                        *candidate_anchor == anchor + 1
+                            && *arg_label == "exact"
+                            && clause_two_label.starts_with("claim_"),
+                        "only the live claim clause-2 variants should now regain historical reanchor on the isolated anchor-11 exact-argument pocket; the broader neighborhood should remain fenced"
                     );
                     assert!(
                         admissibility_decision.is_admitted(),
@@ -14953,7 +15058,7 @@ mod tests {
     }
 
     #[test]
-    fn current_claim_step_fifteen_anchor_eleven_exact_argument_pocket_is_canonical_tie_clean_but_bit_cost_worse()
+    fn current_claim_step_fifteen_anchor_eleven_exact_argument_pocket_keeps_claim_variants_non_winning_on_bit_cost()
      {
         let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
         let mut library: Library = Vec::new();
@@ -15064,7 +15169,11 @@ mod tests {
             let admissibility_decision =
                 assess_strict_admissibility(15, &library, &telescope, admissibility);
             assert!(witness.connected);
-            assert!(!witness.historical_reanchor);
+            assert_eq!(
+                witness.historical_reanchor,
+                label.starts_with("claim_"),
+                "only the live claim clause-2 variants should now consume the anchor-11 exact-argument pocket; the nearby demo variants should remain diagnosis-only"
+            );
             assert_eq!(reanchor.matched_clause_count(), 2);
             assert_eq!(reanchor.first_mismatch_position(), Some(2));
             assert!(admissibility_decision.is_admitted());
@@ -15175,7 +15284,353 @@ mod tests {
             ]
             .into_iter()
             .collect(),
-            "the anchor-11 exact-argument pocket should now be frozen as a structurally tie-clean 103/8 rival that differs from the canonical step-15 winner only by higher bit cost"
+            "the anchor-11 exact-argument pocket should stay frozen as a structurally tie-clean 103/8 rival that differs from the canonical step-15 winner only by higher bit cost, even after the live claim variants consume it"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_claim_clause_two_prefixes_expose_only_anchor_eleven_exact_argument_pocket()
+     {
+        let steps = search_bootstrap_prefix(14, 2).expect("bootstrap search should succeed");
+        let mut library: Library = Vec::new();
+        let mut history: Vec<DiscoveryRecord> = Vec::new();
+
+        for step in &steps {
+            history.push(DiscoveryRecord::new(
+                step.step_index,
+                u32::from(step.accepted.nu),
+                u32::from(step.accepted.clause_kappa),
+            ));
+            library.push(LibraryEntry::from_telescope(&step.telescope, &library));
+        }
+
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..3].to_vec());
+        let anchor = admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let claim_clause_two_variants = [
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                    Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                ),
+            ),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                        Expr::Var(1),
+                    ))))),
+                ),
+            ),
+        ];
+
+        for clause_two in claim_clause_two_variants {
+            let mut prefix = reference_prefix.clone();
+            prefix.clauses[2] = clause_two;
+            let signature = PrefixSignature::new(15, &library, &prefix);
+            let mut cache = PrefixLegalityCache::default();
+            assert!(cache.insert_root(
+                signature.clone(),
+                8,
+                &library,
+                &prefix,
+                admissibility,
+                LateFamilySurface::ClaimGeneric
+            ));
+            let work_item = create_online_prefix_work_item(
+                8,
+                prefix,
+                signature,
+                &library,
+                admissibility,
+                &clause_catalog,
+                &mut cache,
+            );
+            let observed_exprs = work_item
+                .next_clauses(&clause_catalog)
+                .iter()
+                .map(|clause| format!("{:?}", clause.expr))
+                .collect::<BTreeSet<_>>();
+            assert_eq!(
+                observed_exprs.len(),
+                4,
+                "claim clause-2 prefixes should inject exactly one additional clause-3 option beyond the live claim catalog"
+            );
+            assert!(observed_exprs.contains("Lam(App(Lib(10), Next(Var(1))))"));
+            assert!(observed_exprs.contains("Lam(App(Lib(10), Next(Flat(Var(1)))))"));
+            assert!(observed_exprs.contains("Lam(App(Lib(10), Next(Eventually(Var(1)))))"));
+            assert!(
+                observed_exprs.contains(&format!("Lam(App(Lib({}), Next(Var(1))))", anchor + 1))
+            );
+            assert!(!observed_exprs.contains(&format!(
+                "Lam(App(Lib({}), Next(Flat(Var(1)))))",
+                anchor + 1
+            )));
+            assert!(!observed_exprs.contains(&format!(
+                "Lam(App(Lib({}), Next(Eventually(Var(1)))))",
+                anchor + 1
+            )));
+        }
+
+        let signature = PrefixSignature::new(15, &library, &reference_prefix);
+        let mut cache = PrefixLegalityCache::default();
+        assert!(cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &reference_prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        let work_item = create_online_prefix_work_item(
+            8,
+            reference_prefix,
+            signature,
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut cache,
+        );
+        let observed_exprs = work_item
+            .next_clauses(&clause_catalog)
+            .iter()
+            .map(|clause| format!("{:?}", clause.expr))
+            .collect::<BTreeSet<_>>();
+        assert_eq!(
+            observed_exprs,
+            [
+                "Lam(App(Lib(10), Next(Eventually(Var(1)))))".to_string(),
+                "Lam(App(Lib(10), Next(Flat(Var(1)))))".to_string(),
+                "Lam(App(Lib(10), Next(Var(1))))".to_string(),
+            ]
+            .into_iter()
+            .collect(),
+            "the anchor-11 exact-argument pocket should stay isolated to the mixed claim clause-2 prefixes rather than widening every clause-3 prefix"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_anchor_eleven_exact_argument_pocket_stays_tie_clean_until_clause_six_moves()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let anchor_eleven = anchor + 1;
+        let exact_argument = Expr::Next(Box::new(Expr::Var(1)));
+        let clause_two_variants = [
+            ("reference", reference_prefix.clauses[2].clone()),
+            (
+                "claim_flat_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                    ),
+                ),
+            ),
+            (
+                "claim_sharp_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+            ),
+        ];
+        let side_positions = [0_usize, 1, 4, 5, 6];
+        let canonical_bit_kappa = u16::try_from(pen_core::encode::telescope_bit_cost(
+            &Telescope::reference(15),
+        ))
+        .expect("bit cost exceeded u16");
+        let canonical_rank = super::acceptance_rank_for_telescope(
+            surface.objective_bar,
+            &Telescope::reference(15),
+            103,
+            canonical_bit_kappa,
+            8,
+        )
+        .expect("reference step-15 telescope should clear the bar");
+        let mut profile_masks = BTreeMap::<(String, u16, bool, Rational), BTreeSet<u8>>::new();
+
+        for (clause_two_label, clause_two) in clause_two_variants {
+            for mask in 0u8..(1 << side_positions.len()) {
+                let mut telescope = reference_prefix.clone();
+                telescope.clauses[2] = clause_two.clone();
+                telescope.clauses[3] = ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor_eleven)),
+                        Box::new(exact_argument.clone()),
+                    ))),
+                );
+                for (bit_index, position) in side_positions.iter().copied().enumerate() {
+                    if mask & (1 << bit_index) == 0 {
+                        continue;
+                    }
+                    let replacement = match position {
+                        0 => ClauseRec::new(
+                            ClauseRole::Formation,
+                            Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                        ),
+                        1 => ClauseRec::new(
+                            ClauseRole::Formation,
+                            Expr::Eventually(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+                        ),
+                        4 => ClauseRec::new(
+                            ClauseRole::Formation,
+                            Expr::Pi(
+                                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(
+                                    Expr::Eventually(Box::new(Expr::Var(1))),
+                                ))))),
+                                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                            ),
+                        ),
+                        5 => ClauseRec::new(
+                            ClauseRole::Formation,
+                            Expr::Pi(
+                                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                                    Expr::Var(1),
+                                ))))),
+                                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                                    Expr::Next(Box::new(Expr::Var(1))),
+                                ))))),
+                            ),
+                        ),
+                        6 => ClauseRec::new(
+                            ClauseRole::Introduction,
+                            Expr::Lam(Box::new(Expr::App(
+                                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                                    Expr::Var(1),
+                                ))))),
+                                Box::new(Expr::Var(2)),
+                            ))),
+                        ),
+                        _ => unreachable!("unexpected side position"),
+                    };
+                    telescope.clauses[position] = replacement;
+                }
+                telescope.clauses.push(reference_terminal.clone());
+
+                let admissibility_decision = assess_strict_admissibility(
+                    surface.step_index,
+                    &surface.library,
+                    &telescope,
+                    surface.admissibility,
+                );
+                assert!(
+                    admissibility_decision.is_admitted(),
+                    "the anchor-11 exact-argument pocket should stay locally admissible across the repaired-side subsets being diagnosed"
+                );
+                let exact_nu = u16::try_from(
+                    structural_nu(&telescope, &surface.library, &surface.nu_history).total,
+                )
+                .expect("nu exceeded u16");
+                let bit_kappa_used =
+                    u16::try_from(pen_core::encode::telescope_bit_cost(&telescope))
+                        .expect("bit cost exceeded u16");
+                let clause_kappa_used =
+                    u16::try_from(telescope.kappa()).expect("kappa exceeded u16");
+                let rank = super::acceptance_rank_for_telescope(
+                    surface.objective_bar,
+                    &telescope,
+                    exact_nu,
+                    bit_kappa_used,
+                    clause_kappa_used,
+                )
+                .expect("anchor-11 exact-argument pocket should still clear the bar");
+                profile_masks
+                    .entry((
+                        clause_two_label.to_string(),
+                        exact_nu,
+                        rank < canonical_rank,
+                        rank.overshoot.clone(),
+                    ))
+                    .or_default()
+                    .insert(mask);
+            }
+        }
+
+        assert_eq!(
+            profile_masks,
+            [
+                (
+                    (
+                        "claim_flat_domain".to_string(),
+                        103_u16,
+                        false,
+                        Rational::new(115657, 21112),
+                    ),
+                    (0u8..16).collect()
+                ),
+                (
+                    (
+                        "claim_flat_domain".to_string(),
+                        89_u16,
+                        true,
+                        Rational::new(78711, 21112),
+                    ),
+                    (16u8..32).collect()
+                ),
+                (
+                    (
+                        "claim_sharp_codomain".to_string(),
+                        103_u16,
+                        false,
+                        Rational::new(115657, 21112),
+                    ),
+                    (0u8..16).collect()
+                ),
+                (
+                    (
+                        "claim_sharp_codomain".to_string(),
+                        89_u16,
+                        true,
+                        Rational::new(78711, 21112),
+                    ),
+                    (16u8..32).collect()
+                ),
+                (
+                    (
+                        "reference".to_string(),
+                        117_u16,
+                        false,
+                        Rational::new(152603, 21112),
+                    ),
+                    (0u8..16).collect()
+                ),
+                (
+                    (
+                        "reference".to_string(),
+                        103_u16,
+                        false,
+                        Rational::new(115657, 21112),
+                    ),
+                    (16u8..32).collect()
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "the anchor-11 exact-argument pocket should stay non-winning across every repaired-side subset of positions 0, 1, 4, and 5, while clause 6 still remains the boundary where the mixed claim clause-2 pocket reopens the unsafe 89/8 rival"
         );
     }
 
@@ -16469,7 +16924,7 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(13, 46, 7, 2320), (14, 62, 9, 12027), (15, 103, 8, 1794)],
+            vec![(13, 46, 7, 2320), (14, 62, 9, 12027), (15, 103, 8, 3972)],
             "the repaired step-12 tie set should now collapse onto the parity-preserving widened step-13 surface while restoring the canonical step-15 continuation"
         );
         let alternate_candidate = tied_candidates
@@ -16718,8 +17173,8 @@ mod tests {
                 accepted_step_fourteen_continuation.2,
                 accepted_step_fourteen_continuation.3,
             ),
-            (103, 8, 1794),
-            "live claim step-14 acceptance should now prefer the same-primary survivor that restores the canonical step-15 continuation"
+            (103, 8, 3972),
+            "live claim step-14 acceptance should now prefer the same-primary survivor that restores the broadened canonical step-15 continuation"
         );
         assert!(
             step_fourteen_continuations.iter().any(
@@ -16746,7 +17201,7 @@ mod tests {
         let (step_fifteen, step_fifteen_catalog, step_fifteen_roots) =
             inspect_late_step(15, &library, &history);
         assert_eq!(step_fifteen_catalog.raw_catalog_telescope_count, Some(6561));
-        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 1794);
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 3972);
         assert_eq!(
             step_fifteen.claim_root_seeding,
             Some(ClaimRootSeedingDiagnostics {
@@ -16765,15 +17220,26 @@ mod tests {
             step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
             468
         );
-        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 80);
+        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 242);
         assert!(
             step_fifteen.demo_bucket_stats.iter().any(|bucket| {
-                bucket.stats.generated_terminal_candidates == 732
-                    && bucket.stats.admissible_terminal_candidates == 82
-                    && bucket.stats.exact_screened_terminal_candidates == 82
-                    && bucket.stats.pruned_terminal_candidates == 80
+                bucket.stats.generated_terminal_candidates == 0
+                    && bucket.stats.admissible_terminal_candidates == 0
+                    && bucket.stats.exact_screened_terminal_candidates == 0
+                    && bucket.stats.pruned_terminal_candidates == 0
+                    && bucket.stats.fully_scored_terminal_candidates == 1
+                    && bucket.stats.best_overshoot == Some(Rational::new(115657, 21112))
             }),
-            "step 15 should now widen the surviving temporal terminal cluster after the clause-4 and clause-5 qualifier repair while keeping the canonical continuation"
+            "step 15 should now preserve the isolated anchor-11 exact-argument pocket as one non-winning fully scored terminal"
+        );
+        assert!(
+            step_fifteen.demo_bucket_stats.iter().any(|bucket| {
+                bucket.stats.generated_terminal_candidates == 2190
+                    && bucket.stats.admissible_terminal_candidates == 244
+                    && bucket.stats.exact_screened_terminal_candidates == 244
+                    && bucket.stats.pruned_terminal_candidates == 242
+            }),
+            "step 15 should now widen the surviving temporal terminal cluster again after the isolated anchor-11 exact-argument repair while keeping the canonical continuation"
         );
     }
 
@@ -17225,7 +17691,7 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(14, 62, 9, 12027), (15, 103, 8, 1794)],
+            vec![(14, 62, 9, 12027), (15, 103, 8, 3972)],
             "the position-0/4/5/6 widening should keep the guarded step-14 and step-15 winner profiles even while step-13 parity stays open"
         );
         assert_eq!(

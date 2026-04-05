@@ -54,13 +54,14 @@ Treat these as current repo truths:
   also pinned by
   `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
   so the current breadth miss anatomy is executable in-tree rather than
-  notes-only; the nearby clause-`3` anchor-`11` exact-argument pocket on the
-  remaining clause-`2` / clause-`3` blocker is now also frozen more tightly:
-  on every current mixed clause-`2` claim/demo replacement it matches the
-  canonical `DCT 103 / 8` winner on full primary and structural rank signals
-  and still loses only on higher bit cost `236` versus `229`, while the
-  lifted anchor-`11` neighbors remain unsafe `88 / 8` rivals; user-facing
-  wording stays at `bounded live recovery` until stored breadth and
+  notes-only; a new narrow local step-`15` repair now isolates that nearby
+  clause-`3` anchor-`11` exact-argument pocket onto the live claim
+  clause-`2` variants only, keeps the lifted anchor-`11` neighbors fenced,
+  keeps clause `6` as the local safety boundary, and lifts the repaired
+  canonical step `15` read from `DCT 103 / 8 / 1794` to
+  `DCT 103 / 8 / 3972` while stored `v10` remains frozen at `1794` until the
+  next rerun consumes it; user-facing wording stays at `bounded live recovery`
+  until stored breadth and
   certification pass
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
@@ -380,10 +381,12 @@ Focus on:
 - treating the stored step-`13` repair as the current late-step truth:
   the canonical repaired branch now stays at
   `[5,1,3,3,5,3,2]` / `1350` / `2320` with the guarded accepted hash and the
-  canonical `62 / 9 / 12027 -> 103 / 8 / 1794` continuation
-- starting from clean-tree `v10` as the canonical stored bundle and
-  diagnosing stored step `15` before reopening another rerun or another
-  step-`13` theory slice
+  canonical `62 / 9 / 12027` continuation; locally, the repaired step-`15`
+  read now stays `DCT 103 / 8 / 3972` while stored `v10` remains
+  `DCT 103 / 8 / 1794` until the next rerun
+- starting from clean-tree `v10` as the canonical stored bundle, but treating
+  the next operational move as rerun / audit refresh on top of the new local
+  step-`15` repair rather than another diagnosis-only pass
 - moving admissibility, mutation, scheduling, and certification toward
   family-agnostic structural evidence
 - not using stronger words like `unguided` before the certification gate lands
@@ -394,11 +397,12 @@ Focus on:
   position-`1` / position-`4` reland and the
   position-`0` / position-`4` / position-`5` / position-`6` reland are now
   frozen as executable regressions on the repaired step-`12` chain
-- treating the nearby clause-`3` anchor-`11` neighborhood as diagnosis-only
-  until it is isolated correctly:
-  only the exact-argument pocket currently stays non-winning cleanly, and it
-  does so by losing to the canonical step-`15` winner on bit cost
-  `236` versus `229`; do not reland the lifted anchor-`11` variants
+- treating the nearby clause-`3` anchor-`11` neighborhood as narrowly landed:
+  only the exact-argument pocket is now live, it is isolated to the current
+  claim clause-`2` variants, it stays non-winning by losing to the canonical
+  step-`15` winner on bit cost `236` versus `229`, clause `6` still fences
+  the unsafe `89 / 8` rival, and the lifted anchor-`11` variants must stay
+  out
 
 ### If you are working on reporting or evidence
 
