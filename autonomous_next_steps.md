@@ -98,6 +98,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the certificate now also emits step-level breadth diagnosis from stored
     step summaries plus `step-XX-live.ndjson`, so the open miss anatomy is
     directly visible on canonical `v9`
+  - that stored diagnosis now also preserves the full claim-step-open
+    pressure signature for failing steps, including active widening bands,
+    package flags, and claim-debt `path` / `trunc` pressure
 - The stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)
@@ -545,10 +548,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
    another stored rerun first unless the next diagnosis explicitly requires
    new evidence capture.
 2. Resume diagnosis from stored step `13` as the earliest remaining late-floor
-   miss on that clean canonical bundle, using the stored certificate plus
-   `step-13-live.ndjson` first:
+   miss on that clean canonical bundle, using the enriched stored certificate
+   first and `step-13-live.ndjson` only when checkpoint-level timing or note
+   provenance is needed:
    the current stored read is `[3,1,3,3,1,1,1]` / `27`, `3` seeded roots,
-   and `0` exact-screen losses there.
+   `0` exact-screen losses there, and a `claim_generic` `kappa 7..7`
+   operator-bundle opening with active widening bands `7,8`.
 3. Keep the stored step-`15` miss in view beside that work:
    `1794 / 5000`; the current stored read there is broad `6561` catalog-open
    with `468` partial-prefix bar failures plus `80` incumbent-dominance

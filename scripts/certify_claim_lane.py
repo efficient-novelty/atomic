@@ -415,6 +415,7 @@ def breadth_diagnosis(
                     raw_catalog_telescope_count,
                     raw_catalog_clause_widths,
                     claim_root_seeding,
+                    claim_step_open,
                     search_space,
                     exact_screen_reasons,
                 ),
@@ -435,6 +436,7 @@ def breadth_diagnosis_summary(
     raw_catalog_telescope_count: int | None,
     raw_catalog_clause_widths: list[int],
     claim_root_seeding: dict[str, Any],
+    claim_step_open: dict[str, Any],
     search_space: dict[str, Any],
     exact_screen_reasons: dict[str, int],
 ) -> str:
@@ -454,6 +456,9 @@ def breadth_diagnosis_summary(
             f"enqueued{claim_root_seeding['roots_enqueued']} "
             f"exact_rejected{claim_root_seeding['roots_rejected_by_exact_screen']}"
         )
+    claim_step_open_summary = summarize_claim_step_open(claim_step_open)
+    if claim_step_open_summary:
+        parts.append(claim_step_open_summary)
     parts.append(f"well_formed={search_space['well_formed_candidates']}")
     parts.append(f"exact_screened={search_space['exact_bound_screened']}")
     parts.append(f"retained={search_space['retained_candidates']}")
@@ -554,6 +559,14 @@ def normalize_claim_step_open(value: Any) -> dict[str, Any]:
                         ("kappa_min", int(claim_debt_axes.get("kappa_min", 0) or 0)),
                         ("kappa_max", int(claim_debt_axes.get("kappa_max", 0) or 0)),
                         (
+                            "path_pressure",
+                            int(claim_debt_axes.get("path_pressure", 0) or 0),
+                        ),
+                        (
+                            "trunc_pressure",
+                            int(claim_debt_axes.get("trunc_pressure", 0) or 0),
+                        ),
+                        (
                             "coupling_pressure",
                             int(claim_debt_axes.get("coupling_pressure", 0) or 0),
                         ),
@@ -610,6 +623,71 @@ def optional_int(value: Any) -> int | None:
         return int(value)
     except (TypeError, ValueError):
         return None
+
+
+def summarize_claim_step_open(claim_step_open: dict[str, Any]) -> str:
+    if not claim_step_open:
+        return ""
+
+    surface = str(claim_step_open.get("late_family_surface", "")).strip()
+    kappa_min = int(claim_step_open.get("kappa_min", 0) or 0)
+    kappa_max = int(claim_step_open.get("kappa_max", 0) or 0)
+    anchor_policy = str(claim_step_open.get("anchor_policy", "")).strip() or "none"
+    historical_anchor_ref = optional_int(claim_step_open.get("historical_anchor_ref"))
+    widening_bands = active_widening_bands(claim_step_open)
+    package_flags = active_package_flags(claim_step_open.get("package_flags") or {})
+    claim_debt_axes = claim_step_open.get("claim_debt_axes") or {}
+
+    parts = []
+    if surface:
+        parts.append(f"surface={surface}")
+    if kappa_min > 0 and kappa_max > 0:
+        parts.append(f"kappa={kappa_min}..{kappa_max}")
+    anchor = anchor_policy
+    if historical_anchor_ref is not None:
+        anchor = f"{anchor}@{historical_anchor_ref}"
+    if anchor:
+        parts.append(f"anchor={anchor}")
+    if widening_bands:
+        parts.append(f"widen={','.join(str(band) for band in widening_bands)}")
+    if package_flags:
+        parts.append(f"packages={','.join(package_flags)}")
+    axes_summary = summarize_claim_debt_axes(claim_debt_axes)
+    if axes_summary:
+        parts.append(axes_summary)
+    return " ".join(parts)
+
+
+def active_widening_bands(claim_step_open: dict[str, Any]) -> list[int]:
+    active = []
+    for band in (7, 8, 9):
+        if bool(claim_step_open.get(f"claim_widening_band{band}_active", False)):
+            active.append(band)
+    return active
+
+
+def active_package_flags(package_flags: dict[str, Any]) -> list[str]:
+    active = []
+    for key in ("operator_bundle", "hilbert_functional", "temporal_shell"):
+        if bool(package_flags.get(key, False)):
+            active.append(key)
+    return active
+
+
+def summarize_claim_debt_axes(claim_debt_axes: dict[str, Any]) -> str:
+    if not claim_debt_axes:
+        return ""
+    axes = [
+        ("path", int(claim_debt_axes.get("path_pressure", 0) or 0)),
+        ("trunc", int(claim_debt_axes.get("trunc_pressure", 0) or 0)),
+        ("coupling", int(claim_debt_axes.get("coupling_pressure", 0) or 0)),
+        ("support", int(claim_debt_axes.get("support_pressure", 0) or 0)),
+        ("modal", int(claim_debt_axes.get("modal_pressure", 0) or 0)),
+        ("temporal", int(claim_debt_axes.get("temporal_pressure", 0) or 0)),
+        ("reanchor", int(claim_debt_axes.get("reanchor_pressure", 0) or 0)),
+        ("closure", int(claim_debt_axes.get("closure_pressure", 0) or 0)),
+    ]
+    return "axes=" + ",".join(f"{label}{value}" for label, value in axes)
 
 
 def runtime_threshold_check(

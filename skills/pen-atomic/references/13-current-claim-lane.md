@@ -82,7 +82,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   generated-floor evidence; the current `v9` certificate still flags
   `early_breadth` plus `late_generated_floors`, and it now also records
   step-level breadth diagnosis for failing steps from the stored summaries
-  plus late-step live checkpoints.
+  plus late-step live checkpoints; that diagnosis now also preserves the full
+  stored step-open pressure signature, including active widening bands,
+  package flags, and claim-debt `path` / `trunc` pressure.
 - `scripts/benchmark_claim_lane.py` now aggregates stored claim runs into a
   benchmark bundle with runtime percentiles, parity counts, breadth-floor hit
   counts, and manifest snapshots; it still needs a breadth-clean stored claim
@@ -97,9 +99,13 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - step `15`: `1794 / 5000`
 - The stored certificate now makes the remaining miss split directly visible:
   - step `13` still shows raw catalog widths `[3,1,3,3,1,1,1]`, raw catalog
-    `27`, seeded roots `3`, and `0` stored exact-screen losses
+    `27`, seeded roots `3`, `0` stored exact-screen losses, and the
+    `claim_generic` `kappa 7..7` operator-bundle opening with active widening
+    bands `7,8`
   - step `15` still shows raw catalog `6561`, seeded roots `3`, then
-    `468` partial-prefix bar failures plus `80` incumbent-dominance prunes
+    `468` partial-prefix bar failures plus `80` incumbent-dominance prunes,
+    together with the `claim_generic` `kappa 8..8` temporal-shell opening,
+    modal anchor ref `10`, and active widening bands `7,8,9`
 - A fresh stored rerun stack has now consumed the guarded local step-`11`
   breadth repair:
   - the connected claim step-`11` surface now holds
@@ -154,8 +160,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    step-`13..15` surfaces should stay frozen on the canonical branch.
 3. Start from clean-tree `v9` and resume diagnosis from stored step `13` as
    the earliest remaining late-floor miss on that canonical bundle, using the
-   stored certificate plus `step-13-live.ndjson` / `step-15-live.ndjson`
-   before changing more search code.
+   enriched stored certificate first and `step-13-live.ndjson` /
+   `step-15-live.ndjson` only when checkpoint-level timing or note provenance
+   is needed before changing more search code.
 4. Keep stored step `15` and step `1` in view beside that work:
    `1794 / 5000` and `546 / 2144`.
 5. Do not reopen another stored step-`11` rerun first now that clean-tree

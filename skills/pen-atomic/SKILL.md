@@ -37,8 +37,9 @@ Treat these as current repo truths:
   serialized prefix order key; the current stored canonical bundle is
   clean-tree completed `v9`, compare/certification/benchmark outputs now
   exist beside it, the certificate now also surfaces step-level breadth
-  diagnosis from stored step summaries plus late-step live checkpoints, and
-  the live claim blocker is no longer step-`4` RSS
+  diagnosis from stored step summaries plus late-step live checkpoints, now
+  including the full stored step-open pressure signature for failing steps,
+  and the live claim blocker is no longer step-`4` RSS
   survival or stored step-`11` breadth repair but the remaining stored
   breadth misses on that canonical chain: stored `v9` still misses step `1`
   (`546 / 2144`), step `13` (`123 / 2200`), and step `15` (`1794 / 5000`),
@@ -334,8 +335,9 @@ Focus on:
   `scripts/benchmark_claim_lane.py`, and `scripts/certify_claim_lane.py` as
   the current evidence surfaces before changing more search code, and prefer
   the certificate first when you need the stored step-`13` / step-`15` miss
-  anatomy because it now reports catalog widths, root seeding, and exact-
-  screen pressure for failing steps
+  anatomy because it now reports catalog widths, root seeding, exact-screen
+  pressure, active widening bands, package flags, and claim-debt
+  `path` / `trunc` pressure for failing steps
 - treat the latest claim-cache work as operational memory work, not just
   metadata work: claim proof-close already drops evaluated terminal payloads
   after ranking and now also releases processed retained prefix groups once

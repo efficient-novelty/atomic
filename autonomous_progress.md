@@ -80,6 +80,10 @@ gate.
   - the certificate now also records per-step breadth diagnosis from stored
     step summaries plus `step-XX-live.ndjson` checkpoints, so the open
     step-`13` / step-`15` miss anatomy is queryable without another rerun
+  - that stored diagnosis now preserves the full claim-step-open pressure
+    signature for failing steps too, including active widening bands,
+    package flags, and claim-debt `path` / `trunc` pressure alongside the
+    existing catalog, root-seeding, and exact-screen read
 - Those audits use the guarded baseline
   `runs/codex-guarded-claim-cert-v1`.
 - The clean-tree stored `v9` compare audit is ready:
@@ -106,10 +110,14 @@ gate.
     - `manifest_completeness`
   - the stored certificate now makes the current miss split explicit:
     - step `13` still opens only `[3,1,3,3,1,1,1]` / `27`, seeds `3` roots,
-      and shows `0` stored exact-screen losses there
+      shows `0` stored exact-screen losses there, and now prints the
+      `claim_generic` `kappa 7..7` operator-bundle opening with active
+      widening bands `7,8`
     - step `15` still opens `6561`, seeds `3` roots, and then loses stored
       breadth under `468` partial-prefix bar failures plus
-      `80` incumbent-dominance prunes
+      `80` incumbent-dominance prunes, and now prints the
+      `claim_generic` `kappa 8..8` temporal-shell opening with modal anchor
+      ref `10` and active widening bands `7,8,9`
 - The remaining stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)
@@ -987,7 +995,8 @@ gate.
   guardrails without widening any bands further.
 - Use the stored `v9` certificate and the late-step live checkpoints as the
   first diagnosis surface for the remaining misses; they now expose raw
-  catalog widths, root seeding, and exact-screen pressure for the open steps.
+  catalog widths, root seeding, exact-screen pressure, and the full stored
+  step-open pressure envelope for the open steps.
 - Treat stored `v9` step `13 = 123 / 2200` as the earliest remaining stored
   late-floor miss; do not reopen step `11` first now that stored step `11`
   re-earns `1338 / 800` on the clean canonical bundle.
@@ -1012,9 +1021,10 @@ gate.
    `DCT 103 / 8 / 1794`.
 3. Resume diagnosis from stored step `13` as the earliest remaining
    late-floor miss on the clean canonical bundle, while preserving accepted-
-   hash parity through step `15`; use the stored certificate plus
-   `step-13-live.ndjson` / `step-15-live.ndjson` as the first diagnosis
-   surface before changing search code.
+   hash parity through step `15`; use the enriched stored certificate as the
+   first diagnosis surface and drop to `step-13-live.ndjson` /
+   `step-15-live.ndjson` only when checkpoint-level timing or note provenance
+   is needed before changing search code.
 4. Keep stored step `15 = 1794 / 5000` in view as the remaining later floor
    miss, and keep step `1 = 546 / 2144` on the checklist as the separate
    stored early breadth blocker.

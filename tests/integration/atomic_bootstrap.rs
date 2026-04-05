@@ -1646,7 +1646,13 @@ fn stored_claim_v9_certificate_surfaces_step_13_and_step_15_breadth_diagnostics(
         "late_generated_floors: fail - late generated floors failed at step 13, step 15"
     ));
     assert!(stdout.contains("step 13: actual=123 target=2200 gap=2077 catalog=27"));
+    assert!(stdout.contains(
+        "surface=claim_generic kappa=7..7 anchor=none widen=7,8 packages=operator_bundle"
+    ));
     assert!(stdout.contains("step 15: actual=1794 target=5000 gap=3206 catalog=6561"));
+    assert!(stdout.contains(
+        "surface=claim_generic kappa=8..8 anchor=modal@10 widen=7,8,9 packages=temporal_shell"
+    ));
 
     let certificate = read_json(&json_out);
     let late_steps = certificate["checks"]["late_generated_floors"]["steps"]
@@ -1680,6 +1686,14 @@ fn stored_claim_v9_certificate_surfaces_step_13_and_step_15_breadth_diagnostics(
         Some(3)
     );
     assert_eq!(
+        step13["diagnosis"]["claim_step_open"]["claim_debt_axes"]["path_pressure"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
+        step13["diagnosis"]["claim_step_open"]["claim_debt_axes"]["trunc_pressure"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
         step13["diagnosis"]["exact_screen_reasons"]["partial_prefix_bar_failure"].as_u64(),
         Some(0)
     );
@@ -1696,6 +1710,18 @@ fn stored_claim_v9_certificate_surfaces_step_13_and_step_15_breadth_diagnostics(
     assert_eq!(
         step15["diagnosis"]["claim_root_seeding"]["roots_enqueued"].as_u64(),
         Some(3)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_step_open"]["historical_anchor_ref"].as_u64(),
+        Some(10)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_step_open"]["claim_debt_axes"]["path_pressure"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_step_open"]["claim_debt_axes"]["trunc_pressure"].as_u64(),
+        Some(0)
     );
     assert_eq!(
         step15["diagnosis"]["exact_screen_reasons"]["partial_prefix_bar_failure"].as_u64(),
