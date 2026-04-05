@@ -103,6 +103,20 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - that stored diagnosis now also preserves the full claim-step-open
     pressure signature for failing steps, including active widening bands,
     package flags, and claim-debt `path` / `trunc` pressure
+- A new local step-`15` survivor-bucket freeze now localizes the remaining
+  exact-screened survivor surface more tightly on the repaired canonical
+  chain:
+  - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
+    now pins exactly two
+    `k8:structural_generic:temporal_operator:library_backed` buckets at
+    step `15`
+  - the isolated `single` bucket still carries just one fully scored
+    non-winning pocket with overshoot `115657 / 21112`
+  - the remaining exact-screened pressure still stays concentrated in the
+    `small_cluster` bucket with `2190` generated / `244` admitted /
+    `244` exact-screened / `242` pruned
+  - the accepted canonical step-`15` winner still remains the only retained
+    candidate there and keeps bit cost `229`
 - New stored-evidence regressions now freeze that canonical `v11`
   diagnosis in-tree:
   - `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
@@ -631,6 +645,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
      `[5,1,3,3,5,3,2]` / `1350` / `2320` surface
    - step `14` should stay `19683` / `12027`
    - stored canonical step `15` should now stay `DCT 103 / 8 / 3972`
+   - the exact-screened step-`15` survivor surface should stay frozen as one
+     library-backed temporal-operator `single` bucket with one fully scored
+     non-winning pocket at overshoot `115657 / 21112` plus one
+     library-backed temporal-operator `small_cluster` bucket at
+     `2190` generated / `244` admitted / `244` exact-screened / `242`
+     pruned
 5. Keep the two executable step-`13` negative-control regressions green:
    widening only operator-bundle formation positions `1` and `4` to the
    demo-like custom surface should still reopen the local floor to
@@ -671,7 +691,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
    breadth-repaired late chain; stored step `15` now carries `3972`
    generated prefixes there, and the next repair should work against the
    remaining `468` partial-prefix bar / `242` incumbent-dominance surface
-   rather than the older `1794` read.
+   rather than the older `1794` read, with the new survivor-bucket freeze
+   keeping the isolated `single` pocket fenced while the next repair targets
+   the `small_cluster` pressure.
 4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
    hits so the next repair cannot silently reshuffle the canonical branch.
 5. Keep step `1 = 546 / 2144` on the checklist as the separate stored early

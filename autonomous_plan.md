@@ -69,6 +69,15 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     `2190` generated / `244` admitted / `244` exact-screened / `242` pruned,
     and one isolated fully scored non-winning anchor-`11` terminal pocket is
     now frozen with overshoot `115657 / 21112`
+- A new executable step-`15` survivor-bucket regression now freezes that
+  post-repair split more tightly:
+  - exactly two
+    `k8:structural_generic:temporal_operator:library_backed` buckets remain
+    on the canonical repaired surface
+  - the isolated `single` bucket carries one fully scored non-winning pocket
+    at overshoot `115657 / 21112`
+  - the remaining repair target is the `small_cluster` bucket at
+    `2190` generated / `244` admitted / `244` exact-screened / `242` pruned
 - Two new non-landed local step-`13` probes now sharpen the safe search space:
   - widening only operator-bundle formation positions `1` and `4` to
     demo-like variants lifts the repaired local read to
@@ -166,7 +175,9 @@ Current slice order:
    frozen negative controls green
 2. use the stored `v11` certificate and live checkpoints to localize the next
    step-`15` repair against the remaining `468` partial-prefix bar failures
-   and `242` incumbent-dominance prunes
+   and `242` incumbent-dominance prunes, keeping the isolated `single`
+   survivor bucket fenced while the next repair works against the
+   `small_cluster` pressure
 3. rerun only after that next local repair is regression-backed
 4. revisit stored step `1` from the next evidence bundle once step `15` moves
 

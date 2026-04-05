@@ -64,7 +64,13 @@ Treat these as current repo truths:
   canonical step `15` read from `DCT 103 / 8 / 1794` to
   `DCT 103 / 8 / 3972`; the remaining stored step-`15` miss is now the
   residual `468` partial-prefix bar / `242` incumbent-dominance surface on
-  top of that repaired chain; user-facing wording stays at
+  top of that repaired chain; a new executable step-`15` survivor-bucket
+  regression now freezes that final exact-screened split as one
+  library-backed temporal-operator `small_cluster` bucket at
+  `2190` generated / `244` admitted / `244` exact-screened / `242` pruned
+  plus the isolated non-winning `single` pocket at overshoot
+  `115657 / 21112`, so the next repair stays on the small-cluster incumbent
+  surface rather than reopening the single pocket; user-facing wording stays at
   `bounded live recovery` until stored breadth and certification pass
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`

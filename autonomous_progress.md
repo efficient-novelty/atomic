@@ -128,6 +128,19 @@ gate.
   - `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts`
     now pins the refreshed single-run `3965 ms` / parity-`1` / early-`0` /
     late-`0` benchmark bundle
+- A new local step-`15` survivor-bucket regression now freezes the
+  exact-screened survivor split more tightly on the repaired canonical chain:
+  - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
+    now pins exactly two
+    `k8:structural_generic:temporal_operator:library_backed` buckets at
+    step `15`
+  - the isolated `single` bucket still carries just one fully scored
+    non-winning pocket with overshoot `115657 / 21112`
+  - the remaining exact-screened pressure still stays concentrated in the
+    `small_cluster` bucket with `2190` generated / `244` admitted /
+    `244` exact-screened / `242` pruned
+  - the accepted canonical step-`15` winner still remains the only retained
+    candidate there and keeps bit cost `229`
 - The remaining stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)
@@ -154,6 +167,12 @@ gate.
   - the new stored `v11` certificate / benchmark freeze regressions are green
   - the stored `v5` compare / certification / benchmark freeze regressions
     remain green
+- The current local step-`15` diagnostic suite was rerun green after adding
+  that survivor-bucket freeze:
+  - all current `current_claim_step_fifteen_*` engine regressions are green
+  - `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
+    is green
+  - `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts` is green
 - The parity-preserving step-`13` breadth repair is now earned on stored
   evidence:
   - on the canonical repaired chain, claim-open now widens to

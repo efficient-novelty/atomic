@@ -52,6 +52,12 @@ It lists only work that is still open.
   legality/connectivity exact rejections, `243` well-formed candidates, and
   `469` exact-bound-screened candidates on that `6561`-catalog temporal-shell
   surface.
+- The current exact-screened step-`15` survivor surface is now frozen by
+  `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`:
+  one library-backed temporal-operator `single` bucket carries the isolated
+  non-winning pocket at overshoot `115657 / 21112`, and one
+  library-backed temporal-operator `small_cluster` bucket carries the
+  remaining `2190` / `244` / `244` / `242` pressure.
 - No broader per-step claim search-band expansion should land beyond that
   isolated anchor-`11` pocket before a new local repair proves more is
   necessary on this parity-clean stored chain.

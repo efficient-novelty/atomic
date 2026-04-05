@@ -188,6 +188,19 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   rejections are now `0`, and the surviving temporal terminal cluster now
   widens to `2190` generated / `244` admitted / `244` exact-screened /
   `242` pruned
+- a new local step-`15` survivor-bucket regression now freezes that
+  exact-screened survivor split more tightly:
+  - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
+    now pins exactly two
+    `k8:structural_generic:temporal_operator:library_backed` buckets on the
+    repaired canonical chain
+  - the isolated `single` bucket still carries just one fully scored
+    non-winning pocket with overshoot `115657 / 21112`
+  - the remaining exact-screened pressure still stays concentrated in the
+    `small_cluster` bucket with `2190` generated / `244` admitted /
+    `244` exact-screened / `242` pruned
+  - the accepted canonical step-`15` winner still remains the only retained
+    candidate there and keeps bit cost `229`
 
 ## Current Operational Blockers
 
@@ -229,13 +242,16 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    the guarded step-`11` shell should stay accepted, the repaired step-`12`
    `34 / 6` continuation should stay fixed, the stored step-`13..15`
    canonical surfaces should stay frozen on the repaired branch, and
-   `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
-   plus `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts` should
-   stay green there too.
+   `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
+   `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts`, and
+   `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
+   should stay green there too.
 3. Treat the residual stored `3972 / 5000` step-`15` gap as the current local
    diagnosis target; use the `v11` certificate and `step-15-live.ndjson`
    first, and do not spend another cycle on rerun setup or step-`13` theory
-   before the next parity-preserving local repair is regression-backed.
+   before the next parity-preserving local repair is regression-backed; keep
+   the isolated `single` survivor bucket fenced while the next repair works
+   against the remaining `small_cluster` `242`-incumbent surface.
 4. Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they still prove local breadth can be reopened unsafely, but they are not
    the landed repair.

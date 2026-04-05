@@ -9774,8 +9774,8 @@ mod tests {
     use super::{
         AtomicSearchProgressObserver, AtomicSearchStep, ClaimAnchorPolicyDiagnostics,
         ClaimRootSeedingDiagnostics, DemoBreadthHarvestExitReason, DemoBucketSelectionContext,
-        DemoBudgetController, DemoBudgetFeedback, DemoBudgetRetuneAction, DemoBudgetSeed,
-        DemoClosurePressure, DemoNarrativeRuntime, DemoProofCloseEntryReason,
+        DemoBucketStats, DemoBudgetController, DemoBudgetFeedback, DemoBudgetRetuneAction,
+        DemoBudgetSeed, DemoClosurePressure, DemoNarrativeRuntime, DemoProofCloseEntryReason,
         DemoProofCloseOrderMode, DemoProofCloseOverrunReason, DemoStepBudget,
         ExactPartialPrefixBoundDecision, LIVE_BOOTSTRAP_MAX_STEP, OnlinePrefixWorkItem,
         RealisticShadowDiscovery, SearchBucketTaxonomy, StepLiveCheckpoint, acceptance_rank,
@@ -17240,6 +17240,55 @@ mod tests {
                     && bucket.stats.pruned_terminal_candidates == 242
             }),
             "step 15 should now widen the surviving temporal terminal cluster again after the isolated anchor-11 exact-argument repair while keeping the canonical continuation"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket()
+     {
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let accepted_rank = acceptance_rank(step_fifteen.objective_bar, &step_fifteen.accepted)
+            .expect("accepted step-15 candidate should clear the bar");
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.retained_candidates.len(), 1);
+        assert_eq!(accepted_rank.bit_kappa, 229);
+        assert_eq!(
+            bucket_stats,
+            [
+                (
+                    "k8:structural_generic:temporal_operator:library_backed:single".to_string(),
+                    DemoBucketStats {
+                        generated_terminal_candidates: 0,
+                        admissible_terminal_candidates: 0,
+                        exact_screened_terminal_candidates: 0,
+                        pruned_terminal_candidates: 0,
+                        fully_scored_terminal_candidates: 1,
+                        best_overshoot: Some(Rational::new(115657, 21112)),
+                    },
+                ),
+                (
+                    "k8:structural_generic:temporal_operator:library_backed:small_cluster"
+                        .to_string(),
+                    DemoBucketStats {
+                        generated_terminal_candidates: 2190,
+                        admissible_terminal_candidates: 244,
+                        exact_screened_terminal_candidates: 244,
+                        pruned_terminal_candidates: 242,
+                        fully_scored_terminal_candidates: 0,
+                        best_overshoot: None,
+                    },
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "the repaired canonical step-15 survivor surface should stay frozen as one library-backed temporal small-cluster bucket plus the isolated non-winning single pocket"
         );
     }
 
