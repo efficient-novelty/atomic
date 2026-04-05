@@ -9,25 +9,22 @@ It lists only work that is still open.
 
 - The claim lane still does not have a signoff-ready certified bundle.
 - The current authoritative stored evidence surface is the completed
-  `v6` full-profile run plus its compare, certification, and benchmark
+  `v9` full-profile run plus its compare, certification, and benchmark
   outputs:
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v6`.
-- Stored `v6` now passes accepted-hash parity honestly:
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v9`.
+- Stored `v9` now passes accepted-hash parity honestly:
   - trajectory and accepted hashes match guarded replay through step `15`
   - compare signoff is `ready`
   - the claim audit is `ready`
-- Stored `v6` still fails breadth honestly:
+- The transient `v7` rerun first re-earned stored step `11` but reopened
+  accepted-hash parity at step `12`; clean-tree `v9` now restores that parity
+  while keeping the stored step-`11` repair.
+- Stored `v9` still fails breadth honestly:
   - early breadth still misses at step `1` (`546` versus target `2144`)
-  - late generated floors still miss at step `11` (`330` versus `800`),
-    step `13` (`123` versus `2200`), and step `15` (`1794` versus `5000`)
-  - late generated floors now hit at step `10`, step `12`, and step `14`
-- A new local step-`11` breadth repair is now landed and guarded, but no
-  stored rerun has consumed it yet:
-  - the connected claim step-`11` surface now holds
-    `kappa 5 = 243`, `kappa 6 = 729` (total `972`)
-  - the guarded step-`11` shell still stays accepted locally
-  - stored `v6` remains the authoritative breadth read until a fresh rerun
-    re-earns step `11` on disk
+  - late generated floors still miss at step `13` (`123` versus `2200`) and
+    step `15` (`1794` versus `5000`)
+  - late generated floors now hit at step `10`, step `11`, step `12`, and
+    step `14`
 - The current canonical later surfaces are frozen on stored evidence:
   - step `13` reports `[3,1,3,3,1,1,1]` / `27` / `123`
   - step `14` reports `19683` / `12027`
@@ -43,7 +40,7 @@ It lists only work that is still open.
 
 - [ ] Restore step `1` generated raw count to exactly `2144`.
 - [ ] Re-earn the remaining generated-count floors from stored evidence:
-      step `11 >= 800`, step `13 >= 2200`, step `15 >= 5000`.
+      step `13 >= 2200`, step `15 >= 5000`.
 - [ ] Keep `full_telescopes_evaluated` within a certified moderate threshold.
 
 Done when:

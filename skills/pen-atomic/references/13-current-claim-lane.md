@@ -8,10 +8,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - `desktop_claim_shadow` exists as a separate profile and config family.
 - The lane is not yet certified and should still be described with the safer
   `bounded live recovery` wording.
-- The current canonical stored claim bundle is parity-clean completed `v6`:
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v6`.
+- The current canonical stored claim bundle is clean-tree completed `v9`:
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v9`.
 - Stored compare, certification, and benchmark outputs now exist beside that
-  `v6` bundle, and they already treat accepted-hash parity, claim-policy
+  `v9` bundle, and they already treat accepted-hash parity, claim-policy
   honesty, fallback honesty, narrative/event completeness, exact-screen
   reason coverage, prune-class coverage, and manifest completeness as earned.
 - Claim admissibility now uses structural claim debt and anchor hints, without
@@ -79,46 +79,50 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   stored run reaches the step-15 claim signoff surface.
 - `scripts/certify_claim_lane.py` now emits a stored pass/fail certificate from
   claim artifacts and currently fails honestly on missing breadth, missing
-  generated-floor evidence; the current `v6` certificate still flags
+  generated-floor evidence; the current `v9` certificate still flags
   `early_breadth` plus `late_generated_floors`.
 - `scripts/benchmark_claim_lane.py` now aggregates stored claim runs into a
   benchmark bundle with runtime percentiles, parity counts, breadth-floor hit
   counts, and manifest snapshots; it still needs a breadth-clean stored claim
   bundle before those numbers can justify a stronger sentence.
-- The current stored breadth snapshot on canonical `v6` is:
+- The current stored breadth snapshot on canonical `v9` is:
   - step `1`: `546 / 2144`
   - step `10`: `1428 / 500`
-  - step `11`: `330 / 800`
+  - step `11`: `1338 / 800`
   - step `12`: `1338 / 1200`
   - step `13`: `123 / 2200`
   - step `14`: `12027 / 3500`
   - step `15`: `1794 / 5000`
-- A new guarded local step-`11` breadth repair is landed but not yet consumed
-  by stored evidence:
+- A fresh stored rerun stack has now consumed the guarded local step-`11`
+  breadth repair:
   - the connected claim step-`11` surface now holds
     `kappa 5 = 243`, `kappa 6 = 729` (total `972`)
   - local exact-screen connectivity rejections there are now `0`
   - the guarded accepted step-`11` shell stays fixed locally
-  - the repaired step-`12` `34 / 6` continuation and later
-    step-`13..15` guardrails stay fixed locally
+  - dirty-tree `v7` first re-earned stored step `11` but reopened accepted-
+    hash parity at step `12`
+  - the narrow step-`12` same-primary selector repair now lands on top of that
+    rerun read
+  - clean-tree `v9` restores accepted-hash parity through step `15` while
+    keeping stored step `11` and step `12` both as breadth hits
 - the repo-level autonomy docs now treat claim-policy separation, failed-run
   evidence preservation, and one parity-clean full-profile stored bundle as
-  baseline; the live blocker is re-earning stored breadth on the canonical
-  chain, not reopening another step-`4` survival pass first
+  baseline; the live blocker is diagnosing the remaining stored breadth misses
+  on the canonical chain, not reopening another step-`4` survival pass first
 
 ## Current Operational Blockers
 
 - the lane still does not have a signoff-ready certified bundle even though
-  stored `v6` now passes accepted-hash parity and the compare/certification/
+  stored `v9` now passes accepted-hash parity and the compare/certification/
   benchmark infrastructure is live
 - stored breadth still fails honestly on the canonical chain:
   - early breadth still misses at step `1` (`546` versus `2144`)
-  - late generated floors still miss at step `11` (`330` versus `800`),
-    step `13` (`123` versus `2200`), and step `15` (`1794` versus `5000`)
-  - stored breadth already hits at step `10`, step `12`, and step `14`
-- the new local step-`11` breadth repair is only locally landed so far:
-  a fresh stored rerun must still prove whether the repaired connected surface
-  closes the canonical stored `330 / 800` miss
+  - late generated floors still miss at step `13` (`123` versus `2200`) and
+    step `15` (`1794` versus `5000`)
+  - stored breadth already hits at step `10`, step `11`, step `12`, and
+    step `14`
+- step `13` is now the earliest remaining stored late-floor miss on the clean
+  canonical bundle
 - the canonical repaired late chain must stay frozen while breadth is
   re-earned:
   - step `12` should keep the guarded `34 / 6` continuation
@@ -133,19 +137,20 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 
 ## Immediate Next Slice
 
-1. Freeze parity-clean completed `v6` as the current canonical stored claim
-   bundle and keep completed `v5` as the pre-parity reference surface.
+1. Freeze clean-tree completed `v9` as the current canonical stored claim
+   bundle, keep clean `v6` as the pre-step-`11` breadth baseline, and keep
+   completed `v5` as the pre-parity reference surface.
 2. Hold the current local guardrails green before reopening any new theory:
    the step-`11` connected surface should stay at `243 + 729 = 972`, the
    guarded step-`11` shell should stay accepted, the repaired step-`12`
    `34 / 6` continuation should stay fixed, and the current
    step-`13..15` surfaces should stay frozen on the canonical branch.
-3. Launch one fresh clean-start full-profile rerun on the repaired local tree
-   so stored evidence can consume the new local step-`11` breadth repair.
-4. Refresh compare, benchmark, and certification on that new stored bundle.
-5. If stored step `11` still misses, resume diagnosis from the earliest
-   remaining stored late-floor miss on that new canonical bundle while keeping
-   step `1`, step `13`, and step `15` breadth failures in view.
+3. Start from clean-tree `v9` and resume diagnosis from stored step `13` as
+   the earliest remaining late-floor miss on that canonical bundle.
+4. Keep stored step `15` and step `1` in view beside that work:
+   `1794 / 5000` and `546 / 2144`.
+5. Do not reopen another stored step-`11` rerun first now that clean-tree
+   `v9` already re-earns stored step `11 = 1338 / 800`.
 
 ## First Reads
 
@@ -169,9 +174,10 @@ Do:
   as `&&`; use separate commands for staging, commit, and push work
 - keep claim-lane edits narrow and staged; split very large file updates into
   smaller targeted patches when the first broad patch does not land cleanly
-- focus next on re-earning stored breadth on the canonical chain, refreshing
-  compare / benchmark / certification on the next stored bundle, and keeping
-  the repaired local step-`11` / step-`12` / step-`13..15` guardrails fixed
+- focus next on diagnosing the remaining stored breadth misses on the clean
+  canonical bundle, keeping step `13` / step `15` / step `1` in view, and
+  keeping the repaired local step-`11` / step-`12` / step-`13..15`
+  guardrails fixed
 
 Do not:
 

@@ -47,10 +47,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - targeted claim regressions
   - claim live-checkpoint persistence
   - release replay harness on all `5` stored plateau surfaces
+- The current repaired-chain local guardrails were rerun on clean-tree repo
+  head `67c26eca02cb5546745bdd5ca5b31468e6807f42`:
+  - guarded step-`11` / step-`12` / step-`15` claim regressions green
+  - repaired step-`12` same-primary selector regression green
+  - repaired step-`12 -> 15` continuation guardrails green
 - A fresh clean-start full-profile rerun,
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v6`,
-  now exists on that same clean-tree head and release binary hash
-  `bdcbf9b0c6386a5fd2e0e7388c2637a15486c962f47041530075dff3e50a5385`.
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v9`,
+  now exists on clean-tree repo head
+  `67c26eca02cb5546745bdd5ca5b31468e6807f42` with release binary hash
+  `2023ea693e72403b98448ab1bece5048b739a2cb115aafcd2b1580cb941a59bf`.
 - Its authoritative `run.json` state is:
   - `status = "completed"`
   - `completed_step = 15`
@@ -60,6 +66,13 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - `dirty_tree = false`
 - The older completed `v5` bundle remains frozen as the pre-parity reference
   surface.
+- The earlier clean-tree completed `v6` bundle remains frozen as the
+  pre-step-`11`-breadth stored baseline.
+- The dirty-tree `v7` and `v8` reruns remain transient selector diagnostics:
+  - `v7` first re-earned stored step `11` but reopened accepted-hash parity at
+    step `12`
+  - `v8` restored parity and the step-`11` floor, but it was recorded with
+    `dirty_tree = true`
 - The new compare report against `runs/codex-guarded-claim-cert-v1` is ready:
   - trajectory matches guarded through step `15`
   - accepted hashes match guarded through step `15`
@@ -85,7 +98,7 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - The stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)
-  - step `11`: `330` versus target `800` (`miss`)
+  - step `11`: `1338` versus target `800` (`hit`)
   - step `12`: `1338` versus target `1200` (`hit`)
   - step `13`: `123` versus target `2200` (`miss`)
   - step `14`: `12027` versus target `3500` (`hit`)
@@ -94,14 +107,15 @@ This note is the exact next work order for `desktop_claim_shadow`.
   blockers on the current stored bundle:
   - claim run count `= 1`
   - completed step-`15` count `= 1`
-  - runtime `= 2904 ms`
+  - runtime `= 2848 ms`
   - parity success count `= 1`
   - full early breadth hit count `= 0`
   - full late floor hit count `= 0`
-- The current repo head `629b59861d521555cfd214a602bedec4f44c67d0`
+- The current repo head `67c26eca02cb5546745bdd5ca5b31468e6807f42`
   has now revalidated the targeted local guardrails before the next breadth
   repair lands:
   - current step-`9` / step-`11` / step-`12` selector regressions green
+  - repaired step-`12` same-primary selector regression green
   - current step-`13` / step-`14` / step-`15` guardrails green
   - claim live-checkpoint persistence green
   - stored `v5` compare / certification / benchmark freeze regressions green
@@ -111,7 +125,7 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - step `14` holds `19683` / `12027`
   - step `15` keeps the canonical `DCT 103 / 8 / 1794` continuation
 - The next repair should therefore move off ordinal parity and onto stored
-  breadth on the canonical chain, starting at step `11` as the earliest
+  breadth on the canonical chain, starting at step `13` as the earliest
   remaining late-floor miss.
 - A new local late-surface repair now sharpens that remaining blocker:
   - on the repaired step-`12` history, a new scoped claim-only step-`13`
@@ -459,23 +473,28 @@ This note is the exact next work order for `desktop_claim_shadow`.
     step-`11` shell and the repaired step-`12` `34 / 6` continuation stay
     fixed
   - local step-`11` exact-screen connectivity rejections are now `0`
-  - no fresh stored rerun has consumed that repair yet, so stored `v6`
-    remains the authoritative breadth surface and still records
-    step `11 = 330 / 800`
-  - `skills/pen-atomic` is now synced to that same stored-`v6` /
-    local-step-`11` posture, so future sessions should not use the older
-    step-`4` throughput-first claim summary as their starting point
-  - the next operational slice should therefore move off local step-`11`
-    diagnosis and onto a fresh stored rerun plus audit refresh
+  - dirty-tree `v7` first consumed that repair on stored evidence but reopened
+    accepted-hash parity at step `12`
+  - the narrow step-`12` same-primary selector repair now lands on top of that
+    rerun read
+  - clean-tree `v9` now restores accepted-hash parity through step `15` and
+    re-earns stored step `11 = 1338 / 800` while keeping guarded
+    step `12 = 1338 / 1200`
+  - `skills/pen-atomic` is now synced to that same stored-`v9` / step-`13`
+    posture, so future sessions should not use the older step-`11` rerun plan
+    or the older step-`4` throughput-first claim summary as their starting
+    point
 
 ## Do This Next
 
-### 1. Freeze `v6` As The Canonical Stored Bundle
+### 1. Freeze `v9` As The Canonical Stored Bundle
 
 1. Freeze `v1`, `v2`, `v3`, capped `v1`, stopped `v4`, completed `v5`, and
-   parity-clean completed `v6` as the current stored claim evidence set.
-2. Freeze the new compare / certification / benchmark outputs under `v6`.
-3. Keep the replay-harness corpus and benchmark files frozen; do not recapture
+   clean canonical completed `v9` as the current stored claim evidence set.
+2. Keep clean `v6` frozen as the pre-step-`11` breadth baseline and dirty-tree
+   `v7` / `v8` frozen as selector diagnostics.
+3. Freeze the new compare / certification / benchmark outputs under `v9`.
+4. Keep the replay-harness corpus and benchmark files frozen; do not recapture
    fixtures first.
 
 ### 2. Treat Stored Parity And Audit Infrastructure As Earned
@@ -487,7 +506,7 @@ This note is the exact next work order for `desktop_claim_shadow`.
 3. Treat accepted-hash parity, claim-policy honesty, fallback honesty,
    narrative/event completeness, exact-screen reason completeness,
    prune-class completeness, manifest completeness, and compare-ready claim
-   audit as earned on stored `v6` evidence.
+   audit as earned on stored `v9` evidence.
 4. Treat the old step-`9` / step-`11` / step-`12` parity fork, the old
    step-`14` zero-candidate opening, and the old step-`4` runtime wall as no
    longer being the first blockers.
@@ -498,11 +517,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
    raw-structural read that still prefers the cheaper non-guarded same-primary
    survivor.
 2. Keep the step-`11` retained-pool / selector / continuation-collapse and
-   new breadth regressions green:
+   new breadth regressions green on the repaired local chain:
    the connected step-`11` claim surface should stay at
    `kappa 5 = 243`, `kappa 6 = 729` (total `972`), the guarded step-`11`
-   shell should stay accepted, and the local step-`11` generated-floor
-   regression should stay green without reopening the old step-`12` drop.
+   shell should stay accepted, and the stored step-`11` floor should stay
+   re-earned at `1338 / 800` without reopening the old step-`12` drop.
 3. Keep the step-`12` exact-screen / minimality / cache-key / selector /
    continuation-collapse regressions green.
 4. Keep the current step-`13` / step-`14` / step-`15` regressions green and
@@ -511,26 +530,26 @@ This note is the exact next work order for `desktop_claim_shadow`.
    step `15` `DCT 103 / 8 / 1794`.
 5. Keep the stored certification / benchmark snapshot green for the current
    breadth surface:
-   step `1` `546 / 2144`, step `10` `1428 / 500`, step `11` `330 / 800`,
+   step `1` `546 / 2144`, step `10` `1428 / 500`, step `11` `1338 / 800`,
    step `12` `1338 / 1200`, step `13` `123 / 2200`, step `14`
    `12027 / 3500`, and step `15` `1794 / 5000`.
 6. Do not reland the rejected global band-`7` widening or the rejected late
    reanchor / early bridge expansions while breadth is still open.
 
-### 4. Re-Earn Stored Breadth Evidence
+### 4. Diagnose The Remaining Stored Breadth Evidence
 
-1. Launch one fresh clean-start full-profile rerun on the repaired local tree
-   so stored evidence can consume the new step-`11` breadth repair.
-2. Refresh compare, certification, and benchmark on that new stored bundle.
-3. If stored step `11` still misses, resume diagnosis from the earliest
-   remaining stored late-floor miss on that new canonical bundle.
-4. Then keep the stored step-`13` and step-`15` misses in view:
-   `123 / 2200` and `1794 / 5000`.
-5. Keep step `12` and step `14` frozen as positive stored floor hits so the
-   next fix cannot silently reshuffle the canonical branch.
-6. Keep step `1` `546 / 2144` on the checklist as a separate stored early
+1. Start from clean-tree `v9` as the canonical stored bundle; do not reopen
+   another stored rerun first unless the next diagnosis explicitly requires
+   new evidence capture.
+2. Resume diagnosis from stored step `13` as the earliest remaining late-floor
+   miss on that clean canonical bundle.
+3. Keep the stored step-`15` miss in view beside that work:
+   `1794 / 5000`.
+4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
+   hits so the next fix cannot silently reshuffle the canonical branch.
+5. Keep step `1` `546 / 2144` on the checklist as a separate stored early
    breadth blocker; do not let a late-step repair paper over it.
-7. Only treat the certification gate as newly in reach once breadth passes on
+6. Only treat the certification gate as newly in reach once breadth passes on
    stored evidence without losing accepted-hash parity through step `15`.
 
 ## Do Not Reopen First
@@ -548,6 +567,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
   diagnostic surfaces
 - another local step-`11` selector or raw-connectivity theory first:
   the local step-`11` breadth repair is already landed and guarded
+- another stored/local step-`11` breadth rerun or diagnosis first:
+  clean-tree `v9` already re-earns step `11 = 1338 / 800`
 - a direct temporal-reanchor matcher reland first:
   the exploratory late branches already disturbed the canonical step-`15`
   continuation
@@ -559,13 +580,15 @@ This note is the exact next work order for `desktop_claim_shadow`.
 ## Keep Or Branch Decision
 
 - Keep the current lane on stored breadth repair using parity-clean completed
-  `v6` as the canonical stored claim bundle, with completed `v5` frozen as the
-  pre-parity reference surface.
-- Keep the new local step-`11` breadth repair as a guarded local change until a
-  fresh stored rerun proves whether the stored `330 / 800` miss is now closed.
+  `v9` as the canonical stored claim bundle, with clean `v6` frozen as the
+  pre-step-`11` breadth baseline and completed `v5` frozen as the pre-parity
+  reference surface.
+- Keep the new local step-`11` breadth repair and the narrow step-`12`
+  selector repair as guarded landed changes while the next work starts at
+  stored step `13`, not step `11`.
 - Keep the current short-loop gate, stored step-`4` continuation references,
-  the capped intended-profile read, stopped `v4`, and completed `v5` / `v6`
-  frozen as regression checks.
+  the capped intended-profile read, stopped `v4`, and completed
+  `v5` / `v6` / `v9` frozen as regression checks.
 - Return to another runtime-only slice only if the stored targeted parity/floor
   regressions prove the remaining misses are just accounting bugs rather than
   real breadth loss on the canonical chain.

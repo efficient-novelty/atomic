@@ -35,17 +35,17 @@ Treat these as current repo truths:
   materialization, cloned prefix signatures share one serialized exact payload
   allocation, and claim frontier items reuse the shared clause catalog plus
   serialized prefix order key; the current stored canonical bundle is
-  parity-clean completed `v6`, compare/certification/benchmark outputs now
+  clean-tree completed `v9`, compare/certification/benchmark outputs now
   exist beside it, and the live claim blocker is no longer step-`4` RSS
-  survival but stored breadth repair on that canonical chain: stored `v6`
-  still misses step `1` (`546 / 2144`), step `11` (`330 / 800`), step `13`
-  (`123 / 2200`), and step `15` (`1794 / 5000`), while a new guarded local
-  step-`11` breadth repair now widens the connected claim surface to
-  `kappa 5 = 243`, `kappa 6 = 729` (total `972`) with `0` exact-screen
-  connectivity rejections; the next operational move is therefore one fresh
-  clean-start full-profile rerun plus compare/certification/benchmark refresh,
-  and user-facing wording stays at `bounded live recovery` until stored
-  breadth and certification pass
+  survival or stored step-`11` breadth repair but the remaining stored
+  breadth misses on that canonical chain: stored `v9` still misses step `1`
+  (`546 / 2144`), step `13` (`123 / 2200`), and step `15` (`1794 / 5000`),
+  while step `10`, step `11`, step `12`, and step `14` are now stored hits;
+  the guarded local step-`11` breadth repair and the narrow step-`12`
+  selector repair are both re-earned on clean stored evidence, so the next
+  operational move is stored step-`13` diagnosis on top of the canonical
+  `v9` bundle rather than another step-`11` rerun, and user-facing wording
+  stays at `bounded live recovery` until stored breadth and certification pass
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -325,7 +325,8 @@ Focus on:
   claim-debt admissibility, claim-generic late expansion, and
   structural-generic bucket scheduling are real; `kappa 7-9` mutators and
   claim-path exactness rechecks are landed; stored compare, benchmark, and
-  certification outputs now exist for the parity-clean completed `v6` bundle,
+  certification outputs now exist for the clean canonical completed `v9`
+  bundle,
   but certification still fails honestly on stored breadth misses and the lane
   must stay at `bounded live recovery`; use `scripts/compare_runs.py`,
   `scripts/benchmark_claim_lane.py`, and `scripts/certify_claim_lane.py` as
@@ -346,18 +347,19 @@ Focus on:
   gain; do not reopen that step-`4` throughput story first unless a fresh
   stored rerun proves the remaining breadth misses are really runtime fallout
 - treating the current blocker as stored breadth on the canonical chain:
-  stored `v6` still misses step `1` (`546 / 2144`), step `11` (`330 / 800`),
-  step `13` (`123 / 2200`), and step `15` (`1794 / 5000`), while step `10`,
-  step `12`, and step `14` are already stored hits
-- keeping the new guarded local step-`11` breadth repair green:
+  stored `v9` still misses step `1` (`546 / 2144`), step `13`
+  (`123 / 2200`), and step `15` (`1794 / 5000`), while step `10`,
+  step `11`, step `12`, and step `14` are already stored hits
+- keeping the new guarded local step-`11` breadth repair and the narrow
+  step-`12` selector repair green:
   the connected claim surface should stay at `kappa 5 = 243`,
   `kappa 6 = 729` (total `972`), exact-screen connectivity rejections there
   should stay at `0`, the guarded step-`11` shell should stay accepted, and
-  the repaired step-`12` `34 / 6` continuation plus the later
+  the repaired guarded step-`12` winner plus the later
   step-`13..15` guardrails should stay fixed
-- rerunning the repaired local tree clean-start, then refreshing compare,
-  benchmark, and certification on that new stored bundle before reopening
-  another local late-step theory slice
+- starting from clean-tree `v9` as the canonical stored bundle and resuming
+  diagnosis at stored step `13` before reopening another local late-step
+  theory slice
 - moving admissibility, mutation, scheduling, and certification toward
   family-agnostic structural evidence
 - not using stronger words like `unguided` before the certification gate lands
@@ -452,14 +454,14 @@ Reject designs that:
   and the newest step-4 throughput pass now reuses one scratch terminal
   telescope plus the precomputed prefix bit cost after the stored full-profile
   rerun showed a retained-prefix plateau inside step `4`; the current
-  canonical stored bundle is parity-clean completed `v6`, but breadth still
-  fails honestly at step `1`, step `11`, step `13`, and step `15`, and a new
-  guarded local step-`11` breadth repair is landed but not yet re-earned on
-  stored evidence.
-- The next operational claim-lane work should focus on a fresh clean-start
-  stored rerun plus compare / benchmark / certification refresh so the new
-  step-`11` repair can be re-earned on the canonical chain, rather than on
-  reopening another local step-`11` theory slice, another runtime-only
-  step-`4` micro-optimization, or new late-step band/reanchor widening.
+  canonical stored bundle is clean-tree completed `v9`, breadth still fails
+  honestly at step `1`, step `13`, and step `15`, and the guarded local
+  step-`11` breadth repair plus the narrow step-`12` selector repair are now
+  both re-earned on stored evidence.
+- The next operational claim-lane work should focus on clean canonical-bundle
+  diagnosis at stored step `13`, while keeping step `15`
+  and step `1` in view, rather than on reopening another local step-`11`
+  theory slice, another runtime-only step-`4` micro-optimization, or new
+  late-step band/reanchor widening.
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
   the track-specific references you actually need.
