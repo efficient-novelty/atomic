@@ -49,7 +49,12 @@ Treat these as current repo truths:
   is now also re-earned on stored evidence at `[5,1,3,3,5,3,2]` /
   `1350` / `2320` with canonical acceptance, and the next operational move is
   stored step-`15` diagnosis / repair on top of that `v10` bundle rather than
-  another rerun first or another step-`13` theory pass first; user-facing
+  another rerun first or another step-`13` theory pass first; the canonical
+  `v10` certificate plus the frozen `step-15-live.ndjson` provenance are now
+  also pinned by
+  `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
+  so the current breadth miss anatomy is executable in-tree rather than
+  notes-only; user-facing
   wording stays at `bounded live recovery` until stored breadth and
   certification pass
 - the accepted executable late-step canon is the current Rust truth, including

@@ -25,6 +25,10 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   hash `d003dd29c599ba86b7ef410b1c7849f89a0fe45d33dc42508e368f4c2a7c473a`.
 - Stored compare, certification, and benchmark outputs now exist beside that
   `v10` run and are the current authoritative evidence surface.
+- The stored `v10` certificate plus the frozen `step-15-live.ndjson`
+  provenance are now also pinned by
+  `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
+  so the current canonical breadth diagnosis is executable in-tree.
 - Stored accepted-hash parity is earned on `v10` through step `15`.
 - Runtime, manifest completeness, fallback honesty, narrative/event
   completeness, exact-screen reason completeness, and prune-class completeness

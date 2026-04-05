@@ -101,6 +101,18 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - that stored diagnosis now also preserves the full claim-step-open
     pressure signature for failing steps, including active widening bands,
     package flags, and claim-debt `path` / `trunc` pressure
+- A new stored-evidence regression now freezes that canonical `v10`
+  diagnosis in-tree:
+  - `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
+    now pins the stored step-`1` miss, the full late-floor table on `10..15`,
+    and the fact that only step `15` still misses there
+  - the same regression also pins the frozen `step-15-live.ndjson`
+    provenance note sequence
+    `claim_regular_clause_catalog -> claim_root_seeding_summary`
+  - that live-note regression also freezes the canonical step-`15`
+    `6561 -> 1794` temporal-shell opening at modal anchor `10`, active
+    widening bands `7/8/9`, and the stored root-seeding / terminal-summary
+    checkpoint counts that feed the step-level certificate diagnosis
 - The stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)
@@ -600,7 +612,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
    breadth surface:
    step `1` `546 / 2144`, step `10` `1428 / 500`, step `11` `1338 / 800`,
    step `12` `1338 / 1200`, step `13` `2320 / 2200`, step `14`
-   `12027 / 3500`, and step `15` `1794 / 5000`.
+   `12027 / 3500`, and step `15` `1794 / 5000`; keep
+   `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
+   green as the executable freeze for that evidence surface.
 7. Do not reland the rejected global band-`7` widening or the rejected late
    reanchor / early bridge expansions while breadth is still open.
 
@@ -612,7 +626,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
 2. Resume diagnosis from stored step `15` as the remaining late-floor miss on
    that canonical bundle, using the enriched stored certificate first and
    `step-15-live.ndjson` only when checkpoint-level timing or note provenance
-   is needed before changing more search code.
+   is needed before changing more search code; keep the stored `v10`
+   certificate/live-note regression green while doing that work.
 3. Keep the stored step-`13` hit frozen while doing that work:
    `[5,1,3,3,5,3,2]` / `1350` / `2320`, `5` seeded roots, and the guarded
    `46 / 7 -> 62 / 9 -> 103 / 8` continuation should remain the canonical

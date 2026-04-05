@@ -1736,6 +1736,212 @@ fn stored_claim_v9_certificate_surfaces_step_13_and_step_15_breadth_diagnostics(
 }
 
 #[test]
+fn stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis() {
+    let root = temp_dir("claim-v10-certificate-diagnostics");
+    let guarded_dir = workspace_root()
+        .join("runs")
+        .join("codex-guarded-claim-cert-v1");
+    let claim_dir = workspace_root().join("runs").join(
+        "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v10",
+    );
+    let json_out = root.join("claim-certificate.json");
+
+    let output = run_claim_certify([
+        "--guarded-run",
+        &guarded_dir.to_string_lossy(),
+        "--claim-run",
+        &claim_dir.to_string_lossy(),
+        "--runtime-threshold-ms",
+        "600000",
+        "--json-out",
+        &json_out.to_string_lossy(),
+    ]);
+    let stdout = String::from_utf8_lossy(&output.stdout).to_string()
+        + &String::from_utf8_lossy(&output.stderr);
+
+    assert!(
+        !output.status.success(),
+        "stored claim v10 certificate should still fail until breadth closes\nstdout:\n{}",
+        stdout
+    );
+    assert!(stdout.contains("early_breadth: fail - early breadth failed at step 1"));
+    assert!(
+        stdout.contains("late_generated_floors: fail - late generated floors failed at step 15")
+    );
+    assert!(stdout.contains("step 15: actual=1794 target=5000 gap=3206 catalog=6561"));
+    assert!(stdout.contains(
+        "surface=claim_generic kappa=8..8 anchor=modal@10 widen=7,8,9 packages=temporal_shell"
+    ));
+
+    let certificate = read_json(&json_out);
+    let early_steps = certificate["checks"]["early_breadth"]["steps"]
+        .as_array()
+        .expect("early breadth steps");
+    let step1 = early_steps
+        .iter()
+        .find(|step| step["step_index"].as_u64() == Some(1))
+        .expect("step 1 early breadth entry");
+    assert_eq!(
+        step1["diagnosis"]["source"].as_str(),
+        Some("summary_plus_live_checkpoints")
+    );
+    assert_eq!(
+        step1["diagnosis"]["claim_root_seeding"]["roots_seen"].as_u64(),
+        Some(18)
+    );
+    assert_eq!(
+        step1["diagnosis"]["claim_root_seeding"]["roots_enqueued"].as_u64(),
+        Some(16)
+    );
+    assert_eq!(
+        step1["diagnosis"]["exact_screen_reasons"]["legality_connectivity_exact_rejection"]
+            .as_u64(),
+        Some(435)
+    );
+
+    let late_steps = certificate["checks"]["late_generated_floors"]["steps"]
+        .as_array()
+        .expect("late floor steps");
+    assert_eq!(
+        late_steps.len(),
+        6,
+        "stored v10 should keep the full late-floor table while missing only step 15"
+    );
+    let late_misses = late_steps
+        .iter()
+        .filter_map(|step| {
+            (step["status"].as_str() == Some("miss"))
+                .then_some(step["step_index"].as_u64().expect("late step index"))
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(
+        late_misses,
+        vec![15],
+        "stored v10 should now miss only step 15 on the late generated floors"
+    );
+    let step15 = late_steps
+        .iter()
+        .find(|step| step["step_index"].as_u64() == Some(15))
+        .expect("step 15 late floor entry");
+
+    assert_eq!(
+        step15["diagnosis"]["source"].as_str(),
+        Some("summary_plus_live_checkpoints")
+    );
+    assert_eq!(step15["gap_to_target"].as_i64(), Some(3206));
+    assert_eq!(
+        step15["diagnosis"]["raw_catalog_telescope_count"].as_u64(),
+        Some(6561)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_root_seeding"]["roots_seen"].as_u64(),
+        Some(3)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_root_seeding"]["roots_enqueued"].as_u64(),
+        Some(3)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_step_open"]["historical_anchor_ref"].as_u64(),
+        Some(10)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_step_open"]["claim_widening_band7_active"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_step_open"]["claim_widening_band8_active"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_step_open"]["claim_widening_band9_active"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_step_open"]["package_flags"]["temporal_shell"].as_bool(),
+        Some(true)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_step_open"]["claim_debt_axes"]["coupling_pressure"].as_u64(),
+        Some(2)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_step_open"]["claim_debt_axes"]["support_pressure"].as_u64(),
+        Some(2)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_step_open"]["claim_debt_axes"]["reanchor_pressure"].as_u64(),
+        Some(2)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_step_open"]["claim_debt_axes"]["closure_pressure"].as_u64(),
+        Some(3)
+    );
+    assert_eq!(
+        step15["diagnosis"]["exact_screen_reasons"]["partial_prefix_bar_failure"].as_u64(),
+        Some(468)
+    );
+    assert_eq!(
+        step15["diagnosis"]["exact_screen_reasons"]["incumbent_dominance"].as_u64(),
+        Some(80)
+    );
+
+    let live_text = read_text(
+        &claim_dir
+            .join("reports")
+            .join("steps")
+            .join("step-15-live.ndjson"),
+    );
+    let live_entries = live_text
+        .lines()
+        .map(|line| {
+            serde_json::from_str::<serde_json::Value>(line)
+                .expect("stored step-15 live checkpoint should be valid json")
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(
+        live_entries
+            .iter()
+            .map(|entry| entry["note"].as_str().expect("checkpoint note"))
+            .collect::<Vec<_>>(),
+        vec!["claim_regular_clause_catalog", "claim_root_seeding_summary"],
+        "stored v10 step-15 live checkpoints should preserve the catalog and root-seeding provenance notes"
+    );
+    assert_eq!(
+        live_entries[0]["raw_catalog_clause_widths"]
+            .as_array()
+            .expect("step 15 catalog widths")
+            .iter()
+            .map(|value| value.as_u64().expect("catalog width"))
+            .collect::<Vec<_>>(),
+        vec![3, 3, 3, 3, 3, 3, 3, 3]
+    );
+    assert_eq!(
+        live_entries[0]["claim_step_open"]["anchor_policy"].as_str(),
+        Some("modal")
+    );
+    assert_eq!(
+        live_entries[1]["claim_root_seeding"]["roots_enqueued"].as_u64(),
+        Some(3)
+    );
+    assert_eq!(
+        live_entries[1]["remaining_one_telemetry"]["terminal_summary_connectivity_checks"].as_u64(),
+        Some(9)
+    );
+    assert_eq!(
+        live_entries[1]["remaining_one_telemetry"]["terminal_summary_fallback_connectivity_checks"]
+            .as_u64(),
+        Some(6)
+    );
+    assert_eq!(
+        live_entries[1]["legality_cache_entries"]["summaries"].as_u64(),
+        Some(21)
+    );
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
 fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
     let root = temp_dir("workstream4-rollout");
     let root_arg = root.to_string_lossy().to_string();

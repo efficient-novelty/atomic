@@ -117,6 +117,18 @@ gate.
       `80` incumbent-dominance prunes, and now prints the
       `claim_generic` `kappa 8..8` temporal-shell opening with modal anchor
       ref `10` and active widening bands `7,8,9`
+- A new stored-evidence regression now freezes that canonical `v10`
+  diagnosis in-tree:
+  - `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
+    now pins the stored step-`1` miss, the full late-floor table on
+    `10..15`, and the fact that only step `15` still misses there
+  - the same regression also pins the frozen `step-15-live.ndjson`
+    provenance note sequence
+    `claim_regular_clause_catalog -> claim_root_seeding_summary`
+  - that live-note regression also freezes the canonical step-`15`
+    `6561 -> 1794` temporal-shell opening at modal anchor `10`, active
+    widening bands `7/8/9`, and the stored root-seeding / terminal-summary
+    checkpoint counts that feed the certificate diagnosis
 - The remaining stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)

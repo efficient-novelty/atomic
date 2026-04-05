@@ -85,6 +85,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   plus late-step live checkpoints; that diagnosis now also preserves the full
   stored step-open pressure signature, including active widening bands,
   package flags, and claim-debt `path` / `trunc` pressure.
+- the canonical `v10` certificate plus the frozen `step-15-live.ndjson`
+  provenance are now also pinned by
+  `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
+  so the current breadth miss anatomy is executable in-tree rather than
+  notes-only
 - `scripts/benchmark_claim_lane.py` now aggregates stored claim runs into a
   benchmark bundle with runtime percentiles, parity counts, breadth-floor hit
   counts, and manifest snapshots; it still needs a breadth-clean stored claim
@@ -189,7 +194,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    the step-`11` connected surface should stay at `243 + 729 = 972`, the
    guarded step-`11` shell should stay accepted, the repaired step-`12`
    `34 / 6` continuation should stay fixed, and the current
-   step-`13..15` surfaces should stay frozen on the canonical branch.
+   step-`13..15` surfaces should stay frozen on the canonical branch; keep
+   `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
+   green there too.
 3. Resume diagnosis from stored step `15` on top of canonical `v10`, using
    the stored certificate first and `step-15-live.ndjson` only when
    checkpoint-level timing or note provenance is needed before changing more

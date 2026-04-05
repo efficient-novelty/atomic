@@ -16351,7 +16351,10 @@ mod tests {
             step_thirteen_catalog.raw_catalog_clause_widths,
             vec![5, 1, 3, 3, 5, 3, 2]
         );
-        assert_eq!(step_thirteen_catalog.raw_catalog_telescope_count, Some(1350));
+        assert_eq!(
+            step_thirteen_catalog.raw_catalog_telescope_count,
+            Some(1350)
+        );
         assert_eq!(step_thirteen.telescope, Telescope::reference(13));
         assert_eq!(step_thirteen.demo_funnel.generated_raw_prefixes, 2320);
         assert_eq!(
@@ -16739,9 +16742,7 @@ mod tests {
         late_steps
     }
 
-    fn frozen_pre_repair_claim_step_thirteen_catalog(
-        context: EnumerationContext,
-    ) -> ClauseCatalog {
+    fn frozen_pre_repair_claim_step_thirteen_catalog(context: EnumerationContext) -> ClauseCatalog {
         let latest = context.library_size;
         let previous = latest - 1;
         build_clause_catalog_from_options(
@@ -16751,13 +16752,17 @@ mod tests {
                     ClauseRec::new(
                         ClauseRole::Formation,
                         Expr::Sigma(
+                            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                        ),
+                    ),
+                    ClauseRec::new(
+                        ClauseRole::Formation,
+                        Expr::Sigma(
+                            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
                             Box::new(Expr::Pi(
                                 Box::new(Expr::Var(1)),
-                                Box::new(Expr::Var(1)),
-                            )),
-                            Box::new(Expr::Pi(
-                                Box::new(Expr::Var(1)),
-                                Box::new(Expr::Var(1)),
+                                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
                             )),
                         ),
                     ),
@@ -16766,31 +16771,9 @@ mod tests {
                         Expr::Sigma(
                             Box::new(Expr::Pi(
                                 Box::new(Expr::Var(1)),
-                                Box::new(Expr::Var(1)),
+                                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
                             )),
-                            Box::new(Expr::Pi(
-                                Box::new(Expr::Var(1)),
-                                Box::new(Expr::Pi(
-                                    Box::new(Expr::Var(1)),
-                                    Box::new(Expr::Var(1)),
-                                )),
-                            )),
-                        ),
-                    ),
-                    ClauseRec::new(
-                        ClauseRole::Formation,
-                        Expr::Sigma(
-                            Box::new(Expr::Pi(
-                                Box::new(Expr::Var(1)),
-                                Box::new(Expr::Pi(
-                                    Box::new(Expr::Var(1)),
-                                    Box::new(Expr::Var(1)),
-                                )),
-                            )),
-                            Box::new(Expr::Pi(
-                                Box::new(Expr::Var(1)),
-                                Box::new(Expr::Var(1)),
-                            )),
+                            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
                         ),
                     ),
                 ],
@@ -16806,30 +16789,21 @@ mod tests {
                         ClauseRole::Formation,
                         Expr::Pi(
                             Box::new(Expr::Var(1)),
-                            Box::new(Expr::Pi(
-                                Box::new(Expr::Var(1)),
-                                Box::new(Expr::Var(1)),
-                            )),
+                            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
                         ),
                     ),
                     ClauseRec::new(
                         ClauseRole::Formation,
                         Expr::Pi(
                             Box::new(Expr::Var(1)),
-                            Box::new(Expr::Sigma(
-                                Box::new(Expr::Var(1)),
-                                Box::new(Expr::Var(1)),
-                            )),
+                            Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
                         ),
                     ),
                     ClauseRec::new(
                         ClauseRole::Formation,
                         Expr::Pi(
                             Box::new(Expr::Var(2)),
-                            Box::new(Expr::Sigma(
-                                Box::new(Expr::Var(1)),
-                                Box::new(Expr::Var(1)),
-                            )),
+                            Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
                         ),
                     ),
                 ],
@@ -16845,20 +16819,14 @@ mod tests {
                         ClauseRole::Introduction,
                         Expr::Lam(Box::new(Expr::App(
                             Box::new(Expr::Var(1)),
-                            Box::new(Expr::App(
-                                Box::new(Expr::Var(2)),
-                                Box::new(Expr::Var(1)),
-                            )),
+                            Box::new(Expr::App(Box::new(Expr::Var(2)), Box::new(Expr::Var(1)))),
                         ))),
                     ),
                     ClauseRec::new(
                         ClauseRole::Introduction,
                         Expr::Lam(Box::new(Expr::App(
                             Box::new(Expr::Var(2)),
-                            Box::new(Expr::App(
-                                Box::new(Expr::Var(1)),
-                                Box::new(Expr::Var(2)),
-                            )),
+                            Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
                         ))),
                     ),
                 ],

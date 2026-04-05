@@ -12,6 +12,10 @@ It lists only work that is still open.
   `v10` full-profile run plus its compare, certification, and benchmark
   outputs:
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v10`.
+- The stored `v10` certificate and frozen `step-15-live.ndjson` provenance
+  are now also pinned by
+  `stored_claim_v10_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
+  so the current open miss anatomy is executable in-tree.
 - Stored `v10` now passes accepted-hash parity honestly:
   - trajectory and accepted hashes match guarded replay through step `15`
   - compare signoff is `ready`
