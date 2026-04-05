@@ -370,6 +370,11 @@ Focus on:
 - moving admissibility, mutation, scheduling, and certification toward
   family-agnostic structural evidence
 - not using stronger words like `unguided` before the certification gate lands
+- treating the two newer local step-`13` widened probes,
+  `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]`, as negative controls only:
+  they reopen the local floor but still leave accepted-hash parity open, so
+  the next live repair is narrower step-`13` parity-preserving breadth work,
+  not a raw reland of either widened surface
 
 ### If you are working on reporting or evidence
 

@@ -956,6 +956,28 @@ gate.
     narrower next fix had to stay claim-only and repaired-history-specific;
     that scoped widening is now landed, so the remaining work is the residual
     exact-screen losses on that widened step-`13` surface
+- Two newer non-landed local step-`13` breadth probes now sharpen the parity
+  side of that same blocker further:
+  - widening only the repaired operator-bundle formation positions `1` and `4`
+    to demo-like variants lifts the local read to
+    `[3,5,3,3,5,1,1]` / raw `675` / generated `2223`, but it also shifts the
+    accepted late path to `45 / 7 -> 61 / 9` before step `15`, so that reland
+    is not safe
+  - widening positions `0`, `4`, `5`, and `6` while keeping position `1`
+    exact lifts the local read further to
+    `[5,1,3,3,5,3,3]` / raw `2025` / generated `2995` and preserves the
+    guarded accepted hashes at steps `14` and `15`, but the accepted step-`13`
+    hash still flips to a non-reference `46 / 7` shell
+  - on that second widened surface, the exact guarded step-`13` telescope
+    still evaluates and clears bar locally, but continuing from it no longer
+    reproduces the guarded step-`14` accepted hash
+  - a naive local guarded-step-`13` retention/selection attempt on top of that
+    second widened surface was also explored and reverted: it recovers the
+    guarded step-`13` shell into the retained pool but still does not close
+    the full step-`13 -> step-14` accepted-hash parity story
+  - the next honest local repair is therefore a parity-preserving clause-local
+    step-`13` widening/retention change, not a raw reland of either new
+    exploratory widened surface
 - The clean canonical `v9` bundle also changes what counts as the next honest
   engineering dollar:
   - do not reopen runtime-only step-`4` surgery first
@@ -1000,6 +1022,10 @@ gate.
 - Treat stored `v9` step `13 = 123 / 2200` as the earliest remaining stored
   late-floor miss; do not reopen step `11` first now that stored step `11`
   re-earns `1338 / 800` on the clean canonical bundle.
+- Treat the new `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` local step-`13`
+  widenings as negative controls only:
+  they prove missing breadth can be re-opened locally, but neither one yet
+  preserves accepted-hash parity through step `14`.
 - Keep step `1` on the checklist as a separate stored early breadth blocker.
 - Keep step `15` on the checklist as the remaining later stored floor miss on
   the canonical branch.

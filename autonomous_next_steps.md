@@ -444,6 +444,28 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - but that same reland disturbed claim prefix-memo, realistic-shadow,
     demo-lane, and divergent step-`13` / step-`14` guardrails, so it was
     reverted and should not be relanded directly
+- Two newer non-landed local step-`13` breadth probes now sharpen the next
+  safe move further:
+  - widening only operator-bundle formation positions `1` and `4` to
+    demo-like variants lifts the repaired local read to
+    `[3,5,3,3,5,1,1]` / raw `675` / generated `2223`, but it also changes the
+    accepted late path to `45 / 7 -> 61 / 9` before step `15`, so that reland
+    is not safe
+  - widening positions `0`, `4`, `5`, and `6` while keeping position `1`
+    exact lifts the repaired local read to
+    `[5,1,3,3,5,3,3]` / raw `2025` / generated `2995` and preserves the
+    guarded accepted hashes at steps `14` and `15`, but the accepted
+    step-`13` hash still flips to a non-reference `46 / 7` shell
+  - on that second widened surface, the exact guarded step-`13` telescope
+    still evaluates and clears bar locally, but continuing from it no longer
+    reproduces the guarded step-`14` accepted hash
+  - a naive guarded step-`13` retention/selection reland on top of that
+    second widened surface was also explored and reverted:
+    it recovers the guarded step-`13` shell into the retained pool but still
+    does not close full step-`13 -> step-14` accepted-hash parity
+  - the next repair should therefore target a parity-preserving clause-local
+    step-`13` widening/retention change rather than relanding either new
+    exploratory widened surface raw
 - A follow-up exploratory step-`15` temporal-reanchor broadening was also run
   locally but not landed:
   - a broad temporal-shell matcher expansion collapsed the captured exact-prune
@@ -554,6 +576,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
    the current stored read is `[3,1,3,3,1,1,1]` / `27`, `3` seeded roots,
    `0` exact-screen losses there, and a `claim_generic` `kappa 7..7`
    operator-bundle opening with active widening bands `7,8`.
+   Keep the two newer local widened probes as negative controls only:
+   `[3,5,3,3,5,1,1]` proves the floor can be reopened at the cost of an unsafe
+   `45 / 7 -> 61 / 9` path, while `[5,1,3,3,5,3,3]` proves the floor can be
+   reopened while preserving guarded step-`14` / step-`15` hashes but still
+   loses the guarded step-`13` accepted hash.
 3. Keep the stored step-`15` miss in view beside that work:
    `1794 / 5000`; the current stored read there is broad `6561` catalog-open
    with `468` partial-prefix bar failures plus `80` incumbent-dominance
@@ -585,6 +612,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - a direct temporal-reanchor matcher reland first:
   the exploratory late branches already disturbed the canonical step-`15`
   continuation
+- a raw reland of the newer `[3,5,3,3,5,1,1]` or `[5,1,3,3,5,3,3]`
+  step-`13` widenings first:
+  those probes reopen local breadth but still leave accepted-hash parity open
 - a direct early clause-`2` / clause-`3` reanchor-bridge matcher reland
   first:
   those exploratory branches already displaced the canonical step-`15`

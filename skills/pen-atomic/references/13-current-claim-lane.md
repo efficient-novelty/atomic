@@ -122,6 +122,17 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   evidence preservation, and one parity-clean full-profile stored bundle as
   baseline; the live blocker is diagnosing the remaining stored breadth misses
   on the canonical chain, not reopening another step-`4` survival pass first
+- two newer non-landed local step-`13` widened probes now frame that next
+  diagnosis more tightly:
+  - `[3,5,3,3,5,1,1]` / raw `675` / generated `2223` reopens the local floor
+    but changes the accepted late path to `45 / 7 -> 61 / 9`
+  - `[5,1,3,3,5,3,3]` / raw `2025` / generated `2995` reopens the local
+    floor while preserving the guarded step-`14` / step-`15` accepted hashes,
+    but it still replaces the guarded step-`13` accepted hash with a
+    non-reference `46 / 7` shell
+  - the exact guarded step-`13` telescope still clears bar on that second
+    widened surface, but continuing from it no longer reproduces the guarded
+    step-`14` accepted hash, so neither widened probe is safe to land raw
 
 ## Current Operational Blockers
 
@@ -136,6 +147,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     step `14`
 - step `13` is now the earliest remaining stored late-floor miss on the clean
   canonical bundle
+- the next step-`13` repair must now preserve parity as well as breadth:
+  the two newer local widened probes show that local generated floor can be
+  re-opened, but not yet on a surface that keeps guarded accepted-hash parity
+  through step `14`
 - the canonical repaired late chain must stay frozen while breadth is
   re-earned:
   - step `12` should keep the guarded `34 / 6` continuation
@@ -163,6 +178,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    enriched stored certificate first and `step-13-live.ndjson` /
    `step-15-live.ndjson` only when checkpoint-level timing or note provenance
    is needed before changing more search code.
+   Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
+   they prove the missing floor can be reopened locally, but neither one yet
+   preserves accepted-hash parity through step `14`.
 4. Keep stored step `15` and step `1` in view beside that work:
    `1794 / 5000` and `546 / 2144`.
 5. Do not reopen another stored step-`11` rerun first now that clean-tree
@@ -207,4 +225,6 @@ Do not:
   stored rerun proves the remaining misses are really runtime fallout
 - reland the rejected global band-`7` widening or the rejected late reanchor /
   early bridge expansions first while stored breadth is still open
+- reland the newer `[3,5,3,3,5,1,1]` or `[5,1,3,3,5,3,3]` step-`13`
+  widenings raw; both still leave accepted-hash parity open
 - call the lane `unguided` yet

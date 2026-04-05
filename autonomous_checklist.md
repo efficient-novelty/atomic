@@ -25,6 +25,10 @@ It lists only work that is still open.
     step `15` (`1794` versus `5000`)
   - late generated floors now hit at step `10`, step `11`, step `12`, and
     step `14`
+- Two newer local step-`13` widened probes are now frozen as negative
+  controls only:
+  `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` can reopen the local floor, but
+  neither one yet preserves accepted-hash parity through step `14`.
 - The stored `v9` certificate now also carries step-level breadth diagnosis
   for the open misses, so step `13` / step `15` catalog widths, root seeding,
   exact-screen pressure, and the full stored step-open pressure signature are
