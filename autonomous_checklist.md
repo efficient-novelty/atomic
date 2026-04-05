@@ -40,6 +40,13 @@ It lists only work that is still open.
   - step `13` reports `[3,1,3,3,1,1,1]` / `27` / `123`
   - step `14` reports `19683` / `12027`
   - step `15` preserves `DCT 103 / 8 / 1794`
+- A new local step-`13` repair is now landed but not yet stored:
+  - the repaired local canonical branch now widens step `13` to
+    `[5,1,3,3,5,3,2]` / `1350` / `2320`
+  - the guarded step-`13` hash stays accepted there and the canonical
+    step-`14` / step-`15` continuation remains unchanged
+  - that local hit still needs a fresh clean rerun before it can close the
+    stored step-`13` checklist item
 - No new per-step claim search-band expansion should land before the stored
   breadth repair proves it is necessary on this parity-clean chain.
 - Claim-policy honesty, fallback honesty, narrative/event completeness,

@@ -45,10 +45,13 @@ Treat these as current repo truths:
   (`546 / 2144`), step `13` (`123 / 2200`), and step `15` (`1794 / 5000`),
   while step `10`, step `11`, step `12`, and step `14` are now stored hits;
   the guarded local step-`11` breadth repair and the narrow step-`12`
-  selector repair are both re-earned on clean stored evidence, so the next
-  operational move is stored step-`13` diagnosis on top of the canonical
-  `v9` bundle rather than another step-`11` rerun, and user-facing wording
-  stays at `bounded live recovery` until stored breadth and certification pass
+  selector repair are both re-earned on clean stored evidence, a new local
+  parity-preserving step-`13` repair is now landed at
+  `[5,1,3,3,5,3,2]` / `1350` / `2320` with canonical acceptance, and the
+  next operational move is the next clean full-profile rerun plus refreshed
+  compare / benchmark / certification on top of that repair rather than
+  another step-`13` theory pass first; user-facing wording stays at
+  `bounded live recovery` until stored breadth and certification pass
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -364,17 +367,20 @@ Focus on:
   should stay at `0`, the guarded step-`11` shell should stay accepted, and
   the repaired guarded step-`12` winner plus the later
   step-`13..15` guardrails should stay fixed
-- starting from clean-tree `v9` as the canonical stored bundle and resuming
-  diagnosis at stored step `13` before reopening another local late-step
-  theory slice
+- treating the landed local step-`13` repair as the current late-step truth:
+  the repaired local canonical branch now stays at
+  `[5,1,3,3,5,3,2]` / `1350` / `2320` with the guarded accepted hash and the
+  canonical `62 / 9 / 12027 -> 103 / 8 / 1794` continuation
+- starting from clean-tree `v9` as the canonical stored bundle and launching
+  the next full-profile rerun plus refreshed compare / benchmark /
+  certification before reopening another step-`13` theory slice
 - moving admissibility, mutation, scheduling, and certification toward
   family-agnostic structural evidence
 - not using stronger words like `unguided` before the certification gate lands
 - treating the two newer local step-`13` widened probes,
   `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]`, as negative controls only:
-  they reopen the local floor but still leave accepted-hash parity open, so
-  the next live repair is narrower step-`13` parity-preserving breadth work,
-  not a raw reland of either widened surface; both the
+  they still show how local breadth can be reopened unsafely, but they are
+  not the landed repair; both the
   position-`1` / position-`4` reland and the
   position-`0` / position-`4` / position-`5` / position-`6` reland are now
   frozen as executable regressions on the repaired step-`12` chain

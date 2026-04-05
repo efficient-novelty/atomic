@@ -472,26 +472,32 @@ fn claim_generic_band7_clauses(position: usize, context: EnumerationContext) -> 
     let previous = latest - 1;
     let widen = context.library_size >= 12;
     match position {
-        0 => vec![
-            Expr::Sigma(
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-            ),
-            Expr::Sigma(
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-                Box::new(Expr::Pi(
-                    Box::new(Expr::Var(1)),
-                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-                )),
-            ),
-            Expr::Sigma(
-                Box::new(Expr::Pi(
-                    Box::new(Expr::Var(1)),
-                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-                )),
-                Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
-            ),
-        ],
+        0 => {
+            if widen {
+                demo_operator_bundle_clauses(position, context)
+            } else {
+                vec![
+                    Expr::Sigma(
+                        Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                    ),
+                    Expr::Sigma(
+                        Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                        Box::new(Expr::Pi(
+                            Box::new(Expr::Var(1)),
+                            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                        )),
+                    ),
+                    Expr::Sigma(
+                        Box::new(Expr::Pi(
+                            Box::new(Expr::Var(1)),
+                            Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                        )),
+                        Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                    ),
+                ]
+            }
+        }
         1 => {
             vec![Expr::Pi(
                 Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
@@ -537,22 +543,40 @@ fn claim_generic_band7_clauses(position: usize, context: EnumerationContext) -> 
             clauses
         }
         4 => {
-            vec![Expr::Pi(
-                Box::new(Expr::Lib(latest)),
-                Box::new(Expr::Lib(latest)),
-            )]
+            if widen {
+                demo_operator_bundle_clauses(position, context)
+            } else {
+                vec![Expr::Pi(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::Lib(latest)),
+                )]
+            }
         }
         5 => {
-            vec![Expr::Lam(Box::new(Expr::Pi(
-                Box::new(Expr::Var(1)),
-                Box::new(Expr::Var(1)),
-            )))]
+            if widen {
+                demo_operator_bundle_clauses(position, context)[..3].to_vec()
+            } else {
+                vec![Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Var(1)),
+                )))]
+            }
         }
         6 => {
-            vec![Expr::Pi(
-                Box::new(Expr::Lib(latest)),
-                Box::new(Expr::Var(1)),
-            )]
+            if widen {
+                vec![
+                    Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+                    Expr::Pi(
+                        Box::new(Expr::Lib(latest)),
+                        Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                    ),
+                ]
+            } else {
+                vec![Expr::Pi(
+                    Box::new(Expr::Lib(latest)),
+                    Box::new(Expr::Var(1)),
+                )]
+            }
         }
         _ => Vec::new(),
     }
@@ -4479,9 +4503,9 @@ mod tests {
         let raw_telescopes = enumerate_raw_telescopes(claim_context, 7);
         assert_eq!(
             raw_clause_catalog_widths(claim_context, 7),
-            vec![3, 1, 3, 3, 1, 1, 1]
+            vec![5, 1, 3, 3, 5, 3, 2]
         );
-        assert_eq!(raw_telescopes.len(), 27);
+        assert_eq!(raw_telescopes.len(), 1350);
         assert!(
             raw_telescopes.contains(&Telescope::reference(13)),
             "the scoped step-13 widening should still keep the reference metric shell in the raw claim catalog"

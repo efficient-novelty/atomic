@@ -122,6 +122,16 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   evidence preservation, and one parity-clean full-profile stored bundle as
   baseline; the live blocker is diagnosing the remaining stored breadth misses
   on the canonical chain, not reopening another step-`4` survival pass first
+- a new local parity-preserving step-`13` repair is now landed on the
+  repaired step-`12` chain:
+  - the local step-`13` surface now widens to
+    `[5,1,3,3,5,3,2]` / raw `1350` / generated `2320`
+  - the guarded step-`13` metric shell now stays accepted on that widened
+    local surface while the canonical step-`14` / step-`15` continuation
+    remains `62 / 9 / 12027 -> 103 / 8 / 1794`
+  - that widened local surface now records `576` exact
+    legality/connectivity rejections with `135` captured zero-admitted exact
+    prefixes / `270` disconnected terminal options before proof-close
 - two newer non-landed local step-`13` widened probes now frame that next
   diagnosis more tightly:
   - `[3,5,3,3,5,1,1]` / raw `675` / generated `2223` reopens the local floor
@@ -156,14 +166,14 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     step `14`
 - step `13` is now the earliest remaining stored late-floor miss on the clean
   canonical bundle
-- the next step-`13` repair must now preserve parity as well as breadth:
-  the two newer local widened probes show that local generated floor can be
-  re-opened, but not yet on a surface that keeps guarded accepted-hash parity
-  through step `14`
+- the next step-`13` theory pass is no longer the first move:
+  the local parity-preserving repair is landed, so the next move is the clean
+  rerun that captures it on stored evidence
 - the canonical repaired late chain must stay frozen while breadth is
   re-earned:
   - step `12` should keep the guarded `34 / 6` continuation
-  - step `13` should stay at `[3,1,3,3,1,1,1]` / `27` / `123`
+  - local step `13` should stay at `[5,1,3,3,5,3,2]` / `1350` / `2320`
+    with the guarded accepted hash
   - step `14` should stay at `19683` / `12027`
   - step `15` should stay on `DCT 103 / 8 / 1794`
 - step `1` remains a separate stored early breadth blocker even if late-step
@@ -182,21 +192,16 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    guarded step-`11` shell should stay accepted, the repaired step-`12`
    `34 / 6` continuation should stay fixed, and the current
    step-`13..15` surfaces should stay frozen on the canonical branch.
-3. Start from clean-tree `v9` and resume diagnosis from stored step `13` as
-   the earliest remaining late-floor miss on that canonical bundle, using the
-   enriched stored certificate first and `step-13-live.ndjson` /
-   `step-15-live.ndjson` only when checkpoint-level timing or note provenance
-   is needed before changing more search code.
-   Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
-   they prove the missing floor can be reopened locally, but neither one yet
-   preserves accepted-hash parity through step `14`; both the
-   position-`1` / position-`4` reland and the
-   position-`0` / position-`4` / position-`5` / position-`6` reland are now
-   frozen as executable regressions on the repaired step-`12` chain.
-4. Keep stored step `15` and step `1` in view beside that work:
-   `1794 / 5000` and `546 / 2144`.
-5. Do not reopen another stored step-`11` rerun first now that clean-tree
-   `v9` already re-earns stored step `11 = 1338 / 800`.
+3. Launch the next clean full-profile rerun on top of that landed local
+   step-`13` repair, then refresh compare / benchmark / certification on the
+   resulting stored bundle before spending another cycle on step-`13`
+   theory first.
+4. Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
+   they still prove local breadth can be reopened unsafely, but they are not
+   the landed repair.
+5. Keep stored step `15 = 1794 / 5000` and step `1 = 546 / 2144` in view
+   beside that rerun; do not reopen another stored step-`11` rerun first now
+   that clean-tree `v9` already re-earns stored step `11 = 1338 / 800`.
 
 ## First Reads
 

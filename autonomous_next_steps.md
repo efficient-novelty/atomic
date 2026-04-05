@@ -125,6 +125,27 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - current step-`13` / step-`14` / step-`15` guardrails green
   - claim live-checkpoint persistence green
   - stored `v5` compare / certification / benchmark freeze regressions green
+- A new local parity-preserving step-`13` breadth repair is now landed on top
+  of that repaired chain:
+  - on the repaired step-`12` history, claim-open now widens to
+    `[5,1,3,3,5,3,2]` / raw `1350` / generated `2320`
+  - the guarded step-`13` metric shell now stays accepted on that widened
+    local surface while the canonical later continuation remains
+    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 1794`
+  - step-`13` root seeding now rises to `5` seen / `5` enqueued on that
+    repaired canonical branch
+  - the widened local step-`13` surface now pays `576` exact
+    legality/connectivity rejections before proof-close, with a captured
+    zero-admitted exact-prune surface of `135` prefixes / `270`
+    disconnected terminal options
+  - the two executable step-`13` negative controls remain frozen unchanged:
+    `[3,5,3,3,5,1,1]` still reopens only the unsafe `45 / 7 -> 61 / 9` path,
+    and `[5,1,3,3,5,3,3]` still preserves guarded step-`14` / step-`15`
+    hashes while keeping step-`13` parity open
+- The next engineering dollar is therefore no longer another step-`13`
+  clause-local theory pass first; it is a new clean full-profile rerun plus
+  fresh compare / benchmark / certification on top of this landed local
+  repair.
 - The current stored step-`13` / step-`14` / step-`15` canonical surfaces are
   now corroborated end to end:
   - step `13` holds `[3,1,3,3,1,1,1]` / `27` / `123`
@@ -556,10 +577,14 @@ This note is the exact next work order for `desktop_claim_shadow`.
    re-earned at `1338 / 800` without reopening the old step-`12` drop.
 3. Keep the step-`12` exact-screen / minimality / cache-key / selector /
    continuation-collapse regressions green.
-4. Keep the current step-`13` / step-`14` / step-`15` regressions green and
-   keep the stored canonical counts frozen at step `13`
-   `[3,1,3,3,1,1,1]` / `27` / `123`, step `14` `19683` / `12027`, and
-   step `15` `DCT 103 / 8 / 1794`.
+4. Keep the current local step-`13` / step-`14` / step-`15` regressions green
+   and keep both the new local and old stored surfaces straight:
+   - local repaired step `13` should stay
+     `[5,1,3,3,5,3,2]` / `1350` / `2320` with the guarded accepted hash
+   - stored canonical `v9` step `13` remains `[3,1,3,3,1,1,1]` / `27` / `123`
+     until the next rerun lands
+   - step `14` should stay `19683` / `12027`
+   - step `15` should stay `DCT 103 / 8 / 1794`
 5. Keep the two executable step-`13` negative-control regressions green:
    widening only operator-bundle formation positions `1` and `4` to the
    demo-like custom surface should still reopen the local floor to
@@ -582,33 +607,21 @@ This note is the exact next work order for `desktop_claim_shadow`.
 
 ### 4. Diagnose The Remaining Stored Breadth Evidence
 
-1. Start from clean-tree `v9` as the canonical stored bundle; do not reopen
-   another stored rerun first unless the next diagnosis explicitly requires
-   new evidence capture.
-2. Resume diagnosis from stored step `13` as the earliest remaining late-floor
-   miss on that clean canonical bundle, using the enriched stored certificate
-   first and `step-13-live.ndjson` only when checkpoint-level timing or note
-   provenance is needed:
-   the current stored read is `[3,1,3,3,1,1,1]` / `27`, `3` seeded roots,
-   `0` exact-screen losses there, and a `claim_generic` `kappa 7..7`
-   operator-bundle opening with active widening bands `7,8`.
-   Keep the two newer local widened probes as negative controls only:
-   `[3,5,3,3,5,1,1]` proves the floor can be reopened at the cost of an unsafe
-   `45 / 7 -> 61 / 9` path and is now frozen as an executable regression,
-   while `[5,1,3,3,5,3,3]` proves the floor can be reopened while preserving
-   guarded step-`14` / step-`15` hashes but still loses the guarded
-   step-`13` accepted hash and is now also frozen as an executable
-   regression.
-3. Keep the stored step-`15` miss in view beside that work:
-   `1794 / 5000`; the current stored read there is broad `6561` catalog-open
-   with `468` partial-prefix bar failures plus `80` incumbent-dominance
-   prunes.
+1. Start from clean-tree stored `v9` as the canonical reference surface, but
+   do not spend another cycle on step-`13` diagnosis first: the next run
+   should consume the landed local repair.
+2. Launch one new clean full-profile `desktop_claim_shadow` rerun beyond
+   `v9`, then store its complete artifact bundle from the disclosed desktop.
+3. Refresh compare, benchmark, and certification on that new stored bundle as
+   soon as it completes; only then re-evaluate whether stored step `13`
+   closes and what remains at stored step `15` and step `1`.
 4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
-   hits so the next fix cannot silently reshuffle the canonical branch.
-5. Keep step `1` `546 / 2144` on the checklist as a separate stored early
-   breadth blocker; do not let a late-step repair paper over it.
-6. Only treat the certification gate as newly in reach once breadth passes on
-   stored evidence without losing accepted-hash parity through step `15`.
+   hits so the rerun cannot silently reshuffle the canonical branch.
+5. Keep step `1 = 546 / 2144` on the checklist as the separate stored early
+   breadth blocker; do not let the new local step-`13` hit paper over it.
+6. Only treat the certification gate as newly in reach once the rerun proves
+   breadth from stored evidence without losing accepted-hash parity through
+   step `15`.
 
 ## Do Not Reopen First
 

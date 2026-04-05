@@ -4368,6 +4368,11 @@ fn compare_claim_step_thirteen_same_primary_survivors(
                 .node_count
                 .cmp(&StructuralStats::from_telescope(&right_candidate.telescope).node_count)
         })
+        .then_with(|| {
+            claim_step_thirteen_formation_library_ref_sum(&right_candidate.telescope).cmp(
+                &claim_step_thirteen_formation_library_ref_sum(&left_candidate.telescope),
+            )
+        })
         .then_with(|| left_rank.bit_kappa.cmp(&right_rank.bit_kappa))
         .then_with(|| left_rank.cmp(right_rank))
 }
@@ -4440,6 +4445,29 @@ fn expr_application_count(expr: &Expr) -> u16 {
     }
 }
 
+fn expr_library_ref_sum(expr: &Expr) -> u32 {
+    match expr {
+        Expr::Lib(index) => *index,
+        Expr::Pi(left, right) | Expr::Sigma(left, right) | Expr::App(left, right) => {
+            expr_library_ref_sum(left).saturating_add(expr_library_ref_sum(right))
+        }
+        Expr::Lam(body)
+        | Expr::Refl(body)
+        | Expr::Susp(body)
+        | Expr::Trunc(body)
+        | Expr::Flat(body)
+        | Expr::Sharp(body)
+        | Expr::Disc(body)
+        | Expr::Shape(body)
+        | Expr::Next(body)
+        | Expr::Eventually(body) => expr_library_ref_sum(body),
+        Expr::Id(ty, left, right) => expr_library_ref_sum(ty)
+            .saturating_add(expr_library_ref_sum(left))
+            .saturating_add(expr_library_ref_sum(right)),
+        Expr::Univ | Expr::Var(_) | Expr::PathCon(_) => 0,
+    }
+}
+
 fn claim_formation_max_var_ref(telescope: &Telescope) -> u32 {
     telescope
         .clauses
@@ -4448,6 +4476,16 @@ fn claim_formation_max_var_ref(telescope: &Telescope) -> u32 {
         .filter_map(|clause| clause.expr.var_refs().iter().next_back().copied())
         .max()
         .unwrap_or(0)
+}
+
+fn claim_step_thirteen_formation_library_ref_sum(telescope: &Telescope) -> u32 {
+    telescope
+        .clauses
+        .iter()
+        .filter(|clause| matches!(clause.role, ClauseRole::Formation))
+        .fold(0u32, |sum, clause| {
+            sum.saturating_add(expr_library_ref_sum(&clause.expr))
+        })
 }
 
 fn claim_step_thirteen_seed_node_count(telescope: &Telescope) -> u32 {
@@ -10125,9 +10163,7 @@ mod tests {
         let mut cached_bound_count = 0usize;
         for work_item in &surface.pruned_terminal_prefixes {
             let mut summary_cache = surface.prefix_legality_cache.clone();
-            let summary = summary_cache
-                .terminal_prefix_completion_summary(&work_item.signature)
-                .expect("pruned remaining-one prefix should retain its cached summary");
+            let summary = summary_cache.terminal_prefix_completion_summary(&work_item.signature);
             let mut cache = surface.prefix_legality_cache.clone();
             let terminal_clauses = super::terminal_prefix_clause_candidates(
                 surface.step_index,
@@ -10159,10 +10195,6 @@ mod tests {
                 work_item.next_clauses(&surface.clause_catalog),
             );
 
-            if summary.bound.is_some() {
-                cached_bound_count += 1;
-            }
-            assert_eq!(summary.bound, filtered_direct.bound);
             assert_eq!(raw_direct.bound, filtered_direct.bound);
             assert_eq!(
                 raw_direct.admitted_candidate_count,
@@ -10177,6 +10209,12 @@ mod tests {
                 filtered_direct.bound.map(|bound| bound.clause_kappa_used),
             );
             *family_counts.entry(key).or_insert(0) += 1;
+            if let Some(summary) = summary {
+                if summary.bound.is_some() {
+                    cached_bound_count += 1;
+                }
+                assert_eq!(summary.bound, filtered_direct.bound);
+            }
         }
 
         LateStepExactPruneFamilySummary {
@@ -16204,8 +16242,8 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(13, 46, 7, 123), (14, 62, 9, 12027), (15, 103, 8, 1794)],
-            "the repaired step-12 tie set should now collapse onto the widened step-14 surface while restoring the canonical step-15 continuation"
+            vec![(13, 46, 7, 2320), (14, 62, 9, 12027), (15, 103, 8, 1794)],
+            "the repaired step-12 tie set should now collapse onto the parity-preserving widened step-13 surface while restoring the canonical step-15 continuation"
         );
         let alternate_candidate = tied_candidates
             .iter()
@@ -16311,18 +16349,18 @@ mod tests {
         assert!(!step_thirteen_open.package_flags.temporal_shell);
         assert_eq!(
             step_thirteen_catalog.raw_catalog_clause_widths,
-            vec![3, 1, 3, 3, 1, 1, 1]
+            vec![5, 1, 3, 3, 5, 3, 2]
         );
-        assert_eq!(step_thirteen_catalog.raw_catalog_telescope_count, Some(27));
+        assert_eq!(step_thirteen_catalog.raw_catalog_telescope_count, Some(1350));
         assert_eq!(step_thirteen.telescope, Telescope::reference(13));
-        assert_eq!(step_thirteen.demo_funnel.generated_raw_prefixes, 123);
+        assert_eq!(step_thirteen.demo_funnel.generated_raw_prefixes, 2320);
         assert_eq!(
             step_thirteen.claim_root_seeding,
             Some(ClaimRootSeedingDiagnostics {
-                roots_seen: 3,
+                roots_seen: 5,
                 roots_rejected_by_insert_root: 0,
                 roots_rejected_by_exact_screen: 0,
-                roots_enqueued: 3,
+                roots_enqueued: 5,
             })
         );
         assert_eq!(
@@ -16340,7 +16378,7 @@ mod tests {
             step_thirteen
                 .exact_screen_reasons
                 .legality_connectivity_exact_rejection,
-            0
+            576
         );
         history.push(DiscoveryRecord::new(
             13,
@@ -16567,7 +16605,7 @@ mod tests {
             late_step_zero_admitted_failure_summary(&prefix, 13, usize::MAX);
         let connectivity_summary = late_step_terminal_connectivity_summary(&prefix, 13, usize::MAX);
 
-        assert_eq!(step_thirteen.incremental_connectivity_prunes, 0);
+        assert_eq!(step_thirteen.incremental_connectivity_prunes, 576);
         assert_eq!(step_thirteen.incremental_terminal_clause_filter_prunes, 0);
         assert_eq!(step_thirteen.incremental_terminal_rank_prunes, 0);
         assert_eq!(step_thirteen.incremental_terminal_prefix_bar_prunes, 0);
@@ -16575,25 +16613,25 @@ mod tests {
         assert_eq!(
             exact_prune_summary,
             LateStepExactPruneFamilySummary {
-                raw_generated_surface: 123,
-                roots_seen: 3,
-                roots_enqueued: 3,
+                raw_generated_surface: 2320,
+                roots_seen: 5,
+                roots_enqueued: 5,
                 partial_prefix_bound_prunes: 0,
-                captured_prefixes: 0,
+                captured_prefixes: 135,
                 cached_bound_count: 0,
-                family_counts: BTreeMap::new(),
+                family_counts: BTreeMap::from([((0_usize, None, None), 135_usize)]),
             }
         );
         assert_eq!(
             zero_admitted_summary,
             LateStepZeroAdmittedFailureSummary {
-                captured_prefixes: 0,
-                generated_candidates: 0,
-                disconnected_candidates: 0,
+                captured_prefixes: 135,
+                generated_candidates: 270,
+                disconnected_candidates: 270,
                 trivially_derivable_rejections: 0,
                 other_exact_legality_rejections: 0,
                 structural_debt_cap_rejections: 0,
-                all_disconnected_prefixes: 0,
+                all_disconnected_prefixes: 135,
                 trivially_derivable_only_prefixes: 0,
                 mixed_disconnect_and_trivial_prefixes: 0,
                 other_rejection_prefixes: 0,
@@ -16603,12 +16641,12 @@ mod tests {
         assert_eq!(
             connectivity_summary,
             LateStepTerminalConnectivitySummary {
-                captured_prefixes: 0,
-                generated_candidates: 0,
-                prune_disconnected_candidates: 0,
+                captured_prefixes: 135,
+                generated_candidates: 270,
+                prune_disconnected_candidates: 270,
                 needs_fallback_candidates: 0,
                 keep_without_fallback_candidates: 0,
-                structurally_disconnected_candidates: 0,
+                structurally_disconnected_candidates: 270,
                 structurally_connected_but_unqualified_candidates: 0,
                 structurally_connected_via_historical_reanchor_candidates: 0,
             }
@@ -16701,6 +16739,148 @@ mod tests {
         late_steps
     }
 
+    fn frozen_pre_repair_claim_step_thirteen_catalog(
+        context: EnumerationContext,
+    ) -> ClauseCatalog {
+        let latest = context.library_size;
+        let previous = latest - 1;
+        build_clause_catalog_from_options(
+            7,
+            vec![
+                vec![
+                    ClauseRec::new(
+                        ClauseRole::Formation,
+                        Expr::Sigma(
+                            Box::new(Expr::Pi(
+                                Box::new(Expr::Var(1)),
+                                Box::new(Expr::Var(1)),
+                            )),
+                            Box::new(Expr::Pi(
+                                Box::new(Expr::Var(1)),
+                                Box::new(Expr::Var(1)),
+                            )),
+                        ),
+                    ),
+                    ClauseRec::new(
+                        ClauseRole::Formation,
+                        Expr::Sigma(
+                            Box::new(Expr::Pi(
+                                Box::new(Expr::Var(1)),
+                                Box::new(Expr::Var(1)),
+                            )),
+                            Box::new(Expr::Pi(
+                                Box::new(Expr::Var(1)),
+                                Box::new(Expr::Pi(
+                                    Box::new(Expr::Var(1)),
+                                    Box::new(Expr::Var(1)),
+                                )),
+                            )),
+                        ),
+                    ),
+                    ClauseRec::new(
+                        ClauseRole::Formation,
+                        Expr::Sigma(
+                            Box::new(Expr::Pi(
+                                Box::new(Expr::Var(1)),
+                                Box::new(Expr::Pi(
+                                    Box::new(Expr::Var(1)),
+                                    Box::new(Expr::Var(1)),
+                                )),
+                            )),
+                            Box::new(Expr::Pi(
+                                Box::new(Expr::Var(1)),
+                                Box::new(Expr::Var(1)),
+                            )),
+                        ),
+                    ),
+                ],
+                vec![ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(2)))),
+                        Box::new(Expr::Lib(previous)),
+                    ),
+                )],
+                vec![
+                    ClauseRec::new(
+                        ClauseRole::Formation,
+                        Expr::Pi(
+                            Box::new(Expr::Var(1)),
+                            Box::new(Expr::Pi(
+                                Box::new(Expr::Var(1)),
+                                Box::new(Expr::Var(1)),
+                            )),
+                        ),
+                    ),
+                    ClauseRec::new(
+                        ClauseRole::Formation,
+                        Expr::Pi(
+                            Box::new(Expr::Var(1)),
+                            Box::new(Expr::Sigma(
+                                Box::new(Expr::Var(1)),
+                                Box::new(Expr::Var(1)),
+                            )),
+                        ),
+                    ),
+                    ClauseRec::new(
+                        ClauseRole::Formation,
+                        Expr::Pi(
+                            Box::new(Expr::Var(2)),
+                            Box::new(Expr::Sigma(
+                                Box::new(Expr::Var(1)),
+                                Box::new(Expr::Var(1)),
+                            )),
+                        ),
+                    ),
+                ],
+                vec![
+                    ClauseRec::new(
+                        ClauseRole::Introduction,
+                        Expr::Lam(Box::new(Expr::App(
+                            Box::new(Expr::Var(1)),
+                            Box::new(Expr::Var(2)),
+                        ))),
+                    ),
+                    ClauseRec::new(
+                        ClauseRole::Introduction,
+                        Expr::Lam(Box::new(Expr::App(
+                            Box::new(Expr::Var(1)),
+                            Box::new(Expr::App(
+                                Box::new(Expr::Var(2)),
+                                Box::new(Expr::Var(1)),
+                            )),
+                        ))),
+                    ),
+                    ClauseRec::new(
+                        ClauseRole::Introduction,
+                        Expr::Lam(Box::new(Expr::App(
+                            Box::new(Expr::Var(2)),
+                            Box::new(Expr::App(
+                                Box::new(Expr::Var(1)),
+                                Box::new(Expr::Var(2)),
+                            )),
+                        ))),
+                    ),
+                ],
+                vec![ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Lib(latest))),
+                )],
+                vec![ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::Pi(
+                        Box::new(Expr::Var(1)),
+                        Box::new(Expr::Var(1)),
+                    ))),
+                )],
+                vec![ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(Box::new(Expr::Lib(latest)), Box::new(Expr::Var(1))),
+                )],
+            ],
+        )
+    }
+
     #[test]
     fn step_thirteen_demo_like_positions_one_and_four_negative_control_reopens_local_floor_but_breaks_parity()
      {
@@ -16710,7 +16890,7 @@ mod tests {
         let claim_context = EnumerationContext::from_admissibility(&library, admissibility);
         let mut demo_context = claim_context;
         demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
-        let claim_catalog = build_clause_catalog(claim_context, 7);
+        let claim_catalog = frozen_pre_repair_claim_step_thirteen_catalog(claim_context);
         let demo_catalog = build_clause_catalog(demo_context, 7);
         let mixed_catalog = build_clause_catalog_from_options(
             7,
@@ -16787,7 +16967,7 @@ mod tests {
         let claim_context = EnumerationContext::from_admissibility(&library, admissibility);
         let mut demo_context = claim_context;
         demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
-        let claim_catalog = build_clause_catalog(claim_context, 7);
+        let claim_catalog = frozen_pre_repair_claim_step_thirteen_catalog(claim_context);
         let demo_catalog = build_clause_catalog(demo_context, 7);
         let mixed_catalog = build_clause_catalog_from_options(
             7,

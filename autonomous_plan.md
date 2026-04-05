@@ -31,8 +31,20 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   are all earned on stored evidence.
 - The remaining blockers are stored breadth misses on the canonical chain:
   step `1 = 546 / 2144`, step `13 = 123 / 2200`, step `15 = 1794 / 5000`.
-- Step `13` is now the earliest remaining stored late-floor miss and is the
-  next honest local engineering dollar.
+- Step `13` is still the earliest remaining stored late-floor miss, but the
+  next honest local engineering dollar is now the rerun that captures the
+  landed local repair rather than another step-`13` theory pass first.
+- A new local parity-preserving step-`13` repair is now landed on the
+  repaired step-`12` chain:
+  - the local claim-open surface now widens to
+    `[5,1,3,3,5,3,2]` / raw `1350` / generated `2320`
+  - the guarded step-`13` metric shell stays accepted on that widened local
+    surface and keeps the canonical `62 / 9 / 12027 -> 103 / 8 / 1794`
+    continuation through steps `14` and `15`
+  - the widened local surface now exposes `576` exact
+    legality/connectivity rejections with a captured zero-admitted
+    exact-prune surface of `135` prefixes / `270` disconnected terminal
+    options before proof-close
 - Two new non-landed local step-`13` probes now sharpen the safe search space:
   - widening only operator-bundle formation positions `1` and `4` to
     demo-like variants lifts the repaired local read to
@@ -61,9 +73,9 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
 
 ## Optimization Thesis
 
-The next cycle should spend engineering time on parity-preserving stored
-breadth repair at step `13`, not on another stored rerun first and not on a
-raw reland of any exploratory widened step-`13` surface.
+The next cycle should spend engineering time on turning that landed local
+step-`13` repair into stored evidence, not on another round of step-`13`
+theory first and not on a raw reland of any exploratory widened surface.
 
 The highest-value work is:
 
@@ -71,10 +83,9 @@ The highest-value work is:
    green on the repaired chain
 2. use stored `v9` certificate plus `step-13-live.ndjson` as the primary
    diagnosis surface
-3. land a parity-preserving step-`13` breadth repair on top of the canonical
-   chain
-4. only then launch the next full-profile stored rerun and refresh compare /
-   benchmark / certification
+3. keep the landed parity-preserving local step-`13` repair green
+4. launch the next full-profile stored rerun and refresh compare / benchmark /
+   certification
 
 Treat `v9` plus its stored audit bundle as the current canonical guardrail.
 Keep the replay harness corpus and benchmark inputs frozen until real stored
@@ -112,27 +123,25 @@ Loop:
 3. keep the current step-`13` / step-`14` / step-`15` canonical guardrails
    green until a replacement is explicitly proved
 4. use the stored certificate and late-step live checkpoints first
-5. land a parity-preserving step-`13` breadth repair
-6. rerun targeted claim tests plus replay parity
-7. launch the next clean full-profile rerun only after that local repair is
-   stable
-8. refresh compare / benchmark / certification on the new stored bundle
-9. only treat certification as newly in reach if the rerun keeps step-`15`
+5. rerun targeted claim tests plus replay parity on the landed repair
+6. launch the next clean full-profile rerun
+7. refresh compare / benchmark / certification on that new stored bundle
+8. only treat certification as newly in reach if the rerun keeps step-`15`
    completion while closing the remaining breadth failures
 
 Current slice order:
 
-1. diagnose step `13` on top of clean-tree `v9`
-2. turn the new exploratory step-`13` probes into a narrower
-   parity-preserving repair
-3. rerun once that repair is local-green
-4. revisit stored step `15` and step `1` only after the step-`13` canonical
-   surface is fixed
+1. hold the landed local step-`13` repair and the frozen negative controls
+   green
+2. rerun once that repair is local-green
+3. refresh stored compare / benchmark / certification
+4. revisit stored step `15` and step `1` only after the new stored bundle
+   is in hand
 
 Do not reopen first:
 
-- another clean-start full-profile rerun before the local step-`13` repair is
-  green
+- another fresh step-`13` widening theory pass before the landed local repair
+  is rerun
 - a `resume`-based restart of stopped `v4`
 - another runtime-only step-`4` micro-optimization slice first
 - another stored/local step-`11` rerun first

@@ -143,6 +143,23 @@ gate.
   - claim live-checkpoint persistence is green
   - the stored `v5` compare / certification / benchmark freeze regressions
     remain green
+- A new local parity-preserving step-`13` breadth repair now lands on top of
+  that repaired chain:
+  - on the repaired step-`12` history, claim-open now widens to
+    `[5,1,3,3,5,3,2]` / raw `1350` / generated `2320`
+  - the guarded step-`13` metric shell now stays accepted on that widened
+    local surface, with the same observed canonical continuation
+    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 1794`
+  - step-`13` root seeding now rises to `5` seen / `5` enqueued on that
+    repaired canonical branch
+  - the widened local step-`13` surface no longer loses parity in proof-close,
+    but it now records `576` exact legality/connectivity rejections before
+    proof-close with a captured zero-admitted exact-prune surface of
+    `135` prefixes / `270` disconnected terminal options
+  - the two frozen executable negative controls remain unchanged:
+    `[3,5,3,3,5,1,1]` still reopens local breadth only on the unsafe
+    `45 / 7 -> 61 / 9` path, and `[5,1,3,3,5,3,3]` still preserves guarded
+    step-`14` / step-`15` hashes while keeping step-`13` parity open
 - A new narrow step-`9` same-primary selector repair now lands on top of that
   stored `v5` evidence surface:
   - the guarded step-`9` telescope still stays retained inside the local
@@ -1017,8 +1034,11 @@ gate.
   `kappa 5 = 243`, `kappa 6 = 729` (total `972`), the guarded step-`11`
   shell should stay accepted, and the guarded step-`12` same-primary winner
   should stay fixed without reopening the old step-`12` drop.
-- Keep the current step-`13` / step-`14` / step-`15` surfaces green as
-  guardrails without widening any bands further.
+- Keep the current local step-`13` / step-`14` / step-`15` surfaces green as
+  guardrails:
+  step `13` should now stay at `[5,1,3,3,5,3,2]` / `1350` / `2320` with the
+  guarded accepted hash, while step `14` stays `19683` / `12027` and step
+  `15` stays `DCT 103 / 8 / 1794`.
 - Use the stored `v9` certificate and the late-step live checkpoints as the
   first diagnosis surface for the remaining misses; they now expose raw
   catalog widths, root seeding, exact-screen pressure, and the full stored
@@ -1039,28 +1059,22 @@ gate.
 
 ## Immediate Next Move
 
-1. Freeze `long-rerun-v9` as the canonical stored claim bundle, keep `v6` as
-   the clean pre-step-`11` breadth baseline, and keep `v5` as the pre-parity
-   completed reference; do not resume the stopped `v4` run and do not
-   recapture replay fixtures first.
+1. Freeze `long-rerun-v9` as the current canonical stored claim bundle, keep
+   `v6` as the clean pre-step-`11` breadth baseline, and keep `v5` as the
+   pre-parity completed reference; do not resume the stopped `v4` run and do
+   not recapture replay fixtures first.
 2. Hold the current pre-flight gate, the stored `v9` compare readiness, the
    new local step-`11` breadth guardrails, the repaired step-`12`
-   same-primary selector, and the current step-`13` / step-`14` / step-`15`
-   later-surface guardrails green:
-   step `11` should stay stored-hit at `1338 / 800`, step `12` should stay
-   stored-hit at `1338 / 1200`, step `13` should stay
-   `[3,1,3,3,1,1,1]` / `27` / `123`, step `14` should stay `19683` /
-   `12027`, and the canonical step-`15` continuation should stay
-   `DCT 103 / 8 / 1794`.
-3. Resume diagnosis from stored step `13` as the earliest remaining
-   late-floor miss on the clean canonical bundle, while preserving accepted-
-   hash parity through step `15`; use the enriched stored certificate as the
-   first diagnosis surface and drop to `step-13-live.ndjson` /
-   `step-15-live.ndjson` only when checkpoint-level timing or note provenance
-   is needed before changing search code.
-4. Keep stored step `15 = 1794 / 5000` in view as the remaining later floor
-   miss, and keep step `1 = 546 / 2144` on the checklist as the separate
-   stored early breadth blocker.
-5. Do not broaden any claim search band or reland the rejected
-   global band-`7` widening, temporal-reanchor matcher, or early
-   clause-`2` / clause-`3` bridge expansions first.
+   same-primary selector, the new local step-`13`
+   `[5,1,3,3,5,3,2]` / `1350` / `2320` accepted surface, and the current
+   step-`14` / step-`15` later-surface guardrails green.
+3. Launch the next clean full-profile `desktop_claim_shadow` rerun on top of
+   that local step-`13` repair and store one new bundle beyond `v9`; do not
+   spend another cycle on step-`13` theory first unless the rerun itself
+   disagrees with the guarded local read.
+4. Refresh compare, benchmark, and certification on that new stored bundle as
+   soon as it finishes, then re-evaluate the remaining stored misses at step
+   `15` and step `1` from the new evidence set.
+5. Keep the two frozen step-`13` negative controls and the rejected global
+   band-`7` / temporal-reanchor / early bridge expansions out of the landed
+   path while the rerun and audit refresh are still pending.
