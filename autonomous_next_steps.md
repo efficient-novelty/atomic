@@ -1,6 +1,6 @@
 # Autonomous Claim Lane: Next Operational Slice
 
-Last updated: 2026-04-04
+Last updated: 2026-04-05
 
 This note is the exact next work order for `desktop_claim_shadow`.
 
@@ -445,6 +445,25 @@ This note is the exact next work order for `desktop_claim_shadow`.
     reanchor-prefix regressions were revalidated afterwards
   - the next step-`15` repair should therefore not directly broaden the early
     clause-`2` / clause-`3` reanchor bridge matcher either
+- A new local step-`11` breadth repair now sharpens the earliest remaining
+  late-floor miss before any new stored rerun:
+  - claim structural-shell seal variants now count as connected when the
+    adjacent step-`11` `kappa = 6` closure clause stays on the existing
+    library-backed claim surface
+  - the direct connected claim step-`11` surface now widens from
+    `kappa 5 = 243`, `kappa 6 = 243` (total `486`) to
+    `kappa 5 = 243`, `kappa 6 = 729` (total `972`)
+  - live claim search now also keeps that existing step-`11` `kappa = 6`
+    surface out of exact frontier screening, so the local step-`11`
+    generated-floor regression is now green while the guarded accepted
+    step-`11` shell and the repaired step-`12` `34 / 6` continuation stay
+    fixed
+  - local step-`11` exact-screen connectivity rejections are now `0`
+  - no fresh stored rerun has consumed that repair yet, so stored `v6`
+    remains the authoritative breadth surface and still records
+    step `11 = 330 / 800`
+  - the next operational slice should therefore move off local step-`11`
+    diagnosis and onto a fresh stored rerun plus audit refresh
 
 ## Do This Next
 
@@ -476,31 +495,39 @@ This note is the exact next work order for `desktop_claim_shadow`.
    raw-structural read that still prefers the cheaper non-guarded same-primary
    survivor.
 2. Keep the step-`11` retained-pool / selector / continuation-collapse and
-   step-`12` exact-screen / minimality / cache-key / selector /
+   new breadth regressions green:
+   the connected step-`11` claim surface should stay at
+   `kappa 5 = 243`, `kappa 6 = 729` (total `972`), the guarded step-`11`
+   shell should stay accepted, and the local step-`11` generated-floor
+   regression should stay green without reopening the old step-`12` drop.
+3. Keep the step-`12` exact-screen / minimality / cache-key / selector /
    continuation-collapse regressions green.
-3. Keep the current step-`13` / step-`14` / step-`15` regressions green and
+4. Keep the current step-`13` / step-`14` / step-`15` regressions green and
    keep the stored canonical counts frozen at step `13`
    `[3,1,3,3,1,1,1]` / `27` / `123`, step `14` `19683` / `12027`, and
    step `15` `DCT 103 / 8 / 1794`.
-4. Keep the stored certification / benchmark snapshot green for the current
+5. Keep the stored certification / benchmark snapshot green for the current
    breadth surface:
    step `1` `546 / 2144`, step `10` `1428 / 500`, step `11` `330 / 800`,
    step `12` `1338 / 1200`, step `13` `123 / 2200`, step `14`
    `12027 / 3500`, and step `15` `1794 / 5000`.
-5. Do not reland the rejected global band-`7` widening or the rejected late
+6. Do not reland the rejected global band-`7` widening or the rejected late
    reanchor / early bridge expansions while breadth is still open.
 
-### 4. Repair Breadth On The Canonical Chain
+### 4. Re-Earn Stored Breadth Evidence
 
-1. Start the next narrow diagnosis from the earliest remaining late-floor miss
-   on the canonical chain: step `11` generated `330` versus target `800`.
-2. Then keep the stored step-`13` and step-`15` misses in view:
+1. Launch one fresh clean-start full-profile rerun on the repaired local tree
+   so stored evidence can consume the new step-`11` breadth repair.
+2. Refresh compare, certification, and benchmark on that new stored bundle.
+3. If stored step `11` still misses, resume diagnosis from the earliest
+   remaining stored late-floor miss on that new canonical bundle.
+4. Then keep the stored step-`13` and step-`15` misses in view:
    `123 / 2200` and `1794 / 5000`.
-3. Keep step `12` and step `14` frozen as positive stored floor hits so the
+5. Keep step `12` and step `14` frozen as positive stored floor hits so the
    next fix cannot silently reshuffle the canonical branch.
-4. Keep step `1` `546 / 2144` on the checklist as a separate stored early
+6. Keep step `1` `546 / 2144` on the checklist as a separate stored early
    breadth blocker; do not let a late-step repair paper over it.
-5. Only treat the certification gate as newly in reach once breadth passes on
+7. Only treat the certification gate as newly in reach once breadth passes on
    stored evidence without losing accepted-hash parity through step `15`.
 
 ## Do Not Reopen First
@@ -516,6 +543,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - another raw step-`9` enumeration or terminal-clause-filter theory first:
   the guarded step-`9` telescope is already present on both of those
   diagnostic surfaces
+- another local step-`11` selector or raw-connectivity theory first:
+  the local step-`11` breadth repair is already landed and guarded
 - a direct temporal-reanchor matcher reland first:
   the exploratory late branches already disturbed the canonical step-`15`
   continuation
@@ -529,6 +558,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
 - Keep the current lane on stored breadth repair using parity-clean completed
   `v6` as the canonical stored claim bundle, with completed `v5` frozen as the
   pre-parity reference surface.
+- Keep the new local step-`11` breadth repair as a guarded local change until a
+  fresh stored rerun proves whether the stored `330 / 800` miss is now closed.
 - Keep the current short-loop gate, stored step-`4` continuation references,
   the capped intended-profile read, stopped `v4`, and completed `v5` / `v6`
   frozen as regression checks.

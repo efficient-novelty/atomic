@@ -4299,6 +4299,7 @@ mod tests {
     use pen_type::admissibility::{
         AdmissibilityMode, StrictAdmissibility, strict_admissibility, strict_admissibility_for_mode,
     };
+    use std::collections::BTreeMap;
 
     fn library_until(step: u32) -> Library {
         let mut library = Vec::new();
@@ -4368,6 +4369,57 @@ mod tests {
 
         assert!(claim_catalog.clauses_at(1).contains(&claim_only));
         assert!(!realistic_catalog.clauses_at(1).contains(&claim_only));
+    }
+
+    #[test]
+    fn claim_generic_step_eleven_full_enumeration_reports_connected_surface_counts() {
+        let library = library_until(10);
+        let admissibility =
+            strict_admissibility_for_mode(11, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = context_from_admissibility(&library, admissibility);
+        let mut counts = Vec::new();
+        let mut total = 0usize;
+        let mut final_clause_counts = BTreeMap::new();
+
+        for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
+            let telescopes = enumerate_telescopes(&library, claim_context, clause_kappa);
+            total += telescopes.len();
+            if clause_kappa == 6 {
+                for telescope in &telescopes {
+                    let last = telescope
+                        .clauses
+                        .last()
+                        .expect("kappa-6 telescope should have a final clause");
+                    *final_clause_counts
+                        .entry(
+                            serde_json::to_string(&last.expr)
+                                .expect("final clause expr should serialize"),
+                        )
+                        .or_insert(0usize) += 1;
+                }
+            }
+            counts.push((clause_kappa, telescopes.len()));
+        }
+
+        assert_eq!(counts, vec![(5, 243), (6, 729)]);
+        assert_eq!(
+            final_clause_counts,
+            BTreeMap::from([
+                (
+                    "{\"Pi\":[{\"Lib\":10},{\"Lib\":10}]}".to_owned(),
+                    243usize,
+                ),
+                (
+                    "{\"Pi\":[{\"Lib\":10},{\"Lib\":9}]}".to_owned(),
+                    243usize,
+                ),
+                (
+                    "{\"Pi\":[{\"Lib\":9},{\"Lib\":10}]}".to_owned(),
+                    243usize,
+                ),
+            ])
+        );
+        assert_eq!(total, 972);
     }
 
     #[test]

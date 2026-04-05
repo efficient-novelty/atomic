@@ -91,6 +91,7 @@ struct ConnectivityClauseState {
     is_higher_path_con: bool,
     is_higher_order_bridge: bool,
     is_operator_action: bool,
+    is_structural_shell_seal: bool,
     has_prior_operator_bundle_seed: bool,
     later_pathcon_seen: bool,
 }
@@ -105,6 +106,7 @@ impl ConnectivityClauseState {
             is_higher_path_con: matches!(expr, Expr::PathCon(dimension) if *dimension > 1),
             is_higher_order_bridge: is_higher_order_bridge_clause(expr),
             is_operator_action: is_operator_action_clause(expr),
+            is_structural_shell_seal: is_structural_shell_seal_clause(expr),
             has_prior_operator_bundle_seed,
             later_pathcon_seen: false,
         }
@@ -460,6 +462,9 @@ fn clause_state_satisfied_by_terminal_clause(
         || has_path_attachment
         || (clause_state.is_higher_path_con && new_clause_is_higher_path_witness)
         || (clause_state.is_higher_order_bridge && new_clause_has_lib_pointer)
+        || (clause_state.is_structural_shell_seal
+            && later_index == earlier_index + 1
+            && new_clause_is_operator_bundle_closure)
         || (clause_state.is_operator_action
             && clause_state.has_prior_operator_bundle_seed
             && new_clause_is_operator_bundle_closure)
@@ -487,6 +492,9 @@ fn clause_state_satisfied_by_terminal_clause_facts(
         || has_path_attachment
         || (clause_state.is_higher_path_con && facts.is_higher_path_witness)
         || (clause_state.is_higher_order_bridge && facts.has_lib_pointer())
+        || (clause_state.is_structural_shell_seal
+            && later_index == earlier_index + 1
+            && facts.is_operator_bundle_closure)
         || (clause_state.is_operator_action
             && clause_state.has_prior_operator_bundle_seed
             && facts.is_operator_bundle_closure)
@@ -708,6 +716,18 @@ fn is_higher_order_bridge_clause(expr: &Expr) -> bool {
 
 fn is_operator_action_clause(expr: &Expr) -> bool {
     matches!(expr, Expr::Lam(body) if is_operator_action_application(body))
+}
+
+fn is_structural_shell_seal_clause(expr: &Expr) -> bool {
+    matches!(expr, Expr::Lam(body) if matches!(body.as_ref(), Expr::Var(1)))
+        || matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                )
+        )
 }
 
 fn is_operator_bundle_seed_clause(expr: &Expr) -> bool {
@@ -1455,6 +1475,40 @@ mod tests {
             }
         );
         assert!(passes_connectivity(&library, &Telescope::reference(12)));
+    }
+
+    #[test]
+    fn connectivity_accepts_claim_structural_shell_seal_variants() {
+        let library = library_until(10);
+
+        for seal_expr in [
+            Expr::Lam(Box::new(Expr::Var(1))),
+            Expr::Lam(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+        ] {
+            for closure_expr in [
+                Expr::Pi(Box::new(Expr::Lib(10)), Box::new(Expr::Lib(10))),
+                Expr::Pi(Box::new(Expr::Lib(9)), Box::new(Expr::Lib(10))),
+                Expr::Pi(Box::new(Expr::Lib(10)), Box::new(Expr::Lib(9))),
+            ] {
+                let mut telescope = Telescope::reference(11);
+                telescope.clauses[4].expr = seal_expr.clone();
+                telescope
+                    .clauses
+                    .push(ClauseRec::new(ClauseRole::Formation, closure_expr));
+                let witness = analyze_connectivity(&library, &telescope);
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: true,
+                        self_contained: false,
+                        max_lib_ref: 10,
+                        historical_reanchor: false,
+                    }
+                );
+                assert!(passes_connectivity(&library, &telescope));
+            }
+        }
     }
 
     #[test]

@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-04-04
+Last updated: 2026-04-05
 
 This checklist is the live signoff gate for `desktop_claim_shadow`.
 It lists only work that is still open.
@@ -21,6 +21,13 @@ It lists only work that is still open.
   - late generated floors still miss at step `11` (`330` versus `800`),
     step `13` (`123` versus `2200`), and step `15` (`1794` versus `5000`)
   - late generated floors now hit at step `10`, step `12`, and step `14`
+- A new local step-`11` breadth repair is now landed and guarded, but no
+  stored rerun has consumed it yet:
+  - the connected claim step-`11` surface now holds
+    `kappa 5 = 243`, `kappa 6 = 729` (total `972`)
+  - the guarded step-`11` shell still stays accepted locally
+  - stored `v6` remains the authoritative breadth read until a fresh rerun
+    re-earns step `11` on disk
 - The current canonical later surfaces are frozen on stored evidence:
   - step `13` reports `[3,1,3,3,1,1,1]` / `27` / `123`
   - step `14` reports `19683` / `12027`

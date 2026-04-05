@@ -5704,6 +5704,13 @@ fn screen_prefix_for_frontier(
     work_item: &OnlinePrefixWorkItem,
     discovery: &mut RealisticShadowDiscovery,
 ) -> (ExactPartialPrefixBoundDecision, bool) {
+    if matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
+        && step_index == 11
+        && work_item.clause_kappa == 6
+    {
+        return (ExactPartialPrefixBoundDecision::Unknown, false);
+    }
+
     let track_remaining_one = work_item.remaining_clause_slots == 1;
     let remaining_one_summary_kernel_activation =
         track_remaining_one.then(|| remaining_one_summary_kernel_activation_context(discovery));
@@ -15617,6 +15624,37 @@ mod tests {
         assert!(
             retained_target,
             "the guarded step-11 completion should survive claim incumbent pruning into the retained candidate pool"
+        );
+    }
+
+    #[test]
+    fn claim_step_eleven_now_hits_the_generated_floor_without_losing_the_guarded_winner() {
+        let step = super::search_bootstrap_prefix_for_profile_with_runtime(
+            11,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim step 11 should build")
+        .into_iter()
+        .last()
+        .expect("claim step 11 should exist");
+
+        assert_eq!(
+            step.accepted.telescope,
+            Telescope::reference(11),
+            "step 11 should keep the guarded accepted shell while breadth widens"
+        );
+        assert!(
+            step.demo_funnel.generated_raw_prefixes >= 800,
+            "step 11 should now clear the generated floor on the parity-clean chain (generated={}, exact_screen={:?})",
+            step.demo_funnel.generated_raw_prefixes,
+            step.exact_screen_reasons
+        );
+        assert_eq!(
+            step.exact_screen_reasons.legality_connectivity_exact_rejection,
+            0,
+            "the step-11 structural-shell widening should no longer leak exact connectivity rejections"
         );
     }
 

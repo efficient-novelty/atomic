@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Progress
 
-Last updated: 2026-04-04
+Last updated: 2026-04-05
 
 This file is the live operating brief for `desktop_claim_shadow`.
 Use [autonomous_next_steps.md](autonomous_next_steps.md) for the exact next
@@ -815,6 +815,23 @@ gate.
     compact-summary loss, a simple one-step viability miss, or an unresolved
     local same-primary selector; the old step-`12` `33 / 5` drop is no longer
     the remaining local blocker on that repaired step-`11` history
+- A new follow-up local step-`11` breadth repair now sharpens the earliest
+  late-floor miss further:
+  - claim structural-shell seal variants now count as connected when the
+    adjacent step-`11` `kappa = 6` closure clause stays on the existing
+    library-backed claim surface
+  - the direct connected claim step-`11` surface now widens from
+    `kappa 5 = 243`, `kappa 6 = 243` (total `486`) to
+    `kappa 5 = 243`, `kappa 6 = 729` (total `972`) without changing the
+    guarded accepted step-`11` shell
+  - live claim search now also keeps that existing step-`11` `kappa = 6`
+    surface out of exact frontier screening, so the local generated-floor
+    regression is now green while the guarded step-`11` winner and the
+    repaired step-`12` `34 / 6` continuation stay fixed
+  - local step-`11` exact-screen connectivity rejections are now `0`
+  - no fresh stored rerun has consumed that repair yet, so stored `v6`
+    remains the authoritative breadth surface and still records
+    step `11 = 330 / 800`
 - A new local step-`12` repair now refines that blocker further:
   - the guarded step-`12` telescope is still enumerated and exact-admitted on
     the repaired live claim history
@@ -892,8 +909,8 @@ gate.
   - do not reopen runtime-only step-`4` surgery first
   - do not reopen late-step zero-candidate diagnosis first
   - do not reopen another pre-rerun step-`9` selector theory first
-  - first repair stored breadth on the parity-clean chain rather than launch
-    another rerun immediately
+  - consume the new local step-`11` breadth repair on a fresh stored rerun
+    before reopening another late-step theory slice
 - No residual `pen-cli.exe` process remains from the `v6` rerun.
 
 ## Forward Direction
@@ -913,30 +930,40 @@ gate.
 - Keep the claim-policy metadata, narrative/event artifacts, exact-screen
   reason counts, prune-class counts, manifest provenance, and runtime-threshold
   pass green.
+- Keep the new local step-`11` breadth guardrails green:
+  the connected step-`11` claim surface should stay at
+  `kappa 5 = 243`, `kappa 6 = 729` (total `972`), the guarded step-`11`
+  shell should stay accepted, and the local generated-floor regression should
+  stay green without reopening the old step-`12` drop.
 - Keep the current step-`13` / step-`14` / step-`15` surfaces green as
   guardrails without widening any bands further.
-- Start breadth repair from the stored misses on the canonical chain, with
-  step `11` as the earliest remaining late-floor miss while step `1` stays on
-  the checklist as a separate early breadth blocker.
+- Treat stored `v6` step `11 = 330 / 800` as the earliest remaining stored
+  late-floor miss, but treat the local step-`11` diagnosis as repaired and
+  ready to be re-earned on stored evidence.
+- Keep step `1` on the checklist as a separate stored early breadth blocker.
 
 ## Immediate Next Move
 
 1. Freeze `long-rerun-v6` as the canonical stored claim bundle and keep `v5`
    as the pre-parity completed reference; do not resume the stopped `v4` run
    and do not recapture replay fixtures first.
-2. Hold the current pre-flight gate, stored `v6` compare readiness, and the
-   current step-`13` / step-`14` / step-`15` later-surface guardrails green
-   while the next breadth fix lands:
-   the repaired canonical chain should still report step `13`
+2. Hold the current pre-flight gate, the new local step-`11` breadth
+   guardrails, stored `v6` compare readiness, and the current
+   step-`13` / step-`14` / step-`15` later-surface guardrails green:
+   step `11` should stay locally breadth-green without losing the guarded
+   accepted shell or the repaired step-`12` `34 / 6` continuation, and the
+   repaired canonical chain should still report step `13`
    `[3,1,3,3,1,1,1]` / `27` / `123`, step `14` `19683` / `12027`, and the
    canonical step-`15` continuation `DCT 103 / 8 / 1794`.
-3. Start the next narrow diagnosis from the earliest remaining late-floor miss
-   on the canonical chain: step `11` generated `330` versus target `800`.
-4. Then keep the stored step-`13` and step-`15` misses in view without losing
+3. Launch one fresh clean-start full-profile rerun on the repaired local tree
+   so stored evidence can consume the new step-`11` breadth repair.
+4. Refresh compare, certification, and benchmark on that new stored bundle
+   before reopening another local breadth theory.
+5. Then keep the stored step-`13` and step-`15` misses in view without losing
    the new step-`12` and step-`14` hits:
    step `13` is `123 / 2200`, step `15` is `1794 / 5000`, while step `12`
    holds `1338 / 1200` and step `14` holds `12027 / 3500`.
-5. Keep step `1` `546 / 2144` on the checklist as a separate stored breadth
+6. Keep step `1` `546 / 2144` on the checklist as a separate stored breadth
    blocker, and do not broaden any claim search band or reland the rejected
    global band-`7` widening, temporal-reanchor matcher, or early
    clause-`2` / clause-`3` bridge expansions first.
