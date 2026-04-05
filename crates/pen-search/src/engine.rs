@@ -4292,10 +4292,18 @@ fn compare_claim_step_twelve_same_primary_survivors(
     right_candidate: &ExpandedCandidate,
     right_rank: &AcceptRank,
 ) -> Ordering {
-    left_candidate
-        .signals
-        .former_score
-        .cmp(&right_candidate.signals.former_score)
+    claim_introduction_application_count(&right_candidate.telescope)
+        .cmp(&claim_introduction_application_count(&left_candidate.telescope))
+        .then_with(|| {
+            claim_introduction_former_count(&right_candidate.telescope)
+                .cmp(&claim_introduction_former_count(&left_candidate.telescope))
+        })
+        .then_with(|| {
+            left_candidate
+                .signals
+                .former_score
+                .cmp(&right_candidate.signals.former_score)
+        })
         .then_with(|| {
             left_candidate
                 .signals
@@ -4307,11 +4315,6 @@ fn compare_claim_step_twelve_same_primary_survivors(
                 .signals
                 .dependent_motive_density
                 .cmp(&right_candidate.signals.dependent_motive_density)
-        })
-        .then_with(|| {
-            claim_introduction_application_count(&right_candidate.telescope).cmp(
-                &claim_introduction_application_count(&left_candidate.telescope),
-            )
         })
         .then_with(|| {
             claim_formation_max_var_ref(&left_candidate.telescope)
@@ -4348,6 +4351,39 @@ fn claim_introduction_application_count(telescope: &Telescope) -> u16 {
         .fold(0u16, |count, clause| {
             count.saturating_add(expr_application_count(&clause.expr))
         })
+}
+
+fn claim_introduction_former_count(telescope: &Telescope) -> u16 {
+    telescope
+        .clauses
+        .iter()
+        .filter(|clause| matches!(clause.role, ClauseRole::Introduction))
+        .fold(0u16, |count, clause| {
+            count.saturating_add(expr_former_count(&clause.expr))
+        })
+}
+
+fn expr_former_count(expr: &Expr) -> u16 {
+    match expr {
+        Expr::Pi(left, right) | Expr::Sigma(left, right) => 1u16
+            .saturating_add(expr_former_count(left))
+            .saturating_add(expr_former_count(right)),
+        Expr::App(left, right) => expr_former_count(left).saturating_add(expr_former_count(right)),
+        Expr::Lam(body)
+        | Expr::Refl(body)
+        | Expr::Susp(body)
+        | Expr::Trunc(body)
+        | Expr::Flat(body)
+        | Expr::Sharp(body)
+        | Expr::Disc(body)
+        | Expr::Shape(body)
+        | Expr::Next(body)
+        | Expr::Eventually(body) => expr_former_count(body),
+        Expr::Id(ty, left, right) => expr_former_count(ty)
+            .saturating_add(expr_former_count(left))
+            .saturating_add(expr_former_count(right)),
+        Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_) => 0,
+    }
 }
 
 fn expr_application_count(expr: &Expr) -> u16 {
@@ -15863,6 +15899,8 @@ mod tests {
         };
         let target_evaluation = evaluate_candidate(&library, &history, target.clone())
             .expect("target step-12 evaluates");
+        let target_rank = acceptance_rank(structural_step.objective_bar, target_candidate)
+            .expect("guarded step-12 candidate should still clear the bar");
         let target_minimality = analyze_semantic_minimality(
             12,
             structural_step.objective_bar,
@@ -15873,6 +15911,42 @@ mod tests {
         );
         let guarded_step_twelve =
             profile_step_from_reference_prefix(12, SearchProfile::StrictCanonGuarded);
+        let leaner_same_primary_candidate = structural_step
+            .retained_candidates
+            .iter()
+            .find(|candidate| {
+                candidate.telescope.clauses.len() == target.clauses.len()
+                    && candidate.telescope.clauses[..4] == target.clauses[..4]
+                    && candidate.telescope.clauses[5] == target.clauses[5]
+                    && matches!(
+                        candidate.telescope.clauses[4].expr,
+                        Expr::Lam(ref body) if matches!(body.as_ref(), Expr::Var(1))
+                    )
+            })
+            .expect("the leaner lam-var same-primary step-12 shell should stay retained");
+        let leaner_same_primary_rank = acceptance_rank(
+            structural_step.objective_bar,
+            leaner_same_primary_candidate,
+        )
+        .expect("the leaner same-primary step-12 shell should still clear the bar");
+        let richer_intro_former_candidate = structural_step
+            .retained_candidates
+            .iter()
+            .find(|candidate| {
+                candidate.telescope.clauses.len() == target.clauses.len()
+                    && candidate.telescope.clauses[2..] == target.clauses[2..]
+                    && matches!(
+                        candidate.telescope.clauses[1].expr,
+                        Expr::Lam(ref body)
+                            if matches!(body.as_ref(), Expr::Pi(_, _))
+                    )
+            })
+            .expect("the richer step-12 double-former same-primary sibling should stay retained");
+        let richer_intro_former_rank = acceptance_rank(
+            structural_step.objective_bar,
+            richer_intro_former_candidate,
+        )
+        .expect("the richer same-primary step-12 sibling should still clear the bar");
         assert!(
             target_minimality.is_minimal(),
             "claim open-band minimality should no longer prune the guarded step-12 shell using a worse-ranked detachable subbundle"
@@ -15895,6 +15969,38 @@ mod tests {
         );
         assert_eq!(target_evaluation.nu, 34);
         assert_eq!(target_evaluation.clause_kappa, 6);
+        assert!(
+            super::claim_introduction_application_count(&target_candidate.telescope)
+                > super::claim_introduction_application_count(
+                    &richer_intro_former_candidate.telescope
+                ),
+            "the guarded curvature shell should still preserve more introduction-level application structure than the richer double-former sibling"
+        );
+        assert!(
+            super::claim_introduction_former_count(&target_candidate.telescope)
+                > super::claim_introduction_former_count(&leaner_same_primary_candidate.telescope),
+            "the guarded curvature shell should still carry a richer introduction-level former shell than the new leaner same-primary sibling"
+        );
+        assert_eq!(
+            super::compare_claim_step_twelve_same_primary_survivors(
+                target_candidate,
+                &target_rank,
+                leaner_same_primary_candidate,
+                &leaner_same_primary_rank,
+            ),
+            std::cmp::Ordering::Less,
+            "the step-12 same-primary selector should prefer the guarded curvature shell over the leaner lam-var sibling"
+        );
+        assert_eq!(
+            super::compare_claim_step_twelve_same_primary_survivors(
+                target_candidate,
+                &target_rank,
+                richer_intro_former_candidate,
+                &richer_intro_former_rank,
+            ),
+            std::cmp::Ordering::Less,
+            "the step-12 same-primary selector should still prefer the guarded curvature shell over the richer double-former sibling"
+        );
         assert_ne!(
             structural_acceptance.accepted.candidate_hash, target_candidate.candidate_hash,
             "the raw structural tie-break should still miss the guarded step-12 curvature shell"
