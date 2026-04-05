@@ -130,6 +130,8 @@ pub struct PrefixCandidateGroup {
     pub depth: u16,
     pub bound: PrefixBound,
     pub best_accept_rank: Option<AcceptRank>,
+    pub generated_terminal_candidates: usize,
+    pub admissible_terminal_candidates: usize,
     pub candidates: Vec<PrefixGroupCandidate>,
 }
 
@@ -207,6 +209,32 @@ impl PrefixCache {
         history: &[DiscoveryRecord],
         retention_policy: RetentionPolicy,
     ) -> Result<()> {
+        let terminal_surface_count = candidates.len();
+        self.record_group_with_surface_counts(
+            step_index,
+            prefix_telescope,
+            candidates,
+            bound,
+            terminal_surface_count,
+            terminal_surface_count,
+            library,
+            history,
+            retention_policy,
+        )
+    }
+
+    pub fn record_group_with_surface_counts(
+        &mut self,
+        step_index: u32,
+        prefix_telescope: Telescope,
+        candidates: Vec<PrefixGroupCandidate>,
+        bound: PrefixBound,
+        generated_terminal_candidates: usize,
+        admissible_terminal_candidates: usize,
+        library: &Library,
+        history: &[DiscoveryRecord],
+        retention_policy: RetentionPolicy,
+    ) -> Result<()> {
         if candidates.is_empty() {
             return Ok(());
         }
@@ -220,6 +248,12 @@ impl PrefixCache {
             if let Some(rank) = best_accept_rank {
                 merge_best_accept_rank(&mut group.best_accept_rank, rank);
             }
+            group.generated_terminal_candidates = group
+                .generated_terminal_candidates
+                .saturating_add(generated_terminal_candidates);
+            group.admissible_terminal_candidates = group
+                .admissible_terminal_candidates
+                .saturating_add(admissible_terminal_candidates);
             group.candidates.extend(candidates);
             self.stats.merged_by_signature += telescope_count;
             return Ok(());
@@ -235,6 +269,8 @@ impl PrefixCache {
             support_hash64: signature.support_hash64,
             bound,
             best_accept_rank,
+            generated_terminal_candidates,
+            admissible_terminal_candidates,
             candidates,
         };
         self.groups.insert(signature, group);
@@ -436,6 +472,8 @@ mod tests {
         assert_eq!(cache.stats().merged_by_signature, 1);
         let (_, group) = cache.iter().next().expect("group should exist");
         assert_eq!(group.candidates.len(), 2);
+        assert_eq!(group.generated_terminal_candidates, 2);
+        assert_eq!(group.admissible_terminal_candidates, 2);
         assert!(group.bound.nu_upper_bound >= group.bound.nu_lower_bound);
     }
 
@@ -497,7 +535,58 @@ mod tests {
         let (_, group) = cache.iter().next().expect("group should exist");
         assert_eq!(group.prefix_telescope, prefix);
         assert_eq!(group.candidates.len(), 2);
+        assert_eq!(group.generated_terminal_candidates, 2);
+        assert_eq!(group.admissible_terminal_candidates, 2);
         assert_eq!(group.bound.nu_lower_bound, 5);
         assert_eq!(group.bound.nu_upper_bound, 8);
+    }
+
+    #[test]
+    fn cache_can_preserve_explicit_terminal_surface_counts_for_precomputed_groups() {
+        let prefix = Telescope::new(vec![clause(Expr::Univ), clause(Expr::Var(1))]);
+        let telescope_a = Telescope::new(vec![
+            clause(Expr::Univ),
+            clause(Expr::Var(1)),
+            clause(Expr::PathCon(1)),
+        ]);
+        let mut cache = PrefixCache::default();
+        let history = vec![DiscoveryRecord::new(1, 2, 2)];
+        let policy = RetentionPolicy {
+            focus: RetentionFocus::Former,
+            focus_quota: 1,
+            bridge_quota: 1,
+            support_quota: 1,
+            macro_quota: 1,
+            cold_limit: 4,
+        };
+
+        cache
+            .record_group_with_surface_counts(
+                2,
+                prefix.clone(),
+                vec![PrefixGroupCandidate {
+                    telescope: telescope_a,
+                    accept_rank: None,
+                    evaluated_candidate: None,
+                }],
+                PrefixBound {
+                    nu_lower_bound: 5,
+                    nu_upper_bound: 8,
+                    clause_kappa_used: 3,
+                    bit_kappa_used: 12,
+                },
+                3,
+                1,
+                &Library::default(),
+                &history,
+                policy,
+            )
+            .expect("precomputed group with explicit surface counts should record");
+
+        let (_, group) = cache.iter().next().expect("group should exist");
+        assert_eq!(group.prefix_telescope, prefix);
+        assert_eq!(group.candidates.len(), 1);
+        assert_eq!(group.generated_terminal_candidates, 3);
+        assert_eq!(group.admissible_terminal_candidates, 1);
     }
 }

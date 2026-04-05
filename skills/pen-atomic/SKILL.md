@@ -105,6 +105,12 @@ Treat these as current repo truths:
   regression now further freezes those three residual families as clause-`0`
   `claim_flat_domain`, clause-`2` `claim_flat_domain` plus the anchor-`11`
   exact-argument pocket, and clause-`5` `claim_flat_codomain`; a newer
+  `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_each_still_carry_a_three_generated_one_admitted_surface`
+  regression now also pins that each of those same three fenced proof-close
+  families is already only a tiny local `3`-generated / `1`-admitted /
+  `1`-pruned surface, so the next repair should stay family-local rather than
+  relanding bucket-global same-primary relief from those preserved broader
+  group-surface counts; a newer
   `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
   regression now also proves that omitted demo-only side variants at clause
   positions `0`, `1`, `4`, and `5` are already structurally connected,

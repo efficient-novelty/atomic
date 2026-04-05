@@ -3512,6 +3512,8 @@ fn search_next_step_internal_with_clause_catalog_override(
                         "proof_close_group",
                         bucket_key.label(),
                         &group.prefix_telescope,
+                        group.generated_terminal_candidates,
+                        group.admissible_terminal_candidates,
                         group.candidates.len(),
                         Some(group_best_rank.clone()),
                     );
@@ -5306,6 +5308,8 @@ fn discover_realistic_shadow_candidates_with_clause_catalog_override(
                         "materialized_summary",
                         bucket_key.label(),
                         &work_item.prefix_telescope,
+                        group.generated_terminal_candidates,
+                        group.admissible_terminal_candidates,
                         pruned_candidates,
                         group.best_accept_rank.clone(),
                     );
@@ -5335,6 +5339,8 @@ fn discover_realistic_shadow_candidates_with_clause_catalog_override(
                             "materialized_group",
                             bucket_key.label(),
                             &work_item.prefix_telescope,
+                            group.generated_terminal_candidates,
+                            group.admissible_terminal_candidates,
                             group.candidates.len(),
                             Some(group_best_rank.clone()),
                         );
@@ -5359,11 +5365,13 @@ fn discover_realistic_shadow_candidates_with_clause_catalog_override(
                     &mut group.candidates,
                     &mut discovery,
                 )?;
-                discovery.prefix_cache.record_group_with_bound(
+                discovery.prefix_cache.record_group_with_surface_counts(
                     step_index,
                     work_item.prefix_telescope.clone(),
                     group.candidates,
                     retained_bound,
+                    group.generated_terminal_candidates,
+                    group.admissible_terminal_candidates,
                     library,
                     history,
                     retention_policy,
@@ -5859,6 +5867,8 @@ struct IncumbentPrunedTerminalGroupCapture {
     phase: &'static str,
     bucket_label: String,
     prefix_telescope: Telescope,
+    generated_terminal_candidates: usize,
+    admissible_terminal_candidates: usize,
     pruned_candidate_count: usize,
     best_accept_rank: Option<AcceptRank>,
 }
@@ -5925,6 +5935,8 @@ fn maybe_capture_incumbent_pruned_terminal_group(
     phase: &'static str,
     bucket_label: String,
     prefix_telescope: &Telescope,
+    generated_terminal_candidates: usize,
+    admissible_terminal_candidates: usize,
     pruned_candidate_count: usize,
     best_accept_rank: Option<AcceptRank>,
 ) {
@@ -5941,6 +5953,8 @@ fn maybe_capture_incumbent_pruned_terminal_group(
             phase,
             bucket_label,
             prefix_telescope: prefix_telescope.clone(),
+            generated_terminal_candidates,
+            admissible_terminal_candidates,
             pruned_candidate_count,
             best_accept_rank,
         });
@@ -6150,6 +6164,8 @@ fn process_prepared_exact_two_step_terminal_surface(
                 "prepared_summary",
                 bucket_key.label(),
                 &terminal_prefix.prefix_telescope,
+                group.generated_terminal_candidates,
+                group.admissible_terminal_candidates,
                 pruned_candidates,
                 group.best_accept_rank.clone(),
             );
@@ -6179,6 +6195,8 @@ fn process_prepared_exact_two_step_terminal_surface(
                     "prepared_group",
                     bucket_key.label(),
                     &terminal_prefix.prefix_telescope,
+                    group.generated_terminal_candidates,
+                    group.admissible_terminal_candidates,
                     group.candidates.len(),
                     Some(group_best_rank.clone()),
                 );
@@ -6201,11 +6219,13 @@ fn process_prepared_exact_two_step_terminal_surface(
             &mut group.candidates,
             discovery,
         )?;
-        discovery.prefix_cache.record_group_with_bound(
+        discovery.prefix_cache.record_group_with_surface_counts(
             step_index,
             terminal_prefix.prefix_telescope.clone(),
             group.candidates,
             retained_bound,
+            group.generated_terminal_candidates,
+            group.admissible_terminal_candidates,
             library,
             history,
             retention_policy,
@@ -8686,6 +8706,8 @@ fn claim_try_summary_prune_before_materialization(
         "summary",
         bucket_key.label(),
         prefix_telescope,
+        generated_terminal_candidates,
+        admitted_terminal_candidates,
         pruned_candidates,
         summary.best_accept_rank.clone(),
     );
@@ -10695,7 +10717,9 @@ mod tests {
         summary
     }
 
-    fn current_claim_step_fifteen_proof_close_incumbent_family_labels() -> BTreeMap<String, usize> {
+    fn current_claim_step_fifteen_proof_close_incumbent_family_label(
+        prefix_telescope: &Telescope,
+    ) -> String {
         let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
         let mut clause_zero_claim_flat_domain = reference_prefix.clone();
         clause_zero_claim_flat_domain.clauses[0] = ClauseRec::new(
@@ -10731,27 +10755,54 @@ mod tests {
             ),
         );
 
+        if *prefix_telescope == clause_zero_claim_flat_domain {
+            "clause-0 claim_flat_domain".to_string()
+        } else if *prefix_telescope == clause_two_claim_flat_domain_anchor_eleven_exact_argument {
+            "clause-2 claim_flat_domain plus anchor-11 exact-argument".to_string()
+        } else if *prefix_telescope == clause_five_claim_flat_codomain {
+            "clause-5 claim_flat_codomain".to_string()
+        } else {
+            format!("unclassified {:?}", prefix_telescope)
+        }
+    }
+
+    fn current_claim_step_fifteen_proof_close_incumbent_family_labels() -> BTreeMap<String, usize> {
         super::start_incumbent_pruned_terminal_group_capture();
         let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
         let captures = super::finish_incumbent_pruned_terminal_group_capture();
 
         let mut family_labels = BTreeMap::new();
         for capture in captures {
-            let label = if capture.prefix_telescope == clause_zero_claim_flat_domain {
-                "clause-0 claim_flat_domain".to_string()
-            } else if capture.prefix_telescope
-                == clause_two_claim_flat_domain_anchor_eleven_exact_argument
-            {
-                "clause-2 claim_flat_domain plus anchor-11 exact-argument".to_string()
-            } else if capture.prefix_telescope == clause_five_claim_flat_codomain {
-                "clause-5 claim_flat_codomain".to_string()
-            } else {
-                format!("unclassified {:?}", capture.prefix_telescope)
-            };
+            let label = current_claim_step_fifteen_proof_close_incumbent_family_label(
+                &capture.prefix_telescope,
+            );
             *family_labels.entry(label).or_insert(0) += capture.pruned_candidate_count;
         }
 
         family_labels
+    }
+
+    fn current_claim_step_fifteen_proof_close_incumbent_surface_counts()
+    -> BTreeMap<String, (usize, usize, usize)> {
+        super::start_incumbent_pruned_terminal_group_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let captures = super::finish_incumbent_pruned_terminal_group_capture();
+
+        let mut family_surfaces = BTreeMap::new();
+        for capture in captures {
+            family_surfaces.insert(
+                current_claim_step_fifteen_proof_close_incumbent_family_label(
+                    &capture.prefix_telescope,
+                ),
+                (
+                    capture.generated_terminal_candidates,
+                    capture.admissible_terminal_candidates,
+                    capture.pruned_candidate_count,
+                ),
+            );
+        }
+
+        family_surfaces
     }
 
     fn claim_step_open_from_prefix(
@@ -11128,6 +11179,8 @@ mod tests {
                 bit_kappa_used: 1,
             },
             best_accept_rank,
+            generated_terminal_candidates: candidate_count,
+            admissible_terminal_candidates: candidate_count,
             candidates,
         }
     }
@@ -18678,6 +18731,30 @@ mod tests {
             .into_iter()
             .collect(),
             "the residual proof-close pressure should now be frozen on three exact claim-side families rather than only by first-mismatch position"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_residual_single_bucket_incumbent_groups_each_still_carry_a_three_generated_one_admitted_surface()
+     {
+        let family_surfaces = current_claim_step_fifteen_proof_close_incumbent_surface_counts();
+
+        assert_eq!(
+            family_surfaces,
+            [
+                (
+                    "clause-0 claim_flat_domain".to_string(),
+                    (3_usize, 1_usize, 1_usize)
+                ),
+                (
+                    "clause-2 claim_flat_domain plus anchor-11 exact-argument".to_string(),
+                    (3, 1, 1),
+                ),
+                ("clause-5 claim_flat_codomain".to_string(), (3, 1, 1)),
+            ]
+            .into_iter()
+            .collect(),
+            "each residual proof-close family should still already be a tiny local 3-generated / 1-admitted / 1-pruned surface, so the next step-15 repair can stay family-local instead of reopening the whole bucket"
         );
     }
 

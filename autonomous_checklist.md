@@ -78,6 +78,12 @@ It lists only work that is still open.
   now pins clause-`0` `claim_flat_domain`, clause-`2`
   `claim_flat_domain` plus the anchor-`11` exact-argument pocket, and
   clause-`5` `claim_flat_codomain`.
+- A newer surface-count regression now sharpens that same residual blocker:
+  `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_each_still_carry_a_three_generated_one_admitted_surface`
+  now pins that each of those three fenced proof-close families is already
+  only a tiny `3`-generated / `1`-admitted / `1`-pruned local surface, so the
+  next landed repair still needs to stay family-local rather than reopen
+  bucket-global same-primary relief.
 - A new local omitted-side-variant regression now proves the next safe opening
   is narrower than a raw catalog reland:
   omitted demo-only temporal-shell side variants at clause positions `0`,

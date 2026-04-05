@@ -177,6 +177,21 @@ gate.
     `claim_flat_domain`, clause-`2` `claim_flat_domain` plus the
     anchor-`11` exact-argument pocket, and clause-`5`
     `claim_flat_codomain`
+- A newer local step-`15` proof-close surface-count regression now sharpens
+  that same blocker without relanding the rejected blanket retention move:
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_each_still_carry_a_three_generated_one_admitted_surface`
+    now pins that each of those three fenced proof-close families is already
+    only a tiny local `3`-generated / `1`-admitted / `1`-pruned surface
+  - that means the remaining step-`15` pressure is still clause-family-local
+    rather than a hidden broad bucket miss
+  - a non-landed proof-close reland that reused those broader stored
+    group-surface counts to grant same-primary relief was checked and
+    reverted: it collapsed incumbent-dominance prunes from `3` to `0`, but it
+    also recreated the rejected blanket-retention anatomy by reopening `4`
+    retained step-`15` candidates on the same `2964 / 494 / 494 / 0`
+    `small_cluster` surface
+  - the next landed repair should therefore use those preserved surface counts
+    only as diagnosis and stay family-local, not bucket-global
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
