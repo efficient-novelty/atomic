@@ -79,6 +79,8 @@ MANIFEST_FIELD_SPECS = (
         "non_empty",
     ),
 )
+CLAIM_REGULAR_CATALOG_NOTE = "claim_regular_clause_catalog"
+CLAIM_ROOT_SEEDING_NOTE = "claim_root_seeding_summary"
 
 
 def main() -> int:
@@ -100,8 +102,14 @@ def main() -> int:
             ("search_policy", search_policy_check(claim_audit)),
             ("fallback_honesty", fallback_honesty_check(claim_audit)),
             ("narrative_artifacts", narrative_artifact_check(claim_lane)),
-            ("early_breadth", breadth_check(steps, EARLY_GENERATED_TARGETS, exact=True)),
-            ("late_generated_floors", breadth_check(steps, LATE_GENERATED_FLOORS, exact=False)),
+            (
+                "early_breadth",
+                breadth_check(claim_run, steps, EARLY_GENERATED_TARGETS, exact=True),
+            ),
+            (
+                "late_generated_floors",
+                breadth_check(claim_run, steps, LATE_GENERATED_FLOORS, exact=False),
+            ),
             (
                 "runtime_threshold",
                 runtime_threshold_check(steps, args.runtime_threshold_ms),
@@ -281,7 +289,7 @@ def narrative_artifact_check(claim_lane: dict[str, Any]) -> dict[str, Any]:
 
 
 def breadth_check(
-    steps: list[dict[str, Any]], targets: dict[int, int], exact: bool
+    run_dir: Path, steps: list[dict[str, Any]], targets: dict[int, int], exact: bool
 ) -> dict[str, Any]:
     step_map = {int(step.get("step_index", 0) or 0): step for step in steps}
     results = []
@@ -293,22 +301,33 @@ def breadth_check(
             actual = None
             hit = False
             reason = "missing"
+            diagnosis = compare_runs.ordered_dict(
+                [
+                    ("source", "missing_step_summary"),
+                    ("summary", f"actual=missing target={target}"),
+                ]
+            )
         else:
             actual = generated_count(step)
             hit = actual == target if exact else actual >= target
             reason = "hit" if hit else "miss"
+            diagnosis = breadth_diagnosis(run_dir, step, target, actual)
         if not hit:
             failing_steps.append(step_index)
-        results.append(
-            compare_runs.ordered_dict(
-                [
-                    ("step_index", step_index),
-                    ("target", target),
-                    ("actual", actual),
-                    ("status", reason),
-                ]
-            )
+        result = compare_runs.ordered_dict(
+            [
+                ("step_index", step_index),
+                ("target", target),
+                ("actual", actual),
+                ("status", reason),
+                (
+                    "gap_to_target",
+                    None if actual is None else int(target) - int(actual),
+                ),
+            ]
         )
+        result["diagnosis"] = diagnosis
+        results.append(result)
 
     label = "early breadth targets are satisfied" if exact else "late generated floors are satisfied"
     if failing_steps:
@@ -330,6 +349,267 @@ def generated_count(step: dict[str, Any]) -> int:
     search_stats = step.get("search_stats") or {}
     demo_funnel = search_stats.get("demo_funnel") or {}
     return int(demo_funnel.get("generated_raw_prefixes", 0) or 0)
+
+
+def breadth_diagnosis(
+    run_dir: Path, step: dict[str, Any], target: int, actual: int
+) -> dict[str, Any]:
+    step_index = int(step.get("step_index", 0) or 0)
+    stats = step.get("search_stats") or {}
+    funnel = stats.get("demo_funnel") or {}
+    checkpoints = load_step_live_checkpoints(run_dir, step_index)
+    catalog_checkpoint = checkpoint_with_note(checkpoints, CLAIM_REGULAR_CATALOG_NOTE)
+    root_checkpoint = checkpoint_with_note(checkpoints, CLAIM_ROOT_SEEDING_NOTE)
+    best_checkpoint = root_checkpoint or catalog_checkpoint
+
+    exact_screen_reasons = normalize_exact_screen_reasons(
+        stats.get("exact_screen_reasons")
+    )
+    claim_root_seeding = normalize_claim_root_seeding(
+        (root_checkpoint or {}).get("claim_root_seeding") or stats.get("claim_root_seeding")
+    )
+    raw_catalog_clause_widths = normalize_int_list(
+        (best_checkpoint or {}).get("raw_catalog_clause_widths")
+    )
+    raw_catalog_telescope_count = optional_int(
+        (best_checkpoint or {}).get("raw_catalog_telescope_count")
+    )
+    claim_step_open = normalize_claim_step_open(
+        (best_checkpoint or {}).get("claim_step_open") or stats.get("claim_step_open")
+    )
+    search_space = compare_runs.ordered_dict(
+        [
+            ("enumerated_candidates", int(stats.get("enumerated_candidates", 0) or 0)),
+            ("well_formed_candidates", int(stats.get("well_formed_candidates", 0) or 0)),
+            (
+                "admissibility_rejections",
+                int(stats.get("admissibility_rejections", 0) or 0),
+            ),
+            (
+                "exact_bound_screened",
+                int(funnel.get("exact_bound_screened", 0) or 0),
+            ),
+            (
+                "full_telescopes_evaluated",
+                int(stats.get("full_telescopes_evaluated", 0) or 0),
+            ),
+            ("heuristic_dropped", int(funnel.get("heuristic_dropped", 0) or 0)),
+            ("candidate_heuristic_drops", int(stats.get("heuristic_drops", 0) or 0)),
+            ("retained_candidates", int(stats.get("retained_candidates", 0) or 0)),
+        ]
+    )
+
+    return compare_runs.ordered_dict(
+        [
+            (
+                "source",
+                "summary_plus_live_checkpoints"
+                if best_checkpoint is not None
+                else "summary_only",
+            ),
+            (
+                "summary",
+                breadth_diagnosis_summary(
+                    target,
+                    actual,
+                    raw_catalog_telescope_count,
+                    raw_catalog_clause_widths,
+                    claim_root_seeding,
+                    search_space,
+                    exact_screen_reasons,
+                ),
+            ),
+            ("raw_catalog_telescope_count", raw_catalog_telescope_count),
+            ("raw_catalog_clause_widths", raw_catalog_clause_widths),
+            ("claim_root_seeding", claim_root_seeding),
+            ("claim_step_open", claim_step_open),
+            ("search_space", search_space),
+            ("exact_screen_reasons", exact_screen_reasons),
+        ]
+    )
+
+
+def breadth_diagnosis_summary(
+    target: int,
+    actual: int,
+    raw_catalog_telescope_count: int | None,
+    raw_catalog_clause_widths: list[int],
+    claim_root_seeding: dict[str, Any],
+    search_space: dict[str, Any],
+    exact_screen_reasons: dict[str, int],
+) -> str:
+    parts = [
+        f"actual={actual}",
+        f"target={target}",
+        f"gap={int(target) - int(actual)}",
+    ]
+    if raw_catalog_telescope_count is not None:
+        parts.append(f"catalog={raw_catalog_telescope_count}")
+    if raw_catalog_clause_widths:
+        parts.append(f"widths={raw_catalog_clause_widths}")
+    if claim_root_seeding:
+        parts.append(
+            "roots="
+            f"seen{claim_root_seeding['roots_seen']} "
+            f"enqueued{claim_root_seeding['roots_enqueued']} "
+            f"exact_rejected{claim_root_seeding['roots_rejected_by_exact_screen']}"
+        )
+    parts.append(f"well_formed={search_space['well_formed_candidates']}")
+    parts.append(f"exact_screened={search_space['exact_bound_screened']}")
+    parts.append(f"retained={search_space['retained_candidates']}")
+    parts.append(f"heuristic={search_space['heuristic_dropped']}")
+    parts.append(
+        "exact="
+        f"bar={exact_screen_reasons['partial_prefix_bar_failure']} "
+        f"completion={exact_screen_reasons['terminal_prefix_completion_failure']} "
+        f"incumbent={exact_screen_reasons['incumbent_dominance']} "
+        f"legality={exact_screen_reasons['legality_connectivity_exact_rejection']}"
+    )
+    return " ".join(parts)
+
+
+def load_step_live_checkpoints(run_dir: Path, step_index: int) -> list[dict[str, Any]]:
+    path = run_dir / "reports" / "steps" / f"step-{step_index:02}-live.ndjson"
+    return compare_runs.load_ndjson(path)
+
+
+def checkpoint_with_note(
+    checkpoints: list[dict[str, Any]], note: str
+) -> dict[str, Any] | None:
+    for checkpoint in reversed(checkpoints):
+        if str(checkpoint.get("note", "")) == note:
+            return checkpoint
+    return None
+
+
+def normalize_exact_screen_reasons(value: Any) -> dict[str, int]:
+    data = value if isinstance(value, dict) else {}
+    return compare_runs.ordered_dict(
+        [
+            (
+                "partial_prefix_bar_failure",
+                int(data.get("partial_prefix_bar_failure", 0) or 0),
+            ),
+            (
+                "terminal_prefix_completion_failure",
+                int(data.get("terminal_prefix_completion_failure", 0) or 0),
+            ),
+            ("incumbent_dominance", int(data.get("incumbent_dominance", 0) or 0)),
+            (
+                "legality_connectivity_exact_rejection",
+                int(data.get("legality_connectivity_exact_rejection", 0) or 0),
+            ),
+        ]
+    )
+
+
+def normalize_claim_root_seeding(value: Any) -> dict[str, Any]:
+    data = value if isinstance(value, dict) else {}
+    return compare_runs.ordered_dict(
+        [
+            ("roots_seen", int(data.get("roots_seen", 0) or 0)),
+            (
+                "roots_rejected_by_insert_root",
+                int(data.get("roots_rejected_by_insert_root", 0) or 0),
+            ),
+            (
+                "roots_rejected_by_exact_screen",
+                int(data.get("roots_rejected_by_exact_screen", 0) or 0),
+            ),
+            ("roots_enqueued", int(data.get("roots_enqueued", 0) or 0)),
+        ]
+    )
+
+
+def normalize_claim_step_open(value: Any) -> dict[str, Any]:
+    data = value if isinstance(value, dict) else {}
+    claim_debt_axes = data.get("claim_debt_axes") or {}
+    package_flags = data.get("package_flags") or {}
+    return compare_runs.ordered_dict(
+        [
+            ("kappa_min", int(data.get("kappa_min", 0) or 0)),
+            ("kappa_max", int(data.get("kappa_max", 0) or 0)),
+            ("late_family_surface", str(data.get("late_family_surface", ""))),
+            ("anchor_policy", str(data.get("anchor_policy", ""))),
+            (
+                "historical_anchor_ref",
+                optional_int(data.get("historical_anchor_ref")),
+            ),
+            (
+                "claim_widening_band7_active",
+                bool(data.get("claim_widening_band7_active", False)),
+            ),
+            (
+                "claim_widening_band8_active",
+                bool(data.get("claim_widening_band8_active", False)),
+            ),
+            (
+                "claim_widening_band9_active",
+                bool(data.get("claim_widening_band9_active", False)),
+            ),
+            (
+                "claim_debt_axes",
+                compare_runs.ordered_dict(
+                    [
+                        ("kappa_min", int(claim_debt_axes.get("kappa_min", 0) or 0)),
+                        ("kappa_max", int(claim_debt_axes.get("kappa_max", 0) or 0)),
+                        (
+                            "coupling_pressure",
+                            int(claim_debt_axes.get("coupling_pressure", 0) or 0),
+                        ),
+                        (
+                            "support_pressure",
+                            int(claim_debt_axes.get("support_pressure", 0) or 0),
+                        ),
+                        (
+                            "modal_pressure",
+                            int(claim_debt_axes.get("modal_pressure", 0) or 0),
+                        ),
+                        (
+                            "temporal_pressure",
+                            int(claim_debt_axes.get("temporal_pressure", 0) or 0),
+                        ),
+                        (
+                            "reanchor_pressure",
+                            int(claim_debt_axes.get("reanchor_pressure", 0) or 0),
+                        ),
+                        (
+                            "closure_pressure",
+                            int(claim_debt_axes.get("closure_pressure", 0) or 0),
+                        ),
+                    ]
+                ),
+            ),
+            (
+                "package_flags",
+                compare_runs.ordered_dict(
+                    [
+                        ("operator_bundle", bool(package_flags.get("operator_bundle", False))),
+                        (
+                            "hilbert_functional",
+                            bool(package_flags.get("hilbert_functional", False)),
+                        ),
+                        ("temporal_shell", bool(package_flags.get("temporal_shell", False))),
+                    ]
+                ),
+            ),
+        ]
+    )
+
+
+def normalize_int_list(value: Any) -> list[int]:
+    if not isinstance(value, list):
+        return []
+    return [int(item or 0) for item in value]
+
+
+def optional_int(value: Any) -> int | None:
+    if value is None:
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def runtime_threshold_check(
@@ -465,6 +745,14 @@ def render_text_summary(certificate: dict[str, Any]) -> str:
         lines.append(f"runtime threshold ms: {certificate['runtime_threshold_ms']}")
     for label, check in checks.items():
         lines.append(f"{label}: {check['status']} - {check['detail']}")
+        if label in {"early_breadth", "late_generated_floors"} and check["status"] != "pass":
+            for step in check.get("steps", []):
+                if step.get("status") == "hit":
+                    continue
+                diagnosis = step.get("diagnosis") or {}
+                summary = str(diagnosis.get("summary", "")).strip()
+                if summary:
+                    lines.append(f"  step {step['step_index']}: {summary}")
     if certificate["failing_checks"]:
         lines.append("failing checks: " + ", ".join(certificate["failing_checks"]))
     return "\n".join(lines) + "\n"

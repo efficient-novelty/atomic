@@ -34,7 +34,7 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - claim runs now record observed process RSS alongside governor-accounted RSS
   in stored step pressure data, so the model gap is visible from artifacts.
 - claim runs now also emit `step_live_checkpoint` telemetry and
-  `reports/steps/step-XX-live.ndjson` artifacts for steps 4-5, exposing
+  `reports/steps/step-XX-live.ndjson` artifacts through step `15`, exposing
   observed process RSS, raw catalog widths, frontier queue size, prefix-cache
   size, legality-cache size, and whether late claim widening gates are active
   while the step is still in flight.
@@ -80,7 +80,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - `scripts/certify_claim_lane.py` now emits a stored pass/fail certificate from
   claim artifacts and currently fails honestly on missing breadth, missing
   generated-floor evidence; the current `v9` certificate still flags
-  `early_breadth` plus `late_generated_floors`.
+  `early_breadth` plus `late_generated_floors`, and it now also records
+  step-level breadth diagnosis for failing steps from the stored summaries
+  plus late-step live checkpoints.
 - `scripts/benchmark_claim_lane.py` now aggregates stored claim runs into a
   benchmark bundle with runtime percentiles, parity counts, breadth-floor hit
   counts, and manifest snapshots; it still needs a breadth-clean stored claim
@@ -93,6 +95,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - step `13`: `123 / 2200`
   - step `14`: `12027 / 3500`
   - step `15`: `1794 / 5000`
+- The stored certificate now makes the remaining miss split directly visible:
+  - step `13` still shows raw catalog widths `[3,1,3,3,1,1,1]`, raw catalog
+    `27`, seeded roots `3`, and `0` stored exact-screen losses
+  - step `15` still shows raw catalog `6561`, seeded roots `3`, then
+    `468` partial-prefix bar failures plus `80` incumbent-dominance prunes
 - A fresh stored rerun stack has now consumed the guarded local step-`11`
   breadth repair:
   - the connected claim step-`11` surface now holds
@@ -146,7 +153,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    `34 / 6` continuation should stay fixed, and the current
    step-`13..15` surfaces should stay frozen on the canonical branch.
 3. Start from clean-tree `v9` and resume diagnosis from stored step `13` as
-   the earliest remaining late-floor miss on that canonical bundle.
+   the earliest remaining late-floor miss on that canonical bundle, using the
+   stored certificate plus `step-13-live.ndjson` / `step-15-live.ndjson`
+   before changing more search code.
 4. Keep stored step `15` and step `1` in view beside that work:
    `1794 / 5000` and `546 / 2144`.
 5. Do not reopen another stored step-`11` rerun first now that clean-tree

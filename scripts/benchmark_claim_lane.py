@@ -89,10 +89,10 @@ def benchmark_entry(
 
     parity = certify_claim_lane.accepted_hash_parity_check(claim_audit)
     early_breadth = certify_claim_lane.breadth_check(
-        steps, certify_claim_lane.EARLY_GENERATED_TARGETS, exact=True
+        claim_run, steps, certify_claim_lane.EARLY_GENERATED_TARGETS, exact=True
     )
     late_floors = certify_claim_lane.breadth_check(
-        steps, certify_claim_lane.LATE_GENERATED_FLOORS, exact=False
+        claim_run, steps, certify_claim_lane.LATE_GENERATED_FLOORS, exact=False
     )
     runtime = certify_claim_lane.runtime_threshold_check(steps, runtime_threshold_ms)
     manifest_completeness = certify_claim_lane.manifest_completeness_check(manifest)

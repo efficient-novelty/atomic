@@ -77,6 +77,9 @@ gate.
   - `claim-compare.txt` / `claim-compare.json`
   - `claim_certificate.txt` / `claim_certificate.json`
   - `claim_benchmark.txt` / `claim_benchmark.json`
+  - the certificate now also records per-step breadth diagnosis from stored
+    step summaries plus `step-XX-live.ndjson` checkpoints, so the open
+    step-`13` / step-`15` miss anatomy is queryable without another rerun
 - Those audits use the guarded baseline
   `runs/codex-guarded-claim-cert-v1`.
 - The clean-tree stored `v9` compare audit is ready:
@@ -101,6 +104,12 @@ gate.
     - `exact_screen_reason_completeness`
     - `prune_class_completeness`
     - `manifest_completeness`
+  - the stored certificate now makes the current miss split explicit:
+    - step `13` still opens only `[3,1,3,3,1,1,1]` / `27`, seeds `3` roots,
+      and shows `0` stored exact-screen losses there
+    - step `15` still opens `6561`, seeds `3` roots, and then loses stored
+      breadth under `468` partial-prefix bar failures plus
+      `80` incumbent-dominance prunes
 - The remaining stored breadth snapshot on the parity-clean bundle is:
   - step `1`: `546` versus target `2144` (`miss`)
   - step `10`: `1428` versus target `500` (`hit`)
@@ -803,6 +812,9 @@ gate.
   - late generated floors still miss at steps `13` and `15` with stored
     counts `123` and `1794`
   - step `13` is now the earliest remaining stored late-floor miss
+  - the stored certificate now exposes the miss anatomy directly:
+    step `13` is still narrow before exact screening, while step `15`
+    still loses breadth later under bar and incumbent pressure
 - Search-space, admissibility, and late-step competition deltas remain honest
   comparison-backed differences, but they are no longer parity blockers as
   long as accepted hashes stay aligned.
@@ -973,6 +985,9 @@ gate.
   should stay fixed without reopening the old step-`12` drop.
 - Keep the current step-`13` / step-`14` / step-`15` surfaces green as
   guardrails without widening any bands further.
+- Use the stored `v9` certificate and the late-step live checkpoints as the
+  first diagnosis surface for the remaining misses; they now expose raw
+  catalog widths, root seeding, and exact-screen pressure for the open steps.
 - Treat stored `v9` step `13 = 123 / 2200` as the earliest remaining stored
   late-floor miss; do not reopen step `11` first now that stored step `11`
   re-earns `1338 / 800` on the clean canonical bundle.
@@ -997,7 +1012,9 @@ gate.
    `DCT 103 / 8 / 1794`.
 3. Resume diagnosis from stored step `13` as the earliest remaining
    late-floor miss on the clean canonical bundle, while preserving accepted-
-   hash parity through step `15`.
+   hash parity through step `15`; use the stored certificate plus
+   `step-13-live.ndjson` / `step-15-live.ndjson` as the first diagnosis
+   surface before changing search code.
 4. Keep stored step `15 = 1794 / 5000` in view as the remaining later floor
    miss, and keep step `1 = 546 / 2144` on the checklist as the separate
    stored early breadth blocker.

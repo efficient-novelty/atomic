@@ -25,6 +25,9 @@ It lists only work that is still open.
     step `15` (`1794` versus `5000`)
   - late generated floors now hit at step `10`, step `11`, step `12`, and
     step `14`
+- The stored `v9` certificate now also carries step-level breadth diagnosis
+  for the open misses, so step `13` / step `15` catalog widths, root seeding,
+  and exact-screen pressure are visible from the bundle itself.
 - The current canonical later surfaces are frozen on stored evidence:
   - step `13` reports `[3,1,3,3,1,1,1]` / `27` / `123`
   - step `14` reports `19683` / `12027`
@@ -50,7 +53,6 @@ Done when:
 
 ## 2. Compare, Benchmark, And Certification
 
-- [ ] Freeze one certified runtime threshold for the claim sentence.
 - [ ] Store one passing `claim_certificate.json`.
 
 Done when:

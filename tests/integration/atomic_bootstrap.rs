@@ -1614,6 +1614,102 @@ fn stored_claim_v5_benchmark_freezes_runtime_and_floor_counts() {
 }
 
 #[test]
+fn stored_claim_v9_certificate_surfaces_step_13_and_step_15_breadth_diagnostics() {
+    let root = temp_dir("claim-v9-certificate-diagnostics");
+    let guarded_dir = workspace_root()
+        .join("runs")
+        .join("codex-guarded-claim-cert-v1");
+    let claim_dir = workspace_root().join("runs").join(
+        "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v9",
+    );
+    let json_out = root.join("claim-certificate.json");
+
+    let output = run_claim_certify([
+        "--guarded-run",
+        &guarded_dir.to_string_lossy(),
+        "--claim-run",
+        &claim_dir.to_string_lossy(),
+        "--runtime-threshold-ms",
+        "600000",
+        "--json-out",
+        &json_out.to_string_lossy(),
+    ]);
+    let stdout = String::from_utf8_lossy(&output.stdout).to_string()
+        + &String::from_utf8_lossy(&output.stderr);
+
+    assert!(
+        !output.status.success(),
+        "stored claim v9 certificate should still fail until breadth closes\nstdout:\n{}",
+        stdout
+    );
+    assert!(stdout.contains(
+        "late_generated_floors: fail - late generated floors failed at step 13, step 15"
+    ));
+    assert!(stdout.contains("step 13: actual=123 target=2200 gap=2077 catalog=27"));
+    assert!(stdout.contains("step 15: actual=1794 target=5000 gap=3206 catalog=6561"));
+
+    let certificate = read_json(&json_out);
+    let late_steps = certificate["checks"]["late_generated_floors"]["steps"]
+        .as_array()
+        .expect("late floor steps");
+    let step13 = late_steps
+        .iter()
+        .find(|step| step["step_index"].as_u64() == Some(13))
+        .expect("step 13 late floor entry");
+    let step15 = late_steps
+        .iter()
+        .find(|step| step["step_index"].as_u64() == Some(15))
+        .expect("step 15 late floor entry");
+
+    assert_eq!(step13["gap_to_target"].as_i64(), Some(2077));
+    assert_eq!(
+        step13["diagnosis"]["raw_catalog_telescope_count"].as_u64(),
+        Some(27)
+    );
+    assert_eq!(
+        step13["diagnosis"]["raw_catalog_clause_widths"]
+            .as_array()
+            .expect("step 13 widths")
+            .iter()
+            .map(|value| value.as_u64().expect("width"))
+            .collect::<Vec<_>>(),
+        vec![3, 1, 3, 3, 1, 1, 1]
+    );
+    assert_eq!(
+        step13["diagnosis"]["claim_root_seeding"]["roots_enqueued"].as_u64(),
+        Some(3)
+    );
+    assert_eq!(
+        step13["diagnosis"]["exact_screen_reasons"]["partial_prefix_bar_failure"].as_u64(),
+        Some(0)
+    );
+    assert_eq!(
+        step13["diagnosis"]["exact_screen_reasons"]["incumbent_dominance"].as_u64(),
+        Some(0)
+    );
+
+    assert_eq!(step15["gap_to_target"].as_i64(), Some(3206));
+    assert_eq!(
+        step15["diagnosis"]["raw_catalog_telescope_count"].as_u64(),
+        Some(6561)
+    );
+    assert_eq!(
+        step15["diagnosis"]["claim_root_seeding"]["roots_enqueued"].as_u64(),
+        Some(3)
+    );
+    assert_eq!(
+        step15["diagnosis"]["exact_screen_reasons"]["partial_prefix_bar_failure"].as_u64(),
+        Some(468)
+    );
+    assert_eq!(
+        step15["diagnosis"]["exact_screen_reasons"]["incumbent_dominance"].as_u64(),
+        Some(80)
+    );
+
+    fs::remove_dir_all(root).ok();
+}
+
+#[test]
 fn compare_runs_reports_workstream4_rollout_parity_and_pressure_sets() {
     let root = temp_dir("workstream4-rollout");
     let root_arg = root.to_string_lossy().to_string();
