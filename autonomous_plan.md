@@ -294,7 +294,11 @@ Current slice order:
    `single` survivor bucket fenced, keeping the newly reopened clause-`4`
    side pocket fenced as tiny and noncanonical, and working against the
    residual `single`-bucket pressure without broadening the raw
-   position-`0` catalog
+   position-`0` catalog; keep
+   `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_pin_the_exact_claim_family_labels`
+   green so that the exact residual surface stays frozen as clause-`0`
+   `claim_flat_domain`, clause-`2` `claim_flat_domain` plus the anchor-`11`
+   exact-argument pocket, and clause-`5` `claim_flat_codomain`
 3. rerun only after that next local repair is regression-backed
 4. revisit stored step `1` from the next evidence bundle once step `15` moves
 

@@ -172,6 +172,11 @@ gate.
   - those fenced groups now localize to exactly three first-mismatch prefix
     families at clause positions `0`, `2`, and `5`, so the next local repair
     can stay narrower than reopening the whole pocket
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_pin_the_exact_claim_family_labels`
+    now freezes those same three fenced families more concretely as clause-`0`
+    `claim_flat_domain`, clause-`2` `claim_flat_domain` plus the
+    anchor-`11` exact-argument pocket, and clause-`5`
+    `claim_flat_codomain`
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -1309,7 +1314,12 @@ gate.
    `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
    now pins those remaining prunes to three `proof_close_group`
    same-primary `103 / 8` families first diverging at clause positions `0`,
-   `2`, and `5`. The next move is therefore not another rerun setup pass, not another raw
+   `2`, and `5`, while
+   `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_pin_the_exact_claim_family_labels`
+   now makes those three families explicit as clause-`0`
+   `claim_flat_domain`, clause-`2` `claim_flat_domain` plus the
+   anchor-`11` exact-argument pocket, and clause-`5`
+   `claim_flat_codomain`. The next move is therefore not another rerun setup pass, not another raw
    clause-`4` / raw clause-`5` / raw global position-`0` reland, and not a
    blanket same-primary-retention reland; it should be the next
    parity-preserving step-`15` repair against those residual `3`

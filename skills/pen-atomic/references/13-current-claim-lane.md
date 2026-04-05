@@ -252,6 +252,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - those residual groups now localize to exactly three first-mismatch prefix
     families at clause positions `0`, `2`, and `5`, so the next local repair
     can stay narrower than reopening the whole pocket
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_pin_the_exact_claim_family_labels`
+    now freezes those same residual families more concretely as clause-`0`
+    `claim_flat_domain`, clause-`2` `claim_flat_domain` plus the
+    anchor-`11` exact-argument pocket, and clause-`5`
+    `claim_flat_codomain`
 - the executable repaired late-path and negative-control guardrails are now
   synced to that same latest local state too:
   - `repaired_claim_step_twelve_late_path_has_scoped_step_thirteen_widening_before_proof_close`
@@ -293,6 +298,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     same-primary `103 / 8` non-winners
   - their first mismatches now stay localized to clause positions `0`, `2`,
     and `5`
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_pin_the_exact_claim_family_labels`
+    now makes those exact families explicit as clause-`0`
+    `claim_flat_domain`, clause-`2` `claim_flat_domain` plus the
+    anchor-`11` exact-argument pocket, and clause-`5`
+    `claim_flat_codomain`
 - a new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`

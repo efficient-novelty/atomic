@@ -10695,6 +10695,65 @@ mod tests {
         summary
     }
 
+    fn current_claim_step_fifteen_proof_close_incumbent_family_labels() -> BTreeMap<String, usize> {
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let mut clause_zero_claim_flat_domain = reference_prefix.clone();
+        clause_zero_claim_flat_domain.clauses[0] = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+        );
+        let mut clause_two_claim_flat_domain_anchor_eleven_exact_argument =
+            reference_prefix.clone();
+        clause_two_claim_flat_domain_anchor_eleven_exact_argument.clauses[2] = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+            ),
+        );
+        clause_two_claim_flat_domain_anchor_eleven_exact_argument.clauses[3] = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(11)),
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+            ))),
+        );
+        let mut clause_five_claim_flat_codomain = reference_prefix.clone();
+        clause_five_claim_flat_codomain.clauses[5] = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Var(1),
+                ))))),
+            ),
+        );
+
+        super::start_incumbent_pruned_terminal_group_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let captures = super::finish_incumbent_pruned_terminal_group_capture();
+
+        let mut family_labels = BTreeMap::new();
+        for capture in captures {
+            let label = if capture.prefix_telescope == clause_zero_claim_flat_domain {
+                "clause-0 claim_flat_domain".to_string()
+            } else if capture.prefix_telescope
+                == clause_two_claim_flat_domain_anchor_eleven_exact_argument
+            {
+                "clause-2 claim_flat_domain plus anchor-11 exact-argument".to_string()
+            } else if capture.prefix_telescope == clause_five_claim_flat_codomain {
+                "clause-5 claim_flat_codomain".to_string()
+            } else {
+                format!("unclassified {:?}", capture.prefix_telescope)
+            };
+            *family_labels.entry(label).or_insert(0) += capture.pruned_candidate_count;
+        }
+
+        family_labels
+    }
+
     fn claim_step_open_from_prefix(
         prefix: &[Telescope],
         step_index: u32,
@@ -18598,6 +18657,27 @@ mod tests {
                 .into_iter()
                 .collect(),
             "every residual proof-close group should still be a same-primary 103/8 non-winner tied on overshoot and differing only on later structural tiebreaks"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_residual_single_bucket_incumbent_groups_pin_the_exact_claim_family_labels()
+     {
+        let family_labels = current_claim_step_fifteen_proof_close_incumbent_family_labels();
+
+        assert_eq!(
+            family_labels,
+            [
+                ("clause-0 claim_flat_domain".to_string(), 1_usize),
+                (
+                    "clause-2 claim_flat_domain plus anchor-11 exact-argument".to_string(),
+                    1,
+                ),
+                ("clause-5 claim_flat_codomain".to_string(), 1),
+            ]
+            .into_iter()
+            .collect(),
+            "the residual proof-close pressure should now be frozen on three exact claim-side families rather than only by first-mismatch position"
         );
     }
 

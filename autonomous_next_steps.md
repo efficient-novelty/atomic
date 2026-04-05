@@ -145,6 +145,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
     families at clause positions `0`, `2`, and `5`, so the next repair should
     start from those fenced families rather than reopening the whole local
     pocket
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_pin_the_exact_claim_family_labels`
+    now freezes those same three fenced families more concretely as clause-`0`
+    `claim_flat_domain`, clause-`2` `claim_flat_domain` plus the
+    anchor-`11` exact-argument pocket, and clause-`5`
+    `claim_flat_codomain`
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -848,7 +853,10 @@ This note is the exact next work order for `desktop_claim_shadow`.
    clause-`5`, raw position-`0`, or blanket same-primary-relief reland. The
    new proof-close incumbent freeze now further localizes that work to three
    same-primary `103 / 8` fenced prefix families first diverging at clause
-   positions `0`, `2`, and `5`.
+   positions `0`, `2`, and `5`, and the new exact-family regression now pins
+   those families concretely as clause-`0` `claim_flat_domain`, clause-`2`
+   `claim_flat_domain` plus the anchor-`11` exact-argument pocket, and
+   clause-`5` `claim_flat_codomain`.
 4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
    hits so the next repair cannot silently reshuffle the canonical branch.
 5. Keep step `1 = 546 / 2144` on the checklist as the separate stored early

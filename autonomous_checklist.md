@@ -72,6 +72,12 @@ It lists only work that is still open.
   stay same-primary `103 / 8` non-winners at overshoot `115657 / 21112` and
   bit cost `236`, and first diverge only at clause positions `0`, `2`, and
   `5`.
+- A newer exact-family regression now freezes those same residual
+  `proof_close_group` captures as three concrete claim-side families:
+  `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_pin_the_exact_claim_family_labels`
+  now pins clause-`0` `claim_flat_domain`, clause-`2`
+  `claim_flat_domain` plus the anchor-`11` exact-argument pocket, and
+  clause-`5` `claim_flat_codomain`.
 - A new local omitted-side-variant regression now proves the next safe opening
   is narrower than a raw catalog reland:
   omitted demo-only temporal-shell side variants at clause positions `0`,

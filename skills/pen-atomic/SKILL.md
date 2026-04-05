@@ -101,6 +101,10 @@ Treat these as current repo truths:
   `115657 / 21112` and bit cost `236`, and that they first diverge only at
   clause positions `0`, `2`, and `5`, so the next repair can stay narrower
   than reopening the whole pocket; a newer
+  `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_pin_the_exact_claim_family_labels`
+  regression now further freezes those three residual families as clause-`0`
+  `claim_flat_domain`, clause-`2` `claim_flat_domain` plus the anchor-`11`
+  exact-argument pocket, and clause-`5` `claim_flat_codomain`; a newer
   `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
   regression now also proves that omitted demo-only side variants at clause
   positions `0`, `1`, `4`, and `5` are already structurally connected,
