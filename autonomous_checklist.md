@@ -63,6 +63,19 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
   - the larger `reference + demo_flat_codomain` side stays at `23 / 23 / 15`
   - the mismatch-`2` tail stays only on the two claim clause-`2` variants at
     `21 / 21`, while mismatch-`3` stays only `reference = 12`
+- A narrower `reference + demo_flat_codomain` tradeoff control is now
+  explicit too:
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
+  - it lifted local step `15` generated breadth to `4523`
+  - it narrowed the clean partial-prefix wall to `537` and zero-admitted
+    capture to `2223`
+  - it shrank the mismatch `1` `reference + demo_flat_codomain` branch from
+    `61` captured prefixes on clause-`4` `33 / 28` down to `45` on
+    clause-`4` `27 / 18`
+  - it kept the isolated `single` pocket and residual `3` incumbent prunes
+    unchanged
+  - but it widened `small_cluster` to `3324 / 554 / 554 / 0`, so it is not
+    the landed repair
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:

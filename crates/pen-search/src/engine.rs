@@ -6207,10 +6207,11 @@ fn override_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero
 #[cfg(test)]
 impl Drop for ClaimStepFifteenClauseFourSharpCodomainOnClaimSafeClauseZeroOneOverrideGuard {
     fn drop(&mut self) {
-        CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_CODOMAIN_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE
-            .with(|override_enabled| {
+        CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_CODOMAIN_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE.with(
+            |override_enabled| {
                 *override_enabled.borrow_mut() = false;
-            });
+            },
+        );
     }
 }
 
@@ -7289,7 +7290,7 @@ fn create_online_prefix_work_item(
                 anchor,
             ))
             || claim_safe_override_slice)
-        .then(claim_step_fifteen_anchor_eleven_demo_sharp_codomain_clause)
+            .then(claim_step_fifteen_anchor_eleven_demo_sharp_codomain_clause)
     }
 
     fn injected_claim_step_fifteen_anchor_eleven_clause_four_bridge_side_clause(
@@ -12301,8 +12302,8 @@ mod tests {
         clause_four_five_counts
     }
 
-    fn current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts(
-    ) -> BTreeMap<(Option<usize>, &'static str, &'static str, &'static str), usize> {
+    fn current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+    -> BTreeMap<(Option<usize>, &'static str, &'static str, &'static str), usize> {
         let counts = current_claim_step_fifteen_remaining_two_partial_prefix_bridge_family_counts();
         let mut clause_four_counts = BTreeMap::new();
         for ((mismatch, clause_zero, clause_one, _clause_two, clause_four, _clause_five), count) in
@@ -14860,12 +14861,7 @@ mod tests {
                     24
                 ),
                 (
-                    (
-                        Some(0_usize),
-                        "claim_flat_domain",
-                        "reference",
-                        "reference"
-                    ),
+                    (Some(0_usize), "claim_flat_domain", "reference", "reference"),
                     18
                 ),
                 (
@@ -14923,21 +14919,11 @@ mod tests {
                     28
                 ),
                 (
-                    (
-                        Some(2_usize),
-                        "reference",
-                        "reference",
-                        "claim_next_bridge"
-                    ),
+                    (Some(2_usize), "reference", "reference", "claim_next_bridge"),
                     18
                 ),
                 (
-                    (
-                        Some(2_usize),
-                        "reference",
-                        "reference",
-                        "demo_sharp_bridge"
-                    ),
+                    (Some(2_usize), "reference", "reference", "demo_sharp_bridge"),
                     4
                 ),
                 (
@@ -14949,33 +14935,12 @@ mod tests {
                     ),
                     4
                 ),
+                ((Some(2_usize), "reference", "reference", "reference"), 16),
                 (
-                    (
-                        Some(2_usize),
-                        "reference",
-                        "reference",
-                        "reference"
-                    ),
-                    16
-                ),
-                (
-                    (
-                        Some(3_usize),
-                        "reference",
-                        "reference",
-                        "claim_next_bridge"
-                    ),
+                    (Some(3_usize), "reference", "reference", "claim_next_bridge"),
                     6
                 ),
-                (
-                    (
-                        Some(3_usize),
-                        "reference",
-                        "reference",
-                        "reference"
-                    ),
-                    6
-                ),
+                ((Some(3_usize), "reference", "reference", "reference"), 6),
             ]
             .into_iter()
             .collect(),
@@ -15145,12 +15110,7 @@ mod tests {
                     15
                 ),
                 (
-                    (
-                        Some(0_usize),
-                        "claim_flat_domain",
-                        "reference",
-                        "reference"
-                    ),
+                    (Some(0_usize), "claim_flat_domain", "reference", "reference"),
                     12
                 ),
                 (
@@ -15235,12 +15195,7 @@ mod tests {
                     15
                 ),
                 (
-                    (
-                        Some(2_usize),
-                        "reference",
-                        "reference",
-                        "claim_flat_domain"
-                    ),
+                    (Some(2_usize), "reference", "reference", "claim_flat_domain"),
                     21
                 ),
                 (
@@ -15252,15 +15207,7 @@ mod tests {
                     ),
                     21
                 ),
-                (
-                    (
-                        Some(3_usize),
-                        "reference",
-                        "reference",
-                        "reference"
-                    ),
-                    12
-                ),
+                ((Some(3_usize), "reference", "reference", "reference"), 12),
             ]
             .into_iter()
             .collect(),
@@ -19812,6 +19759,106 @@ mod tests {
             .into_iter()
             .collect(),
             "every omitted demo-only side variant around the exact anchor-11 pocket should still keep both unsafe lifted terminals fenced, so any future reland there must stay reference-terminal-local rather than reopening the old 89/8 shell"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control()
+     {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4523);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 537,
+            "broadening the clause-1 demo-flat-codomain qualifier only onto the reference-clause-0 live claim bridge surface should narrow the clean wall, but it still remains only a tradeoff control rather than the landed repair"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the reference-clause-0 live-claim bridge tradeoff control should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 537);
+        assert_eq!(zero_summary.captured_prefixes, 2223);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3324,
+                admissible_terminal_candidates: 554,
+                exact_screened_terminal_candidates: 554,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the reference-clause-0 live-claim bridge tradeoff control still widens the noncanonical small-cluster surface, so it is not yet the landed repair even though it narrows the clean wall"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the reference-clause-0 live-claim bridge tradeoff control should still keep the isolated single pocket fenced"
+        );
+        assert_eq!(
+            pair_counts
+                .get(&(Some(1_usize), "reference", "demo_flat_codomain"))
+                .copied(),
+            Some(45),
+            "this tradeoff control should narrow only the larger remaining-two reference-plus-demo-flat pair while leaving the other dominant pairings unchanged"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "claim_next_bridge"
+                ))
+                .copied(),
+            Some(27),
+            "the narrowed reference-plus-demo-flat tradeoff should still sit primarily on the live clause-4 claim-next-bridge family"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "reference"
+                ))
+                .copied(),
+            Some(18),
+            "the same tradeoff should leave a smaller residual on the clause-4 reference family"
         );
     }
 

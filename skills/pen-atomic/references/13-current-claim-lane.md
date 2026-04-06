@@ -341,6 +341,28 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     `connectivity_accepts_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_only_on_the_exact_anchor_eleven_side_pocket_under_override`
     and
     `connectivity_keeps_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
+- a newer exploratory clause-`0` `reference` plus clause-`1`
+  `demo_flat_codomain` live-claim-bridge reopening has now also been checked
+  under a scoped connectivity-only override:
+  - the local late chain still accepted `DCT 103 / 8`, and live generated
+    prefixes lifted from `4331` to `4523`
+  - the clean partial-prefix wall narrowed from `553` to `537`, and
+    zero-admitted exact-prune capture narrowed from `2271` to `2223`
+  - the larger mismatch-`1` `reference + demo_flat_codomain` branch shrank
+    from clause-`4` `33 / 28` / `61` captured prefixes to clause-`4`
+    `27 / 18` / `45`
+  - the isolated `single` pocket and the residual `3`
+    incumbent-dominance prunes stayed fenced and unchanged
+  - but the `small_cluster` widened from `3132 / 522 / 522 / 0` to
+    `3324 / 554 / 554 / 0`
+  - so that narrower reopening is now only a tradeoff control rather than
+    the next landed repair, and it is now pinned by
+    `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
+    plus
+    `connectivity_accepts_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_under_override`,
+    `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`,
+    and
+    `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_from_reopening_lifted_terminals_even_under_override`
 - a newer exploratory clause-`3` `anchor-11` exact-argument widening onto the
   broader clause-`0` / clause-`1` claim surface while clause `2` stayed
   `reference` has now also been checked and reverted:
@@ -678,6 +700,16 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   next move should still target the live clause-`0` / clause-`1` plus
   clause-`4` claim-family split rather than clause-`3` widening or another
   hidden demo-only clause-`2` reopening
+- the newer clause-`0` `reference` plus clause-`1` `demo_flat_codomain`
+  live-claim-bridge reopening is now also explicitly ruled out as a direct
+  reland:
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
+  shows that reopening only that larger mismatch-`1` branch cuts it from
+  clause-`4` `33 / 28` / `61` captured prefixes to clause-`4`
+  `27 / 18` / `45`, lifts local breadth to `4523`, and narrows the clean wall
+  to `537`, but it also widens the `small_cluster` to
+  `3324 / 554 / 554 / 0`, so the next landed repair should isolate those
+  escaping `16` captures rather than reland that whole reopening
 - both reverted clause-`1` side-pocket broadenings are now explicitly ruled
   out as the next move:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
@@ -757,6 +789,17 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    on the two current claim clause-`2` variants at `15 / 15 / 12` or
    `23 / 23 / 15`, so the next landed repair still should not spend another
    cycle on clause-`3` widening or a hidden demo-only clause-`2` reopening.
+   The newer scoped tradeoff control
+   `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
+   now shows that reopening only that larger mismatch-`1`
+   `reference + demo_flat_codomain` branch cuts it from clause-`4`
+   `33 / 28` / `61` captured prefixes to clause-`4` `27 / 18` / `45`,
+   lifts local breadth to `4523`, narrows the clean wall to `537`, and cuts
+   zero-admitted capture to `2223`, while keeping the isolated `single`
+   pocket and residual `3` prunes fixed. But it also widens the
+   `small_cluster` to `3324 / 554 / 554 / 0`, so it is only a tradeoff
+   control; the next landed repair should isolate those escaping `16`
+   captures on that branch without relanding the whole reopening.
    The reverted clause-`3` `anchor-11` exact-argument widening onto the
    broader clause-`0` / clause-`1` claim surface while clause `2` stayed
    `reference` left that clean `553` wall and the executable nine-pair split
@@ -858,6 +901,10 @@ Do not:
   broader clause-`0` `claim_flat_domain` plus clause-`1`
   `demo_flat_codomain` exact-pocket probe first; both now widen the clean
   step-`15` wall to `626`
+- reland the clause-`0` `reference` plus clause-`1` `demo_flat_codomain`
+  live-claim-bridge reopening first; it narrows the clean wall to `537` and
+  lifts local breadth to `4523`, but it also widens the `small_cluster` to
+  `3324 / 554 / 554 / 0`
 - go back to treating the dominant remaining-two clause-`0` / clause-`1`
   wall as unlabeled; the exact nine-pair executable split is now part of the
   current diagnosis

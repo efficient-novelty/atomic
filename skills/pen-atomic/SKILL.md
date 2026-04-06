@@ -72,10 +72,15 @@ Treat these as current repo truths:
   mismatch-`0` / mismatch-`1` pairs keep clause-`4`
   `claim_next_bridge` ahead of `reference` at `24 / 18`, the larger
   `reference + demo_flat_codomain` side still stays on the same live
-  clause-`4` claim families at `33 / 28`, and the clause-`2` split keeps the
+  clause-`4` claim families at `33 / 28`, while a newer scoped tradeoff
+  control now shows that reopening only that branch lifts local breadth to
+  `4523`, narrows the clean wall to `537`, and shrinks that branch to
+  clause-`4` `27 / 18` / `45` captured prefixes, but only by widening the
+  `small_cluster` to `3324 / 554 / 554 / 0`; the clause-`2` split keeps the
   pressure on the two current claim variants at `15 / 15 / 12` or
   `23 / 23 / 15` rather than on a hidden demo-only clause-`2` reopening, so
-  the next landed repair should start there rather than with another rerun
+  the next landed repair should start by isolating that narrower
+  `reference + demo_flat_codomain` branch rather than with another rerun
   setup pass or a step-`1`-first theory slice; the canonical
   `v11` certificate plus the frozen `step-15-live.ndjson` provenance are now
   pinned by
@@ -148,7 +153,18 @@ Treat these as current repo truths:
   to `626`, so it is also ruled out rather than the landed path, and that
   reland is now pinned by
   `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
-  plus the matching connectivity override tests; a third local exploratory
+  plus the matching connectivity override tests; a newer scoped tradeoff
+  control that broadens the same clause-`1` `demo_flat_codomain` qualifier
+  only across clause-`0` `reference` and the live clause-`4` / clause-`5`
+  claim families is now pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
+  plus the matching connectivity override tests: it lifts the local surface
+  to `DCT 103 / 8 / 4523`, narrows the clean partial-prefix wall to `537`,
+  cuts zero-admitted capture to `2223`, and shrinks the larger mismatch-`1`
+  `reference + demo_flat_codomain` branch from clause-`4` `33 / 28` / `61`
+  captured prefixes to clause-`4` `27 / 18` / `45`, but it also widens the
+  `small_cluster` to `3324 / 554 / 554 / 0`, so it is only a tradeoff
+  control and not the landed path; a third local exploratory
   clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   was also checked and reverted: it left the clean `553` partial-prefix wall
@@ -676,6 +692,16 @@ Focus on:
   should still target the live clause-`0` / clause-`1` plus clause-`4`
   claim-family split rather than reopening clause-`3` widening or another
   hidden demo-only clause-`2` branch
+- treating the newer clause-`0` `reference` plus clause-`1`
+  `demo_flat_codomain` live-claim-bridge reopening as a tradeoff control
+  only:
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
+  now shows that reopening only that larger mismatch-`1` branch cuts it from
+  clause-`4` `33 / 28` / `61` captured prefixes to clause-`4`
+  `27 / 18` / `45`, lifts local breadth to `4523`, and narrows the clean wall
+  to `537`, but it also widens the `small_cluster` to
+  `3324 / 554 / 554 / 0`, so the next landed repair should isolate those
+  escaping `16` captures rather than reland the whole reopening
 - treating the two reverted clause-`1` side-pocket broadenings as negative
   controls only:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
@@ -703,11 +729,14 @@ Focus on:
   lifts local breadth to `4843` but widens the wall further to `617`, so none
   of those clause-`4` claim-safe reopenings is the next move
 - treating the next honest slice as narrower than any claim-safe clause-`4`
-  or clause-`5` reopening:
+  or clause-`5` reopening or the full reference-clause-`0` tradeoff control:
   the dominant remaining-two wall still lives on the clause-`0` /
   clause-`1` claim surface and the clause-`4` `claim_next_bridge` plus
   `reference` families, but the new claim-safe clause-`4` controls show that
-  reopening those side pockets directly is still too broad
+  reopening those side pockets directly is still too broad, and the newer
+  `reference + demo_flat_codomain` tradeoff control shows that the next
+  landed repair should isolate its escaping `16` captures without taking the
+  accompanying `small_cluster` reopening
 - treating the remaining step-`15` `small_cluster` incumbent surface as a
   landed local relief rather than the live blocker:
   the old summary-stage same-primary `103 / 8` bit-cost spread is now closed,
