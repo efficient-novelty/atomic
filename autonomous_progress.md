@@ -256,6 +256,21 @@ gate.
   - the next landed repair must therefore stay narrower than same-primary
     relief even at exact-family scope and keep the isolated `single` pocket
     fenced
+- A newer non-landed subset-local same-primary relief probe now sharpens that
+  blocker even further:
+  - `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
+    now pins that every non-empty subset of those same exact clause-`0`,
+    clause-`2` + anchor-`11`, and clause-`5` residual families still keeps
+    live generated prefixes flat at `4088`, partial-prefix bar failures at
+    `476`, and the cleared `small_cluster` unchanged at
+    `3012 / 502 / 502 / 0`
+  - the repaired canonical step-`15` winner also stays unchanged on every one
+    of those subset-local probes
+  - instead, opening any strict subset only trades `n` of the remaining `3`
+    incumbent-dominance prunes for `n` extra fully scored non-winning
+    terminals in the isolated `single` pocket
+  - the next landed repair therefore has to stay narrower than proof-close
+    same-primary relief even on a strict subset of those three families
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -1422,10 +1437,15 @@ gate.
    incumbent-dominance prunes from `3` to `0`, and still unfences the
    isolated `single` pocket from `1` to `4` fully scored non-winning
    terminals while leaving the `small_cluster` unchanged at
-   `3012 / 502 / 502 / 0`, so the next move is therefore not another rerun
-   setup pass, not another raw
-   clause-`4` / raw clause-`5` / raw global position-`0` reland, and not a
-   blanket or exact-family same-primary-retention reland; it should be the next
+   `3012 / 502 / 502 / 0`, while
+   `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
+   now further proves that every strict subset of those same families still
+   keeps `4088` / `476` and the same cleared `small_cluster`, only trading
+   `n` residual incumbent prunes for `n` extra fully scored non-winning
+   terminals in the isolated `single` pocket. The next move is therefore not
+   another rerun setup pass, not another raw clause-`4` / raw clause-`5` /
+   raw global position-`0` reland, and not a blanket, exact-family, or
+   subset-local same-primary-retention reland; it should be the next
    parity-preserving step-`15` repair against those residual `3`
    single-bucket incumbent prunes on top of this `4088` surface, starting
    from those three fenced prefix families instead of reopening the full

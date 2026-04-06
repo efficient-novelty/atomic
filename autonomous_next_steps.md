@@ -195,6 +195,21 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next landed repair must therefore stay narrower than same-primary
     relief even at exact-family scope and keep the isolated `single` pocket
     fenced
+- A newer non-landed subset-local same-primary relief probe now sharpens that
+  blocker one step further again:
+  - `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
+    now pins that every non-empty subset of those same exact clause-`0`,
+    clause-`2` + anchor-`11`, and clause-`5` residual families still keeps
+    live generated prefixes flat at `4088`, partial-prefix bar failures at
+    `476`, and the cleared `small_cluster` unchanged at
+    `3012 / 502 / 502 / 0`
+  - the repaired canonical step-`15` winner also stays unchanged on every one
+    of those subset-local probes
+  - instead, opening any strict subset only trades `n` of the remaining `3`
+    incumbent-dominance prunes for `n` extra fully scored non-winning
+    terminals in the isolated `single` pocket
+  - the next landed repair therefore has to stay narrower than proof-close
+    same-primary relief even on a strict subset of those three families
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -964,7 +979,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
    `4088` / `476`, collapses incumbent-dominance from `3` to `0`, leaves the
    `small_cluster` unchanged at `3012 / 502 / 502 / 0`, and unfences the
    isolated `single` pocket from `1` to `4` fully scored non-winning
-   terminals.
+   terminals. A newer subset-local same-primary relief probe now further pins
+   that every strict subset of those same families still keeps `4088` /
+   `476`, keeps the cleared `small_cluster` unchanged, and only trades `n`
+   of the residual incumbent prunes for `n` extra fully scored non-winning
+   terminals in that same isolated `single` pocket.
    `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
    now further pins that every one of those same three families still sits
    beside two unsafe stronger-than-canonical `89 / 8` lifted terminals, and
@@ -972,8 +991,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
    now also pins that the nearby omitted demo-only side variants keep those
    same lifts fenced once the terminal moves. The next landed repair must
    therefore keep any future side-pocket use reference-terminal-local instead
-   of blindly relanding broader local terminal recovery or same-primary
-   retention on the same family shell.
+   of blindly relanding broader local terminal recovery or blanket,
+   exact-family, or subset-local same-primary retention on the same family
+   shell.
 4. Keep step `11`, step `12`, and step `14` frozen as positive stored floor
    hits so the next repair cannot silently reshuffle the canonical branch.
 5. Keep step `1 = 546 / 2144` on the checklist as the separate stored early
@@ -1026,7 +1046,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
   exact residual clause-`0`, clause-`2` + anchor-`11`, and clause-`5`
   families still keeps `4088` / `476`, leaves the `small_cluster`
   unchanged at `3012 / 502 / 502 / 0`, and unfences that same isolated
-  `single` pocket to `4` fully scored non-winning terminals
+  `single` pocket to `4` fully scored non-winning terminals; the newer
+  subset-local probe now further proves that even any strict subset of those
+  same families only trades `n` incumbent prunes for `n` extra fully scored
+  non-winning terminals while keeping `4088` / `476` and the cleared
+  `small_cluster` unchanged
 - a direct early clause-`2` / clause-`3` reanchor-bridge matcher reland
   first:
   those exploratory branches already displaced the canonical step-`15`

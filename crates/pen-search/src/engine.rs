@@ -19511,6 +19511,83 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners()
+     {
+        let family_labels = [
+            "clause-0 claim_flat_domain",
+            "clause-2 claim_flat_domain plus anchor-11 exact-argument",
+            "clause-5 claim_flat_codomain",
+        ];
+
+        for mask in 1usize..(1usize << family_labels.len()) {
+            let subset = family_labels
+                .iter()
+                .enumerate()
+                .filter_map(|(index, label)| ((mask & (1 << index)) != 0).then_some(*label))
+                .collect::<Vec<_>>();
+            let _override =
+                super::override_claim_step_fifteen_family_local_same_primary_relief(&subset);
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let subset_size = subset.len();
+
+            assert_eq!(
+                step_fifteen.telescope,
+                Telescope::reference(15),
+                "subset-local same-primary relief should keep the repaired canonical step-15 winner"
+            );
+            assert_eq!(
+                step_fifteen.demo_funnel.generated_raw_prefixes, 4088,
+                "subset-local same-primary relief on {:?} should not broaden the repaired local step-15 generated surface",
+                subset
+            );
+            assert_eq!(
+                step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 476,
+                "subset-local same-primary relief on {:?} should leave the repaired partial-prefix wall unchanged",
+                subset
+            );
+            assert_eq!(
+                step_fifteen.exact_screen_reasons.incumbent_dominance,
+                3 - subset_size,
+                "subset-local same-primary relief on {:?} should only remove the same number of residual single-bucket incumbent prunes as the exact families it unfreezes",
+                subset
+            );
+            assert_eq!(
+                bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+                Some(&DemoBucketStats {
+                    generated_terminal_candidates: 0,
+                    admissible_terminal_candidates: 0,
+                    exact_screened_terminal_candidates: 0,
+                    pruned_terminal_candidates: 3 - subset_size,
+                    fully_scored_terminal_candidates: 1 + subset_size,
+                    best_overshoot: Some(Rational::new(115657, 21112)),
+                }),
+                "subset-local same-primary relief on {:?} should only trade residual single-bucket prunes for extra fully scored non-winning terminals in the isolated pocket",
+                subset
+            );
+            assert_eq!(
+                bucket_stats
+                    .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+                Some(&DemoBucketStats {
+                    generated_terminal_candidates: 3012,
+                    admissible_terminal_candidates: 502,
+                    exact_screened_terminal_candidates: 502,
+                    pruned_terminal_candidates: 0,
+                    fully_scored_terminal_candidates: 0,
+                    best_overshoot: None,
+                }),
+                "subset-local same-primary relief on {:?} should leave the cleared temporal small-cluster unchanged",
+                subset
+            );
+        }
+    }
+
+    #[test]
     fn current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket()
      {
         let _override = super::override_claim_step_fifteen_family_local_same_primary_relief(&[

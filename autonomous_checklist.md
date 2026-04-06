@@ -103,6 +103,15 @@ It lists only work that is still open.
   leaves the cleared `small_cluster` unchanged at `3012 / 502 / 502 / 0`,
   and still unfences the isolated `single` pocket from `1` to `4`
   fully scored non-winning terminals.
+- A newer subset-local negative control now proves even strict subsets of
+  those families are still too broad:
+  `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
+  now pins that every non-empty subset of those same three residual families
+  keeps the repaired local surface flat at `4088` generated prefixes with
+  `476` partial-prefix bar failures, keeps the cleared `small_cluster`
+  unchanged at `3012 / 502 / 502 / 0`, keeps the canonical winner unchanged,
+  and only trades `n` of the remaining `3` residual incumbent prunes for `n`
+  extra fully scored non-winning terminals in the isolated `single` pocket.
 - A new local omitted-side-variant regression now proves the next safe opening
   is narrower than a raw catalog reland:
   omitted demo-only temporal-shell side variants at clause positions `0`,
@@ -149,7 +158,8 @@ It lists only work that is still open.
   / clause-`5` fenced prefix families rather than reopening the whole
   side-pocket neighborhood, while also keeping the newly frozen unsafe
   `89 / 8` lifted terminals fenced on each of those same family shells and
-  staying narrower than same-primary relief even at exact-family scope.
+  staying narrower than same-primary relief even at exact-family scope or on
+  any strict subset of those same families.
 - No broader per-step claim search-band expansion should land beyond that
   isolated anchor-`11` pocket before a new local repair proves more is
   necessary on this parity-clean stored chain.

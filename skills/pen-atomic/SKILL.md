@@ -138,7 +138,15 @@ Treat these as current repo truths:
   to `0`, leaves the `small_cluster` unchanged at `3012 / 502 / 502 / 0`,
   and still unfences the isolated `single` pocket from `1` to `4`
   fully scored non-winning terminals, so the next landed repair must stay
-  narrower than same-primary relief even at exact-family scope;
+  narrower than same-primary relief even at exact-family scope; a newer
+  `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
+  regression now further proves that every non-empty strict subset of those
+  same three families still keeps `4088` / `476` and the cleared
+  `3012 / 502 / 502 / 0` `small_cluster` unchanged, keeps the canonical
+  winner unchanged, and only trades `n` residual incumbent prunes for `n`
+  extra fully scored non-winning terminals in the isolated `single` pocket,
+  so the next landed repair must stay narrower than proof-close same-primary
+  relief even on a strict subset of those families;
   a newer
   `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
   regression now also proves that omitted demo-only side variants at clause
@@ -167,8 +175,12 @@ Treat these as current repo truths:
   probe kept generated breadth flat at `4030`, collapsed incumbent-dominance
   to `0`, widened the `small_cluster` aggregate to `2964 / 494 / 494 / 0`,
   and unfenced the isolated `single` pocket to `4` fully scored non-winning
-  terminals, so that broad incumbent-retention reland is now also outside the
-  landed path; user-facing wording stays at
+  terminals, and the newer strict-subset same-primary probe now also proves
+  that even any non-empty subset of the three residual families only trades
+  `n` incumbent prunes for `n` extra fully scored non-winning terminals while
+  keeping `4088` / `476` and the cleared `3012 / 502 / 502 / 0`
+  `small_cluster` unchanged, so that entire same-primary-retention family of
+  relands is now outside the landed path; user-facing wording stays at
   `bounded live recovery` until stored breadth and certification pass
 - the accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
