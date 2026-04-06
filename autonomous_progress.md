@@ -268,9 +268,13 @@ gate.
     of those subset-local probes
   - instead, opening any strict subset only trades `n` of the remaining `3`
     incumbent-dominance prunes for `n` extra fully scored non-winning
-    terminals in the isolated `single` pocket
+    terminals in the isolated `single` pocket, and those extra candidates are
+    all same-primary `103 / 8`, bit-cost-`236` reference-terminal completions
+    from the selected residual families
   - the next landed repair therefore has to stay narrower than proof-close
-    same-primary relief even on a strict subset of those three families
+    same-primary relief even on a strict subset of those three families,
+    because even reference-terminal-only same-primary retention there is still
+    too broad
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -1442,10 +1446,12 @@ gate.
    now further proves that every strict subset of those same families still
    keeps `4088` / `476` and the same cleared `small_cluster`, only trading
    `n` residual incumbent prunes for `n` extra fully scored non-winning
-   terminals in the isolated `single` pocket. The next move is therefore not
-   another rerun setup pass, not another raw clause-`4` / raw clause-`5` /
-   raw global position-`0` reland, and not a blanket, exact-family, or
-   subset-local same-primary-retention reland; it should be the next
+   terminals in the isolated `single` pocket, with those extra candidates all
+   staying same-primary `103 / 8`, bit-cost-`236` reference-terminal
+   completions from the selected residual families. The next move is
+   therefore not another rerun setup pass, not another raw clause-`4` / raw
+   clause-`5` / raw global position-`0` reland, and not a blanket,
+   exact-family, or subset-local same-primary-retention reland; it should be the next
    parity-preserving step-`15` repair against those residual `3`
    single-bucket incumbent prunes on top of this `4088` surface, starting
    from those three fenced prefix families instead of reopening the full

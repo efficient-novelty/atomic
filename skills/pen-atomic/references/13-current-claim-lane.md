@@ -395,9 +395,13 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     of those subset-local probes
   - instead, opening any strict subset only trades `n` of the remaining `3`
     incumbent-dominance prunes for `n` extra fully scored non-winning
-    terminals in the isolated `single` pocket
+    terminals in the isolated `single` pocket, and those extra candidates are
+    all same-primary `103 / 8`, bit-cost-`236` reference-terminal completions
+    from the selected residual families
   - the next landed repair therefore has to stay narrower than proof-close
-    same-primary relief even on a strict subset of those three families
+    same-primary relief even on a strict subset of those three families,
+    because even reference-terminal-only same-primary retention there is still
+    too broad
 - a new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -537,7 +541,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    now further pins that every strict subset of those same families still
    keeps `4088` / `476`, keeps the cleared `small_cluster` unchanged, and
    only trades `n` residual incumbent prunes for `n` extra fully scored
-   non-winning terminals in that same isolated `single` pocket.
+   non-winning terminals in that same isolated `single` pocket, with those
+   extra candidates all staying same-primary `103 / 8`, bit-cost-`236`
+   reference-terminal completions from the selected residual families.
 4. Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they still prove local breadth can be reopened unsafely, but they are not
    the landed repair.

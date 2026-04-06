@@ -19518,6 +19518,11 @@ mod tests {
             "clause-2 claim_flat_domain plus anchor-11 exact-argument",
             "clause-5 claim_flat_codomain",
         ];
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
 
         for mask in 1usize..(1usize << family_labels.len()) {
             let subset = family_labels
@@ -19534,7 +19539,16 @@ mod tests {
                 .iter()
                 .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
                 .collect::<BTreeMap<_, _>>();
+            let accepted_rank = acceptance_rank(step_fifteen.objective_bar, &step_fifteen.accepted)
+                .expect("accepted step-15 candidate should clear the bar");
             let subset_size = subset.len();
+            let extra_candidates = step_fifteen
+                .retained_candidates
+                .iter()
+                .filter(|candidate| {
+                    candidate.candidate_hash != step_fifteen.accepted.candidate_hash
+                })
+                .collect::<Vec<_>>();
 
             assert_eq!(
                 step_fifteen.telescope,
@@ -19582,6 +19596,62 @@ mod tests {
                     best_overshoot: None,
                 }),
                 "subset-local same-primary relief on {:?} should leave the cleared temporal small-cluster unchanged",
+                subset
+            );
+            assert_eq!(
+                extra_candidates.len(),
+                subset_size,
+                "subset-local same-primary relief on {:?} should add exactly one extra fully scored non-winning candidate per unfenced residual family",
+                subset
+            );
+            let observed_labels = extra_candidates
+                .iter()
+                .map(|candidate| {
+                    let rank = acceptance_rank(step_fifteen.objective_bar, candidate)
+                        .expect("retained extra candidate should clear the bar");
+                    assert!(
+                        crate::branch_bound::same_primary_rank_tier(&rank, &accepted_rank),
+                        "subset-local same-primary relief on {:?} should only unfence same-primary non-winning candidates",
+                        subset
+                    );
+                    assert!(
+                        !super::better_rank(&rank, &accepted_rank),
+                        "subset-local same-primary relief on {:?} should not admit a stronger-than-canonical winner",
+                        subset
+                    );
+                    assert_eq!(
+                        rank.bit_kappa, 236,
+                        "subset-local same-primary relief on {:?} should only unfence the 236-bit reference-terminal profile",
+                        subset
+                    );
+                    assert_eq!(
+                        rank.overshoot,
+                        Rational::new(115657, 21112),
+                        "subset-local same-primary relief on {:?} should keep the exact isolated single-pocket overshoot",
+                        subset
+                    );
+                    assert_eq!(
+                        candidate
+                            .telescope
+                            .clauses
+                            .last()
+                            .expect("retained candidate should have a terminal clause"),
+                        &reference_terminal,
+                        "subset-local same-primary relief on {:?} should only unfence reference-terminal completions",
+                        subset
+                    );
+                    current_claim_step_fifteen_proof_close_incumbent_family_label(&Telescope::new(
+                        candidate.telescope.clauses[..7].to_vec(),
+                    ))
+                })
+                .collect::<BTreeSet<_>>();
+            assert_eq!(
+                observed_labels,
+                subset
+                    .iter()
+                    .map(|label| (*label).to_string())
+                    .collect::<BTreeSet<_>>(),
+                "subset-local same-primary relief on {:?} should only unfence reference-terminal candidates from the selected residual families",
                 subset
             );
         }

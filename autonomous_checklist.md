@@ -111,7 +111,9 @@ It lists only work that is still open.
   `476` partial-prefix bar failures, keeps the cleared `small_cluster`
   unchanged at `3012 / 502 / 502 / 0`, keeps the canonical winner unchanged,
   and only trades `n` of the remaining `3` residual incumbent prunes for `n`
-  extra fully scored non-winning terminals in the isolated `single` pocket.
+  extra fully scored non-winning terminals in the isolated `single` pocket,
+  with those extra candidates all staying same-primary `103 / 8`,
+  bit-cost-`236` reference-terminal completions from the selected families.
 - A new local omitted-side-variant regression now proves the next safe opening
   is narrower than a raw catalog reland:
   omitted demo-only temporal-shell side variants at clause positions `0`,

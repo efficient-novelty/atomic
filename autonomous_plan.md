@@ -224,9 +224,13 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     unchanged
   - instead, opening any strict subset only trades `n` of the remaining `3`
     incumbent-dominance prunes for `n` extra fully scored non-winning
-    terminals in the isolated `single` pocket
+    terminals in the isolated `single` pocket, and those extra candidates are
+    all same-primary `103 / 8`, bit-cost-`236` reference-terminal completions
+    from the selected residual families
   - the next landed repair must therefore stay narrower than proof-close
-    same-primary relief even on a strict subset of those three families
+    same-primary relief even on a strict subset of those three families,
+    because even reference-terminal-only same-primary retention there is still
+    too broad
 - A newer executable omitted-side-variant regression now sharpens that same
   `small_cluster` target without landing another widening yet:
   - the omitted demo-only temporal-shell side variants at clause positions
@@ -320,7 +324,8 @@ The highest-value work is:
    prefix families first diverging at clause positions `0`, `2`, and `5`, and
    the newer strict-subset same-primary probe now proves the next repair must
    stay narrower than proof-close same-primary relief even on any strict
-   subset of those same families
+   subset of those same families, because those probes already only unfence
+   same-primary `103 / 8`, bit-cost-`236` reference-terminal completions
 4. launch the next clean full-profile rerun only after that next local repair
    is regression-backed
 5. refresh compare / benchmark / certification on the next stored bundle
@@ -399,8 +404,8 @@ Current slice order:
    `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
    green too so the next step-`15` repair still respects that even any strict
    subset of those same families only trades `n` incumbent prunes for `n`
-   extra fully scored non-winning terminals while keeping `4088` / `476` and
-   the cleared `small_cluster` unchanged, and keep
+   extra fully scored non-winning reference-terminal completions while keeping
+   `4088` / `476` and the cleared `small_cluster` unchanged, and keep
    `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
    green so any future omitted-side opening stays reference-terminal-local
    instead of reopening that lifted shell

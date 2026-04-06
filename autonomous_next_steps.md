@@ -207,9 +207,13 @@ This note is the exact next work order for `desktop_claim_shadow`.
     of those subset-local probes
   - instead, opening any strict subset only trades `n` of the remaining `3`
     incumbent-dominance prunes for `n` extra fully scored non-winning
-    terminals in the isolated `single` pocket
+    terminals in the isolated `single` pocket, and those extra candidates are
+    all same-primary `103 / 8`, bit-cost-`236` reference-terminal completions
+    from the selected residual families
   - the next landed repair therefore has to stay narrower than proof-close
-    same-primary relief even on a strict subset of those three families
+    same-primary relief even on a strict subset of those three families,
+    because even reference-terminal-only same-primary retention there is still
+    too broad
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -983,7 +987,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
    that every strict subset of those same families still keeps `4088` /
    `476`, keeps the cleared `small_cluster` unchanged, and only trades `n`
    of the residual incumbent prunes for `n` extra fully scored non-winning
-   terminals in that same isolated `single` pocket.
+   terminals in that same isolated `single` pocket, with those extra
+   candidates all staying same-primary `103 / 8`, bit-cost-`236`
+   reference-terminal completions from the selected residual families.
    `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
    now further pins that every one of those same three families still sits
    beside two unsafe stronger-than-canonical `89 / 8` lifted terminals, and
@@ -1049,8 +1055,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
   `single` pocket to `4` fully scored non-winning terminals; the newer
   subset-local probe now further proves that even any strict subset of those
   same families only trades `n` incumbent prunes for `n` extra fully scored
-  non-winning terminals while keeping `4088` / `476` and the cleared
-  `small_cluster` unchanged
+  non-winning reference-terminal completions while keeping `4088` / `476`
+  and the cleared `small_cluster` unchanged
 - a direct early clause-`2` / clause-`3` reanchor-bridge matcher reland
   first:
   those exploratory branches already displaced the canonical step-`15`
