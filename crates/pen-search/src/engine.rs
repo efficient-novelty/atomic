@@ -5956,6 +5956,20 @@ thread_local! {
 
 #[cfg(test)]
 #[derive(Clone, Debug)]
+struct PartialPrefixBoundPruneCapture {
+    remaining_clause_slots: usize,
+    prefix_telescope: Telescope,
+}
+
+#[cfg(test)]
+thread_local! {
+    static PARTIAL_PREFIX_BOUND_PRUNE_CAPTURE:
+        std::cell::RefCell<Option<Vec<PartialPrefixBoundPruneCapture>>> =
+            const { std::cell::RefCell::new(None) };
+}
+
+#[cfg(test)]
+#[derive(Clone, Debug)]
 struct IncumbentPrunedTerminalGroupCapture {
     phase: &'static str,
     bucket_label: String,
@@ -5989,6 +6003,19 @@ fn start_pruned_terminal_prefix_capture() {
 #[cfg(test)]
 fn finish_pruned_terminal_prefix_capture() -> Vec<OnlinePrefixWorkItem> {
     PRUNED_TERMINAL_PREFIX_CAPTURE.with(|capture| capture.borrow_mut().take().unwrap_or_default())
+}
+
+#[cfg(test)]
+fn start_partial_prefix_bound_prune_capture() {
+    PARTIAL_PREFIX_BOUND_PRUNE_CAPTURE.with(|capture| {
+        *capture.borrow_mut() = Some(Vec::new());
+    });
+}
+
+#[cfg(test)]
+fn finish_partial_prefix_bound_prune_capture() -> Vec<PartialPrefixBoundPruneCapture> {
+    PARTIAL_PREFIX_BOUND_PRUNE_CAPTURE
+        .with(|capture| capture.borrow_mut().take().unwrap_or_default())
 }
 
 #[cfg(test)]
@@ -6090,6 +6117,27 @@ fn maybe_capture_pruned_terminal_prefix(
 }
 
 #[cfg(test)]
+fn maybe_capture_partial_prefix_bound_prune(
+    work_item: &OnlinePrefixWorkItem,
+    decision: ExactPartialPrefixBoundDecision,
+) {
+    if !matches!(decision, ExactPartialPrefixBoundDecision::CannotClearBar) {
+        return;
+    }
+
+    PARTIAL_PREFIX_BOUND_PRUNE_CAPTURE.with(|capture| {
+        let mut capture = capture.borrow_mut();
+        let Some(capture) = capture.as_mut() else {
+            return;
+        };
+        capture.push(PartialPrefixBoundPruneCapture {
+            remaining_clause_slots: work_item.remaining_clause_slots,
+            prefix_telescope: work_item.prefix_telescope.clone(),
+        });
+    });
+}
+
+#[cfg(test)]
 fn maybe_capture_incumbent_pruned_terminal_group(
     phase: &'static str,
     bucket_label: String,
@@ -6167,6 +6215,8 @@ fn screen_prefix_for_frontier(
                 .remaining_one_bar_prunes_pre_materialize += 1;
         }
         #[cfg(test)]
+        maybe_capture_partial_prefix_bound_prune(work_item, decision);
+        #[cfg(test)]
         maybe_capture_pruned_terminal_prefix(work_item, decision);
         return (decision, false);
     }
@@ -6208,6 +6258,8 @@ fn screen_prefix_for_frontier(
         }
     }
 
+    #[cfg(test)]
+    maybe_capture_partial_prefix_bound_prune(work_item, decision);
     #[cfg(test)]
     maybe_capture_pruned_terminal_prefix(work_item, decision);
 
@@ -10928,6 +10980,15 @@ mod tests {
     }
 
     #[derive(Clone, Debug, Default, Eq, PartialEq)]
+    struct LateStepPartialPrefixWallSummary {
+        capture_count: usize,
+        remaining_clause_slot_counts: BTreeMap<usize, usize>,
+        matched_clause_counts: BTreeMap<usize, usize>,
+        first_mismatch_position_counts: BTreeMap<Option<usize>, usize>,
+        slot_mismatch_position_counts: BTreeMap<(usize, Option<usize>), usize>,
+    }
+
+    #[derive(Clone, Debug, Default, Eq, PartialEq)]
     struct LateStepZeroAdmittedFailureSummary {
         captured_prefixes: usize,
         generated_candidates: usize,
@@ -11063,6 +11124,60 @@ mod tests {
             .map(|step| step.telescope)
             .collect::<Vec<_>>();
         late_step_exact_prune_family_summary(&prefix, 15, limit)
+    }
+
+    fn current_claim_step_fifteen_partial_prefix_wall_summary() -> LateStepPartialPrefixWallSummary {
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let (library, _, _) = history_from_prefix(&prefix);
+
+        super::start_partial_prefix_bound_prune_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let captures = super::finish_partial_prefix_bound_prune_capture();
+
+        let mut summary = LateStepPartialPrefixWallSummary {
+            capture_count: captures.len(),
+            ..LateStepPartialPrefixWallSummary::default()
+        };
+        for capture in captures {
+            *summary
+                .remaining_clause_slot_counts
+                .entry(capture.remaining_clause_slots)
+                .or_insert(0) += 1;
+
+            let historical_reanchor =
+                HistoricalReanchorSummary::from_telescope(&library, &capture.prefix_telescope);
+            *summary
+                .matched_clause_counts
+                .entry(historical_reanchor.matched_clause_count())
+                .or_insert(0) += 1;
+            let mismatch_position = capture
+                .prefix_telescope
+                .clauses
+                .iter()
+                .zip(reference_prefix.clauses.iter())
+                .position(|(left, right)| left != right);
+            *summary
+                .first_mismatch_position_counts
+                .entry(mismatch_position)
+                .or_insert(0) += 1;
+            *summary
+                .slot_mismatch_position_counts
+                .entry((capture.remaining_clause_slots, mismatch_position))
+                .or_insert(0) += 1;
+        }
+
+        summary
     }
 
     fn current_claim_step_fifteen_incumbent_prune_summary() -> LateStepIncumbentPruneSummary {
@@ -13308,6 +13423,48 @@ mod tests {
             summary.family_counts,
             [((0_usize, None, None), 2271_usize)].into_iter().collect(),
             "the captured step-15 exact-prune surface should currently consist only of zero-admitted terminal families"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families()
+     {
+        let summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        assert_eq!(summary.capture_count, 553);
+        assert_eq!(
+            summary.remaining_clause_slot_counts,
+            [(2_usize, 451_usize), (3, 102)].into_iter().collect(),
+            "the clean step-15 partial-prefix wall should stay concentrated on remaining-two prefixes with only a smaller remaining-three tail"
+        );
+        assert_eq!(
+            summary.matched_clause_counts,
+            [(1_usize, 73_usize), (2, 354), (3, 126)]
+                .into_iter()
+                .collect(),
+            "the clean step-15 partial-prefix wall should keep landing only after one, two, or three historical clauses match, rather than reopening later repaired pockets"
+        );
+        assert_eq!(
+            summary.first_mismatch_position_counts,
+            [(Some(0_usize), 312_usize), (Some(1), 177), (Some(2), 50), (Some(3), 14)]
+                .into_iter()
+                .collect(),
+            "the clean step-15 partial-prefix wall should now localize to four early temporal mismatch families at clause positions 0 through 3"
+        );
+        assert_eq!(
+            summary.slot_mismatch_position_counts,
+            [
+                ((2_usize, Some(0_usize)), 252_usize),
+                ((2, Some(1)), 145),
+                ((2, Some(2)), 42),
+                ((2, Some(3)), 12),
+                ((3, Some(0)), 60),
+                ((3, Some(1)), 32),
+                ((3, Some(2)), 8),
+                ((3, Some(3)), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the clean step-15 partial-prefix wall should stay dominated by remaining-two clause-0 and clause-1 mismatches, with only a narrow remaining-three tail across the same four early families"
         );
     }
 

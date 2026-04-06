@@ -550,6 +550,12 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   surface, with the focus now shifted to the clean `553` partial-prefix wall
   while the remaining `3` single-bucket incumbent prunes and the unsafe
   lifted `89 / 8` shell both stay fenced
+- that clean partial-prefix wall is now executable rather than notes-only:
+  `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
+  now freezes all `553` actual bound prunes as `451` remaining-two plus
+  `102` remaining-three prefixes, with first mismatch pressure only at clause
+  positions `0..3` (`312 / 177 / 50 / 14`) and dominant remaining-two
+  pressure at clause `0` / clause `1` (`252 / 145`)
 - the canonical repaired late chain must stay frozen while breadth is
   re-earned:
   - step `12` should keep the guarded `34 / 6` continuation
@@ -585,7 +591,13 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    setup or step-`13` theory before the next parity-preserving local repair is
    regression-backed; keep the isolated `single` survivor bucket fenced while
    the next repair works first against the clean `553` partial-prefix wall on
-   top of the matched `4331` canonical surface. The newer clause-`0`,
+   top of the matched `4331` canonical surface. That wall is now executable:
+   `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
+   pins it as `451` remaining-two plus `102` remaining-three prefixes with
+   first mismatch positions `0..3` only, so the next landed repair should
+   start on the dominant remaining-two clause-`0` / clause-`1` side
+   (`252 / 145`) before reopening the smaller clause-`2` / clause-`3` tail.
+   The newer clause-`0`,
    clause-`1`, clause-`4`, and clause-`5` exact-pocket reopenings are now
    already consumed narrowly and must stay fenced as a tiny noncanonical
    pocket stack; the reverted raw position-`0` reland still proves that

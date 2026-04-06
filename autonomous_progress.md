@@ -57,11 +57,24 @@ Until that exists, wording stays at `bounded live recovery`.
   - `small_cluster`: `3132 / 522 / 522 / 0`
   - fenced `single` bucket: `1` fully scored non-winner plus `3` residual prunes
     at overshoot `115657 / 21112`
+  - executable partial-prefix wall split:
+    - remaining-two prefixes: `451`
+    - remaining-three prefixes: `102`
+    - first mismatch positions: clause `0 = 312`, clause `1 = 177`,
+      clause `2 = 50`, clause `3 = 14`
+    - dominant remaining-two slice: clause `0 = 252`, clause `1 = 145`
 
 ## Residual Step-15 Diagnosis
 
 - The old broad `small_cluster` incumbent wall is still closed; the remaining
-  late miss is now dominated by the clean step-`15` partial-prefix wall.
+  late miss is now dominated by the clean step-`15` partial-prefix wall, and
+  that wall is no longer notes-only:
+  - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
+    now freezes the real `553`-prune split as `451` remaining-two plus `102`
+    remaining-three prefixes
+  - it localizes first mismatch pressure to clause positions `0..3` only,
+    with the dominant live slice now on remaining-two clause-`0` / clause-`1`
+    prefixes at `252 / 145`
 - A local clause-`1` `demo_eventually_codomain` exact-pocket reland was
   tested and reverted:
   - it lifted the local late surface from `4331` to `4466`
@@ -101,6 +114,7 @@ Until that exists, wording stays at `bounded live recovery`.
   - `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
   - `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts`
 - Current step-`15` guardrails:
+  - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
   - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
   - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
   - `current_claim_step_fifteen_zero_admitted_connectivity_surface_reports_reanchor_prefix_progress`
@@ -111,9 +125,11 @@ Until that exists, wording stays at `bounded live recovery`.
 
 ## Immediate Direction
 
-Diagnose the clean `v12` step-`15` partial-prefix wall on top of the matched
-`4331` surface, keep the next change prefix-local and reference-terminal-safe,
-do not reland the reverted clause-`1` `demo_eventually_codomain`
-exact-pocket probe that widened the wall to `626`, rerun only after the new
-local slice is green, and keep step `1` explicit unless that next stored
-bundle changes it directly.
+Use the new executable wall split to attack the clean `v12` step-`15`
+partial-prefix wall on top of the matched `4331` surface, start with the
+dominant remaining-two clause-`0` / clause-`1` side of that wall before
+reopening the smaller clause-`2` / clause-`3` tail, keep the next change
+prefix-local and reference-terminal-safe, do not reland the reverted
+clause-`1` `demo_eventually_codomain` exact-pocket probe that widened the
+wall to `626`, rerun only after the new local slice is green, and keep
+step `1` explicit unless that next stored bundle changes it directly.

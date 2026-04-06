@@ -46,9 +46,18 @@ Treat these as current repo truths:
   breadth repair and the narrow step-`12` selector repair are both re-earned
   on clean stored evidence, the parity-preserving step-`13` repair is now
   also re-earned on stored evidence at `[5,1,3,3,5,3,2]` / `1350` / `2320`
-  with canonical acceptance, and the next operational move is diagnosing the
-  clean step-`15` partial-prefix wall on top of that `v12` bundle rather than
-  another rerun setup pass or a step-`1`-first theory slice; the canonical
+  with canonical acceptance, and the next operational move is no longer
+  notes-only diagnosis but a prefix-local repair against the now-frozen clean
+  step-`15` partial-prefix wall on top of that `v12` bundle: a newer
+  executable
+  `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
+  regression now pins the real `553` bound-prune wall as `451`
+  remaining-two plus `102` remaining-three prefixes, with first mismatch
+  pressure only at clause positions `0..3` (`312 / 177 / 50 / 14`) and the
+  dominant live slice now on remaining-two clause `0` / clause `1`
+  prefixes (`252 / 145`), so the next landed repair should start there
+  rather than with another rerun setup pass or a step-`1`-first theory
+  slice; the canonical
   `v11` certificate plus the frozen `step-15-live.ndjson` provenance are now
   pinned by
   `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
@@ -544,6 +553,14 @@ Focus on:
   step-`15` `4331 / 5000` gap rather than another rerun setup pass, while
   keeping that same `4331` surface explicit as the guardrail that must not
   regress
+- treating the clean step-`15` partial-prefix wall as newly executable rather
+  than notes-only:
+  `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
+  now pins all `553` actual bound prunes as `451` remaining-two plus `102`
+  remaining-three prefixes, with first mismatch pressure only at clause
+  positions `0..3` and dominant remaining-two pressure at clause `0` / clause
+  `1`, so the next landed repair should start there before reopening the
+  smaller clause-`2` / clause-`3` tail
 - treating the remaining step-`15` `small_cluster` incumbent surface as a
   landed local relief rather than the live blocker:
   the old summary-stage same-primary `103 / 8` bit-cost spread is now closed,

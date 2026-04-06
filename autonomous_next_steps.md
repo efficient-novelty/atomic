@@ -6,8 +6,9 @@ This file is the exact next work order for `desktop_claim_shadow`.
 
 ## Objective
 
-Diagnose and narrow the remaining clean stored step-`15` partial-prefix wall
-on top of canonical `v12` and the matched local `4331` guardrail surface.
+Narrow the remaining clean stored step-`15` partial-prefix wall on top of
+canonical `v12` and the matched local `4331` guardrail surface, now that the
+real `553`-prune wall split is frozen executable-in-tree.
 
 Do not start with another rerun setup pass.
 
@@ -29,6 +30,12 @@ Do not start with another rerun setup pass.
   - incumbent-dominance prunes: `3`
   - `small_cluster`: `3132 / 522 / 522 / 0`
   - fenced `single` bucket: `1` fully scored non-winner plus `3` residual prunes
+- Executable partial-prefix wall split:
+  - remaining-two prefixes: `451`
+  - remaining-three prefixes: `102`
+  - first mismatch positions: clause `0 = 312`, clause `1 = 177`,
+    clause `2 = 50`, clause `3 = 14`
+  - dominant remaining-two slice: clause `0 = 252`, clause `1 = 145`
 
 ## The Real Remaining Problem
 
@@ -36,6 +43,12 @@ Do not start with another rerun setup pass.
   surface, so the next honest move is no longer proving the last repair.
 - The dominant remaining late miss is now the clean `553` partial-prefix wall
   on the canonical temporal-shell surface.
+- That wall is now executable rather than notes-only:
+  - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
+    freezes all `553` actual bound prunes
+  - it shows that the live wall now sits entirely on clause positions `0..3`
+    and is dominated by remaining-two prefixes, especially clause-`0` and
+    clause-`1`
 - A local clause-`1` `demo_eventually_codomain` exact-pocket reland has now
   been checked and reverted:
   - local step `15` generated breadth lifted to `4466`
@@ -64,8 +77,14 @@ Do not start with another rerun setup pass.
 2. Keep step `1` explicit as the separate early breadth blocker, but do not
    reopen it first while step `15` still has the cleaner late-surface
    diagnosis.
-3. Isolate which prefix-local families and clause positions are feeding the
-   `553` partial-prefix bar failures on the canonical step-`15` surface.
+3. Start the next repair on the dominant remaining-two clause-`0` / clause-`1`
+   side of the clean partial-prefix wall before reopening the smaller
+   clause-`2` / clause-`3` tail:
+   - remaining-two clause `0 = 252`
+   - remaining-two clause `1 = 145`
+   - remaining-two clause `2 = 42`
+   - remaining-two clause `3 = 12`
+   - remaining-three tail across the same four positions = `60 / 32 / 8 / 2`
 4. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays the canonical `103 / 8`
@@ -73,6 +92,7 @@ Do not start with another rerun setup pass.
    - the `small_cluster` does not regress
    - no stronger-than-canonical lifted terminal becomes live
 5. Keep the focused guardrail slice green:
+   - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
    - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
    - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
    - `current_claim_step_fifteen_zero_admitted_prunes_reduce_to_disconnect_and_trivial_derivability`

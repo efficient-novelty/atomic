@@ -22,6 +22,12 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
   - incumbent-dominance prunes `3`
   - `small_cluster = 3132 / 522 / 522 / 0`
   - fenced `single` bucket = `1` fully scored non-winner plus `3` residual prunes
+- The executable partial-prefix wall split is now explicit:
+  - remaining-two prefixes `451`
+  - remaining-three prefixes `102`
+  - first mismatch positions `clause 0 = 312`, `clause 1 = 177`,
+    `clause 2 = 50`, `clause 3 = 14`
+  - dominant remaining-two slice `clause 0 = 252`, `clause 1 = 145`
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis:
   - it lifted local step `15` generated breadth to `4466`
