@@ -118,7 +118,9 @@ Treat these as current repo truths:
   `small_cluster` to `3156 / 526 / 526 / 0`, and kept the isolated `single`
   pocket plus residual incumbent pressure unchanged, but it widened the
   partial-prefix wall to `626` and the zero-admitted exact-prune capture to
-  `2562`, so it is now another negative control rather than the landed path;
+  `2562`, so it is now another negative control rather than the landed path,
+  and that reland is now pinned by
+  `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`;
   the
   executable repaired late-path and negative-control guardrails are now also
   synced to that same `4331` / `3` / `3132 / 522 / 522 / 0` local surface

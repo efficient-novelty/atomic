@@ -5,6 +5,39 @@ use pen_core::telescope::{Telescope, TelescopeClass};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE:
+        std::cell::RefCell<usize> = const { std::cell::RefCell::new(0) };
+}
+
+#[doc(hidden)]
+pub struct ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard;
+
+impl Drop for ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE.with(
+            |override_depth| {
+                let mut override_depth = override_depth.borrow_mut();
+                *override_depth = override_depth.saturating_sub(1);
+            },
+        );
+    }
+}
+
+#[doc(hidden)]
+pub fn override_claim_step_fifteen_clause_one_eventually_codomain_side_pocket()
+-> ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE.with(|override_depth| {
+        *override_depth.borrow_mut() += 1;
+    });
+    ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard
+}
+
+fn claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enabled() -> bool {
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE
+        .with(|override_depth| *override_depth.borrow() > 0)
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct ConnectivityWitness {
     pub connected: bool,
@@ -1034,11 +1067,24 @@ fn matches_anchor_eleven_clause_one_side_pocket_clause(
 ) -> bool {
     match position {
         0 => matches_reference_temporal_next_clause(expr),
-        1 => matches!(expr, Expr::Eventually(body)
-        if matches!(
-            body.as_ref(),
-            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
-        )),
+        1 => {
+            matches!(
+                expr,
+                Expr::Eventually(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
+            ) || (claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enabled()
+                && matches!(
+                    expr,
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ))
+        }
         2 => matches_claim_temporal_pair_clause_two_variant(expr),
         3 => matches_anchor_eleven_exact_argument_clause(expr, anchor + 1),
         4 => matches_reference_temporal_flat_next_bridge(expr),
@@ -2507,6 +2553,91 @@ mod tests {
             assert!(
                 !reanchor.allows_historical_reanchor(),
                 "the clause-1 demo-flat-codomain opening should stay fenced until the exact anchor-11 side pocket is also present"
+            );
+            assert_eq!(
+                witness,
+                ConnectivityWitness {
+                    connected: true,
+                    references_active_window: false,
+                    self_contained: false,
+                    max_lib_ref: 10,
+                    historical_reanchor: false,
+                }
+            );
+            assert!(!passes_connectivity(&library, &telescope));
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_clause_one_demo_eventually_codomain_only_on_the_exact_anchor_eleven_side_pocket_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_eventually_codomain_side_pocket();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            let mut telescope = Telescope::reference(15);
+            telescope.clauses[1] = ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Eventually(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+            );
+            telescope.clauses[2].expr = clause_two_variant;
+            telescope.clauses[3] = ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor + 1)),
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                ))),
+            );
+            telescope.clauses[7] = reference_terminal.clone();
+
+            let witness = analyze_connectivity(&library, &telescope);
+            let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+            assert!(
+                reanchor.allows_historical_reanchor(),
+                "the clause-1 demo-eventually-codomain opening should become historically reanchorable only on the exact anchor-11 side pocket under the scoped negative-control override"
+            );
+            assert_eq!(
+                witness,
+                ConnectivityWitness {
+                    connected: true,
+                    references_active_window: false,
+                    self_contained: false,
+                    max_lib_ref: 11,
+                    historical_reanchor: true,
+                }
+            );
+            assert!(passes_connectivity(&library, &telescope));
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_one_demo_eventually_codomain_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_eventually_codomain_side_pocket();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            let mut telescope = Telescope::reference(15);
+            telescope.clauses[1] = ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Eventually(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+            );
+            telescope.clauses[2].expr = clause_two_variant;
+            telescope.clauses[7] = reference_terminal.clone();
+
+            let witness = analyze_connectivity(&library, &telescope);
+            let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+            assert!(
+                !reanchor.allows_historical_reanchor(),
+                "the clause-1 demo-eventually-codomain opening should still stay fenced until the exact anchor-11 side pocket is present even under the scoped negative-control override"
             );
             assert_eq!(
                 witness,

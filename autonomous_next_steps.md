@@ -50,7 +50,8 @@ Do not start with another rerun setup pass.
     and is dominated by remaining-two prefixes, especially clause-`0` and
     clause-`1`
 - A local clause-`1` `demo_eventually_codomain` exact-pocket reland has now
-  been checked and reverted:
+  been checked, reverted, and pinned by
+  `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
   - local step `15` generated breadth lifted to `4466`
   - the `small_cluster` widened to `3156 / 526 / 526 / 0`
   - the isolated `single` pocket and residual `3` incumbent prunes stayed
@@ -93,6 +94,7 @@ Do not start with another rerun setup pass.
    - no stronger-than-canonical lifted terminal becomes live
 5. Keep the focused guardrail slice green:
    - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
+   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
    - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
    - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
    - `current_claim_step_fifteen_zero_admitted_prunes_reduce_to_disconnect_and_trivial_derivability`

@@ -76,7 +76,8 @@ Until that exists, wording stays at `bounded live recovery`.
     with the dominant live slice now on remaining-two clause-`0` / clause-`1`
     prefixes at `252 / 145`
 - A local clause-`1` `demo_eventually_codomain` exact-pocket reland was
-  tested and reverted:
+  tested, reverted, and is now pinned by
+  `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
   - it lifted the local late surface from `4331` to `4466`
   - it widened the `small_cluster` from `3132 / 522 / 522 / 0` to
     `3156 / 526 / 526 / 0`
@@ -115,6 +116,7 @@ Until that exists, wording stays at `bounded live recovery`.
   - `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts`
 - Current step-`15` guardrails:
   - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
+  - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
   - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
   - `current_claim_step_fifteen_zero_admitted_connectivity_surface_reports_reanchor_prefix_progress`
@@ -130,6 +132,7 @@ partial-prefix wall on top of the matched `4331` surface, start with the
 dominant remaining-two clause-`0` / clause-`1` side of that wall before
 reopening the smaller clause-`2` / clause-`3` tail, keep the next change
 prefix-local and reference-terminal-safe, do not reland the reverted
-clause-`1` `demo_eventually_codomain` exact-pocket probe that widened the
-wall to `626`, rerun only after the new local slice is green, and keep
+clause-`1` `demo_eventually_codomain` exact-pocket probe that is now pinned
+as a negative control and widened the wall to `626`, rerun only after the
+new local slice is green, and keep
 step `1` explicit unless that next stored bundle changes it directly.

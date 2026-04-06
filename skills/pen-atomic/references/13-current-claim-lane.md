@@ -324,7 +324,8 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - but the partial-prefix wall widened from `553` to `626`, and the
     zero-admitted exact-prune capture widened from `2271` to `2562`
   - so that reland is now another negative control rather than the next
-    landed repair
+    landed repair, and it is now pinned by
+    `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
 - a newer local step-`15` proof-close incumbent regression now freezes that
   remaining fenced pressure more tightly:
   - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`

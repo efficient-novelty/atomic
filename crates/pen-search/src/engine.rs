@@ -5994,6 +5994,12 @@ thread_local! {
 }
 
 #[cfg(test)]
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
 fn start_pruned_terminal_prefix_capture() {
     PRUNED_TERMINAL_PREFIX_CAPTURE.with(|capture| {
         *capture.borrow_mut() = Some(Vec::new());
@@ -6035,6 +6041,9 @@ fn finish_incumbent_pruned_terminal_group_capture() -> Vec<IncumbentPrunedTermin
 struct ClaimStepFifteenFamilyLocalSamePrimaryReliefOverrideGuard;
 
 #[cfg(test)]
+struct ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard;
+
+#[cfg(test)]
 impl Drop for ClaimStepFifteenFamilyLocalSamePrimaryReliefOverrideGuard {
     fn drop(&mut self) {
         CLAIM_STEP_FIFTEEN_FAMILY_LOCAL_SAME_PRIMARY_RELIEF_OVERRIDE.with(|override_labels| {
@@ -6051,6 +6060,39 @@ fn override_claim_step_fifteen_family_local_same_primary_relief(
         *override_labels.borrow_mut() = Some(labels.iter().copied().collect());
     });
     ClaimStepFifteenFamilyLocalSamePrimaryReliefOverrideGuard
+}
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE.with(
+            |override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_clause_one_eventually_codomain_side_pocket()
+-> ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE.with(
+        |override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        },
+    );
+    ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enabled() -> bool {
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enabled() -> bool {
+    false
 }
 
 #[cfg(test)]
@@ -6753,6 +6795,14 @@ fn create_online_prefix_work_item(
         )
     }
 
+    fn claim_step_fifteen_anchor_eleven_clause_one_demo_eventually_codomain_clause()
+    -> pen_core::clause::ClauseRec {
+        pen_core::clause::ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Eventually(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+        )
+    }
+
     fn injected_claim_step_fifteen_anchor_eleven_clause_one_side_clause(
         clause_kappa: u16,
         prefix_telescope: &Telescope,
@@ -6771,6 +6821,27 @@ fn create_online_prefix_work_item(
             .first()
             .is_some_and(matches_reference_temporal_clause_zero)
             .then(claim_step_fifteen_anchor_eleven_clause_one_demo_flat_codomain_clause)
+    }
+
+    fn injected_claim_step_fifteen_anchor_eleven_clause_one_eventually_side_clause(
+        clause_kappa: u16,
+        prefix_telescope: &Telescope,
+        signature: &PrefixSignature,
+        admissibility: StrictAdmissibility,
+    ) -> Option<pen_core::clause::ClauseRec> {
+        if !claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enabled()
+            || admissibility.mode != AdmissibilityMode::DesktopClaimShadow
+            || signature.obligation_set_id.get() != 15
+            || clause_kappa != 8
+            || prefix_telescope.clauses.len() != 1
+        {
+            return None;
+        }
+        prefix_telescope
+            .clauses
+            .first()
+            .is_some_and(matches_reference_temporal_clause_zero)
+            .then(claim_step_fifteen_anchor_eleven_clause_one_demo_eventually_codomain_clause)
     }
 
     fn injected_claim_step_fifteen_anchor_eleven_clause(
@@ -7039,6 +7110,16 @@ fn create_online_prefix_work_item(
             &signature,
             admissibility,
         ) {
+            injected_clauses.push(clause);
+        }
+        if let Some(clause) =
+            injected_claim_step_fifteen_anchor_eleven_clause_one_eventually_side_clause(
+                clause_kappa,
+                &prefix_telescope,
+                &signature,
+                admissibility,
+            )
+        {
             injected_clauses.push(clause);
         }
         if let Some(clause) = injected_claim_step_fifteen_anchor_eleven_clause(
@@ -11126,7 +11207,8 @@ mod tests {
         late_step_exact_prune_family_summary(&prefix, 15, limit)
     }
 
-    fn current_claim_step_fifteen_partial_prefix_wall_summary() -> LateStepPartialPrefixWallSummary {
+    fn current_claim_step_fifteen_partial_prefix_wall_summary() -> LateStepPartialPrefixWallSummary
+    {
         let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             14,
@@ -13428,7 +13510,7 @@ mod tests {
 
     #[test]
     fn current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families()
-     {
+    {
         let summary = current_claim_step_fifteen_partial_prefix_wall_summary();
         assert_eq!(summary.capture_count, 553);
         assert_eq!(
@@ -13445,9 +13527,14 @@ mod tests {
         );
         assert_eq!(
             summary.first_mismatch_position_counts,
-            [(Some(0_usize), 312_usize), (Some(1), 177), (Some(2), 50), (Some(3), 14)]
-                .into_iter()
-                .collect(),
+            [
+                (Some(0_usize), 312_usize),
+                (Some(1), 177),
+                (Some(2), 50),
+                (Some(3), 14)
+            ]
+            .into_iter()
+            .collect(),
             "the clean step-15 partial-prefix wall should now localize to four early temporal mismatch families at clause positions 0 through 3"
         );
         assert_eq!(
@@ -17670,6 +17757,76 @@ mod tests {
             .into_iter()
             .collect(),
             "every omitted demo-only side variant around the exact anchor-11 pocket should still keep both unsafe lifted terminals fenced, so any future reland there must stay reference-terminal-local rather than reopening the old 89/8 shell"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_clause_one_eventually_codomain_side_pocket();
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_eventually_codomain_side_pocket();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4466);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 626,
+            "the reverted clause-1 demo-eventually-codomain exact-pocket reland should stay a widening negative control by reopening more partial-prefix wall pressure"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the reverted clause-1 demo-eventually-codomain exact-pocket reland should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 626);
+        assert_eq!(zero_summary.captured_prefixes, 2562);
+        assert_eq!(zero_summary.generated_candidates, 7686);
+        assert_eq!(zero_summary.disconnected_candidates, 7686);
+        assert_eq!(zero_summary.all_disconnected_prefixes, 2562);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3156,
+                admissible_terminal_candidates: 526,
+                exact_screened_terminal_candidates: 526,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the reverted clause-1 demo-eventually-codomain exact-pocket reland should still widen the same small-cluster bucket rather than touching the isolated single pocket"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the reverted clause-1 demo-eventually-codomain exact-pocket reland should keep the isolated single pocket fenced even while it widens the noncanonical small-cluster surface"
         );
     }
 

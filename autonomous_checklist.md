@@ -29,7 +29,8 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     `clause 2 = 50`, `clause 3 = 14`
   - dominant remaining-two slice `clause 0 = 252`, `clause 1 = 145`
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
-  also part of the live diagnosis:
+  also part of the live diagnosis and is pinned by
+  `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
   - it lifted local step `15` generated breadth to `4466`
   - it widened `small_cluster` to `3156 / 526 / 526 / 0`
   - it kept the isolated `single` pocket and residual `3` incumbent prunes
