@@ -75,6 +75,25 @@ Do not start with another rerun setup pass.
     clause-`1` claim surface, but now specifically on the live clause-`4`
     `claim_next_bridge` plus `reference` families rather than another broad
     omitted-side reopening
+  - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_four_pressure_on_claim_next_bridge_per_clause_zero_one_pairing`
+    now freezes that same live slice per dominant pairing:
+    every mismatch-`0` pairing sits at clause-`4`
+    `claim_next_bridge = 24` versus `reference = 18`,
+    mismatch-`1` keeps the same `24 / 18` split on
+    `reference + claim_sharp_codomain` and `reference + claim_next_codomain`,
+    and the larger `reference + demo_flat_codomain` side still stays on the
+    same live clause-`4` claim families at `33 / 28`
+  - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`
+    now freezes the same dominant slice across clause `2`:
+    the regular mismatch-`0` / mismatch-`1` pairings stay at
+    `claim_flat_domain = 15`, `claim_sharp_codomain = 15`,
+    `reference = 12`,
+    while the larger `reference + demo_flat_codomain` side stays at
+    `23 / 23 / 15`
+  - so the next honest repair should still work on the live clause-`4`
+    `claim_next_bridge` plus `reference` split on the dominant clause-`0` /
+    clause-`1` pairings, not on another clause-`3` widening pass or a hidden
+    demo-only clause-`2` reopening
 - A local clause-`1` `demo_eventually_codomain` exact-pocket reland has now
   been checked, reverted, and pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
@@ -195,6 +214,18 @@ Do not start with another rerun setup pass.
    - mismatch-`1` stays on that same clause-`4` / clause-`5` grid at
      `27 / 27 / 27` and `22 / 22 / 20`, while the older demo-only
      clause-`4` bridge pockets survive only on the smaller mismatch-`2` tail
+   - the new per-pair clause-`4` freeze now sharpens that live slice again:
+     every mismatch-`0` pairing keeps the same `24 / 18`
+     clause-`4` `claim_next_bridge` / `reference` split,
+     the mismatch-`1` `reference + claim_sharp_codomain` and
+     `reference + claim_next_codomain` pairings keep that same `24 / 18`
+     split, and the larger `reference + demo_flat_codomain` side still stays
+     on the same claim families at `33 / 28`
+   - the new clause-`2` freeze now shows that those same dominant pairings
+     still sit mostly on the two current claim clause-`2` variants rather
+     than on a hidden demo-only clause-`2` reopening:
+     `15 / 15 / 12` on the regular pairings and `23 / 23 / 15` on the larger
+     mismatch-`1` `demo_flat_codomain` side
    - the reverted clause-`3` `anchor-11` widening with clause `2 = reference`
      left that clause-`4` family split unchanged and only reopened
      summary-stage incumbent pressure
@@ -217,6 +248,8 @@ Do not start with another rerun setup pass.
   - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
   - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
   - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
+  - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_four_pressure_on_claim_next_bridge_per_clause_zero_one_pairing`
+  - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`
   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`

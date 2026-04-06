@@ -47,6 +47,22 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     `27 / 27 / 27` and `22 / 22 / 20`
   - the old demo-only clause-`4` bridge pockets survive only on the smaller
     mismatch-`2` tail, so they are not the dominant live blocker anymore
+- The dominant remaining-two wall is now explicit per dominant pairing too:
+  - every mismatch `0` clause-`0` / clause-`1` pairing keeps the same
+    clause-`4` split, `claim_next_bridge = 24` versus `reference = 18`
+  - mismatch `1` keeps that same `24 / 18` split on
+    `reference + claim_sharp_codomain` and `reference + claim_next_codomain`,
+    while the larger `reference + demo_flat_codomain` side still stays on the
+    same live clause-`4` claim families at `33 / 28`
+  - the mismatch-`2` tail is the only place the old clause-`4` demo pockets
+    still appear, at `18 / 4 / 4 / 16`
+- The dominant remaining-two wall is now explicit across clause `2` too:
+  - the regular mismatch-`0` / mismatch-`1` pairings stay on
+    `claim_flat_domain = 15`, `claim_sharp_codomain = 15`,
+    `reference = 12`
+  - the larger `reference + demo_flat_codomain` side stays at `23 / 23 / 15`
+  - the mismatch-`2` tail stays only on the two claim clause-`2` variants at
+    `21 / 21`, while mismatch-`3` stays only `reference = 12`
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:

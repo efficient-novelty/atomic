@@ -658,6 +658,26 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   up only on the much smaller mismatch-`2` tail, so the next move should
   target the live clause-`4` claim families rather than relanding another
   demo-bridge pocket
+- that same dominant remaining-two wall is now executable per dominant
+  pairing too:
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_four_pressure_on_claim_next_bridge_per_clause_zero_one_pairing`
+  now freezes every mismatch-`0` pairing at clause-`4`
+  `claim_next_bridge = 24` versus `reference = 18`, keeps mismatch-`1`
+  `reference + claim_sharp_codomain` and `reference + claim_next_codomain`
+  on the same `24 / 18` split, and keeps the larger
+  `reference + demo_flat_codomain` side on those same live clause-`4`
+  claim families at `33 / 28`; the older clause-`4` demo pockets stay
+  confined to the mismatch-`2` tail at only `18 / 4 / 4 / 16`
+- that same dominant remaining-two wall is now executable across clause `2`
+  as well:
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`
+  now freezes the regular mismatch-`0` / mismatch-`1` pairings at
+  `claim_flat_domain = 15`, `claim_sharp_codomain = 15`,
+  `reference = 12`, while the larger mismatch-`1`
+  `reference + demo_flat_codomain` side stays at `23 / 23 / 15`, so the
+  next move should still target the live clause-`0` / clause-`1` plus
+  clause-`4` claim-family split rather than clause-`3` widening or another
+  hidden demo-only clause-`2` reopening
 - both reverted clause-`1` side-pocket broadenings are now explicitly ruled
   out as the next move:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
@@ -726,6 +746,17 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    staying on `reference`, `claim_next_codomain`, and `claim_flat_codomain`,
    so the next landed repair should work on those live claim families rather
    than on another demo-only clause-`4` bridge reopening.
+   `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_four_pressure_on_claim_next_bridge_per_clause_zero_one_pairing`
+   now sharpens that same dominant side again:
+   the regular mismatch-`0` / mismatch-`1` pairings keep clause-`4`
+   `claim_next_bridge` ahead of `reference` at `24 / 18`, and the larger
+   `reference + demo_flat_codomain` side still stays on the same live
+   clause-`4` claim families at `33 / 28`.
+   `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`
+   now shows that those same pairings still keep their bridge-family pressure
+   on the two current claim clause-`2` variants at `15 / 15 / 12` or
+   `23 / 23 / 15`, so the next landed repair still should not spend another
+   cycle on clause-`3` widening or a hidden demo-only clause-`2` reopening.
    The reverted clause-`3` `anchor-11` exact-argument widening onto the
    broader clause-`0` / clause-`1` claim surface while clause `2` stayed
    `reference` left that clean `553` wall and the executable nine-pair split

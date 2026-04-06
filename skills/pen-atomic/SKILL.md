@@ -64,8 +64,19 @@ Treat these as current repo truths:
   regression now freezes that same dominant side onto clause-`4`
   `claim_next_bridge` plus clause-`4` `reference`, with clause-`5`
   staying split only across `reference`, `claim_next_codomain`, and
-  `claim_flat_codomain`, so the next landed repair should start there rather
-  than with another rerun setup pass or a step-`1`-first theory slice; the canonical
+  `claim_flat_codomain`, and the newer
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_four_pressure_on_claim_next_bridge_per_clause_zero_one_pairing`
+  plus
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`
+  regressions now freeze that same dominant side per pairing too: the regular
+  mismatch-`0` / mismatch-`1` pairs keep clause-`4`
+  `claim_next_bridge` ahead of `reference` at `24 / 18`, the larger
+  `reference + demo_flat_codomain` side still stays on the same live
+  clause-`4` claim families at `33 / 28`, and the clause-`2` split keeps the
+  pressure on the two current claim variants at `15 / 15 / 12` or
+  `23 / 23 / 15` rather than on a hidden demo-only clause-`2` reopening, so
+  the next landed repair should start there rather than with another rerun
+  setup pass or a step-`1`-first theory slice; the canonical
   `v11` certificate plus the frozen `step-15-live.ndjson` provenance are now
   pinned by
   `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
@@ -647,6 +658,24 @@ Focus on:
   survive only on the smaller mismatch-`2` tail, so the next landed repair
   should target the live clause-`4` claim families rather than another
   demo-bridge reopening
+- treating that same dominant remaining-two wall as executable per dominant
+  pairing too:
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_four_pressure_on_claim_next_bridge_per_clause_zero_one_pairing`
+  now freezes the regular mismatch-`0` / mismatch-`1` pairings at
+  clause-`4` `claim_next_bridge = 24` versus `reference = 18`, while the
+  larger `reference + demo_flat_codomain` side still stays on the same live
+  clause-`4` claim families at `33 / 28`; the mismatch-`2` tail is still the
+  only place the old clause-`4` demo pockets appear at all
+- treating that same dominant remaining-two wall as executable across clause
+  `2` too:
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`
+  now freezes the regular mismatch-`0` / mismatch-`1` pairings at
+  `claim_flat_domain = 15`, `claim_sharp_codomain = 15`,
+  `reference = 12`, with the larger mismatch-`1`
+  `reference + demo_flat_codomain` side at `23 / 23 / 15`, so the next move
+  should still target the live clause-`0` / clause-`1` plus clause-`4`
+  claim-family split rather than reopening clause-`3` widening or another
+  hidden demo-only clause-`2` branch
 - treating the two reverted clause-`1` side-pocket broadenings as negative
   controls only:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the

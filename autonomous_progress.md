@@ -106,6 +106,30 @@ Until that exists, wording stays at `bounded live recovery`.
     another demo-bridge reland, but the live clause-`4`
     `claim_next_bridge` plus `reference` families on top of the dominant
     clause-`0` / clause-`1` claim surface
+- That same dominant remaining-two wall is now frozen one layer more concretely
+  again by
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_four_pressure_on_claim_next_bridge_per_clause_zero_one_pairing`
+  plus
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`:
+  - every mismatch-`0` clause-`0` / clause-`1` pairing now keeps the same
+    clause-`4` split, `claim_next_bridge = 24` versus `reference = 18`
+  - mismatch-`1` keeps that same `24 / 18` split on
+    `reference + claim_sharp_codomain` and `reference + claim_next_codomain`,
+    while the larger `reference + demo_flat_codomain` side still stays on the
+    same live claim families at `33 / 28`
+  - the older clause-`4` demo pockets now stay confined to the mismatch-`2`
+    tail at only `18 / 4 / 4 / 16`, and mismatch-`3` stays only `6 / 6`
+    across `claim_next_bridge` and `reference`
+  - the same dominant mismatch-`0` / mismatch-`1` pairings now also keep
+    clause `2` on the two current claim variants ahead of the reference
+    continuation:
+    `15 / 15 / 12` on the regular pairings and `23 / 23 / 15` on the larger
+    `reference + demo_flat_codomain` side
+  - so the next repair still should not reopen clause-`3` widening, hidden
+    demo-only clause-`2` drift, or another broad clause-`4` omitted-side
+    reland; it should work directly against the live clause-`4`
+    `claim_next_bridge` plus `reference` split on the dominant clause-`0` /
+    clause-`1` pairings
 - A local clause-`1` `demo_eventually_codomain` exact-pocket reland was
   tested, reverted, and is now pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
@@ -241,6 +265,8 @@ Until that exists, wording stays at `bounded live recovery`.
   - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
   - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
   - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
+  - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_four_pressure_on_claim_next_bridge_per_clause_zero_one_pairing`
+  - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`
   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
@@ -276,10 +302,16 @@ prefix-local and reference-terminal-safe, use the new nine-pair executable
 split plus the newer clause-`4` / clause-`5` family freeze to work first on
 the six mismatch-`0` current claim-generic
 clause-`0` / clause-`1` pairings and the three mismatch-`1` clause-`1`
-pairings before spending another cycle on the smaller reference/reference
-tail, with the next repair aimed at the live clause-`4`
+pairs before spending another cycle on the smaller reference/reference
+tail, now that the per-pair clause-`4` freeze shows the dominant regular
+pairings all sit at `24 / 18` and the larger `reference + demo_flat_codomain`
+side still stays on the same live clause-`4` claim families at `33 / 28`,
+while the clause-`2` split keeps the pressure on the two current claim
+variants rather than on a hidden demo-only clause-`2` reopening, with the
+next repair therefore aimed at the live clause-`4`
 `claim_next_bridge` plus `reference` families rather than another demo-only
-bridge pocket, do not reland the reverted clause-`1` `demo_eventually_codomain`
+bridge pocket or another clause-`3` widen-first probe, do not reland the
+reverted clause-`1` `demo_eventually_codomain`
 exact-pocket probe or the broader clause-`0` `claim_flat_domain` plus
 clause-`1` `demo_flat_codomain` exact-pocket reland that are now pinned as
 negative controls and widened the wall to `626`, do not reland the broader
