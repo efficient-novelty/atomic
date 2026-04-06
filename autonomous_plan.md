@@ -55,6 +55,8 @@ Do not use:
 - exact-family same-primary relief
 - subset-local same-primary relief
 - raw lifted-shell relands
+- claim-safe clause-`4` `demo_sharp_codomain` or `demo_sharp_bridge`
+  reopenings, whether single-side or combined
 - raw position-`0`, broad clause-`4`, or broad clause-`5` relands
 - raw step-`13` widened controls
 

@@ -118,6 +118,30 @@ Do not start with another rerun setup pass.
     capture widened to `2367`
   - so that broader clause-`5` reland is also ruled out as another negative
     control rather than the next repair
+- Clause-`4` claim-safe reopenings have now also been checked under scoped
+  overrides and pinned as negative controls:
+  - the broad clause-`4` `demo_sharp_codomain` plus `demo_sharp_bridge`
+    reopening on the claim-safe clause-`0` / clause-`1` surface is pinned by
+    `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
+    plus the matching connectivity override tests:
+    - local step `15` generated breadth lifted to `4843`
+    - the `small_cluster` widened to `3516 / 586 / 586 / 0`
+    - the isolated `single` pocket and residual `3` incumbent prunes stayed
+      fenced
+    - but the partial-prefix wall widened to `617` and the zero-admitted
+      capture widened to `2463`
+  - the narrower clause-`4` `demo_sharp_codomain`-only reopening is pinned by
+    `current_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`,
+    and the matching clause-`4` `demo_sharp_bridge`-only reopening is pinned
+    by
+    `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
+  - each narrower half still lifted local step `15` generated breadth only to
+    `4587`, widened the `small_cluster` to `3324 / 554 / 554 / 0`, kept the
+    isolated `single` pocket and residual `3` incumbent prunes fenced, and
+    still widened the partial-prefix wall to `585` with zero-admitted capture
+    widened to `2367`
+  - so even the narrower clause-`4` claim-safe reopenings are also ruled out
+    as the next repair rather than new live candidates
 - A narrower clause-`5` reland on only the exact remaining-two mismatch-`0`
   bridge slice has now also been checked under scoped overrides and pinned by
   `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
@@ -174,10 +198,15 @@ Do not start with another rerun setup pass.
    - the reverted clause-`3` `anchor-11` widening with clause `2 = reference`
      left that clause-`4` family split unchanged and only reopened
      summary-stage incumbent pressure
+   - the newer claim-safe clause-`4` reopenings also stayed negative
+     controls: the narrower single-side variants each widened the wall to
+     `585`, and the broader combined clause-`4` reopening widened it further
+     to `617`
    - so the next honest slice is still the live clause-`0` / clause-`1`
      claim surface itself, but now on the clause-`4`
      `claim_next_bridge` plus `reference` families rather than another raw
-     clause-`3` widen-first probe or another demo-bridge reland
+     clause-`3` widen-first probe, another demo-bridge reland, or a
+     claim-safe clause-`4` reopening
 4. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays the canonical `103 / 8`
@@ -190,6 +219,9 @@ Do not start with another rerun setup pass.
   - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
+  - `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
+  - `current_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
+  - `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_five_side_pocket_injects_on_exact_remaining_two_mismatch_zero_bridge_slice`
   - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
@@ -202,6 +234,8 @@ Do not start with another rerun setup pass.
    - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
    - `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
   - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
+  - `connectivity_accepts_clause_four_demo_sharp_codomain_on_claim_safe_clause_zero_one_surface_under_override`
+  - `connectivity_accepts_clause_four_demo_sharp_bridge_on_claim_safe_clause_zero_one_surface_under_override`
   - `connectivity_accepts_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_only_on_the_exact_anchor_eleven_side_pocket_under_override`
   - `connectivity_keeps_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
   - `connectivity_accepts_clause_five_demo_sharp_domain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
@@ -227,6 +261,12 @@ Do not start with another rerun setup pass.
   exact-pocket reland
 - clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stays `reference`
+- clause-`4` `demo_sharp_codomain` reopening onto the claim-safe
+  clause-`0` / clause-`1` surface
+- clause-`4` `demo_sharp_bridge` reopening onto the claim-safe clause-`0` /
+  clause-`1` surface
+- the combined broad clause-`4` side-pocket reopening onto the claim-safe
+  clause-`0` / clause-`1` surface
 - clause-`5` side-pocket broadening onto the claim-safe clause-`0` /
   clause-`1` surface
 - the exact remaining-two mismatch-`0` bridge-slice clause-`5` reopening

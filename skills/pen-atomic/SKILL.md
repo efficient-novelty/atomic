@@ -153,7 +153,30 @@ Treat these as current repo truths:
   `3516 / 586 / 586 / 0`, and kept the isolated `single` pocket plus
   residual incumbent pressure unchanged, but it widened the partial-prefix
   wall to `585` and the zero-admitted exact-prune capture to `2367`, so it
-  is also ruled out rather than the landed path; a fifth scoped negative
+  is also ruled out rather than the landed path; another scoped negative
+  control that reopened the clause-`4` `demo_sharp_codomain` plus
+  `demo_sharp_bridge` side pockets on the claim-safe clause-`0` /
+  clause-`1` surface is now also pinned by
+  `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
+  plus the matching connectivity override tests: it lifted the local surface
+  to `DCT 103 / 8 / 4843`, widened the `small_cluster` to
+  `3516 / 586 / 586 / 0`, and kept the isolated `single` pocket plus
+  residual incumbent pressure unchanged, but it widened the partial-prefix
+  wall to `617` and the zero-admitted exact-prune capture to `2463`, so that
+  broader clause-`4` reopening is also ruled out rather than the landed path;
+  matching narrower scoped negative controls that reopened only the
+  clause-`4` `demo_sharp_codomain` side pocket or only the
+  clause-`4` `demo_sharp_bridge` side pocket on that same claim-safe
+  clause-`0` / clause-`1` surface are now pinned by
+  `current_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
+  and
+  `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`:
+  each lifted the local surface only to `DCT 103 / 8 / 4587`, widened the
+  `small_cluster` to `3324 / 554 / 554 / 0`, and kept the isolated `single`
+  pocket plus residual incumbent pressure unchanged, but still widened the
+  partial-prefix wall to `585` and the zero-admitted exact-prune capture to
+  `2367`, so even the narrower claim-safe clause-`4` reopenings are also
+  ruled out rather than the landed path; another scoped negative
   control that reopened the clause-`5` side pocket only on the exact
   remaining-two mismatch-`0` bridge slice is now also pinned by
   `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
@@ -642,6 +665,20 @@ Focus on:
   it lifts local generated breadth to `4779` and widens the `small_cluster`
   to `3516 / 586 / 586 / 0`, but it also widens the clean partial-prefix
   wall to `585`, so it is also not the next move
+- treating the reverted claim-safe clause-`4` reopenings as negative controls
+  only:
+  reopening either the clause-`4` `demo_sharp_codomain` side pocket or the
+  clause-`4` `demo_sharp_bridge` side pocket on the claim-safe clause-`0` /
+  clause-`1` surface lifts local generated breadth only to `4587` but still
+  widens the clean partial-prefix wall to `585`, and reopening both together
+  lifts local breadth to `4843` but widens the wall further to `617`, so none
+  of those clause-`4` claim-safe reopenings is the next move
+- treating the next honest slice as narrower than any claim-safe clause-`4`
+  or clause-`5` reopening:
+  the dominant remaining-two wall still lives on the clause-`0` /
+  clause-`1` claim surface and the clause-`4` `claim_next_bridge` plus
+  `reference` families, but the new claim-safe clause-`4` controls show that
+  reopening those side pockets directly is still too broad
 - treating the remaining step-`15` `small_cluster` incumbent surface as a
   landed local relief rather than the live blocker:
   the old summary-stage same-primary `103 / 8` bit-cost spread is now closed,

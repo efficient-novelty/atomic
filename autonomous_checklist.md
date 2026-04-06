@@ -82,6 +82,24 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     unchanged
   - but it widened the partial-prefix wall to `585`, so it is not the landed
     repair
+- Reverted clause-`4` claim-safe reopenings are now also part of the live
+  diagnosis:
+  - the broad clause-`4` `demo_sharp_codomain` plus `demo_sharp_bridge`
+    reopening is pinned by
+    `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`:
+    it lifted local step `15` generated breadth to `4843`, widened
+    `small_cluster` to `3516 / 586 / 586 / 0`, kept the isolated `single`
+    pocket and residual `3` incumbent prunes unchanged, but widened the
+    partial-prefix wall to `617`, so it is not the landed repair
+  - the narrower clause-`4` `demo_sharp_codomain`-only and
+    `demo_sharp_bridge`-only reopenings are pinned by
+    `current_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
+    and
+    `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`:
+    each lifted local step `15` generated breadth only to `4587`, widened
+    `small_cluster` to `3324 / 554 / 554 / 0`, kept the isolated `single`
+    pocket and residual `3` incumbent prunes unchanged, but still widened the
+    partial-prefix wall to `585`, so neither is the landed repair
 
 ## Late-Step Gate
 

@@ -6013,6 +6013,24 @@ thread_local! {
 
 #[cfg(test)]
 thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_CODOMAIN_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
+thread_local! {
     static CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_REMAINING_TWO_MISMATCH_ZERO_BRIDGE_SLICE_OVERRIDE:
         std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
 }
@@ -6066,6 +6084,15 @@ struct ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimFlatOverrideGuard;
 
 #[cfg(test)]
 struct ClaimStepFifteenClauseFiveSidePocketOnClaimSafeClauseZeroOneOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenClauseFourSidePocketOnClaimSafeClauseZeroOneOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenClauseFourSharpCodomainOnClaimSafeClauseZeroOneOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenClauseFourSharpBridgeOnClaimSafeClauseZeroOneOverrideGuard;
 
 #[cfg(test)]
 struct ClaimStepFifteenClauseFiveRemainingTwoMismatchZeroBridgeSliceOverrideGuard;
@@ -6156,6 +6183,71 @@ fn override_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero
 }
 
 #[cfg(test)]
+impl Drop for ClaimStepFifteenClauseFourSidePocketOnClaimSafeClauseZeroOneOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE.with(
+            |override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one()
+-> ClaimStepFifteenClauseFourSidePocketOnClaimSafeClauseZeroOneOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE.with(
+        |override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        },
+    );
+    ClaimStepFifteenClauseFourSidePocketOnClaimSafeClauseZeroOneOverrideGuard
+}
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenClauseFourSharpCodomainOnClaimSafeClauseZeroOneOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_CODOMAIN_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE
+            .with(|override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            });
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one()
+-> ClaimStepFifteenClauseFourSharpCodomainOnClaimSafeClauseZeroOneOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_CODOMAIN_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE.with(
+        |override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        },
+    );
+    ClaimStepFifteenClauseFourSharpCodomainOnClaimSafeClauseZeroOneOverrideGuard
+}
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenClauseFourSharpBridgeOnClaimSafeClauseZeroOneOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE.with(
+            |override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one()
+-> ClaimStepFifteenClauseFourSharpBridgeOnClaimSafeClauseZeroOneOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE.with(
+        |override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        },
+    );
+    ClaimStepFifteenClauseFourSharpBridgeOnClaimSafeClauseZeroOneOverrideGuard
+}
+
+#[cfg(test)]
 impl Drop for ClaimStepFifteenClauseFiveRemainingTwoMismatchZeroBridgeSliceOverrideGuard {
     fn drop(&mut self) {
         CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_REMAINING_TWO_MISMATCH_ZERO_BRIDGE_SLICE_OVERRIDE.with(
@@ -6210,6 +6302,45 @@ fn claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_over
 
 #[cfg(not(test))]
 fn claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
+-> bool {
+    false
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
+-> bool {
+    false
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_CODOMAIN_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_override_enabled()
+-> bool {
+    false
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_override_enabled()
 -> bool {
     false
 }
@@ -7140,10 +7271,24 @@ fn create_online_prefix_work_item(
             .clauses
             .get(3)
             .expect("step-15 temporal shell prefix should expose clause 3");
-        (matches_reference_temporal_clause_zero(clause_zero)
+        let claim_safe_override_slice =
+            (claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
+                || claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_override_enabled())
+                && matches_claim_safe_temporal_clause_zero(clause_zero)
+                && matches_claim_safe_temporal_clause_one(clause_one)
+                && matches_claim_step_fifteen_anchor_eleven_clause_two_variant(clause_two)
+                && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(
+                    clause_three,
+                    anchor,
+                );
+        ((matches_reference_temporal_clause_zero(clause_zero)
             && matches_reference_temporal_clause_one(clause_one)
             && matches_claim_step_fifteen_anchor_eleven_clause_two_variant(clause_two)
-            && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(clause_three, anchor))
+            && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(
+                clause_three,
+                anchor,
+            ))
+            || claim_safe_override_slice)
         .then(claim_step_fifteen_anchor_eleven_demo_sharp_codomain_clause)
     }
 
@@ -7191,7 +7336,18 @@ fn create_online_prefix_work_item(
                     clause_three,
                     anchor,
                 );
+        let claim_safe_override_slice =
+            (claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
+                || claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_override_enabled())
+                && matches_claim_safe_temporal_clause_zero(clause_zero)
+                && matches_claim_safe_temporal_clause_one(clause_one)
+                && matches_claim_step_fifteen_anchor_eleven_clause_two_variant(clause_two)
+                && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(
+                    clause_three,
+                    anchor,
+                );
         (reference_slice
+            || claim_safe_override_slice
             || (claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_override_enabled()
                 && remaining_two_mismatch_zero_slice))
         .then(claim_step_fifteen_anchor_eleven_demo_sharp_bridge_clause)
@@ -18064,6 +18220,207 @@ mod tests {
                 }
             }
         }
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one();
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4843);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 617,
+            "broadening both clause-4 side pockets onto the claim-safe clause-0/1 surface should stay a widening negative control by reopening still more partial-prefix wall pressure than the already-reverted clause-5 broadening"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the broad clause-4 claim-safe reopening should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 617);
+        assert_eq!(zero_summary.captured_prefixes, 2463);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3516,
+                admissible_terminal_candidates: 586,
+                exact_screened_terminal_candidates: 586,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the broad clause-4 claim-safe reopening should widen the same small-cluster bucket while leaving the isolated single pocket unchanged"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the broad clause-4 claim-safe reopening should still keep the isolated single pocket fenced even while it widens the noncanonical small-cluster surface"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_surface_stays_a_negative_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one();
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4587);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 585,
+            "broadening only the clause-4 demo-sharp-codomain side pocket onto the claim-safe clause-0/1 surface should still stay a widening negative control"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the clause-4 demo-sharp-codomain claim-safe reopening should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 585);
+        assert_eq!(zero_summary.captured_prefixes, 2367);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3324,
+                admissible_terminal_candidates: 554,
+                exact_screened_terminal_candidates: 554,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the clause-4 demo-sharp-codomain claim-safe reopening should widen the same small-cluster bucket without moving the isolated single pocket"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the clause-4 demo-sharp-codomain claim-safe reopening should still keep the isolated single pocket fenced"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one();
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4587);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 585,
+            "broadening only the clause-4 demo-sharp-bridge side pocket onto the claim-safe clause-0/1 surface should also stay a widening negative control"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the clause-4 demo-sharp-bridge claim-safe reopening should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 585);
+        assert_eq!(zero_summary.captured_prefixes, 2367);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3324,
+                admissible_terminal_candidates: 554,
+                exact_screened_terminal_candidates: 554,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the clause-4 demo-sharp-bridge claim-safe reopening should widen the same small-cluster bucket without moving the isolated single pocket"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the clause-4 demo-sharp-bridge claim-safe reopening should still keep the isolated single pocket fenced"
+        );
     }
 
     #[test]

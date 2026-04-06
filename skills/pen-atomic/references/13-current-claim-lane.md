@@ -363,6 +363,31 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     the zero-admitted exact-prune capture from `2271` to `2367`
   - so that broader clause-`5` reland is now another negative control rather
     than the next landed repair
+- a newer exploratory clause-`4` claim-safe reopening family has now also
+  been checked under scoped overrides and pinned as negative controls:
+  - the broad clause-`4` `demo_sharp_codomain` plus `demo_sharp_bridge`
+    reopening on the claim-safe clause-`0` / clause-`1` surface is now pinned
+    by
+    `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
+    plus the matching connectivity override tests:
+    it lifted the local late surface from `4331` to `4843`, widened the
+    `small_cluster` to `3516 / 586 / 586 / 0`, kept the isolated `single`
+    pocket plus residual incumbent pressure unchanged, but widened the clean
+    partial-prefix wall to `617` and the zero-admitted exact-prune capture to
+    `2463`
+  - the narrower clause-`4` `demo_sharp_codomain`-only reopening is now
+    pinned by
+    `current_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`,
+    and the matching clause-`4` `demo_sharp_bridge`-only reopening is now
+    pinned by
+    `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`:
+    each lifted the local late surface only to `4587`, widened the
+    `small_cluster` to `3324 / 554 / 554 / 0`, kept the isolated `single`
+    pocket plus residual incumbent pressure unchanged, and still widened the
+    clean partial-prefix wall to `585` with zero-admitted exact-prune capture
+    widened to `2367`
+  - so even the narrower clause-`4` claim-safe reopenings are now also ruled
+    out rather than the next landed repair
 - a newer exploratory clause-`5` reland on only the exact remaining-two
   mismatch-`0` bridge slice has now also been checked under scoped overrides
   and pinned by
@@ -716,8 +741,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    same-primary-retention reland, clause-`1`
    `demo_eventually_codomain` exact-pocket reland, or the broader clause-`0`
    `claim_flat_domain` plus clause-`1` `demo_flat_codomain`
-   exact-pocket reland, or the broader clause-`5` side-pocket opening onto
-   the claim-safe clause-`0` / clause-`1` surface. The residual proof-close
+   exact-pocket reland, or the claim-safe clause-`4`
+   `demo_sharp_codomain` / `demo_sharp_bridge` reopenings, or the broader
+   clause-`5` side-pocket opening onto the claim-safe clause-`0` /
+   clause-`1` surface. The residual proof-close
    incumbent freeze
    still localizes the remaining `3` prunes to the same clause positions `0`,
    `2`, and `5`, but those are no longer the dominant wall.
