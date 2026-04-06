@@ -184,11 +184,11 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
     now pins that granting same-primary incumbent relief only to those exact
     clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
-    keeps live generated prefixes flat at `4056` and keeps partial-prefix bar
-    failures at `472`
+    keeps live generated prefixes flat at `4088` and keeps partial-prefix bar
+    failures at `476`
   - it does collapse the remaining incumbent-dominance prunes from `3` to `0`
   - the cleared `small_cluster` stays unchanged at
-    `2988 / 498 / 498 / 0`
+    `3012 / 502 / 502 / 0`
   - but the isolated `single` pocket still unfences from `1` to `4`
     fully scored non-winning terminals at the same overshoot
     `115657 / 21112`
@@ -289,7 +289,7 @@ This note is the exact next work order for `desktop_claim_shadow`.
     landed small-cluster relief and the newer clause-`5`
     `demo_flat_codomain` side-pocket extension, so the next repair should
     target the residual `3` single-bucket incumbent prunes on top of the
-    current `4056` surface rather than another raw clause-`4`, raw
+    then-current `4056` surface rather than another raw clause-`4`, raw
     clause-`5`, raw position-`0`, or blanket same-primary-retention reland
 - A newer local step-`15` clause-`5` demo-flat-codomain side-pocket repair
   now lands on top of that same exact anchor-`11` clause-`4` pocket plus the
@@ -309,6 +309,24 @@ This note is the exact next work order for `desktop_claim_shadow`.
     `1956` families / `5868` generated terminal options, so the clause-`2` /
     clause-`3` capture remains fenced even after that narrower clause-`5`
     extension
+- A newer local step-`15` clause-`4` demo-sharp-bridge side-pocket repair
+  now lands on top of that same exact anchor-`11` side-pocket stack:
+  - the `demo_sharp_bridge` clause-`4` opening now also counts as
+    historical reanchor only on that exact side pocket and only with the
+    reference terminal
+  - on the repaired local late chain, step `15` still accepts `DCT 103 / 8`,
+    and live generated prefixes now lift again from `4056` to `4088`
+  - the remaining local gap to the late floor is now `912`, with
+    partial-prefix bar failures now at `476`, incumbent-dominance prunes
+    still at `3`, and legality/connectivity exact rejection still at `0`
+  - the surviving local temporal terminal `small_cluster` now widens again to
+    `3012` generated / `502` admitted / `502` exact-screened / `0` pruned,
+    while the isolated `single` pocket still remains the only fully scored
+    non-winning terminal plus `3` residual single-bucket prunes
+  - the captured zero-admitted surface now stays tightly localized at
+    `1968` families / `5904` generated terminal options, and
+    historical-reanchor prefix progress there now splits as `1482`
+    clause-`2`-side families plus `486` clause-`3`-side families
 - New stored-evidence regressions now freeze that canonical `v11`
   diagnosis in-tree:
   - `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`
@@ -345,24 +363,24 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - stored `v11` certificate / benchmark freeze regressions green
   - stored `v5` compare / certification / benchmark freeze regressions green
 - The executable late-path guardrails are now also synced to that newer
-  clause-`5` demo-flat-codomain-plus-small-cluster state:
+  clause-`4` / clause-`5` side-pocket-plus-small-cluster state:
   - `repaired_claim_step_twelve_late_path_has_scoped_step_thirteen_widening_before_proof_close`
     now freezes the repaired canonical local continuation through
-    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 4056`
+    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 4088`
   - the clause-`5`-only local step-`15` read remains frozen as
     `4030`, `246` incumbent-dominance prunes, and the
     `2226 / 248 / 248 / 246` `small_cluster` surface instead of the older
     clause-`4`-only `4004` / `244` / `2208 / 246 / 246 / 244` read
   - a newer landed small-cluster relief now narrows that local blocker
     further without changing live generated prefixes:
-    the current step-`15` local guardrails now freeze `4056`,
+    the current step-`15` local guardrails now freeze `4088`,
     only `3` incumbent-dominance prunes, the widened
-    `2988 / 498 / 498 / 0` `small_cluster` surface, and the isolated
+    `3012 / 502 / 502 / 0` `small_cluster` surface, and the isolated
     `single` pocket still fenced as one fully scored non-winning terminal
     plus `3` residual single-bucket prunes
   - the frozen `[5,1,3,3,5,3,3]` step-`13` negative control still preserves
     guarded step-`14` / step-`15` hashes while now also observing that same
-    repaired local `4056` step-`15` surface
+    repaired local `4088` step-`15` surface
 - The parity-preserving step-`13` breadth repair is now earned on stored
   evidence:
   - on the canonical repaired chain, claim-open now widens to
@@ -855,14 +873,14 @@ This note is the exact next work order for `desktop_claim_shadow`.
    - stored canonical `v11` step `13` now matches that same
      `[5,1,3,3,5,3,2]` / `1350` / `2320` surface
    - step `14` should stay `19683` / `12027`
-   - local post-`v11` step `15` should now stay `DCT 103 / 8 / 4056`
+   - local post-`v11` step `15` should now stay `DCT 103 / 8 / 4088`
    - stored canonical step `15` should still stay `DCT 103 / 8 / 3972`
    - the exact-screened step-`15` survivor surface should stay frozen as one
      library-backed temporal-operator `single` bucket with one fully scored
      non-winning pocket at overshoot `115657 / 21112` plus `3` residual
      single-bucket incumbent prunes, alongside one
      library-backed temporal-operator `small_cluster` bucket at
-     `2988` generated / `498` admitted / `498` exact-screened / `0`
+     `3012` generated / `502` admitted / `502` exact-screened / `0`
      pruned
    - the `small_cluster` summary-stage incumbent wall should stay closed:
      `current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain`
@@ -912,17 +930,17 @@ This note is the exact next work order for `desktop_claim_shadow`.
    `46 / 7 -> 62 / 9 -> 103 / 8` continuation should remain the canonical
    breadth-repaired late chain; stored step `15` still carries `3972`
    generated prefixes there, but the current local guardrail surface is now
-   `4056` after the fenced clause-`5` `demo_flat_codomain` side-pocket
-   extension on top of the exact clause-`4` pocket and the newer landed
-   small-cluster relief.
+   `4088` after the fenced clause-`4` `demo_sharp_bridge` reopening on top
+   of the exact clause-`4` / clause-`5` side-pocket stack and the newer
+   landed small-cluster relief.
    The next repair should therefore work against the remaining local
-   `472` partial-prefix bar / `3` incumbent-dominance surface on top of that
+   `476` partial-prefix bar / `3` incumbent-dominance surface on top of that
    new guardrail, with the survivor-bucket freeze keeping the isolated
    `single` pocket fenced while the cleared `small_cluster` now stays at
-   `2988 / 498 / 498 / 0`. The clause-`4` `demo_sharp_codomain`
-   reopening plus the clause-`5` `demo_sharp_domain` and
-   `demo_flat_codomain` reopenings are now all consumed narrowly and must
-   stay fenced as a tiny noncanonical pocket, so
+   `3012 / 502 / 502 / 0`. The clause-`4` `demo_sharp_codomain` plus
+   `demo_sharp_bridge` reopenings and the clause-`5` `demo_sharp_domain`
+   and `demo_flat_codomain` reopenings are now all consumed narrowly and
+   must stay fenced as a tiny noncanonical pocket stack, so
    the next landed repair should now target those residual `3`
    single-bucket incumbent prunes rather than another raw clause-`4`, raw
    clause-`5`, raw position-`0`, or blanket same-primary-relief reland. The
@@ -943,8 +961,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
    `small_cluster` surface). A newer exact-family same-primary relief probe
    now further pins that even granting relief only to the exact residual
    clause-`0`, clause-`2` + anchor-`11`, and clause-`5` families still keeps
-   `4056` / `472`, collapses incumbent-dominance from `3` to `0`, leaves the
-   `small_cluster` unchanged at `2988 / 498 / 498 / 0`, and unfences the
+   `4088` / `476`, collapses incumbent-dominance from `3` to `0`, leaves the
+   `small_cluster` unchanged at `3012 / 502 / 502 / 0`, and unfences the
    isolated `single` pocket from `1` to `4` fully scored non-winning
    terminals.
    `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
@@ -1006,8 +1024,8 @@ This note is the exact next work order for `desktop_claim_shadow`.
   pocket to `4` fully scored non-winning terminals; the newer exact-family
   probe now also proves that even granting same-primary relief only to the
   exact residual clause-`0`, clause-`2` + anchor-`11`, and clause-`5`
-  families still keeps `4056` / `472`, leaves the `small_cluster`
-  unchanged at `2988 / 498 / 498 / 0`, and unfences that same isolated
+  families still keeps `4088` / `476`, leaves the `small_cluster`
+  unchanged at `3012 / 502 / 502 / 0`, and unfences that same isolated
   `single` pocket to `4` fully scored non-winning terminals
 - a direct early clause-`2` / clause-`3` reanchor-bridge matcher reland
   first:
