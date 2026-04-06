@@ -160,6 +160,24 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     `1968` families / `5904` connected-but-unqualified terminal options, so
     the landed repair still leaves the broader clause-`2` / clause-`3`
     capture boundary untouched
+- A newer local step-`15` clause-`5` bridge-pocket stack repair now lands on
+  top of that same exact anchor-`11` clause-`4` bridge pocket:
+  - the `demo_sharp_domain` and `demo_flat_codomain` clause-`5` openings now
+    also count as historical reanchor once that exact clause-`4`
+    `demo_sharp_bridge` pocket is present
+  - the repaired local late chain still accepts `DCT 103 / 8`, and live
+    generated prefixes now lift from `4088` to `4140`
+  - the remaining local gap to the late floor is now `860`, with step-`15`
+    partial-prefix bar failures still at `476`, incumbent-dominance prunes
+    still at `3`, and legality/connectivity exact rejections still at `0`
+  - the local surviving temporal terminal cluster now widens again to
+    `3060` generated / `510` admitted / `510` exact-screened / `0` pruned,
+    while the isolated `single` pocket still remains the only fully scored
+    non-winning terminal plus `3` residual single-bucket prunes
+  - the captured zero-admitted surface still stays tightly localized at
+    `1968` families / `5904` connected-but-unqualified terminal options, so
+    the landed repair still leaves the broader clause-`2` / clause-`3`
+    capture boundary untouched
 - A new executable step-`15` survivor-bucket regression now freezes that
   post-repair split more tightly:
   - exactly two
@@ -205,11 +223,11 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   regression now sharpens that same blocker one step further:
   - granting same-primary incumbent relief only to those exact
     clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
-    still keeps the repaired local surface at `4088` generated prefixes with
+    still keeps the repaired local surface at `4140` generated prefixes with
     `476` partial-prefix bar failures
   - it does collapse the remaining incumbent-dominance prunes from `3` to `0`
   - the cleared `small_cluster` stays unchanged at
-    `3012 / 502 / 502 / 0`
+    `3060 / 510 / 510 / 0`
   - but the isolated `single` pocket still unfences from `1` to `4`
   fully scored non-winning terminals, so the next landed repair must stay
   narrower than same-primary relief even at exact-family scope
@@ -217,10 +235,10 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
   regression now sharpens that same blocker further again:
   - every non-empty strict subset of those same three residual families still
-    keeps the repaired local surface at `4088` generated prefixes with `476`
+    keeps the repaired local surface at `4140` generated prefixes with `476`
     partial-prefix bar failures
   - the cleared `small_cluster` still stays unchanged at
-    `3012 / 502 / 502 / 0`, and the repaired canonical winner also stays
+    `3060 / 510 / 510 / 0`, and the repaired canonical winner also stays
     unchanged
   - instead, opening any strict subset only trades `n` of the remaining `3`
     incumbent-dominance prunes for `n` extra fully scored non-winning
@@ -313,7 +331,7 @@ The highest-value work is:
    `1` explicit on the checklist
 3. use the `v11` certificate and `step-15-live.ndjson` to land the next
    parity-preserving local step-`15` repair against the current post-relief
-   `476`-bar / `3`-incumbent surface, keeping the new `4088` guardrail
+   `476`-bar / `3`-incumbent surface, keeping the new `4140` guardrail
    stable, treating the raw position-`0` probe as the explicit "do not reland
    this globally" boundary, and treating clause `4` plus the local
    clause-`5` `demo_sharp_domain` and `demo_flat_codomain` openings as
@@ -400,12 +418,12 @@ Current slice order:
    exact-family same-primary relief collapses `3 -> 0` incumbent-dominance
    prunes only by unfencing the isolated `single` pocket from `1` to `4`
    fully scored non-winning terminals while leaving the `small_cluster`
-   unchanged at `3012 / 502 / 502 / 0`, keep
+   unchanged at `3060 / 510 / 510 / 0`, keep
    `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
    green too so the next step-`15` repair still respects that even any strict
    subset of those same families only trades `n` incumbent prunes for `n`
    extra fully scored non-winning reference-terminal completions while keeping
-   `4088` / `476` and the cleared `small_cluster` unchanged, and keep
+   `4140` / `476` and the cleared `small_cluster` unchanged, and keep
    `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
    green so any future omitted-side opening stays reference-terminal-local
    instead of reopening that lifted shell

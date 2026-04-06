@@ -89,13 +89,18 @@ Treat these as current repo truths:
   current local guardrail surface again to `DCT 103 / 8 / 4088`, raises the
   remaining partial-prefix wall to `476`, widens the local `small_cluster`
   again to `3012 / 502 / 502 / 0`, and keeps the isolated `single` pocket
-  fenced; the
+  fenced; a newer local post-`v11` clause-`5` bridge-pocket stack repair now
+  also consumes that same exact anchor-`11` clause-`4` bridge pocket, lifts
+  the current local guardrail surface again to `DCT 103 / 8 / 4140`, keeps
+  the remaining partial-prefix wall at `476`, widens the local
+  `small_cluster` again to `3060 / 510 / 510 / 0`, and keeps the isolated
+  `single` pocket fenced; the
   executable repaired late-path and negative-control guardrails are now also
-  synced to that same `4088` / `3` / `3012 / 502 / 502 / 0` local surface end to end; the current executable
+  synced to that same `4140` / `3` / `3060 / 510 / 510 / 0` local surface end to end; the current executable
   step-`15` survivor-bucket
   regression now freezes that latest exact-screened split as one
   library-backed temporal-operator `small_cluster` bucket at
-  `3012` generated / `502` admitted / `502` exact-screened / `0` pruned
+  `3060` generated / `510` admitted / `510` exact-screened / `0` pruned
   plus the isolated non-winning `single` pocket at overshoot
   `115657 / 21112` and the residual `3` single-bucket incumbent prunes; a
   newer executable
@@ -133,16 +138,16 @@ Treat these as current repo truths:
   `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
   regression now also proves that even granting same-primary relief only to
   those exact clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual
-  families keeps the repaired local surface at `4088` generated prefixes with
+  families keeps the repaired local surface at `4140` generated prefixes with
   `476` partial-prefix bar failures, collapses incumbent-dominance from `3`
-  to `0`, leaves the `small_cluster` unchanged at `3012 / 502 / 502 / 0`,
+  to `0`, leaves the `small_cluster` unchanged at `3060 / 510 / 510 / 0`,
   and still unfences the isolated `single` pocket from `1` to `4`
   fully scored non-winning terminals, so the next landed repair must stay
   narrower than same-primary relief even at exact-family scope; a newer
   `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
   regression now further proves that every non-empty strict subset of those
-  same three families still keeps `4088` / `476` and the cleared
-  `3012 / 502 / 502 / 0` `small_cluster` unchanged, keeps the canonical
+  same three families still keeps `4140` / `476` and the cleared
+  `3060 / 510 / 510 / 0` `small_cluster` unchanged, keeps the canonical
   winner unchanged, and only trades `n` residual incumbent prunes for `n`
   extra fully scored non-winning terminals in the isolated `single` pocket,
   with those extra candidates all staying same-primary `103 / 8`,
@@ -171,7 +176,7 @@ Treat these as current repo truths:
   also consumed narrowly on top of that clause-`4` repair, and the landed
   small-cluster relief has now consumed that summary-stage move too, so the
   next repair should target the residual `3` `single`-bucket incumbent prunes
-  on top of the fenced `4088` local surface rather than broadening raw
+  on top of the fenced `4140` local surface rather than broadening raw
   position `0` or relanding another broad clause-`4` / clause-`5`
   injection; a reverted blanket step-`15` same-primary relief
   probe kept generated breadth flat at `4030`, collapsed incumbent-dominance
@@ -180,8 +185,8 @@ Treat these as current repo truths:
   terminals, and the newer strict-subset same-primary probe now also proves
   that even any non-empty subset of the three residual families only trades
   `n` incumbent prunes for `n` extra fully scored non-winning
-  reference-terminal completions while keeping `4088` / `476` and the
-  cleared `3012 / 502 / 502 / 0` `small_cluster` unchanged, so that entire
+  reference-terminal completions while keeping `4140` / `476` and the
+  cleared `3060 / 510 / 510 / 0` `small_cluster` unchanged, so that entire
   same-primary-retention family of relands is now outside the landed path;
   user-facing wording stays at
   `bounded live recovery` until stored breadth and certification pass
@@ -505,11 +510,11 @@ Focus on:
   `[5,1,3,3,5,3,2]` / `1350` / `2320` with the guarded accepted hash and the
   canonical `62 / 9 / 12027` continuation; stored canonical step `15` still
   stays `DCT 103 / 8 / 3972`, while the latest local post-`v11` guardrail
-  surface now stays `DCT 103 / 8 / 4088`
+  surface now stays `DCT 103 / 8 / 4140`
 - starting from clean-tree `v11` as the canonical stored bundle, but treating
   the next operational move as diagnosis / repair on the residual stored
   step-`15` `3972 / 5000` gap rather than another rerun setup pass, while
-  keeping the newer local `4088` surface explicit as the guardrail that must
+  keeping the newer local `4140` surface explicit as the guardrail that must
   not regress
 - treating the remaining step-`15` `small_cluster` incumbent surface as a
   landed local relief rather than the live blocker:
@@ -626,18 +631,19 @@ Reject designs that:
   canonical stored bundle is clean-tree completed `v11`, breadth still fails
   honestly at step `1` and step `15`, but stored step `15` has now lifted to
   `3972 / 5000`, stored step `13` is re-earned, the latest local post-`v11`
-  guardrail surface now holds `4088` after the fenced clause-`4` /
+  guardrail surface now holds `4140` after the fenced clause-`4` /
   clause-`5` side-pocket relands plus the landed small-cluster relief, the
-  narrower clause-`5` `demo_flat_codomain` extension, and the newer
-  clause-`4` `demo_sharp_bridge` reopening, with the old `246`-candidate
+  narrower clause-`5` `demo_flat_codomain` extension, the newer
+  clause-`4` `demo_sharp_bridge` reopening, and the newer clause-`5`
+  bridge-pocket stack extension, with the old `246`-candidate
   `small_cluster` wall collapsed to `3` residual fenced `single`-bucket
-  incumbent prunes on top of a `3012 / 502 / 502 / 0` `small_cluster`
+  incumbent prunes on top of a `3060 / 510 / 510 / 0` `small_cluster`
   surface, and the guarded local step-`11` breadth
   repair plus the narrow step-`12` selector repair are now both re-earned on
   stored evidence.
 - The next operational claim-lane work should focus on clean canonical-bundle
   diagnosis at stored step `15`, while keeping step `1` explicit, stored
-  step `13` frozen as a hit, and the newer `4088` local guardrail surface
+  step `13` frozen as a hit, and the newer `4140` local guardrail surface
   fenced, rather than on reopening another local step-`11` theory slice,
   another runtime-only step-`4` micro-optimization, another rerun first, or
   new step-`13` band/reanchor widening.
