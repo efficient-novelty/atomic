@@ -6570,12 +6570,37 @@ fn create_online_prefix_work_item(
         )
     }
 
+    fn claim_step_fifteen_anchor_eleven_clause_zero_demo_sharp_domain_clause()
+    -> pen_core::clause::ClauseRec {
+        pen_core::clause::ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+        )
+    }
+
     fn claim_step_fifteen_anchor_eleven_clause_one_demo_flat_codomain_clause()
     -> pen_core::clause::ClauseRec {
         pen_core::clause::ClauseRec::new(
             ClauseRole::Formation,
             Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
         )
+    }
+
+    fn injected_claim_step_fifteen_anchor_eleven_clause_zero_side_clause(
+        clause_kappa: u16,
+        prefix_telescope: &Telescope,
+        signature: &PrefixSignature,
+        admissibility: StrictAdmissibility,
+    ) -> Option<pen_core::clause::ClauseRec> {
+        if admissibility.mode != AdmissibilityMode::DesktopClaimShadow
+            || signature.obligation_set_id.get() != 15
+            || clause_kappa != 8
+            || !prefix_telescope.clauses.is_empty()
+            || admissibility.historical_anchor_ref.is_none()
+        {
+            return None;
+        }
+        Some(claim_step_fifteen_anchor_eleven_clause_zero_demo_sharp_domain_clause())
     }
 
     fn claim_step_fifteen_anchor_eleven_demo_flat_codomain_clause() -> pen_core::clause::ClauseRec {
@@ -6850,6 +6875,14 @@ fn create_online_prefix_work_item(
         let catalog_connectivity_facts = clause_catalog.terminal_connectivity_facts_at(prefix_len);
         let catalog_nu_facts = clause_catalog.terminal_nu_facts_at(prefix_len);
         let mut injected_clauses = Vec::new();
+        if let Some(clause) = injected_claim_step_fifteen_anchor_eleven_clause_zero_side_clause(
+            clause_kappa,
+            &prefix_telescope,
+            &signature,
+            admissibility,
+        ) {
+            injected_clauses.push(clause);
+        }
         if let Some(clause) = injected_claim_step_fifteen_anchor_eleven_clause_one_side_clause(
             clause_kappa,
             &prefix_telescope,
@@ -16925,7 +16958,7 @@ mod tests {
                     "claim_flat_domain:0:demo_sharp_domain".to_string(),
                     (
                         true,
-                        false,
+                        true,
                         true,
                         103_u16,
                         243_u16,
@@ -17021,7 +17054,7 @@ mod tests {
                     "claim_sharp_codomain:0:demo_sharp_domain".to_string(),
                     (
                         true,
-                        false,
+                        true,
                         true,
                         103_u16,
                         243_u16,
@@ -17104,7 +17137,7 @@ mod tests {
             ]
             .into_iter()
             .collect(),
-            "the remaining demo-only side variants around the live anchor-11 exact-argument pocket should stay structurally connected, locally admissible, and same-primary 103/8 non-winners on bit cost alone, while the clause-1 demo-flat-codomain opening now joins the clause-4 bridge-pocket variants as a reference-terminal-only historical-reanchor reland"
+            "the remaining demo-only side variants around the live anchor-11 exact-argument pocket should stay structurally connected, locally admissible, and same-primary 103/8 non-winners on bit cost alone, while the clause-0 demo-sharp-domain and clause-1 demo-flat-codomain openings now join the clause-4 bridge-pocket variants as reference-terminal-only historical-reanchor relands"
         );
     }
 

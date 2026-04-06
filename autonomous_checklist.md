@@ -120,12 +120,16 @@ It lists only work that is still open.
   `1`, `4`, and `5` all stay structurally connected, locally admissible, and
   same-primary `103 / 8` / `115657 / 21112` non-winners around the live
   anchor-`11` exact-argument pocket; the clause-`4`
-  `demo_sharp_codomain` and `demo_sharp_bridge` variants now regain
-  historical reanchor only on that exact side pocket, and the clause-`1`
-  `demo_flat_codomain` variant now also regains historical reanchor only on
-  that same exact side pocket and only with the reference terminal, while the
-  clause-`0`, clause-`1` `demo_eventually_codomain`, and clause-`5` side
-  variants still stay outside historical reanchor there. A reverted raw
+  `demo_sharp_codomain` and `demo_sharp_bridge` variants plus the clause-`0`
+  `demo_sharp_domain` and clause-`1` `demo_flat_codomain` variants now regain
+  historical reanchor only on that exact side pocket and only with the
+  reference terminal, but the newer clause-`0` exact-pocket reland still
+  leaves the live canonical guardrail flat at
+  `4275` generated prefixes with `549` partial-prefix bar failures, `3`
+  incumbent-dominance prunes, and the same
+  `3084 / 514 / 514 / 0` `small_cluster`, while the clause-`0`,
+  clause-`1` `demo_eventually_codomain`, and clause-`5` side variants still
+  stay outside historical reanchor there. A reverted raw
   position-`0` probe that lifted local step `15` only to `4285` also reopened
   the repaired clause-`0` zero-admitted capture to `2835` families / `891`
   reanchor-prefix misses, so the next landed repair must stay isolated onto

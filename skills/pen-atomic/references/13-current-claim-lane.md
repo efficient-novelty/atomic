@@ -461,11 +461,16 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     positions `0`, `1`, `4`, and `5` all stay structurally connected, locally
     admissible, and same-primary `103 / 8` / `115657 / 21112` on top of the
     current live claim clause-`2` + anchor-`11` exact-argument pocket
-  - the clause-`4` `demo_sharp_codomain` and `demo_sharp_bridge` variants now
-    regain historical reanchor only on that exact side pocket, while the
-    clause-`0`, clause-`1`, and clause-`5` variants still stay outside
-    historical reanchor there and still lose only on higher bit cost `243`,
-    `245`, or `250`
+  - the clause-`0` `demo_sharp_domain`, clause-`1`
+    `demo_flat_codomain`, and clause-`4` `demo_sharp_codomain` plus
+    `demo_sharp_bridge` variants now regain historical reanchor only on that
+    exact side pocket and only with the reference terminal
+  - that newer clause-`0` exact-pocket reland still leaves the live
+    canonical guardrail flat at `4275` / `549` / `3` with the same
+    `3084 / 514 / 514 / 0` `small_cluster`
+  - the clause-`0`, clause-`1` `demo_eventually_codomain`, and clause-`5`
+    variants still stay outside historical reanchor there and still lose only
+    on higher bit cost `243`, `245`, or `250`
   - a newer
     `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
     regression now further pins that every one of those omitted side variants
@@ -518,7 +523,7 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   stored step `13` is already closed and the anchor-`11` step-`15` repair is
   already consumed on canonical `v11`, so the next move is the next local
   step-`15` diagnosis / repair on that residual stored `3972 / 5000` surface
-  while keeping the newer local `4140` guardrail surface fenced and while
+  while keeping the newer local `4275` guardrail surface fenced and while
   keeping the newly frozen unsafe `89 / 8` lifted terminals fenced on the
   three residual single-bucket family shells
 - the canonical repaired late chain must stay frozen while breadth is
@@ -555,11 +560,14 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    before the next parity-preserving local repair is regression-backed; keep
    the isolated `single` survivor bucket fenced while the next repair works
    against the remaining local `3`-incumbent surface on top of the new
-   `4140` guardrail now that the old `small_cluster` summary wall is gone.
-   The newer clause-`4` `demo_sharp_codomain` plus `demo_sharp_bridge`
-   reopenings and the clause-`5` `demo_sharp_domain` and
+   `4275` guardrail now that the old `small_cluster` summary wall is gone.
+   The newer clause-`0` `demo_sharp_domain`, clause-`1`
+   `demo_flat_codomain`, clause-`4` `demo_sharp_codomain` plus
+   `demo_sharp_bridge`, and clause-`5` `demo_sharp_domain` plus
    `demo_flat_codomain` reopenings are now already consumed narrowly and must
-   stay fenced as a tiny noncanonical pocket stack, the reverted raw
+   stay fenced as a tiny noncanonical pocket stack, with the clause-`0`
+   exact-pocket reland staying non-breadth-moving on the live canonical
+   `4275` / `549` / `3` surface; the reverted raw
    position-`0` reland still proves that broadening that side globally
    reopens the old captured clause-`0` surface, and the next landed repair
    should therefore target those residual `single`-bucket incumbent prunes
@@ -570,13 +578,13 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    positions `0`, `2`, and `5`.
    `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
    now further pins that even granting same-primary relief only to those
-   exact three families keeps `4140` / `476`, collapses incumbent-dominance
+   exact three families keeps `4275` / `549`, collapses incumbent-dominance
    from `3` to `0`, leaves the `small_cluster` unchanged at
-   `3060 / 510 / 510 / 0`, and still unfences the isolated `single` pocket
+   `3084 / 514 / 514 / 0`, and still unfences the isolated `single` pocket
    from `1` to `4` fully scored non-winning terminals.
    `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
    now further pins that every strict subset of those same families still
-   keeps `4140` / `476`, keeps the cleared `small_cluster` unchanged, and
+   keeps `4275` / `549`, keeps the cleared `small_cluster` unchanged, and
    only trades `n` residual incumbent prunes for `n` extra fully scored
    non-winning terminals in that same isolated `single` pocket, with those
    extra candidates all staying same-primary `103 / 8`, bit-cost-`236`

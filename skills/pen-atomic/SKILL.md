@@ -166,11 +166,14 @@ Treat these as current repo truths:
   locally admissible, same-primary `103 / 8` non-winners around the live
   anchor-`11` exact-argument pocket, with the clause-`4`
   `demo_sharp_codomain` and `demo_sharp_bridge` variants now regaining
-  historical reanchor only on that exact side pocket, the clause-`1`
-  `demo_flat_codomain` variant now also regaining historical reanchor only on
-  that same exact side pocket and only with the reference terminal, while the
-  clause-`0`, clause-`1` `demo_eventually_codomain`, and clause-`5` variants
-  stay outside historical reanchor there; a reverted raw
+  historical reanchor only on that exact side pocket, the clause-`0`
+  `demo_sharp_domain` and clause-`1` `demo_flat_codomain` variants now also
+  regaining historical reanchor only on that same exact side pocket and only
+  with the reference terminal, while the clause-`0`,
+  clause-`1` `demo_eventually_codomain`, and clause-`5` variants stay outside
+  historical reanchor there; that newer clause-`0` exact-pocket reland still
+  leaves the live canonical guardrail flat at `4275` / `549` /
+  `3` with the same `3084 / 514 / 514 / 0` `small_cluster`; a reverted raw
   position-`0` reland that lifted local step `15` only to `4285` also
   reopened the repaired clause-`0` zero-admitted capture, and the older raw
   clause-`4` / clause-`5` probes only reached `3980` or `3974` while
@@ -643,10 +646,14 @@ Reject designs that:
   narrower clause-`5` `demo_flat_codomain` extension, the newer
   clause-`4` `demo_sharp_bridge` reopening, the newer clause-`5`
   bridge-pocket stack extension, and the newer clause-`1`
-  `demo_flat_codomain` side-pocket reland, with the old `246`-candidate
-  `small_cluster` wall collapsed to `3` residual fenced `single`-bucket
-  incumbent prunes on top of a `3084 / 514 / 514 / 0` `small_cluster`
-  surface, and the guarded local step-`11` breadth
+  `demo_flat_codomain` side-pocket reland; a newer clause-`0`
+  `demo_sharp_domain` exact-pocket reland now also restores historical
+  reanchor only on that same reference-terminal side pocket, but it leaves
+  the live canonical guardrail flat at `4275` / `549` / `3`; the old
+  `246`-candidate `small_cluster` wall is collapsed to `3` residual fenced
+  `single`-bucket incumbent prunes on top of a
+  `3084 / 514 / 514 / 0` `small_cluster` surface, and the guarded local
+  step-`11` breadth
   repair plus the narrow step-`12` selector repair are now both re-earned on
   stored evidence.
 - The next operational claim-lane work should focus on clean canonical-bundle

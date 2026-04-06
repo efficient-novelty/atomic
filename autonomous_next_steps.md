@@ -238,10 +238,19 @@ This note is the exact next work order for `desktop_claim_shadow`.
     positions `0`, `1`, `4`, and `5` all stay structurally connected, locally
     admissible, and same-primary `103 / 8` / `115657 / 21112` on top of the
     current live claim clause-`2` + anchor-`11` exact-argument pocket
-  - the clause-`4` `demo_sharp_codomain` side variant now regains historical
-    reanchor only on that exact anchor-`11` side pocket, while the omitted
-    side variants at clause positions `0`, `1`, and `5` still stay outside
-    historical reanchor there
+  - the clause-`0` `demo_sharp_domain`, clause-`1`
+    `demo_flat_codomain`, and clause-`4` `demo_sharp_codomain` plus
+    `demo_sharp_bridge` side variants now regain historical reanchor only on
+    that exact anchor-`11` side pocket and only with the reference terminal
+  - that newer clause-`0` exact-pocket reland does not yet move the live
+    canonical surface:
+    the repaired local step-`15` guardrail still stays flat at
+    `4275` generated prefixes with `549` partial-prefix bar failures,
+    `3` incumbent-dominance prunes, and the same
+    `3084 / 514 / 514 / 0` `small_cluster`
+  - the omitted side variants at clause positions `0`, clause-`1`
+    `demo_eventually_codomain`, and clause-`5` still stay outside historical
+    reanchor there
   - those omitted side variants still lose only on higher bit cost `243`,
     `245`, or `250`
   - a newer lifted-terminal fence regression now sharpens that same opening
@@ -988,8 +997,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
    generated prefixes there, but the current local guardrail surface is now
    `4275` after the newer clause-`5` bridge-pocket stack extension on top of
    the fenced clause-`4` / clause-`5` side-pocket stack, the newer landed
-   small-cluster relief, and the newer clause-`1` `demo_flat_codomain`
-   side-pocket reland.
+   small-cluster relief, the newer clause-`1` `demo_flat_codomain`
+   side-pocket reland, and the newer non-breadth-moving clause-`0`
+   `demo_sharp_domain` exact-pocket reland.
    The next repair should therefore work against the remaining local
    `549` partial-prefix bar / `3` incumbent-dominance surface on top of that
    new guardrail, with the survivor-bucket freeze keeping the isolated
@@ -997,8 +1007,9 @@ This note is the exact next work order for `desktop_claim_shadow`.
    `3084 / 514 / 514 / 0`. The clause-`4` `demo_sharp_codomain` plus
    `demo_sharp_bridge` reopenings and the clause-`5` `demo_sharp_domain`
    and `demo_flat_codomain` reopenings plus the newer clause-`1`
-   `demo_flat_codomain` reopening are now all consumed narrowly and must stay
-   fenced as a tiny noncanonical pocket stack, so
+   `demo_flat_codomain` reopening and the newer clause-`0`
+   `demo_sharp_domain` exact-pocket reopening are now all consumed narrowly
+   and must stay fenced as a tiny noncanonical pocket stack, so
    the next landed repair should now target those residual `3`
    single-bucket incumbent prunes rather than another raw clause-`4`, raw
    clause-`5`, raw position-`0`, or blanket same-primary-relief reland. The

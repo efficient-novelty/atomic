@@ -274,11 +274,14 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     `0`, `1`, `4`, and `5` all stay structurally connected, locally
     admissible, and same-primary `103 / 8` / `115657 / 21112` on top of the
     current live claim clause-`2` + anchor-`11` exact-argument pocket
-  - the clause-`4` `demo_sharp_codomain` and `demo_sharp_bridge` variants now
-    regain historical reanchor only on that exact side pocket, the clause-`1`
-    `demo_flat_codomain` variant now also regains historical reanchor only on
-    that same exact side pocket and only with the reference terminal, while
-    the clause-`0`, clause-`1` `demo_eventually_codomain`, and clause-`5`
+  - the clause-`0` `demo_sharp_domain`, clause-`1`
+    `demo_flat_codomain`, and clause-`4` `demo_sharp_codomain` plus
+    `demo_sharp_bridge` variants now regain historical reanchor only on that
+    exact side pocket and only with the reference terminal
+  - that newer clause-`0` exact-pocket reland still leaves the live
+    canonical guardrail flat at `4275` / `549` / `3` with the same
+    `3084 / 514 / 514 / 0` `small_cluster`
+  - the clause-`0`, clause-`1` `demo_eventually_codomain`, and clause-`5`
     variants still stay outside historical reanchor there and still lose only
     on higher bit cost `243`, `245`, or `250`
   - a non-landed raw position-`0` reland probe briefly lifted the local
@@ -441,12 +444,12 @@ Current slice order:
    exact-family same-primary relief collapses `3 -> 0` incumbent-dominance
    prunes only by unfencing the isolated `single` pocket from `1` to `4`
    fully scored non-winning terminals while leaving the `small_cluster`
-   unchanged at `3060 / 510 / 510 / 0`, keep
+   unchanged at `3084 / 514 / 514 / 0`, keep
    `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
    green too so the next step-`15` repair still respects that even any strict
    subset of those same families only trades `n` incumbent prunes for `n`
    extra fully scored non-winning reference-terminal completions while keeping
-   `4140` / `476` and the cleared `small_cluster` unchanged, and keep
+   `4275` / `549` and the cleared `small_cluster` unchanged, and keep
    `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
    green so any future omitted-side opening stays reference-terminal-local
    instead of reopening that lifted shell

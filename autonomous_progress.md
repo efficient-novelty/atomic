@@ -336,10 +336,19 @@ gate.
     positions `0`, `1`, `4`, and `5` all stay structurally connected, locally
     admissible, and same-primary `103 / 8` / `115657 / 21112` on top of the
     current live claim clause-`2` + anchor-`11` exact-argument pocket
-  - the clause-`4` `demo_sharp_codomain` side variant now regains historical
-    reanchor only on that exact anchor-`11` side pocket, while the omitted
-    side variants at clause positions `0`, `1`, and `5` still stay outside
-    historical reanchor there
+  - the clause-`0` `demo_sharp_domain`, clause-`1`
+    `demo_flat_codomain`, and clause-`4` `demo_sharp_codomain` plus
+    `demo_sharp_bridge` side variants now regain historical reanchor only on
+    that exact anchor-`11` side pocket and only with the reference terminal
+  - that newer clause-`0` exact-pocket reland does not yet move the live
+    canonical surface:
+    the repaired local step-`15` guardrail still stays flat at
+    `4275` generated prefixes with `549` partial-prefix bar failures,
+    `3` incumbent-dominance prunes, and the same
+    `3084 / 514 / 514 / 0` `small_cluster`
+  - the omitted side variants at clause positions `0`, clause-`1`
+    `demo_eventually_codomain`, and clause-`5` still stay outside historical
+    reanchor there
   - those omitted side variants still lose only on higher bit cost `243`,
     `245`, or `250`, so they remain candidate-safe surface openings rather
     than hidden stronger winners
@@ -1454,15 +1463,16 @@ gate.
    step `15`, but keep the new local post-`v11` guardrail explicit while
    doing so: the landed small-cluster relief plus the newer
    clause-`5` bridge-pocket stack and the newer clause-`1`
-   `demo_flat_codomain` side-pocket reland now keep the repaired local
-   late chain at `DCT 103 / 8 / 4275`, with `549` partial-prefix bar
+   `demo_flat_codomain` side-pocket reland plus the newer non-breadth-moving
+   clause-`0` `demo_sharp_domain` exact-pocket reland now keep the repaired
+   local late chain at `DCT 103 / 8 / 4275`, with `549` partial-prefix bar
    failures, only `3` incumbent-dominance prunes, a widened temporal
    `small_cluster` at `3084 / 514 / 514 / 0`, the isolated `single` pocket
    still fenced as one fully scored non-winner plus `3` residual single-bucket
    prunes, and the still-narrow captured surface at
    `2259` families / `6777` connected-but-unqualified terminal options. The
-   clause-`1` / clause-`4` / clause-`5` side-pocket stack still stays
-   narrowly fenced and noncanonical,
+   clause-`0` / clause-`1` / clause-`4` / clause-`5` side-pocket stack still
+   stays narrowly fenced and noncanonical,
    and
    `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
    now pins those remaining prunes to three `proof_close_group`
