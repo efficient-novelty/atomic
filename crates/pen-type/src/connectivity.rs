@@ -952,7 +952,10 @@ fn matches_anchor_eleven_clause_five_side_pocket_clause(
         2 => matches_claim_temporal_pair_clause_two_variant(expr),
         3 => matches_anchor_eleven_exact_argument_clause(expr, anchor + 1),
         4 => matches_anchor_eleven_demo_sharp_codomain_clause(expr),
-        5 => matches_anchor_eleven_demo_sharp_domain_clause(expr),
+        5 => {
+            matches_anchor_eleven_demo_sharp_domain_clause(expr)
+                || matches_anchor_eleven_demo_flat_codomain_clause(expr)
+        }
         6 => matches!(
             expr,
             Expr::Lam(body)
@@ -1108,6 +1111,32 @@ fn matches_anchor_eleven_demo_sharp_domain_clause(expr: &Expr) -> bool {
                     if matches!(
                         body.as_ref(),
                         Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
+            )
+    )
+}
+
+fn matches_anchor_eleven_demo_flat_codomain_clause(expr: &Expr) -> bool {
+    matches!(
+        expr,
+        Expr::Pi(domain, codomain)
+            if matches!(
+                domain.as_ref(),
+                Expr::Sharp(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
+            ) && matches!(
+                codomain.as_ref(),
+                Expr::Eventually(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::Sharp(inner)
+                            if matches!(
+                                inner.as_ref(),
+                                Expr::Flat(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                            )
                     )
             )
     )
@@ -2337,6 +2366,66 @@ mod tests {
     }
 
     #[test]
+    fn connectivity_accepts_clause_five_demo_flat_codomain_only_on_the_exact_anchor_eleven_clause_four_side_pocket()
+     {
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            let mut telescope = Telescope::reference(15);
+            telescope.clauses[2].expr = clause_two_variant;
+            telescope.clauses[3] = ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor + 1)),
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                ))),
+            );
+            telescope.clauses[4] = ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                    Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Flat(
+                        Box::new(Expr::Var(1)),
+                    )))))),
+                ),
+            );
+            telescope.clauses[5] = ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                        Expr::Var(1),
+                    ))))),
+                    Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                        Expr::Flat(Box::new(Expr::Var(1))),
+                    ))))),
+                ),
+            );
+            telescope.clauses[7] = reference_terminal.clone();
+
+            let witness = analyze_connectivity(&library, &telescope);
+            let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+            assert!(
+                reanchor.allows_historical_reanchor(),
+                "the clause-5 demo-flat-codomain opening should count as historical reanchor only once the exact anchor-11 clause-4 side pocket is already present"
+            );
+            assert_eq!(
+                witness,
+                ConnectivityWitness {
+                    connected: true,
+                    references_active_window: false,
+                    self_contained: false,
+                    max_lib_ref: 11,
+                    historical_reanchor: true,
+                }
+            );
+            assert!(passes_connectivity(&library, &telescope));
+        }
+    }
+
+    #[test]
     fn connectivity_keeps_clause_five_demo_sharp_domain_outside_historical_reanchor_without_the_clause_four_side_pocket()
      {
         let library = library_until(14);
@@ -2372,6 +2461,57 @@ mod tests {
             assert!(
                 !reanchor.allows_historical_reanchor(),
                 "the clause-5 demo-sharp-domain opening should stay fenced until the exact clause-4 side pocket is also present"
+            );
+            assert_eq!(
+                witness,
+                ConnectivityWitness {
+                    connected: true,
+                    references_active_window: false,
+                    self_contained: false,
+                    max_lib_ref: 11,
+                    historical_reanchor: false,
+                }
+            );
+            assert!(!passes_connectivity(&library, &telescope));
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_five_demo_flat_codomain_outside_historical_reanchor_without_the_clause_four_side_pocket()
+     {
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            let mut telescope = Telescope::reference(15);
+            telescope.clauses[2].expr = clause_two_variant;
+            telescope.clauses[3] = ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor + 1)),
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                ))),
+            );
+            telescope.clauses[5] = ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                        Expr::Var(1),
+                    ))))),
+                    Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                        Expr::Flat(Box::new(Expr::Var(1))),
+                    ))))),
+                ),
+            );
+            telescope.clauses[7] = reference_terminal.clone();
+
+            let witness = analyze_connectivity(&library, &telescope);
+            let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+            assert!(
+                !reanchor.allows_historical_reanchor(),
+                "the clause-5 demo-flat-codomain opening should stay fenced until the exact clause-4 side pocket is also present"
             );
             assert_eq!(
                 witness,

@@ -57,13 +57,14 @@ It lists only work that is still open.
   one library-backed temporal-operator `single` bucket carries the isolated
   non-winning pocket at overshoot `115657 / 21112` plus the residual `3`
   incumbent-dominance prunes, and one library-backed temporal-operator
-  `small_cluster` bucket now carries `2964 / 494 / 494 / 0`.
+  `small_cluster` bucket now carries `2988 / 498 / 498 / 0`.
 - A newer local step-`15` small-cluster relief is now landed and frozen by
   `current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain`:
   the old `246`-candidate summary-stage `small_cluster` incumbent wall is now
   gone, local incumbent-dominance pressure has fallen to `3`, live generated
-  prefixes still stay at `4030` with `472` partial-prefix bar failures, and
-  the isolated fully scored `single` pocket stays fenced.
+  prefixes now stay at `4056` with `472` partial-prefix bar failures, the
+  widened `small_cluster` now stays at `2988 / 498 / 498 / 0`, and the
+  isolated fully scored `single` pocket stays fenced.
 - A newer local step-`15` proof-close incumbent regression now freezes that
   remaining fenced pressure more tightly:
   `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
@@ -97,9 +98,9 @@ It lists only work that is still open.
   `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
   now pins that granting same-primary incumbent relief only to those exact
   clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
-  keeps the repaired local surface at `4030` generated prefixes with `472`
+  keeps the repaired local surface at `4056` generated prefixes with `472`
   partial-prefix bar failures, collapses incumbent-dominance from `3` to `0`,
-  leaves the cleared `small_cluster` unchanged at `2964 / 494 / 494 / 0`,
+  leaves the cleared `small_cluster` unchanged at `2988 / 498 / 498 / 0`,
   and still unfences the isolated `single` pocket from `1` to `4`
   fully scored non-winning terminals.
 - A new local omitted-side-variant regression now proves the next safe opening
@@ -127,23 +128,26 @@ It lists only work that is still open.
   reanchor-prefix misses, and the clause-`5`-only pocket-gated probe only
   reached `3974` and still reopened the capture to `1950` families / `1464`
   clause-`2` misses.
-- A newer narrower clause-`5` side-pocket reland remains landed locally on top
+- A newer narrower clause-`5` side-pocket stack remains landed locally on top
   of the clause-`4` pocket:
-  it lifts the repaired local step-`15` guardrail surface to `4030`,
-  keeps the captured zero-admitted surface tightly localized at
+  the `demo_sharp_domain` and `demo_flat_codomain` clause-`5` openings are
+  now both consumed only on that exact anchor-`11` clause-`4` pocket, the
+  repaired local step-`15` guardrail surface now stays at `4056`, the
+  widened `small_cluster` now stays at `2988 / 498 / 498 / 0`, the captured
+  zero-admitted surface still stays tightly localized at
   `1956` families / `5868` connected-but-unqualified terminal options, and
-  keeps the clause-`4` / clause-`5` side pocket tiny and noncanonical.
+  the clause-`4` / clause-`5` side pocket still stays tiny and noncanonical.
 - The next landed repair should therefore not be another raw clause-`4`
   reland or another blanket same-primary-retention pass:
-  clause `4` plus the local clause-`5` `demo_sharp_domain` opening are now
-  consumed as fenced local pockets, the small-cluster summary wall is already
-  cleared, and the next gain now needs to target the residual `3`
-  single-bucket incumbent prunes on top of the current `4030` local surface,
-  starting from those clause-`0` / clause-`2` / clause-`5` fenced prefix
-  families rather than reopening the whole side-pocket neighborhood, while
-  also keeping the newly frozen unsafe `89 / 8` lifted terminals fenced on
-  each of those same family shells and staying narrower than same-primary
-  relief even at exact-family scope.
+  clause `4` plus the local clause-`5` `demo_sharp_domain` and
+  `demo_flat_codomain` openings are now consumed as fenced local pockets, the
+  small-cluster summary wall is already cleared, and the next gain now needs
+  to target the residual `3` single-bucket incumbent prunes on top of the
+  current `4056` local surface, starting from those clause-`0` / clause-`2`
+  / clause-`5` fenced prefix families rather than reopening the whole
+  side-pocket neighborhood, while also keeping the newly frozen unsafe
+  `89 / 8` lifted terminals fenced on each of those same family shells and
+  staying narrower than same-primary relief even at exact-family scope.
 - No broader per-step claim search-band expansion should land beyond that
   isolated anchor-`11` pocket before a new local repair proves more is
   necessary on this parity-clean stored chain.

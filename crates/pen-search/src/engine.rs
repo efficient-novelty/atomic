@@ -6556,6 +6556,21 @@ fn create_online_prefix_work_item(
         )
     }
 
+    fn claim_step_fifteen_anchor_eleven_demo_flat_codomain_clause()
+    -> pen_core::clause::ClauseRec {
+        pen_core::clause::ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    Expr::Var(1),
+                ))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                ))))),
+            ),
+        )
+    }
+
     fn injected_claim_step_fifteen_anchor_eleven_clause(
         clause_kappa: u16,
         prefix_telescope: &Telescope,
@@ -6660,6 +6675,48 @@ fn create_online_prefix_work_item(
         .then(claim_step_fifteen_anchor_eleven_demo_sharp_domain_clause)
     }
 
+    fn injected_claim_step_fifteen_anchor_eleven_clause_five_flat_codomain_side_clause(
+        clause_kappa: u16,
+        prefix_telescope: &Telescope,
+        signature: &PrefixSignature,
+        admissibility: StrictAdmissibility,
+    ) -> Option<pen_core::clause::ClauseRec> {
+        if admissibility.mode != AdmissibilityMode::DesktopClaimShadow
+            || signature.obligation_set_id.get() != 15
+            || clause_kappa != 8
+            || prefix_telescope.clauses.len() != 5
+        {
+            return None;
+        }
+        let anchor = admissibility.historical_anchor_ref?;
+        let clause_zero = prefix_telescope
+            .clauses
+            .first()
+            .expect("step-15 temporal shell prefix should expose clause 0");
+        let clause_one = prefix_telescope
+            .clauses
+            .get(1)
+            .expect("step-15 temporal shell prefix should expose clause 1");
+        let clause_two = prefix_telescope
+            .clauses
+            .get(2)
+            .expect("step-15 temporal shell prefix should expose clause 2");
+        let clause_three = prefix_telescope
+            .clauses
+            .get(3)
+            .expect("step-15 temporal shell prefix should expose clause 3");
+        let clause_four = prefix_telescope
+            .clauses
+            .get(4)
+            .expect("step-15 temporal shell prefix should expose clause 4");
+        (matches_reference_temporal_clause_zero(clause_zero)
+            && matches_reference_temporal_clause_one(clause_one)
+            && matches_claim_step_fifteen_anchor_eleven_clause_two_variant(clause_two)
+            && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(clause_three, anchor)
+            && matches_claim_step_fifteen_anchor_eleven_demo_sharp_codomain_clause(clause_four))
+        .then(claim_step_fifteen_anchor_eleven_demo_flat_codomain_clause)
+    }
+
     fn clone_filtered_terminal_clause_data(
         catalog_clauses: &[pen_core::clause::ClauseRec],
         catalog_connectivity_facts: &[TerminalClauseConnectivityFacts],
@@ -6736,6 +6793,16 @@ fn create_online_prefix_work_item(
             &signature,
             admissibility,
         ) {
+            injected_clauses.push(clause);
+        }
+        if let Some(clause) =
+            injected_claim_step_fifteen_anchor_eleven_clause_five_flat_codomain_side_clause(
+                clause_kappa,
+                &prefix_telescope,
+                &signature,
+                admissibility,
+            )
+        {
             injected_clauses.push(clause);
         }
         let filtered_clauses = prefix_legality_cache.filter_active_window_clauses(
@@ -12996,7 +13063,7 @@ mod tests {
     #[test]
     fn current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families() {
         let summary = current_claim_step_fifteen_exact_prune_family_summary(usize::MAX);
-        assert_eq!(summary.raw_generated_surface, 4030);
+        assert_eq!(summary.raw_generated_surface, 4056);
         assert_eq!(summary.roots_seen, 3);
         assert_eq!(summary.roots_enqueued, 3);
         assert_eq!(summary.partial_prefix_bound_prunes, 472);
@@ -16218,12 +16285,17 @@ mod tests {
                 .collect::<BTreeSet<_>>();
             assert_eq!(
                 observed_exprs.len(),
-                4,
-                "the next clause-5 pocket repair should inject exactly one additional side option beyond the live claim clause-5 catalog once the clause-4 side pocket is already present"
+                5,
+                "the clause-5 anchor-11 side pocket should now inject exactly two additional side options beyond the live claim clause-5 catalog once the clause-4 side pocket is already present"
             );
             assert!(
                 observed_exprs
                     .contains("Pi(Sharp(Eventually(Sharp(Var(1)))), Eventually(Sharp(Var(1))))")
+            );
+            assert!(
+                observed_exprs.contains(
+                    "Pi(Sharp(Eventually(Var(1))), Eventually(Sharp(Flat(Var(1)))))"
+                )
             );
         }
 
@@ -18642,7 +18714,7 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(13, 46, 7, 2320), (14, 62, 9, 12027), (15, 103, 8, 4030)],
+            vec![(13, 46, 7, 2320), (14, 62, 9, 12027), (15, 103, 8, 4056)],
             "the repaired step-12 tie set should now collapse onto the parity-preserving widened step-13 surface while restoring the latest canonical step-15 continuation"
         );
         let alternate_candidate = tied_candidates
@@ -18891,7 +18963,7 @@ mod tests {
                 accepted_step_fourteen_continuation.2,
                 accepted_step_fourteen_continuation.3,
             ),
-            (103, 8, 4030),
+            (103, 8, 4056),
             "live claim step-14 acceptance should now prefer the same-primary survivor that restores the latest broadened canonical step-15 continuation"
         );
         assert!(
@@ -18919,7 +18991,7 @@ mod tests {
         let (step_fifteen, step_fifteen_catalog, step_fifteen_roots) =
             inspect_late_step(15, &library, &history);
         assert_eq!(step_fifteen_catalog.raw_catalog_telescope_count, Some(6561));
-        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4030);
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4056);
         assert_eq!(
             step_fifteen.claim_root_seeding,
             Some(ClaimRootSeedingDiagnostics {
@@ -18952,9 +19024,9 @@ mod tests {
         );
         assert!(
             step_fifteen.demo_bucket_stats.iter().any(|bucket| {
-                bucket.stats.generated_terminal_candidates == 2964
-                    && bucket.stats.admissible_terminal_candidates == 494
-                    && bucket.stats.exact_screened_terminal_candidates == 494
+                bucket.stats.generated_terminal_candidates == 2988
+                    && bucket.stats.admissible_terminal_candidates == 498
+                    && bucket.stats.exact_screened_terminal_candidates == 498
                     && bucket.stats.pruned_terminal_candidates == 0
             }),
             "step 15 should now carry the temporal small-cluster through exact screening while keeping the canonical continuation"
@@ -18995,9 +19067,9 @@ mod tests {
                     "k8:structural_generic:temporal_operator:library_backed:small_cluster"
                         .to_string(),
                     DemoBucketStats {
-                        generated_terminal_candidates: 2964,
-                        admissible_terminal_candidates: 494,
-                        exact_screened_terminal_candidates: 494,
+                        generated_terminal_candidates: 2988,
+                        admissible_terminal_candidates: 498,
+                        exact_screened_terminal_candidates: 498,
                         pruned_terminal_candidates: 0,
                         fully_scored_terminal_candidates: 0,
                         best_overshoot: None,
@@ -19053,9 +19125,9 @@ mod tests {
             bucket_stats
                 .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
             Some(&DemoBucketStats {
-                generated_terminal_candidates: 2964,
-                admissible_terminal_candidates: 494,
-                exact_screened_terminal_candidates: 494,
+                generated_terminal_candidates: 2988,
+                admissible_terminal_candidates: 498,
+                exact_screened_terminal_candidates: 498,
                 pruned_terminal_candidates: 0,
                 fully_scored_terminal_candidates: 0,
                 best_overshoot: None,
@@ -19393,7 +19465,7 @@ mod tests {
             .collect::<BTreeMap<_, _>>();
 
         assert_eq!(step_fifteen.telescope, Telescope::reference(15));
-        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4030);
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4056);
         assert_eq!(
             step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 472,
             "family-local same-primary relief should not change the repaired local generated surface or the remaining partial-prefix wall"
@@ -19418,9 +19490,9 @@ mod tests {
             bucket_stats
                 .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
             Some(&DemoBucketStats {
-                generated_terminal_candidates: 2964,
-                admissible_terminal_candidates: 494,
-                exact_screened_terminal_candidates: 494,
+                generated_terminal_candidates: 2988,
+                admissible_terminal_candidates: 498,
+                exact_screened_terminal_candidates: 498,
                 pruned_terminal_candidates: 0,
                 fully_scored_terminal_candidates: 0,
                 best_overshoot: None,
@@ -19877,7 +19949,7 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(14, 62, 9, 12027), (15, 103, 8, 4030)],
+            vec![(14, 62, 9, 12027), (15, 103, 8, 4056)],
             "the position-0/4/5/6 widening should keep the guarded step-14 and step-15 winner profiles even while step-13 parity stays open"
         );
         assert_eq!(

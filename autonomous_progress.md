@@ -161,6 +161,24 @@ gate.
     `1956` families / `5868` connected-but-unqualified terminal options, so
     the landed relief changes only the incumbent screen and not the broader
     clause-`2` / clause-`3` capture boundary
+- A newer local step-`15` clause-`5` demo-flat-codomain side-pocket repair
+  now lands on top of that same exact anchor-`11` clause-`4` pocket plus the
+  small-cluster relief:
+  - the `demo_flat_codomain` clause-`5` opening now also counts as
+    historical reanchor only on that same doubly fenced pocket
+  - the repaired local late chain still accepts `DCT 103 / 8`, and live
+    generated prefixes now lift from `4030` to `4056`
+  - the remaining local pressure stays `472` partial-prefix bar failures plus
+    `3` incumbent-dominance prunes, with
+    legality/connectivity exact rejection still at `0`
+  - the local surviving temporal terminal `small_cluster` now widens again to
+    `2988` generated / `498` admitted / `498` exact-screened / `0` pruned,
+    while the isolated `single` pocket still stays fenced as one fully scored
+    non-winning terminal plus `3` residual single-bucket prunes
+  - the captured zero-admitted surface still stays tightly localized at
+    `1956` families / `5868` connected-but-unqualified terminal options, so
+    this repair still leaves the broader clause-`2` / clause-`3` capture
+    boundary untouched
 - A newer local step-`15` proof-close incumbent regression now freezes that
   residual fenced pressure more tightly:
   - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
@@ -209,11 +227,11 @@ gate.
   - `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
     now pins that granting same-primary incumbent relief only to those exact
     clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
-    keeps live generated prefixes flat at `4030` and keeps partial-prefix bar
+    keeps live generated prefixes flat at `4056` and keeps partial-prefix bar
     failures at `472`
   - it does collapse the remaining incumbent-dominance prunes from `3` to `0`
   - the cleared `small_cluster` stays unchanged at
-    `2964 / 494 / 494 / 0`
+    `2988 / 498 / 498 / 0`
   - but the isolated `single` pocket still unfences from `1` to `4`
     fully scored non-winning terminals at the same overshoot
     `115657 / 21112`
@@ -319,9 +337,10 @@ gate.
   - the clause-`4` / clause-`5` side pocket still stays tiny and
     noncanonical, so the next safe move is no longer another side-pocket
     reland first:
-    the landed small-cluster relief has now consumed that summary-stage
-    retention move, so the next repair should target the residual
-    `3` single-bucket incumbent prunes on top of the current `4030`
+    the landed small-cluster relief and the newer clause-`5`
+    `demo_flat_codomain` side-pocket repair have now consumed that
+    summary-stage retention move, so the next repair should target the
+    residual `3` single-bucket incumbent prunes on top of the current `4056`
     local surface rather than another raw clause-`4`, raw clause-`5`, raw
     position-`0`, or blanket same-primary-retention reland
 - The remaining stored breadth snapshot on the parity-clean bundle is:
@@ -373,16 +392,16 @@ gate.
     is green
   - `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts` is green
 - The executable late-path guardrails are now synced to that same
-  small-cluster-relief local surface too:
+  clause-`5` demo-flat-codomain-plus-small-cluster local surface too:
   - `repaired_claim_step_twelve_late_path_has_scoped_step_thirteen_widening_before_proof_close`
     now freezes the repaired canonical continuation through
-    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 4030`
+    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 4056`
   - the step-`15` late-path guardrails now freeze the current
-    `4030` / `3` / `2964 / 494 / 494 / 0` local surface rather than the
+    `4056` / `3` / `2988 / 498 / 498 / 0` local surface rather than the
     older clause-`5`-only `4030` / `246` / `2226 / 248 / 248 / 246` read
   - the `[5,1,3,3,5,3,3]` step-`13` negative control still preserves guarded
     step-`14` / step-`15` accepted hashes while now also observing the current
-    local step-`15` generated surface at `4030`
+    local step-`15` generated surface at `4056`
 - The parity-preserving step-`13` breadth repair is now earned on stored
   evidence:
   - on the canonical repaired chain, claim-open now widens to
@@ -1313,9 +1332,9 @@ gate.
   guardrails:
   step `13` should now stay at `[5,1,3,3,5,3,2]` / `1350` / `2320` with the
   guarded accepted hash, step `14` should stay `19683` / `12027`, the latest
-  local post-`v11` step `15` guardrail should stay `DCT 103 / 8 / 4030`
+  local post-`v11` step `15` guardrail should stay `DCT 103 / 8 / 4056`
   with `472` partial-prefix bar failures, `3` incumbent-dominance prunes, and
-  a `2964 / 494 / 494 / 0` `small_cluster` surface plus the fenced
+  a `2988 / 498 / 498 / 0` `small_cluster` surface plus the fenced
   `single` pocket, and stored canonical `v11` step `15` should still stay
   `DCT 103 / 8 / 3972` until another full rerun consumes the new local repair.
 - Use the stored `v11` certificate and the late-step live checkpoints as the
@@ -1323,7 +1342,7 @@ gate.
   catalog widths, root seeding, exact-screen pressure, and the full stored
   step-open pressure envelope for the open steps.
 - Treat stored `v11` step `15 = 3972 / 5000` as the remaining stored
-  late-floor miss, but keep the new local `4030` guardrail explicit too; do
+  late-floor miss, but keep the new local `4056` guardrail explicit too; do
   not reopen step `11` or step `13` first now that stored step `11`
   re-earns `1338 / 800` and stored step `13` re-earns `2320 / 2200` on the
   clean canonical bundle.
@@ -1356,10 +1375,11 @@ gate.
 3. Use the stored `v11` certificate and late-step live checkpoints as the
    first diagnosis surface for the residual stored `3972 / 5000` miss at
    step `15`, but keep the new local post-`v11` guardrail explicit while
-   doing so: the landed small-cluster relief now keeps the repaired local
-   late chain at `DCT 103 / 8 / 4030`, with `472` partial-prefix bar
+   doing so: the landed small-cluster relief plus the new
+   clause-`5` demo-flat-codomain pocket now keep the repaired local
+   late chain at `DCT 103 / 8 / 4056`, with `472` partial-prefix bar
    failures, only `3` incumbent-dominance prunes, a widened temporal
-   `small_cluster` at `2964 / 494 / 494 / 0`, the isolated `single` pocket
+   `small_cluster` at `2988 / 498 / 498 / 0`, the isolated `single` pocket
    still fenced as one fully scored non-winner plus `3` residual single-bucket
    prunes, and the still-tight captured surface at
    `1956` families / `5868` connected-but-unqualified terminal options. The
@@ -1379,16 +1399,16 @@ gate.
    unsafe stronger-than-canonical `89 / 8` lifted terminals, and
    `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
    now further proves that even granting same-primary relief only to those
-   exact three families keeps `4030` / `472`, collapses the remaining
+   exact three families keeps `4056` / `472`, collapses the remaining
    incumbent-dominance prunes from `3` to `0`, and still unfences the
    isolated `single` pocket from `1` to `4` fully scored non-winning
    terminals while leaving the `small_cluster` unchanged at
-   `2964 / 494 / 494 / 0`, so the next move is therefore not another rerun
+   `2988 / 498 / 498 / 0`, so the next move is therefore not another rerun
    setup pass, not another raw
    clause-`4` / raw clause-`5` / raw global position-`0` reland, and not a
    blanket or exact-family same-primary-retention reland; it should be the next
    parity-preserving step-`15` repair against those residual `3`
-   single-bucket incumbent prunes on top of this `4030` surface, starting
+   single-bucket incumbent prunes on top of this `4056` surface, starting
    from those three fenced prefix families instead of reopening the full
    side-pocket neighborhood.
 4. Launch the next clean full-profile claim rerun only after that next local
