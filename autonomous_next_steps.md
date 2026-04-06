@@ -133,6 +133,19 @@ Do not start with another rerun setup pass.
   - so that narrower reopening is now only a tradeoff control rather than
     the landed repair, and the next slice should isolate those escaping `16`
     captures without taking the full `small_cluster` regression
+  - that tradeoff branch is now executable one layer deeper too:
+    `current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_evenly_across_three_clause_two_sheets`
+    and
+    `current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_each_clause_two_sheet_as_three_by_three_and_two_by_two_bridge_cells`
+    pin the remaining `45` captured prefixes as three equal clause-`2`
+    sheets at `15 / 15 / 15`, and each sheet then splits uniformly as
+    clause-`4` `claim_next_bridge = 3 / 3 / 3` plus clause-`4`
+    `reference = 2 / 2 / 2` across clause-`5`
+    `claim_flat_codomain`, `claim_next_codomain`, and `reference`
+  - so the next honest reland can now stay narrower than the whole tradeoff
+    reopening: test one exact `15`-count clause-`2` sheet or the exact
+    `18`-count clause-`4` `reference` sheet before touching the larger
+    `27`-count clause-`4` `claim_next_bridge` side
 - A local clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   has now also been checked and reverted:
@@ -250,10 +263,20 @@ Do not start with another rerun setup pass.
      `33 / 28` / `61` captured prefixes to clause-`4` `27 / 18` / `45`,
      lifts local breadth to `4523`, narrows the clean wall to `537`, and
      cuts zero-admitted capture to `2223`
+   - the newer tradeoff-branch freezes now make that same `45`-capture
+     branch executable one layer deeper:
+     the captured prefixes split evenly across clause-`2`
+     `claim_flat_domain = 15`, `claim_sharp_codomain = 15`,
+     `reference = 15`, and each clause-`2` sheet then splits uniformly as
+     clause-`4` `claim_next_bridge = 3 / 3 / 3` plus clause-`4`
+     `reference = 2 / 2 / 2` across clause-`5`
+     `claim_flat_codomain`, `claim_next_codomain`, and `reference`
    - but that same probe still widens the `small_cluster` to
      `3324 / 554 / 554 / 0`, so the next landed repair should isolate those
      escaping `16` captures on that branch without relanding the whole
-     reopening
+     reopening; start by isolating one exact `15`-count clause-`2` sheet or
+     the exact `18`-count clause-`4` `reference` sheet before touching the
+     larger `27`-count clause-`4` `claim_next_bridge` side
    - the reverted clause-`3` `anchor-11` widening with clause `2 = reference`
      left that clause-`4` family split unchanged and only reopened
      summary-stage incumbent pressure
@@ -282,6 +305,8 @@ Do not start with another rerun setup pass.
   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_evenly_across_three_clause_two_sheets`
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_each_clause_two_sheet_as_three_by_three_and_two_by_two_bridge_cells`
   - `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`

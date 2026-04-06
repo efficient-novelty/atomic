@@ -355,9 +355,20 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     incumbent-dominance prunes stayed fenced and unchanged
   - but the `small_cluster` widened from `3132 / 522 / 522 / 0` to
     `3324 / 554 / 554 / 0`
+  - newer executable tradeoff-branch freezes now pin that same `45`-capture
+    branch one layer deeper: it splits evenly across clause-`2`
+    `claim_flat_domain = 15`, `claim_sharp_codomain = 15`,
+    `reference = 15`, and each clause-`2` sheet then splits uniformly as
+    clause-`4` `claim_next_bridge = 3 / 3 / 3` plus clause-`4`
+    `reference = 2 / 2 / 2` across clause-`5`
+    `claim_flat_codomain`, `claim_next_codomain`, and `reference`
   - so that narrower reopening is now only a tradeoff control rather than
     the next landed repair, and it is now pinned by
     `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
+    plus
+    `current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_evenly_across_three_clause_two_sheets`
+    and
+    `current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_each_clause_two_sheet_as_three_by_three_and_two_by_two_bridge_cells`
     plus
     `connectivity_accepts_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_under_override`,
     `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`,
@@ -708,8 +719,14 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   clause-`4` `33 / 28` / `61` captured prefixes to clause-`4`
   `27 / 18` / `45`, lifts local breadth to `4523`, and narrows the clean wall
   to `537`, but it also widens the `small_cluster` to
-  `3324 / 554 / 554 / 0`, so the next landed repair should isolate those
-  escaping `16` captures rather than reland that whole reopening
+  `3324 / 554 / 554 / 0`; newer executable tradeoff-branch freezes now show
+  that same `45`-capture branch split evenly across three clause-`2` sheets
+  at `15` each, with each sheet then splitting as clause-`4`
+  `claim_next_bridge = 3 / 3 / 3` plus clause-`4`
+  `reference = 2 / 2 / 2` across the three clause-`5` families, so the next
+  landed repair should isolate those escaping `16` captures by testing one
+  exact `15`-count clause-`2` sheet or the exact `18`-count clause-`4`
+  `reference` sheet rather than relanding that whole reopening
 - both reverted clause-`1` side-pocket broadenings are now explicitly ruled
   out as the next move:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the

@@ -76,6 +76,12 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     unchanged
   - but it widened `small_cluster` to `3324 / 554 / 554 / 0`, so it is not
     the landed repair
+  - newer executable tradeoff-branch freezes now pin that same `45`-capture
+    branch as three equal clause-`2` sheets at `15 / 15 / 15`
+  - each clause-`2` sheet then splits uniformly as clause-`4`
+    `claim_next_bridge = 3 / 3 / 3` plus clause-`4` `reference = 2 / 2 / 2`
+    across clause-`5`
+    `claim_flat_codomain`, `claim_next_codomain`, and `reference`
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:

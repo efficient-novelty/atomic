@@ -170,9 +170,24 @@ Until that exists, wording stays at `bounded live recovery`.
     incumbent-dominance prunes unchanged
   - but it widens the `small_cluster` from `3132 / 522 / 522 / 0` to
     `3324 / 554 / 554 / 0`
+  - newer executable tradeoff-branch freezes now pin that same `45`-capture
+    branch one layer deeper:
+    `current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_evenly_across_three_clause_two_sheets`
+    and
+    `current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_each_clause_two_sheet_as_three_by_three_and_two_by_two_bridge_cells`
+  - the branch now splits evenly across clause-`2`
+    `claim_flat_domain = 15`, `claim_sharp_codomain = 15`,
+    `reference = 15`
+  - each clause-`2` sheet then splits uniformly as clause-`4`
+    `claim_next_bridge = 3 / 3 / 3` plus clause-`4`
+    `reference = 2 / 2 / 2` across clause-`5`
+    `claim_flat_codomain`, `claim_next_codomain`, and `reference`
   - so it is a tradeoff control, not the landed repair; the next slice should
     isolate that narrower `reference + demo_flat_codomain` branch without
-    taking the full `small_cluster` reopening
+    taking the full `small_cluster` reopening, starting with one exact
+    `15`-count clause-`2` sheet or the exact `18`-count clause-`4`
+    `reference` sheet before touching the larger `27`-count clause-`4`
+    `claim_next_bridge` side
 - A local clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   was also checked and reverted:
@@ -295,6 +310,8 @@ Until that exists, wording stays at `bounded live recovery`.
   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_evenly_across_three_clause_two_sheets`
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_each_clause_two_sheet_as_three_by_three_and_two_by_two_bridge_cells`
   - `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
@@ -341,7 +358,14 @@ to `2223`, and lift local breadth to `4523` while leaving the isolated
 `single` pocket and residual `3` prunes unchanged. Because that same probe
 also widens the `small_cluster` to `3324 / 554 / 554 / 0`, the next landed
 repair should isolate those escaping `16` captures on the
-`reference + demo_flat_codomain` branch without relanding the full reopening,
+`reference + demo_flat_codomain` branch without relanding the full reopening.
+The new executable tradeoff-branch freezes now show exactly how to do that
+more narrowly: the `45` captured prefixes break into three equal clause-`2`
+sheets at `15` each, and each sheet then splits uniformly as clause-`4`
+`claim_next_bridge = 3 / 3 / 3` plus clause-`4` `reference = 2 / 2 / 2`
+across the three clause-`5` families. Start with one exact `15`-count
+clause-`2` sheet or the exact `18`-count clause-`4` `reference` sheet before
+touching the larger `27`-count clause-`4` `claim_next_bridge` side,
 and should stay narrower than another clause-`3` widen-first probe, the
 reverted clause-`1` broadenings at `4466 / 626`, the claim-safe
 clause-`4` reopenings at `4587 / 585` or `4843 / 617`, the broader

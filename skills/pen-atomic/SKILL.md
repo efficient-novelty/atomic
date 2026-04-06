@@ -76,10 +76,19 @@ Treat these as current repo truths:
   control now shows that reopening only that branch lifts local breadth to
   `4523`, narrows the clean wall to `537`, and shrinks that branch to
   clause-`4` `27 / 18` / `45` captured prefixes, but only by widening the
-  `small_cluster` to `3324 / 554 / 554 / 0`; the clause-`2` split keeps the
-  pressure on the two current claim variants at `15 / 15 / 12` or
-  `23 / 23 / 15` rather than on a hidden demo-only clause-`2` reopening, so
-  the next landed repair should start by isolating that narrower
+  `small_cluster` to `3324 / 554 / 554 / 0`; newer executable tradeoff-branch
+  freezes now pin that same `45`-capture branch one layer deeper too:
+  it splits evenly across clause-`2`
+  `claim_flat_domain = 15`, `claim_sharp_codomain = 15`,
+  `reference = 15`, and each clause-`2` sheet then splits uniformly as
+  clause-`4` `claim_next_bridge = 3 / 3 / 3` plus clause-`4`
+  `reference = 2 / 2 / 2` across clause-`5`
+  `claim_flat_codomain`, `claim_next_codomain`, and `reference`; the
+  clause-`2` split keeps the pressure on the two current claim variants at
+  `15 / 15 / 12` or `23 / 23 / 15` rather than on a hidden demo-only
+  clause-`2` reopening, so the next landed repair should start by isolating
+  one exact `15`-count clause-`2` sheet or the exact `18`-count
+  clause-`4` `reference` sheet on that narrower
   `reference + demo_flat_codomain` branch rather than with another rerun
   setup pass or a step-`1`-first theory slice; the canonical
   `v11` certificate plus the frozen `step-15-live.ndjson` provenance are now
@@ -700,8 +709,14 @@ Focus on:
   clause-`4` `33 / 28` / `61` captured prefixes to clause-`4`
   `27 / 18` / `45`, lifts local breadth to `4523`, and narrows the clean wall
   to `537`, but it also widens the `small_cluster` to
-  `3324 / 554 / 554 / 0`, so the next landed repair should isolate those
-  escaping `16` captures rather than reland the whole reopening
+  `3324 / 554 / 554 / 0`; newer executable freezes now show that same
+  `45`-capture branch split evenly across three clause-`2` sheets at `15`
+  each, with each sheet then splitting as clause-`4`
+  `claim_next_bridge = 3 / 3 / 3` plus clause-`4`
+  `reference = 2 / 2 / 2` across the three clause-`5` families, so the next
+  landed repair should isolate those escaping `16` captures by testing one
+  exact `15`-count clause-`2` sheet or the exact `18`-count clause-`4`
+  `reference` sheet rather than relanding the whole reopening
 - treating the two reverted clause-`1` side-pocket broadenings as negative
   controls only:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the

@@ -12332,6 +12332,23 @@ mod tests {
         clause_two_counts
     }
 
+    fn current_claim_step_fifteen_tradeoff_control_reference_demo_flat_branch_bridge_family_counts(
+    ) -> BTreeMap<(&'static str, &'static str, &'static str), usize> {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface();
+        current_claim_step_fifteen_remaining_two_partial_prefix_bridge_family_counts()
+            .into_iter()
+            .filter_map(
+                |((mismatch, clause_zero, clause_one, clause_two, clause_four, clause_five), count)| {
+                    (mismatch == Some(1_usize)
+                        && clause_zero == "reference"
+                        && clause_one == "demo_flat_codomain")
+                        .then_some(((clause_two, clause_four, clause_five), count))
+                },
+            )
+            .collect()
+    }
+
     fn current_claim_step_fifteen_incumbent_prune_summary() -> LateStepIncumbentPruneSummary {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             14,
@@ -19859,6 +19876,79 @@ mod tests {
                 .copied(),
             Some(18),
             "the same tradeoff should leave a smaller residual on the clause-4 reference family"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_evenly_across_three_clause_two_sheets()
+     {
+        let bridge_counts =
+            current_claim_step_fifteen_tradeoff_control_reference_demo_flat_branch_bridge_family_counts();
+        let mut clause_two_counts = BTreeMap::new();
+        for ((clause_two, _clause_four, _clause_five), count) in bridge_counts {
+            *clause_two_counts.entry(clause_two).or_insert(0usize) += count;
+        }
+        assert_eq!(
+            clause_two_counts,
+            [
+                ("claim_flat_domain", 15_usize),
+                ("claim_sharp_codomain", 15),
+                ("reference", 15),
+            ]
+            .into_iter()
+            .collect(),
+            "the clause-1 demo-flat reference-clause-0 tradeoff branch should now be executable one layer deeper too: it breaks into three equal clause-2 sheets rather than hiding on only one claim-side continuation"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_each_clause_two_sheet_as_three_by_three_and_two_by_two_bridge_cells()
+     {
+        let bridge_counts =
+            current_claim_step_fifteen_tradeoff_control_reference_demo_flat_branch_bridge_family_counts();
+        assert_eq!(
+            bridge_counts,
+            [
+                (
+                    ("claim_flat_domain", "claim_next_bridge", "claim_flat_codomain"),
+                    3_usize
+                ),
+                (
+                    ("claim_flat_domain", "claim_next_bridge", "claim_next_codomain"),
+                    3
+                ),
+                (("claim_flat_domain", "claim_next_bridge", "reference"), 3),
+                (("claim_flat_domain", "reference", "claim_flat_codomain"), 2),
+                (("claim_flat_domain", "reference", "claim_next_codomain"), 2),
+                (("claim_flat_domain", "reference", "reference"), 2),
+                (
+                    ("claim_sharp_codomain", "claim_next_bridge", "claim_flat_codomain"),
+                    3
+                ),
+                (
+                    ("claim_sharp_codomain", "claim_next_bridge", "claim_next_codomain"),
+                    3
+                ),
+                (("claim_sharp_codomain", "claim_next_bridge", "reference"), 3),
+                (("claim_sharp_codomain", "reference", "claim_flat_codomain"), 2),
+                (("claim_sharp_codomain", "reference", "claim_next_codomain"), 2),
+                (("claim_sharp_codomain", "reference", "reference"), 2),
+                (
+                    ("reference", "claim_next_bridge", "claim_flat_codomain"),
+                    3
+                ),
+                (
+                    ("reference", "claim_next_bridge", "claim_next_codomain"),
+                    3
+                ),
+                (("reference", "claim_next_bridge", "reference"), 3),
+                (("reference", "reference", "claim_flat_codomain"), 2),
+                (("reference", "reference", "claim_next_codomain"), 2),
+                (("reference", "reference", "reference"), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "each clause-2 sheet on that tradeoff branch should split uniformly: clause-4 claim_next_bridge contributes one 3-count cell per clause-5 family, while clause-4 reference contributes the matching 2-count cells"
         );
     }
 
