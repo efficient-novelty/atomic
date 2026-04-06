@@ -374,6 +374,31 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`,
     and
     `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_from_reopening_lifted_terminals_even_under_override`
+- a newer narrower clause-`4` `reference`-sheet reopening on that same
+  `reference + demo_flat_codomain` branch has now also been checked under a
+  second scoped connectivity-only override:
+  - the local late chain still accepts `DCT 103 / 8`, and live generated
+    prefixes lift from `4331` to `4379`
+  - the clean partial-prefix wall narrows from `553` to `549`, and
+    zero-admitted exact-prune capture narrows from `2271` to `2259`
+  - the larger mismatch-`1` `reference + demo_flat_codomain` branch shrinks
+    only from clause-`4` `33 / 28` / `61` down to clause-`4` `33 / 24` / `57`
+  - the isolated `single` pocket and the residual `3`
+    incumbent-dominance prunes stay fenced and unchanged
+  - but the `small_cluster` still widens from `3132 / 522 / 522 / 0` to
+    `3180 / 530 / 530 / 0`
+  - the reopened cells stay narrower than the broader tradeoff control:
+    only four captured clause-`4` `reference` cells reopen, only on the
+    `claim_flat_domain` plus `claim_sharp_codomain` clause-`2` sheets, while
+    the full `33`-count clause-`4` `claim_next_bridge` side stays unchanged
+  - so that narrower reopening is also only a tradeoff control rather than
+    the next landed repair, and it is now pinned by
+    `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_reference_sheet_stays_a_tradeoff_control`
+    plus
+    `connectivity_accepts_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_reference_sheet_under_override`,
+    `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_outside_clause_four_reference_sheet_even_under_override`,
+    and
+    `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_reference_sheet_reference_terminal_only_even_under_override`
 - a newer exploratory clause-`3` `anchor-11` exact-argument widening onto the
   broader clause-`0` / clause-`1` claim surface while clause `2` stayed
   `reference` has now also been checked and reverted:
@@ -816,7 +841,15 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    pocket and residual `3` prunes fixed. But it also widens the
    `small_cluster` to `3324 / 554 / 554 / 0`, so it is only a tradeoff
    control; the next landed repair should isolate those escaping `16`
-   captures on that branch without relanding the whole reopening.
+   captures on that branch without relanding the whole reopening. The newer
+   clause-`4` `reference`-sheet tradeoff then shows that reopening only that
+   smaller side is real but still not enough: it lifts local breadth only to
+   `4379`, narrows the clean wall only to `549`, cuts zero-admitted capture
+   only to `2259`, shrinks the same branch only to clause-`4` `33 / 24` /
+   `57`, and still widens the `small_cluster` to `3180 / 530 / 530 / 0`.
+   So the next landed repair should now move to one exact `15`-count
+   clause-`2` sheet before touching the larger clause-`4`
+   `claim_next_bridge` side again.
    The reverted clause-`3` `anchor-11` exact-argument widening onto the
    broader clause-`0` / clause-`1` claim surface while clause `2` stayed
    `reference` left that clean `553` wall and the executable nine-pair split

@@ -12349,6 +12349,23 @@ mod tests {
             .collect()
     }
 
+    fn current_claim_step_fifteen_clause_four_reference_sheet_probe_reference_demo_flat_branch_bridge_family_counts(
+    ) -> BTreeMap<(&'static str, &'static str, &'static str), usize> {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_reference_sheet();
+        current_claim_step_fifteen_remaining_two_partial_prefix_bridge_family_counts()
+            .into_iter()
+            .filter_map(
+                |((mismatch, clause_zero, clause_one, clause_two, clause_four, clause_five), count)| {
+                    (mismatch == Some(1_usize)
+                        && clause_zero == "reference"
+                        && clause_one == "demo_flat_codomain")
+                        .then_some(((clause_two, clause_four, clause_five), count))
+                },
+            )
+            .collect()
+    }
+
     fn current_claim_step_fifteen_incumbent_prune_summary() -> LateStepIncumbentPruneSummary {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             14,
@@ -19949,6 +19966,143 @@ mod tests {
             .into_iter()
             .collect(),
             "each clause-2 sheet on that tradeoff branch should split uniformly: clause-4 claim_next_bridge contributes one 3-count cell per clause-5 family, while clause-4 reference contributes the matching 2-count cells"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_reference_sheet_stays_a_tradeoff_control()
+     {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_reference_sheet();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts();
+        let bridge_counts =
+            current_claim_step_fifteen_clause_four_reference_sheet_probe_reference_demo_flat_branch_bridge_family_counts();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4379);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
+            549,
+            "opening only the clause-4 reference sheet beneath the reference-plus-demo-flat branch should narrow the clean wall, but it still stays only a tradeoff control rather than the landed repair"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance,
+            3,
+            "the clause-4 reference-sheet tradeoff should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 549);
+        assert_eq!(zero_summary.captured_prefixes, 2259);
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3180,
+                admissible_terminal_candidates: 530,
+                exact_screened_terminal_candidates: 530,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the clause-4 reference-sheet tradeoff still widens the noncanonical small-cluster surface, so it is not yet the landed repair"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the clause-4 reference-sheet tradeoff should still keep the isolated single pocket fenced"
+        );
+        assert_eq!(
+            pair_counts
+                .get(&(Some(1_usize), "reference", "demo_flat_codomain"))
+                .copied(),
+            Some(57),
+            "this narrower tradeoff should cut only four captures from the larger remaining-two reference-plus-demo-flat branch"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(Some(1_usize), "reference", "demo_flat_codomain", "reference"))
+                .copied(),
+            Some(24),
+            "the narrower tradeoff should cut only the clause-4 reference side of that branch"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(Some(1_usize), "reference", "demo_flat_codomain", "claim_next_bridge"))
+                .copied(),
+            Some(33),
+            "the narrower tradeoff should leave the larger clause-4 claim-next-bridge side unchanged"
+        );
+        assert_eq!(
+            bridge_counts,
+            [
+                (
+                    ("claim_flat_domain", "claim_next_bridge", "claim_flat_codomain"),
+                    4_usize
+                ),
+                (
+                    ("claim_flat_domain", "claim_next_bridge", "claim_next_codomain"),
+                    4
+                ),
+                (("claim_flat_domain", "claim_next_bridge", "reference"), 4),
+                (("claim_flat_domain", "reference", "claim_flat_codomain"), 3),
+                (("claim_flat_domain", "reference", "claim_next_codomain"), 3),
+                (("claim_flat_domain", "reference", "reference"), 3),
+                (
+                    ("claim_sharp_codomain", "claim_next_bridge", "claim_flat_codomain"),
+                    4
+                ),
+                (
+                    ("claim_sharp_codomain", "claim_next_bridge", "claim_next_codomain"),
+                    4
+                ),
+                (("claim_sharp_codomain", "claim_next_bridge", "reference"), 4),
+                (("claim_sharp_codomain", "reference", "claim_flat_codomain"), 3),
+                (("claim_sharp_codomain", "reference", "claim_next_codomain"), 3),
+                (("claim_sharp_codomain", "reference", "reference"), 3),
+                (
+                    ("reference", "claim_next_bridge", "claim_flat_codomain"),
+                    3
+                ),
+                (
+                    ("reference", "claim_next_bridge", "claim_next_codomain"),
+                    3
+                ),
+                (("reference", "claim_next_bridge", "reference"), 3),
+                (("reference", "reference", "claim_flat_codomain"), 2),
+                (("reference", "reference", "claim_next_codomain"), 2),
+                (("reference", "reference", "reference"), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the clause-4 reference-sheet tradeoff should reopen only four captured cells, and only on the claim-flat and claim-sharp clause-2 sheets while leaving the reference clause-2 sheet unchanged"
         );
     }
 

@@ -82,6 +82,22 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     `claim_next_bridge = 3 / 3 / 3` plus clause-`4` `reference = 2 / 2 / 2`
     across clause-`5`
     `claim_flat_codomain`, `claim_next_codomain`, and `reference`
+- A narrower clause-`4` `reference`-sheet tradeoff control is now explicit
+  too:
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_reference_sheet_stays_a_tradeoff_control`
+  - it lifted local step `15` generated breadth to `4379`
+  - it narrowed the clean partial-prefix wall to `549` and zero-admitted
+    capture to `2259`
+  - it shrank the mismatch `1` `reference + demo_flat_codomain` branch from
+    `61` captured prefixes on clause-`4` `33 / 28` down only to
+    clause-`4` `33 / 24` / `57`
+  - it kept the isolated `single` pocket and residual `3` incumbent prunes
+    unchanged
+  - but it widened `small_cluster` to `3180 / 530 / 530 / 0`, so it is also
+    not the landed repair
+  - it reopened only four captured clause-`4` `reference` cells, only on the
+    `claim_flat_domain` plus `claim_sharp_codomain` clause-`2` sheets, while
+    the full `33`-count clause-`4` `claim_next_bridge` side stayed unchanged
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
