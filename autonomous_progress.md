@@ -215,6 +215,25 @@ gate.
     `1968` families / `5904` connected-but-unqualified terminal options, so
     this narrower bridge-stack extension still leaves the broader
     clause-`2` / clause-`3` capture boundary untouched
+- A newer local step-`15` clause-`1` demo-flat-codomain side-pocket repair
+  now lands on top of that same exact anchor-`11` bridge-pocket stack:
+  - the clause-`1` `demo_flat_codomain` opening now also counts as
+    historical reanchor only on the exact anchor-`11` clause-`2` plus
+    exact-argument side pocket and only with the reference terminal
+  - the repaired local late chain still accepts `DCT 103 / 8`, and live
+    generated prefixes now lift again from `4140` to `4275`
+  - the remaining local pressure is now `549` partial-prefix bar failures
+    plus `3` incumbent-dominance prunes, with
+    legality/connectivity exact rejection still at `0`
+  - the local surviving temporal terminal `small_cluster` now widens again to
+    `3084` generated / `514` admitted / `514` exact-screened / `0` pruned,
+    while the isolated `single` pocket still stays fenced as one fully scored
+    non-winning terminal plus `3` residual single-bucket prunes
+  - the captured zero-admitted surface now widens narrowly to
+    `2259` families / `6777` connected-but-unqualified terminal options, and
+    historical-reanchor prefix progress there now splits as `291`
+    clause-`1`-side families plus `1482` clause-`2`-side families and `486`
+    clause-`3`-side families
 - A newer local step-`15` proof-close incumbent regression now freezes that
   residual fenced pressure more tightly:
   - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
@@ -263,11 +282,11 @@ gate.
   - `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
     now pins that granting same-primary incumbent relief only to those exact
     clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
-    keeps live generated prefixes flat at `4140` and keeps partial-prefix bar
-    failures at `476`
+    keeps live generated prefixes flat at `4275` and keeps partial-prefix bar
+    failures at `549`
   - it does collapse the remaining incumbent-dominance prunes from `3` to `0`
   - the cleared `small_cluster` stays unchanged at
-    `3060 / 510 / 510 / 0`
+    `3084 / 514 / 514 / 0`
   - but the isolated `single` pocket still unfences from `1` to `4`
     fully scored non-winning terminals at the same overshoot
     `115657 / 21112`
@@ -279,9 +298,9 @@ gate.
   - `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
     now pins that every non-empty subset of those same exact clause-`0`,
     clause-`2` + anchor-`11`, and clause-`5` residual families still keeps
-    live generated prefixes flat at `4140`, partial-prefix bar failures at
-    `476`, and the cleared `small_cluster` unchanged at
-    `3060 / 510 / 510 / 0`
+    live generated prefixes flat at `4275`, partial-prefix bar failures at
+    `549`, and the cleared `small_cluster` unchanged at
+    `3084 / 514 / 514 / 0`
   - the repaired canonical step-`15` winner also stays unchanged on every one
     of those subset-local probes
   - instead, opening any strict subset only trades `n` of the remaining `3`
@@ -1390,9 +1409,9 @@ gate.
   guardrails:
   step `13` should now stay at `[5,1,3,3,5,3,2]` / `1350` / `2320` with the
   guarded accepted hash, step `14` should stay `19683` / `12027`, the latest
-  local post-`v11` step `15` guardrail should stay `DCT 103 / 8 / 4140`
-  with `476` partial-prefix bar failures, `3` incumbent-dominance prunes, and
-  a `3060 / 510 / 510 / 0` `small_cluster` surface plus the fenced
+  local post-`v11` step `15` guardrail should stay `DCT 103 / 8 / 4275`
+  with `549` partial-prefix bar failures, `3` incumbent-dominance prunes, and
+  a `3084 / 514 / 514 / 0` `small_cluster` surface plus the fenced
   `single` pocket, and stored canonical `v11` step `15` should still stay
   `DCT 103 / 8 / 3972` until another full rerun consumes the new local repair.
 - Use the stored `v11` certificate and the late-step live checkpoints as the
@@ -1400,7 +1419,7 @@ gate.
   catalog widths, root seeding, exact-screen pressure, and the full stored
   step-open pressure envelope for the open steps.
 - Treat stored `v11` step `15 = 3972 / 5000` as the remaining stored
-  late-floor miss, but keep the new local `4140` guardrail explicit too; do
+  late-floor miss, but keep the new local `4275` guardrail explicit too; do
   not reopen step `11` or step `13` first now that stored step `11`
   re-earns `1338 / 800` and stored step `13` re-earns `2320 / 2200` on the
   clean canonical bundle.
@@ -1434,15 +1453,16 @@ gate.
    first diagnosis surface for the residual stored `3972 / 5000` miss at
    step `15`, but keep the new local post-`v11` guardrail explicit while
    doing so: the landed small-cluster relief plus the newer
-   clause-`5` bridge-pocket stack now keep the repaired local
-   late chain at `DCT 103 / 8 / 4140`, with `476` partial-prefix bar
+   clause-`5` bridge-pocket stack and the newer clause-`1`
+   `demo_flat_codomain` side-pocket reland now keep the repaired local
+   late chain at `DCT 103 / 8 / 4275`, with `549` partial-prefix bar
    failures, only `3` incumbent-dominance prunes, a widened temporal
-   `small_cluster` at `3060 / 510 / 510 / 0`, the isolated `single` pocket
+   `small_cluster` at `3084 / 514 / 514 / 0`, the isolated `single` pocket
    still fenced as one fully scored non-winner plus `3` residual single-bucket
-   prunes, and the still-tight captured surface at
-   `1968` families / `5904` connected-but-unqualified terminal options. The
-   clause-`4` / clause-`5` pocket stack still stays narrowly fenced and
-   noncanonical,
+   prunes, and the still-narrow captured surface at
+   `2259` families / `6777` connected-but-unqualified terminal options. The
+   clause-`1` / clause-`4` / clause-`5` side-pocket stack still stays
+   narrowly fenced and noncanonical,
    and
    `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
    now pins those remaining prunes to three `proof_close_group`
@@ -1458,14 +1478,14 @@ gate.
    unsafe stronger-than-canonical `89 / 8` lifted terminals, and
    `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
    now further proves that even granting same-primary relief only to those
-   exact three families keeps `4140` / `476`, collapses the remaining
+   exact three families keeps `4275` / `549`, collapses the remaining
    incumbent-dominance prunes from `3` to `0`, and still unfences the
    isolated `single` pocket from `1` to `4` fully scored non-winning
    terminals while leaving the `small_cluster` unchanged at
-   `3060 / 510 / 510 / 0`, while
+   `3084 / 514 / 514 / 0`, while
    `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
    now further proves that every strict subset of those same families still
-   keeps `4140` / `476` and the same cleared `small_cluster`, only trading
+   keeps `4275` / `549` and the same cleared `small_cluster`, only trading
    `n` residual incumbent prunes for `n` extra fully scored non-winning
    terminals in the isolated `single` pocket, with those extra candidates all
    staying same-primary `103 / 8`, bit-cost-`236` reference-terminal
@@ -1474,7 +1494,7 @@ gate.
    clause-`5` / raw global position-`0` reland, and not a blanket,
    exact-family, or subset-local same-primary-retention reland; it should be the next
    parity-preserving step-`15` repair against those residual `3`
-   single-bucket incumbent prunes on top of this `4140` surface, starting
+   single-bucket incumbent prunes on top of this `4275` surface, starting
    from those three fenced prefix families instead of reopening the full
    side-pocket neighborhood.
 4. Launch the next clean full-profile claim rerun only after that next local

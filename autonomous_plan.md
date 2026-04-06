@@ -178,6 +178,25 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     `1968` families / `5904` connected-but-unqualified terminal options, so
     the landed repair still leaves the broader clause-`2` / clause-`3`
     capture boundary untouched
+- A newer local step-`15` clause-`1` demo-flat-codomain side-pocket repair
+  now lands on top of that same exact anchor-`11` bridge-pocket stack:
+  - the clause-`1` `demo_flat_codomain` opening now also counts as
+    historical reanchor only on the exact anchor-`11` clause-`2` plus
+    exact-argument side pocket and only with the reference terminal
+  - the repaired local late chain still accepts `DCT 103 / 8`, and live
+    generated prefixes now lift again from `4140` to `4275`
+  - the remaining local gap to the late floor is now `725`, with step-`15`
+    partial-prefix bar failures now at `549`, incumbent-dominance prunes
+    still at `3`, and legality/connectivity exact rejections still at `0`
+  - the local surviving temporal terminal cluster now widens again to
+    `3084` generated / `514` admitted / `514` exact-screened / `0` pruned,
+    while the isolated `single` pocket still remains the only fully scored
+    non-winning terminal plus `3` residual single-bucket prunes
+  - the captured zero-admitted surface now widens narrowly to
+    `2259` families / `6777` connected-but-unqualified terminal options, and
+    historical-reanchor prefix progress there now splits as `291`
+    clause-`1`-side families plus `1482` clause-`2`-side families and `486`
+    clause-`3`-side families
 - A new executable step-`15` survivor-bucket regression now freezes that
   post-repair split more tightly:
   - exactly two
@@ -223,11 +242,11 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   regression now sharpens that same blocker one step further:
   - granting same-primary incumbent relief only to those exact
     clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
-    still keeps the repaired local surface at `4140` generated prefixes with
-    `476` partial-prefix bar failures
+    still keeps the repaired local surface at `4275` generated prefixes with
+    `549` partial-prefix bar failures
   - it does collapse the remaining incumbent-dominance prunes from `3` to `0`
   - the cleared `small_cluster` stays unchanged at
-    `3060 / 510 / 510 / 0`
+    `3084 / 514 / 514 / 0`
   - but the isolated `single` pocket still unfences from `1` to `4`
   fully scored non-winning terminals, so the next landed repair must stay
   narrower than same-primary relief even at exact-family scope
@@ -235,10 +254,10 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
   regression now sharpens that same blocker further again:
   - every non-empty strict subset of those same three residual families still
-    keeps the repaired local surface at `4140` generated prefixes with `476`
+    keeps the repaired local surface at `4275` generated prefixes with `549`
     partial-prefix bar failures
   - the cleared `small_cluster` still stays unchanged at
-    `3060 / 510 / 510 / 0`, and the repaired canonical winner also stays
+    `3084 / 514 / 514 / 0`, and the repaired canonical winner also stays
     unchanged
   - instead, opening any strict subset only trades `n` of the remaining `3`
     incumbent-dominance prunes for `n` extra fully scored non-winning
@@ -256,10 +275,12 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
     admissible, and same-primary `103 / 8` / `115657 / 21112` on top of the
     current live claim clause-`2` + anchor-`11` exact-argument pocket
   - the clause-`4` `demo_sharp_codomain` and `demo_sharp_bridge` variants now
-    regain historical reanchor only on that exact side pocket, while the clause-`0`,
-    clause-`1`, and clause-`5` variants still stay outside historical
-    reanchor there and still lose only on higher bit cost `243`, `245`, or
-    `250`
+    regain historical reanchor only on that exact side pocket, the clause-`1`
+    `demo_flat_codomain` variant now also regains historical reanchor only on
+    that same exact side pocket and only with the reference terminal, while
+    the clause-`0`, clause-`1` `demo_eventually_codomain`, and clause-`5`
+    variants still stay outside historical reanchor there and still lose only
+    on higher bit cost `243`, `245`, or `250`
   - a non-landed raw position-`0` reland probe briefly lifted the local
     step-`15` generated surface to `4285`, but it also reopened the repaired
     clause-`0` zero-admitted capture to `2835` families / `891`
@@ -331,19 +352,20 @@ The highest-value work is:
    `1` explicit on the checklist
 3. use the `v11` certificate and `step-15-live.ndjson` to land the next
    parity-preserving local step-`15` repair against the current post-relief
-   `476`-bar / `3`-incumbent surface, keeping the new `4140` guardrail
+   `549`-bar / `3`-incumbent surface, keeping the new `4275` guardrail
    stable, treating the raw position-`0` probe as the explicit "do not reland
    this globally" boundary, and treating clause `4` plus the local
-   clause-`5` `demo_sharp_domain` and `demo_flat_codomain` openings as
-   already consumed by a fenced tiny side pocket so the next gain now comes
-   from the residual `single`-bucket incumbent pressure rather than from the
-   old `small_cluster` summary wall; the new proof-close incumbent freeze now
-   further localizes that next move to three fenced same-primary `103 / 8`
-   prefix families first diverging at clause positions `0`, `2`, and `5`, and
-   the newer strict-subset same-primary probe now proves the next repair must
-   stay narrower than proof-close same-primary relief even on any strict
-   subset of those same families, because those probes already only unfence
-   same-primary `103 / 8`, bit-cost-`236` reference-terminal completions
+   clause-`5` `demo_sharp_domain` and `demo_flat_codomain` openings plus the
+   newer clause-`1` `demo_flat_codomain` opening as already consumed by a
+   fenced tiny side pocket so the next gain now comes from the residual
+   `single`-bucket incumbent pressure rather than from the old `small_cluster`
+   summary wall; the new proof-close incumbent freeze now further localizes
+   that next move to three fenced same-primary `103 / 8` prefix families first
+   diverging at clause positions `0`, `2`, and `5`, and the newer
+   strict-subset same-primary probe now proves the next repair must stay
+   narrower than proof-close same-primary relief even on any strict subset of
+   those same families, because those probes already only unfence same-primary
+   `103 / 8`, bit-cost-`236` reference-terminal completions
 4. launch the next clean full-profile rerun only after that next local repair
    is regression-backed
 5. refresh compare / benchmark / certification on the next stored bundle
@@ -399,11 +421,12 @@ Current slice order:
 1. hold the stored step-`13` hit, the stored `v11` diagnosis freeze, and the
    frozen negative controls green
 2. use the stored `v11` certificate and live checkpoints to localize the next
-   step-`15` repair against the remaining local `476` partial-prefix bar
+   step-`15` repair against the remaining local `549` partial-prefix bar
    failures and `3` incumbent-dominance prunes, keeping the isolated
    `single` survivor bucket fenced, keeping the newly reopened clause-`4`
-   side pocket fenced as tiny and noncanonical, and working against the
-   residual `single`-bucket pressure without broadening the raw
+   side pocket fenced as tiny and noncanonical, keeping the newer clause-`1`
+   side pocket equally fenced and reference-terminal-local, and working
+   against the residual `single`-bucket pressure without broadening the raw
    position-`0` catalog; keep
    `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_pin_the_exact_claim_family_labels`
    green so that the exact residual surface stays frozen as clause-`0`

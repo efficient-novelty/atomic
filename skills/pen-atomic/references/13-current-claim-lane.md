@@ -294,6 +294,25 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     `1968` families / `5904` connected-but-unqualified terminal options, so
     the landed repair still leaves the broader clause-`2` / clause-`3`
     capture boundary untouched
+- a newer local step-`15` clause-`1` demo-flat-codomain side-pocket repair
+  now lands on top of that same exact anchor-`11` bridge-pocket stack:
+  - the clause-`1` `demo_flat_codomain` opening now also counts as
+    historical reanchor only on the exact anchor-`11` clause-`2` plus
+    exact-argument side pocket and only with the reference terminal
+  - the repaired local late chain still accepts `DCT 103 / 8`, and live
+    generated prefixes now lift again from `4140` to `4275`
+  - the remaining local gap to the late floor is now `725`, with
+    partial-prefix bar failures now at `549`, incumbent-dominance prunes
+    still at `3`, and legality/connectivity exact rejection still at `0`
+  - the surviving local temporal terminal `small_cluster` now widens again to
+    `3084` generated / `514` admitted / `514` exact-screened / `0` pruned,
+    while the isolated `single` pocket still remains the only fully scored
+    non-winning terminal plus `3` residual single-bucket prunes
+  - the captured zero-admitted surface now widens narrowly to
+    `2259` families / `6777` connected-but-unqualified terminal options, and
+    historical-reanchor prefix progress there now splits as `291`
+    clause-`1`-side families plus `1482` clause-`2`-side families and `486`
+    clause-`3`-side families
 - a newer local step-`15` proof-close incumbent regression now freezes that
   remaining fenced pressure more tightly:
   - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
@@ -314,14 +333,14 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   synced to that same latest local state too:
   - `repaired_claim_step_twelve_late_path_has_scoped_step_thirteen_widening_before_proof_close`
     now freezes the repaired canonical continuation through
-    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 4140`
-  - the local step-`15` guardrails now freeze `4140`, `3`
+    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 4275`
+  - the local step-`15` guardrails now freeze `4275`, `3`
     incumbent-dominance prunes, and the
-    `3060 / 510 / 510 / 0` `small_cluster` surface instead of the older
+    `3084 / 514 / 514 / 0` `small_cluster` surface instead of the older
     clause-`5` `4030` / `246` / `2226 / 248 / 248 / 246` read
   - the frozen `[5,1,3,3,5,3,3]` step-`13` negative control still preserves
     guarded step-`14` / step-`15` hashes while now also observing that same
-    repaired local `4140` step-`15` surface
+    repaired local `4275` step-`15` surface
 - a new local step-`15` survivor-bucket regression now freezes that
   exact-screened survivor split more tightly:
   - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
@@ -390,11 +409,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
     now pins that granting same-primary incumbent relief only to those exact
     clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
-    keeps live generated prefixes flat at `4140` and keeps partial-prefix bar
-    failures at `476`
+    keeps live generated prefixes flat at `4275` and keeps partial-prefix bar
+    failures at `549`
   - it does collapse the remaining incumbent-dominance prunes from `3` to `0`
   - the cleared `small_cluster` stays unchanged at
-    `3060 / 510 / 510 / 0`
+    `3084 / 514 / 514 / 0`
   - but the isolated `single` pocket still unfences from `1` to `4`
     fully scored non-winning terminals at the same overshoot
     `115657 / 21112`
@@ -406,9 +425,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
     now pins that every non-empty subset of those same exact clause-`0`,
     clause-`2` + anchor-`11`, and clause-`5` residual families still keeps
-    live generated prefixes flat at `4140`, partial-prefix bar failures at
-    `476`, and the cleared `small_cluster` unchanged at
-    `3060 / 510 / 510 / 0`
+    live generated prefixes flat at `4275`, partial-prefix bar failures at
+    `549`, and the cleared `small_cluster` unchanged at
+    `3084 / 514 / 514 / 0`
   - the repaired canonical step-`15` winner also stays unchanged on every one
     of those subset-local probes
   - instead, opening any strict subset only trades `n` of the remaining `3`

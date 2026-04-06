@@ -6570,6 +6570,14 @@ fn create_online_prefix_work_item(
         )
     }
 
+    fn claim_step_fifteen_anchor_eleven_clause_one_demo_flat_codomain_clause()
+    -> pen_core::clause::ClauseRec {
+        pen_core::clause::ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+        )
+    }
+
     fn claim_step_fifteen_anchor_eleven_demo_flat_codomain_clause() -> pen_core::clause::ClauseRec {
         pen_core::clause::ClauseRec::new(
             ClauseRole::Formation,
@@ -6582,6 +6590,26 @@ fn create_online_prefix_work_item(
                 ))))),
             ),
         )
+    }
+
+    fn injected_claim_step_fifteen_anchor_eleven_clause_one_side_clause(
+        clause_kappa: u16,
+        prefix_telescope: &Telescope,
+        signature: &PrefixSignature,
+        admissibility: StrictAdmissibility,
+    ) -> Option<pen_core::clause::ClauseRec> {
+        if admissibility.mode != AdmissibilityMode::DesktopClaimShadow
+            || signature.obligation_set_id.get() != 15
+            || clause_kappa != 8
+            || prefix_telescope.clauses.len() != 1
+        {
+            return None;
+        }
+        prefix_telescope
+            .clauses
+            .first()
+            .is_some_and(matches_reference_temporal_clause_zero)
+            .then(claim_step_fifteen_anchor_eleven_clause_one_demo_flat_codomain_clause)
     }
 
     fn injected_claim_step_fifteen_anchor_eleven_clause(
@@ -6822,6 +6850,14 @@ fn create_online_prefix_work_item(
         let catalog_connectivity_facts = clause_catalog.terminal_connectivity_facts_at(prefix_len);
         let catalog_nu_facts = clause_catalog.terminal_nu_facts_at(prefix_len);
         let mut injected_clauses = Vec::new();
+        if let Some(clause) = injected_claim_step_fifteen_anchor_eleven_clause_one_side_clause(
+            clause_kappa,
+            &prefix_telescope,
+            &signature,
+            admissibility,
+        ) {
+            injected_clauses.push(clause);
+        }
         if let Some(clause) = injected_claim_step_fifteen_anchor_eleven_clause(
             clause_kappa,
             &prefix_telescope,
@@ -13125,13 +13161,13 @@ mod tests {
     #[test]
     fn current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families() {
         let summary = current_claim_step_fifteen_exact_prune_family_summary(usize::MAX);
-        assert_eq!(summary.raw_generated_surface, 4140);
+        assert_eq!(summary.raw_generated_surface, 4275);
         assert_eq!(summary.roots_seen, 3);
         assert_eq!(summary.roots_enqueued, 3);
-        assert_eq!(summary.partial_prefix_bound_prunes, 476);
+        assert_eq!(summary.partial_prefix_bound_prunes, 549);
         assert_eq!(
-            summary.captured_prefixes, 1968,
-            "the clause-4 anchor-11 side-pocket repairs should still keep the captured step-15 exact-prune surface tightly localized even after they reopen the tiny codomain and bridge pockets"
+            summary.captured_prefixes, 2259,
+            "the newer clause-1 side-pocket reland should widen the captured step-15 exact-prune surface only by a new narrow anchor-11 clause-1 band on top of the existing clause-2 and clause-3 capture"
         );
         assert_eq!(
             summary.cached_bound_count, 0,
@@ -13139,7 +13175,7 @@ mod tests {
         );
         assert_eq!(
             summary.family_counts,
-            [((0_usize, None, None), 1968_usize)].into_iter().collect(),
+            [((0_usize, None, None), 2259_usize)].into_iter().collect(),
             "the captured step-15 exact-prune surface should currently consist only of zero-admitted terminal families"
         );
     }
@@ -13159,16 +13195,16 @@ mod tests {
             .map(|step| step.telescope)
             .collect::<Vec<_>>();
         let summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
-        assert_eq!(summary.captured_prefixes, 1968);
-        assert_eq!(summary.generated_candidates, 5904);
+        assert_eq!(summary.captured_prefixes, 2259);
+        assert_eq!(summary.generated_candidates, 6777);
         assert_eq!(
-            summary.disconnected_candidates, 5904,
+            summary.disconnected_candidates, 6777,
             "every currently captured step-15 zero-admitted exact prune should lose all three terminal options to connectivity"
         );
         assert_eq!(summary.trivially_derivable_rejections, 0);
         assert_eq!(summary.other_exact_legality_rejections, 0);
         assert_eq!(summary.structural_debt_cap_rejections, 0);
-        assert_eq!(summary.all_disconnected_prefixes, 1968);
+        assert_eq!(summary.all_disconnected_prefixes, 2259);
         assert_eq!(summary.trivially_derivable_only_prefixes, 0);
         assert_eq!(summary.mixed_disconnect_and_trivial_prefixes, 0);
         assert_eq!(summary.other_rejection_prefixes, 0);
@@ -13190,15 +13226,15 @@ mod tests {
             .map(|step| step.telescope)
             .collect::<Vec<_>>();
         let summary = late_step_terminal_connectivity_summary(&prefix, 15, usize::MAX);
-        assert_eq!(summary.captured_prefixes, 1968);
-        assert_eq!(summary.generated_candidates, 5904);
+        assert_eq!(summary.captured_prefixes, 2259);
+        assert_eq!(summary.generated_candidates, 6777);
         assert_eq!(summary.prune_disconnected_candidates, 0);
-        assert_eq!(summary.needs_fallback_candidates, 5904);
+        assert_eq!(summary.needs_fallback_candidates, 6777);
         assert_eq!(summary.keep_without_fallback_candidates, 0);
         assert_eq!(summary.structurally_disconnected_candidates, 0);
         assert_eq!(
             summary.structurally_connected_but_unqualified_candidates,
-            5904
+            6777
         );
         assert_eq!(
             summary.structurally_connected_via_historical_reanchor_candidates,
@@ -13232,15 +13268,17 @@ mod tests {
 
         assert_eq!(
             matched_prefix_counts,
-            [(2_usize, 1482_usize), (3, 486),].into_iter().collect(),
-            "captured step-15 zero-admitted prefixes should still stay repaired through clause positions 0, 1, 4, and 5, with only the tiny clause-4 twin side pockets reopening a few extra clause-2-side families"
+            [(1_usize, 291_usize), (2, 1482), (3, 486),]
+                .into_iter()
+                .collect(),
+            "captured step-15 zero-admitted prefixes should now split into one narrow clause-1 side band plus the existing clause-2 and clause-3 historical-reanchor misses"
         );
         assert_eq!(
             first_mismatch_counts,
-            [(Some(2_usize), 1482_usize), (Some(3), 486),]
+            [(Some(1_usize), 291_usize), (Some(2), 1482), (Some(3), 486),]
                 .into_iter()
                 .collect(),
-            "the captured step-15 exact-prune surface should now preserve the repaired clause-0, clause-1, clause-4, and clause-5 prefixes and only lose the historical-reanchor shell at clause positions 2 and 3"
+            "the captured step-15 exact-prune surface should now preserve the repaired clause-0, clause-4, and clause-5 prefixes, while clause-1 contributes a new narrow side-pocket miss band ahead of the older clause-2 and clause-3 losses"
         );
         assert_eq!(full_prefix_matches, 0);
     }
@@ -13402,11 +13440,17 @@ mod tests {
                 })
                 .collect::<Vec<_>>();
             isolated_prefix_counts.insert(position, isolated_prefixes.len());
-            let expected_isolated_count = if (2..=3).contains(&position) { 2 } else { 0 };
+            let expected_isolated_count = if position == 1 {
+                1
+            } else if (2..=3).contains(&position) {
+                2
+            } else {
+                0
+            };
             assert_eq!(
                 isolated_prefixes.len(),
                 expected_isolated_count,
-                "clause positions 0, 1, 4, and 5 should now be repaired out of the captured temporal-shell surface, while positions 2 and 3 should still expose exactly two isolated claim-only deviations on the otherwise exact seven-clause prefix"
+                "clause positions 0, 4, and 5 should stay repaired out of the captured temporal-shell surface, while clause 1 now contributes one isolated anchor-11 side-pocket deviation and positions 2 and 3 should still expose exactly two isolated claim-only deviations on the otherwise exact seven-clause prefix"
             );
 
             for work_item in isolated_prefixes {
@@ -13470,10 +13514,10 @@ mod tests {
 
         assert_eq!(
             isolated_prefix_counts,
-            [(0_usize, 0_usize), (1, 0), (2, 2), (3, 2), (4, 0), (5, 0),]
+            [(0_usize, 0_usize), (1, 1), (2, 2), (3, 2), (4, 0), (5, 0),]
                 .into_iter()
                 .collect(),
-            "the captured step-15 exact-prune surface should now exclude the repaired clause-0, clause-1, clause-4, and clause-5 temporal deviations while still containing the remaining isolated clause-2 and clause-3 deviations"
+            "the captured step-15 exact-prune surface should now exclude the repaired clause-0, clause-4, and clause-5 temporal deviations while still containing the new isolated clause-1 side-pocket deviation and the remaining isolated clause-2 and clause-3 deviations"
         );
     }
 
@@ -13507,7 +13551,9 @@ mod tests {
                 .map(|(_, count)| count)
                 .collect::<Vec<_>>();
             observed_counts.sort_unstable();
-            let expected_counts = if position == 2 {
+            let expected_counts = if position == 1 {
+                vec![291]
+            } else if position == 2 {
                 vec![741, 741]
             } else if position == 3 {
                 vec![243, 243]
@@ -13516,7 +13562,7 @@ mod tests {
             };
             assert_eq!(
                 observed_counts, expected_counts,
-                "clause positions 0, 1, 4, and 5 should now be repaired out of the captured surface, while each remaining isolated claim-only variant at temporal-shell clause position {position} should still stay captured across every later claim suffix combination before the clause-6 boundary"
+                "clause positions 0, 4, and 5 should stay repaired out of the captured surface, while clause 1 now carries one narrow side-pocket variant and the remaining isolated claim-only variants at positions 2 and 3 should still stay captured across every later claim suffix combination before the clause-6 boundary"
             );
         }
     }
@@ -13597,7 +13643,7 @@ mod tests {
             forced_recovery_counts,
             [
                 (0_usize, (0_usize, 0_usize, 0_usize)),
-                (1, (0, 0, 0)),
+                (1, (3, 3, 3)),
                 (2, (6, 6, 6)),
                 (3, (6, 6, 6)),
                 (4, (0, 0, 0)),
@@ -13605,7 +13651,7 @@ mod tests {
             ]
             .into_iter()
             .collect(),
-            "the repaired clause-0, clause-1, clause-4, and clause-5 variants should no longer appear on the captured isolated surface, while each remaining isolated clause-2 and clause-3 deviation would still become a fully admitted, bar-clearing local surface if the missing clause-local reanchor evidence were restored"
+            "the repaired clause-0, clause-4, and clause-5 variants should stay out of the captured isolated surface, while the new clause-1 side-pocket and the remaining isolated clause-2 and clause-3 deviations would still become fully admitted, bar-clearing local surfaces if the missing clause-local reanchor evidence were restored"
         );
     }
 
@@ -13699,7 +13745,12 @@ mod tests {
             recovered_profiles,
             [
                 (0_usize, BTreeSet::new()),
-                (1, BTreeSet::new()),
+                (
+                    1,
+                    [(103_u16, Rational::new(115657, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
                 (
                     2,
                     [(89_u16, Rational::new(78711, 21112))]
@@ -13715,7 +13766,7 @@ mod tests {
             ]
             .into_iter()
             .collect(),
-            "exact-terminal-only local recovery would still create stronger isolated clause-2 and clause-3 rivals, while clause-4 and clause-5 are now repaired out of the captured isolated surface"
+            "exact-terminal-only local recovery would still create stronger isolated clause-2 and clause-3 rivals, while the new clause-1 side pocket only restores the same-primary 103/8 reference-terminal profile and clause-4 and clause-5 stay repaired out of the captured isolated surface"
         );
     }
 
@@ -13836,15 +13887,23 @@ mod tests {
 
         assert_eq!(reference_terminal_wins, 0);
         assert_eq!(next_lift_terminal_wins, 3);
-        assert_eq!(eventual_lift_terminal_wins, 1);
+        assert_eq!(eventual_lift_terminal_wins, 2);
         assert_eq!(
             forced_winner_counts,
-            [(2, (0, 1, 1)), (3, (0, 2, 0)),].into_iter().collect(),
-            "the repaired clause-0, clause-1, clause-4, and clause-5 variants should disappear from the captured isolated surface, while forced clause-local reanchor on the remaining clause-2 and clause-3 deviations should still split between the two non-reference terminal closures instead of restoring the canonical terminal clause"
+            [(1, (0, 0, 1)), (2, (0, 1, 1)), (3, (0, 2, 0)),]
+                .into_iter()
+                .collect(),
+            "the repaired clause-0, clause-4, and clause-5 variants should disappear from the captured isolated surface, while forced clause-local reanchor on the new clause-1 side pocket and the remaining clause-2 and clause-3 deviations should still split only across non-reference terminal closures"
         );
         assert_eq!(
             forced_rank_profiles,
             [
+                (
+                    1,
+                    [(89_u16, Rational::new(78711, 21112))]
+                        .into_iter()
+                        .collect()
+                ),
                 (
                     2,
                     [(75_u16, Rational::new(41765, 21112))]
@@ -14076,14 +14135,15 @@ mod tests {
         }
 
         let expected_pair_counts = [
-            ((0_usize, 1_usize), 243_usize),
-            ((0, 2), 243),
-            ((1, 0), 243),
-            ((1, 1), 243),
-            ((1, 2), 243),
-            ((2, 0), 243),
-            ((2, 1), 243),
-            ((2, 2), 243),
+            ((0_usize, 0_usize), 27_usize),
+            ((0, 1), 270),
+            ((0, 2), 270),
+            ((1, 0), 270),
+            ((1, 1), 270),
+            ((1, 2), 270),
+            ((2, 0), 270),
+            ((2, 1), 270),
+            ((2, 2), 270),
         ]
         .into_iter()
         .collect();
@@ -14100,12 +14160,34 @@ mod tests {
             "every captured clause-2/clause-3 pair should still clear the bar under exact-terminal-only local recovery"
         );
         assert_eq!(
-            exact_terminal_stronger_counts, expected_pair_counts,
+            exact_terminal_stronger_counts,
+            [
+                ((0_usize, 0_usize), 18_usize),
+                ((0, 1), 270),
+                ((0, 2), 270),
+                ((1, 0), 270),
+                ((1, 1), 270),
+                ((1, 2), 270),
+                ((2, 0), 270),
+                ((2, 1), 270),
+                ((2, 2), 270),
+            ]
+            .into_iter()
+            .collect(),
             "every captured clause-2/clause-3 pair should still outrank the canonical step-15 profile under exact-terminal-only local recovery, so a direct local recovery reland remains unsafe"
         );
         assert_eq!(
             exact_terminal_profiles,
             [
+                (
+                    (0_usize, 0_usize),
+                    [
+                        (89_u16, Rational::new(78711, 21112)),
+                        (103_u16, Rational::new(115657, 21112)),
+                    ]
+                    .into_iter()
+                    .collect()
+                ),
                 (
                     (0_usize, 1_usize),
                     [
@@ -14186,14 +14268,15 @@ mod tests {
         assert_eq!(
             forced_admitted_counts,
             [
-                ((0_usize, 1_usize), 729_usize),
-                ((0, 2), 729),
-                ((1, 0), 729),
-                ((1, 1), 729),
-                ((1, 2), 729),
-                ((2, 0), 729),
-                ((2, 1), 729),
-                ((2, 2), 729),
+                ((0_usize, 0_usize), 81_usize),
+                ((0, 1), 810),
+                ((0, 2), 810),
+                ((1, 0), 810),
+                ((1, 1), 810),
+                ((1, 2), 810),
+                ((2, 0), 810),
+                ((2, 1), 810),
+                ((2, 2), 810),
             ]
             .into_iter()
             .collect(),
@@ -14202,14 +14285,15 @@ mod tests {
         assert_eq!(
             forced_bar_clearing_counts,
             [
-                ((0_usize, 1_usize), 729_usize),
-                ((0, 2), 729),
-                ((1, 0), 729),
-                ((1, 1), 405),
-                ((1, 2), 405),
-                ((2, 0), 729),
-                ((2, 1), 405),
-                ((2, 2), 405),
+                ((0_usize, 0_usize), 81_usize),
+                ((0, 1), 810),
+                ((0, 2), 810),
+                ((1, 0), 810),
+                ((1, 1), 450),
+                ((1, 2), 450),
+                ((2, 0), 810),
+                ((2, 1), 450),
+                ((2, 2), 450),
             ]
             .into_iter()
             .collect(),
@@ -14218,14 +14302,15 @@ mod tests {
         assert_eq!(
             forced_winner_counts,
             [
-                ((0_usize, 1_usize), (0_usize, 124_usize, 119_usize)),
-                ((0, 2), (0, 123, 120)),
-                ((1, 0), (0, 126, 117)),
-                ((1, 1), (162, 39, 42)),
-                ((1, 2), (162, 45, 36)),
-                ((2, 0), (0, 132, 111)),
-                ((2, 1), (162, 43, 38)),
-                ((2, 2), (162, 42, 39)),
+                ((0_usize, 0_usize), (0_usize, 9_usize, 18_usize)),
+                ((0, 1), (0, 138, 132)),
+                ((0, 2), (0, 138, 132)),
+                ((1, 0), (0, 137, 133)),
+                ((1, 1), (180, 45, 45)),
+                ((1, 2), (180, 50, 40)),
+                ((2, 0), (0, 146, 124)),
+                ((2, 1), (180, 46, 44)),
+                ((2, 2), (180, 46, 44)),
             ]
             .into_iter()
             .collect(),
@@ -14402,10 +14487,10 @@ mod tests {
         }
 
         let expected_reference_terminal_wins = [
-            ((1_usize, 1_usize), 162_usize),
-            ((1, 2), 162),
-            ((2, 1), 162),
-            ((2, 2), 162),
+            ((1_usize, 1_usize), 180_usize),
+            ((1, 2), 180),
+            ((2, 1), 180),
+            ((2, 2), 180),
         ]
         .into_iter()
         .collect();
@@ -14616,7 +14701,12 @@ mod tests {
                 (0u8..16).map(move |optional_mask| {
                     let mask = optional_mask | (1 << 4);
                     let deviation_count = mask.count_ones() as usize;
-                    ((key.0, key.1, mask), 1usize << deviation_count)
+                    let count = if (mask & (1 << 1)) != 0 && (mask & (1 << 0)) == 0 {
+                        3usize * (1usize << (deviation_count - 1))
+                    } else {
+                        1usize << deviation_count
+                    };
+                    ((key.0, key.1, mask), count)
                 })
             })
             .collect::<BTreeMap<_, _>>();
@@ -16859,7 +16949,7 @@ mod tests {
                     "claim_flat_domain:1:demo_flat_codomain".to_string(),
                     (
                         true,
-                        false,
+                        true,
                         true,
                         103_u16,
                         243_u16,
@@ -16955,7 +17045,7 @@ mod tests {
                     "claim_sharp_codomain:1:demo_flat_codomain".to_string(),
                     (
                         true,
-                        false,
+                        true,
                         true,
                         103_u16,
                         243_u16,
@@ -17014,7 +17104,7 @@ mod tests {
             ]
             .into_iter()
             .collect(),
-            "the remaining demo-only side variants around the live anchor-11 exact-argument pocket should stay structurally connected, locally admissible, and same-primary 103/8 non-winners on bit cost alone, while the new clause-4 bridge opening stays equally non-winning on bit cost"
+            "the remaining demo-only side variants around the live anchor-11 exact-argument pocket should stay structurally connected, locally admissible, and same-primary 103/8 non-winners on bit cost alone, while the clause-1 demo-flat-codomain opening now joins the clause-4 bridge-pocket variants as a reference-terminal-only historical-reanchor reland"
         );
     }
 
@@ -17425,12 +17515,12 @@ mod tests {
         assert_eq!(
             capture_counts,
             [
-                ("claim_flat_domain", 12_usize),
-                ("claim_sharp_codomain", 12_usize)
+                ("claim_flat_domain", 36_usize),
+                ("claim_sharp_codomain", 36_usize)
             ]
             .into_iter()
             .collect(),
-            "the new clause-4 twin side-pocket reland should stay tiny on the captured surface rather than reopening the broader clause-2/3 family"
+            "the clause-4 twin side-pocket reland should stay tiny relative to the broader clause-2/3 family even after the newer clause-1 side-pocket reland triples those captured bridge-pocket contexts"
         );
         assert_eq!(
             exact_terminal_profiles,
@@ -17461,8 +17551,8 @@ mod tests {
         assert_eq!(
             forced_admitted_counts,
             [
-                ("claim_flat_domain", 36_usize),
-                ("claim_sharp_codomain", 36_usize)
+                ("claim_flat_domain", 108_usize),
+                ("claim_sharp_codomain", 108_usize)
             ]
             .into_iter()
             .collect()
@@ -17470,8 +17560,8 @@ mod tests {
         assert_eq!(
             forced_bar_clearing_counts,
             [
-                ("claim_flat_domain", 36_usize),
-                ("claim_sharp_codomain", 36_usize)
+                ("claim_flat_domain", 108_usize),
+                ("claim_sharp_codomain", 108_usize)
             ]
             .into_iter()
             .collect()
@@ -17479,8 +17569,8 @@ mod tests {
         assert_eq!(
             forced_winner_counts,
             [
-                ("claim_flat_domain", (0_usize, 7_usize, 5_usize)),
-                ("claim_sharp_codomain", (0_usize, 4_usize, 8_usize)),
+                ("claim_flat_domain", (0_usize, 19_usize, 17_usize)),
+                ("claim_sharp_codomain", (0_usize, 17_usize, 19_usize)),
             ]
             .into_iter()
             .collect(),
@@ -18778,7 +18868,7 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(13, 46, 7, 2320), (14, 62, 9, 12027), (15, 103, 8, 4140)],
+            vec![(13, 46, 7, 2320), (14, 62, 9, 12027), (15, 103, 8, 4275)],
             "the repaired step-12 tie set should now collapse onto the parity-preserving widened step-13 surface while restoring the latest canonical step-15 continuation"
         );
         let alternate_candidate = tied_candidates
@@ -19027,7 +19117,7 @@ mod tests {
                 accepted_step_fourteen_continuation.2,
                 accepted_step_fourteen_continuation.3,
             ),
-            (103, 8, 4140),
+            (103, 8, 4275),
             "live claim step-14 acceptance should now prefer the same-primary survivor that restores the latest broadened canonical step-15 continuation"
         );
         assert!(
@@ -19055,7 +19145,7 @@ mod tests {
         let (step_fifteen, step_fifteen_catalog, step_fifteen_roots) =
             inspect_late_step(15, &library, &history);
         assert_eq!(step_fifteen_catalog.raw_catalog_telescope_count, Some(6561));
-        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4140);
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4275);
         assert_eq!(
             step_fifteen.claim_root_seeding,
             Some(ClaimRootSeedingDiagnostics {
@@ -19069,10 +19159,10 @@ mod tests {
             step_fifteen_roots.claim_root_seeding,
             step_fifteen.claim_root_seeding
         );
-        assert_eq!(step_fifteen.incremental_partial_prefix_bound_prunes, 476);
+        assert_eq!(step_fifteen.incremental_partial_prefix_bound_prunes, 549);
         assert_eq!(
             step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
-            476
+            549
         );
         assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 3);
         assert!(
@@ -19088,9 +19178,9 @@ mod tests {
         );
         assert!(
             step_fifteen.demo_bucket_stats.iter().any(|bucket| {
-                bucket.stats.generated_terminal_candidates == 3060
-                    && bucket.stats.admissible_terminal_candidates == 510
-                    && bucket.stats.exact_screened_terminal_candidates == 510
+                bucket.stats.generated_terminal_candidates == 3084
+                    && bucket.stats.admissible_terminal_candidates == 514
+                    && bucket.stats.exact_screened_terminal_candidates == 514
                     && bucket.stats.pruned_terminal_candidates == 0
             }),
             "step 15 should now carry the temporal small-cluster through exact screening while keeping the canonical continuation"
@@ -19131,9 +19221,9 @@ mod tests {
                     "k8:structural_generic:temporal_operator:library_backed:small_cluster"
                         .to_string(),
                     DemoBucketStats {
-                        generated_terminal_candidates: 3060,
-                        admissible_terminal_candidates: 510,
-                        exact_screened_terminal_candidates: 510,
+                        generated_terminal_candidates: 3084,
+                        admissible_terminal_candidates: 514,
+                        exact_screened_terminal_candidates: 514,
                         pruned_terminal_candidates: 0,
                         fully_scored_terminal_candidates: 0,
                         best_overshoot: None,
@@ -19189,9 +19279,9 @@ mod tests {
             bucket_stats
                 .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
             Some(&DemoBucketStats {
-                generated_terminal_candidates: 3060,
-                admissible_terminal_candidates: 510,
-                exact_screened_terminal_candidates: 510,
+                generated_terminal_candidates: 3084,
+                admissible_terminal_candidates: 514,
+                exact_screened_terminal_candidates: 514,
                 pruned_terminal_candidates: 0,
                 fully_scored_terminal_candidates: 0,
                 best_overshoot: None,
@@ -19558,12 +19648,12 @@ mod tests {
                 "subset-local same-primary relief should keep the repaired canonical step-15 winner"
             );
             assert_eq!(
-                step_fifteen.demo_funnel.generated_raw_prefixes, 4140,
+                step_fifteen.demo_funnel.generated_raw_prefixes, 4275,
                 "subset-local same-primary relief on {:?} should not broaden the repaired local step-15 generated surface",
                 subset
             );
             assert_eq!(
-                step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 476,
+                step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 549,
                 "subset-local same-primary relief on {:?} should leave the repaired partial-prefix wall unchanged",
                 subset
             );
@@ -19590,9 +19680,9 @@ mod tests {
                 bucket_stats
                     .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
                 Some(&DemoBucketStats {
-                    generated_terminal_candidates: 3060,
-                    admissible_terminal_candidates: 510,
-                    exact_screened_terminal_candidates: 510,
+                    generated_terminal_candidates: 3084,
+                    admissible_terminal_candidates: 514,
+                    exact_screened_terminal_candidates: 514,
                     pruned_terminal_candidates: 0,
                     fully_scored_terminal_candidates: 0,
                     best_overshoot: None,
@@ -19676,10 +19766,10 @@ mod tests {
             .collect::<BTreeMap<_, _>>();
 
         assert_eq!(step_fifteen.telescope, Telescope::reference(15));
-        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4140);
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4275);
         assert_eq!(
-            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 476,
-            "family-local same-primary relief should now still collapse the remaining incumbent pressure only by widening the repaired local surface to 4140 and keeping the partial-prefix wall at 476"
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 549,
+            "family-local same-primary relief should now still collapse the remaining incumbent pressure only by widening the repaired local surface to 4275 and keeping the partial-prefix wall at 549"
         );
         assert_eq!(
             step_fifteen.exact_screen_reasons.incumbent_dominance, 0,
@@ -19701,9 +19791,9 @@ mod tests {
             bucket_stats
                 .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
             Some(&DemoBucketStats {
-                generated_terminal_candidates: 3060,
-                admissible_terminal_candidates: 510,
-                exact_screened_terminal_candidates: 510,
+                generated_terminal_candidates: 3084,
+                admissible_terminal_candidates: 514,
+                exact_screened_terminal_candidates: 514,
                 pruned_terminal_candidates: 0,
                 fully_scored_terminal_candidates: 0,
                 best_overshoot: None,
@@ -20160,7 +20250,7 @@ mod tests {
                     (*step_index, *nu, *clause_kappa, *generated)
                 })
                 .collect::<Vec<_>>(),
-            vec![(14, 62, 9, 12027), (15, 103, 8, 4140)],
+            vec![(14, 62, 9, 12027), (15, 103, 8, 4275)],
             "the position-0/4/5/6 widening should keep the guarded step-14 and step-15 winner profiles even while step-13 parity stays open"
         );
         assert_eq!(

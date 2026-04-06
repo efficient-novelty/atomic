@@ -57,13 +57,13 @@ It lists only work that is still open.
   one library-backed temporal-operator `single` bucket carries the isolated
   non-winning pocket at overshoot `115657 / 21112` plus the residual `3`
   incumbent-dominance prunes, and one library-backed temporal-operator
-  `small_cluster` bucket now carries `3060 / 510 / 510 / 0`.
+  `small_cluster` bucket now carries `3084 / 514 / 514 / 0`.
 - A newer local step-`15` small-cluster relief is now landed and frozen by
   `current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain`:
   the old `246`-candidate summary-stage `small_cluster` incumbent wall is now
   gone, local incumbent-dominance pressure has fallen to `3`, live generated
-  prefixes now stay at `4140` with `476` partial-prefix bar failures, the
-  widened `small_cluster` now stays at `3060 / 510 / 510 / 0`, and the
+  prefixes now stay at `4275` with `549` partial-prefix bar failures, the
+  widened `small_cluster` now stays at `3084 / 514 / 514 / 0`, and the
   isolated fully scored `single` pocket stays fenced.
 - A newer local step-`15` proof-close incumbent regression now freezes that
   remaining fenced pressure more tightly:
@@ -98,18 +98,18 @@ It lists only work that is still open.
   `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
   now pins that granting same-primary incumbent relief only to those exact
   clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
-  keeps the repaired local surface at `4140` generated prefixes with `476`
+  keeps the repaired local surface at `4275` generated prefixes with `549`
   partial-prefix bar failures, collapses incumbent-dominance from `3` to `0`,
-  leaves the cleared `small_cluster` unchanged at `3060 / 510 / 510 / 0`,
+  leaves the cleared `small_cluster` unchanged at `3084 / 514 / 514 / 0`,
   and still unfences the isolated `single` pocket from `1` to `4`
   fully scored non-winning terminals.
 - A newer subset-local negative control now proves even strict subsets of
   those families are still too broad:
   `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
   now pins that every non-empty subset of those same three residual families
-  keeps the repaired local surface flat at `4140` generated prefixes with
-  `476` partial-prefix bar failures, keeps the cleared `small_cluster`
-  unchanged at `3060 / 510 / 510 / 0`, keeps the canonical winner unchanged,
+  keeps the repaired local surface flat at `4275` generated prefixes with
+  `549` partial-prefix bar failures, keeps the cleared `small_cluster`
+  unchanged at `3084 / 514 / 514 / 0`, keeps the canonical winner unchanged,
   and only trades `n` of the remaining `3` residual incumbent prunes for `n`
   extra fully scored non-winning terminals in the isolated `single` pocket,
   with those extra candidates all staying same-primary `103 / 8`,
@@ -121,9 +121,11 @@ It lists only work that is still open.
   same-primary `103 / 8` / `115657 / 21112` non-winners around the live
   anchor-`11` exact-argument pocket; the clause-`4`
   `demo_sharp_codomain` and `demo_sharp_bridge` variants now regain
-  historical reanchor only on that exact side pocket, while the clause-`0`,
-  clause-`1`, and clause-`5` side variants still stay outside historical
-  reanchor there. A reverted raw
+  historical reanchor only on that exact side pocket, and the clause-`1`
+  `demo_flat_codomain` variant now also regains historical reanchor only on
+  that same exact side pocket and only with the reference terminal, while the
+  clause-`0`, clause-`1` `demo_eventually_codomain`, and clause-`5` side
+  variants still stay outside historical reanchor there. A reverted raw
   position-`0` probe that lifted local step `15` only to `4285` also reopened
   the repaired clause-`0` zero-admitted capture to `2835` families / `891`
   reanchor-prefix misses, so the next landed repair must stay isolated onto
@@ -143,21 +145,23 @@ It lists only work that is still open.
 - A newer narrower clause-`5` side-pocket stack remains landed locally on top
   of the clause-`4` pocket:
   the `demo_sharp_codomain` and `demo_sharp_bridge` clause-`4` openings plus
-  the `demo_sharp_domain` and `demo_flat_codomain` clause-`5` openings are
-  now all consumed only on that exact anchor-`11` clause-`4` pocket stack,
-  including the newer bridge-pocket extension, the repaired local step-`15`
-  guardrail surface now stays at `4140`, the widened `small_cluster` now
-  stays at `3060 / 510 / 510 / 0`, the captured
-  zero-admitted surface still stays tightly localized at
-  `1968` families / `5904` connected-but-unqualified terminal options, and
-  the clause-`4` / clause-`5` side pocket still stays tiny and noncanonical.
+  the `demo_sharp_domain` and `demo_flat_codomain` clause-`5` openings plus
+  the newer clause-`1` `demo_flat_codomain` opening are now all consumed only
+  on that exact anchor-`11` side-pocket stack, including the newer
+  bridge-pocket extension, the repaired local step-`15` guardrail surface now
+  stays at `4275`, the widened `small_cluster` now stays at
+  `3084 / 514 / 514 / 0`, the captured zero-admitted surface now stays
+  tightly localized at `2259` families / `6777`
+  connected-but-unqualified terminal options, and the clause-`1` /
+  clause-`4` / clause-`5` side pocket still stays tiny and noncanonical.
 - The next landed repair should therefore not be another raw clause-`4`
   reland or another blanket same-primary-retention pass:
   clause `4` plus the local clause-`5` `demo_sharp_domain` and
-  `demo_flat_codomain` openings are now consumed as fenced local pockets, the
+  `demo_flat_codomain` openings plus the newer clause-`1`
+  `demo_flat_codomain` opening are now consumed as fenced local pockets, the
   small-cluster summary wall is already cleared, and the next gain now needs
   to target the residual `3` single-bucket incumbent prunes on top of the
-  current `4140` local surface, starting from those clause-`0` / clause-`2`
+  current `4275` local surface, starting from those clause-`0` / clause-`2`
   / clause-`5` fenced prefix families rather than reopening the whole
   side-pocket neighborhood, while also keeping the newly frozen unsafe
   `89 / 8` lifted terminals fenced on each of those same family shells and
