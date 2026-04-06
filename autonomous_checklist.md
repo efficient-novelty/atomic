@@ -93,6 +93,13 @@ It lists only work that is still open.
   same-primary `103 / 8` non-winner at bit cost `236` while both
   `next_lift` and `eventual_lift` stay connected, locally admissible, and
   stronger-than-canonical `89 / 8` rivals at bit cost `254`.
+- A newer live-terminal fence regression now sharpens that same residual
+  blocker one step further:
+  `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
+  now pins that each of those same three fenced families still keeps only the
+  reference terminal live on the current claim path, while both
+  stronger-than-canonical lifted terminals stay structurally connected but
+  outside historical reanchor and therefore outside live connectivity there.
 - A newer exact-family negative control now proves even family-local
   same-primary relief is still too broad:
   `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`

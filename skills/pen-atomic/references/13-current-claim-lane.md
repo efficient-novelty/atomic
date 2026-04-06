@@ -403,6 +403,16 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - the next landed repair therefore cannot blindly reland those residual
     families through broader same-primary retention or raw local terminal
     recovery; it still has to keep those unsafe `89 / 8` lifts fenced
+- a new local step-`15` live-terminal fence regression now sharpens that
+  same blocker one step further again:
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
+    now pins that each of those same fenced proof-close families still keeps
+    only the reference terminal live on the current claim path
+  - both stronger-than-canonical lifted terminals still stay structurally
+    connected but outside historical reanchor and therefore outside live
+    connectivity there
+  - the next landed repair must therefore stay reference-terminal-local on
+    those families rather than reopening the lifted shell itself
 - a new non-landed exact-family same-primary relief probe now sharpens that
   same blocker one step further without reopening the cleared
   `small_cluster`:

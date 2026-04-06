@@ -137,8 +137,14 @@ Treat these as current repo truths:
   on the same raw three-terminal shell, with the reference terminal staying a
   same-primary `103 / 8` non-winner at bit cost `236` while the neighboring
   `next_lift` and `eventual_lift` terminals remain connected, locally
-  admissible, and stronger-than-canonical `89 / 8` rivals at bit cost `254`,
-  so the next repair still has to keep those unsafe lifted terminals fenced;
+  admissible, and stronger-than-canonical `89 / 8` rivals at bit cost `254`;
+  a newer
+  `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
+  regression now further pins that those same three families still keep only
+  the reference terminal live on the current claim path while both unsafe
+  lifts stay structurally connected but outside historical reanchor and live
+  connectivity there, so the next repair still has to stay
+  reference-terminal-local and keep those unsafe lifted terminals fenced;
   a newer
   `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
   regression now also proves that even granting same-primary relief only to

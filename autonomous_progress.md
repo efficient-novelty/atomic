@@ -277,6 +277,16 @@ gate.
   - the next landed repair therefore cannot blindly reland those residual
     families through broader same-primary retention or raw local terminal
     recovery; it still has to keep those unsafe `89 / 8` lifts fenced
+- A newer local step-`15` live-terminal fence regression now sharpens that
+  same blocker one step further:
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
+    now pins that each of those same three families still keeps only the
+    reference terminal live on the current claim path
+  - both stronger-than-canonical lifted terminals still stay structurally
+    connected but outside historical reanchor and therefore outside live
+    connectivity there
+  - the next landed repair must therefore stay reference-terminal-local on
+    those families rather than reopening the lifted shell itself
 - A newer non-landed exact-family same-primary relief probe now sharpens that
   same blocker further without reopening the cleared `small_cluster`:
   - `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
@@ -464,6 +474,9 @@ gate.
     regression is green
   - the new
     `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
+    regression is green
+  - the new
+    `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
     regression is green
   - the new
     `connectivity_accepts_clause_four_demo_sharp_codomain_only_on_the_exact_anchor_eleven_side_pocket`
@@ -1485,7 +1498,12 @@ gate.
    `claim_flat_codomain`.
    `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
    now further pins that each of those same families still sits beside two
-   unsafe stronger-than-canonical `89 / 8` lifted terminals, and
+   unsafe stronger-than-canonical `89 / 8` lifted terminals, while
+   `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
+   now further pins that each family still keeps only the reference terminal
+   live on the current claim path and keeps both unsafe lifts structurally
+   connected but outside historical reanchor and live connectivity there,
+   and
    `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
    now further proves that even granting same-primary relief only to those
    exact three families keeps `4275` / `549`, collapses the remaining

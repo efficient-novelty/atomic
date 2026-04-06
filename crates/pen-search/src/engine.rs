@@ -19636,6 +19636,113 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let captures = {
+            super::start_incumbent_pruned_terminal_group_capture();
+            let _ = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            super::finish_incumbent_pruned_terminal_group_capture()
+        };
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let mut live_terminal_profiles = BTreeMap::new();
+
+        for capture in captures {
+            let label = current_claim_step_fifteen_proof_close_incumbent_family_label(
+                &capture.prefix_telescope,
+            );
+            let mut terminal_profiles = BTreeMap::new();
+
+            for (terminal_label, terminal_clause) in [
+                ("reference", reference_terminal.clone()),
+                ("next_lift", next_lift_terminal.clone()),
+                ("eventual_lift", eventual_lift_terminal.clone()),
+            ] {
+                let mut telescope = capture.prefix_telescope.clone();
+                telescope.clauses.push(terminal_clause);
+
+                let witness = analyze_connectivity(&surface.library, &telescope);
+                let reanchor =
+                    HistoricalReanchorSummary::from_telescope(&surface.library, &telescope);
+                terminal_profiles.insert(
+                    terminal_label.to_string(),
+                    (
+                        witness.connected,
+                        witness.historical_reanchor,
+                        reanchor.allows_historical_reanchor(),
+                        passes_connectivity(&surface.library, &telescope),
+                    ),
+                );
+            }
+
+            live_terminal_profiles.insert(label, terminal_profiles);
+        }
+
+        assert_eq!(
+            live_terminal_profiles,
+            [
+                (
+                    "clause-0 claim_flat_domain".to_string(),
+                    [
+                        ("eventual_lift".to_string(), (true, false, false, false)),
+                        ("next_lift".to_string(), (true, false, false, false)),
+                        ("reference".to_string(), (true, true, true, true)),
+                    ]
+                    .into_iter()
+                    .collect(),
+                ),
+                (
+                    "clause-2 claim_flat_domain plus anchor-11 exact-argument".to_string(),
+                    [
+                        ("eventual_lift".to_string(), (true, false, false, false)),
+                        ("next_lift".to_string(), (true, false, false, false)),
+                        ("reference".to_string(), (true, true, true, true)),
+                    ]
+                    .into_iter()
+                    .collect(),
+                ),
+                (
+                    "clause-5 claim_flat_codomain".to_string(),
+                    [
+                        ("eventual_lift".to_string(), (true, false, false, false)),
+                        ("next_lift".to_string(), (true, false, false, false)),
+                        ("reference".to_string(), (true, true, true, true)),
+                    ]
+                    .into_iter()
+                    .collect(),
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "each residual single-bucket family should still keep only the reference terminal live on the current claim path: both stronger-than-canonical lifted terminals remain structurally connected but outside historical reanchor and therefore fenced out of live connectivity"
+        );
+    }
+
+    #[test]
     fn current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners()
      {
         let family_labels = [

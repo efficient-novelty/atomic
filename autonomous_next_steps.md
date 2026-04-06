@@ -179,6 +179,16 @@ This note is the exact next work order for `desktop_claim_shadow`.
   - the next landed repair therefore cannot blindly reland those residual
     families through broader same-primary retention or raw local terminal
     recovery; it still has to keep those unsafe `89 / 8` lifts fenced
+- A newer local step-`15` live-terminal fence regression now sharpens that
+  same blocker one step further again:
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
+    now pins that each of those same fenced proof-close families still keeps
+    only the reference terminal live on the current claim path
+  - both stronger-than-canonical lifted terminals still stay structurally
+    connected but outside historical reanchor and therefore outside live
+    connectivity there
+  - the next landed repair must therefore stay reference-terminal-local on
+    those families rather than reopening the lifted shell itself
 - A newer non-landed exact-family same-primary relief probe now sharpens that
   same blocker one step further without reopening the cleared `small_cluster`:
   - `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
@@ -1042,7 +1052,12 @@ This note is the exact next work order for `desktop_claim_shadow`.
    reference-terminal completions from the selected residual families.
    `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
    now further pins that every one of those same three families still sits
-   beside two unsafe stronger-than-canonical `89 / 8` lifted terminals, and
+   beside two unsafe stronger-than-canonical `89 / 8` lifted terminals, while
+   `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
+   now further pins that each family still keeps only the reference terminal
+   live on the current claim path and keeps both unsafe lifts structurally
+   connected but outside historical reanchor and live connectivity there,
+   and
    `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
    now also pins that the nearby omitted demo-only side variants keep those
    same lifts fenced once the terminal moves. The next landed repair must
