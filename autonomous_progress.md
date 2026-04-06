@@ -75,6 +75,21 @@ Until that exists, wording stays at `bounded live recovery`.
   - it localizes first mismatch pressure to clause positions `0..3` only,
     with the dominant live slice now on remaining-two clause-`0` / clause-`1`
     prefixes at `252 / 145`
+- The dominant remaining-two side of that wall is now pinned one layer more
+  concretely by
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`:
+  - mismatch position `0` is exactly six current claim-generic clause-`0` /
+    clause-`1` pairings, all at `42` captures each:
+    `claim_flat_domain` or `claim_eventual_domain` crossed with clause-`1`
+    `reference`, `claim_sharp_codomain`, or `claim_next_codomain`
+  - mismatch position `1` keeps clause `0` at `reference` and is exactly
+    three clause-`1` pairings:
+    `claim_sharp_codomain = 42`, `claim_next_codomain = 42`,
+    `demo_flat_codomain = 61`
+  - the remaining-two tail at mismatch positions `2` and `3` stays only the
+    narrow `reference/reference` continuation at `42` and `12`
+  - so the main blocker is still the current claim-generic clause-`0` /
+    clause-`1` surface rather than an undiscovered broad demo-only reopening
 - A local clause-`1` `demo_eventually_codomain` exact-pocket reland was
   tested, reverted, and is now pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
@@ -129,6 +144,7 @@ Until that exists, wording stays at `bounded live recovery`.
   - `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts`
 - Current step-`15` guardrails:
   - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
+  - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
@@ -147,9 +163,13 @@ Use the new executable wall split to attack the clean `v12` step-`15`
 partial-prefix wall on top of the matched `4331` surface, start with the
 dominant remaining-two clause-`0` / clause-`1` side of that wall before
 reopening the smaller clause-`2` / clause-`3` tail, keep the next change
-prefix-local and reference-terminal-safe, do not reland the reverted
-clause-`1` `demo_eventually_codomain` exact-pocket probe or the broader
-clause-`0` `claim_flat_domain` plus clause-`1` `demo_flat_codomain`
-exact-pocket reland that are now pinned as negative controls and widened the
-wall to `626`, rerun only after the new local slice is green, and keep
-step `1` explicit unless that next stored bundle changes it directly.
+prefix-local and reference-terminal-safe, use the new nine-pair executable
+split to work first on the six mismatch-`0` current claim-generic
+clause-`0` / clause-`1` pairings and the three mismatch-`1` clause-`1`
+pairings before spending another cycle on the smaller reference/reference
+tail, do not reland the reverted clause-`1` `demo_eventually_codomain`
+exact-pocket probe or the broader clause-`0` `claim_flat_domain` plus
+clause-`1` `demo_flat_codomain` exact-pocket reland that are now pinned as
+negative controls and widened the wall to `626`, rerun only after the new
+local slice is green, and keep step `1` explicit unless that next stored
+bundle changes it directly.

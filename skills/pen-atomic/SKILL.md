@@ -55,8 +55,12 @@ Treat these as current repo truths:
   remaining-two plus `102` remaining-three prefixes, with first mismatch
   pressure only at clause positions `0..3` (`312 / 177 / 50 / 14`) and the
   dominant live slice now on remaining-two clause `0` / clause `1`
-  prefixes (`252 / 145`), so the next landed repair should start there
-  rather than with another rerun setup pass or a step-`1`-first theory
+  prefixes (`252 / 145`), and a newer
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
+  regression now sharpens that slice into six exact mismatch-`0`
+  current-claim pairings at `42` each plus three mismatch-`1` clause-`1`
+  pairings at `42`, `42`, and `61`, so the next landed repair should start
+  there rather than with another rerun setup pass or a step-`1`-first theory
   slice; the canonical
   `v11` certificate plus the frozen `step-15-live.ndjson` provenance are now
   pinned by
@@ -572,6 +576,15 @@ Focus on:
   positions `0..3` and dominant remaining-two pressure at clause `0` / clause
   `1`, so the next landed repair should start there before reopening the
   smaller clause-`2` / clause-`3` tail
+- treating the dominant remaining-two clause-`0` / clause-`1` wall as
+  executable exact pairings rather than a generic early blur:
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
+  now freezes mismatch-`0` as the six exact
+  `claim_flat_domain` / `claim_eventual_domain` crossed with
+  `reference` / `claim_sharp_codomain` / `claim_next_codomain` pairings at
+  `42` each, and mismatch-`1` as the
+  `reference` + `claim_sharp_codomain` / `claim_next_codomain` /
+  `demo_flat_codomain` pairings at `42`, `42`, and `61`
 - treating the two reverted clause-`1` side-pocket broadenings as negative
   controls only:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the

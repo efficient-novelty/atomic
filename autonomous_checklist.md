@@ -28,6 +28,16 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
   - first mismatch positions `clause 0 = 312`, `clause 1 = 177`,
     `clause 2 = 50`, `clause 3 = 14`
   - dominant remaining-two slice `clause 0 = 252`, `clause 1 = 145`
+- The dominant remaining-two clause-`0` / clause-`1` slice is now explicit:
+  - mismatch `0` is six exact `42`-count pairings:
+    clause-`0` `claim_flat_domain` or `claim_eventual_domain`
+    crossed with clause-`1` `reference`, `claim_sharp_codomain`, or
+    `claim_next_codomain`
+  - mismatch `1` is clause-`0` `reference` with clause-`1`
+    `claim_sharp_codomain = 42`, `claim_next_codomain = 42`,
+    `demo_flat_codomain = 61`
+  - the remaining-two mismatch-`2` / mismatch-`3` tail stays only the narrow
+    `reference/reference` continuation at `42` and `12`
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:

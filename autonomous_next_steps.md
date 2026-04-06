@@ -49,6 +49,20 @@ Do not start with another rerun setup pass.
   - it shows that the live wall now sits entirely on clause positions `0..3`
     and is dominated by remaining-two prefixes, especially clause-`0` and
     clause-`1`
+- The dominant remaining-two slice is now executable one layer deeper too:
+  - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
+    freezes mismatch position `0` as six exact `42`-count pairings:
+    clause-`0` `claim_flat_domain` or `claim_eventual_domain` crossed with
+    clause-`1` `reference`, `claim_sharp_codomain`, or
+    `claim_next_codomain`
+  - it freezes mismatch position `1` as clause-`0` `reference` with exactly
+    three clause-`1` pairings:
+    `claim_sharp_codomain = 42`, `claim_next_codomain = 42`,
+    `demo_flat_codomain = 61`
+  - the remaining-two mismatch-`2` / mismatch-`3` tail stays only the narrow
+    `reference/reference` continuation at `42` and `12`
+  - so the next honest repair target is still the current clause-`0` /
+    clause-`1` claim surface, not another broad omitted-side reopening
 - A local clause-`1` `demo_eventually_codomain` exact-pocket reland has now
   been checked, reverted, and pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
@@ -97,6 +111,14 @@ Do not start with another rerun setup pass.
    - remaining-two clause `2 = 42`
    - remaining-two clause `3 = 12`
    - remaining-three tail across the same four positions = `60 / 32 / 8 / 2`
+   - mismatch-`0` current pairings:
+     `claim_flat_domain` or `claim_eventual_domain`
+     crossed with clause-`1` `reference`, `claim_sharp_codomain`, or
+     `claim_next_codomain`, all at `42`
+   - mismatch-`1` current pairings:
+     clause-`0` `reference` with clause-`1`
+     `claim_sharp_codomain = 42`, `claim_next_codomain = 42`,
+     `demo_flat_codomain = 61`
 4. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays the canonical `103 / 8`
@@ -105,6 +127,7 @@ Do not start with another rerun setup pass.
    - no stronger-than-canonical lifted terminal becomes live
 5. Keep the focused guardrail slice green:
    - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
+   - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
    - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
    - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
    - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
@@ -134,6 +157,7 @@ Do not start with another rerun setup pass.
 - clause-`1` `demo_eventually_codomain` exact-pocket reland
 - clause-`0` `claim_flat_domain` plus clause-`1` `demo_flat_codomain`
   exact-pocket reland
+- treating the dominant remaining-two wall as an unlabeled early blur again
 - raw position-`0` reland
 - another broad clause-`4` or clause-`5` reopening
 - raw reland of the unsafe lifted `89 / 8` shell

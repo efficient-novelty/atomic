@@ -11324,6 +11324,142 @@ mod tests {
         summary
     }
 
+    fn current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+        position: usize,
+        clause: &ClauseRec,
+    ) -> &'static str {
+        match position {
+            0 => {
+                if matches!(
+                    &clause.expr,
+                    Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+                ) {
+                    "reference"
+                } else if matches!(
+                    &clause.expr,
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) {
+                    "claim_flat_domain"
+                } else if matches!(
+                    &clause.expr,
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) {
+                    "claim_eventual_domain"
+                } else if matches!(
+                    &clause.expr,
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) {
+                    "demo_sharp_domain"
+                } else if matches!(
+                    &clause.expr,
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) {
+                    "demo_next_domain"
+                } else {
+                    "unclassified"
+                }
+            }
+            1 => {
+                if matches!(
+                    &clause.expr,
+                    Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+                ) {
+                    "reference"
+                } else if matches!(
+                    &clause.expr,
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) {
+                    "claim_sharp_codomain"
+                } else if matches!(
+                    &clause.expr,
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) {
+                    "claim_next_codomain"
+                } else if matches!(
+                    &clause.expr,
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) {
+                    "demo_flat_codomain"
+                } else if matches!(
+                    &clause.expr,
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) {
+                    "demo_eventually_codomain"
+                } else {
+                    "unclassified"
+                }
+            }
+            _ => "out_of_scope",
+        }
+    }
+
+    fn current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+    -> BTreeMap<(Option<usize>, &'static str, &'static str), usize> {
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+
+        super::start_partial_prefix_bound_prune_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let captures = super::finish_partial_prefix_bound_prune_capture();
+
+        let mut pair_counts = BTreeMap::new();
+        for capture in captures
+            .into_iter()
+            .filter(|capture| capture.remaining_clause_slots == 2)
+        {
+            let mismatch = capture
+                .prefix_telescope
+                .clauses
+                .iter()
+                .zip(reference_prefix.clauses.iter())
+                .position(|(left, right)| left != right);
+            let clause_zero = current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                0,
+                &capture.prefix_telescope.clauses[0],
+            );
+            let clause_one = current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                1,
+                &capture.prefix_telescope.clauses[1],
+            );
+            *pair_counts
+                .entry((mismatch, clause_zero, clause_one))
+                .or_insert(0usize) += 1;
+        }
+
+        pair_counts
+    }
+
     fn current_claim_step_fifteen_incumbent_prune_summary() -> LateStepIncumbentPruneSummary {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             14,
@@ -13614,6 +13750,33 @@ mod tests {
             .into_iter()
             .collect(),
             "the clean step-15 partial-prefix wall should stay dominated by remaining-two clause-0 and clause-1 mismatches, with only a narrow remaining-three tail across the same four early families"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings()
+     {
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts();
+
+        assert_eq!(
+            pair_counts,
+            [
+                ((Some(0_usize), "claim_eventual_domain", "claim_next_codomain"), 42_usize),
+                ((Some(0_usize), "claim_eventual_domain", "claim_sharp_codomain"), 42),
+                ((Some(0_usize), "claim_eventual_domain", "reference"), 42),
+                ((Some(0_usize), "claim_flat_domain", "claim_next_codomain"), 42),
+                ((Some(0_usize), "claim_flat_domain", "claim_sharp_codomain"), 42),
+                ((Some(0_usize), "claim_flat_domain", "reference"), 42),
+                ((Some(1_usize), "reference", "claim_next_codomain"), 42),
+                ((Some(1_usize), "reference", "claim_sharp_codomain"), 42),
+                ((Some(1_usize), "reference", "demo_flat_codomain"), 61),
+                ((Some(2_usize), "reference", "reference"), 42),
+                ((Some(3_usize), "reference", "reference"), 12),
+            ]
+            .into_iter()
+            .collect(),
+            "the dominant remaining-two step-15 partial-prefix wall should now be executable as six clause-0 current-claim pairings, three clause-1 pairings, and only a narrow reference/reference tail at mismatch positions 2 and 3; the main blocker is therefore still the current claim-generic clause-0/1 surface rather than an undiscovered broad demo-only reopening"
         );
     }
 

@@ -572,6 +572,19 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   `102` remaining-three prefixes, with first mismatch pressure only at clause
   positions `0..3` (`312 / 177 / 50 / 14`) and dominant remaining-two
   pressure at clause `0` / clause `1` (`252 / 145`)
+- the dominant remaining-two clause-`0` / clause-`1` side of that wall is now
+  executable one layer more concretely too:
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
+  now freezes mismatch position `0` as six exact `42`-count current-claim
+  pairings, clause-`0` `claim_flat_domain` or `claim_eventual_domain`
+  crossed with clause-`1` `reference`, `claim_sharp_codomain`, or
+  `claim_next_codomain`, while mismatch position `1` now freezes clause-`0`
+  `reference` with clause-`1` `claim_sharp_codomain = 42`,
+  `claim_next_codomain = 42`, and `demo_flat_codomain = 61`; the
+  remaining-two mismatch-`2` / mismatch-`3` tail stays only the narrow
+  `reference/reference` continuation at `42` and `12`, so the next repair can
+  target exact clause-`0` / clause-`1` pairings rather than treating the wall
+  as an unlabeled early blur
 - both reverted clause-`1` side-pocket broadenings are now explicitly ruled
   out as the next move:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
@@ -620,6 +633,12 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    first mismatch positions `0..3` only, so the next landed repair should
    start on the dominant remaining-two clause-`0` / clause-`1` side
    (`252 / 145`) before reopening the smaller clause-`2` / clause-`3` tail.
+   `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
+   now further freezes that dominant side as six exact mismatch-`0`
+   current-claim pairings at `42` each plus three mismatch-`1` clause-`1`
+   pairings at `42`, `42`, and `61`, so the next landed repair can work from
+   explicit clause-`0` / clause-`1` labels rather than another generic early
+   wall theory slice.
    The newer clause-`0`,
    clause-`1`, clause-`4`, and clause-`5` exact-pocket reopenings are now
    already consumed narrowly and must stay fenced as a tiny noncanonical
@@ -712,6 +731,9 @@ Do not:
   broader clause-`0` `claim_flat_domain` plus clause-`1`
   `demo_flat_codomain` exact-pocket probe first; both now widen the clean
   step-`15` wall to `626`
+- go back to treating the dominant remaining-two clause-`0` / clause-`1`
+  wall as unlabeled; the exact nine-pair executable split is now part of the
+  current diagnosis
 - reland the newer `[3,5,3,3,5,1,1]` or `[5,1,3,3,5,3,3]` step-`13`
   widenings raw; both still leave accepted-hash parity open
 - call the lane `unguided` yet
