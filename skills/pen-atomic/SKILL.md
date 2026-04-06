@@ -119,6 +119,16 @@ Treat these as current repo truths:
   admissible, and stronger-than-canonical `89 / 8` rivals at bit cost `254`,
   so the next repair still has to keep those unsafe lifted terminals fenced;
   a newer
+  `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
+  regression now also proves that even granting same-primary relief only to
+  those exact clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual
+  families keeps the repaired local surface at `4030` generated prefixes with
+  `472` partial-prefix bar failures, collapses incumbent-dominance from `3`
+  to `0`, leaves the `small_cluster` unchanged at `2964 / 494 / 494 / 0`,
+  and still unfences the isolated `single` pocket from `1` to `4`
+  fully scored non-winning terminals, so the next landed repair must stay
+  narrower than same-primary relief even at exact-family scope;
+  a newer
   `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_stay_same_primary_and_non_winning`
   regression now also proves that omitted demo-only side variants at clause
   positions `0`, `1`, `4`, and `5` are already structurally connected,

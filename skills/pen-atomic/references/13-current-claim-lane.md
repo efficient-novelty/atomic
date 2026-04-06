@@ -331,6 +331,23 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - the next landed repair therefore cannot blindly reland those residual
     families through broader same-primary retention or raw local terminal
     recovery; it still has to keep those unsafe `89 / 8` lifts fenced
+- a new non-landed exact-family same-primary relief probe now sharpens that
+  same blocker one step further without reopening the cleared
+  `small_cluster`:
+  - `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
+    now pins that granting same-primary incumbent relief only to those exact
+    clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
+    keeps live generated prefixes flat at `4030` and keeps partial-prefix bar
+    failures at `472`
+  - it does collapse the remaining incumbent-dominance prunes from `3` to `0`
+  - the cleared `small_cluster` stays unchanged at
+    `2964 / 494 / 494 / 0`
+  - but the isolated `single` pocket still unfences from `1` to `4`
+    fully scored non-winning terminals at the same overshoot
+    `115657 / 21112`
+  - the next landed repair must therefore stay narrower than same-primary
+    relief even at exact-family scope and keep the isolated `single` pocket
+    fenced
 - a new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -458,6 +475,12 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    same-primary-retention reland. The new proof-close incumbent freeze now
    further localizes that next move to three same-primary `103 / 8` fenced
    prefix families first diverging at clause positions `0`, `2`, and `5`.
+   `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
+   now further pins that even granting same-primary relief only to those
+   exact three families keeps `4030` / `472`, collapses incumbent-dominance
+   from `3` to `0`, leaves the `small_cluster` unchanged at
+   `2964 / 494 / 494 / 0`, and still unfences the isolated `single` pocket
+   from `1` to `4` fully scored non-winning terminals.
 4. Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they still prove local breadth can be reopened unsafely, but they are not
    the landed repair.

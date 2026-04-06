@@ -92,6 +92,16 @@ It lists only work that is still open.
   same-primary `103 / 8` non-winner at bit cost `236` while both
   `next_lift` and `eventual_lift` stay connected, locally admissible, and
   stronger-than-canonical `89 / 8` rivals at bit cost `254`.
+- A newer exact-family negative control now proves even family-local
+  same-primary relief is still too broad:
+  `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
+  now pins that granting same-primary incumbent relief only to those exact
+  clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
+  keeps the repaired local surface at `4030` generated prefixes with `472`
+  partial-prefix bar failures, collapses incumbent-dominance from `3` to `0`,
+  leaves the cleared `small_cluster` unchanged at `2964 / 494 / 494 / 0`,
+  and still unfences the isolated `single` pocket from `1` to `4`
+  fully scored non-winning terminals.
 - A new local omitted-side-variant regression now proves the next safe opening
   is narrower than a raw catalog reland:
   omitted demo-only temporal-shell side variants at clause positions `0`,
@@ -132,7 +142,8 @@ It lists only work that is still open.
   starting from those clause-`0` / clause-`2` / clause-`5` fenced prefix
   families rather than reopening the whole side-pocket neighborhood, while
   also keeping the newly frozen unsafe `89 / 8` lifted terminals fenced on
-  each of those same family shells.
+  each of those same family shells and staying narrower than same-primary
+  relief even at exact-family scope.
 - No broader per-step claim search-band expansion should land beyond that
   isolated anchor-`11` pocket before a new local repair proves more is
   necessary on this parity-clean stored chain.

@@ -204,6 +204,22 @@ gate.
   - the next landed repair therefore cannot blindly reland those residual
     families through broader same-primary retention or raw local terminal
     recovery; it still has to keep those unsafe `89 / 8` lifts fenced
+- A newer non-landed exact-family same-primary relief probe now sharpens that
+  same blocker further without reopening the cleared `small_cluster`:
+  - `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
+    now pins that granting same-primary incumbent relief only to those exact
+    clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
+    keeps live generated prefixes flat at `4030` and keeps partial-prefix bar
+    failures at `472`
+  - it does collapse the remaining incumbent-dominance prunes from `3` to `0`
+  - the cleared `small_cluster` stays unchanged at
+    `2964 / 494 / 494 / 0`
+  - but the isolated `single` pocket still unfences from `1` to `4`
+    fully scored non-winning terminals at the same overshoot
+    `115657 / 21112`
+  - the next landed repair must therefore stay narrower than same-primary
+    relief even at exact-family scope and keep the isolated `single` pocket
+    fenced
 - A new non-landed blanket step-`15` same-primary retention probe was also
   run and reverted against that same repaired canonical chain:
   - enabling same-primary incumbent relief across the whole local step-`15`
@@ -1360,10 +1376,17 @@ gate.
    `claim_flat_codomain`.
    `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
    now further pins that each of those same families still sits beside two
-   unsafe stronger-than-canonical `89 / 8` lifted terminals, so the next move
-   is therefore not another rerun setup pass, not another raw
+   unsafe stronger-than-canonical `89 / 8` lifted terminals, and
+   `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
+   now further proves that even granting same-primary relief only to those
+   exact three families keeps `4030` / `472`, collapses the remaining
+   incumbent-dominance prunes from `3` to `0`, and still unfences the
+   isolated `single` pocket from `1` to `4` fully scored non-winning
+   terminals while leaving the `small_cluster` unchanged at
+   `2964 / 494 / 494 / 0`, so the next move is therefore not another rerun
+   setup pass, not another raw
    clause-`4` / raw clause-`5` / raw global position-`0` reland, and not a
-   blanket same-primary-retention reland; it should be the next
+   blanket or exact-family same-primary-retention reland; it should be the next
    parity-preserving step-`15` repair against those residual `3`
    single-bucket incumbent prunes on top of this `4030` surface, starting
    from those three fenced prefix families instead of reopening the full

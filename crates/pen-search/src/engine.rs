@@ -3493,11 +3493,12 @@ fn search_next_step_internal_with_clause_catalog_override(
                 continue;
             };
             let bucket_key = demo_bucket_key_for_group(admissibility.mode, &signature, &group);
-            let allow_same_primary_relief = claim_same_primary_incumbent_relief_for_bucket(
-                admissibility.mode,
+            let allow_same_primary_relief = claim_same_primary_incumbent_relief_for_prefix_group(
+                admissibility,
                 step_index,
                 history,
                 &bucket_key,
+                &group.prefix_telescope,
             );
             if let (Some(group_best_rank), Some(incumbent_rank)) =
                 (&group.best_accept_rank, &incumbent_terminal_rank)
@@ -4278,6 +4279,95 @@ fn claim_same_primary_incumbent_relief_for_bucket(
             && bucket_key.category == SearchBucketCategory::TemporalOperator
             && bucket_key.support_profile == DemoBucketSupportProfile::LibraryBacked
             && bucket_key.width == DemoBucketWidth::SmallCluster)
+}
+
+fn claim_step_fifteen_residual_single_bucket_family_label(
+    prefix_telescope: &Telescope,
+    historical_anchor_ref: Option<u32>,
+) -> Option<&'static str> {
+    if prefix_telescope.clauses.len() != 7 {
+        return None;
+    }
+
+    let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+
+    let mut clause_zero_claim_flat_domain = reference_prefix.clone();
+    clause_zero_claim_flat_domain.clauses[0] = pen_core::clause::ClauseRec::new(
+        ClauseRole::Formation,
+        Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+    );
+
+    let mut clause_five_claim_flat_codomain = reference_prefix.clone();
+    clause_five_claim_flat_codomain.clauses[5] = pen_core::clause::ClauseRec::new(
+        ClauseRole::Formation,
+        Expr::Pi(
+            Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                Expr::Flat(Box::new(Expr::Var(1))),
+            ))))),
+            Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                Expr::Var(1),
+            ))))),
+        ),
+    );
+
+    if *prefix_telescope == clause_zero_claim_flat_domain {
+        return Some("clause-0 claim_flat_domain");
+    }
+    if *prefix_telescope == clause_five_claim_flat_codomain {
+        return Some("clause-5 claim_flat_codomain");
+    }
+
+    let anchor = historical_anchor_ref?;
+    let mut clause_two_claim_flat_domain_anchor_eleven_exact_argument = reference_prefix;
+    clause_two_claim_flat_domain_anchor_eleven_exact_argument.clauses[2] =
+        pen_core::clause::ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+            ),
+        );
+    clause_two_claim_flat_domain_anchor_eleven_exact_argument.clauses[3] =
+        pen_core::clause::ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor + 1)),
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+            ))),
+        );
+    (*prefix_telescope == clause_two_claim_flat_domain_anchor_eleven_exact_argument)
+        .then_some("clause-2 claim_flat_domain plus anchor-11 exact-argument")
+}
+
+fn claim_same_primary_incumbent_relief_for_prefix_group(
+    admissibility: StrictAdmissibility,
+    step_index: u32,
+    history: &[DiscoveryRecord],
+    bucket_key: &DemoBucketKey,
+    prefix_telescope: &Telescope,
+) -> bool {
+    let allow_same_primary_relief = claim_same_primary_incumbent_relief_for_bucket(
+        admissibility.mode,
+        step_index,
+        history,
+        bucket_key,
+    );
+    #[cfg(test)]
+    {
+        allow_same_primary_relief
+            || claim_step_fifteen_family_local_same_primary_relief_override_enabled(
+                admissibility,
+                step_index,
+                history,
+                bucket_key,
+                prefix_telescope,
+            )
+    }
+    #[cfg(not(test))]
+    {
+        let _ = prefix_telescope;
+        allow_same_primary_relief
+    }
 }
 
 fn claim_step_nine_matches_axiomatic_bundle(
@@ -5274,11 +5364,12 @@ fn discover_realistic_shadow_candidates_with_clause_catalog_override(
                 let cached_rank_prune_count =
                     if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
                         let allow_same_primary_relief =
-                            claim_same_primary_incumbent_relief_for_bucket(
-                                admissibility.mode,
+                            claim_same_primary_incumbent_relief_for_prefix_group(
+                                admissibility,
                                 step_index,
                                 history,
                                 &bucket_key,
+                                &work_item.prefix_telescope,
                             );
                         terminal_prefix_rank_prune_count(
                             group.best_accept_rank.as_ref(),
@@ -5289,11 +5380,12 @@ fn discover_realistic_shadow_candidates_with_clause_catalog_override(
                         )
                     } else {
                         let allow_same_primary_relief =
-                            claim_same_primary_incumbent_relief_for_bucket(
-                                admissibility.mode,
+                            claim_same_primary_incumbent_relief_for_prefix_group(
+                                admissibility,
                                 step_index,
                                 history,
                                 &bucket_key,
+                                &work_item.prefix_telescope,
                             );
                         cached_terminal_prefix_rank_prune_count(
                             &work_item.signature,
@@ -5327,11 +5419,12 @@ fn discover_realistic_shadow_candidates_with_clause_catalog_override(
                     if !accept_rank_can_survive_incumbent(
                         &group_best_rank,
                         incumbent_rank,
-                        claim_same_primary_incumbent_relief_for_bucket(
-                            admissibility.mode,
+                        claim_same_primary_incumbent_relief_for_prefix_group(
+                            admissibility,
                             step_index,
                             history,
                             &bucket_key,
+                            &work_item.prefix_telescope,
                         ),
                     ) {
                         #[cfg(test)]
@@ -5880,6 +5973,13 @@ thread_local! {
 }
 
 #[cfg(test)]
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_FAMILY_LOCAL_SAME_PRIMARY_RELIEF_OVERRIDE:
+        std::cell::RefCell<Option<BTreeSet<&'static str>>> =
+            const { std::cell::RefCell::new(None) };
+}
+
+#[cfg(test)]
 fn start_pruned_terminal_prefix_capture() {
     PRUNED_TERMINAL_PREFIX_CAPTURE.with(|capture| {
         *capture.borrow_mut() = Some(Vec::new());
@@ -5902,6 +6002,65 @@ fn start_incumbent_pruned_terminal_group_capture() {
 fn finish_incumbent_pruned_terminal_group_capture() -> Vec<IncumbentPrunedTerminalGroupCapture> {
     INCUMBENT_PRUNED_TERMINAL_GROUP_CAPTURE
         .with(|capture| capture.borrow_mut().take().unwrap_or_default())
+}
+
+#[cfg(test)]
+struct ClaimStepFifteenFamilyLocalSamePrimaryReliefOverrideGuard;
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenFamilyLocalSamePrimaryReliefOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_FAMILY_LOCAL_SAME_PRIMARY_RELIEF_OVERRIDE.with(|override_labels| {
+            *override_labels.borrow_mut() = None;
+        });
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_family_local_same_primary_relief(
+    labels: &[&'static str],
+) -> ClaimStepFifteenFamilyLocalSamePrimaryReliefOverrideGuard {
+    CLAIM_STEP_FIFTEEN_FAMILY_LOCAL_SAME_PRIMARY_RELIEF_OVERRIDE.with(|override_labels| {
+        *override_labels.borrow_mut() = Some(labels.iter().copied().collect());
+    });
+    ClaimStepFifteenFamilyLocalSamePrimaryReliefOverrideGuard
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_family_local_same_primary_relief_override_enabled(
+    admissibility: StrictAdmissibility,
+    step_index: u32,
+    history: &[DiscoveryRecord],
+    bucket_key: &DemoBucketKey,
+    prefix_telescope: &Telescope,
+) -> bool {
+    if !matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
+        || step_index != 15
+        || !history
+            .last()
+            .is_some_and(|record| record.step_index == 14 && record.nu == 62 && record.kappa == 9)
+        || bucket_key.clause_kappa != 8
+        || bucket_key.taxonomy != SearchBucketTaxonomy::StructuralGeneric
+        || bucket_key.category != SearchBucketCategory::TemporalOperator
+        || bucket_key.support_profile != DemoBucketSupportProfile::LibraryBacked
+        || bucket_key.width != DemoBucketWidth::Single
+    {
+        return false;
+    }
+
+    let Some(label) = claim_step_fifteen_residual_single_bucket_family_label(
+        prefix_telescope,
+        admissibility.historical_anchor_ref,
+    ) else {
+        return false;
+    };
+
+    CLAIM_STEP_FIFTEEN_FAMILY_LOCAL_SAME_PRIMARY_RELIEF_OVERRIDE.with(|override_labels| {
+        override_labels
+            .borrow()
+            .as_ref()
+            .is_some_and(|labels| labels.contains(label))
+    })
 }
 
 #[cfg(test)]
@@ -6131,12 +6290,14 @@ fn process_prepared_exact_two_step_terminal_surface(
         }
         let cached_rank_prune_count =
             if should_compact_terminal_prefix_group_candidates(admissibility.mode) {
-                let allow_same_primary_relief = claim_same_primary_incumbent_relief_for_bucket(
-                    admissibility.mode,
-                    step_index,
-                    history,
-                    &bucket_key,
-                );
+                let allow_same_primary_relief =
+                    claim_same_primary_incumbent_relief_for_prefix_group(
+                        admissibility,
+                        step_index,
+                        history,
+                        &bucket_key,
+                        &terminal_prefix.prefix_telescope,
+                    );
                 terminal_prefix_rank_prune_count(
                     group.best_accept_rank.as_ref(),
                     None,
@@ -6145,12 +6306,14 @@ fn process_prepared_exact_two_step_terminal_surface(
                     allow_same_primary_relief,
                 )
             } else {
-                let allow_same_primary_relief = claim_same_primary_incumbent_relief_for_bucket(
-                    admissibility.mode,
-                    step_index,
-                    history,
-                    &bucket_key,
-                );
+                let allow_same_primary_relief =
+                    claim_same_primary_incumbent_relief_for_prefix_group(
+                        admissibility,
+                        step_index,
+                        history,
+                        &bucket_key,
+                        &terminal_prefix.prefix_telescope,
+                    );
                 cached_terminal_prefix_rank_prune_count(
                     &terminal_prefix.signature,
                     discovery.terminal_rank_incumbent.as_ref(),
@@ -6183,11 +6346,12 @@ fn process_prepared_exact_two_step_terminal_surface(
             if !accept_rank_can_survive_incumbent(
                 &group_best_rank,
                 incumbent_rank,
-                claim_same_primary_incumbent_relief_for_bucket(
-                    admissibility.mode,
+                claim_same_primary_incumbent_relief_for_prefix_group(
+                    admissibility,
                     step_index,
                     history,
                     &bucket_key,
+                    &terminal_prefix.prefix_telescope,
                 ),
             ) {
                 #[cfg(test)]
@@ -8682,11 +8846,12 @@ fn claim_try_summary_prune_before_materialization(
         return true;
     }
 
-    let allow_same_primary_relief = claim_same_primary_incumbent_relief_for_bucket(
-        admissibility.mode,
+    let allow_same_primary_relief = claim_same_primary_incumbent_relief_for_prefix_group(
+        admissibility,
         step_index,
         history,
         &bucket_key,
+        prefix_telescope,
     );
     let Some(pruned_candidates) = terminal_prefix_rank_prune_count(
         summary.best_accept_rank.as_ref(),
@@ -19208,6 +19373,59 @@ mod tests {
             .into_iter()
             .collect(),
             "each residual single-bucket family should still sit beside the same raw three-terminal shell: one same-primary 103/8 reference terminal and two unsafe stronger-than-canonical 89/8 lifts, so the next repair cannot blindly reland those families through broader same-primary retention"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket()
+     {
+        let _override = super::override_claim_step_fifteen_family_local_same_primary_relief(&[
+            "clause-0 claim_flat_domain",
+            "clause-2 claim_flat_domain plus anchor-11 exact-argument",
+            "clause-5 claim_flat_codomain",
+        ]);
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4030);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 472,
+            "family-local same-primary relief should not change the repaired local generated surface or the remaining partial-prefix wall"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 0,
+            "granting same-primary relief to only the three residual families should still collapse the last incumbent-dominance prunes"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 4,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "even exact-family-scoped same-primary relief still unfences the isolated single pocket from one fully scored non-winner to four, so it is not the landed repair either"
+        );
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 2964,
+                admissible_terminal_candidates: 494,
+                exact_screened_terminal_candidates: 494,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the exact-family relief probe should leave the cleared temporal small-cluster unchanged, so the remaining blocker is still the isolated single pocket fence"
         );
     }
 

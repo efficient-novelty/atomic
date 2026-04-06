@@ -163,6 +163,19 @@ Until that bundle exists, keep the paper wording at `bounded live recovery`.
   - the next landed repair therefore still has to keep those unsafe lifted
     terminals fenced rather than blindly relanding broader same-primary or raw
     local-terminal retention on that family shell
+- A newer executable
+  `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
+  regression now sharpens that same blocker one step further:
+  - granting same-primary incumbent relief only to those exact
+    clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
+    still keeps the repaired local surface at `4030` generated prefixes with
+    `472` partial-prefix bar failures
+  - it does collapse the remaining incumbent-dominance prunes from `3` to `0`
+  - the cleared `small_cluster` stays unchanged at
+    `2964 / 494 / 494 / 0`
+  - but the isolated `single` pocket still unfences from `1` to `4`
+    fully scored non-winning terminals, so the next landed repair must stay
+    narrower than same-primary relief even at exact-family scope
 - A newer executable omitted-side-variant regression now sharpens that same
   `small_cluster` target without landing another widening yet:
   - the omitted demo-only temporal-shell side variants at clause positions
@@ -322,7 +335,13 @@ Current slice order:
    `current_claim_step_fifteen_residual_single_bucket_incumbent_families_still_hide_two_unsafe_lifted_terminals`
    green too so the next step-`15` repair still respects that each of those
    three families sits beside two unsafe stronger-than-canonical `89 / 8`
-   lifted terminals, and keep
+   lifted terminals, keep
+   `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
+   green too so the next step-`15` repair still respects that even
+   exact-family same-primary relief collapses `3 -> 0` incumbent-dominance
+   prunes only by unfencing the isolated `single` pocket from `1` to `4`
+   fully scored non-winning terminals while leaving the `small_cluster`
+   unchanged at `2964 / 494 / 494 / 0`, and keep
    `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
    green so any future omitted-side opening stays reference-terminal-local
    instead of reopening that lifted shell
