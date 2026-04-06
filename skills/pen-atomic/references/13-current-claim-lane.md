@@ -341,6 +341,14 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     `connectivity_accepts_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_only_on_the_exact_anchor_eleven_side_pocket_under_override`
     and
     `connectivity_keeps_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
+- a newer exploratory clause-`3` `anchor-11` exact-argument widening onto the
+  broader clause-`0` / clause-`1` claim surface while clause `2` stayed
+  `reference` has now also been checked and reverted:
+  - the clean step-`15` partial-prefix wall stayed pinned at `553`
+  - the executable remaining-two nine-pair split stayed the same
+  - but summary-stage incumbent captures reopened from `0` to `72`
+  - so that clause-`3` widening is now another negative control rather than
+    the next landed repair
 - a newer local step-`15` proof-close incumbent regression now freezes that
   remaining fenced pressure more tightly:
   - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
@@ -639,6 +647,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    pairings at `42`, `42`, and `61`, so the next landed repair can work from
    explicit clause-`0` / clause-`1` labels rather than another generic early
    wall theory slice.
+   The reverted clause-`3` `anchor-11` exact-argument widening onto the
+   broader clause-`0` / clause-`1` claim surface while clause `2` stayed
+   `reference` left that clean `553` wall and the executable nine-pair split
+   unchanged while reopening `72` summary-stage incumbent captures, so that
+   probe is also not the next move.
    The newer clause-`0`,
    clause-`1`, clause-`4`, and clause-`5` exact-pocket reopenings are now
    already consumed narrowly and must stay fenced as a tiny noncanonical

@@ -56,6 +56,13 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     unchanged
   - but it also widened the partial-prefix wall to `626`, so it is not the
     landed repair
+- A reverted clause-`3` `anchor-11` exact-argument widening onto the broader
+  clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
+  is now also part of the live diagnosis:
+  - it left the clean partial-prefix wall pinned at `553`
+  - it left the executable remaining-two nine-pair split unchanged
+  - but it reopened `72` summary-stage incumbent captures, so it is also not
+    the landed repair
 
 ## Late-Step Gate
 

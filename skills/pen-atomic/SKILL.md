@@ -133,7 +133,13 @@ Treat these as current repo truths:
   to `626`, so it is also ruled out rather than the landed path, and that
   reland is now pinned by
   `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
-  plus the matching connectivity override tests;
+  plus the matching connectivity override tests; a third local exploratory
+  clause-`3` `anchor-11` exact-argument widening onto the broader
+  clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
+  was also checked and reverted: it left the clean `553` partial-prefix wall
+  and the executable remaining-two nine-pair split unchanged, but it reopened
+  `72` summary-stage incumbent captures, so that clause-`3` widening is also
+  ruled out rather than the next landed path;
   the
   executable repaired late-path and negative-control guardrails are now also
   synced to that same `4331` / `3` / `3132 / 522 / 522 / 0` local surface
@@ -592,6 +598,12 @@ Focus on:
   `demo_flat_codomain` exact-pocket reland both lift local generated breadth
   to `4466` but also widen the clean partial-prefix wall to `626`, so neither
   is the next move
+- treating the reverted clause-`3` `anchor-11` exact-argument widening onto
+  the broader clause-`0` / clause-`1` claim surface as another negative
+  control only:
+  it leaves the clean `553` wall and the executable remaining-two nine-pair
+  split unchanged while reopening `72` summary-stage incumbent captures, so
+  it is also not the next move
 - treating the remaining step-`15` `small_cluster` incumbent surface as a
   landed local relief rather than the live blocker:
   the old summary-stage same-primary `103 / 8` bit-cost spread is now closed,

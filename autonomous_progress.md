@@ -112,6 +112,14 @@ Until that exists, wording stays at `bounded live recovery`.
     incumbent-dominance prunes unchanged
   - but it widened the clean partial-prefix wall from `553` to `626`
   - so that broader flat-pocket reland is now ruled out too
+- A local clause-`3` `anchor-11` exact-argument widening onto the broader
+  clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
+  was also checked and reverted:
+  - the clean step-`15` partial-prefix wall stayed pinned at `553`, including
+    the same executable remaining-two nine-pair split
+  - but summary-stage incumbent captures reopened from `0` to `72`
+  - so widening the clause-`3` exact pocket onto that broader early claim
+    surface is also ruled out as the next repair
 - The residual proof-close pressure is still localized to three same-primary
   `103 / 8` families:
   - clause-`0` `claim_flat_domain`
@@ -132,6 +140,10 @@ Until that exists, wording stays at `bounded live recovery`.
 - Do not reopen the raw lifted `89 / 8` shell.
 - Do not reland the broader clause-`0` `claim_flat_domain` plus clause-`1`
   `demo_flat_codomain` exact-pocket reopening.
+- Do not reland the raw clause-`3` `anchor-11` exact-argument widening onto
+  the broader clause-`0` / clause-`1` claim surface while clause `2` stays
+  `reference`; that probe left the `553` wall unchanged and reopened `72`
+  summary-stage incumbent captures.
 - Do not reland the raw position-`0`, broad clause-`4`, or broad clause-`5`
   widenings.
 - Do not reland the raw step-`13` widened controls

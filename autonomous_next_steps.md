@@ -85,6 +85,14 @@ Do not start with another rerun setup pass.
   - but the partial-prefix wall again widened to `626`
   - so that broader flat-pocket reland is also ruled out as another negative
     control rather than the next repair
+- A local clause-`3` `anchor-11` exact-argument widening onto the broader
+  clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
+  has now also been checked and reverted:
+  - the clean step-`15` partial-prefix wall stayed pinned at `553`
+  - the executable remaining-two nine-pair split stayed the same
+  - but summary-stage incumbent captures reopened from `0` to `72`
+  - so that clause-`3` widening is also ruled out as the next repair rather
+    than another live candidate
 - The old proof-close blocker has been reduced to only `3` fenced
   same-primary `single`-bucket incumbent prunes:
   - clause-`0` `claim_flat_domain`
@@ -119,6 +127,13 @@ Do not start with another rerun setup pass.
      clause-`0` `reference` with clause-`1`
      `claim_sharp_codomain = 42`, `claim_next_codomain = 42`,
      `demo_flat_codomain = 61`
+   - local capture inspection already shows those dominant remaining-two
+     claim-surface prefixes sitting on non-reference clause-`4` bridge
+     families, while the reverted clause-`3` `anchor-11` widening with
+     clause `2 = reference` left the wall unchanged and only reopened
+     summary-stage incumbent pressure
+   - so the next honest slice is still the live clause-`0` / clause-`1`
+     claim surface itself, but not another raw clause-`3` widen-first probe
 4. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays the canonical `103 / 8`
@@ -157,6 +172,8 @@ Do not start with another rerun setup pass.
 - clause-`1` `demo_eventually_codomain` exact-pocket reland
 - clause-`0` `claim_flat_domain` plus clause-`1` `demo_flat_codomain`
   exact-pocket reland
+- clause-`3` `anchor-11` exact-argument widening onto the broader
+  clause-`0` / clause-`1` claim surface while clause `2` stays `reference`
 - treating the dominant remaining-two wall as an unlabeled early blur again
 - raw position-`0` reland
 - another broad clause-`4` or clause-`5` reopening
