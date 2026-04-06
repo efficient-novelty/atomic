@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-04-06
+Last updated: 2026-04-07
 
 This checklist tracks only work that is still open for `desktop_claim_shadow`.
 
@@ -115,6 +115,30 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     the full `3 / 3 / 3` plus `2 / 2 / 2` split, while the sibling
     `claim_sharp_codomain` and `reference` sheets stayed higher at `21` and
     `15`
+- A narrower exact clause-`2` `claim_sharp_codomain` sheet tradeoff control
+  is now explicit too:
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_stays_a_tradeoff_control`
+  - it also lifted local step `15` generated breadth to `4412`
+  - it also narrowed the clean partial-prefix wall to `544` and zero-admitted
+    capture to `2250`
+  - it also shrank the mismatch `1` `reference + demo_flat_codomain` branch
+    from `61` captured prefixes on clause-`4` `33 / 28` down to
+    clause-`4` `30 / 21` / `51`
+  - it kept the isolated `single` pocket and residual `3` incumbent prunes
+    unchanged
+  - but it also widened `small_cluster` to `3216 / 536 / 536 / 0`, so it is
+    also not the landed repair
+  - it fully reopened only the exact `claim_sharp_codomain` clause-`2` sheet
+    at the full `3 / 3 / 3` plus `2 / 2 / 2` split, while the sibling
+    `claim_flat_domain` sheet stayed higher at `21` and the `reference`
+    sheet stayed at `15`
+- The two exact claim clause-`2` sheet probes are now symmetric:
+  - the `reference` clause-`2` sheet is already at the `15`-capture floor
+  - the remaining gap to the full `45`-capture tradeoff is the shared
+    `21 -> 15` residual on whichever claim clause-`2` sheet stays closed
+  - the next honest slice should therefore isolate the combined exact
+    claim-variant clause-`2` pair before touching the larger clause-`4`
+    `claim_next_bridge` side
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:

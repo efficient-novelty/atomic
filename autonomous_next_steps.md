@@ -1,6 +1,6 @@
 # Autonomous Claim Lane: Next Operational Slice
 
-Last updated: 2026-04-06
+Last updated: 2026-04-07
 
 This file is the exact next work order for `desktop_claim_shadow`.
 
@@ -164,9 +164,9 @@ Do not start with another rerun setup pass.
     `claim_flat_domain` plus `claim_sharp_codomain` clause-`2` sheets, while
     the full `33`-count clause-`4` `claim_next_bridge` side stayed unchanged
   - so that narrower reopening is also only a tradeoff control rather than
-    the landed repair, and the next slice should now move to one exact
-    `15`-count clause-`2` sheet before touching the larger clause-`4`
-    `claim_next_bridge` side again
+    the landed repair, and it motivated the exact clause-`2` sheet probes
+    that are now both pinned before any larger clause-`4`
+    `claim_next_bridge` reopening
 - A narrower exact clause-`2` `claim_flat_domain` sheet reopening on that
   same `reference + demo_flat_codomain` branch has now also been checked
   under a third scoped connectivity-only override and pinned by
@@ -186,9 +186,29 @@ Do not start with another rerun setup pass.
     `reference` sheets stay higher at `21` and `15`
   - so that exact-sheet reopening is also only a tradeoff control rather
     than the landed repair, but it is stronger than the clause-`4`
-    `reference`-sheet probe; the next honest slice should now move to the
-    sibling exact clause-`2` `claim_sharp_codomain` sheet before touching the
-    `reference` sheet or the larger clause-`4` `claim_next_bridge` side
+    `reference`-sheet probe
+- A narrower exact clause-`2` `claim_sharp_codomain` sheet reopening on that
+  same `reference + demo_flat_codomain` branch has now also been checked
+  under a fourth scoped connectivity-only override and pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_stays_a_tradeoff_control`
+  plus the matching connectivity override tests:
+  - local step `15` generated breadth also lifted to `4412`
+  - the clean partial-prefix wall also narrowed to `544`
+  - zero-admitted capture also narrowed to `2250`
+  - the larger mismatch-`1` `reference + demo_flat_codomain` branch also
+    shrank from clause-`4` `33 / 28` / `61` down to clause-`4`
+    `30 / 21` / `51`
+  - the isolated `single` pocket and residual `3` incumbent prunes still
+    stayed fenced
+  - but the `small_cluster` still widened to `3216 / 536 / 536 / 0`
+  - the reopened bridge cells now reland only the exact
+    `claim_sharp_codomain` clause-`2` sheet at the full `3 / 3 / 3` plus
+    `2 / 2 / 2` split, while the sibling `claim_flat_domain` sheet stays at
+    `21` and the `reference` sheet stays at `15`
+  - so that exact-sheet reopening is also only a tradeoff control rather
+    than the landed repair, but it now shows the two claim clause-`2`
+    sheets are numerically symmetric while the `reference` sheet is already
+    at the `15`-capture floor
 - A local clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   has now also been checked and reverted:
@@ -324,17 +344,21 @@ Do not start with another rerun setup pass.
      `549`, cuts zero-admitted capture only to `2259`, shrinks the larger
      mismatch-`1` branch only to clause-`4` `33 / 24` / `57`, and still
      widens the `small_cluster` to `3180 / 530 / 530 / 0`
-   - the newer exact clause-`2` `claim_flat_domain` sheet probe now shows
-     that reopening only that single sheet is real and stronger than the
-     clause-`4` `reference`-sheet probe, but still not enough:
-     it lifts local breadth to `4412`, narrows the clean wall to `544`, cuts
-     zero-admitted capture to `2250`, shrinks that same branch to
+   - the newer exact clause-`2` `claim_flat_domain` and
+     `claim_sharp_codomain` sheet probes now show that reopening only one
+     claim sheet at a time is real and stronger than the clause-`4`
+     `reference`-sheet probe, but still not enough:
+     each lifts local breadth to `4412`, narrows the clean wall to `544`,
+     cuts zero-admitted capture to `2250`, shrinks that same branch to
      clause-`4` `30 / 21` / `51`, and still widens the `small_cluster` to
      `3216 / 536 / 536 / 0`
-   - so the next honest slice is now the sibling exact `15`-count
-     clause-`2` `claim_sharp_codomain` sheet before touching the
-     `reference` sheet or the larger clause-`4` `claim_next_bridge` side
-     again
+   - together they now show that the `reference` clause-`2` sheet is already
+     at the `15`-capture floor, and the remaining gap to the full
+     `45`-capture tradeoff is the shared `21 -> 15` residual on whichever
+     claim clause-`2` sheet stays closed
+   - so the next honest slice is now the combined exact claim-variant
+     clause-`2` pair before touching the larger clause-`4`
+     `claim_next_bridge` side again
    - the reverted clause-`3` `anchor-11` widening with clause `2 = reference`
      left that clause-`4` family split unchanged and only reopened
      summary-stage incumbent pressure
@@ -367,6 +391,7 @@ Do not start with another rerun setup pass.
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_each_clause_two_sheet_as_three_by_three_and_two_by_two_bridge_cells`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_reference_sheet_stays_a_tradeoff_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_flat_sheet_stays_a_tradeoff_control`
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_stays_a_tradeoff_control`
   - `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
@@ -396,6 +421,10 @@ Do not start with another rerun setup pass.
   - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_flat_sheet_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
   - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_outside_exact_claim_flat_clause_two_sheet_even_under_override`
   - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_flat_sheet_reference_terminal_only_even_under_override`
+  - `connectivity_accepts_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_under_override`
+  - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
+  - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_outside_exact_claim_sharp_clause_two_sheet_even_under_override`
+  - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_reference_terminal_only_even_under_override`
   - `connectivity_accepts_clause_five_demo_sharp_domain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
   - `connectivity_accepts_clause_five_demo_flat_codomain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
   - `connectivity_keeps_clause_five_remaining_two_mismatch_one_bridge_slice_outside_historical_reanchor_even_under_override`
@@ -422,6 +451,8 @@ Do not start with another rerun setup pass.
 - the narrower clause-`4` `reference`-sheet reopening on that same
   `reference + demo_flat_codomain` branch
 - the exact clause-`2` `claim_flat_domain` sheet reopening on that same
+  `reference + demo_flat_codomain` branch
+- the exact clause-`2` `claim_sharp_codomain` sheet reopening on that same
   `reference + demo_flat_codomain` branch
 - clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stays `reference`
