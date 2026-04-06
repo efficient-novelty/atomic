@@ -121,6 +121,15 @@ Treat these as current repo truths:
   `2562`, so it is now another negative control rather than the landed path,
   and that reland is now pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`;
+  a second scoped negative control that broadened the landed clause-`1`
+  `demo_flat_codomain` side pocket onto clause-`0` `claim_flat_domain` was
+  also tested locally and reverted: it again lifted the local surface to
+  `DCT 103 / 8 / 4466`, kept the isolated `single` pocket plus residual
+  incumbent pressure unchanged, but it again widened the partial-prefix wall
+  to `626`, so it is also ruled out rather than the landed path, and that
+  reland is now pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
+  plus the matching connectivity override tests;
   the
   executable repaired late-path and negative-control guardrails are now also
   synced to that same `4331` / `3` / `3132 / 522 / 522 / 0` local surface
@@ -563,6 +572,13 @@ Focus on:
   positions `0..3` and dominant remaining-two pressure at clause `0` / clause
   `1`, so the next landed repair should start there before reopening the
   smaller clause-`2` / clause-`3` tail
+- treating the two reverted clause-`1` side-pocket broadenings as negative
+  controls only:
+  the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
+  broader clause-`0` `claim_flat_domain` plus clause-`1`
+  `demo_flat_codomain` exact-pocket reland both lift local generated breadth
+  to `4466` but also widen the clean partial-prefix wall to `626`, so neither
+  is the next move
 - treating the remaining step-`15` `small_cluster` incumbent surface as a
   landed local relief rather than the live blocker:
   the old summary-stage same-primary `103 / 8` bit-cost spread is now closed,

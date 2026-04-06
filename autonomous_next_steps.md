@@ -60,6 +60,17 @@ Do not start with another rerun setup pass.
     capture widened to `2562`
   - so that reland is now ruled out as another negative control rather than
     the next repair
+- A broader clause-`0` `claim_flat_domain` plus clause-`1`
+  `demo_flat_codomain` exact-pocket reland has now also been checked under
+  test-only scoped overrides and pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
+  plus the matching connectivity override tests:
+  - local step `15` generated breadth again lifted to `4466`
+  - the isolated `single` pocket and residual `3` incumbent prunes stayed
+    fenced
+  - but the partial-prefix wall again widened to `626`
+  - so that broader flat-pocket reland is also ruled out as another negative
+    control rather than the next repair
 - The old proof-close blocker has been reduced to only `3` fenced
   same-primary `single`-bucket incumbent prunes:
   - clause-`0` `claim_flat_domain`
@@ -95,6 +106,7 @@ Do not start with another rerun setup pass.
 5. Keep the focused guardrail slice green:
    - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
    - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
+   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
    - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
    - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
    - `current_claim_step_fifteen_zero_admitted_prunes_reduce_to_disconnect_and_trivial_derivability`
@@ -104,6 +116,8 @@ Do not start with another rerun setup pass.
    - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
    - `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
    - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
+   - `connectivity_accepts_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_only_on_the_exact_anchor_eleven_side_pocket_under_override`
+   - `connectivity_keeps_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
 6. Only after the local repair is green and parity-clean, launch the next
    clean full-profile rerun beyond `v12`.
 7. Immediately refresh compare, benchmark, and certification after that rerun.
@@ -118,6 +132,8 @@ Do not start with another rerun setup pass.
 - exact-family same-primary relief
 - subset-local same-primary relief
 - clause-`1` `demo_eventually_codomain` exact-pocket reland
+- clause-`0` `claim_flat_domain` plus clause-`1` `demo_flat_codomain`
+  exact-pocket reland
 - raw position-`0` reland
 - another broad clause-`4` or clause-`5` reopening
 - raw reland of the unsafe lifted `89 / 8` shell

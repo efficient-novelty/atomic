@@ -86,6 +86,17 @@ Until that exists, wording stays at `bounded live recovery`.
   - but it widened the clean partial-prefix wall from `553` to `626` and the
     zero-admitted exact-prune capture from `2271` to `2562`
   - so it is now a negative control, not the landed repair
+- A broader clause-`0` / clause-`1` flat-pocket reland was also tested under
+  scoped test-only overrides and is now pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
+  plus the matching connectivity override tests:
+  - it broadened the landed clause-`1` `demo_flat_codomain` side pocket onto
+    clause-`0` `claim_flat_domain`
+  - it again lifted the local late surface from `4331` to `4466`
+  - it kept the isolated `single` pocket and the residual `3`
+    incumbent-dominance prunes unchanged
+  - but it widened the clean partial-prefix wall from `553` to `626`
+  - so that broader flat-pocket reland is now ruled out too
 - The residual proof-close pressure is still localized to three same-primary
   `103 / 8` families:
   - clause-`0` `claim_flat_domain`
@@ -104,6 +115,8 @@ Until that exists, wording stays at `bounded live recovery`.
 - Do not use blanket, exact-family, or subset-local same-primary relief.
   Those probes still unfence extra non-winning `236`-bit terminals.
 - Do not reopen the raw lifted `89 / 8` shell.
+- Do not reland the broader clause-`0` `claim_flat_domain` plus clause-`1`
+  `demo_flat_codomain` exact-pocket reopening.
 - Do not reland the raw position-`0`, broad clause-`4`, or broad clause-`5`
   widenings.
 - Do not reland the raw step-`13` widened controls
@@ -117,6 +130,7 @@ Until that exists, wording stays at `bounded live recovery`.
 - Current step-`15` guardrails:
   - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
   - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
   - `current_claim_step_fifteen_zero_admitted_connectivity_surface_reports_reanchor_prefix_progress`
@@ -124,6 +138,8 @@ Until that exists, wording stays at `bounded live recovery`.
   - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
   - `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
   - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
+  - `connectivity_accepts_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_only_on_the_exact_anchor_eleven_side_pocket_under_override`
+  - `connectivity_keeps_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
 
 ## Immediate Direction
 
@@ -132,7 +148,8 @@ partial-prefix wall on top of the matched `4331` surface, start with the
 dominant remaining-two clause-`0` / clause-`1` side of that wall before
 reopening the smaller clause-`2` / clause-`3` tail, keep the next change
 prefix-local and reference-terminal-safe, do not reland the reverted
-clause-`1` `demo_eventually_codomain` exact-pocket probe that is now pinned
-as a negative control and widened the wall to `626`, rerun only after the
-new local slice is green, and keep
+clause-`1` `demo_eventually_codomain` exact-pocket probe or the broader
+clause-`0` `claim_flat_domain` plus clause-`1` `demo_flat_codomain`
+exact-pocket reland that are now pinned as negative controls and widened the
+wall to `626`, rerun only after the new local slice is green, and keep
 step `1` explicit unless that next stored bundle changes it directly.

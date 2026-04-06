@@ -326,6 +326,21 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - so that reland is now another negative control rather than the next
     landed repair, and it is now pinned by
     `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
+- a newer exploratory broader clause-`0` `claim_flat_domain` plus clause-`1`
+  `demo_flat_codomain` exact-pocket reland has now also been checked and
+  reverted under scoped test-only overrides:
+  - the local late chain still accepted `DCT 103 / 8`, and live generated
+    prefixes again lifted from `4331` to `4466`
+  - the isolated `single` pocket and the residual `3`
+    incumbent-dominance prunes stayed fenced and unchanged
+  - but the partial-prefix wall again widened from `553` to `626`
+  - so that broader flat-pocket reland is now another negative control rather
+    than the next landed repair, and it is now pinned by
+    `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
+    plus
+    `connectivity_accepts_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_only_on_the_exact_anchor_eleven_side_pocket_under_override`
+    and
+    `connectivity_keeps_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
 - a newer local step-`15` proof-close incumbent regression now freezes that
   remaining fenced pressure more tightly:
   - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
@@ -557,6 +572,13 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   `102` remaining-three prefixes, with first mismatch pressure only at clause
   positions `0..3` (`312 / 177 / 50 / 14`) and dominant remaining-two
   pressure at clause `0` / clause `1` (`252 / 145`)
+- both reverted clause-`1` side-pocket broadenings are now explicitly ruled
+  out as the next move:
+  the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
+  broader clause-`0` `claim_flat_domain` plus clause-`1`
+  `demo_flat_codomain` exact-pocket reland both widened that clean wall to
+  `626` even while keeping the canonical winner and the residual `3`
+  incumbent prunes fixed
 - the canonical repaired late chain must stay frozen while breadth is
   re-earned:
   - step `12` should keep the guarded `34 / 6` continuation
@@ -604,8 +626,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    pocket stack; the reverted raw position-`0` reland still proves that
    broadening that side globally reopens the old captured clause-`0`
    surface, and the next landed repair should therefore stay narrower than
-   another raw clause-`4`, raw clause-`5`, raw position-`0`, or blanket
-   same-primary-retention reland. The residual proof-close incumbent freeze
+   another raw clause-`4`, raw clause-`5`, raw position-`0`, blanket
+   same-primary-retention reland, clause-`1`
+   `demo_eventually_codomain` exact-pocket reland, or the broader clause-`0`
+   `claim_flat_domain` plus clause-`1` `demo_flat_codomain`
+   exact-pocket reland. The residual proof-close incumbent freeze
    still localizes the remaining `3` prunes to the same clause positions `0`,
    `2`, and `5`, but those are no longer the dominant wall.
    `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
@@ -683,6 +708,10 @@ Do not:
   stored rerun proves the remaining misses are really runtime fallout
 - reland the rejected global band-`7` widening or the rejected late reanchor /
   early bridge expansions first while stored breadth is still open
+- reland the clause-`1` `demo_eventually_codomain` exact-pocket probe or the
+  broader clause-`0` `claim_flat_domain` plus clause-`1`
+  `demo_flat_codomain` exact-pocket probe first; both now widen the clean
+  step-`15` wall to `626`
 - reland the newer `[3,5,3,3,5,1,1]` or `[5,1,3,3,5,3,3]` step-`13`
   widenings raw; both still leave accepted-hash parity open
 - call the lane `unguided` yet

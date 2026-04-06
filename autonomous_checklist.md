@@ -37,6 +37,15 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     unchanged
   - but it widened the partial-prefix wall to `626`, so it is not the landed
     repair
+- A reverted broader clause-`0` `claim_flat_domain` plus clause-`1`
+  `demo_flat_codomain` exact-pocket reland is now also part of the live
+  diagnosis and is pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`:
+  - it also lifted local step `15` generated breadth to `4466`
+  - it kept the isolated `single` pocket and residual `3` incumbent prunes
+    unchanged
+  - but it also widened the partial-prefix wall to `626`, so it is not the
+    landed repair
 
 ## Late-Step Gate
 
