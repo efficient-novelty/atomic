@@ -313,6 +313,18 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     historical-reanchor prefix progress there now splits as `291`
     clause-`1`-side families plus `1482` clause-`2`-side families and `486`
     clause-`3`-side families
+- a newer exploratory clause-`1` `demo_eventually_codomain` exact-pocket
+  reland has now also been checked and reverted:
+  - the local late chain still accepted `DCT 103 / 8`, and live generated
+    prefixes lifted from `4331` to `4466`
+  - the `small_cluster` widened from `3132 / 522 / 522 / 0` to
+    `3156 / 526 / 526 / 0`
+  - the isolated `single` pocket and the residual `3` incumbent-dominance
+    prunes stayed fenced and unchanged
+  - but the partial-prefix wall widened from `553` to `626`, and the
+    zero-admitted exact-prune capture widened from `2271` to `2562`
+  - so that reland is now another negative control rather than the next
+    landed repair
 - a newer local step-`15` proof-close incumbent regression now freezes that
   remaining fenced pressure more tightly:
   - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`

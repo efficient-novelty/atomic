@@ -103,7 +103,14 @@ Treat these as current repo truths:
   local guardrail again to `DCT 103 / 8 / 4331`, raises the remaining
   partial-prefix wall to `553`, widens the local `small_cluster` to
   `3132 / 522 / 522 / 0`, and still keeps the isolated `single` pocket
-  fenced; the
+  fenced; a newer exploratory clause-`1`
+  `demo_eventually_codomain` exact-pocket reland was also tested locally and
+  reverted: it lifted the local surface to `DCT 103 / 8 / 4466`, widened the
+  `small_cluster` to `3156 / 526 / 526 / 0`, and kept the isolated `single`
+  pocket plus residual incumbent pressure unchanged, but it widened the
+  partial-prefix wall to `626` and the zero-admitted exact-prune capture to
+  `2562`, so it is now another negative control rather than the landed path;
+  the
   executable repaired late-path and negative-control guardrails are now also
   synced to that same `4331` / `3` / `3132 / 522 / 522 / 0` local surface
   end to end; the current executable

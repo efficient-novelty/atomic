@@ -62,6 +62,16 @@ Until that exists, wording stays at `bounded live recovery`.
 
 - The old broad `small_cluster` incumbent wall is still closed; the remaining
   late miss is now dominated by the clean step-`15` partial-prefix wall.
+- A local clause-`1` `demo_eventually_codomain` exact-pocket reland was
+  tested and reverted:
+  - it lifted the local late surface from `4331` to `4466`
+  - it widened the `small_cluster` from `3132 / 522 / 522 / 0` to
+    `3156 / 526 / 526 / 0`
+  - it kept the isolated `single` pocket and the residual `3`
+    incumbent-dominance prunes unchanged
+  - but it widened the clean partial-prefix wall from `553` to `626` and the
+    zero-admitted exact-prune capture from `2271` to `2562`
+  - so it is now a negative control, not the landed repair
 - The residual proof-close pressure is still localized to three same-primary
   `103 / 8` families:
   - clause-`0` `claim_flat_domain`
@@ -103,5 +113,7 @@ Until that exists, wording stays at `bounded live recovery`.
 
 Diagnose the clean `v12` step-`15` partial-prefix wall on top of the matched
 `4331` surface, keep the next change prefix-local and reference-terminal-safe,
-rerun only after the new local slice is green, and keep step `1` explicit
-unless that next stored bundle changes it directly.
+do not reland the reverted clause-`1` `demo_eventually_codomain`
+exact-pocket probe that widened the wall to `626`, rerun only after the new
+local slice is green, and keep step `1` explicit unless that next stored
+bundle changes it directly.

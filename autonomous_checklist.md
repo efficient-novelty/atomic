@@ -22,6 +22,14 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
   - incumbent-dominance prunes `3`
   - `small_cluster = 3132 / 522 / 522 / 0`
   - fenced `single` bucket = `1` fully scored non-winner plus `3` residual prunes
+- A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
+  also part of the live diagnosis:
+  - it lifted local step `15` generated breadth to `4466`
+  - it widened `small_cluster` to `3156 / 526 / 526 / 0`
+  - it kept the isolated `single` pocket and residual `3` incumbent prunes
+    unchanged
+  - but it widened the partial-prefix wall to `626`, so it is not the landed
+    repair
 
 ## Late-Step Gate
 

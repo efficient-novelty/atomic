@@ -36,6 +36,16 @@ Do not start with another rerun setup pass.
   surface, so the next honest move is no longer proving the last repair.
 - The dominant remaining late miss is now the clean `553` partial-prefix wall
   on the canonical temporal-shell surface.
+- A local clause-`1` `demo_eventually_codomain` exact-pocket reland has now
+  been checked and reverted:
+  - local step `15` generated breadth lifted to `4466`
+  - the `small_cluster` widened to `3156 / 526 / 526 / 0`
+  - the isolated `single` pocket and residual `3` incumbent prunes stayed
+    fenced
+  - but the partial-prefix wall widened to `626` and the zero-admitted
+    capture widened to `2562`
+  - so that reland is now ruled out as another negative control rather than
+    the next repair
 - The old proof-close blocker has been reduced to only `3` fenced
   same-primary `single`-bucket incumbent prunes:
   - clause-`0` `claim_flat_domain`
@@ -85,6 +95,7 @@ Do not start with another rerun setup pass.
 - blanket same-primary relief
 - exact-family same-primary relief
 - subset-local same-primary relief
+- clause-`1` `demo_eventually_codomain` exact-pocket reland
 - raw position-`0` reland
 - another broad clause-`4` or clause-`5` reopening
 - raw reland of the unsafe lifted `89 / 8` shell
