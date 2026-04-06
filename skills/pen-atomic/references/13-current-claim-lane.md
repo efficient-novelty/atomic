@@ -8,10 +8,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 - `desktop_claim_shadow` exists as a separate profile and config family.
 - The lane is not yet certified and should still be described with the safer
   `bounded live recovery` wording.
-- The current canonical stored claim bundle is clean-tree completed `v11`:
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v11`.
+- The current canonical stored claim bundle is clean-tree completed `v12`:
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12`.
 - Stored compare, certification, and benchmark outputs now exist beside that
-  `v11` bundle, and they already treat accepted-hash parity, claim-policy
+  `v12` bundle, and they already treat accepted-hash parity, claim-policy
   honesty, fallback honesty, narrative/event completeness, exact-screen
   reason coverage, prune-class coverage, and manifest completeness as earned.
 - Claim admissibility now uses structural claim debt and anchor hints, without
@@ -79,7 +79,7 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   stored run reaches the step-15 claim signoff surface.
 - `scripts/certify_claim_lane.py` now emits a stored pass/fail certificate from
   claim artifacts and currently fails honestly on missing breadth, missing
-  generated-floor evidence; the current `v11` certificate still flags
+  generated-floor evidence; the current `v12` certificate still flags
   `early_breadth` plus `late_generated_floors`, and it now also records
   step-level breadth diagnosis for failing steps from the stored summaries
   plus late-step live checkpoints; that diagnosis now also preserves the full
@@ -95,22 +95,22 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   benchmark bundle with runtime percentiles, parity counts, breadth-floor hit
   counts, and manifest snapshots; it still needs a breadth-clean stored claim
   bundle before those numbers can justify a stronger sentence.
-- The current stored breadth snapshot on canonical `v11` is:
+- The current stored breadth snapshot on canonical `v12` is:
   - step `1`: `546 / 2144`
   - step `10`: `1428 / 500`
   - step `11`: `1338 / 800`
   - step `12`: `1338 / 1200`
   - step `13`: `2320 / 2200`
   - step `14`: `12027 / 3500`
-  - step `15`: `3972 / 5000`
+  - step `15`: `4331 / 5000`
 - The stored certificate now makes the remaining miss split directly visible:
   - step `1` still shows raw catalog widths `[18,36]`, raw catalog `648`,
     seeded roots `18` seen / `16` enqueued, and `435`
     legality/connectivity exact rejections before proof-close
   - step `15` still shows raw catalog `6561`, seeded roots `3`, then
-    `468` partial-prefix bar failures plus `242` incumbent-dominance prunes,
-    `0` legality/connectivity exact rejections, `243` well-formed
-    candidates, and `469` exact-bound-screened candidates, together with the
+    `553` partial-prefix bar failures plus `3` incumbent-dominance prunes,
+    `0` legality/connectivity exact rejections, `261` well-formed
+    candidates, and `554` exact-bound-screened candidates, together with the
     `claim_generic` `kappa 8..8` temporal-shell opening, modal anchor ref
     `10`, and active widening bands `7,8,9`
 - A fresh stored rerun stack has now consumed the guarded local step-`11`
@@ -333,14 +333,14 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   synced to that same latest local state too:
   - `repaired_claim_step_twelve_late_path_has_scoped_step_thirteen_widening_before_proof_close`
     now freezes the repaired canonical continuation through
-    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 4275`
-  - the local step-`15` guardrails now freeze `4275`, `3`
+    `46 / 7 / 2320 -> 62 / 9 / 12027 -> 103 / 8 / 4331`
+  - the local step-`15` guardrails now freeze `4331`, `3`
     incumbent-dominance prunes, and the
-    `3084 / 514 / 514 / 0` `small_cluster` surface instead of the older
+    `3132 / 522 / 522 / 0` `small_cluster` surface instead of the older
     clause-`5` `4030` / `246` / `2226 / 248 / 248 / 246` read
   - the frozen `[5,1,3,3,5,3,3]` step-`13` negative control still preserves
     guarded step-`14` / step-`15` hashes while now also observing that same
-    repaired local `4275` step-`15` surface
+    repaired local `4331` step-`15` surface
 - a new local step-`15` survivor-bucket regression now freezes that
   exact-screened survivor split more tightly:
   - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
@@ -350,8 +350,8 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - the isolated `single` bucket still carries the one fully scored
     non-winning pocket with overshoot `115657 / 21112` plus `3` residual
     incumbent-dominance prunes
-  - the `small_cluster` bucket now widens to `3012` generated /
-    `502` admitted / `502` exact-screened / `0` pruned
+  - the `small_cluster` bucket now widens to `3132` generated /
+    `522` admitted / `522` exact-screened / `0` pruned
   - the accepted canonical step-`15` winner still remains the only retained
     candidate there and keeps bit cost `229`
 - a new local step-`15` small-cluster-relief regression now freezes that
@@ -381,8 +381,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     now pins that each of those same three fenced proof-close families is
     already only a tiny local `3`-generated / `1`-admitted / `1`-pruned
     surface
-  - the remaining step-`15` pressure is therefore still family-local rather
-    than a hidden broad-bucket miss
+  - the remaining proof-close step-`15` pressure is therefore still
+    family-local even though the broader late miss is now dominated by the
+    clean partial-prefix wall
   - a non-landed proof-close reland that reused those preserved broader
     group-surface counts to grant same-primary relief was checked and
     reverted: it collapsed local incumbent-dominance prunes from `3` to `0`,
@@ -419,11 +420,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
     now pins that granting same-primary incumbent relief only to those exact
     clause-`0`, clause-`2` + anchor-`11`, and clause-`5` residual families
-    keeps live generated prefixes flat at `4275` and keeps partial-prefix bar
-    failures at `549`
+    keeps live generated prefixes flat at `4331` and keeps partial-prefix bar
+    failures at `553`
   - it does collapse the remaining incumbent-dominance prunes from `3` to `0`
   - the cleared `small_cluster` stays unchanged at
-    `3084 / 514 / 514 / 0`
+    `3132 / 522 / 522 / 0`
   - but the isolated `single` pocket still unfences from `1` to `4`
     fully scored non-winning terminals at the same overshoot
     `115657 / 21112`
@@ -435,9 +436,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
     now pins that every non-empty subset of those same exact clause-`0`,
     clause-`2` + anchor-`11`, and clause-`5` residual families still keeps
-    live generated prefixes flat at `4275`, partial-prefix bar failures at
-    `549`, and the cleared `small_cluster` unchanged at
-    `3084 / 514 / 514 / 0`
+    live generated prefixes flat at `4331`, partial-prefix bar failures at
+    `553`, and the cleared `small_cluster` unchanged at
+    `3132 / 522 / 522 / 0`
   - the repaired canonical step-`15` winner also stays unchanged on every one
     of those subset-local probes
   - instead, opening any strict subset only trades `n` of the remaining `3`
@@ -475,9 +476,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     `demo_flat_codomain`, and clause-`4` `demo_sharp_codomain` plus
     `demo_sharp_bridge` variants now regain historical reanchor only on that
     exact side pocket and only with the reference terminal
-  - that newer clause-`0` exact-pocket reland still leaves the live
-    canonical guardrail flat at `4275` / `549` / `3` with the same
-    `3084 / 514 / 514 / 0` `small_cluster`
+  - that newer clause-`0` exact-pocket reland plus the follow-on
+    exact-pocket clause-`5` repairs now leave the live canonical guardrail at
+    `4331` / `553` / `3` with the same
+    `3132 / 522 / 522 / 0` `small_cluster`
   - the clause-`0`, clause-`1` `demo_eventually_codomain`, and clause-`5`
     variants still stay outside historical reanchor there and still lose only
     on higher bit cost `243`, `245`, or `250`
@@ -520,29 +522,29 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 ## Current Operational Blockers
 
 - the lane still does not have a signoff-ready certified bundle even though
-  stored `v11` now passes accepted-hash parity and the compare/certification/
+  stored `v12` now passes accepted-hash parity and the compare/certification/
   benchmark infrastructure is live
 - stored breadth still fails honestly on the canonical chain:
   - early breadth still misses at step `1` (`546` versus `2144`)
-  - late generated floors still miss only at step `15` (`3972` versus `5000`)
+  - late generated floors still miss only at step `15` (`4331` versus `5000`)
   - stored breadth already hits at step `10`, step `11`, step `12`,
     step `13`, and step `14`
 - step `15` is now the remaining stored late-floor miss on the clean
   canonical bundle
 - the next rerun or step-`13` theory pass is no longer the first move:
-  stored step `13` is already closed and the anchor-`11` step-`15` repair is
-  already consumed on canonical `v11`, so the next move is the next local
-  step-`15` diagnosis / repair on that residual stored `3972 / 5000` surface
-  while keeping the newer local `4275` guardrail surface fenced and while
-  keeping the newly frozen unsafe `89 / 8` lifted terminals fenced on the
-  three residual single-bucket family shells
+  stored step `13` is already closed and the new exact-pocket step-`15`
+  repair is already consumed on canonical `v12`, so the next move is the next
+  local step-`15` diagnosis / repair on that residual stored `4331 / 5000`
+  surface, with the focus now shifted to the clean `553` partial-prefix wall
+  while the remaining `3` single-bucket incumbent prunes and the unsafe
+  lifted `89 / 8` shell both stay fenced
 - the canonical repaired late chain must stay frozen while breadth is
   re-earned:
   - step `12` should keep the guarded `34 / 6` continuation
   - stored step `13` should stay at `[5,1,3,3,5,3,2]` / `1350` / `2320`
     with the guarded accepted hash
   - step `14` should stay at `19683` / `12027`
-  - stored canonical step `15` should now stay on `DCT 103 / 8 / 3972`
+  - stored canonical step `15` should now stay on `DCT 103 / 8 / 4331`
 - step `1` remains a separate stored early breadth blocker even if late-step
   repairs continue to land
 - benchmark evidence is still too weak for a passing claim certificate until a
@@ -551,10 +553,11 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 
 ## Immediate Next Slice
 
-1. Freeze clean-tree completed `v11` as the current canonical stored claim
-   bundle, keep clean `v10` as the pre-anchor-`11` stored baseline, keep clean
-   `v6` as the pre-step-`11` breadth baseline, and keep completed `v5` as the
-   pre-parity reference surface.
+1. Freeze clean-tree completed `v12` as the current canonical stored claim
+   bundle, keep clean `v11` as the pre-`4331` stored baseline, keep clean
+   `v10` as the pre-anchor-`11` stored baseline, keep clean `v6` as the
+   pre-step-`11` breadth baseline, and keep completed `v5` as the pre-parity
+   reference surface.
 2. Hold the current local and stored guardrails green before reopening any new
    theory: the step-`11` connected surface should stay at `243 + 729 = 972`,
    the guarded step-`11` shell should stay accepted, the repaired step-`12`
@@ -564,37 +567,31 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts`, and
    `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
    should stay green there too.
-3. Treat the residual stored `3972 / 5000` step-`15` gap as the current local
-   diagnosis target; use the `v11` certificate and `step-15-live.ndjson`
-   first, and do not spend another cycle on rerun setup or step-`13` theory
-   before the next parity-preserving local repair is regression-backed; keep
-   the isolated `single` survivor bucket fenced while the next repair works
-   against the remaining local `3`-incumbent surface on top of the new
-   `4275` guardrail now that the old `small_cluster` summary wall is gone.
-   The newer clause-`0` `demo_sharp_domain`, clause-`1`
-   `demo_flat_codomain`, clause-`4` `demo_sharp_codomain` plus
-   `demo_sharp_bridge`, and clause-`5` `demo_sharp_domain` plus
-   `demo_flat_codomain` reopenings are now already consumed narrowly and must
-   stay fenced as a tiny noncanonical pocket stack, with the clause-`0`
-   exact-pocket reland staying non-breadth-moving on the live canonical
-   `4275` / `549` / `3` surface; the reverted raw
-   position-`0` reland still proves that broadening that side globally
-   reopens the old captured clause-`0` surface, and the next landed repair
-   should therefore target those residual `single`-bucket incumbent prunes
-   rather than another raw clause-`4`, raw clause-`5`, raw
-   position-`0`, or blanket same-primary-retention reland. The new
-   proof-close incumbent freeze now further localizes that next move to three
-   same-primary `103 / 8` fenced prefix families first diverging at clause
-   positions `0`, `2`, and `5`.
+3. Treat the residual stored `4331 / 5000` step-`15` gap as the current local
+   diagnosis target; use the `v12` certificate, compare report, benchmark,
+   and `step-15-live.ndjson` first, and do not spend another cycle on rerun
+   setup or step-`13` theory before the next parity-preserving local repair is
+   regression-backed; keep the isolated `single` survivor bucket fenced while
+   the next repair works first against the clean `553` partial-prefix wall on
+   top of the matched `4331` canonical surface. The newer clause-`0`,
+   clause-`1`, clause-`4`, and clause-`5` exact-pocket reopenings are now
+   already consumed narrowly and must stay fenced as a tiny noncanonical
+   pocket stack; the reverted raw position-`0` reland still proves that
+   broadening that side globally reopens the old captured clause-`0`
+   surface, and the next landed repair should therefore stay narrower than
+   another raw clause-`4`, raw clause-`5`, raw position-`0`, or blanket
+   same-primary-retention reland. The residual proof-close incumbent freeze
+   still localizes the remaining `3` prunes to the same clause positions `0`,
+   `2`, and `5`, but those are no longer the dominant wall.
    `current_claim_step_fifteen_exact_family_same_primary_relief_still_unfences_the_isolated_single_pocket`
    now further pins that even granting same-primary relief only to those
-   exact three families keeps `4275` / `549`, collapses incumbent-dominance
+   exact three families keeps `4331` / `553`, collapses incumbent-dominance
    from `3` to `0`, leaves the `small_cluster` unchanged at
-   `3084 / 514 / 514 / 0`, and still unfences the isolated `single` pocket
+   `3132 / 522 / 522 / 0`, and still unfences the isolated `single` pocket
    from `1` to `4` fully scored non-winning terminals.
    `current_claim_step_fifteen_subset_local_same_primary_relief_only_trades_single_prunes_for_non_winners`
    now further pins that every strict subset of those same families still
-   keeps `4275` / `549`, keeps the cleared `small_cluster` unchanged, and
+   keeps `4331` / `553`, keeps the cleared `small_cluster` unchanged, and
    only trades `n` residual incumbent prunes for `n` extra fully scored
    non-winning terminals in that same isolated `single` pocket, with those
    extra candidates all staying same-primary `103 / 8`, bit-cost-`236`
@@ -602,9 +599,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 4. Keep `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]` as negative controls only:
    they still prove local breadth can be reopened unsafely, but they are not
    the landed repair.
-5. Keep stored step `15 = 3972 / 5000` and step `1 = 546 / 2144` in view
+5. Keep stored step `15 = 4331 / 5000` and step `1 = 546 / 2144` in view
    beside that work; do not reopen another stored step-`11` rerun first now
-   that clean-tree `v11` already keeps stored step `11 = 1338 / 800`.
+   that clean-tree `v12` already keeps stored step `11 = 1338 / 800`.
 6. If the nearby clause-`3` anchor-`11` neighborhood is touched again, keep
    the live repair boundary explicit: only the exact-argument pocket is
    landed, it is isolated to the current claim clause-`2` variants, it stays
