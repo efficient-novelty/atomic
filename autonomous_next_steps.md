@@ -61,8 +61,20 @@ Do not start with another rerun setup pass.
     `demo_flat_codomain = 61`
   - the remaining-two mismatch-`2` / mismatch-`3` tail stays only the narrow
     `reference/reference` continuation at `42` and `12`
+  - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
+    now freezes the same dominant side one layer deeper again:
+    mismatch-`0` stays only on clause-`4` `claim_next_bridge = 48 / 48 / 48`
+    and clause-`4` `reference = 36 / 36 / 36` against clause-`5`
+    `claim_flat_codomain`, `claim_next_codomain`, and `reference`;
+    mismatch-`1` stays on the same clause-`4` / clause-`5` grid at
+    `27 / 27 / 27` and `22 / 22 / 20`
+  - the mismatch-`2` / mismatch-`3` tail stays much smaller and is the only
+    place where the old demo-only clause-`4` bridge pockets still appear at
+    all
   - so the next honest repair target is still the current clause-`0` /
-    clause-`1` claim surface, not another broad omitted-side reopening
+    clause-`1` claim surface, but now specifically on the live clause-`4`
+    `claim_next_bridge` plus `reference` families rather than another broad
+    omitted-side reopening
 - A local clause-`1` `demo_eventually_codomain` exact-pocket reland has now
   been checked, reverted, and pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
@@ -151,13 +163,21 @@ Do not start with another rerun setup pass.
      clause-`0` `reference` with clause-`1`
      `claim_sharp_codomain = 42`, `claim_next_codomain = 42`,
      `demo_flat_codomain = 61`
-   - local capture inspection already shows those dominant remaining-two
-     claim-surface prefixes sitting on non-reference clause-`4` bridge
-     families, while the reverted clause-`3` `anchor-11` widening with
-     clause `2 = reference` left the wall unchanged and only reopened
+   - local capture inspection is now executable too:
+     mismatch-`0` lives only on clause-`4` `claim_next_bridge` and
+     clause-`4` `reference`, with the clause-`4` `claim_next_bridge` side
+     larger at `48 / 48 / 48` versus `36 / 36 / 36` across clause-`5`
+     `claim_flat_codomain`, `claim_next_codomain`, and `reference`
+   - mismatch-`1` stays on that same clause-`4` / clause-`5` grid at
+     `27 / 27 / 27` and `22 / 22 / 20`, while the older demo-only
+     clause-`4` bridge pockets survive only on the smaller mismatch-`2` tail
+   - the reverted clause-`3` `anchor-11` widening with clause `2 = reference`
+     left that clause-`4` family split unchanged and only reopened
      summary-stage incumbent pressure
    - so the next honest slice is still the live clause-`0` / clause-`1`
-     claim surface itself, but not another raw clause-`3` widen-first probe
+     claim surface itself, but now on the clause-`4`
+     `claim_next_bridge` plus `reference` families rather than another raw
+     clause-`3` widen-first probe or another demo-bridge reland
 4. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays the canonical `103 / 8`
@@ -167,6 +187,7 @@ Do not start with another rerun setup pass.
 5. Keep the focused guardrail slice green:
   - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
   - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
+  - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_five_side_pocket_injects_on_exact_remaining_two_mismatch_zero_bridge_slice`
@@ -210,6 +231,8 @@ Do not start with another rerun setup pass.
   clause-`1` surface
 - the exact remaining-two mismatch-`0` bridge-slice clause-`5` reopening
 - treating the dominant remaining-two wall as an unlabeled early blur again
+- treating the dominant remaining-two wall as if the old demo-only clause-`4`
+  bridge pockets were still the dominant slice
 - raw position-`0` reland
 - another broad clause-`4` or clause-`5` reopening
 - raw reland of the unsafe lifted `89 / 8` shell

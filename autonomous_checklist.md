@@ -38,6 +38,15 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     `demo_flat_codomain = 61`
   - the remaining-two mismatch-`2` / mismatch-`3` tail stays only the narrow
     `reference/reference` continuation at `42` and `12`
+- The dominant remaining-two wall is now explicit one layer deeper too:
+  - mismatch `0` stays only on clause-`4` `claim_next_bridge` and clause-`4`
+    `reference`, with the clause-`4` `claim_next_bridge` side larger at
+    `48 / 48 / 48` versus `36 / 36 / 36` across clause-`5`
+    `claim_flat_codomain`, `claim_next_codomain`, and `reference`
+  - mismatch `1` stays on the same clause-`4` / clause-`5` grid at
+    `27 / 27 / 27` and `22 / 22 / 20`
+  - the old demo-only clause-`4` bridge pockets survive only on the smaller
+    mismatch-`2` tail, so they are not the dominant live blocker anymore
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:

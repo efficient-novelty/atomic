@@ -59,9 +59,13 @@ Treat these as current repo truths:
   `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
   regression now sharpens that slice into six exact mismatch-`0`
   current-claim pairings at `42` each plus three mismatch-`1` clause-`1`
-  pairings at `42`, `42`, and `61`, so the next landed repair should start
-  there rather than with another rerun setup pass or a step-`1`-first theory
-  slice; the canonical
+  pairings at `42`, `42`, and `61`, and the newer
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
+  regression now freezes that same dominant side onto clause-`4`
+  `claim_next_bridge` plus clause-`4` `reference`, with clause-`5`
+  staying split only across `reference`, `claim_next_codomain`, and
+  `claim_flat_codomain`, so the next landed repair should start there rather
+  than with another rerun setup pass or a step-`1`-first theory slice; the canonical
   `v11` certificate plus the frozen `step-15-live.ndjson` provenance are now
   pinned by
   `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
@@ -610,6 +614,16 @@ Focus on:
   `42` each, and mismatch-`1` as the
   `reference` + `claim_sharp_codomain` / `claim_next_codomain` /
   `demo_flat_codomain` pairings at `42`, `42`, and `61`
+- treating that same dominant remaining-two wall as executable one layer
+  deeper again too:
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
+  now freezes mismatch-`0` and mismatch-`1` onto clause-`4`
+  `claim_next_bridge` plus clause-`4` `reference`, with clause-`5`
+  staying split only across `reference`, `claim_next_codomain`, and
+  `claim_flat_codomain`; the old demo-only clause-`4` bridge pockets now
+  survive only on the smaller mismatch-`2` tail, so the next landed repair
+  should target the live clause-`4` claim families rather than another
+  demo-bridge reopening
 - treating the two reverted clause-`1` side-pocket broadenings as negative
   controls only:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the

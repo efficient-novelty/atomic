@@ -6136,10 +6136,11 @@ fn override_claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_fla
 #[cfg(test)]
 impl Drop for ClaimStepFifteenClauseFiveSidePocketOnClaimSafeClauseZeroOneOverrideGuard {
     fn drop(&mut self) {
-        CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE
-            .with(|override_enabled| {
+        CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE.with(
+            |override_enabled| {
                 *override_enabled.borrow_mut() = false;
-            });
+            },
+        );
     }
 }
 
@@ -6157,10 +6158,11 @@ fn override_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero
 #[cfg(test)]
 impl Drop for ClaimStepFifteenClauseFiveRemainingTwoMismatchZeroBridgeSliceOverrideGuard {
     fn drop(&mut self) {
-        CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_REMAINING_TWO_MISMATCH_ZERO_BRIDGE_SLICE_OVERRIDE
-            .with(|override_enabled| {
+        CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_REMAINING_TWO_MISMATCH_ZERO_BRIDGE_SLICE_OVERRIDE.with(
+            |override_enabled| {
                 *override_enabled.borrow_mut() = false;
-            });
+            },
+        );
     }
 }
 
@@ -6213,15 +6215,15 @@ fn claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_over
 }
 
 #[cfg(test)]
-fn claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_override_enabled()
--> bool {
+fn claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_override_enabled() -> bool
+{
     CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_REMAINING_TWO_MISMATCH_ZERO_BRIDGE_SLICE_OVERRIDE
         .with(|override_enabled| *override_enabled.borrow())
 }
 
 #[cfg(not(test))]
-fn claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_override_enabled()
--> bool {
+fn claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_override_enabled() -> bool
+{
     false
 }
 
@@ -11708,6 +11710,441 @@ mod tests {
         pair_counts
     }
 
+    fn current_claim_step_fifteen_partial_prefix_clause_two_label(
+        clause: &ClauseRec,
+    ) -> &'static str {
+        if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Var(1)
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Var(1)
+                        )
+                )
+        ) {
+            "reference"
+        } else if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Var(1)
+                        )
+                )
+        ) {
+            "claim_flat_domain"
+        } else if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Var(1)
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        ) {
+            "claim_sharp_codomain"
+        } else {
+            "unclassified"
+        }
+    }
+
+    fn current_claim_step_fifteen_partial_prefix_clause_four_label(
+        clause: &ClauseRec,
+    ) -> &'static str {
+        if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if (
+                    matches!(
+                        domain.as_ref(),
+                        Expr::Flat(body)
+                            if matches!(
+                                body.as_ref(),
+                                Expr::Next(inner)
+                                    if matches!(
+                                        inner.as_ref(),
+                                        Expr::Eventually(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                    )
+                            )
+                    )
+                    || matches!(
+                        domain.as_ref(),
+                        Expr::Flat(body)
+                            if matches!(
+                                body.as_ref(),
+                                Expr::Next(inner)
+                                    if matches!(inner.as_ref(), Expr::Var(1))
+                            )
+                    )
+                ) && (
+                    matches!(
+                        codomain.as_ref(),
+                        Expr::Next(body)
+                            if matches!(
+                                body.as_ref(),
+                                Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                            )
+                    )
+                    || matches!(
+                        codomain.as_ref(),
+                        Expr::Next(body)
+                            if matches!(
+                                body.as_ref(),
+                                Expr::Flat(inner)
+                                    if matches!(
+                                        inner.as_ref(),
+                                        Expr::Next(deeper)
+                                            if matches!(
+                                                deeper.as_ref(),
+                                                Expr::Eventually(tail) if matches!(tail.as_ref(), Expr::Var(1))
+                                            )
+                                    )
+                            )
+                    )
+                )
+        ) {
+            "reference"
+        } else if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Flat(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Flat(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                )
+        ) {
+            "demo_sharp_codomain"
+        } else if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Flat(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Sharp(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Sharp(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                )
+        ) {
+            "demo_sharp_bridge"
+        } else if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Flat(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Eventually(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        ) {
+            "claim_eventual_bridge"
+        } else if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Flat(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Next(deeper)
+                                        if matches!(
+                                            deeper.as_ref(),
+                                            Expr::Eventually(tail) if matches!(tail.as_ref(), Expr::Var(1))
+                                        )
+                                )
+                        )
+                )
+        ) {
+            "claim_next_bridge"
+        } else {
+            "unclassified"
+        }
+    }
+
+    fn current_claim_step_fifteen_partial_prefix_clause_five_label(
+        clause: &ClauseRec,
+    ) -> &'static str {
+        if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sharp(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        ) {
+            "reference"
+        } else if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sharp(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Flat(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        ) {
+            "claim_flat_codomain"
+        } else if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sharp(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Sharp(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        ) {
+            "demo_sharp_domain"
+        } else if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sharp(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Flat(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                )
+        ) {
+            "demo_flat_codomain"
+        } else if matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sharp(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                )
+        ) {
+            "claim_next_codomain"
+        } else {
+            "unclassified"
+        }
+    }
+
+    fn current_claim_step_fifteen_remaining_two_partial_prefix_bridge_family_counts() -> BTreeMap<
+        (
+            Option<usize>,
+            &'static str,
+            &'static str,
+            &'static str,
+            &'static str,
+            &'static str,
+        ),
+        usize,
+    > {
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+
+        super::start_partial_prefix_bound_prune_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let captures = super::finish_partial_prefix_bound_prune_capture();
+
+        let mut counts = BTreeMap::new();
+        for capture in captures
+            .into_iter()
+            .filter(|capture| capture.remaining_clause_slots == 2)
+        {
+            let mismatch = capture
+                .prefix_telescope
+                .clauses
+                .iter()
+                .zip(reference_prefix.clauses.iter())
+                .position(|(left, right)| left != right);
+            let clause_zero = current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                0,
+                &capture.prefix_telescope.clauses[0],
+            );
+            let clause_one = current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                1,
+                &capture.prefix_telescope.clauses[1],
+            );
+            let clause_two = current_claim_step_fifteen_partial_prefix_clause_two_label(
+                &capture.prefix_telescope.clauses[2],
+            );
+            let clause_four = current_claim_step_fifteen_partial_prefix_clause_four_label(
+                &capture.prefix_telescope.clauses[4],
+            );
+            let clause_five = current_claim_step_fifteen_partial_prefix_clause_five_label(
+                &capture.prefix_telescope.clauses[5],
+            );
+            *counts
+                .entry((
+                    mismatch,
+                    clause_zero,
+                    clause_one,
+                    clause_two,
+                    clause_four,
+                    clause_five,
+                ))
+                .or_insert(0usize) += 1;
+        }
+
+        counts
+    }
+
+    fn current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+    -> BTreeMap<(Option<usize>, &'static str, &'static str), usize> {
+        let counts = current_claim_step_fifteen_remaining_two_partial_prefix_bridge_family_counts();
+        let mut clause_four_five_counts = BTreeMap::new();
+        for ((mismatch, _clause_zero, _clause_one, _clause_two, clause_four, clause_five), count) in
+            counts
+        {
+            *clause_four_five_counts
+                .entry((mismatch, clause_four, clause_five))
+                .or_insert(0usize) += count;
+        }
+        clause_four_five_counts
+    }
+
     fn current_claim_step_fifteen_incumbent_prune_summary() -> LateStepIncumbentPruneSummary {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             14,
@@ -14010,11 +14447,31 @@ mod tests {
         assert_eq!(
             pair_counts,
             [
-                ((Some(0_usize), "claim_eventual_domain", "claim_next_codomain"), 42_usize),
-                ((Some(0_usize), "claim_eventual_domain", "claim_sharp_codomain"), 42),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain"
+                    ),
+                    42_usize
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_sharp_codomain"
+                    ),
+                    42
+                ),
                 ((Some(0_usize), "claim_eventual_domain", "reference"), 42),
-                ((Some(0_usize), "claim_flat_domain", "claim_next_codomain"), 42),
-                ((Some(0_usize), "claim_flat_domain", "claim_sharp_codomain"), 42),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_next_codomain"),
+                    42
+                ),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_sharp_codomain"),
+                    42
+                ),
                 ((Some(0_usize), "claim_flat_domain", "reference"), 42),
                 ((Some(1_usize), "reference", "claim_next_codomain"), 42),
                 ((Some(1_usize), "reference", "claim_sharp_codomain"), 42),
@@ -14025,6 +14482,87 @@ mod tests {
             .into_iter()
             .collect(),
             "the dominant remaining-two step-15 partial-prefix wall should now be executable as six clause-0 current-claim pairings, three clause-1 pairings, and only a narrow reference/reference tail at mismatch positions 2 and 3; the main blocker is therefore still the current claim-generic clause-0/1 surface rather than an undiscovered broad demo-only reopening"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families()
+     {
+        let clause_four_five_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts();
+        assert_eq!(
+            clause_four_five_counts,
+            [
+                (
+                    (Some(0_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    48_usize
+                ),
+                (
+                    (Some(0_usize), "claim_next_bridge", "claim_next_codomain"),
+                    48
+                ),
+                ((Some(0_usize), "claim_next_bridge", "reference"), 48),
+                ((Some(0_usize), "reference", "claim_flat_codomain"), 36),
+                ((Some(0_usize), "reference", "claim_next_codomain"), 36),
+                ((Some(0_usize), "reference", "reference"), 36),
+                (
+                    (Some(1_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    27
+                ),
+                (
+                    (Some(1_usize), "claim_next_bridge", "claim_next_codomain"),
+                    27
+                ),
+                ((Some(1_usize), "claim_next_bridge", "reference"), 27),
+                ((Some(1_usize), "reference", "claim_flat_codomain"), 22),
+                ((Some(1_usize), "reference", "claim_next_codomain"), 22),
+                ((Some(1_usize), "reference", "reference"), 20),
+                (
+                    (Some(2_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    6
+                ),
+                (
+                    (Some(2_usize), "claim_next_bridge", "claim_next_codomain"),
+                    6
+                ),
+                ((Some(2_usize), "claim_next_bridge", "reference"), 6),
+                (
+                    (Some(2_usize), "demo_sharp_bridge", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    (Some(2_usize), "demo_sharp_bridge", "claim_next_codomain"),
+                    2
+                ),
+                (
+                    (Some(2_usize), "demo_sharp_codomain", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    (Some(2_usize), "demo_sharp_codomain", "claim_next_codomain"),
+                    2
+                ),
+                ((Some(2_usize), "reference", "claim_flat_codomain"), 4),
+                ((Some(2_usize), "reference", "claim_next_codomain"), 4),
+                ((Some(2_usize), "reference", "demo_flat_codomain"), 2),
+                ((Some(2_usize), "reference", "demo_sharp_domain"), 2),
+                ((Some(2_usize), "reference", "reference"), 4),
+                (
+                    (Some(3_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    (Some(3_usize), "claim_next_bridge", "claim_next_codomain"),
+                    2
+                ),
+                ((Some(3_usize), "claim_next_bridge", "reference"), 2),
+                ((Some(3_usize), "reference", "claim_flat_codomain"), 2),
+                ((Some(3_usize), "reference", "claim_next_codomain"), 2),
+                ((Some(3_usize), "reference", "reference"), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the dominant remaining-two claim-surface wall should now be executable one layer deeper: mismatch-0 and mismatch-1 live mostly on clause-4 claim_next_bridge plus reference families, while clause-5 stays split only across reference, claim_next_codomain, and claim_flat_codomain rather than on the old demo-only bridge pockets"
         );
     }
 
@@ -17391,7 +17929,8 @@ mod tests {
     fn current_claim_step_fifteen_clause_five_side_pocket_injects_on_exact_remaining_two_mismatch_zero_bridge_slice()
      {
         let _search_override =
-            super::override_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice();
+            super::override_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice(
+            );
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             14,
             2,
@@ -18470,7 +19009,8 @@ mod tests {
     fn current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control()
      {
         let _search_override =
-            super::override_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice();
+            super::override_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice(
+            );
         let _connectivity_override =
             pen_type::connectivity::override_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice();
         let step_fifteen =

@@ -623,6 +623,16 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   `reference/reference` continuation at `42` and `12`, so the next repair can
   target exact clause-`0` / clause-`1` pairings rather than treating the wall
   as an unlabeled early blur
+- that same dominant remaining-two wall is now executable one layer deeper
+  again too:
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
+  now freezes mismatch `0` and mismatch `1` onto the live clause-`4`
+  `claim_next_bridge` plus clause-`4` `reference` families, with clause-`5`
+  staying split only across `reference`, `claim_next_codomain`, and
+  `claim_flat_codomain`; the old demo-only clause-`4` bridge pockets now show
+  up only on the much smaller mismatch-`2` tail, so the next move should
+  target the live clause-`4` claim families rather than relanding another
+  demo-bridge pocket
 - both reverted clause-`1` side-pocket broadenings are now explicitly ruled
   out as the next move:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
@@ -685,6 +695,12 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    pairings at `42`, `42`, and `61`, so the next landed repair can work from
    explicit clause-`0` / clause-`1` labels rather than another generic early
    wall theory slice.
+   `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
+   now further freezes that same dominant side onto clause-`4`
+   `claim_next_bridge` plus clause-`4` `reference`, with clause-`5`
+   staying on `reference`, `claim_next_codomain`, and `claim_flat_codomain`,
+   so the next landed repair should work on those live claim families rather
+   than on another demo-only clause-`4` bridge reopening.
    The reverted clause-`3` `anchor-11` exact-argument widening onto the
    broader clause-`0` / clause-`1` claim surface while clause `2` stayed
    `reference` left that clean `553` wall and the executable nine-pair split

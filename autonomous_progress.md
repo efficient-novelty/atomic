@@ -90,6 +90,22 @@ Until that exists, wording stays at `bounded live recovery`.
     narrow `reference/reference` continuation at `42` and `12`
   - so the main blocker is still the current claim-generic clause-`0` /
     clause-`1` surface rather than an undiscovered broad demo-only reopening
+- That same dominant remaining-two wall is now frozen one layer deeper again by
+  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`:
+  - mismatch position `0` now splits only across clause-`4`
+    `claim_next_bridge = 48 / 48 / 48` and clause-`4` `reference = 36 / 36 / 36`
+    against clause-`5` `claim_flat_codomain`, `claim_next_codomain`, and
+    `reference`
+  - mismatch position `1` now stays on the same clause-`4` / clause-`5`
+    family grid at `27 / 27 / 27` for clause-`4` `claim_next_bridge` and
+    `22 / 22 / 20` for clause-`4` `reference`
+  - the mismatch-`2` / mismatch-`3` tail stays much smaller and is the only
+    place where the old demo-only clause-`4` bridge pockets still appear at
+    all
+  - so the next honest slice is no longer a generic early claim wall or
+    another demo-bridge reland, but the live clause-`4`
+    `claim_next_bridge` plus `reference` families on top of the dominant
+    clause-`0` / clause-`1` claim surface
 - A local clause-`1` `demo_eventually_codomain` exact-pocket reland was
   tested, reverted, and is now pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
@@ -191,6 +207,7 @@ Until that exists, wording stays at `bounded live recovery`.
 - Current step-`15` guardrails:
   - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
   - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
+  - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_five_side_pocket_injects_on_exact_remaining_two_mismatch_zero_bridge_slice`
@@ -218,10 +235,13 @@ partial-prefix wall on top of the matched `4331` surface, start with the
 dominant remaining-two clause-`0` / clause-`1` side of that wall before
 reopening the smaller clause-`2` / clause-`3` tail, keep the next change
 prefix-local and reference-terminal-safe, use the new nine-pair executable
-split to work first on the six mismatch-`0` current claim-generic
+split plus the newer clause-`4` / clause-`5` family freeze to work first on
+the six mismatch-`0` current claim-generic
 clause-`0` / clause-`1` pairings and the three mismatch-`1` clause-`1`
 pairings before spending another cycle on the smaller reference/reference
-tail, do not reland the reverted clause-`1` `demo_eventually_codomain`
+tail, with the next repair aimed at the live clause-`4`
+`claim_next_bridge` plus `reference` families rather than another demo-only
+bridge pocket, do not reland the reverted clause-`1` `demo_eventually_codomain`
 exact-pocket probe or the broader clause-`0` `claim_flat_domain` plus
 clause-`1` `demo_flat_codomain` exact-pocket reland that are now pinned as
 negative controls and widened the wall to `626`, do not reland the broader
