@@ -139,7 +139,17 @@ Treat these as current repo truths:
   was also checked and reverted: it left the clean `553` partial-prefix wall
   and the executable remaining-two nine-pair split unchanged, but it reopened
   `72` summary-stage incumbent captures, so that clause-`3` widening is also
-  ruled out rather than the next landed path;
+  ruled out rather than the next landed path; a fourth scoped negative
+  control that broadened the clause-`5` side pocket onto the claim-safe
+  clause-`0` / clause-`1` surface has now also been checked under override
+  and pinned by
+  `current_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
+  plus the matching connectivity override tests: it lifted the local surface
+  to `DCT 103 / 8 / 4779`, widened the `small_cluster` to
+  `3516 / 586 / 586 / 0`, and kept the isolated `single` pocket plus
+  residual incumbent pressure unchanged, but it widened the partial-prefix
+  wall to `585` and the zero-admitted exact-prune capture to `2367`, so it
+  is also ruled out rather than the landed path;
   the
   executable repaired late-path and negative-control guardrails are now also
   synced to that same `4331` / `3` / `3132 / 522 / 522 / 0` local surface
@@ -604,6 +614,11 @@ Focus on:
   it leaves the clean `553` wall and the executable remaining-two nine-pair
   split unchanged while reopening `72` summary-stage incumbent captures, so
   it is also not the next move
+- treating the reverted clause-`5` side-pocket broadening onto the claim-safe
+  clause-`0` / clause-`1` surface as another negative control only:
+  it lifts local generated breadth to `4779` and widens the `small_cluster`
+  to `3516 / 586 / 586 / 0`, but it also widens the clean partial-prefix
+  wall to `585`, so it is also not the next move
 - treating the remaining step-`15` `small_cluster` incumbent surface as a
   landed local relief rather than the live blocker:
   the old summary-stage same-primary `103 / 8` bit-cost spread is now closed,

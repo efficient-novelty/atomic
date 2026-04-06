@@ -63,6 +63,16 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
   - it left the executable remaining-two nine-pair split unchanged
   - but it reopened `72` summary-stage incumbent captures, so it is also not
     the landed repair
+- A reverted clause-`5` side-pocket broadening onto the claim-safe
+  clause-`0` / clause-`1` surface is now also part of the live diagnosis and
+  is pinned by
+  `current_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`:
+  - it lifted local step `15` generated breadth to `4779`
+  - it widened `small_cluster` to `3516 / 586 / 586 / 0`
+  - it kept the isolated `single` pocket and residual `3` incumbent prunes
+    unchanged
+  - but it widened the partial-prefix wall to `585`, so it is not the landed
+    repair
 
 ## Late-Step Gate
 

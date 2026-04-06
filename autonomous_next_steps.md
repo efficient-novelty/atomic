@@ -93,6 +93,19 @@ Do not start with another rerun setup pass.
   - but summary-stage incumbent captures reopened from `0` to `72`
   - so that clause-`3` widening is also ruled out as the next repair rather
     than another live candidate
+- A local clause-`5` side-pocket broadening onto the claim-safe clause-`0` /
+  clause-`1` surface has now also been checked under scoped overrides and
+  pinned by
+  `current_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
+  plus the matching connectivity override tests:
+  - local step `15` generated breadth lifted to `4779`
+  - the `small_cluster` widened to `3516 / 586 / 586 / 0`
+  - the isolated `single` pocket and residual `3` incumbent prunes stayed
+    fenced
+  - but the partial-prefix wall widened to `585` and the zero-admitted
+    capture widened to `2367`
+  - so that broader clause-`5` reland is also ruled out as another negative
+    control rather than the next repair
 - The old proof-close blocker has been reduced to only `3` fenced
   same-primary `single`-bucket incumbent prunes:
   - clause-`0` `claim_flat_domain`
@@ -141,11 +154,12 @@ Do not start with another rerun setup pass.
    - the `small_cluster` does not regress
    - no stronger-than-canonical lifted terminal becomes live
 5. Keep the focused guardrail slice green:
-   - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
-   - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
-   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
-   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
-   - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
+  - `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
+  - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
+  - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
+  - `current_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
+  - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
    - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
    - `current_claim_step_fifteen_zero_admitted_prunes_reduce_to_disconnect_and_trivial_derivability`
    - `current_claim_step_fifteen_zero_admitted_connectivity_surface_reports_reanchor_prefix_progress`
@@ -153,9 +167,11 @@ Do not start with another rerun setup pass.
    - `current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain`
    - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
    - `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
-   - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
-   - `connectivity_accepts_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_only_on_the_exact_anchor_eleven_side_pocket_under_override`
-   - `connectivity_keeps_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
+  - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
+  - `connectivity_accepts_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_only_on_the_exact_anchor_eleven_side_pocket_under_override`
+  - `connectivity_keeps_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
+  - `connectivity_accepts_clause_five_demo_sharp_domain_on_claim_safe_clause_zero_one_surface_under_override`
+  - `connectivity_accepts_clause_five_demo_flat_codomain_on_claim_safe_clause_zero_one_surface_under_override`
 6. Only after the local repair is green and parity-clean, launch the next
    clean full-profile rerun beyond `v12`.
 7. Immediately refresh compare, benchmark, and certification after that rerun.
@@ -174,6 +190,8 @@ Do not start with another rerun setup pass.
   exact-pocket reland
 - clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stays `reference`
+- clause-`5` side-pocket broadening onto the claim-safe clause-`0` /
+  clause-`1` surface
 - treating the dominant remaining-two wall as an unlabeled early blur again
 - raw position-`0` reland
 - another broad clause-`4` or clause-`5` reopening

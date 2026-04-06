@@ -120,6 +120,19 @@ Until that exists, wording stays at `bounded live recovery`.
   - but summary-stage incumbent captures reopened from `0` to `72`
   - so widening the clause-`3` exact pocket onto that broader early claim
     surface is also ruled out as the next repair
+- A local clause-`5` side-pocket broadening onto the claim-safe clause-`0` /
+  clause-`1` surface was also checked under scoped overrides and is now pinned
+  by
+  `current_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
+  plus the matching connectivity override tests:
+  - it lifted the local late surface from `4331` to `4779`
+  - it widened the `small_cluster` from `3132 / 522 / 522 / 0` to
+    `3516 / 586 / 586 / 0`
+  - it kept the isolated `single` pocket and the residual `3`
+    incumbent-dominance prunes unchanged
+  - but it widened the clean partial-prefix wall from `553` to `585` and the
+    zero-admitted exact-prune capture from `2271` to `2367`
+  - so that broader clause-`5` reland is also ruled out as the next move
 - The residual proof-close pressure is still localized to three same-primary
   `103 / 8` families:
   - clause-`0` `claim_flat_domain`
@@ -144,6 +157,9 @@ Until that exists, wording stays at `bounded live recovery`.
   the broader clause-`0` / clause-`1` claim surface while clause `2` stays
   `reference`; that probe left the `553` wall unchanged and reopened `72`
   summary-stage incumbent captures.
+- Do not reland the clause-`5` side-pocket broadening onto the claim-safe
+  clause-`0` / clause-`1` surface; that probe lifted local breadth to `4779`
+  but widened the clean wall to `585`.
 - Do not reland the raw position-`0`, broad clause-`4`, or broad clause-`5`
   widenings.
 - Do not reland the raw step-`13` widened controls
@@ -159,6 +175,7 @@ Until that exists, wording stays at `bounded live recovery`.
   - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
+  - `current_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
   - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
   - `current_claim_step_fifteen_zero_admitted_connectivity_surface_reports_reanchor_prefix_progress`
@@ -168,6 +185,8 @@ Until that exists, wording stays at `bounded live recovery`.
   - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
   - `connectivity_accepts_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_only_on_the_exact_anchor_eleven_side_pocket_under_override`
   - `connectivity_keeps_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
+  - `connectivity_accepts_clause_five_demo_sharp_domain_on_claim_safe_clause_zero_one_surface_under_override`
+  - `connectivity_accepts_clause_five_demo_flat_codomain_on_claim_safe_clause_zero_one_surface_under_override`
 
 ## Immediate Direction
 
@@ -182,6 +201,8 @@ pairings before spending another cycle on the smaller reference/reference
 tail, do not reland the reverted clause-`1` `demo_eventually_codomain`
 exact-pocket probe or the broader clause-`0` `claim_flat_domain` plus
 clause-`1` `demo_flat_codomain` exact-pocket reland that are now pinned as
-negative controls and widened the wall to `626`, rerun only after the new
-local slice is green, and keep step `1` explicit unless that next stored
-bundle changes it directly.
+negative controls and widened the wall to `626`, do not reland the broader
+clause-`5` side-pocket opening on the claim-safe clause-`0` / clause-`1`
+surface that is now pinned as another negative control at `4779 / 585`,
+rerun only after the new local slice is green, and keep step `1` explicit
+unless that next stored bundle changes it directly.

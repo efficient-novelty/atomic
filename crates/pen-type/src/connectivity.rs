@@ -15,11 +15,19 @@ thread_local! {
         std::cell::RefCell<usize> = const { std::cell::RefCell::new(0) };
 }
 
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE:
+        std::cell::RefCell<usize> = const { std::cell::RefCell::new(0) };
+}
+
 #[doc(hidden)]
 pub struct ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard;
 
 #[doc(hidden)]
 pub struct ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimFlatOverrideGuard;
+
+#[doc(hidden)]
+pub struct ClaimStepFifteenClauseFiveSidePocketOnClaimSafeClauseZeroOneOverrideGuard;
 
 impl Drop for ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard {
     fn drop(&mut self) {
@@ -63,6 +71,28 @@ pub fn override_claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim
     ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimFlatOverrideGuard
 }
 
+impl Drop for ClaimStepFifteenClauseFiveSidePocketOnClaimSafeClauseZeroOneOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE.with(
+            |override_depth| {
+                let mut override_depth = override_depth.borrow_mut();
+                *override_depth = override_depth.saturating_sub(1);
+            },
+        );
+    }
+}
+
+#[doc(hidden)]
+pub fn override_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one()
+-> ClaimStepFifteenClauseFiveSidePocketOnClaimSafeClauseZeroOneOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE.with(
+        |override_depth| {
+            *override_depth.borrow_mut() += 1;
+        },
+    );
+    ClaimStepFifteenClauseFiveSidePocketOnClaimSafeClauseZeroOneOverrideGuard
+}
+
 fn claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enabled() -> bool {
     CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE
         .with(|override_depth| *override_depth.borrow() > 0)
@@ -71,6 +101,12 @@ fn claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enable
 fn claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_flat_override_enabled() -> bool
 {
     CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_CLAUSE_ZERO_CLAIM_FLAT_OVERRIDE
+        .with(|override_depth| *override_depth.borrow() > 0)
+}
+
+fn claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE
         .with(|override_depth| *override_depth.borrow() > 0)
 }
 
@@ -1191,8 +1227,22 @@ fn matches_anchor_eleven_clause_five_side_pocket_clause(
     anchor: u32,
 ) -> bool {
     match position {
-        0 => matches_reference_temporal_next_clause(expr),
-        1 => matches_reference_temporal_eventually_clause(expr),
+        0 => {
+            if claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
+            {
+                matches_temporal_next_reanchor_clause(expr)
+            } else {
+                matches_reference_temporal_next_clause(expr)
+            }
+        }
+        1 => {
+            if claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
+            {
+                matches_temporal_eventually_reanchor_clause(expr)
+            } else {
+                matches_reference_temporal_eventually_clause(expr)
+            }
+        }
         2 => matches_claim_temporal_pair_clause_two_variant(expr),
         3 => matches_anchor_eleven_exact_argument_clause(expr, anchor + 1),
         4 => {
@@ -3284,6 +3334,124 @@ mod tests {
                 }
             );
             assert!(passes_connectivity(&library, &telescope));
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_clause_five_demo_sharp_domain_on_claim_safe_clause_zero_one_surface_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for clause_zero_variant in claim_temporal_variant_exprs(0, anchor) {
+            for clause_one_variant in claim_temporal_variant_exprs(1, anchor) {
+                for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[0].expr = clause_zero_variant.clone();
+                    telescope.clauses[1].expr = clause_one_variant.clone();
+                    telescope.clauses[2].expr = clause_two_variant;
+                    telescope.clauses[3] = ClauseRec::new(
+                        ClauseRole::Introduction,
+                        Expr::Lam(Box::new(Expr::App(
+                            Box::new(Expr::Lib(anchor + 1)),
+                            Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        ))),
+                    );
+                    telescope.clauses[5] = ClauseRec::new(
+                        ClauseRole::Formation,
+                        Expr::Pi(
+                            Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                                Expr::Sharp(Box::new(Expr::Var(1))),
+                            ))))),
+                            Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                                Expr::Var(1),
+                            ))))),
+                        ),
+                    );
+                    telescope.clauses[7] = reference_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        reanchor.allows_historical_reanchor(),
+                        "the clause-5 demo-sharp-domain opening should become historically reanchorable across the claim-safe clause-0/1 surface only under the scoped negative-control override"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 11,
+                            historical_reanchor: true,
+                        }
+                    );
+                    assert!(passes_connectivity(&library, &telescope));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_clause_five_demo_flat_codomain_on_claim_safe_clause_zero_one_surface_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for clause_zero_variant in claim_temporal_variant_exprs(0, anchor) {
+            for clause_one_variant in claim_temporal_variant_exprs(1, anchor) {
+                for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[0].expr = clause_zero_variant.clone();
+                    telescope.clauses[1].expr = clause_one_variant.clone();
+                    telescope.clauses[2].expr = clause_two_variant;
+                    telescope.clauses[3] = ClauseRec::new(
+                        ClauseRole::Introduction,
+                        Expr::Lam(Box::new(Expr::App(
+                            Box::new(Expr::Lib(anchor + 1)),
+                            Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        ))),
+                    );
+                    telescope.clauses[5] = ClauseRec::new(
+                        ClauseRole::Formation,
+                        Expr::Pi(
+                            Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                                Expr::Var(1),
+                            ))))),
+                            Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                                Expr::Flat(Box::new(Expr::Var(1))),
+                            ))))),
+                        ),
+                    );
+                    telescope.clauses[7] = reference_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        reanchor.allows_historical_reanchor(),
+                        "the clause-5 demo-flat-codomain opening should become historically reanchorable across the claim-safe clause-0/1 surface only under the scoped negative-control override"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 11,
+                            historical_reanchor: true,
+                        }
+                    );
+                    assert!(passes_connectivity(&library, &telescope));
+                }
+            }
         }
     }
 

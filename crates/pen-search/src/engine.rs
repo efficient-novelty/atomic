@@ -6006,6 +6006,12 @@ thread_local! {
 }
 
 #[cfg(test)]
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
 fn start_pruned_terminal_prefix_capture() {
     PRUNED_TERMINAL_PREFIX_CAPTURE.with(|capture| {
         *capture.borrow_mut() = Some(Vec::new());
@@ -6051,6 +6057,9 @@ struct ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard;
 
 #[cfg(test)]
 struct ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimFlatOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenClauseFiveSidePocketOnClaimSafeClauseZeroOneOverrideGuard;
 
 #[cfg(test)]
 impl Drop for ClaimStepFifteenFamilyLocalSamePrimaryReliefOverrideGuard {
@@ -6116,6 +6125,27 @@ fn override_claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_fla
 }
 
 #[cfg(test)]
+impl Drop for ClaimStepFifteenClauseFiveSidePocketOnClaimSafeClauseZeroOneOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE
+            .with(|override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            });
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one()
+-> ClaimStepFifteenClauseFiveSidePocketOnClaimSafeClauseZeroOneOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE.with(
+        |override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        },
+    );
+    ClaimStepFifteenClauseFiveSidePocketOnClaimSafeClauseZeroOneOverrideGuard
+}
+
+#[cfg(test)]
 fn claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enabled() -> bool {
     CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE
         .with(|override_enabled| *override_enabled.borrow())
@@ -6136,6 +6166,19 @@ fn claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_flat_overrid
 #[cfg(not(test))]
 fn claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_flat_override_enabled() -> bool
 {
+    false
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
+-> bool {
     false
 }
 
@@ -6618,6 +6661,40 @@ fn create_online_prefix_work_item(
             )
     }
 
+    fn matches_claim_safe_temporal_clause_zero(clause: &pen_core::clause::ClauseRec) -> bool {
+        clause.role == ClauseRole::Formation
+            && matches!(
+                &clause.expr,
+                Expr::Next(body)
+                    if matches!(body.as_ref(), Expr::Var(1))
+                        || matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                        || matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+            )
+    }
+
+    fn matches_claim_safe_temporal_clause_one(clause: &pen_core::clause::ClauseRec) -> bool {
+        clause.role == ClauseRole::Formation
+            && matches!(
+                &clause.expr,
+                Expr::Eventually(body)
+                    if matches!(body.as_ref(), Expr::Var(1))
+                        || matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                        || matches!(
+                            body.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+            )
+    }
+
     fn matches_reference_temporal_clause_four(clause: &pen_core::clause::ClauseRec) -> bool {
         clause.role == ClauseRole::Formation
             && matches!(
@@ -7039,8 +7116,11 @@ fn create_online_prefix_work_item(
             .clauses
             .get(4)
             .expect("step-15 temporal shell prefix should expose clause 4");
-        (matches_reference_temporal_clause_zero(clause_zero)
-            && matches_reference_temporal_clause_one(clause_one)
+        (((matches_reference_temporal_clause_zero(clause_zero)
+            && matches_reference_temporal_clause_one(clause_one))
+            || (claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
+                && matches_claim_safe_temporal_clause_zero(clause_zero)
+                && matches_claim_safe_temporal_clause_one(clause_one)))
             && matches_claim_step_fifteen_anchor_eleven_clause_two_variant(clause_two)
             && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(clause_three, anchor)
             && (matches_reference_temporal_clause_four(clause_four)
@@ -7085,8 +7165,11 @@ fn create_online_prefix_work_item(
             .clauses
             .get(4)
             .expect("step-15 temporal shell prefix should expose clause 4");
-        (matches_reference_temporal_clause_zero(clause_zero)
-            && matches_reference_temporal_clause_one(clause_one)
+        (((matches_reference_temporal_clause_zero(clause_zero)
+            && matches_reference_temporal_clause_one(clause_one))
+            || (claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
+                && matches_claim_safe_temporal_clause_zero(clause_zero)
+                && matches_claim_safe_temporal_clause_one(clause_one)))
             && matches_claim_step_fifteen_anchor_eleven_clause_two_variant(clause_two)
             && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(clause_three, anchor)
             && (matches_reference_temporal_clause_four(clause_four)
@@ -18076,6 +18159,73 @@ mod tests {
             "the widened clause-1 demo-flat-codomain reland should keep the residual single-bucket incumbent fence unchanged"
         );
         assert_eq!(wall_summary.capture_count, 626);
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one();
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4779);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 585,
+            "broadening the clause-5 side pocket onto the claim-safe clause-0/1 surface should stay a widening negative control by reopening more partial-prefix wall pressure"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the widened clause-5 side-pocket reland should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 585);
+        assert_eq!(zero_summary.captured_prefixes, 2367);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3516,
+                admissible_terminal_candidates: 586,
+                exact_screened_terminal_candidates: 586,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the clause-5 side-pocket reland on the broader claim-safe clause-0/1 surface should widen the same small-cluster bucket rather than touching the isolated single pocket"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the widened clause-5 side-pocket reland should keep the isolated single pocket fenced even while it widens the noncanonical small-cluster surface"
+        );
     }
 
     #[test]
