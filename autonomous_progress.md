@@ -133,6 +133,21 @@ Until that exists, wording stays at `bounded live recovery`.
   - but it widened the clean partial-prefix wall from `553` to `585` and the
     zero-admitted exact-prune capture from `2271` to `2367`
   - so that broader clause-`5` reland is also ruled out as the next move
+- A narrower clause-`5` reland on only the exact remaining-two mismatch-`0`
+  bridge slice was also checked under scoped overrides and is now pinned by
+  `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
+  plus the matching injector and connectivity override tests:
+  - it reopened the clause-`4` `demo_sharp_bridge` prerequisite only across
+    the six mismatch-`0` clause-`0` / clause-`1` pairings before admitting the
+    two existing clause-`5` side clauses there
+  - it lifted the local late surface from `4331` to `4691`
+  - it widened the `small_cluster` from `3132 / 522 / 522 / 0` to
+    `3420 / 570 / 570 / 0`
+  - it kept the isolated `single` pocket and the residual `3`
+    incumbent-dominance prunes unchanged
+  - but it widened the clean partial-prefix wall from `553` to `589`
+  - so that narrower mismatch-`0` bridge-slice reland is also ruled out as
+    the next move
 - The residual proof-close pressure is still localized to three same-primary
   `103 / 8` families:
   - clause-`0` `claim_flat_domain`
@@ -160,6 +175,9 @@ Until that exists, wording stays at `bounded live recovery`.
 - Do not reland the clause-`5` side-pocket broadening onto the claim-safe
   clause-`0` / clause-`1` surface; that probe lifted local breadth to `4779`
   but widened the clean wall to `585`.
+- Do not reland the exact remaining-two mismatch-`0` bridge-slice clause-`5`
+  reopening; that narrower probe still lifted local breadth to `4691` but
+  widened the clean wall to `589`.
 - Do not reland the raw position-`0`, broad clause-`4`, or broad clause-`5`
   widenings.
 - Do not reland the raw step-`13` widened controls
@@ -175,6 +193,8 @@ Until that exists, wording stays at `bounded live recovery`.
   - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
   - `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
+  - `current_claim_step_fifteen_clause_five_side_pocket_injects_on_exact_remaining_two_mismatch_zero_bridge_slice`
+  - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
   - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
@@ -185,6 +205,9 @@ Until that exists, wording stays at `bounded live recovery`.
   - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
   - `connectivity_accepts_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_only_on_the_exact_anchor_eleven_side_pocket_under_override`
   - `connectivity_keeps_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
+  - `connectivity_accepts_clause_five_demo_sharp_domain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
+  - `connectivity_accepts_clause_five_demo_flat_codomain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
+  - `connectivity_keeps_clause_five_remaining_two_mismatch_one_bridge_slice_outside_historical_reanchor_even_under_override`
   - `connectivity_accepts_clause_five_demo_sharp_domain_on_claim_safe_clause_zero_one_surface_under_override`
   - `connectivity_accepts_clause_five_demo_flat_codomain_on_claim_safe_clause_zero_one_surface_under_override`
 
@@ -203,6 +226,8 @@ exact-pocket probe or the broader clause-`0` `claim_flat_domain` plus
 clause-`1` `demo_flat_codomain` exact-pocket reland that are now pinned as
 negative controls and widened the wall to `626`, do not reland the broader
 clause-`5` side-pocket opening on the claim-safe clause-`0` / clause-`1`
-surface that is now pinned as another negative control at `4779 / 585`,
+surface that is now pinned as another negative control at `4779 / 585`, do
+not reland the narrower exact remaining-two mismatch-`0` bridge-slice
+opening that is now pinned as another negative control at `4691 / 589`,
 rerun only after the new local slice is green, and keep step `1` explicit
 unless that next stored bundle changes it directly.

@@ -149,7 +149,16 @@ Treat these as current repo truths:
   `3516 / 586 / 586 / 0`, and kept the isolated `single` pocket plus
   residual incumbent pressure unchanged, but it widened the partial-prefix
   wall to `585` and the zero-admitted exact-prune capture to `2367`, so it
-  is also ruled out rather than the landed path;
+  is also ruled out rather than the landed path; a fifth scoped negative
+  control that reopened the clause-`5` side pocket only on the exact
+  remaining-two mismatch-`0` bridge slice is now also pinned by
+  `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
+  plus the matching injector and connectivity override tests: it lifted the
+  local surface to `DCT 103 / 8 / 4691`, widened the `small_cluster` to
+  `3420 / 570 / 570 / 0`, and kept the isolated `single` pocket plus
+  residual incumbent pressure unchanged, but it still widened the
+  partial-prefix wall to `589`, so that narrower mismatch-`0` bridge-slice
+  reland is also ruled out rather than the landed path;
   the
   executable repaired late-path and negative-control guardrails are now also
   synced to that same `4331` / `3` / `3132 / 522 / 522 / 0` local surface

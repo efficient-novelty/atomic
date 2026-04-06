@@ -363,6 +363,22 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     the zero-admitted exact-prune capture from `2271` to `2367`
   - so that broader clause-`5` reland is now another negative control rather
     than the next landed repair
+- a newer exploratory clause-`5` reland on only the exact remaining-two
+  mismatch-`0` bridge slice has now also been checked under scoped overrides
+  and pinned by
+  `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
+  plus the matching injector and connectivity override tests:
+  - it reopened the clause-`4` `demo_sharp_bridge` prerequisite only across
+    the six mismatch-`0` clause-`0` / clause-`1` pairings before admitting
+    the two existing clause-`5` side clauses there
+  - it lifted the local late surface from `4331` to `4691`
+  - it widened the `small_cluster` from `3132 / 522 / 522 / 0` to
+    `3420 / 570 / 570 / 0`
+  - it kept the isolated `single` pocket and the residual `3`
+    incumbent-dominance prunes unchanged
+  - but it widened the clean partial-prefix wall from `553` to `589`
+  - so that narrower mismatch-`0` bridge-slice reland is now another
+    negative control rather than the next landed repair
 - a newer local step-`15` proof-close incumbent regression now freezes that
   remaining fenced pressure more tightly:
   - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
@@ -618,6 +634,10 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   clause-`0` / clause-`1` surface is now also explicitly ruled out as the
   next move: it widens the clean wall to `585` even while keeping the
   canonical winner and the residual `3` incumbent prunes fixed
+- the reverted exact remaining-two mismatch-`0` bridge-slice clause-`5`
+  reland is now also explicitly ruled out as the next move: it still widens
+  the clean wall to `589` even while keeping the canonical winner and the
+  residual `3` incumbent prunes fixed
 - the canonical repaired late chain must stay frozen while breadth is
   re-earned:
   - step `12` should keep the guarded `34 / 6` continuation
