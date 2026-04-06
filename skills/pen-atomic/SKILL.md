@@ -172,7 +172,17 @@ Treat these as current repo truths:
   `reference + demo_flat_codomain` branch from clause-`4` `33 / 28` / `61`
   captured prefixes to clause-`4` `27 / 18` / `45`, but it also widens the
   `small_cluster` to `3324 / 554 / 554 / 0`, so it is only a tradeoff
-  control and not the landed path; a third local exploratory
+  control and not the landed path; a newer exact clause-`2`
+  `claim_flat_domain` sheet probe on that same branch is now also pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_flat_sheet_stays_a_tradeoff_control`
+  plus the matching connectivity override tests: it lifts the local surface
+  to `DCT 103 / 8 / 4412`, narrows the clean partial-prefix wall to `544`,
+  cuts zero-admitted capture to `2250`, and shrinks that same branch to
+  clause-`4` `30 / 21` / `51`, but it still widens the `small_cluster` to
+  `3216 / 536 / 536 / 0`, so it is also only a tradeoff control and the next
+  honest slice should now move to the sibling exact clause-`2`
+  `claim_sharp_codomain` sheet rather than another clause-`4`
+  `reference`-sheet-only reopening; a third local exploratory
   clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   was also checked and reverted: it left the clean `553` partial-prefix wall
@@ -718,9 +728,15 @@ Focus on:
   it lifts local breadth only to `4379`, narrows the clean wall only to
   `549`, cuts zero-admitted capture only to `2259`, shrinks the same branch
   only to clause-`4` `33 / 24` / `57`, and still widens the `small_cluster`
-  to `3180 / 530 / 530 / 0`; so the next landed repair should isolate those
-  escaping `16` captures by testing one exact `15`-count clause-`2` sheet
-  rather than relanding the whole reopening
+  to `3180 / 530 / 530 / 0`; a newer exact clause-`2`
+  `claim_flat_domain` sheet tradeoff control now shows that reopening only
+  that single sheet is stronger but still not enough:
+  it lifts local breadth to `4412`, narrows the clean wall to `544`, cuts
+  zero-admitted capture to `2250`, shrinks that same branch to
+  clause-`4` `30 / 21` / `51`, and still widens the `small_cluster` to
+  `3216 / 536 / 536 / 0`; so the next landed repair should isolate those
+  escaping `16` captures by testing the sibling exact clause-`2`
+  `claim_sharp_codomain` sheet rather than relanding the whole reopening
 - treating the two reverted clause-`1` side-pocket broadenings as negative
   controls only:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
