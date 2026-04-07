@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-04-06
+Last updated: 2026-04-07
 Status: active
 
 This file is the staged path from the current `v12` state to final signoff.
@@ -34,6 +34,20 @@ Until then, wording stays at `bounded live recovery`.
   incumbent wall. It is the clean step-`15` residual of `553`
   partial-prefix bar failures plus `3` fenced `single`-bucket incumbent
   prunes.
+- The exact clause-`5` `reference` follow-on on the clause-`4` `reference`
+  remaining-three tail is now pinned as a neutral control on the canonical
+  `4331 / 553 / 2271` surface.
+- The exact clause-`5` `claim_flat_codomain` and `claim_next_codomain`
+  single-family follow-ons on that same tail are now both pinned as symmetric
+  smaller tradeoff controls at `4355 / 551 / 2265`, with the larger
+  `reference + demo_flat_codomain` branch only shrinking to
+  clause-`4` `33 / 26` / `59` while `small_cluster` still widens to
+  `3156 / 526 / 526 / 0`.
+- Together those two single-family probes now show the clause-`4`
+  `reference` remaining-three tail is exhausted as a cleaner local repair
+  target, so Phase 1 should step back up to the broader dominant
+  clause-`0` / clause-`1` claim surface outside that tail before another
+  rerun.
 
 ## Phase 1: Narrow The Remaining Step-15 Wall
 

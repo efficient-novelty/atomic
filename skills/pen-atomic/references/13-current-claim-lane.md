@@ -862,10 +862,18 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   sheet, together with their exact `18` zero-admitted clause-`5`
   continuations. The newer exact clause-`5` `reference` follow-on on that
   same tail is now also pinned as a neutral control because it leaves the
-  whole `4331 / 553 / 2271` surface unchanged, so the next honest slice is
-  now the still-closed clause-`5` `claim_flat_codomain` or
-  `claim_next_codomain` cell on that two-prefix tail rather than the larger
-  clause-`4` `claim_next_bridge` half or the full reopening
+  whole `4331 / 553 / 2271` surface unchanged. Newer exact clause-`5`
+  `claim_flat_codomain` and `claim_next_codomain` follow-ons on that same
+  two-prefix tail are now also pinned as symmetric smaller tradeoff controls:
+  each lands only `4355 / 551 / 2265`, shrinks that same branch only to
+  clause-`4` `33 / 26` / `59`, and still widens the `small_cluster` to
+  `3156 / 526 / 526 / 0`. Together they merely split the older clause-`4`
+  `reference`-sheet tradeoff into its two exact clause-`5` claim families, so
+  the clause-`4` `reference` remaining-three tail is now exhausted as a
+  cleaner local repair target. The next honest slice is therefore no longer
+  another clause-`5` tail probe but to step back up to the broader dominant
+  clause-`0` / clause-`1` claim surface outside that exhausted tail rather
+  than the larger clause-`4` `claim_next_bridge` half or the full reopening
 - both reverted clause-`1` side-pocket broadenings are now explicitly ruled
   out as the next move:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the

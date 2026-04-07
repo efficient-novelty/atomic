@@ -12472,6 +12472,46 @@ mod tests {
             .collect()
     }
 
+    fn current_claim_step_fifteen_clause_five_claim_flat_codomain_on_clause_four_reference_tail_on_clause_two_claim_variant_pair_probe_reference_demo_flat_branch_bridge_family_counts()
+    -> BTreeMap<(&'static str, &'static str, &'static str), usize> {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_five_claim_flat_codomain_on_clause_four_reference_tail_on_clause_two_claim_variant_pair();
+        current_claim_step_fifteen_remaining_two_partial_prefix_bridge_family_counts()
+            .into_iter()
+            .filter_map(
+                |(
+                    (mismatch, clause_zero, clause_one, clause_two, clause_four, clause_five),
+                    count,
+                )| {
+                    (mismatch == Some(1_usize)
+                        && clause_zero == "reference"
+                        && clause_one == "demo_flat_codomain")
+                        .then_some(((clause_two, clause_four, clause_five), count))
+                },
+            )
+            .collect()
+    }
+
+    fn current_claim_step_fifteen_clause_five_claim_next_codomain_on_clause_four_reference_tail_on_clause_two_claim_variant_pair_probe_reference_demo_flat_branch_bridge_family_counts()
+    -> BTreeMap<(&'static str, &'static str, &'static str), usize> {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_five_claim_next_codomain_on_clause_four_reference_tail_on_clause_two_claim_variant_pair();
+        current_claim_step_fifteen_remaining_two_partial_prefix_bridge_family_counts()
+            .into_iter()
+            .filter_map(
+                |(
+                    (mismatch, clause_zero, clause_one, clause_two, clause_four, clause_five),
+                    count,
+                )| {
+                    (mismatch == Some(1_usize)
+                        && clause_zero == "reference"
+                        && clause_one == "demo_flat_codomain")
+                        .then_some(((clause_two, clause_four, clause_five), count))
+                },
+            )
+            .collect()
+    }
+
     fn current_claim_step_fifteen_partial_prefix_bound_prune_captures_on_exact_claim_variant_pair_tradeoff()
     -> Vec<super::PartialPrefixBoundPruneCapture> {
         let _connectivity_override =
@@ -21336,6 +21376,334 @@ mod tests {
             bridge_counts.get(&("claim_sharp_codomain", "reference", "reference")),
             Some(&3_usize),
             "the claim-sharp clause-two sheet should also already carry that same clause-5 reference cell"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_flat_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control()
+     {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_five_claim_flat_codomain_on_clause_four_reference_tail_on_clause_two_claim_variant_pair();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts();
+        let bridge_counts =
+            current_claim_step_fifteen_clause_five_claim_flat_codomain_on_clause_four_reference_tail_on_clause_two_claim_variant_pair_probe_reference_demo_flat_branch_bridge_family_counts();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4355);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 551,
+            "opening only the exact clause-5 claim-flat-codomain cell on the clause-4 reference tail should help, but it still stays only a smaller tradeoff control"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the exact clause-5 claim-flat tail probe should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 551);
+        assert_eq!(zero_summary.captured_prefixes, 2265);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3156,
+                admissible_terminal_candidates: 526,
+                exact_screened_terminal_candidates: 526,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the exact clause-5 claim-flat tail probe still widens the small-cluster surface, so it is not the landed repair"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the exact clause-5 claim-flat tail probe should keep the isolated single pocket fenced"
+        );
+        assert_eq!(
+            pair_counts
+                .get(&(Some(1_usize), "reference", "demo_flat_codomain"))
+                .copied(),
+            Some(59),
+            "the larger reference-plus-demo-flat branch should shrink by exactly one claim-family cell on each claim clause-two sheet"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "claim_next_bridge"
+                ))
+                .copied(),
+            Some(33),
+            "the exact clause-5 claim-flat tail probe should leave the dominant clause-4 claim-next-bridge share untouched"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "reference"
+                ))
+                .copied(),
+            Some(26),
+            "the exact clause-5 claim-flat tail probe should trim only the clause-4 reference share on that branch"
+        );
+        assert_eq!(
+            bridge_counts,
+            [
+                (
+                    (
+                        "claim_flat_domain",
+                        "claim_next_bridge",
+                        "claim_flat_codomain"
+                    ),
+                    4_usize
+                ),
+                (
+                    (
+                        "claim_flat_domain",
+                        "claim_next_bridge",
+                        "claim_next_codomain"
+                    ),
+                    4
+                ),
+                (("claim_flat_domain", "claim_next_bridge", "reference"), 4),
+                (("claim_flat_domain", "reference", "claim_flat_codomain"), 3),
+                (("claim_flat_domain", "reference", "claim_next_codomain"), 4),
+                (("claim_flat_domain", "reference", "reference"), 3),
+                (
+                    (
+                        "claim_sharp_codomain",
+                        "claim_next_bridge",
+                        "claim_flat_codomain"
+                    ),
+                    4
+                ),
+                (
+                    (
+                        "claim_sharp_codomain",
+                        "claim_next_bridge",
+                        "claim_next_codomain"
+                    ),
+                    4
+                ),
+                (
+                    ("claim_sharp_codomain", "claim_next_bridge", "reference"),
+                    4
+                ),
+                (
+                    ("claim_sharp_codomain", "reference", "claim_flat_codomain"),
+                    3
+                ),
+                (
+                    ("claim_sharp_codomain", "reference", "claim_next_codomain"),
+                    4
+                ),
+                (("claim_sharp_codomain", "reference", "reference"), 3),
+                (("reference", "claim_next_bridge", "claim_flat_codomain"), 3),
+                (("reference", "claim_next_bridge", "claim_next_codomain"), 3),
+                (("reference", "claim_next_bridge", "reference"), 3),
+                (("reference", "reference", "claim_flat_codomain"), 2),
+                (("reference", "reference", "claim_next_codomain"), 2),
+                (("reference", "reference", "reference"), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the exact clause-5 claim-flat tail probe should reopen only the claim-flat clause-5 cell on each claim clause-two sheet, leaving the sibling claim-next cell at the higher four-capture level"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_next_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control()
+     {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_five_claim_next_codomain_on_clause_four_reference_tail_on_clause_two_claim_variant_pair();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts();
+        let bridge_counts =
+            current_claim_step_fifteen_clause_five_claim_next_codomain_on_clause_four_reference_tail_on_clause_two_claim_variant_pair_probe_reference_demo_flat_branch_bridge_family_counts();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4355);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 551,
+            "opening only the exact clause-5 claim-next-codomain cell on the clause-4 reference tail should help, but it still stays only a smaller tradeoff control"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the exact clause-5 claim-next tail probe should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 551);
+        assert_eq!(zero_summary.captured_prefixes, 2265);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3156,
+                admissible_terminal_candidates: 526,
+                exact_screened_terminal_candidates: 526,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the exact clause-5 claim-next tail probe still widens the small-cluster surface, so it is not the landed repair"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the exact clause-5 claim-next tail probe should keep the isolated single pocket fenced"
+        );
+        assert_eq!(
+            pair_counts
+                .get(&(Some(1_usize), "reference", "demo_flat_codomain"))
+                .copied(),
+            Some(59),
+            "the larger reference-plus-demo-flat branch should shrink by exactly one claim-family cell on each claim clause-two sheet"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "claim_next_bridge"
+                ))
+                .copied(),
+            Some(33),
+            "the exact clause-5 claim-next tail probe should leave the dominant clause-4 claim-next-bridge share untouched"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "reference"
+                ))
+                .copied(),
+            Some(26),
+            "the exact clause-5 claim-next tail probe should trim only the clause-4 reference share on that branch"
+        );
+        assert_eq!(
+            bridge_counts,
+            [
+                (
+                    (
+                        "claim_flat_domain",
+                        "claim_next_bridge",
+                        "claim_flat_codomain"
+                    ),
+                    4_usize
+                ),
+                (
+                    (
+                        "claim_flat_domain",
+                        "claim_next_bridge",
+                        "claim_next_codomain"
+                    ),
+                    4
+                ),
+                (("claim_flat_domain", "claim_next_bridge", "reference"), 4),
+                (("claim_flat_domain", "reference", "claim_flat_codomain"), 4),
+                (("claim_flat_domain", "reference", "claim_next_codomain"), 3),
+                (("claim_flat_domain", "reference", "reference"), 3),
+                (
+                    (
+                        "claim_sharp_codomain",
+                        "claim_next_bridge",
+                        "claim_flat_codomain"
+                    ),
+                    4
+                ),
+                (
+                    (
+                        "claim_sharp_codomain",
+                        "claim_next_bridge",
+                        "claim_next_codomain"
+                    ),
+                    4
+                ),
+                (
+                    ("claim_sharp_codomain", "claim_next_bridge", "reference"),
+                    4
+                ),
+                (
+                    ("claim_sharp_codomain", "reference", "claim_flat_codomain"),
+                    4
+                ),
+                (
+                    ("claim_sharp_codomain", "reference", "claim_next_codomain"),
+                    3
+                ),
+                (("claim_sharp_codomain", "reference", "reference"), 3),
+                (("reference", "claim_next_bridge", "claim_flat_codomain"), 3),
+                (("reference", "claim_next_bridge", "claim_next_codomain"), 3),
+                (("reference", "claim_next_bridge", "reference"), 3),
+                (("reference", "reference", "claim_flat_codomain"), 2),
+                (("reference", "reference", "claim_next_codomain"), 2),
+                (("reference", "reference", "reference"), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the exact clause-5 claim-next tail probe should reopen only the claim-next clause-5 cell on each claim clause-two sheet, leaving the sibling claim-flat cell at the higher four-capture level"
         );
     }
 

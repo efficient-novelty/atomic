@@ -224,9 +224,22 @@ Treat these as current repo truths:
   and leaves the whole `DCT 103 / 8 / 4331` / `553` / `2271` surface plus the
   clause-`4` `33 / 28` / `61` branch unchanged, so that exact `reference`
   cell is already effectively part of the current canonical surface rather
-  than the next repair; the next operational move is now the still-closed
-  clause-`5` `claim_flat_codomain` or `claim_next_codomain` cell on that
-  same two-prefix clause-`4`-`reference` tail rather than the larger
+  than the next repair; newer exact clause-`5` `claim_flat_codomain` and
+  `claim_next_codomain` follow-ons on that same two-prefix
+  clause-`4`-`reference` tail are now also pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_flat_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control`
+  and
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_next_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control`:
+  each lands only `DCT 103 / 8 / 4355`, narrows the clean wall only to
+  `551`, cuts zero-admitted capture only to `2265`, shrinks that same branch
+  only to clause-`4` `33 / 26` / `59`, and still widens the `small_cluster`
+  to `3156 / 526 / 526 / 0`; the two probes are numerically symmetric and
+  merely split the older clause-`4` `reference`-sheet tradeoff into its two
+  exact clause-`5` claim families, so that clause-`4` `reference`
+  remaining-three tail is now exhausted as a cleaner local repair target; the
+  next operational move is therefore no longer another clause-`5` tail probe
+  but to step back up to the broader dominant clause-`0` / clause-`1`
+  claim surface outside that exhausted tail rather than the larger
   clause-`4` `claim_next_bridge` half, another rerun setup pass, or a
   step-`1`-first theory slice; a third local exploratory
   clause-`3` `anchor-11` exact-argument widening onto the broader
@@ -794,10 +807,19 @@ Focus on:
   sheet, together with their exact `18` zero-admitted clause-`5`
   continuations. The newer exact clause-`5` `reference` follow-on on that
   same tail is now also pinned as a neutral control because it leaves the
-  whole `4331 / 553 / 2271` surface unchanged, so the next operational slice
-  is now the still-closed clause-`5` `claim_flat_codomain` or
-  `claim_next_codomain` cell on that two-prefix tail rather than the larger
-  clause-`4` `claim_next_bridge` half or the full reopening
+  whole `4331 / 553 / 2271` surface unchanged. Newer exact clause-`5`
+  `claim_flat_codomain` and `claim_next_codomain` follow-ons on that same
+  two-prefix tail are now also pinned as symmetric smaller tradeoff controls:
+  each lands only `4355 / 551 / 2265`, shrinks that same branch only to
+  clause-`4` `33 / 26` / `59`, and still widens the `small_cluster` to
+  `3156 / 526 / 526 / 0`. Together they merely split the older clause-`4`
+  `reference`-sheet tradeoff into its two exact clause-`5` claim families, so
+  the clause-`4` `reference` remaining-three tail is now exhausted as a
+  cleaner local repair target. The next operational slice is therefore no
+  longer another clause-`5` tail probe but to step back up to the broader
+  dominant clause-`0` / clause-`1` claim surface outside that exhausted tail
+  rather than the larger clause-`4` `claim_next_bridge` half or the full
+  reopening
 - treating the two reverted clause-`1` side-pocket broadenings as negative
   controls only:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
@@ -832,7 +854,12 @@ Focus on:
   reopening those side pockets directly is still too broad, and the newer
   `reference + demo_flat_codomain` tradeoff control shows that the next
   landed repair should isolate its escaping `16` captures without taking the
-  accompanying `small_cluster` reopening
+  accompanying `small_cluster` reopening; the exact clause-`5`
+  `reference` tail cell is already neutral, the exact clause-`5`
+  `claim_flat_codomain` and `claim_next_codomain` tail cells are now pinned
+  as symmetric smaller tradeoff controls at `4355 / 551 / 2265`, and together
+  they merely decompose the older clause-`4` `reference`-sheet tradeoff, so
+  the next honest slice is no longer another clause-`5` tail probe
 - treating the remaining step-`15` `small_cluster` incumbent surface as a
   landed local relief rather than the live blocker:
   the old summary-stage same-primary `103 / 8` bit-cost spread is now closed,

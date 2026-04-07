@@ -194,10 +194,35 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
   - the exact clause-`5` `reference` follow-on on that tail is already part
     of the current canonical surface, so it is not itself a remaining
     checklist target
-  - the next honest slice should therefore work on the still-closed
-    clause-`5` `claim_flat_codomain` or `claim_next_codomain` cells on that
-    narrow clause-`4` `reference` tail rather than rerunning first or
-    reopening broader clause-`4` / clause-`5` surfaces
+- The two exact clause-`5` single-family probes on that same clause-`4`
+  `reference` tail are now explicit too:
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_flat_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control`
+    and
+    `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_next_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control`
+  - each lifts local step `15` generated breadth only to `4355`
+  - each narrows the clean partial-prefix wall only to `551` and
+    zero-admitted capture only to `2265`
+  - each shrinks the larger mismatch `1` `reference + demo_flat_codomain`
+    branch only to clause-`4` `33 / 26` / `59`
+  - each keeps the isolated `single` pocket and residual `3` incumbent prunes
+    unchanged
+  - but each still widens `small_cluster` to `3156 / 526 / 526 / 0`, so each
+    is also only a smaller tradeoff control rather than the landed repair
+  - the bridge grids now show the two probes are numerically symmetric:
+    each reopens only one exact clause-`5` claim family on each claim
+    clause-`2` sheet while the sibling claim family stays at the higher
+    four-capture level
+- The clause-`4` `reference` remaining-three tail is therefore now exhausted
+  as a cleaner local repair target:
+  - the exact clause-`5` `reference` cell was already neutral on the current
+    canonical surface
+  - the two exact clause-`5` claim-family probes are only the two smaller
+    halves of the already-pinned clause-`4` `reference`-sheet tradeoff at
+    `4379 / 549 / 2259`
+  - the next honest slice should therefore step back up to the broader
+    dominant clause-`0` / clause-`1` claim surface outside this exhausted
+    tail rather than spend another turn on clause-`5` tail reopenings or
+    rerun first
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
