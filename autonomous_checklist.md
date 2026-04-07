@@ -132,13 +132,29 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     at the full `3 / 3 / 3` plus `2 / 2 / 2` split, while the sibling
     `claim_flat_domain` sheet stayed higher at `21` and the `reference`
     sheet stayed at `15`
-- The two exact claim clause-`2` sheet probes are now symmetric:
+- A combined exact clause-`2` claim-variant pair tradeoff control is now
+  explicit too:
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_stays_a_tradeoff_control`
+  - it lifted local step `15` generated breadth to `4523`
+  - it narrowed the clean partial-prefix wall to `537` and zero-admitted
+    capture to `2223`
+  - it shrank the mismatch `1` `reference + demo_flat_codomain` branch from
+    `61` captured prefixes on clause-`4` `33 / 28` down to
+    clause-`4` `27 / 18` / `45`
+  - it kept the isolated `single` pocket and residual `3` incumbent prunes
+    unchanged
+  - but it still widened `small_cluster` to `3324 / 554 / 554 / 0`, so it is
+    also not the landed repair
+  - it exactly reproduced the broader live-claim-bridge tradeoff control:
+    both claim clause-`2` sheets dropped to the `15`-capture floor, while the
+    `reference` sheet was already sitting there
+- The clause-`2` tradeoff probes are now exhausted as a narrowing path:
   - the `reference` clause-`2` sheet is already at the `15`-capture floor
-  - the remaining gap to the full `45`-capture tradeoff is the shared
-    `21 -> 15` residual on whichever claim clause-`2` sheet stays closed
-  - the next honest slice should therefore isolate the combined exact
-    claim-variant clause-`2` pair before touching the larger clause-`4`
-    `claim_next_bridge` side
+  - reopening both claim sheets together just reproduces the broader
+    `4523 / 537 / 2223` tradeoff surface with the same
+    `3324 / 554 / 554 / 0` `small_cluster` regression
+  - the next honest slice should therefore move to the larger clause-`4`
+    `claim_next_bridge` side on that same combined claim-pair surface
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:

@@ -86,10 +86,15 @@ Treat these as current repo truths:
   `claim_flat_codomain`, `claim_next_codomain`, and `reference`; the
   clause-`2` split keeps the pressure on the two current claim variants at
   `15 / 15 / 12` or `23 / 23 / 15` rather than on a hidden demo-only
-  clause-`2` reopening, so the next landed repair should start by isolating
-  one exact `15`-count clause-`2` sheet on that narrower
-  `reference + demo_flat_codomain` branch rather than with another rerun
-  setup pass or a step-`1`-first theory slice; the canonical
+  clause-`2` reopening; the newer exact clause-`2` single-sheet probes plus
+  the newer combined claim-variant pair probe now show that the
+  clause-`2`-only narrowing on that branch is exhausted because the full
+  pair simply reproduces the broader `4523 / 537 / 2223` tradeoff with the
+  same `3324 / 554 / 554 / 0` `small_cluster` regression, so the next
+  landed repair should move one layer lower to the larger clause-`4`
+  `claim_next_bridge` side on that same combined claim-pair surface rather
+  than with another rerun setup pass or a step-`1`-first theory slice; the
+  canonical
   `v11` certificate plus the frozen `step-15-live.ndjson` provenance are now
   pinned by
   `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
@@ -186,10 +191,17 @@ Treat these as current repo truths:
   plus the matching connectivity override tests: it lands the same
   `DCT 103 / 8 / 4412`, `544`, `2250`, and clause-`4` `30 / 21` / `51`
   surface with the two claim clause-`2` sheets swapped, so the `reference`
-  clause-`2` sheet is now known to already sit at the `15`-capture floor and
-  the next honest slice should isolate the shared `21 -> 15` residual on the
-  combined exact claim-variant clause-`2` pair rather than another
-  clause-`4` `reference`-sheet-only reopening; a third local exploratory
+  clause-`2` sheet is now known to already sit at the `15`-capture floor; a
+  newer combined exact clause-`2` claim-variant pair probe is now also
+  pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_stays_a_tradeoff_control`
+  plus the matching connectivity override tests: it reproduces the broader
+  `DCT 103 / 8 / 4523`, `537`, `2223`, and clause-`4` `27 / 18` / `45`
+  tradeoff surface exactly and still widens the `small_cluster` to
+  `3324 / 554 / 554 / 0`, so the clause-`2`-only narrowing on that branch is
+  now exhausted and the next honest slice should move to the larger
+  clause-`4` `claim_next_bridge` side rather than another clause-`4`
+  `reference`-sheet-only reopening; a third local exploratory
   clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   was also checked and reverted: it left the clean `553` partial-prefix wall
@@ -743,9 +755,13 @@ Focus on:
   zero-admitted capture to `2250`, shrinks that same branch to
   clause-`4` `30 / 21` / `51`, and still widens the `small_cluster` to
   `3216 / 536 / 536 / 0`; the `reference` clause-`2` sheet is already at the
-  `15`-capture floor, so the next landed repair should isolate the shared
-  `21 -> 15` residual on the combined exact claim-variant clause-`2` pair
-  rather than relanding the whole reopening
+  `15`-capture floor, and the newer combined exact claim-variant clause-`2`
+  pair probe now shows that reopening both claim sheets together simply
+  reproduces the broader `4523 / 537 / 2223` tradeoff with the same
+  `3324 / 554 / 554 / 0` `small_cluster` regression, so the next landed
+  repair should move to the larger clause-`4` `claim_next_bridge` side on
+  that same combined claim-pair surface rather than relanding the whole
+  reopening
 - treating the two reverted clause-`1` side-pocket broadenings as negative
   controls only:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the

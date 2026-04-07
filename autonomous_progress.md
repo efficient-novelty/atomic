@@ -262,9 +262,32 @@ Until that exists, wording stays at `bounded live recovery`.
   - so it is also only a tradeoff control rather than the landed repair, but
     it now shows that the two exact claim clause-`2` sheets are numerically
     symmetric while the `reference` sheet is already at the `15`-capture
-    floor; the next honest slice should therefore isolate the shared residual
-    `21 -> 15` gap on the combined claim-variant clause-`2` pair before
-    touching the larger clause-`4` `claim_next_bridge` side again
+    floor
+- A combined exact clause-`2` claim-variant pair reopening on that same
+  `reference + demo_flat_codomain` branch was then checked under a fifth
+  scoped connectivity-only override and is now pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_stays_a_tradeoff_control`
+  plus the matching connectivity override tests:
+  - it broadens that same branch only while clause `2` stays on the combined
+    exact `claim_flat_domain` plus `claim_sharp_codomain` pair and clauses
+    `4` and `5` stay on the live claim bridge families
+  - it lifts the local late surface from `4331` to `4523`
+  - it narrows the clean partial-prefix wall from `553` to `537` and the
+    zero-admitted exact-prune capture from `2271` to `2223`
+  - it shrinks the larger mismatch-`1`
+    `reference + demo_flat_codomain` branch from `61` captured prefixes on
+    clause-`4` `33 / 28` down to clause-`4` `27 / 18` / `45`
+  - it keeps the isolated `single` pocket and the residual `3`
+    incumbent-dominance prunes unchanged
+  - but it still widens the `small_cluster` from `3132 / 522 / 522 / 0` to
+    `3324 / 554 / 554 / 0`
+  - its reopened bridge cells exactly match the broader live-claim-bridge
+    tradeoff control: both claim clause-`2` sheets drop to the `15`-capture
+    floor, while the `reference` sheet was already sitting there
+  - so it is also only a tradeoff control rather than the landed repair; the
+    clause-`2`-only narrowing on that mismatch-`1` branch is now exhausted,
+    and the next honest slice should move to the larger clause-`4`
+    `claim_next_bridge` side on that same combined claim-pair surface
 - A local clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   was also checked and reverted:
@@ -367,6 +390,10 @@ Until that exists, wording stays at `bounded live recovery`.
   on that same `reference + demo_flat_codomain` branch first; that symmetric
   probe landed the same `4412 / 544 / 2250` surface and still widened the
   `small_cluster` to `3216 / 536 / 536 / 0`.
+- Do not reland the combined exact clause-`2` claim-variant pair reopening
+  on that same `reference + demo_flat_codomain` branch first; that probe
+  simply reproduced the broader `4523 / 537 / 2223` tradeoff surface and
+  still widened the `small_cluster` to `3324 / 554 / 554 / 0`.
 - Do not reland the raw clause-`3` `anchor-11` exact-argument widening onto
   the broader clause-`0` / clause-`1` claim surface while clause `2` stays
   `reference`; that probe left the `553` wall unchanged and reopened `72`
@@ -406,6 +433,7 @@ Until that exists, wording stays at `bounded live recovery`.
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_reference_sheet_stays_a_tradeoff_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_flat_sheet_stays_a_tradeoff_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_stays_a_tradeoff_control`
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_stays_a_tradeoff_control`
   - `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
@@ -437,6 +465,10 @@ Until that exists, wording stays at `bounded live recovery`.
   - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
   - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_outside_exact_claim_sharp_clause_two_sheet_even_under_override`
   - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_reference_terminal_only_even_under_override`
+  - `connectivity_accepts_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_under_override`
+  - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
+  - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_outside_exact_claim_pair_clause_two_sheets_even_under_override`
+  - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_reference_terminal_only_even_under_override`
   - `connectivity_accepts_clause_five_demo_sharp_domain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
   - `connectivity_accepts_clause_five_demo_flat_codomain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
   - `connectivity_keeps_clause_five_remaining_two_mismatch_one_bridge_slice_outside_historical_reanchor_even_under_override`
@@ -480,15 +512,18 @@ breadth to `4412`, narrows the clean wall to `544`, cuts zero-admitted
 capture to `2250`, shrinks that same branch to clause-`4` `30 / 21` / `51`,
 and still widens the `small_cluster` to `3216 / 536 / 536 / 0`, with the two
 probes differing only in which claim clause-`2` sheet drops to the
-`15`-capture floor while the sibling stays at `21`. Together they now show
-that the `reference` clause-`2` sheet is already sitting at that same
-`15`-capture floor, so the next live slice should isolate the shared
-six-capture residual on the combined claim-variant clause-`2` pair rather
-than another clause-`4` `reference`-sheet-only reopening,
-and should stay narrower than another clause-`3` widen-first probe, the
-reverted clause-`1` broadenings at `4466 / 626`, the claim-safe
-clause-`4` reopenings at `4587 / 585` or `4843 / 617`, the broader
-clause-`5` reopening at `4779 / 585`, or the narrower mismatch-`0`
-clause-`5` reopening at `4691 / 589`. Rerun only after the new local slice
-is green, and keep step `1` explicit unless that next stored bundle changes
-it directly.
+`15`-capture floor while the sibling stays at `21`. The newer combined exact
+claim-variant clause-`2` pair probe is now pinned too: it reproduces the full
+`4523 / 537 / 2223` tradeoff surface exactly, drops both claim sheets to the
+same `15`-capture floor, and still widens the `small_cluster` to
+`3324 / 554 / 554 / 0`. That exhausts the clause-`2`-only narrowing on this
+`reference + demo_flat_codomain` branch. The next live slice should therefore
+move one layer lower to the larger clause-`4` `claim_next_bridge` side on
+that same combined claim-pair surface, rather than another clause-`4`
+`reference`-sheet-only reopening, another clause-`3` widen-first probe, the
+reverted clause-`1` broadenings at `4466 / 626`, the claim-safe clause-`4`
+reopenings at `4587 / 585` or `4843 / 617`, the broader clause-`5`
+reopening at `4779 / 585`, or the narrower mismatch-`0` clause-`5`
+reopening at `4691 / 589`. Rerun only after the new local slice is green,
+and keep step `1` explicit unless that next stored bundle changes it
+directly.

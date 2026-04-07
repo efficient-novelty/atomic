@@ -452,6 +452,29 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_outside_exact_claim_sharp_clause_two_sheet_even_under_override`,
     and
     `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_reference_terminal_only_even_under_override`
+- a newer combined exact clause-`2` claim-variant pair reopening on that same
+  `reference + demo_flat_codomain` branch has now also been checked under a
+  fifth scoped connectivity-only override and pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_stays_a_tradeoff_control`
+  plus the matching connectivity override tests:
+  - the local late chain still accepts `DCT 103 / 8`, and live generated
+    prefixes also lift from `4331` to `4523`
+  - the clean partial-prefix wall also narrows from `553` to `537`, and
+    zero-admitted exact-prune capture also narrows from `2271` to `2223`
+  - the larger mismatch-`1` `reference + demo_flat_codomain` branch also
+    shrinks from clause-`4` `33 / 28` / `61` down to clause-`4`
+    `27 / 18` / `45`
+  - the isolated `single` pocket and the residual `3`
+    incumbent-dominance prunes stay fenced and unchanged
+  - but the `small_cluster` still widens from `3132 / 522 / 522 / 0` to
+    `3324 / 554 / 554 / 0`
+  - the reopened bridge cells now reproduce the broader live-claim-bridge
+    tradeoff exactly: both claim clause-`2` sheets fall to the
+    `15`-capture floor, while the `reference` sheet was already there
+  - so that combined-pair reopening is also only a tradeoff control rather
+    than the next landed repair, and the clause-`2`-only narrowing on that
+    branch is now exhausted before any broader clause-`4` or clause-`5`
+    reopening
 - a newer exploratory clause-`3` `anchor-11` exact-argument widening onto the
   broader clause-`0` / clause-`1` claim surface while clause `2` stayed
   `reference` has now also been checked and reverted:
@@ -805,10 +828,13 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   landed repair should isolate those escaping `16` captures more narrowly;
   the clause-`4` `reference`-sheet probe at `4379 / 549 / 2259` and the newer
   exact clause-`2` `claim_flat_domain` plus `claim_sharp_codomain` sheet
-  probes at `4412 / 544 / 2250` are all now pinned as tradeoff controls, so
-  the next honest slice should isolate the shared `21 -> 15` residual on the
-  combined exact claim-variant clause-`2` pair rather than relanding that
-  whole reopening
+  probes at `4412 / 544 / 2250` are all now pinned as tradeoff controls, and
+  the newer combined exact claim-variant clause-`2` pair probe now shows that
+  reopening both claim sheets together simply reproduces the broader
+  `4523 / 537 / 2223` tradeoff with the same `3324 / 554 / 554 / 0`
+  `small_cluster` regression, so the next honest slice should move to the
+  larger clause-`4` `claim_next_bridge` side on that same combined
+  claim-pair surface rather than relanding that whole reopening
 - both reverted clause-`1` side-pocket broadenings are now explicitly ruled
   out as the next move:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
