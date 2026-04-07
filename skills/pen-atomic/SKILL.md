@@ -218,10 +218,17 @@ Treat these as current repo truths:
   claim clause-`2` sheet while clause-`4` stays `reference`, and one layer
   deeper that same miss is the exact `18` zero-admitted prefixes split evenly
   across clause-`5` `claim_flat_codomain`, `claim_next_codomain`, and
-  `reference`; so the next operational move is that two-prefix
-  clause-`4`-`reference` tail rather than the larger clause-`4`
-  `claim_next_bridge` half, another rerun setup pass, or a step-`1`-first
-  theory slice; a third local exploratory
+  `reference`; a newer exact clause-`5` `reference` follow-on on that same
+  tail is now also pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_neutral_control`
+  and leaves the whole `DCT 103 / 8 / 4331` / `553` / `2271` surface plus the
+  clause-`4` `33 / 28` / `61` branch unchanged, so that exact `reference`
+  cell is already effectively part of the current canonical surface rather
+  than the next repair; the next operational move is now the still-closed
+  clause-`5` `claim_flat_codomain` or `claim_next_codomain` cell on that
+  same two-prefix clause-`4`-`reference` tail rather than the larger
+  clause-`4` `claim_next_bridge` half, another rerun setup pass, or a
+  step-`1`-first theory slice; a third local exploratory
   clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   was also checked and reverted: it left the clean `553` partial-prefix wall
@@ -785,9 +792,12 @@ Focus on:
   exactly the two clause-`4` `reference` remaining-three prefixes on the
   `reference + demo_flat_codomain` surface, one on each claim clause-`2`
   sheet, together with their exact `18` zero-admitted clause-`5`
-  continuations, so that two-prefix tail is now the next operational slice
-  rather than the larger clause-`4` `claim_next_bridge` half or the full
-  reopening
+  continuations. The newer exact clause-`5` `reference` follow-on on that
+  same tail is now also pinned as a neutral control because it leaves the
+  whole `4331 / 553 / 2271` surface unchanged, so the next operational slice
+  is now the still-closed clause-`5` `claim_flat_codomain` or
+  `claim_next_codomain` cell on that two-prefix tail rather than the larger
+  clause-`4` `claim_next_bridge` half or the full reopening
 - treating the two reverted clause-`1` side-pocket broadenings as negative
   controls only:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the

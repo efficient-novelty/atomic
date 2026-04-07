@@ -191,9 +191,13 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     `reference` remaining-three prefixes on the
     `reference + demo_flat_codomain` surface and their exact `18`
     zero-admitted clause-`5` continuations
-  - the next honest slice should therefore work directly on that narrow
-    clause-`4` `reference` tail rather than rerunning first or reopening
-    broader clause-`4` / clause-`5` surfaces
+  - the exact clause-`5` `reference` follow-on on that tail is already part
+    of the current canonical surface, so it is not itself a remaining
+    checklist target
+  - the next honest slice should therefore work on the still-closed
+    clause-`5` `claim_flat_codomain` or `claim_next_codomain` cells on that
+    narrow clause-`4` `reference` tail rather than rerunning first or
+    reopening broader clause-`4` / clause-`5` surfaces
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:

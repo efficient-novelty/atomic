@@ -12452,6 +12452,26 @@ mod tests {
             .collect()
     }
 
+    fn current_claim_step_fifteen_clause_five_reference_on_clause_four_reference_tail_on_clause_two_claim_variant_pair_probe_reference_demo_flat_branch_bridge_family_counts()
+    -> BTreeMap<(&'static str, &'static str, &'static str), usize> {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_clause_two_claim_variant_pair();
+        current_claim_step_fifteen_remaining_two_partial_prefix_bridge_family_counts()
+            .into_iter()
+            .filter_map(
+                |(
+                    (mismatch, clause_zero, clause_one, clause_two, clause_four, clause_five),
+                    count,
+                )| {
+                    (mismatch == Some(1_usize)
+                        && clause_zero == "reference"
+                        && clause_one == "demo_flat_codomain")
+                        .then_some(((clause_two, clause_four, clause_five), count))
+                },
+            )
+            .collect()
+    }
+
     fn current_claim_step_fifteen_partial_prefix_bound_prune_captures_on_exact_claim_variant_pair_tradeoff()
     -> Vec<super::PartialPrefixBoundPruneCapture> {
         let _connectivity_override =
@@ -12490,7 +12510,14 @@ mod tests {
 
     fn current_claim_step_fifteen_prefix_group_delta_label(
         prefix_telescope: &Telescope,
-    ) -> (Option<usize>, &'static str, &'static str, &'static str, &'static str, &'static str) {
+    ) -> (
+        Option<usize>,
+        &'static str,
+        &'static str,
+        &'static str,
+        &'static str,
+        &'static str,
+    ) {
         let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
         let mismatch = prefix_telescope
             .clauses
@@ -12500,12 +12527,16 @@ mod tests {
         let clause_zero = prefix_telescope
             .clauses
             .first()
-            .map(|clause| current_claim_step_fifteen_partial_prefix_clause_zero_one_label(0, clause))
+            .map(|clause| {
+                current_claim_step_fifteen_partial_prefix_clause_zero_one_label(0, clause)
+            })
             .unwrap_or("out_of_scope");
         let clause_one = prefix_telescope
             .clauses
             .get(1)
-            .map(|clause| current_claim_step_fifteen_partial_prefix_clause_zero_one_label(1, clause))
+            .map(|clause| {
+                current_claim_step_fifteen_partial_prefix_clause_zero_one_label(1, clause)
+            })
             .unwrap_or("out_of_scope");
         let clause_two = prefix_telescope
             .clauses
@@ -21194,6 +21225,117 @@ mod tests {
             .into_iter()
             .collect(),
             "one layer deeper, the narrower claim-next-bridge-side probe should miss only the same two remaining-three clause-four-reference prefixes, each now splitting evenly across the three live clause-five families as the exact 18-prefix zero-admitted delta"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_neutral_control()
+     {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_clause_two_claim_variant_pair();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts();
+        let bridge_counts =
+            current_claim_step_fifteen_clause_five_reference_on_clause_four_reference_tail_on_clause_two_claim_variant_pair_probe_reference_demo_flat_branch_bridge_family_counts();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4331);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 553,
+            "reopening only the clause-5 reference cell on the clause-4 reference tail should not move the clean wall; that cell is already part of the current 4331 surface"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the exact clause-5 reference follow-on should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 553);
+        assert_eq!(zero_summary.captured_prefixes, 2271);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3132,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the exact clause-5 reference follow-on should leave the canonical small-cluster surface unchanged"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the exact clause-5 reference follow-on should keep the isolated single pocket fenced"
+        );
+        assert_eq!(
+            pair_counts
+                .get(&(Some(1_usize), "reference", "demo_flat_codomain"))
+                .copied(),
+            Some(61),
+            "the larger reference-plus-demo-flat branch should stay unchanged because the reference clause-five cell is already present on the live surface"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "claim_next_bridge"
+                ))
+                .copied(),
+            Some(33),
+            "the exact clause-5 reference follow-on should leave the dominant clause-4 claim-next-bridge share untouched"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "reference"
+                ))
+                .copied(),
+            Some(28),
+            "the exact clause-5 reference follow-on should also leave the companion clause-4 reference share untouched"
+        );
+        assert_eq!(
+            bridge_counts.get(&("claim_flat_domain", "reference", "reference")),
+            Some(&3_usize),
+            "the claim-flat clause-two sheet should still already carry the clause-5 reference cell on the live surface"
+        );
+        assert_eq!(
+            bridge_counts.get(&("claim_sharp_codomain", "reference", "reference")),
+            Some(&3_usize),
+            "the claim-sharp clause-two sheet should also already carry that same clause-5 reference cell"
         );
     }
 

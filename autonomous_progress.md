@@ -327,6 +327,25 @@ Until that exists, wording stays at `bounded live recovery`.
     remaining-three prefixes on the `reference + demo_flat_codomain`
     surface rather than the already-frozen `45`-capture mismatch-`1`
     bridge grid or the larger clause-`4` `claim_next_bridge` half
+- A narrower exact clause-`5` `reference` follow-on on that same
+  clause-`4` `reference` tail was then checked under a seventh scoped
+  connectivity-only override and is now pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_neutral_control`
+  plus the matching connectivity override tests:
+  - it broadens only the exact claim-pair clause-`4` `reference` tail through
+    clause-`5` `reference`
+  - but the local late surface stays pinned at `4331`
+  - the clean partial-prefix wall stays pinned at `553`
+  - zero-admitted exact-prune capture stays pinned at `2271`
+  - the larger mismatch-`1` `reference + demo_flat_codomain` branch stays
+    pinned at clause-`4` `33 / 28` / `61`
+  - the `small_cluster` and the isolated `single` pocket both stay unchanged
+    at `3132 / 522 / 522 / 0` and the fenced `1 + 3` split
+  - so that exact clause-`5` `reference` cell is already effectively part of
+    the current canonical `4331` surface rather than a new repair; the next
+    honest slice is now the still-closed clause-`5`
+    `claim_flat_codomain` or `claim_next_codomain` cells on that same
+    clause-`4` `reference` tail
 - A local clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   was also checked and reverted:
@@ -440,6 +459,10 @@ Until that exists, wording stays at `bounded live recovery`.
   to `3252 / 542 / 542 / 0`, and the newer delta freeze now shows the
   remaining miss sits on the narrower clause-`4` `reference`
   remaining-three tail instead.
+- Do not spend another turn on the exact clause-`5` `reference` follow-on on
+  that same clause-`4` `reference` tail first; that probe now stays pinned as
+  a neutral control because it leaves `4331 / 553 / 2271` and the same
+  clause-`4` `33 / 28` / `61` branch unchanged.
 - Do not reland the raw clause-`3` `anchor-11` exact-argument widening onto
   the broader clause-`0` / clause-`1` claim surface while clause `2` stays
   `reference`; that probe left the `553` wall unchanged and reopened `72`
@@ -482,6 +505,7 @@ Until that exists, wording stays at `bounded live recovery`.
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_stays_a_tradeoff_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_variant_pair_stays_a_tradeoff_control`
   - `current_claim_step_fifteen_exact_claim_variant_pair_tradeoff_delta_outside_the_claim_next_bridge_side_probe_lives_on_two_clause_four_reference_remaining_three_prefixes`
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_neutral_control`
   - `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
@@ -522,6 +546,11 @@ Until that exists, wording stays at `bounded live recovery`.
   - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_outside_exact_claim_pair_clause_two_sheets_even_under_claim_next_bridge_side_override`
   - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_reference_sheet_even_under_claim_next_bridge_side_override`
   - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_variant_pair_reference_terminal_only_even_under_override`
+  - `connectivity_accepts_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_exact_claim_variant_pair_under_override`
+  - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_exact_claim_variant_pair_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override`
+  - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_outside_exact_claim_pair_clause_two_sheets_even_under_clause_five_reference_on_clause_four_reference_tail_override`
+  - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_families_closed_on_clause_four_reference_tail_even_under_override`
+  - `connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_exact_claim_variant_pair_reference_terminal_only_even_under_override`
   - `connectivity_accepts_clause_five_demo_sharp_domain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
   - `connectivity_accepts_clause_five_demo_flat_codomain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
   - `connectivity_keeps_clause_five_remaining_two_mismatch_one_bridge_slice_outside_historical_reanchor_even_under_override`
@@ -552,7 +581,11 @@ still over-prunes exactly two remaining-three prefixes on the
 clause-`2` sheet while clause `4` stays `reference`; one layer deeper, that
 same off-branch difference is the exact `18` zero-admitted prefixes split
 evenly across clause `5` `claim_flat_codomain`, `claim_next_codomain`, and
-`reference`. So the next local slice should work directly on those two
+`reference`. The newly pinned exact clause-`5` `reference` follow-on on that
+tail then leaves the whole `4331 / 553 / 2271` surface unchanged, which means
+that cell is already effectively absorbed by the current canonical surface.
+So the next local slice should now work directly on the still-closed
+clause-`5` `claim_flat_codomain` or `claim_next_codomain` cells on those two
 clause-`4` `reference` remaining-three prefixes rather than reopening the
 broader `45`-capture mismatch-`1` branch, the larger clause-`4`
 `claim_next_bridge` half, another broad clause-`4` / clause-`5` widening, a

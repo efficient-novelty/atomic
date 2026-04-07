@@ -860,8 +860,12 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   `reference` remaining-three prefixes on the
   `reference + demo_flat_codomain` surface, one on each claim clause-`2`
   sheet, together with their exact `18` zero-admitted clause-`5`
-  continuations, so that two-prefix tail is now the next honest slice rather
-  than the larger clause-`4` `claim_next_bridge` half or the full reopening
+  continuations. The newer exact clause-`5` `reference` follow-on on that
+  same tail is now also pinned as a neutral control because it leaves the
+  whole `4331 / 553 / 2271` surface unchanged, so the next honest slice is
+  now the still-closed clause-`5` `claim_flat_codomain` or
+  `claim_next_codomain` cell on that two-prefix tail rather than the larger
+  clause-`4` `claim_next_bridge` half or the full reopening
 - both reverted clause-`1` side-pocket broadenings are now explicitly ruled
   out as the next move:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
