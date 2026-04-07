@@ -199,9 +199,18 @@ Treat these as current repo truths:
   `DCT 103 / 8 / 4523`, `537`, `2223`, and clause-`4` `27 / 18` / `45`
   tradeoff surface exactly and still widens the `small_cluster` to
   `3324 / 554 / 554 / 0`, so the clause-`2`-only narrowing on that branch is
-  now exhausted and the next honest slice should move to the larger
-  clause-`4` `claim_next_bridge` side rather than another clause-`4`
-  `reference`-sheet-only reopening; a third local exploratory
+  now exhausted; a newer exact clause-`4` `claim_next_bridge`-side probe on
+  that same combined claim-pair surface is now also pinned by
+  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_variant_pair_stays_a_tradeoff_control`
+  plus the matching connectivity override tests: it lands at
+  `DCT 103 / 8 / 4445`, narrows the clean wall to `539`, cuts
+  zero-admitted capture to `2241`, and widens the `small_cluster` only to
+  `3252 / 542 / 542 / 0` while keeping the isolated `single` pocket and the
+  residual `3` incumbent prunes unchanged; crucially, that narrower probe
+  already reproduces the same captured mismatch-`1`
+  `reference + demo_flat_codomain` branch as the broader exact claim-pair
+  tradeoff, so the remaining delta now lives outside that frozen `45`-capture
+  branch rather than inside the already-executed clause-`4` half; a third local exploratory
   clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   was also checked and reverted: it left the clean `553` partial-prefix wall

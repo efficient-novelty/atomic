@@ -148,13 +148,34 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
   - it exactly reproduced the broader live-claim-bridge tradeoff control:
     both claim clause-`2` sheets dropped to the `15`-capture floor, while the
     `reference` sheet was already sitting there
-- The clause-`2` tradeoff probes are now exhausted as a narrowing path:
+- A narrower exact clause-`4` `claim_next_bridge`-side tradeoff control is
+  now explicit too:
+  - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_variant_pair_stays_a_tradeoff_control`
+  - it lifted local step `15` generated breadth to `4445`
+  - it narrowed the clean partial-prefix wall to `539` and zero-admitted
+    capture to `2241`
+  - it kept the isolated `single` pocket and residual `3` incumbent prunes
+    unchanged
+  - but it still widened `small_cluster` to `3252 / 542 / 542 / 0`, so it is
+    also not the landed repair
+  - it already reproduced the same captured mismatch `1`
+    `reference + demo_flat_codomain` branch as the broader exact claim-pair
+    tradeoff at clause-`4` `27 / 18` / `45`, with the same executable
+    per-sheet `3 / 3 / 3` plus `2 / 2 / 2` bridge grid
+- The clause-`2` tradeoff probes are now exhausted, and the first narrower
+  clause-`4` follow-on is pinned too:
   - the `reference` clause-`2` sheet is already at the `15`-capture floor
-  - reopening both claim sheets together just reproduces the broader
-    `4523 / 537 / 2223` tradeoff surface with the same
-    `3324 / 554 / 554 / 0` `small_cluster` regression
-  - the next honest slice should therefore move to the larger clause-`4`
-    `claim_next_bridge` side on that same combined claim-pair surface
+  - reopening both claim sheets together reproduces the broader
+    `4523 / 537 / 2223` tradeoff with a `3324 / 554 / 554 / 0`
+    `small_cluster` regression
+  - reopening only the exact clause-`4` `claim_next_bridge`-side on that
+    same claim-pair surface lands at `4445 / 539 / 2241` with the smaller
+    `3252 / 542 / 542 / 0` `small_cluster` regression while already matching
+    the same captured `45`-prefix mismatch-`1` branch
+  - the next honest slice should therefore localize the remaining delta to
+    the broader claim-pair tradeoff outside that already-captured branch
+    rather than rerunning first or reopening broader clause-`4` / clause-`5`
+    surfaces
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
