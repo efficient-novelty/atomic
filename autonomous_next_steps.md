@@ -143,9 +143,10 @@ Do not start with another rerun setup pass.
     `reference = 2 / 2 / 2` across clause-`5`
     `claim_flat_codomain`, `claim_next_codomain`, and `reference`
   - so the next honest reland can now stay narrower than the whole tradeoff
-    reopening: test one exact `15`-count clause-`2` sheet or the exact
-    `18`-count clause-`4` `reference` sheet before touching the larger
-    `27`-count clause-`4` `claim_next_bridge` side
+    reopening: the later exact clause-`2` single-sheet probes, the combined
+    claim-pair probe, and the narrower clause-`4` follow-on can all stay
+    inside that branch until the remaining off-branch delta is frozen on the
+    clause-`4` `reference` remaining-three tail
 - A narrower clause-`4` `reference`-sheet reopening on that same
   `reference + demo_flat_codomain` branch has now also been checked under a
   second scoped connectivity-only override and pinned by
@@ -245,10 +246,25 @@ Do not start with another rerun setup pass.
     clause-`4` `27 / 18` / `45`, with the same executable
     `3 / 3 / 3` plus `2 / 2 / 2` bridge grid on each clause-`2` sheet
   - so that narrower reopening is also only a tradeoff control rather than
-    the landed repair, but it now shows that the remaining delta to the
-    broader `4523 / 537 / 2223` tradeoff lives outside that already-captured
-    mismatch-`1` branch rather than inside the frozen `45`-capture bridge
-    grid
+    the landed repair, and a newer executable delta-localization freeze now
+    pins the remaining off-branch difference one layer deeper:
+    `current_claim_step_fifteen_exact_claim_variant_pair_tradeoff_delta_outside_the_claim_next_bridge_side_probe_lives_on_two_clause_four_reference_remaining_three_prefixes`
+  - comparing that narrower probe against the broader exact claim-pair
+    tradeoff, the broader side contributes no unique residual
+    partial-prefix captures or zero-admitted exact-prune prefixes at all
+  - instead the narrower probe alone still keeps exactly two
+    remaining-three partial-prefix captures, both at mismatch-`1` on
+    `reference + demo_flat_codomain`, with clause `2` on
+    `claim_flat_domain` or `claim_sharp_codomain` while clause `4` stays on
+    `reference`
+  - one layer deeper, that same off-branch delta is the exact `18`
+    zero-admitted prefixes: each of those two remaining-three prefixes splits
+    evenly across clause `5` `claim_flat_codomain`,
+    `claim_next_codomain`, and `reference` at `3 / 3 / 3`
+  - so the next honest slice is now the two clause-`4` `reference`
+    remaining-three prefixes on the `reference + demo_flat_codomain`
+    surface rather than the already-frozen `45`-capture mismatch-`1`
+    branch or the larger clause-`4` `claim_next_bridge` half
 - A local clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   has now also been checked and reverted:
@@ -377,7 +393,9 @@ Do not start with another rerun setup pass.
    - but that same probe still widens the `small_cluster` to
      `3324 / 554 / 554 / 0`, so the next landed repair should isolate those
      escaping `16` captures on that branch without relanding the whole
-     reopening
+     reopening; the later exact sheet, claim-pair, and clause-`4`
+     follow-ons now pin that residual down to the narrower
+     clause-`4` `reference` remaining-three tail
    - the newer clause-`4` `reference`-sheet tradeoff control now shows that
      reopening only that smaller side is real but still not enough:
      it lifts local breadth only to `4379`, narrows the clean wall only to
@@ -411,11 +429,22 @@ Do not start with another rerun setup pass.
      broader exact claim-pair tradeoff, including the same executable
      clause-`4` `27 / 18` / `45` split and the same per-sheet
      `3 / 3 / 3` plus `2 / 2 / 2` bridge grid
-   - so the next honest slice is no longer "try the larger clause-`4`
-     `claim_next_bridge` side"; it is to localize the remaining delta between
-     `4445 / 539 / 2241 / 3252:542` and `4523 / 537 / 2223 / 3324:554`
-     outside that already-captured mismatch-`1` branch before any broader
-     clause-`4` or clause-`5` reopening
+   - the newer executable delta freeze
+     `current_claim_step_fifteen_exact_claim_variant_pair_tradeoff_delta_outside_the_claim_next_bridge_side_probe_lives_on_two_clause_four_reference_remaining_three_prefixes`
+     now shows that the broader tradeoff contributes no unique residual
+     captures or exact prunes beyond that narrower probe
+   - instead the narrower probe alone still keeps exactly two
+     remaining-three prefixes on the `reference + demo_flat_codomain`
+     mismatch-`1` surface, one on each claim clause-`2` sheet while
+     clause-`4` stays `reference`
+   - one layer deeper those same two prefixes account for the whole exact
+     off-branch delta: `18` zero-admitted prunes split evenly as `3 / 3 / 3`
+     across clause-`5` `claim_flat_codomain`, `claim_next_codomain`, and
+     `reference` on each sheet
+   - so the next honest slice is no longer generic off-branch localization;
+     it is to test or repair just those two clause-`4` `reference`
+     remaining-three prefixes before any broader clause-`4` or clause-`5`
+     reopening
    - the reverted clause-`3` `anchor-11` widening with clause `2 = reference`
      left that clause-`4` family split unchanged and only reopened
      summary-stage incumbent pressure
@@ -424,11 +453,14 @@ Do not start with another rerun setup pass.
      `585`, and the broader combined clause-`4` reopening widened it further
      to `617`
    - so the next honest slice is still the live clause-`0` / clause-`1`
-     claim surface itself, but now most tightly on the off-branch delta that
-     still separates the narrower `4445 / 539 / 2241 / 3252:542` control
-     from the broader `4523 / 537 / 2223 / 3324:554` tradeoff rather than on
-     another raw clause-`3` widen-first probe, another demo-bridge reland,
-     or a claim-safe clause-`4` reopening
+     claim surface itself, but now at its narrowest executable target:
+     clause-`0` `reference`, clause-`1` `demo_flat_codomain`,
+     clause-`2` `claim_flat_domain` or `claim_sharp_codomain`, and
+     clause-`4` `reference` on the remaining-three tail, followed one layer
+     deeper by clause-`5` `claim_flat_codomain`,
+     `claim_next_codomain`, or `reference`, rather than another raw
+     clause-`3` widen-first probe, another demo-bridge reland, or a
+     claim-safe clause-`4` reopening
 4. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays the canonical `103 / 8`
@@ -451,6 +483,7 @@ Do not start with another rerun setup pass.
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_stays_a_tradeoff_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_stays_a_tradeoff_control`
   - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_variant_pair_stays_a_tradeoff_control`
+  - `current_claim_step_fifteen_exact_claim_variant_pair_tradeoff_delta_outside_the_claim_next_bridge_side_probe_lives_on_two_clause_four_reference_remaining_three_prefixes`
   - `current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
@@ -458,13 +491,13 @@ Do not start with another rerun setup pass.
   - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
-   - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
-   - `current_claim_step_fifteen_zero_admitted_prunes_reduce_to_disconnect_and_trivial_derivability`
-   - `current_claim_step_fifteen_zero_admitted_connectivity_surface_reports_reanchor_prefix_progress`
-   - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
-   - `current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain`
-   - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
-   - `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
+  - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
+  - `current_claim_step_fifteen_zero_admitted_prunes_reduce_to_disconnect_and_trivial_derivability`
+  - `current_claim_step_fifteen_zero_admitted_connectivity_surface_reports_reanchor_prefix_progress`
+  - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
+  - `current_claim_step_fifteen_small_cluster_relief_clears_summary_prunes_while_three_single_bucket_prunes_remain`
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_groups_stay_on_three_fenced_prefix_families`
+  - `current_claim_step_fifteen_residual_single_bucket_incumbent_families_only_keep_reference_terminals_live`
   - `current_claim_step_fifteen_demo_only_side_variants_around_anchor_eleven_pocket_still_fence_unsafe_lifted_terminals`
   - `connectivity_accepts_clause_four_demo_sharp_codomain_on_claim_safe_clause_zero_one_surface_under_override`
   - `connectivity_accepts_clause_four_demo_sharp_bridge_on_claim_safe_clause_zero_one_surface_under_override`
@@ -542,7 +575,8 @@ Do not start with another rerun setup pass.
   bridge pockets were still the dominant slice
 - treating the remaining delta to the broader exact claim-pair tradeoff as if
   it still lived inside the already-captured `45`-prefix mismatch-`1`
-  branch
+  branch instead of the now-frozen two-prefix clause-`4` `reference`
+  remaining-three tail
 - raw position-`0` reland
 - another broad clause-`4` or clause-`5` reopening
 - raw reland of the unsafe lifted `89 / 8` shell

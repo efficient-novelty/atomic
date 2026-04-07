@@ -12452,6 +12452,86 @@ mod tests {
             .collect()
     }
 
+    fn current_claim_step_fifteen_partial_prefix_bound_prune_captures_on_exact_claim_variant_pair_tradeoff()
+    -> Vec<super::PartialPrefixBoundPruneCapture> {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair();
+        super::start_partial_prefix_bound_prune_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        super::finish_partial_prefix_bound_prune_capture()
+    }
+
+    fn current_claim_step_fifteen_partial_prefix_bound_prune_captures_on_exact_claim_variant_pair_claim_next_bridge_side_probe()
+    -> Vec<super::PartialPrefixBoundPruneCapture> {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_variant_pair();
+        super::start_partial_prefix_bound_prune_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        super::finish_partial_prefix_bound_prune_capture()
+    }
+
+    fn current_claim_step_fifteen_pruned_terminal_prefixes_on_exact_claim_variant_pair_tradeoff()
+    -> Vec<OnlinePrefixWorkItem> {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair();
+        super::start_pruned_terminal_prefix_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        super::finish_pruned_terminal_prefix_capture()
+    }
+
+    fn current_claim_step_fifteen_pruned_terminal_prefixes_on_exact_claim_variant_pair_claim_next_bridge_side_probe()
+    -> Vec<OnlinePrefixWorkItem> {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_variant_pair();
+        super::start_pruned_terminal_prefix_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        super::finish_pruned_terminal_prefix_capture()
+    }
+
+    fn current_claim_step_fifteen_prefix_group_delta_label(
+        prefix_telescope: &Telescope,
+    ) -> (Option<usize>, &'static str, &'static str, &'static str, &'static str, &'static str) {
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let mismatch = prefix_telescope
+            .clauses
+            .iter()
+            .zip(reference_prefix.clauses.iter())
+            .position(|(left, right)| left != right);
+        let clause_zero = prefix_telescope
+            .clauses
+            .first()
+            .map(|clause| current_claim_step_fifteen_partial_prefix_clause_zero_one_label(0, clause))
+            .unwrap_or("out_of_scope");
+        let clause_one = prefix_telescope
+            .clauses
+            .get(1)
+            .map(|clause| current_claim_step_fifteen_partial_prefix_clause_zero_one_label(1, clause))
+            .unwrap_or("out_of_scope");
+        let clause_two = prefix_telescope
+            .clauses
+            .get(2)
+            .map(current_claim_step_fifteen_partial_prefix_clause_two_label)
+            .unwrap_or("out_of_scope");
+        let clause_four = prefix_telescope
+            .clauses
+            .get(4)
+            .map(current_claim_step_fifteen_partial_prefix_clause_four_label)
+            .unwrap_or("out_of_scope");
+        let clause_five = prefix_telescope
+            .clauses
+            .get(5)
+            .map(current_claim_step_fifteen_partial_prefix_clause_five_label)
+            .unwrap_or("out_of_scope");
+        (
+            mismatch,
+            clause_zero,
+            clause_one,
+            clause_two,
+            clause_four,
+            clause_five,
+        )
+    }
+
     fn current_claim_step_fifteen_incumbent_prune_summary() -> LateStepIncumbentPruneSummary {
         let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
             14,
@@ -20896,6 +20976,224 @@ mod tests {
             .into_iter()
             .collect(),
             "this narrower probe should already reproduce the full 45-capture branch grid from the broader exact claim-pair tradeoff, which shows that the remaining delta now lives outside that captured mismatch-1 bridge branch"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_claim_variant_pair_tradeoff_delta_outside_the_claim_next_bridge_side_probe_lives_on_two_clause_four_reference_remaining_three_prefixes()
+     {
+        let broad_captures =
+            current_claim_step_fifteen_partial_prefix_bound_prune_captures_on_exact_claim_variant_pair_tradeoff();
+        let narrow_captures =
+            current_claim_step_fifteen_partial_prefix_bound_prune_captures_on_exact_claim_variant_pair_claim_next_bridge_side_probe();
+        let broad_capture_keys = broad_captures
+            .iter()
+            .map(|capture| {
+                serde_json::to_string(&capture.prefix_telescope)
+                    .expect("captured prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let narrow_capture_keys = narrow_captures
+            .iter()
+            .map(|capture| {
+                serde_json::to_string(&capture.prefix_telescope)
+                    .expect("captured prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let broad_only_capture_labels = broad_captures
+            .iter()
+            .filter(|capture| {
+                !narrow_capture_keys.contains(
+                    &serde_json::to_string(&capture.prefix_telescope)
+                        .expect("captured prefix should serialize"),
+                )
+            })
+            .fold(BTreeMap::new(), |mut summary, capture| {
+                *summary
+                    .entry(current_claim_step_fifteen_prefix_group_delta_label(
+                        &capture.prefix_telescope,
+                    ))
+                    .or_insert(0usize) += 1;
+                summary
+            });
+        let narrow_only_capture_labels = narrow_captures
+            .iter()
+            .filter(|capture| {
+                !broad_capture_keys.contains(
+                    &serde_json::to_string(&capture.prefix_telescope)
+                        .expect("captured prefix should serialize"),
+                )
+            })
+            .fold(BTreeMap::new(), |mut summary, capture| {
+                *summary
+                    .entry(current_claim_step_fifteen_prefix_group_delta_label(
+                        &capture.prefix_telescope,
+                    ))
+                    .or_insert(0usize) += 1;
+                summary
+            });
+        let broad_pruned_prefixes =
+            current_claim_step_fifteen_pruned_terminal_prefixes_on_exact_claim_variant_pair_tradeoff();
+        let narrow_pruned_prefixes =
+            current_claim_step_fifteen_pruned_terminal_prefixes_on_exact_claim_variant_pair_claim_next_bridge_side_probe();
+        let broad_pruned_keys = broad_pruned_prefixes
+            .iter()
+            .map(|work_item| {
+                serde_json::to_string(&work_item.prefix_telescope)
+                    .expect("captured prune prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let narrow_pruned_keys = narrow_pruned_prefixes
+            .iter()
+            .map(|work_item| {
+                serde_json::to_string(&work_item.prefix_telescope)
+                    .expect("captured prune prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let broad_only_pruned_labels = broad_pruned_prefixes
+            .iter()
+            .filter(|work_item| {
+                !narrow_pruned_keys.contains(
+                    &serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize"),
+                )
+            })
+            .fold(BTreeMap::new(), |mut summary, work_item| {
+                *summary
+                    .entry(current_claim_step_fifteen_prefix_group_delta_label(
+                        &work_item.prefix_telescope,
+                    ))
+                    .or_insert(0usize) += 1;
+                summary
+            });
+        let narrow_only_pruned_labels = narrow_pruned_prefixes
+            .iter()
+            .filter(|work_item| {
+                !broad_pruned_keys.contains(
+                    &serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize"),
+                )
+            })
+            .fold(BTreeMap::new(), |mut summary, work_item| {
+                *summary
+                    .entry(current_claim_step_fifteen_prefix_group_delta_label(
+                        &work_item.prefix_telescope,
+                    ))
+                    .or_insert(0usize) += 1;
+                summary
+            });
+
+        assert!(
+            broad_only_capture_labels.is_empty(),
+            "the broader exact claim-pair tradeoff should not introduce any partial-prefix captures that the narrower claim-next-bridge-side probe does not already keep"
+        );
+        assert_eq!(
+            narrow_only_capture_labels,
+            [
+                (
+                    (
+                        Some(1_usize),
+                        "reference",
+                        "demo_flat_codomain",
+                        "claim_flat_domain",
+                        "reference",
+                        "out_of_scope",
+                    ),
+                    1_usize,
+                ),
+                (
+                    (
+                        Some(1_usize),
+                        "reference",
+                        "demo_flat_codomain",
+                        "claim_sharp_codomain",
+                        "reference",
+                        "out_of_scope",
+                    ),
+                    1,
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "the narrower claim-next-bridge-side probe should miss the broader exact claim-pair tradeoff only on two remaining-three prefixes: the two claim clause-two sheets while clause four still stays on the reference family"
+        );
+        assert!(
+            broad_only_pruned_labels.is_empty(),
+            "the broader exact claim-pair tradeoff should not keep any zero-admitted exact-prune prefixes that the narrower claim-next-bridge-side probe alone uniquely drops"
+        );
+        assert_eq!(
+            narrow_only_pruned_labels,
+            [
+                (
+                    (
+                        Some(1_usize),
+                        "reference",
+                        "demo_flat_codomain",
+                        "claim_flat_domain",
+                        "reference",
+                        "claim_flat_codomain",
+                    ),
+                    3_usize,
+                ),
+                (
+                    (
+                        Some(1_usize),
+                        "reference",
+                        "demo_flat_codomain",
+                        "claim_flat_domain",
+                        "reference",
+                        "claim_next_codomain",
+                    ),
+                    3,
+                ),
+                (
+                    (
+                        Some(1_usize),
+                        "reference",
+                        "demo_flat_codomain",
+                        "claim_flat_domain",
+                        "reference",
+                        "reference",
+                    ),
+                    3,
+                ),
+                (
+                    (
+                        Some(1_usize),
+                        "reference",
+                        "demo_flat_codomain",
+                        "claim_sharp_codomain",
+                        "reference",
+                        "claim_flat_codomain",
+                    ),
+                    3,
+                ),
+                (
+                    (
+                        Some(1_usize),
+                        "reference",
+                        "demo_flat_codomain",
+                        "claim_sharp_codomain",
+                        "reference",
+                        "claim_next_codomain",
+                    ),
+                    3,
+                ),
+                (
+                    (
+                        Some(1_usize),
+                        "reference",
+                        "demo_flat_codomain",
+                        "claim_sharp_codomain",
+                        "reference",
+                        "reference",
+                    ),
+                    3,
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "one layer deeper, the narrower claim-next-bridge-side probe should miss only the same two remaining-three clause-four-reference prefixes, each now splitting evenly across the three live clause-five families as the exact 18-prefix zero-admitted delta"
         );
     }
 

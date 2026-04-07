@@ -484,9 +484,18 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     the residual `3` incumbent prunes unchanged; crucially, that narrower
     probe already reproduces the same captured mismatch-`1`
     `reference + demo_flat_codomain` branch as the broader exact claim-pair
-    tradeoff, so the remaining delta now lives outside that frozen
-    `45`-capture branch rather than inside the already-executed clause-`4`
-    half
+    tradeoff, and a newer executable
+    `current_claim_step_fifteen_exact_claim_variant_pair_tradeoff_delta_outside_the_claim_next_bridge_side_probe_lives_on_two_clause_four_reference_remaining_three_prefixes`
+    regression now shows that the broader tradeoff contributes no unique
+    residual captures or exact prunes beyond that narrower probe: the
+    remaining off-branch miss is exactly two mismatch-`1`
+    `reference + demo_flat_codomain` remaining-three prefixes, one on each
+    claim clause-`2` sheet while clause-`4` stays `reference`, and one layer
+    deeper that same miss is the exact `18` zero-admitted prefixes split
+    evenly across clause-`5` `claim_flat_codomain`,
+    `claim_next_codomain`, and `reference`; so the next operational move is
+    that two-prefix clause-`4`-`reference` tail rather than the larger
+    clause-`4` `claim_next_bridge` half
 - a newer exploratory clause-`3` `anchor-11` exact-argument widening onto the
   broader clause-`0` / clause-`1` claim surface while clause `2` stayed
   `reference` has now also been checked and reverted:
@@ -844,9 +853,15 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   the newer combined exact claim-variant clause-`2` pair probe now shows that
   reopening both claim sheets together simply reproduces the broader
   `4523 / 537 / 2223` tradeoff with the same `3324 / 554 / 554 / 0`
-  `small_cluster` regression, so the next honest slice should move to the
-  larger clause-`4` `claim_next_bridge` side on that same combined
-  claim-pair surface rather than relanding that whole reopening
+  `small_cluster` regression, while the newer exact clause-`4`
+  `claim_next_bridge`-side probe is already pinned at
+  `4445 / 539 / 2241 / 3252:542`; the newer executable delta freeze now
+  shows that the remaining off-branch miss is exactly the two clause-`4`
+  `reference` remaining-three prefixes on the
+  `reference + demo_flat_codomain` surface, one on each claim clause-`2`
+  sheet, together with their exact `18` zero-admitted clause-`5`
+  continuations, so that two-prefix tail is now the next honest slice rather
+  than the larger clause-`4` `claim_next_bridge` half or the full reopening
 - both reverted clause-`1` side-pocket broadenings are now explicitly ruled
   out as the next move:
   the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
@@ -935,16 +950,30 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    zero-admitted capture to `2223`, while keeping the isolated `single`
    pocket and residual `3` prunes fixed. But it also widens the
    `small_cluster` to `3324 / 554 / 554 / 0`, so it is only a tradeoff
-   control; the next landed repair should isolate those escaping `16`
-   captures on that branch without relanding the whole reopening. The newer
+   control; the later exact sheet, claim-pair, and clause-`4` follow-ons now
+   pin that residual down to the narrower clause-`4` `reference`
+   remaining-three tail. The newer
    clause-`4` `reference`-sheet tradeoff then shows that reopening only that
    smaller side is real but still not enough: it lifts local breadth only to
    `4379`, narrows the clean wall only to `549`, cuts zero-admitted capture
    only to `2259`, shrinks the same branch only to clause-`4` `33 / 24` /
    `57`, and still widens the `small_cluster` to `3180 / 530 / 530 / 0`.
-   So the next landed repair should now move to one exact `15`-count
-   clause-`2` sheet before touching the larger clause-`4`
-   `claim_next_bridge` side again.
+   The newer exact clause-`2` single-sheet probes, the combined exact
+   claim-pair probe, and the narrower exact clause-`4`
+   `claim_next_bridge`-side probe are now all pinned too, and the newer
+   executable delta freeze
+   `current_claim_step_fifteen_exact_claim_variant_pair_tradeoff_delta_outside_the_claim_next_bridge_side_probe_lives_on_two_clause_four_reference_remaining_three_prefixes`
+   now shows that the broader tradeoff contributes no unique residual
+   captures or exact prunes beyond that narrower probe. Instead, the narrower
+   probe alone still keeps exactly two remaining-three prefixes on the
+   `reference + demo_flat_codomain` mismatch-`1` surface, one on each claim
+   clause-`2` sheet while clause-`4` stays `reference`; one layer deeper,
+   those same two prefixes account for the whole exact off-branch delta:
+   `18` zero-admitted prunes split evenly as `3 / 3 / 3` across clause-`5`
+   `claim_flat_codomain`, `claim_next_codomain`, and `reference` on each
+   sheet. So the next landed repair should now work directly on that
+   two-prefix clause-`4` `reference` remaining-three tail rather than the
+   larger clause-`4` `claim_next_bridge` side again.
    The reverted clause-`3` `anchor-11` exact-argument widening onto the
    broader clause-`0` / clause-`1` claim surface while clause `2` stayed
    `reference` left that clean `553` wall and the executable nine-pair split

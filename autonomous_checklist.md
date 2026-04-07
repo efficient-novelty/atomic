@@ -162,8 +162,23 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     `reference + demo_flat_codomain` branch as the broader exact claim-pair
     tradeoff at clause-`4` `27 / 18` / `45`, with the same executable
     per-sheet `3 / 3 / 3` plus `2 / 2 / 2` bridge grid
-- The clause-`2` tradeoff probes are now exhausted, and the first narrower
-  clause-`4` follow-on is pinned too:
+- A newer off-branch delta freeze is now explicit too:
+  - `current_claim_step_fifteen_exact_claim_variant_pair_tradeoff_delta_outside_the_claim_next_bridge_side_probe_lives_on_two_clause_four_reference_remaining_three_prefixes`
+  - the broader exact claim-pair tradeoff contributes no unique residual
+    partial-prefix captures or zero-admitted exact-prune prefixes beyond the
+    narrower claim-next-bridge-side probe
+  - instead the narrower probe alone still keeps exactly two
+    remaining-three partial-prefix captures at mismatch `1` on
+    `reference + demo_flat_codomain`, with clause `2` on
+    `claim_flat_domain` or `claim_sharp_codomain` while clause `4` stays on
+    `reference`
+  - one layer deeper, that same off-branch delta is the exact `18`
+    zero-admitted prefixes, split evenly across clause `5`
+    `claim_flat_codomain`, `claim_next_codomain`, and `reference` at
+    `3 / 3 / 3` on each of those two sheets
+- The clause-`2` tradeoff probes are now exhausted, the first narrower
+  clause-`4` follow-on is pinned, and the remaining off-branch delta is
+  localized too:
   - the `reference` clause-`2` sheet is already at the `15`-capture floor
   - reopening both claim sheets together reproduces the broader
     `4523 / 537 / 2223` tradeoff with a `3324 / 554 / 554 / 0`
@@ -172,10 +187,13 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     same claim-pair surface lands at `4445 / 539 / 2241` with the smaller
     `3252 / 542 / 542 / 0` `small_cluster` regression while already matching
     the same captured `45`-prefix mismatch-`1` branch
-  - the next honest slice should therefore localize the remaining delta to
-    the broader claim-pair tradeoff outside that already-captured branch
-    rather than rerunning first or reopening broader clause-`4` / clause-`5`
-    surfaces
+  - the remaining off-branch miss is now only the two clause-`4`
+    `reference` remaining-three prefixes on the
+    `reference + demo_flat_codomain` surface and their exact `18`
+    zero-admitted clause-`5` continuations
+  - the next honest slice should therefore work directly on that narrow
+    clause-`4` `reference` tail rather than rerunning first or reopening
+    broader clause-`4` / clause-`5` surfaces
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:
