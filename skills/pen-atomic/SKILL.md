@@ -427,6 +427,18 @@ Focus on:
   collapse to matched dead `3`-generated / `0`-admitted completion summaries
   with the same nonlive open-band structural terminal trio, so route to the
   live docs before spending another turn on the exhausted claim-flat shell
+- treat the representative `claim_sharp_codomain` clause-`2` sheet's
+  clause-`6` continuations as live autonomy detail too; the
+  `claim_next_codomain`, `claim_sharp_codomain`, and `reference`
+  continuations now also reland the same matched smaller tradeoff shell and
+  differ only by a tiny deeper zero-admitted tail delta, so route to the
+  live docs before retrying clause-`6` identity on the representative
+  claim-sharp sheet as if it were fresh leverage
+- keep the next slice above another mismatch-`0` representative claim-side
+  identity reland; with both claim-side sheets now frozen through clause-`6`
+  identity, route to the live docs before spending another turn below the
+  representative mismatch-`0` pair unless a reason-level connectivity
+  partition under one frozen shell is explicitly promoted
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward

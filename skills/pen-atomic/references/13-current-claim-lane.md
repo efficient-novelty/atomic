@@ -172,6 +172,17 @@ Do not:
   completion summaries with the same nonlive open-band structural terminal
   trio, so route to the live autonomy docs before spending another turn on the
   exhausted claim-flat shell
+- reopen the representative `claim_sharp_codomain` clause-`2` sheet's
+  clause-`6` identity split first either; its `claim_next_codomain`,
+  `claim_sharp_codomain`, and `reference` continuations now also reland the
+  same matched smaller tradeoff shell and differ only by a tiny deeper
+  zero-admitted tail delta, so that axis also belongs to the autonomy ledger
+  rather than as a fresh lead
+- keep the next slice above another mismatch-`0` claim-side identity reland;
+  with both representative claim-side sheets now frozen through clause-`6`
+  identity, route to the live autonomy docs before spending another turn
+  below the mismatch-`0` representative pair unless a reason-level
+  connectivity partition under one frozen shell is explicitly promoted
 - reopen the mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
   `claim_next_codomain` exact-summary cell first; that sibling is now a
   neutral control owned by the autonomy ledger rather than a fresh lead

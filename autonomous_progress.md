@@ -311,6 +311,25 @@ Until that exists, wording stays at `bounded live recovery`.
     representative `claim_sharp_codomain` clause-`2` sheet unless a narrower
     connectivity-failure reason partition under one dead claim-flat child is
     explicitly promoted
+- The representative `claim_sharp_codomain` clause-`2` sheet is now also
+  exhausted at clause-`6` identity scope:
+  - under
+    `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain /
+    claim_next_bridge / claim_flat_codomain`,
+    the clause-`6` `claim_next_codomain`, `claim_sharp_codomain`, and
+    `reference` continuations all reland the same matched smaller tradeoff
+    shell at `4343 / 552`
+  - each widens `small_cluster` only to `3141 / 522 / 522 / 0`
+  - each keeps the representative clause-`2` spread at `15 / 14 / 12`
+  - each keeps the representative clause-`4` split at `23 / 18`
+  - each keeps the representative clause-`4` `claim_next_bridge` plus
+    clause-`5` `claim_flat_codomain` bucket at `47`
+  - they differ only in the deeper zero-admitted tail:
+    `claim_next_codomain = 2270`, `claim_sharp_codomain = 2269`,
+    `reference = 2268`
+  - consequence: clause-`6` identity is now exhausted on the representative
+    claim-sharp sheet too, and it only reproduces the same smaller tradeoff
+    shell already seen on the representative claim-flat sheet
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -332,9 +351,12 @@ Until that exists, wording stays at `bounded live recovery`.
 - Keep step `1` explicit, but do not reopen it first unless a newer stored
   rerun changes the diagnosis.
 - When working outside the exhausted mismatch-`1`
-  `reference + demo_flat_codomain` ladder, start with the mismatch-`0`
-  claim-domain surface before the smaller claim-safe mismatch-`1` tier or the
-  `reference / reference` tails.
+  `reference + demo_flat_codomain` ladder, treat the mismatch-`0`
+  claim-domain surface as exhausted through the representative claim-side
+  clause-`6` identity passes and move to the smaller claim-safe mismatch-`1`
+  tier before the `reference / reference` tails unless a narrower
+  reason-level connectivity partition under one frozen representative
+  claim-side shell is explicitly promoted.
 - If the mismatch-`0` claim-domain surface is revisited, stay below the broad
   clause-`1` `demo_flat_codomain` reopening and below whole-tier parent
   exact-bound relief; the former reaches `4985` only by widening the clean
@@ -387,39 +409,41 @@ Until that exists, wording stays at `bounded live recovery`.
   first; it is now a neutral control on the untouched `4331 / 553 / 2271`
   baseline.
 - Because the two representative claim-side clause-`2` sheets are symmetric
-  smaller tradeoff controls and the reference sheet is inert, the next revisit
-  should move below one representative claim-side clause-`2` sheet into a
-  finer remaining-one exact-summary partition before considering the smaller
-  claim-safe mismatch-`1` tier.
+  smaller tradeoff controls and the reference sheet is inert, both
+  representative claim-side sheets are now frozen context rather than fresh
+  mismatch-`0` leads.
 - Do not stop at the representative `claim_flat_domain` clause-`2` sheet's
   clause-`6` `claim_next_codomain`, `claim_sharp_codomain`, or `reference`
   continuations either; all three reland the same `4343 / 552 / 3141`
   smaller tradeoff shell and differ only by a tiny zero-admitted tail delta.
-- Because that representative claim-flat sheet is now exhausted at clause-`6`
-  identity scope too, the next revisit should move one layer deeper below the
-  marginally best clause-`6` `reference` continuation before reopening the
-  representative `claim_sharp_codomain` clause-`2` sheet or the smaller
-  claim-safe mismatch-`1` tier.
 - Do not reopen that marginally best clause-`6` `reference` continuation
   through either individual clause-`3` `claim_flat_argument` or
   `claim_eventual_argument` branch first; each is now a neutral control on
   the untouched `4331 / 553 / 2271` baseline.
 - Because those two individual clause-`3` branches are neutral while their
-  union is the only clause-`6` `reference` tradeoff, the next revisit should
-  move below clause-`3` identity into a finer terminal or remaining-one
-  completion partition under their joint clause-`6` `reference`
-  continuation before reopening the representative `claim_sharp_codomain`
-  clause-`2` sheet or the smaller claim-safe mismatch-`1` tier.
+  union is the only clause-`6` `reference` tradeoff, the representative
+  claim-flat clause-`6` `reference` shell is now historical frozen context
+  rather than the active next slice.
 - Do not stop at that representative claim-flat joint clause-`3`
   parent/child shell either; its six child continuations are now all the same
   dead `3`-generated / `0`-admitted completion summary with no bound and no
   survivor sketch.
 - Because those claim-flat child continuations only expose the same nonlive
   `reference / eventual_lift / next_lift` open-band structural trio, the next
-  honest revisit should move sideways to the representative
-  `claim_sharp_codomain` clause-`2` sheet before the smaller claim-safe
-  mismatch-`1` tier unless a reason-level connectivity partition under one
-  dead claim-flat child is explicitly promoted.
+  honest revisit should now move off mismatch-`0` identity partitions and onto
+  the smaller claim-safe mismatch-`1` tier before the `reference / reference`
+  tails, unless a reason-level connectivity partition under one frozen
+  representative claim-side shell is explicitly promoted.
+- Do not stop at the representative `claim_sharp_codomain` clause-`2` sheet's
+  clause-`6` `claim_next_codomain`, `claim_sharp_codomain`, or `reference`
+  continuations either; all three reland the same `4343 / 552 / 3141`
+  smaller tradeoff shell and differ only by a tiny zero-admitted tail delta.
+- Because the representative claim-sharp sheet is now exhausted at clause-`6`
+  identity scope too, the next honest slice no longer sits on another
+  mismatch-`0` claim-side identity reland; it should move to the smaller
+  claim-safe mismatch-`1` tier unless a narrower reason-level connectivity
+  partition under one frozen representative claim-side shell is explicitly
+  promoted.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

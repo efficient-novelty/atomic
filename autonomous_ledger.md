@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Ledger
 
-Last updated: 2026-04-08
+Last updated: 2026-04-09
 
 This file is the append-only history for `desktop_claim_shadow`.
 
@@ -327,3 +327,21 @@ This file is the append-only history for `desktop_claim_shadow`.
   `claim_sharp_codomain` clause-`2` sheet unless a narrower
   connectivity-failure reason partition under one dead claim-flat child is
   explicitly promoted.
+- Scope: localize one layer deeper below the representative
+  `claim_sharp_codomain` clause-`2` sheet at clause-`6` identity scope.
+  Result: under
+  `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain / claim_next_bridge / claim_flat_codomain`,
+  the clause-`6` `claim_next_codomain`, `claim_sharp_codomain`, and
+  `reference` continuations all relanded the same matched smaller tradeoff
+  shell at `4343 / 552` with `small_cluster = 3141 / 522 / 522 / 0`; each
+  kept the representative clause-`2` spread at `15 / 14 / 12`, the
+  representative clause-`4` split at `23 / 18`, and the representative
+  clause-`4` `claim_next_bridge` plus clause-`5` `claim_flat_codomain`
+  bucket at `47`, differing only in the deeper zero-admitted tail at
+  `2270 / 2269 / 2268`.
+  Consequence: clause-`6` identity is now exhausted on the representative
+  claim-sharp sheet too. Because it only reproduces the same shell already
+  seen on the representative claim-flat sheet, the next honest slice should
+  move off mismatch-`0` identity partitions and onto the smaller claim-safe
+  mismatch-`1` tier unless a narrower reason-level connectivity partition
+  beneath one frozen representative claim-side shell is explicitly promoted.
