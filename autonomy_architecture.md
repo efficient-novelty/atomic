@@ -35,21 +35,45 @@ The full loop is:
 That is why the relevant code is not only the search engine. The artifact and
 audit layers are part of the autonomy architecture.
 
+## Operational Memory Map
+
+Use the autonomy files by contract, not by habit:
+
+- `autonomous_progress.md`: live snapshot only. Current blocker, active
+  diagnosis, latest counters, and the canonical operating position.
+- `autonomous_next_steps.md`: current work order only. One active slice, one
+  explicit success target, and one "not the next move" fence.
+- `autonomous_plan.md`: medium-horizon phases only. Milestones, dependencies,
+  and exit criteria.
+- `autonomous_checklist.md`: binary signoff gates only. What must be true
+  before the claim lane can graduate.
+- `autonomous_ledger.md`: append-only probe history. Negative controls,
+  tradeoff controls, and the reason earlier branches were ruled out.
+- `skills/pen-atomic/SKILL.md`: routing and stable repo context only.
+- `skills/pen-atomic/references/13-current-claim-lane.md`: stable claim-lane
+  truths, invariants, and reading pointers only.
+
+If a number changes often, it belongs in `autonomous_progress.md`. If a note
+starts with "we tried", it belongs in `autonomous_ledger.md`.
+
 ## First Reading Order
 
 Read these in order before branching into deeper code:
 
-1. `autonomous_plan.md`
+1. `autonomous_progress.md`
 2. `autonomous_next_steps.md`
-3. `skills/pen-atomic/SKILL.md`
-4. `docs/ARCHITECTURE.md`
-5. `skills/pen-atomic/references/13-current-claim-lane.md`
-6. `skills/pen-atomic/references/02-target-sequence.md`
-7. `configs/desktop_claim_shadow_1h.toml`
-8. `crates/pen-search/src/config.rs`
-9. `crates/pen-cli/src/cmd_run.rs`
-10. `crates/pen-cli/src/report.rs`
-11. `crates/pen-search/src/engine.rs`
+3. `autonomous_plan.md`
+4. `autonomous_checklist.md`
+5. `autonomous_ledger.md`
+6. `skills/pen-atomic/SKILL.md`
+7. `docs/ARCHITECTURE.md`
+8. `skills/pen-atomic/references/13-current-claim-lane.md`
+9. `skills/pen-atomic/references/02-target-sequence.md`
+10. `configs/desktop_claim_shadow_1h.toml`
+11. `crates/pen-search/src/config.rs`
+12. `crates/pen-cli/src/cmd_run.rs`
+13. `crates/pen-cli/src/report.rs`
+14. `crates/pen-search/src/engine.rs`
 
 After that, read supporting modules in this order:
 

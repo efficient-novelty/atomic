@@ -7,257 +7,36 @@ description: Current-state architecture and donor guide for the `pen-atomic` Rus
 
 ## Overview
 
-Use this skill as the current working memory pack for the repository as it
-exists today, not as a description of an aspirational rewrite.
+Use this skill as a routing and stable-context guide for the repository as it
+exists today, not as a live experiment log.
 
-Treat these as current repo truths:
+Treat these as stable repo truths:
 
 - `pen-cli run` and `pen-cli resume` perform live atomic strict search through
-  step `15`
-- `strict_canon_guarded` remains the authoritative executable lane
-- `realistic_frontier_shadow` is a live comparison-backed lane with real online
-  prefix search, persisted frontier evidence, and detailed reporting
+  step `15`.
+- `strict_canon_guarded` remains the authoritative executable lane.
+- `realistic_frontier_shadow` is a live comparison-backed lane with real
+  online prefix search, persisted frontier evidence, and detailed reporting.
 - `demo_breadth_shadow` is a comparison-backed child of realistic shadow with
   runnable `5m`, `10m`, and `15m` profiles plus stored narrative/event
-  artifacts
-- `desktop_claim_shadow` now exists as a separate claim-lane scaffold with its
-  own configs, narratives, and policy metadata; it uses claim-debt
-  admissibility, a claim-generic late surface, and a structural-generic claim
-  bucket taxonomy, and the later `kappa 7-9` mutator packs plus claim-path
-  exactness rechecks are landed in code/tests; the repo also has
-  claim-specific compare/certification/benchmark tooling, richer
-  CPU/build/git/binary manifest fingerprints, and incremental failed-run
-  artifact persistence; claim runs now record observed-versus-accounted RSS
-  gap data, claim auto-worker resolution is memory-aware, claim proof-close
-  drops cached evaluated terminal payloads and releases processed retained
-  prefix groups once exact certification starts, claim terminal-prefix
-  materialization compacts legality-cache reuse plus uncached direct
-  materialization, cloned prefix signatures share one serialized exact payload
-  allocation, and claim frontier items reuse the shared clause catalog plus
-  serialized prefix order key; the current stored canonical bundle is
-  clean-tree completed `v12`, compare/certification/benchmark outputs now
-  exist beside it, the certificate now also surfaces step-level breadth
-  diagnosis from stored step summaries plus late-step live checkpoints, now
-  including the full stored step-open pressure signature for failing steps,
-  and the live claim blocker is the remaining stored breadth misses on that
-  canonical chain: stored `v12` still misses step `1` (`546 / 2144`) and
-  step `15` (`4331 / 5000`), while step `10`, step `11`, step `12`,
-  step `13`, and step `14` are stored hits; the guarded local step-`11`
-  breadth repair and the narrow step-`12` selector repair are both re-earned
-  on clean stored evidence, the parity-preserving step-`13` repair is now
-  also re-earned on stored evidence at `[5,1,3,3,5,3,2]` / `1350` / `2320`
-  with canonical acceptance, and the next operational move is no longer
-  notes-only diagnosis but a prefix-local repair against the now-frozen clean
-  step-`15` partial-prefix wall on top of that `v12` bundle: a newer
-  executable
-  `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
-  regression now pins the real `553` bound-prune wall as `451`
-  remaining-two plus `102` remaining-three prefixes, with first mismatch
-  pressure only at clause positions `0..3` (`312 / 177 / 50 / 14`) and the
-  dominant live slice now on remaining-two clause `0` / clause `1`
-  prefixes (`252 / 145`), and a newer
-  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
-  regression now sharpens that slice into six exact mismatch-`0`
-  current-claim pairings at `42` each plus three mismatch-`1` clause-`1`
-  pairings at `42`, `42`, and `61`, and the newer
-  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
-  regression now freezes that same dominant side onto clause-`4`
-  `claim_next_bridge` plus clause-`4` `reference`, with clause-`5`
-  staying split only across `reference`, `claim_next_codomain`, and
-  `claim_flat_codomain`, and the newer
-  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_four_pressure_on_claim_next_bridge_per_clause_zero_one_pairing`
-  plus
-  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`
-  regressions now freeze that same dominant side per pairing too: the regular
-  mismatch-`0` / mismatch-`1` pairs keep clause-`4`
-  `claim_next_bridge` ahead of `reference` at `24 / 18`, the larger
-  `reference + demo_flat_codomain` side still stays on the same live
-  clause-`4` claim families at `33 / 28`, while a newer scoped tradeoff
-  control now shows that reopening only that branch lifts local breadth to
-  `4523`, narrows the clean wall to `537`, and shrinks that branch to
-  clause-`4` `27 / 18` / `45` captured prefixes, but only by widening the
-  `small_cluster` to `3324 / 554 / 554 / 0`; newer executable tradeoff-branch
-  freezes now pin that same `45`-capture branch one layer deeper too:
-  it splits evenly across clause-`2`
-  `claim_flat_domain = 15`, `claim_sharp_codomain = 15`,
-  `reference = 15`, and each clause-`2` sheet then splits uniformly as
-  clause-`4` `claim_next_bridge = 3 / 3 / 3` plus clause-`4`
-  `reference = 2 / 2 / 2` across clause-`5`
-  `claim_flat_codomain`, `claim_next_codomain`, and `reference`; the
-  clause-`2` split keeps the pressure on the two current claim variants at
-  `15 / 15 / 12` or `23 / 23 / 15` rather than on a hidden demo-only
-  clause-`2` reopening; the newer exact clause-`2` single-sheet probes plus
-  the newer combined claim-variant pair probe now show that the
-  clause-`2`-only narrowing on that branch is exhausted because the full
-  pair simply reproduces the broader `4523 / 537 / 2223` tradeoff with the
-  same `3324 / 554 / 554 / 0` `small_cluster` regression; the newer exact
-  clause-`4` `claim_next_bridge`-side probe then narrows that tradeoff to
-  `4445 / 539 / 2241`, and the newer executable delta freeze localizes the
-  remaining off-branch miss to the exact clause-`4` `reference`
-  remaining-three tail; the newer exact clause-`5` `reference`,
-  `claim_flat_codomain`, and `claim_next_codomain` follow-ons on that tail
-  now show that it is exhausted as a cleaner repair target, and the newer
-  exact remaining-two mismatch-`1` clause-`5` bridge-slice reopening is
-  another widening negative control at `4511 / 571 / 2325` that inflates the
-  three mismatch-`1` pairings to `48 / 48 / 67` while leaving the live
-  clause-`4` split unchanged at `24 / 18`, `24 / 18`, and `33 / 28`; so the
-  next operational move should now stay above clause-`5` bridge-side
-  reopenings and work directly against the live clause-`4`
-  `claim_next_bridge` / `reference` families under the dominant mismatch-`1`
-  clause-`0` / clause-`1` pairings rather than with another rerun setup pass
-  or a step-`1`-first theory slice; the canonical
-  `v11` certificate plus the frozen `step-15-live.ndjson` provenance are now
-  pinned by
-  `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
-  and the refreshed benchmark bundle is pinned by
-  `stored_claim_v11_benchmark_freezes_runtime_and_floor_counts`,
-  so the current breadth miss anatomy is executable in-tree rather than
-  notes-only; the narrow step-`15` anchor-`11` repair has now been consumed
-  on stored evidence: that nearby clause-`3` exact-argument pocket is isolated
-  onto the live claim
-  clause-`2` variants only, keeps the lifted anchor-`11` neighbors fenced,
-  keeps clause `6` as the local safety boundary, and lifts the stored
-  canonical step `15` read from `DCT 103 / 8 / 1794` to
-  `DCT 103 / 8 / 3972`; the remaining stored step-`15` miss on canonical
-  `v11` is still the residual `468` partial-prefix bar / `242`
-  incumbent-dominance surface on top of that repaired chain, but a newer
-  local post-`v11` clause-`4` side-pocket repair now reopens only the
-  `demo_sharp_codomain` clause-`4` option on the exact anchor-`11`
-  exact-argument pocket and counts it as historical reanchor only there,
-  lifting the current local guardrail surface again to
-  `DCT 103 / 8 / 4004`; a newer local post-`v11` clause-`5` side-pocket
-  repair now reopens only the `demo_sharp_domain` clause-`5` option once that
-  exact clause-`4` side pocket is already present and counts it as historical
-  reanchor only there, lifting the current local guardrail surface again to
-  `DCT 103 / 8 / 4030`; a newer local post-`v11` small-cluster relief now
-  lands on top of that clause-`5` pocket, keeps live generated prefixes fixed
-  at `4030`, collapses local incumbent-dominance pressure from `246` to `3`,
-  widens the local `small_cluster` to `2964 / 494 / 494 / 0`, and keeps the
-  isolated `single` pocket fenced as one fully scored non-winning terminal
-  plus `3` residual single-bucket prunes; a newer local post-`v11`
-  clause-`5` demo-flat-codomain side-pocket repair now also consumes only
-  that same doubly fenced pocket, lifts the current local guardrail surface
-  again to `DCT 103 / 8 / 4056`, keeps local incumbent-dominance pressure at
-  `3`, widens the local `small_cluster` again to
-  `2988 / 498 / 498 / 0`, and keeps the isolated `single` pocket fenced; a
-  newer local post-`v11` clause-`4` demo-sharp-bridge side-pocket repair now
-  also consumes only that same exact anchor-`11` pocket stack, lifts the
-  current local guardrail surface again to `DCT 103 / 8 / 4088`, raises the
-  remaining partial-prefix wall to `476`, widens the local `small_cluster`
-  again to `3012 / 502 / 502 / 0`, and keeps the isolated `single` pocket
-  fenced; a newer local post-`v11` clause-`5` bridge-pocket stack repair now
-  also consumes that same exact anchor-`11` clause-`4` bridge pocket, lifts
-  the current local guardrail surface again to `DCT 103 / 8 / 4140`, keeps
-  the remaining partial-prefix wall at `476`, widens the local
-  `small_cluster` again to `3060 / 510 / 510 / 0`, and keeps the isolated
-  `single` pocket fenced; a newer local post-`v11` clause-`1`
-  `demo_flat_codomain` side-pocket repair now also consumes that same exact
-  anchor-`11` bridge-pocket stack, lifts the current local guardrail surface
-  again to `DCT 103 / 8 / 4275`, raises the remaining partial-prefix wall to
-  `549`, widens the local `small_cluster` again to
-  `3084 / 514 / 514 / 0`, and keeps the isolated `single` pocket fenced; the
-  newer exact-pocket clause-`0` / clause-`5` follow-on then lifts the current
-  local guardrail again to `DCT 103 / 8 / 4331`, raises the remaining
-  partial-prefix wall to `553`, widens the local `small_cluster` to
-  `3132 / 522 / 522 / 0`, and still keeps the isolated `single` pocket
-  fenced; a newer exploratory clause-`1`
-  `demo_eventually_codomain` exact-pocket reland was also tested locally and
-  reverted: it lifted the local surface to `DCT 103 / 8 / 4466`, widened the
-  `small_cluster` to `3156 / 526 / 526 / 0`, and kept the isolated `single`
-  pocket plus residual incumbent pressure unchanged, but it widened the
-  partial-prefix wall to `626` and the zero-admitted exact-prune capture to
-  `2562`, so it is now another negative control rather than the landed path,
-  and that reland is now pinned by
-  `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`;
-  a second scoped negative control that broadened the landed clause-`1`
-  `demo_flat_codomain` side pocket onto clause-`0` `claim_flat_domain` was
-  also tested locally and reverted: it again lifted the local surface to
-  `DCT 103 / 8 / 4466`, kept the isolated `single` pocket plus residual
-  incumbent pressure unchanged, but it again widened the partial-prefix wall
-  to `626`, so it is also ruled out rather than the landed path, and that
-  reland is now pinned by
-  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_clause_zero_claim_flat_exact_pocket_reland_stays_a_negative_control`
-  plus the matching connectivity override tests; a newer scoped tradeoff
-  control that broadens the same clause-`1` `demo_flat_codomain` qualifier
-  only across clause-`0` `reference` and the live clause-`4` / clause-`5`
-  claim families is now pinned by
-  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
-  plus the matching connectivity override tests: it lifts the local surface
-  to `DCT 103 / 8 / 4523`, narrows the clean partial-prefix wall to `537`,
-  cuts zero-admitted capture to `2223`, and shrinks the larger mismatch-`1`
-  `reference + demo_flat_codomain` branch from clause-`4` `33 / 28` / `61`
-  captured prefixes to clause-`4` `27 / 18` / `45`, but it also widens the
-  `small_cluster` to `3324 / 554 / 554 / 0`, so it is only a tradeoff
-  control and not the landed path; a newer exact clause-`2`
-  `claim_flat_domain` sheet probe on that same branch is now also pinned by
-  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_flat_sheet_stays_a_tradeoff_control`
-  plus the matching connectivity override tests: it lifts the local surface
-  to `DCT 103 / 8 / 4412`, narrows the clean partial-prefix wall to `544`,
-  cuts zero-admitted capture to `2250`, and shrinks that same branch to
-  clause-`4` `30 / 21` / `51`, but it still widens the `small_cluster` to
-  `3216 / 536 / 536 / 0`, so it is also only a tradeoff control; a newer
-  symmetric exact clause-`2` `claim_sharp_codomain` sheet probe is now also
-  pinned by
-  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_stays_a_tradeoff_control`
-  plus the matching connectivity override tests: it lands the same
-  `DCT 103 / 8 / 4412`, `544`, `2250`, and clause-`4` `30 / 21` / `51`
-  surface with the two claim clause-`2` sheets swapped, so the `reference`
-  clause-`2` sheet is now known to already sit at the `15`-capture floor; a
-  newer combined exact clause-`2` claim-variant pair probe is now also
-  pinned by
-  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_stays_a_tradeoff_control`
-  plus the matching connectivity override tests: it reproduces the broader
-  `DCT 103 / 8 / 4523`, `537`, `2223`, and clause-`4` `27 / 18` / `45`
-  tradeoff surface exactly and still widens the `small_cluster` to
-  `3324 / 554 / 554 / 0`, so the clause-`2`-only narrowing on that branch is
-  now exhausted; a newer exact clause-`4` `claim_next_bridge`-side probe on
-  that same combined claim-pair surface is now also pinned by
-  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_variant_pair_stays_a_tradeoff_control`
-  plus the matching connectivity override tests: it lands at
-  `DCT 103 / 8 / 4445`, narrows the clean wall to `539`, cuts
-  zero-admitted capture to `2241`, and widens the `small_cluster` only to
-  `3252 / 542 / 542 / 0` while keeping the isolated `single` pocket and the
-  residual `3` incumbent prunes unchanged; crucially, that narrower probe
-  already reproduces the same captured mismatch-`1`
-  `reference + demo_flat_codomain` branch as the broader exact claim-pair
-  tradeoff, and a newer executable
-  `current_claim_step_fifteen_exact_claim_variant_pair_tradeoff_delta_outside_the_claim_next_bridge_side_probe_lives_on_two_clause_four_reference_remaining_three_prefixes`
-  regression now shows that the broader tradeoff contributes no unique
-  residual captures or exact prunes beyond that narrower probe: the remaining
-  off-branch miss is exactly two mismatch-`1`
-  `reference + demo_flat_codomain` remaining-three prefixes, one on each
-  claim clause-`2` sheet while clause-`4` stays `reference`, and one layer
-  deeper that same miss is the exact `18` zero-admitted prefixes split evenly
-  across clause-`5` `claim_flat_codomain`, `claim_next_codomain`, and
-  `reference`; a newer exact clause-`5` `reference` follow-on on that same
-  tail is now also pinned by
-  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_neutral_control`
-  and leaves the whole `DCT 103 / 8 / 4331` / `553` / `2271` surface plus the
-  clause-`4` `33 / 28` / `61` branch unchanged, so that exact `reference`
-  cell is already effectively part of the current canonical surface rather
-  than the next repair; newer exact clause-`5` `claim_flat_codomain` and
-  `claim_next_codomain` follow-ons on that same two-prefix
-  clause-`4`-`reference` tail are now also pinned by
-  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_flat_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control`
-  and
-  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_next_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control`:
-  each lands only `DCT 103 / 8 / 4355`, narrows the clean wall only to
-  `551`, cuts zero-admitted capture only to `2265`, shrinks that same branch
-  only to clause-`4` `33 / 26` / `59`, and still widens the `small_cluster`
-  to `3156 / 526 / 526 / 0`; the two probes are numerically symmetric and
-  merely split the older clause-`4` `reference`-sheet tradeoff into its two
-  exact clause-`5` claim families, so that clause-`4` `reference`
-  remaining-three tail is now exhausted as a cleaner local repair target; a
-  newer exact remaining-two mismatch-`1` clause-`5` bridge-slice reland is
-  now also pinned as a widening negative control at
-  `DCT 103 / 8 / 4511`, `571`, `2325`, and
-  `3276 / 546 / 546 / 0`: it inflates the three exact mismatch-`1`
-  pairings to `48 / 48 / 67` while leaving the live clause-`4`
-  `24 / 18`, `24 / 18`, and `33 / 28` split unchanged, so the next
-  operational move is therefore no longer another clause-`5` tail probe or
-  an exact remaining-two clause-`5` bridge-slice reland but to work
-  directly against the live clause-`4` `claim_next_bridge` / `reference`
-  families under the dominant mismatch-`1` clause-`0` / clause-`1`
+  artifacts.
+- `desktop_claim_shadow` is a separate claim-lane scaffold with its own
+  configs, narratives, policy metadata, compare/certification/benchmark
+  tooling, manifest provenance, and failure-safe persistence.
+- Claim-lane mechanisms such as claim-debt admissibility, a claim-generic late
+  surface, structural-generic bucket scheduling, later `kappa 7-9` mutators,
+  and claim-path exactness rechecks are landed in code and tests.
+- Claim artifacts, manifests, live checkpoints, and certification surfaces are
+  real; the lane must stay at `bounded live recovery` until a stored
+  certificate passes.
+- Live claim-lane counters, active hypotheses, current blockers, and probe
+  history no longer live in this skill file. Read the autonomous docs for that
+  operating state:
+  [../../autonomous_progress.md](../../autonomous_progress.md),
+  [../../autonomous_next_steps.md](../../autonomous_next_steps.md),
+  [../../autonomous_plan.md](../../autonomous_plan.md),
+  [../../autonomous_checklist.md](../../autonomous_checklist.md), and
+  [../../autonomous_ledger.md](../../autonomous_ledger.md).
   pairings rather than the larger clause-`4` `claim_next_bridge` half,
   another rerun setup pass, or a step-`1`-first theory slice; a third local exploratory
   clause-`3` `anchor-11` exact-argument widening onto the broader
@@ -451,12 +230,16 @@ Read only the track-specific detail you need:
   [../../demo_lane_plan.md](../../demo_lane_plan.md), and
   [../../demo_lane_checklist.md](../../demo_lane_checklist.md).
 - For the active autonomy workstream, read
-  [../../autonomous_plan.md](../../autonomous_plan.md),
-  [../../autonomous_next_steps.md](../../autonomous_next_steps.md), and
-  [../../autonomous_progress.md](../../autonomous_progress.md), plus
-  [../../autonomous_checklist.md](../../autonomous_checklist.md).
-  These are the operational docs for remaining claim-lane work and
-  intentionally omit old rollout history.
+  [../../autonomous_progress.md](../../autonomous_progress.md) for the live
+  snapshot,
+  [../../autonomous_next_steps.md](../../autonomous_next_steps.md) for the
+  active work order,
+  [../../autonomous_plan.md](../../autonomous_plan.md) for medium-horizon
+  phases,
+  [../../autonomous_checklist.md](../../autonomous_checklist.md) for binary
+  signoff gates, and
+  [../../autonomous_ledger.md](../../autonomous_ledger.md) for append-only
+  probe history.
 
 Start with the current architecture doc before diving into donor material:
 
@@ -525,9 +308,11 @@ For most tasks, read in this order:
 5. [../../demo_lane_progress.md](../../demo_lane_progress.md) and
    [../../demo_lane_plan.md](../../demo_lane_plan.md) when the task touches
    `demo_breadth_shadow`
-6. [../../autonomous_progress.md](../../autonomous_progress.md) and
-   [../../autonomous_next_steps.md](../../autonomous_next_steps.md) when the
-   task touches `desktop_claim_shadow`
+6. [../../autonomous_progress.md](../../autonomous_progress.md),
+   [../../autonomous_next_steps.md](../../autonomous_next_steps.md),
+   [../../autonomous_plan.md](../../autonomous_plan.md), and
+   [../../autonomous_ledger.md](../../autonomous_ledger.md) when the task
+   touches `desktop_claim_shadow`
 7. [theory/README.md](theory/README.md) when you need the theorem or manuscript
    map
 
@@ -555,12 +340,13 @@ Then branch based on the task.
   for the stable current demo-lane mechanisms and evidence baselines that
   should remain true while later demo-lane changes move.
 - Read [references/13-current-claim-lane.md](references/13-current-claim-lane.md)
-  plus [../../autonomous_plan.md](../../autonomous_plan.md),
-  [../../autonomous_next_steps.md](../../autonomous_next_steps.md), and
-  [../../autonomous_progress.md](../../autonomous_progress.md), plus
-  [../../autonomous_checklist.md](../../autonomous_checklist.md) for the
-  current claim-lane mixed state, honesty boundary, and remaining autonomy
-  work.
+  plus [../../autonomous_progress.md](../../autonomous_progress.md),
+  [../../autonomous_next_steps.md](../../autonomous_next_steps.md),
+  [../../autonomous_plan.md](../../autonomous_plan.md),
+  [../../autonomous_checklist.md](../../autonomous_checklist.md), and
+  [../../autonomous_ledger.md](../../autonomous_ledger.md) for the current
+  claim-lane mixed state, active work order, signoff gates, and probe
+  history.
 - Read [theory/README.md](theory/README.md) when you need the theorem map or
   manuscript map.
 - Read [theory/genesis.md](theory/genesis.md) when you need the exact strict
@@ -683,222 +469,48 @@ Focus on:
 Read:
 
 - [references/13-current-claim-lane.md](references/13-current-claim-lane.md)
-- [../../autonomous_plan.md](../../autonomous_plan.md)
 - [../../autonomous_progress.md](../../autonomous_progress.md)
+- [../../autonomous_next_steps.md](../../autonomous_next_steps.md)
+- [../../autonomous_plan.md](../../autonomous_plan.md)
 - [../../autonomous_checklist.md](../../autonomous_checklist.md)
+- [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md)
 - [references/08-evidence-and-invariants.md](references/08-evidence-and-invariants.md)
 
 Focus on:
 
 - keeping the claim lane separate from demo-only behavior
-- recording the mixed current state honestly in policy metadata:
-  claim-debt admissibility, claim-generic late expansion, and
-  structural-generic bucket scheduling are real; `kappa 7-9` mutators and
-  claim-path exactness rechecks are landed; stored compare, benchmark, and
-  certification outputs now exist for the clean canonical completed `v12`
-  bundle,
-  but certification still fails honestly on stored breadth misses and the lane
-  must stay at `bounded live recovery`; use `scripts/compare_runs.py`,
-  `scripts/benchmark_claim_lane.py`, and `scripts/certify_claim_lane.py` as
-  the current evidence surfaces before changing more search code, and prefer
-  the certificate first when you need the stored step-`1` / step-`15` miss
-  anatomy because it now reports catalog widths, root seeding, exact-screen
-  pressure, active widening bands, package flags, and claim-debt
-  `path` / `trunc` pressure for failing steps
-- treat the latest claim-cache work as operational memory work, not just
-  metadata work: claim proof-close already drops evaluated terminal payloads
-  after ranking and now also releases processed retained prefix groups once
-  certification starts, and claim materialization now also consumes cached
-  exact completion summaries from the legality cache after reuse, while the
-  newer direct compact claim materialization path avoids rebuilding and
-  re-walking the same uncached terminal evaluation vector on the hot step-4
-  path; the latest full-profile rerun then showed the retained prefix cache
-  flattening after prefix state `24`, and the next landed throughput pass now
-  reuses one scratch terminal telescope plus the precomputed prefix bit cost
-  across that same remaining-two loop, while the newest claim-only discovery
-  pass now skips full evaluation for compact terminal candidates that are
-  already below bar or incumbent-dominated and showed a modest early smoke
-  gain; do not reopen that step-`4` throughput story first unless a fresh
-  stored rerun proves the remaining breadth misses are really runtime fallout
-- treating the current blocker as stored breadth on the canonical chain:
-  stored `v12` still misses step `1` (`546 / 2144`) and step `15`
-  (`4331 / 5000`), while step `10`, step `11`, step `12`, step `13`, and
-  step `14` are already stored hits
-- keeping the new guarded local step-`11` breadth repair and the narrow
-  step-`12` selector repair green:
-  the connected claim surface should stay at `kappa 5 = 243`,
-  `kappa 6 = 729` (total `972`), exact-screen connectivity rejections there
-  should stay at `0`, the guarded step-`11` shell should stay accepted, and
-  the repaired guarded step-`12` winner plus the later
-  step-`13..15` guardrails should stay fixed
-- treating the stored step-`13` repair as the current late-step truth:
-  the canonical repaired branch now stays at
-  `[5,1,3,3,5,3,2]` / `1350` / `2320` with the guarded accepted hash and the
-  canonical `62 / 9 / 12027 -> DCT 103 / 8 / 4331` continuation; the clean
-  stored and local step-`15` surfaces now match
-- treating clean-tree `v12` as the canonical stored bundle, but treating the
-  next operational move as diagnosis / repair on the residual stored
-  step-`15` `4331 / 5000` gap rather than another rerun setup pass, while
-  keeping that same `4331` surface explicit as the guardrail that must not
-  regress
-- treating the clean step-`15` partial-prefix wall as newly executable rather
-  than notes-only:
-  `current_claim_step_fifteen_partial_prefix_wall_stays_on_four_early_temporal_prefix_families`
-  now pins all `553` actual bound prunes as `451` remaining-two plus `102`
-  remaining-three prefixes, with first mismatch pressure only at clause
-  positions `0..3` and dominant remaining-two pressure at clause `0` / clause
-  `1`, so the next landed repair should start there before reopening the
-  smaller clause-`2` / clause-`3` tail
-- treating the dominant remaining-two clause-`0` / clause-`1` wall as
-  executable exact pairings rather than a generic early blur:
-  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
-  now freezes mismatch-`0` as the six exact
-  `claim_flat_domain` / `claim_eventual_domain` crossed with
-  `reference` / `claim_sharp_codomain` / `claim_next_codomain` pairings at
-  `42` each, and mismatch-`1` as the
-  `reference` + `claim_sharp_codomain` / `claim_next_codomain` /
-  `demo_flat_codomain` pairings at `42`, `42`, and `61`
-- treating that same dominant remaining-two wall as executable one layer
-  deeper again too:
-  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
-  now freezes mismatch-`0` and mismatch-`1` onto clause-`4`
-  `claim_next_bridge` plus clause-`4` `reference`, with clause-`5`
-  staying split only across `reference`, `claim_next_codomain`, and
-  `claim_flat_codomain`; the old demo-only clause-`4` bridge pockets now
-  survive only on the smaller mismatch-`2` tail, so the next landed repair
-  should target the live clause-`4` claim families rather than another
-  demo-bridge reopening
-- treating that same dominant remaining-two wall as executable per dominant
-  pairing too:
-  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_four_pressure_on_claim_next_bridge_per_clause_zero_one_pairing`
-  now freezes the regular mismatch-`0` / mismatch-`1` pairings at
-  clause-`4` `claim_next_bridge = 24` versus `reference = 18`, while the
-  larger `reference + demo_flat_codomain` side still stays on the same live
-  clause-`4` claim families at `33 / 28`; the mismatch-`2` tail is still the
-  only place the old clause-`4` demo pockets appear at all
-- treating that same dominant remaining-two wall as executable across clause
-  `2` too:
-  `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`
-  now freezes the regular mismatch-`0` / mismatch-`1` pairings at
-  `claim_flat_domain = 15`, `claim_sharp_codomain = 15`,
-  `reference = 12`, with the larger mismatch-`1`
-  `reference + demo_flat_codomain` side at `23 / 23 / 15`, so the next move
-  should still target the live clause-`0` / clause-`1` plus clause-`4`
-  claim-family split rather than reopening clause-`3` widening or another
-  hidden demo-only clause-`2` branch
-- treating the newer clause-`0` `reference` plus clause-`1`
-  `demo_flat_codomain` live-claim-bridge reopening as a tradeoff control
-  only:
-  `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
-  now shows that reopening only that larger mismatch-`1` branch cuts it from
-  clause-`4` `33 / 28` / `61` captured prefixes to clause-`4`
-  `27 / 18` / `45`, lifts local breadth to `4523`, and narrows the clean wall
-  to `537`, but it also widens the `small_cluster` to
-  `3324 / 554 / 554 / 0`; newer executable freezes now show that same
-  `45`-capture branch split evenly across three clause-`2` sheets at `15`
-  each, with each sheet then splitting as clause-`4`
-  `claim_next_bridge = 3 / 3 / 3` plus clause-`4`
-  `reference = 2 / 2 / 2` across the three clause-`5` families; a newer
-  narrower clause-`4` `reference`-sheet tradeoff control now shows that
-  reopening only that smaller side is real but still not enough:
-  it lifts local breadth only to `4379`, narrows the clean wall only to
-  `549`, cuts zero-admitted capture only to `2259`, shrinks the same branch
-  only to clause-`4` `33 / 24` / `57`, and still widens the `small_cluster`
-  to `3180 / 530 / 530 / 0`; a newer exact clause-`2`
-  `claim_flat_domain` and `claim_sharp_codomain` sheet tradeoff controls now
-  show that reopening only one claim sheet at a time is stronger but still
-  not enough:
-  each lifts local breadth to `4412`, narrows the clean wall to `544`, cuts
-  zero-admitted capture to `2250`, shrinks that same branch to
-  clause-`4` `30 / 21` / `51`, and still widens the `small_cluster` to
-  `3216 / 536 / 536 / 0`; the `reference` clause-`2` sheet is already at the
-  `15`-capture floor, and the newer combined exact claim-variant clause-`2`
-  pair probe now shows that reopening both claim sheets together simply
-  reproduces the broader `4523 / 537 / 2223` tradeoff with the same
-  `3324 / 554 / 554 / 0` `small_cluster` regression, while the newer exact
-  clause-`4` `claim_next_bridge`-side probe is already pinned at
-  `4445 / 539 / 2241 / 3252:542`; the newer executable delta freeze now
-  shows that the remaining off-branch miss is no longer an unlabeled gap but
-  exactly the two clause-`4` `reference` remaining-three prefixes on the
-  `reference + demo_flat_codomain` surface, one on each claim clause-`2`
-  sheet, together with their exact `18` zero-admitted clause-`5`
-  continuations. The newer exact clause-`5` `reference` follow-on on that
-  same tail is now also pinned as a neutral control because it leaves the
-  whole `4331 / 553 / 2271` surface unchanged. Newer exact clause-`5`
-  `claim_flat_codomain` and `claim_next_codomain` follow-ons on that same
-  two-prefix tail are now also pinned as symmetric smaller tradeoff controls:
-  each lands only `4355 / 551 / 2265`, shrinks that same branch only to
-  clause-`4` `33 / 26` / `59`, and still widens the `small_cluster` to
-  `3156 / 526 / 526 / 0`. Together they merely split the older clause-`4`
-  `reference`-sheet tradeoff into its two exact clause-`5` claim families, so
-  the clause-`4` `reference` remaining-three tail is now exhausted as a
-  cleaner local repair target. The next operational slice is therefore no
-  longer another clause-`5` tail probe but to step back up to the broader
-  dominant clause-`0` / clause-`1` claim surface outside that exhausted tail
-  rather than the larger clause-`4` `claim_next_bridge` half or the full
-  reopening
-- treating the two reverted clause-`1` side-pocket broadenings as negative
-  controls only:
-  the clause-`1` `demo_eventually_codomain` exact-pocket reland and the
-  broader clause-`0` `claim_flat_domain` plus clause-`1`
-  `demo_flat_codomain` exact-pocket reland both lift local generated breadth
-  to `4466` but also widen the clean partial-prefix wall to `626`, so neither
-  is the next move
-- treating the reverted clause-`3` `anchor-11` exact-argument widening onto
-  the broader clause-`0` / clause-`1` claim surface as another negative
-  control only:
-  it leaves the clean `553` wall and the executable remaining-two nine-pair
-  split unchanged while reopening `72` summary-stage incumbent captures, so
-  it is also not the next move
-- treating the reverted clause-`5` side-pocket broadening onto the claim-safe
-  clause-`0` / clause-`1` surface as another negative control only:
-  it lifts local generated breadth to `4779` and widens the `small_cluster`
-  to `3516 / 586 / 586 / 0`, but it also widens the clean partial-prefix
-  wall to `585`, so it is also not the next move
-- treating the reverted claim-safe clause-`4` reopenings as negative controls
-  only:
-  reopening either the clause-`4` `demo_sharp_codomain` side pocket or the
-  clause-`4` `demo_sharp_bridge` side pocket on the claim-safe clause-`0` /
-  clause-`1` surface lifts local generated breadth only to `4587` but still
-  widens the clean partial-prefix wall to `585`, and reopening both together
-  lifts local breadth to `4843` but widens the wall further to `617`, so none
-  of those clause-`4` claim-safe reopenings is the next move
-- treating the next honest slice as narrower than any claim-safe clause-`4`
-  or clause-`5` reopening or the full reference-clause-`0` tradeoff control:
-  the dominant remaining-two wall still lives on the clause-`0` /
-  clause-`1` claim surface and the clause-`4` `claim_next_bridge` plus
-  `reference` families, but the new claim-safe clause-`4` controls show that
-  reopening those side pockets directly is still too broad, and the newer
-  `reference + demo_flat_codomain` tradeoff control shows that the next
-  landed repair should isolate its escaping `16` captures without taking the
-  accompanying `small_cluster` reopening; the exact clause-`5`
-  `reference` tail cell is already neutral, the exact clause-`5`
-  `claim_flat_codomain` and `claim_next_codomain` tail cells are now pinned
-  as symmetric smaller tradeoff controls at `4355 / 551 / 2265`, and together
-  they merely decompose the older clause-`4` `reference`-sheet tradeoff, so
-  the next honest slice is no longer another clause-`5` tail probe
-- treating the remaining step-`15` `small_cluster` incumbent surface as a
-  landed local relief rather than the live blocker:
-  the old summary-stage same-primary `103 / 8` bit-cost spread is now closed,
-  and the remaining local incumbent pressure is down to `3`
-  fenced `single`-bucket prunes
-- moving admissibility, mutation, scheduling, and certification toward
-  family-agnostic structural evidence
-- not using stronger words like `unguided` before the certification gate lands
-- treating the two newer local step-`13` widened probes,
-  `[3,5,3,3,5,1,1]` and `[5,1,3,3,5,3,3]`, as negative controls only:
-  they still show how local breadth can be reopened unsafely, but they are
-  not the landed repair; both the
-  position-`1` / position-`4` reland and the
-  position-`0` / position-`4` / position-`5` / position-`6` reland are now
-  frozen as executable regressions on the repaired step-`12` chain
-- treating the nearby clause-`3` anchor-`11` neighborhood as narrowly landed:
-  only the exact-argument pocket is now live, it is isolated to the current
-  claim clause-`2` variants, it stays non-winning by losing to the canonical
-  step-`15` winner on bit cost `236` versus `229`, clause `6` still fences
-  the unsafe `89 / 8` rival, and the lifted anchor-`11` variants must stay
-  out
+- use [../../autonomous_progress.md](../../autonomous_progress.md) as the
+  canonical home for live counters, blocker anatomy, and the current
+  operating position
+- use [../../autonomous_next_steps.md](../../autonomous_next_steps.md) as the
+  only home for the active slice and explicit "not the next move" guidance
+- use [../../autonomous_ledger.md](../../autonomous_ledger.md) for probe
+  history, negative controls, and why earlier ideas were ruled out
+- use [../../autonomous_plan.md](../../autonomous_plan.md) for
+  medium-horizon sequencing and exit criteria rather than re-explaining the
+  current slice
+- keep certification language honest: the claim lane remains at
+  `bounded live recovery` until a stored certificate passes
+- use `scripts/compare_runs.py`, `scripts/benchmark_claim_lane.py`, and
+  `scripts/certify_claim_lane.py` as the evidence surfaces before moving the
+  search code again
+- treat the step-`15` partial-prefix wall, the dominant clause-`0` / clause-`1`
+  pairings, and the live clause-`4` split as live diagnosis owned by
+  [../../autonomous_progress.md](../../autonomous_progress.md)
+- treat the active slice and the exact next move as owned by
+  [../../autonomous_next_steps.md](../../autonomous_next_steps.md), not by
+  this skill file
+- keep the next repair above exhausted clause-`5` tail probes and above
+  demo-only reopenings; the skill should route you to the live docs, not
+  restate their full diagnostic ledger
+- treat negative controls, tradeoff controls, and probe outcomes as ledger
+  entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
+- keep the remaining local guardrails green while moving toward
+  family-agnostic structural evidence and honest certification language
+- keep nearby step-`13` widenings and anchor-`11` side pockets fenced unless a
+  new active slice explicitly promotes them in
+  [../../autonomous_next_steps.md](../../autonomous_next_steps.md)
 
 ### If you are working on reporting or evidence
 
@@ -973,45 +585,13 @@ Reject designs that:
 - The tracked demo-lane signoff set is currently closed; use the repo-level
   demo-lane docs and `references/12-current-demo-lane.md` as the regression
   baseline for future work.
-- The claim lane now exists as a separate scaffold, but its policy metadata
-  now honestly reports that claim-debt admissibility, a claim-generic late
-  surface, and structural-generic bucket scheduling are landed; later `kappa
-  7-9` mutators and claim-path exactness rechecks are now also landed; the
-  repo also now has a claim-lane compare audit, a failing-until-earned
-  certification script, and richer manifest provenance/build fingerprints,
-  while failed-run evidence preservation is now landed, claim proof-close now
-  both drops evaluated terminal payloads and releases processed retained prefix
-  groups more aggressively, claim materialization now also compacts duplicated
-  legality-cache terminal payloads plus streams uncached terminal
-  materialization directly, and claim frontier items now reuse both the shared
-  clause catalog and the shared serialized prefix order key; the latest smoke
-  and release reruns removed the old step-4 startup RSS cliff, then sped up
-  the hot release step-4 path by about `12-14%` and another about `18-20%`,
-  and the newest step-4 throughput pass now reuses one scratch terminal
-  telescope plus the precomputed prefix bit cost after the stored full-profile
-  rerun showed a retained-prefix plateau inside step `4`; the current
-  canonical stored bundle is clean-tree completed `v12`, breadth still fails
-  honestly at step `1` and step `15`, but stored step `15` has now lifted to
-  `4331 / 5000`, stored step `13` is re-earned, and the clean stored/local
-  guardrail surface now holds `4331` after the fenced clause-`4` /
-  clause-`5` side-pocket relands plus the landed small-cluster relief, the
-  narrower clause-`5` `demo_flat_codomain` extension, the newer
-  clause-`4` `demo_sharp_bridge` reopening, the newer clause-`5`
-  bridge-pocket stack extension, and the newer clause-`1`
-  `demo_flat_codomain` side-pocket reland; the newer clause-`0`
-  `demo_next_domain` exact-pocket reland plus the clause-`5`
-  exact-pocket follow-on now carry that surface to `4331` / `553` / `3`; the old
-  `246`-candidate `small_cluster` wall is collapsed to `3` residual fenced
-  `single`-bucket incumbent prunes on top of a
-  `3132 / 522 / 522 / 0` `small_cluster` surface, and the guarded local
-  step-`11` breadth
-  repair plus the narrow step-`12` selector repair are now both re-earned on
-  stored evidence.
-- The next operational claim-lane work should focus on clean canonical-bundle
-  diagnosis at stored step `15`, while keeping step `1` explicit, stored
-  step `13` frozen as a hit, and the matched `4331` clean late surface fenced,
-  rather than on reopening another local step-`11` theory slice,
-  another runtime-only step-`4` micro-optimization, another rerun first, or
-  new step-`13` band/reanchor widening.
+- The claim lane has real configs, artifacts, compare/certify/benchmark
+  tooling, and landed claim-specific mechanics, but live counters and probe
+  history now live in the autonomous docs rather than in this skill file.
+- For current claim-lane status, read
+  [references/13-current-claim-lane.md](references/13-current-claim-lane.md),
+  [../../autonomous_progress.md](../../autonomous_progress.md),
+  [../../autonomous_next_steps.md](../../autonomous_next_steps.md), and
+  [../../autonomous_ledger.md](../../autonomous_ledger.md).
 - Start with [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md), then load only
   the track-specific references you actually need.

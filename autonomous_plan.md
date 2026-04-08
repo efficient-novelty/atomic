@@ -3,8 +3,18 @@
 Last updated: 2026-04-08
 Status: active
 
-This file is the staged path from the current `v12` state to final signoff.
-It is deliberately operational rather than historical.
+This file owns the medium-horizon path from the current canonical claim bundle
+to final signoff.
+
+## Contract
+
+- Keep phases, dependencies, and exit criteria here.
+- Do not store live counters here. Use
+  [autonomous_progress.md](autonomous_progress.md).
+- Do not store the exact current work order here. Use
+  [autonomous_next_steps.md](autonomous_next_steps.md).
+- Do not store probe history here. Use
+  [autonomous_ledger.md](autonomous_ledger.md).
 
 ## Goal
 
@@ -16,86 +26,40 @@ Produce one stored `desktop_claim_shadow` bundle that:
 
 Until then, wording stays at `bounded live recovery`.
 
-## Current Position
-
-- Canonical stored evidence is
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12`.
-- Stored parity is already earned.
-- Stored compare is ready and the refreshed benchmark now covers `v11` plus
-  `v12`.
-- Stored certification still fails only on breadth:
-  - step `1 = 546 / 2144`
-  - step `15 = 4331 / 5000`
-- The clean stored late surface and the local guardrail now match:
-  - step `13 = 2320`
-  - step `14 = 12027`
-  - step `15 = 4331`
-- The remaining local blocker is no longer the old broad `small_cluster`
-  incumbent wall. It is the clean step-`15` residual of `553`
-  partial-prefix bar failures plus `3` fenced `single`-bucket incumbent
-  prunes.
-- The exact clause-`5` `reference` follow-on on the clause-`4` `reference`
-  remaining-three tail is now pinned as a neutral control on the canonical
-  `4331 / 553 / 2271` surface.
-- The exact clause-`5` `claim_flat_codomain` and `claim_next_codomain`
-  single-family follow-ons on that same tail are now both pinned as symmetric
-  smaller tradeoff controls at `4355 / 551 / 2265`, with the larger
-  `reference + demo_flat_codomain` branch only shrinking to
-  clause-`4` `33 / 26` / `59` while `small_cluster` still widens to
-  `3156 / 526 / 526 / 0`.
-- Together those two single-family probes now show the clause-`4`
-  `reference` remaining-three tail is exhausted as a cleaner local repair
-  target, so Phase 1 should step back up to the broader dominant
-  clause-`0` / clause-`1` claim surface outside that tail before another
-  rerun.
-- A newer exact remaining-two mismatch-`1` clause-`5` bridge-slice reopening
-  is now also pinned as a widening negative control at `4511 / 571 / 2325`:
-  it widens `small_cluster` to `3276 / 546 / 546 / 0`, inflates the three
-  mismatch-`1` pairings to `48 / 48 / 67`, and leaves the live clause-`4`
-  `24 / 18`, `24 / 18`, and `33 / 28` split unchanged.
-- So Phase 1 should now stay above clause-`5` bridge-side reopenings too and
-  work directly against the live clause-`4` `claim_next_bridge` /
-  `reference` families under the dominant mismatch-`1` clause-`0` /
-  clause-`1` pairings.
-
-## Phase 1: Narrow The Remaining Step-15 Wall
+## Phase 1: Land One Step-15 Repair
 
 Goal:
 
-- improve the clean step-`15` late-surface miss on top of `v12` without
-  changing the canonical accepted path
+- improve the clean step-`15` miss on top of canonical `v12`
 
 Must keep true:
 
 - accepted step `15` winner stays canonical `103 / 8`
-- isolated `single` pocket stays fenced
+- the isolated `single` pocket stays fenced
 - `small_cluster` does not regress
-- unsafe lifted `89 / 8` terminals do not become live
+- stronger-than-canonical lifted `89 / 8` terminals do not become live
 
 Do not use:
 
-- blanket same-primary relief
-- exact-family same-primary relief
-- subset-local same-primary relief
+- blanket, exact-family, or subset-local same-primary relief
 - raw lifted-shell relands
-- claim-safe clause-`4` `demo_sharp_codomain` or `demo_sharp_bridge`
-  reopenings, whether single-side or combined
+- raw clause-`3` widening
+- claim-safe clause-`4` or clause-`5` reopenings
 - exact remaining-two mismatch-`0` or mismatch-`1` clause-`5`
   bridge-slice reopenings
-- raw position-`0`, broad clause-`4`, or broad clause-`5` relands
-- raw step-`13` widened controls
+- a rerun-first or step-`1`-first pass
 
 Exit criterion:
 
-- one focused local repair is regression-backed and sets up the next clean
-  rerun beyond `v12`
+- one focused local repair is regression-backed and clearly better than the
+  current `4331 / 553` local surface
 
 ## Phase 2: Re-Earn Stored Breadth
 
 Goal:
 
-- run one new clean full-profile bundle that consumes the next landed local
-  repair
+- consume the landed local repair in one new clean full-profile bundle beyond
+  `v12`
 
 Required output:
 
@@ -113,13 +77,13 @@ Exit criterion:
 
 Goal:
 
-- close the breadth blockers from stored evidence
+- close the remaining stored breadth blockers
 
 Open gates:
 
 - step `15 >= 5000`
 - step `1 = 2144`
-- runtime remains within a certified moderate threshold
+- `full_telescopes_evaluated` stays within a certified moderate threshold
 
 Decision rule:
 
@@ -130,11 +94,11 @@ Decision rule:
 
 Goal:
 
-- produce one passing stored certification surface
+- store one passing certification surface
 
 Required output:
 
-- ready compare report
+- refreshed compare report
 - refreshed benchmark bundle
 - passing `claim_certificate.json`
 
@@ -156,24 +120,12 @@ Rules:
 - tie any stronger sentence directly to the stored certificate and disclosed
   desktop bundle
 
-## Working Rules
+## Operating Rules
 
 - Trust stored evidence over terminal impressions.
 - Treat `v12` as canonical until a newer stored bundle clearly replaces it.
-- Prefer narrow, regression-backed fixes over broader rewrites.
-- Do not spend another cycle on rerun setup before the next local step-`15`
-  repair is real.
-- Do not reopen already-closed step-`11` through step-`14` work unless a new
-  regression forces it.
-
-## Success Condition
-
-This plan is complete only when one stored `desktop_claim_shadow` bundle shows
-all of the following at once:
-
-- full-profile completion through step `15`
-- accepted-hash parity through step `15`
-- breadth gates passed from stored evidence
-- compare, benchmark, and certification all pass
-- the accepted late path is still canonical
-- the evidence is strong enough to support stronger wording
+- Keep live numbers in [autonomous_progress.md](autonomous_progress.md).
+- Keep current execution instructions in
+  [autonomous_next_steps.md](autonomous_next_steps.md).
+- Keep binary gates in [autonomous_checklist.md](autonomous_checklist.md).
+- Keep experiment history in [autonomous_ledger.md](autonomous_ledger.md).
