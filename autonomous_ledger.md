@@ -238,3 +238,19 @@ This file is the append-only history for `desktop_claim_shadow`.
   most naturally into its clause-`2` sheet split or an equivalently fine
   remaining-one exact-summary partition, rather than spending another turn on
   equivalent pair-cell relands.
+- Scope: localize below the representative mismatch-`0` pair cell onto its
+  clause-`2` sheets.
+  Result: under
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge / claim_flat_codomain`,
+  the `claim_flat_domain` and `claim_sharp_codomain` sheets each landed the
+  same smaller tradeoff at `4343 / 552 / 2268` with
+  `small_cluster = 3141 / 522 / 522 / 0`, while the sibling `reference` sheet
+  stayed neutral on `4331 / 553 / 2271`; each claim-side probe lowered only
+  its own clause-`2` share from `15` to `14`, left the sibling claim sheet at
+  `15` and the reference sheet at `12`, and contracted the representative
+  clause-`4` split only from `24 / 18` to `23 / 18`.
+  Consequence: the representative pair-cell `4355 / 551 / 2265` tradeoff is
+  exactly the union of the two claim-side clause-`2` sheets, so the next
+  revisit has to move below clause-`2` sheet identity into a finer
+  remaining-one exact-summary partition under one representative claim-side
+  sheet rather than swapping between the two claim sheets again.

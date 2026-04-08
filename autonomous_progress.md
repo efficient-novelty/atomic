@@ -218,6 +218,27 @@ Until that exists, wording stays at `bounded live recovery`.
     clause-`5` family choice are now both exhausted at pair-cell scope, so
     the next revisit has to move one layer deeper below a representative pair
     cell rather than comparing more equivalent pair-cell relands
+- The representative mismatch-`0` pair cell is now also localized one layer
+  deeper across its clause-`2` sheets:
+  - under
+    `claim_eventual_domain / claim_next_codomain / claim_next_bridge / claim_flat_codomain`,
+    the `claim_flat_domain` and `claim_sharp_codomain` sheets each land the
+    same smaller tradeoff at `4343 / 552 / 2268`
+  - each widens `small_cluster` only to `3141 / 522 / 522 / 0`
+  - the sibling `reference` sheet is a neutral control on the untouched
+    `4331 / 553 / 2271` baseline
+  - each claim-side probe lowers only its own clause-`2` share from `15` to
+    `14`, while the sibling claim sheet stays at `15` and the reference sheet
+    stays at `12`
+  - the representative pair's clause-`4` split contracts only the
+    `claim_next_bridge` share, from `24 / 18` to `23 / 18`
+  - the representative clause-`4` `claim_next_bridge` plus clause-`5`
+    `claim_flat_codomain` bucket contracts only from `48` to `47`
+  - consequence: the representative pair-cell `4355 / 551 / 2265` tradeoff is
+    exactly the union of the two claim-side clause-`2` sheets, so the next
+    revisit has to move below clause-`2` sheet identity into a finer
+    remaining-one exact-summary partition under one representative claim-side
+    sheet rather than swapping between the two claim sheets again
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -281,12 +302,23 @@ Until that exists, wording stays at `bounded live recovery`.
 - Do not stop at the pair-cell subprobes below those two active clause-`5`
   cells either; each only narrows the wall to `551` while still widening
   `small_cluster` to `3150`.
-- Because all `12` pair-cell relands are symmetric at that depth, the next
-  revisit should choose one representative active pair cell and move below it,
-  most naturally into its clause-`2` sheet split or an equivalently fine
-  remaining-one exact-summary partition, rather than rechecking the other live
-  pairings or swapping between the `claim_flat_codomain` and `reference`
-  families again.
+- Because all `12` pair-cell relands were symmetric at that depth, the current
+  deep probe already moved below one representative active pair cell; the next
+  revisit should stay below that representative cell rather than rechecking the
+  other live pairings or swapping between the `claim_flat_codomain` and
+  `reference` families again.
+- Do not stop at the representative pair-cell clause-`2`
+  `claim_flat_domain` or `claim_sharp_codomain` sheet subprobes either; each
+  only narrows the wall to `552` while still widening `small_cluster` to
+  `3141`.
+- Do not reopen the representative pair-cell clause-`2` `reference` sheet
+  first; it is now a neutral control on the untouched `4331 / 553 / 2271`
+  baseline.
+- Because the two representative claim-side clause-`2` sheets are symmetric
+  smaller tradeoff controls and the reference sheet is inert, the next revisit
+  should move below one representative claim-side clause-`2` sheet into a
+  finer remaining-one exact-summary partition before considering the smaller
+  claim-safe mismatch-`1` tier.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

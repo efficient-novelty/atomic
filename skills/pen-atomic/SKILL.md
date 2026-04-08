@@ -396,6 +396,11 @@ Focus on:
   live pairings, so route to the live docs before retrying that pair-cell
   scope instead of assuming one pairing or active clause-`5` family is newly
   privileged
+- treat the representative clause-`2` sheet subprobes below that pair-cell as
+  live autonomy detail too; the two claim-side sheets are now matching smaller
+  tradeoff controls while the reference sheet is neutral, so route to the live
+  docs before retrying clause-`2` identity instead of assuming one sheet is
+  newly privileged
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward

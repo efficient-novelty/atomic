@@ -6103,6 +6103,13 @@ enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel 
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel {
+    ClaimFlatDomain,
+    ClaimSharpCodomain,
+    Reference,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel {
     ClaimFlatCodomain,
     Reference,
@@ -6112,6 +6119,7 @@ enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel
 struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
     clause_zero: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel,
     clause_one: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel,
+    clause_two: Option<ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel>,
     clause_five: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel,
 }
 
@@ -6975,6 +6983,53 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause
     }
 }
 
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_two_matches_label(
+    clause: &pen_core::clause::ClauseRec,
+    label: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel,
+) -> bool {
+    match label {
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain => {
+            clause.role == ClauseRole::Formation
+                && matches!(
+                    &clause.expr,
+                    Expr::Pi(domain, codomain)
+                        if matches!(
+                            domain.as_ref(),
+                            Expr::Next(body)
+                                if matches!(
+                                    body.as_ref(),
+                                    Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                )
+                        ) && matches!(
+                            codomain.as_ref(),
+                            Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+                        )
+                )
+        }
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimSharpCodomain => {
+            clause.role == ClauseRole::Formation
+                && matches!(
+                    &clause.expr,
+                    Expr::Pi(domain, codomain)
+                        if matches!(
+                            domain.as_ref(),
+                            Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+                        ) && matches!(
+                            codomain.as_ref(),
+                            Expr::Eventually(body)
+                                if matches!(
+                                    body.as_ref(),
+                                    Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                )
+                        )
+                )
+        }
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::Reference => {
+            *clause == Telescope::reference(15).clauses[2]
+        }
+    }
+}
+
 fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_flat_codomain_clause_five_matches(
     clause: &pen_core::clause::ClauseRec,
 ) -> bool {
@@ -7330,13 +7385,20 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_c
         })
         && prefix_telescope
             .clauses
-            .get(1)
-            .is_some_and(|clause| {
-                claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_one_matches_label(
-                    clause,
-                    selector.clause_one,
+        .get(1)
+        .is_some_and(|clause| {
+            claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_one_matches_label(
+                clause,
+                selector.clause_one,
+            )
+        })
+        && prefix_telescope.clauses.get(2).is_some_and(|clause| {
+            selector.clause_two.is_none_or(|label| {
+                claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_two_matches_label(
+                    clause, label,
                 )
             })
+        })
         && prefix_telescope.clauses.get(5).is_some_and(|clause| match selector.clause_five {
             ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain => {
                 claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_flat_codomain_clause_five_matches(
@@ -23360,6 +23422,7 @@ mod tests {
                             super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
                                 clause_zero,
                                 clause_one,
+                                clause_two: None,
                                 clause_five,
                             },
                         );
@@ -23415,6 +23478,7 @@ mod tests {
                 super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
                     clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
                     clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                    clause_two: None,
                     clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
                 },
             );
@@ -23678,6 +23742,335 @@ mod tests {
             .into_iter()
             .collect(),
             "the representative pair-cell tradeoff should lower only the targeted clause-4 claim-next-bridge plus clause-5 claim-flat-codomain bucket from 48 to 46 while leaving every sibling cell inert"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_pair_cell_clause_two_sheets_split_into_two_claim_side_smaller_tradeoff_controls_plus_one_reference_neutral_control()
+     {
+        let clause_two_labels = [
+            (
+                "claim_flat_domain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain,
+            ),
+            (
+                "claim_sharp_codomain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimSharpCodomain,
+            ),
+            (
+                "reference",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::Reference,
+            ),
+        ];
+        let mut outcomes = BTreeMap::new();
+
+        for (clause_two_name, clause_two) in clause_two_labels {
+            let _search_override =
+                super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                    super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                        clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                        clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                        clause_two: Some(clause_two),
+                        clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
+                    },
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let clause_two_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_two_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_zero, clause_one, _clause_two), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *clause_zero == "claim_eventual_domain"
+                            && *clause_one == "claim_next_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let clause_four_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_zero, clause_one, _clause_four), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *clause_zero == "claim_eventual_domain"
+                            && *clause_one == "claim_next_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let clause_four_five_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_four, clause_five), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *clause_four == "claim_next_bridge"
+                            && *clause_five == "claim_flat_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("claim prefix through step 14 should build");
+            let prefix = claim_steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+            outcomes.insert(
+                clause_two_name,
+                (
+                    step_fifteen.demo_funnel.generated_raw_prefixes,
+                    step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
+                    zero_summary.captured_prefixes,
+                    wall_summary.first_mismatch_position_counts,
+                    bucket_stats
+                        .get("k8:structural_generic:temporal_operator:library_backed:small_cluster")
+                        .map(|stats| stats.generated_terminal_candidates)
+                        .expect("small_cluster bucket should stay present"),
+                    clause_two_counts,
+                    clause_four_counts,
+                    clause_four_five_counts,
+                ),
+            );
+        }
+
+        assert_eq!(outcomes.len(), 3);
+        assert_eq!(
+            outcomes.get("claim_flat_domain"),
+            Some(&(
+                4343,
+                552,
+                2268,
+                [
+                    (Some(0_usize), 311_usize),
+                    (Some(1), 177),
+                    (Some(2), 50),
+                    (Some(3), 14)
+                ]
+                .into_iter()
+                .collect(),
+                3141,
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_flat_domain",
+                        ),
+                        14_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_sharp_codomain",
+                        ),
+                        15,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "reference",
+                        ),
+                        12,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_next_bridge",
+                        ),
+                        23_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "reference",
+                        ),
+                        18,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+                [(
+                    (Some(0_usize), "claim_next_bridge", "claim_flat_codomain",),
+                    47_usize,
+                )]
+                .into_iter()
+                .collect(),
+            )),
+            "the claim-flat clause-two sheet should be a one-prefix smaller tradeoff: it trims only its own 15-capture share to 14, lowering the representative pair to 41 and the active clause-4/clause-5 bucket to 47"
+        );
+        assert_eq!(
+            outcomes.get("claim_sharp_codomain"),
+            Some(&(
+                4343,
+                552,
+                2268,
+                [
+                    (Some(0_usize), 311_usize),
+                    (Some(1), 177),
+                    (Some(2), 50),
+                    (Some(3), 14)
+                ]
+                .into_iter()
+                .collect(),
+                3141,
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_flat_domain",
+                        ),
+                        15_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_sharp_codomain",
+                        ),
+                        14,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "reference",
+                        ),
+                        12,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_next_bridge",
+                        ),
+                        23_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "reference",
+                        ),
+                        18,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+                [(
+                    (Some(0_usize), "claim_next_bridge", "claim_flat_codomain",),
+                    47_usize,
+                )]
+                .into_iter()
+                .collect(),
+            )),
+            "the claim-sharp clause-two sheet should land the same one-prefix smaller tradeoff, only swapping which claim-side sheet drops from 15 to 14 while the reference share stays inert at 12"
+        );
+        assert_eq!(
+            outcomes.get("reference"),
+            Some(&(
+                4331,
+                553,
+                2271,
+                [
+                    (Some(0_usize), 312_usize),
+                    (Some(1), 177),
+                    (Some(2), 50),
+                    (Some(3), 14)
+                ]
+                .into_iter()
+                .collect(),
+                3132,
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_flat_domain",
+                        ),
+                        15_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_sharp_codomain",
+                        ),
+                        15,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "reference",
+                        ),
+                        12,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_next_bridge",
+                        ),
+                        24_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "reference",
+                        ),
+                        18,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+                [(
+                    (Some(0_usize), "claim_next_bridge", "claim_flat_codomain",),
+                    48_usize,
+                )]
+                .into_iter()
+                .collect(),
+            )),
+            "the reference clause-two sheet should stay a neutral control, confirming that the representative pair-cell tradeoff is exactly the union of the two claim-side sheets"
         );
     }
 
