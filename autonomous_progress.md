@@ -205,6 +205,19 @@ Until that exists, wording stays at `bounded live recovery`.
   - consequence: the next revisit should move below the two active
     `claim_flat_codomain / reference` cells and leave the inert
     `claim_next_codomain` sibling alone
+- Those two active clause-`5` cells are now also exhausted one layer deeper
+  at pair-cell scope:
+  - every live clause-`0` / clause-`1` pair under either active clause-`5`
+    family lands the same `4355 / 551 / 2265` smaller tradeoff
+  - `small_cluster` widens only to `3150 / 522 / 522 / 0`
+  - the isolated `single` pocket stays fenced
+  - each probe contracts only its targeted live pair from `42` to `40`
+  - each probe contracts only its targeted clause-`4` `claim_next_bridge`
+    plus active clause-`5` bucket from `48` to `46`
+  - consequence: the clause-`0` / clause-`1` axis and the active
+    clause-`5` family choice are now both exhausted at pair-cell scope, so
+    the next revisit has to move one layer deeper below a representative pair
+    cell rather than comparing more equivalent pair-cell relands
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -265,6 +278,15 @@ Until that exists, wording stays at `bounded live recovery`.
   clause-`5` `claim_flat_codomain` or `reference` exact-summary cells either;
   each narrows the wall only to `541` while still widening `small_cluster` to
   `3240`.
+- Do not stop at the pair-cell subprobes below those two active clause-`5`
+  cells either; each only narrows the wall to `551` while still widening
+  `small_cluster` to `3150`.
+- Because all `12` pair-cell relands are symmetric at that depth, the next
+  revisit should choose one representative active pair cell and move below it,
+  most naturally into its clause-`2` sheet split or an equivalently fine
+  remaining-one exact-summary partition, rather than rechecking the other live
+  pairings or swapping between the `claim_flat_codomain` and `reference`
+  families again.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

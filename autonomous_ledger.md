@@ -223,3 +223,18 @@ This file is the append-only history for `desktop_claim_shadow`.
   subcells under the mismatch-`0` `claim_next_bridge` half, so the next
   revisit should localize below those two active cells and ignore the inert
   `claim_next_codomain` sibling.
+- Scope: localize below those two active mismatch-`0` clause-`5`
+  `claim_flat_codomain / reference` cells onto individual live clause-`0` /
+  clause-`1` pair cells.
+  Result: all `12` pair-cell overrides landed the same smaller tradeoff at
+  `4355 / 551 / 2265` with `small_cluster = 3150 / 522 / 522 / 0`; each
+  probe kept the isolated `single` pocket fenced, contracted only its
+  targeted live mismatch-`0` pair from `42` to `40`, and contracted only its
+  targeted clause-`4` `claim_next_bridge` plus active clause-`5` bucket from
+  `48` to `46`.
+  Consequence: both active clause-`5` families and all six live
+  clause-`0` / clause-`1` pairings are now exhausted at pair-cell scope. The
+  next revisit has to move one layer deeper below a representative pair cell,
+  most naturally into its clause-`2` sheet split or an equivalently fine
+  remaining-one exact-summary partition, rather than spending another turn on
+  equivalent pair-cell relands.

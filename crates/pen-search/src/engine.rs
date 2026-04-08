@@ -6089,6 +6089,39 @@ thread_local! {
         std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
 }
 
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel {
+    ClaimEventualDomain,
+    ClaimFlatDomain,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel {
+    ClaimNextCodomain,
+    ClaimSharpCodomain,
+    Reference,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel {
+    ClaimFlatCodomain,
+    Reference,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+    clause_zero: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel,
+    clause_one: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel,
+    clause_five: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel,
+}
+
+#[cfg(test)]
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_PAIR_CELL_OVERRIDE:
+        std::cell::RefCell<Option<ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector>> =
+            const { std::cell::RefCell::new(None) };
+}
+
 #[cfg(test)]
 fn start_pruned_terminal_prefix_capture() {
     PRUNED_TERMINAL_PREFIX_CAPTURE.with(|capture| {
@@ -6177,6 +6210,9 @@ struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBrid
 
 #[cfg(test)]
 struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeClauseFiveReferenceOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellOverrideGuard;
 
 #[cfg(test)]
 impl Drop for ClaimStepFifteenFamilyLocalSamePrimaryReliefOverrideGuard {
@@ -6446,7 +6482,9 @@ fn override_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_sli
 }
 
 #[cfg(test)]
-impl Drop for ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroReferenceTailOverrideGuard {
+impl Drop
+    for ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroReferenceTailOverrideGuard
+{
     fn drop(&mut self) {
         CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_REFERENCE_TAIL_OVERRIDE.with(
             |override_enabled| {
@@ -6459,16 +6497,17 @@ impl Drop for ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroRefere
 #[cfg(test)]
 fn override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail()
 -> ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroReferenceTailOverrideGuard {
-    CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_REFERENCE_TAIL_OVERRIDE.with(
-        |override_enabled| {
+    CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_REFERENCE_TAIL_OVERRIDE
+        .with(|override_enabled| {
             *override_enabled.borrow_mut() = true;
-        },
-    );
+        });
     ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroReferenceTailOverrideGuard
 }
 
 #[cfg(test)]
-impl Drop for ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard {
+impl Drop
+    for ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard
+{
     fn drop(&mut self) {
         CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_HALF_OVERRIDE.with(
             |override_enabled| {
@@ -6502,7 +6541,7 @@ impl Drop for ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimN
 
 #[cfg(test)]
 fn override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain()
--> ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimFlatCodomainOverrideGuard {
+-> ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimFlatCodomainOverrideGuard{
     CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_FLAT_CODOMAIN_OVERRIDE.with(
         |override_enabled| {
             *override_enabled.borrow_mut() = true;
@@ -6524,7 +6563,7 @@ impl Drop for ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimN
 
 #[cfg(test)]
 fn override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain()
--> ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimNextCodomainOverrideGuard {
+-> ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimNextCodomainOverrideGuard{
     CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_NEXT_CODOMAIN_OVERRIDE.with(
         |override_enabled| {
             *override_enabled.borrow_mut() = true;
@@ -6546,13 +6585,35 @@ impl Drop for ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimN
 
 #[cfg(test)]
 fn override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference()
--> ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeClauseFiveReferenceOverrideGuard {
+-> ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeClauseFiveReferenceOverrideGuard{
     CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_REFERENCE_OVERRIDE.with(
         |override_enabled| {
             *override_enabled.borrow_mut() = true;
         },
     );
     ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeClauseFiveReferenceOverrideGuard
+}
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_PAIR_CELL_OVERRIDE
+            .with(|override_selector| {
+                *override_selector.borrow_mut() = None;
+            });
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+    selector: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector,
+) -> ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellOverrideGuard {
+    CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_PAIR_CELL_OVERRIDE.with(
+        |override_selector| {
+            *override_selector.borrow_mut() = Some(selector);
+        },
+    );
+    ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellOverrideGuard
 }
 
 #[cfg(test)]
@@ -6761,6 +6822,19 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_
     false
 }
 
+#[cfg(test)]
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell_override_selector()
+-> Option<ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector> {
+    CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_PAIR_CELL_OVERRIDE
+        .with(|override_selector| *override_selector.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell_override_selector()
+-> Option<ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector> {
+    None
+}
+
 fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_clause_two_matches(
     clause: &pen_core::clause::ClauseRec,
 ) -> bool {
@@ -6815,6 +6889,36 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_c
         )
 }
 
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_zero_matches_label(
+    clause: &pen_core::clause::ClauseRec,
+    label: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel,
+) -> bool {
+    match label {
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain => {
+            clause.role == ClauseRole::Formation
+                && matches!(
+                    &clause.expr,
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        }
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimFlatDomain => {
+            clause.role == ClauseRole::Formation
+                && matches!(
+                    &clause.expr,
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        }
+    }
+}
+
 fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_clause_one_matches(
     clause: &pen_core::clause::ClauseRec,
 ) -> bool {
@@ -6832,6 +6936,43 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_c
                         Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
                     )
         )
+}
+
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_one_matches_label(
+    clause: &pen_core::clause::ClauseRec,
+    label: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel,
+) -> bool {
+    match label {
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain => {
+            clause.role == ClauseRole::Formation
+                && matches!(
+                    &clause.expr,
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        }
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimSharpCodomain => {
+            clause.role == ClauseRole::Formation
+                && matches!(
+                    &clause.expr,
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        }
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::Reference => {
+            clause.role == ClauseRole::Formation
+                && matches!(
+                    &clause.expr,
+                    Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+                )
+        }
+    }
 }
 
 fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_flat_codomain_clause_five_matches(
@@ -6992,11 +7133,10 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_
     prefix_telescope: &Telescope,
 ) -> bool {
     if !claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_prefix_matches(
-            step_index,
-            admissibility,
-            prefix_telescope,
-        )
-    {
+        step_index,
+        admissibility,
+        prefix_telescope,
+    ) {
         return false;
     }
 
@@ -7164,6 +7304,53 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_
         )
 }
 
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell_matches(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    prefix_telescope: &Telescope,
+) -> bool {
+    let Some(selector) =
+        claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell_override_selector()
+    else {
+        return false;
+    };
+
+    claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half_base_matches(
+        step_index,
+        admissibility,
+        prefix_telescope,
+    ) && prefix_telescope
+        .clauses
+        .first()
+        .is_some_and(|clause| {
+            claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_zero_matches_label(
+                clause,
+                selector.clause_zero,
+            )
+        })
+        && prefix_telescope
+            .clauses
+            .get(1)
+            .is_some_and(|clause| {
+                claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_one_matches_label(
+                    clause,
+                    selector.clause_one,
+                )
+            })
+        && prefix_telescope.clauses.get(5).is_some_and(|clause| match selector.clause_five {
+            ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain => {
+                claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_flat_codomain_clause_five_matches(
+                    clause,
+                )
+            }
+            ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::Reference => {
+                claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_clause_five_matches(
+                    clause,
+                )
+            }
+        })
+}
+
 fn maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half(
     step_index: u32,
     admissibility: StrictAdmissibility,
@@ -7252,6 +7439,28 @@ fn maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_misma
     decision
 }
 
+fn maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    prefix_telescope: &Telescope,
+    decision: ExactPartialPrefixBoundDecision,
+) -> ExactPartialPrefixBoundDecision {
+    #[cfg(test)]
+    {
+        if matches!(decision, ExactPartialPrefixBoundDecision::CannotClearBar)
+            && claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell_matches(
+                step_index,
+                admissibility,
+                prefix_telescope,
+            )
+        {
+            return ExactPartialPrefixBoundDecision::Unknown;
+        }
+    }
+
+    decision
+}
+
 fn maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_cells(
     step_index: u32,
     admissibility: StrictAdmissibility,
@@ -7260,6 +7469,13 @@ fn maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_misma
 ) -> ExactPartialPrefixBoundDecision {
     let decision =
         maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail(
+            step_index,
+            admissibility,
+            prefix_telescope,
+            decision,
+        );
+    let decision =
+        maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
             step_index,
             admissibility,
             prefix_telescope,
@@ -22126,7 +22342,9 @@ mod tests {
         let pair_counts =
             current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
                 .into_iter()
-                .filter(|((mismatch, _clause_zero, _clause_one), _count)| *mismatch == Some(0_usize))
+                .filter(|((mismatch, _clause_zero, _clause_one), _count)| {
+                    *mismatch == Some(0_usize)
+                })
                 .collect::<BTreeMap<_, _>>();
         let clause_four_counts =
             current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
@@ -22339,12 +22557,7 @@ mod tests {
                     24
                 ),
                 (
-                    (
-                        Some(0_usize),
-                        "claim_flat_domain",
-                        "reference",
-                        "reference"
-                    ),
+                    (Some(0_usize), "claim_flat_domain", "reference", "reference"),
                     28
                 ),
             ]
@@ -22370,7 +22583,9 @@ mod tests {
         let pair_counts =
             current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
                 .into_iter()
-                .filter(|((mismatch, _clause_zero, _clause_one), _count)| *mismatch == Some(0_usize))
+                .filter(|((mismatch, _clause_zero, _clause_one), _count)| {
+                    *mismatch == Some(0_usize)
+                })
                 .collect::<BTreeMap<_, _>>();
         let clause_four_counts =
             current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
@@ -22590,12 +22805,7 @@ mod tests {
                     20
                 ),
                 (
-                    (
-                        Some(0_usize),
-                        "claim_flat_domain",
-                        "reference",
-                        "reference"
-                    ),
+                    (Some(0_usize), "claim_flat_domain", "reference", "reference"),
                     18
                 ),
             ]
@@ -22641,7 +22851,9 @@ mod tests {
         let pair_counts =
             current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
                 .into_iter()
-                .filter(|((mismatch, _clause_zero, _clause_one), _count)| *mismatch == Some(0_usize))
+                .filter(|((mismatch, _clause_zero, _clause_one), _count)| {
+                    *mismatch == Some(0_usize)
+                })
                 .collect::<BTreeMap<_, _>>();
         let clause_four_counts =
             current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
@@ -22799,7 +23011,9 @@ mod tests {
         let pair_counts =
             current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
                 .into_iter()
-                .filter(|((mismatch, _clause_zero, _clause_one), _count)| *mismatch == Some(0_usize))
+                .filter(|((mismatch, _clause_zero, _clause_one), _count)| {
+                    *mismatch == Some(0_usize)
+                })
                 .collect::<BTreeMap<_, _>>();
         let clause_four_counts =
             current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
@@ -22956,7 +23170,9 @@ mod tests {
         let pair_counts =
             current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
                 .into_iter()
-                .filter(|((mismatch, _clause_zero, _clause_one), _count)| *mismatch == Some(0_usize))
+                .filter(|((mismatch, _clause_zero, _clause_one), _count)| {
+                    *mismatch == Some(0_usize)
+                })
                 .collect::<BTreeMap<_, _>>();
         let clause_four_counts =
             current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
@@ -23094,6 +23310,374 @@ mod tests {
             .into_iter()
             .collect(),
             "the mismatch-0 claim-next-bridge plus clause-5 reference tradeoff should localize entirely onto that single clause-5 family while leaving the claim-flat-codomain and claim-next-codomain siblings inert"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_pair_cells_below_the_active_mismatch_zero_clause_five_cells_stay_uniform_smaller_tradeoff_controls()
+     {
+        let clause_zero_labels = [
+            (
+                "claim_eventual_domain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+            ),
+            (
+                "claim_flat_domain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimFlatDomain,
+            ),
+        ];
+        let clause_one_labels = [
+            (
+                "claim_next_codomain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+            ),
+            (
+                "claim_sharp_codomain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimSharpCodomain,
+            ),
+            (
+                "reference",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::Reference,
+            ),
+        ];
+        let clause_five_labels = [
+            (
+                "claim_flat_codomain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
+            ),
+            (
+                "reference",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::Reference,
+            ),
+        ];
+        let mut outcomes = BTreeMap::new();
+
+        for (clause_zero_name, clause_zero) in clause_zero_labels {
+            for (clause_one_name, clause_one) in clause_one_labels {
+                for (clause_five_name, clause_five) in clause_five_labels {
+                    let _search_override =
+                        super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                                clause_zero,
+                                clause_one,
+                                clause_five,
+                            },
+                        );
+                    let step_fifteen =
+                        profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+                    let bucket_stats = step_fifteen
+                        .demo_bucket_stats
+                        .iter()
+                        .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                        .collect::<BTreeMap<_, _>>();
+                    let pair_counts =
+                        current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                            .into_iter()
+                            .filter(|((mismatch, _pair_clause_zero, _pair_clause_one), _count)| {
+                                *mismatch == Some(0_usize)
+                            })
+                            .collect::<BTreeMap<_, _>>();
+                    outcomes.insert(
+                        (clause_zero_name, clause_one_name, clause_five_name),
+                        (
+                            step_fifteen.demo_funnel.generated_raw_prefixes,
+                            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
+                            bucket_stats
+                                .get(
+                                    "k8:structural_generic:temporal_operator:library_backed:small_cluster",
+                                )
+                                .map(|stats| stats.generated_terminal_candidates)
+                                .expect("small_cluster bucket should stay present"),
+                            pair_counts
+                                .get(&(Some(0_usize), clause_zero_name, clause_one_name))
+                                .copied()
+                                .expect("the targeted mismatch-0 pair should stay visible"),
+                        ),
+                    );
+                }
+            }
+        }
+
+        assert_eq!(outcomes.len(), 12);
+        assert!(
+            outcomes
+                .values()
+                .all(|outcome| *outcome == (4355, 551, 3150, 40)),
+            "each pair-cell below the two active mismatch-0 clause-5 cells should land the same smaller 4355 / 551 tradeoff with a targeted 40-capture pair and the reduced 3150 small-cluster shell"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_on_a_representative_mismatch_zero_pair_cell_stays_a_smaller_tradeoff_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                    clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                    clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                    clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
+                },
+            );
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, _clause_one), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, _clause_one, _clause_four), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let clause_four_five_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_four, _clause_five), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4355);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 551,
+            "relaxing remaining-one exact-summary relief only on one live mismatch-0 pair cell under the active clause-5 family should stay a smaller tradeoff control rather than the landed repair"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the representative mismatch-0 pair-cell exact-summary tradeoff should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 551);
+        assert_eq!(
+            wall_summary.remaining_clause_slot_counts,
+            [(2_usize, 449_usize), (3, 102)].into_iter().collect(),
+            "the representative pair-cell tradeoff should shave only two remaining-two captures while leaving the remaining-three spill unchanged"
+        );
+        assert_eq!(
+            wall_summary.first_mismatch_position_counts,
+            [
+                (Some(0_usize), 310_usize),
+                (Some(1), 177),
+                (Some(2), 50),
+                (Some(3), 14)
+            ]
+            .into_iter()
+            .collect(),
+            "the representative pair-cell tradeoff should contract only a single first-mismatch-0 pairing rather than a broader mismatch tier"
+        );
+        assert_eq!(zero_summary.captured_prefixes, 2265);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3150,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the representative pair-cell tradeoff should still widen the same small-cluster shell, but only to 3150 rather than the larger 3240 or 3348 tradeoff shells"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the representative pair-cell tradeoff should still keep the isolated single pocket fenced"
+        );
+        assert_eq!(
+            pair_counts,
+            [
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain"
+                    ),
+                    40_usize
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_sharp_codomain"
+                    ),
+                    42
+                ),
+                ((Some(0_usize), "claim_eventual_domain", "reference"), 42),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_next_codomain"),
+                    42
+                ),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_sharp_codomain"),
+                    42
+                ),
+                ((Some(0_usize), "claim_flat_domain", "reference"), 42),
+            ]
+            .into_iter()
+            .collect(),
+            "the representative pair-cell tradeoff should contract only the targeted mismatch-0 pair from 42 to 40 and leave the other five live pairs unchanged"
+        );
+        assert_eq!(
+            clause_four_counts,
+            [
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain",
+                        "claim_next_bridge"
+                    ),
+                    22_usize
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain",
+                        "reference"
+                    ),
+                    18
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_sharp_codomain",
+                        "claim_next_bridge"
+                    ),
+                    24
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_sharp_codomain",
+                        "reference"
+                    ),
+                    18
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "reference",
+                        "claim_next_bridge"
+                    ),
+                    24
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "reference",
+                        "reference"
+                    ),
+                    18
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "claim_next_codomain",
+                        "claim_next_bridge"
+                    ),
+                    24
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "claim_next_codomain",
+                        "reference"
+                    ),
+                    18
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "claim_sharp_codomain",
+                        "claim_next_bridge"
+                    ),
+                    24
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "claim_sharp_codomain",
+                        "reference"
+                    ),
+                    18
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "reference",
+                        "claim_next_bridge"
+                    ),
+                    24
+                ),
+                (
+                    (Some(0_usize), "claim_flat_domain", "reference", "reference"),
+                    18
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "the representative pair-cell tradeoff should trim only the targeted pair's clause-4 claim-next-bridge share from 24 to 22 while leaving every sibling pair on the untouched 24 / 18 split"
+        );
+        assert_eq!(
+            clause_four_five_counts,
+            [
+                (
+                    (Some(0_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    46_usize
+                ),
+                (
+                    (Some(0_usize), "claim_next_bridge", "claim_next_codomain"),
+                    48
+                ),
+                ((Some(0_usize), "claim_next_bridge", "reference"), 48),
+                ((Some(0_usize), "reference", "claim_flat_codomain"), 36),
+                ((Some(0_usize), "reference", "claim_next_codomain"), 36),
+                ((Some(0_usize), "reference", "reference"), 36),
+            ]
+            .into_iter()
+            .collect(),
+            "the representative pair-cell tradeoff should lower only the targeted clause-4 claim-next-bridge plus clause-5 claim-flat-codomain bucket from 48 to 46 while leaving every sibling cell inert"
         );
     }
 

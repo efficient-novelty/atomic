@@ -390,6 +390,12 @@ Focus on:
   tradeoffs as live autonomy detail too; they are smaller tradeoff controls,
   while the sibling clause-`5` `claim_next_codomain` cell is inert, so route
   to the live docs before retrying any of those whole-cell slices
+- treat the deeper pair-cell subprobes below those active mismatch-`0`
+  clause-`5` `claim_flat_codomain / reference` cells as live autonomy detail
+  too; they are now symmetric smaller tradeoff controls across all `12`
+  live pairings, so route to the live docs before retrying that pair-cell
+  scope instead of assuming one pairing or active clause-`5` family is newly
+  privileged
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward
