@@ -99,6 +99,19 @@ Until that exists, wording stays at `bounded live recovery`.
   - claim-safe mismatch-`1` pairings are the smaller second tier at `84`
   - mismatch-`2` plus mismatch-`3` `reference / reference` tails are only the
     residual `54`
+- A direct parent-level exact-bound bypass on the whole remaining-two
+  mismatch-`0` claim-domain tier is now ruled out:
+  - redirecting that tier from `CannotClearBar` to `Unknown` at
+    `exact_partial_prefix_bound_decision(...)` dropped the clean wall from
+    `553` to `241`, which means the full `312` first-mismatch-`0` surface
+    escaped exact pruning
+  - `small_cluster` generated-terminal pressure jumped from `3132` to `7020`
+  - under the existing mismatch-`0` demo-flat override, generated breadth
+    jumped from `4985` to `10349`
+  - the isolated `single` pocket stayed fenced
+  - consequence: exact-bound relief has to stay below the whole
+    mismatch-`0` tier and work one layer deeper inside the live clause-`4` /
+    clause-`5` split or the remaining-one exact-summary path
 - The broad clause-`1` `demo_flat_codomain` reopening across that
   mismatch-`0` claim-domain tier is now also ruled out as a widening negative
   control:
@@ -134,8 +147,14 @@ Until that exists, wording stays at `bounded live recovery`.
   claim-domain surface before the smaller claim-safe mismatch-`1` tier or the
   `reference / reference` tails.
 - If the mismatch-`0` claim-domain surface is revisited, stay below the broad
-  clause-`1` `demo_flat_codomain` reopening; it reaches `4985` only by
-  widening the clean wall to `667` and broadening `small_cluster`.
+  clause-`1` `demo_flat_codomain` reopening and below whole-tier parent
+  exact-bound relief; the former reaches `4985` only by widening the clean
+  wall to `667`, and the latter drops the wall to `241` only by exploding the
+  noncanonical `small_cluster`.
+- When revisiting mismatch-`0`, work one layer deeper on the existing
+  clause-`4` `claim_next_bridge / reference` split, the aligned clause-`5`
+  families, or the remaining-one exact-summary path rather than on a broad
+  parent-level release of the whole tier.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

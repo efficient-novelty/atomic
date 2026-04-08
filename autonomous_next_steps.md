@@ -65,6 +65,18 @@ Do not start with another rerun setup pass.
 - The next honest slice should therefore start with the mismatch-`0`
   claim-domain surface before revisiting the smaller claim-safe mismatch-`1`
   tier or the `reference / reference` tails.
+- A direct parent-level exact-bound bypass on that whole remaining-two
+  mismatch-`0` claim-domain tier is now ruled out as a widening negative
+  control:
+  - redirecting the full tier from `CannotClearBar` to `Unknown` inside
+    `exact_partial_prefix_bound_decision(...)` dropped the clean wall only by
+    releasing the entire first-mismatch-`0` family, from `553` to `241`
+  - `small_cluster` generated-terminal pressure exploded from `3132` to
+    `7020`
+  - under the existing mismatch-`0` demo-flat negative control, generated
+    breadth jumped from `4985` to `10349`
+  - the isolated `single` pocket stayed fenced, so the failure mode is the
+    noncanonical `small_cluster`, not a reopened single-pocket rival
 - The broad clause-`1` `demo_flat_codomain` reopening across the full
   mismatch-`0` claim-domain surface is now also exhausted as a widening
   negative control:
@@ -77,6 +89,10 @@ Do not start with another rerun setup pass.
 - Any remaining mismatch-`0` leverage therefore has to stay below that broad
   demo-flat reopening rather than relanding both new `45`-capture pairings at
   once.
+- Any remaining mismatch-`0` leverage also has to stay below the whole-tier
+  parent exact-bound decision. The next repair has to live one layer deeper,
+  inside the existing clause-`4` / clause-`5` split or remaining-one exact
+  summary behavior on those live mismatch-`0` pairings.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -93,11 +109,22 @@ Do not start with another rerun setup pass.
    of the same `51`-capture tradeoff.
 3. Prefer the mismatch-`0` claim-domain surface first:
    - six pairings totaling `252`
+   - do not redirect the whole remaining-two mismatch-`0` claim-domain tier
+     from `CannotClearBar` to `Unknown` at the parent
+     `exact_partial_prefix_bound_decision(...)` level; that exploratory relief
+     only releases the full `312` first-mismatch-`0` family and explodes
+     `small_cluster`
    - do not reopen broad clause-`1` `demo_flat_codomain` across both
      mismatch-`0` claim-domain pairings again; that control is now frozen at
      `4985 / 667 / 2757`
-   - if mismatch-`0` is revisited, localize below that broad reopening rather
-     than relanding both new `45`-capture pairings together
+   - if mismatch-`0` is revisited, localize one layer deeper inside the live
+     clause-`4` `claim_next_bridge / reference` split and the existing
+     clause-`5` `reference / claim_flat_codomain / claim_next_codomain`
+     families, or inside remaining-one exact-summary behavior under those live
+     pairings
+   - start with the larger mismatch-`0` clause-`4` `claim_next_bridge` half
+     before the smaller `reference` half unless a narrower probe reverses that
+     ordering
    - only after that, consider the smaller claim-safe mismatch-`1` tier at
      `84`
    - leave the `reference / reference` tails at `54` below both of those
@@ -146,6 +173,9 @@ Do not start with another rerun setup pass.
   the clause-`4` `claim_next_bridge` half
 - broad clause-`1` `demo_flat_codomain` reopenings across the full
   mismatch-`0` claim-domain surface
+- whole-tier remaining-two mismatch-`0` claim-domain
+  `CannotClearBar -> Unknown` relief at the parent
+  `exact_partial_prefix_bound_decision(...)` layer
 - broader clause-`4` `reference`-sheet reopenings
 - claim-safe clause-`4` or clause-`5` reopenings
 - raw clause-`3` `anchor-11` widening

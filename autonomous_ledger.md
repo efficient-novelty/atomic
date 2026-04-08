@@ -147,3 +147,18 @@ This file is the append-only history for `desktop_claim_shadow`.
   `demo_flat_codomain` reopenings and only revisit that priority tier through
   a narrower localization, or else move on to the smaller claim-safe
   mismatch-`1` surface.
+- Scope: test whether broad exact-bound relief on the whole remaining-two
+  mismatch-`0` claim-domain tier can safely turn the step-`15` wall into
+  honest frontier breadth.
+  Result: a temporary parent-level `exact_partial_prefix_bound_decision(...)`
+  override redirected that whole tier from `CannotClearBar` to `Unknown`; the
+  clean wall fell from `553` to `241`, which means the full `312`
+  first-mismatch-`0` family escaped exact pruning, but `small_cluster`
+  generated-terminal pressure jumped from `3132` to `7020`. Under the existing
+  mismatch-`0` demo-flat override, the negative control also ballooned from
+  `4985` to `10349`. The isolated `single` pocket stayed fenced, and the
+  exploratory change was reverted immediately after the read.
+  Consequence: whole-tier parent-level mismatch-`0` exact-bound relief is now
+  ruled out. The next repair has to stay one layer deeper, inside the existing
+  mismatch-`0` clause-`4` / clause-`5` split or the remaining-one
+  exact-summary path, rather than releasing the entire tier at once.

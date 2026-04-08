@@ -42,6 +42,9 @@ Must keep true:
 Do not use:
 
 - blanket, exact-family, or subset-local same-primary relief
+- whole-tier remaining-two mismatch-`0` claim-domain
+  `CannotClearBar -> Unknown` relief at the parent
+  `exact_partial_prefix_bound_decision(...)` layer
 - raw lifted-shell relands
 - raw clause-`3` widening
 - claim-safe clause-`4` or clause-`5` reopenings

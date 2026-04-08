@@ -357,6 +357,11 @@ Focus on:
   now only reproduces the broader clause-`4` `reference`-sheet result, so the
   skill should route you to the live docs rather than restating their full
   diagnostic ledger
+- do not bypass `exact_partial_prefix_bound_decision(...)` for the whole
+  remaining-two mismatch-`0` claim-domain tier; that parent-level release is
+  now a ruled-out widening control owned by the autonomous docs and ledger, so
+  read those files before touching exact-bound relief on the current step-`15`
+  wall
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by
