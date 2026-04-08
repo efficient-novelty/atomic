@@ -133,9 +133,22 @@ Until that exists, wording stays at `bounded live recovery`.
   - it leaves the same clause-`2` spread `15 / 15 / 15`
   - consequence: the remaining mismatch-`0` leverage is not isolated on a
     connectivity-only relocalization of the clause-`4`
-    `claim_next_bridge` half; the next slice should move to the smaller
-    clause-`4` `reference` half or to remaining-one exact-summary behavior
-    under the same live pairings
+    `claim_next_bridge` half
+- The smaller mismatch-`0` clause-`4` `reference`-side relocalization under
+  that same demo-flat reopening is now also ruled out as a sharper negative
+  control:
+  - it lands `4697 / 691 / 2829`
+  - it widens `small_cluster` to `3276 / 546 / 546 / 0`
+  - the isolated `single` pocket stays fenced
+  - it inflates the same two mismatch-`0` pairings to `57 / 57`
+  - it widens the clause-`4` split to `33 / 24`
+  - it leans the clause-`2` spread toward the two claim sheets at
+    `21 / 21 / 15`
+  - consequence: the remaining mismatch-`0` leverage is not isolated on
+    either clause-`4` half; the next slice should move below clause-`4`
+    relocalizations and into remaining-one exact-summary behavior under the
+    same live pairings before revisiting smaller claim-safe mismatch-`1`
+    surfaces
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -165,13 +178,17 @@ Until that exists, wording stays at `bounded live recovery`.
   exact-bound relief; the former reaches `4985` only by widening the clean
   wall to `667`, and the latter drops the wall to `241` only by exploding the
   noncanonical `small_cluster`.
-- When revisiting mismatch-`0`, work one layer deeper on the existing
-  clause-`4` `claim_next_bridge / reference` split, the aligned clause-`5`
-  families, or the remaining-one exact-summary path rather than on a broad
-  parent-level release of the whole tier.
+- When revisiting mismatch-`0`, work one layer deeper below the now-exhausted
+  clause-`4` `claim_next_bridge / reference` split, starting with
+  remaining-one exact-summary behavior under the same live pairings before any
+  narrower aligned clause-`5` reopening, rather than on a broad parent-level
+  release of the whole tier.
 - Do not reopen the mismatch-`0` clause-`4` `claim_next_bridge` half through
   the same connectivity-only relocalization first; it is now a smaller
   negative control rather than the landed repair.
+- Do not reopen the mismatch-`0` clause-`4` `reference` half through the same
+  connectivity-only relocalization first; it is now an even sharper negative
+  control rather than the landed repair.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

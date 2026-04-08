@@ -175,3 +175,15 @@ This file is the append-only history for `desktop_claim_shadow`.
   `claim_next_bridge` half; the next slice should move to the smaller
   clause-`4` `reference` half or to remaining-one exact-summary behavior
   under the same live pairings.
+- Scope: localize that same broad mismatch-`0` `demo_flat_codomain` reopening
+  onto the smaller clause-`4` `reference` half.
+  Result: new connectivity and search regressions pinned that sharper reland
+  as a negative control at `4697 / 691 / 2829` with
+  `small_cluster = 3276 / 546 / 546 / 0`; the isolated `single` pocket stayed
+  fenced, the same two mismatch-`0` pairings widened further to `57 / 57`,
+  the clause-`4` split widened to `33 / 24`, and the clause-`2` spread leaned
+  toward the two claim sheets at `21 / 21 / 15`.
+  Consequence: the remaining mismatch-`0` leverage is not isolated on either
+  clause-`4` half. The next slice should move below clause-`4`
+  relocalizations and into remaining-one exact-summary behavior under the same
+  live pairings before revisiting the smaller claim-safe mismatch-`1` tier.

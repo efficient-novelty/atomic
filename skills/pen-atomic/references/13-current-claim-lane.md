@@ -126,6 +126,9 @@ Do not:
 - reopen the narrower clause-`4` `claim_next_bridge`-side relocalization under
   that mismatch-`0` surface first; that smaller negative result also belongs in
   the autonomy ledger rather than as a fresh lead
+- reopen the narrower clause-`4` `reference`-side relocalization under that
+  same mismatch-`0` surface first; that sharper negative result now also
+  belongs in the autonomy ledger rather than as a fresh lead
 - reopen the whole remaining-two mismatch-`0` claim-domain tier by flipping
   parent-level `CannotClearBar` decisions to `Unknown`; that broad exact-bound
   release is now also a ruled-out widening control owned by the autonomy
