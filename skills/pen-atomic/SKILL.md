@@ -415,6 +415,13 @@ Focus on:
   `4343 / 552 / 2268` clause-`6` `reference` tradeoff only appears when both
   clause-`3` branches reopen together, so route to the live docs before
   retrying clause-`3` identity as if one branch were newly privileged
+- treat that broader joint clause-`3` continuation below the representative
+  `claim_flat_domain` clause-`2` sheet's marginally best clause-`6`
+  `reference` shell as live autonomy detail too; it is now localized to one
+  remaining-two parent capture plus its three clause-`6` remaining-one child
+  continuations, so route to the live docs before retrying the whole joint
+  continuation and instead localize the next probe to a finer terminal or
+  remaining-one completion partition inside that parent/child shell
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward

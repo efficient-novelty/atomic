@@ -13577,6 +13577,62 @@ mod tests {
         }
     }
 
+    fn current_claim_step_fifteen_partial_prefix_clause_six_label(
+        clause: &ClauseRec,
+    ) -> &'static str {
+        if matches!(
+            &clause.expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(
+                            function.as_ref(),
+                            Expr::Eventually(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        ) && matches!(argument.as_ref(), Expr::Var(2))
+                )
+        ) {
+            "claim_next_codomain"
+        } else if matches!(
+            &clause.expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(
+                            function.as_ref(),
+                            Expr::Eventually(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Sharp(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        ) && matches!(argument.as_ref(), Expr::Var(2))
+                )
+        ) {
+            "claim_sharp_codomain"
+        } else if matches!(
+            &clause.expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(
+                            function.as_ref(),
+                            Expr::Eventually(inner)
+                                if matches!(inner.as_ref(), Expr::Var(1))
+                        ) && matches!(argument.as_ref(), Expr::Var(2))
+                )
+        ) {
+            "reference"
+        } else {
+            "unclassified"
+        }
+    }
+
     fn current_claim_step_fifteen_partial_prefix_clause_five_label(
         clause: &ClauseRec,
     ) -> &'static str {
@@ -14041,6 +14097,48 @@ mod tests {
         super::finish_pruned_terminal_prefix_capture()
     }
 
+    fn current_claim_step_fifteen_partial_prefix_bound_prune_captures_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_tradeoff(
+        clause_three: Option<
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseThreeLabel,
+        >,
+    ) -> Vec<super::PartialPrefixBoundPruneCapture> {
+        let _search_override =
+            super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                    clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                    clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                    clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain),
+                    clause_three,
+                    clause_six: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel::Reference),
+                    clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
+                },
+            );
+        super::start_partial_prefix_bound_prune_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        super::finish_partial_prefix_bound_prune_capture()
+    }
+
+    fn current_claim_step_fifteen_pruned_terminal_prefixes_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_tradeoff(
+        clause_three: Option<
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseThreeLabel,
+        >,
+    ) -> Vec<OnlinePrefixWorkItem> {
+        let _search_override =
+            super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                    clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                    clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                    clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain),
+                    clause_three,
+                    clause_six: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel::Reference),
+                    clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
+                },
+            );
+        super::start_pruned_terminal_prefix_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        super::finish_pruned_terminal_prefix_capture()
+    }
+
     fn current_claim_step_fifteen_prefix_group_delta_label(
         prefix_telescope: &Telescope,
     ) -> (
@@ -14092,6 +14190,61 @@ mod tests {
             clause_one,
             clause_two,
             clause_four,
+            clause_five,
+        )
+    }
+
+    fn current_claim_step_fifteen_clause_six_reference_pruned_prefix_delta_label(
+        prefix_telescope: &Telescope,
+    ) -> (
+        Option<usize>,
+        &'static str,
+        &'static str,
+        &'static str,
+        &'static str,
+        &'static str,
+    ) {
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let mismatch = prefix_telescope
+            .clauses
+            .iter()
+            .zip(reference_prefix.clauses.iter())
+            .position(|(left, right)| left != right);
+        let clause_zero = prefix_telescope
+            .clauses
+            .first()
+            .map(|clause| {
+                current_claim_step_fifteen_partial_prefix_clause_zero_one_label(0, clause)
+            })
+            .unwrap_or("out_of_scope");
+        let clause_one = prefix_telescope
+            .clauses
+            .get(1)
+            .map(|clause| {
+                current_claim_step_fifteen_partial_prefix_clause_zero_one_label(1, clause)
+            })
+            .unwrap_or("out_of_scope");
+        let clause_two = prefix_telescope
+            .clauses
+            .get(2)
+            .map(current_claim_step_fifteen_partial_prefix_clause_two_label)
+            .unwrap_or("out_of_scope");
+        let clause_six = prefix_telescope
+            .clauses
+            .get(6)
+            .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+            .unwrap_or("out_of_scope");
+        let clause_five = prefix_telescope
+            .clauses
+            .get(5)
+            .map(current_claim_step_fifteen_partial_prefix_clause_five_label)
+            .unwrap_or("out_of_scope");
+        (
+            mismatch,
+            clause_zero,
+            clause_one,
+            clause_two,
+            clause_six,
             clause_five,
         )
     }
@@ -24522,6 +24675,209 @@ mod tests {
             Some(&(4331, 553, 2271, expected_first_mismatch_counts, 3132)),
             "the claim-eventual clause-three branch should stay individually neutral too, confirming that the broader clause-six reference tradeoff does not localize to either clause-three sheet by itself"
         );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_tradeoff_delta_below_joint_clause_three_continuation_probe()
+     {
+        let clause_three_labels = [
+            (
+                "claim_flat_argument",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseThreeLabel::ClaimFlatArgument,
+            ),
+            (
+                "claim_eventual_argument",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseThreeLabel::ClaimEventualArgument,
+            ),
+        ];
+        let expected_removed_capture_labels = [(
+            (
+                2_usize,
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "claim_flat_domain",
+                    "claim_next_bridge",
+                    "claim_flat_codomain",
+                ),
+            ),
+            1_usize,
+        )]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_removed_pruned_labels = [
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "claim_flat_domain",
+                    "claim_next_codomain",
+                    "claim_flat_codomain",
+                ),
+                1_usize,
+            ),
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "claim_flat_domain",
+                    "claim_sharp_codomain",
+                    "claim_flat_codomain",
+                ),
+                1,
+            ),
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "claim_flat_domain",
+                    "reference",
+                    "claim_flat_codomain",
+                ),
+                1,
+            ),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+
+        for (clause_three_name, clause_three) in clause_three_labels {
+            let baseline_captures =
+                current_claim_step_fifteen_partial_prefix_bound_prune_captures_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_tradeoff(
+                    Some(clause_three),
+                );
+            let broad_captures =
+                current_claim_step_fifteen_partial_prefix_bound_prune_captures_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_tradeoff(
+                    None,
+                );
+            let baseline_capture_keys = baseline_captures
+                .iter()
+                .map(|capture| {
+                    serde_json::to_string(&capture.prefix_telescope)
+                        .expect("captured prefix should serialize")
+                })
+                .collect::<BTreeSet<_>>();
+            let broad_capture_keys = broad_captures
+                .iter()
+                .map(|capture| {
+                    serde_json::to_string(&capture.prefix_telescope)
+                        .expect("captured prefix should serialize")
+                })
+                .collect::<BTreeSet<_>>();
+            let removed_capture_labels = baseline_captures
+                .iter()
+                .filter(|capture| {
+                    !broad_capture_keys.contains(
+                        &serde_json::to_string(&capture.prefix_telescope)
+                            .expect("captured prefix should serialize"),
+                    )
+                })
+                .fold(BTreeMap::new(), |mut summary, capture| {
+                    *summary
+                        .entry((
+                            capture.remaining_clause_slots,
+                            current_claim_step_fifteen_prefix_group_delta_label(
+                                &capture.prefix_telescope,
+                            ),
+                        ))
+                        .or_insert(0usize) += 1;
+                    summary
+                });
+            let introduced_capture_labels = broad_captures
+                .iter()
+                .filter(|capture| {
+                    !baseline_capture_keys.contains(
+                        &serde_json::to_string(&capture.prefix_telescope)
+                            .expect("captured prefix should serialize"),
+                    )
+                })
+                .fold(BTreeMap::new(), |mut summary, capture| {
+                    *summary
+                        .entry((
+                            capture.remaining_clause_slots,
+                            current_claim_step_fifteen_prefix_group_delta_label(
+                                &capture.prefix_telescope,
+                            ),
+                        ))
+                        .or_insert(0usize) += 1;
+                    summary
+                });
+
+            let baseline_pruned_prefixes =
+                current_claim_step_fifteen_pruned_terminal_prefixes_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_tradeoff(
+                    Some(clause_three),
+                );
+            let broad_pruned_prefixes =
+                current_claim_step_fifteen_pruned_terminal_prefixes_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_tradeoff(
+                    None,
+                );
+            let baseline_pruned_keys = baseline_pruned_prefixes
+                .iter()
+                .map(|work_item| {
+                    serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize")
+                })
+                .collect::<BTreeSet<_>>();
+            let broad_pruned_keys = broad_pruned_prefixes
+                .iter()
+                .map(|work_item| {
+                    serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize")
+                })
+                .collect::<BTreeSet<_>>();
+            let removed_pruned_labels = baseline_pruned_prefixes
+                .iter()
+                .filter(|work_item| {
+                    !broad_pruned_keys.contains(
+                        &serde_json::to_string(&work_item.prefix_telescope)
+                            .expect("captured prune prefix should serialize"),
+                    )
+                })
+                .fold(BTreeMap::new(), |mut summary, work_item| {
+                    *summary
+                        .entry(current_claim_step_fifteen_clause_six_reference_pruned_prefix_delta_label(
+                            &work_item.prefix_telescope,
+                        ))
+                        .or_insert(0usize) += 1;
+                    summary
+                });
+            let introduced_pruned_labels = broad_pruned_prefixes
+                .iter()
+                .filter(|work_item| {
+                    !baseline_pruned_keys.contains(
+                        &serde_json::to_string(&work_item.prefix_telescope)
+                            .expect("captured prune prefix should serialize"),
+                    )
+                })
+                .fold(BTreeMap::new(), |mut summary, work_item| {
+                    *summary
+                        .entry(current_claim_step_fifteen_clause_six_reference_pruned_prefix_delta_label(
+                            &work_item.prefix_telescope,
+                        ))
+                        .or_insert(0usize) += 1;
+                    summary
+                });
+
+            assert_eq!(
+                removed_capture_labels, expected_removed_capture_labels,
+                "relative to the individually neutral {clause_three_name} branch, the broader clause-six reference tradeoff should remove exactly one remaining-two parent capture under the representative mismatch-zero claim-flat sheet"
+            );
+            assert!(
+                introduced_capture_labels.is_empty(),
+                "the broader clause-six reference tradeoff should not introduce any new partial-prefix captures beyond the individually neutral {clause_three_name} branch"
+            );
+            assert_eq!(
+                removed_pruned_labels, expected_removed_pruned_labels,
+                "relative to the individually neutral {clause_three_name} branch, the broader clause-six reference tradeoff should differ only by reopening the same three clause-six remaining-one continuations beneath that single parent capture"
+            );
+            assert!(
+                introduced_pruned_labels.is_empty(),
+                "the broader clause-six reference tradeoff should not keep any zero-admitted remaining-one prunes that the individually neutral {clause_three_name} branch alone already removes"
+            );
+        }
     }
 
     #[test]

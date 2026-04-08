@@ -161,6 +161,11 @@ Do not:
   `4343 / 552 / 2268` clause-`6` `reference` tradeoff only appears when both
   reopen together, so that axis also belongs to the autonomy ledger rather
   than as a fresh lead
+- reopen that whole joint clause-`3` continuation first either; that broader
+  clause-`6` `reference` tradeoff is now localized to one remaining-two
+  parent capture plus its three clause-`6` remaining-one child
+  continuations, so the live autonomy docs should own the finer completion
+  partition beneath that parent/child shell rather than this stable reference
 - reopen the mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
   `claim_next_codomain` exact-summary cell first; that sibling is now a
   neutral control owned by the autonomy ledger rather than a fresh lead

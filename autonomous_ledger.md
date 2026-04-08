@@ -283,3 +283,22 @@ This file is the append-only history for `desktop_claim_shadow`.
   appears when both clause-`3` branches reopen together, so the next revisit
   has to move below clause-`3` identity into a finer terminal or remaining-one
   completion partition under that joint continuation.
+- Scope: localize that broader representative `claim_flat_domain`
+  clause-`2` plus clause-`6` `reference` tradeoff one layer deeper beneath the
+  joint clause-`3` continuation.
+  Result: new step-`15` regressions pinned the whole delta relative to either
+  individually neutral clause-`3` branch at exactly one remaining-two parent
+  capture plus its three child remaining-one exact-prune prefixes:
+  - the parent delta is one
+    `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / claim_flat_codomain`
+    capture
+  - the zero-admitted delta is exactly the three sibling clause-`6`
+    continuations below that same parent:
+    `claim_next_codomain`, `claim_sharp_codomain`, and `reference`
+  - no new partial-prefix captures or zero-admitted remaining-one prunes
+    appear elsewhere
+  Consequence: the joint clause-`3` continuation is now localized as a single
+  remaining-two parent shell plus its three clause-`6` child continuations, so
+  the next revisit has to partition that one parent's remaining-one completion
+  / terminal subcells rather than reopening either individual clause-`3`
+  branch or the whole joint continuation again.

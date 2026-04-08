@@ -276,6 +276,21 @@ Until that exists, wording stays at `bounded live recovery`.
     only when both clause-`3` branches reopen together, so the next revisit
     has to move below clause-`3` identity into a finer terminal or
     remaining-one completion partition under that joint continuation
+- That broader joint clause-`3` continuation is now also localized one layer
+  deeper as a single parent-plus-children shell:
+  - relative to either individually neutral clause-`3` branch, the broader
+    clause-`6` `reference` tradeoff removes exactly one remaining-two parent
+    capture under
+    `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / claim_flat_codomain`
+  - the entire zero-admitted delta is exactly that parent's three child
+    remaining-one clause-`6` continuations:
+    `claim_next_codomain`, `claim_sharp_codomain`, and `reference`
+  - no new partial-prefix captures or remaining-one zero-admitted prunes
+    appear elsewhere
+  - consequence: any remaining leverage below clause-`3` identity is no
+    longer on another whole-joint-continuation reopen; it has to partition the
+    single remaining-two parent's remaining-one completion / terminal subcells
+    beneath that same `claim_flat_codomain` tail
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -375,6 +390,11 @@ Until that exists, wording stays at `bounded live recovery`.
   completion partition under their joint clause-`6` `reference`
   continuation before reopening the representative `claim_sharp_codomain`
   clause-`2` sheet or the smaller claim-safe mismatch-`1` tier.
+- Because that whole joint continuation is now itself localized to one
+  remaining-two parent plus its three clause-`6` child remaining-one
+  continuations, the next revisit should partition that single parent's
+  remaining-one completion / terminal subcells directly instead of reopening
+  either individual clause-`3` branch or the whole joint continuation again.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.
