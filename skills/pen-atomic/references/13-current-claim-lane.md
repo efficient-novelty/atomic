@@ -493,9 +493,20 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     claim clause-`2` sheet while clause-`4` stays `reference`, and one layer
     deeper that same miss is the exact `18` zero-admitted prefixes split
     evenly across clause-`5` `claim_flat_codomain`,
-    `claim_next_codomain`, and `reference`; so the next operational move is
-    that two-prefix clause-`4`-`reference` tail rather than the larger
-    clause-`4` `claim_next_bridge` half
+    `claim_next_codomain`, and `reference`; the newer exact clause-`5`
+    `reference`, `claim_flat_codomain`, and `claim_next_codomain`
+    follow-ons on that same tail now show that the clause-`4`
+    `reference` remaining-three tail is exhausted as a cleaner local repair
+    target, and a newer exact remaining-two mismatch-`1` clause-`5`
+    bridge-slice reland is now also pinned as a widening negative control at
+    `4511 / 571 / 2325` with a `3276 / 546 / 546 / 0`
+    `small_cluster` regression, widening the three exact mismatch-`1`
+    pairings to `48 / 48 / 67` while leaving the live clause-`4`
+    `24 / 18`, `24 / 18`, and `33 / 28` split unchanged; so the next
+    operational move is now to work directly against the live clause-`4`
+    `claim_next_bridge` / `reference` families under the dominant
+    mismatch-`1` clause-`0` / clause-`1` pairings rather than another
+    clause-`5` tail or bridge-slice reopening
 - a newer exploratory clause-`3` `anchor-11` exact-argument widening onto the
   broader clause-`0` / clause-`1` claim surface while clause `2` stayed
   `reference` has now also been checked and reverted:
@@ -558,6 +569,24 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
     incumbent-dominance prunes unchanged
   - but it widened the clean partial-prefix wall from `553` to `589`
   - so that narrower mismatch-`0` bridge-slice reland is now another
+    negative control rather than the next landed repair
+- a newer exploratory clause-`5` reland on only the exact remaining-two
+  mismatch-`1` bridge slice has now also been checked under scoped overrides
+  and pinned by
+  `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
+  plus the matching injector and connectivity override tests:
+  - it lifted the local late surface from `4331` to `4511`
+  - it widened the clean partial-prefix wall from `553` to `571` and the
+    zero-admitted exact-prune capture from `2271` to `2325`
+  - it widened the `small_cluster` from `3132 / 522 / 522 / 0` to
+    `3276 / 546 / 546 / 0`
+  - it kept the isolated `single` pocket and the residual `3`
+    incumbent-dominance prunes unchanged
+  - it widened the three exact mismatch-`1` pairings from `42 / 42 / 61` to
+    `48 / 48 / 67`
+  - but it left the live clause-`4` mismatch-`1` split unchanged at
+    `24 / 18`, `24 / 18`, and `33 / 28`
+  - so that narrower mismatch-`1` bridge-slice reland is now another
     negative control rather than the next landed repair
 - a newer local step-`15` proof-close incumbent regression now freezes that
   remaining fenced pressure more tightly:
@@ -983,9 +1012,21 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
    those same two prefixes account for the whole exact off-branch delta:
    `18` zero-admitted prunes split evenly as `3 / 3 / 3` across clause-`5`
    `claim_flat_codomain`, `claim_next_codomain`, and `reference` on each
-   sheet. So the next landed repair should now work directly on that
-   two-prefix clause-`4` `reference` remaining-three tail rather than the
-   larger clause-`4` `claim_next_bridge` side again.
+   sheet. The newer exact clause-`5` `reference` follow-on on that same tail
+   is now pinned as a neutral control because it leaves the whole
+   `4331 / 553 / 2271` surface unchanged, and the newer exact
+   clause-`5` `claim_flat_codomain` and `claim_next_codomain` follow-ons are
+   now pinned as symmetric smaller tradeoff controls at `4355 / 551 / 2265`;
+   together they show that the clause-`4` `reference` remaining-three tail is
+   exhausted as a cleaner repair target. The newer exact remaining-two
+   mismatch-`1` clause-`5` bridge-slice reopening is also pinned as a
+   widening negative control at `4511 / 571 / 2325`: it inflates the three
+   mismatch-`1` pairings to `48 / 48 / 67` while leaving the live clause-`4`
+   split fixed at `24 / 18`, `24 / 18`, and `33 / 28`. So the next landed
+   repair should now stay above clause-`5` bridge-side reopenings and work
+   directly against the live clause-`4` `claim_next_bridge` / `reference`
+   families under the dominant mismatch-`1` clause-`0` / clause-`1`
+   pairings rather than the larger clause-`4` `claim_next_bridge` side again.
    The reverted clause-`3` `anchor-11` exact-argument widening onto the
    broader clause-`0` / clause-`1` claim surface while clause `2` stayed
    `reference` left that clean `553` wall and the executable nine-pair split

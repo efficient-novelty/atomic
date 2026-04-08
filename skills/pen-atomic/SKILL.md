@@ -90,11 +90,22 @@ Treat these as current repo truths:
   the newer combined claim-variant pair probe now show that the
   clause-`2`-only narrowing on that branch is exhausted because the full
   pair simply reproduces the broader `4523 / 537 / 2223` tradeoff with the
-  same `3324 / 554 / 554 / 0` `small_cluster` regression, so the next
-  landed repair should move one layer lower to the larger clause-`4`
-  `claim_next_bridge` side on that same combined claim-pair surface rather
-  than with another rerun setup pass or a step-`1`-first theory slice; the
-  canonical
+  same `3324 / 554 / 554 / 0` `small_cluster` regression; the newer exact
+  clause-`4` `claim_next_bridge`-side probe then narrows that tradeoff to
+  `4445 / 539 / 2241`, and the newer executable delta freeze localizes the
+  remaining off-branch miss to the exact clause-`4` `reference`
+  remaining-three tail; the newer exact clause-`5` `reference`,
+  `claim_flat_codomain`, and `claim_next_codomain` follow-ons on that tail
+  now show that it is exhausted as a cleaner repair target, and the newer
+  exact remaining-two mismatch-`1` clause-`5` bridge-slice reopening is
+  another widening negative control at `4511 / 571 / 2325` that inflates the
+  three mismatch-`1` pairings to `48 / 48 / 67` while leaving the live
+  clause-`4` split unchanged at `24 / 18`, `24 / 18`, and `33 / 28`; so the
+  next operational move should now stay above clause-`5` bridge-side
+  reopenings and work directly against the live clause-`4`
+  `claim_next_bridge` / `reference` families under the dominant mismatch-`1`
+  clause-`0` / clause-`1` pairings rather than with another rerun setup pass
+  or a step-`1`-first theory slice; the canonical
   `v11` certificate plus the frozen `step-15-live.ndjson` provenance are now
   pinned by
   `stored_claim_v11_certificate_and_step_15_live_checkpoint_freeze_current_canonical_diagnosis`,
@@ -236,12 +247,19 @@ Treat these as current repo truths:
   to `3156 / 526 / 526 / 0`; the two probes are numerically symmetric and
   merely split the older clause-`4` `reference`-sheet tradeoff into its two
   exact clause-`5` claim families, so that clause-`4` `reference`
-  remaining-three tail is now exhausted as a cleaner local repair target; the
-  next operational move is therefore no longer another clause-`5` tail probe
-  but to step back up to the broader dominant clause-`0` / clause-`1`
-  claim surface outside that exhausted tail rather than the larger
-  clause-`4` `claim_next_bridge` half, another rerun setup pass, or a
-  step-`1`-first theory slice; a third local exploratory
+  remaining-three tail is now exhausted as a cleaner local repair target; a
+  newer exact remaining-two mismatch-`1` clause-`5` bridge-slice reland is
+  now also pinned as a widening negative control at
+  `DCT 103 / 8 / 4511`, `571`, `2325`, and
+  `3276 / 546 / 546 / 0`: it inflates the three exact mismatch-`1`
+  pairings to `48 / 48 / 67` while leaving the live clause-`4`
+  `24 / 18`, `24 / 18`, and `33 / 28` split unchanged, so the next
+  operational move is therefore no longer another clause-`5` tail probe or
+  an exact remaining-two clause-`5` bridge-slice reland but to work
+  directly against the live clause-`4` `claim_next_bridge` / `reference`
+  families under the dominant mismatch-`1` clause-`0` / clause-`1`
+  pairings rather than the larger clause-`4` `claim_next_bridge` half,
+  another rerun setup pass, or a step-`1`-first theory slice; a third local exploratory
   clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   was also checked and reverted: it left the clean `553` partial-prefix wall

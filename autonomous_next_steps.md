@@ -1,6 +1,6 @@
 # Autonomous Claim Lane: Next Operational Slice
 
-Last updated: 2026-04-07
+Last updated: 2026-04-08
 
 This file is the exact next work order for `desktop_claim_shadow`.
 
@@ -381,6 +381,22 @@ Do not start with another rerun setup pass.
   - but the partial-prefix wall widened to `589`
   - so that narrower mismatch-`0` bridge-slice reland is also ruled out as
     another negative control rather than the next repair
+- A newer clause-`5` reland on only the exact remaining-two mismatch-`1`
+  bridge slice has now also been checked under scoped overrides and pinned by
+  `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
+  plus the matching injector and connectivity override tests:
+  - local step `15` generated breadth lifted to `4511`
+  - the `small_cluster` widened to `3276 / 546 / 546 / 0`
+  - the isolated `single` pocket and residual `3` incumbent prunes stayed
+    fenced
+  - but the partial-prefix wall widened to `571` and the zero-admitted
+    capture widened to `2325`
+  - it widened the three exact mismatch-`1` pairings from `42 / 42 / 61` to
+    `48 / 48 / 67`
+  - but it left the live clause-`4` mismatch-`1` split unchanged at
+    `24 / 18`, `24 / 18`, and `33 / 28`
+  - so that narrower mismatch-`1` bridge-slice reland is also ruled out as
+    another negative control rather than the next repair
 - The old proof-close blocker has been reduced to only `3` fenced
   same-primary `single`-bucket incumbent prunes:
   - clause-`0` `claim_flat_domain`
@@ -528,11 +544,12 @@ Do not start with another rerun setup pass.
      to `617`
    - so the next honest slice is still the live clause-`0` / clause-`1`
      claim surface itself, but no longer on another clause-`5`
-     remaining-three tail probe; it should step back up outside that
-     exhausted exact clause-`4` `reference` tail and relocalize the broader
-     dominant clause-`0` / clause-`1` pressure before another raw
-     clause-`3` widen-first probe, another demo-bridge reland, a
-     claim-safe clause-`4` reopening, or a rerun
+     remaining-three tail probe or an exact remaining-two clause-`5`
+     bridge-slice reland; it should now work directly against the live
+     clause-`4` `claim_next_bridge` / `reference` families under the
+     dominant mismatch-`1` pairings before another raw clause-`3`
+     widen-first probe, another demo-bridge reland, a claim-safe
+     clause-`4` reopening, or a rerun
 4. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays the canonical `103 / 8`
@@ -564,6 +581,8 @@ Do not start with another rerun setup pass.
   - `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_five_side_pocket_injects_on_exact_remaining_two_mismatch_zero_bridge_slice`
   - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
+  - `current_claim_step_fifteen_clause_five_side_pocket_injects_on_exact_remaining_two_mismatch_one_bridge_slice`
+  - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
   - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
@@ -619,6 +638,9 @@ Do not start with another rerun setup pass.
   - `connectivity_accepts_clause_five_demo_sharp_domain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
   - `connectivity_accepts_clause_five_demo_flat_codomain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
   - `connectivity_keeps_clause_five_remaining_two_mismatch_one_bridge_slice_outside_historical_reanchor_even_under_override`
+  - `connectivity_accepts_clause_five_demo_sharp_domain_on_the_exact_remaining_two_mismatch_one_bridge_slice`
+  - `connectivity_accepts_clause_five_demo_flat_codomain_on_the_exact_remaining_two_mismatch_one_bridge_slice`
+  - `connectivity_keeps_clause_five_remaining_two_mismatch_zero_bridge_slice_outside_historical_reanchor_even_under_mismatch_one_override`
   - `connectivity_accepts_clause_five_demo_sharp_domain_on_claim_safe_clause_zero_one_surface_under_override`
   - `connectivity_accepts_clause_five_demo_flat_codomain_on_claim_safe_clause_zero_one_surface_under_override`
 6. Only after the local repair is green and parity-clean, launch the next
@@ -666,6 +688,7 @@ Do not start with another rerun setup pass.
 - clause-`5` side-pocket broadening onto the claim-safe clause-`0` /
   clause-`1` surface
 - the exact remaining-two mismatch-`0` bridge-slice clause-`5` reopening
+- the exact remaining-two mismatch-`1` bridge-slice clause-`5` reopening
 - treating the dominant remaining-two wall as an unlabeled early blur again
 - treating the dominant remaining-two wall as if the old demo-only clause-`4`
   bridge pockets were still the dominant slice

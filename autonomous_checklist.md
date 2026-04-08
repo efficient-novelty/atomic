@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-04-07
+Last updated: 2026-04-08
 
 This checklist tracks only work that is still open for `desktop_claim_shadow`.
 
@@ -223,6 +223,28 @@ This checklist tracks only work that is still open for `desktop_claim_shadow`.
     dominant clause-`0` / clause-`1` claim surface outside this exhausted
     tail rather than spend another turn on clause-`5` tail reopenings or
     rerun first
+- A newer exact remaining-two mismatch-`1` clause-`5` bridge-slice negative
+  control is now explicit too:
+  - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
+  - it lifted local step `15` generated breadth to `4511`
+  - it widened the clean partial-prefix wall to `571` and zero-admitted
+    capture to `2325`
+  - it widened `small_cluster` to `3276 / 546 / 546 / 0`
+  - it kept the isolated `single` pocket and residual `3` incumbent prunes
+    unchanged
+  - it widened the three exact mismatch-`1` pairings from `42 / 42 / 61` to
+    `48 / 48 / 67`
+  - but it left the live clause-`4` mismatch-`1` split unchanged at
+    `24 / 18`, `24 / 18`, and `33 / 28`, so it is also not the landed repair
+- The next honest slice should therefore stay on the broader dominant
+  clause-`0` / clause-`1` claim surface, but no longer via clause-`5`
+  bridge-side reopenings either:
+  - the exhausted clause-`4` `reference` tail and the newer exact
+    remaining-two mismatch-`1` clause-`5` bridge slice are both ruled out
+  - the next relocalization should work directly against the live clause-`4`
+    `claim_next_bridge` / `reference` families under the dominant
+    mismatch-`1` pairings rather than another clause-`5` or demo-side
+    widening
 - A reverted clause-`1` `demo_eventually_codomain` exact-pocket probe is now
   also part of the live diagnosis and is pinned by
   `current_claim_step_fifteen_clause_one_demo_eventually_codomain_exact_pocket_reland_stays_a_negative_control`:

@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-04-07
+Last updated: 2026-04-08
 Status: active
 
 This file is the staged path from the current `v12` state to final signoff.
@@ -48,6 +48,15 @@ Until then, wording stays at `bounded live recovery`.
   target, so Phase 1 should step back up to the broader dominant
   clause-`0` / clause-`1` claim surface outside that tail before another
   rerun.
+- A newer exact remaining-two mismatch-`1` clause-`5` bridge-slice reopening
+  is now also pinned as a widening negative control at `4511 / 571 / 2325`:
+  it widens `small_cluster` to `3276 / 546 / 546 / 0`, inflates the three
+  mismatch-`1` pairings to `48 / 48 / 67`, and leaves the live clause-`4`
+  `24 / 18`, `24 / 18`, and `33 / 28` split unchanged.
+- So Phase 1 should now stay above clause-`5` bridge-side reopenings too and
+  work directly against the live clause-`4` `claim_next_bridge` /
+  `reference` families under the dominant mismatch-`1` clause-`0` /
+  clause-`1` pairings.
 
 ## Phase 1: Narrow The Remaining Step-15 Wall
 
@@ -71,6 +80,8 @@ Do not use:
 - raw lifted-shell relands
 - claim-safe clause-`4` `demo_sharp_codomain` or `demo_sharp_bridge`
   reopenings, whether single-side or combined
+- exact remaining-two mismatch-`0` or mismatch-`1` clause-`5`
+  bridge-slice reopenings
 - raw position-`0`, broad clause-`4`, or broad clause-`5` relands
 - raw step-`13` widened controls
 

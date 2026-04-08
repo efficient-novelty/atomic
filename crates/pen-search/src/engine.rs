@@ -6036,6 +6036,12 @@ thread_local! {
 }
 
 #[cfg(test)]
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_REMAINING_TWO_MISMATCH_ONE_BRIDGE_SLICE_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
 fn start_pruned_terminal_prefix_capture() {
     PRUNED_TERMINAL_PREFIX_CAPTURE.with(|capture| {
         *capture.borrow_mut() = Some(Vec::new());
@@ -6096,6 +6102,9 @@ struct ClaimStepFifteenClauseFourSharpBridgeOnClaimSafeClauseZeroOneOverrideGuar
 
 #[cfg(test)]
 struct ClaimStepFifteenClauseFiveRemainingTwoMismatchZeroBridgeSliceOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenClauseFiveRemainingTwoMismatchOneBridgeSliceOverrideGuard;
 
 #[cfg(test)]
 impl Drop for ClaimStepFifteenFamilyLocalSamePrimaryReliefOverrideGuard {
@@ -6271,6 +6280,28 @@ fn override_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_sl
 }
 
 #[cfg(test)]
+impl Drop for ClaimStepFifteenClauseFiveRemainingTwoMismatchOneBridgeSliceOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_REMAINING_TWO_MISMATCH_ONE_BRIDGE_SLICE_OVERRIDE.with(
+            |override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice()
+-> ClaimStepFifteenClauseFiveRemainingTwoMismatchOneBridgeSliceOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_REMAINING_TWO_MISMATCH_ONE_BRIDGE_SLICE_OVERRIDE.with(
+        |override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        },
+    );
+    ClaimStepFifteenClauseFiveRemainingTwoMismatchOneBridgeSliceOverrideGuard
+}
+
+#[cfg(test)]
 fn claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enabled() -> bool {
     CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE
         .with(|override_enabled| *override_enabled.borrow())
@@ -6355,6 +6386,19 @@ fn claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_overr
 
 #[cfg(not(test))]
 fn claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_override_enabled() -> bool
+{
+    false
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_override_enabled() -> bool
+{
+    CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_REMAINING_TWO_MISMATCH_ONE_BRIDGE_SLICE_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_override_enabled() -> bool
 {
     false
 }
@@ -6929,6 +6973,20 @@ fn create_online_prefix_work_item(
             || matches_claim_step_fifteen_clause_one_claim_next_codomain_clause(clause)
     }
 
+    fn matches_claim_step_fifteen_clause_five_remaining_two_mismatch_one_clause_zero(
+        clause: &pen_core::clause::ClauseRec,
+    ) -> bool {
+        matches_reference_temporal_clause_zero(clause)
+    }
+
+    fn matches_claim_step_fifteen_clause_five_remaining_two_mismatch_one_clause_one(
+        clause: &pen_core::clause::ClauseRec,
+    ) -> bool {
+        matches_claim_step_fifteen_clause_one_claim_sharp_codomain_clause(clause)
+            || matches_claim_step_fifteen_clause_one_claim_next_codomain_clause(clause)
+            || clause == &claim_step_fifteen_anchor_eleven_clause_one_demo_flat_codomain_clause()
+    }
+
     fn matches_reference_temporal_clause_four(clause: &pen_core::clause::ClauseRec) -> bool {
         clause.role == ClauseRole::Formation
             && matches!(
@@ -7337,6 +7395,16 @@ fn create_online_prefix_work_item(
                     clause_three,
                     anchor,
                 );
+        let remaining_two_mismatch_one_bridge_slice =
+            matches_claim_step_fifteen_clause_five_remaining_two_mismatch_one_clause_zero(
+                clause_zero,
+            ) && matches_claim_step_fifteen_clause_five_remaining_two_mismatch_one_clause_one(
+                clause_one,
+            ) && matches_claim_step_fifteen_anchor_eleven_clause_two_variant(clause_two)
+                && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(
+                    clause_three,
+                    anchor,
+                );
         let claim_safe_override_slice =
             (claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
                 || claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_override_enabled())
@@ -7350,7 +7418,9 @@ fn create_online_prefix_work_item(
         (reference_slice
             || claim_safe_override_slice
             || (claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_override_enabled()
-                && remaining_two_mismatch_zero_slice))
+                && remaining_two_mismatch_zero_slice)
+            || (claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_override_enabled()
+                && remaining_two_mismatch_one_bridge_slice))
         .then(claim_step_fifteen_anchor_eleven_demo_sharp_bridge_clause)
     }
 
@@ -7408,6 +7478,17 @@ fn create_online_prefix_work_item(
                     anchor,
                 )
                 && *clause_four == claim_step_fifteen_anchor_eleven_demo_sharp_bridge_clause();
+        let remaining_two_mismatch_one_bridge_slice =
+            matches_claim_step_fifteen_clause_five_remaining_two_mismatch_one_clause_zero(
+                clause_zero,
+            ) && matches_claim_step_fifteen_clause_five_remaining_two_mismatch_one_clause_one(
+                clause_one,
+            ) && matches_claim_step_fifteen_anchor_eleven_clause_two_variant(clause_two)
+                && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(
+                    clause_three,
+                    anchor,
+                )
+                && *clause_four == claim_step_fifteen_anchor_eleven_demo_sharp_bridge_clause();
         let broad_claim_safe_override_slice =
             claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
                 && matches_claim_safe_temporal_clause_zero(clause_zero)
@@ -7425,6 +7506,8 @@ fn create_online_prefix_work_item(
         (reference_slice
             || (claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_override_enabled()
                 && remaining_two_mismatch_zero_bridge_slice)
+            || (claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_override_enabled()
+                && remaining_two_mismatch_one_bridge_slice)
             || broad_claim_safe_override_slice)
         .then(claim_step_fifteen_anchor_eleven_demo_sharp_domain_clause)
     }
@@ -7483,6 +7566,17 @@ fn create_online_prefix_work_item(
                     anchor,
                 )
                 && *clause_four == claim_step_fifteen_anchor_eleven_demo_sharp_bridge_clause();
+        let remaining_two_mismatch_one_bridge_slice =
+            matches_claim_step_fifteen_clause_five_remaining_two_mismatch_one_clause_zero(
+                clause_zero,
+            ) && matches_claim_step_fifteen_clause_five_remaining_two_mismatch_one_clause_one(
+                clause_one,
+            ) && matches_claim_step_fifteen_anchor_eleven_clause_two_variant(clause_two)
+                && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(
+                    clause_three,
+                    anchor,
+                )
+                && *clause_four == claim_step_fifteen_anchor_eleven_demo_sharp_bridge_clause();
         let broad_claim_safe_override_slice =
             claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_override_enabled()
                 && matches_claim_safe_temporal_clause_zero(clause_zero)
@@ -7500,6 +7594,8 @@ fn create_online_prefix_work_item(
         (reference_slice
             || (claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_override_enabled()
                 && remaining_two_mismatch_zero_bridge_slice)
+            || (claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_override_enabled()
+                && remaining_two_mismatch_one_bridge_slice)
             || broad_claim_safe_override_slice)
         .then(claim_step_fifteen_anchor_eleven_demo_flat_codomain_clause)
     }
@@ -18987,6 +19083,133 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_clause_five_side_pocket_injects_on_exact_remaining_two_mismatch_one_bridge_slice()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice(
+            );
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let claim_prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let (library, _history, _) = history_from_prefix(&claim_prefix);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let clause_catalog = build_clause_catalog(
+            EnumerationContext::from_admissibility(&library, admissibility),
+            8,
+        );
+        let anchor = admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let clause_one_variants = [
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Eventually(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+            ),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
+            ),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+            ),
+        ];
+        let clause_two_variants = [
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                    Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                ),
+            ),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                        Expr::Var(1),
+                    ))))),
+                ),
+            ),
+        ];
+        let exact_argument_clause = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor + 1)),
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+            ))),
+        );
+        let bridge_clause = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Sharp(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Sharp(
+                    Box::new(Expr::Var(1)),
+                )))))),
+            ),
+        );
+
+        for clause_one in clause_one_variants {
+            for clause_two in clause_two_variants.iter().cloned() {
+                let mut prefix = Telescope::new(Telescope::reference(15).clauses[..5].to_vec());
+                prefix.clauses[1] = clause_one.clone();
+                prefix.clauses[2] = clause_two;
+                prefix.clauses[3] = exact_argument_clause.clone();
+                prefix.clauses[4] = bridge_clause.clone();
+                let signature = PrefixSignature::new(15, &library, &prefix);
+                let mut cache = PrefixLegalityCache::default();
+                assert!(
+                    cache.insert_root(
+                        signature.clone(),
+                        8,
+                        &library,
+                        &prefix,
+                        admissibility,
+                        LateFamilySurface::ClaimGeneric,
+                    ),
+                    "the exact remaining-two mismatch-1 bridge slice should stay legal enough to reach the clause-5 injector"
+                );
+                let work_item = create_online_prefix_work_item(
+                    8,
+                    prefix,
+                    signature,
+                    &library,
+                    admissibility,
+                    &clause_catalog,
+                    &mut cache,
+                );
+                let observed_exprs = work_item
+                    .next_clauses(&clause_catalog)
+                    .iter()
+                    .map(|clause| format!("{:?}", clause.expr))
+                    .collect::<BTreeSet<_>>();
+                assert!(
+                    observed_exprs.contains(
+                        "Pi(Sharp(Eventually(Sharp(Var(1)))), Eventually(Sharp(Var(1))))"
+                    ),
+                    "the narrow mismatch-1 bridge slice should inject the clause-5 demo-sharp-domain side clause"
+                );
+                assert!(
+                    observed_exprs
+                        .contains("Pi(Sharp(Eventually(Var(1))), Eventually(Sharp(Flat(Var(1)))))"),
+                    "the narrow mismatch-1 bridge slice should inject the clause-5 demo-flat-codomain side clause"
+                );
+            }
+        }
+    }
+
+    #[test]
     fn current_claim_step_fifteen_clause_four_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control()
      {
         let _search_override =
@@ -21852,6 +22075,171 @@ mod tests {
                 best_overshoot: Some(Rational::new(115657, 21112)),
             }),
             "the exact remaining-two mismatch-0 bridge-slice reland should keep the isolated single pocket fenced even while it widens the noncanonical small-cluster surface"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice(
+            );
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4511);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 571,
+            "opening the clause-5 side pocket only on the exact remaining-two mismatch-1 bridge slice should still stay a widening negative control because it lifts breadth while widening the clean partial-prefix wall"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the exact remaining-two mismatch-1 bridge-slice reland should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 571);
+        assert_eq!(zero_summary.captured_prefixes, 2325);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3276,
+                admissible_terminal_candidates: 546,
+                exact_screened_terminal_candidates: 546,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the exact remaining-two mismatch-1 bridge-slice reland should widen the same small-cluster bucket rather than touching the isolated single pocket"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the exact remaining-two mismatch-1 bridge-slice reland should keep the isolated single pocket fenced even while it widens the noncanonical small-cluster surface"
+        );
+        assert_eq!(
+            pair_counts
+                .get(&(Some(1_usize), "reference", "claim_sharp_codomain"))
+                .copied(),
+            Some(48),
+            "the exact remaining-two mismatch-1 bridge-slice reland should widen the reference-plus-claim-sharp mismatch-1 pairing without relieving the broader live clause-4 split"
+        );
+        assert_eq!(
+            pair_counts
+                .get(&(Some(1_usize), "reference", "claim_next_codomain"))
+                .copied(),
+            Some(48),
+            "the same mismatch-1 bridge-slice reland should widen the reference-plus-claim-next pairing by the same amount"
+        );
+        assert_eq!(
+            pair_counts
+                .get(&(Some(1_usize), "reference", "demo_flat_codomain"))
+                .copied(),
+            Some(67),
+            "the larger reference-plus-demo-flat mismatch-1 pairing should widen too rather than narrow"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "claim_sharp_codomain",
+                    "claim_next_bridge"
+                ))
+                .copied(),
+            Some(24),
+            "the exact remaining-two mismatch-1 bridge-slice reland should leave the claim-sharp live clause-4 claim-next-bridge share unchanged"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "claim_sharp_codomain",
+                    "reference"
+                ))
+                .copied(),
+            Some(18),
+            "the same mismatch-1 bridge-slice reland should leave the companion claim-sharp clause-4 reference share unchanged"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "claim_next_bridge"
+                ))
+                .copied(),
+            Some(24),
+            "the exact remaining-two mismatch-1 bridge-slice reland should also leave the claim-next live clause-4 claim-next-bridge share unchanged"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "reference"
+                ))
+                .copied(),
+            Some(18),
+            "the same mismatch-1 bridge-slice reland should leave the companion claim-next clause-4 reference share unchanged"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "claim_next_bridge"
+                ))
+                .copied(),
+            Some(33),
+            "the exact remaining-two mismatch-1 bridge-slice reland should leave the larger demo-flat clause-4 claim-next-bridge share unchanged"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "reference"
+                ))
+                .copied(),
+            Some(28),
+            "the same mismatch-1 bridge-slice reland should leave the companion demo-flat clause-4 reference share unchanged"
         );
     }
 

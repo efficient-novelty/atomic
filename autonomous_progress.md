@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Progress
 
-Last updated: 2026-04-07
+Last updated: 2026-04-08
 
 This file is the live operating brief for `desktop_claim_shadow`.
 It is intentionally short. Use [autonomous_next_steps.md](autonomous_next_steps.md)
@@ -392,6 +392,23 @@ Until that exists, wording stays at `bounded live recovery`.
   - so the next honest slice is no longer another clause-`5` tail reopening;
     it is to step back up to the broader dominant clause-`0` / clause-`1`
     claim surface outside this exhausted exact clause-`4` `reference` tail
+- A newer exact remaining-two mismatch-`1` clause-`5` bridge-slice reopening
+  has now also been checked under scoped overrides and is pinned by
+  `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
+  plus the matching injector and connectivity tests:
+  - it lifted the local late surface from `4331` to `4511`
+  - it widened the clean partial-prefix wall from `553` to `571`
+  - it widened zero-admitted exact-prune capture from `2271` to `2325`
+  - it widened the `small_cluster` from `3132 / 522 / 522 / 0` to
+    `3276 / 546 / 546 / 0`
+  - it kept the isolated `single` pocket and the residual `3`
+    incumbent-dominance prunes unchanged
+  - it widened the exact mismatch-`1` clause-`0` / clause-`1` pairings from
+    `42 / 42 / 61` to `48 / 48 / 67`
+  - but it left the live clause-`4` mismatch-`1` split unchanged at
+    `24 / 18`, `24 / 18`, and `33 / 28`
+  - so even that narrower mismatch-`1` clause-`5` reopening is also ruled
+    out as the next repair rather than a cleaner local fix
 - A local clause-`3` `anchor-11` exact-argument widening onto the broader
   clause-`0` / clause-`1` claim surface while clause `2` stayed `reference`
   was also checked and reverted:
@@ -533,6 +550,10 @@ Until that exists, wording stays at `bounded live recovery`.
 - Do not reland the exact remaining-two mismatch-`0` bridge-slice clause-`5`
   reopening; that narrower probe still lifted local breadth to `4691` but
   widened the clean wall to `589`.
+- Do not reland the exact remaining-two mismatch-`1` bridge-slice clause-`5`
+  reopening; that newer probe lifted local breadth to `4511`, widened the
+  clean wall to `571`, widened zero-admitted capture to `2325`, and still
+  left the live clause-`4` mismatch-`1` split unchanged.
 - Do not reland the raw position-`0`, broad clause-`4`, or broad clause-`5`
   widenings.
 - Do not reland the raw step-`13` widened controls
@@ -568,6 +589,8 @@ Until that exists, wording stays at `bounded live recovery`.
   - `current_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_five_side_pocket_injects_on_exact_remaining_two_mismatch_zero_bridge_slice`
   - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
+  - `current_claim_step_fifteen_clause_five_side_pocket_injects_on_exact_remaining_two_mismatch_one_bridge_slice`
+  - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
   - `current_claim_step_fifteen_clause_five_side_pocket_on_claim_safe_clause_zero_one_surface_stays_a_negative_control`
   - `current_claim_step_fifteen_pruned_terminal_prefixes_match_direct_exact_assessment`
   - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
@@ -621,6 +644,9 @@ Until that exists, wording stays at `bounded live recovery`.
   - `connectivity_accepts_clause_five_demo_sharp_domain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
   - `connectivity_accepts_clause_five_demo_flat_codomain_on_the_exact_remaining_two_mismatch_zero_bridge_slice`
   - `connectivity_keeps_clause_five_remaining_two_mismatch_one_bridge_slice_outside_historical_reanchor_even_under_override`
+  - `connectivity_accepts_clause_five_demo_sharp_domain_on_the_exact_remaining_two_mismatch_one_bridge_slice`
+  - `connectivity_accepts_clause_five_demo_flat_codomain_on_the_exact_remaining_two_mismatch_one_bridge_slice`
+  - `connectivity_keeps_clause_five_remaining_two_mismatch_zero_bridge_slice_outside_historical_reanchor_even_under_mismatch_one_override`
   - `connectivity_accepts_clause_five_demo_sharp_domain_on_claim_safe_clause_zero_one_surface_under_override`
   - `connectivity_accepts_clause_five_demo_flat_codomain_on_claim_safe_clause_zero_one_surface_under_override`
 
@@ -628,39 +654,19 @@ Until that exists, wording stays at `bounded live recovery`.
 
 Use the executable wall split plus the pinned
 `reference + demo_flat_codomain` tradeoff stack to attack the clean `v12`
-step-`15` partial-prefix wall on top of the matched `4331` surface. The new
-exact claim-pair plus clause-`4` `claim_next_bridge`-side probe now sits
-between the single-sheet controls and the broader exact claim-pair tradeoff:
-it lifts local breadth to `4445`, narrows the clean wall to `539`, cuts
-zero-admitted capture to `2241`, and widens `small_cluster` only to
-`3252 / 542 / 542 / 0` while keeping the isolated `single` pocket and the
-residual `3` incumbent prunes unchanged. The important new fact is that this
-narrower probe already reproduces the same captured mismatch-`1`
-`reference + demo_flat_codomain` branch as the broader exact claim-pair
-tradeoff: the executable branch still sits at clause-`4` `27 / 18` / `45`
-with the same per-sheet `3 / 3 / 3` plus `2 / 2 / 2` bridge grid. So the
-newer executable delta freeze
-`current_claim_step_fifteen_exact_claim_variant_pair_tradeoff_delta_outside_the_claim_next_bridge_side_probe_lives_on_two_clause_four_reference_remaining_three_prefixes`
-now shows that the broader tradeoff adds no unique residual captures or
-exact prunes beyond that narrower probe. Instead, the narrower probe alone
-still over-prunes exactly two remaining-three prefixes on the
-`reference + demo_flat_codomain` mismatch-`1` surface, one on each claim
-clause-`2` sheet while clause `4` stays `reference`; one layer deeper, that
-same off-branch difference is the exact `18` zero-admitted prefixes split
-evenly across clause `5` `claim_flat_codomain`, `claim_next_codomain`, and
-`reference`. The newly pinned exact clause-`5` `reference` follow-on on that
-tail leaves the whole `4331 / 553 / 2271` surface unchanged, which means that
-cell is already effectively absorbed by the current canonical surface. The
-newer exact clause-`5` `claim_flat_codomain` and `claim_next_codomain`
-follow-ons on that same tail now both land only the smaller
-`4355 / 551 / 2265` tradeoff surface with a `3156 / 526 / 526 / 0`
-`small_cluster` regression. Each probe reopens only one exact clause-`5`
-claim family on each claim clause-`2` sheet, and together they merely
-decompose the older clause-`4` `reference`-sheet tradeoff at
-`4379 / 549 / 2259`. So the clause-`4` `reference` tail is now exhausted as a
-cleaner local repair target. The next local slice should therefore step back
-up to the broader dominant clause-`0` / clause-`1` claim surface outside this
-exhausted tail rather than spend another turn on clause-`5` tail reopenings,
-the broader `45`-capture mismatch-`1` branch, the larger clause-`4`
+step-`15` partial-prefix wall on top of the matched `4331` surface. The newer
+exact clause-`5` single-family follow-ons on the exhausted clause-`4`
+`reference` tail are now pinned as smaller tradeoff controls at
+`4355 / 551 / 2265`, and the newer exact remaining-two mismatch-`1`
+clause-`5` bridge-slice reland is now pinned as a widening negative control
+at `4511 / 571 / 2325`. The key new fact from that mismatch-`1` probe is
+that it widens the three mismatch-`1` clause-`0` / clause-`1` pairings to
+`48 / 48 / 67` while leaving the live clause-`4` `24 / 18`, `24 / 18`, and
+`33 / 28` split unchanged. So the next local slice should stay above
+clause-`5` reopenings entirely and work directly against the live
+clause-`4` `claim_next_bridge` / `reference` families under the dominant
+mismatch-`1` pairings, rather than spend another turn on clause-`5` tails,
+exact mismatch-`0` or mismatch-`1` bridge-side relands, the broader
+`45`-capture mismatch-`1` tradeoff branch, the larger clause-`4`
 `claim_next_bridge` half, another broad clause-`4` / clause-`5` widening, a
 rerun, or a step-`1`-first theory pass.
