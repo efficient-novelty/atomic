@@ -6066,6 +6066,12 @@ thread_local! {
 }
 
 #[cfg(test)]
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_HALF_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
 fn start_pruned_terminal_prefix_capture() {
     PRUNED_TERMINAL_PREFIX_CAPTURE.with(|capture| {
         *capture.borrow_mut() = Some(Vec::new());
@@ -6141,6 +6147,9 @@ struct ClaimStepFifteenClauseFiveRemainingTwoMismatchOneBridgeSliceOverrideGuard
 
 #[cfg(test)]
 struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroReferenceTailOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard;
 
 #[cfg(test)]
 impl Drop for ClaimStepFifteenFamilyLocalSamePrimaryReliefOverrideGuard {
@@ -6432,6 +6441,28 @@ fn override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_ze
 }
 
 #[cfg(test)]
+impl Drop for ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_HALF_OVERRIDE.with(
+            |override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half()
+-> ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard {
+    CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_HALF_OVERRIDE.with(
+        |override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        },
+    );
+    ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard
+}
+
+#[cfg(test)]
 fn claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enabled() -> bool {
     CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE
         .with(|override_enabled| *override_enabled.borrow())
@@ -6585,13 +6616,98 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_refere
     false
 }
 
-fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail_matches(
+#[cfg(test)]
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_HALF_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half_override_enabled()
+-> bool {
+    false
+}
+
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_clause_two_matches(
+    clause: &pen_core::clause::ClauseRec,
+) -> bool {
+    let reference = Telescope::reference(15);
+    *clause == reference.clauses[2]
+        || matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+                )
+        )
+        || matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        )
+}
+
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_clause_zero_matches(
+    clause: &pen_core::clause::ClauseRec,
+) -> bool {
+    clause.role == ClauseRole::Formation
+        && matches!(
+            &clause.expr,
+            Expr::Next(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                ) || matches!(
+                    body.as_ref(),
+                    Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                )
+        )
+}
+
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_clause_one_matches(
+    clause: &pen_core::clause::ClauseRec,
+) -> bool {
+    clause.role == ClauseRole::Formation
+        && matches!(
+            &clause.expr,
+            Expr::Eventually(body)
+                if matches!(body.as_ref(), Expr::Var(1))
+                    || matches!(
+                        body.as_ref(),
+                        Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
+                    || matches!(
+                        body.as_ref(),
+                        Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                    )
+        )
+}
+
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_prefix_matches(
     step_index: u32,
     admissibility: StrictAdmissibility,
     prefix_telescope: &Telescope,
 ) -> bool {
-    if !claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail_override_enabled()
-        || !matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
+    if !matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
         || step_index != 15
         || prefix_telescope.clauses.len() != 7
     {
@@ -6599,77 +6715,40 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_refere
     }
 
     let reference = Telescope::reference(15);
-    prefix_telescope
+    prefix_telescope.clauses.first().is_some_and(
+        claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_clause_zero_matches,
+    ) && prefix_telescope
         .clauses
-        .first()
-        .is_some_and(|clause| {
-            clause.role == ClauseRole::Formation
-                && matches!(
-                    &clause.expr,
-                    Expr::Next(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        ) || matches!(
-                            body.as_ref(),
-                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                )
-        })
+        .get(1)
+        .is_some_and(
+            claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_clause_one_matches,
+        )
         && prefix_telescope
             .clauses
-            .get(1)
-            .is_some_and(|clause| {
-                clause.role == ClauseRole::Formation
-                    && matches!(
-                        &clause.expr,
-                        Expr::Eventually(body)
-                            if matches!(body.as_ref(), Expr::Var(1))
-                                || matches!(
-                                    body.as_ref(),
-                                    Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                                )
-                                || matches!(
-                                    body.as_ref(),
-                                    Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                                )
-                    )
-            })
-        && prefix_telescope.clauses.get(2).is_some_and(|clause| {
-            *clause == reference.clauses[2]
-                || matches!(
-                    &clause.expr,
-                    Expr::Pi(domain, codomain)
-                        if matches!(
-                            domain.as_ref(),
-                            Expr::Next(body)
-                                if matches!(
-                                    body.as_ref(),
-                                    Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                                )
-                        ) && matches!(
-                            codomain.as_ref(),
-                            Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
-                        )
-                )
-                || matches!(
-                    &clause.expr,
-                    Expr::Pi(domain, codomain)
-                        if matches!(
-                            domain.as_ref(),
-                            Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
-                        ) && matches!(
-                            codomain.as_ref(),
-                            Expr::Eventually(body)
-                                if matches!(
-                                    body.as_ref(),
-                                    Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                                )
-                        )
-                )
-        })
+            .get(2)
+            .is_some_and(
+                claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_clause_two_matches,
+            )
         && prefix_telescope.clauses.get(3) == reference.clauses.get(3)
-        && prefix_telescope.clauses.get(4) == reference.clauses.get(4)
+}
+
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail_matches(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    prefix_telescope: &Telescope,
+) -> bool {
+    if !claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail_override_enabled()
+        || !claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_prefix_matches(
+            step_index,
+            admissibility,
+            prefix_telescope,
+        )
+    {
+        return false;
+    }
+
+    let reference = Telescope::reference(15);
+    prefix_telescope.clauses.get(4) == reference.clauses.get(4)
         && prefix_telescope.clauses.get(5) == reference.clauses.get(5)
 }
 
@@ -6693,6 +6772,167 @@ fn maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_misma
     }
 
     decision
+}
+
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half_matches(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    prefix_telescope: &Telescope,
+) -> bool {
+    if !claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half_override_enabled()
+        || !claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_prefix_matches(
+            step_index,
+            admissibility,
+            prefix_telescope,
+        )
+    {
+        return false;
+    }
+
+    prefix_telescope.clauses.get(4).is_some_and(|clause| {
+        matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Flat(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Next(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Next(deeper)
+                                        if matches!(
+                                            deeper.as_ref(),
+                                            Expr::Eventually(tail) if matches!(tail.as_ref(), Expr::Var(1))
+                                        )
+                                )
+                        )
+                )
+        )
+    }) && prefix_telescope.clauses.get(5).is_some_and(|clause| {
+        matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sharp(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        ) || matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sharp(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Flat(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        ) || matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sharp(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Eventually(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Sharp(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
+                        )
+                )
+        )
+    })
+}
+
+fn maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    prefix_telescope: &Telescope,
+    decision: ExactPartialPrefixBoundDecision,
+) -> ExactPartialPrefixBoundDecision {
+    #[cfg(test)]
+    {
+        if matches!(decision, ExactPartialPrefixBoundDecision::CannotClearBar)
+            && claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half_matches(
+                step_index,
+                admissibility,
+                prefix_telescope,
+            )
+        {
+            return ExactPartialPrefixBoundDecision::Unknown;
+        }
+    }
+
+    decision
+}
+
+fn maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_cells(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    prefix_telescope: &Telescope,
+    decision: ExactPartialPrefixBoundDecision,
+) -> ExactPartialPrefixBoundDecision {
+    let decision =
+        maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail(
+            step_index,
+            admissibility,
+            prefix_telescope,
+            decision,
+        );
+    maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half(
+        step_index,
+        admissibility,
+        prefix_telescope,
+        decision,
+    )
 }
 
 #[cfg(test)]
@@ -8440,7 +8680,7 @@ fn exact_terminal_prefix_bound_decision(
         if let Some(telemetry) = remaining_one_telemetry.as_deref_mut() {
             telemetry.remaining_one_cached_bound_hits += 1;
         }
-        return maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail(
+        return maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_cells(
             step_index,
             admissibility,
             prefix_telescope,
@@ -8458,7 +8698,7 @@ fn exact_terminal_prefix_bound_decision(
         if let Some(telemetry) = remaining_one_telemetry.as_deref_mut() {
             telemetry.remaining_one_algebraic_prunes += 1;
         }
-        return maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail(
+        return maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_cells(
             step_index,
             admissibility,
             prefix_telescope,
@@ -8503,7 +8743,7 @@ fn exact_terminal_prefix_bound_decision(
         }
         prefix_legality_cache
             .store_terminal_prefix_completion_summary(prefix_signature.clone(), summary.clone());
-        return maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail(
+        return maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_cells(
             step_index,
             admissibility,
             prefix_telescope,
@@ -8685,7 +8925,7 @@ fn exact_terminal_prefix_bound_decision(
         }
     }
 
-    maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail(
+    maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_cells(
         step_index,
         admissibility,
         prefix_telescope,
@@ -21752,6 +21992,250 @@ mod tests {
             .into_iter()
             .collect(),
             "the mismatch-0 reference-tail exact-summary relief should widen only the clause-4 reference half from 18 to 28 per live pair while leaving the claim-next-bridge half unchanged"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half_stays_a_tradeoff_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, _clause_one), _count)| *mismatch == Some(0_usize))
+                .collect::<BTreeMap<_, _>>();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, _clause_one, _clause_four), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4619);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 529,
+            "relaxing remaining-one exact-summary relief on the whole mismatch-0 clause-4 claim-next-bridge half should narrow the clean wall instead of widening it, but it still remains only a tradeoff because the noncanonical survivor shell grows"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the mismatch-0 claim-next-bridge-half exact-summary relief should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 529);
+        assert_eq!(
+            wall_summary.remaining_clause_slot_counts,
+            [(2_usize, 427_usize), (3, 102)].into_iter().collect(),
+            "the mismatch-0 claim-next-bridge-half exact-summary relief should shrink the remaining-two wall while leaving the smaller remaining-three spill unchanged"
+        );
+        assert_eq!(
+            wall_summary.first_mismatch_position_counts,
+            [
+                (Some(0_usize), 288_usize),
+                (Some(1), 177),
+                (Some(2), 50),
+                (Some(3), 14)
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-0 claim-next-bridge-half exact-summary relief should contract only the first-mismatch-0 family"
+        );
+        assert_eq!(zero_summary.captured_prefixes, 2199);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3348,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the mismatch-0 claim-next-bridge-half exact-summary relief should still widen the same noncanonical small-cluster shell even while it narrows the clean wall"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the mismatch-0 claim-next-bridge-half exact-summary relief should still keep the isolated single pocket fenced"
+        );
+        assert_eq!(
+            pair_counts,
+            [
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain"
+                    ),
+                    38_usize
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_sharp_codomain"
+                    ),
+                    38
+                ),
+                ((Some(0_usize), "claim_eventual_domain", "reference"), 38),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_next_codomain"),
+                    38
+                ),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_sharp_codomain"),
+                    38
+                ),
+                ((Some(0_usize), "claim_flat_domain", "reference"), 38),
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-0 claim-next-bridge-half exact-summary relief should contract every live mismatch-0 pairing by the same four-capture spread instead of isolating a single clause-zero/one branch"
+        );
+        assert_eq!(
+            clause_four_counts,
+            [
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain",
+                        "claim_next_bridge"
+                    ),
+                    20_usize
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain",
+                        "reference"
+                    ),
+                    18
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_sharp_codomain",
+                        "claim_next_bridge"
+                    ),
+                    20
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_sharp_codomain",
+                        "reference"
+                    ),
+                    18
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "reference",
+                        "claim_next_bridge"
+                    ),
+                    20
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "reference",
+                        "reference"
+                    ),
+                    18
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "claim_next_codomain",
+                        "claim_next_bridge"
+                    ),
+                    20
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "claim_next_codomain",
+                        "reference"
+                    ),
+                    18
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "claim_sharp_codomain",
+                        "claim_next_bridge"
+                    ),
+                    20
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "claim_sharp_codomain",
+                        "reference"
+                    ),
+                    18
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "reference",
+                        "claim_next_bridge"
+                    ),
+                    20
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "reference",
+                        "reference"
+                    ),
+                    18
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-0 claim-next-bridge-half exact-summary relief should contract only the clause-4 claim-next-bridge share from 24 to 20 per live pair while leaving the reference share unchanged"
         );
     }
 

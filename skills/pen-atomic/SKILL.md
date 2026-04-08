@@ -380,6 +380,11 @@ Focus on:
   that deeper negative control now also belongs to
   [../../autonomous_ledger.md](../../autonomous_ledger.md), so route to the
   live docs before retrying that same narrow reference-tail slice
+- treat the whole mismatch-`0` clause-`4` `claim_next_bridge`-half
+  remaining-one exact-summary tradeoff as live autonomy detail too; it now
+  narrows the wall but still widens `small_cluster`, so route to the live
+  docs before retrying that whole half and localize within its clause-`5`
+  cells if that is still the active slice
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward

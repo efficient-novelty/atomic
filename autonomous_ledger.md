@@ -197,3 +197,15 @@ This file is the append-only history for `desktop_claim_shadow`.
   Consequence: even summary-only relief on that existing reference tail
   widens the mismatch-`0` wall, so the next revisit should stay away from
   that tail and probe another live mismatch-`0` cell first.
+- Scope: probe remaining-one exact-summary relief on the whole mismatch-`0`
+  clause-`4` `claim_next_bridge` half.
+  Result: a search-only exact-summary override pinned the first real
+  wall-narrowing tradeoff on that surface at `4619 / 529 / 2199` with
+  `small_cluster = 3348 / 522 / 522 / 0`; the isolated `single` pocket stayed
+  fenced, each live mismatch-`0` pairing contracted from `42` to `38`, and
+  the clause-`4` split contracted only the `claim_next_bridge` share, from
+  `24 / 18` to `20 / 18`.
+  Consequence: the next revisit should stay below the whole-half tradeoff and
+  localize into the non-reference clause-`5` cells under that same half,
+  because the wall improvement is real but the wider `small_cluster` shell
+  still blocks a safe landing.

@@ -132,6 +132,10 @@ Do not:
 - reopen remaining-one exact-summary relief on the mismatch-`0` clause-`4`
   `reference` plus clause-`5` `reference` tail first; that deeper negative
   control now also belongs in the autonomy ledger rather than as a fresh lead
+- reopen the whole mismatch-`0` clause-`4` `claim_next_bridge`-half
+  remaining-one exact-summary relief as if it were already the landed repair;
+  that wall-narrowing tradeoff still belongs in the autonomy docs and ledger
+  rather than as a stable resolved lead
 - reopen the whole remaining-two mismatch-`0` claim-domain tier by flipping
   parent-level `CannotClearBar` decisions to `Unknown`; that broad exact-bound
   release is now also a ruled-out widening control owned by the autonomy

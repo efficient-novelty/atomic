@@ -67,9 +67,18 @@ Until that exists, wording stays at `bounded live recovery`.
   - clause-`4` pressure is frozen to `claim_next_bridge` plus `reference`
   - clause-`2` pressure stays on the current claim variants rather than on a
     hidden demo-only reopening
-- The best known narrowing tradeoff is still the exact claim-pair plus
-  clause-`4` `claim_next_bridge`-side probe at `4445 / 539 / 2241`, but it
-  still widens `small_cluster` to `3252 / 542 / 542 / 0`.
+- The best known clean wall-narrowing tradeoff is now the whole mismatch-`0`
+  clause-`4` `claim_next_bridge`-half remaining-one exact-summary relief:
+  - it lands `4619 / 529 / 2199`
+  - it widens `small_cluster` to `3348 / 522 / 522 / 0`
+  - the isolated `single` pocket stays fenced
+  - each live mismatch-`0` pairing contracts from `42` to `38`
+  - the clause-`4` split contracts only the `claim_next_bridge` share, from
+    `24 / 18` to `20 / 18`
+  - consequence: the first honest wall reduction on the mismatch-`0`
+    claim-domain surface now sits on the whole `claim_next_bridge` half, but
+    it is still only a tradeoff because the noncanonical `small_cluster`
+    shell grows
 - The exact claim-pair clause-`4` `reference`-side relocalization is now also
   isolated and exhausted as a smaller tradeoff control:
   - it lands the same `4379 / 549 / 2259` surface as the older broader
@@ -161,6 +170,19 @@ Until that exists, wording stays at `bounded live recovery`.
     `24 / 28`
   - consequence: even summary-only relief on the narrow reference tail widens
     the mismatch-`0` wall instead of converting that tail into honest breadth
+- The whole mismatch-`0` clause-`4` `claim_next_bridge` half is now also
+  localized as a real remaining-one exact-summary tradeoff:
+  - a search-only exact-summary override on that live half lands
+    `4619 / 529 / 2199`
+  - it widens `small_cluster` to `3348 / 522 / 522 / 0`
+  - the isolated `single` pocket stays fenced
+  - each live mismatch-`0` pairing contracts from `42` to `38`
+  - the clause-`4` split contracts only the `claim_next_bridge` share, from
+    `24 / 18` to `20 / 18`
+  - consequence: remaining mismatch-`0` leverage is now genuinely localized
+    below the `claim_next_bridge` half, but the next slice still has to move
+    one layer deeper into its clause-`5` cells to preserve the wall win
+    without widening `small_cluster`
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -195,6 +217,11 @@ Until that exists, wording stays at `bounded live recovery`.
   remaining-one exact-summary behavior under the same live pairings before any
   narrower aligned clause-`5` reopening, rather than on a broad parent-level
   release of the whole tier.
+- The whole mismatch-`0` clause-`4` `claim_next_bridge`-half remaining-one
+  exact-summary relief is now the leading local tradeoff on that surface, but
+  it is not the landed repair because it still widens `small_cluster` to
+  `3348`; if mismatch-`0` is revisited again, localize one layer deeper into
+  the non-reference clause-`5` cells under that same half first.
 - Do not reopen the mismatch-`0` clause-`4` `claim_next_bridge` half through
   the same connectivity-only relocalization first; it is now a smaller
   negative control rather than the landed repair.
@@ -205,6 +232,9 @@ Until that exists, wording stays at `bounded live recovery`.
   clause-`4` `reference` plus clause-`5` `reference` tail first; it lifts
   breadth only to `4547` by widening the clean wall to `589` and
   `small_cluster` to `3240`.
+- Do not stop at the whole mismatch-`0` clause-`4` `claim_next_bridge`-half
+  remaining-one exact-summary relief either; it narrows the wall to `529`,
+  but only by widening `small_cluster` to `3348`.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.
