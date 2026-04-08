@@ -153,6 +153,14 @@ Do not:
   `claim_sharp_codomain`, and `reference` continuations are now matching
   smaller tradeoff controls too, so that axis also belongs to the autonomy
   ledger rather than as a fresh lead
+- reopen the representative `claim_flat_domain` clause-`2` sheet's
+  marginally best clause-`6` `reference` continuation through either
+  individual clause-`3` `claim_flat_argument` or `claim_eventual_argument`
+  branch first; those branches are now individually neutral controls on the
+  untouched `4331 / 553 / 2271` baseline, and the broader
+  `4343 / 552 / 2268` clause-`6` `reference` tradeoff only appears when both
+  reopen together, so that axis also belongs to the autonomy ledger rather
+  than as a fresh lead
 - reopen the mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
   `claim_next_codomain` exact-summary cell first; that sibling is now a
   neutral control owned by the autonomy ledger rather than a fresh lead

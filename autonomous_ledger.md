@@ -270,3 +270,16 @@ This file is the append-only history for `desktop_claim_shadow`.
   leverage below that representative claim-flat sheet, so the next revisit
   has to move below the marginally best `reference` continuation rather than
   spending another turn swapping among the three clause-`6` siblings.
+- Scope: localize one layer deeper below that representative
+  `claim_flat_domain` clause-`2` sheet's marginally best clause-`6`
+  `reference` continuation onto its clause-`3` branches.
+  Result: the `claim_flat_argument` and `claim_eventual_argument`
+  clause-`3` branches each stayed individually neutral on the untouched
+  `4331 / 553 / 2271` baseline, each kept
+  `small_cluster = 3132 / 522 / 522 / 0`, and each preserved first-mismatch
+  counts at `312 / 177 / 50 / 14`.
+  Consequence: the broader clause-`6` `reference` `4343 / 552 / 2268`
+  tradeoff does not localize to either clause-`3` branch alone; it only
+  appears when both clause-`3` branches reopen together, so the next revisit
+  has to move below clause-`3` identity into a finer terminal or remaining-one
+  completion partition under that joint continuation.

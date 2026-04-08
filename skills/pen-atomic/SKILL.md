@@ -407,6 +407,14 @@ Focus on:
   same matched smaller tradeoff shell and differ only by a tiny deeper
   zero-admitted tail delta, so route to the live docs before retrying
   clause-`6` identity as if it were fresh leverage
+- treat the representative `claim_flat_domain` clause-`2` sheet's marginally
+  best clause-`6` `reference` continuation's clause-`3` split as live
+  autonomy detail too; the `claim_flat_argument` and
+  `claim_eventual_argument` branches are now individually neutral controls on
+  the untouched `4331 / 553 / 2271` baseline, and the broader
+  `4343 / 552 / 2268` clause-`6` `reference` tradeoff only appears when both
+  clause-`3` branches reopen together, so route to the live docs before
+  retrying clause-`3` identity as if one branch were newly privileged
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward

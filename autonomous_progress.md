@@ -260,6 +260,22 @@ Until that exists, wording stays at `bounded live recovery`.
     leverage below that representative claim-flat sheet, so the next revisit
     has to move below the marginally best `reference` clause-`6`
     continuation rather than swapping among the three clause-`6` siblings
+- The representative `claim_flat_domain` clause-`2` sheet's marginally best
+  clause-`6` `reference` continuation is now also exhausted one layer deeper
+  at clause-`3` identity scope:
+  - under
+    `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
+    claim_next_bridge / claim_flat_codomain / reference`,
+    the `claim_flat_argument` and `claim_eventual_argument` clause-`3`
+    branches are each individually neutral controls on the untouched
+    `4331 / 553 / 2271` baseline
+  - each keeps `small_cluster` at `3132 / 522 / 522 / 0`
+  - each keeps first-mismatch counts at `312 / 177 / 50 / 14`
+  - consequence: the broader clause-`6` `reference` `4343 / 552 / 2268`
+    tradeoff does not localize to either clause-`3` branch alone; it appears
+    only when both clause-`3` branches reopen together, so the next revisit
+    has to move below clause-`3` identity into a finer terminal or
+    remaining-one completion partition under that joint continuation
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -349,6 +365,16 @@ Until that exists, wording stays at `bounded live recovery`.
   marginally best clause-`6` `reference` continuation before reopening the
   representative `claim_sharp_codomain` clause-`2` sheet or the smaller
   claim-safe mismatch-`1` tier.
+- Do not reopen that marginally best clause-`6` `reference` continuation
+  through either individual clause-`3` `claim_flat_argument` or
+  `claim_eventual_argument` branch first; each is now a neutral control on
+  the untouched `4331 / 553 / 2271` baseline.
+- Because those two individual clause-`3` branches are neutral while their
+  union is the only clause-`6` `reference` tradeoff, the next revisit should
+  move below clause-`3` identity into a finer terminal or remaining-one
+  completion partition under their joint clause-`6` `reference`
+  continuation before reopening the representative `claim_sharp_codomain`
+  clause-`2` sheet or the smaller claim-safe mismatch-`1` tier.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

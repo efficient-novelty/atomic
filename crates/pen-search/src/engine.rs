@@ -6110,6 +6110,12 @@ enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel 
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseThreeLabel {
+    ClaimFlatArgument,
+    ClaimEventualArgument,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel {
     ClaimNextCodomain,
     ClaimSharpCodomain,
@@ -6127,6 +6133,8 @@ struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelec
     clause_zero: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel,
     clause_one: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel,
     clause_two: Option<ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel>,
+    clause_three:
+        Option<ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseThreeLabel>,
     clause_six: Option<ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel>,
     clause_five: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel,
 }
@@ -7038,6 +7046,55 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause
     }
 }
 
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_three_matches_label(
+    clause: &pen_core::clause::ClauseRec,
+    anchor: u32,
+    label: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseThreeLabel,
+) -> bool {
+    match label {
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseThreeLabel::ClaimFlatArgument => {
+            clause.role == ClauseRole::Introduction
+                && matches!(
+                    &clause.expr,
+                    Expr::Lam(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::App(function, argument)
+                                if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
+                                    && matches!(
+                                        argument.as_ref(),
+                                        Expr::Next(inner)
+                                            if matches!(
+                                                inner.as_ref(),
+                                                Expr::Flat(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                            )
+                                    )
+                        )
+                )
+        }
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseThreeLabel::ClaimEventualArgument => {
+            clause.role == ClauseRole::Introduction
+                && matches!(
+                    &clause.expr,
+                    Expr::Lam(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::App(function, argument)
+                                if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
+                                    && matches!(
+                                        argument.as_ref(),
+                                        Expr::Next(inner)
+                                            if matches!(
+                                                inner.as_ref(),
+                                                Expr::Eventually(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                            )
+                                    )
+                        )
+                )
+        }
+    }
+}
+
 fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_six_matches_label(
     clause: &pen_core::clause::ClauseRec,
     label: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel,
@@ -7438,6 +7495,7 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_c
     else {
         return false;
     };
+    let anchor = admissibility.historical_anchor_ref;
 
     claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half_base_matches(
         step_index,
@@ -7466,6 +7524,15 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_c
                 claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_two_matches_label(
                     clause, label,
                 )
+            })
+        })
+        && prefix_telescope.clauses.get(3).is_some_and(|clause| {
+            selector.clause_three.is_none_or(|label| {
+                anchor.is_some_and(|anchor| {
+                    claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_three_matches_label(
+                        clause, anchor, label,
+                    )
+                })
             })
         })
         && prefix_telescope.clauses.get(6).is_some_and(|clause| {
@@ -23499,6 +23566,7 @@ mod tests {
                                 clause_zero,
                                 clause_one,
                                 clause_two: None,
+                                clause_three: None,
                                 clause_six: None,
                                 clause_five,
                             },
@@ -23556,6 +23624,7 @@ mod tests {
                     clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
                     clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
                     clause_two: None,
+                    clause_three: None,
                     clause_six: None,
                     clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
                 },
@@ -23849,6 +23918,7 @@ mod tests {
                         clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
                         clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
                         clause_two: Some(clause_two),
+                        clause_three: None,
                         clause_six: None,
                         clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
                     },
@@ -24179,6 +24249,7 @@ mod tests {
                         clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
                         clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
                         clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain),
+                        clause_three: None,
                         clause_six: Some(clause_six),
                         clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
                     },
@@ -24359,6 +24430,97 @@ mod tests {
                 expected_clause_four_five_counts,
             )),
             "the reference clause-six continuation should be only the marginally best of the same three matched smaller tradeoff controls, leaving the wall and small-cluster shell unchanged while shaving the zero-admitted tail to 2268"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_clause_three_sheets_stay_individually_neutral_controls()
+     {
+        let clause_three_labels = [
+            (
+                "claim_flat_argument",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseThreeLabel::ClaimFlatArgument,
+            ),
+            (
+                "claim_eventual_argument",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseThreeLabel::ClaimEventualArgument,
+            ),
+        ];
+        let mut outcomes = BTreeMap::new();
+
+        for (clause_three_name, clause_three) in clause_three_labels {
+            let _search_override =
+                super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                    super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                        clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                        clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                        clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain),
+                        clause_three: Some(clause_three),
+                        clause_six: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel::Reference),
+                        clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
+                    },
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("claim prefix through step 14 should build");
+            let prefix = claim_steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+            outcomes.insert(
+                clause_three_name,
+                (
+                    step_fifteen.demo_funnel.generated_raw_prefixes,
+                    step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
+                    zero_summary.captured_prefixes,
+                    wall_summary.first_mismatch_position_counts,
+                    bucket_stats
+                        .get("k8:structural_generic:temporal_operator:library_backed:small_cluster")
+                        .map(|stats| stats.generated_terminal_candidates)
+                        .expect("small_cluster bucket should stay present"),
+                ),
+            );
+        }
+
+        let expected_first_mismatch_counts = [
+            (Some(0_usize), 312_usize),
+            (Some(1), 177),
+            (Some(2), 50),
+            (Some(3), 14),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+
+        assert_eq!(outcomes.len(), 2);
+        assert_eq!(
+            outcomes.get("claim_flat_argument"),
+            Some(&(
+                4331,
+                553,
+                2271,
+                expected_first_mismatch_counts.clone(),
+                3132
+            )),
+            "the claim-flat clause-three branch under the representative claim-flat / clause-six reference continuation should stay individually neutral: relaxing only that one remaining-one prefix leaves the canonical 4331 / 553 wall and the small-cluster shell untouched"
+        );
+        assert_eq!(
+            outcomes.get("claim_eventual_argument"),
+            Some(&(4331, 553, 2271, expected_first_mismatch_counts, 3132)),
+            "the claim-eventual clause-three branch should stay individually neutral too, confirming that the broader clause-six reference tradeoff does not localize to either clause-three sheet by itself"
         );
     }
 
