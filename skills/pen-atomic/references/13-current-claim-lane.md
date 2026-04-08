@@ -123,6 +123,9 @@ Do not:
 - reopen the broad clause-`1` `demo_flat_codomain` reopening across the full
   mismatch-`0` claim-domain surface first; that control is now a widening
   negative result owned by the autonomy ledger rather than a fresh lead
+- reopen the narrower clause-`4` `claim_next_bridge`-side relocalization under
+  that mismatch-`0` surface first; that smaller negative result also belongs in
+  the autonomy ledger rather than as a fresh lead
 - reopen the whole remaining-two mismatch-`0` claim-domain tier by flipping
   parent-level `CannotClearBar` decisions to `Unknown`; that broad exact-bound
   release is now also a ruled-out widening control owned by the autonomy

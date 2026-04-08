@@ -162,3 +162,16 @@ This file is the append-only history for `desktop_claim_shadow`.
   ruled out. The next repair has to stay one layer deeper, inside the existing
   mismatch-`0` clause-`4` / clause-`5` split or the remaining-one
   exact-summary path, rather than releasing the entire tier at once.
+- Scope: localize the broad mismatch-`0` `demo_flat_codomain` reopening onto
+  the clause-`4` `claim_next_bridge` half.
+  Result: new connectivity and search regressions pinned that narrower reland
+  as a smaller negative control at `4829 / 671 / 2793` with
+  `small_cluster = 3420 / 570 / 570 / 0`; the isolated `single` pocket stayed
+  fenced, and the same two mismatch-`0` pairings remained live at `45 / 45`
+  with the same clause-`4` split `27 / 18`, the same clause-`2` spread
+  `15 / 15 / 15`, and the same `3 / 3 / 3` versus `2 / 2 / 2` bridge grid.
+  Consequence: the remaining mismatch-`0` leverage is not isolated on a
+  connectivity-only relocalization of the larger clause-`4`
+  `claim_next_bridge` half; the next slice should move to the smaller
+  clause-`4` `reference` half or to remaining-one exact-summary behavior
+  under the same live pairings.

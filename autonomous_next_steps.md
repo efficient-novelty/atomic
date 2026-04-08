@@ -86,6 +86,14 @@ Do not start with another rerun setup pass.
   - each new pairing sits on the same clause-`4` split `27 / 18`
   - each new pairing also spreads evenly across the three clause-`2` sheets at
     `15 / 15 / 15`
+- The narrower mismatch-`0` clause-`4` `claim_next_bridge`-side relocalization
+  under that same demo-flat reopening is now also exhausted as a smaller
+  negative control:
+  - it lands `4829 / 671 / 2793`
+  - it widens `small_cluster` to `3420 / 570 / 570 / 0`
+  - it leaves the same two mismatch-`0` pairings at `45 / 45`
+  - it leaves the same clause-`4` split `27 / 18`
+  - it leaves the same clause-`2` spread `15 / 15 / 15`
 - Any remaining mismatch-`0` leverage therefore has to stay below that broad
   demo-flat reopening rather than relanding both new `45`-capture pairings at
   once.
@@ -93,6 +101,11 @@ Do not start with another rerun setup pass.
   parent exact-bound decision. The next repair has to live one layer deeper,
   inside the existing clause-`4` / clause-`5` split or remaining-one exact
   summary behavior on those live mismatch-`0` pairings.
+- Any remaining mismatch-`0` leverage is therefore no longer on a
+  connectivity-only relocalization of the larger clause-`4`
+  `claim_next_bridge` half. The next honest slice should check the smaller
+  clause-`4` `reference` half or remaining-one exact-summary behavior under
+  the same live pairings before reopening clause-`5` families.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -117,14 +130,18 @@ Do not start with another rerun setup pass.
    - do not reopen broad clause-`1` `demo_flat_codomain` across both
      mismatch-`0` claim-domain pairings again; that control is now frozen at
      `4985 / 667 / 2757`
+   - do not reland the mismatch-`0` clause-`4` `claim_next_bridge`-half
+     connectivity-only relocalization again; that smaller control is now
+     frozen at `4829 / 671 / 2793`
    - if mismatch-`0` is revisited, localize one layer deeper inside the live
      clause-`4` `claim_next_bridge / reference` split and the existing
      clause-`5` `reference / claim_flat_codomain / claim_next_codomain`
      families, or inside remaining-one exact-summary behavior under those live
      pairings
-   - start with the larger mismatch-`0` clause-`4` `claim_next_bridge` half
-     before the smaller `reference` half unless a narrower probe reverses that
-     ordering
+   - the larger mismatch-`0` clause-`4` `claim_next_bridge` half is now ruled
+     out as a smaller negative control, so the next revisit should start with
+     the smaller `reference` half or with remaining-one exact-summary behavior
+     under the same live pairings
    - only after that, consider the smaller claim-safe mismatch-`1` tier at
      `84`
    - leave the `reference / reference` tails at `54` below both of those
@@ -154,6 +171,7 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_flat_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_next_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_mismatch_zero_claim_domain_surface_stays_a_negative_control`
+- `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_mismatch_zero_claim_domain_clause_four_claim_next_bridge_side_stays_a_smaller_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
@@ -173,6 +191,8 @@ Do not start with another rerun setup pass.
   the clause-`4` `claim_next_bridge` half
 - broad clause-`1` `demo_flat_codomain` reopenings across the full
   mismatch-`0` claim-domain surface
+- another connectivity-only relocalization of the mismatch-`0` clause-`4`
+  `claim_next_bridge` half
 - whole-tier remaining-two mismatch-`0` claim-domain
   `CannotClearBar -> Unknown` relief at the parent
   `exact_partial_prefix_bound_decision(...)` layer

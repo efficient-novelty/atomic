@@ -367,6 +367,10 @@ Focus on:
   now a widening negative result owned by
   [../../autonomous_ledger.md](../../autonomous_ledger.md), so route to the
   live docs before reopening that surface again
+- keep the next repair above the narrower mismatch-`0` clause-`4`
+  `claim_next_bridge`-side relocalization too; that smaller negative control
+  now also belongs to [../../autonomous_ledger.md](../../autonomous_ledger.md),
+  so route to the live docs before retrying that same connectivity-only slice
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward
