@@ -111,3 +111,17 @@ This file is the append-only history for `desktop_claim_shadow`.
   Consequence: the broader clause-`4` `reference`-sheet tradeoff already lives
   entirely on the exact claim clause-`2` pair, so exact clause-`4`
   `reference`-side relocalization is exhausted rather than the landed repair.
+- Scope: isolate the exact claim-flat and exact claim-sharp single-sheet
+  sub-slices on the live clause-`4` `claim_next_bridge` half under the same
+  dominant mismatch-`1` `reference + demo_flat_codomain` branch.
+  Result: new connectivity and search regressions pinned both single-sheet
+  probes at the same `4373 / 545 / 2259` surface with
+  `small_cluster = 3180 / 530 / 530 / 0`; the dominant branch fell only to
+  `51` captured prefixes with clause-`4` split `30 / 21`, and each probe only
+  changed which claim clause-`2` sheet dropped to the smaller `15`-capture
+  floor while the sibling claim sheet stayed at `21` and the reference sheet
+  stayed at `15`.
+  Consequence: the exact claim-pair clause-`4` `claim_next_bridge` half is now
+  also exhausted at single-sheet scope, so the next slice should move above
+  the `57 -> 51 -> 45` mismatch-`1` tradeoff ladder rather than splitting the
+  claim-flat and claim-sharp clause-`2` sheets again.

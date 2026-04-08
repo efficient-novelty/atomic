@@ -44,27 +44,37 @@ Do not start with another rerun setup pass.
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
   `small_cluster` to `3180 / 530 / 530 / 0`.
+- The exact claim-flat and exact claim-sharp single-sheet relocalizations on
+  the live clause-`4` `claim_next_bridge` half are now also exhausted as
+  smaller tradeoff controls: each lands `4373 / 545 / 2259`, widens
+  `small_cluster` to `3180 / 530 / 530 / 0`, and only repartitions the same
+  `51`-capture dominant mismatch-`1` branch between the two claim clause-`2`
+  sheets.
 - The best remaining leverage is therefore no longer on the clause-`4`
-  `reference` side or on the reference clause-`2` sheet of the dominant
-  remaining-two clause-`0` / clause-`1` mismatch-`1` surface.
-- The next honest slice should stay on the live clause-`4`
-  `claim_next_bridge` half or another still-unexplained family outside that
-  exhausted reference-side relocalization.
+  `reference` side, the reference clause-`2` sheet, or the exact claim-flat
+  versus claim-sharp single-sheet split inside the dominant remaining-two
+  clause-`0` / clause-`1` mismatch-`1` surface.
+- The next honest slice should move outside that exact claim-pair mismatch-`1`
+  branch or another still-unexplained family that does not just reproduce the
+  `57 -> 51 -> 45` captured-prefix ladder.
 - Do not spend another turn on clause-`5` tail reopenings or exact
-  remaining-two clause-`5` bridge-slice reopenings. Those surfaces are
+  remaining-two clause-`5` bridge-slice reopenings or on another exact
+  claim-flat / claim-sharp single-sheet restatement. Those surfaces are
   already exhausted or explicitly ruled out.
 
 ## Do This Next
 
-1. Re-read the stored `v12` certificate, compare report, benchmark bundle, and
-   `reports/steps/step-15-live.ndjson` before touching search code again.
-2. Re-read the new exact claim-pair clause-`4` `reference`-side regressions
-   before changing search code again; they prove that the older broader
-   clause-`4` `reference`-sheet tradeoff already lives entirely on the exact
-   claim clause-`2` pair.
-3. Probe only surfaces that differ from both the exact claim-pair
-   clause-`4` `claim_next_bridge` tradeoff (`4445 / 539 / 2241`) and the exact
-   claim-pair clause-`4` `reference` tradeoff (`4379 / 549 / 2259`).
+1. Start from the stored `v12` certificate, compare report, benchmark bundle,
+   and `reports/steps/step-15-live.ndjson`, but treat the exact-claim mismatch-`1`
+   tradeoff ladder as already frozen at `57 -> 51 -> 45`.
+2. Probe only surfaces outside the exact claim-pair mismatch-`1`
+   `reference + demo_flat_codomain` branch, or at minimum outside any reland
+   that only swaps which claim clause-`2` sheet keeps the `21`-capture share
+   of the same `51`-capture tradeoff.
+3. Prefer another still-live dominant clause-`0` / clause-`1` pairing or
+   another family outside the exact claim clause-`2` subgrid before splitting
+   claim-flat versus claim-sharp again on the same clause-`4`
+   `claim_next_bridge` half.
 4. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays canonical `103 / 8`
@@ -81,6 +91,8 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_variant_pair_stays_a_tradeoff_control`
+- `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_flat_sheet_stays_a_smaller_tradeoff_control`
+- `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_sharp_sheet_stays_a_smaller_tradeoff_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_reference_side_on_exact_claim_variant_pair_stays_a_tradeoff_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_neutral_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_flat_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control`
@@ -100,6 +112,8 @@ Do not start with another rerun setup pass.
 - exact remaining-two mismatch-`0` or mismatch-`1` clause-`5`
   bridge-slice reopenings
 - another exact claim-pair clause-`4` `reference`-side relocalization pass
+- another exact claim-flat or claim-sharp single-sheet relocalization pass on
+  the clause-`4` `claim_next_bridge` half
 - broader clause-`4` `reference`-sheet reopenings
 - claim-safe clause-`4` or clause-`5` reopenings
 - raw clause-`3` `anchor-11` widening

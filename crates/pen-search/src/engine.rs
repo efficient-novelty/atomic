@@ -20959,7 +20959,7 @@ mod tests {
             ]
             .into_iter()
             .collect(),
-            "the exact claim-sharp clause-two sheet probe should fully reopen only that 15-count sheet while leaving the sibling claim-flat sheet above it at the still-narrower 21 captured-prefix surface and the reference sheet at 15"
+            "the exact claim-sharp clause-two sheet probe should cut only the claim-sharp residual to the smaller 15-capture floor while leaving the sibling claim-flat sheet at 21 and the reference sheet at 15"
         );
     }
 
@@ -21290,6 +21290,362 @@ mod tests {
             .into_iter()
             .collect(),
             "this narrower probe should already reproduce the full 45-capture branch grid from the broader exact claim-pair tradeoff, which shows that the remaining delta now lives outside that captured mismatch-1 bridge branch"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_flat_sheet_stays_a_smaller_tradeoff_control()
+     {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_flat_sheet();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts();
+        let bridge_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_bridge_family_counts()
+                .into_iter()
+                .filter_map(
+                    |(
+                        (mismatch, clause_zero, clause_one, clause_two, clause_four, clause_five),
+                        count,
+                    )| {
+                        (mismatch == Some(1_usize)
+                            && clause_zero == "reference"
+                            && clause_one == "demo_flat_codomain")
+                            .then_some(((clause_two, clause_four, clause_five), count))
+                    },
+                )
+                .collect::<BTreeMap<_, _>>();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4373);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 545,
+            "opening only the exact claim-flat sheet on the live clause-4 claim-next-bridge half should still help, but it remains only a smaller tradeoff control rather than the landed repair"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the exact claim-flat plus claim-next-bridge-side probe should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 545);
+        assert_eq!(zero_summary.captured_prefixes, 2259);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3180,
+                admissible_terminal_candidates: 530,
+                exact_screened_terminal_candidates: 530,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the exact claim-flat plus claim-next-bridge-side probe still widens the noncanonical small-cluster surface to the same smaller tradeoff level as the reference-side relocalization, so it is not yet the landed repair"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the exact claim-flat plus claim-next-bridge-side probe should still keep the isolated single pocket fenced"
+        );
+        assert_eq!(
+            pair_counts
+                .get(&(Some(1_usize), "reference", "demo_flat_codomain"))
+                .copied(),
+            Some(51),
+            "this smaller claim-flat plus claim-next-bridge-side probe should leave the dominant mismatch-1 reference-plus-demo-flat branch above the exhausted 45-capture pair probe but below the broader exact-pair reference-side relocalization"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "claim_next_bridge"
+                ))
+                .copied(),
+            Some(30),
+            "the claim-flat plus claim-next-bridge-side probe should still leave the larger share of that branch on the live clause-4 claim-next-bridge family"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "reference"
+                ))
+                .copied(),
+            Some(21),
+            "the same probe should leave the smaller companion share on the clause-4 reference family"
+        );
+        assert_eq!(
+            bridge_counts,
+            [
+                (
+                    (
+                        "claim_flat_domain",
+                        "claim_next_bridge",
+                        "claim_flat_codomain"
+                    ),
+                    3_usize
+                ),
+                (
+                    (
+                        "claim_flat_domain",
+                        "claim_next_bridge",
+                        "claim_next_codomain"
+                    ),
+                    3
+                ),
+                (("claim_flat_domain", "claim_next_bridge", "reference"), 3),
+                (("claim_flat_domain", "reference", "claim_flat_codomain"), 2),
+                (("claim_flat_domain", "reference", "claim_next_codomain"), 2),
+                (("claim_flat_domain", "reference", "reference"), 2),
+                (
+                    (
+                        "claim_sharp_codomain",
+                        "claim_next_bridge",
+                        "claim_flat_codomain"
+                    ),
+                    4
+                ),
+                (
+                    (
+                        "claim_sharp_codomain",
+                        "claim_next_bridge",
+                        "claim_next_codomain"
+                    ),
+                    4
+                ),
+                (
+                    ("claim_sharp_codomain", "claim_next_bridge", "reference"),
+                    4
+                ),
+                (
+                    ("claim_sharp_codomain", "reference", "claim_flat_codomain"),
+                    3
+                ),
+                (
+                    ("claim_sharp_codomain", "reference", "claim_next_codomain"),
+                    3
+                ),
+                (("claim_sharp_codomain", "reference", "reference"), 3),
+                (("reference", "claim_next_bridge", "claim_flat_codomain"), 3),
+                (("reference", "claim_next_bridge", "claim_next_codomain"), 3),
+                (("reference", "claim_next_bridge", "reference"), 3),
+                (("reference", "reference", "claim_flat_codomain"), 2),
+                (("reference", "reference", "claim_next_codomain"), 2),
+                (("reference", "reference", "reference"), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the exact claim-flat plus claim-next-bridge-side probe should cut only the claim-flat residual to the smaller 15-capture floor while leaving the sibling claim-sharp sheet at 21 and the reference sheet at 15"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_sharp_sheet_stays_a_smaller_tradeoff_control()
+     {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_sharp_sheet();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts();
+        let bridge_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_bridge_family_counts()
+                .into_iter()
+                .filter_map(
+                    |(
+                        (mismatch, clause_zero, clause_one, clause_two, clause_four, clause_five),
+                        count,
+                    )| {
+                        (mismatch == Some(1_usize)
+                            && clause_zero == "reference"
+                            && clause_one == "demo_flat_codomain")
+                            .then_some(((clause_two, clause_four, clause_five), count))
+                    },
+                )
+                .collect::<BTreeMap<_, _>>();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4373);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 545,
+            "opening only the exact claim-sharp sheet on the live clause-4 claim-next-bridge half should mirror the claim-flat sibling as a smaller tradeoff control rather than the landed repair"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the exact claim-sharp plus claim-next-bridge-side probe should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 545);
+        assert_eq!(zero_summary.captured_prefixes, 2259);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3180,
+                admissible_terminal_candidates: 530,
+                exact_screened_terminal_candidates: 530,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the exact claim-sharp plus claim-next-bridge-side probe still widens the noncanonical small-cluster surface to the same smaller tradeoff level as its claim-flat sibling, so it is not yet the landed repair"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the exact claim-sharp plus claim-next-bridge-side probe should still keep the isolated single pocket fenced"
+        );
+        assert_eq!(
+            pair_counts
+                .get(&(Some(1_usize), "reference", "demo_flat_codomain"))
+                .copied(),
+            Some(51),
+            "this smaller claim-sharp plus claim-next-bridge-side probe should land the same 51-capture dominant mismatch-1 branch as the claim-flat sibling"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "claim_next_bridge"
+                ))
+                .copied(),
+            Some(30),
+            "the claim-sharp plus claim-next-bridge-side probe should still leave the larger share of that branch on the live clause-4 claim-next-bridge family"
+        );
+        assert_eq!(
+            clause_four_counts
+                .get(&(
+                    Some(1_usize),
+                    "reference",
+                    "demo_flat_codomain",
+                    "reference"
+                ))
+                .copied(),
+            Some(21),
+            "the same probe should leave the smaller companion share on the clause-4 reference family"
+        );
+        assert_eq!(
+            bridge_counts,
+            [
+                (
+                    (
+                        "claim_flat_domain",
+                        "claim_next_bridge",
+                        "claim_flat_codomain"
+                    ),
+                    4_usize
+                ),
+                (
+                    (
+                        "claim_flat_domain",
+                        "claim_next_bridge",
+                        "claim_next_codomain"
+                    ),
+                    4
+                ),
+                (("claim_flat_domain", "claim_next_bridge", "reference"), 4),
+                (("claim_flat_domain", "reference", "claim_flat_codomain"), 3),
+                (("claim_flat_domain", "reference", "claim_next_codomain"), 3),
+                (("claim_flat_domain", "reference", "reference"), 3),
+                (
+                    (
+                        "claim_sharp_codomain",
+                        "claim_next_bridge",
+                        "claim_flat_codomain"
+                    ),
+                    3
+                ),
+                (
+                    (
+                        "claim_sharp_codomain",
+                        "claim_next_bridge",
+                        "claim_next_codomain"
+                    ),
+                    3
+                ),
+                (
+                    ("claim_sharp_codomain", "claim_next_bridge", "reference"),
+                    3
+                ),
+                (
+                    ("claim_sharp_codomain", "reference", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    ("claim_sharp_codomain", "reference", "claim_next_codomain"),
+                    2
+                ),
+                (("claim_sharp_codomain", "reference", "reference"), 2),
+                (("reference", "claim_next_bridge", "claim_flat_codomain"), 3),
+                (("reference", "claim_next_bridge", "claim_next_codomain"), 3),
+                (("reference", "claim_next_bridge", "reference"), 3),
+                (("reference", "reference", "claim_flat_codomain"), 2),
+                (("reference", "reference", "claim_next_codomain"), 2),
+                (("reference", "reference", "reference"), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the exact claim-sharp plus claim-next-bridge-side probe should reopen only its own 21-capture sheet while the sibling claim-flat and reference sheets stay at the smaller 15-capture floor"
         );
     }
 

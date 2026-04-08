@@ -46,6 +46,16 @@ thread_local! {
 }
 
 thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_REFERENCE_CLAUSE_ZERO_CLAUSE_FOUR_CLAIM_NEXT_BRIDGE_SIDE_ON_CLAUSE_TWO_CLAIM_FLAT_SHEET_OVERRIDE:
+        std::cell::RefCell<usize> = const { std::cell::RefCell::new(0) };
+}
+
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_REFERENCE_CLAUSE_ZERO_CLAUSE_FOUR_CLAIM_NEXT_BRIDGE_SIDE_ON_CLAUSE_TWO_CLAIM_SHARP_SHEET_OVERRIDE:
+        std::cell::RefCell<usize> = const { std::cell::RefCell::new(0) };
+}
+
+thread_local! {
     static CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_REFERENCE_CLAUSE_ZERO_CLAUSE_FOUR_REFERENCE_SIDE_ON_CLAUSE_TWO_CLAIM_VARIANT_PAIR_OVERRIDE:
         std::cell::RefCell<usize> = const { std::cell::RefCell::new(0) };
 }
@@ -108,6 +118,12 @@ pub struct ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseTwoCl
 
 #[doc(hidden)]
 pub struct ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseFourClaimNextBridgeSideOnClauseTwoClaimVariantPairOverrideGuard;
+
+#[doc(hidden)]
+pub struct ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseFourClaimNextBridgeSideOnClauseTwoClaimFlatSheetOverrideGuard;
+
+#[doc(hidden)]
+pub struct ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseFourClaimNextBridgeSideOnClauseTwoClaimSharpSheetOverrideGuard;
 
 #[doc(hidden)]
 pub struct ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseFourReferenceSideOnClauseTwoClaimVariantPairOverrideGuard;
@@ -317,6 +333,56 @@ pub fn override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_
         },
     );
     ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseFourClaimNextBridgeSideOnClauseTwoClaimVariantPairOverrideGuard
+}
+
+impl Drop
+    for ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseFourClaimNextBridgeSideOnClauseTwoClaimFlatSheetOverrideGuard
+{
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_REFERENCE_CLAUSE_ZERO_CLAUSE_FOUR_CLAIM_NEXT_BRIDGE_SIDE_ON_CLAUSE_TWO_CLAIM_FLAT_SHEET_OVERRIDE.with(
+            |override_depth| {
+                let mut override_depth = override_depth.borrow_mut();
+                *override_depth = override_depth.saturating_sub(1);
+            },
+        );
+    }
+}
+
+#[doc(hidden)]
+pub fn override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_flat_sheet()
+-> ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseFourClaimNextBridgeSideOnClauseTwoClaimFlatSheetOverrideGuard
+{
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_REFERENCE_CLAUSE_ZERO_CLAUSE_FOUR_CLAIM_NEXT_BRIDGE_SIDE_ON_CLAUSE_TWO_CLAIM_FLAT_SHEET_OVERRIDE.with(
+        |override_depth| {
+            *override_depth.borrow_mut() += 1;
+        },
+    );
+    ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseFourClaimNextBridgeSideOnClauseTwoClaimFlatSheetOverrideGuard
+}
+
+impl Drop
+    for ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseFourClaimNextBridgeSideOnClauseTwoClaimSharpSheetOverrideGuard
+{
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_REFERENCE_CLAUSE_ZERO_CLAUSE_FOUR_CLAIM_NEXT_BRIDGE_SIDE_ON_CLAUSE_TWO_CLAIM_SHARP_SHEET_OVERRIDE.with(
+            |override_depth| {
+                let mut override_depth = override_depth.borrow_mut();
+                *override_depth = override_depth.saturating_sub(1);
+            },
+        );
+    }
+}
+
+#[doc(hidden)]
+pub fn override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_sharp_sheet()
+-> ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseFourClaimNextBridgeSideOnClauseTwoClaimSharpSheetOverrideGuard
+{
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_REFERENCE_CLAUSE_ZERO_CLAUSE_FOUR_CLAIM_NEXT_BRIDGE_SIDE_ON_CLAUSE_TWO_CLAIM_SHARP_SHEET_OVERRIDE.with(
+        |override_depth| {
+            *override_depth.borrow_mut() += 1;
+        },
+    );
+    ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseFourClaimNextBridgeSideOnClauseTwoClaimSharpSheetOverrideGuard
 }
 
 impl Drop
@@ -551,6 +617,18 @@ fn claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_t
 fn claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_variant_pair_override_enabled()
 -> bool {
     CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_REFERENCE_CLAUSE_ZERO_CLAUSE_FOUR_CLAIM_NEXT_BRIDGE_SIDE_ON_CLAUSE_TWO_CLAIM_VARIANT_PAIR_OVERRIDE
+        .with(|override_depth| *override_depth.borrow() > 0)
+}
+
+fn claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_flat_sheet_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_REFERENCE_CLAUSE_ZERO_CLAUSE_FOUR_CLAIM_NEXT_BRIDGE_SIDE_ON_CLAUSE_TWO_CLAIM_FLAT_SHEET_OVERRIDE
+        .with(|override_depth| *override_depth.borrow() > 0)
+}
+
+fn claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_sharp_sheet_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_REFERENCE_CLAUSE_ZERO_CLAUSE_FOUR_CLAIM_NEXT_BRIDGE_SIDE_ON_CLAUSE_TWO_CLAIM_SHARP_SHEET_OVERRIDE
         .with(|override_depth| *override_depth.borrow() > 0)
 }
 
@@ -1793,6 +1871,12 @@ fn matches_anchor_eleven_clause_one_side_pocket_clause(
                 || claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_override_enabled()
             {
                 matches_claim_temporal_pair_clause_two_variant(expr)
+            } else if claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_flat_sheet_override_enabled()
+            {
+                matches_claim_temporal_pair_clause_two_claim_flat_domain_variant(expr)
+            } else if claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_sharp_sheet_override_enabled()
+            {
+                matches_claim_temporal_pair_clause_two_claim_sharp_codomain_variant(expr)
             } else if claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_two_claim_flat_sheet_override_enabled()
             {
                 matches_claim_temporal_pair_clause_two_claim_flat_domain_variant(expr)
@@ -1806,6 +1890,8 @@ fn matches_anchor_eleven_clause_one_side_pocket_clause(
         3 => matches_anchor_eleven_exact_argument_clause(expr, anchor + 1),
         4 => {
             if claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_variant_pair_override_enabled()
+                || claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_flat_sheet_override_enabled()
+                || claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_sharp_sheet_override_enabled()
             {
                 matches_claim_temporal_flat_next_bridge(expr)
             } else if claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_reference_side_on_clause_two_claim_variant_pair_override_enabled()
@@ -1825,6 +1911,8 @@ fn matches_anchor_eleven_clause_one_side_pocket_clause(
             if claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_override_enabled()
                 || claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_two_claim_variant_pair_override_enabled()
                 || claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_variant_pair_override_enabled()
+                || claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_flat_sheet_override_enabled()
+                || claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_sharp_sheet_override_enabled()
                 || claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_reference_side_on_clause_two_claim_variant_pair_override_enabled()
                 || claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_two_claim_flat_sheet_override_enabled()
                 || claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_two_claim_sharp_sheet_override_enabled()
@@ -5107,6 +5195,636 @@ mod tests {
                     );
                     assert!(!passes_connectivity(&library, &telescope));
                 }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_flat_sheet_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_flat_sheet();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_two_variant = claim_temporal_variant_exprs(2, anchor)
+            .into_iter()
+            .next()
+            .expect("claim-flat clause-two variant should exist");
+        let clause_four_variants = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .filter(|expr| super::matches_claim_temporal_flat_next_bridge(expr))
+            .collect::<Vec<_>>();
+        let mut clause_five_variants = vec![Telescope::reference(15).clauses[5].expr.clone()];
+        clause_five_variants.extend(
+            claim_temporal_variant_exprs(5, anchor)
+                .into_iter()
+                .filter(|expr| super::matches_temporal_sharp_eventually_bridge(expr)),
+        );
+
+        for clause_four_variant in clause_four_variants.iter() {
+            for clause_five_variant in clause_five_variants.iter() {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[1] = ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                );
+                telescope.clauses[2].expr = clause_two_variant.clone();
+                telescope.clauses[3] = ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor + 1)),
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    ))),
+                );
+                telescope.clauses[4].expr = clause_four_variant.clone();
+                telescope.clauses[5].expr = clause_five_variant.clone();
+                telescope.clauses[7] = reference_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    reanchor.allows_historical_reanchor(),
+                    "the exact claim-flat plus clause-4 claim-next-bridge-side override should admit the live claim bridge cells only on the claim-flat clause-two sheet: clause4={:?} clause5={:?}",
+                    clause_four_variant,
+                    clause_five_variant,
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 11,
+                        historical_reanchor: true,
+                    }
+                );
+                assert!(passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_flat_sheet_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_flat_sheet();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_two_variant = claim_temporal_variant_exprs(2, anchor)
+            .into_iter()
+            .next()
+            .expect("claim-flat clause-two variant should exist");
+        let clause_four_variants = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .filter(|expr| super::matches_claim_temporal_flat_next_bridge(expr))
+            .collect::<Vec<_>>();
+        let mut clause_five_variants = vec![Telescope::reference(15).clauses[5].expr.clone()];
+        clause_five_variants.extend(
+            claim_temporal_variant_exprs(5, anchor)
+                .into_iter()
+                .filter(|expr| super::matches_temporal_sharp_eventually_bridge(expr)),
+        );
+
+        for clause_four_variant in clause_four_variants.iter() {
+            for clause_five_variant in clause_five_variants.iter() {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[1] = ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                );
+                telescope.clauses[2].expr = clause_two_variant.clone();
+                telescope.clauses[4].expr = clause_four_variant.clone();
+                telescope.clauses[5].expr = clause_five_variant.clone();
+                telescope.clauses[7] = reference_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    !reanchor.allows_historical_reanchor(),
+                    "the exact claim-flat plus clause-4 claim-next-bridge-side override should still require the exact anchor-11 side pocket"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 10,
+                        historical_reanchor: false,
+                    }
+                );
+                assert!(!passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_outside_exact_claim_flat_clause_two_sheet_even_under_claim_next_bridge_side_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_flat_sheet();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_two_variants = [
+            Telescope::reference(15).clauses[2].expr.clone(),
+            claim_temporal_variant_exprs(2, anchor)
+                .into_iter()
+                .nth(1)
+                .expect("claim-sharp clause-two variant should exist"),
+        ];
+        let clause_four_variants = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .filter(|expr| super::matches_claim_temporal_flat_next_bridge(expr))
+            .collect::<Vec<_>>();
+        let mut clause_five_variants = vec![Telescope::reference(15).clauses[5].expr.clone()];
+        clause_five_variants.extend(
+            claim_temporal_variant_exprs(5, anchor)
+                .into_iter()
+                .filter(|expr| super::matches_temporal_sharp_eventually_bridge(expr)),
+        );
+
+        for clause_two_variant in clause_two_variants {
+            for clause_four_variant in clause_four_variants.iter() {
+                for clause_five_variant in clause_five_variants.iter() {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[1] = ClauseRec::new(
+                        ClauseRole::Formation,
+                        Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                    );
+                    telescope.clauses[2].expr = clause_two_variant.clone();
+                    telescope.clauses[3] = ClauseRec::new(
+                        ClauseRole::Introduction,
+                        Expr::Lam(Box::new(Expr::App(
+                            Box::new(Expr::Lib(anchor + 1)),
+                            Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        ))),
+                    );
+                    telescope.clauses[4].expr = clause_four_variant.clone();
+                    telescope.clauses[5].expr = clause_five_variant.clone();
+                    telescope.clauses[7] = reference_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        !reanchor.allows_historical_reanchor(),
+                        "the exact claim-flat plus clause-4 claim-next-bridge-side override should stay fenced on the reference and claim-sharp clause-two sheets"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 11,
+                            historical_reanchor: false,
+                        }
+                    );
+                    assert!(!passes_connectivity(&library, &telescope));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_reference_sheet_even_under_claim_next_bridge_side_on_exact_claim_flat_sheet_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_flat_sheet();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let reference_clause_four = Telescope::reference(15).clauses[4].expr.clone();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_two_variant = claim_temporal_variant_exprs(2, anchor)
+            .into_iter()
+            .next()
+            .expect("claim-flat clause-two variant should exist");
+        let mut clause_five_variants = vec![Telescope::reference(15).clauses[5].expr.clone()];
+        clause_five_variants.extend(
+            claim_temporal_variant_exprs(5, anchor)
+                .into_iter()
+                .filter(|expr| super::matches_temporal_sharp_eventually_bridge(expr)),
+        );
+
+        for clause_five_variant in clause_five_variants.iter() {
+            let mut telescope = Telescope::reference(15);
+            telescope.clauses[1] = ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+            );
+            telescope.clauses[2].expr = clause_two_variant.clone();
+            telescope.clauses[3] = ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor + 1)),
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                ))),
+            );
+            telescope.clauses[4].expr = reference_clause_four.clone();
+            telescope.clauses[5].expr = clause_five_variant.clone();
+            telescope.clauses[7] = reference_terminal.clone();
+
+            let witness = analyze_connectivity(&library, &telescope);
+            let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+            assert!(
+                !reanchor.allows_historical_reanchor(),
+                "the exact claim-flat plus clause-4 claim-next-bridge-side override should keep the actual clause-4 reference sheet closed"
+            );
+            assert_eq!(
+                witness,
+                ConnectivityWitness {
+                    connected: true,
+                    references_active_window: false,
+                    self_contained: false,
+                    max_lib_ref: 11,
+                    historical_reanchor: false,
+                }
+            );
+            assert!(!passes_connectivity(&library, &telescope));
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_flat_sheet_reference_terminal_only_even_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_flat_sheet();
+        let library = library_until(14);
+        let lifted_terminal = next_lift_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_two_variant = claim_temporal_variant_exprs(2, anchor)
+            .into_iter()
+            .next()
+            .expect("claim-flat clause-two variant should exist");
+        let clause_four_variants = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .filter(|expr| super::matches_claim_temporal_flat_next_bridge(expr))
+            .collect::<Vec<_>>();
+        let mut clause_five_variants = vec![Telescope::reference(15).clauses[5].expr.clone()];
+        clause_five_variants.extend(
+            claim_temporal_variant_exprs(5, anchor)
+                .into_iter()
+                .filter(|expr| super::matches_temporal_sharp_eventually_bridge(expr)),
+        );
+
+        for clause_four_variant in clause_four_variants.iter() {
+            for clause_five_variant in clause_five_variants.iter() {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[1] = ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                );
+                telescope.clauses[2].expr = clause_two_variant.clone();
+                telescope.clauses[3] = ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor + 1)),
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    ))),
+                );
+                telescope.clauses[4].expr = clause_four_variant.clone();
+                telescope.clauses[5].expr = clause_five_variant.clone();
+                telescope.clauses[7] = lifted_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    !reanchor.allows_historical_reanchor(),
+                    "the exact claim-flat plus clause-4 claim-next-bridge-side override should remain reference-terminal-only and keep lifted terminals fenced"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 11,
+                        historical_reanchor: false,
+                    }
+                );
+                assert!(!passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_sharp_sheet_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_sharp_sheet();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_two_variant = claim_temporal_variant_exprs(2, anchor)
+            .into_iter()
+            .nth(1)
+            .expect("claim-sharp clause-two variant should exist");
+        let clause_four_variants = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .filter(|expr| super::matches_claim_temporal_flat_next_bridge(expr))
+            .collect::<Vec<_>>();
+        let mut clause_five_variants = vec![Telescope::reference(15).clauses[5].expr.clone()];
+        clause_five_variants.extend(
+            claim_temporal_variant_exprs(5, anchor)
+                .into_iter()
+                .filter(|expr| super::matches_temporal_sharp_eventually_bridge(expr)),
+        );
+
+        for clause_four_variant in clause_four_variants.iter() {
+            for clause_five_variant in clause_five_variants.iter() {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[1] = ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                );
+                telescope.clauses[2].expr = clause_two_variant.clone();
+                telescope.clauses[3] = ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor + 1)),
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    ))),
+                );
+                telescope.clauses[4].expr = clause_four_variant.clone();
+                telescope.clauses[5].expr = clause_five_variant.clone();
+                telescope.clauses[7] = reference_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    reanchor.allows_historical_reanchor(),
+                    "the exact claim-sharp plus clause-4 claim-next-bridge-side override should admit the live claim bridge cells only on the claim-sharp clause-two sheet: clause4={:?} clause5={:?}",
+                    clause_four_variant,
+                    clause_five_variant,
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 11,
+                        historical_reanchor: true,
+                    }
+                );
+                assert!(passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_sharp_sheet_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_sharp_sheet();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_two_variant = claim_temporal_variant_exprs(2, anchor)
+            .into_iter()
+            .nth(1)
+            .expect("claim-sharp clause-two variant should exist");
+        let clause_four_variants = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .filter(|expr| super::matches_claim_temporal_flat_next_bridge(expr))
+            .collect::<Vec<_>>();
+        let mut clause_five_variants = vec![Telescope::reference(15).clauses[5].expr.clone()];
+        clause_five_variants.extend(
+            claim_temporal_variant_exprs(5, anchor)
+                .into_iter()
+                .filter(|expr| super::matches_temporal_sharp_eventually_bridge(expr)),
+        );
+
+        for clause_four_variant in clause_four_variants.iter() {
+            for clause_five_variant in clause_five_variants.iter() {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[1] = ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                );
+                telescope.clauses[2].expr = clause_two_variant.clone();
+                telescope.clauses[4].expr = clause_four_variant.clone();
+                telescope.clauses[5].expr = clause_five_variant.clone();
+                telescope.clauses[7] = reference_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    !reanchor.allows_historical_reanchor(),
+                    "the exact claim-sharp plus clause-4 claim-next-bridge-side override should still require the exact anchor-11 side pocket"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 10,
+                        historical_reanchor: false,
+                    }
+                );
+                assert!(!passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_outside_exact_claim_sharp_clause_two_sheet_even_under_claim_next_bridge_side_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_sharp_sheet();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_two_variants = [
+            Telescope::reference(15).clauses[2].expr.clone(),
+            claim_temporal_variant_exprs(2, anchor)
+                .into_iter()
+                .next()
+                .expect("claim-flat clause-two variant should exist"),
+        ];
+        let clause_four_variants = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .filter(|expr| super::matches_claim_temporal_flat_next_bridge(expr))
+            .collect::<Vec<_>>();
+        let mut clause_five_variants = vec![Telescope::reference(15).clauses[5].expr.clone()];
+        clause_five_variants.extend(
+            claim_temporal_variant_exprs(5, anchor)
+                .into_iter()
+                .filter(|expr| super::matches_temporal_sharp_eventually_bridge(expr)),
+        );
+
+        for clause_two_variant in clause_two_variants {
+            for clause_four_variant in clause_four_variants.iter() {
+                for clause_five_variant in clause_five_variants.iter() {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[1] = ClauseRec::new(
+                        ClauseRole::Formation,
+                        Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                    );
+                    telescope.clauses[2].expr = clause_two_variant.clone();
+                    telescope.clauses[3] = ClauseRec::new(
+                        ClauseRole::Introduction,
+                        Expr::Lam(Box::new(Expr::App(
+                            Box::new(Expr::Lib(anchor + 1)),
+                            Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                        ))),
+                    );
+                    telescope.clauses[4].expr = clause_four_variant.clone();
+                    telescope.clauses[5].expr = clause_five_variant.clone();
+                    telescope.clauses[7] = reference_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        !reanchor.allows_historical_reanchor(),
+                        "the exact claim-sharp plus clause-4 claim-next-bridge-side override should stay fenced on the reference and claim-flat clause-two sheets"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 11,
+                            historical_reanchor: false,
+                        }
+                    );
+                    assert!(!passes_connectivity(&library, &telescope));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_reference_sheet_even_under_claim_next_bridge_side_on_exact_claim_sharp_sheet_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_sharp_sheet();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let reference_clause_four = Telescope::reference(15).clauses[4].expr.clone();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_two_variant = claim_temporal_variant_exprs(2, anchor)
+            .into_iter()
+            .nth(1)
+            .expect("claim-sharp clause-two variant should exist");
+        let mut clause_five_variants = vec![Telescope::reference(15).clauses[5].expr.clone()];
+        clause_five_variants.extend(
+            claim_temporal_variant_exprs(5, anchor)
+                .into_iter()
+                .filter(|expr| super::matches_temporal_sharp_eventually_bridge(expr)),
+        );
+
+        for clause_five_variant in clause_five_variants.iter() {
+            let mut telescope = Telescope::reference(15);
+            telescope.clauses[1] = ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+            );
+            telescope.clauses[2].expr = clause_two_variant.clone();
+            telescope.clauses[3] = ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor + 1)),
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                ))),
+            );
+            telescope.clauses[4].expr = reference_clause_four.clone();
+            telescope.clauses[5].expr = clause_five_variant.clone();
+            telescope.clauses[7] = reference_terminal.clone();
+
+            let witness = analyze_connectivity(&library, &telescope);
+            let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+            assert!(
+                !reanchor.allows_historical_reanchor(),
+                "the exact claim-sharp plus clause-4 claim-next-bridge-side override should keep the actual clause-4 reference sheet closed"
+            );
+            assert_eq!(
+                witness,
+                ConnectivityWitness {
+                    connected: true,
+                    references_active_window: false,
+                    self_contained: false,
+                    max_lib_ref: 11,
+                    historical_reanchor: false,
+                }
+            );
+            assert!(!passes_connectivity(&library, &telescope));
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_sharp_sheet_reference_terminal_only_even_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_clause_two_claim_sharp_sheet();
+        let library = library_until(14);
+        let lifted_terminal = next_lift_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_two_variant = claim_temporal_variant_exprs(2, anchor)
+            .into_iter()
+            .nth(1)
+            .expect("claim-sharp clause-two variant should exist");
+        let clause_four_variants = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .filter(|expr| super::matches_claim_temporal_flat_next_bridge(expr))
+            .collect::<Vec<_>>();
+        let mut clause_five_variants = vec![Telescope::reference(15).clauses[5].expr.clone()];
+        clause_five_variants.extend(
+            claim_temporal_variant_exprs(5, anchor)
+                .into_iter()
+                .filter(|expr| super::matches_temporal_sharp_eventually_bridge(expr)),
+        );
+
+        for clause_four_variant in clause_four_variants.iter() {
+            for clause_five_variant in clause_five_variants.iter() {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[1] = ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                );
+                telescope.clauses[2].expr = clause_two_variant.clone();
+                telescope.clauses[3] = ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor + 1)),
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    ))),
+                );
+                telescope.clauses[4].expr = clause_four_variant.clone();
+                telescope.clauses[5].expr = clause_five_variant.clone();
+                telescope.clauses[7] = lifted_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    !reanchor.allows_historical_reanchor(),
+                    "the exact claim-sharp plus clause-4 claim-next-bridge-side override should remain reference-terminal-only and keep lifted terminals fenced"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 11,
+                        historical_reanchor: false,
+                    }
+                );
+                assert!(!passes_connectivity(&library, &telescope));
             }
         }
     }

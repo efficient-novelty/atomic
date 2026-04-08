@@ -112,6 +112,10 @@ Do not:
   relocalization now only reproduces the older broader clause-`4`
   `reference`-sheet tradeoff and belongs in the autonomy ledger rather than as
   a fresh lead
+- split the exact claim-pair clause-`4` `claim_next_bridge` half into the
+  claim-flat or claim-sharp single-sheet relocalizations first; those smaller
+  tradeoff controls now also belong in the autonomy ledger rather than as a
+  fresh lead
 - reopen runtime-only step-`4` throughput work first unless a newer rerun
   proves the remaining misses are runtime fallout
 - reland ruled-out clause-`4` / clause-`5` or same-primary probes without new

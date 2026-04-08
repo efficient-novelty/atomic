@@ -80,6 +80,16 @@ Until that exists, wording stays at `bounded live recovery`.
   - its bridge grid matches the broader clause-`4` `reference`-sheet tradeoff
     exactly, so that older tradeoff already lived entirely on the exact claim
     clause-`2` pair rather than on the reference clause-`2` sheet
+- The exact claim-pair clause-`4` `claim_next_bridge` half is now also
+  localized one layer deeper and exhausted at single-sheet scope:
+  - the exact claim-flat and exact claim-sharp sub-slices each land the same
+    `4373 / 545 / 2259` surface
+  - they also widen `small_cluster` to `3180 / 530 / 530 / 0`
+  - the dominant mismatch-`1` `reference + demo_flat_codomain` branch drops
+    only to `51` captured prefixes with clause-`4` split `30 / 21`
+  - each probe only chooses which claim clause-`2` sheet falls to the smaller
+    `15`-capture floor while the sibling claim sheet stays at `21` and the
+    reference sheet stays at `15`
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -100,5 +110,8 @@ Until that exists, wording stays at `bounded live recovery`.
 - Keep wording at `bounded live recovery`.
 - Keep step `1` explicit, but do not reopen it first unless a newer stored
   rerun changes the diagnosis.
+- Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
+  clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
+  controls rather than the landed repair.
 - After a real local repair lands, immediately rerun beyond `v12` and refresh
   compare, benchmark, and certification.
