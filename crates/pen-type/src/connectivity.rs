@@ -21,6 +21,11 @@ thread_local! {
 }
 
 thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_CLAUSE_ZERO_CLAIM_DOMAIN_MISMATCH_ZERO_SURFACE_OVERRIDE:
+        std::cell::RefCell<usize> = const { std::cell::RefCell::new(0) };
+}
+
+thread_local! {
     static CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_REFERENCE_CLAUSE_ZERO_CLAUSE_FOUR_REFERENCE_SHEET_OVERRIDE:
         std::cell::RefCell<usize> = const { std::cell::RefCell::new(0) };
 }
@@ -103,6 +108,9 @@ pub struct ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimFlatOverrideGua
 
 #[doc(hidden)]
 pub struct ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroLiveClaimBridgeSurfaceOverrideGuard;
+
+#[doc(hidden)]
+pub struct ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimDomainMismatchZeroSurfaceOverrideGuard;
 
 #[doc(hidden)]
 pub struct ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroClauseFourReferenceSheetOverrideGuard;
@@ -211,6 +219,30 @@ pub fn override_claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_
         },
     );
     ClaimStepFifteenClauseOneFlatCodomainOnReferenceClauseZeroLiveClaimBridgeSurfaceOverrideGuard
+}
+
+impl Drop
+    for ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimDomainMismatchZeroSurfaceOverrideGuard
+{
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_CLAUSE_ZERO_CLAIM_DOMAIN_MISMATCH_ZERO_SURFACE_OVERRIDE.with(
+            |override_depth| {
+                let mut override_depth = override_depth.borrow_mut();
+                *override_depth = override_depth.saturating_sub(1);
+            },
+        );
+    }
+}
+
+#[doc(hidden)]
+pub fn override_claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_domain_mismatch_zero_surface()
+-> ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimDomainMismatchZeroSurfaceOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_CLAUSE_ZERO_CLAIM_DOMAIN_MISMATCH_ZERO_SURFACE_OVERRIDE.with(
+        |override_depth| {
+            *override_depth.borrow_mut() += 1;
+        },
+    );
+    ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimDomainMismatchZeroSurfaceOverrideGuard
 }
 
 impl Drop
@@ -596,6 +628,12 @@ fn claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_f
         .with(|override_depth| *override_depth.borrow() > 0)
 }
 
+fn claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_domain_mismatch_zero_surface_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_CLAUSE_ZERO_CLAIM_DOMAIN_MISMATCH_ZERO_SURFACE_OVERRIDE
+        .with(|override_depth| *override_depth.borrow() > 0)
+}
+
 fn claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_two_claim_flat_sheet_override_enabled()
 -> bool {
     CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_REFERENCE_CLAUSE_ZERO_CLAUSE_TWO_CLAIM_FLAT_SHEET_OVERRIDE
@@ -816,6 +854,7 @@ pub struct HistoricalReanchorSummary {
     anchor_eleven_clause_zero_side_pocket_matches: bool,
     anchor_eleven_clause_zero_next_side_pocket_matches: bool,
     anchor_eleven_clause_one_side_pocket_matches: bool,
+    anchor_eleven_clause_one_claim_domain_mismatch_zero_surface_matches: bool,
     anchor_eleven_clause_four_side_pocket_matches: bool,
     anchor_eleven_clause_one_clause_five_reference_on_clause_four_reference_tail_on_claim_variant_pair_matches:
         bool,
@@ -849,6 +888,8 @@ impl HistoricalReanchorSummary {
             anchor_eleven_clause_zero_side_pocket_matches: temporal_shell_anchor_ref.is_some(),
             anchor_eleven_clause_zero_next_side_pocket_matches: temporal_shell_anchor_ref.is_some(),
             anchor_eleven_clause_one_side_pocket_matches: temporal_shell_anchor_ref.is_some(),
+            anchor_eleven_clause_one_claim_domain_mismatch_zero_surface_matches:
+                temporal_shell_anchor_ref.is_some(),
             anchor_eleven_clause_four_side_pocket_matches: temporal_shell_anchor_ref.is_some(),
             anchor_eleven_clause_one_clause_five_reference_on_clause_four_reference_tail_on_claim_variant_pair_matches:
                 claim_step_fifteen_clause_one_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_clause_two_claim_variant_pair_override_enabled()
@@ -898,6 +939,13 @@ impl HistoricalReanchorSummary {
             self.anchor_eleven_clause_one_side_pocket_matches = self
                 .anchor_eleven_clause_one_side_pocket_matches
                 && matches_anchor_eleven_clause_one_side_pocket_clause(
+                    position,
+                    &clause.expr,
+                    anchor,
+                );
+            self.anchor_eleven_clause_one_claim_domain_mismatch_zero_surface_matches = self
+                .anchor_eleven_clause_one_claim_domain_mismatch_zero_surface_matches
+                && matches_anchor_eleven_clause_one_claim_domain_mismatch_zero_surface_clause(
                     position,
                     &clause.expr,
                     anchor,
@@ -971,6 +1019,13 @@ impl HistoricalReanchorSummary {
         self.anchor_eleven_clause_one_side_pocket_matches = self
             .anchor_eleven_clause_one_side_pocket_matches
             && matches_anchor_eleven_clause_one_side_pocket_clause(position, &clause.expr, anchor);
+        self.anchor_eleven_clause_one_claim_domain_mismatch_zero_surface_matches = self
+            .anchor_eleven_clause_one_claim_domain_mismatch_zero_surface_matches
+            && matches_anchor_eleven_clause_one_claim_domain_mismatch_zero_surface_clause(
+                position,
+                &clause.expr,
+                anchor,
+            );
         self.anchor_eleven_clause_four_side_pocket_matches = self
             .anchor_eleven_clause_four_side_pocket_matches
             && matches_anchor_eleven_clause_four_side_pocket_clause(position, &clause.expr, anchor);
@@ -1027,6 +1082,7 @@ impl HistoricalReanchorSummary {
                 || self.anchor_eleven_clause_zero_side_pocket_matches
                 || self.anchor_eleven_clause_zero_next_side_pocket_matches
                 || self.anchor_eleven_clause_one_side_pocket_matches
+                || self.anchor_eleven_clause_one_claim_domain_mismatch_zero_surface_matches
                 || self.anchor_eleven_clause_four_side_pocket_matches
                 || self
                     .anchor_eleven_clause_one_clause_five_reference_on_clause_four_reference_tail_on_claim_variant_pair_matches
@@ -1923,6 +1979,46 @@ fn matches_anchor_eleven_clause_one_side_pocket_clause(
                 matches_reference_temporal_sharp_eventually_bridge(expr)
             }
         }
+        6 => matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(
+                            function.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        ) && matches!(argument.as_ref(), Expr::Var(2))
+                )
+        ),
+        7 => matches_reference_temporal_terminal_clause(expr),
+        _ => false,
+    }
+}
+
+fn matches_anchor_eleven_clause_one_claim_domain_mismatch_zero_surface_clause(
+    position: usize,
+    expr: &Expr,
+    anchor: u32,
+) -> bool {
+    if !claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_domain_mismatch_zero_surface_override_enabled()
+    {
+        return false;
+    }
+    match position {
+        0 => matches_anchor_eleven_clause_five_remaining_two_mismatch_zero_clause_zero(expr),
+        1 => matches!(
+            expr,
+            Expr::Eventually(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                )
+        ),
+        2 => matches_claim_temporal_pair_clause_two_variant(expr),
+        3 => matches_anchor_eleven_exact_argument_clause(expr, anchor + 1),
+        4 => matches_temporal_flat_next_bridge(expr),
+        5 => matches_temporal_sharp_eventually_bridge(expr),
         6 => matches!(
             expr,
             Expr::Lam(body)
@@ -4026,6 +4122,190 @@ mod tests {
                         }
                     );
                     assert!(!passes_connectivity(&library, &telescope));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_clause_one_demo_flat_codomain_on_claim_domain_mismatch_zero_surface_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_domain_mismatch_zero_surface();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_zero_variants = [
+            Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+            Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+        ];
+        let mut clause_four_variants = vec![Telescope::reference(15).clauses[4].expr.clone()];
+        clause_four_variants.extend(claim_temporal_variant_exprs(4, anchor));
+        let mut clause_five_variants = vec![Telescope::reference(15).clauses[5].expr.clone()];
+        clause_five_variants.extend(claim_temporal_variant_exprs(5, anchor));
+
+        for clause_zero_variant in clause_zero_variants {
+            for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+                for clause_four_variant in clause_four_variants.iter() {
+                    for clause_five_variant in clause_five_variants.iter() {
+                        let mut telescope = Telescope::reference(15);
+                        telescope.clauses[0].expr = clause_zero_variant.clone();
+                        telescope.clauses[1] = ClauseRec::new(
+                            ClauseRole::Formation,
+                            Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                        );
+                        telescope.clauses[2].expr = clause_two_variant.clone();
+                        telescope.clauses[3] = ClauseRec::new(
+                            ClauseRole::Introduction,
+                            Expr::Lam(Box::new(Expr::App(
+                                Box::new(Expr::Lib(anchor + 1)),
+                                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                            ))),
+                        );
+                        telescope.clauses[4].expr = clause_four_variant.clone();
+                        telescope.clauses[5].expr = clause_five_variant.clone();
+                        telescope.clauses[7] = reference_terminal.clone();
+
+                        let witness = analyze_connectivity(&library, &telescope);
+                        let reanchor =
+                            HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                        assert!(
+                            reanchor.allows_historical_reanchor(),
+                            "the clause-1 demo-flat-codomain opening should become historically reanchorable on the exact mismatch-0 claim-domain surface under the scoped override: clause0={:?} clause4={:?} clause5={:?} witness={witness:?} reanchor={reanchor:?}",
+                            clause_zero_variant,
+                            clause_four_variant,
+                            clause_five_variant,
+                        );
+                        assert_eq!(
+                            witness,
+                            ConnectivityWitness {
+                                connected: true,
+                                references_active_window: false,
+                                self_contained: false,
+                                max_lib_ref: 11,
+                                historical_reanchor: true,
+                            }
+                        );
+                        assert!(passes_connectivity(&library, &telescope));
+                    }
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_one_demo_flat_codomain_on_claim_domain_mismatch_zero_surface_outside_historical_reanchor_without_the_exact_anchor_eleven_side_pocket_even_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_domain_mismatch_zero_surface();
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_zero_variants = [
+            Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+            Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+        ];
+
+        for clause_zero_variant in clause_zero_variants {
+            for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+                for clause_four_variant in claim_temporal_variant_exprs(4, anchor) {
+                    for clause_five_variant in claim_temporal_variant_exprs(5, anchor) {
+                        let mut telescope = Telescope::reference(15);
+                        telescope.clauses[0].expr = clause_zero_variant.clone();
+                        telescope.clauses[1] = ClauseRec::new(
+                            ClauseRole::Formation,
+                            Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                        );
+                        telescope.clauses[2].expr = clause_two_variant.clone();
+                        telescope.clauses[4].expr = clause_four_variant.clone();
+                        telescope.clauses[5].expr = clause_five_variant.clone();
+                        telescope.clauses[7] = reference_terminal.clone();
+
+                        let witness = analyze_connectivity(&library, &telescope);
+                        let reanchor =
+                            HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                        assert!(
+                            !reanchor.allows_historical_reanchor(),
+                            "the mismatch-0 claim-domain override should still keep clause-1 demo-flat-codomain fenced until the exact anchor-11 side pocket is also present"
+                        );
+                        assert_eq!(
+                            witness,
+                            ConnectivityWitness {
+                                connected: true,
+                                references_active_window: false,
+                                self_contained: false,
+                                max_lib_ref: 10,
+                                historical_reanchor: false,
+                            }
+                        );
+                        assert!(!passes_connectivity(&library, &telescope));
+                    }
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_one_demo_flat_codomain_on_claim_domain_mismatch_zero_surface_from_reopening_lifted_terminals_even_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_domain_mismatch_zero_surface();
+        let library = library_until(14);
+        let lifted_terminal = next_lift_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_zero_variants = [
+            Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+            Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+        ];
+        let mut clause_four_variants = vec![Telescope::reference(15).clauses[4].expr.clone()];
+        clause_four_variants.extend(claim_temporal_variant_exprs(4, anchor));
+        let mut clause_five_variants = vec![Telescope::reference(15).clauses[5].expr.clone()];
+        clause_five_variants.extend(claim_temporal_variant_exprs(5, anchor));
+
+        for clause_zero_variant in clause_zero_variants {
+            for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+                for clause_four_variant in clause_four_variants.iter() {
+                    for clause_five_variant in clause_five_variants.iter() {
+                        let mut telescope = Telescope::reference(15);
+                        telescope.clauses[0].expr = clause_zero_variant.clone();
+                        telescope.clauses[1] = ClauseRec::new(
+                            ClauseRole::Formation,
+                            Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                        );
+                        telescope.clauses[2].expr = clause_two_variant.clone();
+                        telescope.clauses[3] = ClauseRec::new(
+                            ClauseRole::Introduction,
+                            Expr::Lam(Box::new(Expr::App(
+                                Box::new(Expr::Lib(anchor + 1)),
+                                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                            ))),
+                        );
+                        telescope.clauses[4].expr = clause_four_variant.clone();
+                        telescope.clauses[5].expr = clause_five_variant.clone();
+                        telescope.clauses[7] = lifted_terminal.clone();
+
+                        let witness = analyze_connectivity(&library, &telescope);
+                        let reanchor =
+                            HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                        assert!(
+                            !reanchor.allows_historical_reanchor(),
+                            "the mismatch-0 claim-domain override should remain reference-terminal-only and keep lifted terminals outside historical reanchor"
+                        );
+                        assert_eq!(
+                            witness,
+                            ConnectivityWitness {
+                                connected: true,
+                                references_active_window: false,
+                                self_contained: false,
+                                max_lib_ref: 11,
+                                historical_reanchor: false,
+                            }
+                        );
+                        assert!(!passes_connectivity(&library, &telescope));
+                    }
                 }
             }
         }

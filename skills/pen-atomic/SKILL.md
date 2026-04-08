@@ -357,6 +357,11 @@ Focus on:
   now only reproduces the broader clause-`4` `reference`-sheet result, so the
   skill should route you to the live docs rather than restating their full
   diagnostic ledger
+- keep the next repair above the broad clause-`1` `demo_flat_codomain`
+  reopening across the full mismatch-`0` claim-domain surface; that control is
+  now a widening negative result owned by
+  [../../autonomous_ledger.md](../../autonomous_ledger.md), so route to the
+  live docs before reopening that surface again
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward

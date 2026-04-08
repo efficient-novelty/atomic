@@ -6007,6 +6007,12 @@ thread_local! {
 
 #[cfg(test)]
 thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_CLAUSE_ZERO_CLAIM_DOMAIN_MISMATCH_ZERO_SURFACE_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
+thread_local! {
     static CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_SIDE_POCKET_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE:
         std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
 }
@@ -6089,6 +6095,9 @@ struct ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard;
 struct ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimFlatOverrideGuard;
 
 #[cfg(test)]
+struct ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimDomainMismatchZeroSurfaceOverrideGuard;
+
+#[cfg(test)]
 struct ClaimStepFifteenClauseFiveSidePocketOnClaimSafeClauseZeroOneOverrideGuard;
 
 #[cfg(test)]
@@ -6167,6 +6176,30 @@ fn override_claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_fla
         },
     );
     ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimFlatOverrideGuard
+}
+
+#[cfg(test)]
+impl Drop
+    for ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimDomainMismatchZeroSurfaceOverrideGuard
+{
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_CLAUSE_ZERO_CLAIM_DOMAIN_MISMATCH_ZERO_SURFACE_OVERRIDE.with(
+            |override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_domain_mismatch_zero_surface()
+-> ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimDomainMismatchZeroSurfaceOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_CLAUSE_ZERO_CLAIM_DOMAIN_MISMATCH_ZERO_SURFACE_OVERRIDE.with(
+        |override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        },
+    );
+    ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimDomainMismatchZeroSurfaceOverrideGuard
 }
 
 #[cfg(test)]
@@ -6322,6 +6355,19 @@ fn claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_flat_overrid
 #[cfg(not(test))]
 fn claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_flat_override_enabled() -> bool
 {
+    false
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_domain_mismatch_zero_surface_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_CLAUSE_ZERO_CLAIM_DOMAIN_MISMATCH_ZERO_SURFACE_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_domain_mismatch_zero_surface_override_enabled()
+-> bool {
     false
 }
 
@@ -7250,6 +7296,8 @@ fn create_online_prefix_work_item(
                 matches_reference_temporal_clause_zero(clause)
                     || (claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_flat_override_enabled()
                         && matches_claim_step_fifteen_clause_zero_claim_flat_domain_clause(clause))
+                    || (claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_domain_mismatch_zero_surface_override_enabled()
+                        && matches_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_clause_zero(clause))
             })
             .then(claim_step_fifteen_anchor_eleven_clause_one_demo_flat_codomain_clause)
     }
@@ -20492,6 +20540,216 @@ mod tests {
                 .copied(),
             Some(18),
             "the same tradeoff should leave a smaller residual on the clause-4 reference family"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_one_demo_flat_codomain_on_mismatch_zero_claim_domain_surface_stays_a_negative_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_domain_mismatch_zero_surface();
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_one_flat_codomain_on_clause_zero_claim_domain_mismatch_zero_surface();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, clause_one), _count)| {
+                    *mismatch == Some(0_usize) && *clause_one == "demo_flat_codomain"
+                })
+                .collect::<BTreeMap<_, _>>();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, clause_one, _clause_four), _count)| {
+                    *mismatch == Some(0_usize) && *clause_one == "demo_flat_codomain"
+                })
+                .collect::<BTreeMap<_, _>>();
+        let clause_two_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_two_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, clause_one, _clause_two), _count)| {
+                    *mismatch == Some(0_usize) && *clause_one == "demo_flat_codomain"
+                })
+                .collect::<BTreeMap<_, _>>();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4985);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 667,
+            "broadening clause-1 demo-flat-codomain across the mismatch-0 claim-domain surface should stay a widening negative control because it reaches the 5000 neighborhood only by reopening substantially more partial-prefix wall pressure"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the mismatch-0 claim-domain demo-flat negative control should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 667);
+        assert_eq!(zero_summary.captured_prefixes, 2757);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3564,
+                admissible_terminal_candidates: 594,
+                exact_screened_terminal_candidates: 594,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the broad mismatch-0 claim-domain demo-flat reopening should widen the same noncanonical small-cluster bucket rather than relieve the isolated single pocket"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the broad mismatch-0 claim-domain demo-flat reopening should still keep the isolated single pocket fenced even while it widens the noncanonical shell"
+        );
+        assert_eq!(
+            pair_counts,
+            [
+                (
+                    (Some(0_usize), "claim_eventual_domain", "demo_flat_codomain"),
+                    45_usize,
+                ),
+                (
+                    (Some(0_usize), "claim_flat_domain", "demo_flat_codomain"),
+                    45
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "the broad mismatch-0 claim-domain demo-flat reopening should add two new 45-capture pairings rather than narrowing the existing six mismatch-0 claim-domain pairings"
+        );
+        assert_eq!(
+            clause_four_counts,
+            [
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "demo_flat_codomain",
+                        "claim_next_bridge",
+                    ),
+                    27_usize,
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "demo_flat_codomain",
+                        "reference",
+                    ),
+                    18,
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "demo_flat_codomain",
+                        "claim_next_bridge",
+                    ),
+                    27,
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "demo_flat_codomain",
+                        "reference",
+                    ),
+                    18,
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "each mismatch-0 demo-flat pairing should stay concentrated on the same 27 / 18 clause-4 split rather than revealing a narrower hidden bridge family"
+        );
+        assert_eq!(
+            clause_two_counts,
+            [
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "demo_flat_codomain",
+                        "claim_flat_domain",
+                    ),
+                    15_usize,
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "demo_flat_codomain",
+                        "claim_sharp_codomain",
+                    ),
+                    15,
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "demo_flat_codomain",
+                        "reference",
+                    ),
+                    15,
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "demo_flat_codomain",
+                        "claim_flat_domain",
+                    ),
+                    15,
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "demo_flat_codomain",
+                        "claim_sharp_codomain",
+                    ),
+                    15,
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_flat_domain",
+                        "demo_flat_codomain",
+                        "reference",
+                    ),
+                    15,
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "the broad mismatch-0 demo-flat reopening should spread evenly across all three clause-2 sheets on both claim-domain pairings, so it is not hiding a narrower exact-sheet repair"
         );
     }
 

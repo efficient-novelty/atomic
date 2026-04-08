@@ -99,6 +99,16 @@ Until that exists, wording stays at `bounded live recovery`.
   - claim-safe mismatch-`1` pairings are the smaller second tier at `84`
   - mismatch-`2` plus mismatch-`3` `reference / reference` tails are only the
     residual `54`
+- The broad clause-`1` `demo_flat_codomain` reopening across that
+  mismatch-`0` claim-domain tier is now also ruled out as a widening negative
+  control:
+  - it lands `4985 / 667 / 2757`
+  - it widens `small_cluster` to `3564 / 594 / 594 / 0`
+  - the isolated `single` pocket stays fenced
+  - it adds two new mismatch-`0` pairings at `45 / 45`
+  - each new pairing sits on the same clause-`4` split `27 / 18`
+  - each new pairing also spreads evenly across the three clause-`2` sheets at
+    `15 / 15 / 15`
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -123,6 +133,9 @@ Until that exists, wording stays at `bounded live recovery`.
   `reference + demo_flat_codomain` ladder, start with the mismatch-`0`
   claim-domain surface before the smaller claim-safe mismatch-`1` tier or the
   `reference / reference` tails.
+- If the mismatch-`0` claim-domain surface is revisited, stay below the broad
+  clause-`1` `demo_flat_codomain` reopening; it reaches `4985` only by
+  widening the clean wall to `667` and broadening `small_cluster`.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

@@ -65,6 +65,18 @@ Do not start with another rerun setup pass.
 - The next honest slice should therefore start with the mismatch-`0`
   claim-domain surface before revisiting the smaller claim-safe mismatch-`1`
   tier or the `reference / reference` tails.
+- The broad clause-`1` `demo_flat_codomain` reopening across the full
+  mismatch-`0` claim-domain surface is now also exhausted as a widening
+  negative control:
+  - it lands `4985 / 667 / 2757`
+  - it widens `small_cluster` to `3564 / 594 / 594 / 0`
+  - it adds two new mismatch-`0` pairings at `45 / 45`
+  - each new pairing sits on the same clause-`4` split `27 / 18`
+  - each new pairing also spreads evenly across the three clause-`2` sheets at
+    `15 / 15 / 15`
+- Any remaining mismatch-`0` leverage therefore has to stay below that broad
+  demo-flat reopening rather than relanding both new `45`-capture pairings at
+  once.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -81,6 +93,11 @@ Do not start with another rerun setup pass.
    of the same `51`-capture tradeoff.
 3. Prefer the mismatch-`0` claim-domain surface first:
    - six pairings totaling `252`
+   - do not reopen broad clause-`1` `demo_flat_codomain` across both
+     mismatch-`0` claim-domain pairings again; that control is now frozen at
+     `4985 / 667 / 2757`
+   - if mismatch-`0` is revisited, localize below that broad reopening rather
+     than relanding both new `45`-capture pairings together
    - only after that, consider the smaller claim-safe mismatch-`1` tier at
      `84`
    - leave the `reference / reference` tails at `54` below both of those
@@ -109,6 +126,7 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_reference_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_neutral_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_flat_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_five_claim_next_codomain_on_clause_four_reference_tail_on_exact_claim_variant_pair_stays_a_tradeoff_control`
+- `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_mismatch_zero_claim_domain_surface_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
@@ -126,6 +144,8 @@ Do not start with another rerun setup pass.
 - another exact claim-pair clause-`4` `reference`-side relocalization pass
 - another exact claim-flat or claim-sharp single-sheet relocalization pass on
   the clause-`4` `claim_next_bridge` half
+- broad clause-`1` `demo_flat_codomain` reopenings across the full
+  mismatch-`0` claim-domain surface
 - broader clause-`4` `reference`-sheet reopenings
 - claim-safe clause-`4` or clause-`5` reopenings
 - raw clause-`3` `anchor-11` widening

@@ -120,6 +120,9 @@ Do not:
   claim-flat or claim-sharp single-sheet relocalizations first; those smaller
   tradeoff controls now also belong in the autonomy ledger rather than as a
   fresh lead
+- reopen the broad clause-`1` `demo_flat_codomain` reopening across the full
+  mismatch-`0` claim-domain surface first; that control is now a widening
+  negative result owned by the autonomy ledger rather than a fresh lead
 - reopen runtime-only step-`4` throughput work first unless a newer rerun
   proves the remaining misses are runtime fallout
 - reland ruled-out clause-`4` / clause-`5` or same-primary probes without new

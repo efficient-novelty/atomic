@@ -134,3 +134,16 @@ This file is the append-only history for `desktop_claim_shadow`.
   Consequence: the next slice should prioritize mismatch-`0` claim-domain
   pairings before the smaller claim-safe mismatch-`1` tier or the
   `reference / reference` tails.
+- Scope: probe the broad clause-`1` `demo_flat_codomain` reopening across the
+  mismatch-`0` claim-domain surface.
+  Result: new connectivity and search regressions pinned that reopening as a
+  widening negative control at `4985 / 667 / 2757` with
+  `small_cluster = 3564 / 594 / 594 / 0`; it added two new `45`-capture
+  mismatch-`0` pairings on `claim_eventual_domain` and `claim_flat_domain`,
+  each split `27 / 18` across clause-`4` `claim_next_bridge / reference` and
+  evenly `15 / 15 / 15` across the two claim clause-`2` sheets plus the
+  reference sheet, while leaving the isolated `single` pocket unchanged.
+  Consequence: the next slice should stay above broad mismatch-`0`
+  `demo_flat_codomain` reopenings and only revisit that priority tier through
+  a narrower localization, or else move on to the smaller claim-safe
+  mismatch-`1` surface.
