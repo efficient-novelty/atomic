@@ -166,6 +166,12 @@ Do not:
   parent capture plus its three clause-`6` remaining-one child
   continuations, so the live autonomy docs should own the finer completion
   partition beneath that parent/child shell rather than this stable reference
+- reopen that representative claim-flat parent/child shell through another
+  clause-`3` / clause-`6` child-identity pass first either; those six child
+  continuations now only expose matched dead `3`-generated / `0`-admitted
+  completion summaries with the same nonlive open-band structural terminal
+  trio, so route to the live autonomy docs before spending another turn on the
+  exhausted claim-flat shell
 - reopen the mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
   `claim_next_codomain` exact-summary cell first; that sibling is now a
   neutral control owned by the autonomy ledger rather than a fresh lead

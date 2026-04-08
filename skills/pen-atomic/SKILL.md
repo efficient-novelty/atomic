@@ -422,6 +422,11 @@ Focus on:
   continuations, so route to the live docs before retrying the whole joint
   continuation and instead localize the next probe to a finer terminal or
   remaining-one completion partition inside that parent/child shell
+- treat that representative claim-flat parent/child shell as live autonomy
+  detail too; its six clause-`3` / clause-`6` child continuations now all
+  collapse to matched dead `3`-generated / `0`-admitted completion summaries
+  with the same nonlive open-band structural terminal trio, so route to the
+  live docs before spending another turn on the exhausted claim-flat shell
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward

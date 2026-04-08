@@ -1,6 +1,6 @@
 # Autonomous Claim Lane: Next Operational Slice
 
-Last updated: 2026-04-08
+Last updated: 2026-04-09
 
 This file owns the single active work order for `desktop_claim_shadow`.
 
@@ -15,13 +15,12 @@ This file owns the single active work order for `desktop_claim_shadow`.
 
 ## Objective
 
-Push the remaining-one exact-summary probe one layer below the now-localized
-representative mismatch-`0` `claim_flat_domain` clause-`2` shell:
-the single remaining-two parent capture and its three child remaining-one
-clause-`6` continuations that sit beneath the already exhausted individual
-clause-`3` branches, starting with a finer terminal or remaining-one
-completion partition inside that parent/child shell on top of canonical `v12`
-and the matched local `4331` guardrail surface.
+Shift the remaining-one exact-summary probe sideways off the now-exhausted
+representative mismatch-`0` `claim_flat_domain` clause-`2` shell and onto the
+sibling representative `claim_sharp_codomain` clause-`2` sheet, carrying the
+newly closed claim-flat parent/child shell as frozen context rather than
+reopening it again on top of canonical `v12` and the matched local `4331`
+guardrail surface.
 
 Do not start with another rerun setup pass.
 
@@ -241,6 +240,25 @@ Do not start with another rerun setup pass.
   remaining-two parent's remaining-one completion / terminal subcells before
   reopening the representative `claim_sharp_codomain` clause-`2` sheet or the
   smaller claim-safe mismatch-`1` tier.
+- That representative `claim_flat_domain` parent/child shell is now also
+  exhausted at child completion-summary scope:
+  - across both clause-`3` branches and all three clause-`6` child labels,
+    the six remaining-one child continuations all collapse to the same dead
+    `3`-generated / `0`-admitted completion summary
+  - each keeps no bound, no best-rank profile, and no survivor sketch
+  - each exposes only the same three local terminal choices:
+    `reference`, `eventual_lift`, and `next_lift`
+  - each of those three choices is still
+    `KeepWithoutFallback` plus locally `open_band_structural`, but none passes
+    live connectivity on the current claim path
+- Any remaining mismatch-`0` leverage is therefore no longer on the
+  representative claim-flat clause-`3` or clause-`6` child identity either,
+  nor on a hidden live terminal pocket inside that claim-flat shell.
+- The next honest mismatch-`0` slice should therefore move sideways to the
+  representative `claim_sharp_codomain` clause-`2` sheet before the smaller
+  claim-safe mismatch-`1` tier, unless a narrower
+  connectivity-failure reason partition under one dead claim-flat child is
+  explicitly promoted.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -330,23 +348,26 @@ Do not start with another rerun setup pass.
    - do not spend another turn swapping between those two clause-`3`
      branches on the representative clause-`6` `reference` continuation;
      that axis is now exhausted individually
-   - if mismatch-`0` is revisited, localize one layer deeper beneath the
-     representative `claim_flat_domain` clause-`2` sheet by staying below the
-     joint clause-`3` branch under the marginally best clause-`6`
-     `reference` continuation and probing a finer terminal or
-     remaining-one completion partition inside the now-localized
-     parent/child shell:
+   - treat the representative `claim_flat_domain` joint clause-`3`
+     parent/child shell as frozen and exhausted:
      - the one remaining-two parent capture under
        `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
        claim_next_bridge / claim_flat_codomain`
-     - its three child remaining-one clause-`6` continuations
-       `claim_next_codomain / claim_sharp_codomain / reference`
-     before reopening the representative `claim_sharp_codomain` clause-`2`
-     sheet or any broader clause-`5` family
+       now only feeds six matched dead child completion summaries across the
+       two clause-`3` branches and the three clause-`6` labels
+     - each of those six child summaries is only
+       `3` generated / `0` admitted with no bound and no survivor sketch
+     - each only exposes the same nonlive
+       `reference / eventual_lift / next_lift` open-band structural trio
    - do not reland the whole joint clause-`3` continuation again as if it
-     were still the active unknown; that `4343 / 552 / 2268` tradeoff is now
-     localized to the single parent capture plus those three child
-     continuations
+     were still the active unknown, and do not spend another turn swapping
+     among those frozen claim-flat child continuations by clause-`3` or
+     clause-`6` identity
+   - if mismatch-`0` is revisited next, move sideways to the representative
+     `claim_sharp_codomain` clause-`2` sheet and localize below it with the
+     same sequence used on the representative claim-flat sheet:
+     clause-`6` identity first, then the marginally best child shell only if
+     it actually breaks symmetry
    - leave the other `11` pair cells alone unless a deeper probe breaks the
      current symmetry
    - both mismatch-`0` clause-`4` halves are now ruled out as negative
@@ -399,6 +420,8 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_flat_sheet_clause_six_sheets_stay_matched_smaller_tradeoff_controls`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_clause_three_sheets_stay_individually_neutral_controls`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_tradeoff_delta_below_joint_clause_three_continuation_probe`
+- `current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_flat_joint_clause_three_shell_stays_on_six_matched_dead_completion_summaries`
+- `current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_flat_joint_clause_three_shell_keeps_only_uniform_nonlive_open_band_terminal_choices`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
@@ -448,6 +471,9 @@ Do not start with another rerun setup pass.
   claim_next_bridge / claim_flat_codomain / reference`
 - another whole joint clause-`3` continuation reopen under that same
   representative clause-`6` `reference` shell
+- another representative claim-flat parent/child-shell completion pass that
+  only rechecks the same six dead `3`-generated / `0`-admitted child
+  continuations or re-partitions them by clause-`3` / clause-`6` identity
 - another whole-cell remaining-one exact-summary relief pass on the
   mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
   `claim_next_codomain` cell

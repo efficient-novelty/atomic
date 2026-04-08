@@ -302,3 +302,28 @@ This file is the append-only history for `desktop_claim_shadow`.
   the next revisit has to partition that one parent's remaining-one completion
   / terminal subcells rather than reopening either individual clause-`3`
   branch or the whole joint continuation again.
+
+## 2026-04-09
+
+- Scope: partition the representative `claim_flat_domain` joint clause-`3`
+  parent/child shell one layer deeper at child completion-summary scope.
+  Result: beneath
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / claim_flat_codomain`,
+  all six remaining-one child continuations across the two clause-`3` branches
+  and the three clause-`6` labels
+  `claim_next_codomain / claim_sharp_codomain / reference` now collapse to the
+  same dead completion summary:
+  - `3` generated terminal candidates
+  - `0` admitted candidates
+  - no bound, no best-rank profile, and no survivor sketch
+  - the same three local terminal choices only:
+    `reference`, `eventual_lift`, and `next_lift`
+  - each of those three choices is still
+    `KeepWithoutFallback` plus locally `open_band_structural`, but none passes
+    live connectivity on the current claim path
+  Consequence: the representative claim-flat parent/child shell is now
+  exhausted at full completion-profile scope. The next honest mismatch-`0`
+  revisit should move sideways to the representative
+  `claim_sharp_codomain` clause-`2` sheet unless a narrower
+  connectivity-failure reason partition under one dead claim-flat child is
+  explicitly promoted.

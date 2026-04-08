@@ -1,6 +1,6 @@
 # Autonomous Claim Lane State
 
-Last updated: 2026-04-08
+Last updated: 2026-04-09
 
 This file owns the live operational snapshot for `desktop_claim_shadow`.
 
@@ -291,6 +291,26 @@ Until that exists, wording stays at `bounded live recovery`.
     longer on another whole-joint-continuation reopen; it has to partition the
     single remaining-two parent's remaining-one completion / terminal subcells
     beneath that same `claim_flat_codomain` tail
+- That representative `claim_flat_domain` parent-plus-children shell is now
+  also exhausted one layer deeper at child completion-summary scope:
+  - across both clause-`3` branches and all three clause-`6` child labels,
+    the six remaining-one child continuations all collapse to the same dead
+    completion summary
+  - each child keeps only `3` generated terminal candidates and `0` admitted
+    candidates
+  - each child keeps no bound, no best-rank profile, and no survivor sketch
+  - each child exposes the same three local terminal choices only:
+    `reference`, `eventual_lift`, and `next_lift`
+  - each of those three local choices is still
+    `KeepWithoutFallback` plus locally `open_band_structural`, but none passes
+    live connectivity on the current claim path
+  - consequence: the representative claim-flat parent/child shell no longer
+    hides a smaller live terminal pocket, so any remaining mismatch-`0`
+    leverage is no longer on claim-flat clause-`3` or clause-`6` child
+    identity either; the next honest revisit should move sideways to the
+    representative `claim_sharp_codomain` clause-`2` sheet unless a narrower
+    connectivity-failure reason partition under one dead claim-flat child is
+    explicitly promoted
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -390,11 +410,16 @@ Until that exists, wording stays at `bounded live recovery`.
   completion partition under their joint clause-`6` `reference`
   continuation before reopening the representative `claim_sharp_codomain`
   clause-`2` sheet or the smaller claim-safe mismatch-`1` tier.
-- Because that whole joint continuation is now itself localized to one
-  remaining-two parent plus its three clause-`6` child remaining-one
-  continuations, the next revisit should partition that single parent's
-  remaining-one completion / terminal subcells directly instead of reopening
-  either individual clause-`3` branch or the whole joint continuation again.
+- Do not stop at that representative claim-flat joint clause-`3`
+  parent/child shell either; its six child continuations are now all the same
+  dead `3`-generated / `0`-admitted completion summary with no bound and no
+  survivor sketch.
+- Because those claim-flat child continuations only expose the same nonlive
+  `reference / eventual_lift / next_lift` open-band structural trio, the next
+  honest revisit should move sideways to the representative
+  `claim_sharp_codomain` clause-`2` sheet before the smaller claim-safe
+  mismatch-`1` tier unless a reason-level connectivity partition under one
+  dead claim-flat child is explicitly promoted.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

@@ -24880,6 +24880,317 @@ mod tests {
         }
     }
 
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    struct ClaimStepFifteenRepresentativeMismatchZeroClaimFlatShellChildCompletionProfile {
+        generated_candidate_count: usize,
+        admitted_candidate_count: usize,
+        has_bound: bool,
+        has_best_accept_primary_rank: bool,
+        has_best_accept_rank: bool,
+        survivor_labels: BTreeMap<&'static str, (u16, u16)>,
+        terminal_profiles:
+            BTreeMap<&'static str, (ConnectivityTerminalDecision, bool, AdmissibilityDecision)>,
+    }
+
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_flat_shell_child_completion_profiles()
+    -> BTreeMap<
+        (&'static str, &'static str),
+        ClaimStepFifteenRepresentativeMismatchZeroClaimFlatShellChildCompletionProfile,
+    > {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let claim_flat_argument = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+            ))),
+        );
+        let claim_eventual_argument = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))))),
+            ))),
+        );
+        let mut profiles = BTreeMap::new();
+
+        for work_item in surface.pruned_terminal_prefixes.iter().filter(|work_item| {
+            current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                0,
+                &work_item.prefix_telescope.clauses[0],
+            ) == "claim_eventual_domain"
+                && current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                    1,
+                    &work_item.prefix_telescope.clauses[1],
+                ) == "claim_next_codomain"
+                && current_claim_step_fifteen_partial_prefix_clause_two_label(
+                    &work_item.prefix_telescope.clauses[2],
+                ) == "claim_flat_domain"
+                && current_claim_step_fifteen_partial_prefix_clause_four_label(
+                    &work_item.prefix_telescope.clauses[4],
+                ) == "claim_next_bridge"
+                && current_claim_step_fifteen_partial_prefix_clause_five_label(
+                    &work_item.prefix_telescope.clauses[5],
+                ) == "claim_flat_codomain"
+                && matches!(
+                    current_claim_step_fifteen_partial_prefix_clause_six_label(
+                        &work_item.prefix_telescope.clauses[6]
+                    ),
+                    "claim_next_codomain" | "claim_sharp_codomain" | "reference"
+                )
+                && (*work_item.prefix_telescope.clauses.get(3).expect("clause-3 should exist")
+                    == claim_flat_argument
+                    || *work_item
+                        .prefix_telescope
+                        .clauses
+                        .get(3)
+                        .expect("clause-3 should exist")
+                        == claim_eventual_argument)
+        }) {
+            let clause_three_label =
+                if work_item.prefix_telescope.clauses[3] == claim_flat_argument {
+                    "claim_flat_argument"
+                } else {
+                    "claim_eventual_argument"
+                };
+            let clause_six_label = current_claim_step_fifteen_partial_prefix_clause_six_label(
+                &work_item.prefix_telescope.clauses[6],
+            );
+            let mut summary_cache = surface.prefix_legality_cache.clone();
+            let summary = summary_cache
+                .terminal_prefix_completion_summary(&work_item.signature)
+                .expect("localized child prefix should keep a cached completion summary");
+            let survivor_labels = summary
+                .compact_survivor_sketch
+                .clone()
+                .into_iter()
+                .flat_map(|sketch| sketch.survivors.into_iter())
+                .map(|entry| {
+                    let clause = work_item
+                        .next_clauses(&surface.clause_catalog)
+                        .get(entry.clause_index)
+                        .expect("survivor clause index should stay aligned");
+                    let label = if *clause == reference_terminal {
+                        "reference"
+                    } else if *clause == next_lift_terminal {
+                        "next_lift"
+                    } else if *clause == eventual_lift_terminal {
+                        "eventual_lift"
+                    } else {
+                        "other"
+                    };
+                    (label, (entry.exact_nu, entry.bit_kappa_used))
+                })
+                .collect::<BTreeMap<_, _>>();
+            let connectivity_summary =
+                ConnectivitySummary::from_telescope(&surface.library, &work_item.prefix_telescope);
+            let terminal_profiles = work_item
+                .next_clauses(&surface.clause_catalog)
+                .iter()
+                .map(|clause| {
+                    let label = if *clause == reference_terminal {
+                        "reference"
+                    } else if *clause == next_lift_terminal {
+                        "next_lift"
+                    } else if *clause == eventual_lift_terminal {
+                        "eventual_lift"
+                    } else {
+                        "other"
+                    };
+                    let mut telescope = work_item.prefix_telescope.clone();
+                    telescope.clauses.push(clause.clone());
+                    (
+                        label,
+                        (
+                            connectivity_summary.terminal_decision(&surface.library, clause, true),
+                            passes_connectivity(&surface.library, &telescope),
+                            assess_strict_admissibility(
+                                surface.step_index,
+                                &surface.library,
+                                &telescope,
+                                surface.admissibility,
+                            ),
+                        ),
+                    )
+                })
+                .collect::<BTreeMap<_, _>>();
+            profiles.insert(
+                (clause_three_label, clause_six_label),
+                ClaimStepFifteenRepresentativeMismatchZeroClaimFlatShellChildCompletionProfile {
+                    generated_candidate_count: summary.generated_candidate_count,
+                    admitted_candidate_count: summary.admitted_candidate_count,
+                    has_bound: summary.bound.is_some(),
+                    has_best_accept_primary_rank: summary.best_accept_primary_rank.is_some(),
+                    has_best_accept_rank: summary.best_accept_rank.is_some(),
+                    survivor_labels,
+                    terminal_profiles,
+                },
+            );
+        }
+
+        profiles
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_flat_joint_clause_three_shell_stays_on_six_matched_dead_completion_summaries(
+    ) {
+        let profiles =
+            current_claim_step_fifteen_representative_mismatch_zero_claim_flat_shell_child_completion_profiles();
+        let expected_shell =
+            ClaimStepFifteenRepresentativeMismatchZeroClaimFlatShellChildCompletionProfile {
+                generated_candidate_count: 3,
+                admitted_candidate_count: 0,
+                has_bound: false,
+                has_best_accept_primary_rank: false,
+                has_best_accept_rank: false,
+                survivor_labels: BTreeMap::new(),
+                terminal_profiles: [
+                    (
+                        "reference",
+                        (
+                            ConnectivityTerminalDecision::KeepWithoutFallback,
+                            false,
+                            AdmissibilityDecision {
+                                class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+                                reason: "open_band_structural".to_owned(),
+                            },
+                        ),
+                    ),
+                    (
+                        "eventual_lift",
+                        (
+                            ConnectivityTerminalDecision::KeepWithoutFallback,
+                            false,
+                            AdmissibilityDecision {
+                                class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+                                reason: "open_band_structural".to_owned(),
+                            },
+                        ),
+                    ),
+                    (
+                        "next_lift",
+                        (
+                            ConnectivityTerminalDecision::KeepWithoutFallback,
+                            false,
+                            AdmissibilityDecision {
+                                class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+                                reason: "open_band_structural".to_owned(),
+                            },
+                        ),
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+            };
+
+        assert_eq!(
+            profiles,
+            [
+                (
+                    ("claim_eventual_argument", "claim_next_codomain"),
+                    expected_shell.clone(),
+                ),
+                (
+                    ("claim_eventual_argument", "claim_sharp_codomain"),
+                    expected_shell.clone(),
+                ),
+                (("claim_eventual_argument", "reference"), expected_shell.clone()),
+                (
+                    ("claim_flat_argument", "claim_next_codomain"),
+                    expected_shell.clone(),
+                ),
+                (
+                    ("claim_flat_argument", "claim_sharp_codomain"),
+                    expected_shell.clone(),
+                ),
+                (("claim_flat_argument", "reference"), expected_shell),
+            ]
+            .into_iter()
+            .collect(),
+            "below the localized representative claim-flat parent shell, every clause-three / clause-six child continuation should now expose the same dead 3-generated / 0-admitted completion summary, so there is no hidden survivor or bound-carrying child left on that exact claim-flat branch"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_flat_joint_clause_three_shell_keeps_only_uniform_nonlive_open_band_terminal_choices(
+    ) {
+        let profiles =
+            current_claim_step_fifteen_representative_mismatch_zero_claim_flat_shell_child_completion_profiles();
+
+        assert!(
+            profiles.values().all(|profile| {
+                profile.terminal_profiles
+                    == [
+                        (
+                            "eventual_lift",
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                false,
+                                AdmissibilityDecision {
+                                    class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+                                    reason: "open_band_structural".to_owned(),
+                                },
+                            ),
+                        ),
+                        (
+                            "next_lift",
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                false,
+                                AdmissibilityDecision {
+                                    class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+                                    reason: "open_band_structural".to_owned(),
+                                },
+                            ),
+                        ),
+                        (
+                            "reference",
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                false,
+                                AdmissibilityDecision {
+                                    class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+                                    reason: "open_band_structural".to_owned(),
+                                },
+                            ),
+                        ),
+                    ]
+                    .into_iter()
+                    .collect::<BTreeMap<_, _>>()
+            }),
+            "each representative child continuation under that claim-flat shell should keep the same three open-band structural terminal choices, but all of them should still fail live connectivity, so the shell is not hiding a smaller live terminal pocket"
+        );
+    }
+
     #[test]
     fn current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_evenly_across_three_clause_two_sheets()
      {
