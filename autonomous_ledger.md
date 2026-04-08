@@ -125,3 +125,12 @@ This file is the append-only history for `desktop_claim_shadow`.
   also exhausted at single-sheet scope, so the next slice should move above
   the `57 -> 51 -> 45` mismatch-`1` tradeoff ladder rather than splitting the
   claim-flat and claim-sharp clause-`2` sheets again.
+- Scope: freeze the remaining-two wall outside the exhausted mismatch-`1`
+  `reference + demo_flat_codomain` ladder.
+  Result: new step-`15` search regressions pinned the off-branch surface at
+  `390` captures across `10` pairings, split as mismatch-`0` claim-domain
+  surface `252`, claim-safe mismatch-`1` surface `84`, and
+  mismatch-`2` plus mismatch-`3` `reference / reference` tails `54`.
+  Consequence: the next slice should prioritize mismatch-`0` claim-domain
+  pairings before the smaller claim-safe mismatch-`1` tier or the
+  `reference / reference` tails.

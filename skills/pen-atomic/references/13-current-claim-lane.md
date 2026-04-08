@@ -108,6 +108,10 @@ Do not:
 
 - restate live counters in this file
 - treat negative controls as if they were still open hypotheses
+- reopen or re-summarize the exhausted mismatch-`1`
+  `reference + demo_flat_codomain` ladder first; the live off-branch priority
+  order now belongs in the autonomous docs rather than in this stable
+  reference
 - reopen the exact claim-pair clause-`4` `reference` side first; that narrower
   relocalization now only reproduces the older broader clause-`4`
   `reference`-sheet tradeoff and belongs in the autonomy ledger rather than as

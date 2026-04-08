@@ -90,6 +90,15 @@ Until that exists, wording stays at `bounded live recovery`.
   - each probe only chooses which claim clause-`2` sheet falls to the smaller
     `15`-capture floor while the sibling claim sheet stays at `21` and the
     reference sheet stays at `15`
+- The remaining-two wall outside that exhausted mismatch-`1`
+  `reference + demo_flat_codomain` ladder is now also executable:
+  - excluding the frozen `61`-capture ladder leaves `390` off-branch captures
+    across `10` pairings
+  - mismatch-`0` claim-domain pairings now own the first priority tier at
+    `252`
+  - claim-safe mismatch-`1` pairings are the smaller second tier at `84`
+  - mismatch-`2` plus mismatch-`3` `reference / reference` tails are only the
+    residual `54`
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -110,6 +119,10 @@ Until that exists, wording stays at `bounded live recovery`.
 - Keep wording at `bounded live recovery`.
 - Keep step `1` explicit, but do not reopen it first unless a newer stored
   rerun changes the diagnosis.
+- When working outside the exhausted mismatch-`1`
+  `reference + demo_flat_codomain` ladder, start with the mismatch-`0`
+  claim-domain surface before the smaller claim-safe mismatch-`1` tier or the
+  `reference / reference` tails.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

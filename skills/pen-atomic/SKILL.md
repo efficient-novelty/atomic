@@ -332,6 +332,11 @@ Focus on:
   only home for the active slice and explicit "not the next move" guidance
 - use [../../autonomous_ledger.md](../../autonomous_ledger.md) for probe
   history, negative controls, and why earlier ideas were ruled out
+- treat the exhausted mismatch-`1` `reference + demo_flat_codomain` ladder as
+  a live autonomy detail owned by the autonomous docs rather than by this
+  skill file; read [../../autonomous_progress.md](../../autonomous_progress.md)
+  and [../../autonomous_next_steps.md](../../autonomous_next_steps.md) for the
+  current off-branch priority order before opening another late-step probe
 - use [../../autonomous_plan.md](../../autonomous_plan.md) for
   medium-horizon sequencing and exit criteria rather than re-explaining the
   current slice

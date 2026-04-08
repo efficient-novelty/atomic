@@ -11963,6 +11963,45 @@ mod tests {
         pair_counts
     }
 
+    fn current_claim_step_fifteen_remaining_two_partial_prefix_pair_counts_outside_reference_demo_flat_tradeoff_ladder()
+    -> BTreeMap<(Option<usize>, &'static str, &'static str), usize> {
+        current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+            .into_iter()
+            .filter(|((mismatch, clause_zero, clause_one), _count)| {
+                !(*mismatch == Some(1_usize)
+                    && *clause_zero == "reference"
+                    && *clause_one == "demo_flat_codomain")
+            })
+            .collect()
+    }
+
+    fn current_claim_step_fifteen_remaining_two_partial_prefix_mismatch_counts_outside_reference_demo_flat_tradeoff_ladder()
+    -> BTreeMap<Option<usize>, usize> {
+        let mut mismatch_counts = BTreeMap::new();
+        for ((mismatch, _clause_zero, _clause_one), count) in
+            current_claim_step_fifteen_remaining_two_partial_prefix_pair_counts_outside_reference_demo_flat_tradeoff_ladder()
+        {
+            *mismatch_counts.entry(mismatch).or_insert(0usize) += count;
+        }
+        mismatch_counts
+    }
+
+    fn current_claim_step_fifteen_remaining_two_partial_prefix_surface_totals_outside_reference_demo_flat_tradeoff_ladder()
+    -> BTreeMap<&'static str, usize> {
+        let mut surface_totals = BTreeMap::new();
+        for ((mismatch, _clause_zero, _clause_one), count) in
+            current_claim_step_fifteen_remaining_two_partial_prefix_pair_counts_outside_reference_demo_flat_tradeoff_ladder()
+        {
+            let surface_label = match mismatch {
+                Some(0_usize) => "mismatch_zero_claim_domain_surface",
+                Some(1_usize) => "mismatch_one_claim_safe_surface",
+                _ => "reference_reference_tail",
+            };
+            *surface_totals.entry(surface_label).or_insert(0usize) += count;
+        }
+        surface_totals
+    }
+
     fn current_claim_step_fifteen_partial_prefix_clause_two_label(
         clause: &ClauseRec,
     ) -> &'static str {
@@ -15056,6 +15095,86 @@ mod tests {
             .into_iter()
             .collect(),
             "the dominant remaining-two step-15 partial-prefix wall should now be executable as six clause-0 current-claim pairings, three clause-1 pairings, and only a narrow reference/reference tail at mismatch positions 2 and 3; the main blocker is therefore still the current claim-generic clause-0/1 surface rather than an undiscovered broad demo-only reopening"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_two_partial_prefix_wall_outside_reference_demo_flat_tradeoff_ladder_stays_on_ten_off_branch_pairings()
+     {
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_pair_counts_outside_reference_demo_flat_tradeoff_ladder();
+
+        assert_eq!(pair_counts.values().sum::<usize>(), 390);
+        assert_eq!(
+            pair_counts,
+            [
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain"
+                    ),
+                    42_usize
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_sharp_codomain"
+                    ),
+                    42
+                ),
+                ((Some(0_usize), "claim_eventual_domain", "reference"), 42),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_next_codomain"),
+                    42
+                ),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_sharp_codomain"),
+                    42
+                ),
+                ((Some(0_usize), "claim_flat_domain", "reference"), 42),
+                ((Some(1_usize), "reference", "claim_next_codomain"), 42),
+                ((Some(1_usize), "reference", "claim_sharp_codomain"), 42),
+                ((Some(2_usize), "reference", "reference"), 42),
+                ((Some(3_usize), "reference", "reference"), 12),
+            ]
+            .into_iter()
+            .collect(),
+            "once the exhausted reference-plus-demo-flat mismatch-1 ladder is excluded, the live remaining-two wall should stay frozen on ten off-branch pairings totaling 390 captures rather than hiding another broader unlabeled reopening"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_two_partial_prefix_wall_outside_reference_demo_flat_tradeoff_ladder_still_prioritizes_mismatch_zero_claim_domain_surface()
+     {
+        let mismatch_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_mismatch_counts_outside_reference_demo_flat_tradeoff_ladder();
+        let surface_totals =
+            current_claim_step_fifteen_remaining_two_partial_prefix_surface_totals_outside_reference_demo_flat_tradeoff_ladder();
+
+        assert_eq!(
+            mismatch_counts,
+            [
+                (Some(0_usize), 252_usize),
+                (Some(1_usize), 84),
+                (Some(2_usize), 42),
+                (Some(3_usize), 12),
+            ]
+            .into_iter()
+            .collect(),
+            "outside the exhausted demo-flat ladder, the remaining-two wall should stay dominated first by mismatch-0 claim-domain pairings, then by the smaller claim-safe mismatch-1 pairings, with only a narrow reference/reference tail after that"
+        );
+        assert_eq!(
+            surface_totals,
+            [
+                ("mismatch_zero_claim_domain_surface", 252_usize),
+                ("mismatch_one_claim_safe_surface", 84),
+                ("reference_reference_tail", 54),
+            ]
+            .into_iter()
+            .collect(),
+            "the executable off-branch priority order should stay 252 on the mismatch-0 claim-domain surface, 84 on the claim-safe mismatch-1 surface, and only 54 on the reference/reference tail"
         );
     }
 

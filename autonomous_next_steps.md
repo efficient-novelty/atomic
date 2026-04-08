@@ -54,9 +54,17 @@ Do not start with another rerun setup pass.
   `reference` side, the reference clause-`2` sheet, or the exact claim-flat
   versus claim-sharp single-sheet split inside the dominant remaining-two
   clause-`0` / clause-`1` mismatch-`1` surface.
-- The next honest slice should move outside that exact claim-pair mismatch-`1`
-  branch or another still-unexplained family that does not just reproduce the
-  `57 -> 51 -> 45` captured-prefix ladder.
+- The exhausted mismatch-`1` `reference + demo_flat_codomain` ladder is now
+  cleanly separated from the rest of the wall:
+  - excluding that frozen `61`-capture ladder leaves `390` off-branch
+    remaining-two captures across `10` pairings
+  - the next live priority tier is the mismatch-`0` claim-domain surface at
+    `252`
+  - the smaller claim-safe mismatch-`1` tier is `84`
+  - mismatch-`2` plus mismatch-`3` `reference / reference` tails are only `54`
+- The next honest slice should therefore start with the mismatch-`0`
+  claim-domain surface before revisiting the smaller claim-safe mismatch-`1`
+  tier or the `reference / reference` tails.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -71,10 +79,12 @@ Do not start with another rerun setup pass.
    `reference + demo_flat_codomain` branch, or at minimum outside any reland
    that only swaps which claim clause-`2` sheet keeps the `21`-capture share
    of the same `51`-capture tradeoff.
-3. Prefer another still-live dominant clause-`0` / clause-`1` pairing or
-   another family outside the exact claim clause-`2` subgrid before splitting
-   claim-flat versus claim-sharp again on the same clause-`4`
-   `claim_next_bridge` half.
+3. Prefer the mismatch-`0` claim-domain surface first:
+   - six pairings totaling `252`
+   - only after that, consider the smaller claim-safe mismatch-`1` tier at
+     `84`
+   - leave the `reference / reference` tails at `54` below both of those
+     unless a narrower probe changes the ordering
 4. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays canonical `103 / 8`
@@ -89,6 +99,8 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_sits_on_claim_next_bridge_and_reference_clause_four_families`
 - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_four_pressure_on_claim_next_bridge_per_clause_zero_one_pairing`
 - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`
+- `current_claim_step_fifteen_remaining_two_partial_prefix_wall_outside_reference_demo_flat_tradeoff_ladder_stays_on_ten_off_branch_pairings`
+- `current_claim_step_fifteen_remaining_two_partial_prefix_wall_outside_reference_demo_flat_tradeoff_ladder_still_prioritizes_mismatch_zero_claim_domain_surface`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_variant_pair_stays_a_tradeoff_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_flat_sheet_stays_a_smaller_tradeoff_control`
