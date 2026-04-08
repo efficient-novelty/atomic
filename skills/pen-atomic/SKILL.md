@@ -385,6 +385,11 @@ Focus on:
   narrows the wall but still widens `small_cluster`, so route to the live
   docs before retrying that whole half and localize within its clause-`5`
   cells if that is still the active slice
+- treat the narrower mismatch-`0` clause-`4` `claim_next_bridge` plus
+  clause-`5` `claim_flat_codomain` and clause-`5` `reference` exact-summary
+  tradeoffs as live autonomy detail too; they are smaller tradeoff controls,
+  while the sibling clause-`5` `claim_next_codomain` cell is inert, so route
+  to the live docs before retrying any of those whole-cell slices
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward

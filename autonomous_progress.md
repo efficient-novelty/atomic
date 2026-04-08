@@ -79,6 +79,21 @@ Until that exists, wording stays at `bounded live recovery`.
     claim-domain surface now sits on the whole `claim_next_bridge` half, but
     it is still only a tradeoff because the noncanonical `small_cluster`
     shell grows
+- That whole-half tradeoff now also splits cleanly one layer deeper across its
+  clause-`5` families:
+  - the `claim_flat_codomain` cell lands `4475 / 541 / 2235`
+  - the `reference` cell lands the same `4475 / 541 / 2235`
+  - each smaller tradeoff widens `small_cluster` to `3240 / 522 / 522 / 0`
+  - each smaller tradeoff contracts every live mismatch-`0` pairing from
+    `42` to `40`
+  - each smaller tradeoff contracts only the clause-`4`
+    `claim_next_bridge` share from `24 / 18` to `22 / 18`
+  - the sibling `claim_next_codomain` cell is a neutral control on the
+    untouched `4331 / 553 / 2271` baseline
+  - consequence: the whole-half `529` tradeoff is exactly the union of the
+    `claim_flat_codomain` and `reference` cells under the mismatch-`0`
+    `claim_next_bridge` half, while `claim_next_codomain` is no longer a live
+    lead
 - The exact claim-pair clause-`4` `reference`-side relocalization is now also
   isolated and exhausted as a smaller tradeoff control:
   - it lands the same `4379 / 549 / 2259` surface as the older broader
@@ -183,6 +198,13 @@ Until that exists, wording stays at `bounded live recovery`.
     below the `claim_next_bridge` half, but the next slice still has to move
     one layer deeper into its clause-`5` cells to preserve the wall win
     without widening `small_cluster`
+- The clause-`5` split under that whole-half tradeoff is now executable too:
+  - the `claim_flat_codomain` and `reference` cells are symmetric smaller
+    tradeoff controls at `4475 / 541 / 2235`
+  - the `claim_next_codomain` cell is neutral on `4331 / 553 / 2271`
+  - consequence: the next revisit should move below the two active
+    `claim_flat_codomain / reference` cells and leave the inert
+    `claim_next_codomain` sibling alone
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -221,7 +243,8 @@ Until that exists, wording stays at `bounded live recovery`.
   exact-summary relief is now the leading local tradeoff on that surface, but
   it is not the landed repair because it still widens `small_cluster` to
   `3348`; if mismatch-`0` is revisited again, localize one layer deeper into
-  the non-reference clause-`5` cells under that same half first.
+  the active clause-`5` `claim_flat_codomain / reference` cells under that
+  same half first rather than the inert `claim_next_codomain` sibling.
 - Do not reopen the mismatch-`0` clause-`4` `claim_next_bridge` half through
   the same connectivity-only relocalization first; it is now a smaller
   negative control rather than the landed repair.
@@ -235,6 +258,13 @@ Until that exists, wording stays at `bounded live recovery`.
 - Do not stop at the whole mismatch-`0` clause-`4` `claim_next_bridge`-half
   remaining-one exact-summary relief either; it narrows the wall to `529`,
   but only by widening `small_cluster` to `3348`.
+- Do not reopen the mismatch-`0` clause-`4` `claim_next_bridge` plus
+  clause-`5` `claim_next_codomain` exact-summary cell first; it is now a
+  neutral control on the untouched `4331 / 553 / 2271` baseline.
+- Do not stop at the smaller mismatch-`0` clause-`4` `claim_next_bridge` plus
+  clause-`5` `claim_flat_codomain` or `reference` exact-summary cells either;
+  each narrows the wall only to `541` while still widening `small_cluster` to
+  `3240`.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

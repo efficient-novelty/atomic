@@ -209,3 +209,17 @@ This file is the append-only history for `desktop_claim_shadow`.
   localize into the non-reference clause-`5` cells under that same half,
   because the wall improvement is real but the wider `small_cluster` shell
   still blocks a safe landing.
+- Scope: split that whole mismatch-`0` clause-`4` `claim_next_bridge`-half
+  tradeoff across its clause-`5` families.
+  Result: the narrower clause-`5` `claim_flat_codomain` cell and clause-`5`
+  `reference` cell each landed the same smaller tradeoff at
+  `4475 / 541 / 2235` with `small_cluster = 3240 / 522 / 522 / 0`, each
+  contracting every live mismatch-`0` pairing from `42` to `40` and reducing
+  only the clause-`4` `claim_next_bridge` share from `24` to `22`; the
+  sibling clause-`5` `claim_next_codomain` cell was a neutral control on the
+  untouched `4331 / 553 / 2271` baseline.
+  Consequence: the whole-half `4619 / 529 / 2199` tradeoff is exactly the
+  union of the clause-`5` `claim_flat_codomain` and clause-`5` `reference`
+  subcells under the mismatch-`0` `claim_next_bridge` half, so the next
+  revisit should localize below those two active cells and ignore the inert
+  `claim_next_codomain` sibling.

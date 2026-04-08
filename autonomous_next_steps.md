@@ -120,6 +120,18 @@ Do not start with another rerun setup pass.
   - each live mismatch-`0` pairing contracts from `42` to `38`
   - the clause-`4` split contracts only the `claim_next_bridge` share, from
     `24 / 18` to `20 / 18`
+- That whole-half tradeoff now splits cleanly one layer deeper:
+  - the `claim_flat_codomain` cell under the same mismatch-`0`
+    `claim_next_bridge` half lands `4475 / 541 / 2235`
+  - the `reference` cell under that same half lands the same
+    `4475 / 541 / 2235`
+  - each smaller tradeoff widens `small_cluster` to `3240 / 522 / 522 / 0`
+  - each smaller tradeoff contracts every live mismatch-`0` pairing from
+    `42` to `40`
+  - each smaller tradeoff contracts only the clause-`4`
+    `claim_next_bridge` share from `24 / 18` to `22 / 18`
+  - the sibling clause-`5` `claim_next_codomain` cell is a neutral control on
+    `4331 / 553 / 2271`
 - Any remaining mismatch-`0` leverage therefore has to stay below that broad
   demo-flat reopening rather than relanding either of the clause-`4` halves
   again.
@@ -130,8 +142,9 @@ Do not start with another rerun setup pass.
 - Any remaining mismatch-`0` leverage is therefore no longer on a
   connectivity-only relocalization of either clause-`4` half. The next honest
   slice should move below the whole `claim_next_bridge`-half exact-summary
-  tradeoff and localize into its non-reference clause-`5` cells before trying
-  any broader clause-`5` family reopening.
+  tradeoff and below its two active clause-`5`
+  `claim_flat_codomain / reference` subcells before trying any broader
+  clause-`5` family reopening.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -169,19 +182,29 @@ Do not start with another rerun setup pass.
      remaining-one exact-summary relief as a frozen tradeoff at
      `4619 / 529 / 2199`; it narrows the wall, but still widens
      `small_cluster` to `3348 / 522 / 522 / 0`
+   - treat the smaller mismatch-`0` clause-`4` `claim_next_bridge` plus
+     clause-`5` `claim_flat_codomain` cell as a frozen tradeoff at
+     `4475 / 541 / 2235`
+   - treat the smaller mismatch-`0` clause-`4` `claim_next_bridge` plus
+     clause-`5` `reference` cell as a matching frozen tradeoff at
+     `4475 / 541 / 2235`
+   - treat the sibling mismatch-`0` clause-`4` `claim_next_bridge` plus
+     clause-`5` `claim_next_codomain` cell as a neutral control on
+     `4331 / 553 / 2271`
    - if mismatch-`0` is revisited, localize one layer deeper beneath the now
      promising whole-half `claim_next_bridge` exact-summary tradeoff,
-     starting with one of the non-reference clause-`5`
-     `claim_flat_codomain / claim_next_codomain` cells under that same half
-     before any broader clause-`5` family reopening
+     starting below one of the two active clause-`5`
+     `claim_flat_codomain / reference` cells under that same half before any
+     broader clause-`5` family reopening
    - both mismatch-`0` clause-`4` halves are now ruled out as negative
      controls, so the next revisit should start with remaining-one exact-summary
      behavior under the same live pairings away from the exhausted
      clause-`4` `reference` plus clause-`5` `reference` tail
    - inside remaining-one exact-summary behavior, prefer another live
      mismatch-`0` cell below that whole-half tradeoff before moving on, such
-     as one of the non-reference clause-`5` cells that still sit under the
-     `claim_next_bridge` half
+     as one of the still-active clause-`5` `claim_flat_codomain / reference`
+     cells under the `claim_next_bridge` half; leave the inert
+     `claim_next_codomain` sibling alone
    - only after that, consider the smaller claim-safe mismatch-`1` tier at
      `84`
    - leave the `reference / reference` tails at `54` below both of those
@@ -215,6 +238,9 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_mismatch_zero_claim_domain_clause_four_reference_side_stays_a_negative_control`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail_stays_a_negative_control`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half_stays_a_tradeoff_control`
+- `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain_stays_a_tradeoff_control`
+- `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain_stays_a_neutral_control`
+- `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference_stays_a_tradeoff_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
@@ -240,6 +266,15 @@ Do not start with another rerun setup pass.
   `reference` half
 - another whole-half remaining-one exact-summary relief pass on the
   mismatch-`0` clause-`4` `claim_next_bridge` half
+- another whole-cell remaining-one exact-summary relief pass on the
+  mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
+  `claim_flat_codomain` cell
+- another whole-cell remaining-one exact-summary relief pass on the
+  mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
+  `reference` cell
+- another whole-cell remaining-one exact-summary relief pass on the
+  mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
+  `claim_next_codomain` cell
 - another remaining-one exact-summary relief pass on the mismatch-`0`
   clause-`4` `reference` plus clause-`5` `reference` tail
 - whole-tier remaining-two mismatch-`0` claim-domain

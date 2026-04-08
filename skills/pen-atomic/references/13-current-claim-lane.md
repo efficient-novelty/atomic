@@ -136,6 +136,13 @@ Do not:
   remaining-one exact-summary relief as if it were already the landed repair;
   that wall-narrowing tradeoff still belongs in the autonomy docs and ledger
   rather than as a stable resolved lead
+- reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
+  clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
+  tradeoffs first; those smaller tradeoff controls now also belong in the
+  autonomy ledger rather than as stable resolved leads
+- reopen the mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
+  `claim_next_codomain` exact-summary cell first; that sibling is now a
+  neutral control owned by the autonomy ledger rather than a fresh lead
 - reopen the whole remaining-two mismatch-`0` claim-domain tier by flipping
   parent-level `CannotClearBar` decisions to `Unknown`; that broad exact-bound
   release is now also a ruled-out widening control owned by the autonomy
