@@ -101,3 +101,13 @@ This file is the append-only history for `desktop_claim_shadow`.
   - [autonomous_ledger.md](autonomous_ledger.md) now owns experiment history
   Consequence: live counts should be edited in one place, and probe history
   should be appended only here.
+- Scope: isolate the exact claim-pair clause-`4` `reference` side under the
+  dominant mismatch-`1` `reference + demo_flat_codomain` branch.
+  Result: new connectivity and search regressions pinned that narrower probe
+  at `4379 / 549 / 2259` with `small_cluster = 3180 / 530 / 530 / 0`; the
+  dominant branch stayed at `57` captured prefixes with the same clause-`4`
+  split `33 / 24`, and the bridge-family grid matched the older broader
+  clause-`4` `reference`-sheet tradeoff exactly.
+  Consequence: the broader clause-`4` `reference`-sheet tradeoff already lives
+  entirely on the exact claim clause-`2` pair, so exact clause-`4`
+  `reference`-side relocalization is exhausted rather than the landed repair.

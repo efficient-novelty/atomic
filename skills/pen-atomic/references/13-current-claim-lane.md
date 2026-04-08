@@ -108,6 +108,10 @@ Do not:
 
 - restate live counters in this file
 - treat negative controls as if they were still open hypotheses
+- reopen the exact claim-pair clause-`4` `reference` side first; that narrower
+  relocalization now only reproduces the older broader clause-`4`
+  `reference`-sheet tradeoff and belongs in the autonomy ledger rather than as
+  a fresh lead
 - reopen runtime-only step-`4` throughput work first unless a newer rerun
   proves the remaining misses are runtime fallout
 - reland ruled-out clause-`4` / clause-`5` or same-primary probes without new

@@ -502,8 +502,11 @@ Focus on:
   [../../autonomous_next_steps.md](../../autonomous_next_steps.md), not by
   this skill file
 - keep the next repair above exhausted clause-`5` tail probes and above
-  demo-only reopenings; the skill should route you to the live docs, not
-  restate their full diagnostic ledger
+  demo-only reopenings and above another exact claim-pair clause-`4`
+  `reference`-side relocalization pass; that narrower reference-side tradeoff
+  now only reproduces the broader clause-`4` `reference`-sheet result, so the
+  skill should route you to the live docs rather than restating their full
+  diagnostic ledger
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward

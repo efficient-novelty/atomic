@@ -70,6 +70,16 @@ Until that exists, wording stays at `bounded live recovery`.
 - The best known narrowing tradeoff is still the exact claim-pair plus
   clause-`4` `claim_next_bridge`-side probe at `4445 / 539 / 2241`, but it
   still widens `small_cluster` to `3252 / 542 / 542 / 0`.
+- The exact claim-pair clause-`4` `reference`-side relocalization is now also
+  isolated and exhausted as a smaller tradeoff control:
+  - it lands the same `4379 / 549 / 2259` surface as the older broader
+    clause-`4` `reference`-sheet probe
+  - it still widens `small_cluster` to `3180 / 530 / 530 / 0`
+  - the dominant mismatch-`1` `reference + demo_flat_codomain` branch stays at
+    `57` captured prefixes with the same clause-`4` split `33 / 24`
+  - its bridge grid matches the broader clause-`4` `reference`-sheet tradeoff
+    exactly, so that older tradeoff already lived entirely on the exact claim
+    clause-`2` pair rather than on the reference clause-`2` sheet
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
