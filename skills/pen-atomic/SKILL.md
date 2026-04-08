@@ -401,6 +401,12 @@ Focus on:
   tradeoff controls while the reference sheet is neutral, so route to the live
   docs before retrying clause-`2` identity instead of assuming one sheet is
   newly privileged
+- treat the representative `claim_flat_domain` clause-`2` sheet's clause-`6`
+  continuations as live autonomy detail too; the `claim_next_codomain`,
+  `claim_sharp_codomain`, and `reference` continuations now all reland the
+  same matched smaller tradeoff shell and differ only by a tiny deeper
+  zero-admitted tail delta, so route to the live docs before retrying
+  clause-`6` identity as if it were fresh leverage
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward

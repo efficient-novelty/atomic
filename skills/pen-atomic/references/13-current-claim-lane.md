@@ -148,6 +148,11 @@ Do not:
   two claim-side clause-`2` sheets are now matching smaller tradeoff controls
   while the sibling reference sheet is neutral, so that axis also belongs to
   the autonomy ledger rather than as a fresh lead
+- reopen the representative `claim_flat_domain` clause-`2` sheet's clause-`6`
+  identity split first; those `claim_next_codomain`,
+  `claim_sharp_codomain`, and `reference` continuations are now matching
+  smaller tradeoff controls too, so that axis also belongs to the autonomy
+  ledger rather than as a fresh lead
 - reopen the mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
   `claim_next_codomain` exact-summary cell first; that sibling is now a
   neutral control owned by the autonomy ledger rather than a fresh lead

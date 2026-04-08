@@ -6110,6 +6110,13 @@ enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel 
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel {
+    ClaimNextCodomain,
+    ClaimSharpCodomain,
+    Reference,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel {
     ClaimFlatCodomain,
     Reference,
@@ -6120,6 +6127,7 @@ struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelec
     clause_zero: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel,
     clause_one: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel,
     clause_two: Option<ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel>,
+    clause_six: Option<ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel>,
     clause_five: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel,
 }
 
@@ -7030,6 +7038,67 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause
     }
 }
 
+fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_six_matches_label(
+    clause: &pen_core::clause::ClauseRec,
+    label: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel,
+) -> bool {
+    match label {
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel::ClaimNextCodomain => {
+            clause.role == ClauseRole::Introduction
+                && matches!(
+                    &clause.expr,
+                    Expr::Lam(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::App(function, argument)
+                                if matches!(
+                                    function.as_ref(),
+                                    Expr::Eventually(inner)
+                                        if matches!(
+                                            inner.as_ref(),
+                                            Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                        )
+                                ) && matches!(argument.as_ref(), Expr::Var(2))
+                        )
+                )
+        }
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel::ClaimSharpCodomain => {
+            clause.role == ClauseRole::Introduction
+                && matches!(
+                    &clause.expr,
+                    Expr::Lam(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::App(function, argument)
+                                if matches!(
+                                    function.as_ref(),
+                                    Expr::Eventually(inner)
+                                        if matches!(
+                                            inner.as_ref(),
+                                            Expr::Sharp(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                        )
+                                ) && matches!(argument.as_ref(), Expr::Var(2))
+                        )
+                )
+        }
+        ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel::Reference => {
+            clause.role == ClauseRole::Introduction
+                && matches!(
+                    &clause.expr,
+                    Expr::Lam(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::App(function, argument)
+                                if matches!(
+                                    function.as_ref(),
+                                    Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                ) && matches!(argument.as_ref(), Expr::Var(2))
+                        )
+                )
+        }
+    }
+}
+
 fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_flat_codomain_clause_five_matches(
     clause: &pen_core::clause::ClauseRec,
 ) -> bool {
@@ -7395,6 +7464,13 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_c
         && prefix_telescope.clauses.get(2).is_some_and(|clause| {
             selector.clause_two.is_none_or(|label| {
                 claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_two_matches_label(
+                    clause, label,
+                )
+            })
+        })
+        && prefix_telescope.clauses.get(6).is_some_and(|clause| {
+            selector.clause_six.is_none_or(|label| {
+                claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_clause_six_matches_label(
                     clause, label,
                 )
             })
@@ -23423,6 +23499,7 @@ mod tests {
                                 clause_zero,
                                 clause_one,
                                 clause_two: None,
+                                clause_six: None,
                                 clause_five,
                             },
                         );
@@ -23479,6 +23556,7 @@ mod tests {
                     clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
                     clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
                     clause_two: None,
+                    clause_six: None,
                     clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
                 },
             );
@@ -23771,6 +23849,7 @@ mod tests {
                         clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
                         clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
                         clause_two: Some(clause_two),
+                        clause_six: None,
                         clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
                     },
                 );
@@ -24071,6 +24150,215 @@ mod tests {
                 .collect(),
             )),
             "the reference clause-two sheet should stay a neutral control, confirming that the representative pair-cell tradeoff is exactly the union of the two claim-side sheets"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_flat_sheet_clause_six_sheets_stay_matched_smaller_tradeoff_controls()
+     {
+        let clause_six_labels = [
+            (
+                "claim_next_codomain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel::ClaimNextCodomain,
+            ),
+            (
+                "claim_sharp_codomain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel::ClaimSharpCodomain,
+            ),
+            (
+                "reference",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel::Reference,
+            ),
+        ];
+        let mut outcomes = BTreeMap::new();
+
+        for (clause_six_name, clause_six) in clause_six_labels {
+            let _search_override =
+                super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                    super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                        clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                        clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                        clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain),
+                        clause_six: Some(clause_six),
+                        clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
+                    },
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let clause_two_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_two_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_zero, clause_one, _clause_two), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *clause_zero == "claim_eventual_domain"
+                            && *clause_one == "claim_next_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let clause_four_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_zero, clause_one, _clause_four), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *clause_zero == "claim_eventual_domain"
+                            && *clause_one == "claim_next_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let clause_four_five_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_four, clause_five), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *clause_four == "claim_next_bridge"
+                            && *clause_five == "claim_flat_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("claim prefix through step 14 should build");
+            let prefix = claim_steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+            outcomes.insert(
+                clause_six_name,
+                (
+                    step_fifteen.demo_funnel.generated_raw_prefixes,
+                    step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
+                    zero_summary.captured_prefixes,
+                    wall_summary.first_mismatch_position_counts,
+                    bucket_stats
+                        .get("k8:structural_generic:temporal_operator:library_backed:small_cluster")
+                        .map(|stats| stats.generated_terminal_candidates)
+                        .expect("small_cluster bucket should stay present"),
+                    clause_two_counts,
+                    clause_four_counts,
+                    clause_four_five_counts,
+                ),
+            );
+        }
+
+        let expected_first_mismatch_counts = [
+            (Some(0_usize), 311_usize),
+            (Some(1), 177),
+            (Some(2), 50),
+            (Some(3), 14),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_clause_two_counts = [
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "claim_flat_domain",
+                ),
+                14_usize,
+            ),
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "claim_sharp_codomain",
+                ),
+                15,
+            ),
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "reference",
+                ),
+                12,
+            ),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_clause_four_counts = [
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "claim_next_bridge",
+                ),
+                23_usize,
+            ),
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "reference",
+                ),
+                18,
+            ),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_clause_four_five_counts = [(
+            (Some(0_usize), "claim_next_bridge", "claim_flat_codomain"),
+            47_usize,
+        )]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+
+        assert_eq!(outcomes.len(), 3);
+        assert_eq!(
+            outcomes.get("claim_next_codomain"),
+            Some(&(
+                4343,
+                552,
+                2270,
+                expected_first_mismatch_counts.clone(),
+                3141,
+                expected_clause_two_counts.clone(),
+                expected_clause_four_counts.clone(),
+                expected_clause_four_five_counts.clone(),
+            )),
+            "the claim-next clause-six continuation under the representative claim-flat sheet should stay only a smaller tradeoff control: it relands the same 4343 / 552 / 3141 shell and differs only by a slightly wider zero-admitted tail"
+        );
+        assert_eq!(
+            outcomes.get("claim_sharp_codomain"),
+            Some(&(
+                4343,
+                552,
+                2269,
+                expected_first_mismatch_counts.clone(),
+                3141,
+                expected_clause_two_counts.clone(),
+                expected_clause_four_counts.clone(),
+                expected_clause_four_five_counts.clone(),
+            )),
+            "the claim-sharp clause-six continuation should stay the same matched smaller tradeoff control too, again differing only by a tiny zero-admitted tail delta"
+        );
+        assert_eq!(
+            outcomes.get("reference"),
+            Some(&(
+                4343,
+                552,
+                2268,
+                expected_first_mismatch_counts,
+                3141,
+                expected_clause_two_counts,
+                expected_clause_four_counts,
+                expected_clause_four_five_counts,
+            )),
+            "the reference clause-six continuation should be only the marginally best of the same three matched smaller tradeoff controls, leaving the wall and small-cluster shell unchanged while shaving the zero-admitted tail to 2268"
         );
     }
 

@@ -254,3 +254,19 @@ This file is the append-only history for `desktop_claim_shadow`.
   revisit has to move below clause-`2` sheet identity into a finer
   remaining-one exact-summary partition under one representative claim-side
   sheet rather than swapping between the two claim sheets again.
+- Scope: localize one layer deeper below the representative mismatch-`0`
+  `claim_flat_domain` clause-`2` sheet onto its clause-`6` remaining-one
+  exact-summary continuations.
+  Result: the three clause-`6` continuations below
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
+  claim_next_bridge / claim_flat_codomain` all landed the same matched
+  smaller tradeoff shell at `4343 / 552` with
+  `small_cluster = 3141 / 522 / 522 / 0`; `claim_next_codomain`,
+  `claim_sharp_codomain`, and `reference` differed only in the deeper
+  zero-admitted tail at `2270 / 2269 / 2268`, while the representative
+  clause-`2` share stayed `14`, the representative clause-`4` split stayed
+  `23 / 18`, and the active clause-`4` plus clause-`5` bucket stayed `47`.
+  Consequence: clause-`6` identity is now also exhausted as full-profile
+  leverage below that representative claim-flat sheet, so the next revisit
+  has to move below the marginally best `reference` continuation rather than
+  spending another turn swapping among the three clause-`6` siblings.

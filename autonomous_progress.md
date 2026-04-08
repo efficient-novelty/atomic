@@ -239,6 +239,27 @@ Until that exists, wording stays at `bounded live recovery`.
     revisit has to move below clause-`2` sheet identity into a finer
     remaining-one exact-summary partition under one representative claim-side
     sheet rather than swapping between the two claim sheets again
+- The representative `claim_flat_domain` clause-`2` sheet is now also
+  localized one layer deeper across its clause-`6` remaining-one
+  continuations:
+  - under
+    `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
+    claim_next_bridge / claim_flat_codomain`,
+    the clause-`6` `claim_next_codomain`, `claim_sharp_codomain`, and
+    `reference` continuations all land the same matched smaller tradeoff shell
+    at `4343 / 552`
+  - each widens `small_cluster` only to `3141 / 522 / 522 / 0`
+  - each keeps the representative clause-`2` spread at `14 / 15 / 12`
+  - each keeps the representative clause-`4` split at `23 / 18`
+  - each keeps the representative clause-`4` `claim_next_bridge` plus
+    clause-`5` `claim_flat_codomain` bucket at `47`
+  - they differ only in the deeper zero-admitted tail:
+    `claim_next_codomain = 2270`, `claim_sharp_codomain = 2269`,
+    `reference = 2268`
+  - consequence: clause-`6` identity is now also exhausted as full-profile
+    leverage below that representative claim-flat sheet, so the next revisit
+    has to move below the marginally best `reference` clause-`6`
+    continuation rather than swapping among the three clause-`6` siblings
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -318,6 +339,15 @@ Until that exists, wording stays at `bounded live recovery`.
   smaller tradeoff controls and the reference sheet is inert, the next revisit
   should move below one representative claim-side clause-`2` sheet into a
   finer remaining-one exact-summary partition before considering the smaller
+  claim-safe mismatch-`1` tier.
+- Do not stop at the representative `claim_flat_domain` clause-`2` sheet's
+  clause-`6` `claim_next_codomain`, `claim_sharp_codomain`, or `reference`
+  continuations either; all three reland the same `4343 / 552 / 3141`
+  smaller tradeoff shell and differ only by a tiny zero-admitted tail delta.
+- Because that representative claim-flat sheet is now exhausted at clause-`6`
+  identity scope too, the next revisit should move one layer deeper below the
+  marginally best clause-`6` `reference` continuation before reopening the
+  representative `claim_sharp_codomain` clause-`2` sheet or the smaller
   claim-safe mismatch-`1` tier.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff

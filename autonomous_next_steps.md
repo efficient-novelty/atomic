@@ -15,9 +15,10 @@ This file owns the single active work order for `desktop_claim_shadow`.
 
 ## Objective
 
-Push the remaining-one exact-summary probe one layer below the representative
-mismatch-`0` pair-cell claim-side clause-`2` subcell on top of canonical
-`v12` and the matched local `4331` guardrail surface.
+Push the remaining-one exact-summary probe one layer below the now-exhausted
+representative mismatch-`0` `claim_flat_domain` clause-`2` sheet, starting
+with its marginally best clause-`6` `reference` continuation, on top of
+canonical `v12` and the matched local `4331` guardrail surface.
 
 Do not start with another rerun setup pass.
 
@@ -183,6 +184,26 @@ Do not start with another rerun setup pass.
   slice should move below one representative claim-side clause-`2` sheet into
   a finer remaining-one exact-summary partition before considering the smaller
   claim-safe mismatch-`1` tier.
+- That representative `claim_flat_domain` clause-`2` sheet is now also
+  exhausted at clause-`6` identity scope:
+  - under
+    `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / claim_flat_codomain`,
+    the clause-`6` `claim_next_codomain`, `claim_sharp_codomain`, and
+    `reference` continuations all land the same matched smaller tradeoff shell
+    at `4343 / 552`
+  - each keeps `small_cluster` at `3141 / 522 / 522 / 0`
+  - each keeps the representative clause-`2` spread at `14 / 15 / 12`
+  - each keeps the representative clause-`4` split at `23 / 18`
+  - each keeps the representative clause-`4` `claim_next_bridge` plus
+    clause-`5` `claim_flat_codomain` bucket at `47`
+  - they differ only in the deeper zero-admitted tail:
+    `claim_next_codomain = 2270`, `claim_sharp_codomain = 2269`,
+    `reference = 2268`
+- Any remaining mismatch-`0` leverage below that representative claim-flat
+  sheet is therefore no longer on clause-`6` identity either. The next honest
+  slice should move below the marginally best clause-`6` `reference`
+  continuation before reopening the representative `claim_sharp_codomain`
+  clause-`2` sheet or the smaller claim-safe mismatch-`1` tier.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -247,12 +268,28 @@ Do not start with another rerun setup pass.
    - do not spend another turn swapping between those two claim-side
      clause-`2` sheets or rechecking the reference sheet; that axis is now
      exhausted
-   - if mismatch-`0` is revisited, localize one layer deeper beneath one
-     representative claim-side clause-`2` sheet, using an equivalently fine
-     remaining-one exact-summary partition under the
-     `claim_eventual_domain / claim_next_codomain / {claim_flat_domain or
-     claim_sharp_codomain} / claim_next_bridge / claim_flat_codomain` subcell
-     before any broader clause-`5` family reopening
+   - treat the representative `claim_flat_domain` clause-`2` sheet as now
+     exhausted at clause-`6` identity scope too:
+     - `claim_next_codomain`, `claim_sharp_codomain`, and `reference` all
+       reland the same matched smaller tradeoff shell at `4343 / 552`
+     - each keeps `small_cluster` at `3141 / 522 / 522 / 0`
+     - each keeps the representative clause-`2` spread at `14 / 15 / 12`
+     - each keeps the representative clause-`4` split at `23 / 18`
+     - each keeps the representative clause-`4` `claim_next_bridge` plus
+       clause-`5` `claim_flat_codomain` bucket at `47`
+     - they differ only in the deeper zero-admitted tail at
+       `2270 / 2269 / 2268`, with `reference` marginally best
+   - do not spend another turn swapping among those three clause-`6`
+     continuations on the representative claim-flat sheet; that axis is now
+     exhausted at full-profile scope
+   - if mismatch-`0` is revisited, localize one layer deeper beneath the
+     representative `claim_flat_domain` clause-`2` sheet, starting with the
+     clause-`6` `reference` continuation and probing a finer terminal or
+     remaining-one completion partition under
+     `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
+     claim_next_bridge / claim_flat_codomain / reference`
+     before reopening the representative `claim_sharp_codomain` clause-`2`
+     sheet or any broader clause-`5` family
    - leave the other `11` pair cells alone unless a deeper probe breaks the
      current symmetry
    - both mismatch-`0` clause-`4` halves are now ruled out as negative
@@ -302,6 +339,7 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_pair_cells_below_the_active_mismatch_zero_clause_five_cells_stay_uniform_smaller_tradeoff_controls`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_a_representative_mismatch_zero_pair_cell_stays_a_smaller_tradeoff_control`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_pair_cell_clause_two_sheets_split_into_two_claim_side_smaller_tradeoff_controls_plus_one_reference_neutral_control`
+- `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_flat_sheet_clause_six_sheets_stay_matched_smaller_tradeoff_controls`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
@@ -340,6 +378,10 @@ Do not start with another rerun setup pass.
   the `claim_flat_domain`, `claim_sharp_codomain`, or `reference` sheet under
   `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
   claim_flat_codomain`
+- another representative `claim_flat_domain` clause-`2` clause-`6` identity
+  pass on the `claim_next_codomain`, `claim_sharp_codomain`, or `reference`
+  continuation under `claim_eventual_domain / claim_next_codomain /
+  claim_flat_domain / claim_next_bridge / claim_flat_codomain`
 - another whole-cell remaining-one exact-summary relief pass on the
   mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
   `claim_next_codomain` cell
@@ -355,7 +397,7 @@ Do not start with another rerun setup pass.
 
 ## Success For This Slice
 
-- the clean step-`15` partial-prefix wall is narrower than `553`
+- the clean step-`15` partial-prefix wall is narrower than `552`
 - the canonical accepted path stays fixed through step `15`
 - the isolated `single` pocket and unsafe lifted shell both stay fenced
 - a new clean full-profile rerun beyond `v12` is justified and ready to launch
