@@ -103,6 +103,15 @@ Do not start with another rerun setup pass.
   - it widens the clause-`4` split to `33 / 24`
   - it leans the clause-`2` spread toward the two claim sheets at
     `21 / 21 / 15`
+- The narrower remaining-one exact-summary relief on the existing mismatch-`0`
+  clause-`4` `reference` plus clause-`5` `reference` tail is now also
+  exhausted as a deeper negative control:
+  - it lands `4547 / 589 / 2235`
+  - it widens `small_cluster` to `3240 / 522 / 522 / 0`
+  - the isolated `single` pocket stays fenced
+  - each live mismatch-`0` pairing inflates from `42` to `52`
+  - the clause-`4` split leans harder toward `reference`, from `24 / 18` to
+    `24 / 28`
 - Any remaining mismatch-`0` leverage therefore has to stay below that broad
   demo-flat reopening rather than relanding either of the clause-`4` halves
   again.
@@ -113,7 +122,8 @@ Do not start with another rerun setup pass.
 - Any remaining mismatch-`0` leverage is therefore no longer on a
   connectivity-only relocalization of either clause-`4` half. The next honest
   slice should move below clause-`4` relocalizations and test remaining-one
-  exact-summary behavior under the same live pairings before reopening
+  exact-summary behavior under the same live pairings away from the
+  clause-`4` `reference` plus clause-`5` `reference` tail before reopening
   clause-`5` families.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
@@ -145,6 +155,9 @@ Do not start with another rerun setup pass.
    - do not reland the mismatch-`0` clause-`4` `reference` half
      connectivity-only relocalization again; that sharper control is now
      frozen at `4697 / 691 / 2829`
+   - do not reland remaining-one exact-summary relief on the existing
+     mismatch-`0` clause-`4` `reference` plus clause-`5` `reference` tail
+     again; that deeper control is now frozen at `4547 / 589 / 2235`
    - if mismatch-`0` is revisited, localize one layer deeper beneath the now
      exhausted clause-`4` `claim_next_bridge / reference` split, starting with
      remaining-one exact-summary behavior under those live pairings before any
@@ -152,7 +165,12 @@ Do not start with another rerun setup pass.
      family reopening
    - both mismatch-`0` clause-`4` halves are now ruled out as negative
      controls, so the next revisit should start with remaining-one exact-summary
-     behavior under the same live pairings
+     behavior under the same live pairings away from the exhausted
+     clause-`4` `reference` plus clause-`5` `reference` tail
+   - inside remaining-one exact-summary behavior, prefer another live
+     mismatch-`0` cell before moving on, such as the `claim_next_bridge` half
+     or one of the non-reference clause-`5` cells that still sit under the
+     same pairings
    - only after that, consider the smaller claim-safe mismatch-`1` tier at
      `84`
    - leave the `reference / reference` tails at `54` below both of those
@@ -184,6 +202,7 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_mismatch_zero_claim_domain_surface_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_mismatch_zero_claim_domain_clause_four_claim_next_bridge_side_stays_a_smaller_negative_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_mismatch_zero_claim_domain_clause_four_reference_side_stays_a_negative_control`
+- `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
@@ -207,6 +226,8 @@ Do not start with another rerun setup pass.
   `claim_next_bridge` half
 - another connectivity-only relocalization of the mismatch-`0` clause-`4`
   `reference` half
+- another remaining-one exact-summary relief pass on the mismatch-`0`
+  clause-`4` `reference` plus clause-`5` `reference` tail
 - whole-tier remaining-two mismatch-`0` claim-domain
   `CannotClearBar -> Unknown` relief at the parent
   `exact_partial_prefix_bound_decision(...)` layer

@@ -129,6 +129,9 @@ Do not:
 - reopen the narrower clause-`4` `reference`-side relocalization under that
   same mismatch-`0` surface first; that sharper negative result now also
   belongs in the autonomy ledger rather than as a fresh lead
+- reopen remaining-one exact-summary relief on the mismatch-`0` clause-`4`
+  `reference` plus clause-`5` `reference` tail first; that deeper negative
+  control now also belongs in the autonomy ledger rather than as a fresh lead
 - reopen the whole remaining-two mismatch-`0` claim-domain tier by flipping
   parent-level `CannotClearBar` decisions to `Unknown`; that broad exact-bound
   release is now also a ruled-out widening control owned by the autonomy

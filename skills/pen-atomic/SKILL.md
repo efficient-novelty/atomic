@@ -375,6 +375,11 @@ Focus on:
   `reference`-side relocalization too; that sharper negative control now also
   belongs to [../../autonomous_ledger.md](../../autonomous_ledger.md), so
   route to the live docs before retrying that same connectivity-only slice
+- keep the next repair above remaining-one exact-summary relief on the
+  mismatch-`0` clause-`4` `reference` plus clause-`5` `reference` tail too;
+  that deeper negative control now also belongs to
+  [../../autonomous_ledger.md](../../autonomous_ledger.md), so route to the
+  live docs before retrying that same narrow reference-tail slice
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward

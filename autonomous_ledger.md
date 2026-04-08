@@ -187,3 +187,13 @@ This file is the append-only history for `desktop_claim_shadow`.
   clause-`4` half. The next slice should move below clause-`4`
   relocalizations and into remaining-one exact-summary behavior under the same
   live pairings before revisiting the smaller claim-safe mismatch-`1` tier.
+- Scope: probe remaining-one exact-summary relief on the narrow mismatch-`0`
+  clause-`4` `reference` plus clause-`5` `reference` tail.
+  Result: a search-only exact-summary override pinned that deeper reland at
+  `4547 / 589 / 2235` with `small_cluster = 3240 / 522 / 522 / 0`; the
+  isolated `single` pocket stayed fenced, each live mismatch-`0` pairing
+  widened from `42` to `52`, and the clause-`4` split leaned further toward
+  `reference`, from `24 / 18` to `24 / 28`.
+  Consequence: even summary-only relief on that existing reference tail
+  widens the mismatch-`0` wall, so the next revisit should stay away from
+  that tail and probe another live mismatch-`0` cell first.

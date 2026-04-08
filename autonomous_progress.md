@@ -149,6 +149,18 @@ Until that exists, wording stays at `bounded live recovery`.
     relocalizations and into remaining-one exact-summary behavior under the
     same live pairings before revisiting smaller claim-safe mismatch-`1`
     surfaces
+- The narrower remaining-one exact-summary relief on the existing mismatch-`0`
+  clause-`4` `reference` plus clause-`5` `reference` tail is now also ruled
+  out as a deeper negative control:
+  - a search-only exact-summary override on that live cell lands
+    `4547 / 589 / 2235`
+  - it widens `small_cluster` to `3240 / 522 / 522 / 0`
+  - the isolated `single` pocket stays fenced
+  - each live mismatch-`0` pairing inflates from `42` to `52`
+  - the clause-`4` split leans harder toward `reference`, from `24 / 18` to
+    `24 / 28`
+  - consequence: even summary-only relief on the narrow reference tail widens
+    the mismatch-`0` wall instead of converting that tail into honest breadth
 - The clause-`4` `reference` remaining-three tail is exhausted as a cleaner
   target:
   - exact clause-`5` `reference` is neutral on `4331 / 553 / 2271`
@@ -189,6 +201,10 @@ Until that exists, wording stays at `bounded live recovery`.
 - Do not reopen the mismatch-`0` clause-`4` `reference` half through the same
   connectivity-only relocalization first; it is now an even sharper negative
   control rather than the landed repair.
+- Do not reopen remaining-one exact-summary relief on the mismatch-`0`
+  clause-`4` `reference` plus clause-`5` `reference` tail first; it lifts
+  breadth only to `4547` by widening the clean wall to `589` and
+  `small_cluster` to `3240`.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.
