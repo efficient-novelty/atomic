@@ -16,9 +16,10 @@ This file owns the single active work order for `desktop_claim_shadow`.
 ## Objective
 
 Keep the active work order off the now-demoted claim-safe mismatch-`1`
-clause-`5` fail-fast checkpoint and the now-demoted representative
-mismatch-`0` claim-flat dead-child reason checkpoint, so the next slice
-promotes the residual `reference / reference` tails instead of reopening
+clause-`5` fail-fast checkpoint, the now-demoted representative
+mismatch-`0` claim-flat dead-child reason checkpoint, and another lumped
+`reference / reference` restatement, so the next slice moves below the
+now-localized mismatch-`2` `reference / reference` tail instead of reopening
 another claim-safe clause-`5` retry or another mismatch-`0` identity or
 reason reland on top of canonical `v12` and the matched local `4331`
 guardrail surface.
@@ -443,6 +444,20 @@ Do not start with another rerun setup pass.
   - the representative mismatch-`0` claim-flat backup is therefore now
     demoted at its first fail-fast checkpoint too and is no longer the active
     next slice
+- The promoted `reference / reference` tail is now also localized one layer
+  deeper by mismatch position and clause-`4` anatomy:
+  - mismatch-`2` is the larger lead at `42`
+  - mismatch-`3` is the smaller backup at `12`
+  - mismatch-`2` keeps clause-`4` pressure on
+    `claim_next_bridge = 18`, `reference = 16`,
+    `demo_sharp_codomain = 4`, and `demo_sharp_bridge = 4`
+  - mismatch-`3` stays only on the smaller
+    `claim_next_bridge = 6` plus `reference = 6` tail
+- Any remaining `reference / reference` leverage is therefore no longer on
+  another lumped tail restatement. The next honest slice should move below the
+  larger mismatch-`2` tail first, comparing its clause-`4`
+  `claim_next_bridge` and `reference` halves before the tiny demo-side
+  pockets or the smaller mismatch-`3` backup.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -472,19 +487,22 @@ Do not start with another rerun setup pass.
    - do not spend another turn below that same representative mismatch-`0`
      claim-flat dead shell unless a later `reference / reference` result
      changes the ordering
-4. Promote the `reference / reference` tails next:
-   - start from the residual `54` remaining-two captures across mismatch
-     positions `2 = 42` and `3 = 12`
-   - localize that tail by mismatch position first rather than reopening
-     mismatch-`0` or claim-safe shells again
-   - within that same tail, keep the current clause-`4` anatomy explicit:
-     mismatch-`2` sits on `claim_next_bridge = 18`, `reference = 16`,
-     `demo_sharp_codomain = 4`, and `demo_sharp_bridge = 4`, while
-     mismatch-`3` sits on `claim_next_bridge = 6` plus `reference = 6`
-   - if the first `reference / reference` tail split also stalls cleanly
-     while preserving the canonical winner, the isolated `single` fence, and
-     the `small_cluster` fence, only then reconsider whether any alternate
-     mismatch-`0` shell deserves promotion
+4. Promote the now-localized mismatch-`2` `reference / reference` tail next:
+   - treat the residual `reference / reference` tail as already split into
+     mismatch positions `2 = 42` and `3 = 12`
+   - keep mismatch-`2` clause-`4` anatomy explicit:
+     `claim_next_bridge = 18`, `reference = 16`,
+     `demo_sharp_codomain = 4`, and `demo_sharp_bridge = 4`
+   - keep mismatch-`3` as the smaller backup only:
+     `claim_next_bridge = 6` plus `reference = 6`
+   - move one layer deeper below mismatch-`2` before reopening any broader
+     mismatch-`0` or claim-safe shell again
+   - compare mismatch-`2`'s clause-`4` `claim_next_bridge` and `reference`
+     halves before the tiny demo-side pockets
+   - if that first mismatch-`2` sub-split also stalls cleanly while
+     preserving the canonical winner, the isolated `single` fence, and the
+     `small_cluster` fence, only then decide whether the smaller mismatch-`3`
+     backup or an alternate mismatch-`0` shell deserves promotion
 5. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays canonical `103 / 8`
@@ -501,6 +519,8 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_keeps_clause_two_pressure_on_claim_variants_under_the_live_clause_zero_one_pairs`
 - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_outside_reference_demo_flat_tradeoff_ladder_stays_on_ten_off_branch_pairings`
 - `current_claim_step_fifteen_remaining_two_partial_prefix_wall_outside_reference_demo_flat_tradeoff_ladder_still_prioritizes_mismatch_zero_claim_domain_surface`
+- `current_claim_step_fifteen_reference_reference_tail_localizes_to_mismatch_two_then_mismatch_three`
+- `current_claim_step_fifteen_reference_reference_tail_keeps_clause_four_anatomy_explicit_per_mismatch_position`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_live_claim_bridge_surface_stays_a_tradeoff_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_variant_pair_stays_a_tradeoff_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_reference_clause_zero_clause_four_claim_next_bridge_side_on_exact_claim_flat_sheet_stays_a_smaller_tradeoff_control`
@@ -633,6 +653,8 @@ Do not start with another rerun setup pass.
   `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
   claim_next_bridge / claim_flat_codomain` dead child before the
   `reference / reference` tails have been checked
+- another lumped `reference / reference` tail restatement before moving below
+  the larger mismatch-`2` tail first
 - another whole-cell remaining-one exact-summary relief pass on the
   mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
   `claim_next_codomain` cell
@@ -648,7 +670,11 @@ Do not start with another rerun setup pass.
 
 ## Success For This Slice
 
-- the clean step-`15` partial-prefix wall is narrower than `552`
+- the larger mismatch-`2` `reference / reference` tail is localized one layer
+  deeper than the current `42`-capture shell
+- the clean step-`15` partial-prefix wall is narrower than `552`, or the
+  first mismatch-`2` clause-`4` sub-split is cleanly exhausted without
+  reopening the broader mismatch-`0` or claim-safe backups
 - the canonical accepted path stays fixed through step `15`
 - the isolated `single` pocket and unsafe lifted shell both stay fenced
 - a new clean full-profile rerun beyond `v12` is justified and ready to launch

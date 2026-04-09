@@ -13591,6 +13591,46 @@ mod tests {
         surface_totals
     }
 
+    fn current_claim_step_fifteen_reference_reference_tail_mismatch_position_counts()
+    -> BTreeMap<usize, usize> {
+        current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+            .into_iter()
+            .filter_map(|((mismatch, clause_zero, clause_one), count)| {
+                (clause_zero == "reference"
+                    && clause_one == "reference"
+                    && matches!(mismatch, Some(2_usize) | Some(3_usize)))
+                .then_some((
+                    mismatch.expect("reference/reference tail should stay localized to mismatch 2 or 3"),
+                    count,
+                ))
+            })
+            .collect()
+    }
+
+    fn current_claim_step_fifteen_reference_reference_tail_clause_four_counts()
+    -> BTreeMap<(usize, &'static str), usize> {
+        let counts = current_claim_step_fifteen_remaining_two_partial_prefix_bridge_family_counts();
+        let mut clause_four_counts = BTreeMap::new();
+        for ((mismatch, clause_zero, clause_one, _clause_two, clause_four, _clause_five), count) in
+            counts
+        {
+            if clause_zero != "reference" || clause_one != "reference" {
+                continue;
+            }
+            let Some(mismatch) = mismatch else {
+                continue;
+            };
+            if !matches!(mismatch, 2_usize | 3_usize) {
+                continue;
+            }
+            *clause_four_counts
+                .entry((mismatch, clause_four))
+                .or_insert(0usize) += count;
+        }
+
+        clause_four_counts
+    }
+
     fn current_claim_step_fifteen_partial_prefix_clause_two_label(
         clause: &ClauseRec,
     ) -> &'static str {
@@ -16917,6 +16957,44 @@ mod tests {
             .into_iter()
             .collect(),
             "the executable off-branch priority order should stay 252 on the mismatch-0 claim-domain surface, 84 on the claim-safe mismatch-1 surface, and only 54 on the reference/reference tail"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_reference_reference_tail_localizes_to_mismatch_two_then_mismatch_three()
+     {
+        let mismatch_counts =
+            current_claim_step_fifteen_reference_reference_tail_mismatch_position_counts();
+
+        assert_eq!(mismatch_counts.values().sum::<usize>(), 54);
+        assert_eq!(
+            mismatch_counts,
+            [(2_usize, 42_usize), (3_usize, 12_usize)]
+                .into_iter()
+                .collect(),
+            "the promoted reference/reference tail should stay localized first by mismatch position: mismatch-2 remains the larger 42-capture lead and mismatch-3 stays the smaller 12-capture backup"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_reference_reference_tail_keeps_clause_four_anatomy_explicit_per_mismatch_position()
+     {
+        let clause_four_counts =
+            current_claim_step_fifteen_reference_reference_tail_clause_four_counts();
+
+        assert_eq!(
+            clause_four_counts,
+            [
+                ((2_usize, "claim_next_bridge"), 18_usize),
+                ((2_usize, "demo_sharp_bridge"), 4),
+                ((2_usize, "demo_sharp_codomain"), 4),
+                ((2_usize, "reference"), 16),
+                ((3_usize, "claim_next_bridge"), 6),
+                ((3_usize, "reference"), 6),
+            ]
+            .into_iter()
+            .collect(),
+            "within the promoted reference/reference tail, mismatch-2 should stay split across claim_next_bridge, reference, and only tiny demo-side clause-4 pockets, while mismatch-3 should stay on the smaller claim_next_bridge-plus-reference residual"
         );
     }
 

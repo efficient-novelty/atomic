@@ -123,6 +123,20 @@ Until that exists, wording stays at `bounded live recovery`.
   - claim-safe mismatch-`1` pairings are the smaller second tier at `84`
   - mismatch-`2` plus mismatch-`3` `reference / reference` tails are only the
     residual `54`
+- That promoted `reference / reference` tail is now also localized one layer
+  deeper by mismatch position and clause-`4` anatomy:
+  - mismatch-`2` is the larger lead at `42`
+  - mismatch-`3` is the smaller backup at `12`
+  - within mismatch-`2`, clause-`4` stays split across
+    `claim_next_bridge = 18`, `reference = 16`,
+    `demo_sharp_codomain = 4`, and `demo_sharp_bridge = 4`
+  - within mismatch-`3`, clause-`4` stays only on
+    `claim_next_bridge = 6` plus `reference = 6`
+  - consequence: the lumped `reference / reference` tail is no longer the
+    next honest unit of work; the next slice should move below mismatch-`2`
+    first, comparing its clause-`4` `claim_next_bridge` and `reference`
+    shares before the tiny demo-side pockets or the smaller mismatch-`3`
+    backup
 - A direct parent-level exact-bound bypass on the whole remaining-two
   mismatch-`0` claim-domain tier is now ruled out:
   - redirecting that tier from `CannotClearBar` to `Unknown` at
@@ -600,9 +614,16 @@ Until that exists, wording stays at `bounded live recovery`.
 - With the claim-safe fail-fast checkpoint and the promoted representative
   mismatch-`0` reason-level checkpoint now both demoted, the next promoted
   backup should be the residual `reference / reference` tails at `54`.
-- Start that `reference / reference` revisit by splitting the residual
-  mismatch positions `2 = 42` and `3 = 12` before reopening any broader
-  mismatch-`0` or claim-safe shell again.
+- That `reference / reference` revisit is now already split one layer deeper:
+  - mismatch-`2 = 42` is the active lead
+  - mismatch-`3 = 12` is the smaller backup
+  - mismatch-`2` keeps clause-`4` pressure on
+    `claim_next_bridge = 18`, `reference = 16`,
+    `demo_sharp_codomain = 4`, and `demo_sharp_bridge = 4`
+  - mismatch-`3` stays on the smaller
+    `claim_next_bridge = 6` plus `reference = 6` tail
+- Do not reopen any broader mismatch-`0` or claim-safe shell before moving
+  below that larger mismatch-`2` `reference / reference` tail first.
 - The representative mismatch-`0` claim-flat dead shell is now frozen context
   rather than an active lead: its first finer reason-level split already
   relands the same clause-`2` blocker and the same nonqualifying connectivity

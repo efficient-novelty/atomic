@@ -537,3 +537,15 @@ This file is the append-only history for `desktop_claim_shadow`.
   should be demoted, and the next promoted backup should move to the residual
   `reference / reference` tails rather than to another mismatch-`0`
   clause-`3` / clause-`6` / terminal-family or reason reland.
+- Scope: localize the promoted `reference / reference` tail one layer deeper
+  by mismatch position and clause-`4` anatomy.
+  Result: the residual tail now splits cleanly into mismatch positions
+  `2 = 42` and `3 = 12`. Within mismatch-`2`, clause-`4` stays on
+  `claim_next_bridge = 18`, `reference = 16`,
+  `demo_sharp_codomain = 4`, and `demo_sharp_bridge = 4`; mismatch-`3` stays
+  only on `claim_next_bridge = 6` plus `reference = 6`.
+  Consequence: the lumped `reference / reference` tail is no longer the live
+  unit of work. The next honest slice should move below the larger
+  mismatch-`2` tail first, comparing its clause-`4`
+  `claim_next_bridge` and `reference` halves before the tiny demo-side
+  pockets or the smaller mismatch-`3` backup.

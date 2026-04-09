@@ -178,6 +178,12 @@ Do not:
   nonqualifying connectivity vector across all clause-`3` / clause-`6` /
   terminal continuations; keep that finer reason partition in the autonomy
   docs rather than stabilizing it here
+- reopen broader mismatch-`0` or claim-safe shells first either after the
+  live docs have already localized the promoted `reference / reference` tail
+  to mismatch `2 = 42` versus mismatch `3 = 12` with mismatch-`2`
+  clause-`4` pressure still concentrated on `claim_next_bridge = 18` and
+  `reference = 16`; keep that tail split in the autonomy docs rather than
+  stabilizing it here
 - reopen the representative `claim_sharp_codomain` clause-`2` sheet's
   clause-`6` identity split first either; its `claim_next_codomain`,
   `claim_sharp_codomain`, and `reference` continuations now also reland the
