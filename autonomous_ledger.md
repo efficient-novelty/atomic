@@ -601,3 +601,26 @@ This file is the append-only history for `desktop_claim_shadow`.
   the whole mismatch-`2` clause-`4` anatomy is spent, so the next honest slice
   should move to the smaller mismatch-`3` backup before reopening broader
   mismatch-`0` or claim-safe shells again.
+- Scope: localize the promoted mismatch-`3` `reference / reference` tail onto
+  its clause-`4` `claim_next_bridge` half.
+  Result: a narrow exact-bound override on that half lands
+  `4403 / 547 / 2271` with `small_cluster = 3186 / 522 / 522 / 0`; the
+  isolated `single` pocket stays fenced, the exact mismatch-`3` pair
+  contracts from `12` to `6`, and the larger spent mismatch-`2` tail stays
+  untouched at `42`.
+  Consequence: the smaller mismatch-`3` backup is not safely repairable on
+  its whole clause-`4` `claim_next_bridge` half either. The wall win is real,
+  but it still depends on a wider noncanonical `small_cluster`.
+- Scope: localize the promoted mismatch-`3` `reference / reference` tail onto
+  its clause-`4` `reference` half.
+  Result: a narrow exact-bound override on that half lands
+  `4481 / 545 / 2271` with `small_cluster = 3240 / 522 / 522 / 0`; the
+  isolated `single` pocket stays fenced, the exact mismatch-`3` pair also
+  contracts from `12` to `6`, the mismatch-`3` remaining-three spill
+  contracts by `2`, from `102` to `100`, and the larger spent mismatch-`2`
+  tail stays untouched at `42`.
+  Consequence: the smaller mismatch-`3` backup is not safely repairable on
+  its whole clause-`4` `reference` half either. With both mismatch-`3` halves
+  now exhausted as tradeoff controls, the full `reference / reference` tail is
+  spent and the next honest slice has to compare alternate broader backups
+  rather than reopening that tail again.

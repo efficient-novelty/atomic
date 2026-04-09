@@ -194,10 +194,16 @@ Do not:
   live docs have already pinned those pockets as matched smaller tradeoff
   controls; keep those demo-side outcomes in the autonomy docs rather than
   stabilizing them here
-- reopen broader mismatch-`0` or claim-safe shells first either after the
-  live docs have already marked both mismatch-`2` demo-side pockets as spent;
-  once those pockets are exhausted, route to the live docs for the smaller
-  mismatch-`3` backup rather than jumping sideways too early
+- reopen the smaller mismatch-`3` `reference / reference` clause-`4`
+  `claim_next_bridge` or `reference` half first either after the live docs
+  have already pinned those halves as smaller or sharper tradeoff controls
+  with wider `small_cluster`; keep those mismatch-`3` half-probe outcomes in
+  the autonomy docs rather than stabilizing them here
+- reopen broader mismatch-`0` or claim-safe shells by restating the
+  `reference / reference` tail either after the live docs have already marked
+  both mismatch-`2` demo-side pockets and both mismatch-`3` halves as spent;
+  once the full tail is exhausted, route to the live docs for the next
+  broader-backup comparison rather than retelling that tail again
 - reopen the representative `claim_sharp_codomain` clause-`2` sheet's
   clause-`6` identity split first either; its `claim_next_codomain`,
   `claim_sharp_codomain`, and `reference` continuations now also reland the

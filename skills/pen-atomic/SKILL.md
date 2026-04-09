@@ -449,9 +449,15 @@ Focus on:
   detail too; if the live docs have already pinned them as matched smaller
   tradeoff controls, route there instead of reopening either demo-side pocket
   as if it were still a fresh repair lead
-- once the live docs say those two mismatch-`2` demo-side pockets are spent
-  too, move to the smaller mismatch-`3` backup before reopening broader
-  mismatch-`0` or claim-safe shells
+- treat the smaller mismatch-`3` `reference / reference` clause-`4`
+  `claim_next_bridge` and `reference` halves as live autonomy detail too; if
+  the live docs have already pinned those halves as smaller or sharper
+  tradeoff controls, route there instead of reopening either mismatch-`3`
+  half as if it were still a fresh repair lead
+- once the live docs say those two mismatch-`2` demo-side pockets and both
+  mismatch-`3` halves are spent too, move to the next broader-backup
+  comparison before reopening broader mismatch-`0` or claim-safe shells by
+  restating the same `reference / reference` tail
 - treat the representative `claim_sharp_codomain` clause-`2` sheet's
   clause-`6` continuations as live autonomy detail too; the
   `claim_next_codomain`, `claim_sharp_codomain`, and `reference`
