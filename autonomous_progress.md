@@ -342,6 +342,26 @@ Until that exists, wording stays at `bounded live recovery`.
   - it inflates the three mismatch-`1` pairings to `48 / 48 / 67`
   - it leaves the live clause-`4` mismatch-`1` split unchanged at
     `24 / 18`, `24 / 18`, and `33 / 28`
+- The representative claim-safe mismatch-`1` clause-`4`
+  `demo_sharp_codomain` side is now also localized one layer deeper across
+  its two exact pair cells:
+  - the `reference / claim_next_codomain` pair cell lands
+    `4363 / 557 / 2283`
+  - the `reference / claim_sharp_codomain` pair cell lands the same
+    `4363 / 557 / 2283`
+  - each widens `small_cluster` only to `3156 / 526 / 526 / 0`
+  - the isolated `single` pocket stays fenced
+  - each raises only its targeted claim-safe mismatch-`1` pairing from
+    `42` to `46`
+  - each keeps that pairing's incumbent clause-`4`
+    `claim_next_bridge / reference` split at `24 / 18`
+  - each adds only a tiny clause-`4` `demo_sharp_codomain` side pocket of `4`
+    while leaving the sibling claim-safe pairing frozen at `42`
+  - consequence: pair identity is now exhausted below that representative
+    claim-safe clause-`4` side too, so the next honest claim-safe revisit
+    should move below one representative pair cell or explicitly compare the
+    `demo_sharp_bridge` sibling rather than swapping between the two
+    claim-safe pairings again
 - The residual `3` `single`-bucket incumbent prunes remain fenced and are now
   secondary to the partial-prefix wall.
 
@@ -357,6 +377,18 @@ Until that exists, wording stays at `bounded live recovery`.
   tier before the `reference / reference` tails unless a narrower
   reason-level connectivity partition under one frozen representative
   claim-side shell is explicitly promoted.
+- Do not stop at the representative claim-safe mismatch-`1` clause-`4`
+  `demo_sharp_codomain` side's exact pair-cell relands either; each only
+  lifts breadth to `4363` while widening the clean wall to `557` and
+  `small_cluster` to `3156`.
+- Because those two representative claim-safe pair cells reland the same
+  smaller negative control on that representative clause-`4`
+  `demo_sharp_codomain` side, claim-safe pair identity there is now frozen
+  context rather than a fresh lead.
+- If the claim-safe mismatch-`1` tier is revisited next, move below one
+  representative exact pair cell or explicitly compare the clause-`4`
+  `demo_sharp_bridge` sibling first rather than swapping between the
+  `claim_next_codomain` and `claim_sharp_codomain` pairings again.
 - If the mismatch-`0` claim-domain surface is revisited, stay below the broad
   clause-`1` `demo_flat_codomain` reopening and below whole-tier parent
   exact-bound relief; the former reaches `4985` only by widening the clean

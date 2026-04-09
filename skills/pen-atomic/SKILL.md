@@ -434,6 +434,13 @@ Focus on:
   differ only by a tiny deeper zero-admitted tail delta, so route to the
   live docs before retrying clause-`6` identity on the representative
   claim-sharp sheet as if it were fresh leverage
+- treat the representative claim-safe mismatch-`1` clause-`4`
+  `demo_sharp_codomain` side's exact pair-cell relands as live autonomy
+  detail too; the `reference / claim_next_codomain` and
+  `reference / claim_sharp_codomain` pairings now reland the same smaller
+  negative-control shell, so route to the live docs before spending another
+  turn swapping between those two claim-safe pairings as if one were newly
+  privileged
 - keep the next slice above another mismatch-`0` representative claim-side
   identity reland; with both claim-side sheets now frozen through clause-`6`
   identity, route to the live docs before spending another turn below the
