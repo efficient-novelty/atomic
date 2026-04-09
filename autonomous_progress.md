@@ -412,10 +412,9 @@ Until that exists, wording stays at `bounded live recovery`.
   - consequence: the representative claim-flat parent/child shell no longer
     hides a smaller live terminal pocket, so any remaining mismatch-`0`
     leverage is no longer on claim-flat clause-`3` or clause-`6` child
-    identity either; the next honest revisit should move sideways to the
-    representative `claim_sharp_codomain` clause-`2` sheet unless a narrower
-    connectivity-failure reason partition under one dead claim-flat child is
-    explicitly promoted
+    identity either; the later claim-sharp probe then moved sideways onto the
+    representative `claim_sharp_codomain` clause-`2` sheet rather than
+    reopening the same claim-flat shell
 - The representative `claim_sharp_codomain` clause-`2` sheet is now also
   exhausted at clause-`6` identity scope:
   - under
@@ -637,6 +636,31 @@ Until that exists, wording stays at `bounded live recovery`.
   - consequence: the promoted mismatch-`0` reason-level backup beneath that
     representative claim-flat shell is now exhausted too and should be
     demoted rather than reopened below the same dead child
+- The representative mismatch-`0` claim-sharp dead-child fail-fast checkpoint
+  is now also exhausted:
+  - beneath
+    `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain /
+    claim_next_bridge / claim_flat_codomain`,
+    both clause-`3` branches `claim_flat_argument / claim_eventual_argument`,
+    all three clause-`6` children
+    `claim_next_codomain / claim_sharp_codomain / reference`, and all three
+    terminal families `reference / eventual_lift / next_lift` reland the same
+    dead shell
+  - every one of those six child continuations keeps the same
+    `3`-generated / `0`-admitted completion summary with no bound, no
+    best-rank profile, no survivor sketch, and the same
+    `reference / eventual_lift / next_lift` terminal trio
+  - every one of those `18` completed telescopes also falls off historical
+    reanchor after exactly `2` matched clauses with first mismatch at clause
+    `2`
+  - every one of them stays structurally connected but outside active-window
+    qualification, outside self-containedness, and outside historical
+    reanchor, with `max_lib_ref = 10`
+  - every one of them therefore still fails live connectivity on the current
+    claim path
+  - consequence: the tighter representative mismatch-`0` claim-side broader
+    backup is now exhausted below both representative claim-side sheets, not
+    just beneath the earlier claim-flat shell
 - The residual `3` `single`-bucket incumbent prunes remain fenced and are now
   secondary to the partial-prefix wall.
 
@@ -648,12 +672,12 @@ Until that exists, wording stays at `bounded live recovery`.
 - When working outside the exhausted mismatch-`1`
   `reference + demo_flat_codomain` ladder, treat both the smaller claim-safe
   mismatch-`1` tier and the promoted representative mismatch-`0`
-  claim-flat dead-child reason backup as exhausted. The residual
+  claim-side dead-child reason backup as exhausted. The residual
   `reference / reference` tail is now exhausted too, so there is no fresh
   off-branch lead left inside those three surfaces; the claim-safe
-  clause-`5` wall, the representative mismatch-`0` dead-child shell, and the
-  full `reference / reference` tail are all frozen controls rather than fresh
-  leads.
+  clause-`5` wall, both representative mismatch-`0` dead-child shells, and
+  the full `reference / reference` tail are all frozen controls rather than
+  fresh leads.
 - Do not stop at the representative claim-safe mismatch-`1` clause-`4`
   `demo_sharp_codomain` or `demo_sharp_bridge` side's exact pair-cell
   relands either; each only lifts breadth to `4363` while widening the clean
@@ -699,15 +723,23 @@ Until that exists, wording stays at `bounded live recovery`.
   - do not spend another turn below that same representative mismatch-`0`
     claim-flat dead shell unless a later broader-backup comparison changes
     the priority order again
+- The representative mismatch-`0` claim-sharp dead-child fail-fast checkpoint
+  is now spent too:
+  - the deeper completion pass and the first finer reason-level probe below
+    that dead shell both stayed fully uniform across both clause-`3`
+    branches, all three clause-`6` children, and all three terminal families
+  - do not spend another turn below that same representative mismatch-`0`
+    claim-sharp dead shell unless a later broader-backup comparison changes
+    the priority order again
 - If the mismatch-`0` claim-domain surface is revisited, stay below the broad
   clause-`1` `demo_flat_codomain` reopening and below whole-tier parent
   exact-bound relief; the former reaches `4985` only by widening the clean
   wall to `667`, and the latter drops the wall to `241` only by exploding the
   noncanonical `small_cluster`.
-- With the claim-safe fail-fast checkpoint, the promoted representative
-  mismatch-`0` reason-level checkpoint, and the full
-  `reference / reference` tail now all spent, there is no fresh local lead
-  left inside that tail.
+- With the claim-safe fail-fast checkpoint, both representative
+  mismatch-`0` claim-side dead-child checkpoints, and the full
+  `reference / reference` tail now all spent, there is no fresh off-branch
+  local lead left inside the currently promoted step-`15` backups.
 - That `reference / reference` revisit is now already localized three layers
   deeper:
   - mismatch-`2 = 42` was the earlier larger lead, but its clause-`4`
@@ -757,6 +789,11 @@ Until that exists, wording stays at `bounded live recovery`.
   rather than an active lead: its first finer reason-level split already
   relands the same clause-`2` blocker and the same nonqualifying connectivity
   vector across all `18` completed telescopes.
+- The representative mismatch-`0` claim-sharp dead shell is now frozen
+  context rather than an active lead too: its deeper completion pass and its
+  first finer reason-level split already reland the same dead
+  `3`-generated / `0`-admitted shell and the same clause-`2` blocker plus
+  nonqualifying connectivity vector across all `18` completed telescopes.
 - The whole mismatch-`0` clause-`4` `claim_next_bridge`-half remaining-one
   exact-summary relief is now the leading local tradeoff on that surface, but
   it is not the landed repair because it still widens `small_cluster` to
@@ -826,13 +863,13 @@ Until that exists, wording stays at `bounded live recovery`.
   clause-`6` `claim_next_codomain`, `claim_sharp_codomain`, or `reference`
   continuations either; all three reland the same `4343 / 552 / 3141`
   smaller tradeoff shell and differ only by a tiny zero-admitted tail delta.
-- Because the representative claim-sharp sheet is now exhausted at clause-`6`
-  identity scope too, the next honest slice no longer sits on another
-  mismatch-`0` claim-side identity reland. With the broader-backup comparison
-  now settled, the next honest mismatch-`0` revisit should move below the
-  representative claim-sharp sheet's marginally best clause-`6` `reference`
-  continuation rather than reopening the demoted claim-flat dead shell or
-  promoting the looser claim-safe shell first.
+- Because the representative claim-sharp sheet is now exhausted through both
+  clause-`6` identity and its deeper dead-child fail-fast checkpoint, the
+  next honest slice no longer sits on another mismatch-`0` claim-side reland.
+  With the broader-backup comparison now settled and both representative
+  claim-side shells frozen, the next honest follow-on has to move to the first
+  post-local-probe fallback decision rather than reopening either claim-side
+  dead shell or promoting the looser claim-safe shell first.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

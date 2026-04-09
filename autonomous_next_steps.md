@@ -17,17 +17,18 @@ This file owns the single active work order for `desktop_claim_shadow`.
 
 Keep the active work order off the now-demoted claim-safe mismatch-`1`
 clause-`5` fail-fast checkpoint, the now-demoted representative
-mismatch-`0` claim-flat dead-child reason checkpoint, the now-spent full
-`reference / reference` tail across mismatch-`2` and mismatch-`3`
-clause-`4` anatomy, and the now-secondary representative claim-safe
-claim-side broader backup, so the next slice stays on the tighter
-representative mismatch-`0` claim-side broader backup instead of reopening
-another claim-safe clause-`5` retry, another mismatch-`0` claim-flat reason
-reland, another spent `reference / reference` clause-`4` reland, or an early
+mismatch-`0` claim-flat and claim-sharp dead-child reason checkpoints, the
+now-spent full `reference / reference` tail across mismatch-`2` and
+mismatch-`3` clause-`4` anatomy, and the now-secondary representative
+claim-safe claim-side broader backup, so the next slice decides the first
+honest post-local-probe fallback instead of reopening another claim-safe
+clause-`5` retry, another representative mismatch-`0` dead-shell reland,
+another spent `reference / reference` clause-`4` reland, or an early
 promotion of the looser claim-safe shell on top of canonical `v12` and the
 matched local `4331` guardrail surface.
 
-Do not start with another rerun setup pass.
+Do not start by launching another rerun yet; settle the post-local-probe
+fallback decision first from stored evidence.
 
 ## Start From
 
@@ -270,14 +271,36 @@ Do not start with another rerun setup pass.
   - they differ only in the deeper zero-admitted tail:
     `claim_next_codomain = 2270`, `claim_sharp_codomain = 2269`,
     `reference = 2268`
+- That representative claim-sharp shell is now also exhausted one layer deeper
+  at child completion-summary and first finer reason scope:
+  - beneath
+    `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain /
+    claim_next_bridge / claim_flat_codomain`,
+    both clause-`3` branches and all three clause-`6` children collapse to the
+    same dead `3`-generated / `0`-admitted completion summary
+  - each keeps no bound, no best-rank profile, and no survivor sketch
+  - each keeps only the same three local terminal choices:
+    `reference`, `eventual_lift`, and `next_lift`
+  - each of those three choices is still
+    `KeepWithoutFallback` plus locally `open_band_structural`, but none passes
+    live connectivity on the current claim path
+  - every one of those `18` completed telescopes also relands the same finer
+    reason vector:
+    `matched = 2`, `first_mismatch = 2`, `connected = true`,
+    `references_active_window = false`, `self_contained = false`,
+    `max_lib_ref = 10`, `historical_reanchor = false`, and no live
+    connectivity
 - Any remaining mismatch-`0` leverage is therefore no longer on either
-  representative claim-side clause-`6` identity surface, nor on another
-  mismatch-`0` sheet-identity reland below the current representative pair.
-- The next honest slice should therefore move off mismatch-`0` identity
-  partitions and onto the smaller claim-safe mismatch-`1` tier before the
-  `reference / reference` tails, unless a narrower reason-level connectivity
-  partition under one frozen representative claim-side shell is explicitly
-  promoted.
+  representative claim-side clause-`6` identity surface, on either
+  representative claim-side dead-child completion shell, or on another
+  representative mismatch-`0` reason reland below the current pair.
+- With the smaller claim-safe mismatch-`1` fail-fast checkpoint and the full
+  `reference / reference` tail already spent too, no fresh off-branch local
+  lead remains inside the currently promoted step-`15` backups.
+- The next honest slice should therefore stop below another representative
+  mismatch-`0` dead-shell reland and move to the first post-local-probe
+  fallback decision, while still keeping the looser claim-safe shell demoted
+  unless a later comparison changes the ordering again.
 - That representative claim-safe mismatch-`1` clause-`4`
   `demo_sharp_codomain` side is now also localized one layer deeper across
   its two exact pair cells:
@@ -538,7 +561,8 @@ Do not start with another rerun setup pass.
   - consequence: the representative mismatch-`0` claim-side shell stays
     promoted, and the representative claim-safe shell should not compete for
     promotion again unless that tighter mismatch-`0` backup is ruled out
-    below its remaining untouched branch
+    by a later broader comparison rather than by another representative
+    dead-shell reland
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -568,8 +592,28 @@ Do not start with another rerun setup pass.
    - do not spend another turn below that same representative mismatch-`0`
      claim-flat dead shell unless a later broader-backup comparison changes
      the ordering again
-4. Keep the alternate broader-backup comparison settled and stay on the
-   tighter mismatch-`0` shell next:
+4. Treat the representative mismatch-`0` claim-sharp dead-child checkpoint as
+   demoted for now too:
+   - beneath
+     `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain /
+     claim_next_bridge / claim_flat_codomain`,
+     both clause-`3` branches, all three clause-`6` children, and all three
+     terminal families reland the same dead shell
+   - every one of those six child continuations keeps the same
+     `3`-generated / `0`-admitted completion summary with no bound, no
+     best-rank profile, no survivor sketch, and the same
+     `reference / eventual_lift / next_lift` trio
+   - every one of those `18` completed telescopes also keeps the same finer
+     reason vector:
+     `matched = 2`, `first_mismatch = 2`, `connected = true`,
+     `references_active_window = false`, `self_contained = false`,
+     `max_lib_ref = 10`, `historical_reanchor = false`, and no live
+     connectivity
+   - do not spend another turn below that same representative mismatch-`0`
+     claim-sharp dead shell unless a later broader-backup comparison changes
+     the ordering again
+5. Keep the alternate broader-backup comparison settled, but move off
+   another claim-side local reland:
    - treat the full `reference / reference` tail as fully exhausted across
      its clause-`4` anatomy:
      mismatch-`2` `claim_next_bridge = 4547 / 535 / 2271` with
@@ -597,15 +641,18 @@ Do not start with another rerun setup pass.
    - keep the looser representative claim-safe claim-side clause-`2` shell
      demoted at `4347 / 555 / 2277` with
      `small_cluster = 3144 / 522 / 522 / 0`; do not promote it again unless
-     the tighter mismatch-`0` backup is ruled out below its remaining
-     untouched branch
-   - spend the next turn below the representative mismatch-`0`
-     `claim_sharp_codomain` clause-`2` sheet rather than the already-demoted
-     claim-flat dead shell:
-     start from its marginally best clause-`6` `reference` continuation and
-     ask whether a finer dead-child completion / reason partition differs from
-     the claim-flat fail-fast checkpoint
-5. Land only a change that improves generated breadth while preserving all of
+     the tighter mismatch-`0` backup is ruled out by a later broader
+     comparison rather than by another representative dead-shell reland
+   - with both representative mismatch-`0` claim-side dead shells now spent,
+     there is no fresh off-branch local lead left inside the promoted
+     mismatch-`0` shell
+   - spend the next turn on the first post-local-probe fallback decision from
+     stored evidence rather than on another representative mismatch-`0` or
+     claim-safe dead-shell retry:
+     decide whether a rerun-backed step-`15` reset or a later step-`1`
+     reopening is the first honest follow-on, while keeping step `1` behind a
+     newer stored rerun unless that rerun changes the diagnosis
+6. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays canonical `103 / 8`
    - the isolated `single` pocket stays fenced
@@ -678,6 +725,10 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_flat_joint_clause_three_shell_keeps_only_uniform_nonlive_open_band_terminal_choices`
 - `current_claim_step_fifteen_representative_mismatch_zero_claim_flat_dead_child_reason_progress_stays_uniformly_blocked_at_clause_two`
 - `current_claim_step_fifteen_representative_mismatch_zero_claim_flat_first_finer_reason_split_stays_uniform_below_the_dead_child_shell`
+- `current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_sharp_joint_clause_three_shell_stays_on_six_matched_dead_completion_summaries`
+- `current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_sharp_joint_clause_three_shell_keeps_only_uniform_nonlive_open_band_terminal_choices`
+- `current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_dead_child_reason_progress_stays_uniformly_blocked_at_clause_two`
+- `current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_first_finer_reason_split_stays_uniform_below_the_dead_child_shell`
 - `current_claim_step_fifteen_alternate_broader_backup_comparison_keeps_the_tighter_representative_mismatch_zero_claim_side_shell_ahead_of_the_claim_safe_shell`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
@@ -765,6 +816,13 @@ Do not start with another rerun setup pass.
   `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
   claim_next_bridge / claim_flat_codomain` dead child before the
   alternate broader backups have been compared
+- another representative claim-sharp parent/child-shell completion pass that
+  only rechecks the same six dead `3`-generated / `0`-admitted child
+  continuations or re-partitions them by clause-`3` / clause-`6` identity
+- another finer reason-level split below that same representative
+  `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain /
+  claim_next_bridge / claim_flat_codomain` dead child before the
+  post-local-probe fallback has been chosen
 - another lumped `reference / reference` tail restatement now that the full
   mismatch-`2` and mismatch-`3` tail is spent
 - another mismatch-`2` `reference / reference` clause-`4`
@@ -804,13 +862,15 @@ Do not start with another rerun setup pass.
 
 ## Success For This Slice
 
-- the full `reference / reference` tail is localized one layer deeper than
-  the exhausted mismatch-`2` clause-`4`
-  `claim_next_bridge = 18`, `reference = 16`,
-  `demo_sharp_codomain = 4`, and `demo_sharp_bridge = 4` anatomy by also
-  checking mismatch-`3` `claim_next_bridge = 6` and `reference = 6`
-- both mismatch-`3` clause-`4` halves are cleanly exhausted as tradeoff-only
-  controls without reopening the broader mismatch-`0` or claim-safe backups
+- the representative mismatch-`0` claim-sharp dead shell is localized one
+  layer deeper at both child completion-summary scope and first finer
+  reason-level scope
+- that claim-sharp shell relands the same six dead
+  `3`-generated / `0`-admitted child continuations and the same clause-`2`
+  fail-fast reason vector as the earlier claim-flat shell
+- both representative mismatch-`0` claim-side shells are therefore frozen
+  controls rather than active leads
 - the canonical accepted path stays fixed through step `15`
 - the isolated `single` pocket and unsafe lifted shell both stay fenced
-- the next broader-backup comparison is justified and ready to launch
+- the first post-local-probe fallback decision is justified and ready to
+  launch

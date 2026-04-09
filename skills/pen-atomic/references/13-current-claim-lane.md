@@ -178,6 +178,13 @@ Do not:
   nonqualifying connectivity vector across all clause-`3` / clause-`6` /
   terminal continuations; keep that finer reason partition in the autonomy
   docs rather than stabilizing it here
+- reopen that representative mismatch-`0` claim-sharp dead child through
+  another completion or finer reason split first either after the live docs
+  have already localized that shell to the same dead
+  `3`-generated / `0`-admitted child summaries and the same uniform
+  clause-`2` blocker plus nonqualifying connectivity vector; keep that
+  deeper claim-sharp partition in the autonomy docs rather than stabilizing
+  it here
 - reopen broader mismatch-`0` or claim-safe shells first either after the
   live docs have already localized the promoted `reference / reference` tail
   to mismatch `2 = 42` versus mismatch `3 = 12` with mismatch-`2`
@@ -215,6 +222,11 @@ Do not:
   same matched smaller tradeoff shell and differ only by a tiny deeper
   zero-admitted tail delta, so that axis also belongs to the autonomy ledger
   rather than as a fresh lead
+- keep the next slice above another representative mismatch-`0` claim-side
+  dead-shell reland too; once both representative claim-side sheets are
+  frozen through their deeper completion and first finer reason passes, route
+  to the live autonomy docs for the post-local-probe fallback instead of
+  reopening either claim-side dead child again
 - reopen the representative claim-safe mismatch-`1` clause-`4`
   `demo_sharp_codomain` or `demo_sharp_bridge` side on either exact
   claim-safe pair first; those `reference / claim_next_codomain` and

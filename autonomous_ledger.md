@@ -642,3 +642,30 @@ This file is the append-only history for `desktop_claim_shadow`.
   is now a secondary broader backup that should not compete again unless the
   tighter mismatch-`0` branch is ruled out below its remaining untouched
   representative claim-sharp continuation.
+- Scope: localize the representative mismatch-`0`
+  `claim_sharp_codomain` branch one layer deeper below its marginally best
+  clause-`6` `reference` continuation.
+  Result: beneath
+  `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain /
+  claim_next_bridge / claim_flat_codomain`, both clause-`3` branches
+  `claim_flat_argument / claim_eventual_argument`, all three clause-`6`
+  children `claim_next_codomain / claim_sharp_codomain / reference`, and all
+  three terminal families `reference / eventual_lift / next_lift` relanded
+  the same dead shell:
+  - the six clause-`3` / clause-`6` child continuations all collapse to the
+    same `3`-generated / `0`-admitted completion summary
+  - none keeps a bound, a best-rank profile, or a survivor sketch
+  - every completed telescope keeps the same
+    `KeepWithoutFallback + open_band_structural` terminal trio while still
+    failing live connectivity
+  - every one of those `18` completed telescopes also keeps the same finer
+    reason vector: historical reanchor progress `2`, first mismatch at clause
+    `2`, `connected = true`, `references_active_window = false`,
+    `self_contained = false`, `max_lib_ref = 10`,
+    `historical_reanchor = false`, and no live connectivity
+  Consequence: the representative mismatch-`0` claim-sharp dead-child backup
+  is now exhausted too. The tighter representative mismatch-`0` claim-side
+  broader backup is therefore spent beneath both claim-side sheets rather than
+  only beneath claim-flat, so the next honest move has to stop below another
+  representative claim-side dead-shell reland and switch to the first
+  post-local-probe fallback decision.

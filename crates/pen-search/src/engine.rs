@@ -28633,7 +28633,7 @@ mod tests {
     }
 
     #[derive(Clone, Debug, Eq, PartialEq)]
-    struct ClaimStepFifteenRepresentativeMismatchZeroClaimFlatShellChildCompletionProfile {
+    struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideShellChildCompletionProfile {
         generated_candidate_count: usize,
         admitted_candidate_count: usize,
         has_bound: bool,
@@ -28644,10 +28644,11 @@ mod tests {
             BTreeMap<&'static str, (ConnectivityTerminalDecision, bool, AdmissibilityDecision)>,
     }
 
-    fn current_claim_step_fifteen_representative_mismatch_zero_claim_flat_shell_child_completion_profiles()
-    -> BTreeMap<
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_side_shell_child_completion_profiles(
+        clause_two_label: &'static str,
+    ) -> BTreeMap<
         (&'static str, &'static str),
-        ClaimStepFifteenRepresentativeMismatchZeroClaimFlatShellChildCompletionProfile,
+        ClaimStepFifteenRepresentativeMismatchZeroClaimSideShellChildCompletionProfile,
     > {
         let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
         let reference_terminal = Telescope::reference(15)
@@ -28708,7 +28709,7 @@ mod tests {
                 ) == "claim_next_codomain"
                 && current_claim_step_fifteen_partial_prefix_clause_two_label(
                     &work_item.prefix_telescope.clauses[2],
-                ) == "claim_flat_domain"
+                ) == clause_two_label
                 && current_claim_step_fifteen_partial_prefix_clause_four_label(
                     &work_item.prefix_telescope.clauses[4],
                 ) == "claim_next_bridge"
@@ -28803,7 +28804,7 @@ mod tests {
                 .collect::<BTreeMap<_, _>>();
             profiles.insert(
                 (clause_three_label, clause_six_label),
-                ClaimStepFifteenRepresentativeMismatchZeroClaimFlatShellChildCompletionProfile {
+                ClaimStepFifteenRepresentativeMismatchZeroClaimSideShellChildCompletionProfile {
                     generated_candidate_count: summary.generated_candidate_count,
                     admitted_candidate_count: summary.admitted_candidate_count,
                     has_bound: summary.bound.is_some(),
@@ -28818,13 +28819,33 @@ mod tests {
         profiles
     }
 
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_flat_shell_child_completion_profiles()
+    -> BTreeMap<
+        (&'static str, &'static str),
+        ClaimStepFifteenRepresentativeMismatchZeroClaimSideShellChildCompletionProfile,
+    > {
+        current_claim_step_fifteen_representative_mismatch_zero_claim_side_shell_child_completion_profiles(
+            "claim_flat_domain",
+        )
+    }
+
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_shell_child_completion_profiles()
+    -> BTreeMap<
+        (&'static str, &'static str),
+        ClaimStepFifteenRepresentativeMismatchZeroClaimSideShellChildCompletionProfile,
+    > {
+        current_claim_step_fifteen_representative_mismatch_zero_claim_side_shell_child_completion_profiles(
+            "claim_sharp_codomain",
+        )
+    }
+
     #[test]
     fn current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_flat_joint_clause_three_shell_stays_on_six_matched_dead_completion_summaries()
      {
         let profiles =
             current_claim_step_fifteen_representative_mismatch_zero_claim_flat_shell_child_completion_profiles();
         let expected_shell =
-            ClaimStepFifteenRepresentativeMismatchZeroClaimFlatShellChildCompletionProfile {
+            ClaimStepFifteenRepresentativeMismatchZeroClaimSideShellChildCompletionProfile {
                 generated_candidate_count: 3,
                 admitted_candidate_count: 0,
                 has_bound: false,
@@ -28952,8 +28973,143 @@ mod tests {
         );
     }
 
-    fn current_claim_step_fifteen_representative_mismatch_zero_claim_flat_shell_child_reason_vectors()
-    -> BTreeMap<
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_sharp_joint_clause_three_shell_stays_on_six_matched_dead_completion_summaries()
+     {
+        let profiles =
+            current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_shell_child_completion_profiles();
+        let expected_shell =
+            ClaimStepFifteenRepresentativeMismatchZeroClaimSideShellChildCompletionProfile {
+                generated_candidate_count: 3,
+                admitted_candidate_count: 0,
+                has_bound: false,
+                has_best_accept_primary_rank: false,
+                has_best_accept_rank: false,
+                survivor_labels: BTreeMap::new(),
+                terminal_profiles: [
+                    (
+                        "reference",
+                        (
+                            ConnectivityTerminalDecision::KeepWithoutFallback,
+                            false,
+                            AdmissibilityDecision {
+                                class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+                                reason: "open_band_structural".to_owned(),
+                            },
+                        ),
+                    ),
+                    (
+                        "eventual_lift",
+                        (
+                            ConnectivityTerminalDecision::KeepWithoutFallback,
+                            false,
+                            AdmissibilityDecision {
+                                class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+                                reason: "open_band_structural".to_owned(),
+                            },
+                        ),
+                    ),
+                    (
+                        "next_lift",
+                        (
+                            ConnectivityTerminalDecision::KeepWithoutFallback,
+                            false,
+                            AdmissibilityDecision {
+                                class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+                                reason: "open_band_structural".to_owned(),
+                            },
+                        ),
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+            };
+
+        assert_eq!(
+            profiles,
+            [
+                (
+                    ("claim_eventual_argument", "claim_next_codomain"),
+                    expected_shell.clone(),
+                ),
+                (
+                    ("claim_eventual_argument", "claim_sharp_codomain"),
+                    expected_shell.clone(),
+                ),
+                (
+                    ("claim_eventual_argument", "reference"),
+                    expected_shell.clone()
+                ),
+                (
+                    ("claim_flat_argument", "claim_next_codomain"),
+                    expected_shell.clone(),
+                ),
+                (
+                    ("claim_flat_argument", "claim_sharp_codomain"),
+                    expected_shell.clone(),
+                ),
+                (("claim_flat_argument", "reference"), expected_shell),
+            ]
+            .into_iter()
+            .collect(),
+            "below the localized representative claim-sharp parent shell, every clause-three / clause-six child continuation should also collapse to the same dead 3-generated / 0-admitted completion summary, so this sharper representative sheet is not hiding a survivor or bound-carrying child either"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_sharp_joint_clause_three_shell_keeps_only_uniform_nonlive_open_band_terminal_choices()
+     {
+        let profiles =
+            current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_shell_child_completion_profiles();
+
+        assert!(
+            profiles.values().all(|profile| {
+                profile.terminal_profiles
+                    == [
+                        (
+                            "eventual_lift",
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                false,
+                                AdmissibilityDecision {
+                                    class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+                                    reason: "open_band_structural".to_owned(),
+                                },
+                            ),
+                        ),
+                        (
+                            "next_lift",
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                false,
+                                AdmissibilityDecision {
+                                    class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+                                    reason: "open_band_structural".to_owned(),
+                                },
+                            ),
+                        ),
+                        (
+                            "reference",
+                            (
+                                ConnectivityTerminalDecision::KeepWithoutFallback,
+                                false,
+                                AdmissibilityDecision {
+                                    class: AdmissibilityDecisionClass::AdmittedFocusAligned,
+                                    reason: "open_band_structural".to_owned(),
+                                },
+                            ),
+                        ),
+                    ]
+                    .into_iter()
+                    .collect::<BTreeMap<_, _>>()
+            }),
+            "each representative child continuation under that claim-sharp shell should keep the same three open-band structural terminal choices, and all of them should still fail live connectivity, so the sharper sheet also relands the same dead terminal pocket"
+        );
+    }
+
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_side_shell_child_reason_vectors(
+        clause_two_label: &'static str,
+    ) -> BTreeMap<
         (&'static str, &'static str, &'static str),
         (usize, Option<usize>, bool, bool, bool, u32, bool, bool),
     > {
@@ -29016,7 +29172,7 @@ mod tests {
                 ) == "claim_next_codomain"
                 && current_claim_step_fifteen_partial_prefix_clause_two_label(
                     &work_item.prefix_telescope.clauses[2],
-                ) == "claim_flat_domain"
+                ) == clause_two_label
                 && current_claim_step_fifteen_partial_prefix_clause_four_label(
                     &work_item.prefix_telescope.clauses[4],
                 ) == "claim_next_bridge"
@@ -29086,6 +29242,26 @@ mod tests {
         reason_vectors
     }
 
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_flat_shell_child_reason_vectors()
+    -> BTreeMap<
+        (&'static str, &'static str, &'static str),
+        (usize, Option<usize>, bool, bool, bool, u32, bool, bool),
+    > {
+        current_claim_step_fifteen_representative_mismatch_zero_claim_side_shell_child_reason_vectors(
+            "claim_flat_domain",
+        )
+    }
+
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_shell_child_reason_vectors()
+    -> BTreeMap<
+        (&'static str, &'static str, &'static str),
+        (usize, Option<usize>, bool, bool, bool, u32, bool, bool),
+    > {
+        current_claim_step_fifteen_representative_mismatch_zero_claim_side_shell_child_reason_vectors(
+            "claim_sharp_codomain",
+        )
+    }
+
     #[test]
     fn current_claim_step_fifteen_representative_mismatch_zero_claim_flat_dead_child_reason_progress_stays_uniformly_blocked_at_clause_two()
      {
@@ -29121,6 +29297,44 @@ mod tests {
                 .values()
                 .all(|vector| { *vector == (2, Some(2), true, false, false, 10, false, false) }),
             "the first finer mismatch-zero reason-level split below the representative claim-flat dead shell should stay uniform too: every completed telescope remains structurally connected but outside active-window qualification, outside self-containedness, and outside historical reanchor after the same clause-2 blocker, so this shell should demote rather than reopen another mismatch-zero identity reland"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_dead_child_reason_progress_stays_uniformly_blocked_at_clause_two()
+     {
+        let reason_vectors =
+            current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_shell_child_reason_vectors();
+
+        assert_eq!(
+            reason_vectors.len(),
+            18,
+            "the representative mismatch-zero claim-sharp dead shell should still stay on the two clause-three branches, their three clause-six children, and the same three terminal families"
+        );
+        assert!(
+            reason_vectors
+                .values()
+                .all(|vector| vector.0 == 2 && vector.1 == Some(2)),
+            "beneath the representative mismatch-zero claim-sharp dead shell, every clause-three / clause-six / terminal continuation should also fall off historical reanchor at clause 2, so the blocker remains upstream of clause-3, clause-6, or terminal identity"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_first_finer_reason_split_stays_uniform_below_the_dead_child_shell()
+     {
+        let reason_vectors =
+            current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_shell_child_reason_vectors();
+
+        assert_eq!(
+            reason_vectors.len(),
+            18,
+            "the first finer mismatch-zero reason split should still stay on the representative claim-sharp dead shell's two clause-three branches, three clause-six children, and three terminal families"
+        );
+        assert!(
+            reason_vectors
+                .values()
+                .all(|vector| { *vector == (2, Some(2), true, false, false, 10, false, false) }),
+            "the first finer mismatch-zero reason-level split below the representative claim-sharp dead shell should stay uniform too: every completed telescope remains structurally connected but outside active-window qualification, outside self-containedness, and outside historical reanchor after the same clause-2 blocker, so this sharper representative shell should demote rather than reopen another mismatch-zero identity reland"
         );
     }
 

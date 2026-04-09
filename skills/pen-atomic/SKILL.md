@@ -433,6 +433,12 @@ Focus on:
   same nonqualifying connectivity vector across all clause-`3` / clause-`6` /
   terminal continuations, route there instead of reopening that dead child as
   if another mismatch-`0` identity or reason reland were still fresh
+- treat the representative mismatch-`0` claim-sharp dead-child completion and
+  reason split as live autonomy detail too; if the live docs have already
+  localized that shell to the same dead `3`-generated / `0`-admitted child
+  summaries and the same uniform clause-`2` blocker plus nonqualifying
+  connectivity vector, route there instead of reopening that sharper dead
+  child as if another mismatch-`0` identity or reason reland were still fresh
 - treat the promoted `reference / reference` tail split as live autonomy
   detail too; if the live docs have already localized that tail to mismatch
   `2 = 42` versus mismatch `3 = 12` with mismatch-`2` clause-`4` pressure
@@ -462,7 +468,8 @@ Focus on:
   keep the tighter representative mismatch-`0` claim-side clause-`2` shell
   ahead of the looser representative claim-safe claim-side shell; do not
   promote the claim-safe backup first unless the mismatch-`0` backup has been
-  ruled out again below its remaining untouched branch
+  ruled out again by a later broader comparison rather than by another
+  representative dead-shell reland
 - treat the representative `claim_sharp_codomain` clause-`2` sheet's
   clause-`6` continuations as live autonomy detail too; the
   `claim_next_codomain`, `claim_sharp_codomain`, and `reference`
@@ -514,10 +521,10 @@ Focus on:
   instead of reopening clause-`6` or terminal-family identity as if those
   controls were newly privileged
 - keep the next slice above another mismatch-`0` representative claim-side
-  identity reland; with both claim-side sheets now frozen through clause-`6`
-  identity, route to the live docs before spending another turn below the
-  representative mismatch-`0` pair unless a reason-level connectivity
-  partition under one frozen shell is explicitly promoted
+  reland; with both claim-side sheets now frozen through their deeper
+  completion and first finer reason passes, route to the live docs before
+  spending another turn below the representative mismatch-`0` pair unless a
+  later broader-backup comparison explicitly promotes a new branch
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward
