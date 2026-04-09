@@ -471,5 +471,25 @@ This file is the append-only history for `desktop_claim_shadow`.
   Consequence: the promoted reason-level claim-safe dead-shell slice is now
   exhausted one layer deeper too. Clause-`6` and terminal-family identity are
   frozen controls, and any further claim-safe revisit has to stay below the
-  now-uniform clause-`5` qualification wall rather than reopening another
-  clause-`6` or terminal-family reland.
+  clause-`5` qualification wall rather than reopening another clause-`6` or
+  terminal-family reland.
+- Scope: partition that representative claim-safe dead-shell clause-`5`
+  qualification wall one layer deeper on the promoted `reference` terminal.
+  Result: under the same selected
+  `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`
+  exact-pair override, clause-`5` `reference` is the only label that keeps
+  the full exact-pair reanchor match (`8` clauses, no mismatch). All four
+  off-reference clause-`5` labels
+  `claim_flat_codomain / claim_next_codomain / demo_sharp_domain /
+  demo_flat_codomain` stop at the same `5`-matched / first-mismatch-`5`
+  blocker, fail the exact claim-safe pair, and also fail the clause-`5`
+  side-pocket qualifier once clause `1` has moved to `claim_next_codomain`.
+  The live dead shell itself still uses only the two claim-side dead labels
+  `claim_flat_codomain / claim_next_codomain`, one copy per clause-`6`
+  sibling.
+  Consequence: the representative claim-safe clause-`5` wall is now sharper
+  than the earlier exact anchor-`11` pocket controls. Even the demo-side
+  clause-`5` variants are dead controls under the selected exact pair, so the
+  next honest revisit has to stay below off-reference clause-`5` identity
+  rather than retrying demo-side clause-`5` controls, clause-`6` identity, or
+  terminal-family relands.

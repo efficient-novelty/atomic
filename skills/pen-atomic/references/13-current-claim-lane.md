@@ -201,10 +201,19 @@ Do not:
   every one of those completed telescopes is still structurally connected but
   outside historical reanchor and active-window qualification, so that axis
   also belongs to the autonomy ledger rather than as a fresh lead
+- reopen the representative claim-safe dead prefix's clause-`5` qualifiers
+  first either; under the selected
+  `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`
+  exact pair, clause-`5` `reference` is the only exact control while
+  `claim_flat_codomain / claim_next_codomain / demo_sharp_domain /
+  demo_flat_codomain` all stop at `5 / mismatch 5`, and the live dead shell
+  itself still uses only the two claim-side dead labels, so that axis also
+  belongs to the autonomy ledger rather than as a fresh lead
 - reopen a deeper representative claim-safe dead-prefix clause-`6` or
   terminal-family reason pass first either after the live docs have already
-  localized that completed shell to a uniform clause-`5` blocker; keep that
-  finer reason partition in the autonomy docs rather than stabilizing it here
+  localized that completed shell to the clause-`5` qualification wall; keep
+  that finer reason partition in the autonomy docs rather than stabilizing it
+  here
 - keep the next slice above another mismatch-`0` claim-side identity reland;
   with both representative claim-side sheets now frozen through clause-`6`
   identity, route to the live autonomy docs before spending another turn

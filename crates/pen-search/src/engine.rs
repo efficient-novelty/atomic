@@ -22573,6 +22573,132 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_representative_claim_safe_dead_prefix_clause_five_labels_stay_on_two_nonqualifying_claim_variants()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                super::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                    clause_one: super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                    clause_two: super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+                },
+            );
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                pen_type::connectivity::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                    clause_one: pen_type::connectivity::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                    clause_two: pen_type::connectivity::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+                },
+            );
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let mut clause_five_counts = BTreeMap::new();
+        let mut clause_five_qualifications = BTreeMap::new();
+
+        for work_item in surface.pruned_terminal_prefixes.iter().filter(|work_item| {
+            work_item.prefix_telescope.clauses.len() == 7
+                && current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                    0,
+                    &work_item.prefix_telescope.clauses[0],
+                ) == "reference"
+                && current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                    1,
+                    &work_item.prefix_telescope.clauses[1],
+                ) == "claim_next_codomain"
+                && current_claim_step_fifteen_partial_prefix_clause_two_label(
+                    &work_item.prefix_telescope.clauses[2],
+                ) == "claim_flat_domain"
+                && matches!(
+                    &work_item.prefix_telescope.clauses[3].expr,
+                    Expr::Lam(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::App(function, argument)
+                                if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor + 1)
+                                    && matches!(
+                                        argument.as_ref(),
+                                        Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                    )
+                        )
+                )
+                && current_claim_step_fifteen_partial_prefix_clause_four_label(
+                    &work_item.prefix_telescope.clauses[4],
+                ) == "demo_sharp_codomain"
+                && matches!(
+                    current_claim_step_fifteen_partial_prefix_clause_five_label(
+                        &work_item.prefix_telescope.clauses[5]
+                    ),
+                    "claim_flat_codomain" | "claim_next_codomain"
+                )
+                && matches!(
+                    current_claim_step_fifteen_partial_prefix_clause_six_label(
+                        &work_item.prefix_telescope.clauses[6]
+                    ),
+                    "claim_next_codomain" | "claim_sharp_codomain" | "reference"
+                )
+        }) {
+            let clause_five_label = current_claim_step_fifteen_partial_prefix_clause_five_label(
+                &work_item.prefix_telescope.clauses[5],
+            );
+            let mut telescope = work_item.prefix_telescope.clone();
+            telescope.clauses.push(reference_terminal.clone());
+            let reanchor = HistoricalReanchorSummary::from_telescope(&surface.library, &telescope);
+            *clause_five_counts.entry(clause_five_label).or_insert(0usize) += 1;
+            clause_five_qualifications
+                .entry(clause_five_label)
+                .or_insert((
+                    reanchor
+                        .claim_safe_sharp_codomain_pair_progress()
+                        .expect("the representative claim-safe dead shell should expose exact-pair progress under override"),
+                    reanchor.claim_safe_sharp_codomain_pair_prefix_matches(),
+                    reanchor.clause_five_side_pocket_prefix_matches(),
+                    reanchor.allows_historical_reanchor(),
+                ));
+        }
+
+        assert_eq!(
+            clause_five_counts,
+            [("claim_flat_codomain", 3_usize), ("claim_next_codomain", 3),]
+                .into_iter()
+                .collect(),
+            "the live representative claim-safe dead shell should stay entirely on the two claim-side clause-five labels, one copy per clause-six sibling"
+        );
+        assert_eq!(
+            clause_five_qualifications,
+            [
+                (
+                    "claim_flat_codomain",
+                    (
+                        HistoricalReanchorProgress::new(5, Some(5)),
+                        false,
+                        false,
+                        false,
+                    ),
+                ),
+                (
+                    "claim_next_codomain",
+                    (
+                        HistoricalReanchorProgress::new(5, Some(5)),
+                        false,
+                        false,
+                        false,
+                    ),
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "beneath the representative claim-safe dead shell, the live clause-five labels should remain exactly the two claim-side variants that fail both the exact claim-safe pair and the clause-five side-pocket qualifiers; any reanchorable reference or demo-side clause-five controls are therefore off-shell rather than hidden inside the dead prefixes"
+        );
+    }
+
+    #[test]
     fn current_claim_step_fifteen_anchor_eleven_exact_argument_pocket_stays_tie_clean_until_clause_six_moves()
      {
         let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);

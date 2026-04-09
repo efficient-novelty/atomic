@@ -18,9 +18,9 @@ This file owns the single active work order for `desktop_claim_shadow`.
 Keep the active work order off the exhausted mismatch-`0` identity relands and
 below the now-exhausted representative claim-safe mismatch-`1` dead prefix's
 clause-`6` and terminal-family controls, so the next slice starts from the
-newly localized clause-`5` reason wall instead of reopening another identity
-reland on top of canonical `v12` and the matched local `4331` guardrail
-surface.
+newly split clause-`5` qualification wall instead of reopening another
+identity reland on top of canonical `v12` and the matched local `4331`
+guardrail surface.
 
 Do not start with another rerun setup pass.
 
@@ -379,9 +379,29 @@ Do not start with another rerun setup pass.
     with no mismatch
 - Any remaining claim-safe mismatch-`1` leverage is therefore no longer on
   claim-side clause-`6` or terminal-family identity below that representative
-  exact pair cell either. The next honest slice should stay below the now
-  uniform clause-`5` reason wall rather than reopening another claim-side
+  exact pair cell either. The next honest slice should stay below the
+  clause-`5` qualification wall rather than reopening another claim-side
   sheet, clause-`6`, or terminal-family sibling.
+- That representative claim-safe clause-`5` wall is now also partitioned one
+  layer deeper:
+  - under the same selected exact pair, clause-`5` `reference` is the only
+    label that keeps the full exact-pair match and historical reanchor
+  - the four off-reference clause-`5` labels
+    `claim_flat_codomain / claim_next_codomain / demo_sharp_domain /
+    demo_flat_codomain` all stop at the same `5`-matched /
+    first-mismatch-`5` blocker
+  - once clause `1` has moved to `claim_next_codomain`, even the two
+    demo-side clause-`5` labels no longer satisfy the clause-`5`
+    side-pocket qualifier there
+  - the live dead shell itself still sits only on the two claim-side dead
+    labels `claim_flat_codomain / claim_next_codomain`, one copy per
+    clause-`6` sibling
+- Any remaining claim-safe mismatch-`1` leverage is therefore no longer on
+  reopening clause-`5` `reference` as a fresh search lead or on retrying the
+  demo-side clause-`5` controls inside that representative exact pair cell.
+  The next honest slice should stay below the two live claim-side dead
+  clause-`5` labels instead of spending another turn on clause-`6` or
+  terminal-family siblings.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -439,14 +459,25 @@ Do not start with another rerun setup pass.
      clause-`6` `claim_next_codomain / claim_sharp_codomain / reference`
      identities as frozen matched dead shells too; every one of those six
      prefixes still has only `NeedsFallback` terminals
+   - inside that same representative exact pair cell, treat clause-`5`
+     `reference` as the only exact control and treat the four off-reference
+     clause-`5` labels
+     `claim_flat_codomain / claim_next_codomain / demo_sharp_domain /
+     demo_flat_codomain` as dead controls once clause `1` has shifted to
+     `claim_next_codomain`
+   - the live dead shell still sits only on the two claim-side dead labels
+     `claim_flat_codomain / claim_next_codomain`, one copy per clause-`6`
+     sibling; do not promote the absent demo-side clause-`5` labels from
+     earlier anchor-`11` pocket controls into this next search slice
    - if the claim-safe mismatch-`1` tier is revisited next, stay below the
-     representative dead prefix's now-uniform clause-`5` reason wall at
+     representative dead prefix's off-reference clause-`5` wall at
      `reference / claim_next_codomain / claim_flat_domain /
      demo_sharp_codomain / claim_flat_codomain / reference`;
      use the already-exhausted `eventual_lift` and `next_lift` terminals plus
      the other five dead prefixes in that shell only as matched controls, and
-     partition by narrower clause-`5` qualification behavior rather than by
-     another clause-`6` or terminal-family reland
+     partition within the two live claim-side dead clause-`5` labels rather
+     than by another clause-`6`, terminal-family reland, or demo-side
+     clause-`5` retry
    - if mismatch-`0` is reopened at all, do so only through a newly promoted
      reason-level connectivity partition beneath one frozen representative
      claim-side shell; otherwise leave all `12` live pair cells alone
@@ -489,12 +520,14 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_representative_claim_safe_dead_prefixes_stay_on_six_matched_dead_completion_summaries`
 - `current_claim_step_fifteen_representative_claim_safe_dead_prefixes_keep_only_uniform_nonlive_terminal_families`
 - `current_claim_step_fifteen_representative_claim_safe_dead_prefix_reason_progress_stays_uniformly_blocked_at_clause_five`
+- `current_claim_step_fifteen_representative_claim_safe_dead_prefix_clause_five_labels_stay_on_two_nonqualifying_claim_variants`
 - `current_claim_step_fifteen_claim_clause_two_prefixes_expose_only_anchor_eleven_exact_argument_pocket`
 - `connectivity_accepts_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_claim_clause_two_under_override`
 - `connectivity_keeps_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_sibling_claim_clause_two_closed_even_under_override`
 - `connectivity_accepts_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_reference_clause_two_under_override`
 - `connectivity_tracks_claim_safe_pair_reason_progress_below_the_representative_dead_prefix`
 - `connectivity_keeps_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_claim_clause_two_reference_terminal_only_even_under_override`
+- `connectivity_splits_representative_claim_safe_clause_five_labels_into_one_exact_pair_match_plus_four_dead_controls`
 - `connectivity_accepts_clause_four_demo_sharp_bridge_on_exact_claim_safe_pair_under_override`
 - `connectivity_keeps_clause_four_demo_sharp_bridge_on_sibling_claim_safe_pair_closed_even_under_override`
 - `connectivity_keeps_clause_four_demo_sharp_bridge_on_exact_claim_safe_pair_reference_terminal_only_even_under_override`
@@ -540,11 +573,14 @@ Do not start with another rerun setup pass.
 - another representative claim-safe claim-side clause-`5` / clause-`6`
   identity pass inside
   `reference / claim_next_codomain / demo_sharp_codomain`
+- another representative claim-safe dead-prefix clause-`5` reland on
+  `reference`, `demo_sharp_domain`, or `demo_flat_codomain` inside
+  `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`
 - another representative claim-safe dead-prefix terminal-family reland under
   `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`
 - another representative claim-safe dead-prefix clause-`6` or terminal-family
   reason reland after the exact-pair blocker has already been localized
-  uniformly at clause `5`
+  to the clause-`5` wall and its off-reference dead controls
 - broad clause-`1` `demo_flat_codomain` reopenings across the full
   mismatch-`0` claim-domain surface
 - another connectivity-only relocalization of the mismatch-`0` clause-`4`

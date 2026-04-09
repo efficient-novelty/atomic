@@ -463,11 +463,20 @@ Focus on:
   outside historical reanchor and active-window qualification, so route to the
   live docs before retrying terminal-family identity there as if one terminal
   were newly privileged
+- treat the representative claim-safe dead prefix's clause-`5`
+  qualification split as live autonomy detail too; under the selected
+  `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`
+  exact pair, clause-`5` `reference` is the only exact control while
+  `claim_flat_codomain / claim_next_codomain / demo_sharp_domain /
+  demo_flat_codomain` all stop at `5 / mismatch 5`, and the live dead shell
+  itself still uses only the two claim-side dead labels, so route to the live
+  docs before retrying clause-`5` identity there as if a demo-side control
+  were still live
 - treat any deeper reason-level pass below that representative claim-safe dead
   prefix as live autonomy detail too; if the live docs have already localized
-  the completed shell to a uniform clause-`5` blocker, route there instead of
-  reopening clause-`6` or terminal-family identity as if those controls were
-  newly privileged
+  the completed shell to the clause-`5` qualification wall, route there
+  instead of reopening clause-`6` or terminal-family identity as if those
+  controls were newly privileged
 - keep the next slice above another mismatch-`0` representative claim-side
   identity reland; with both claim-side sheets now frozen through clause-`6`
   identity, route to the live docs before spending another turn below the

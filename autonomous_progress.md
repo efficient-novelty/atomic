@@ -459,6 +459,27 @@ Until that exists, wording stays at `bounded live recovery`.
     clause-`6` or terminal-family identity either; the whole completed shell is
     now uniformly blocked one layer earlier by the clause-`5` structural
     reason wall below the exact claim-safe pair
+- That representative claim-safe clause-`5` qualification wall is now also
+  partitioned one layer deeper on the promoted `reference` terminal:
+  - under the same selected
+    `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`
+    exact-pair override, clause-`5` `reference` is the only label that keeps
+    the full exact claim-safe pair match at `8` clauses with no mismatch
+  - the four off-reference clause-`5` labels
+    `claim_flat_codomain / claim_next_codomain / demo_sharp_domain /
+    demo_flat_codomain` all stop at the same `5`-matched /
+    first-mismatch-`5` blocker
+  - once clause `1` has moved to `claim_next_codomain`, even the demo-side
+    clause-`5` `demo_sharp_domain / demo_flat_codomain` labels no longer
+    satisfy the clause-`5` side-pocket qualifier
+  - the live six-prefix dead shell still uses only the two claim-side dead
+    clause-`5` labels `claim_flat_codomain / claim_next_codomain`, one copy
+    per clause-`6` sibling
+  - consequence: the representative claim-safe clause-`5` wall is now split
+    into one exact `reference` control plus four dead off-reference controls,
+    so the next claim-safe revisit has to stay below off-reference
+    clause-`5` identity rather than reopening demo-side clause-`5` controls,
+    clause-`6`, or terminal-family partitions
 - The residual `3` `single`-bucket incumbent prunes remain fenced and are now
   secondary to the partial-prefix wall.
 
@@ -472,8 +493,10 @@ Until that exists, wording stays at `bounded live recovery`.
   claim-domain surface as exhausted through the representative claim-side
   clause-`6` identity passes and move to the smaller claim-safe mismatch-`1`
   tier before the `reference / reference` tails. The promoted representative
-  claim-safe dead-prefix reason partition is now uniform at clause `5`, so
-  clause-`6` and terminal-family identity are frozen controls rather than
+  claim-safe dead-prefix reason partition now splits clause `5` into one exact
+  `reference` control plus four dead off-reference labels, while the live dead
+  shell itself still sits only on `claim_flat_codomain / claim_next_codomain`,
+  so clause-`6` and terminal-family identity are frozen controls rather than
   fresh leads.
 - Do not stop at the representative claim-safe mismatch-`1` clause-`4`
   `demo_sharp_codomain` or `demo_sharp_bridge` side's exact pair-cell
@@ -500,14 +523,20 @@ Until that exists, wording stays at `bounded live recovery`.
   `reference / eventual_lift / next_lift` trio, and every one of those
   completed telescopes is still only structurally connected but outside
   historical reanchor and active-window qualification.
+- Do not reopen the representative claim-safe dead prefix through the
+  clause-`5` `reference`, `demo_sharp_domain`, or `demo_flat_codomain`
+  controls either; under the selected exact pair, `reference` is only the
+  exact control and the two demo-side labels are dead off-reference controls
+  rather than fresh live search leads.
 - If the claim-safe mismatch-`1` tier is revisited next, move below one
-  representative dead prefix's now-uniform clause-`5` reason wall, starting
+  representative dead prefix's off-reference clause-`5` wall, starting
   with
   `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain /
   claim_flat_codomain / reference`; use the already-exhausted clause-`6` and
   terminal-family siblings plus the other five dead prefixes only as matched
-  controls, and partition by narrower clause-`5` qualification behavior rather
-  than by another claim-side sheet, clause-`6`, or terminal-family reland.
+  controls, and partition within the two live claim-side dead clause-`5`
+  labels rather than by another claim-side sheet, clause-`6`, terminal-family
+  reland, or a demo-side clause-`5` retry.
 - If the mismatch-`0` claim-domain surface is revisited, stay below the broad
   clause-`1` `demo_flat_codomain` reopening and below whole-tier parent
   exact-bound relief; the former reaches `4985` only by widening the clean

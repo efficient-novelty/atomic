@@ -1429,6 +1429,14 @@ impl HistoricalReanchorSummary {
         self.first_mismatch_position
     }
 
+    pub fn claim_safe_sharp_codomain_pair_prefix_matches(self) -> bool {
+        self.anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_matches
+    }
+
+    pub fn clause_five_side_pocket_prefix_matches(self) -> bool {
+        self.anchor_eleven_clause_five_side_pocket_matches
+    }
+
     pub fn claim_safe_sharp_codomain_pair_progress(self) -> Option<HistoricalReanchorProgress> {
         self.anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_progress
             .progress()
@@ -10416,6 +10424,189 @@ mod tests {
                 );
                 assert!(!passes_connectivity(&library, &telescope));
             }
+        }
+    }
+
+    #[test]
+    fn connectivity_splits_representative_claim_safe_clause_five_labels_into_one_exact_pair_match_plus_four_dead_controls()
+     {
+        let _override =
+            super::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                super::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                    clause_one: super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                    clause_two: super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+                },
+            );
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_five_variants = [
+            (
+                "reference",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+                HistoricalReanchorProgress::new(8, None),
+                true,
+                false,
+                true,
+            ),
+            (
+                "claim_flat_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                            Expr::Flat(Box::new(Expr::Var(1))),
+                        ))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+                HistoricalReanchorProgress::new(5, Some(5)),
+                false,
+                false,
+                false,
+            ),
+            (
+                "demo_sharp_domain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                            Expr::Sharp(Box::new(Expr::Var(1))),
+                        ))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                    ),
+                ),
+                HistoricalReanchorProgress::new(5, Some(5)),
+                false,
+                false,
+                false,
+            ),
+            (
+                "demo_flat_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Flat(Box::new(Expr::Var(1))),
+                        ))))),
+                    ),
+                ),
+                HistoricalReanchorProgress::new(5, Some(5)),
+                false,
+                false,
+                false,
+            ),
+            (
+                "claim_next_codomain",
+                ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                            Expr::Var(1),
+                        ))))),
+                        Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                            Expr::Next(Box::new(Expr::Var(1))),
+                        ))))),
+                    ),
+                ),
+                HistoricalReanchorProgress::new(5, Some(5)),
+                false,
+                false,
+                false,
+            ),
+        ];
+
+        for (
+            label,
+            clause_five,
+            expected_progress,
+            expected_exact_pair_match,
+            expected_side_pocket_match,
+            expected_historical_reanchor,
+        ) in clause_five_variants
+        {
+            let mut telescope = Telescope::reference(15);
+            telescope.clauses[1].expr =
+                Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+            telescope.clauses[2].expr = Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+            );
+            telescope.clauses[3] = ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(anchor + 1)),
+                    Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                ))),
+            );
+            telescope.clauses[4] = ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                    Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Flat(
+                        Box::new(Expr::Var(1)),
+                    )))))),
+                ),
+            );
+            telescope.clauses[5] = clause_five;
+            telescope.clauses[7] = reference_terminal.clone();
+
+            let witness = analyze_connectivity(&library, &telescope);
+            let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+
+            assert_eq!(
+                reanchor.claim_safe_sharp_codomain_pair_progress(),
+                Some(expected_progress),
+                "the representative claim-safe exact pair should report the expected clause-five progress split on {label}"
+            );
+            assert_eq!(
+                reanchor.claim_safe_sharp_codomain_pair_prefix_matches(),
+                expected_exact_pair_match,
+                "the representative claim-safe exact pair should only stay fully matched on the expected clause-five labels"
+            );
+            assert_eq!(
+                reanchor.clause_five_side_pocket_prefix_matches(),
+                expected_side_pocket_match,
+                "once clause one has moved onto the representative claim-safe pair, the clause-five side-pocket qualifier should no longer survive on the off-reference clause-five labels"
+            );
+            assert_eq!(
+                reanchor.allows_historical_reanchor(),
+                expected_historical_reanchor,
+                "the representative claim-safe clause-five labels should split cleanly into one exact-pair reference control plus four dead off-reference controls"
+            );
+            assert_eq!(
+                witness,
+                ConnectivityWitness {
+                    connected: true,
+                    references_active_window: false,
+                    self_contained: false,
+                    max_lib_ref: 11,
+                    historical_reanchor: expected_historical_reanchor,
+                }
+            );
+            assert_eq!(
+                passes_connectivity(&library, &telescope),
+                expected_historical_reanchor,
+                "the representative claim-safe clause-five qualification split should align with live connectivity on {label}"
+            );
         }
     }
 }
