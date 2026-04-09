@@ -493,3 +493,25 @@ This file is the append-only history for `desktop_claim_shadow`.
   next honest revisit has to stay below off-reference clause-`5` identity
   rather than retrying demo-side clause-`5` controls, clause-`6` identity, or
   terminal-family relands.
+- Scope: run the first finer reason-level checkpoint below the representative
+  claim-safe dead-shell clause-`5` wall.
+  Result: beneath
+  `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`,
+  both live claim-side clause-`5` labels
+  `claim_flat_codomain / claim_next_codomain`, all three clause-`6` siblings,
+  and all three terminal families `reference / eventual_lift / next_lift`
+  relanded the same finer reason vector:
+  - exact-pair progress stayed fixed at `5` matched clauses with first
+    mismatch at clause `5`
+  - exact claim-safe pair match stayed false
+  - clause-`5` side-pocket qualification stayed false
+  - every completed telescope stayed structurally connected but outside
+    active-window qualification, outside self-containedness, and outside
+    historical reanchor, with `max_lib_ref = 11`
+  - every completed telescope therefore still failed live connectivity on the
+    current claim path
+  Consequence: the claim-safe mismatch-`1` branch is now exhausted at its
+  first finer reason-level checkpoint too. The branch should be demoted, and
+  the next promoted backup should come from a mismatch-`0` reason-level
+  connectivity partition beneath one frozen representative claim-side shell
+  rather than from another claim-safe clause-`5` retry.

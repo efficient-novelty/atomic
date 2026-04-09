@@ -22699,6 +22699,162 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_representative_claim_safe_first_finer_reason_split_stays_uniform_below_live_clause_five_labels()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                super::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                    clause_one: super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                    clause_two: super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+                },
+            );
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                pen_type::connectivity::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                    clause_one: pen_type::connectivity::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                    clause_two: pen_type::connectivity::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+                },
+            );
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let mut reason_vectors = BTreeMap::new();
+
+        for work_item in surface.pruned_terminal_prefixes.iter().filter(|work_item| {
+            work_item.prefix_telescope.clauses.len() == 7
+                && current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                    0,
+                    &work_item.prefix_telescope.clauses[0],
+                ) == "reference"
+                && current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                    1,
+                    &work_item.prefix_telescope.clauses[1],
+                ) == "claim_next_codomain"
+                && current_claim_step_fifteen_partial_prefix_clause_two_label(
+                    &work_item.prefix_telescope.clauses[2],
+                ) == "claim_flat_domain"
+                && matches!(
+                    &work_item.prefix_telescope.clauses[3].expr,
+                    Expr::Lam(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::App(function, argument)
+                                if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor + 1)
+                                    && matches!(
+                                        argument.as_ref(),
+                                        Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                    )
+                        )
+                )
+                && current_claim_step_fifteen_partial_prefix_clause_four_label(
+                    &work_item.prefix_telescope.clauses[4],
+                ) == "demo_sharp_codomain"
+                && matches!(
+                    current_claim_step_fifteen_partial_prefix_clause_five_label(
+                        &work_item.prefix_telescope.clauses[5]
+                    ),
+                    "claim_flat_codomain" | "claim_next_codomain"
+                )
+                && matches!(
+                    current_claim_step_fifteen_partial_prefix_clause_six_label(
+                        &work_item.prefix_telescope.clauses[6]
+                    ),
+                    "claim_next_codomain" | "claim_sharp_codomain" | "reference"
+                )
+        }) {
+            for clause in work_item.next_clauses(&surface.clause_catalog) {
+                let terminal_label = if *clause == reference_terminal {
+                    "reference"
+                } else if *clause == next_lift_terminal {
+                    "next_lift"
+                } else if *clause == eventual_lift_terminal {
+                    "eventual_lift"
+                } else {
+                    "other"
+                };
+                let clause_five_label = current_claim_step_fifteen_partial_prefix_clause_five_label(
+                    &work_item.prefix_telescope.clauses[5],
+                );
+                let clause_six_label = current_claim_step_fifteen_partial_prefix_clause_six_label(
+                    &work_item.prefix_telescope.clauses[6],
+                );
+                let mut telescope = work_item.prefix_telescope.clone();
+                telescope.clauses.push(clause.clone());
+                let witness = analyze_connectivity(&surface.library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&surface.library, &telescope);
+                reason_vectors.insert(
+                    (clause_five_label, clause_six_label, terminal_label),
+                    (
+                        reanchor
+                            .claim_safe_sharp_codomain_pair_progress()
+                            .expect("the representative claim-safe dead shell should expose exact-pair progress under override"),
+                        reanchor.claim_safe_sharp_codomain_pair_prefix_matches(),
+                        reanchor.clause_five_side_pocket_prefix_matches(),
+                        reanchor.allows_historical_reanchor(),
+                        witness.connected,
+                        witness.references_active_window,
+                        witness.self_contained,
+                        witness.max_lib_ref,
+                        witness.historical_reanchor,
+                        passes_connectivity(&surface.library, &telescope),
+                    ),
+                );
+            }
+        }
+
+        assert_eq!(
+            reason_vectors.len(),
+            18,
+            "the representative claim-safe fail-fast checkpoint should still stay on the two live clause-five labels, their three clause-six siblings, and the same three terminal families"
+        );
+        assert!(
+            reason_vectors.values().all(|vector| {
+                *vector
+                    == (
+                        HistoricalReanchorProgress::new(5, Some(5)),
+                        false,
+                        false,
+                        false,
+                        true,
+                        false,
+                        false,
+                        11,
+                        false,
+                        false,
+                    )
+            }),
+            "the first finer reason-level split below the representative claim-safe dead shell should still stay uniform: both live clause-five labels, all three clause-six siblings, and all three terminal families remain structurally connected but outside active-window qualification, self-containedness, clause-five side-pocket qualification, and historical reanchor, so this branch should demote rather than reopen another claim-safe identity reland"
+        );
+    }
+
+    #[test]
     fn current_claim_step_fifteen_anchor_eleven_exact_argument_pocket_stays_tie_clean_until_clause_six_moves()
      {
         let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
