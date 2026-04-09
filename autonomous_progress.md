@@ -133,10 +133,9 @@ Until that exists, wording stays at `bounded live recovery`.
   - within mismatch-`3`, clause-`4` stays only on
     `claim_next_bridge = 6` plus `reference = 6`
   - consequence: the lumped `reference / reference` tail is no longer the
-    next honest unit of work; the next slice should move below mismatch-`2`
-    first, comparing its clause-`4` `claim_next_bridge` and `reference`
-    shares before the tiny demo-side pockets or the smaller mismatch-`3`
-    backup
+    next honest unit of work; the later probes have now spent the whole
+    mismatch-`2` clause-`4` anatomy, so the remaining live slice below that
+    tail is the smaller mismatch-`3` backup
 - The mismatch-`2` `reference / reference` clause-`4`
   `claim_next_bridge` half is now also localized as a smaller tradeoff
   control:
@@ -161,11 +160,34 @@ Until that exists, wording stays at `bounded live recovery`.
     clause-`4` `reference` half either; that half buys a larger wall win only
     by widening `small_cluster` even more aggressively than the sibling
     `claim_next_bridge` tradeoff
+- The mismatch-`2` `reference / reference` clause-`4`
+  `demo_sharp_codomain` pocket is now also localized as a smaller tradeoff
+  control:
+  - a narrow exact-bound override on that pocket lands `4379 / 549 / 2271`
+  - it widens `small_cluster` only to `3168 / 522 / 522 / 0`
+  - the isolated `single` pocket stays fenced
+  - the exact mismatch-`2` pair contracts from `42` to `38`
+  - it removes only the tiny `demo_sharp_codomain`
+    `claim_flat_codomain / claim_next_codomain` `2 / 2` cells while leaving
+    the larger mismatch-`2` `claim_next_bridge` and `reference` halves, the
+    sibling `demo_sharp_bridge` pocket, and the mismatch-`3` backup untouched
+- The mismatch-`2` `reference / reference` clause-`4`
+  `demo_sharp_bridge` pocket is now also localized as the same smaller
+  tradeoff control:
+  - a narrow exact-bound override on that pocket also lands
+    `4379 / 549 / 2271`
+  - it widens `small_cluster` only to `3168 / 522 / 522 / 0`
+  - the isolated `single` pocket stays fenced
+  - the exact mismatch-`2` pair also contracts from `42` to `38`
+  - it removes only the tiny `demo_sharp_bridge`
+    `claim_flat_codomain / claim_next_codomain` `2 / 2` cells while leaving
+    the larger mismatch-`2` `claim_next_bridge` and `reference` halves, the
+    sibling `demo_sharp_codomain` pocket, and the mismatch-`3` backup
+    untouched
 - Any remaining mismatch-`2` leverage is therefore no longer on either of the
-  two larger clause-`4` halves. The next honest slice should stay on the tiny
-  `demo_sharp_codomain = 4` and `demo_sharp_bridge = 4` pockets before
-  backing off to mismatch-`3` or reopening another broader mismatch-`0` or
-  claim-safe shell.
+  two larger clause-`4` halves or either tiny demo-side pocket. The next
+  honest slice should move to the smaller mismatch-`3` backup before
+  reopening another broader mismatch-`0` or claim-safe shell.
 - A direct parent-level exact-bound bypass on the whole remaining-two
   mismatch-`0` claim-domain tier is now ruled out:
   - redirecting that tier from `CannotClearBar` to `Unknown` at
@@ -641,27 +663,36 @@ Until that exists, wording stays at `bounded live recovery`.
   wall to `667`, and the latter drops the wall to `241` only by exploding the
   noncanonical `small_cluster`.
 - With the claim-safe fail-fast checkpoint and the promoted representative
-  mismatch-`0` reason-level checkpoint now both demoted, the next promoted
-  backup should be the residual `reference / reference` tails at `54`.
-- That `reference / reference` revisit is now already split one layer deeper:
-  - mismatch-`2 = 42` is the active lead
-  - mismatch-`3 = 12` is the smaller backup
-  - mismatch-`2` keeps clause-`4` pressure on
+  mismatch-`0` reason-level checkpoint now both demoted, the active
+  off-branch backup inside the residual `reference / reference` tail is now
+  the smaller mismatch-`3` slice at `12`, because the larger mismatch-`2`
+  clause-`4` anatomy is spent.
+- That `reference / reference` revisit is now already localized two layers
+  deeper:
+  - mismatch-`2 = 42` was the earlier larger lead, but its clause-`4`
     `claim_next_bridge = 18`, `reference = 16`,
-    `demo_sharp_codomain = 4`, and `demo_sharp_bridge = 4`
+    `demo_sharp_codomain = 4`, and `demo_sharp_bridge = 4` anatomy is now
+    pinned as tradeoff-only control
+  - mismatch-`3 = 12` is the active smaller backup
   - mismatch-`3` stays on the smaller
     `claim_next_bridge = 6` plus `reference = 6` tail
 - Do not reopen any broader mismatch-`0` or claim-safe shell before moving
-  below that larger mismatch-`2` `reference / reference` tail first.
+  below that smaller mismatch-`3` `reference / reference` backup first.
 - Do not stop at the mismatch-`2` clause-`4` `claim_next_bridge` half either;
   it narrows the wall only to `535` while widening `small_cluster` to `3294`.
 - Do not stop at the mismatch-`2` clause-`4` `reference` half either; it
   narrows the wall further to `529`, but only by widening `small_cluster` to
   `3492`.
-- Because both larger mismatch-`2` clause-`4` halves are now exhausted as
-  tradeoff controls, the next honest revisit should move to the two tiny
-  mismatch-`2` clause-`4` demo-side pockets before promoting mismatch-`3` or
-  another broader mismatch-`0` shell.
+- Do not stop at the mismatch-`2` clause-`4` `demo_sharp_codomain` pocket
+  either; it narrows the wall only to `549`, contracts the exact mismatch-`2`
+  pair only to `38`, and still widens `small_cluster` to `3168`.
+- Do not stop at the mismatch-`2` clause-`4` `demo_sharp_bridge` pocket
+  either; it lands the same `4379 / 549 / 2271` smaller tradeoff shell and
+  the same widened `3168 / 522 / 522 / 0` `small_cluster`.
+- Because both larger mismatch-`2` clause-`4` halves and both tiny demo-side
+  pockets are now exhausted as tradeoff controls, the next honest revisit
+  should move to the smaller mismatch-`3` backup before another broader
+  mismatch-`0` shell.
 - The representative mismatch-`0` claim-flat dead shell is now frozen context
   rather than an active lead: its first finer reason-level split already
   relands the same clause-`2` blocker and the same nonqualifying connectivity

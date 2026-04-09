@@ -444,6 +444,14 @@ Focus on:
   the live docs have already pinned them as wider-`small_cluster` tradeoff
   controls, route there instead of reopening either larger half as if it were
   still a fresh safe repair lead
+- treat the tiny mismatch-`2` `reference / reference` clause-`4`
+  `demo_sharp_codomain` and `demo_sharp_bridge` pockets as live autonomy
+  detail too; if the live docs have already pinned them as matched smaller
+  tradeoff controls, route there instead of reopening either demo-side pocket
+  as if it were still a fresh repair lead
+- once the live docs say those two mismatch-`2` demo-side pockets are spent
+  too, move to the smaller mismatch-`3` backup before reopening broader
+  mismatch-`0` or claim-safe shells
 - treat the representative `claim_sharp_codomain` clause-`2` sheet's
   clause-`6` continuations as live autonomy detail too; the
   `claim_next_codomain`, `claim_sharp_codomain`, and `reference`

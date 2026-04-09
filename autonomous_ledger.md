@@ -573,3 +573,31 @@ This file is the append-only history for `desktop_claim_shadow`.
   `claim_next_bridge` tradeoff, the next honest slice should move to the two
   tiny mismatch-`2` clause-`4` demo-side pockets before promoting mismatch-`3`
   or reopening broader mismatch-`0` or claim-safe shells again.
+- Scope: localize the promoted mismatch-`2` `reference / reference` tail onto
+  its clause-`4` `demo_sharp_codomain` pocket.
+  Result: a narrow exact-bound override on that pocket lands
+  `4379 / 549 / 2271` with `small_cluster = 3168 / 522 / 522 / 0`; the
+  isolated `single` pocket stays fenced, the exact mismatch-`2` pair
+  contracts from `42` to `38`, and the probe removes only the
+  `demo_sharp_codomain` `2 / 2` clause-`5`
+  `claim_flat_codomain / claim_next_codomain` cells while leaving the larger
+  mismatch-`2` `claim_next_bridge` and `reference` halves, the sibling
+  `demo_sharp_bridge` pocket, and the mismatch-`3` backup untouched.
+  Consequence: the tiny mismatch-`2` `demo_sharp_codomain` pocket is also only
+  a smaller tradeoff control. It buys a real but narrow wall win only by
+  widening `small_cluster`, so it is not the landed repair.
+- Scope: localize the promoted mismatch-`2` `reference / reference` tail onto
+  its clause-`4` `demo_sharp_bridge` pocket.
+  Result: a narrow exact-bound override on that pocket also lands
+  `4379 / 549 / 2271` with `small_cluster = 3168 / 522 / 522 / 0`; the
+  isolated `single` pocket stays fenced, the exact mismatch-`2` pair
+  contracts from `42` to `38`, and the probe removes only the
+  `demo_sharp_bridge` `2 / 2` clause-`5`
+  `claim_flat_codomain / claim_next_codomain` cells while leaving the larger
+  mismatch-`2` `claim_next_bridge` and `reference` halves, the sibling
+  `demo_sharp_codomain` pocket, and the mismatch-`3` backup untouched.
+  Consequence: the tiny mismatch-`2` `demo_sharp_bridge` pocket is the same
+  matched smaller tradeoff control. With both demo-side pockets now exhausted,
+  the whole mismatch-`2` clause-`4` anatomy is spent, so the next honest slice
+  should move to the smaller mismatch-`3` backup before reopening broader
+  mismatch-`0` or claim-safe shells again.

@@ -6159,6 +6159,8 @@ enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 enum ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel {
     ClaimNextBridge,
+    DemoSharpCodomain,
+    DemoSharpBridge,
     Reference,
 }
 
@@ -8050,6 +8052,62 @@ fn claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four_matches_
                                             )
                                     )
                             )
+                        )
+                )
+        }
+        ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel::DemoSharpCodomain => {
+            clause.role == ClauseRole::Formation
+                && matches!(
+                    &clause.expr,
+                    Expr::Pi(domain, codomain)
+                        if matches!(
+                            domain.as_ref(),
+                            Expr::Flat(body)
+                                if matches!(
+                                    body.as_ref(),
+                                    Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                )
+                        ) && matches!(
+                            codomain.as_ref(),
+                            Expr::Next(body)
+                                if matches!(
+                                    body.as_ref(),
+                                    Expr::Sharp(inner)
+                                        if matches!(
+                                            inner.as_ref(),
+                                            Expr::Flat(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                        )
+                                )
+                        )
+                )
+        }
+        ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel::DemoSharpBridge => {
+            clause.role == ClauseRole::Formation
+                && matches!(
+                    &clause.expr,
+                    Expr::Pi(domain, codomain)
+                        if matches!(
+                            domain.as_ref(),
+                            Expr::Flat(body)
+                                if matches!(
+                                    body.as_ref(),
+                                    Expr::Next(inner)
+                                        if matches!(
+                                            inner.as_ref(),
+                                            Expr::Sharp(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                        )
+                                )
+                        ) && matches!(
+                            codomain.as_ref(),
+                            Expr::Next(body)
+                                if matches!(
+                                    body.as_ref(),
+                                    Expr::Flat(inner)
+                                        if matches!(
+                                            inner.as_ref(),
+                                            Expr::Sharp(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                        )
+                                )
                         )
                 )
         }
@@ -17562,6 +17620,288 @@ mod tests {
             .into_iter()
             .collect(),
             "the mismatch-2 reference-half probe should remove exactly the 4 / 4 / 2 / 2 / 4 reference-side cells from mismatch-2 while leaving the mismatch-2 claim-next-bridge half, the tiny clause-4 demo-side pockets, and the mismatch-3 backup intact"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four_demo_sharp_codomain_pocket_stays_a_smaller_tradeoff_control()
+     {
+        let label =
+            super::ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel::DemoSharpCodomain;
+        let _search_override =
+            super::override_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four(
+                label,
+            );
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let tail_pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                .into_iter()
+                .filter(|((mismatch, clause_zero, clause_one), _count)| {
+                    *clause_zero == "reference"
+                        && *clause_one == "reference"
+                        && matches!(mismatch, Some(2_usize) | Some(3_usize))
+                })
+                .collect::<BTreeMap<_, _>>();
+        let tail_clause_four_five_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_four, _clause_five), _count)| {
+                    matches!(mismatch, Some(2_usize) | Some(3_usize))
+                })
+                .collect::<BTreeMap<_, _>>();
+        let pruned_terminal_prefixes =
+            current_claim_step_fifteen_pruned_terminal_prefixes_on_reference_reference_tail_mismatch_two_clause_four_probe(
+                label,
+            );
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4379);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 549,
+            "relaxing the mismatch-2 reference/reference clause-4 demo-sharp-codomain pocket should narrow only a tiny part of the mismatch-2 wall, so it remains a smaller tradeoff control rather than a safe repair"
+        );
+        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 3);
+        assert_eq!(wall_summary.capture_count, 549);
+        assert_eq!(
+            wall_summary.remaining_clause_slot_counts,
+            [(2_usize, 447_usize), (3, 102)].into_iter().collect(),
+            "the mismatch-2 demo-sharp-codomain-pocket probe should contract only the remaining-two mismatch-2 tail while leaving the smaller remaining-three spill unchanged"
+        );
+        assert_eq!(
+            wall_summary.first_mismatch_position_counts,
+            [
+                (Some(0_usize), 312_usize),
+                (Some(1), 177),
+                (Some(2), 46),
+                (Some(3), 14)
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-2 demo-sharp-codomain-pocket probe should localize its whole wall win to a tiny four-capture slice inside the mismatch-2 tail"
+        );
+        assert_eq!(pruned_terminal_prefixes.len(), 2271);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3168,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the mismatch-2 demo-sharp-codomain-pocket probe should still widen the noncanonical small-cluster shell, so it is not a safe landing"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            })
+        );
+        assert_eq!(
+            tail_pair_counts,
+            [
+                ((Some(2_usize), "reference", "reference"), 38_usize),
+                ((Some(3_usize), "reference", "reference"), 12),
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-2 demo-sharp-codomain-pocket probe should contract only that mismatch-2 pair from 42 to 38 while leaving mismatch-3 unchanged"
+        );
+        assert_eq!(
+            tail_clause_four_five_counts,
+            [
+                (
+                    (Some(2_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    6_usize
+                ),
+                (
+                    (Some(2_usize), "claim_next_bridge", "claim_next_codomain"),
+                    6
+                ),
+                ((Some(2_usize), "claim_next_bridge", "reference"), 6),
+                (
+                    (Some(2_usize), "demo_sharp_bridge", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    (Some(2_usize), "demo_sharp_bridge", "claim_next_codomain"),
+                    2
+                ),
+                ((Some(2_usize), "reference", "claim_flat_codomain"), 4),
+                ((Some(2_usize), "reference", "claim_next_codomain"), 4),
+                ((Some(2_usize), "reference", "demo_flat_codomain"), 2),
+                ((Some(2_usize), "reference", "demo_sharp_domain"), 2),
+                ((Some(2_usize), "reference", "reference"), 4),
+                (
+                    (Some(3_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    (Some(3_usize), "claim_next_bridge", "claim_next_codomain"),
+                    2
+                ),
+                ((Some(3_usize), "claim_next_bridge", "reference"), 2),
+                ((Some(3_usize), "reference", "claim_flat_codomain"), 2),
+                ((Some(3_usize), "reference", "claim_next_codomain"), 2),
+                ((Some(3_usize), "reference", "reference"), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-2 demo-sharp-codomain-pocket probe should remove only that tiny demo-side pocket while leaving the mismatch-2 claim-next-bridge half, the mismatch-2 reference half, the sibling demo-sharp-bridge pocket, and the mismatch-3 backup intact"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four_demo_sharp_bridge_pocket_stays_a_smaller_tradeoff_control()
+     {
+        let label =
+            super::ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel::DemoSharpBridge;
+        let _search_override =
+            super::override_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four(
+                label,
+            );
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let tail_pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                .into_iter()
+                .filter(|((mismatch, clause_zero, clause_one), _count)| {
+                    *clause_zero == "reference"
+                        && *clause_one == "reference"
+                        && matches!(mismatch, Some(2_usize) | Some(3_usize))
+                })
+                .collect::<BTreeMap<_, _>>();
+        let tail_clause_four_five_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_four, _clause_five), _count)| {
+                    matches!(mismatch, Some(2_usize) | Some(3_usize))
+                })
+                .collect::<BTreeMap<_, _>>();
+        let pruned_terminal_prefixes =
+            current_claim_step_fifteen_pruned_terminal_prefixes_on_reference_reference_tail_mismatch_two_clause_four_probe(
+                label,
+            );
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4379);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 549,
+            "relaxing the mismatch-2 reference/reference clause-4 demo-sharp-bridge pocket should narrow only a tiny part of the mismatch-2 wall, so it remains a smaller tradeoff control rather than a safe repair"
+        );
+        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 3);
+        assert_eq!(wall_summary.capture_count, 549);
+        assert_eq!(
+            wall_summary.remaining_clause_slot_counts,
+            [(2_usize, 447_usize), (3, 102)].into_iter().collect(),
+            "the mismatch-2 demo-sharp-bridge-pocket probe should contract only the remaining-two mismatch-2 tail while leaving the smaller remaining-three spill unchanged"
+        );
+        assert_eq!(
+            wall_summary.first_mismatch_position_counts,
+            [
+                (Some(0_usize), 312_usize),
+                (Some(1), 177),
+                (Some(2), 46),
+                (Some(3), 14)
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-2 demo-sharp-bridge-pocket probe should localize its whole wall win to a tiny four-capture slice inside the mismatch-2 tail"
+        );
+        assert_eq!(pruned_terminal_prefixes.len(), 2271);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3168,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the mismatch-2 demo-sharp-bridge-pocket probe should still widen the noncanonical small-cluster shell, so it is not a safe landing"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            })
+        );
+        assert_eq!(
+            tail_pair_counts,
+            [
+                ((Some(2_usize), "reference", "reference"), 38_usize),
+                ((Some(3_usize), "reference", "reference"), 12),
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-2 demo-sharp-bridge-pocket probe should contract only that mismatch-2 pair from 42 to 38 while leaving mismatch-3 unchanged"
+        );
+        assert_eq!(
+            tail_clause_four_five_counts,
+            [
+                (
+                    (Some(2_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    6_usize
+                ),
+                (
+                    (Some(2_usize), "claim_next_bridge", "claim_next_codomain"),
+                    6
+                ),
+                ((Some(2_usize), "claim_next_bridge", "reference"), 6),
+                (
+                    (Some(2_usize), "demo_sharp_codomain", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    (Some(2_usize), "demo_sharp_codomain", "claim_next_codomain"),
+                    2
+                ),
+                ((Some(2_usize), "reference", "claim_flat_codomain"), 4),
+                ((Some(2_usize), "reference", "claim_next_codomain"), 4),
+                ((Some(2_usize), "reference", "demo_flat_codomain"), 2),
+                ((Some(2_usize), "reference", "demo_sharp_domain"), 2),
+                ((Some(2_usize), "reference", "reference"), 4),
+                (
+                    (Some(3_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    (Some(3_usize), "claim_next_bridge", "claim_next_codomain"),
+                    2
+                ),
+                ((Some(3_usize), "claim_next_bridge", "reference"), 2),
+                ((Some(3_usize), "reference", "claim_flat_codomain"), 2),
+                ((Some(3_usize), "reference", "claim_next_codomain"), 2),
+                ((Some(3_usize), "reference", "reference"), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-2 demo-sharp-bridge-pocket probe should remove only that tiny demo-side pocket while leaving the mismatch-2 claim-next-bridge half, the mismatch-2 reference half, the sibling demo-sharp-codomain pocket, and the mismatch-3 backup intact"
         );
     }
 

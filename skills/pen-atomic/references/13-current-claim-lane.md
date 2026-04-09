@@ -189,6 +189,15 @@ Do not:
   have already pinned those halves as tradeoff controls with wider
   `small_cluster`; keep those half-probe outcomes in the autonomy docs rather
   than stabilizing them here
+- reopen the tiny mismatch-`2` `reference / reference` clause-`4`
+  `demo_sharp_codomain` or `demo_sharp_bridge` pocket first either after the
+  live docs have already pinned those pockets as matched smaller tradeoff
+  controls; keep those demo-side outcomes in the autonomy docs rather than
+  stabilizing them here
+- reopen broader mismatch-`0` or claim-safe shells first either after the
+  live docs have already marked both mismatch-`2` demo-side pockets as spent;
+  once those pockets are exhausted, route to the live docs for the smaller
+  mismatch-`3` backup rather than jumping sideways too early
 - reopen the representative `claim_sharp_codomain` clause-`2` sheet's
   clause-`6` identity split first either; its `claim_next_codomain`,
   `claim_sharp_codomain`, and `reference` continuations now also reland the
