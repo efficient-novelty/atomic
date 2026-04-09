@@ -624,3 +624,21 @@ This file is the append-only history for `desktop_claim_shadow`.
   now exhausted as tradeoff controls, the full `reference / reference` tail is
   spent and the next honest slice has to compare alternate broader backups
   rather than reopening that tail again.
+- Scope: compare the tightest remaining broader backups after the full
+  `reference / reference` tail was spent.
+  Result: a new explicit regression comparison kept the representative
+  mismatch-`0` claim-side clause-`2` shell as the tighter backup at
+  `4343 / 552 / 2268` with `small_cluster = 3141 / 522 / 522 / 0`, while the
+  representative claim-safe claim-side clause-`2` shell stayed looser at
+  `4347 / 555 / 2277` with `small_cluster = 3144 / 522 / 522 / 0`. The
+  claim-safe shell bought only `4` extra generated prefixes by spending
+  `3` extra clean-wall captures, `3` extra `small_cluster` generated
+  terminals, and `9` extra zero-admitted captures; it also left the
+  first-mismatch-`0` tier untouched at `312` and instead inflated
+  first-mismatch-`1` from `177` to `179`, while the tighter mismatch-`0`
+  shell cut first-mismatch-`0` to `311`.
+  Consequence: the representative mismatch-`0` claim-side shell stays
+  promoted ahead of the representative claim-safe shell. The claim-safe shell
+  is now a secondary broader backup that should not compete again unless the
+  tighter mismatch-`0` branch is ruled out below its remaining untouched
+  representative claim-sharp continuation.

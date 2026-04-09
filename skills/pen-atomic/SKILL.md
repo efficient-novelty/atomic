@@ -458,6 +458,11 @@ Focus on:
   mismatch-`3` halves are spent too, move to the next broader-backup
   comparison before reopening broader mismatch-`0` or claim-safe shells by
   restating the same `reference / reference` tail
+- if that broader-backup comparison is already explicit in the live docs,
+  keep the tighter representative mismatch-`0` claim-side clause-`2` shell
+  ahead of the looser representative claim-safe claim-side shell; do not
+  promote the claim-safe backup first unless the mismatch-`0` backup has been
+  ruled out again below its remaining untouched branch
 - treat the representative `claim_sharp_codomain` clause-`2` sheet's
   clause-`6` continuations as live autonomy detail too; the
   `claim_next_codomain`, `claim_sharp_codomain`, and `reference`

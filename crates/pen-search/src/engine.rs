@@ -10172,12 +10172,13 @@ fn exact_partial_prefix_bound_decision(
         work_item.clause_kappa,
         PartialPrefixBoundDecision::CannotClearBar,
     );
-    let decision = maybe_override_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four(
-        step_index,
-        admissibility,
-        work_item,
-        ExactPartialPrefixBoundDecision::CannotClearBar,
-    );
+    let decision =
+        maybe_override_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four(
+            step_index,
+            admissibility,
+            work_item,
+            ExactPartialPrefixBoundDecision::CannotClearBar,
+        );
     maybe_override_claim_step_fifteen_reference_reference_tail_mismatch_three_clause_four(
         step_index,
         admissibility,
@@ -27725,6 +27726,195 @@ mod tests {
                 .collect(),
             )),
             "the reference clause-two sheet should stay a neutral control, confirming that the representative pair-cell tradeoff is exactly the union of the two claim-side sheets"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_alternate_broader_backup_comparison_keeps_the_tighter_representative_mismatch_zero_claim_side_shell_ahead_of_the_claim_safe_shell()
+     {
+        #[derive(Debug, Eq, PartialEq)]
+        struct BroaderBackupOutcome {
+            generated_raw_prefixes: usize,
+            partial_prefix_bar_failure: usize,
+            zero_captured_prefixes: usize,
+            first_mismatch_position_counts: BTreeMap<Option<usize>, usize>,
+            small_cluster_generated: usize,
+        }
+
+        let mismatch_zero_outcome = |clause_two| {
+            let _search_override =
+                super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                    super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                        clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                        clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                        clause_two: Some(clause_two),
+                        clause_three: None,
+                        clause_six: None,
+                        clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
+                    },
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("claim prefix through step 14 should build");
+            let prefix = claim_steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+            BroaderBackupOutcome {
+                generated_raw_prefixes: step_fifteen.demo_funnel.generated_raw_prefixes,
+                partial_prefix_bar_failure: step_fifteen
+                    .exact_screen_reasons
+                    .partial_prefix_bar_failure,
+                zero_captured_prefixes: zero_summary.captured_prefixes,
+                first_mismatch_position_counts: wall_summary.first_mismatch_position_counts,
+                small_cluster_generated: bucket_stats
+                    .get("k8:structural_generic:temporal_operator:library_backed:small_cluster")
+                    .map(|stats| stats.generated_terminal_candidates)
+                    .expect("small_cluster bucket should stay present"),
+            }
+        };
+        let claim_safe_outcome = |search_clause_two, connectivity_clause_two| {
+            let _search_override =
+                super::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                    super::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                        clause_one: super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                        clause_two: search_clause_two,
+                    },
+                );
+            let _connectivity_override =
+                pen_type::connectivity::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                    pen_type::connectivity::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                        clause_one: pen_type::connectivity::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                        clause_two: connectivity_clause_two,
+                    },
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("claim prefix through step 14 should build");
+            let prefix = claim_steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+            BroaderBackupOutcome {
+                generated_raw_prefixes: step_fifteen.demo_funnel.generated_raw_prefixes,
+                partial_prefix_bar_failure: step_fifteen
+                    .exact_screen_reasons
+                    .partial_prefix_bar_failure,
+                zero_captured_prefixes: zero_summary.captured_prefixes,
+                first_mismatch_position_counts: wall_summary.first_mismatch_position_counts,
+                small_cluster_generated: bucket_stats
+                    .get("k8:structural_generic:temporal_operator:library_backed:small_cluster")
+                    .map(|stats| stats.generated_terminal_candidates)
+                    .expect("small_cluster bucket should stay present"),
+            }
+        };
+
+        let mismatch_zero_claim_flat = mismatch_zero_outcome(
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain,
+        );
+        let mismatch_zero_claim_sharp = mismatch_zero_outcome(
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimSharpCodomain,
+        );
+        let claim_safe_claim_flat = claim_safe_outcome(
+            super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+            pen_type::connectivity::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+        );
+        let claim_safe_claim_sharp = claim_safe_outcome(
+            super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimSharpCodomain,
+            pen_type::connectivity::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimSharpCodomain,
+        );
+
+        assert_eq!(
+            mismatch_zero_claim_flat, mismatch_zero_claim_sharp,
+            "the tighter mismatch-zero broader backup should stay symmetric across the two representative claim-side clause-two sheets"
+        );
+        assert_eq!(
+            claim_safe_claim_flat, claim_safe_claim_sharp,
+            "the secondary claim-safe broader backup should stay symmetric across the two representative claim-side clause-two sheets too"
+        );
+        assert_eq!(
+            claim_safe_claim_flat.generated_raw_prefixes
+                - mismatch_zero_claim_flat.generated_raw_prefixes,
+            4,
+            "the claim-safe broader backup should buy only four extra generated prefixes over the tighter mismatch-zero shell"
+        );
+        assert_eq!(
+            claim_safe_claim_flat.partial_prefix_bar_failure
+                - mismatch_zero_claim_flat.partial_prefix_bar_failure,
+            3,
+            "that tiny claim-safe breadth lift should still cost three extra clean-wall captures"
+        );
+        assert_eq!(
+            claim_safe_claim_flat.small_cluster_generated
+                - mismatch_zero_claim_flat.small_cluster_generated,
+            3,
+            "the claim-safe backup should also widen the noncanonical small-cluster shell by three generated candidates over the tighter mismatch-zero shell"
+        );
+        assert_eq!(
+            claim_safe_claim_flat.zero_captured_prefixes
+                - mismatch_zero_claim_flat.zero_captured_prefixes,
+            9,
+            "the claim-safe backup should also worsen the zero-admitted tail by nine captured prefixes"
+        );
+        assert_eq!(
+            mismatch_zero_claim_flat
+                .first_mismatch_position_counts
+                .get(&Some(0_usize))
+                .copied(),
+            Some(311),
+            "the tighter mismatch-zero shell should contract the first-mismatch-zero tier by one capture"
+        );
+        assert_eq!(
+            claim_safe_claim_flat
+                .first_mismatch_position_counts
+                .get(&Some(0_usize))
+                .copied(),
+            Some(312),
+            "the secondary claim-safe shell should leave the first-mismatch-zero tier untouched"
+        );
+        assert_eq!(
+            mismatch_zero_claim_flat
+                .first_mismatch_position_counts
+                .get(&Some(1_usize))
+                .copied(),
+            Some(177),
+            "the tighter mismatch-zero shell should keep the first-mismatch-one tier on the canonical floor"
+        );
+        assert_eq!(
+            claim_safe_claim_flat
+                .first_mismatch_position_counts
+                .get(&Some(1_usize))
+                .copied(),
+            Some(179),
+            "the secondary claim-safe shell should spend its tiny breadth gain by inflating the first-mismatch-one tier instead"
         );
     }
 

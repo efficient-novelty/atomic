@@ -17,12 +17,14 @@ This file owns the single active work order for `desktop_claim_shadow`.
 
 Keep the active work order off the now-demoted claim-safe mismatch-`1`
 clause-`5` fail-fast checkpoint, the now-demoted representative
-mismatch-`0` claim-flat dead-child reason checkpoint, and the now-spent full
+mismatch-`0` claim-flat dead-child reason checkpoint, the now-spent full
 `reference / reference` tail across mismatch-`2` and mismatch-`3`
-clause-`4` anatomy, so the next slice compares alternate broader backups
-instead of reopening another claim-safe clause-`5` retry, another
-mismatch-`0` identity or reason reland, or another spent
-`reference / reference` clause-`4` reland on top of canonical `v12` and the
+clause-`4` anatomy, and the now-secondary representative claim-safe
+claim-side broader backup, so the next slice stays on the tighter
+representative mismatch-`0` claim-side broader backup instead of reopening
+another claim-safe clause-`5` retry, another mismatch-`0` claim-flat reason
+reland, another spent `reference / reference` clause-`4` reland, or an early
+promotion of the looser claim-safe shell on top of canonical `v12` and the
 matched local `4331` guardrail surface.
 
 Do not start with another rerun setup pass.
@@ -520,6 +522,23 @@ Do not start with another rerun setup pass.
   or either mismatch-`3` clause-`4` half. The full tail is now spent as
   tradeoff-only control, so the next honest slice has to compare alternate
   broader backups rather than reopening the same tail again.
+- That alternate broader-backup comparison is now also explicit:
+  - the representative mismatch-`0` claim-side clause-`2` shell remains the
+    tighter broader backup at `4343 / 552 / 2268` with
+    `small_cluster = 3141 / 522 / 522 / 0`
+  - the representative claim-safe claim-side clause-`2` shell is the looser
+    secondary backup at `4347 / 555 / 2277` with
+    `small_cluster = 3144 / 522 / 522 / 0`
+  - the claim-safe shell buys only `4` extra generated prefixes by spending
+    `3` extra clean-wall captures, `3` extra `small_cluster` generated
+    terminals, and `9` extra zero-admitted captures
+  - the tighter mismatch-`0` shell also contracts the first-mismatch-`0` tier
+    from `312` to `311`, while the claim-safe shell leaves mismatch-`0`
+    untouched and instead inflates first-mismatch-`1` from `177` to `179`
+  - consequence: the representative mismatch-`0` claim-side shell stays
+    promoted, and the representative claim-safe shell should not compete for
+    promotion again unless that tighter mismatch-`0` backup is ruled out
+    below its remaining untouched branch
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -549,7 +568,8 @@ Do not start with another rerun setup pass.
    - do not spend another turn below that same representative mismatch-`0`
      claim-flat dead shell unless a later broader-backup comparison changes
      the ordering again
-4. Promote the alternate broader-backup comparison next:
+4. Keep the alternate broader-backup comparison settled and stay on the
+   tighter mismatch-`0` shell next:
    - treat the full `reference / reference` tail as fully exhausted across
      its clause-`4` anatomy:
      mismatch-`2` `claim_next_bridge = 4547 / 535 / 2271` with
@@ -571,16 +591,20 @@ Do not start with another rerun setup pass.
      `claim_next_bridge / reference / demo_sharp_codomain /
      demo_sharp_bridge` slice again as a candidate repair; all six now widen
      `small_cluster` above the canonical `3132 / 522 / 522 / 0` fence
-   - compare the tightest remaining broader backups next instead of the spent
-     tail
-   - start with the tighter representative mismatch-`0` claim-side
-     clause-`2` shell at `4343 / 552 / 2268` with
-     `small_cluster = 3141 / 522 / 522 / 0`, not the broader whole-half or
-     whole-cell mismatch-`0` tradeoffs
-   - only if that tighter mismatch-`0` backup is ruled out again should the
-     representative claim-safe claim-side clause-`2` shell at
-     `4347 / 555 / 2277` with `small_cluster = 3144 / 522 / 522 / 0`
-     compete for promotion
+   - keep the tighter representative mismatch-`0` claim-side clause-`2`
+     shell promoted at `4343 / 552 / 2268` with
+     `small_cluster = 3141 / 522 / 522 / 0`
+   - keep the looser representative claim-safe claim-side clause-`2` shell
+     demoted at `4347 / 555 / 2277` with
+     `small_cluster = 3144 / 522 / 522 / 0`; do not promote it again unless
+     the tighter mismatch-`0` backup is ruled out below its remaining
+     untouched branch
+   - spend the next turn below the representative mismatch-`0`
+     `claim_sharp_codomain` clause-`2` sheet rather than the already-demoted
+     claim-flat dead shell:
+     start from its marginally best clause-`6` `reference` continuation and
+     ask whether a finer dead-child completion / reason partition differs from
+     the claim-flat fail-fast checkpoint
 5. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays canonical `103 / 8`
@@ -654,6 +678,7 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_flat_joint_clause_three_shell_keeps_only_uniform_nonlive_open_band_terminal_choices`
 - `current_claim_step_fifteen_representative_mismatch_zero_claim_flat_dead_child_reason_progress_stays_uniformly_blocked_at_clause_two`
 - `current_claim_step_fifteen_representative_mismatch_zero_claim_flat_first_finer_reason_split_stays_uniform_below_the_dead_child_shell`
+- `current_claim_step_fifteen_alternate_broader_backup_comparison_keeps_the_tighter_representative_mismatch_zero_claim_side_shell_ahead_of_the_claim_safe_shell`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
@@ -714,6 +739,9 @@ Do not start with another rerun setup pass.
   the `claim_flat_domain`, `claim_sharp_codomain`, or `reference` sheet under
   `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
   claim_flat_codomain`
+- promoting the representative claim-safe claim-side clause-`2` shell ahead
+  of the tighter representative mismatch-`0` claim-side shell after the
+  broader-backup comparison has already settled that ordering
 - another representative `claim_flat_domain` clause-`2` clause-`6` identity
   pass on the `claim_next_codomain`, `claim_sharp_codomain`, or `reference`
   continuation under `claim_eventual_domain / claim_next_codomain /

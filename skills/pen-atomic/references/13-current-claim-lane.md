@@ -204,6 +204,11 @@ Do not:
   both mismatch-`2` demo-side pockets and both mismatch-`3` halves as spent;
   once the full tail is exhausted, route to the live docs for the next
   broader-backup comparison rather than retelling that tail again
+- promote the representative claim-safe claim-side clause-`2` shell ahead of
+  the tighter representative mismatch-`0` claim-side clause-`2` shell after
+  the live docs have already compared those broader backups; keep that
+  ordering in the autonomy docs rather than stabilizing the looser claim-safe
+  shell here
 - reopen the representative `claim_sharp_codomain` clause-`2` sheet's
   clause-`6` identity split first either; its `claim_next_codomain`,
   `claim_sharp_codomain`, and `reference` continuations now also reland the

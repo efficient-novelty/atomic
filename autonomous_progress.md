@@ -213,6 +213,21 @@ Until that exists, wording stays at `bounded live recovery`.
   or either mismatch-`3` clause-`4` half. The full tail is now spent as
   tradeoff-only control, so the next honest slice has to compare alternate
   broader backups rather than reopening the same tail again.
+- That alternate broader-backup comparison is now explicit:
+  - the representative mismatch-`0` claim-side clause-`2` shell remains the
+    tighter backup at `4343 / 552 / 2268` with
+    `small_cluster = 3141 / 522 / 522 / 0`
+  - the representative claim-safe claim-side clause-`2` shell is the looser
+    secondary backup at `4347 / 555 / 2277` with
+    `small_cluster = 3144 / 522 / 522 / 0`
+  - the claim-safe shell buys only `4` extra generated prefixes by spending
+    `3` extra clean-wall captures, `3` extra `small_cluster` generated
+    terminals, and `9` extra zero-admitted captures
+  - the tighter mismatch-`0` shell also contracts the first-mismatch-`0` tier
+    from `312` to `311`, while the claim-safe shell leaves mismatch-`0`
+    untouched and instead inflates first-mismatch-`1` from `177` to `179`
+  - consequence: the representative mismatch-`0` claim-side shell stays
+    promoted ahead of the representative claim-safe shell
 - A direct parent-level exact-bound bypass on the whole remaining-two
   mismatch-`0` claim-domain tier is now ruled out:
   - redirecting that tier from `CannotClearBar` to `Unknown` at
@@ -728,6 +743,16 @@ Until that exists, wording stays at `bounded live recovery`.
   tradeoff controls, the full `reference / reference` tail is frozen context
   rather than the active lead. The next honest revisit should compare
   alternate broader backups rather than reopening the same tail again.
+- That broader-backup comparison is now already settled in favor of the
+  tighter representative mismatch-`0` claim-side clause-`2` shell:
+  - it stays at `4343 / 552 / 2268` with
+    `small_cluster = 3141 / 522 / 522 / 0`
+  - the secondary representative claim-safe claim-side shell lands the looser
+    `4347 / 555 / 2277` with `small_cluster = 3144 / 522 / 522 / 0`
+  - do not promote the claim-safe shell ahead of that tighter mismatch-`0`
+    backup; its tiny `+4` breadth lift is bought by worse wall, worse
+    `small_cluster`, a worse zero-admitted tail, and extra first-mismatch-`1`
+    pressure
 - The representative mismatch-`0` claim-flat dead shell is now frozen context
   rather than an active lead: its first finer reason-level split already
   relands the same clause-`2` blocker and the same nonqualifying connectivity
@@ -803,9 +828,11 @@ Until that exists, wording stays at `bounded live recovery`.
   smaller tradeoff shell and differ only by a tiny zero-admitted tail delta.
 - Because the representative claim-sharp sheet is now exhausted at clause-`6`
   identity scope too, the next honest slice no longer sits on another
-  mismatch-`0` claim-side identity reland; it should move to the
-  broader-backup comparison rather than reopening another frozen
-  mismatch-`0` shell first.
+  mismatch-`0` claim-side identity reland. With the broader-backup comparison
+  now settled, the next honest mismatch-`0` revisit should move below the
+  representative claim-sharp sheet's marginally best clause-`6` `reference`
+  continuation rather than reopening the demoted claim-flat dead shell or
+  promoting the looser claim-safe shell first.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.
