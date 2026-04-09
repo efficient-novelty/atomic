@@ -287,12 +287,30 @@ Do not start with another rerun setup pass.
     `claim_next_bridge / reference` split at `24 / 18`
   - each adds only a tiny clause-`4` `demo_sharp_codomain` side pocket of `4`
     while leaving the sibling claim-safe pairing frozen at `42`
+  - consequence: pair identity is now exhausted below that representative
+    claim-safe clause-`4` side too
+- That representative claim-safe mismatch-`1` clause-`4`
+  `demo_sharp_bridge` side is now also localized one layer deeper across its
+  two exact pair cells:
+  - the `reference / claim_next_codomain` pair cell also lands
+    `4363 / 557 / 2283`
+  - the `reference / claim_sharp_codomain` pair cell lands the same
+    `4363 / 557 / 2283`
+  - each widens `small_cluster` only to `3156 / 526 / 526 / 0`
+  - the isolated `single` pocket stays fenced
+  - each raises only its targeted claim-safe mismatch-`1` pairing from
+    `42` to `46`
+  - each keeps that pairing's incumbent clause-`4`
+    `claim_next_bridge / reference` split at `24 / 18`
+  - each adds only a tiny clause-`4` `demo_sharp_bridge` side pocket of `4`
+    while leaving the sibling claim-safe pairing frozen at `42`
 - Any remaining claim-safe mismatch-`1` leverage is therefore no longer on
   choosing between the `claim_next_codomain` and `claim_sharp_codomain`
-  pairings below that representative clause-`4` `demo_sharp_codomain` side.
-  The next honest slice should move below one representative claim-safe pair
-  cell or only move sideways if the clause-`4` `demo_sharp_bridge` sibling is
-  explicitly promoted.
+  pairings or between the clause-`4`
+  `demo_sharp_codomain / demo_sharp_bridge` sides below that representative
+  claim-safe exact pair scope. The next honest slice should move below one
+  representative claim-safe exact pair cell instead of reopening another
+  clause-`4` sibling or pair-cell reland.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -329,17 +347,16 @@ Do not start with another rerun setup pass.
      frozen matched smaller tradeoff shells at `4343 / 552`, differing only
      by the tiny deeper zero-admitted tail at `2270 / 2269 / 2268`
    - treat the representative claim-safe mismatch-`1` clause-`4`
-     `demo_sharp_codomain` side's two exact pair cells as frozen matched
-     smaller negative controls at `4363 / 557 / 2283`
-   - on that representative claim-safe clause-`4` side, each exact pair-cell
-     reland only raises its targeted pairing from `42` to `46`, keeps the
-     incumbent clause-`4` `24 / 18` split, and adds only a tiny
-     `demo_sharp_codomain = 4` side pocket while leaving the sibling pairing
-     at `42`
+     `demo_sharp_codomain` and `demo_sharp_bridge` sides' exact pair cells as
+     frozen matched smaller negative controls at `4363 / 557 / 2283`
+   - on either representative claim-safe clause-`4` side, each exact
+     pair-cell reland only raises its targeted pairing from `42` to `46`,
+     keeps the incumbent clause-`4` `24 / 18` split, and adds only a tiny
+     `demo_sharp_codomain = 4` or `demo_sharp_bridge = 4` side pocket while
+     leaving the sibling pairing at `42`
    - if the claim-safe mismatch-`1` tier is revisited next, move below one
-     representative exact pair cell or explicitly compare the clause-`4`
-     `demo_sharp_bridge` sibling before reopening any broader claim-safe
-     surface again
+     representative exact pair cell rather than comparing another clause-`4`
+     sibling or reopening any broader claim-safe surface again
    - if mismatch-`0` is reopened at all, do so only through a newly promoted
      reason-level connectivity partition beneath one frozen representative
      claim-side shell; otherwise leave all `12` live pair cells alone
@@ -373,9 +390,13 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_mismatch_zero_claim_domain_clause_four_claim_next_bridge_side_stays_a_smaller_negative_control`
 - `current_claim_step_fifteen_clause_one_demo_flat_codomain_on_mismatch_zero_claim_domain_clause_four_reference_side_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_four_sharp_codomain_on_exact_claim_safe_pair_cells_stay_matched_smaller_negative_controls`
+- `current_claim_step_fifteen_clause_four_sharp_bridge_on_exact_claim_safe_pair_cells_stay_matched_smaller_negative_controls`
 - `connectivity_accepts_clause_four_demo_sharp_codomain_on_exact_claim_safe_pair_under_override`
 - `connectivity_keeps_clause_four_demo_sharp_codomain_on_sibling_claim_safe_pair_closed_even_under_override`
 - `connectivity_keeps_clause_four_demo_sharp_codomain_on_exact_claim_safe_pair_reference_terminal_only_even_under_override`
+- `connectivity_accepts_clause_four_demo_sharp_bridge_on_exact_claim_safe_pair_under_override`
+- `connectivity_keeps_clause_four_demo_sharp_bridge_on_sibling_claim_safe_pair_closed_even_under_override`
+- `connectivity_keeps_clause_four_demo_sharp_bridge_on_exact_claim_safe_pair_reference_terminal_only_even_under_override`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail_stays_a_negative_control`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half_stays_a_tradeoff_control`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain_stays_a_tradeoff_control`
@@ -408,7 +429,8 @@ Do not start with another rerun setup pass.
 - another exact claim-flat or claim-sharp single-sheet relocalization pass on
   the clause-`4` `claim_next_bridge` half
 - another exact claim-safe mismatch-`1` pair-cell reland on the
-  representative clause-`4` `demo_sharp_codomain` side for either the
+  representative clause-`4` `demo_sharp_codomain` or
+  `demo_sharp_bridge` side for either the
   `reference / claim_next_codomain` or
   `reference / claim_sharp_codomain` pairing
 - broad clause-`1` `demo_flat_codomain` reopenings across the full

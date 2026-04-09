@@ -6050,6 +6050,13 @@ thread_local! {
 
 #[cfg(test)]
 thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_PAIR_OVERRIDE:
+        std::cell::RefCell<Option<ClaimStepFifteenClaimSafeClauseOneLabel>> =
+            const { std::cell::RefCell::new(None) };
+}
+
+#[cfg(test)]
+thread_local! {
     static CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_CLAUSE_ZERO_ONE_OVERRIDE:
         std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
 }
@@ -6223,6 +6230,9 @@ struct ClaimStepFifteenClauseFourSidePocketOnClaimSafeClauseZeroOneOverrideGuard
 
 #[cfg(test)]
 struct ClaimStepFifteenClauseFourSharpCodomainOnClaimSafeClauseZeroOneOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenClauseFourSharpBridgeOnClaimSafePairOverrideGuard;
 
 #[cfg(test)]
 struct ClaimStepFifteenClauseFourSharpBridgeOnClaimSafeClauseZeroOneOverrideGuard;
@@ -6476,6 +6486,29 @@ fn override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair(
         },
     );
     ClaimStepFifteenClauseFourSharpCodomainOnClaimSafePairOverrideGuard
+}
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenClauseFourSharpBridgeOnClaimSafePairOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_PAIR_OVERRIDE.with(
+            |override_selector| {
+                *override_selector.borrow_mut() = None;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair(
+    clause_one: ClaimStepFifteenClaimSafeClauseOneLabel,
+) -> ClaimStepFifteenClauseFourSharpBridgeOnClaimSafePairOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_PAIR_OVERRIDE.with(
+        |override_selector| {
+            *override_selector.borrow_mut() = Some(clause_one);
+        },
+    );
+    ClaimStepFifteenClauseFourSharpBridgeOnClaimSafePairOverrideGuard
 }
 
 #[cfg(test)]
@@ -6782,6 +6815,13 @@ fn claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_override_sel
         .with(|override_selector| *override_selector.borrow())
 }
 
+#[cfg(test)]
+fn claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair_override_selector()
+-> Option<ClaimStepFifteenClaimSafeClauseOneLabel> {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_PAIR_OVERRIDE
+        .with(|override_selector| *override_selector.borrow())
+}
+
 #[cfg(not(test))]
 fn claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_override_enabled()
 -> bool {
@@ -6790,6 +6830,12 @@ fn claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_o
 
 #[cfg(not(test))]
 fn claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_override_selector()
+-> Option<ClaimStepFifteenClaimSafeClauseOneLabel> {
+    None
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair_override_selector()
 -> Option<ClaimStepFifteenClaimSafeClauseOneLabel> {
     None
 }
@@ -8811,8 +8857,20 @@ fn create_online_prefix_work_item(
                     clause_three,
                     anchor,
                 );
+        let claim_safe_pair_override_slice =
+            claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair_override_selector()
+                .is_some_and(|label| {
+                    matches_reference_temporal_clause_zero(clause_zero)
+                        && matches_claim_step_fifteen_claim_safe_clause_one_label(clause_one, label)
+                        && matches_claim_step_fifteen_anchor_eleven_clause_two_variant(clause_two)
+                        && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(
+                            clause_three,
+                            anchor,
+                        )
+                });
         (reference_slice
             || claim_safe_override_slice
+            || claim_safe_pair_override_slice
             || (claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_override_enabled()
                 && remaining_two_mismatch_zero_slice)
             || (claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_override_enabled()
@@ -21251,6 +21309,143 @@ mod tests {
                     .copied(),
                 None,
                 "the sibling claim-safe pairing should keep the reopened clause-4 side pocket closed"
+            );
+        }
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_four_sharp_bridge_on_exact_claim_safe_pair_cells_stay_matched_smaller_negative_controls()
+     {
+        for (label, sibling, selector) in [
+            (
+                "claim_next_codomain",
+                "claim_sharp_codomain",
+                super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+            ),
+            (
+                "claim_sharp_codomain",
+                "claim_next_codomain",
+                super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimSharpCodomain,
+            ),
+        ] {
+            let _search_override =
+                super::override_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair(
+                    selector,
+                );
+            let _connectivity_override =
+                pen_type::connectivity::override_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair(
+                    match selector {
+                        super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain => {
+                            pen_type::connectivity::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain
+                        }
+                        super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimSharpCodomain => {
+                            pen_type::connectivity::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimSharpCodomain
+                        }
+                    },
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let pair_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts(
+                );
+            let clause_four_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts();
+            let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("claim prefix through step 14 should build");
+            let prefix = claim_steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+            assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+            assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4363);
+            assert_eq!(
+                step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 557,
+                "reopening only the clause-4 demo-sharp-bridge side on one exact claim-safe mismatch-1 pairing should stay only a matched smaller negative control"
+            );
+            assert_eq!(
+                step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+                "the exact claim-safe bridge reland should keep the residual single-bucket incumbent fence unchanged"
+            );
+            assert_eq!(wall_summary.capture_count, 557);
+            assert_eq!(zero_summary.captured_prefixes, 2283);
+            assert_eq!(
+                bucket_stats
+                    .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+                Some(&DemoBucketStats {
+                    generated_terminal_candidates: 3156,
+                    admissible_terminal_candidates: 526,
+                    exact_screened_terminal_candidates: 526,
+                    pruned_terminal_candidates: 0,
+                    fully_scored_terminal_candidates: 0,
+                    best_overshoot: None,
+                }),
+                "the exact claim-safe bridge reland should still widen the same noncanonical small-cluster shell"
+            );
+            assert_eq!(
+                bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+                Some(&DemoBucketStats {
+                    generated_terminal_candidates: 0,
+                    admissible_terminal_candidates: 0,
+                    exact_screened_terminal_candidates: 0,
+                    pruned_terminal_candidates: 3,
+                    fully_scored_terminal_candidates: 1,
+                    best_overshoot: Some(Rational::new(115657, 21112)),
+                }),
+                "the exact claim-safe bridge reland should still keep the isolated single pocket fenced"
+            );
+            assert_eq!(
+                pair_counts
+                    .get(&(Some(1_usize), "reference", label))
+                    .copied(),
+                Some(46),
+                "the selected claim-safe mismatch-1 pairing should widen only slightly under the exact bridge reland"
+            );
+            assert_eq!(
+                pair_counts
+                    .get(&(Some(1_usize), "reference", sibling))
+                    .copied(),
+                Some(42),
+                "the sibling claim-safe mismatch-1 pairing should stay frozen at the baseline wall count"
+            );
+            assert_eq!(
+                clause_four_counts
+                    .get(&(Some(1_usize), "reference", label, "claim_next_bridge"))
+                    .copied(),
+                Some(24),
+                "the exact claim-safe bridge reland should preserve the incumbent claim-next-bridge share on the selected pairing"
+            );
+            assert_eq!(
+                clause_four_counts
+                    .get(&(Some(1_usize), "reference", label, "reference"))
+                    .copied(),
+                Some(18),
+                "the exact claim-safe bridge reland should preserve the incumbent clause-4 reference share on the selected pairing"
+            );
+            assert_eq!(
+                clause_four_counts
+                    .get(&(Some(1_usize), "reference", label, "demo_sharp_bridge"))
+                    .copied(),
+                Some(4),
+                "the exact claim-safe bridge reland should add only a tiny demo-sharp-bridge clause-4 side pocket on the selected pairing"
+            );
+            assert_eq!(
+                clause_four_counts
+                    .get(&(Some(1_usize), "reference", sibling, "demo_sharp_bridge"))
+                    .copied(),
+                None,
+                "the sibling claim-safe pairing should keep the reopened clause-4 bridge pocket closed"
             );
         }
     }

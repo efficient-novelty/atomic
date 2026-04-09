@@ -114,6 +114,12 @@ thread_local! {
 }
 
 thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_PAIR_OVERRIDE:
+        std::cell::RefCell<Option<ClaimStepFifteenClaimSafeClauseOneLabel>> =
+            const { std::cell::RefCell::new(None) };
+}
+
+thread_local! {
     static CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_REMAINING_TWO_MISMATCH_ZERO_BRIDGE_SLICE_OVERRIDE:
         std::cell::RefCell<usize> = const { std::cell::RefCell::new(0) };
 }
@@ -182,6 +188,9 @@ pub struct ClaimStepFifteenClauseFourSidePocketOnClaimSafeClauseZeroOneOverrideG
 
 #[doc(hidden)]
 pub struct ClaimStepFifteenClauseFourSharpCodomainOnClaimSafePairOverrideGuard;
+
+#[doc(hidden)]
+pub struct ClaimStepFifteenClauseFourSharpBridgeOnClaimSafePairOverrideGuard;
 
 #[doc(hidden)]
 pub struct ClaimStepFifteenClauseFiveRemainingTwoMismatchZeroBridgeSliceOverrideGuard;
@@ -663,6 +672,28 @@ pub fn override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair
     ClaimStepFifteenClauseFourSharpCodomainOnClaimSafePairOverrideGuard
 }
 
+impl Drop for ClaimStepFifteenClauseFourSharpBridgeOnClaimSafePairOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_PAIR_OVERRIDE.with(
+            |override_selector| {
+                *override_selector.borrow_mut() = None;
+            },
+        );
+    }
+}
+
+#[doc(hidden)]
+pub fn override_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair(
+    clause_one: ClaimStepFifteenClaimSafeClauseOneLabel,
+) -> ClaimStepFifteenClauseFourSharpBridgeOnClaimSafePairOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_PAIR_OVERRIDE.with(
+        |override_selector| {
+            *override_selector.borrow_mut() = Some(clause_one);
+        },
+    );
+    ClaimStepFifteenClauseFourSharpBridgeOnClaimSafePairOverrideGuard
+}
+
 impl Drop for ClaimStepFifteenClauseFiveRemainingTwoMismatchZeroBridgeSliceOverrideGuard {
     fn drop(&mut self) {
         CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_REMAINING_TWO_MISMATCH_ZERO_BRIDGE_SLICE_OVERRIDE.with(
@@ -826,6 +857,12 @@ fn claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_override_sel
         .with(|override_selector| *override_selector.borrow())
 }
 
+fn claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair_override_selector()
+-> Option<ClaimStepFifteenClaimSafeClauseOneLabel> {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_PAIR_OVERRIDE
+        .with(|override_selector| *override_selector.borrow())
+}
+
 fn claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_override_enabled() -> bool
 {
     CLAIM_STEP_FIFTEEN_CLAUSE_FIVE_REMAINING_TWO_MISMATCH_ZERO_BRIDGE_SLICE_OVERRIDE
@@ -977,6 +1014,7 @@ pub struct HistoricalReanchorSummary {
     anchor_eleven_clause_one_claim_domain_mismatch_zero_surface_matches: bool,
     anchor_eleven_clause_four_side_pocket_matches: bool,
     anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_matches: bool,
+    anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_matches: bool,
     anchor_eleven_clause_one_clause_five_reference_on_clause_four_reference_tail_on_claim_variant_pair_matches:
         bool,
     anchor_eleven_clause_one_clause_five_claim_flat_codomain_on_clause_four_reference_tail_on_claim_variant_pair_matches:
@@ -1014,6 +1052,10 @@ impl HistoricalReanchorSummary {
             anchor_eleven_clause_four_side_pocket_matches: temporal_shell_anchor_ref.is_some(),
             anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_matches:
                 claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_override_selector()
+                    .is_some()
+                    && temporal_shell_anchor_ref.is_some(),
+            anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_matches:
+                claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair_override_selector()
                     .is_some()
                     && temporal_shell_anchor_ref.is_some(),
             anchor_eleven_clause_one_clause_five_reference_on_clause_four_reference_tail_on_claim_variant_pair_matches:
@@ -1085,6 +1127,13 @@ impl HistoricalReanchorSummary {
             self.anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_matches = self
                 .anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_matches
                 && matches_anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_clause(
+                    position,
+                    &clause.expr,
+                    anchor,
+                );
+            self.anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_matches = self
+                .anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_matches
+                && matches_anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_clause(
                     position,
                     &clause.expr,
                     anchor,
@@ -1168,6 +1217,13 @@ impl HistoricalReanchorSummary {
                 &clause.expr,
                 anchor,
             );
+        self.anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_matches = self
+            .anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_matches
+            && matches_anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_clause(
+                position,
+                &clause.expr,
+                anchor,
+            );
         self.anchor_eleven_clause_one_clause_five_reference_on_clause_four_reference_tail_on_claim_variant_pair_matches = self
             .anchor_eleven_clause_one_clause_five_reference_on_clause_four_reference_tail_on_claim_variant_pair_matches
             && matches_anchor_eleven_clause_one_clause_five_reference_on_clause_four_reference_tail_on_claim_variant_pair_clause(
@@ -1224,6 +1280,7 @@ impl HistoricalReanchorSummary {
                 || self.anchor_eleven_clause_one_claim_domain_mismatch_zero_surface_matches
                 || self.anchor_eleven_clause_four_side_pocket_matches
                 || self.anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_matches
+                || self.anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_matches
                 || self
                     .anchor_eleven_clause_one_clause_five_reference_on_clause_four_reference_tail_on_claim_variant_pair_matches
                 || self
@@ -2278,6 +2335,40 @@ fn matches_anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_clause(
         2 => matches_claim_temporal_pair_clause_two_variant(expr),
         3 => matches_anchor_eleven_exact_argument_clause(expr, anchor + 1),
         4 => matches_anchor_eleven_demo_sharp_codomain_clause(expr),
+        5 => matches_reference_temporal_sharp_eventually_bridge(expr),
+        6 => matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(
+                            function.as_ref(),
+                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        ) && matches!(argument.as_ref(), Expr::Var(2))
+                )
+        ),
+        7 => matches_reference_temporal_terminal_clause(expr),
+        _ => false,
+    }
+}
+
+fn matches_anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_clause(
+    position: usize,
+    expr: &Expr,
+    anchor: u32,
+) -> bool {
+    let Some(clause_one) =
+        claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair_override_selector()
+    else {
+        return false;
+    };
+    match position {
+        0 => matches_reference_temporal_next_clause(expr),
+        1 => matches_anchor_eleven_claim_safe_clause_one_label(expr, clause_one),
+        2 => matches_claim_temporal_pair_clause_two_variant(expr),
+        3 => matches_anchor_eleven_exact_argument_clause(expr, anchor + 1),
+        4 => matches_anchor_eleven_demo_sharp_bridge_clause(expr),
         5 => matches_reference_temporal_sharp_eventually_bridge(expr),
         6 => matches!(
             expr,
@@ -9057,6 +9148,207 @@ mod tests {
                 assert!(
                     !reanchor.allows_historical_reanchor(),
                     "the exact claim-safe pair override should remain reference-terminal-only and keep lifted terminals fenced"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 11,
+                        historical_reanchor: false,
+                    }
+                );
+                assert!(!passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_clause_four_demo_sharp_bridge_on_exact_claim_safe_pair_under_override()
+    {
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for (selector, clause_one_variant) in [
+            (
+                super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
+            ),
+            (
+                super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimSharpCodomain,
+                Expr::Eventually(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+            ),
+        ] {
+            let _override =
+                super::override_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair(
+                    selector,
+                );
+            for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[1].expr = clause_one_variant.clone();
+                telescope.clauses[2].expr = clause_two_variant;
+                telescope.clauses[3] = ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor + 1)),
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    ))),
+                );
+                telescope.clauses[4] = ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Sharp(
+                            Box::new(Expr::Var(1)),
+                        )))))),
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Sharp(
+                            Box::new(Expr::Var(1)),
+                        )))))),
+                    ),
+                );
+                telescope.clauses[7] = reference_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    reanchor.allows_historical_reanchor(),
+                    "the exact claim-safe pair bridge override should admit only the selected mismatch-1 pairing on the clause-4 demo-sharp-bridge side"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 11,
+                        historical_reanchor: true,
+                    }
+                );
+                assert!(passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_four_demo_sharp_bridge_on_sibling_claim_safe_pair_closed_even_under_override()
+     {
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for (selector, sibling_clause_one_variant) in [
+            (
+                super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                Expr::Eventually(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+            ),
+            (
+                super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimSharpCodomain,
+                Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
+            ),
+        ] {
+            let _override =
+                super::override_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair(
+                    selector,
+                );
+            for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[1].expr = sibling_clause_one_variant.clone();
+                telescope.clauses[2].expr = clause_two_variant;
+                telescope.clauses[3] = ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor + 1)),
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    ))),
+                );
+                telescope.clauses[4] = ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Sharp(
+                            Box::new(Expr::Var(1)),
+                        )))))),
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Sharp(
+                            Box::new(Expr::Var(1)),
+                        )))))),
+                    ),
+                );
+                telescope.clauses[7] = reference_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    !reanchor.allows_historical_reanchor(),
+                    "the exact claim-safe pair bridge override should keep the sibling mismatch-1 pairing closed"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 11,
+                        historical_reanchor: false,
+                    }
+                );
+                assert!(!passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_clause_four_demo_sharp_bridge_on_exact_claim_safe_pair_reference_terminal_only_even_under_override()
+     {
+        let library = library_until(14);
+        let lifted_terminal = next_lift_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+
+        for (selector, clause_one_variant) in [
+            (
+                super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
+            ),
+            (
+                super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimSharpCodomain,
+                Expr::Eventually(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+            ),
+        ] {
+            let _override =
+                super::override_claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair(
+                    selector,
+                );
+            for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[1].expr = clause_one_variant.clone();
+                telescope.clauses[2].expr = clause_two_variant;
+                telescope.clauses[3] = ClauseRec::new(
+                    ClauseRole::Introduction,
+                    Expr::Lam(Box::new(Expr::App(
+                        Box::new(Expr::Lib(anchor + 1)),
+                        Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                    ))),
+                );
+                telescope.clauses[4] = ClauseRec::new(
+                    ClauseRole::Formation,
+                    Expr::Pi(
+                        Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Sharp(
+                            Box::new(Expr::Var(1)),
+                        )))))),
+                        Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Sharp(
+                            Box::new(Expr::Var(1)),
+                        )))))),
+                    ),
+                );
+                telescope.clauses[7] = lifted_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    !reanchor.allows_historical_reanchor(),
+                    "the exact claim-safe pair bridge override should remain reference-terminal-only and keep lifted terminals fenced"
                 );
                 assert_eq!(
                     witness,

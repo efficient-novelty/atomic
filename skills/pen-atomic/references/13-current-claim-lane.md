@@ -179,8 +179,8 @@ Do not:
   zero-admitted tail delta, so that axis also belongs to the autonomy ledger
   rather than as a fresh lead
 - reopen the representative claim-safe mismatch-`1` clause-`4`
-  `demo_sharp_codomain` side on either exact claim-safe pair first; those
-  `reference / claim_next_codomain` and
+  `demo_sharp_codomain` or `demo_sharp_bridge` side on either exact
+  claim-safe pair first; those `reference / claim_next_codomain` and
   `reference / claim_sharp_codomain` relands now belong to the autonomy
   ledger as matching smaller negative controls rather than as fresh leads
 - keep the next slice above another mismatch-`0` claim-side identity reland;

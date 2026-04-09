@@ -364,3 +364,22 @@ This file is the append-only history for `desktop_claim_shadow`.
   the next honest slice should move below one representative claim-safe pair
   cell or only move sideways if the clause-`4` `demo_sharp_bridge` sibling is
   explicitly promoted.
+- Scope: localize the representative claim-safe mismatch-`1` clause-`4`
+  `demo_sharp_bridge` side onto its two exact pair cells.
+  Result: the
+  `reference / claim_next_codomain` and
+  `reference / claim_sharp_codomain` pair-cell relands also both land the same
+  smaller negative-control shell at `4363 / 557 / 2283` with
+  `small_cluster = 3156 / 526 / 526 / 0`; each keeps the isolated `single`
+  pocket fenced, raises only its targeted claim-safe mismatch-`1` pairing
+  from `42` to `46`, preserves that pairing's incumbent clause-`4`
+  `claim_next_bridge / reference` split at `24 / 18`, and adds only a tiny
+  clause-`4` `demo_sharp_bridge` side pocket of `4` while leaving the sibling
+  claim-safe pairing frozen at `42`.
+  Consequence: clause-`4` side identity below the representative claim-safe
+  exact pair scope is now exhausted too. Any remaining claim-safe mismatch-`1`
+  leverage is no longer on choosing between the
+  `demo_sharp_codomain` and `demo_sharp_bridge` siblings or between the two
+  claim-safe pairings under them; the next honest slice should move below one
+  representative exact pair cell instead of reopening another clause-`4`
+  sibling or pair-cell reland.
