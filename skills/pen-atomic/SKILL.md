@@ -454,6 +454,15 @@ Focus on:
   terminal continuation still needs fallback, so route to the live docs before
   retrying clause-`5` or clause-`6` identity there as if one sibling were a
   fresh lead
+- treat the representative claim-safe `claim_flat_domain` dead prefix's
+  terminal-family partition as live autonomy detail too; beneath
+  `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`,
+  all six dead prefixes now reland the same `3`-generated / `0`-admitted
+  profile with the same `reference / eventual_lift / next_lift` trio, and
+  every one of those completed telescopes is still structurally connected but
+  outside historical reanchor and active-window qualification, so route to the
+  live docs before retrying terminal-family identity there as if one terminal
+  were newly privileged
 - keep the next slice above another mismatch-`0` representative claim-side
   identity reland; with both claim-side sheets now frozen through clause-`6`
   identity, route to the live docs before spending another turn below the

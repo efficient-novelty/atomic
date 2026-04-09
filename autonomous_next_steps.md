@@ -16,10 +16,11 @@ This file owns the single active work order for `desktop_claim_shadow`.
 ## Objective
 
 Shift the active work order off the now-exhausted representative mismatch-`0`
-claim-side clause-`6` identity surfaces and onto the smaller claim-safe
-mismatch-`1` tier, carrying both representative claim-side sheets as frozen
-context rather than reopening another mismatch-`0` sheet-identity reland on
-top of canonical `v12` and the matched local `4331` guardrail surface.
+claim-side clause-`6` identity surfaces and below the representative
+claim-safe mismatch-`1` dead prefix's terminal-family split, so the next slice
+starts on reason-level connectivity behavior rather than reopening another
+identity reland on top of canonical `v12` and the matched local `4331`
+guardrail surface.
 
 Do not start with another rerun setup pass.
 
@@ -349,11 +350,29 @@ Do not start with another rerun setup pass.
   - every one of the six prefixes sits at matched-clause count `2`
   - every terminal continuation on every prefix is `NeedsFallback`
     (`3` terminal candidates each)
+- The representative claim-safe `claim_flat_domain` dead shell under that same
+  chosen exact pair is now also localized one layer deeper at terminal-family
+  scope:
+  - all six clause-`5` / clause-`6` continuations
+    `claim_flat_codomain / claim_next_codomain` x
+    `claim_next_codomain / claim_sharp_codomain / reference`
+    reland the same dead `3`-generated / `0`-admitted completion profile
+  - every one of those six dead prefixes still exposes the same three terminal
+    families only:
+    `reference / eventual_lift / next_lift`
+  - every one of those terminal families still classifies only as
+    `NeedsFallback`
+  - every one of those completed telescopes remains structurally connected but
+    unqualified on the current claim path with
+    `connected = true`, `references_active_window = false`,
+    `self_contained = false`, `max_lib_ref = 11`, and
+    `historical_reanchor = false`
 - Any remaining claim-safe mismatch-`1` leverage is therefore no longer on
-  claim-side clause-`5` or clause-`6` identity below that representative exact
-  pair cell either. The next honest slice should move below one representative
-  dead prefix in that shell rather than reopening another claim-side sheet or
-  another clause-`5` / clause-`6` sibling.
+  claim-side clause-`5`, clause-`6`, or terminal-family identity below that
+  representative exact pair cell either. The next honest slice should move
+  below one representative terminal family, starting with the `reference`
+  terminal under the representative dead prefix, rather than reopening another
+  claim-side sheet, clause-`5`, clause-`6`, or terminal-family sibling.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -412,12 +431,13 @@ Do not start with another rerun setup pass.
      identities as frozen matched dead shells too; every one of those six
      prefixes still has only `NeedsFallback` terminals
    - if the claim-safe mismatch-`1` tier is revisited next, move below the
-     representative dead prefix
+     representative dead prefix's `reference` terminal
      `reference / claim_next_codomain / claim_flat_domain /
-     demo_sharp_codomain / claim_flat_codomain / reference`
-     and partition by terminal family or reason-level connectivity behavior;
-     use the other five dead prefixes in that shell as matched controls rather
-     than as separate fresh leads
+     demo_sharp_codomain / claim_flat_codomain / reference`;
+     use the `eventual_lift` and `next_lift` terminals plus the other five
+     dead prefixes in that shell as matched controls, and partition by the
+     specific reason-level connectivity behavior that still blocks historical
+     reanchor rather than by another identity reland
    - if mismatch-`0` is reopened at all, do so only through a newly promoted
      reason-level connectivity partition beneath one frozen representative
      claim-side shell; otherwise leave all `12` live pair cells alone
@@ -457,6 +477,8 @@ Do not start with another rerun setup pass.
 - `connectivity_keeps_clause_four_demo_sharp_codomain_on_exact_claim_safe_pair_reference_terminal_only_even_under_override`
 - `current_claim_step_fifteen_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_clause_two_sheets_split_into_two_claim_side_smaller_negative_controls_plus_one_reference_neutral_control`
 - `current_claim_step_fifteen_clause_four_demo_sharp_codomain_on_representative_claim_safe_claim_side_sheets_localize_to_matching_dead_clause_five_six_shells`
+- `current_claim_step_fifteen_representative_claim_safe_dead_prefixes_stay_on_six_matched_dead_completion_summaries`
+- `current_claim_step_fifteen_representative_claim_safe_dead_prefixes_keep_only_uniform_nonlive_terminal_families`
 - `current_claim_step_fifteen_claim_clause_two_prefixes_expose_only_anchor_eleven_exact_argument_pocket`
 - `connectivity_accepts_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_claim_clause_two_under_override`
 - `connectivity_keeps_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_sibling_claim_clause_two_closed_even_under_override`
@@ -507,6 +529,8 @@ Do not start with another rerun setup pass.
 - another representative claim-safe claim-side clause-`5` / clause-`6`
   identity pass inside
   `reference / claim_next_codomain / demo_sharp_codomain`
+- another representative claim-safe dead-prefix terminal-family reland under
+  `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`
 - broad clause-`1` `demo_flat_codomain` reopenings across the full
   mismatch-`0` claim-domain surface
 - another connectivity-only relocalization of the mismatch-`0` clause-`4`

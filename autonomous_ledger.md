@@ -423,3 +423,32 @@ This file is the append-only history for `desktop_claim_shadow`.
   should move below one representative dead prefix in that six-prefix shell,
   using the other five as matched controls rather than reopening sheet,
   clause-`5`, or clause-`6` identity.
+- Scope: localize the representative claim-safe mismatch-`1`
+  `claim_flat_domain` dead shell one layer deeper at terminal-family /
+  completion-summary scope.
+  Result: beneath
+  `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`,
+  all six dead clause-`5` / clause-`6` continuations
+  `claim_flat_codomain / claim_next_codomain` x
+  `claim_next_codomain / claim_sharp_codomain / reference` collapse to the
+  same dead completion profile:
+  - `3` generated terminal candidates
+  - `0` admitted candidates
+  - no bound, no best-rank profile, and no survivor sketch
+  - the same three terminal families only:
+    `reference`, `eventual_lift`, and `next_lift`
+  - each of those three terminal families still classifies only as
+    `NeedsFallback`
+  - each full telescope remains structurally connected but unqualified on the
+    current claim path:
+    `connected = true`, `references_active_window = false`,
+    `self_contained = false`, `max_lib_ref = 11`,
+    `historical_reanchor = false`
+  Consequence: terminal-family identity is now exhausted below that
+  representative claim-safe dead shell too. The next honest claim-safe revisit
+  should move below one representative terminal family, starting with the
+  `reference` terminal under
+  `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain /
+  claim_flat_codomain / reference`, and partition by specific
+  reason-level connectivity behavior while using the other two terminal
+  families and the other five dead prefixes as matched controls.

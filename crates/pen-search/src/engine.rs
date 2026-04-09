@@ -22088,6 +22088,336 @@ mod tests {
         );
     }
 
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    struct ClaimStepFifteenRepresentativeClaimSafeDeadPrefixCompletionProfile {
+        generated_candidate_count: usize,
+        admitted_candidate_count: usize,
+        has_bound: bool,
+        has_best_accept_primary_rank: bool,
+        has_best_accept_rank: bool,
+        has_survivor_sketch: bool,
+        terminal_profiles:
+            BTreeMap<&'static str, (TerminalConnectivityDecision, ConnectivityWitness, bool)>,
+    }
+
+    fn current_claim_step_fifteen_representative_claim_safe_dead_prefix_completion_profiles()
+    -> BTreeMap<
+        (&'static str, &'static str),
+        ClaimStepFifteenRepresentativeClaimSafeDeadPrefixCompletionProfile,
+    > {
+        let _search_override =
+            super::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                super::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                    clause_one: super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                    clause_two: super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+                },
+            );
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                pen_type::connectivity::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                    clause_one: pen_type::connectivity::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                    clause_two: pen_type::connectivity::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+                },
+            );
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let mut summary_cache = surface.prefix_legality_cache.clone();
+        let mut profiles = BTreeMap::new();
+
+        for work_item in surface.pruned_terminal_prefixes.iter().filter(|work_item| {
+            work_item.prefix_telescope.clauses.len() == 7
+                && current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                    0,
+                    &work_item.prefix_telescope.clauses[0],
+                ) == "reference"
+                && current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                    1,
+                    &work_item.prefix_telescope.clauses[1],
+                ) == "claim_next_codomain"
+                && current_claim_step_fifteen_partial_prefix_clause_two_label(
+                    &work_item.prefix_telescope.clauses[2],
+                ) == "claim_flat_domain"
+                && matches!(
+                    &work_item.prefix_telescope.clauses[3].expr,
+                    Expr::Lam(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::App(function, argument)
+                                if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor + 1)
+                                    && matches!(
+                                        argument.as_ref(),
+                                        Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                    )
+                        )
+                )
+                && current_claim_step_fifteen_partial_prefix_clause_four_label(
+                    &work_item.prefix_telescope.clauses[4],
+                ) == "demo_sharp_codomain"
+                && matches!(
+                    current_claim_step_fifteen_partial_prefix_clause_five_label(
+                        &work_item.prefix_telescope.clauses[5]
+                    ),
+                    "claim_flat_codomain" | "claim_next_codomain"
+                )
+                && matches!(
+                    current_claim_step_fifteen_partial_prefix_clause_six_label(
+                        &work_item.prefix_telescope.clauses[6]
+                    ),
+                    "claim_next_codomain" | "claim_sharp_codomain" | "reference"
+                )
+        }) {
+            let summary = summary_cache
+                .terminal_prefix_completion_summary(&work_item.signature)
+                .expect("representative claim-safe dead prefixes should keep cached completion summaries");
+            let mut terminal_cache = PrefixLegalityCache::default();
+            assert!(terminal_cache.insert_root(
+                work_item.signature.clone(),
+                8,
+                &surface.library,
+                &work_item.prefix_telescope,
+                surface.admissibility,
+                LateFamilySurface::ClaimGeneric
+            ));
+            let connectivity_facts = work_item
+                .next_clause_connectivity_facts(&surface.clause_catalog)
+                .expect("representative claim-safe dead prefixes should expose terminal connectivity facts");
+            let terminal_profiles = work_item
+                .next_clauses(&surface.clause_catalog)
+                .iter()
+                .zip(connectivity_facts.iter())
+                .map(|(clause, facts)| {
+                    let label = if *clause == reference_terminal {
+                        "reference"
+                    } else if *clause == next_lift_terminal {
+                        "next_lift"
+                    } else if *clause == eventual_lift_terminal {
+                        "eventual_lift"
+                    } else {
+                        "other"
+                    };
+                    let decision = terminal_cache
+                        .terminal_connectivity_with_facts(
+                            &work_item.signature,
+                            &surface.library,
+                            clause,
+                            Some(facts),
+                        )
+                        .expect("representative claim-safe dead prefixes should classify each terminal continuation");
+                    let mut telescope = work_item.prefix_telescope.clone();
+                    telescope.clauses.push(clause.clone());
+                    (
+                        label,
+                        (
+                            decision,
+                            analyze_connectivity(&surface.library, &telescope),
+                            passes_connectivity(&surface.library, &telescope),
+                        ),
+                    )
+                })
+                .collect::<BTreeMap<_, _>>();
+            profiles.insert(
+                (
+                    current_claim_step_fifteen_partial_prefix_clause_five_label(
+                        &work_item.prefix_telescope.clauses[5],
+                    ),
+                    current_claim_step_fifteen_partial_prefix_clause_six_label(
+                        &work_item.prefix_telescope.clauses[6],
+                    ),
+                ),
+                ClaimStepFifteenRepresentativeClaimSafeDeadPrefixCompletionProfile {
+                    generated_candidate_count: summary.generated_candidate_count,
+                    admitted_candidate_count: summary.admitted_candidate_count,
+                    has_bound: summary.bound.is_some(),
+                    has_best_accept_primary_rank: summary.best_accept_primary_rank.is_some(),
+                    has_best_accept_rank: summary.best_accept_rank.is_some(),
+                    has_survivor_sketch: summary.compact_survivor_sketch.is_some(),
+                    terminal_profiles,
+                },
+            );
+        }
+
+        profiles
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_representative_claim_safe_dead_prefixes_stay_on_six_matched_dead_completion_summaries()
+     {
+        let profiles =
+            current_claim_step_fifteen_representative_claim_safe_dead_prefix_completion_profiles();
+        let expected_profile = ClaimStepFifteenRepresentativeClaimSafeDeadPrefixCompletionProfile {
+            generated_candidate_count: 3,
+            admitted_candidate_count: 0,
+            has_bound: false,
+            has_best_accept_primary_rank: false,
+            has_best_accept_rank: false,
+            has_survivor_sketch: false,
+            terminal_profiles: [
+                (
+                    "eventual_lift",
+                    (
+                        TerminalConnectivityDecision::NeedsFallback,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 11,
+                            historical_reanchor: false,
+                        },
+                        false,
+                    ),
+                ),
+                (
+                    "next_lift",
+                    (
+                        TerminalConnectivityDecision::NeedsFallback,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 11,
+                            historical_reanchor: false,
+                        },
+                        false,
+                    ),
+                ),
+                (
+                    "reference",
+                    (
+                        TerminalConnectivityDecision::NeedsFallback,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 11,
+                            historical_reanchor: false,
+                        },
+                        false,
+                    ),
+                ),
+            ]
+            .into_iter()
+            .collect(),
+        };
+
+        assert_eq!(
+            profiles,
+            [
+                (
+                    ("claim_flat_codomain", "claim_next_codomain"),
+                    expected_profile.clone(),
+                ),
+                (
+                    ("claim_flat_codomain", "claim_sharp_codomain"),
+                    expected_profile.clone(),
+                ),
+                (
+                    ("claim_flat_codomain", "reference"),
+                    expected_profile.clone()
+                ),
+                (
+                    ("claim_next_codomain", "claim_next_codomain"),
+                    expected_profile.clone(),
+                ),
+                (
+                    ("claim_next_codomain", "claim_sharp_codomain"),
+                    expected_profile.clone(),
+                ),
+                (("claim_next_codomain", "reference"), expected_profile),
+            ]
+            .into_iter()
+            .collect(),
+            "beneath the representative claim-safe claim-flat dead prefix shell, all six clause-five/clause-six continuations should now collapse to the same 3-generated / 0-admitted dead completion summary with no bound, no best-rank profile, and no survivor sketch"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_representative_claim_safe_dead_prefixes_keep_only_uniform_nonlive_terminal_families()
+     {
+        let profiles =
+            current_claim_step_fifteen_representative_claim_safe_dead_prefix_completion_profiles();
+
+        assert!(
+            profiles.values().all(|profile| {
+                profile.terminal_profiles
+                    == [
+                        (
+                            "eventual_lift",
+                            (
+                                TerminalConnectivityDecision::NeedsFallback,
+                                ConnectivityWitness {
+                                    connected: true,
+                                    references_active_window: false,
+                                    self_contained: false,
+                                    max_lib_ref: 11,
+                                    historical_reanchor: false,
+                                },
+                                false,
+                            ),
+                        ),
+                        (
+                            "next_lift",
+                            (
+                                TerminalConnectivityDecision::NeedsFallback,
+                                ConnectivityWitness {
+                                    connected: true,
+                                    references_active_window: false,
+                                    self_contained: false,
+                                    max_lib_ref: 11,
+                                    historical_reanchor: false,
+                                },
+                                false,
+                            ),
+                        ),
+                        (
+                            "reference",
+                            (
+                                TerminalConnectivityDecision::NeedsFallback,
+                                ConnectivityWitness {
+                                    connected: true,
+                                    references_active_window: false,
+                                    self_contained: false,
+                                    max_lib_ref: 11,
+                                    historical_reanchor: false,
+                                },
+                                false,
+                            ),
+                        ),
+                    ]
+                    .into_iter()
+                    .collect::<BTreeMap<_, _>>()
+            }),
+            "each representative claim-safe dead prefix should keep the same three terminal families only: reference, eventual_lift, and next_lift all stay structurally connected but outside active-window qualification and historical reanchor, so none can become a live claim-path recovery on this shell"
+        );
+    }
+
     #[test]
     fn current_claim_step_fifteen_anchor_eleven_exact_argument_pocket_stays_tie_clean_until_clause_six_moves()
      {
