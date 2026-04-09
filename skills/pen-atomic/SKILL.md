@@ -448,6 +448,12 @@ Focus on:
   `reference` sheet is only a search-neutral control, so route to the live
   docs before retrying that clause-`2` identity split as if one sheet were
   newly privileged
+- treat the representative claim-safe claim-side sheets' clause-`5` /
+  clause-`6` shell as live autonomy detail too; beneath that same chosen cell,
+  both claim-side sheets now reland the same six dead prefixes and every
+  terminal continuation still needs fallback, so route to the live docs before
+  retrying clause-`5` or clause-`6` identity there as if one sibling were a
+  fresh lead
 - keep the next slice above another mismatch-`0` representative claim-side
   identity reland; with both claim-side sheets now frozen through clause-`6`
   identity, route to the live docs before spending another turn below the

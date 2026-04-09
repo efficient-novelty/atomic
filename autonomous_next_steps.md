@@ -337,6 +337,23 @@ Do not start with another rerun setup pass.
   next honest slice should move below one representative claim-side clause-`2`
   sheet instead of reopening the sibling claim sheet, the reference sheet, or
   another exact pair cell first.
+- The two representative claim-side sheets under that chosen exact pair cell
+  are now also localized one layer deeper across their clause-`5` / clause-`6`
+  shells:
+  - on both `claim_flat_domain` and `claim_sharp_codomain`, the
+    clause-`5` `claim_flat_codomain` and `claim_next_codomain` prefixes each
+    combine with all three clause-`6` labels
+    `claim_next_codomain / claim_sharp_codomain / reference`
+  - each of those six resulting prefixes is captured exactly once on the same
+    `4347 / 555` outer shell
+  - every one of the six prefixes sits at matched-clause count `2`
+  - every terminal continuation on every prefix is `NeedsFallback`
+    (`3` terminal candidates each)
+- Any remaining claim-safe mismatch-`1` leverage is therefore no longer on
+  claim-side clause-`5` or clause-`6` identity below that representative exact
+  pair cell either. The next honest slice should move below one representative
+  dead prefix in that shell rather than reopening another claim-side sheet or
+  another clause-`5` / clause-`6` sibling.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -389,10 +406,18 @@ Do not start with another rerun setup pass.
    - because only claim clause-`2` prefixes expose the anchor-`11`
      exact-argument pocket there, do not promote the reference sheet from the
      connectivity witness into the next live search slice
-   - if the claim-safe mismatch-`1` tier is revisited next, move below that
-     representative exact pair cell and start with the `claim_flat_domain`
-     claim-side sheet; use the `claim_sharp_codomain` sheet only as the
-     sibling matched control rather than as a separate fresh lead
+   - inside the chosen representative claim-side sheets, treat the
+     clause-`5` `claim_flat_codomain / claim_next_codomain` and
+     clause-`6` `claim_next_codomain / claim_sharp_codomain / reference`
+     identities as frozen matched dead shells too; every one of those six
+     prefixes still has only `NeedsFallback` terminals
+   - if the claim-safe mismatch-`1` tier is revisited next, move below the
+     representative dead prefix
+     `reference / claim_next_codomain / claim_flat_domain /
+     demo_sharp_codomain / claim_flat_codomain / reference`
+     and partition by terminal family or reason-level connectivity behavior;
+     use the other five dead prefixes in that shell as matched controls rather
+     than as separate fresh leads
    - if mismatch-`0` is reopened at all, do so only through a newly promoted
      reason-level connectivity partition beneath one frozen representative
      claim-side shell; otherwise leave all `12` live pair cells alone
@@ -431,6 +456,7 @@ Do not start with another rerun setup pass.
 - `connectivity_keeps_clause_four_demo_sharp_codomain_on_sibling_claim_safe_pair_closed_even_under_override`
 - `connectivity_keeps_clause_four_demo_sharp_codomain_on_exact_claim_safe_pair_reference_terminal_only_even_under_override`
 - `current_claim_step_fifteen_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_clause_two_sheets_split_into_two_claim_side_smaller_negative_controls_plus_one_reference_neutral_control`
+- `current_claim_step_fifteen_clause_four_demo_sharp_codomain_on_representative_claim_safe_claim_side_sheets_localize_to_matching_dead_clause_five_six_shells`
 - `current_claim_step_fifteen_claim_clause_two_prefixes_expose_only_anchor_eleven_exact_argument_pocket`
 - `connectivity_accepts_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_claim_clause_two_under_override`
 - `connectivity_keeps_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_sibling_claim_clause_two_closed_even_under_override`
@@ -477,6 +503,9 @@ Do not start with another rerun setup pass.
   `reference / claim_sharp_codomain` pairing
 - another representative claim-safe exact-pair clause-`2` identity pass on the
   `claim_flat_domain`, `claim_sharp_codomain`, or `reference` sheet under
+  `reference / claim_next_codomain / demo_sharp_codomain`
+- another representative claim-safe claim-side clause-`5` / clause-`6`
+  identity pass inside
   `reference / claim_next_codomain / demo_sharp_codomain`
 - broad clause-`1` `demo_flat_codomain` reopenings across the full
   mismatch-`0` claim-domain surface

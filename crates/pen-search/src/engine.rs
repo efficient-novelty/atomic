@@ -21866,6 +21866,229 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_clause_four_demo_sharp_codomain_on_representative_claim_safe_claim_side_sheets_localize_to_matching_dead_clause_five_six_shells()
+     {
+        let mut outcomes = BTreeMap::new();
+
+        for (sheet_name, search_clause_two, connectivity_clause_two) in [
+            (
+                "claim_flat_domain",
+                super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+                pen_type::connectivity::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+            ),
+            (
+                "claim_sharp_codomain",
+                super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimSharpCodomain,
+                pen_type::connectivity::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimSharpCodomain,
+            ),
+        ] {
+            let selector = super::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                clause_one: super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                clause_two: search_clause_two,
+            };
+            let _search_override =
+                super::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                    selector,
+                );
+            let _connectivity_override =
+                pen_type::connectivity::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                    pen_type::connectivity::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                        clause_one: pen_type::connectivity::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                        clause_two: connectivity_clause_two,
+                    },
+                );
+            let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+            let anchor = surface
+                .admissibility
+                .historical_anchor_ref
+                .expect("step 15 should still expose a historical anchor");
+            let mut cache = PrefixLegalityCache::default();
+            let mut grouped = BTreeMap::new();
+
+            for work_item in surface.pruned_terminal_prefixes.iter().filter(|work_item| {
+                work_item.prefix_telescope.clauses.len() == 7
+                    && current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                        0,
+                        &work_item.prefix_telescope.clauses[0],
+                    ) == "reference"
+                    && current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                        1,
+                        &work_item.prefix_telescope.clauses[1],
+                    ) == "claim_next_codomain"
+                    && current_claim_step_fifteen_partial_prefix_clause_two_label(
+                        &work_item.prefix_telescope.clauses[2],
+                    ) == sheet_name
+                    && matches!(
+                        &work_item.prefix_telescope.clauses[3].expr,
+                        Expr::Lam(body)
+                            if matches!(
+                                body.as_ref(),
+                                Expr::App(function, argument)
+                                    if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor + 1)
+                                        && matches!(
+                                            argument.as_ref(),
+                                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                        )
+                            )
+                    )
+                    && current_claim_step_fifteen_partial_prefix_clause_four_label(
+                        &work_item.prefix_telescope.clauses[4],
+                    ) == "demo_sharp_codomain"
+            }) {
+                assert!(cache.insert_root(
+                    work_item.signature.clone(),
+                    8,
+                    &surface.library,
+                    &work_item.prefix_telescope,
+                    surface.admissibility,
+                    LateFamilySurface::ClaimGeneric
+                ));
+                let connectivity_facts = work_item
+                    .next_clause_connectivity_facts(&surface.clause_catalog)
+                    .expect("targeted claim-safe claim-side surface should expose terminal connectivity facts");
+                let mut decisions = BTreeMap::new();
+                for (clause, facts) in work_item
+                    .next_clauses(&surface.clause_catalog)
+                    .iter()
+                    .zip(connectivity_facts.iter())
+                {
+                    let decision = cache
+                        .terminal_connectivity_with_facts(
+                            &work_item.signature,
+                            &surface.library,
+                            clause,
+                            Some(facts),
+                        )
+                        .expect("targeted claim-safe claim-side surface should classify terminal continuations");
+                    *decisions.entry(format!("{decision:?}")).or_insert(0usize) += 1;
+                }
+                let summary = HistoricalReanchorSummary::from_telescope(
+                    &surface.library,
+                    &work_item.prefix_telescope,
+                );
+                *grouped
+                    .entry((
+                        work_item
+                            .prefix_telescope
+                            .clauses
+                            .iter()
+                            .zip(Telescope::reference(15).clauses.iter())
+                            .position(|(left, right)| left != right),
+                        current_claim_step_fifteen_partial_prefix_clause_five_label(
+                            &work_item.prefix_telescope.clauses[5],
+                        ),
+                        current_claim_step_fifteen_partial_prefix_clause_six_label(
+                            &work_item.prefix_telescope.clauses[6],
+                        ),
+                        summary.matched_clause_count(),
+                        decisions,
+                    ))
+                    .or_insert(0usize) += 1;
+            }
+
+            outcomes.insert(
+                sheet_name,
+                (
+                    surface.raw_generated_surface,
+                    surface.roots_seen,
+                    surface.roots_enqueued,
+                    surface.partial_prefix_bound_prunes,
+                    grouped,
+                ),
+            );
+        }
+
+        let expected_dead_shell = [
+            (
+                (
+                    Some(1_usize),
+                    "claim_flat_codomain",
+                    "claim_next_codomain",
+                    2_usize,
+                    [("NeedsFallback".to_string(), 3_usize)]
+                        .into_iter()
+                        .collect::<BTreeMap<_, _>>(),
+                ),
+                1_usize,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "claim_flat_codomain",
+                    "claim_sharp_codomain",
+                    2_usize,
+                    [("NeedsFallback".to_string(), 3_usize)]
+                        .into_iter()
+                        .collect::<BTreeMap<_, _>>(),
+                ),
+                1,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "claim_flat_codomain",
+                    "reference",
+                    2_usize,
+                    [("NeedsFallback".to_string(), 3_usize)]
+                        .into_iter()
+                        .collect::<BTreeMap<_, _>>(),
+                ),
+                1,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "claim_next_codomain",
+                    "claim_next_codomain",
+                    2_usize,
+                    [("NeedsFallback".to_string(), 3_usize)]
+                        .into_iter()
+                        .collect::<BTreeMap<_, _>>(),
+                ),
+                1,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "claim_next_codomain",
+                    "claim_sharp_codomain",
+                    2_usize,
+                    [("NeedsFallback".to_string(), 3_usize)]
+                        .into_iter()
+                        .collect::<BTreeMap<_, _>>(),
+                ),
+                1,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "claim_next_codomain",
+                    "reference",
+                    2_usize,
+                    [("NeedsFallback".to_string(), 3_usize)]
+                        .into_iter()
+                        .collect::<BTreeMap<_, _>>(),
+                ),
+                1,
+            ),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+
+        assert_eq!(outcomes.len(), 2);
+        assert_eq!(
+            outcomes.get("claim_flat_domain"),
+            Some(&(4347, 3, 3, 555, expected_dead_shell.clone())),
+            "the representative claim-safe claim-flat sheet should localize to a six-prefix dead clause-5/clause-6 shell: both live clause-5 families combine with all three clause-6 labels, but every terminal continuation there still needs fallback"
+        );
+        assert_eq!(
+            outcomes.get("claim_sharp_codomain"),
+            Some(&(4347, 3, 3, 555, expected_dead_shell)),
+            "the sibling representative claim-safe claim-sharp sheet should reland the same six-prefix dead shell exactly, confirming that clause-5 and clause-6 identity are exhausted below the two claim-side sheets too"
+        );
+    }
+
+    #[test]
     fn current_claim_step_fifteen_anchor_eleven_exact_argument_pocket_stays_tie_clean_until_clause_six_moves()
      {
         let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);

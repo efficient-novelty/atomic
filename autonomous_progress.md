@@ -402,6 +402,21 @@ Until that exists, wording stays at `bounded live recovery`.
   - live search stays neutral on that reference sheet because only claim
     clause-`2` prefixes expose the anchor-`11` exact-argument pocket on the
     current lane
+- The representative claim-safe mismatch-`1` clause-`4`
+  `demo_sharp_codomain` side's two claim-side clause-`2` sheets are now also
+  localized one layer deeper across their clause-`5` / clause-`6` shells:
+  - on both `claim_flat_domain` and `claim_sharp_codomain`, the
+    clause-`5` `claim_flat_codomain` and `claim_next_codomain` prefixes each
+    combine with all three clause-`6` labels
+    `claim_next_codomain / claim_sharp_codomain / reference`
+  - each of those six resulting prefixes is captured exactly once on the same
+    `4347 / 555` outer shell
+  - every one of the six prefixes sits at matched-clause count `2`
+  - every terminal continuation on every prefix is `NeedsFallback`
+    (`3` terminal candidates each), so none exposes a live historical-reanchor
+    continuation
+  - consequence: clause-`5` and clause-`6` identity are now exhausted below the
+    two representative claim-side sheets too
 - The residual `3` `single`-bucket incumbent prunes remain fenced and are now
   secondary to the partial-prefix wall.
 
@@ -430,11 +445,16 @@ Until that exists, wording stays at `bounded live recovery`.
   exact-argument pocket there, the reference clause-`2` sheet is not a fresh
   search lead even though a hand-built telescope can pass connectivity under
   the same override.
+- Do not stop at the representative claim-side clause-`5` / clause-`6` shell
+  under that `reference / claim_next_codomain / demo_sharp_codomain` cell
+  either; both claim-side sheets now reland the same six dead prefixes, and
+  every terminal continuation there still needs fallback.
 - If the claim-safe mismatch-`1` tier is revisited next, move below one
-  representative claim-side clause-`2` sheet under that
-  `reference / claim_next_codomain / demo_sharp_codomain` cell rather than
-  swapping between the two claim sheets, reopening the reference sheet, or
-  comparing another exact pair cell first.
+  representative dead prefix in that six-prefix shell, starting with
+  `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain /
+  claim_flat_codomain / reference`, and partition by terminal family or
+  reason-level connectivity behavior rather than by another claim-side sheet,
+  clause-`5`, or clause-`6` identity pass.
 - If the mismatch-`0` claim-domain surface is revisited, stay below the broad
   clause-`1` `demo_flat_codomain` reopening and below whole-tier parent
   exact-bound relief; the former reaches `4985` only by widening the clean

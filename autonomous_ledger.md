@@ -408,3 +408,18 @@ This file is the append-only history for `desktop_claim_shadow`.
   the current lane.
   Consequence: the representative `reference` clause-`2` sheet is a control,
   not the next live search slice.
+- Scope: localize one layer deeper below the representative claim-safe
+  `reference / claim_next_codomain / demo_sharp_codomain` cell across the two
+  claim-side clause-`2` sheets' clause-`5` / clause-`6` shells.
+  Result: on both the `claim_flat_domain` and `claim_sharp_codomain` sheets,
+  the clause-`5` `claim_flat_codomain` and `claim_next_codomain` prefixes each
+  combine with all three clause-`6` labels
+  `claim_next_codomain / claim_sharp_codomain / reference`, yielding the same
+  six captured prefixes on the same `4347 / 555` outer shell. Every one of the
+  six prefixes appears exactly once, sits at matched-clause count `2`, and has
+  only `NeedsFallback` terminal continuations (`3` candidates each).
+  Consequence: clause-`5` and clause-`6` identity are now exhausted below the
+  two representative claim-side sheets too. The next honest claim-safe revisit
+  should move below one representative dead prefix in that six-prefix shell,
+  using the other five as matched controls rather than reopening sheet,
+  clause-`5`, or clause-`6` identity.

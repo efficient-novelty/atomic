@@ -188,6 +188,11 @@ Do not:
   cell, the two claim-side sheets are matched smaller controls while the
   sibling `reference` sheet is only a search-neutral control, so that axis
   also belongs to the autonomy ledger rather than as a fresh lead
+- reopen the representative claim-safe claim-side clause-`5` / clause-`6`
+  identity split first either; beneath that same chosen cell, both claim-side
+  sheets now reland the same six dead prefixes and every terminal continuation
+  still needs fallback, so that axis also belongs to the autonomy ledger
+  rather than as a fresh lead
 - keep the next slice above another mismatch-`0` claim-side identity reland;
   with both representative claim-side sheets now frozen through clause-`6`
   identity, route to the live autonomy docs before spending another turn
