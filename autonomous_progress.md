@@ -480,6 +480,16 @@ Until that exists, wording stays at `bounded live recovery`.
     so the next claim-safe revisit has to stay below off-reference
     clause-`5` identity rather than reopening demo-side clause-`5` controls,
     clause-`6`, or terminal-family partitions
+- Because the earlier reason-level pass already reproduced the same
+  `5`-matched / first-mismatch-`5` blocker across all six dead prefixes in
+  that shell, the remaining claim-safe branch is now reduced to a short
+  fail-fast checkpoint:
+  - the next honest revisit is no longer another label-identity comparison
+  - it is a finer qualification-reason partition below one live claim-side
+    dead clause-`5` label
+  - if that first finer reason split simply relands the same blocker while
+    preserving the same fences, the branch should be demoted rather than
+    spending another turn below the same claim-safe shell
 - The residual `3` `single`-bucket incumbent prunes remain fenced and are now
   secondary to the partial-prefix wall.
 
@@ -537,11 +547,27 @@ Until that exists, wording stays at `bounded live recovery`.
   controls, and partition within the two live claim-side dead clause-`5`
   labels rather than by another claim-side sheet, clause-`6`, terminal-family
   reland, or a demo-side clause-`5` retry.
+- Treat that claim-safe revisit as a fail-fast reason-level checkpoint rather
+  than as an open-ended new ladder:
+  - prefer the first finer split that can distinguish the clause-`5`
+    qualification behavior itself, such as active-window qualification,
+    self-containedness, historical reanchor, or the side-pocket qualifier,
+    below one live claim-side dead label
+  - do not spend another turn comparing clause-`5` label identity once the
+    blocker stays uniform
+  - if the first finer reason-level probe still relands the same
+    `5`-matched / first-mismatch-`5` blocker with the same fences, demote the
+    claim-safe mismatch-`1` branch immediately
 - If the mismatch-`0` claim-domain surface is revisited, stay below the broad
   clause-`1` `demo_flat_codomain` reopening and below whole-tier parent
   exact-bound relief; the former reaches `4985` only by widening the clean
   wall to `667`, and the latter drops the wall to `241` only by exploding the
   noncanonical `small_cluster`.
+- If the claim-safe fail-fast checkpoint demotes without opening a narrower
+  blocker, the next promoted backup should be mismatch-`0` again, but only
+  through a reason-level connectivity partition beneath one frozen
+  representative claim-side shell rather than through another mismatch-`0`
+  identity reland.
 - When revisiting mismatch-`0`, work one layer deeper below the now-exhausted
   clause-`4` `claim_next_bridge / reference` split, starting with
   remaining-one exact-summary behavior under the same live pairings before any

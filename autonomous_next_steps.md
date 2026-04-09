@@ -22,6 +22,12 @@ newly split clause-`5` qualification wall instead of reopening another
 identity reland on top of canonical `v12` and the matched local `4331`
 guardrail surface.
 
+Treat that clause-`5` wall as a fail-fast reason-level checkpoint rather than
+as the start of another long claim-safe identity ladder: the next probe should
+either expose a genuinely narrower qualification reason below one live
+claim-side dead clause-`5` label, or justify demoting the whole claim-safe
+branch and promoting the mismatch-`0` reason-level backup.
+
 Do not start with another rerun setup pass.
 
 ## Start From
@@ -402,6 +408,17 @@ Do not start with another rerun setup pass.
   The next honest slice should stay below the two live claim-side dead
   clause-`5` labels instead of spending another turn on clause-`6` or
   terminal-family siblings.
+- The live strategic question is now narrower than another label reland:
+  - the earlier reason-level pass already reproduced the same
+    `5`-matched / first-mismatch-`5` blocker across all six dead prefixes in
+    that shell
+  - the next claim-safe revisit should therefore ask whether any finer
+    qualification reason below one live claim-side dead clause-`5` label can
+    break that uniform blocker
+  - if the first finer reason split simply relands the same blocker with the
+    same fences, the claim-safe branch should be demoted quickly and the next
+    promoted backup should come from mismatch-`0` reason-level connectivity
+    below one frozen representative claim-side shell
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -472,15 +489,27 @@ Do not start with another rerun setup pass.
    - if the claim-safe mismatch-`1` tier is revisited next, stay below the
      representative dead prefix's off-reference clause-`5` wall at
      `reference / claim_next_codomain / claim_flat_domain /
-     demo_sharp_codomain / claim_flat_codomain / reference`;
-     use the already-exhausted `eventual_lift` and `next_lift` terminals plus
-     the other five dead prefixes in that shell only as matched controls, and
-     partition within the two live claim-side dead clause-`5` labels rather
-     than by another clause-`6`, terminal-family reland, or demo-side
-     clause-`5` retry
+     demo_sharp_codomain / claim_flat_codomain / reference`
+   - use the already-exhausted `eventual_lift` and `next_lift` terminals plus
+     the other five dead prefixes in that shell only as matched controls
+   - the first live question there is now reason-level, not label-level:
+     try to split the clause-`5` qualification blocker itself below one live
+     claim-side dead label rather than reopening another clause-`6`,
+     terminal-family, or demo-side clause-`5` sibling
+   - prefer the first finer qualification split that can distinguish active
+     window, self-containedness, historical reanchor, or the clause-`5`
+     side-pocket qualifier below that same live claim-side dead label
+   - treat the current claim-safe branch as fail-fast:
+     if that first finer reason-level probe still relands the same
+     `5`-matched / first-mismatch-`5` blocker while preserving the canonical
+     winner, the isolated `single` fence, and the `small_cluster` fence,
+     demote the whole claim-safe branch immediately instead of spending
+     another turn below the same shell
    - if mismatch-`0` is reopened at all, do so only through a newly promoted
      reason-level connectivity partition beneath one frozen representative
      claim-side shell; otherwise leave all `12` live pair cells alone
+   - if the claim-safe fail-fast checkpoint demotes without opening a narrower
+     blocker, promote that mismatch-`0` reason-level connectivity backup next
    - leave the `reference / reference` tails at `54` below the claim-safe
      mismatch-`1` tier unless a narrower probe changes the ordering
 4. Land only a change that improves generated breadth while preserving all of
