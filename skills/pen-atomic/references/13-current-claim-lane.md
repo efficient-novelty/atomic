@@ -183,6 +183,11 @@ Do not:
   claim-safe pair first; those `reference / claim_next_codomain` and
   `reference / claim_sharp_codomain` relands now belong to the autonomy
   ledger as matching smaller negative controls rather than as fresh leads
+- reopen the representative claim-safe exact-pair clause-`2` split first
+  either; on the chosen `reference / claim_next_codomain / demo_sharp_codomain`
+  cell, the two claim-side sheets are matched smaller controls while the
+  sibling `reference` sheet is only a search-neutral control, so that axis
+  also belongs to the autonomy ledger rather than as a fresh lead
 - keep the next slice above another mismatch-`0` claim-side identity reland;
   with both representative claim-side sheets now frozen through clause-`6`
   identity, route to the live autonomy docs before spending another turn

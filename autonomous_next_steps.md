@@ -311,6 +311,32 @@ Do not start with another rerun setup pass.
   claim-safe exact pair scope. The next honest slice should move below one
   representative claim-safe exact pair cell instead of reopening another
   clause-`4` sibling or pair-cell reland.
+- The chosen representative claim-safe mismatch-`1` exact pair cell on the
+  clause-`4` `demo_sharp_codomain` side is now also localized one layer deeper
+  across its clause-`2` sheets:
+  - under `reference / claim_next_codomain`, `claim_flat_domain` and
+    `claim_sharp_codomain` each land the same smaller negative-control shell at
+    `4347 / 555 / 2277`
+  - each raises only its own clause-`2` share from `15` to `17`, while the
+    sibling claim sheet stays at `15` and the reference sheet stays at `12`
+  - each keeps the incumbent clause-`4`
+    `claim_next_bridge / reference` split at `24 / 18`
+  - each adds only a tiny clause-`4` `demo_sharp_codomain` pocket of `2`
+  - the sibling `reference` clause-`2` sheet is a neutral search control on
+    `4331 / 553 / 2271`
+  - the claim-side sheets lift `small_cluster` generated candidates only to
+    `3144`, while the reference sheet stays at `3132`
+- The search/connectivity split on that representative exact pair cell is now
+  explicit:
+  - a hand-built reference-sheet telescope still passes connectivity under the
+    same override
+  - live search stays neutral there because only claim clause-`2` prefixes
+    expose the anchor-`11` exact-argument pocket on the current claim lane
+- Any remaining claim-safe mismatch-`1` leverage is therefore no longer on
+  clause-`2` sheet identity inside that representative exact pair cell. The
+  next honest slice should move below one representative claim-side clause-`2`
+  sheet instead of reopening the sibling claim sheet, the reference sheet, or
+  another exact pair cell first.
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -322,9 +348,9 @@ Do not start with another rerun setup pass.
    and `reports/steps/step-15-live.ndjson`, but treat the exact-claim mismatch-`1`
    tradeoff ladder as already frozen at `57 -> 51 -> 45`.
 2. Probe only surfaces outside the exact claim-pair mismatch-`1`
-   `reference + demo_flat_codomain` branch, or at minimum outside any reland
-   that only swaps which claim clause-`2` sheet keeps the `21`-capture share
-   of the same `51`-capture tradeoff.
+   `reference + demo_flat_codomain` branch, and within the smaller claim-safe
+   mismatch-`1` tier stay outside any reland that only swaps exact pair cell,
+   clause-`4` side sibling, or clause-`2` sheet identity.
 3. Prefer the smaller claim-safe mismatch-`1` tier next:
    - total remaining-two pressure there is `84`
    - keep the mismatch-`0` claim-domain surface frozen as exhausted through
@@ -354,9 +380,19 @@ Do not start with another rerun setup pass.
      keeps the incumbent clause-`4` `24 / 18` split, and adds only a tiny
      `demo_sharp_codomain = 4` or `demo_sharp_bridge = 4` side pocket while
      leaving the sibling pairing at `42`
-   - if the claim-safe mismatch-`1` tier is revisited next, move below one
-     representative exact pair cell rather than comparing another clause-`4`
-     sibling or reopening any broader claim-safe surface again
+   - inside the chosen representative
+     `reference / claim_next_codomain / demo_sharp_codomain` cell, treat the
+     `claim_flat_domain` and `claim_sharp_codomain` clause-`2` sheets as
+     frozen matched smaller negative controls at `4347 / 555 / 2277`, and the
+     sibling `reference` sheet as a neutral search control at
+     `4331 / 553 / 2271`
+   - because only claim clause-`2` prefixes expose the anchor-`11`
+     exact-argument pocket there, do not promote the reference sheet from the
+     connectivity witness into the next live search slice
+   - if the claim-safe mismatch-`1` tier is revisited next, move below that
+     representative exact pair cell and start with the `claim_flat_domain`
+     claim-side sheet; use the `claim_sharp_codomain` sheet only as the
+     sibling matched control rather than as a separate fresh lead
    - if mismatch-`0` is reopened at all, do so only through a newly promoted
      reason-level connectivity partition beneath one frozen representative
      claim-side shell; otherwise leave all `12` live pair cells alone
@@ -394,6 +430,12 @@ Do not start with another rerun setup pass.
 - `connectivity_accepts_clause_four_demo_sharp_codomain_on_exact_claim_safe_pair_under_override`
 - `connectivity_keeps_clause_four_demo_sharp_codomain_on_sibling_claim_safe_pair_closed_even_under_override`
 - `connectivity_keeps_clause_four_demo_sharp_codomain_on_exact_claim_safe_pair_reference_terminal_only_even_under_override`
+- `current_claim_step_fifteen_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_clause_two_sheets_split_into_two_claim_side_smaller_negative_controls_plus_one_reference_neutral_control`
+- `current_claim_step_fifteen_claim_clause_two_prefixes_expose_only_anchor_eleven_exact_argument_pocket`
+- `connectivity_accepts_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_claim_clause_two_under_override`
+- `connectivity_keeps_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_sibling_claim_clause_two_closed_even_under_override`
+- `connectivity_accepts_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_reference_clause_two_under_override`
+- `connectivity_keeps_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_claim_clause_two_reference_terminal_only_even_under_override`
 - `connectivity_accepts_clause_four_demo_sharp_bridge_on_exact_claim_safe_pair_under_override`
 - `connectivity_keeps_clause_four_demo_sharp_bridge_on_sibling_claim_safe_pair_closed_even_under_override`
 - `connectivity_keeps_clause_four_demo_sharp_bridge_on_exact_claim_safe_pair_reference_terminal_only_even_under_override`
@@ -433,6 +475,9 @@ Do not start with another rerun setup pass.
   `demo_sharp_bridge` side for either the
   `reference / claim_next_codomain` or
   `reference / claim_sharp_codomain` pairing
+- another representative claim-safe exact-pair clause-`2` identity pass on the
+  `claim_flat_domain`, `claim_sharp_codomain`, or `reference` sheet under
+  `reference / claim_next_codomain / demo_sharp_codomain`
 - broad clause-`1` `demo_flat_codomain` reopenings across the full
   mismatch-`0` claim-domain surface
 - another connectivity-only relocalization of the mismatch-`0` clause-`4`

@@ -378,6 +378,30 @@ Until that exists, wording stays at `bounded live recovery`.
     representative claim-safe exact pair scope too, because the
     `demo_sharp_bridge` sibling only reproduces the same smaller
     negative-control shell already seen on `demo_sharp_codomain`
+- The representative claim-safe mismatch-`1` clause-`4`
+  `demo_sharp_codomain` side's chosen exact pair cell is now also localized
+  one layer deeper across clause-`2` identity:
+  - under `reference / claim_next_codomain`, `claim_flat_domain` and
+    `claim_sharp_codomain` each land the same smaller negative-control shell at
+    `4347 / 555 / 2277`
+  - each raises only its own clause-`2` share from `15` to `17`, while the
+    sibling claim sheet stays at `15` and the reference sheet stays at `12`
+  - each preserves the incumbent clause-`4`
+    `claim_next_bridge / reference` split at `24 / 18`
+  - each adds only a tiny clause-`4` `demo_sharp_codomain` pocket of `2`
+  - the sibling `reference` clause-`2` sheet is a neutral search control on the
+    untouched `4331 / 553 / 2271` baseline
+  - the claim-side sheets lift `small_cluster` generated candidates only to
+    `3144`, while the reference sheet stays at `3132`
+  - consequence: clause-`2` sheet identity is now exhausted below that
+    representative claim-safe exact pair cell too
+- The search/connectivity split on that representative claim-safe exact pair is
+  now explicit:
+  - a hand-built reference-sheet telescope still passes connectivity under the
+    exact override
+  - live search stays neutral on that reference sheet because only claim
+    clause-`2` prefixes expose the anchor-`11` exact-argument pocket on the
+    current lane
 - The residual `3` `single`-bucket incumbent prunes remain fenced and are now
   secondary to the partial-prefix wall.
 
@@ -397,13 +421,20 @@ Until that exists, wording stays at `bounded live recovery`.
   `demo_sharp_codomain` or `demo_sharp_bridge` side's exact pair-cell
   relands either; each only lifts breadth to `4363` while widening the clean
   wall to `557` and `small_cluster` to `3156`.
-- Because both representative claim-safe clause-`4` sides now reland the same
-  smaller negative-control shell on each exact pair cell, neither claim-safe
-  pair identity nor clause-`4` side identity there is a fresh lead.
+- Do not stop at the representative `reference / claim_next_codomain`
+  pair cell's clause-`2` split on the clause-`4` `demo_sharp_codomain` side
+  either; the `claim_flat_domain` and `claim_sharp_codomain` sheets are
+  matched smaller controls at `4347 / 555 / 2277`, while the sibling
+  `reference` sheet is a neutral search control on `4331 / 553 / 2271`.
+- Because only claim clause-`2` prefixes expose the anchor-`11`
+  exact-argument pocket there, the reference clause-`2` sheet is not a fresh
+  search lead even though a hand-built telescope can pass connectivity under
+  the same override.
 - If the claim-safe mismatch-`1` tier is revisited next, move below one
-  representative exact pair cell rather than swapping between the two
-  claim-safe pairings or between the clause-`4`
-  `demo_sharp_codomain / demo_sharp_bridge` sides again.
+  representative claim-side clause-`2` sheet under that
+  `reference / claim_next_codomain / demo_sharp_codomain` cell rather than
+  swapping between the two claim sheets, reopening the reference sheet, or
+  comparing another exact pair cell first.
 - If the mismatch-`0` claim-domain surface is revisited, stay below the broad
   clause-`1` `demo_flat_codomain` reopening and below whole-tier parent
   exact-bound relief; the former reaches `4985` only by widening the clean

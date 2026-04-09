@@ -6050,6 +6050,13 @@ thread_local! {
 
 #[cfg(test)]
 thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_CODOMAIN_ON_CLAIM_SAFE_PAIR_CLAUSE_TWO_OVERRIDE:
+        std::cell::RefCell<Option<ClaimStepFifteenClaimSafePairClauseTwoSelector>> =
+            const { std::cell::RefCell::new(None) };
+}
+
+#[cfg(test)]
+thread_local! {
     static CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_PAIR_OVERRIDE:
         std::cell::RefCell<Option<ClaimStepFifteenClaimSafeClauseOneLabel>> =
             const { std::cell::RefCell::new(None) };
@@ -6149,6 +6156,19 @@ enum ClaimStepFifteenClaimSafeClauseOneLabel {
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+enum ClaimStepFifteenClaimSafeClauseTwoLabel {
+    ClaimFlatDomain,
+    ClaimSharpCodomain,
+    Reference,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+struct ClaimStepFifteenClaimSafePairClauseTwoSelector {
+    clause_one: ClaimStepFifteenClaimSafeClauseOneLabel,
+    clause_two: ClaimStepFifteenClaimSafeClauseTwoLabel,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
     clause_zero: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel,
     clause_one: ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel,
@@ -6234,7 +6254,6 @@ struct ClaimStepFifteenClauseFourSharpCodomainOnClaimSafeClauseZeroOneOverrideGu
 #[cfg(test)]
 struct ClaimStepFifteenClauseFourSharpBridgeOnClaimSafePairOverrideGuard;
 
-#[cfg(test)]
 struct ClaimStepFifteenClauseFourSharpBridgeOnClaimSafeClauseZeroOneOverrideGuard;
 
 #[cfg(test)]
@@ -6466,6 +6485,9 @@ fn override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_z
 struct ClaimStepFifteenClauseFourSharpCodomainOnClaimSafePairOverrideGuard;
 
 #[cfg(test)]
+struct ClaimStepFifteenClauseFourSharpCodomainOnClaimSafePairClauseTwoOverrideGuard;
+
+#[cfg(test)]
 impl Drop for ClaimStepFifteenClauseFourSharpCodomainOnClaimSafePairOverrideGuard {
     fn drop(&mut self) {
         CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_CODOMAIN_ON_CLAIM_SAFE_PAIR_OVERRIDE.with(
@@ -6486,6 +6508,29 @@ fn override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair(
         },
     );
     ClaimStepFifteenClauseFourSharpCodomainOnClaimSafePairOverrideGuard
+}
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenClauseFourSharpCodomainOnClaimSafePairClauseTwoOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_CODOMAIN_ON_CLAIM_SAFE_PAIR_CLAUSE_TWO_OVERRIDE.with(
+            |override_selector| {
+                *override_selector.borrow_mut() = None;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+    selector: ClaimStepFifteenClaimSafePairClauseTwoSelector,
+) -> ClaimStepFifteenClauseFourSharpCodomainOnClaimSafePairClauseTwoOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_CODOMAIN_ON_CLAIM_SAFE_PAIR_CLAUSE_TWO_OVERRIDE.with(
+        |override_selector| {
+            *override_selector.borrow_mut() = Some(selector);
+        },
+    );
+    ClaimStepFifteenClauseFourSharpCodomainOnClaimSafePairClauseTwoOverrideGuard
 }
 
 #[cfg(test)]
@@ -6816,6 +6861,13 @@ fn claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_override_sel
 }
 
 #[cfg(test)]
+fn claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two_override_selector()
+-> Option<ClaimStepFifteenClaimSafePairClauseTwoSelector> {
+    CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_CODOMAIN_ON_CLAIM_SAFE_PAIR_CLAUSE_TWO_OVERRIDE
+        .with(|override_selector| *override_selector.borrow())
+}
+
+#[cfg(test)]
 fn claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair_override_selector()
 -> Option<ClaimStepFifteenClaimSafeClauseOneLabel> {
     CLAIM_STEP_FIFTEEN_CLAUSE_FOUR_SHARP_BRIDGE_ON_CLAIM_SAFE_PAIR_OVERRIDE
@@ -6831,6 +6883,12 @@ fn claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_clause_zero_one_o
 #[cfg(not(test))]
 fn claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_override_selector()
 -> Option<ClaimStepFifteenClaimSafeClauseOneLabel> {
+    None
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two_override_selector()
+-> Option<ClaimStepFifteenClaimSafePairClauseTwoSelector> {
     None
 }
 
@@ -8382,6 +8440,45 @@ fn create_online_prefix_work_item(
         }
     }
 
+    fn matches_claim_step_fifteen_claim_safe_clause_two_label(
+        clause: &pen_core::clause::ClauseRec,
+        label: ClaimStepFifteenClaimSafeClauseTwoLabel,
+    ) -> bool {
+        match label {
+            ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain => matches!(
+                &clause.expr,
+                Expr::Pi(domain, codomain)
+                    if matches!(
+                        domain.as_ref(),
+                        Expr::Next(body)
+                            if matches!(
+                                body.as_ref(),
+                                Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                            )
+                    ) && matches!(
+                        codomain.as_ref(),
+                        Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+                    )
+            ),
+            ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimSharpCodomain => matches!(
+                &clause.expr,
+                Expr::Pi(domain, codomain)
+                    if matches!(domain.as_ref(), Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1)))
+                        && matches!(
+                            codomain.as_ref(),
+                            Expr::Eventually(body)
+                                if matches!(
+                                    body.as_ref(),
+                                    Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                )
+                        )
+            ),
+            ClaimStepFifteenClaimSafeClauseTwoLabel::Reference => {
+                *clause == Telescope::reference(15).clauses[2]
+            }
+        }
+    }
+
     fn matches_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_clause_zero(
         clause: &pen_core::clause::ClauseRec,
     ) -> bool {
@@ -8781,6 +8878,23 @@ fn create_online_prefix_work_item(
                             anchor,
                         )
                 });
+        let claim_safe_pair_clause_two_override_slice =
+            claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two_override_selector()
+                .is_some_and(|selector| {
+                    matches_reference_temporal_clause_zero(clause_zero)
+                        && matches_claim_step_fifteen_claim_safe_clause_one_label(
+                            clause_one,
+                            selector.clause_one,
+                        )
+                        && matches_claim_step_fifteen_claim_safe_clause_two_label(
+                            clause_two,
+                            selector.clause_two,
+                        )
+                        && matches_claim_step_fifteen_anchor_eleven_exact_argument_clause(
+                            clause_three,
+                            anchor,
+                        )
+                });
         (((matches_reference_temporal_clause_zero(clause_zero)
             && matches_reference_temporal_clause_one(clause_one)
             && matches_claim_step_fifteen_anchor_eleven_clause_two_variant(clause_two)
@@ -8789,7 +8903,8 @@ fn create_online_prefix_work_item(
                 anchor,
             ))
             || claim_safe_override_slice)
-            || claim_safe_pair_override_slice)
+            || claim_safe_pair_override_slice
+            || claim_safe_pair_clause_two_override_slice)
             .then(claim_step_fifteen_anchor_eleven_demo_sharp_codomain_clause)
     }
 
@@ -21448,6 +21563,306 @@ mod tests {
                 "the sibling claim-safe pairing should keep the reopened clause-4 bridge pocket closed"
             );
         }
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_four_demo_sharp_codomain_on_representative_claim_safe_pair_clause_two_sheets_split_into_two_claim_side_smaller_negative_controls_plus_one_reference_neutral_control()
+     {
+        let clause_two_labels = [
+            (
+                "claim_flat_domain",
+                super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+            ),
+            (
+                "claim_sharp_codomain",
+                super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimSharpCodomain,
+            ),
+            (
+                "reference",
+                super::ClaimStepFifteenClaimSafeClauseTwoLabel::Reference,
+            ),
+        ];
+        let mut outcomes = BTreeMap::new();
+
+        for (clause_two_name, clause_two) in clause_two_labels {
+            let selector = super::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                clause_one: super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                clause_two,
+            };
+            let _search_override =
+                super::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                    selector,
+                );
+            let _connectivity_override =
+                pen_type::connectivity::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                    pen_type::connectivity::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                        clause_one: pen_type::connectivity::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                        clause_two: match clause_two {
+                            super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain => pen_type::connectivity::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+                            super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimSharpCodomain => pen_type::connectivity::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimSharpCodomain,
+                            super::ClaimStepFifteenClaimSafeClauseTwoLabel::Reference => pen_type::connectivity::ClaimStepFifteenClaimSafeClauseTwoLabel::Reference,
+                        },
+                    },
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let clause_two_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_two_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_zero, clause_one, _clause_two), _count)| {
+                        *mismatch == Some(1_usize)
+                            && *clause_zero == "reference"
+                            && *clause_one == "claim_next_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let clause_four_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_zero, clause_one, _clause_four), _count)| {
+                        *mismatch == Some(1_usize)
+                            && *clause_zero == "reference"
+                            && *clause_one == "claim_next_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("claim prefix through step 14 should build");
+            let prefix = claim_steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+            outcomes.insert(
+                clause_two_name,
+                (
+                    step_fifteen.demo_funnel.generated_raw_prefixes,
+                    step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
+                    zero_summary.captured_prefixes,
+                    wall_summary.first_mismatch_position_counts,
+                    bucket_stats
+                        .get("k8:structural_generic:temporal_operator:library_backed:small_cluster")
+                        .map(|stats| stats.generated_terminal_candidates)
+                        .expect("small_cluster bucket should stay present"),
+                    clause_two_counts,
+                    clause_four_counts,
+                ),
+            );
+        }
+
+        let expected_claim_flat_counts = [
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "claim_flat_domain",
+                ),
+                17_usize,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "claim_sharp_codomain",
+                ),
+                15,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "reference",
+                ),
+                12,
+            ),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_claim_sharp_counts = [
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "claim_flat_domain",
+                ),
+                15_usize,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "claim_sharp_codomain",
+                ),
+                17,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "reference",
+                ),
+                12,
+            ),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_reference_counts = [
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "claim_flat_domain",
+                ),
+                15_usize,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "claim_sharp_codomain",
+                ),
+                15,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "reference",
+                ),
+                12,
+            ),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_claim_sheet_clause_four_counts = [
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "claim_next_bridge",
+                ),
+                24_usize,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "demo_sharp_codomain",
+                ),
+                2,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "reference",
+                ),
+                18,
+            ),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_reference_clause_four_counts = [
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "claim_next_bridge",
+                ),
+                24_usize,
+            ),
+            (
+                (
+                    Some(1_usize),
+                    "reference",
+                    "claim_next_codomain",
+                    "reference",
+                ),
+                18,
+            ),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_claim_sheet_mismatch_counts = [
+            (Some(0_usize), 312_usize),
+            (Some(1), 179),
+            (Some(2), 50),
+            (Some(3), 14),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_reference_mismatch_counts = [
+            (Some(0_usize), 312_usize),
+            (Some(1), 177),
+            (Some(2), 50),
+            (Some(3), 14),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+
+        assert_eq!(outcomes.len(), 3);
+        assert_eq!(
+            outcomes.get("claim_flat_domain"),
+            Some(&(
+                4347,
+                555,
+                2277,
+                expected_claim_sheet_mismatch_counts.clone(),
+                3144,
+                expected_claim_flat_counts,
+                expected_claim_sheet_clause_four_counts.clone(),
+            )),
+            "the representative claim-safe claim-flat clause-two sheet should stay only a smaller negative control: it adds a tiny 2-capture demo-sharp-codomain pocket on that exact pair, lifts only its own clause-two share to 17, and still widens both the clean wall and small_cluster slightly"
+        );
+        assert_eq!(
+            outcomes.get("claim_sharp_codomain"),
+            Some(&(
+                4347,
+                555,
+                2277,
+                expected_claim_sheet_mismatch_counts,
+                3144,
+                expected_claim_sharp_counts,
+                expected_claim_sheet_clause_four_counts,
+            )),
+            "the representative claim-safe claim-sharp clause-two sheet should reland the same matched smaller negative-control shell too, again lifting only its own clause-two share to 17"
+        );
+        assert_eq!(
+            outcomes.get("reference"),
+            Some(&(
+                4331,
+                553,
+                2271,
+                expected_reference_mismatch_counts,
+                3132,
+                expected_reference_counts,
+                expected_reference_clause_four_counts,
+            )),
+            "the representative claim-safe reference clause-two sheet should stay a neutral control, confirming that the exact-pair 46-capture reland sits only on the two claim-side clause-two sheets"
+        );
     }
 
     #[test]

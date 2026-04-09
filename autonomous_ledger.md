@@ -383,3 +383,28 @@ This file is the append-only history for `desktop_claim_shadow`.
   claim-safe pairings under them; the next honest slice should move below one
   representative exact pair cell instead of reopening another clause-`4`
   sibling or pair-cell reland.
+- Scope: localize one layer deeper below the representative claim-safe
+  mismatch-`1` exact pair cell
+  `reference / claim_next_codomain` on the clause-`4`
+  `demo_sharp_codomain` side at clause-`2` identity scope.
+  Result: the `claim_flat_domain` and `claim_sharp_codomain` sheets each land
+  the same smaller negative-control shell at `4347 / 555 / 2277`; each lifts
+  only its own clause-`2` share from `15` to `17`, preserves the incumbent
+  clause-`4` `claim_next_bridge / reference` split at `24 / 18`, adds only a
+  tiny clause-`4` `demo_sharp_codomain` pocket of `2`, and lifts
+  `small_cluster` generated candidates only to `3144`. The sibling
+  `reference` clause-`2` sheet is a neutral control on the untouched
+  `4331 / 553 / 2271` baseline with `small_cluster` generated candidates still
+  at `3132` and no `demo_sharp_codomain` clause-`4` pocket.
+  Consequence: clause-`2` sheet identity is now exhausted below that
+  representative claim-safe exact pair cell too. The next honest claim-safe
+  revisit should move below one representative claim-side sheet rather than
+  swapping between the two claim sheets or reopening the reference sheet.
+- Scope: explain the search/connectivity split on that representative
+  claim-safe exact pair cell's `reference` clause-`2` sheet.
+  Result: a hand-built reference-sheet telescope still passes connectivity
+  under the exact override, but live search remains neutral there because only
+  claim clause-`2` prefixes expose the anchor-`11` exact-argument pocket on
+  the current lane.
+  Consequence: the representative `reference` clause-`2` sheet is a control,
+  not the next live search slice.

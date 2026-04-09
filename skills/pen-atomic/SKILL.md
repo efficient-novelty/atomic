@@ -441,6 +441,13 @@ Focus on:
   `reference / claim_sharp_codomain` pairings, so route to the live docs
   before spending another turn swapping between those claim-safe pairings or
   clause-`4` side siblings as if one were newly privileged
+- treat the representative claim-safe exact pair cell's clause-`2` split as
+  live autonomy detail too; on the chosen
+  `reference / claim_next_codomain / demo_sharp_codomain` cell, the two
+  claim-side sheets are matched smaller negative controls while the sibling
+  `reference` sheet is only a search-neutral control, so route to the live
+  docs before retrying that clause-`2` identity split as if one sheet were
+  newly privileged
 - keep the next slice above another mismatch-`0` representative claim-side
   identity reland; with both claim-side sheets now frozen through clause-`6`
   identity, route to the live docs before spending another turn below the
