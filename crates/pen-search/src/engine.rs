@@ -6082,6 +6082,13 @@ thread_local! {
 
 #[cfg(test)]
 thread_local! {
+    static CLAIM_STEP_FIFTEEN_REFERENCE_REFERENCE_TAIL_MISMATCH_TWO_CLAUSE_FOUR_OVERRIDE:
+        std::cell::RefCell<Option<ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel>> =
+            const { std::cell::RefCell::new(None) };
+}
+
+#[cfg(test)]
+thread_local! {
     static CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_REFERENCE_TAIL_OVERRIDE:
         std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
 }
@@ -6146,6 +6153,12 @@ enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 enum ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel {
     ClaimFlatCodomain,
+    Reference,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+enum ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel {
+    ClaimNextBridge,
     Reference,
 }
 
@@ -6261,6 +6274,9 @@ struct ClaimStepFifteenClauseFiveRemainingTwoMismatchZeroBridgeSliceOverrideGuar
 
 #[cfg(test)]
 struct ClaimStepFifteenClauseFiveRemainingTwoMismatchOneBridgeSliceOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourOverrideGuard;
 
 #[cfg(test)]
 struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroReferenceTailOverrideGuard;
@@ -6623,6 +6639,29 @@ fn override_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_sli
 }
 
 #[cfg(test)]
+impl Drop for ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_REFERENCE_REFERENCE_TAIL_MISMATCH_TWO_CLAUSE_FOUR_OVERRIDE.with(
+            |override_selector| {
+                *override_selector.borrow_mut() = None;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four(
+    label: ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel,
+) -> ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourOverrideGuard {
+    CLAIM_STEP_FIFTEEN_REFERENCE_REFERENCE_TAIL_MISMATCH_TWO_CLAUSE_FOUR_OVERRIDE.with(
+        |override_selector| {
+            *override_selector.borrow_mut() = Some(label);
+        },
+    );
+    ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourOverrideGuard
+}
+
+#[cfg(test)]
 impl Drop
     for ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroReferenceTailOverrideGuard
 {
@@ -6935,6 +6974,19 @@ fn claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_overri
 fn claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_override_enabled() -> bool
 {
     false
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four_override_selector()
+-> Option<ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel> {
+    CLAIM_STEP_FIFTEEN_REFERENCE_REFERENCE_TAIL_MISMATCH_TWO_CLAUSE_FOUR_OVERRIDE
+        .with(|override_selector| *override_selector.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four_override_selector()
+-> Option<ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel> {
+    None
 }
 
 #[cfg(test)]
@@ -7869,6 +7921,213 @@ fn maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_misma
         prefix_telescope,
         decision,
     )
+}
+
+fn claim_step_fifteen_reference_reference_tail_mismatch_two_clause_two_matches(
+    clause: &pen_core::clause::ClauseRec,
+) -> bool {
+    clause.role == ClauseRole::Formation
+        && matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Next(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+                )
+        )
+        || matches!(
+            &clause.expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+                ) && matches!(
+                    codomain.as_ref(),
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        )
+}
+
+fn claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four_matches_label(
+    clause: &pen_core::clause::ClauseRec,
+    label: ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel,
+) -> bool {
+    match label {
+        ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel::ClaimNextBridge => {
+            clause.role == ClauseRole::Formation
+                && matches!(
+                    &clause.expr,
+                    Expr::Pi(domain, codomain)
+                        if matches!(
+                            domain.as_ref(),
+                            Expr::Flat(body)
+                                if matches!(
+                                    body.as_ref(),
+                                    Expr::Next(inner)
+                                        if matches!(
+                                            inner.as_ref(),
+                                            Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                        )
+                                )
+                        ) && matches!(
+                            codomain.as_ref(),
+                            Expr::Next(body)
+                                if matches!(
+                                    body.as_ref(),
+                                    Expr::Flat(inner)
+                                        if matches!(
+                                            inner.as_ref(),
+                                            Expr::Next(deeper)
+                                                if matches!(
+                                                    deeper.as_ref(),
+                                                    Expr::Eventually(tail) if matches!(tail.as_ref(), Expr::Var(1))
+                                                )
+                                        )
+                                )
+                        )
+                )
+        }
+        ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel::Reference => {
+            clause.role == ClauseRole::Formation
+                && matches!(
+                    &clause.expr,
+                    Expr::Pi(domain, codomain)
+                        if (
+                            matches!(
+                                domain.as_ref(),
+                                Expr::Flat(body)
+                                    if matches!(
+                                        body.as_ref(),
+                                        Expr::Next(inner)
+                                            if matches!(
+                                                inner.as_ref(),
+                                                Expr::Eventually(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                            )
+                                    )
+                            )
+                            || matches!(
+                                domain.as_ref(),
+                                Expr::Flat(body)
+                                    if matches!(
+                                        body.as_ref(),
+                                        Expr::Next(inner)
+                                            if matches!(inner.as_ref(), Expr::Var(1))
+                                    )
+                            )
+                        ) && (
+                            matches!(
+                                codomain.as_ref(),
+                                Expr::Next(body)
+                                    if matches!(
+                                        body.as_ref(),
+                                        Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                    )
+                            )
+                            || matches!(
+                                codomain.as_ref(),
+                                Expr::Next(body)
+                                    if matches!(
+                                        body.as_ref(),
+                                        Expr::Flat(inner)
+                                            if matches!(
+                                                inner.as_ref(),
+                                                Expr::Next(deeper)
+                                                    if matches!(
+                                                        deeper.as_ref(),
+                                                        Expr::Eventually(tail) if matches!(tail.as_ref(), Expr::Var(1))
+                                                    )
+                                            )
+                                    )
+                            )
+                        )
+                )
+        }
+    }
+}
+
+fn claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four_matches(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    work_item: &OnlinePrefixWorkItem,
+) -> bool {
+    let Some(label) =
+        claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four_override_selector()
+    else {
+        return false;
+    };
+
+    matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
+        && step_index == 15
+        && work_item.clause_kappa == 8
+        && work_item.remaining_clause_slots == 2
+        && work_item.prefix_telescope.clauses.len() >= 5
+        && work_item
+            .prefix_telescope
+            .clauses
+            .first()
+            .is_some_and(|clause| {
+                clause.role == ClauseRole::Formation
+                    && matches!(
+                        &clause.expr,
+                        Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+                    )
+            })
+        && work_item
+            .prefix_telescope
+            .clauses
+            .get(1)
+            .is_some_and(|clause| {
+                clause.role == ClauseRole::Formation
+                    && matches!(
+                        &clause.expr,
+                        Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+                    )
+            })
+        && work_item.prefix_telescope.clauses.get(2).is_some_and(
+            claim_step_fifteen_reference_reference_tail_mismatch_two_clause_two_matches,
+        )
+        && work_item
+            .prefix_telescope
+            .clauses
+            .get(4)
+            .is_some_and(|clause| {
+                claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four_matches_label(
+                    clause, label,
+                )
+            })
+}
+
+fn maybe_override_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    work_item: &OnlinePrefixWorkItem,
+    decision: ExactPartialPrefixBoundDecision,
+) -> ExactPartialPrefixBoundDecision {
+    #[cfg(test)]
+    {
+        if matches!(decision, ExactPartialPrefixBoundDecision::CannotClearBar)
+            && claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four_matches(
+                step_index,
+                admissibility,
+                work_item,
+            )
+        {
+            return ExactPartialPrefixBoundDecision::Unknown;
+        }
+    }
+
+    decision
 }
 
 #[cfg(test)]
@@ -9476,6 +9735,13 @@ fn exact_partial_prefix_bound_decision(
                 ExactPartialPrefixBoundDecision::CannotClearBar
             }
         };
+        let decision =
+            maybe_override_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four(
+                step_index,
+                admissibility,
+                work_item,
+                decision,
+            );
         #[cfg(test)]
         maybe_capture_pruned_terminal_prefix(work_item, decision);
         return decision;
@@ -9601,7 +9867,12 @@ fn exact_partial_prefix_bound_decision(
         work_item.clause_kappa,
         PartialPrefixBoundDecision::CannotClearBar,
     );
-    ExactPartialPrefixBoundDecision::CannotClearBar
+    maybe_override_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four(
+        step_index,
+        admissibility,
+        work_item,
+        ExactPartialPrefixBoundDecision::CannotClearBar,
+    )
 }
 
 fn cached_terminal_prefix_queue_entry_bound_decision(
@@ -13600,7 +13871,9 @@ mod tests {
                     && clause_one == "reference"
                     && matches!(mismatch, Some(2_usize) | Some(3_usize)))
                 .then_some((
-                    mismatch.expect("reference/reference tail should stay localized to mismatch 2 or 3"),
+                    mismatch.expect(
+                        "reference/reference tail should stay localized to mismatch 2 or 3",
+                    ),
                     count,
                 ))
             })
@@ -14424,6 +14697,18 @@ mod tests {
                     clause_six: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel::Reference),
                     clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
                 },
+            );
+        super::start_pruned_terminal_prefix_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        super::finish_pruned_terminal_prefix_capture()
+    }
+
+    fn current_claim_step_fifteen_pruned_terminal_prefixes_on_reference_reference_tail_mismatch_two_clause_four_probe(
+        label: super::ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel,
+    ) -> Vec<OnlinePrefixWorkItem> {
+        let _search_override =
+            super::override_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four(
+                label,
             );
         super::start_pruned_terminal_prefix_capture();
         let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
@@ -16995,6 +17280,288 @@ mod tests {
             .into_iter()
             .collect(),
             "within the promoted reference/reference tail, mismatch-2 should stay split across claim_next_bridge, reference, and only tiny demo-side clause-4 pockets, while mismatch-3 should stay on the smaller claim_next_bridge-plus-reference residual"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four_claim_next_bridge_half_stays_a_tradeoff_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four(
+                super::ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel::ClaimNextBridge,
+            );
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let tail_pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                .into_iter()
+                .filter(|((mismatch, clause_zero, clause_one), _count)| {
+                    *clause_zero == "reference"
+                        && *clause_one == "reference"
+                        && matches!(mismatch, Some(2_usize) | Some(3_usize))
+                })
+                .collect::<BTreeMap<_, _>>();
+        let tail_clause_four_five_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_four, _clause_five), _count)| {
+                    matches!(mismatch, Some(2_usize) | Some(3_usize))
+                })
+                .collect::<BTreeMap<_, _>>();
+        let pruned_terminal_prefixes =
+            current_claim_step_fifteen_pruned_terminal_prefixes_on_reference_reference_tail_mismatch_two_clause_four_probe(
+                super::ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel::ClaimNextBridge,
+            );
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4547);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 535,
+            "relaxing the mismatch-2 reference/reference clause-4 claim-next-bridge half should narrow the clean wall, but it remains only a tradeoff because the noncanonical small-cluster shell widens"
+        );
+        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 3);
+        assert_eq!(wall_summary.capture_count, 535);
+        assert_eq!(
+            wall_summary.remaining_clause_slot_counts,
+            [(2_usize, 433_usize), (3, 102)].into_iter().collect(),
+            "the mismatch-2 claim-next-bridge-half probe should contract only the remaining-two wall while leaving the smaller remaining-three spill unchanged"
+        );
+        assert_eq!(
+            wall_summary.first_mismatch_position_counts,
+            [
+                (Some(0_usize), 312_usize),
+                (Some(1), 177),
+                (Some(2), 32),
+                (Some(3), 14)
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-2 claim-next-bridge-half probe should localize its whole wall win to the mismatch-2 tail"
+        );
+        assert_eq!(pruned_terminal_prefixes.len(), 2271);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3294,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the mismatch-2 claim-next-bridge-half probe should still widen the noncanonical small-cluster shell, so it is not a safe landing"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            })
+        );
+        assert_eq!(
+            tail_pair_counts,
+            [
+                ((Some(2_usize), "reference", "reference"), 24_usize),
+                ((Some(3_usize), "reference", "reference"), 12),
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-2 claim-next-bridge-half probe should contract only that mismatch-2 pair from 42 to 24 while leaving the smaller mismatch-3 backup unchanged"
+        );
+        assert_eq!(
+            tail_clause_four_five_counts,
+            [
+                (
+                    (Some(2_usize), "demo_sharp_bridge", "claim_flat_codomain"),
+                    2_usize
+                ),
+                (
+                    (Some(2_usize), "demo_sharp_bridge", "claim_next_codomain"),
+                    2
+                ),
+                (
+                    (Some(2_usize), "demo_sharp_codomain", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    (Some(2_usize), "demo_sharp_codomain", "claim_next_codomain"),
+                    2
+                ),
+                ((Some(2_usize), "reference", "claim_flat_codomain"), 4),
+                ((Some(2_usize), "reference", "claim_next_codomain"), 4),
+                ((Some(2_usize), "reference", "demo_flat_codomain"), 2),
+                ((Some(2_usize), "reference", "demo_sharp_domain"), 2),
+                ((Some(2_usize), "reference", "reference"), 4),
+                (
+                    (Some(3_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    (Some(3_usize), "claim_next_bridge", "claim_next_codomain"),
+                    2
+                ),
+                ((Some(3_usize), "claim_next_bridge", "reference"), 2),
+                ((Some(3_usize), "reference", "claim_flat_codomain"), 2),
+                ((Some(3_usize), "reference", "claim_next_codomain"), 2),
+                ((Some(3_usize), "reference", "reference"), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-2 claim-next-bridge-half probe should remove exactly the 6 / 6 / 6 claim-next-bridge cells from mismatch-2 while leaving the mismatch-2 reference half, the tiny demo-side pockets, and the mismatch-3 backup intact"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four_reference_half_stays_a_tradeoff_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_reference_reference_tail_mismatch_two_clause_four(
+                super::ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel::Reference,
+            );
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let tail_pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                .into_iter()
+                .filter(|((mismatch, clause_zero, clause_one), _count)| {
+                    *clause_zero == "reference"
+                        && *clause_one == "reference"
+                        && matches!(mismatch, Some(2_usize) | Some(3_usize))
+                })
+                .collect::<BTreeMap<_, _>>();
+        let tail_clause_four_five_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_four, _clause_five), _count)| {
+                    matches!(mismatch, Some(2_usize) | Some(3_usize))
+                })
+                .collect::<BTreeMap<_, _>>();
+        let pruned_terminal_prefixes =
+            current_claim_step_fifteen_pruned_terminal_prefixes_on_reference_reference_tail_mismatch_two_clause_four_probe(
+                super::ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel::Reference,
+            );
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4835);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 529,
+            "relaxing the mismatch-2 reference/reference clause-4 reference half should narrow the wall more sharply, but it still remains only a tradeoff because the noncanonical small-cluster shell widens even further"
+        );
+        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 3);
+        assert_eq!(wall_summary.capture_count, 529);
+        assert_eq!(
+            wall_summary.remaining_clause_slot_counts,
+            [(2_usize, 435_usize), (3, 94)].into_iter().collect(),
+            "the mismatch-2 reference-half probe should shrink both the remaining-two wall and the mismatch-2 remaining-three spill"
+        );
+        assert_eq!(
+            wall_summary.first_mismatch_position_counts,
+            [
+                (Some(0_usize), 312_usize),
+                (Some(1), 177),
+                (Some(2), 26),
+                (Some(3), 14)
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-2 reference-half probe should localize an even larger wall win to the mismatch-2 tail"
+        );
+        assert_eq!(pruned_terminal_prefixes.len(), 2271);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3492,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the mismatch-2 reference-half probe should widen the noncanonical small-cluster shell even more aggressively than the claim-next-bridge-half tradeoff"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            })
+        );
+        assert_eq!(
+            tail_pair_counts,
+            [
+                ((Some(2_usize), "reference", "reference"), 26_usize),
+                ((Some(3_usize), "reference", "reference"), 12),
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-2 reference-half probe should contract that mismatch-2 pair from 42 to 26 while leaving mismatch-3 unchanged"
+        );
+        assert_eq!(
+            tail_clause_four_five_counts,
+            [
+                (
+                    (Some(2_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    6_usize
+                ),
+                (
+                    (Some(2_usize), "claim_next_bridge", "claim_next_codomain"),
+                    6
+                ),
+                ((Some(2_usize), "claim_next_bridge", "reference"), 6),
+                (
+                    (Some(2_usize), "demo_sharp_bridge", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    (Some(2_usize), "demo_sharp_bridge", "claim_next_codomain"),
+                    2
+                ),
+                (
+                    (Some(2_usize), "demo_sharp_codomain", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    (Some(2_usize), "demo_sharp_codomain", "claim_next_codomain"),
+                    2
+                ),
+                (
+                    (Some(3_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    2
+                ),
+                (
+                    (Some(3_usize), "claim_next_bridge", "claim_next_codomain"),
+                    2
+                ),
+                ((Some(3_usize), "claim_next_bridge", "reference"), 2),
+                ((Some(3_usize), "reference", "claim_flat_codomain"), 2),
+                ((Some(3_usize), "reference", "claim_next_codomain"), 2),
+                ((Some(3_usize), "reference", "reference"), 2),
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-2 reference-half probe should remove exactly the 4 / 4 / 2 / 2 / 4 reference-side cells from mismatch-2 while leaving the mismatch-2 claim-next-bridge half, the tiny clause-4 demo-side pockets, and the mismatch-3 backup intact"
         );
     }
 

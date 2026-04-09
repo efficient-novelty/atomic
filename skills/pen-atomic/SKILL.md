@@ -439,6 +439,11 @@ Focus on:
   still concentrated on `claim_next_bridge = 18` and `reference = 16`, route
   there instead of reopening broader mismatch-`0` or claim-safe shells as if
   the whole tail were still one undifferentiated lead
+- treat the larger mismatch-`2` `reference / reference` clause-`4`
+  `claim_next_bridge` and `reference` halves as live autonomy detail too; if
+  the live docs have already pinned them as wider-`small_cluster` tradeoff
+  controls, route there instead of reopening either larger half as if it were
+  still a fresh safe repair lead
 - treat the representative `claim_sharp_codomain` clause-`2` sheet's
   clause-`6` continuations as live autonomy detail too; the
   `claim_next_codomain`, `claim_sharp_codomain`, and `reference`

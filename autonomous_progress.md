@@ -137,6 +137,35 @@ Until that exists, wording stays at `bounded live recovery`.
     first, comparing its clause-`4` `claim_next_bridge` and `reference`
     shares before the tiny demo-side pockets or the smaller mismatch-`3`
     backup
+- The mismatch-`2` `reference / reference` clause-`4`
+  `claim_next_bridge` half is now also localized as a smaller tradeoff
+  control:
+  - a narrow exact-bound override on that half lands `4547 / 535 / 2271`
+  - it widens `small_cluster` to `3294 / 522 / 522 / 0`
+  - the isolated `single` pocket stays fenced
+  - the exact mismatch-`2` pair contracts from `42` to `24`
+  - the smaller mismatch-`3` backup stays untouched at `12`
+  - consequence: the larger mismatch-`2` tail is not safely repairable on its
+    whole clause-`4` `claim_next_bridge` half, because the wall win still
+    depends on a wider noncanonical `small_cluster`
+- The mismatch-`2` `reference / reference` clause-`4` `reference` half is now
+  also localized as a sharper tradeoff control:
+  - a narrow exact-bound override on that half lands `4835 / 529 / 2271`
+  - it widens `small_cluster` to `3492 / 522 / 522 / 0`
+  - the isolated `single` pocket stays fenced
+  - the exact mismatch-`2` pair contracts from `42` to `26`
+  - the mismatch-`2` remaining-three spill also contracts by `8`, from
+    `102` to `94`
+  - the smaller mismatch-`3` backup stays untouched at `12`
+  - consequence: the mismatch-`2` wall is not safely repairable on its whole
+    clause-`4` `reference` half either; that half buys a larger wall win only
+    by widening `small_cluster` even more aggressively than the sibling
+    `claim_next_bridge` tradeoff
+- Any remaining mismatch-`2` leverage is therefore no longer on either of the
+  two larger clause-`4` halves. The next honest slice should stay on the tiny
+  `demo_sharp_codomain = 4` and `demo_sharp_bridge = 4` pockets before
+  backing off to mismatch-`3` or reopening another broader mismatch-`0` or
+  claim-safe shell.
 - A direct parent-level exact-bound bypass on the whole remaining-two
   mismatch-`0` claim-domain tier is now ruled out:
   - redirecting that tier from `CannotClearBar` to `Unknown` at
@@ -624,6 +653,15 @@ Until that exists, wording stays at `bounded live recovery`.
     `claim_next_bridge = 6` plus `reference = 6` tail
 - Do not reopen any broader mismatch-`0` or claim-safe shell before moving
   below that larger mismatch-`2` `reference / reference` tail first.
+- Do not stop at the mismatch-`2` clause-`4` `claim_next_bridge` half either;
+  it narrows the wall only to `535` while widening `small_cluster` to `3294`.
+- Do not stop at the mismatch-`2` clause-`4` `reference` half either; it
+  narrows the wall further to `529`, but only by widening `small_cluster` to
+  `3492`.
+- Because both larger mismatch-`2` clause-`4` halves are now exhausted as
+  tradeoff controls, the next honest revisit should move to the two tiny
+  mismatch-`2` clause-`4` demo-side pockets before promoting mismatch-`3` or
+  another broader mismatch-`0` shell.
 - The representative mismatch-`0` claim-flat dead shell is now frozen context
   rather than an active lead: its first finer reason-level split already
   relands the same clause-`2` blocker and the same nonqualifying connectivity

@@ -549,3 +549,27 @@ This file is the append-only history for `desktop_claim_shadow`.
   mismatch-`2` tail first, comparing its clause-`4`
   `claim_next_bridge` and `reference` halves before the tiny demo-side
   pockets or the smaller mismatch-`3` backup.
+- Scope: localize the promoted mismatch-`2` `reference / reference` tail onto
+  its clause-`4` `claim_next_bridge` half.
+  Result: a narrow exact-bound override on that half lands
+  `4547 / 535 / 2271` with `small_cluster = 3294 / 522 / 522 / 0`; the
+  isolated `single` pocket stays fenced, the exact mismatch-`2` pair
+  contracts from `42` to `24`, and the smaller mismatch-`3` backup stays
+  untouched at `12`.
+  Consequence: the larger mismatch-`2` tail is not safely repairable on its
+  whole clause-`4` `claim_next_bridge` half. The wall win is real, but it is
+  only a tradeoff because the noncanonical `small_cluster` shell widens.
+- Scope: localize the promoted mismatch-`2` `reference / reference` tail onto
+  its clause-`4` `reference` half.
+  Result: a narrow exact-bound override on that half lands
+  `4835 / 529 / 2271` with `small_cluster = 3492 / 522 / 522 / 0`; the
+  isolated `single` pocket stays fenced, the exact mismatch-`2` pair
+  contracts from `42` to `26`, and the mismatch-`2` remaining-three spill
+  also contracts by `8`, while the smaller mismatch-`3` backup stays
+  untouched at `12`.
+  Consequence: the mismatch-`2` wall is not safely repairable on its whole
+  clause-`4` `reference` half either. Because that sharper wall win widens
+  `small_cluster` even more aggressively than the sibling
+  `claim_next_bridge` tradeoff, the next honest slice should move to the two
+  tiny mismatch-`2` clause-`4` demo-side pockets before promoting mismatch-`3`
+  or reopening broader mismatch-`0` or claim-safe shells again.

@@ -184,6 +184,11 @@ Do not:
   clause-`4` pressure still concentrated on `claim_next_bridge = 18` and
   `reference = 16`; keep that tail split in the autonomy docs rather than
   stabilizing it here
+- reopen the larger mismatch-`2` `reference / reference` clause-`4`
+  `claim_next_bridge` or `reference` half first either after the live docs
+  have already pinned those halves as tradeoff controls with wider
+  `small_cluster`; keep those half-probe outcomes in the autonomy docs rather
+  than stabilizing them here
 - reopen the representative `claim_sharp_codomain` clause-`2` sheet's
   clause-`6` identity split first either; its `claim_next_codomain`,
   `claim_sharp_codomain`, and `reference` continuations now also reland the
