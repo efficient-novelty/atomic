@@ -427,6 +427,12 @@ Focus on:
   collapse to matched dead `3`-generated / `0`-admitted completion summaries
   with the same nonlive open-band structural terminal trio, so route to the
   live docs before spending another turn on the exhausted claim-flat shell
+- treat the representative mismatch-`0` claim-flat dead-child reason split as
+  live autonomy detail too; if the live docs have already localized that
+  shell's first finer reason pass to one uniform clause-`2` blocker plus the
+  same nonqualifying connectivity vector across all clause-`3` / clause-`6` /
+  terminal continuations, route there instead of reopening that dead child as
+  if another mismatch-`0` identity or reason reland were still fresh
 - treat the representative `claim_sharp_codomain` clause-`2` sheet's
   clause-`6` continuations as live autonomy detail too; the
   `claim_next_codomain`, `claim_sharp_codomain`, and `reference`

@@ -27224,6 +27224,178 @@ mod tests {
         );
     }
 
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_flat_shell_child_reason_vectors()
+    -> BTreeMap<
+        (&'static str, &'static str, &'static str),
+        (usize, Option<usize>, bool, bool, bool, u32, bool, bool),
+    > {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let anchor = surface
+            .admissibility
+            .historical_anchor_ref
+            .expect("step 15 should still expose a historical anchor");
+        let claim_flat_argument = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+            ))),
+        );
+        let claim_eventual_argument = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor)),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ))),
+        );
+        let mut reason_vectors = BTreeMap::new();
+
+        for work_item in surface.pruned_terminal_prefixes.iter().filter(|work_item| {
+            current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                0,
+                &work_item.prefix_telescope.clauses[0],
+            ) == "claim_eventual_domain"
+                && current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                    1,
+                    &work_item.prefix_telescope.clauses[1],
+                ) == "claim_next_codomain"
+                && current_claim_step_fifteen_partial_prefix_clause_two_label(
+                    &work_item.prefix_telescope.clauses[2],
+                ) == "claim_flat_domain"
+                && current_claim_step_fifteen_partial_prefix_clause_four_label(
+                    &work_item.prefix_telescope.clauses[4],
+                ) == "claim_next_bridge"
+                && current_claim_step_fifteen_partial_prefix_clause_five_label(
+                    &work_item.prefix_telescope.clauses[5],
+                ) == "claim_flat_codomain"
+                && matches!(
+                    current_claim_step_fifteen_partial_prefix_clause_six_label(
+                        &work_item.prefix_telescope.clauses[6]
+                    ),
+                    "claim_next_codomain" | "claim_sharp_codomain" | "reference"
+                )
+                && (*work_item
+                    .prefix_telescope
+                    .clauses
+                    .get(3)
+                    .expect("clause-3 should exist")
+                    == claim_flat_argument
+                    || *work_item
+                        .prefix_telescope
+                        .clauses
+                        .get(3)
+                        .expect("clause-3 should exist")
+                        == claim_eventual_argument)
+        }) {
+            let clause_three_label = if work_item.prefix_telescope.clauses[3] == claim_flat_argument
+            {
+                "claim_flat_argument"
+            } else {
+                "claim_eventual_argument"
+            };
+            let clause_six_label = current_claim_step_fifteen_partial_prefix_clause_six_label(
+                &work_item.prefix_telescope.clauses[6],
+            );
+
+            for clause in work_item.next_clauses(&surface.clause_catalog) {
+                let terminal_label = if *clause == reference_terminal {
+                    "reference"
+                } else if *clause == next_lift_terminal {
+                    "next_lift"
+                } else if *clause == eventual_lift_terminal {
+                    "eventual_lift"
+                } else {
+                    "other"
+                };
+                let mut telescope = work_item.prefix_telescope.clone();
+                telescope.clauses.push(clause.clone());
+                let reanchor =
+                    HistoricalReanchorSummary::from_telescope(&surface.library, &telescope);
+                let witness = analyze_connectivity(&surface.library, &telescope);
+                reason_vectors.insert(
+                    (clause_three_label, clause_six_label, terminal_label),
+                    (
+                        reanchor.matched_clause_count(),
+                        reanchor.first_mismatch_position(),
+                        witness.connected,
+                        witness.references_active_window,
+                        witness.self_contained,
+                        witness.max_lib_ref,
+                        witness.historical_reanchor,
+                        passes_connectivity(&surface.library, &telescope),
+                    ),
+                );
+            }
+        }
+
+        reason_vectors
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_flat_dead_child_reason_progress_stays_uniformly_blocked_at_clause_two()
+     {
+        let reason_vectors =
+            current_claim_step_fifteen_representative_mismatch_zero_claim_flat_shell_child_reason_vectors();
+
+        assert_eq!(
+            reason_vectors.len(),
+            18,
+            "the representative mismatch-zero claim-flat dead shell should still stay on the two clause-three branches, their three clause-six children, and the same three terminal families"
+        );
+        assert!(
+            reason_vectors
+                .values()
+                .all(|vector| vector.0 == 2 && vector.1 == Some(2)),
+            "beneath the representative mismatch-zero claim-flat dead shell, every clause-three / clause-six / terminal continuation should already fall off historical reanchor at clause 2, so the blocker is upstream of clause-3, clause-6, or terminal identity"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_flat_first_finer_reason_split_stays_uniform_below_the_dead_child_shell()
+     {
+        let reason_vectors =
+            current_claim_step_fifteen_representative_mismatch_zero_claim_flat_shell_child_reason_vectors();
+
+        assert_eq!(
+            reason_vectors.len(),
+            18,
+            "the first finer mismatch-zero reason split should still stay on the representative claim-flat dead shell's two clause-three branches, three clause-six children, and three terminal families"
+        );
+        assert!(
+            reason_vectors
+                .values()
+                .all(|vector| { *vector == (2, Some(2), true, false, false, 10, false, false) }),
+            "the first finer mismatch-zero reason-level split below the representative claim-flat dead shell should stay uniform too: every completed telescope remains structurally connected but outside active-window qualification, outside self-containedness, and outside historical reanchor after the same clause-2 blocker, so this shell should demote rather than reopen another mismatch-zero identity reland"
+        );
+    }
+
     #[test]
     fn current_claim_step_fifteen_clause_one_demo_flat_codomain_tradeoff_control_splits_evenly_across_three_clause_two_sheets()
      {

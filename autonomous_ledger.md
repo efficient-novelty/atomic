@@ -515,3 +515,25 @@ This file is the append-only history for `desktop_claim_shadow`.
   the next promoted backup should come from a mismatch-`0` reason-level
   connectivity partition beneath one frozen representative claim-side shell
   rather than from another claim-safe clause-`5` retry.
+- Scope: run the first finer reason-level checkpoint below the representative
+  mismatch-`0` claim-flat dead child.
+  Result: beneath
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
+  claim_next_bridge / claim_flat_codomain`,
+  both clause-`3` branches `claim_flat_argument / claim_eventual_argument`,
+  all three clause-`6` children
+  `claim_next_codomain / claim_sharp_codomain / reference`, and all three
+  terminal families `reference / eventual_lift / next_lift` relanded the same
+  finer reason vector:
+  - historical-reanchor progress stayed fixed at `2` matched clauses with
+    first mismatch at clause `2`
+  - every completed telescope stayed structurally connected but outside
+    active-window qualification, outside self-containedness, and outside
+    historical reanchor, with `max_lib_ref = 10`
+  - every completed telescope therefore still failed live connectivity on the
+    current claim path
+  Consequence: the representative mismatch-`0` claim-flat dead-child backup is
+  now exhausted at its first finer reason-level checkpoint too. The branch
+  should be demoted, and the next promoted backup should move to the residual
+  `reference / reference` tails rather than to another mismatch-`0`
+  clause-`3` / clause-`6` / terminal-family or reason reland.

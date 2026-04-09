@@ -15,12 +15,12 @@ This file owns the single active work order for `desktop_claim_shadow`.
 
 ## Objective
 
-Keep the active work order off both the exhausted mismatch-`0` identity
-relands and the now-demoted claim-safe mismatch-`1` clause-`5` fail-fast
-checkpoint, so the next slice promotes the mismatch-`0` reason-level
-connectivity backup beneath one frozen representative claim-side shell instead
-of reopening another claim-safe clause-`5` retry or another mismatch-`0`
-identity reland on top of canonical `v12` and the matched local `4331`
+Keep the active work order off the now-demoted claim-safe mismatch-`1`
+clause-`5` fail-fast checkpoint and the now-demoted representative
+mismatch-`0` claim-flat dead-child reason checkpoint, so the next slice
+promotes the residual `reference / reference` tails instead of reopening
+another claim-safe clause-`5` retry or another mismatch-`0` identity or
+reason reland on top of canonical `v12` and the matched local `4331`
 guardrail surface.
 
 Do not start with another rerun setup pass.
@@ -424,6 +424,25 @@ Do not start with another rerun setup pass.
     while exact-pair progress stays fixed at `5 / mismatch 5`
   - the claim-safe branch is therefore now demoted at its first fail-fast
     checkpoint and is no longer the active next slice
+- The first finer mismatch-`0` reason-level split below the representative
+  claim-flat dead shell is now also exhausted:
+  - beneath
+    `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
+    claim_next_bridge / claim_flat_codomain`,
+    both clause-`3` branches `claim_flat_argument / claim_eventual_argument`,
+    all three clause-`6` children
+    `claim_next_codomain / claim_sharp_codomain / reference`, and all three
+    terminal families `reference / eventual_lift / next_lift` reland the same
+    finer reason vector
+  - every one of those `18` completed telescopes falls off historical
+    reanchor after exactly `2` matched clauses with first mismatch at clause
+    `2`
+  - every one of them stays structurally connected but outside active-window
+    qualification, outside self-containedness, and outside historical
+    reanchor, with `max_lib_ref = 10`
+  - the representative mismatch-`0` claim-flat backup is therefore now
+    demoted at its first fail-fast checkpoint too and is no longer the active
+    next slice
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -439,39 +458,34 @@ Do not start with another rerun setup pass.
      clause-`5` labels stayed fully uniform across both live clause-`5`
      labels, all three clause-`6` siblings, and all three terminal families
    - do not spend another turn below that same representative claim-safe
-     clause-`5` wall unless a later mismatch-`0` result changes the ordering
-   - leave the `reference / reference` tails at `54` below the mismatch-`0`
-     reason-level backup unless that backup also stalls cleanly
-3. Promote mismatch-`0` next, but only through a reason-level connectivity
-   partition beneath one frozen representative claim-side shell:
-   - keep the mismatch-`0` claim-domain surface frozen as exhausted through
-     the whole `claim_next_bridge`-half tradeoff, its active clause-`5`
-     cells, the representative pair-cell clause-`2` split, and the matched
-     representative claim-side clause-`6` identity passes
-   - do not reopen the broad mismatch-`0` negative controls again:
-     whole-tier parent `CannotClearBar -> Unknown` relief, broad clause-`1`
-     `demo_flat_codomain`, or either clause-`4`
-     `claim_next_bridge / reference` relocalization
-   - do not reopen the mismatch-`0` remaining-one exact-summary tradeoff
-     cells again either: the whole `claim_next_bridge` half, the active
-     clause-`5` `claim_flat_codomain / reference` cells, the symmetric
-     pair-cell relands, the representative claim-flat joint clause-`3`
-     shell as a whole, or the representative claim-sharp clause-`6`
-     identity relands
-   - start from one representative dead claim-flat child under
-     `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
-     claim_next_bridge / claim_flat_codomain`, because that shell already has
-     a localized dead completion summary and is the cleanest frozen claim-side
-     shell with room for a narrower connectivity-failure reason partition
-   - the first live question there should now be reason-level, not identity:
-     split one representative dead child by the specific connectivity-failure
-     cause below the uniform dead completion summary rather than by another
-     clause-`3`, clause-`6`, or terminal-family sibling
-   - if that first mismatch-`0` reason-level split also stays uniform while
-     preserving the canonical winner, the isolated `single` fence, and the
-     `small_cluster` fence, only then reconsider whether the
-     `reference / reference` tails deserve promotion
-4. Land only a change that improves generated breadth while preserving all of
+     clause-`5` wall unless a later `reference / reference` result changes the
+     ordering
+3. Treat the promoted representative mismatch-`0` claim-flat dead-child
+   reason split as demoted for now:
+   - the first finer reason-level probe below that dead shell stayed fully
+     uniform across both clause-`3` branches, all three clause-`6` children,
+     and all three terminal families
+   - every one of those `18` completed telescopes stayed structurally
+     connected but outside active-window qualification, outside
+     self-containedness, and outside historical reanchor, with the same
+     clause-`2` blocker and `max_lib_ref = 10`
+   - do not spend another turn below that same representative mismatch-`0`
+     claim-flat dead shell unless a later `reference / reference` result
+     changes the ordering
+4. Promote the `reference / reference` tails next:
+   - start from the residual `54` remaining-two captures across mismatch
+     positions `2 = 42` and `3 = 12`
+   - localize that tail by mismatch position first rather than reopening
+     mismatch-`0` or claim-safe shells again
+   - within that same tail, keep the current clause-`4` anatomy explicit:
+     mismatch-`2` sits on `claim_next_bridge = 18`, `reference = 16`,
+     `demo_sharp_codomain = 4`, and `demo_sharp_bridge = 4`, while
+     mismatch-`3` sits on `claim_next_bridge = 6` plus `reference = 6`
+   - if the first `reference / reference` tail split also stalls cleanly
+     while preserving the canonical winner, the isolated `single` fence, and
+     the `small_cluster` fence, only then reconsider whether any alternate
+     mismatch-`0` shell deserves promotion
+5. Land only a change that improves generated breadth while preserving all of
    the following:
    - accepted step `15` winner stays canonical `103 / 8`
    - the isolated `single` pocket stays fenced
@@ -534,6 +548,8 @@ Do not start with another rerun setup pass.
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_tradeoff_delta_below_joint_clause_three_continuation_probe`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_flat_joint_clause_three_shell_stays_on_six_matched_dead_completion_summaries`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_flat_joint_clause_three_shell_keeps_only_uniform_nonlive_open_band_terminal_choices`
+- `current_claim_step_fifteen_representative_mismatch_zero_claim_flat_dead_child_reason_progress_stays_uniformly_blocked_at_clause_two`
+- `current_claim_step_fifteen_representative_mismatch_zero_claim_flat_first_finer_reason_split_stays_uniform_below_the_dead_child_shell`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
@@ -566,7 +582,8 @@ Do not start with another rerun setup pass.
   `reference`, `demo_sharp_domain`, or `demo_flat_codomain` inside
   `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`
 - another finer reason-level split below that same representative claim-safe
-  clause-`5` wall before a mismatch-`0` reason-level backup has been tried
+  clause-`5` wall before a later `reference / reference` tail result changes
+  the ordering
 - another representative claim-safe dead-prefix terminal-family reland under
   `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`
 - another representative claim-safe dead-prefix clause-`6` or terminal-family
@@ -612,6 +629,10 @@ Do not start with another rerun setup pass.
 - another representative claim-flat parent/child-shell completion pass that
   only rechecks the same six dead `3`-generated / `0`-admitted child
   continuations or re-partitions them by clause-`3` / clause-`6` identity
+- another finer reason-level split below that same representative
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
+  claim_next_bridge / claim_flat_codomain` dead child before the
+  `reference / reference` tails have been checked
 - another whole-cell remaining-one exact-summary relief pass on the
   mismatch-`0` clause-`4` `claim_next_bridge` plus clause-`5`
   `claim_next_codomain` cell

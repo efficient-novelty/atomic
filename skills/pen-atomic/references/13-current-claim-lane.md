@@ -172,6 +172,12 @@ Do not:
   completion summaries with the same nonlive open-band structural terminal
   trio, so route to the live autonomy docs before spending another turn on the
   exhausted claim-flat shell
+- reopen that representative mismatch-`0` claim-flat dead child through
+  another finer reason split first either after the live docs have already
+  localized that shell to one uniform clause-`2` blocker plus the same
+  nonqualifying connectivity vector across all clause-`3` / clause-`6` /
+  terminal continuations; keep that finer reason partition in the autonomy
+  docs rather than stabilizing it here
 - reopen the representative `claim_sharp_codomain` clause-`2` sheet's
   clause-`6` identity split first either; its `claim_next_codomain`,
   `claim_sharp_codomain`, and `reference` continuations now also reland the
