@@ -452,3 +452,24 @@ This file is the append-only history for `desktop_claim_shadow`.
   claim_flat_codomain / reference`, and partition by specific
   reason-level connectivity behavior while using the other two terminal
   families and the other five dead prefixes as matched controls.
+- Scope: localize that promoted representative claim-safe dead-prefix
+  `reference`-terminal reason pass one layer deeper against the exact
+  claim-safe pair matcher itself.
+  Result: under the selected
+  `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`
+  exact-pair override, the hand-built exact pair still reaches the full
+  `8`-clause exact-pair historical-reanchor match with no mismatch, but every
+  completed telescope in the six-prefix dead shell lands the same earlier
+  blocker:
+  - the completed `reference` terminal reaches only `5` matched clauses and
+    first fails at clause `5`
+  - the same `5`-matched / first-mismatch-`5` blocker also holds on the
+    `eventual_lift` and `next_lift` terminals
+  - the same blocker also holds across all six dead prefixes
+    `claim_flat_codomain / claim_next_codomain` x
+    `claim_next_codomain / claim_sharp_codomain / reference`
+  Consequence: the promoted reason-level claim-safe dead-shell slice is now
+  exhausted one layer deeper too. Clause-`6` and terminal-family identity are
+  frozen controls, and any further claim-safe revisit has to stay below the
+  now-uniform clause-`5` qualification wall rather than reopening another
+  clause-`6` or terminal-family reland.

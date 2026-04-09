@@ -440,6 +440,25 @@ Until that exists, wording stays at `bounded live recovery`.
     best-rank profile, and no survivor sketch
   - consequence: terminal-family identity is now exhausted below that
     representative claim-safe dead shell too
+- The promoted reason-level pass below that representative claim-safe dead
+  shell's `reference` terminal is now also localized:
+  - under the selected
+    `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`
+    exact-pair override, the exact claim-safe reanchor progress reaches `5`
+    matched clauses and first fails at clause `5` on the completed
+    `reference` terminal
+  - the same `5`-matched / first-mismatch-`5` blocker also holds on the
+    sibling `eventual_lift` and `next_lift` terminals
+  - the same blocker also holds across all six
+    `claim_flat_codomain / claim_next_codomain` x
+    `claim_next_codomain / claim_sharp_codomain / reference` dead prefixes in
+    that shell
+  - the hand-built exact claim-safe pair control still reaches the full
+    `8`-clause match with no mismatch
+  - consequence: the representative claim-safe dead shell is no longer open at
+    clause-`6` or terminal-family identity either; the whole completed shell is
+    now uniformly blocked one layer earlier by the clause-`5` structural
+    reason wall below the exact claim-safe pair
 - The residual `3` `single`-bucket incumbent prunes remain fenced and are now
   secondary to the partial-prefix wall.
 
@@ -452,9 +471,10 @@ Until that exists, wording stays at `bounded live recovery`.
   `reference + demo_flat_codomain` ladder, treat the mismatch-`0`
   claim-domain surface as exhausted through the representative claim-side
   clause-`6` identity passes and move to the smaller claim-safe mismatch-`1`
-  tier before the `reference / reference` tails unless a narrower
-  reason-level connectivity partition under one frozen representative
-  claim-safe dead prefix's `reference` terminal is explicitly promoted.
+  tier before the `reference / reference` tails. The promoted representative
+  claim-safe dead-prefix reason partition is now uniform at clause `5`, so
+  clause-`6` and terminal-family identity are frozen controls rather than
+  fresh leads.
 - Do not stop at the representative claim-safe mismatch-`1` clause-`4`
   `demo_sharp_codomain` or `demo_sharp_bridge` side's exact pair-cell
   relands either; each only lifts breadth to `4363` while widening the clean
@@ -481,12 +501,13 @@ Until that exists, wording stays at `bounded live recovery`.
   completed telescopes is still only structurally connected but outside
   historical reanchor and active-window qualification.
 - If the claim-safe mismatch-`1` tier is revisited next, move below one
-  representative dead prefix's `reference` terminal, starting with
+  representative dead prefix's now-uniform clause-`5` reason wall, starting
+  with
   `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain /
-  claim_flat_codomain / reference`; use the other two terminal families and
-  the other five dead prefixes as matched controls, and partition by specific
-  reason-level connectivity behavior rather than by another claim-side sheet,
-  clause-`5`, clause-`6`, or terminal-family identity pass.
+  claim_flat_codomain / reference`; use the already-exhausted clause-`6` and
+  terminal-family siblings plus the other five dead prefixes only as matched
+  controls, and partition by narrower clause-`5` qualification behavior rather
+  than by another claim-side sheet, clause-`6`, or terminal-family reland.
 - If the mismatch-`0` claim-domain surface is revisited, stay below the broad
   clause-`1` `demo_flat_codomain` reopening and below whole-tier parent
   exact-bound relief; the former reaches `4985` only by widening the clean

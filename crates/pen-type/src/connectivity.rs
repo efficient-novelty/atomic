@@ -936,6 +936,29 @@ pub struct ConnectivityWitness {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct HistoricalReanchorProgress {
+    matched_clause_count: usize,
+    first_mismatch_position: Option<usize>,
+}
+
+impl HistoricalReanchorProgress {
+    pub const fn new(matched_clause_count: usize, first_mismatch_position: Option<usize>) -> Self {
+        Self {
+            matched_clause_count,
+            first_mismatch_position,
+        }
+    }
+
+    pub const fn matched_clause_count(self) -> usize {
+        self.matched_clause_count
+    }
+
+    pub const fn first_mismatch_position(self) -> Option<usize> {
+        self.first_mismatch_position
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ConnectivityTerminalDecision {
     PruneDisconnected,
     KeepWithoutFallback,
@@ -1055,6 +1078,42 @@ impl LibRefSummary {
 }
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+struct HistoricalReanchorPatternTracker {
+    enabled: bool,
+    matched_clause_count: usize,
+    first_mismatch_position: Option<usize>,
+}
+
+impl HistoricalReanchorPatternTracker {
+    fn new(enabled: bool) -> Self {
+        Self {
+            enabled,
+            matched_clause_count: 0,
+            first_mismatch_position: None,
+        }
+    }
+
+    fn advance(mut self, position: usize, clause_matches: bool) -> Self {
+        if !self.enabled || self.first_mismatch_position.is_some() {
+            return self;
+        }
+        if clause_matches {
+            self.matched_clause_count += 1;
+        } else {
+            self.first_mismatch_position = Some(position);
+        }
+        self
+    }
+
+    fn progress(self) -> Option<HistoricalReanchorProgress> {
+        self.enabled.then_some(HistoricalReanchorProgress::new(
+            self.matched_clause_count,
+            self.first_mismatch_position,
+        ))
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct HistoricalReanchorSummary {
     temporal_shell_anchor_ref: Option<u32>,
     temporal_shell_prefix_matches: bool,
@@ -1075,6 +1134,8 @@ pub struct HistoricalReanchorSummary {
     anchor_eleven_clause_five_side_pocket_matches: bool,
     anchor_eleven_clause_five_remaining_two_mismatch_zero_bridge_matches: bool,
     anchor_eleven_clause_five_remaining_two_mismatch_one_bridge_matches: bool,
+    anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_progress:
+        HistoricalReanchorPatternTracker,
     clause_count: usize,
     matched_clause_count: usize,
     first_mismatch_position: Option<usize>,
@@ -1091,6 +1152,12 @@ impl HistoricalReanchorSummary {
 
     fn for_library(library: &Library) -> Self {
         let temporal_shell_anchor_ref = historical_reanchor_anchor_ref(library);
+        let claim_safe_pair_enabled =
+            (claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_override_selector()
+                .is_some()
+                || claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two_override_selector()
+                    .is_some())
+                && temporal_shell_anchor_ref.is_some();
         Self {
             temporal_shell_anchor_ref,
             temporal_shell_prefix_matches: temporal_shell_anchor_ref.is_some(),
@@ -1102,11 +1169,7 @@ impl HistoricalReanchorSummary {
                 temporal_shell_anchor_ref.is_some(),
             anchor_eleven_clause_four_side_pocket_matches: temporal_shell_anchor_ref.is_some(),
             anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_matches:
-                (claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_override_selector()
-                    .is_some()
-                    || claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two_override_selector()
-                        .is_some())
-                    && temporal_shell_anchor_ref.is_some(),
+                claim_safe_pair_enabled,
             anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_matches:
                 claim_step_fifteen_clause_four_sharp_bridge_on_claim_safe_pair_override_selector()
                     .is_some()
@@ -1125,6 +1188,8 @@ impl HistoricalReanchorSummary {
                 temporal_shell_anchor_ref.is_some(),
             anchor_eleven_clause_five_remaining_two_mismatch_one_bridge_matches:
                 temporal_shell_anchor_ref.is_some(),
+            anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_progress:
+                HistoricalReanchorPatternTracker::new(claim_safe_pair_enabled),
             clause_count: 0,
             matched_clause_count: 0,
             first_mismatch_position: None,
@@ -1140,6 +1205,12 @@ impl HistoricalReanchorSummary {
             return self;
         };
         if !self.temporal_shell_prefix_matches {
+            let claim_safe_pair_matches =
+                matches_anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_clause(
+                    position,
+                    &clause.expr,
+                    anchor,
+                );
             self.anchor_eleven_claim_pair_matches = self.anchor_eleven_claim_pair_matches
                 && matches_anchor_eleven_claim_pair_clause(position, &clause.expr, anchor);
             self.anchor_eleven_clause_zero_side_pocket_matches = self
@@ -1179,11 +1250,10 @@ impl HistoricalReanchorSummary {
                 );
             self.anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_matches = self
                 .anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_matches
-                && matches_anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_clause(
-                    position,
-                    &clause.expr,
-                    anchor,
-                );
+                && claim_safe_pair_matches;
+            self.anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_progress = self
+                .anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_progress
+                .advance(position, claim_safe_pair_matches);
             self.anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_matches = self
                 .anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_matches
                 && matches_anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_clause(
@@ -1238,6 +1308,12 @@ impl HistoricalReanchorSummary {
 
         self.temporal_shell_prefix_matches =
             matches_historical_reanchor_clause(position, &clause.expr, anchor);
+        let claim_safe_pair_matches =
+            matches_anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_clause(
+                position,
+                &clause.expr,
+                anchor,
+            );
         self.anchor_eleven_claim_pair_matches = self.anchor_eleven_claim_pair_matches
             && matches_anchor_eleven_claim_pair_clause(position, &clause.expr, anchor);
         self.anchor_eleven_clause_zero_side_pocket_matches = self
@@ -1265,11 +1341,10 @@ impl HistoricalReanchorSummary {
             && matches_anchor_eleven_clause_four_side_pocket_clause(position, &clause.expr, anchor);
         self.anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_matches = self
             .anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_matches
-            && matches_anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_clause(
-                position,
-                &clause.expr,
-                anchor,
-            );
+            && claim_safe_pair_matches;
+        self.anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_progress = self
+            .anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_progress
+            .advance(position, claim_safe_pair_matches);
         self.anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_matches = self
             .anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_matches
             && matches_anchor_eleven_clause_four_sharp_bridge_on_claim_safe_pair_clause(
@@ -1352,6 +1427,11 @@ impl HistoricalReanchorSummary {
 
     pub fn first_mismatch_position(self) -> Option<usize> {
         self.first_mismatch_position
+    }
+
+    pub fn claim_safe_sharp_codomain_pair_progress(self) -> Option<HistoricalReanchorProgress> {
+        self.anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_progress
+            .progress()
     }
 }
 
@@ -2431,14 +2511,18 @@ fn matches_anchor_eleven_clause_four_sharp_codomain_on_claim_safe_pair_clause(
     }
     match position {
         0 => matches_reference_temporal_next_clause(expr),
-        1 => pair_clause_one.is_some_and(|clause_one| {
-            matches_anchor_eleven_claim_safe_clause_one_label(expr, clause_one)
-        }) || pair_clause_two.is_some_and(|selector| {
-            matches_anchor_eleven_claim_safe_clause_one_label(expr, selector.clause_one)
-        }),
-        2 => pair_clause_two.is_some_and(|selector| {
-            matches_anchor_eleven_claim_safe_clause_two_label(expr, selector.clause_two)
-        }) || pair_clause_two.is_none() && matches_claim_temporal_pair_clause_two_variant(expr),
+        1 => {
+            pair_clause_one.is_some_and(|clause_one| {
+                matches_anchor_eleven_claim_safe_clause_one_label(expr, clause_one)
+            }) || pair_clause_two.is_some_and(|selector| {
+                matches_anchor_eleven_claim_safe_clause_one_label(expr, selector.clause_one)
+            })
+        }
+        2 => {
+            pair_clause_two.is_some_and(|selector| {
+                matches_anchor_eleven_claim_safe_clause_two_label(expr, selector.clause_two)
+            }) || pair_clause_two.is_none() && matches_claim_temporal_pair_clause_two_variant(expr)
+        }
         3 => matches_anchor_eleven_exact_argument_clause(expr, anchor + 1),
         4 => matches_anchor_eleven_demo_sharp_codomain_clause(expr),
         5 => matches_reference_temporal_sharp_eventually_bridge(expr),
@@ -3277,8 +3361,8 @@ fn matches_reference_temporal_terminal_clause(expr: &Expr) -> bool {
 mod tests {
     use super::{
         ConnectivitySummary, ConnectivityTerminalDecision, ConnectivityWitness,
-        HistoricalReanchorSummary, TerminalClauseConnectivityFacts, analyze_connectivity,
-        passes_connectivity,
+        HistoricalReanchorProgress, HistoricalReanchorSummary, TerminalClauseConnectivityFacts,
+        analyze_connectivity, passes_connectivity,
     };
     use pen_core::clause::{ClauseRec, ClauseRole};
     use pen_core::expr::Expr;
@@ -9437,8 +9521,7 @@ mod tests {
                 },
             );
         let mut telescope = Telescope::reference(15);
-        telescope.clauses[1].expr =
-            Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+        telescope.clauses[1].expr = Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
         telescope.clauses[3] = ClauseRec::new(
             ClauseRole::Introduction,
             Expr::Lam(Box::new(Expr::App(
@@ -9474,6 +9557,81 @@ mod tests {
             }
         );
         assert!(passes_connectivity(&library, &telescope));
+    }
+
+    #[test]
+    fn connectivity_tracks_claim_safe_pair_reason_progress_below_the_representative_dead_prefix() {
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let _override =
+            super::override_claim_step_fifteen_clause_four_sharp_codomain_on_claim_safe_pair_clause_two(
+                super::ClaimStepFifteenClaimSafePairClauseTwoSelector {
+                    clause_one: super::ClaimStepFifteenClaimSafeClauseOneLabel::ClaimNextCodomain,
+                    clause_two: super::ClaimStepFifteenClaimSafeClauseTwoLabel::ClaimFlatDomain,
+                },
+            );
+
+        let mut exact_pair = Telescope::reference(15);
+        exact_pair.clauses[1].expr = Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+        exact_pair.clauses[2].expr = Expr::Pi(
+            Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+            Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+        );
+        exact_pair.clauses[3] = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Lib(anchor + 1)),
+                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+            ))),
+        );
+        exact_pair.clauses[4] = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Flat(
+                    Box::new(Expr::Var(1)),
+                )))))),
+            ),
+        );
+        exact_pair.clauses[7] = reference_terminal.clone();
+
+        let exact_progress = HistoricalReanchorSummary::from_telescope(&library, &exact_pair)
+            .claim_safe_sharp_codomain_pair_progress()
+            .expect("the representative claim-safe pair override should expose progress");
+        assert_eq!(exact_progress, HistoricalReanchorProgress::new(8, None));
+
+        let mut dead_prefix_reference_terminal = exact_pair.clone();
+        dead_prefix_reference_terminal.clauses[5] = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                    Expr::Var(1),
+                ))))),
+            ),
+        );
+        dead_prefix_reference_terminal.clauses[6] = ClauseRec::new(
+            ClauseRole::Introduction,
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                Box::new(Expr::Var(2)),
+            ))),
+        );
+
+        let dead_progress =
+            HistoricalReanchorSummary::from_telescope(&library, &dead_prefix_reference_terminal)
+                .claim_safe_sharp_codomain_pair_progress()
+                .expect("the representative dead prefix should keep the same progress surface");
+        assert_eq!(dead_progress, HistoricalReanchorProgress::new(5, Some(5)));
+        assert!(
+            !HistoricalReanchorSummary::from_telescope(&library, &dead_prefix_reference_terminal)
+                .allows_historical_reanchor(),
+            "once the representative dead-prefix shell deviates at clause 5, the claim-safe pair reanchor path should stay blocked before clause 6 or terminal identity can matter"
+        );
     }
 
     #[test]

@@ -201,6 +201,10 @@ Do not:
   every one of those completed telescopes is still structurally connected but
   outside historical reanchor and active-window qualification, so that axis
   also belongs to the autonomy ledger rather than as a fresh lead
+- reopen a deeper representative claim-safe dead-prefix clause-`6` or
+  terminal-family reason pass first either after the live docs have already
+  localized that completed shell to a uniform clause-`5` blocker; keep that
+  finer reason partition in the autonomy docs rather than stabilizing it here
 - keep the next slice above another mismatch-`0` claim-side identity reland;
   with both representative claim-side sheets now frozen through clause-`6`
   identity, route to the live autonomy docs before spending another turn
