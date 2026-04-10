@@ -536,6 +536,46 @@ later stored bundle changes the diagnosis.
   create a fresh parent-level repair class, so the next honest probe has to
   move above the full parent-level qualification-family lattice rather than
   trying another recombination of the same three qualifiers.
+- The first clause-`4` split above that exhausted parent-level
+  qualification-family lattice is now also spent on the representative
+  mismatch-`0` claim-side parent-route shell across both active
+  clause-`5` families:
+  - a scoped clause-`4` `reference` override does qualify the targeted
+    claim-side parent shell while keeping the sibling
+    `claim_next_bridge` branch, the sibling reference clause-`2` sheet, and
+    lifted terminals fenced
+  - on `claim_flat_codomain` and `reference`, that narrow route split relands
+    unsafe noncanonical `60 / 8` with `retained = 2`,
+    `generated = 4391`, `partial_prefix_bar_failure = 557`,
+    `incumbent_dominance = 113`, zero-admitted captures `2259`,
+    first-mismatch distribution `316 / 177 / 50 / 14`, and
+    `small_cluster = 2871 / 435 / 435 / 111`
+  - the isolated `single` bucket reopens to `2` fully scored non-winners plus
+    `2` residual prunes at best overshoot `545 / 5278`
+  - the representative clause-`2` spread shifts to `19 / 19 / 12`
+  - the representative clause-`4` split shifts to `24 / 26`
+  - it contracts only the chosen clause-`4` `reference` plus active
+    clause-`5` bucket to `36`
+- That narrow clause-`4` parent-route split is also already localized at
+  delta level:
+  - on the chosen active clause-`5` bucket, it removes only the two
+    remaining-three clause-`4` `reference` parent captures
+  - it removes `4` zero-admitted captures in total and the matching `12`
+    remaining-one pruned prefixes
+  - it introduces four targeted remaining-two clause-`4` `reference`
+    capture families and no introduced pruned-prefix family
+- Any remaining step-`15` leverage is therefore no longer on that narrow
+  parent-route clause-`4` `reference` split either. Even above the exhausted
+  parent-level qualification-family lattice it still only converts
+  remaining-three pressure into a narrower remaining-two
+  clause-`4` `reference` pocket while displacing the canonical `103 / 8`
+  winner, so the next honest probe has to move to a different code-side
+  repair class again rather than retrying this split or dropping back to
+  narrower clause-`3` / clause-`6` selectors.
+- If the next slice stays on this representative mismatch-`0` shell, the
+  first unresolved sibling is the same clause-`4` `reference` split on the
+  alternate active-window and self-contained families rather than another
+  narrower parent-route selector.
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -1348,6 +1388,24 @@ later stored bundle changes the diagnosis.
   the same `small_cluster = 2931 / 455 / 455 / 115`, the same reopened
   `single` bucket, and the same targeted four-cell plus `24`-pruned-prefix
   delta on the active `reference` bucket
+- another representative mismatch-`0` claim-side parent-route clause-`4`
+  `reference` split on `claim_eventual_domain / claim_next_codomain /
+  reference / claim_flat_codomain`; that narrower route split now only
+  relands the unsafe `4391 / 557 / 2259` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 113`, `small_cluster = 2871 / 435 / 435 / 111`, the
+  same reopened `single` bucket, a shifted `19 / 19 / 12` clause-`2` spread,
+  a shifted `24 / 26` clause-`4` split, and a delta that only swaps two
+  remaining-three clause-`4` `reference` parent captures into four targeted
+  remaining-two clause-`4` `reference` capture families plus `12` removed
+  pruned prefixes on the active `claim_flat_codomain` bucket
+- another representative mismatch-`0` claim-side parent-route clause-`4`
+  `reference` split on `claim_eventual_domain / claim_next_codomain /
+  reference / reference`; that sibling narrower route split now relands the
+  same unsafe `4391 / 557 / 2259` shell with the same noncanonical `60 / 8`,
+  the same `incumbent_dominance = 113`, the same
+  `small_cluster = 2871 / 435 / 435 / 111`, the same reopened `single`
+  bucket, and the same two-remaining-three-to-four-remaining-two targeted
+  clause-`4` `reference` delta on the active `reference` bucket
 - another representative mismatch-`0` claim-side active-window reland on
   `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
   claim_flat_codomain`; that alternate qualification family now only relands
@@ -1508,6 +1566,20 @@ later stored bundle changes the diagnosis.
   claim-side remaining-two parent cells plus their `24` corresponding
   remaining-one pruned prefixes on the chosen active clause-`5` bucket, with
   no off-target capture or prune families introduced
+- the first clause-`4` `reference` split above that exhausted parent-level
+  qualification-family lattice is also pinned across both active
+  clause-`5` `claim_flat_codomain / reference` buckets as an unsafe matched
+  control at noncanonical `60 / 8` with `retained = 2`,
+  `generated = 4391`, `partial_prefix_bar_failure = 557`,
+  `incumbent_dominance = 113`, zero-admitted captures `2259`,
+  `small_cluster = 2871 / 435 / 435 / 111`, the same reopened `single`
+  bucket, a shifted `19 / 19 / 12` clause-`2` spread, and a shifted
+  `24 / 26` clause-`4` split
+- that narrow clause-`4` parent-route split is also localized to only two
+  removed remaining-three clause-`4` `reference` parent captures, four
+  introduced targeted remaining-two clause-`4` `reference` capture families,
+  and `12` removed remaining-one pruned prefixes on the chosen active
+  clause-`5` bucket, with no introduced pruned-prefix family
 - the first alternate active-window qualification family on those same active
   clause-`5` `claim_flat_codomain / reference` buckets is also pinned as a
   matched unsafe negative control on the same `4427 / 545 / 2247` with

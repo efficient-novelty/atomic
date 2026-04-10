@@ -190,6 +190,18 @@ Do not:
   cells plus their `24` matching remaining-one pruned prefixes on the chosen
   active clause-`5` bucket, those parent-route probes also belong to the
   autonomy ledger rather than as fresh repair leads
+- reopen the representative mismatch-`0` claim-side parent-route clause-`4`
+  `reference` split first either; if the live docs already pin both active
+  clause-`5` `claim_flat_codomain / reference` probes at the same unsafe
+  `4391 / 557 / 2259` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 113`, `small_cluster = 2871 / 435 / 435 / 111`, the
+  same reopened `single` bucket, a shifted `19 / 19 / 12` clause-`2` spread,
+  a shifted `24 / 26` clause-`4` split, and a delta that only swaps two
+  remaining-three clause-`4` `reference` parent captures into four targeted
+  remaining-two clause-`4` `reference` capture families plus `12` removed
+  pruned prefixes on the chosen active clause-`5` bucket, that narrower route
+  split also belongs to the autonomy ledger rather than as a fresh repair
+  lead
 - reopen the first alternate representative mismatch-`0` claim-side
   active-window qualification family first either; if the live docs already
   pin both active clause-`5` `claim_flat_codomain / reference` probes at the

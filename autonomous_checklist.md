@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-04-10
+Last updated: 2026-04-11
 
 This file owns only binary gates for `desktop_claim_shadow`.
 

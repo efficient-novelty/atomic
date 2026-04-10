@@ -1330,6 +1330,40 @@ Until that exists, wording stays at `bounded live recovery`.
   to move to a different repair class above that lattice rather than trying
   another recombination or reopening narrower clause-`3` / clause-`6`
   selectors from the same exhausted shell.
+- The first clause-`4` split above that exhausted parent-level
+  qualification-family lattice is now also spent on the representative
+  mismatch-`0` claim-side parent-route shell across both active
+  clause-`5` families:
+  - a scoped clause-`4` `reference` override does qualify the targeted
+    claim-side parent shell while keeping the sibling
+    `claim_next_bridge` branch, the sibling reference clause-`2` sheet, and
+    lifted terminals fenced
+  - on either active clause-`5` family, the full step-`15` search surface
+    relands a different unsafe matched control with noncanonical `60 / 8`,
+    `retained = 2`, `generated = 4391`,
+    `partial_prefix_bar_failure = 557`, `incumbent_dominance = 113`,
+    zero-admitted captures `2259`, first-mismatch distribution
+    `316 / 177 / 50 / 14`, `small_cluster = 2871 / 435 / 435 / 111`, and
+    the same reopened `single` bucket at best overshoot `545 / 5278`
+  - the representative clause-`2` spread shifts to `19 / 19 / 12`
+  - the representative clause-`4` split shifts to `24 / 26`
+  - it contracts only the chosen clause-`4` `reference` plus active
+    clause-`5` bucket to `36`
+- That narrow clause-`4` parent-route split is also localized at delta level:
+  - on the chosen active clause-`5` bucket, it removes only the two
+    remaining-three clause-`4` `reference` parent captures
+  - it removes `4` zero-admitted captures in total and the matching `12`
+    remaining-one pruned prefixes
+  - it introduces four targeted remaining-two clause-`4` `reference`
+    capture families and no introduced pruned-prefix family
+- Consequence: even above the exhausted parent-level qualification-family
+  lattice, the representative parent-route clause-`4` `reference` split is
+  not the missing clean repair either. It only converts remaining-three
+  pressure into a narrower remaining-two clause-`4` `reference` pocket while
+  still displacing the canonical `103 / 8` winner and reopening the
+  `single` bucket, so the next honest follow-on has to move to a different
+  code-side repair class again rather than retrying this route split or
+  dropping back to narrower clause-`3` / clause-`6` selectors.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

@@ -15166,6 +15166,34 @@ mod tests {
         super::finish_pruned_terminal_prefix_capture()
     }
 
+    fn current_claim_step_fifteen_partial_prefix_bound_prune_captures_on_representative_mismatch_zero_claim_side_parent_route_clause_four(
+        clause_five: pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
+        clause_four: pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFourLabel,
+    ) -> Vec<super::PartialPrefixBoundPruneCapture> {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_clause_four(
+                clause_five,
+                clause_four,
+            );
+        super::start_partial_prefix_bound_prune_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        super::finish_partial_prefix_bound_prune_capture()
+    }
+
+    fn current_claim_step_fifteen_pruned_terminal_prefixes_on_representative_mismatch_zero_claim_side_parent_route_clause_four(
+        clause_five: pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
+        clause_four: pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFourLabel,
+    ) -> Vec<OnlinePrefixWorkItem> {
+        let _connectivity_override =
+            pen_type::connectivity::override_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_clause_four(
+                clause_five,
+                clause_four,
+            );
+        super::start_pruned_terminal_prefix_capture();
+        let _step = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        super::finish_pruned_terminal_prefix_capture()
+    }
+
     fn current_claim_step_fifteen_partial_prefix_bound_prune_captures_on_representative_mismatch_zero_claim_side_active_window(
         clause_five: pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
     ) -> Vec<super::PartialPrefixBoundPruneCapture> {
@@ -30042,6 +30070,629 @@ mod tests {
             [((Some(0_usize), "claim_next_bridge", "reference"), 44_usize,)]
                 .into_iter()
                 .collect::<BTreeMap<_, _>>()
+        );
+    }
+
+    #[derive(Debug, Eq, PartialEq)]
+    struct RepresentativeMismatchZeroClaimSideParentRouteReferenceClauseFourOutcome {
+        accepted_nu: u16,
+        accepted_clause_kappa: u16,
+        retained_candidates: usize,
+        generated_raw_prefixes: usize,
+        partial_prefix_bar_failure: usize,
+        incumbent_dominance: usize,
+        zero_admitted_captures: usize,
+        first_mismatch_position_counts: BTreeMap<Option<usize>, usize>,
+        small_cluster: Option<DemoBucketStats>,
+        single_bucket: Option<DemoBucketStats>,
+        clause_two_counts:
+            BTreeMap<(Option<usize>, &'static str, &'static str, &'static str), usize>,
+        clause_four_counts:
+            BTreeMap<(Option<usize>, &'static str, &'static str, &'static str), usize>,
+        clause_four_five_counts: BTreeMap<(Option<usize>, &'static str, &'static str), usize>,
+        removed_capture_labels: BTreeMap<
+            (
+                usize,
+                (
+                    Option<usize>,
+                    &'static str,
+                    &'static str,
+                    &'static str,
+                    &'static str,
+                    &'static str,
+                ),
+            ),
+            usize,
+        >,
+        introduced_capture_labels: BTreeMap<
+            (
+                usize,
+                (
+                    Option<usize>,
+                    &'static str,
+                    &'static str,
+                    &'static str,
+                    &'static str,
+                    &'static str,
+                ),
+            ),
+            usize,
+        >,
+        removed_pruned_labels: BTreeMap<
+            (
+                Option<usize>,
+                &'static str,
+                &'static str,
+                &'static str,
+                &'static str,
+                &'static str,
+            ),
+            usize,
+        >,
+        introduced_pruned_labels: BTreeMap<
+            (
+                Option<usize>,
+                &'static str,
+                &'static str,
+                &'static str,
+                &'static str,
+                &'static str,
+            ),
+            usize,
+        >,
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_reference_clause_four_stays_a_matched_unsafe_negative_control()
+     {
+        let baseline_captures = current_claim_step_fifteen_partial_prefix_bound_prune_captures();
+        let baseline_capture_keys = baseline_captures
+            .iter()
+            .map(|capture| {
+                serde_json::to_string(&capture.prefix_telescope)
+                    .expect("captured prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let baseline_pruned_prefixes = current_claim_step_fifteen_pruned_terminal_prefixes();
+        let baseline_pruned_keys = baseline_pruned_prefixes
+            .iter()
+            .map(|work_item| {
+                serde_json::to_string(&work_item.prefix_telescope)
+                    .expect("captured prune prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let mut outcomes = BTreeMap::new();
+
+        for (label, clause_five) in [
+            (
+                "claim_flat_codomain",
+                pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+            ),
+            (
+                "reference",
+                pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::Reference,
+            ),
+        ] {
+            let _connectivity_override =
+                pen_type::connectivity::override_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_clause_four(
+                    clause_five,
+                    pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFourLabel::Reference,
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let clause_two_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_two_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_zero, clause_one, _clause_two), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *clause_zero == "claim_eventual_domain"
+                            && *clause_one == "claim_next_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let clause_four_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_zero, clause_one, _clause_four), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *clause_zero == "claim_eventual_domain"
+                            && *clause_one == "claim_next_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let clause_four_five_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_four, clause_five_label), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *clause_four == "reference"
+                            && *clause_five_label
+                                == match label {
+                                    "claim_flat_codomain" => "claim_flat_codomain",
+                                    _ => "reference",
+                                }
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+            let probe_captures =
+                current_claim_step_fifteen_partial_prefix_bound_prune_captures_on_representative_mismatch_zero_claim_side_parent_route_clause_four(
+                    clause_five,
+                    pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFourLabel::Reference,
+                );
+            let probe_capture_keys = probe_captures
+                .iter()
+                .map(|capture| {
+                    serde_json::to_string(&capture.prefix_telescope)
+                        .expect("captured prefix should serialize")
+                })
+                .collect::<BTreeSet<_>>();
+            let probe_pruned_prefixes =
+                current_claim_step_fifteen_pruned_terminal_prefixes_on_representative_mismatch_zero_claim_side_parent_route_clause_four(
+                    clause_five,
+                    pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFourLabel::Reference,
+                );
+            let probe_pruned_keys = probe_pruned_prefixes
+                .iter()
+                .map(|work_item| {
+                    serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize")
+                })
+                .collect::<BTreeSet<_>>();
+            let removed_capture_labels = baseline_captures
+                .iter()
+                .filter(|capture| {
+                    !probe_capture_keys.contains(
+                        &serde_json::to_string(&capture.prefix_telescope)
+                            .expect("captured prefix should serialize"),
+                    )
+                })
+                .fold(BTreeMap::new(), |mut summary, capture| {
+                    *summary
+                        .entry((
+                            capture.remaining_clause_slots,
+                            current_claim_step_fifteen_prefix_group_delta_label(
+                                &capture.prefix_telescope,
+                            ),
+                        ))
+                        .or_insert(0usize) += 1;
+                    summary
+                });
+            let introduced_capture_labels = probe_captures
+                .iter()
+                .filter(|capture| {
+                    !baseline_capture_keys.contains(
+                        &serde_json::to_string(&capture.prefix_telescope)
+                            .expect("captured prefix should serialize"),
+                    )
+                })
+                .fold(BTreeMap::new(), |mut summary, capture| {
+                    *summary
+                        .entry((
+                            capture.remaining_clause_slots,
+                            current_claim_step_fifteen_prefix_group_delta_label(
+                                &capture.prefix_telescope,
+                            ),
+                        ))
+                        .or_insert(0usize) += 1;
+                    summary
+                });
+            let removed_pruned_labels = baseline_pruned_prefixes
+                .iter()
+                .filter(|work_item| {
+                    !probe_pruned_keys.contains(
+                        &serde_json::to_string(&work_item.prefix_telescope)
+                            .expect("captured prune prefix should serialize"),
+                    )
+                })
+                .fold(BTreeMap::new(), |mut summary, work_item| {
+                    *summary
+                        .entry(current_claim_step_fifteen_prefix_group_delta_label(
+                            &work_item.prefix_telescope,
+                        ))
+                        .or_insert(0usize) += 1;
+                    summary
+                });
+            let introduced_pruned_labels = probe_pruned_prefixes
+                .iter()
+                .filter(|work_item| {
+                    !baseline_pruned_keys.contains(
+                        &serde_json::to_string(&work_item.prefix_telescope)
+                            .expect("captured prune prefix should serialize"),
+                    )
+                })
+                .fold(BTreeMap::new(), |mut summary, work_item| {
+                    *summary
+                        .entry(current_claim_step_fifteen_prefix_group_delta_label(
+                            &work_item.prefix_telescope,
+                        ))
+                        .or_insert(0usize) += 1;
+                    summary
+                });
+
+            outcomes.insert(
+                label,
+                RepresentativeMismatchZeroClaimSideParentRouteReferenceClauseFourOutcome {
+                    accepted_nu: step_fifteen.accepted.nu,
+                    accepted_clause_kappa: step_fifteen.accepted.clause_kappa,
+                    retained_candidates: step_fifteen.retained_candidates.len(),
+                    generated_raw_prefixes: step_fifteen.demo_funnel.generated_raw_prefixes,
+                    partial_prefix_bar_failure: step_fifteen
+                        .exact_screen_reasons
+                        .partial_prefix_bar_failure,
+                    incumbent_dominance: step_fifteen
+                        .exact_screen_reasons
+                        .incumbent_dominance,
+                    zero_admitted_captures: zero_summary.captured_prefixes,
+                    first_mismatch_position_counts: wall_summary.first_mismatch_position_counts,
+                    small_cluster: bucket_stats
+                        .get("k8:structural_generic:temporal_operator:library_backed:small_cluster")
+                        .cloned(),
+                    single_bucket: bucket_stats
+                        .get("k8:structural_generic:temporal_operator:library_backed:single")
+                        .cloned(),
+                    clause_two_counts,
+                    clause_four_counts,
+                    clause_four_five_counts,
+                    removed_capture_labels,
+                    introduced_capture_labels,
+                    removed_pruned_labels,
+                    introduced_pruned_labels,
+                },
+            );
+        }
+
+        let expected_first_mismatch_counts = [
+            (Some(0_usize), 316_usize),
+            (Some(1), 177),
+            (Some(2), 50),
+            (Some(3), 14),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_small_cluster = Some(DemoBucketStats {
+            generated_terminal_candidates: 2871,
+            admissible_terminal_candidates: 435,
+            exact_screened_terminal_candidates: 435,
+            pruned_terminal_candidates: 111,
+            fully_scored_terminal_candidates: 0,
+            best_overshoot: None,
+        });
+        let expected_single_bucket = Some(DemoBucketStats {
+            generated_terminal_candidates: 0,
+            admissible_terminal_candidates: 0,
+            exact_screened_terminal_candidates: 0,
+            pruned_terminal_candidates: 2,
+            fully_scored_terminal_candidates: 2,
+            best_overshoot: Some(Rational::new(545, 5278)),
+        });
+        let expected_clause_two_counts = [
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "claim_flat_domain",
+                ),
+                19_usize,
+            ),
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "claim_sharp_codomain",
+                ),
+                19,
+            ),
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "reference",
+                ),
+                12,
+            ),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_clause_four_counts = [
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "claim_next_bridge",
+                ),
+                24_usize,
+            ),
+            (
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "reference",
+                ),
+                26,
+            ),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_removed_capture_labels = [
+            (
+                (
+                    3_usize,
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain",
+                        "claim_flat_domain",
+                        "reference",
+                        "out_of_scope",
+                    ),
+                ),
+                2_usize,
+            ),
+            (
+                (
+                    3_usize,
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain",
+                        "claim_sharp_codomain",
+                        "reference",
+                        "out_of_scope",
+                    ),
+                ),
+                2,
+            ),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+
+        assert_eq!(
+            outcomes.get("claim_flat_codomain"),
+            Some(
+                &RepresentativeMismatchZeroClaimSideParentRouteReferenceClauseFourOutcome {
+                    accepted_nu: 60,
+                    accepted_clause_kappa: 8,
+                    retained_candidates: 2,
+                    generated_raw_prefixes: 4391,
+                    partial_prefix_bar_failure: 557,
+                    incumbent_dominance: 113,
+                    zero_admitted_captures: 2259,
+                    first_mismatch_position_counts: expected_first_mismatch_counts.clone(),
+                    small_cluster: expected_small_cluster.clone(),
+                    single_bucket: expected_single_bucket.clone(),
+                    clause_two_counts: expected_clause_two_counts.clone(),
+                    clause_four_counts: expected_clause_four_counts.clone(),
+                    clause_four_five_counts: [(
+                        (Some(0_usize), "reference", "claim_flat_codomain"),
+                        36_usize,
+                    )]
+                    .into_iter()
+                    .collect::<BTreeMap<_, _>>(),
+                    removed_capture_labels: expected_removed_capture_labels.clone(),
+                    introduced_capture_labels: [
+                        (
+                            (
+                                2_usize,
+                                (
+                                    Some(0_usize),
+                                    "claim_eventual_domain",
+                                    "claim_next_codomain",
+                                    "claim_flat_domain",
+                                    "reference",
+                                    "claim_next_codomain",
+                                ),
+                            ),
+                            2_usize,
+                        ),
+                        (
+                            (
+                                2,
+                                (
+                                    Some(0_usize),
+                                    "claim_eventual_domain",
+                                    "claim_next_codomain",
+                                    "claim_flat_domain",
+                                    "reference",
+                                    "reference",
+                                ),
+                            ),
+                            2,
+                        ),
+                        (
+                            (
+                                2,
+                                (
+                                    Some(0_usize),
+                                    "claim_eventual_domain",
+                                    "claim_next_codomain",
+                                    "claim_sharp_codomain",
+                                    "reference",
+                                    "claim_next_codomain",
+                                ),
+                            ),
+                            2,
+                        ),
+                        (
+                            (
+                                2,
+                                (
+                                    Some(0_usize),
+                                    "claim_eventual_domain",
+                                    "claim_next_codomain",
+                                    "claim_sharp_codomain",
+                                    "reference",
+                                    "reference",
+                                ),
+                            ),
+                            2,
+                        ),
+                    ]
+                    .into_iter()
+                    .collect::<BTreeMap<_, _>>(),
+                    removed_pruned_labels: [
+                        (
+                            (
+                                Some(0_usize),
+                                "claim_eventual_domain",
+                                "claim_next_codomain",
+                                "claim_flat_domain",
+                                "reference",
+                                "claim_flat_codomain",
+                            ),
+                            6_usize,
+                        ),
+                        (
+                            (
+                                Some(0_usize),
+                                "claim_eventual_domain",
+                                "claim_next_codomain",
+                                "claim_sharp_codomain",
+                                "reference",
+                                "claim_flat_codomain",
+                            ),
+                            6,
+                        ),
+                    ]
+                    .into_iter()
+                    .collect::<BTreeMap<_, _>>(),
+                    introduced_pruned_labels: BTreeMap::new(),
+                }
+            ),
+            "the representative mismatch-zero parent-route reference-clause-four split on the claim-flat clause-five family should stay an unsafe two-retained 60/8 shell and only swap pressure into the targeted reference clause-four remaining-two pocket"
+        );
+        assert_eq!(
+            outcomes.get("reference"),
+            Some(
+                &RepresentativeMismatchZeroClaimSideParentRouteReferenceClauseFourOutcome {
+                    accepted_nu: 60,
+                    accepted_clause_kappa: 8,
+                    retained_candidates: 2,
+                    generated_raw_prefixes: 4391,
+                    partial_prefix_bar_failure: 557,
+                    incumbent_dominance: 113,
+                    zero_admitted_captures: 2259,
+                    first_mismatch_position_counts: expected_first_mismatch_counts,
+                    small_cluster: expected_small_cluster,
+                    single_bucket: expected_single_bucket,
+                    clause_two_counts: expected_clause_two_counts,
+                    clause_four_counts: expected_clause_four_counts,
+                    clause_four_five_counts: [(
+                        (Some(0_usize), "reference", "reference"),
+                        36_usize,
+                    )]
+                    .into_iter()
+                    .collect::<BTreeMap<_, _>>(),
+                    removed_capture_labels: expected_removed_capture_labels,
+                    introduced_capture_labels: [
+                        (
+                            (
+                                2_usize,
+                                (
+                                    Some(0_usize),
+                                    "claim_eventual_domain",
+                                    "claim_next_codomain",
+                                    "claim_flat_domain",
+                                    "reference",
+                                    "claim_flat_codomain",
+                                ),
+                            ),
+                            2_usize,
+                        ),
+                        (
+                            (
+                                2,
+                                (
+                                    Some(0_usize),
+                                    "claim_eventual_domain",
+                                    "claim_next_codomain",
+                                    "claim_flat_domain",
+                                    "reference",
+                                    "claim_next_codomain",
+                                ),
+                            ),
+                            2,
+                        ),
+                        (
+                            (
+                                2,
+                                (
+                                    Some(0_usize),
+                                    "claim_eventual_domain",
+                                    "claim_next_codomain",
+                                    "claim_sharp_codomain",
+                                    "reference",
+                                    "claim_flat_codomain",
+                                ),
+                            ),
+                            2,
+                        ),
+                        (
+                            (
+                                2,
+                                (
+                                    Some(0_usize),
+                                    "claim_eventual_domain",
+                                    "claim_next_codomain",
+                                    "claim_sharp_codomain",
+                                    "reference",
+                                    "claim_next_codomain",
+                                ),
+                            ),
+                            2,
+                        ),
+                    ]
+                    .into_iter()
+                    .collect::<BTreeMap<_, _>>(),
+                    removed_pruned_labels: [
+                        (
+                            (
+                                Some(0_usize),
+                                "claim_eventual_domain",
+                                "claim_next_codomain",
+                                "claim_flat_domain",
+                                "reference",
+                                "reference",
+                            ),
+                            6_usize,
+                        ),
+                        (
+                            (
+                                Some(0_usize),
+                                "claim_eventual_domain",
+                                "claim_next_codomain",
+                                "claim_sharp_codomain",
+                                "reference",
+                                "reference",
+                            ),
+                            6,
+                        ),
+                    ]
+                    .into_iter()
+                    .collect::<BTreeMap<_, _>>(),
+                    introduced_pruned_labels: BTreeMap::new(),
+                }
+            ),
+            "the sibling representative mismatch-zero parent-route reference-clause-four split on the reference clause-five family should reland the same unsafe shell and keep its pruning delta confined to the matching reference-tailed family"
         );
     }
 

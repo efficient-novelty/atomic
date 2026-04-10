@@ -1269,3 +1269,38 @@ This file is the append-only history for `desktop_claim_shadow`.
   family on this representative shell, so the next honest repair has to move
   above the entire qualification-family lattice rather than retrying another
   recombination on either active clause-`5` bucket.
+- Scope: test the first clause-`4` split above that exhausted parent-level
+  qualification-family lattice by narrowing the representative mismatch-`0`
+  claim-side parent-route shell to the clause-`4` `reference` branch on each
+  active clause-`5` bucket.
+  Result: the narrow clause-`4` `reference` route split does qualify the
+  targeted claim-side parent shell while keeping the sibling
+  `claim_next_bridge` branch, the sibling reference clause-`2` sheet, and
+  lifted terminals fenced, but on both active clause-`5` families it still
+  relands a matched unsafe shell:
+  - both `claim_flat_codomain` and `reference` reland noncanonical `60 / 8`
+    with `retained = 2`, `generated = 4391`,
+    `partial_prefix_bar_failure = 557`, `incumbent_dominance = 113`, and
+    zero-admitted captures `2259`
+  - both reland the same first-mismatch distribution
+    `316 / 177 / 50 / 14`
+  - both reland the same
+    `small_cluster = 2871 / 435 / 435 / 111`
+  - both reopen the same isolated `single` bucket to `2` fully scored
+    non-winners plus `2` residual prunes at best overshoot `545 / 5278`
+  - both shift the representative clause-`2` spread to `19 / 19 / 12`
+  - both shift the representative clause-`4` split to `24 / 26`
+  - each contracts only the chosen clause-`4` `reference` plus active
+    clause-`5` bucket to `36`
+  - on the chosen active clause-`5` bucket, each probe removes only the two
+    remaining-three clause-`4` `reference` parent captures, removes `4`
+    zero-admitted captures plus `12` remaining-one pruned prefixes in total,
+    introduces four targeted remaining-two clause-`4` `reference` capture
+    families, and introduces no pruned-prefix family
+  Consequence: even above the exhausted parent-level qualification-family
+  lattice, that clause-`4` `reference` route split is not a fresh clean
+  repair class. It only converts remaining-three pressure into a narrower
+  remaining-two clause-`4` `reference` pocket while still displacing the
+  canonical `103 / 8` winner and reopening the `single` bucket, so the next
+  honest probe has to move to a different code-side repair class again
+  rather than retrying this route split on either active clause-`5` bucket.
