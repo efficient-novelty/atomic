@@ -48,8 +48,9 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
 
 - Prefer stored evidence over terminal impressions.
 - Keep the accepted path fixed until stored evidence clearly replaces it.
-- Keep step `15` local repair ahead of a step-`1` theory pass unless a newer
-  rerun changes the diagnosis.
+- Once the local late-step probes are exhausted, keep a rerun-backed
+  step-`15` evidence refresh ahead of a step-`1` theory pass; only reopen
+  step `1` if that newer rerun changes the diagnosis.
 - Do not use stronger wording such as `unguided` before certification passes.
 - Do not treat the lane as family-agnostic end to end while stored breadth is
   still open.
@@ -91,7 +92,9 @@ Use these before changing search code:
 - `scripts/compare_runs.py` for parity and artifact honesty
 - `scripts/benchmark_claim_lane.py` for stored runtime and breadth summaries
 - `reports/steps/step-15-live.ndjson` when the task touches late-step pressure
-- `run.json` and step summaries when the task touches stored provenance
+- `run.json` and step summaries when the task touches stored provenance or the
+  ordering between a rerun-backed step-`15` reset and a later step-`1`
+  reopening
 
 ## Do And Do Not
 
@@ -102,6 +105,8 @@ Do:
   changes
 - keep claim-lane edits narrow and staged
 - use the certificate first when you need stored breadth anatomy
+- compare stored `v11` / `v12` artifacts plus `run.json` build fingerprints
+  before reopening step `1`
 - use the autonomous files as intended instead of restating live state here
 
 Do not:

@@ -1,6 +1,6 @@
 # Autonomous Claim Lane: Next Operational Slice
 
-Last updated: 2026-04-09
+Last updated: 2026-04-10
 
 This file owns the single active work order for `desktop_claim_shadow`.
 
@@ -15,28 +15,32 @@ This file owns the single active work order for `desktop_claim_shadow`.
 
 ## Objective
 
-Keep the active work order off the now-demoted claim-safe mismatch-`1`
-clause-`5` fail-fast checkpoint, the now-demoted representative
-mismatch-`0` claim-flat and claim-sharp dead-child reason checkpoints, the
-now-spent full `reference / reference` tail across mismatch-`2` and
-mismatch-`3` clause-`4` anatomy, and the now-secondary representative
-claim-safe claim-side broader backup, so the next slice decides the first
-honest post-local-probe fallback instead of reopening another claim-safe
-clause-`5` retry, another representative mismatch-`0` dead-shell reland,
-another spent `reference / reference` clause-`4` reland, or an early
-promotion of the looser claim-safe shell on top of canonical `v12` and the
-matched local `4331` guardrail surface.
+Keep the active work order on the now-settled post-local-probe fallback:
+launch a rerun-backed step-`15` reset on code newer than canonical `v12`
+before reopening step `1`, while keeping the demoted claim-safe mismatch-`1`
+checkpoint, both representative mismatch-`0` dead-child checkpoints, the
+spent `reference / reference` tail, and the looser representative claim-safe
+backup frozen as controls rather than fresh leads.
 
-Do not start by launching another rerun yet; settle the post-local-probe
-fallback decision first from stored evidence.
+Do not spend another turn re-deciding the fallback from the same stored
+evidence. Use the stored `v11` / `v12` comparison only to justify the
+rerun-first ordering; keep step `1` deferred unless that newer rerun changes
+the diagnosis.
 
 ## Start From
 
 - Canonical stored bundle:
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12`
+- Earlier stored comparison point:
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v11`
 - Stored breadth blockers:
   - step `1 = 546 / 2144`
   - step `15 = 4331 / 5000`
+- Stored cross-rerun step-`1` stability:
+  - `v11 = 546 / 2144`
+  - `v12 = 546 / 2144`
+  - both keep step-`01` at `generated = 546`, `well_formed = 288`,
+    `admitted = 1`, `legality_connectivity_exact_rejection = 435`
 - Current clean late chain:
   - step `13 = [5,1,3,3,5,3,2] / 1350 / 2320`
   - step `14 = 62 / 9 / 12027`
@@ -47,9 +51,26 @@ fallback decision first from stored evidence.
   - `small_cluster = 3132 / 522 / 522 / 0`
   - fenced `single` bucket = `1` fully scored non-winner plus `3` residual
     prunes
+- Stored late-surface movement between reruns:
+  - `v11`: `generated = 3972`, `partial_prefix_bar_failure = 468`,
+    `incumbent_dominance = 242`, `small_cluster generated = 2190`
+  - `v12`: `generated = 4331`, `partial_prefix_bar_failure = 553`,
+    `incumbent_dominance = 3`, `small_cluster generated = 3132`
 
 ## Active Hypothesis
 
+- The first honest follow-on is now settled as a rerun-backed step-`15`
+  reset rather than a step-`1`-first reopening:
+  - both stored reruns keep the same step-`1` fail at `546 / 2144` with the
+    same step-`01` surface
+  - the stored late surface moved materially from `v11` to `v12` under the
+    same claim policy, accepted parity, and runtime pass
+  - the stored canonical bundle therefore lags the finished local-probe stack
+    rather than the other way around
+- A newer stored rerun on the current post-probe codebase is therefore the
+  first honest evidence surface that can either confirm the step-`15` reset
+  or change the diagnosis enough to justify reopening step `1`; step `1`
+  remains secondary until that rerun says otherwise.
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -72,10 +93,11 @@ fallback decision first from stored evidence.
     `252`
   - the smaller claim-safe mismatch-`1` tier is `84`
   - mismatch-`2` plus mismatch-`3` `reference / reference` tails are only `54`
-- That earlier ordering promoted the mismatch-`0` claim-domain surface first;
-  with the representative claim-side clause-`6` identity passes now frozen on
-  both claim sheets, the next honest slice moves to the smaller claim-safe
-  mismatch-`1` tier before the `reference / reference` tails.
+- That earlier ordering had promoted the smaller claim-safe mismatch-`1` tier
+  ahead of the `reference / reference` tails once the representative
+  mismatch-`0` claim-side clause-`6` identity passes froze on both claim
+  sheets, but both of those backup surfaces are now spent and no longer
+  compete with the rerun-backed fallback.
 - A direct parent-level exact-bound bypass on that whole remaining-two
   mismatch-`0` claim-domain tier is now ruled out as a widening negative
   control:
@@ -570,90 +592,36 @@ fallback decision first from stored evidence.
 
 ## Do This Next
 
-1. Start from the stored `v12` certificate, compare report, benchmark bundle,
-   and `reports/steps/step-15-live.ndjson`, but treat the exact-claim mismatch-`1`
-   tradeoff ladder as already frozen at `57 -> 51 -> 45`.
-2. Treat the smaller claim-safe mismatch-`1` tier as demoted for now:
-   - the first finer reason-level probe below the live claim-side dead
-     clause-`5` labels stayed fully uniform across both live clause-`5`
-     labels, all three clause-`6` siblings, and all three terminal families
-   - do not spend another turn below that same representative claim-safe
-     clause-`5` wall unless a later broader-backup comparison changes the
-     ordering again
-3. Treat the promoted representative mismatch-`0` claim-flat dead-child
-   reason split as demoted for now:
-   - the first finer reason-level probe below that dead shell stayed fully
-     uniform across both clause-`3` branches, all three clause-`6` children,
-     and all three terminal families
-   - every one of those `18` completed telescopes stayed structurally
-     connected but outside active-window qualification, outside
-     self-containedness, and outside historical reanchor, with the same
-     clause-`2` blocker and `max_lib_ref = 10`
-   - do not spend another turn below that same representative mismatch-`0`
-     claim-flat dead shell unless a later broader-backup comparison changes
-     the ordering again
-4. Treat the representative mismatch-`0` claim-sharp dead-child checkpoint as
-   demoted for now too:
-   - beneath
-     `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain /
-     claim_next_bridge / claim_flat_codomain`,
-     both clause-`3` branches, all three clause-`6` children, and all three
-     terminal families reland the same dead shell
-   - every one of those six child continuations keeps the same
-     `3`-generated / `0`-admitted completion summary with no bound, no
-     best-rank profile, no survivor sketch, and the same
-     `reference / eventual_lift / next_lift` trio
-   - every one of those `18` completed telescopes also keeps the same finer
-     reason vector:
-     `matched = 2`, `first_mismatch = 2`, `connected = true`,
-     `references_active_window = false`, `self_contained = false`,
-     `max_lib_ref = 10`, `historical_reanchor = false`, and no live
-     connectivity
-   - do not spend another turn below that same representative mismatch-`0`
-     claim-sharp dead shell unless a later broader-backup comparison changes
-     the ordering again
-5. Keep the alternate broader-backup comparison settled, but move off
-   another claim-side local reland:
-   - treat the full `reference / reference` tail as fully exhausted across
-     its clause-`4` anatomy:
-     mismatch-`2` `claim_next_bridge = 4547 / 535 / 2271` with
-     `small_cluster = 3294 / 522 / 522 / 0`,
-     mismatch-`2` `reference = 4835 / 529 / 2271` with
-     `small_cluster = 3492 / 522 / 522 / 0`,
-     mismatch-`2` `demo_sharp_codomain = 4379 / 549 / 2271` with
-     `small_cluster = 3168 / 522 / 522 / 0`,
-     mismatch-`2` `demo_sharp_bridge = 4379 / 549 / 2271` with the same
-     `3168 / 522 / 522 / 0` shell,
-     mismatch-`3` `claim_next_bridge = 4403 / 547 / 2271` with
-     `small_cluster = 3186 / 522 / 522 / 0`, and
-     mismatch-`3` `reference = 4481 / 545 / 2271` with
-     `small_cluster = 3240 / 522 / 522 / 0`
-   - keep the least-widening spent tail control explicit at mismatch-`3`
-     `claim_next_bridge = 4403 / 547 / 2271` with
-     `small_cluster = 3186 / 522 / 522 / 0`
-   - do not reland any `reference / reference` clause-`4`
-     `claim_next_bridge / reference / demo_sharp_codomain /
-     demo_sharp_bridge` slice again as a candidate repair; all six now widen
-     `small_cluster` above the canonical `3132 / 522 / 522 / 0` fence
-   - keep the tighter representative mismatch-`0` claim-side clause-`2`
-     shell promoted at `4343 / 552 / 2268` with
-     `small_cluster = 3141 / 522 / 522 / 0`
-   - keep the looser representative claim-safe claim-side clause-`2` shell
-     demoted at `4347 / 555 / 2277` with
-     `small_cluster = 3144 / 522 / 522 / 0`; do not promote it again unless
-     the tighter mismatch-`0` backup is ruled out by a later broader
-     comparison rather than by another representative dead-shell reland
-   - with both representative mismatch-`0` claim-side dead shells now spent,
-     there is no fresh off-branch local lead left inside the promoted
-     mismatch-`0` shell
-   - spend the next turn on the first post-local-probe fallback decision from
-     stored evidence rather than on another representative mismatch-`0` or
-     claim-safe dead-shell retry:
-     decide whether a rerun-backed step-`15` reset or a later step-`1`
-     reopening is the first honest follow-on, while keeping step `1` behind a
-     newer stored rerun unless that rerun changes the diagnosis
-6. Land only a change that improves generated breadth while preserving all of
-   the following:
+1. Start from the stored `v11` and `v12` certificate, compare, benchmark,
+   `run.json`, `step-01-summary.json`, and canonical `v12`
+   `step-15-summary.json` plus `step-15-live.ndjson`.
+2. Treat the fallback ordering as settled from stored evidence:
+   - both stored reruns keep step `1` fixed at `546 / 2144` with the same
+     step-`01` surface
+   - the late stored surface moved materially from `v11` to `v12` while
+     parity, runtime threshold, and claim search policy stayed green
+   - consequence: the first honest follow-on is a rerun-backed step-`15`
+     reset on the newer post-probe codebase, not a step-`1`-first theory
+     slice
+3. Keep the exhausted local backups demoted while preparing that rerun:
+   - do not reopen the claim-safe mismatch-`1` clause-`5` wall, either
+     representative mismatch-`0` dead shell, or the spent
+     `reference / reference` tail
+   - keep the tighter representative mismatch-`0` claim-side shell ahead of
+     the looser representative claim-safe shell until newer stored evidence
+     says otherwise
+4. Spend the next execution turn on one clean `desktop_claim_shadow` rerun
+   beyond `v12` on the newer post-probe codebase:
+   - refresh compare, benchmark, and certification as soon as that run
+     completes
+   - use that newer stored bundle to decide whether the step-`15` reset
+     sticks or whether step `1` becomes the first honest reopening
+5. Keep step `1` explicit but deferred:
+   - do not promote a step-`1` theory slice before the newer rerun
+   - only reopen step `1` if that rerun changes the diagnosis rather than
+     simply re-confirming step `15` as the active miss
+6. Treat a new stored bundle as promotable only if all of the following stay
+   true:
    - accepted step `15` winner stays canonical `103 / 8`
    - the isolated `single` pocket stays fenced
    - `small_cluster` is no worse than `3132 / 522 / 522 / 0`
@@ -738,7 +706,8 @@ fallback decision first from stored evidence.
 
 ## Not The Next Move
 
-- another rerun setup pass first
+- another stored-evidence-only fallback-decision pass instead of the
+  rerun-backed step-`15` reset
 - a step-`1`-first theory slice
 - clause-`5` `reference` / `claim_flat_codomain` / `claim_next_codomain`
   tail reopenings
@@ -822,7 +791,7 @@ fallback decision first from stored evidence.
 - another finer reason-level split below that same representative
   `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain /
   claim_next_bridge / claim_flat_codomain` dead child before the
-  post-local-probe fallback has been chosen
+  rerun-backed step-`15` reset has been run
 - another lumped `reference / reference` tail restatement now that the full
   mismatch-`2` and mismatch-`3` tail is spent
 - another mismatch-`2` `reference / reference` clause-`4`
@@ -862,15 +831,12 @@ fallback decision first from stored evidence.
 
 ## Success For This Slice
 
-- the representative mismatch-`0` claim-sharp dead shell is localized one
-  layer deeper at both child completion-summary scope and first finer
-  reason-level scope
-- that claim-sharp shell relands the same six dead
-  `3`-generated / `0`-admitted child continuations and the same clause-`2`
-  fail-fast reason vector as the earlier claim-flat shell
-- both representative mismatch-`0` claim-side shells are therefore frozen
-  controls rather than active leads
+- stored `v11` / `v12` evidence settles the post-local-probe fallback in
+  favor of a rerun-backed step-`15` reset
+- both stored reruns keep step `1` fixed at `546 / 2144`, so step `1` stays
+  explicit but deferred
 - the canonical accepted path stays fixed through step `15`
-- the isolated `single` pocket and unsafe lifted shell both stay fenced
-- the first post-local-probe fallback decision is justified and ready to
-  launch
+- the isolated `single` pocket and unsafe lifted shell both stay fenced in
+  the stored diagnosis
+- the next operational slice is a clean rerun beyond `v12` on the newer
+  post-probe codebase rather than another local dead-shell retry

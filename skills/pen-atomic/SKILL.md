@@ -345,6 +345,10 @@ Focus on:
 - use `scripts/compare_runs.py`, `scripts/benchmark_claim_lane.py`, and
   `scripts/certify_claim_lane.py` as the evidence surfaces before moving the
   search code again
+- when the late-step local probes are exhausted, use stored `v11` / `v12`
+  evidence plus `run.json` build fingerprints to settle rerun-vs-step-`1`
+  ordering; default to a rerun-backed step-`15` reset before reopening
+  step `1` unless the newer rerun changes the diagnosis
 - treat the step-`15` partial-prefix wall, the dominant clause-`0` / clause-`1`
   pairings, and the live clause-`4` split as live diagnosis owned by
   [../../autonomous_progress.md](../../autonomous_progress.md)

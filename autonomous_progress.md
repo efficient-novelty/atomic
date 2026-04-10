@@ -1,6 +1,6 @@
 # Autonomous Claim Lane State
 
-Last updated: 2026-04-09
+Last updated: 2026-04-10
 
 This file owns the live operational snapshot for `desktop_claim_shadow`.
 
@@ -32,10 +32,18 @@ Until that exists, wording stays at `bounded live recovery`.
   `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12`
 - Stored compare is ready.
 - Stored benchmark is refreshed across `v11` and `v12`.
+- Stored `v11` and `v12` keep the same early breadth miss:
+  - step `1 = 546 / 2144` on both runs
+  - both keep the same step-`01` surface:
+    `generated = 546`, `well_formed = 288`, `admitted = 1`,
+    `legality_connectivity_exact_rejection = 435`
 - Accepted-hash parity is earned through step `15`.
 - Stored certification still fails only on breadth:
   - step `1 = 546 / 2144`
   - step `15 = 4331 / 5000`
+- The stored canonical bundle still lags the finished local-probe stack, so
+  the next honest follow-on has to refresh stored evidence on newer code
+  before a step-`1` theory reopening.
 
 ## Current Late Surface
 
@@ -61,6 +69,18 @@ Until that exists, wording stays at `bounded live recovery`.
 - The old broad `small_cluster` incumbent wall is no longer the primary
   blocker. The dominant live miss is the clean step-`15` partial-prefix wall
   on the canonical `4331` surface.
+- The first post-local-probe fallback decision is now settled in favor of a
+  rerun-backed step-`15` reset rather than a step-`1`-first reopening:
+  - `v11` and `v12` keep the same step-`1` fail and the same step-`01`
+    surface
+  - the late stored surface moved materially from `v11` to `v12` while
+    parity, runtime threshold, and claim search policy stayed green:
+    `generated = 3972 -> 4331`,
+    `partial_prefix_bar_failure = 468 -> 553`,
+    `incumbent_dominance = 242 -> 3`, and
+    `small_cluster generated = 2190 -> 3132`
+  - consequence: refresh stored step-`15` evidence on the newer post-probe
+    codebase before reopening step `1`
 - The dominant remaining-two live surface is already executable:
   - exact clause-`0` / clause-`1` pairings are frozen by
     `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
@@ -867,11 +887,16 @@ Until that exists, wording stays at `bounded live recovery`.
   clause-`6` identity and its deeper dead-child fail-fast checkpoint, the
   next honest slice no longer sits on another mismatch-`0` claim-side reland.
   With the broader-backup comparison now settled and both representative
-  claim-side shells frozen, the next honest follow-on has to move to the first
-  post-local-probe fallback decision rather than reopening either claim-side
-  dead shell or promoting the looser claim-safe shell first.
+  claim-side shells frozen, the post-local-probe fallback is now explicit:
+  the next honest follow-on is a rerun-backed step-`15` reset on the newer
+  post-probe codebase rather than another claim-side dead-shell reland or a
+  step-`1`-first reopening.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.
-- After a real local repair lands, immediately rerun beyond `v12` and refresh
-  compare, benchmark, and certification.
+- Keep step `1` explicit but deferred:
+  - both stored reruns still pin it at `546 / 2144`
+  - do not promote a step-`1` theory slice unless the newer rerun changes the
+    diagnosis instead of simply re-confirming the step-`15` miss
+- Use the next rerun beyond `v12` to refresh compare, benchmark, and
+  certification before reopening step `1`.

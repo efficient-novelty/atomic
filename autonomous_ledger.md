@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Ledger
 
-Last updated: 2026-04-09
+Last updated: 2026-04-10
 
 This file is the append-only history for `desktop_claim_shadow`.
 
@@ -669,3 +669,20 @@ This file is the append-only history for `desktop_claim_shadow`.
   only beneath claim-flat, so the next honest move has to stop below another
   representative claim-side dead-shell reland and switch to the first
   post-local-probe fallback decision.
+
+## 2026-04-10
+
+- Scope: settle the first post-local-probe fallback from stored evidence.
+  Result: the stored `v11` and `v12` certificates and step summaries keep
+  step `1` fixed at `546 / 2144` with the same step-`01` surface
+  (`generated = 546`, `well_formed = 288`, `admitted = 1`,
+  `legality_connectivity_exact_rejection = 435`), while the late stored
+  surface moved materially on the same claim policy from `v11` to `v12`
+  (`generated = 3972 -> 4331`,
+  `partial_prefix_bar_failure = 468 -> 553`,
+  `incumbent_dominance = 242 -> 3`,
+  `small_cluster generated = 2190 -> 3132`). At decision time, the local
+  probe stack was already far ahead of the `v12` build commit.
+  Consequence: the first honest follow-on is a rerun-backed step-`15` reset
+  on newer code, and a step-`1` reopening stays deferred unless that rerun
+  changes the diagnosis.
