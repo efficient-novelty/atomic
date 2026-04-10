@@ -1,6 +1,6 @@
 # Autonomous Claim Lane: Next Operational Slice
 
-Last updated: 2026-04-10
+Last updated: 2026-04-11
 
 This file owns the single active work order for `desktop_claim_shadow`.
 
@@ -29,10 +29,11 @@ same active clause-`5` buckets, above their narrower clause-`6`
 the representative claim-flat clause-`3`
 `claim_flat_argument / claim_eventual_argument` refinements too, and above
 both recombined historical-reanchor plus active-window and
-historical-reanchor plus self-contained hybrids too while now targeting the
-first looser recombined parent-level qualification family above the current
-remaining-one lattice before reopening narrower clause-`3` / clause-`6`
-selectors.
+historical-reanchor plus self-contained hybrids too, and above the first
+looser recombined active-window plus self-contained family too while now
+targeting the next looser recombined parent-level qualification family above
+the current remaining-one lattice before reopening narrower clause-`3` /
+clause-`6` selectors.
 The scoped historical-reanchor route on each
 active clause-`5` `claim_flat_codomain / reference` family qualified its
 targeted claim-side parent shell, yet the broad full surfaces relanded unsafe
@@ -65,7 +66,14 @@ repair: on `claim_flat_codomain`, both refinements reland noncanonical
 noncanonical `60 / 8` with `retained = 2`, the same `4427 / 545 / 2247`,
 `incumbent_dominance = 115`, and the same
 `2904 / 462 / 462 / 109 / 2` `small_cluster`, still with no `single`
-bucket. The parent-route plus active-window plus self-contained family is
+self-contained family on those same active clause-`5` buckets also qualifies
+the targeted claim-side parent shell, yet both broad looser recombined
+surfaces reland that same unsafe matched control with the same noncanonical
+`60 / 8`, the same `4427 / 545 / 2247`,
+`incumbent_dominance = 110`,
+`small_cluster = 2952 / 558 / 558 / 108`, and the same reopened `single`
+bucket. The parent-route, alternate active-window / self-contained, and
+first looser recombined active-window plus self-contained families are
 therefore frozen as an unsafe negative-control lattice, and their narrower
 alternate clause-`6` refinements are frozen as a split unsafe control rather
 than the landed repair. Narrowing those same alternate active-window and
@@ -460,6 +468,37 @@ later stored bundle changes the diagnosis.
   to stay above both recombined hybrids and move to a looser recombined
   parent-level qualification family rather than reopening narrower clause-`3`
   / clause-`6` selectors.
+- The first looser recombined parent-level qualification family above that
+  same remaining-one lattice is now also spent across both active clause-`5`
+  families:
+  - a scoped representative mismatch-`0` claim-side active-window plus
+    self-contained override still qualifies the targeted claim-side parent
+    shell on `claim_flat_codomain` and `reference` while keeping lifted
+    terminals fenced
+  - on either active clause-`5` family, that looser recombination relands the
+    exact same unsafe shell as the already-spent active-window and
+    self-contained families:
+    noncanonical `60 / 8`, `retained = 2`, `generated = 4427`,
+    `partial_prefix_bar_failure = 545`, `incumbent_dominance = 110`,
+    zero-admitted captures `2247`, first-mismatch distribution
+    `304 / 177 / 50 / 14`, `small_cluster = 2952 / 558 / 558 / 108`, the same
+    reopened `single` bucket at best overshoot `545 / 5278`, the same
+    representative clause-`2` spread `11 / 11 / 12`, the same
+    representative clause-`4` split `20 / 14`, and the same chosen active
+    clause-`4` plus clause-`5` bucket at `44`
+- That first looser recombined family is also localized at the same targeted
+  delta level:
+  - on the chosen active clause-`5` bucket, each probe removes the same four
+    remaining-two exact-prune parent cells
+  - it removes the same `8` zero-admitted captures and the same `24`
+    remaining-one pruned prefixes
+  - it introduces no off-target exact-prune or pruned-prefix family
+- Any remaining step-`15` leverage is therefore no longer on that first
+  looser recombined active-window plus self-contained family either.
+  Combining the already-spent alternate qualifications does not create a
+  fresh parent-level repair class, so the next honest probe has to stay above
+  it and move to the next looser recombined parent-level qualification family
+  rather than reopening narrower clause-`3` / clause-`6` selectors.
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -1050,6 +1089,13 @@ later stored bundle changes the diagnosis.
      `60 / 8`, `incumbent_dominance = 110`,
      `small_cluster = 2952 / 558 / 558 / 108`, and the same reopened
      `single` bucket
+   - keep the first looser recombined representative mismatch-`0` claim-side
+     active-window plus self-contained family frozen too; on both active
+     clause-`5` `claim_flat_codomain / reference` buckets it relands that same
+     unsafe `4427 / 545 / 2247` shell with noncanonical `60 / 8`,
+     `incumbent_dominance = 110`,
+     `small_cluster = 2952 / 558 / 558 / 108`, and the same reopened
+     `single` bucket
    - use the known mismatch-`0` claim-`next_bridge` exact-summary tradeoff
      ladder only as geometry for choosing a new repair class; do not simply
      reland the same whole-half, whole-cell, pair-cell, or representative
@@ -1063,7 +1109,7 @@ later stored bundle changes the diagnosis.
      reconstructive control still leaves `cached_bound_count = 0`, exact-prune
      family `((0, None, None), 2265)`, and `6795` structurally connected but
      unqualified `NeedsFallback` terminal continuations
-   - target the first looser recombined parent-level qualification family on
+   - target the next looser recombined parent-level qualification family on
      those same active clause-`5` `claim_flat_codomain / reference` buckets
      before reopening narrower clause-`3` / clause-`6` selectors
 5. Treat a new local or stored candidate as promotable only if all of the
@@ -1498,6 +1544,18 @@ later stored bundle changes the diagnosis.
   bucket, the same `11 / 11 / 12` clause-`2` spread, the same
   `20 / 14` clause-`4` split, and the same chosen active clause-`4` plus
   clause-`5` bucket at `44`
+- the first looser recombined representative mismatch-`0` claim-side
+  active-window plus self-contained family is also pinned across both active
+  clause-`5` `claim_flat_codomain / reference` buckets as the exact same
+  unsafe shell as the already-spent active-window and self-contained
+  families:
+  noncanonical `60 / 8`, `retained = 2`, `generated = 4427`,
+  `partial_prefix_bar_failure = 545`, `incumbent_dominance = 110`,
+  zero-admitted captures `2247`,
+  `small_cluster = 2952 / 558 / 558 / 108`, the same reopened `single`
+  bucket, the same `11 / 11 / 12` clause-`2` spread, the same
+  `20 / 14` clause-`4` split, and the same chosen active clause-`4` plus
+  clause-`5` bucket at `44`
 - the next operational slice stays above the exhausted claim-safe,
   representative mismatch-`0`, `reference / reference`, isolated
   clause-`1` exact-suffix, representative claim-side clause-`6`
@@ -1509,8 +1567,10 @@ later stored bundle changes the diagnosis.
   `claim_flat_codomain` clause-`3` refinements too, the representative
   claim-flat clause-`3` refinements, and both recombined
   historical-reanchor plus active-window and historical-reanchor plus
-  self-contained hybrids while now targeting the first looser recombined
-  parent-level qualification family above the current remaining-one lattice
+  self-contained hybrids, plus the first looser recombined
+  active-window plus self-contained family too, while now targeting the next
+  looser recombined parent-level qualification family above the current
+  remaining-one lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

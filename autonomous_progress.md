@@ -1,6 +1,6 @@
 # Autonomous Claim Lane State
 
-Last updated: 2026-04-10
+Last updated: 2026-04-11
 
 This file owns the live operational snapshot for `desktop_claim_shadow`.
 
@@ -1267,6 +1267,37 @@ Until that exists, wording stays at `bounded live recovery`.
   above both recombined hybrids and move to a looser recombined parent-level
   qualification family rather than reopening narrower clause-`3` /
   clause-`6` selectors.
+- The first looser recombined parent-level qualification family above that
+  same remaining-one lattice is now also spent across both active clause-`5`
+  families:
+  - a scoped representative mismatch-`0` claim-side active-window plus
+    self-contained override still qualifies the targeted claim-side parent
+    shell on `claim_flat_codomain` and `reference` while keeping lifted
+    terminals fenced
+  - on either active clause-`5` family, that looser recombination relands the
+    exact same unsafe shell as the already-spent active-window and
+    self-contained families:
+    noncanonical `60 / 8`, `retained = 2`, `generated = 4427`,
+    `partial_prefix_bar_failure = 545`, `incumbent_dominance = 110`,
+    zero-admitted captures `2247`, first-mismatch distribution
+    `304 / 177 / 50 / 14`, `small_cluster = 2952 / 558 / 558 / 108`, the same
+    reopened `single` bucket at best overshoot `545 / 5278`, the same
+    representative clause-`2` spread `11 / 11 / 12`, the same
+    representative clause-`4` split `20 / 14`, and the same chosen active
+    clause-`4` plus clause-`5` bucket at `44`
+- That looser recombined family is also localized at the same targeted delta
+  level:
+  - on the chosen active clause-`5` bucket, each probe removes the same four
+    remaining-two exact-prune parent cells
+  - it removes the same `8` zero-admitted captures and the same `24`
+    remaining-one pruned prefixes
+  - it introduces no off-target exact-prune or pruned-prefix family
+- Consequence: combining active-window and self-contained does not create a
+  fresh parent-level repair class either. The next honest follow-on has to
+  stay above both recombined historical-reanchor hybrids and above this first
+  looser recombined family too, moving to the next looser recombined
+  parent-level qualification family rather than reopening narrower
+  clause-`3` / clause-`6` selectors.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

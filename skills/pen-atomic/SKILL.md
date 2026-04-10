@@ -505,6 +505,16 @@ Focus on:
   `small_cluster = 2952 / 558 / 558 / 108`, and the same reopened `single`
   bucket, route there instead of reopening either recombination as if it were
   fresh leverage
+- treat the first looser representative mismatch-`0` claim-side
+  active-window plus self-contained recombination as live autonomy detail too;
+  if the live docs already pin both active clause-`5`
+  `claim_flat_codomain / reference` probes at that same unsafe
+  `4427 / 545 / 2247` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 110`,
+  `small_cluster = 2952 / 558 / 558 / 108`, the same reopened `single`
+  bucket, and the same four-cell plus `24`-pruned-prefix targeted delta,
+  route there instead of reopening that looser recombination as if it were
+  fresh leverage
 - treat the representative claim-flat clause-`3` refinement inside that same
   mismatch-`0` claim-side parent-route family as live autonomy detail too; if
   the live docs already pin both `claim_flat_argument /
