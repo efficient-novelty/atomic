@@ -244,6 +244,11 @@ Do not:
   and the same four targeted remaining-two parent cells plus their `24`
   matching remaining-one pruned prefixes, that narrower refinement also
   belongs to the autonomy ledger rather than as a fresh repair lead
+- reopen recombined representative mismatch-`0` claim-side parent-route plus
+  alternate qualification families first either; if the live docs already pin
+  one of those hybrids as a spent control above the same remaining-one
+  lattice, that recombined family also belongs to the autonomy ledger rather
+  than as a fresh repair lead
 - reopen the representative claim-flat clause-`3` refinement inside that same
   mismatch-`0` claim-side parent-route family first either; if the live docs
   already pin both `claim_flat_argument / claim_eventual_argument` branches on

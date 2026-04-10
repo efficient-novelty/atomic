@@ -408,6 +408,29 @@ later stored bundle changes the diagnosis.
   honest probe has to stay above another claim-flat clause-`3` reland as well
   as above the broader route class and the clause-`6` `reference`
   refinement.
+- The first recombined parent-level qualification family above that same
+  remaining-one lattice is now also spent across both active clause-`5`
+  families:
+  - a scoped representative mismatch-`0` claim-side historical-reanchor plus
+    active-window override still qualifies the targeted claim-side parent shell
+    on `claim_flat_codomain` and `reference` while keeping lifted terminals
+    fenced
+  - on either active clause-`5` family, that hybrid relands the exact same
+    unsafe shell as the already-spent active-window family:
+    noncanonical `60 / 8`, `retained = 2`, `generated = 4427`,
+    `partial_prefix_bar_failure = 545`, `incumbent_dominance = 110`,
+    zero-admitted captures `2247`, first-mismatch distribution
+    `304 / 177 / 50 / 14`, `small_cluster = 2952 / 558 / 558 / 108`, the same
+    reopened `single` bucket at best overshoot `545 / 5278`, the same
+    representative clause-`2` spread `11 / 11 / 12`, the same
+    representative clause-`4` split `20 / 14`, and the same chosen active
+    clause-`4` plus clause-`5` bucket at `44`
+- Any remaining step-`15` leverage is therefore no longer on that first
+  recombined historical-reanchor plus active-window hybrid either. Adding
+  historical reanchor on top of the already-spent active-window family does
+  not create a fresh parent-level repair class, so the next honest probe has
+  to stay above that hybrid rather than recombining already-spent parent-route
+  and active-window controls.
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -975,14 +998,22 @@ later stored bundle changes the diagnosis.
      still re-confirms step `15` as the active stored miss
    - only reopen step `1` if a later stored bundle changes the diagnosis
      rather than reproducing `4331 / 553` again
-4. Spend the next execution turn on the first fresh code-side step-`15`
-   repair above the exhausted controls:
+4. Spend the next execution turn on the next fresh code-side step-`15`
+   repair family above the exhausted controls:
    - keep the claim-safe mismatch-`1` clause-`5` wall, both representative
      mismatch-`0` dead shells, the spent `reference / reference` tail, the
      isolated clause-`1` `demo_flat_codomain` exact-suffix side pocket, the
      reconstructive representative mismatch-`0` claim-side clause-`6`
      `reference` union, and the looser representative claim-safe backup
      frozen as controls rather than fresh leads
+   - keep the first recombined representative mismatch-`0` claim-side
+     historical-reanchor plus active-window family frozen too; on both active
+     clause-`5` `claim_flat_codomain / reference` buckets it simply relands
+     the same unsafe `4427 / 545 / 2247` active-window shell with
+     noncanonical `60 / 8`,
+     `incumbent_dominance = 110`,
+     `small_cluster = 2952 / 558 / 558 / 108`, and the same reopened
+     `single` bucket
    - use the known mismatch-`0` claim-`next_bridge` exact-summary tradeoff
      ladder only as geometry for choosing a new repair class; do not simply
      reland the same whole-half, whole-cell, pair-cell, or representative
@@ -996,6 +1027,10 @@ later stored bundle changes the diagnosis.
      reconstructive control still leaves `cached_bound_count = 0`, exact-prune
      family `((0, None, None), 2265)`, and `6795` structurally connected but
      unqualified `NeedsFallback` terminal continuations
+   - target the sibling recombined historical-reanchor plus self-contained
+     family on those same active clause-`5`
+     `claim_flat_codomain / reference` buckets before trying looser
+     recombinations or reopening narrower clause-`3` / clause-`6` selectors
 5. Treat a new local or stored candidate as promotable only if all of the
    following stay true:
    - accepted step `15` winner stays canonical `103 / 8`
@@ -1406,6 +1441,17 @@ later stored bundle changes the diagnosis.
   `incumbent_dominance = 113`, zero-admitted captures `2259`,
   `small_cluster = 2871 / 435 / 435 / 111`, and the same reopened
   `single` bucket
+- the first recombined representative mismatch-`0` claim-side
+  historical-reanchor plus active-window family is also pinned across both
+  active clause-`5` `claim_flat_codomain / reference` buckets as the exact
+  same unsafe shell as the already-spent active-window family:
+  noncanonical `60 / 8`, `retained = 2`, `generated = 4427`,
+  `partial_prefix_bar_failure = 545`, `incumbent_dominance = 110`,
+  zero-admitted captures `2247`,
+  `small_cluster = 2952 / 558 / 558 / 108`, the same reopened `single`
+  bucket, the same `11 / 11 / 12` clause-`2` spread, the same
+  `20 / 14` clause-`4` split, and the same chosen active clause-`4` plus
+  clause-`5` bucket at `44`
 - the next operational slice stays above the exhausted claim-safe,
   representative mismatch-`0`, `reference / reference`, isolated
   clause-`1` exact-suffix, representative claim-side clause-`6`
@@ -1414,9 +1460,11 @@ later stored bundle changes the diagnosis.
   families, their narrower clause-`6` `reference` refinements, the narrower
   alternate active-window and self-contained clause-`6` `reference`
   refinements too, their narrower active clause-`5`
-  `claim_flat_codomain` clause-`3` refinements too, and the representative
-  claim-flat clause-`3` refinements while now targeting a different
-  parent-level qualification above the current remaining-one lattice
+  `claim_flat_codomain` clause-`3` refinements too, the representative
+  claim-flat clause-`3` refinements, and the first recombined
+  historical-reanchor plus active-window hybrid while now targeting the
+  sibling historical-reanchor plus self-contained family above the current
+  remaining-one lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`
