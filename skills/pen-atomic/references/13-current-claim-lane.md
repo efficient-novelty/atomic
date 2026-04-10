@@ -222,6 +222,18 @@ Do not:
   cells plus their `24` matching remaining-one pruned prefixes, those
   narrower alternate refinements also belong to the autonomy ledger rather
   than as fresh repair leads
+- reopen the narrower claim-flat clause-`3`
+  `claim_flat_argument / claim_eventual_argument` refinement of those same
+  alternate active-window or self-contained families first either; if the
+  live docs already pin both branches on the active `claim_flat_codomain`
+  bucket at unsafe noncanonical `60 / 8` with `retained = 2`,
+  `generated = 4379`, `partial_prefix_bar_failure = 549`,
+  `incumbent_dominance = 110`, zero-admitted captures `2259`,
+  `small_cluster = 2880 / 486 / 486 / 108`, the same reopened `single`
+  bucket, and the same four targeted remaining-two parent cells plus their
+  `12` matching remaining-one pruned prefixes, those narrower alternate
+  clause-`3` refinements also belong to the autonomy ledger rather than as
+  fresh repair leads
 - reopen the narrower clause-`6` `reference` refinement of that same
   representative mismatch-`0` claim-side parent-route first either; if the
   live docs already pin both active clause-`5`

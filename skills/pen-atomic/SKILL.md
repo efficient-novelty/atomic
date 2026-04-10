@@ -473,6 +473,18 @@ Focus on:
   overshoot `545 / 5278`, and the same four-cell plus `24`-pruned-prefix
   targeted delta, route there instead of reopening either narrower alternate
   selector as if it were a fresh repair class
+- treat the narrower claim-flat clause-`3`
+  `claim_flat_argument / claim_eventual_argument` refinements of those same
+  alternate active-window and self-contained families as live autonomy detail
+  too; if the live docs already pin both branches on the active
+  `claim_flat_codomain` bucket at unsafe noncanonical `60 / 8` with
+  `retained = 2`, `generated = 4379`,
+  `partial_prefix_bar_failure = 549`, `incumbent_dominance = 110`,
+  zero-admitted captures `2259`,
+  `small_cluster = 2880 / 486 / 486 / 108`, the same reopened `single`
+  bucket, and the same four-cell plus `12`-pruned-prefix targeted delta,
+  route there instead of reopening either narrower alternate clause-`3`
+  selector as if it were a fresh repair class
 - treat the narrower clause-`6` `reference` refinement of that same
   representative mismatch-`0` claim-side parent-route class as live autonomy
   detail too; if the live docs already pin both active clause-`5`

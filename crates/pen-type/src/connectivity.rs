@@ -63,13 +63,19 @@ struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteSelector {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowSelector {
     clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
-    clause_six: Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseSixLabel>,
+    clause_three:
+        Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel>,
+    clause_six:
+        Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseSixLabel>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedSelector {
     clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
-    clause_six: Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseSixLabel>,
+    clause_three:
+        Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel>,
+    clause_six:
+        Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseSixLabel>,
 }
 
 thread_local! {
@@ -902,6 +908,26 @@ pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_activ
             *override_selector.borrow_mut() = Some(
                 ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowSelector {
                     clause_five,
+                    clause_three: None,
+                    clause_six: None,
+                },
+            );
+        },
+    );
+    ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowOverrideGuard
+}
+
+#[doc(hidden)]
+pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_active_window_clause_three(
+    clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
+    clause_three: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel,
+) -> ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowOverrideGuard {
+    CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_ACTIVE_WINDOW_OVERRIDE.with(
+        |override_selector| {
+            *override_selector.borrow_mut() = Some(
+                ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowSelector {
+                    clause_five,
+                    clause_three: Some(clause_three),
                     clause_six: None,
                 },
             );
@@ -920,6 +946,7 @@ pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_activ
             *override_selector.borrow_mut() = Some(
                 ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowSelector {
                     clause_five,
+                    clause_three: None,
                     clause_six: Some(clause_six),
                 },
             );
@@ -947,6 +974,26 @@ pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_self_
             *override_selector.borrow_mut() = Some(
                 ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedSelector {
                     clause_five,
+                    clause_three: None,
+                    clause_six: None,
+                },
+            );
+        },
+    );
+    ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedOverrideGuard
+}
+
+#[doc(hidden)]
+pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_self_contained_clause_three(
+    clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
+    clause_three: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel,
+) -> ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedOverrideGuard {
+    CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_SELF_CONTAINED_OVERRIDE.with(
+        |override_selector| {
+            *override_selector.borrow_mut() = Some(
+                ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedSelector {
+                    clause_five,
+                    clause_three: Some(clause_three),
                     clause_six: None,
                 },
             );
@@ -965,6 +1012,7 @@ pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_self_
             *override_selector.borrow_mut() = Some(
                 ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedSelector {
                     clause_five,
+                    clause_three: None,
                     clause_six: Some(clause_six),
                 },
             );
@@ -3357,7 +3405,15 @@ fn matches_anchor_eleven_representative_mismatch_zero_claim_side_active_window_c
         0 => matches_claim_temporal_eventual_domain_clause(expr),
         1 => matches_claim_temporal_next_codomain_clause(expr),
         2 => matches_claim_temporal_pair_clause_two_variant(expr),
-        3 => matches_claim_temporal_argument_clause(expr, anchor),
+        3 => match selector.clause_three {
+            None => matches_claim_temporal_argument_clause(expr, anchor),
+            Some(
+                ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimFlatArgument,
+            ) => matches_claim_temporal_flat_argument_clause(expr, anchor),
+            Some(
+                ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimEventualArgument,
+            ) => matches_claim_temporal_eventual_argument_clause(expr, anchor),
+        },
         4 => matches_claim_temporal_flat_next_bridge(expr),
         5 => match selector.clause_five {
             ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain => {
@@ -3393,10 +3449,12 @@ fn matches_anchor_eleven_representative_mismatch_zero_claim_side_self_contained_
     anchor: u32,
     selector: ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedSelector,
 ) -> bool {
-    let active_window_selector = ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowSelector {
-        clause_five: selector.clause_five,
-        clause_six: selector.clause_six,
-    };
+    let active_window_selector =
+        ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowSelector {
+            clause_five: selector.clause_five,
+            clause_three: selector.clause_three,
+            clause_six: selector.clause_six,
+        };
     matches_anchor_eleven_representative_mismatch_zero_claim_side_active_window_clause(
         position,
         expr,

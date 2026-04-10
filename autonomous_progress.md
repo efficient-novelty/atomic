@@ -1148,6 +1148,32 @@ Until that exists, wording stays at `bounded live recovery`.
   `2952 / 558 / 558 / 108` shell into a narrower unsafe split control, but it
   still displaces the canonical `103 / 8` winner and therefore stays below
   the active frontier rather than becoming the landed repair.
+- Narrowing those same alternate active-window and self-contained families one
+  layer earlier to only one representative claim-flat clause-`3` argument
+  branch on the active clause-`5` `claim_flat_codomain` bucket is now also
+  spent:
+  - on either `claim_flat_argument` or `claim_eventual_argument`, both
+    alternate families reland noncanonical `60 / 8` with `retained = 2`,
+    `generated = 4379`, `partial_prefix_bar_failure = 549`,
+    `incumbent_dominance = 110`, and zero-admitted captures `2259`
+  - both reland the same first-mismatch distribution
+    `308 / 177 / 50 / 14`
+  - both reland the same
+    `small_cluster = 2880 / 486 / 486 / 108`
+  - both reopen the same isolated `single` bucket to `2` fully scored
+    non-winners plus `2` residual prunes at best overshoot `545 / 5278`
+  - on the chosen active clause-`5` bucket, both alternate clause-`3`
+    refinements remove the same four targeted remaining-two exact-prune
+    parent cells, but now only `1` zero-admitted capture per cell plus `3`
+    corresponding remaining-one pruned prefixes per cell, for a narrowed
+    targeted delta of `4` removed captures plus `12` removed pruned prefixes
+    and no off-target family introduced
+- Consequence: clause-`3` narrowing does not rescue the alternate
+  active-window or self-contained families either. It relands a matched
+  smaller unsafe split control that still displaces the canonical `103 / 8`
+  winner and reopens the `single` bucket, so the next honest follow-on has to
+  stay above those alternate clause-`3` refinements as well as above their
+  broader and clause-`6` siblings.
 - Narrowing that same parent-route class to only the representative
   clause-`6` `reference` continuation is now also spent across both active
   clause-`5` families:

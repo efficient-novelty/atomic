@@ -1086,3 +1086,30 @@ This file is the append-only history for `desktop_claim_shadow`.
   below that narrower selector it still just relands the active-window split
   control. The next honest repair therefore has to stay above both alternate
   clause-`6` refinements as well as above their broader parent families.
+- Scope: narrow those same alternate active-window and self-contained
+  qualification families one layer earlier, to only one representative
+  claim-flat clause-`3` argument branch on the active clause-`5`
+  `claim_flat_codomain` bucket above the current remaining-one lattice.
+  Result: both alternate families reland the same smaller but still unsafe
+  split control on either `claim_flat_argument` or `claim_eventual_argument`:
+  - both families reland noncanonical `60 / 8` with `retained = 2`,
+    `generated = 4379`, `partial_prefix_bar_failure = 549`,
+    `incumbent_dominance = 110`, and zero-admitted captures `2259`
+  - both reland the same first-mismatch distribution
+    `308 / 177 / 50 / 14`
+  - both reland the same
+    `small_cluster = 2880 / 486 / 486 / 108`
+  - both reopen the same isolated `single` bucket to `2` fully scored
+    non-winners plus `2` residual prunes at best overshoot `545 / 5278`
+  - on the chosen active clause-`5` bucket, both alternate clause-`3`
+    refinements remove the same four targeted remaining-two exact-prune parent
+    cells, but now only one captured prefix per cell and three remaining-one
+    pruned prefixes per cell, for a narrowed targeted delta of `4`
+    zero-admitted captures plus `12` pruned prefixes and no off-target family
+    introduced
+  Consequence: alternate-family clause-`3` narrowing is now spent too.
+  Active-window and self-contained stay matched even under clause-`3`
+  identity, and this smaller `4379 / 549 / 2259` split control still
+  displaces the canonical `103 / 8` winner, so the next honest repair has to
+  stay above those narrower alternate clause-`3` refinements as well as above
+  their broader and clause-`6` siblings.
