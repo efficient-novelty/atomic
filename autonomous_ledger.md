@@ -992,3 +992,49 @@ This file is the append-only history for `desktop_claim_shadow`.
   changes survivor pressure inside the same targeted claim-side bucket, but
   it does not reveal a broader hidden repair class above the current
   remaining-one lattice.
+- Scope: test the next alternate parent-level qualification family above that
+  same remaining-one lattice by granting the targeted representative
+  mismatch-`0` claim-side parent shell self-contained qualification instead of
+  historical reanchor or active-window qualification.
+  Result: on both active clause-`5` families
+  `claim_flat_codomain / reference`, the self-contained override does qualify
+  the targeted claim-side parent shell while keeping the sibling reference
+  clause-`2` sheet closed and lifted terminals fenced, but the full
+  step-`15` search surface still relands the same unsafe matched control as
+  the active-window family:
+  - accepted step `15` again shifts to noncanonical `60 / 8`
+  - retained breadth again becomes `4427` with `retained = 2`
+  - partial-prefix bar failures again land at `545`
+  - incumbent-dominance again lands at `110`
+  - zero-admitted captures again land at `2247`
+  - the first-mismatch distribution again stays `304 / 177 / 50 / 14`
+  - `small_cluster` again relands as `2952 / 558 / 558 / 108`
+  - the isolated `single` bucket again reopens to `2` fully scored
+    non-winners plus `2` residual prunes at best overshoot `545 / 5278`
+  - the representative clause-`2` spread again stays `11 / 11 / 12`
+  - the representative clause-`4` split again stays `20 / 14`
+  - the active clause-`4` `claim_next_bridge` plus active clause-`5` bucket
+    again contracts to `44`
+  Consequence: self-contained qualification is not the missing clean repair
+  either. It relands the same unsafe `4427 / 545 / 2247` shell as the
+  active-window family rather than exposing a new repair class above the
+  current remaining-one lattice.
+- Scope: localize that matched representative mismatch-`0` claim-side
+  self-contained class against the canonical baseline to see whether it hides
+  any off-target delta above the current remaining-one lattice.
+  Result: both active clause-`5` self-contained probes are localized at the
+  same narrow delta shape as the active-window family:
+  - on the chosen active clause-`5` bucket, each probe removes exactly four
+    remaining-two exact-prune parent cells:
+    `claim_flat_domain / claim_sharp_codomain` crossed with clause-`4`
+    `claim_next_bridge / reference`
+  - each probe removes exactly `8` zero-admitted captures in total and
+    introduces none
+  - each probe removes exactly `24` remaining-one pruned prefixes in total
+    and introduces none
+  - no off-target exact-prune or pruned-prefix family appears under either
+    active clause-`5` self-contained probe
+  Consequence: the self-contained family is exhausted at delta scope too. The
+  next honest repair has to change parent-level qualification family again
+  rather than swapping between historical-reanchor, active-window, and
+  self-contained controls.

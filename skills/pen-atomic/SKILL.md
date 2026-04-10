@@ -451,6 +451,16 @@ Focus on:
   bucket, and the same four-cell plus `24`-pruned-prefix targeted delta,
   route there instead of reopening that alternate qualification family as if
   it were a fresh repair class
+- treat the next alternate representative mismatch-`0` claim-side
+  self-contained qualification family as live autonomy detail too; if the
+  live docs already pin both active clause-`5`
+  `claim_flat_codomain / reference` probes at the same unsafe
+  `4427 / 545 / 2247` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 110`,
+  `small_cluster = 2952 / 558 / 558 / 108`, the same reopened `single`
+  bucket, and the same four-cell plus `24`-pruned-prefix targeted delta,
+  route there instead of reopening that alternate qualification family as if
+  it were a fresh repair class
 - treat the narrower clause-`6` `reference` refinement of that same
   representative mismatch-`0` claim-side parent-route class as live autonomy
   detail too; if the live docs already pin both active clause-`5`

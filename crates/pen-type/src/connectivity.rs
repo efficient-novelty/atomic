@@ -65,6 +65,11 @@ struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowSelector {
     clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedSelector {
+    clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
+}
+
 thread_local! {
     static CLAIM_STEP_FIFTEEN_CLAUSE_ONE_EVENTUALLY_CODOMAIN_SIDE_POCKET_OVERRIDE:
         std::cell::RefCell<usize> = const { std::cell::RefCell::new(0) };
@@ -200,6 +205,12 @@ thread_local! {
             const { std::cell::RefCell::new(None) };
 }
 
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_SELF_CONTAINED_OVERRIDE:
+        std::cell::RefCell<Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedSelector>> =
+            const { std::cell::RefCell::new(None) };
+}
+
 #[doc(hidden)]
 pub struct ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard;
 
@@ -276,6 +287,9 @@ pub struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteOverrid
 
 #[doc(hidden)]
 pub struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowOverrideGuard;
+
+#[doc(hidden)]
+pub struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedOverrideGuard;
 
 impl Drop for ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard {
     fn drop(&mut self) {
@@ -893,6 +907,32 @@ pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_activ
     ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowOverrideGuard
 }
 
+impl Drop for ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_SELF_CONTAINED_OVERRIDE.with(
+            |override_selector| {
+                *override_selector.borrow_mut() = None;
+            },
+        );
+    }
+}
+
+#[doc(hidden)]
+pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_self_contained(
+    clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
+) -> ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedOverrideGuard {
+    CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_SELF_CONTAINED_OVERRIDE.with(
+        |override_selector| {
+            *override_selector.borrow_mut() = Some(
+                ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedSelector {
+                    clause_five,
+                },
+            );
+        },
+    );
+    ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedOverrideGuard
+}
+
 #[doc(hidden)]
 pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_clause_three(
     clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
@@ -1095,6 +1135,18 @@ fn claim_step_fifteen_representative_mismatch_zero_claim_side_active_window_over
 fn claim_step_fifteen_representative_mismatch_zero_claim_side_active_window_override_selector()
 -> Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowSelector> {
     CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_ACTIVE_WINDOW_OVERRIDE
+        .with(|override_selector| *override_selector.borrow())
+}
+
+fn claim_step_fifteen_representative_mismatch_zero_claim_side_self_contained_override_enabled()
+-> bool {
+    claim_step_fifteen_representative_mismatch_zero_claim_side_self_contained_override_selector()
+        .is_some()
+}
+
+fn claim_step_fifteen_representative_mismatch_zero_claim_side_self_contained_override_selector()
+-> Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideSelfContainedSelector> {
+    CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_SELF_CONTAINED_OVERRIDE
         .with(|override_selector| *override_selector.borrow())
 }
 
@@ -1669,6 +1721,7 @@ pub struct ConnectivitySummary {
     self_contained: bool,
     max_lib_ref: u32,
     representative_mismatch_zero_claim_side_active_window_prefix_matches: bool,
+    representative_mismatch_zero_claim_side_self_contained_prefix_matches: bool,
 }
 
 impl ConnectivitySummary {
@@ -1678,6 +1731,8 @@ impl ConnectivitySummary {
             self_contained: true,
             representative_mismatch_zero_claim_side_active_window_prefix_matches:
                 claim_step_fifteen_representative_mismatch_zero_claim_side_active_window_override_enabled(),
+            representative_mismatch_zero_claim_side_self_contained_prefix_matches:
+                claim_step_fifteen_representative_mismatch_zero_claim_side_self_contained_override_enabled(),
             ..Self::default()
         };
         for clause in &telescope.clauses {
@@ -1700,6 +1755,10 @@ impl ConnectivitySummary {
             claim_step_fifteen_representative_mismatch_zero_claim_side_active_window_override_selector();
         let active_window_override_anchor =
             active_window_override_selector.and_then(|_| latest_modal_shell_anchor_ref(library));
+        let self_contained_override_selector =
+            claim_step_fifteen_representative_mismatch_zero_claim_side_self_contained_override_selector();
+        let self_contained_override_anchor =
+            self_contained_override_selector.and_then(|_| latest_modal_shell_anchor_ref(library));
         if self.representative_mismatch_zero_claim_side_active_window_prefix_matches {
             if let (Some(selector), Some(anchor)) = (
                 active_window_override_selector,
@@ -1714,6 +1773,22 @@ impl ConnectivitySummary {
                     );
             } else {
                 self.representative_mismatch_zero_claim_side_active_window_prefix_matches = false;
+            }
+        }
+        if self.representative_mismatch_zero_claim_side_self_contained_prefix_matches {
+            if let (Some(selector), Some(anchor)) = (
+                self_contained_override_selector,
+                self_contained_override_anchor,
+            ) {
+                self.representative_mismatch_zero_claim_side_self_contained_prefix_matches =
+                    matches_anchor_eleven_representative_mismatch_zero_claim_side_self_contained_clause(
+                        new_index,
+                        new_expr,
+                        anchor,
+                        selector.clause_five,
+                    );
+            } else {
+                self.representative_mismatch_zero_claim_side_self_contained_prefix_matches = false;
             }
         }
         let lib_ref_summary = summarize_lib_refs(
@@ -1794,6 +1869,12 @@ impl ConnectivitySummary {
             }
         }
 
+        if new_index == 7
+            && self.representative_mismatch_zero_claim_side_self_contained_prefix_matches
+        {
+            self.self_contained = true;
+        }
+
         self
     }
 
@@ -1823,7 +1904,9 @@ impl ConnectivitySummary {
             || facts.references_active_window(lib_size)
             || (self.representative_mismatch_zero_claim_side_active_window_prefix_matches
                 && matches_reference_temporal_terminal_clause_facts(facts));
-        let self_contained = self.self_contained && !new_clause_has_lib_pointer;
+        let self_contained = (self.self_contained && !new_clause_has_lib_pointer)
+            || (self.representative_mismatch_zero_claim_side_self_contained_prefix_matches
+                && matches_reference_temporal_terminal_clause_facts(facts));
 
         let unresolved_previous_latest =
             previous_latest.filter(|index| !self.unresolved_indices.contains(index));
@@ -3251,6 +3334,20 @@ fn matches_anchor_eleven_representative_mismatch_zero_claim_side_active_window_c
         7 => matches_reference_temporal_terminal_clause(expr),
         _ => false,
     }
+}
+
+fn matches_anchor_eleven_representative_mismatch_zero_claim_side_self_contained_clause(
+    position: usize,
+    expr: &Expr,
+    anchor: u32,
+    clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
+) -> bool {
+    matches_anchor_eleven_representative_mismatch_zero_claim_side_active_window_clause(
+        position,
+        expr,
+        anchor,
+        clause_five,
+    )
 }
 
 fn reference_temporal_terminal_clause_connectivity_facts()
@@ -11905,6 +12002,234 @@ mod tests {
                             connected: true,
                             references_active_window: true,
                             self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        }
+                    );
+                    assert!(passes_connectivity(&library, &telescope));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_representative_mismatch_zero_claim_side_self_contained_on_claim_flat_codomain_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_representative_mismatch_zero_claim_side_self_contained(
+                super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+            );
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_four = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .next()
+            .expect("representative mismatch-zero self-contained probe should expose a claim-next-bridge clause");
+        let clause_five = representative_mismatch_zero_claim_side_parent_route_clause_five_expr(
+            anchor,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+        );
+        let mut clause_six_variants = claim_temporal_variant_exprs(6, anchor);
+        clause_six_variants.push(reference_temporal_clause_six());
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            for clause_three_variant in claim_temporal_variant_exprs(3, anchor) {
+                for clause_six_variant in &clause_six_variants {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[0].expr =
+                        Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))));
+                    telescope.clauses[1].expr =
+                        Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+                    telescope.clauses[2].expr = clause_two_variant.clone();
+                    telescope.clauses[3].expr = clause_three_variant.clone();
+                    telescope.clauses[4].expr = clause_four.clone();
+                    telescope.clauses[5].expr = clause_five.clone();
+                    telescope.clauses[6].expr = clause_six_variant.clone();
+                    telescope.clauses[7] = reference_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        !reanchor.allows_historical_reanchor(),
+                        "the representative mismatch-zero claim-side self-contained probe should stay distinct from the spent historical-reanchor route family"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: true,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        }
+                    );
+                    assert!(passes_connectivity(&library, &telescope));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_representative_mismatch_zero_reference_clause_two_closed_even_under_self_contained_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_representative_mismatch_zero_claim_side_self_contained(
+                super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+            );
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_four = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .next()
+            .expect("representative mismatch-zero self-contained probe should expose a claim-next-bridge clause");
+        let clause_five = representative_mismatch_zero_claim_side_parent_route_clause_five_expr(
+            anchor,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+        );
+
+        for clause_three_variant in claim_temporal_variant_exprs(3, anchor) {
+            let mut telescope = Telescope::reference(15);
+            telescope.clauses[0].expr =
+                Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))));
+            telescope.clauses[1].expr =
+                Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+            telescope.clauses[3].expr = clause_three_variant;
+            telescope.clauses[4].expr = clause_four.clone();
+            telescope.clauses[5].expr = clause_five.clone();
+            telescope.clauses[7] = reference_terminal.clone();
+
+            let witness = analyze_connectivity(&library, &telescope);
+            let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+            assert!(
+                !reanchor.allows_historical_reanchor(),
+                "the representative mismatch-zero self-contained probe should stay claim-side only and keep the sibling reference clause-two sheet closed"
+            );
+            assert_eq!(
+                witness,
+                ConnectivityWitness {
+                    connected: true,
+                    references_active_window: false,
+                    self_contained: false,
+                    max_lib_ref: 10,
+                    historical_reanchor: false,
+                }
+            );
+            assert!(!passes_connectivity(&library, &telescope));
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_representative_mismatch_zero_claim_side_self_contained_reference_terminal_only_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_representative_mismatch_zero_claim_side_self_contained(
+                super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+            );
+        let library = library_until(14);
+        let lifted_terminal = next_lift_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_four = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .next()
+            .expect("representative mismatch-zero self-contained probe should expose a claim-next-bridge clause");
+        let clause_five = representative_mismatch_zero_claim_side_parent_route_clause_five_expr(
+            anchor,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+        );
+        let mut clause_six_variants = claim_temporal_variant_exprs(6, anchor);
+        clause_six_variants.push(reference_temporal_clause_six());
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            for clause_three_variant in claim_temporal_variant_exprs(3, anchor) {
+                for clause_six_variant in &clause_six_variants {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[0].expr =
+                        Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))));
+                    telescope.clauses[1].expr =
+                        Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+                    telescope.clauses[2].expr = clause_two_variant.clone();
+                    telescope.clauses[3].expr = clause_three_variant.clone();
+                    telescope.clauses[4].expr = clause_four.clone();
+                    telescope.clauses[5].expr = clause_five.clone();
+                    telescope.clauses[6].expr = clause_six_variant.clone();
+                    telescope.clauses[7] = lifted_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        !reanchor.allows_historical_reanchor(),
+                        "the representative mismatch-zero self-contained probe should keep lifted terminals fenced even when the parent shell qualifies on the reference terminal"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        }
+                    );
+                    assert!(!passes_connectivity(&library, &telescope));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_representative_mismatch_zero_claim_side_self_contained_on_reference_clause_five_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_representative_mismatch_zero_claim_side_self_contained(
+                super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::Reference,
+            );
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_four = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .next()
+            .expect("representative mismatch-zero self-contained probe should expose a claim-next-bridge clause");
+        let clause_five = representative_mismatch_zero_claim_side_parent_route_clause_five_expr(
+            anchor,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::Reference,
+        );
+        let mut clause_six_variants = claim_temporal_variant_exprs(6, anchor);
+        clause_six_variants.push(reference_temporal_clause_six());
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            for clause_three_variant in claim_temporal_variant_exprs(3, anchor) {
+                for clause_six_variant in &clause_six_variants {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[0].expr =
+                        Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))));
+                    telescope.clauses[1].expr =
+                        Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+                    telescope.clauses[2].expr = clause_two_variant.clone();
+                    telescope.clauses[3].expr = clause_three_variant.clone();
+                    telescope.clauses[4].expr = clause_four.clone();
+                    telescope.clauses[5].expr = clause_five.clone();
+                    telescope.clauses[6].expr = clause_six_variant.clone();
+                    telescope.clauses[7] = reference_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        !reanchor.allows_historical_reanchor(),
+                        "the sibling self-contained probe on the reference clause-five family should stay distinct from the spent historical-reanchor route family too"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: true,
                             max_lib_ref: 10,
                             historical_reanchor: false,
                         }
