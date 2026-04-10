@@ -4,6 +4,7 @@ use pen_core::library::Library;
 use pen_core::telescope::{Telescope, TelescopeClass};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
+use std::sync::OnceLock;
 
 #[doc(hidden)]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -57,6 +58,11 @@ struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteSelector {
         Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel>,
     clause_six:
         Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseSixLabel>,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowSelector {
+    clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
 }
 
 thread_local! {
@@ -188,6 +194,12 @@ thread_local! {
             const { std::cell::RefCell::new(None) };
 }
 
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_ACTIVE_WINDOW_OVERRIDE:
+        std::cell::RefCell<Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowSelector>> =
+            const { std::cell::RefCell::new(None) };
+}
+
 #[doc(hidden)]
 pub struct ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard;
 
@@ -261,6 +273,9 @@ pub struct ClaimStepFifteenClauseFiveRemainingTwoMismatchOneBridgeSliceOverrideG
 
 #[doc(hidden)]
 pub struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteOverrideGuard;
+
+#[doc(hidden)]
+pub struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowOverrideGuard;
 
 impl Drop for ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard {
     fn drop(&mut self) {
@@ -852,6 +867,32 @@ pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_paren
     ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteOverrideGuard
 }
 
+impl Drop for ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_ACTIVE_WINDOW_OVERRIDE.with(
+            |override_selector| {
+                *override_selector.borrow_mut() = None;
+            },
+        );
+    }
+}
+
+#[doc(hidden)]
+pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_active_window(
+    clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
+) -> ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowOverrideGuard {
+    CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_ACTIVE_WINDOW_OVERRIDE.with(
+        |override_selector| {
+            *override_selector.borrow_mut() = Some(
+                ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowSelector {
+                    clause_five,
+                },
+            );
+        },
+    );
+    ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowOverrideGuard
+}
+
 #[doc(hidden)]
 pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_clause_three(
     clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
@@ -1042,6 +1083,18 @@ fn claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_overr
 fn claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_override_selector()
 -> Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteSelector> {
     CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_PARENT_ROUTE_OVERRIDE
+        .with(|override_selector| *override_selector.borrow())
+}
+
+fn claim_step_fifteen_representative_mismatch_zero_claim_side_active_window_override_enabled()
+-> bool {
+    claim_step_fifteen_representative_mismatch_zero_claim_side_active_window_override_selector()
+        .is_some()
+}
+
+fn claim_step_fifteen_representative_mismatch_zero_claim_side_active_window_override_selector()
+-> Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideActiveWindowSelector> {
+    CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_ACTIVE_WINDOW_OVERRIDE
         .with(|override_selector| *override_selector.borrow())
 }
 
@@ -1615,6 +1668,7 @@ pub struct ConnectivitySummary {
     references_active_window: bool,
     self_contained: bool,
     max_lib_ref: u32,
+    representative_mismatch_zero_claim_side_active_window_prefix_matches: bool,
 }
 
 impl ConnectivitySummary {
@@ -1622,6 +1676,8 @@ impl ConnectivitySummary {
         let mut summary = Self {
             references_active_window: library.len() <= 2,
             self_contained: true,
+            representative_mismatch_zero_claim_side_active_window_prefix_matches:
+                claim_step_fifteen_representative_mismatch_zero_claim_side_active_window_override_enabled(),
             ..Self::default()
         };
         for clause in &telescope.clauses {
@@ -1640,6 +1696,26 @@ impl ConnectivitySummary {
         let new_clause_is_higher_path_witness = is_higher_path_witness_clause(new_expr);
         let new_clause_is_operator_bundle_closure = is_operator_bundle_closure_clause(new_expr);
         let lib_size = library.len() as u32;
+        let active_window_override_selector =
+            claim_step_fifteen_representative_mismatch_zero_claim_side_active_window_override_selector();
+        let active_window_override_anchor =
+            active_window_override_selector.and_then(|_| latest_modal_shell_anchor_ref(library));
+        if self.representative_mismatch_zero_claim_side_active_window_prefix_matches {
+            if let (Some(selector), Some(anchor)) = (
+                active_window_override_selector,
+                active_window_override_anchor,
+            ) {
+                self.representative_mismatch_zero_claim_side_active_window_prefix_matches =
+                    matches_anchor_eleven_representative_mismatch_zero_claim_side_active_window_clause(
+                        new_index,
+                        new_expr,
+                        anchor,
+                        selector.clause_five,
+                    );
+            } else {
+                self.representative_mismatch_zero_claim_side_active_window_prefix_matches = false;
+            }
+        }
         let lib_ref_summary = summarize_lib_refs(
             new_expr,
             (lib_size > 2).then_some((lib_size, lib_size.saturating_sub(1))),
@@ -1649,6 +1725,11 @@ impl ConnectivitySummary {
         if lib_size <= 2 {
             self.references_active_window = true;
         } else if lib_ref_summary.references_active_window {
+            self.references_active_window = true;
+        }
+        if self.representative_mismatch_zero_claim_side_active_window_prefix_matches
+            && new_index == 7
+        {
             self.references_active_window = true;
         }
 
@@ -1739,7 +1820,9 @@ impl ConnectivitySummary {
         let new_clause_has_lib_pointer = facts.has_lib_pointer();
         let references_active_window = self.references_active_window
             || lib_size <= 2
-            || facts.references_active_window(lib_size);
+            || facts.references_active_window(lib_size)
+            || (self.representative_mismatch_zero_claim_side_active_window_prefix_matches
+                && matches_reference_temporal_terminal_clause_facts(facts));
         let self_contained = self.self_contained && !new_clause_has_lib_pointer;
 
         let unresolved_previous_latest =
@@ -3139,6 +3222,54 @@ fn matches_anchor_eleven_representative_mismatch_zero_claim_side_parent_route_cl
         7 => matches_reference_temporal_terminal_clause(expr),
         _ => false,
     }
+}
+
+fn matches_anchor_eleven_representative_mismatch_zero_claim_side_active_window_clause(
+    position: usize,
+    expr: &Expr,
+    anchor: u32,
+    clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
+) -> bool {
+    match position {
+        0 => matches_claim_temporal_eventual_domain_clause(expr),
+        1 => matches_claim_temporal_next_codomain_clause(expr),
+        2 => matches_claim_temporal_pair_clause_two_variant(expr),
+        3 => matches_claim_temporal_argument_clause(expr, anchor),
+        4 => matches_claim_temporal_flat_next_bridge(expr),
+        5 => match clause_five {
+            ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain => {
+                matches_claim_temporal_flat_codomain_bridge(expr)
+            }
+            ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::Reference => {
+                matches_reference_temporal_sharp_eventually_bridge(expr)
+            }
+        },
+        6 => {
+            matches_reference_temporal_clause_six(expr)
+                || matches_claim_temporal_clause_six_variant(expr)
+        }
+        7 => matches_reference_temporal_terminal_clause(expr),
+        _ => false,
+    }
+}
+
+fn reference_temporal_terminal_clause_connectivity_facts()
+-> &'static TerminalClauseConnectivityFacts {
+    static FACTS: OnceLock<TerminalClauseConnectivityFacts> = OnceLock::new();
+    FACTS.get_or_init(|| {
+        let clause = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step fifteen should have a terminal clause");
+        TerminalClauseConnectivityFacts::from_clause(&clause)
+    })
+}
+
+fn matches_reference_temporal_terminal_clause_facts(
+    facts: &TerminalClauseConnectivityFacts,
+) -> bool {
+    facts == reference_temporal_terminal_clause_connectivity_facts()
 }
 
 fn matches_claim_temporal_eventual_domain_clause(expr: &Expr) -> bool {
@@ -11552,6 +11683,234 @@ mod tests {
                     }
                 );
                 assert!(!passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_representative_mismatch_zero_claim_side_active_window_on_claim_flat_codomain_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_representative_mismatch_zero_claim_side_active_window(
+                super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+            );
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_four = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .next()
+            .expect("representative mismatch-zero active-window probe should expose a claim-next-bridge clause");
+        let clause_five = representative_mismatch_zero_claim_side_parent_route_clause_five_expr(
+            anchor,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+        );
+        let mut clause_six_variants = claim_temporal_variant_exprs(6, anchor);
+        clause_six_variants.push(reference_temporal_clause_six());
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            for clause_three_variant in claim_temporal_variant_exprs(3, anchor) {
+                for clause_six_variant in &clause_six_variants {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[0].expr =
+                        Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))));
+                    telescope.clauses[1].expr =
+                        Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+                    telescope.clauses[2].expr = clause_two_variant.clone();
+                    telescope.clauses[3].expr = clause_three_variant.clone();
+                    telescope.clauses[4].expr = clause_four.clone();
+                    telescope.clauses[5].expr = clause_five.clone();
+                    telescope.clauses[6].expr = clause_six_variant.clone();
+                    telescope.clauses[7] = reference_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        !reanchor.allows_historical_reanchor(),
+                        "the representative mismatch-zero claim-side active-window probe should stay distinct from the spent historical-reanchor route family"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: true,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        }
+                    );
+                    assert!(passes_connectivity(&library, &telescope));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_representative_mismatch_zero_reference_clause_two_closed_even_under_active_window_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_representative_mismatch_zero_claim_side_active_window(
+                super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+            );
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_four = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .next()
+            .expect("representative mismatch-zero active-window probe should expose a claim-next-bridge clause");
+        let clause_five = representative_mismatch_zero_claim_side_parent_route_clause_five_expr(
+            anchor,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+        );
+
+        for clause_three_variant in claim_temporal_variant_exprs(3, anchor) {
+            let mut telescope = Telescope::reference(15);
+            telescope.clauses[0].expr =
+                Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))));
+            telescope.clauses[1].expr =
+                Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+            telescope.clauses[3].expr = clause_three_variant;
+            telescope.clauses[4].expr = clause_four.clone();
+            telescope.clauses[5].expr = clause_five.clone();
+            telescope.clauses[7] = reference_terminal.clone();
+
+            let witness = analyze_connectivity(&library, &telescope);
+            let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+            assert!(
+                !reanchor.allows_historical_reanchor(),
+                "the representative mismatch-zero active-window probe should stay claim-side only and keep the sibling reference clause-two sheet closed"
+            );
+            assert_eq!(
+                witness,
+                ConnectivityWitness {
+                    connected: true,
+                    references_active_window: false,
+                    self_contained: false,
+                    max_lib_ref: 10,
+                    historical_reanchor: false,
+                }
+            );
+            assert!(!passes_connectivity(&library, &telescope));
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_representative_mismatch_zero_claim_side_active_window_reference_terminal_only_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_representative_mismatch_zero_claim_side_active_window(
+                super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+            );
+        let library = library_until(14);
+        let lifted_terminal = next_lift_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_four = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .next()
+            .expect("representative mismatch-zero active-window probe should expose a claim-next-bridge clause");
+        let clause_five = representative_mismatch_zero_claim_side_parent_route_clause_five_expr(
+            anchor,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+        );
+        let mut clause_six_variants = claim_temporal_variant_exprs(6, anchor);
+        clause_six_variants.push(reference_temporal_clause_six());
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            for clause_three_variant in claim_temporal_variant_exprs(3, anchor) {
+                for clause_six_variant in &clause_six_variants {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[0].expr =
+                        Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))));
+                    telescope.clauses[1].expr =
+                        Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+                    telescope.clauses[2].expr = clause_two_variant.clone();
+                    telescope.clauses[3].expr = clause_three_variant.clone();
+                    telescope.clauses[4].expr = clause_four.clone();
+                    telescope.clauses[5].expr = clause_five.clone();
+                    telescope.clauses[6].expr = clause_six_variant.clone();
+                    telescope.clauses[7] = lifted_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        !reanchor.allows_historical_reanchor(),
+                        "the representative mismatch-zero active-window probe should keep lifted terminals fenced even when the parent shell qualifies on the reference terminal"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        }
+                    );
+                    assert!(!passes_connectivity(&library, &telescope));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_representative_mismatch_zero_claim_side_active_window_on_reference_clause_five_under_override()
+     {
+        let _override =
+            super::override_claim_step_fifteen_representative_mismatch_zero_claim_side_active_window(
+                super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::Reference,
+            );
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_four = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .next()
+            .expect("representative mismatch-zero active-window probe should expose a claim-next-bridge clause");
+        let clause_five = representative_mismatch_zero_claim_side_parent_route_clause_five_expr(
+            anchor,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::Reference,
+        );
+        let mut clause_six_variants = claim_temporal_variant_exprs(6, anchor);
+        clause_six_variants.push(reference_temporal_clause_six());
+
+        for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+            for clause_three_variant in claim_temporal_variant_exprs(3, anchor) {
+                for clause_six_variant in &clause_six_variants {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[0].expr =
+                        Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))));
+                    telescope.clauses[1].expr =
+                        Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+                    telescope.clauses[2].expr = clause_two_variant.clone();
+                    telescope.clauses[3].expr = clause_three_variant.clone();
+                    telescope.clauses[4].expr = clause_four.clone();
+                    telescope.clauses[5].expr = clause_five.clone();
+                    telescope.clauses[6].expr = clause_six_variant.clone();
+                    telescope.clauses[7] = reference_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        !reanchor.allows_historical_reanchor(),
+                        "the sibling active-window probe on the reference clause-five family should stay distinct from the spent historical-reanchor route family too"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: true,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        }
+                    );
+                    assert!(passes_connectivity(&library, &telescope));
+                }
             }
         }
     }

@@ -1061,6 +1061,40 @@ Until that exists, wording stays at `bounded live recovery`.
   follow-on has to change the parent-level qualification family itself rather
   than retargeting the same active clause-`5` bucket or re-running another
   route-identity reland, while step `1` remains deferred.
+- The first alternate parent-level qualification family above that same
+  remaining-one lattice is now also spent across both active clause-`5`
+  families:
+  - a scoped representative mismatch-`0` claim-side active-window override
+    does qualify the targeted claim-side parent shell while keeping the
+    sibling reference clause-`2` sheet closed and lifted terminals fenced
+  - on either active clause-`5` family, the full step-`15` search surface
+    still relands an unsafe negative control with noncanonical `60 / 8`,
+    `retained = 2`, `generated = 4427`,
+    `partial_prefix_bar_failure = 545`,
+    `incumbent_dominance = 110`, zero-admitted captures `2247`, first-mismatch
+    distribution `304 / 177 / 50 / 14`,
+    `small_cluster = 2952 / 558 / 558 / 108`, and the same reopened `single`
+    bucket at best overshoot `545 / 5278`
+  - the representative clause-`2` spread stays `11 / 11 / 12`
+  - the representative clause-`4` split stays `20 / 14`
+  - it contracts only the chosen active clause-`4`
+    `claim_next_bridge` plus clause-`5` bucket to `44`
+- That alternate active-window family is also localized at the same targeted
+  delta shape:
+  - on the chosen active clause-`5` bucket, it removes the same four
+    remaining-two exact-prune parent cells:
+    `claim_flat_domain / claim_sharp_codomain` crossed with clause-`4`
+    `claim_next_bridge / reference`
+  - it removes the same `8` zero-admitted captures and the same `24`
+    remaining-one pruned prefixes
+  - it introduces no off-target exact-prune or pruned-prefix family
+- Consequence: active-window qualification is not the missing clean repair
+  either. It keeps the same targeted four-cell plus `24`-pruned-prefix delta
+  as the spent historical-reanchor class, but it still displaces the
+  canonical `103 / 8` winner and reopens the `single` bucket, so the next
+  honest follow-on has to change parent-level qualification family again
+  rather than swapping between the historical-reanchor and active-window
+  controls.
 - Narrowing that same parent-route class to only the representative
   clause-`6` `reference` continuation is now also spent across both active
   clause-`5` families:
@@ -1116,5 +1150,5 @@ Until that exists, wording stays at `bounded live recovery`.
   - both stored reruns still pin it at `546 / 2144`
   - do not promote a step-`1` theory slice unless the newer rerun changes the
     diagnosis instead of simply re-confirming the step-`15` miss
-- Use the next rerun beyond `v12` to refresh compare, benchmark, and
+- Use a later rerun beyond `v13` to refresh compare, benchmark, and
   certification before reopening step `1`.

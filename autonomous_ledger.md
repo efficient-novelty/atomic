@@ -945,3 +945,50 @@ This file is the append-only history for `desktop_claim_shadow`.
   reopens the `single` bucket, so the next honest repair still has to change
   parent-level qualification family rather than narrowing the same route by
   clause-`3` identity.
+- Scope: test the first alternate parent-level qualification family above the
+  exhausted representative mismatch-`0` remaining-one lattice by granting the
+  targeted claim-side parent shell active-window qualification instead of
+  historical reanchor.
+  Result: on both active clause-`5` families
+  `claim_flat_codomain / reference`, the active-window override does qualify
+  the targeted claim-side parent shell while keeping the sibling reference
+  clause-`2` sheet closed and lifted terminals fenced, but the full
+  step-`15` search surface still relands an unsafe matched control:
+  - accepted step `15` again shifts to noncanonical `60 / 8`
+  - retained breadth again becomes `4427` with `retained = 2`
+  - partial-prefix bar failures again land at `545`
+  - incumbent-dominance relands at `110`
+  - zero-admitted captures again land at `2247`
+  - the first-mismatch distribution again stays `304 / 177 / 50 / 14`
+  - `small_cluster` now relands as `2952 / 558 / 558 / 108`
+  - the isolated `single` bucket again reopens to `2` fully scored
+    non-winners plus `2` residual prunes at best overshoot `545 / 5278`
+  - the representative clause-`2` spread again stays `11 / 11 / 12`
+  - the representative clause-`4` split again stays `20 / 14`
+  - the active clause-`4` `claim_next_bridge` plus active clause-`5` bucket
+    again contracts to `44`
+  Consequence: active-window qualification is now spent too. It is not the
+  missing clean repair; it keeps the same noncanonical `60 / 8` winner and
+  the same `4427 / 545 / 2247` shell as the broader historical-reanchor class
+  while reopening the `single` bucket, so the next honest repair still has to
+  move to a different parent-level qualification family rather than swapping
+  between historical-reanchor and active-window.
+- Scope: localize that matched representative mismatch-`0` claim-side
+  active-window class against the canonical baseline to see whether it hides
+  any off-target delta above the current remaining-one lattice.
+  Result: both active clause-`5` active-window probes are localized at the
+  same narrow delta shape:
+  - on the chosen active clause-`5` bucket, each probe removes exactly four
+    remaining-two exact-prune parent cells:
+    `claim_flat_domain / claim_sharp_codomain` crossed with clause-`4`
+    `claim_next_bridge / reference`
+  - each probe removes exactly `8` zero-admitted captures in total and
+    introduces none
+  - each probe removes exactly `24` remaining-one pruned prefixes in total
+    and introduces none
+  - no off-target exact-prune or pruned-prefix family appears under either
+    active clause-`5` active-window probe
+  Consequence: the active-window family is exhausted at delta scope too. It
+  changes survivor pressure inside the same targeted claim-side bucket, but
+  it does not reveal a broader hidden repair class above the current
+  remaining-one lattice.
