@@ -451,6 +451,15 @@ Focus on:
   and the same four-cell plus `24`-pruned-prefix delta, route there instead
   of reopening that marginally narrower clause-`6` selector as if it were a
   fresh repair class
+- treat the representative claim-flat clause-`3` refinement inside that same
+  mismatch-`0` claim-side parent-route family as live autonomy detail too; if
+  the live docs already pin both `claim_flat_argument /
+  claim_eventual_argument` branches on the active `claim_flat_codomain`
+  bucket at the same smaller unsafe `4379 / 549 / 2259` shell with
+  noncanonical `60 / 8`, `incumbent_dominance = 113`,
+  `small_cluster = 2871 / 435 / 435 / 111`, and the same reopened `single`
+  bucket, route there instead of reopening clause-`3` identity as if it were
+  a fresh repair class
 - treat the representative `claim_flat_domain` clause-`2` sheet's marginally
   best clause-`6` `reference` continuation's clause-`3` split as live
   autonomy detail too; the `claim_flat_argument` and

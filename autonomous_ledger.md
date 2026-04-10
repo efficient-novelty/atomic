@@ -923,3 +923,25 @@ This file is the append-only history for `desktop_claim_shadow`.
   refinement is fully localized and spent. The next honest repair has to
   change the parent-level qualification family rather than retargeting the
   same parent shell with another clause-`6` reland.
+- Scope: test whether narrowing that same representative mismatch-`0`
+  claim-side parent-route class one layer earlier, to only one claim-side
+  clause-`3` argument branch on the active clause-`5`
+  `claim_flat_codomain` bucket, isolates a safer repair.
+  Result: both clause-`3` branches reland the same smaller but still unsafe
+  negative control exactly:
+  - `claim_flat_argument` and `claim_eventual_argument` both reland
+    noncanonical `60 / 8` with `retained = 2`, `generated = 4379`,
+    `partial_prefix_bar_failure = 549`, `incumbent_dominance = 113`, and
+    zero-admitted captures `2259`
+  - both reland the same first-mismatch distribution
+    `308 / 177 / 50 / 14`
+  - both reland the same `small_cluster = 2871 / 435 / 435 / 111`
+  - both reopen the same isolated `single` bucket to `2` fully scored
+    non-winners plus `2` residual prunes at best overshoot `545 / 5278`
+  Consequence: representative claim-flat clause-`3` identity is now spent
+  inside that same parent-route family too. The route contracts further than
+  the broader `4427 / 545 / 2247` and the narrower clause-`6` `reference`
+  refinement, but it still displaces the canonical `103 / 8` winner and
+  reopens the `single` bucket, so the next honest repair still has to change
+  parent-level qualification family rather than narrowing the same route by
+  clause-`3` identity.

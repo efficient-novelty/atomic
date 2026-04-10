@@ -20,7 +20,9 @@ step-`15` miss: use canonical `v13` as the stored baseline for the next
 code-side step-`15` repair search above the exhausted mismatch-`0`
 remaining-one exact-summary lattice, above both representative mismatch-`0`
 claim-side parent-route probes, and above their narrower clause-`6`
-`reference` refinements too. The scoped historical-reanchor route on each
+`reference` refinements, and above the representative claim-flat
+clause-`3` `claim_flat_argument / claim_eventual_argument` refinements too.
+The scoped historical-reanchor route on each
 active clause-`5` `claim_flat_codomain / reference` family qualified its
 targeted claim-side parent shell, yet the broad full surfaces relanded unsafe
 noncanonical `60 / 8` at `4427 / 545 / 2247` with
@@ -38,8 +40,9 @@ clause-`1` `demo_flat_codomain` exact-suffix side pocket, the reconstructive
 representative mismatch-`0` claim-side clause-`6` `reference` union under
 `claim_next_bridge / claim_flat_codomain`, both representative claim-side
 parent-route probes, their narrower clause-`6` `reference` refinements, and
-the looser representative claim-safe backup frozen as controls rather than
-fresh leads.
+the representative claim-flat clause-`3` refinements inside that same
+parent-route family, plus the looser representative claim-safe backup frozen
+as controls rather than fresh leads.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -230,6 +233,26 @@ later stored bundle changes the diagnosis.
   clause-`5` family. The next honest probe has to change parent-level
   qualification family again rather than retargeting the same route with a
   narrower clause-`6` selector.
+- Narrowing that same representative mismatch-`0` claim-side parent-route
+  class on the active clause-`5` `claim_flat_codomain` family to only one
+  clause-`3` argument branch is now also spent:
+  - on either `claim_flat_argument` or `claim_eventual_argument`, the
+    narrowed route relands the same smaller unsafe negative control with
+    noncanonical `60 / 8`, `retained = 2`, `generated = 4379`,
+    `partial_prefix_bar_failure = 549`, `incumbent_dominance = 113`,
+    zero-admitted captures `2259`, and
+    `small_cluster = 2871 / 435 / 435 / 111`
+  - the first-mismatch distribution relands as clause `0 = 308`,
+    clause `1 = 177`, clause `2 = 50`, and clause `3 = 14`
+  - the isolated `single` bucket reopens to `2` fully scored non-winners plus
+    `2` residual prunes at best overshoot `545 / 5278`
+- Any remaining step-`15` leverage is therefore no longer on representative
+  claim-flat clause-`3` identity inside that same parent-route family
+  either. Even that tighter `4379 / 549 / 2259` shell still displaces the
+  canonical `103 / 8` winner and reopens the `single` bucket, so the next
+  honest probe has to stay above another claim-flat clause-`3` reland as well
+  as above the broader route class and the clause-`6` `reference`
+  refinement.
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -1030,6 +1053,22 @@ later stored bundle changes the diagnosis.
   `small_cluster = 2904 / 430 / 430 / 108`, the same fenced `single` bucket,
   and the same targeted four-cell plus `24`-pruned-prefix delta on the active
   `reference` bucket
+- another representative mismatch-`0` claim-side parent-route reland narrowed
+  to only `claim_flat_argument` on
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+  claim_flat_codomain`; that refinement now relands the smaller but still
+  unsafe `4379 / 549 / 2259` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 113`,
+  `small_cluster = 2871 / 435 / 435 / 111`, and the same reopened `single`
+  bucket
+- another representative mismatch-`0` claim-side parent-route reland narrowed
+  to only `claim_eventual_argument` on
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+  claim_flat_codomain`; that sibling refinement now relands the same smaller
+  unsafe `4379 / 549 / 2259` shell with the same noncanonical `60 / 8`, the
+  same `incumbent_dominance = 113`, the same
+  `small_cluster = 2871 / 435 / 435 / 111`, and the same reopened `single`
+  bucket
 - another whole joint clause-`3` continuation reopen under that same
   representative clause-`6` `reference` shell
 - another representative claim-flat parent/child-shell completion pass that
@@ -1103,12 +1142,21 @@ later stored bundle changes the diagnosis.
   surface, `incumbent_dominance = 111`,
   `small_cluster = 2904 / 430 / 430 / 108`, a still-fenced `single` bucket,
   and the same four-cell plus `24`-pruned-prefix targeted delta
+- the representative claim-flat clause-`3`
+  `claim_flat_argument / claim_eventual_argument` refinements inside that
+  same parent-route family are also pinned as the same smaller unsafe
+  negative control at noncanonical `60 / 8` with `retained = 2`,
+  `generated = 4379`, `partial_prefix_bar_failure = 549`,
+  `incumbent_dominance = 113`, zero-admitted captures `2259`,
+  `small_cluster = 2871 / 435 / 435 / 111`, and the same reopened
+  `single` bucket
 - the next operational slice stays above the exhausted claim-safe,
   representative mismatch-`0`, `reference / reference`, isolated
   clause-`1` exact-suffix, representative claim-side clause-`6`
-  `reference` union, both representative claim-side parent-route controls, and
-  their narrower clause-`6` `reference` refinements while now targeting a
-  different parent-level qualification above the current remaining-one lattice
+  `reference` union, both representative claim-side parent-route controls,
+  their narrower clause-`6` `reference` refinements, and the representative
+  claim-flat clause-`3` refinements while now targeting a different
+  parent-level qualification above the current remaining-one lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

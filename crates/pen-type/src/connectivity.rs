@@ -29,6 +29,13 @@ pub enum ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiv
 
 #[doc(hidden)]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel {
+    ClaimFlatArgument,
+    ClaimEventualArgument,
+}
+
+#[doc(hidden)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseSixLabel {
     ClaimNextCodomain,
     ClaimSharpCodomain,
@@ -46,6 +53,8 @@ pub struct ClaimStepFifteenClaimSafePairClauseTwoSelector {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteSelector {
     clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
+    clause_three:
+        Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel>,
     clause_six:
         Option<ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseSixLabel>,
 }
@@ -834,6 +843,26 @@ pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_paren
             *override_selector.borrow_mut() = Some(
                 ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteSelector {
                     clause_five,
+                    clause_three: None,
+                    clause_six: None,
+                },
+            );
+        },
+    );
+    ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteOverrideGuard
+}
+
+#[doc(hidden)]
+pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_clause_three(
+    clause_five: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel,
+    clause_three: ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel,
+) -> ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteOverrideGuard {
+    CLAIM_STEP_FIFTEEN_REPRESENTATIVE_MISMATCH_ZERO_CLAIM_SIDE_PARENT_ROUTE_OVERRIDE.with(
+        |override_selector| {
+            *override_selector.borrow_mut() = Some(
+                ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteSelector {
+                    clause_five,
+                    clause_three: Some(clause_three),
                     clause_six: None,
                 },
             );
@@ -852,6 +881,7 @@ pub fn override_claim_step_fifteen_representative_mismatch_zero_claim_side_paren
             *override_selector.borrow_mut() = Some(
                 ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteSelector {
                     clause_five,
+                    clause_three: None,
                     clause_six: Some(clause_six),
                 },
             );
@@ -3073,7 +3103,15 @@ fn matches_anchor_eleven_representative_mismatch_zero_claim_side_parent_route_cl
         0 => matches_claim_temporal_eventual_domain_clause(expr),
         1 => matches_claim_temporal_next_codomain_clause(expr),
         2 => matches_claim_temporal_pair_clause_two_variant(expr),
-        3 => matches_claim_temporal_argument_clause(expr, anchor),
+        3 => match selector.clause_three {
+            None => matches_claim_temporal_argument_clause(expr, anchor),
+            Some(
+                ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimFlatArgument,
+            ) => matches_claim_temporal_flat_argument_clause(expr, anchor),
+            Some(
+                ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimEventualArgument,
+            ) => matches_claim_temporal_eventual_argument_clause(expr, anchor),
+        },
         4 => matches_claim_temporal_flat_next_bridge(expr),
         5 => match selector.clause_five {
             ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain => {
@@ -3126,6 +3164,11 @@ fn matches_claim_temporal_next_codomain_clause(expr: &Expr) -> bool {
 }
 
 fn matches_claim_temporal_argument_clause(expr: &Expr, anchor: u32) -> bool {
+    matches_claim_temporal_flat_argument_clause(expr, anchor)
+        || matches_claim_temporal_eventual_argument_clause(expr, anchor)
+}
+
+fn matches_claim_temporal_flat_argument_clause(expr: &Expr, anchor: u32) -> bool {
     matches!(
         expr,
         Expr::Lam(body)
@@ -3140,10 +3183,26 @@ fn matches_claim_temporal_argument_clause(expr: &Expr, anchor: u32) -> bool {
                                     inner.as_ref(),
                                     Expr::Flat(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
                                 )
-                                    || matches!(
-                                        inner.as_ref(),
-                                        Expr::Eventually(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
-                                    )
+                        )
+            )
+    )
+}
+
+fn matches_claim_temporal_eventual_argument_clause(expr: &Expr, anchor: u32) -> bool {
+    matches!(
+        expr,
+        Expr::Lam(body)
+            if matches!(
+                body.as_ref(),
+                Expr::App(function, argument)
+                    if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
+                        && matches!(
+                            argument.as_ref(),
+                            Expr::Next(inner)
+                                if matches!(
+                                    inner.as_ref(),
+                                    Expr::Eventually(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                )
                         )
             )
     )
@@ -4372,6 +4431,27 @@ mod tests {
                     .expect("reference step fifteen should expose clause five")
                     .expr
                     .clone()
+            }
+        }
+    }
+
+    fn representative_mismatch_zero_claim_side_parent_route_clause_three_expr(
+        anchor: u32,
+        clause_three:
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel,
+    ) -> Expr {
+        match clause_three {
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimFlatArgument => {
+                claim_temporal_variant_exprs(3, anchor)
+                    .into_iter()
+                    .next()
+                    .expect("representative mismatch-zero parent route should expose a claim-flat argument clause")
+            }
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimEventualArgument => {
+                claim_temporal_variant_exprs(3, anchor)
+                    .into_iter()
+                    .nth(1)
+                    .expect("representative mismatch-zero parent route should expose a claim-eventual argument clause")
             }
         }
     }
@@ -11014,6 +11094,289 @@ mod tests {
                     }
                 );
                 assert!(passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_accepts_representative_mismatch_zero_claim_side_parent_route_clause_three_under_narrow_override()
+     {
+        let clause_three_labels = [
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimFlatArgument,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimEventualArgument,
+        ];
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_four = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .next()
+            .expect("representative mismatch-zero parent route should expose a claim-next-bridge clause");
+        let clause_five = representative_mismatch_zero_claim_side_parent_route_clause_five_expr(
+            anchor,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+        );
+        let mut clause_six_variants = claim_temporal_variant_exprs(6, anchor);
+        clause_six_variants.push(reference_temporal_clause_six());
+
+        for clause_three_label in clause_three_labels {
+            let _override =
+                super::override_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_clause_three(
+                    super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+                    clause_three_label,
+                );
+            let clause_three =
+                representative_mismatch_zero_claim_side_parent_route_clause_three_expr(
+                    anchor,
+                    clause_three_label,
+                );
+
+            for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+                for clause_six_variant in &clause_six_variants {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[0].expr =
+                        Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))));
+                    telescope.clauses[1].expr =
+                        Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+                    telescope.clauses[2].expr = clause_two_variant.clone();
+                    telescope.clauses[3].expr = clause_three.clone();
+                    telescope.clauses[4].expr = clause_four.clone();
+                    telescope.clauses[5].expr = clause_five.clone();
+                    telescope.clauses[6].expr = clause_six_variant.clone();
+                    telescope.clauses[7] = reference_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        reanchor.allows_historical_reanchor(),
+                        "the narrow representative mismatch-zero parent-route override should qualify the targeted claim-side shell when only one clause-three argument branch is reopened"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: true,
+                        }
+                    );
+                    assert!(passes_connectivity(&library, &telescope));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_representative_mismatch_zero_claim_side_parent_route_sibling_clause_three_closed_under_narrow_override()
+     {
+        let clause_three_labels = [
+            (
+                super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimFlatArgument,
+                super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimEventualArgument,
+            ),
+            (
+                super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimEventualArgument,
+                super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimFlatArgument,
+            ),
+        ];
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_four = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .next()
+            .expect("representative mismatch-zero parent route should expose a claim-next-bridge clause");
+        let clause_five = representative_mismatch_zero_claim_side_parent_route_clause_five_expr(
+            anchor,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+        );
+        let mut clause_six_variants = claim_temporal_variant_exprs(6, anchor);
+        clause_six_variants.push(reference_temporal_clause_six());
+
+        for (selected_clause_three, sibling_clause_three) in clause_three_labels {
+            let _override =
+                super::override_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_clause_three(
+                    super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+                    selected_clause_three,
+                );
+            let clause_three =
+                representative_mismatch_zero_claim_side_parent_route_clause_three_expr(
+                    anchor,
+                    sibling_clause_three,
+                );
+
+            for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+                for clause_six_variant in &clause_six_variants {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[0].expr =
+                        Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))));
+                    telescope.clauses[1].expr =
+                        Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+                    telescope.clauses[2].expr = clause_two_variant.clone();
+                    telescope.clauses[3].expr = clause_three.clone();
+                    telescope.clauses[4].expr = clause_four.clone();
+                    telescope.clauses[5].expr = clause_five.clone();
+                    telescope.clauses[6].expr = clause_six_variant.clone();
+                    telescope.clauses[7] = reference_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        !reanchor.allows_historical_reanchor(),
+                        "the narrow representative mismatch-zero parent-route override should keep the sibling claim clause-three argument branch fenced"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        }
+                    );
+                    assert!(!passes_connectivity(&library, &telescope));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_representative_mismatch_zero_reference_clause_two_closed_even_under_narrow_clause_three_override()
+     {
+        let clause_three_labels = [
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimFlatArgument,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimEventualArgument,
+        ];
+        let library = library_until(14);
+        let reference_terminal = reference_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_four = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .next()
+            .expect("representative mismatch-zero parent route should expose a claim-next-bridge clause");
+        let clause_five = representative_mismatch_zero_claim_side_parent_route_clause_five_expr(
+            anchor,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+        );
+        let mut clause_six_variants = claim_temporal_variant_exprs(6, anchor);
+        clause_six_variants.push(reference_temporal_clause_six());
+
+        for clause_three_label in clause_three_labels {
+            let _override =
+                super::override_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_clause_three(
+                    super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+                    clause_three_label,
+                );
+            let clause_three =
+                representative_mismatch_zero_claim_side_parent_route_clause_three_expr(
+                    anchor,
+                    clause_three_label,
+                );
+
+            for clause_six_variant in &clause_six_variants {
+                let mut telescope = Telescope::reference(15);
+                telescope.clauses[0].expr =
+                    Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))));
+                telescope.clauses[1].expr =
+                    Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+                telescope.clauses[3].expr = clause_three.clone();
+                telescope.clauses[4].expr = clause_four.clone();
+                telescope.clauses[5].expr = clause_five.clone();
+                telescope.clauses[6].expr = clause_six_variant.clone();
+                telescope.clauses[7] = reference_terminal.clone();
+
+                let witness = analyze_connectivity(&library, &telescope);
+                let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                assert!(
+                    !reanchor.allows_historical_reanchor(),
+                    "the narrow representative mismatch-zero parent-route clause-three override should stay claim-side only and keep the sibling reference clause-two sheet closed"
+                );
+                assert_eq!(
+                    witness,
+                    ConnectivityWitness {
+                        connected: true,
+                        references_active_window: false,
+                        self_contained: false,
+                        max_lib_ref: 10,
+                        historical_reanchor: false,
+                    }
+                );
+                assert!(!passes_connectivity(&library, &telescope));
+            }
+        }
+    }
+
+    #[test]
+    fn connectivity_keeps_representative_mismatch_zero_claim_side_parent_route_reference_terminal_only_even_under_narrow_clause_three_override()
+     {
+        let clause_three_labels = [
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimFlatArgument,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimEventualArgument,
+        ];
+        let library = library_until(14);
+        let lifted_terminal = next_lift_temporal_terminal_clause();
+        let anchor = super::latest_modal_shell_anchor_ref(&library)
+            .expect("step fifteen history should still expose a modal shell anchor");
+        let clause_four = claim_temporal_variant_exprs(4, anchor)
+            .into_iter()
+            .next()
+            .expect("representative mismatch-zero parent route should expose a claim-next-bridge clause");
+        let clause_five = representative_mismatch_zero_claim_side_parent_route_clause_five_expr(
+            anchor,
+            super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+        );
+        let mut clause_six_variants = claim_temporal_variant_exprs(6, anchor);
+        clause_six_variants.push(reference_temporal_clause_six());
+
+        for clause_three_label in clause_three_labels {
+            let _override =
+                super::override_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_clause_three(
+                    super::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+                    clause_three_label,
+                );
+            let clause_three =
+                representative_mismatch_zero_claim_side_parent_route_clause_three_expr(
+                    anchor,
+                    clause_three_label,
+                );
+
+            for clause_two_variant in claim_temporal_variant_exprs(2, anchor) {
+                for clause_six_variant in &clause_six_variants {
+                    let mut telescope = Telescope::reference(15);
+                    telescope.clauses[0].expr =
+                        Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1)))));
+                    telescope.clauses[1].expr =
+                        Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1)))));
+                    telescope.clauses[2].expr = clause_two_variant.clone();
+                    telescope.clauses[3].expr = clause_three.clone();
+                    telescope.clauses[4].expr = clause_four.clone();
+                    telescope.clauses[5].expr = clause_five.clone();
+                    telescope.clauses[6].expr = clause_six_variant.clone();
+                    telescope.clauses[7] = lifted_terminal.clone();
+
+                    let witness = analyze_connectivity(&library, &telescope);
+                    let reanchor = HistoricalReanchorSummary::from_telescope(&library, &telescope);
+                    assert!(
+                        !reanchor.allows_historical_reanchor(),
+                        "the narrow representative mismatch-zero parent-route clause-three override should keep lifted terminals fenced even when the selected parent shell qualifies"
+                    );
+                    assert_eq!(
+                        witness,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        }
+                    );
+                    assert!(!passes_connectivity(&library, &telescope));
+                }
             }
         }
     }

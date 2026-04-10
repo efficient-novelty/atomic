@@ -30184,6 +30184,129 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_clause_three_branches_stay_matched_smaller_unsafe_negative_controls()
+     {
+        let clause_three_labels = [
+            (
+                "claim_flat_argument",
+                pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimFlatArgument,
+            ),
+            (
+                "claim_eventual_argument",
+                pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseThreeLabel::ClaimEventualArgument,
+            ),
+        ];
+        let mut outcomes = BTreeMap::new();
+
+        for (clause_three_name, clause_three) in clause_three_labels {
+            let _connectivity_override =
+                pen_type::connectivity::override_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_clause_three(
+                    pen_type::connectivity::ClaimStepFifteenRepresentativeMismatchZeroClaimSideParentRouteClauseFiveLabel::ClaimFlatCodomain,
+                    clause_three,
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("claim prefix through step 14 should build");
+            let prefix = claim_steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+            outcomes.insert(
+                clause_three_name,
+                (
+                    step_fifteen.accepted.nu,
+                    step_fifteen.accepted.clause_kappa,
+                    step_fifteen.retained_candidates.len(),
+                    step_fifteen.demo_funnel.generated_raw_prefixes,
+                    step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
+                    step_fifteen.exact_screen_reasons.incumbent_dominance,
+                    zero_summary.captured_prefixes,
+                    wall_summary.first_mismatch_position_counts,
+                    bucket_stats
+                        .get("k8:structural_generic:temporal_operator:library_backed:small_cluster")
+                        .cloned(),
+                    bucket_stats
+                        .get("k8:structural_generic:temporal_operator:library_backed:single")
+                        .cloned(),
+                ),
+            );
+        }
+
+        let expected_first_mismatch_counts = [
+            (Some(0_usize), 308_usize),
+            (Some(1), 177),
+            (Some(2), 50),
+            (Some(3), 14),
+        ]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+        let expected_small_cluster = Some(DemoBucketStats {
+            generated_terminal_candidates: 2871,
+            admissible_terminal_candidates: 435,
+            exact_screened_terminal_candidates: 435,
+            pruned_terminal_candidates: 111,
+            fully_scored_terminal_candidates: 0,
+            best_overshoot: None,
+        });
+        let expected_single_bucket = Some(DemoBucketStats {
+            generated_terminal_candidates: 0,
+            admissible_terminal_candidates: 0,
+            exact_screened_terminal_candidates: 0,
+            pruned_terminal_candidates: 2,
+            fully_scored_terminal_candidates: 2,
+            best_overshoot: Some(Rational::new(545, 5278)),
+        });
+
+        assert_eq!(outcomes.len(), 2);
+        assert_eq!(
+            outcomes.get("claim_flat_argument"),
+            Some(&(
+                60,
+                8,
+                2,
+                4379,
+                549,
+                113,
+                2259,
+                expected_first_mismatch_counts.clone(),
+                expected_small_cluster.clone(),
+                expected_single_bucket.clone(),
+            )),
+            "the representative mismatch-zero parent-route clause-three split should keep the claim-flat argument branch as a smaller but still unsafe negative control: it narrows the wall relative to the broader 4427 / 545 route class, but it still displaces the canonical 103/8 winner and reopens the single bucket"
+        );
+        assert_eq!(
+            outcomes.get("claim_eventual_argument"),
+            Some(&(
+                60,
+                8,
+                2,
+                4379,
+                549,
+                113,
+                2259,
+                expected_first_mismatch_counts,
+                expected_small_cluster,
+                expected_single_bucket,
+            )),
+            "the claim-eventual argument branch should reland the same smaller unsafe shell too, confirming that clause-three identity is exhausted on the representative claim-flat parent-route family"
+        );
+    }
+
+    #[test]
     fn current_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_reference_clause_six_on_claim_flat_codomain_stays_a_matched_unsafe_negative_control()
      {
         let _connectivity_override =

@@ -1092,6 +1092,23 @@ Until that exists, wording stays at `bounded live recovery`.
 - Consequence: the next honest follow-on has to stay above not just the broad
   representative claim-side parent-route class, but also the narrower
   `reference` clause-`6` refinement on both active clause-`5` families.
+- Narrowing that same representative mismatch-`0` claim-side parent-route
+  class on the active clause-`5` `claim_flat_codomain` family to only one
+  clause-`3` argument branch is now also spent as a smaller unsafe negative
+  control:
+  - on either `claim_flat_argument` or `claim_eventual_argument`, the
+    narrowed route relands noncanonical `60 / 8` with `retained = 2`,
+    `generated = 4379`, `partial_prefix_bar_failure = 549`,
+    `incumbent_dominance = 113`, zero-admitted captures `2259`, and
+    `small_cluster = 2871 / 435 / 435 / 111`
+  - the first-mismatch distribution relands as clause `0 = 308`,
+    clause `1 = 177`, clause `2 = 50`, and clause `3 = 14`
+  - the isolated `single` bucket reopens to `2` fully scored non-winners plus
+    `2` residual prunes at best overshoot `545 / 5278`
+  - consequence: representative claim-flat clause-`3` identity is now
+    exhausted inside that same parent-route family too; even the tighter
+    `4379 / 549 / 2259` shell still displaces the canonical `103 / 8` winner
+    and reopens the `single` bucket
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

@@ -200,6 +200,15 @@ Do not:
   and the same four targeted remaining-two parent cells plus their `24`
   matching remaining-one pruned prefixes, that narrower refinement also
   belongs to the autonomy ledger rather than as a fresh repair lead
+- reopen the representative claim-flat clause-`3` refinement inside that same
+  mismatch-`0` claim-side parent-route family first either; if the live docs
+  already pin both `claim_flat_argument / claim_eventual_argument` branches on
+  the active `claim_flat_codomain` bucket at the same smaller unsafe
+  `4379 / 549 / 2259` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 113`,
+  `small_cluster = 2871 / 435 / 435 / 111`, and the same reopened `single`
+  bucket, that clause-`3` refinement also belongs to the autonomy ledger
+  rather than as a fresh repair lead
 - reopen another deeper remaining-one exact-summary reland inside that same
   representative mismatch-`0` shell first either after the live docs have
   already shown the latest reconstructive control stays on that same
