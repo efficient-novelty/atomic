@@ -6881,15 +6881,13 @@ fn claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enable
 }
 
 #[cfg(test)]
-fn claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief_override_enabled() -> bool
-{
+fn claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief_override_enabled() -> bool {
     CLAIM_STEP_FIFTEEN_CLAUSE_ONE_DEMO_FLAT_CODOMAIN_EXACT_SUFFIX_RELIEF_OVERRIDE
         .with(|override_enabled| *override_enabled.borrow())
 }
 
 #[cfg(not(test))]
-fn claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief_override_enabled() -> bool
-{
+fn claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief_override_enabled() -> bool {
     false
 }
 
@@ -15131,6 +15129,41 @@ mod tests {
         super::finish_pruned_terminal_prefix_capture()
     }
 
+    fn current_claim_step_fifteen_summaries_on_representative_mismatch_zero_pair_cell_tradeoff(
+        selector: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector,
+    ) -> (
+        LateStepExactPruneFamilySummary,
+        LateStepTerminalConnectivitySummary,
+    ) {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let exact_prune_family_summary = {
+            let _search_override =
+                super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                    selector,
+                );
+            late_step_exact_prune_family_summary(&prefix, 15, usize::MAX)
+        };
+        let terminal_connectivity_summary = {
+            let _search_override =
+                super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                    selector,
+                );
+            late_step_terminal_connectivity_summary(&prefix, 15, usize::MAX)
+        };
+
+        (exact_prune_family_summary, terminal_connectivity_summary)
+    }
+
     fn current_claim_step_fifteen_pruned_terminal_prefixes_on_reference_reference_tail_mismatch_two_clause_four_probe(
         label: super::ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel,
     ) -> Vec<OnlinePrefixWorkItem> {
@@ -19783,9 +19816,8 @@ mod tests {
         assert_eq!(wall_summary.capture_count, 556);
         assert_eq!(zero_summary.captured_prefixes, 2268);
         assert_eq!(
-            bucket_stats.get(
-                "k8:structural_generic:temporal_operator:library_backed:small_cluster"
-            ),
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
             Some(&DemoBucketStats {
                 generated_terminal_candidates: 3141,
                 admissible_terminal_candidates: 522,
@@ -28892,7 +28924,8 @@ mod tests {
                     clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
                 },
             );
-        let step_fifteen = profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
         let bucket_stats = step_fifteen
             .demo_bucket_stats
             .iter()
@@ -29027,6 +29060,73 @@ mod tests {
                 .collect(),
             ),
             "opening both representative claim-side clause-two sheets together, but only beneath the marginally best clause-six reference continuation, should still just reconstruct the existing 4355 / 551 / 2265 pair-cell tradeoff rather than isolating a safer repair"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_side_clause_six_reference_union_stays_inside_the_same_zero_admitted_dead_surface_as_the_pair_cell_tradeoff()
+     {
+        let pair_cell_selector =
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                clause_two: None,
+                clause_three: None,
+                clause_six: None,
+                clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
+            };
+        let claim_side_union_selector =
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimSide),
+                clause_three: None,
+                clause_six: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel::Reference),
+                clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
+            };
+        let pair_cell_summaries =
+            current_claim_step_fifteen_summaries_on_representative_mismatch_zero_pair_cell_tradeoff(
+                pair_cell_selector,
+            );
+        let claim_side_union_summaries =
+            current_claim_step_fifteen_summaries_on_representative_mismatch_zero_pair_cell_tradeoff(
+                claim_side_union_selector,
+            );
+        let expected_exact_prune_family_summary = LateStepExactPruneFamilySummary {
+            raw_generated_surface: 4355,
+            roots_seen: 3,
+            roots_enqueued: 3,
+            partial_prefix_bound_prunes: 551,
+            captured_prefixes: 2265,
+            cached_bound_count: 0,
+            family_counts: [((0_usize, None, None), 2265_usize)].into_iter().collect(),
+        };
+        let expected_terminal_connectivity_summary = LateStepTerminalConnectivitySummary {
+            captured_prefixes: 2265,
+            generated_candidates: 6795,
+            prune_disconnected_candidates: 0,
+            needs_fallback_candidates: 6795,
+            keep_without_fallback_candidates: 0,
+            structurally_disconnected_candidates: 0,
+            structurally_connected_but_unqualified_candidates: 6795,
+            structurally_connected_via_historical_reanchor_candidates: 0,
+        };
+
+        assert_eq!(
+            pair_cell_summaries.0, expected_exact_prune_family_summary,
+            "the representative pair-cell tradeoff should already stay inside one zero-admitted remaining-one family with no cached bound, so it is a dead-shell tradeoff rather than a live bound-carrying repair"
+        );
+        assert_eq!(
+            pair_cell_summaries.1, expected_terminal_connectivity_summary,
+            "the representative pair-cell tradeoff should already expose only structurally connected but unqualified remaining-one continuations that all still need fallback"
+        );
+        assert_eq!(
+            claim_side_union_summaries.0, expected_exact_prune_family_summary,
+            "the deeper claim-side union should keep exactly the same zero-admitted remaining-one family as the representative pair-cell tradeoff instead of surfacing a new bound-carrying or admitted shell"
+        );
+        assert_eq!(
+            claim_side_union_summaries.1, expected_terminal_connectivity_summary,
+            "the deeper claim-side union should also keep every promoted remaining-one continuation inside the same structurally connected but unqualified needs-fallback shell as the pair-cell tradeoff"
         );
     }
 

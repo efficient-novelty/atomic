@@ -174,8 +174,16 @@ Do not:
 - reopen the deeper representative mismatch-`0` claim-side clause-`6`
   `reference` union first either; if the live docs already pin that
   cross-sheet union at the same `4355 / 551 / 2265` smaller pair-cell
-  tradeoff with `small_cluster = 3150 / 522 / 522 / 0`, that union also
-  belongs to the autonomy ledger rather than as a fresh lead
+  tradeoff with `small_cluster = 3150 / 522 / 522 / 0`, the same
+  zero-admitted `((0, None, None), 2265)` remaining-one family, no cached
+  bound, and only structurally connected but unqualified `NeedsFallback`
+  terminals, that union also belongs to the autonomy ledger rather than as a
+  fresh lead
+- reopen another deeper remaining-one exact-summary reland inside that same
+  representative mismatch-`0` shell first either after the live docs have
+  already shown the latest reconstructive control stays on that same
+  zero-admitted dead surface; keep the next repair above that remaining-one
+  lattice rather than stabilizing another deeper reland here
 - reopen the representative `claim_flat_domain` clause-`2` sheet's
   marginally best clause-`6` `reference` continuation through either
   individual clause-`3` `claim_flat_argument` or `claim_eventual_argument`

@@ -739,6 +739,19 @@ Until that exists, wording stays at `bounded live recovery`.
   - consequence: that deeper claim-side clause-`6` `reference` union merely
     reconstructs the existing `4355 / 551 / 2265` pair-cell shell instead of
     isolating a safer repair
+- That reconstructive claim-side union is now also pinned to the same
+  zero-admitted remaining-one dead surface as the representative pair-cell
+  tradeoff:
+  - the promoted exact-prune family summary stays
+    `captured_prefixes = 2265`, `cached_bound_count = 0`, and
+    family counts `((0, None, None), 2265)`
+  - the promoted terminal-connectivity summary stays
+    `generated = 6795`, `NeedsFallback = 6795`,
+    `KeepWithoutFallback = 0`, and
+    `structurally_connected_but_unqualified = 6795`
+  - consequence: there is still no hidden bound-carrying or live
+    remaining-one child below that representative mismatch-`0`
+    claim-side clause-`6` `reference` shell either
 - The residual `3` `single`-bucket incumbent prunes remain fenced and are now
   secondary to the partial-prefix wall.
 
@@ -952,6 +965,11 @@ Until that exists, wording stays at `bounded live recovery`.
   that marginally best clause-`6` `reference` continuation either; the
   cross-sheet union now just relands the existing `4355 / 551 / 2265`
   pair-cell smaller tradeoff with `small_cluster = 3150 / 522 / 522 / 0`.
+- Because that deeper claim-side union still keeps the exact-prune family on
+  `((0, None, None), 2265)` with `cached_bound_count = 0` and every one of its
+  `6795` terminal continuations still only `NeedsFallback`, any remaining
+  step-`15` leverage now has to move above the current remaining-one
+  exact-summary lattice rather than further inside it.
 - Do not stop at that representative claim-flat joint clause-`3`
   parent/child shell either; its six child continuations are now all the same
   dead `3`-generated / `0`-admitted completion summary with no bound and no

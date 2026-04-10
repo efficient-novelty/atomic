@@ -106,6 +106,19 @@ later stored bundle changes the diagnosis.
   marginally best clause-`6` `reference` continuation either; that deeper
   union just reconstructs the existing `4355 / 551 / 2265` pair-cell smaller
   tradeoff rather than isolating a safer repair.
+- That reconstructive claim-side union is now also pinned to the same
+  zero-admitted remaining-one dead surface as the representative pair-cell
+  tradeoff:
+  - exact-prune family summary stays on
+    `captured_prefixes = 2265`, `cached_bound_count = 0`, and the single
+    family `((0, None, None), 2265)`
+  - terminal-connectivity summary stays on `6795` generated candidates, all
+    `NeedsFallback`, all structurally connected but unqualified, and none on
+    historical reanchor
+- Any remaining step-`15` leverage is therefore no longer inside that
+  representative mismatch-`0` remaining-one exact-summary lattice either; the
+  next repair class has to move above those dead-shell relands instead of
+  reopening another deeper remaining-one tradeoff.
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -689,6 +702,11 @@ later stored bundle changes the diagnosis.
      representative pair-cell exact-summary selector lattice; the next repair
      class has to move beyond a deeper restatement of the same `4355 / 551`
      smaller tradeoff
+   - keep the next repair above the current remaining-one exact-summary
+     lattice on that representative mismatch-`0` shell entirely; the latest
+     reconstructive control still leaves `cached_bound_count = 0`, exact-prune
+     family `((0, None, None), 2265)`, and `6795` structurally connected but
+     unqualified `NeedsFallback` terminal continuations
 5. Treat a new local or stored candidate as promotable only if all of the
    following stay true:
    - accepted step `15` winner stays canonical `103 / 8`
@@ -862,6 +880,12 @@ later stored bundle changes the diagnosis.
   claim_next_bridge / claim_flat_codomain`; it now only reconstructs the
   existing `4355 / 551 / 2265` pair-cell smaller tradeoff with
   `small_cluster = 3150 / 522 / 522 / 0`
+- another deeper remaining-one exact-summary reland inside that same
+  representative mismatch-`0` pair-cell shell now that the latest
+  reconstructive control still keeps the promoted surface on one
+  zero-admitted `((0, None, None), 2265)` family with no cached bound and only
+  structurally connected but unqualified `NeedsFallback` terminal
+  continuations
 - another whole joint clause-`3` continuation reopen under that same
   representative clause-`6` `reference` shell
 - another representative claim-flat parent/child-shell completion pass that

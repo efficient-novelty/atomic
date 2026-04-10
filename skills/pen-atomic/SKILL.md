@@ -424,8 +424,11 @@ Focus on:
 - treat the deeper representative mismatch-`0` claim-side clause-`6`
   `reference` union as live autonomy detail too; if the live docs already pin
   that cross-sheet union at the same `4355 / 551 / 2265` pair-cell shell with
-  `small_cluster = 3150 / 522 / 522 / 0`, route there instead of reopening a
-  claim-side union as if it were a fresh repair class
+  `small_cluster = 3150 / 522 / 522 / 0`, plus the same zero-admitted
+  `((0, None, None), 2265)` remaining-one family with no cached bound and only
+  structurally connected but unqualified `NeedsFallback` terminals, route
+  there instead of reopening a claim-side union as if it were a fresh repair
+  class
 - treat the representative `claim_flat_domain` clause-`2` sheet's marginally
   best clause-`6` `reference` continuation's clause-`3` split as live
   autonomy detail too; the `claim_flat_argument` and
@@ -549,9 +552,11 @@ Focus on:
   reland; with both claim-side sheets now frozen through their deeper
   completion and first finer reason passes, and with the deeper
   clause-`6` `reference` union now also pinned as a reconstructive control,
-  route to the live docs before spending another turn below the
-  representative mismatch-`0` pair unless a later broader-backup comparison
-  explicitly promotes a new branch
+  and with that union now shown to stay inside the same zero-admitted
+  remaining-one dead surface as the pair-cell tradeoff, route to the live
+  docs before spending another turn below the representative mismatch-`0`
+  pair unless a later broader-backup comparison explicitly promotes a new
+  branch
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward

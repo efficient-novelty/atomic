@@ -748,3 +748,20 @@ This file is the append-only history for `desktop_claim_shadow`.
   relands the existing `4355 / 551 / 2265` pair-cell smaller tradeoff rather
   than isolating a safer repair, so the next slice should stay above another
   claim-side union reassembly inside that same exact-summary ladder.
+- Scope: determine whether that reconstructive representative mismatch-`0`
+  claim-side clause-`6` `reference` union actually opens any new
+  bound-carrying or live remaining-one surface beyond the older pair-cell
+  tradeoff.
+  Result: under the union override, the promoted exact-prune family summary
+  stays exactly `captured_prefixes = 2265`, `cached_bound_count = 0`, and
+  family counts `((0, None, None), 2265)`, while the promoted
+  terminal-connectivity summary stays exactly `generated = 6795`,
+  `NeedsFallback = 6795`, `KeepWithoutFallback = 0`, and
+  `structurally_connected_but_unqualified = 6795`. Those summaries match the
+  older representative pair-cell `4355 / 551 / 2265` tradeoff exactly.
+  Consequence: the representative claim-side clause-`6` `reference` union is
+  now closed not just as a reconstructive tradeoff control, but as proof that
+  the current mismatch-`0` exact-summary ladder remains trapped inside the
+  same zero-admitted remaining-one dead surface. The next repair has to move
+  above that remaining-one lattice rather than another deeper reland inside
+  it.
