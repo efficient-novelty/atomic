@@ -171,6 +171,11 @@ Do not:
   `claim_sharp_codomain`, and `reference` continuations are now matching
   smaller tradeoff controls too, so that axis also belongs to the autonomy
   ledger rather than as a fresh lead
+- reopen the deeper representative mismatch-`0` claim-side clause-`6`
+  `reference` union first either; if the live docs already pin that
+  cross-sheet union at the same `4355 / 551 / 2265` smaller pair-cell
+  tradeoff with `small_cluster = 3150 / 522 / 522 / 0`, that union also
+  belongs to the autonomy ledger rather than as a fresh lead
 - reopen the representative `claim_flat_domain` clause-`2` sheet's
   marginally best clause-`6` `reference` continuation through either
   individual clause-`3` `claim_flat_argument` or `claim_eventual_argument`
@@ -248,9 +253,11 @@ Do not:
   rather than as a fresh lead
 - keep the next slice above another representative mismatch-`0` claim-side
   dead-shell reland too; once both representative claim-side sheets are
-  frozen through their deeper completion and first finer reason passes, route
-  to the live autonomy docs for the post-local-probe fallback instead of
-  reopening either claim-side dead child again
+  frozen through their deeper completion and first finer reason passes, and
+  once the deeper claim-side clause-`6` `reference` union is also pinned as a
+  reconstructive control, route to the live autonomy docs for the
+  post-local-probe fallback instead of reopening either claim-side dead child
+  again
 - reopen the representative claim-safe mismatch-`1` clause-`4`
   `demo_sharp_codomain` or `demo_sharp_bridge` side on either exact
   claim-safe pair first; those `reference / claim_next_codomain` and

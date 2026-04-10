@@ -731,3 +731,20 @@ This file is the append-only history for `desktop_claim_shadow`.
   mismatch-`0` broader-backup shell while worsening the clean wall from
   `553` to `556`, so the next repair should stay above another isolated
   clause-`1` exact-suffix reland.
+- Scope: test whether reopening both representative mismatch-`0` claim-side
+  clause-`2` sheets together, but only beneath the marginally best
+  clause-`6` `reference` continuation on the active
+  `claim_next_bridge / claim_flat_codomain` cell, isolates a safer
+  step-`15` repair.
+  Result: that cross-sheet exact-summary override lands
+  `4355 / 551 / 2265` with `small_cluster = 3150 / 522 / 522 / 0`.
+  First-mismatch-`0` contracts from `312` to `310`, the representative
+  clause-`2` spread becomes `14 / 14 / 12`, the representative clause-`4`
+  split contracts from `24 / 18` to `22 / 18`, and the active clause-`4`
+  `claim_next_bridge` plus clause-`5` `claim_flat_codomain` bucket contracts
+  from `48` to `46`.
+  Consequence: the deeper representative claim-side clause-`6`
+  `reference` union is now also spent as a reconstructive control. It simply
+  relands the existing `4355 / 551 / 2265` pair-cell smaller tradeoff rather
+  than isolating a safer repair, so the next slice should stay above another
+  claim-side union reassembly inside that same exact-summary ladder.

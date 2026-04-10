@@ -723,6 +723,22 @@ Until that exists, wording stays at `bounded live recovery`.
   - consequence: the tighter representative mismatch-`0` claim-side broader
     backup is now exhausted below both representative claim-side sheets, not
     just beneath the earlier claim-flat shell
+- The cross-sheet claim-side union below the representative mismatch-`0`
+  `claim_next_bridge / claim_flat_codomain` cell's marginally best
+  clause-`6` `reference` continuation is now also exhausted as a
+  reconstructive control:
+  - reopening both representative claim-side clause-`2` sheets together,
+    across both clause-`3` branches, lands `4355 / 551 / 2265`
+  - it widens `small_cluster` to `3150 / 522 / 522 / 0`
+  - first-mismatch-`0` contracts from `312` to `310`
+  - the representative clause-`2` spread becomes `14 / 14 / 12`
+  - the representative clause-`4` split contracts from `24 / 18` to
+    `22 / 18`
+  - the active clause-`4` `claim_next_bridge` plus clause-`5`
+    `claim_flat_codomain` bucket contracts from `48` to `46`
+  - consequence: that deeper claim-side clause-`6` `reference` union merely
+    reconstructs the existing `4355 / 551 / 2265` pair-cell shell instead of
+    isolating a safer repair
 - The residual `3` `single`-bucket incumbent prunes remain fenced and are now
   secondary to the partial-prefix wall.
 
@@ -932,6 +948,10 @@ Until that exists, wording stays at `bounded live recovery`.
   union is the only clause-`6` `reference` tradeoff, the representative
   claim-flat clause-`6` `reference` shell is now historical frozen context
   rather than the active next slice.
+- Do not reassemble both representative claim-side clause-`2` sheets beneath
+  that marginally best clause-`6` `reference` continuation either; the
+  cross-sheet union now just relands the existing `4355 / 551 / 2265`
+  pair-cell smaller tradeoff with `small_cluster = 3150 / 522 / 522 / 0`.
 - Do not stop at that representative claim-flat joint clause-`3`
   parent/child shell either; its six child continuations are now all the same
   dead `3`-generated / `0`-admitted completion summary with no bound and no

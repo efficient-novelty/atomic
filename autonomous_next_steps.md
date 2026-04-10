@@ -20,7 +20,9 @@ step-`15` miss: use canonical `v13` as the stored baseline for the next
 code-side step-`15` repair search, while keeping the demoted claim-safe
 mismatch-`1` checkpoint, both representative mismatch-`0` dead-child
 checkpoints, the spent `reference / reference` tail, the isolated clause-`1`
-`demo_flat_codomain` exact-suffix side pocket, and the looser representative
+`demo_flat_codomain` exact-suffix side pocket, the reconstructive
+representative mismatch-`0` claim-side clause-`6` `reference` union under
+`claim_next_bridge / claim_flat_codomain`, and the looser representative
 claim-safe backup frozen as controls rather than fresh leads.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
@@ -86,6 +88,24 @@ later stored bundle changes the diagnosis.
 - The newer stored rerun has now done its job: it confirmed the step-`15`
   reset rather than changing the diagnosis enough to justify reopening step
   `1`.
+- The first fresh post-rerun code-side repair probe on the mismatch-`0`
+  exact-summary ladder is now also spent:
+  - reopening both representative claim-side clause-`2` sheets together, but
+    only beneath the marginally best clause-`6` `reference` continuation on
+    the active `claim_next_bridge / claim_flat_codomain` cell, lands
+    `4355 / 551 / 2265`
+  - it widens `small_cluster` to `3150 / 522 / 522 / 0`
+  - first-mismatch-`0` contracts from `312` to `310`
+  - the representative clause-`2` spread becomes `14 / 14 / 12`
+  - the representative clause-`4` split contracts from `24 / 18` to
+    `22 / 18`
+  - the active clause-`4` `claim_next_bridge` plus clause-`5`
+    `claim_flat_codomain` bucket contracts from `48` to `46`
+- Any remaining step-`15` leverage is therefore no longer on reassembling the
+  representative mismatch-`0` claim-side clause-`2` sheets beneath that
+  marginally best clause-`6` `reference` continuation either; that deeper
+  union just reconstructs the existing `4355 / 551 / 2265` pair-cell smaller
+  tradeoff rather than isolating a safer repair.
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -657,13 +677,18 @@ later stored bundle changes the diagnosis.
    repair above the exhausted controls:
    - keep the claim-safe mismatch-`1` clause-`5` wall, both representative
      mismatch-`0` dead shells, the spent `reference / reference` tail, the
-     isolated clause-`1` `demo_flat_codomain` exact-suffix side pocket, and
-     the looser representative claim-safe backup frozen as controls rather
-     than fresh leads
+     isolated clause-`1` `demo_flat_codomain` exact-suffix side pocket, the
+     reconstructive representative mismatch-`0` claim-side clause-`6`
+     `reference` union, and the looser representative claim-safe backup
+     frozen as controls rather than fresh leads
    - use the known mismatch-`0` claim-`next_bridge` exact-summary tradeoff
      ladder only as geometry for choosing a new repair class; do not simply
      reland the same whole-half, whole-cell, pair-cell, or representative
      dead-shell controls verbatim
+   - stay above another claim-side union reassembly inside the current
+     representative pair-cell exact-summary selector lattice; the next repair
+     class has to move beyond a deeper restatement of the same `4355 / 551`
+     smaller tradeoff
 5. Treat a new local or stored candidate as promotable only if all of the
    following stay true:
    - accepted step `15` winner stays canonical `103 / 8`
@@ -740,6 +765,7 @@ later stored bundle changes the diagnosis.
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_flat_joint_clause_three_shell_keeps_only_uniform_nonlive_open_band_terminal_choices`
 - `current_claim_step_fifteen_representative_mismatch_zero_claim_flat_dead_child_reason_progress_stays_uniformly_blocked_at_clause_two`
 - `current_claim_step_fifteen_representative_mismatch_zero_claim_flat_first_finer_reason_split_stays_uniform_below_the_dead_child_shell`
+- `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_side_clause_six_reference_union_relands_the_pair_cell_tradeoff`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_sharp_joint_clause_three_shell_stays_on_six_matched_dead_completion_summaries`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_below_the_representative_claim_sharp_joint_clause_three_shell_keeps_only_uniform_nonlive_open_band_terminal_choices`
 - `current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_dead_child_reason_progress_stays_uniformly_blocked_at_clause_two`
@@ -831,6 +857,11 @@ later stored bundle changes the diagnosis.
   `claim_flat_argument` or `claim_eventual_argument` branch under
   `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
   claim_next_bridge / claim_flat_codomain / reference`
+- another representative mismatch-`0` claim-side clause-`6` `reference`
+  union reland under `claim_eventual_domain / claim_next_codomain /
+  claim_next_bridge / claim_flat_codomain`; it now only reconstructs the
+  existing `4355 / 551 / 2265` pair-cell smaller tradeoff with
+  `small_cluster = 3150 / 522 / 522 / 0`
 - another whole joint clause-`3` continuation reopen under that same
   representative clause-`6` `reference` shell
 - another representative claim-flat parent/child-shell completion pass that
@@ -891,8 +922,9 @@ later stored bundle changes the diagnosis.
   breadth-only step-`15` miss
 - the next operational slice is a fresh code-side step-`15` repair attempt
   above the exhausted claim-safe, representative mismatch-`0`,
-  `reference / reference`, and isolated clause-`1` exact-suffix controls
-  rather than another rerun-ordering pass
+  `reference / reference`, isolated clause-`1` exact-suffix, and
+  representative claim-side clause-`6` `reference` union controls rather
+  than another rerun-ordering pass
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`
