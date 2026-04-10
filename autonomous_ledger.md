@@ -1219,3 +1219,53 @@ This file is the append-only history for `desktop_claim_shadow`.
   `24`-pruned-prefix delta as the already-spent alternate families, so the
   next honest repair has to move above it rather than re-running the same
   recombination on either active clause-`5` bucket.
+- Scope: test the next looser recombined parent-level qualification family
+  above that same remaining-one lattice by granting the targeted
+  representative mismatch-`0` claim-side parent shell historical-reanchor,
+  active-window, and self-contained qualification all at once.
+  Result: on both active clause-`5` families
+  `claim_flat_codomain / reference`, the full qualification triad still
+  qualifies the targeted claim-side parent shell while keeping lifted
+  terminals fenced, but the full step-`15` search surface again relands the
+  exact same unsafe shell as the already-spent active-window and
+  self-contained families:
+  - accepted step `15` again shifts to noncanonical `60 / 8`
+  - retained breadth again becomes `4427` with `retained = 2`
+  - partial-prefix bar failures again land at `545`
+  - incumbent-dominance again lands at `110`
+  - zero-admitted captures again land at `2247`
+  - the first-mismatch distribution again stays `304 / 177 / 50 / 14`
+  - `small_cluster` again relands as `2952 / 558 / 558 / 108`
+  - the isolated `single` bucket again reopens to `2` fully scored
+    non-winners plus `2` residual prunes at best overshoot `545 / 5278`
+  - the representative clause-`2` spread again stays `11 / 11 / 12`
+  - the representative clause-`4` split again stays `20 / 14`
+  - the active clause-`4` `claim_next_bridge` plus active clause-`5` bucket
+    again contracts to `44`
+  Consequence: exhausting historical-reanchor, active-window, and
+  self-contained together does not create a fresh parent-level repair class
+  either. The next honest repair therefore has to move above the full
+  parent-level qualification-family lattice rather than reopening another
+  recombination of the same three qualifiers.
+- Scope: localize that full parent-route plus active-window plus
+  self-contained qualification triad against the canonical baseline to see
+  whether it hides any off-target delta above the current remaining-one
+  lattice.
+  Result: both active clause-`5` full-triad probes are localized at the same
+  narrow delta shape:
+  - on the chosen active clause-`5` bucket, each probe removes exactly four
+    remaining-two exact-prune parent cells:
+    `claim_flat_domain / claim_sharp_codomain` crossed with clause-`4`
+    `claim_next_bridge / reference`
+  - each probe removes exactly `8` zero-admitted captures in total and
+    introduces none
+  - each probe removes exactly `24` remaining-one pruned prefixes in total
+    and introduces none
+  - no off-target exact-prune or pruned-prefix family appears under either
+    active clause-`5` full-triad probe
+  Consequence: the full qualification triad is exhausted at delta scope too.
+  It relands the same unsafe shell and the same targeted four-cell plus
+  `24`-pruned-prefix delta as every other spent parent-level qualification
+  family on this representative shell, so the next honest repair has to move
+  above the entire qualification-family lattice rather than retrying another
+  recombination on either active clause-`5` bucket.

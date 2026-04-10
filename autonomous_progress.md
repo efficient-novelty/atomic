@@ -1298,6 +1298,38 @@ Until that exists, wording stays at `bounded live recovery`.
   looser recombined family too, moving to the next looser recombined
   parent-level qualification family rather than reopening narrower
   clause-`3` / clause-`6` selectors.
+- The next looser recombined parent-level qualification family above that
+  same remaining-one lattice is now also spent across both active clause-`5`
+  families:
+  - a scoped representative mismatch-`0` claim-side historical-reanchor plus
+    active-window plus self-contained override still qualifies the targeted
+    claim-side parent shell on `claim_flat_codomain` and `reference` while
+    keeping lifted terminals fenced
+  - on either active clause-`5` family, that full qualification triad
+    relands the exact same unsafe shell as the already-spent active-window
+    and self-contained families:
+    noncanonical `60 / 8`, `retained = 2`, `generated = 4427`,
+    `partial_prefix_bar_failure = 545`, `incumbent_dominance = 110`,
+    zero-admitted captures `2247`, first-mismatch distribution
+    `304 / 177 / 50 / 14`, `small_cluster = 2952 / 558 / 558 / 108`, the same
+    reopened `single` bucket at best overshoot `545 / 5278`, the same
+    representative clause-`2` spread `11 / 11 / 12`, the same
+    representative clause-`4` split `20 / 14`, and the same chosen active
+    clause-`4` plus clause-`5` bucket at `44`
+- That full qualification triad is also localized at the same targeted delta
+  level:
+  - on the chosen active clause-`5` bucket, each probe removes the same four
+    remaining-two exact-prune parent cells
+  - it removes the same `8` zero-admitted captures and the same `24`
+    remaining-one pruned prefixes
+  - it introduces no off-target exact-prune or pruned-prefix family
+- Consequence: exhausting historical-reanchor, active-window, and
+  self-contained together does not create a fresh parent-level repair class
+  either. The full parent-level qualification-family lattice above the
+  current remaining-one shell is now spent, so the next honest follow-on has
+  to move to a different repair class above that lattice rather than trying
+  another recombination or reopening narrower clause-`3` / clause-`6`
+  selectors from the same exhausted shell.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

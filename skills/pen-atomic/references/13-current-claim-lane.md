@@ -264,6 +264,16 @@ Do not:
   bucket, and the same four targeted remaining-two parent cells plus their
   `24` matching remaining-one pruned prefixes, that looser recombined family
   also belongs to the autonomy ledger rather than as a fresh repair lead
+- reopen the full representative mismatch-`0` claim-side
+  historical-reanchor plus active-window plus self-contained qualification
+  triad first either; if the live docs already pin both active clause-`5`
+  `claim_flat_codomain / reference` probes at that same unsafe
+  `4427 / 545 / 2247` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 110`,
+  `small_cluster = 2952 / 558 / 558 / 108`, the same reopened `single`
+  bucket, and the same four targeted remaining-two parent cells plus their
+  `24` matching remaining-one pruned prefixes, that full qualification triad
+  also belongs to the autonomy ledger rather than as a fresh repair lead
 - reopen the representative claim-flat clause-`3` refinement inside that same
   mismatch-`0` claim-side parent-route family first either; if the live docs
   already pin both `claim_flat_argument / claim_eventual_argument` branches on
