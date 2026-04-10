@@ -259,7 +259,9 @@ For the claim lane, the most important fact is that
 
 Step-15 work depends especially on `connectivity.rs`, because the late blocker
 is no longer raw generation alone; it is qualifier and reanchor evidence on a
-connected temporal-shell surface.
+connected temporal-shell surface, and the current local bottleneck now sits on
+which parent-level qualification family can honestly reopen the live
+mismatch-`0` shell above an already exhausted remaining-one lattice.
 
 ## How The Claim Lane Differs From Guarded Search
 
@@ -427,6 +429,9 @@ Use tests as executable specs. Read these first:
   - `divergent_step_thirteen_acceptance_prefers_step_fourteen_viable_tied_candidate`
   - `current_claim_step_fifteen_exact_prunes_split_into_zero_admitted_families`
   - `current_claim_step_fifteen_zero_admitted_connectivity_surface_is_structurally_connected_but_unqualified`
+  - `current_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_stays_an_unsafe_negative_control`
+  - `current_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_on_reference_clause_five_stays_a_matched_unsafe_negative_control`
+  - `current_claim_step_fifteen_representative_mismatch_zero_claim_side_parent_route_delta_stays_inside_the_targeted_active_clause_five_bucket`
 - `tests/integration/atomic_bootstrap.rs`
   - CLI-level end-to-end assertions for step completion, claim compare output,
     certification output, and benchmark output
@@ -440,20 +445,29 @@ step-`11` to step-`15` tests in `engine.rs` before reading every helper.
 
 Given the current autonomy docs, the code hotspots are:
 
-- Step `13` widening and residual exact-screen loss
-  - start in `enumerate.rs` and `engine.rs`
-  - especially `EnumerationContext`, claim surface diagnostics, and
+- Step `15` exact partial-prefix wall and remaining-one summary behavior
+  - start in `engine.rs`, `prefix_memo.rs`, `bounds.rs`, and
     `discover_realistic_shadow_candidates(...)`
-- Step `15` qualifier and historical reanchor evidence
-  - start in `connectivity.rs`, `prefix_memo.rs`, and the
-    `materialize_terminal_prefix_group*` path
+  - especially `screen_prefix_for_frontier(...)`,
+    `exact_partial_prefix_bound_decision(...)`,
+    `exact_terminal_prefix_bound_decision(...)`, and
+    `claim_try_summary_prune_before_materialization(...)`
+- Step `15` parent-level qualification and historical-reanchor routing above
+  the exhausted representative mismatch-`0` remaining-one lattice
+  - start in `connectivity.rs` and the step-`15` late tests in `engine.rs`
+  - especially `HistoricalReanchorSummary`,
+    `allows_historical_reanchor(...)`, the representative mismatch-`0`
+    parent-route override helpers, and the matched unsafe parent-route tests
 - Stored parity and breadth signoff
   - start in `StepReport`, `run.json`, `compare_runs.py`, and
     `certify_claim_lane.py`
 
 Those are the relevant places for the current "full 15-step autonomous
-discovery" gap. Agda export, optional acceleration, and donor Haskell are not
-the first places to spend time.
+discovery" gap. The active follow-on is no longer step-`13` widening first or
+another deeper mismatch-`0` reland; it is the missing parent-level
+qualification family above the current remaining-one lattice. Agda export,
+optional acceleration, and donor Haskell are not the first places to spend
+time.
 
 ## What Not To Read First
 

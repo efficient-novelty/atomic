@@ -11,11 +11,11 @@ Reviewed inputs:
 - `docs/ARCHITECTURE.md`
 - `configs/desktop_claim_shadow_1h.toml`
 - `scripts/certify_claim_lane.py`
-- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12/claim_certificate.txt`
-- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12/claim-compare.txt`
-- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12/claim_benchmark.txt`
-- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12/reports/steps/step-15-summary.json`
-- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12/reports/steps/step-15-live.ndjson`
+- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13/claim_certificate.txt`
+- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13/claim-compare.txt`
+- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13/claim_benchmark.txt`
+- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13/reports/steps/step-15-summary.json`
+- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13/reports/steps/step-15-live.ndjson`
 - `crates/pen-search/src/engine.rs`
 - `crates/pen-search/src/prefix_memo.rs`
 - `crates/pen-type/src/admissibility.rs`
@@ -25,15 +25,15 @@ Reviewed inputs:
 
 The active `desktop_claim_shadow` blocker is no longer the old step-4 runtime
 kernel. The current honest blocker is a stored step-15 breadth miss on the
-canonical `v12` claim bundle.
+canonical `v13` claim bundle.
 
 The repo already has all of the following on
-`runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12`:
+`runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13`:
 
 - completion through step `15`
 - accepted-hash parity with the guarded baseline through step `15`
 - a ready compare report
-- a refreshed benchmark bundle across `v11` and `v12`
+- a refreshed benchmark bundle across `v11`, `v12`, and `v13`
 - a narrow, reproducible failing certificate
 
 What still fails is breadth:
@@ -55,13 +55,21 @@ So the present step-`15` miss is not primarily a connectivity miss, not a
 terminal-clause legality miss, and not a proof-close budgeting miss. It is a
 remaining-prefix exact-bound problem.
 
+At the current local-repair level, that exact-bound problem is no longer
+"anything under mismatch-`0`". The representative mismatch-`0`
+remaining-one exact-summary lattice is already exhausted, and the first
+parent-level historical-reanchor route on each active clause-`5`
+`claim_flat_codomain / reference` family is also exhausted as a matched unsafe
+negative control. The active bottleneck is now finding a different
+parent-level qualification family above that lattice.
+
 ## Canonical stored evidence
 
 ### Certification and compare state
 
 The canonical stored run is:
 
-- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12`
+- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13`
 
 The stored compare report says:
 
@@ -84,10 +92,11 @@ The stored certificate says:
   - early breadth at step `1`
   - late generated floor at step `15`
 
-The benchmark bundle shows the same outcome on both stored runs:
+The benchmark bundle shows the same breadth outcome on all recent stored runs:
 
 - `v11`: parity pass, early breadth fail, late breadth fail
 - `v12`: parity pass, early breadth fail, late breadth fail
+- `v13`: parity pass, early breadth fail, late breadth fail at `4387 ms`
 
 This is why the wording still stays at `bounded live recovery`.
 
@@ -140,6 +149,31 @@ The step-15 bucket surface is also already sharply localized:
 The single bucket is not a broad search mass problem. It is a tiny fenced
 residual pocket. The broad miss lives in the `small_cluster`-dominated partial
 prefix wall.
+
+### It is now above the exhausted representative mismatch-`0` lattice
+
+The current autonomy docs now pin two deeper facts that matter for the next
+repair:
+
+- the representative mismatch-`0` claim-side clause-`6` `reference` union is
+  spent and still stays on the same zero-admitted remaining-one family
+- the first parent-level claim-side historical-reanchor route on each active
+  clause-`5` `claim_flat_codomain / reference` family is also spent
+
+Those two parent-route probes are not fresh search leads:
+
+- each lands the same unsafe `4427 / 545 / 2247` surface
+- each displaces canonical acceptance to noncanonical `60 / 8`
+- each contracts `small_cluster` only by reopening the wrong survivor shape
+- each reopens the isolated `single` bucket
+- each is now localized to only four targeted claim-side remaining-two parent
+  cells plus their `24` corresponding remaining-one pruned prefixes on the
+  chosen active clause-`5` bucket, with no off-target families introduced
+
+So the current bottleneck is not another deeper reland inside that same
+remaining-one lattice, and not another claim-side parent-route identity pass.
+It is the missing parent-level qualification family above those already spent
+surfaces.
 
 ### Current live step-open anatomy
 
@@ -452,11 +486,41 @@ The clause-`4` reference remaining-three tail is already classified:
 That is why `autonomous_next_steps.md` explicitly says clause-`5` tail
 reopenings are not the next move.
 
+### Exhausted parent-route class
+
+The representative mismatch-`0` claim-side parent-route class is now frozen as
+an unsafe negative control across both active clause-`5` families:
+
+- `claim_flat_codomain` route:
+  - `4427 generated / 545 wall / 2247 zero-admitted captures`
+  - noncanonical accepted `60 / 8`
+  - `incumbent_dominance = 117`
+  - `small_cluster = 2931 / 455 / 455 / 115`
+  - reopened `single` bucket
+- `reference` route:
+  - the same `4427 / 545 / 2247` surface
+  - the same noncanonical `60 / 8`
+  - the same `incumbent_dominance = 117`
+  - the same `small_cluster = 2931 / 455 / 455 / 115`
+  - the same reopened `single` bucket
+
+And the new localization result matters:
+
+- each route only removes four targeted remaining-two parent cells:
+  `claim_flat_domain / claim_sharp_codomain` crossed with clause-`4`
+  `claim_next_bridge / reference`
+- each route removes exactly `8` zero-admitted captures and exactly `24`
+  remaining-one pruned prefixes on its chosen active clause-`5` bucket
+- neither route introduces any off-target capture or prune family
+
+That is why the next slice has to change qualification family rather than
+retrying route identity.
+
 ## Formal problem statement
 
 We need one narrow change in the live step-`15` claim exact-screen path that:
 
-- improves the clean stored step-`15` breadth miss on top of canonical `v12`
+- improves the clean stored step-`15` breadth miss on top of canonical `v13`
 - increases the honest generated surface beyond `4331`
 - narrows the clean partial-prefix wall below `553`
 - does not regress the accepted late path
@@ -474,6 +538,10 @@ More concretely, the next accepted repair must preserve all of these:
 - the best current canonical claim-open diagnosis still points at the
   mismatch-`0` claim-domain surface before the smaller claim-safe mismatch-`1`
   tier or the `reference/reference` tails
+- the active local repair stays above the exhausted representative
+  mismatch-`0` remaining-one lattice and above the matched unsafe
+  claim-side parent-route class, so it changes parent-level qualification
+  rather than relanding route identity
 
 And the next attempt must not "solve" the problem by any of the already ruled
 out moves:
@@ -495,7 +563,7 @@ The immediate slice succeeds if it produces a local step-`15` repair that:
 - keeps the isolated single pocket fenced
 - keeps the stronger-than-canonical lifted shell fenced
 - keeps `small_cluster` at or below `3132 / 522 / 522 / 0`
-- justifies a new clean stored rerun beyond `v12`
+- justifies a new clean stored rerun beyond `v13`
 
 The broader lane does not finish until all of these later gates also close:
 
@@ -546,9 +614,12 @@ So the next repair is not "make the claim lane faster" and not "make the claim
 lane broader somehow." It is:
 
 - remove or redirect the wrong exact partial-prefix bar failures on the
-  canonical `v12` step-`15` surface,
+  canonical `v13` step-`15` surface,
 - starting below the broad frozen mismatch-`1`
   `reference + demo_flat_codomain` ladder,
-- and most likely starting on the mismatch-`0` claim-domain tier,
+- above the exhausted representative mismatch-`0` remaining-one lattice and
+  above the matched unsafe claim-side parent-route class,
+- by changing the parent-level qualification family on the live mismatch-`0`
+  claim-domain tier rather than replaying route identity,
 - while preserving the current canonical winner and every existing safety
   fence.

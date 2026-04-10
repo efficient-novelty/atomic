@@ -17,8 +17,8 @@ Grounded in:
 - `crates/pen-search/src/prefix_memo.rs`
 - `crates/pen-type/src/admissibility.rs`
 - `crates/pen-cli/src/cmd_run.rs`
-- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12/reports/steps/step-15-summary.json`
-- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12/reports/steps/step-15-live.ndjson`
+- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13/reports/steps/step-15-summary.json`
+- `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13/reports/steps/step-15-live.ndjson`
 
 ## Current bottom line
 
@@ -39,6 +39,34 @@ specific:
 
 So the live wall is a late exact partial-prefix wall on the current canonical
 claim-generic temporal surface.
+
+The rerun-backed ordering is already closed on current-head code:
+
+- canonical stored bundle is now
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13`
+- `v11`, `v12`, and `v13` keep the same early breadth miss at
+  step `1 = 546 / 2144`
+- `v12` and `v13` keep the same late breadth miss at
+  step `15 = 4331 / 5000` with the same canonical
+  `553` / `3` / `3132` late surface
+- step `1` therefore stays explicit but deferred
+
+At local repair scope, the active bottleneck is now narrower than
+"some mismatch-zero claim-domain work":
+
+- deeper remaining-one exact-summary relands beneath the representative
+  mismatch-`0` pair cell are already exhausted
+- the first parent-level historical-reanchor route on each active clause-`5`
+  `claim_flat_codomain / reference` family is also exhausted as an unsafe
+  matched negative control on `4427 / 545 / 2247` with noncanonical `60 / 8`
+- that unsafe route class is now localized too: each route only removes the
+  four targeted claim-side remaining-two parent cells and their `24`
+  corresponding remaining-one pruned prefixes on the chosen active
+  clause-`5` bucket, with no off-target families introduced
+
+So the next code-side repair does not sit on another deeper remaining-one
+reland or another route-identity reland. It has to change the parent-level
+qualification family above the current remaining-one lattice.
 
 ## Current profile
 
@@ -464,6 +492,15 @@ What this means for the current step-15 wall:
 - the stored run currently ends with `553` of those prefixes proving
   `CannotClearBar`
 
+What this now means for the active next move:
+
+- the remaining-one lattice below the representative mismatch-`0` claim-side
+  shell is already spent
+- the first parent-level route class above that lattice is spent too
+- the live bottleneck is therefore a parent-level qualification problem, not a
+  missing deeper remaining-one child or a missing route-identity split inside
+  the same active clause-`5` buckets
+
 ## Remaining-one clause preparation pseudocode
 
 The claim lane already landed a meaningful optimization here:
@@ -721,7 +758,7 @@ fn materialize_terminal_prefix_group_compact(...):
     return MaterializedTerminalPrefixGroup(...)
 ```
 
-On the canonical `v12` step-15 run, this path only leads to one fully
+On the canonical `v13` step-15 run, this path only leads to one fully
 evaluated retained telescope.
 
 ## Post-materialization certification pseudocode
@@ -824,6 +861,14 @@ broad mismatch-zero demo-flat reopening
 exact remaining-two mismatch-one clause-5 bridge slice
   => 4511 generated / 571 wall / 2325 zero-admitted captures
   => widens small_cluster to 3276 / 546 / 546 / 0
+
+representative mismatch-zero claim-side parent-route on active clause-5
+claim_flat_codomain / reference families
+  => each lands unsafe 4427 generated / 545 wall / 2247 zero-admitted captures
+  => each displaces canonical acceptance to noncanonical 60/8
+  => each contracts only the targeted active clause-5 bucket to 44
+  => each removes only four targeted remaining-two parent cells plus 24
+     corresponding remaining-one pruned prefixes, with no off-target families
 ```
 
 So the next slice is not "try those again." The next slice must start below
@@ -863,7 +908,10 @@ Its active failure is no longer a step-4 runtime wall. It is a step-15 exact
 partial-prefix breadth wall on the canonical 4331 generated surface.
 
 The broad incumbent wall is already repaired. The residual single bucket is
-already fenced. The next live work therefore has to remove some of the 553
-partial-prefix bar failures without widening small_cluster, reopening the wrong
-tradeoff controls, or unfencing the unsafe 89/8 lifted shell.
+already fenced. The representative mismatch-zero remaining-one lattice and the
+first parent-route class above it are both now exhausted. The next live work
+therefore has to remove some of the 553 partial-prefix bar failures by finding
+a different parent-level qualification family, without widening small_cluster,
+reopening the wrong tradeoff controls, or unfencing the unsafe 89/8 lifted
+shell.
 ```
