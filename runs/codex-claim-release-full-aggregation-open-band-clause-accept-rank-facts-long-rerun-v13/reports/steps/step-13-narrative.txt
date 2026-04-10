@@ -1,0 +1,91 @@
+step 13 claim narrative
+label        Metric
+profile      claim-10h
+accepted     blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1 nu=46 kappa=7 overshoot=5893/10080
+time         [#...............] 1.8s / 55.0s (within limit)
+generated    [################] 2320 / 2200 generated (hit)
+exact_screen [#...............] 8 / 700 screened (miss)
+full_eval    [##..............] 8 / 70 evaluated (within limit)
+closure      [................] 0% frontier_total=8 certified_nonwinning=0
+phase_eval   materialize=0 proof_close=0 overrun=0 cap=none cap_triggered=false breadth_exit=none proof_close_reason=none overrun_reason=none
+proof_close  reserve=0ms elapsed=0ms remaining=0ms reserve_overrun=0ms exhausted=false groups_closed=0/0 groups_remaining=0 closure=0%
+timing       discovery=75ms frontier_plan=0ms selection=1.7s
+funnel       enumerated=774 well_formed=774 malformed=0 admissibility_rejected=0 scored=8 canonical=8 semantically_minimal=8
+demo_funnel  raw=2320 canonical_prefixes=970 hard_admissible=774 exact_pruned=0 heuristic_dropped=401 bar_clearers=8 semantically_minimal_clearers=8 winner_overshoot=5893/10080
+exact_reasons partial_prefix_bar=0 terminal_completion=0 incumbent_dominance=0 legality_connectivity=576
+prune_totals quotient_dedupe=0 sound_minimality=576 heuristic_shaping=401
+prefixes     created=970 explored=290 merged=369 exact_pruned=0 heuristic_dropped=401 hot=2 cold=2
+memo         legality_hits=2745 active_window_hits=0 terminal_completion_hits=1080 partial_bound_hits=65 terminal_rank_prunes=0
+demo_buckets k7:structural_generic:binder_heavy:library_backed:pair gen=2160 adm=1548 screen=1548 pruned=0 scored=8 best=5893/10080
+
+events
+  [step_open] opened step 13 with bar 8621/1440 and clause band 7..7
+    mode=desktop_claim_shadow exact_legality_rejections=0 structural_cap_rejections=0 admitted_focus_aligned=774 admitted_deprioritized=0
+  [surface_summary] generated 2320 structural candidates; 774 were well formed and 0 were rejected by admissibility
+    malformed=0 full_evaluated=8 canonical=8 semantically_minimal=8
+  [prefix_summary] prefix frontier created=970 explored=290 merged=369 exact_pruned=0 heuristic_dropped=401
+    hot_states=2 cold_states=2 frontier_window=4
+  [memo_summary] memo path hits: legality=2745 active_window=0 terminal_completion=1080 partial_bounds=65
+    connectivity_shortcuts=774 clause_family_prunes=0 terminal_rank_prunes=0 terminal_prefix_bar_prunes=0
+  [frontier_summary] retained 8 candidates with frontier hot=2 cold=2 dropped=0
+    pressure_state=green pressure_action=none resident_cold=0 spill_backed=0
+  [acceptance_summary seal] accepted blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1 with overshoot 5893/10080 (nu=46 kappa=7)
+    bar_clearers=8 near_misses=3 candidate_hash=blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1 canonical_hash=blake3:4eefcc446fb659c101cb538dcf4b06695c165d6e977e64ab7580a2451af0f5ae
+  [step_complete seal] completed step 13 in 1833 ms
+    discovery_ms=75 frontier_plan_ms=0 selection_ms=1757
+
+retained candidates
+  accepted blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1 rho=46/7 distance=5893/10080 frontier=hot headline=Axiomatic candidate with 7 clauses; reuses Step11 (Connections), Step12 (Curvature).
+  bar_clearer blake3:02ad9b71c2ee05d5cbb3e891297366265de0707898c9706777ad23f79153223b rho=46/7 distance=5893/10080 frontier=hot headline=Axiomatic candidate with 7 clauses; reuses Step11 (Connections), Step12 (Curvature).
+  bar_clearer blake3:74147239f6483cb0a03c261bc36ba180e0f78bf8ef5d30c17da6feec6cd36bbe rho=46/7 distance=5893/10080 frontier=hot headline=Axiomatic candidate with 7 clauses; reuses Step11 (Connections), Step12 (Curvature).
+  bar_clearer blake3:0e2ed318e749e0d64c4a32a237307ef0bd1add48725f1d689211e8905cf05807 rho=46/7 distance=5893/10080 frontier=hot headline=Axiomatic candidate with 7 clauses; reuses Step11 (Connections), Step12 (Curvature).
+  bar_clearer blake3:f95a20cc8c1319efcd7a3564dbe06af3ae62e0e009149d77c50055796ef2cc66 rho=46/7 distance=5893/10080 frontier=hot headline=Axiomatic candidate with 7 clauses; reuses Step11 (Connections), Step12 (Curvature).
+  bar_clearer blake3:4f13f7a571568f0279ce129ee3b8fef5bf0a178b8ab2232f20e9dd84b0d582a0 rho=46/7 distance=5893/10080 frontier=hot headline=Axiomatic candidate with 7 clauses; reuses Step11 (Connections), Step12 (Curvature).
+  bar_clearer blake3:055719abc7e1e686faa7f280799ff13a7907b2e927ffef21e7f03aab966155d0 rho=46/7 distance=5893/10080 frontier=hot headline=Axiomatic candidate with 7 clauses; reuses Step11 (Connections), Step12 (Curvature).
+  bar_clearer blake3:eb1e93a9495997b42a41f08713f20dfba5c34726c477544daf941c13ae06d292 rho=46/7 distance=5893/10080 frontier=hot headline=Axiomatic candidate with 7 clauses; reuses Step11 (Connections), Step12 (Curvature).
+
+prunes
+  totals quotient_dedupe=0 sound_minimality=576 heuristic_shaping=401
+  sampled: none
+
+accepted trace
+  source=structural-ast
+  nu_g=4
+  nu_h=0
+  nu_c=42
+  bonus_distributive=0
+  bonus_universe_poly=0
+  bonus_infinitesimal_shift=0
+  nu_total=46
+  node_trace_count=31
+  node=entry1|ctor=Sigma
+  node=entry1/0|ctor=Pi
+  node=entry1/0/0|ctor=Var
+  node=entry1/0/1|ctor=Var
+  node=entry1/1|ctor=Pi
+  node=entry1/1/0|ctor=Var
+  node=entry1/1/1|ctor=Var
+  node=entry2|ctor=Pi
+  node=entry2/0|ctor=Sigma
+  node=entry2/0/0|ctor=Var
+  node=entry2/0/1|ctor=Var
+  node=entry2/1|ctor=Lib
+  node=entry3|ctor=Pi
+  node=entry3/0|ctor=Var
+  node=entry3/1|ctor=Pi
+  node=entry3/1/0|ctor=Var
+  node=entry3/1/1|ctor=Var
+  node=entry4|ctor=Lam
+  node=entry4/0|ctor=App
+  node=entry4/0/0|ctor=Var
+  node=entry4/0/1|ctor=Var
+  node=entry5|ctor=Pi
+  node=entry5/0|ctor=Lib
+  node=entry5/1|ctor=Lib
+  node=entry6|ctor=Lam
+  node=entry6/0|ctor=Pi
+  node=entry6/0/0|ctor=Var
+  node=entry6/0/1|ctor=Var
+  node=entry7|ctor=Pi
+  node=entry7/0|ctor=Lib
+  node=entry7/1|ctor=Var

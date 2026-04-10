@@ -1,0 +1,62 @@
+Comparison Signoff: ready
+baseline: guarded
+lanes: guarded, claim
+trajectory: all 2 lanes match baseline guarded
+accepted hashes: all 2 lanes match baseline guarded
+search-space counts: mismatches detected in claim
+admissibility diagnostics: mismatches detected in claim
+late-step competition: mismatches detected in claim
+step15 claim boundary: consistent (executable_canon step 15 DCT nu=103 matches_accepted=true)
+workstream4 rollout: not_present
+claim lane audit: ready (claim)
+workstream4 parity set: not present
+workstream4 resume set: not present
+workstream4 pressure set: not present
+
+Lane guarded
+  run_id: codex-guarded-claim-cert-v1
+  search profile: strict_canon_guarded
+  mode: atomic_search_bootstrap
+  completed_step: 15
+  trajectory: matches baseline (2048cf11d10f42051dcc5e184af86b233b6d800066b678d494311ed5d217d53e)
+  accepted hashes: matches baseline
+  search-space counts: matches baseline
+  admissibility diagnostics: matches baseline
+  late-step competition: 10-15 eval=1 clears=1 below=0 retained=1 terminal_rank_prunes=0
+  provenance sequence: 01-15 atomic_bootstrap_search
+  replay ablation: 01-15 matches_reference_replay
+  prune classes: quotient_dedupe=0, sound_minimality=0, heuristic_shaping=0
+  frontier retention delta: total=18 latest=step 15 +1
+  governor sequence: 01-15 green/none (max_rss_bytes=1476395392)
+  latest frontier: step 15 band 8 epoch=12 hot=1 cold=0 dedupe=1 spill_generation=0 cache=green/none
+  step15 claim: executable_canon step 15 DCT nu=103 matches_accepted=true
+  demo phase latest: step 15 generated_floor=not_applicable exact_screened_floor=not_applicable soft_cap=not_applicable breadth_exit=none proof_close_reason=none overrun_reason=none overrun_full_evals=0 proof_close_closure=0% groups_closed=0/0 reserve=0/0ms reserve_remaining=0ms reserve_overrun=0ms reserve_exhausted=false
+  demo funnel latest: generated=1 hard_admissible=1 exact_screened=1 exact_pruned=0 full_eval=1 closure=0% winner_overshoot=115657/21112
+  demo buckets latest: none
+
+Lane claim
+  run_id: codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13
+  search profile: desktop_claim_shadow
+  mode: atomic_search_bootstrap
+  completed_step: 15
+  trajectory: matches baseline (2048cf11d10f42051dcc5e184af86b233b6d800066b678d494311ed5d217d53e)
+  accepted hashes: matches baseline
+  search-space counts: diverges at step 4, step 9, step 10, step 11, step 12, step 13, step 14, step 15
+  admissibility diagnostics: diverges at step 9, step 10, step 11, step 12, step 13, step 14, step 15
+  late-step competition: diverges at step 10, step 11, step 12, step 13, step 14, step 15
+  provenance sequence: 01-15 atomic_bootstrap_search
+  replay ablation: 01-15 matches_reference_replay
+  prune classes: quotient_dedupe=0, sound_minimality=23992, heuristic_shaping=779
+  frontier retention delta: total=353 latest=step 15 +1
+  governor sequence: 01-15 green/none (max_rss_bytes=1342188032)
+  latest frontier: step 15 band 8 epoch=12 hot=2 cold=2 dedupe=4 spill_generation=0 cache=green/none
+  step15 claim: executable_canon step 15 DCT nu=103 matches_accepted=true
+  demo phase latest: step 15 generated_floor=not_applicable exact_screened_floor=not_applicable soft_cap=not_applicable breadth_exit=none proof_close_reason=none overrun_reason=none overrun_full_evals=0 proof_close_closure=0% groups_closed=0/0 reserve=0/0ms reserve_remaining=0ms reserve_overrun=0ms reserve_exhausted=false
+  demo funnel latest: generated=4331 hard_admissible=261 exact_screened=554 exact_pruned=553 full_eval=1 closure=99% winner_overshoot=115657/21112
+  demo buckets latest: k8:structural_generic:temporal_operator:library_backed:small_cluster gen=3132 adm=522 screen=522 pruned=0 scored=0 best=none | k8:structural_generic:temporal_operator:library_backed:single gen=0 adm=0 screen=0 pruned=3 scored=1 best=115657/21112
+  narrative artifacts: complete (text=15/15, events=15/15)
+  claim audit: ready (none)
+  search policy: honest guidance_style=claim_debt_guided late_expansion_policy=claim_generic bucket_policy=structural_generic
+  exact-screen reasons: complete partial_prefix_bar_failure=2020, terminal_prefix_completion_failure=401, incumbent_dominance=6829, legality_connectivity_exact_rejection=14742
+  prune class coverage: complete quotient_dedupe=0, sound_minimality=23992, heuristic_shaping=779
+  fallback honesty: clear run_mode=atomic_search_bootstrap resume_steps=none reference_replay_steps=none

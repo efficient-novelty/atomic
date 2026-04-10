@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "run_id": "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13",
+  "step_index": 14,
+  "accepted_utc": "2026-04-10T05:57:25.3810315Z",
+  "compat": {
+    "ast_schema_hash": "blake3:fc9be9ae20ab7277941ba7c98fcb9b7b0a78f699e595d3268656144a3f0b21bf",
+    "type_rules_hash": "blake3:39c261a0e90bde0cfa2affee542db9a2519e4b8cd95c008e3fa0ed59cd38ac2e",
+    "evaluator_hash": "blake3:dc3ad0d7c757a4b498bd4cfc56446e05af84df38049161883ab8592b18df4792",
+    "search_semantics_hash": "blake3:f3572c8c8c9e01202de7df3840fda6eb4458c2f10104b509a36610d2f6dc80ea"
+  },
+  "objective": {
+    "bar": {
+      "num": 73138,
+      "den": 10951
+    },
+    "exact_clause_kappa": 9,
+    "bit_band": {
+      "min": 169,
+      "max": 169
+    }
+  },
+  "accepted": {
+    "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+    "canonical_hash": "blake3:435eaca75694e1e58b26739b2f6d8c5d77cc0c601c2681e63ced81692f25c67d",
+    "bit_kappa": 169,
+    "clause_kappa": 9,
+    "nu": 62,
+    "rho": {
+      "num": 62,
+      "den": 9
+    },
+    "overshoot": {
+      "num": 20720,
+      "den": 98559
+    },
+    "shape_fingerprint": "0x6898fb76d0020431",
+    "support_fingerprint": "0xb8c7a5b2f5e174ac"
+  },
+  "library_snapshot": {
+    "window_depth": 2,
+    "entries": [
+      {
+        "step": 12,
+        "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 11
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 11
+                    },
+                    {
+                      "Var": 1
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Lib": 11
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Lib": 11
+                  },
+                  {
+                    "App": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 11
+                  },
+                  {
+                    "Lib": 11
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "step": 13,
+        "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  },
+                  {
+                    "Lib": 11
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Lib": 12
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 1
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "near_misses": [
+    {
+      "candidate_hash": "blake3:c931e47ea35346f3bcdd024559dc01eac40269d178cc3bdc08d37fda9acef4f4",
+      "canonical_hash": "blake3:6db248f4e94ceb4fc6602f49fd65db9daba8f0d20359fe4acb99dceb5866dcc6",
+      "bit_kappa": 176,
+      "clause_kappa": 9,
+      "nu": 62,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:59cc70259c389dcaa7f6214532bd3835d77765facce2ff95e2c9d7d6f9db73e0",
+      "canonical_hash": "blake3:c1f3dd6d892c89363fbc64f57a5b1346e5905f3985798cbdc803fe1a4ab5da1a",
+      "bit_kappa": 183,
+      "clause_kappa": 9,
+      "nu": 62,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:a9b69ac34eee5dfc809b6db3e6831435d5b85c1328da5aa060dec6daaddaed5d",
+      "canonical_hash": "blake3:a3a7965d26201d034297a9f97d459372493029bb4b408f334b12df8bb889c68f",
+      "bit_kappa": 176,
+      "clause_kappa": 9,
+      "nu": 62,
+      "status": "bar_clear_higher_overshoot"
+    }
+  ],
+  "stats": {
+    "frontier_scanned": 1821,
+    "typed_prefixes": 4,
+    "sound_prunes": 1458,
+    "heuristic_drops": 2
+  }
+}

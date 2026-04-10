@@ -15,32 +15,40 @@ This file owns the single active work order for `desktop_claim_shadow`.
 
 ## Objective
 
-Keep the active work order on the now-settled post-local-probe fallback:
-launch a rerun-backed step-`15` reset on code newer than canonical `v12`
-before reopening step `1`, while keeping the demoted claim-safe mismatch-`1`
-checkpoint, both representative mismatch-`0` dead-child checkpoints, the
-spent `reference / reference` tail, and the looser representative claim-safe
-backup frozen as controls rather than fresh leads.
+Keep the active work order on the rerun-confirmed post-local-probe
+step-`15` miss: use canonical `v13` as the stored baseline for the next
+code-side step-`15` repair search, while keeping the demoted claim-safe
+mismatch-`1` checkpoint, both representative mismatch-`0` dead-child
+checkpoints, the spent `reference / reference` tail, and the looser
+representative claim-safe backup frozen as controls rather than fresh leads.
 
-Do not spend another turn re-deciding the fallback from the same stored
-evidence. Use the stored `v11` / `v12` comparison only to justify the
-rerun-first ordering; keep step `1` deferred unless that newer rerun changes
-the diagnosis.
+Do not spend another turn re-running the rerun-vs-step-`1` decision on the
+same code. The newer stored rerun has already shown that current-head code
+reproduces the same breadth-only miss, so step `1` stays deferred unless a
+later stored bundle changes the diagnosis.
 
 ## Start From
 
 - Canonical stored bundle:
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12`
-- Earlier stored comparison point:
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v11`
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13`
+- Earlier stored comparison points:
+  - `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12`
+  - `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v11`
 - Stored breadth blockers:
   - step `1 = 546 / 2144`
   - step `15 = 4331 / 5000`
 - Stored cross-rerun step-`1` stability:
   - `v11 = 546 / 2144`
   - `v12 = 546 / 2144`
-  - both keep step-`01` at `generated = 546`, `well_formed = 288`,
+  - `v13 = 546 / 2144`
+  - all three keep step-`01` at `generated = 546`, `well_formed = 288`,
     `admitted = 1`, `legality_connectivity_exact_rejection = 435`
+- Stored cross-rerun step-`15` stability on the newer codebase:
+  - `v12 = 4331 / 5000`
+  - `v13 = 4331 / 5000`
+  - both keep step-`15` at `generated = 4331`,
+    `partial_prefix_bar_failure = 553`, `incumbent_dominance = 3`, and
+    `small_cluster generated = 3132`
 - Current clean late chain:
   - step `13 = [5,1,3,3,5,3,2] / 1350 / 2320`
   - step `14 = 62 / 9 / 12027`
@@ -56,21 +64,27 @@ the diagnosis.
     `incumbent_dominance = 242`, `small_cluster generated = 2190`
   - `v12`: `generated = 4331`, `partial_prefix_bar_failure = 553`,
     `incumbent_dominance = 3`, `small_cluster generated = 3132`
+  - `v13`: `generated = 4331`, `partial_prefix_bar_failure = 553`,
+    `incumbent_dominance = 3`, `small_cluster generated = 3132`
 
 ## Active Hypothesis
 
-- The first honest follow-on is now settled as a rerun-backed step-`15`
-  reset rather than a step-`1`-first reopening:
-  - both stored reruns keep the same step-`1` fail at `546 / 2144` with the
-    same step-`01` surface
-  - the stored late surface moved materially from `v11` to `v12` under the
-    same claim policy, accepted parity, and runtime pass
-  - the stored canonical bundle therefore lags the finished local-probe stack
-    rather than the other way around
-- A newer stored rerun on the current post-probe codebase is therefore the
-  first honest evidence surface that can either confirm the step-`15` reset
-  or change the diagnosis enough to justify reopening step `1`; step `1`
-  remains secondary until that rerun says otherwise.
+- The rerun-backed step-`15` reset is now confirmed on the current
+  post-probe codebase:
+  - `v11`, `v12`, and `v13` keep the same step-`1` fail at `546 / 2144`
+    with the same step-`01` surface
+  - `v12` and `v13` also keep the same step-`15` fail at `4331 / 5000`
+    with the same canonical `553` / `3` / `3132` late surface
+  - `v13` keeps accepted parity, claim policy honesty, narrative coverage,
+    compare readiness, benchmark freshness, and runtime-threshold pass on the
+    newer build commit
+- The rerun-vs-step-`1` ordering is therefore closed on current-head code:
+  step `15` remains the active stored miss, step `1` remains secondary, and
+  another same-code rerun or fallback-decision pass would add no new
+  evidence.
+- The newer stored rerun has now done its job: it confirmed the step-`15`
+  reset rather than changing the diagnosis enough to justify reopening step
+  `1`.
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -592,40 +606,41 @@ the diagnosis.
 
 ## Do This Next
 
-1. Start from the stored `v11` and `v12` certificate, compare, benchmark,
-   `run.json`, `step-01-summary.json`, and canonical `v12`
-   `step-15-summary.json` plus `step-15-live.ndjson`.
-2. Treat the fallback ordering as settled from stored evidence:
-   - both stored reruns keep step `1` fixed at `546 / 2144` with the same
-     step-`01` surface
-   - the late stored surface moved materially from `v11` to `v12` while
-     parity, runtime threshold, and claim search policy stayed green
-   - consequence: the first honest follow-on is a rerun-backed step-`15`
-     reset on the newer post-probe codebase, not a step-`1`-first theory
-     slice
-3. Keep the exhausted local backups demoted while preparing that rerun:
-   - do not reopen the claim-safe mismatch-`1` clause-`5` wall, either
-     representative mismatch-`0` dead shell, or the spent
-     `reference / reference` tail
-   - keep the tighter representative mismatch-`0` claim-side shell ahead of
-     the looser representative claim-safe shell until newer stored evidence
-     says otherwise
-4. Spend the next execution turn on one clean `desktop_claim_shadow` rerun
-   beyond `v12` on the newer post-probe codebase:
-   - refresh compare, benchmark, and certification as soon as that run
-     completes
-   - use that newer stored bundle to decide whether the step-`15` reset
-     sticks or whether step `1` becomes the first honest reopening
-5. Keep step `1` explicit but deferred:
-   - do not promote a step-`1` theory slice before the newer rerun
-   - only reopen step `1` if that rerun changes the diagnosis rather than
-     simply re-confirming step `15` as the active miss
-6. Treat a new stored bundle as promotable only if all of the following stay
-   true:
+1. Start from canonical `v13`:
+   - use its certificate, compare, benchmark, `run.json`,
+     `step-01-summary.json`, `step-15-summary.json`, and
+     `step-15-live.ndjson`
+   - use `v11` and `v12` only as earlier comparison points rather than as the
+     current baseline
+2. Treat rerun-vs-step-`1` ordering as closed on the current head:
+   - `v13` reproduced the `v12` step-`1` and step-`15` breadth misses on
+     newer code
+   - compare, benchmark, and certification were refreshed and stayed honest
+   - consequence: do not spend another turn on another same-code rerun or
+     another fallback-decision restatement
+3. Keep step `1` explicit but deferred:
+   - do not promote a step-`1` theory slice while canonical `v13`
+     still re-confirms step `15` as the active stored miss
+   - only reopen step `1` if a later stored bundle changes the diagnosis
+     rather than reproducing `4331 / 553` again
+4. Spend the next execution turn on the first fresh code-side step-`15`
+   repair above the exhausted controls:
+   - keep the claim-safe mismatch-`1` clause-`5` wall, both representative
+     mismatch-`0` dead shells, the spent `reference / reference` tail, and
+     the looser representative claim-safe backup frozen as controls rather
+     than fresh leads
+   - use the known mismatch-`0` claim-`next_bridge` exact-summary tradeoff
+     ladder only as geometry for choosing a new repair class; do not simply
+     reland the same whole-half, whole-cell, pair-cell, or representative
+     dead-shell controls verbatim
+5. Treat a new local or stored candidate as promotable only if all of the
+   following stay true:
    - accepted step `15` winner stays canonical `103 / 8`
    - the isolated `single` pocket stays fenced
    - `small_cluster` is no worse than `3132 / 522 / 522 / 0`
    - stronger-than-canonical lifted `89 / 8` terminals stay fenced
+   - and the surfaced result improves beyond `4331` generated or `553`
+     partial-prefix bar failures without worsening step `1`
 
 ## Keep Green
 
@@ -707,7 +722,8 @@ the diagnosis.
 ## Not The Next Move
 
 - another stored-evidence-only fallback-decision pass instead of the
-  rerun-backed step-`15` reset
+  rerun-backed step-`15` reset, or another same-code rerun-backed step-`15`
+  reset now that canonical `v13` already closed that ordering
 - a step-`1`-first theory slice
 - clause-`5` `reference` / `claim_flat_codomain` / `claim_next_codomain`
   tail reopenings
@@ -831,12 +847,12 @@ the diagnosis.
 
 ## Success For This Slice
 
-- stored `v11` / `v12` evidence settles the post-local-probe fallback in
-  favor of a rerun-backed step-`15` reset
-- both stored reruns keep step `1` fixed at `546 / 2144`, so step `1` stays
-  explicit but deferred
-- the canonical accepted path stays fixed through step `15`
-- the isolated `single` pocket and unsafe lifted shell both stay fenced in
-  the stored diagnosis
-- the next operational slice is a clean rerun beyond `v12` on the newer
-  post-probe codebase rather than another local dead-shell retry
+- canonical `v13` stands as the newer stored baseline on current-head code
+- step `1` stays explicit but deferred because `v13` re-confirms the same
+  breadth-only step-`15` miss
+- the next operational slice is a fresh code-side step-`15` repair attempt
+  above the exhausted claim-safe, representative mismatch-`0`, and
+  `reference / reference` controls rather than another rerun-ordering pass
+- any new surface is judged against the unchanged fences:
+  canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
+  `small_cluster <= 3132 / 522 / 522 / 0`

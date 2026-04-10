@@ -29,21 +29,28 @@ Until that exists, wording stays at `bounded live recovery`.
 ## Canonical Baseline
 
 - Canonical stored bundle:
-  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12`
+  `runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13`
 - Stored compare is ready.
-- Stored benchmark is refreshed across `v11` and `v12`.
-- Stored `v11` and `v12` keep the same early breadth miss:
-  - step `1 = 546 / 2144` on both runs
-  - both keep the same step-`01` surface:
+- Stored benchmark is refreshed across `v11`, `v12`, and `v13`.
+- Stored `v11`, `v12`, and `v13` keep the same early breadth miss:
+  - step `1 = 546 / 2144` on all three runs
+  - all three keep the same step-`01` surface:
     `generated = 546`, `well_formed = 288`, `admitted = 1`,
     `legality_connectivity_exact_rejection = 435`
+- Stored `v12` and `v13` also keep the same late breadth miss:
+  - step `15 = 4331 / 5000`
+  - both keep step-`15` at `generated = 4331`,
+    `partial_prefix_bar_failure = 553`, `incumbent_dominance = 3`, and
+    `small_cluster generated = 3132`
 - Accepted-hash parity is earned through step `15`.
+- Refreshed benchmark keeps all three stored reruns under the runtime
+  threshold, with `v13` at `4387 ms`.
 - Stored certification still fails only on breadth:
   - step `1 = 546 / 2144`
   - step `15 = 4331 / 5000`
-- The stored canonical bundle still lags the finished local-probe stack, so
-  the next honest follow-on has to refresh stored evidence on newer code
-  before a step-`1` theory reopening.
+- The canonical stored bundle is now on the newer post-probe codebase, and it
+  re-confirms step `15` as the active stored miss rather than reopening
+  step `1`.
 
 ## Current Late Surface
 
@@ -69,18 +76,21 @@ Until that exists, wording stays at `bounded live recovery`.
 - The old broad `small_cluster` incumbent wall is no longer the primary
   blocker. The dominant live miss is the clean step-`15` partial-prefix wall
   on the canonical `4331` surface.
-- The first post-local-probe fallback decision is now settled in favor of a
-  rerun-backed step-`15` reset rather than a step-`1`-first reopening:
-  - `v11` and `v12` keep the same step-`1` fail and the same step-`01`
-    surface
-  - the late stored surface moved materially from `v11` to `v12` while
-    parity, runtime threshold, and claim search policy stayed green:
-    `generated = 3972 -> 4331`,
-    `partial_prefix_bar_failure = 468 -> 553`,
-    `incumbent_dominance = 242 -> 3`, and
-    `small_cluster generated = 2190 -> 3132`
-  - consequence: refresh stored step-`15` evidence on the newer post-probe
-    codebase before reopening step `1`
+- The rerun-backed step-`15` reset is now confirmed on the newer codebase:
+  - `v11`, `v12`, and `v13` keep the same step-`1` fail and the same
+    step-`01` surface
+  - `v12` and `v13` also keep the same late stored surface on different build
+    commits:
+    `generated = 4331`,
+    `partial_prefix_bar_failure = 553`,
+    `incumbent_dominance = 3`, and
+    `small_cluster generated = 3132`
+  - `v13` keeps accepted parity, claim search policy honesty, narrative
+    coverage, compare readiness, benchmark freshness, and runtime-threshold
+    pass on the current head
+  - consequence: canonical `v13` keeps step `15` as the active stored miss,
+    and step `1` stays deferred until a later stored bundle changes the
+    diagnosis
 - The dominant remaining-two live surface is already executable:
   - exact clause-`0` / clause-`1` pairings are frozen by
     `current_claim_step_fifteen_remaining_two_partial_prefix_wall_stays_on_nine_clause_zero_one_pairings`
@@ -687,8 +697,12 @@ Until that exists, wording stays at `bounded live recovery`.
 ## Current Operating Position
 
 - Keep wording at `bounded live recovery`.
-- Keep step `1` explicit, but do not reopen it first unless a newer stored
-  rerun changes the diagnosis.
+- Treat canonical `v13` as the stored baseline on newer code; do not spend
+  another turn on the rerun-vs-step-`1` ordering pass.
+- Keep step `1` explicit, but do not reopen it first; `v13` reconfirmed the
+  same step-`1` and step-`15` misses on newer code, so another step-`15`
+  repair stays ahead of step `1` unless a later stored bundle changes the
+  diagnosis.
 - When working outside the exhausted mismatch-`1`
   `reference + demo_flat_codomain` ladder, treat both the smaller claim-safe
   mismatch-`1` tier and the promoted representative mismatch-`0`

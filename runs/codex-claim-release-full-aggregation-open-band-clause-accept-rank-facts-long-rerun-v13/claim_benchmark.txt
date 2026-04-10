@@ -1,0 +1,13 @@
+Claim Benchmark Summary
+guarded run: C:\DEV\atomic\runs\codex-guarded-claim-cert-v1
+claim run count: 3
+runtime ms: min=3965 median=3976 p90=4387 max=4387
+completed step-15 count: 3
+parity success count: 3
+full early breadth hit count: 0
+full late floor hit count: 0
+runtime threshold pass count: 3
+per-run details:
+  - C:\DEV\atomic\runs\codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v11: completed_step=15 runtime_ms=3965 parity=pass early=fail late=fail manifest=pass
+  - C:\DEV\atomic\runs\codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v12: completed_step=15 runtime_ms=3976 parity=pass early=fail late=fail manifest=pass
+  - C:\DEV\atomic\runs\codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13: completed_step=15 runtime_ms=4387 parity=pass early=fail late=fail manifest=pass

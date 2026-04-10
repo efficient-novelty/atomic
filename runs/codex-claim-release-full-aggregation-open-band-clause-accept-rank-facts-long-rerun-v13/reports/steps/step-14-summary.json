@@ -1,0 +1,856 @@
+{
+  "step_index": 14,
+  "label": "Hilbert",
+  "search_profile": "desktop_claim_shadow",
+  "objective_bar": {
+    "num": 73138,
+    "den": 10951
+  },
+  "accepted": {
+    "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+    "canonical_hash": "blake3:435eaca75694e1e58b26739b2f6d8c5d77cc0c601c2681e63ced81692f25c67d",
+    "bit_kappa": 169,
+    "clause_kappa": 9,
+    "nu": 62,
+    "rho": {
+      "num": 62,
+      "den": 9
+    },
+    "overshoot": {
+      "num": 20720,
+      "den": 98559
+    },
+    "shape_fingerprint": "0x6898fb76d0020431",
+    "support_fingerprint": "0xb8c7a5b2f5e174ac"
+  },
+  "telescope": {
+    "clauses": [
+      {
+        "role": "formation",
+        "expr": {
+          "Sigma": [
+            {
+              "Pi": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    "Univ"
+                  ]
+                }
+              ]
+            },
+            {
+              "Var": 1
+            }
+          ]
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Var": 1
+            },
+            {
+              "Var": 1
+            }
+          ]
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Var": 1
+            },
+            {
+              "Sigma": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Var": 1
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Lam": {
+                "Var": 1
+              }
+            },
+            {
+              "Sigma": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Sigma": [
+            {
+              "Pi": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Var": 1
+                }
+              ]
+            },
+            {
+              "Pi": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Var": 1
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Lib": 13
+            },
+            {
+              "Var": 1
+            }
+          ]
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Lib": 12
+            },
+            {
+              "Var": 1
+            }
+          ]
+        }
+      },
+      {
+        "role": "formation",
+        "expr": {
+          "Pi": [
+            {
+              "Lib": 11
+            },
+            {
+              "Var": 1
+            }
+          ]
+        }
+      },
+      {
+        "role": "introduction",
+        "expr": {
+          "Lam": {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              "Univ"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "trace": [
+    "source=structural-ast",
+    "nu_g=5",
+    "nu_h=0",
+    "nu_c=57",
+    "bonus_distributive=0",
+    "bonus_universe_poly=0",
+    "bonus_infinitesimal_shift=0",
+    "nu_total=62",
+    "node_trace_count=41",
+    "node=entry1|ctor=Sigma",
+    "node=entry1/0|ctor=Pi",
+    "node=entry1/0/0|ctor=Var",
+    "node=entry1/0/1|ctor=Pi",
+    "node=entry1/0/1/0|ctor=Var",
+    "node=entry1/0/1/1|ctor=Univ",
+    "node=entry1/1|ctor=Var",
+    "node=entry2|ctor=Pi",
+    "node=entry2/0|ctor=Var",
+    "node=entry2/1|ctor=Var",
+    "node=entry3|ctor=Pi",
+    "node=entry3/0|ctor=Var",
+    "node=entry3/1|ctor=Sigma",
+    "node=entry3/1/0|ctor=Var",
+    "node=entry3/1/1|ctor=Var",
+    "node=entry4|ctor=Pi",
+    "node=entry4/0|ctor=Lam",
+    "node=entry4/0/0|ctor=Var",
+    "node=entry4/1|ctor=Sigma",
+    "node=entry4/1/0|ctor=Var",
+    "node=entry4/1/1|ctor=Var",
+    "node=entry5|ctor=Sigma",
+    "node=entry5/0|ctor=Pi",
+    "node=entry5/0/0|ctor=Var",
+    "node=entry5/0/1|ctor=Var",
+    "node=entry5/1|ctor=Pi",
+    "node=entry5/1/0|ctor=Var",
+    "node=entry5/1/1|ctor=Var",
+    "node=entry6|ctor=Pi",
+    "node=entry6/0|ctor=Lib",
+    "node=entry6/1|ctor=Var",
+    "node=entry7|ctor=Pi",
+    "node=entry7/0|ctor=Lib",
+    "node=entry7/1|ctor=Var",
+    "node=entry8|ctor=Pi",
+    "node=entry8/0|ctor=Lib",
+    "node=entry8/1|ctor=Var",
+    "node=entry9|ctor=Lam",
+    "node=entry9/0|ctor=Pi",
+    "node=entry9/0/0|ctor=Var",
+    "node=entry9/0/1|ctor=Univ"
+  ],
+  "near_misses": [
+    {
+      "candidate_hash": "blake3:c931e47ea35346f3bcdd024559dc01eac40269d178cc3bdc08d37fda9acef4f4",
+      "canonical_hash": "blake3:6db248f4e94ceb4fc6602f49fd65db9daba8f0d20359fe4acb99dceb5866dcc6",
+      "bit_kappa": 176,
+      "clause_kappa": 9,
+      "nu": 62,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:59cc70259c389dcaa7f6214532bd3835d77765facce2ff95e2c9d7d6f9db73e0",
+      "canonical_hash": "blake3:c1f3dd6d892c89363fbc64f57a5b1346e5905f3985798cbdc803fe1a4ab5da1a",
+      "bit_kappa": 183,
+      "clause_kappa": 9,
+      "nu": 62,
+      "status": "bar_clear_higher_overshoot"
+    },
+    {
+      "candidate_hash": "blake3:a9b69ac34eee5dfc809b6db3e6831435d5b85c1328da5aa060dec6daaddaed5d",
+      "canonical_hash": "blake3:a3a7965d26201d034297a9f97d459372493029bb4b408f334b12df8bb889c68f",
+      "bit_kappa": 176,
+      "clause_kappa": 9,
+      "nu": 62,
+      "status": "bar_clear_higher_overshoot"
+    }
+  ],
+  "search_stats": {
+    "enumerated_candidates": 6561,
+    "well_formed_candidates": 6561,
+    "malformed_rejections": 0,
+    "malformed_rejection_reasons": {},
+    "admissibility_rejections": 0,
+    "admissibility_diagnostics": {
+      "exact_legality_rejections": 0,
+      "structural_debt_cap_rejections": 0,
+      "admitted_deprioritized": 0,
+      "admitted_focus_aligned": 6561,
+      "reason_counts": {
+        "open_band_structural": 6561
+      }
+    },
+    "full_telescopes_evaluated": 4,
+    "evaluated_candidates": 4,
+    "canonical_candidates": 4,
+    "semantically_minimal_candidates": 4,
+    "canonical_dedupe_prunes": 0,
+    "semantic_minimality_prunes": 0,
+    "dedupe_prunes": 0,
+    "minimality_prunes": 0,
+    "heuristic_drops": 0,
+    "prefixes_created": 5466,
+    "prefix_states_explored": 1821,
+    "prefix_states_merged_by_signature": 12,
+    "prefix_states_exact_pruned": 1458,
+    "prefix_states_heuristic_dropped": 2,
+    "incremental_legality_cache_hits": 33285,
+    "incremental_connectivity_shortcuts": 6561,
+    "incremental_connectivity_fallbacks": 0,
+    "incremental_connectivity_prunes": 13122,
+    "incremental_clause_family_filter_hits": 0,
+    "incremental_clause_family_prunes": 0,
+    "incremental_active_window_clause_filter_hits": 0,
+    "incremental_active_window_clause_filter_prunes": 0,
+    "incremental_terminal_clause_filter_hits": 7047,
+    "incremental_terminal_clause_filter_prunes": 0,
+    "incremental_trivial_derivability_hits": 21141,
+    "incremental_trivial_derivability_prunes": 0,
+    "incremental_terminal_admissibility_hits": 21141,
+    "incremental_terminal_admissibility_rejections": 0,
+    "incremental_terminal_prefix_completion_hits": 2193,
+    "incremental_terminal_prefix_rank_hits": 0,
+    "incremental_terminal_rank_prunes": 6551,
+    "incremental_partial_prefix_bound_hits": 2064,
+    "incremental_partial_prefix_bound_checks": 2793,
+    "incremental_partial_prefix_bound_prunes": 1458,
+    "incremental_terminal_prefix_bar_prunes": 0,
+    "prune_classes": {
+      "quotient_dedupe": 0,
+      "sound_minimality": 21131,
+      "heuristic_shaping": 2
+    },
+    "exact_screen_reasons": {
+      "partial_prefix_bar_failure": 1458,
+      "terminal_prefix_completion_failure": 0,
+      "incumbent_dominance": 6551,
+      "legality_connectivity_exact_rejection": 13122
+    },
+    "demo_phase": {
+      "materialize_full_evals": 0,
+      "proof_close_reserved_millis": 0,
+      "proof_close_elapsed_millis": 0,
+      "proof_close_remaining_millis": 0,
+      "proof_close_reserve_overrun_millis": 0,
+      "proof_close_reserve_exhausted": false,
+      "proof_close_frontier_total_groups": 0,
+      "proof_close_frontier_groups_closed": 0,
+      "proof_close_frontier_groups_remaining": 0,
+      "proof_close_closure_percent": 0,
+      "proof_close_full_evals": 0,
+      "proof_close_overrun_full_evals": 0,
+      "materialize_soft_cap_triggered": false
+    },
+    "demo_funnel": {
+      "generated_raw_prefixes": 12027,
+      "canonical_prefix_signatures": 5466,
+      "well_formed_terminals": 6561,
+      "hard_admissible": 6561,
+      "exact_bound_screened": 1462,
+      "exact_bound_pruned": 1458,
+      "heuristic_dropped": 2,
+      "full_telescopes_evaluated": 4,
+      "bar_clearers": 4,
+      "semantically_minimal_clearers": 4,
+      "winner_overshoot": {
+        "num": 20720,
+        "den": 98559
+      }
+    },
+    "demo_closure": {
+      "frontier_total_seen": 1462,
+      "frontier_certified_nonwinning": 1458,
+      "closure_percent": 99
+    },
+    "demo_bucket_stats": [
+      {
+        "bucket_label": "k9:structural_generic:binder_heavy:library_backed:small_cluster",
+        "bucket_key": {
+          "clause_kappa": 9,
+          "taxonomy": "structural_generic",
+          "category": "binder_heavy",
+          "support_profile": "library_backed",
+          "width": "small_cluster"
+        },
+        "generated_terminal_candidates": 6579,
+        "admissible_terminal_candidates": 6579,
+        "exact_screened_terminal_candidates": 6579,
+        "pruned_terminal_candidates": 6551,
+        "fully_scored_terminal_candidates": 4,
+        "best_overshoot": {
+          "num": 20720,
+          "den": 98559
+        }
+      }
+    ],
+    "claim_step_open": {
+      "kappa_min": 9,
+      "kappa_max": 9,
+      "late_family_surface": "claim_generic",
+      "claim_widening_band7_active": true,
+      "claim_widening_band8_active": true,
+      "claim_widening_band9_active": true,
+      "historical_anchor_ref": null,
+      "anchor_policy": "none",
+      "claim_debt_axes": {
+        "kappa_min": 9,
+        "kappa_max": 9,
+        "path_pressure": 0,
+        "trunc_pressure": 0,
+        "coupling_pressure": 2,
+        "support_pressure": 2,
+        "modal_pressure": 0,
+        "temporal_pressure": 0,
+        "reanchor_pressure": 0,
+        "closure_pressure": 3
+      },
+      "package_flags": {
+        "operator_bundle": false,
+        "hilbert_functional": true,
+        "temporal_shell": false
+      }
+    },
+    "claim_root_seeding": {
+      "roots_seen": 3,
+      "roots_rejected_by_insert_root": 0,
+      "roots_rejected_by_exact_screen": 0,
+      "roots_enqueued": 3
+    },
+    "search_timing": {
+      "step_wall_clock_millis": 1794,
+      "candidate_discovery_wall_clock_millis": 255,
+      "prefix_frontier_planning_wall_clock_millis": 0,
+      "selection_wall_clock_millis": 1538
+    },
+    "prefix_frontier_hot_states": 2,
+    "prefix_frontier_cold_states": 2,
+    "retained_candidates": 4,
+    "frontier_hot_states": 4,
+    "frontier_cold_states": 0,
+    "frontier_resident_cold_states": 0,
+    "frontier_spill_states": 0,
+    "frontier_drops": 0,
+    "scored_candidate_distribution": {
+      "candidate_count": 4,
+      "clears_bar": 4,
+      "below_bar": 0,
+      "clause_kappa_counts": {
+        "9": 4
+      },
+      "nu_summary": {
+        "min": 62,
+        "median": 62,
+        "max": 62,
+        "average": {
+          "num": 62,
+          "den": 1
+        }
+      },
+      "rho_summary": {
+        "min": {
+          "num": 62,
+          "den": 9
+        },
+        "median": {
+          "num": 62,
+          "den": 9
+        },
+        "max": {
+          "num": 62,
+          "den": 9
+        },
+        "average": {
+          "num": 62,
+          "den": 9
+        }
+      }
+    }
+  },
+  "candidate_reports": [
+    {
+      "status": "accepted_minimal_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+      "canonical_hash": "blake3:435eaca75694e1e58b26739b2f6d8c5d77cc0c601c2681e63ced81692f25c67d",
+      "bit_kappa": 169,
+      "clause_kappa": 9,
+      "nu": 62,
+      "rho": {
+        "num": 62,
+        "den": 9
+      },
+      "distance_to_bar": {
+        "num": 20720,
+        "den": 98559
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 9 clauses; reuses Step11 (Connections), Step12 (Curvature), Step13 (Metric).",
+      "library_refs": [
+        "Step11 (Connections)",
+        "Step12 (Curvature)",
+        "Step13 (Metric)"
+      ],
+      "clauses": [
+        "c01 [formation] (Sigma ((x1 : x1) -> ((x2 : x1) -> Universe)) (fun x1 -> x1))",
+        "c02 [formation] ((x1 : x1) -> x1)",
+        "c03 [formation] ((x1 : x1) -> (Sigma x1 (fun x2 -> x2)))",
+        "c04 [formation] ((x1 : (fun x1 -> x1)) -> (Sigma x1 (fun x2 -> x1)))",
+        "c05 [formation] (Sigma ((x1 : x1) -> x1) (fun x1 -> ((x2 : x1) -> x2)))",
+        "c06 [formation] ((x1 : Step13 (Metric)) -> x1)",
+        "c07 [formation] ((x1 : Step12 (Curvature)) -> x1)",
+        "c08 [formation] ((x1 : Step11 (Connections)) -> x1)",
+        "c09 [introduction] (fun x1 -> ((x2 : x1) -> Universe))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:c931e47ea35346f3bcdd024559dc01eac40269d178cc3bdc08d37fda9acef4f4",
+      "canonical_hash": "blake3:6db248f4e94ceb4fc6602f49fd65db9daba8f0d20359fe4acb99dceb5866dcc6",
+      "bit_kappa": 176,
+      "clause_kappa": 9,
+      "nu": 62,
+      "rho": {
+        "num": 62,
+        "den": 9
+      },
+      "distance_to_bar": {
+        "num": 20720,
+        "den": 98559
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 9 clauses; reuses Step11 (Connections), Step12 (Curvature), Step13 (Metric).",
+      "library_refs": [
+        "Step11 (Connections)",
+        "Step12 (Curvature)",
+        "Step13 (Metric)"
+      ],
+      "clauses": [
+        "c01 [formation] (Sigma ((x1 : x1) -> ((x2 : x1) -> Universe)) (fun x1 -> x1))",
+        "c02 [formation] ((x1 : x1) -> x1)",
+        "c03 [formation] ((x1 : x1) -> (Sigma x1 (fun x2 -> x2)))",
+        "c04 [formation] ((x1 : (fun x1 -> ((x2 : x1) -> x2))) -> (Sigma x1 (fun x2 -> x1)))",
+        "c05 [formation] (Sigma ((x1 : x1) -> x1) (fun x1 -> ((x2 : x1) -> x2)))",
+        "c06 [formation] ((x1 : Step13 (Metric)) -> x1)",
+        "c07 [formation] ((x1 : Step12 (Curvature)) -> x1)",
+        "c08 [formation] ((x1 : Step11 (Connections)) -> x1)",
+        "c09 [introduction] (fun x1 -> ((x2 : x1) -> Universe))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:a9b69ac34eee5dfc809b6db3e6831435d5b85c1328da5aa060dec6daaddaed5d",
+      "canonical_hash": "blake3:a3a7965d26201d034297a9f97d459372493029bb4b408f334b12df8bb889c68f",
+      "bit_kappa": 176,
+      "clause_kappa": 9,
+      "nu": 62,
+      "rho": {
+        "num": 62,
+        "den": 9
+      },
+      "distance_to_bar": {
+        "num": 20720,
+        "den": 98559
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 9 clauses; reuses Step11 (Connections), Step12 (Curvature), Step13 (Metric).",
+      "library_refs": [
+        "Step11 (Connections)",
+        "Step12 (Curvature)",
+        "Step13 (Metric)"
+      ],
+      "clauses": [
+        "c01 [formation] (Sigma ((x1 : x1) -> ((x2 : x1) -> Universe)) (fun x1 -> x1))",
+        "c02 [formation] ((x1 : x1) -> x1)",
+        "c03 [formation] ((x1 : x1) -> (Sigma x1 (fun x2 -> x2)))",
+        "c04 [formation] ((x1 : (fun x1 -> x1)) -> (Sigma x1 (fun x2 -> x1)))",
+        "c05 [formation] (Sigma ((x1 : x1) -> ((x2 : x1) -> x2)) (fun x1 -> ((x2 : x1) -> x2)))",
+        "c06 [formation] ((x1 : Step13 (Metric)) -> x1)",
+        "c07 [formation] ((x1 : Step12 (Curvature)) -> x1)",
+        "c08 [formation] ((x1 : Step11 (Connections)) -> x1)",
+        "c09 [introduction] (fun x1 -> ((x2 : x1) -> Universe))"
+      ]
+    },
+    {
+      "status": "clears_bar_higher_overshoot",
+      "frontier_retention": "hot",
+      "retention_class": "rare_focus_head",
+      "candidate_hash": "blake3:59cc70259c389dcaa7f6214532bd3835d77765facce2ff95e2c9d7d6f9db73e0",
+      "canonical_hash": "blake3:c1f3dd6d892c89363fbc64f57a5b1346e5905f3985798cbdc803fe1a4ab5da1a",
+      "bit_kappa": 183,
+      "clause_kappa": 9,
+      "nu": 62,
+      "rho": {
+        "num": 62,
+        "den": 9
+      },
+      "distance_to_bar": {
+        "num": 20720,
+        "den": 98559
+      },
+      "telescope_class": "Axiomatic",
+      "headline": "Axiomatic candidate with 9 clauses; reuses Step11 (Connections), Step12 (Curvature), Step13 (Metric).",
+      "library_refs": [
+        "Step11 (Connections)",
+        "Step12 (Curvature)",
+        "Step13 (Metric)"
+      ],
+      "clauses": [
+        "c01 [formation] (Sigma ((x1 : x1) -> ((x2 : x1) -> Universe)) (fun x1 -> ((x2 : x1) -> x2)))",
+        "c02 [formation] ((x1 : x1) -> x1)",
+        "c03 [formation] ((x1 : x1) -> (Sigma x1 (fun x2 -> x2)))",
+        "c04 [formation] ((x1 : (fun x1 -> x1)) -> (Sigma x1 (fun x2 -> x1)))",
+        "c05 [formation] (Sigma ((x1 : x1) -> ((x2 : x1) -> x2)) (fun x1 -> ((x2 : x1) -> x2)))",
+        "c06 [formation] ((x1 : Step13 (Metric)) -> x1)",
+        "c07 [formation] ((x1 : Step12 (Curvature)) -> x1)",
+        "c08 [formation] ((x1 : Step11 (Connections)) -> x1)",
+        "c09 [introduction] (fun x1 -> ((x2 : x1) -> Universe))"
+      ]
+    }
+  ],
+  "prune_reports": [],
+  "frontier_policy": {
+    "focus": "axiomatic",
+    "focus_quota": 2,
+    "bridge_quota": 2,
+    "support_quota": 1,
+    "macro_quota": 0,
+    "cold_limit": 6
+  },
+  "frontier_pressure": {
+    "governor_state": "green",
+    "pressure_action": "none",
+    "rss_bytes": 1342177664,
+    "observed_process_rss_bytes": 28672000,
+    "rss_gap_bytes": -1313505664,
+    "hot_frontier_bytes": 128,
+    "cold_frontier_bytes": 128,
+    "dedupe_bytes": 128,
+    "hot_count": 2,
+    "cold_candidate_count": 4,
+    "requested_cold_limit": 2,
+    "retained_cold_limit": 2,
+    "resident_cold_limit": 2,
+    "spill_backed_cold_records": 0,
+    "dropped_cold_records": 2
+  },
+  "prefix_frontier": {
+    "hot_states": [
+      {
+        "state_id": 60129542144,
+        "parent_state_id": 0,
+        "last_clause_id": 8,
+        "obligation_set_id": 14,
+        "shape_hash64": 5085418830993051814,
+        "support_hash64": 9762851283677379395,
+        "nu_lower_bound": 62,
+        "nu_upper_bound": 62,
+        "bit_kappa_used": 169,
+        "clause_kappa_used": 9,
+        "depth": 8,
+        "step_index": 14,
+        "band_index": 9,
+        "flags": 3328,
+        "priority_key": 2420025752,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 60129542147,
+        "parent_state_id": 0,
+        "last_clause_id": 8,
+        "obligation_set_id": 14,
+        "shape_hash64": 8831587239888398814,
+        "support_hash64": 17735824769958542098,
+        "nu_lower_bound": 62,
+        "nu_upper_bound": 62,
+        "bit_kappa_used": 176,
+        "clause_kappa_used": 9,
+        "depth": 8,
+        "step_index": 14,
+        "band_index": 9,
+        "flags": 3328,
+        "priority_key": 2420027544,
+        "worker_hint": 0
+      }
+    ],
+    "cold_states": [
+      {
+        "state_id": 60129542149,
+        "parent_state_id": 0,
+        "last_clause_id": 8,
+        "obligation_set_id": 14,
+        "shape_hash64": 17892953758363148558,
+        "support_hash64": 10074236673579392463,
+        "nu_lower_bound": 62,
+        "nu_upper_bound": 62,
+        "bit_kappa_used": 176,
+        "clause_kappa_used": 9,
+        "depth": 8,
+        "step_index": 14,
+        "band_index": 9,
+        "flags": 3584,
+        "priority_key": 2420027544,
+        "worker_hint": 0
+      },
+      {
+        "state_id": 60129542145,
+        "parent_state_id": 0,
+        "last_clause_id": 8,
+        "obligation_set_id": 14,
+        "shape_hash64": 6048044922207667807,
+        "support_hash64": 6907310036442888774,
+        "nu_lower_bound": 62,
+        "nu_upper_bound": 62,
+        "bit_kappa_used": 183,
+        "clause_kappa_used": 9,
+        "depth": 8,
+        "step_index": 14,
+        "band_index": 9,
+        "flags": 3584,
+        "priority_key": 2420029336,
+        "worker_hint": 0
+      }
+    ],
+    "dedupe_keys": [
+      "blake3:872ce10ca301fd5cf6c796e70d475635159456b122c90bf6cea14a1bec02290e",
+      "blake3:e15e3df0911e6169581ed2cb8399eddd0be5359572b7c73258b68ec2385f60fb",
+      "blake3:e41696d31e74139c44a3aff0942f9d94b44ddda4c247f436bc2019d4a75b772d",
+      "blake3:fdaa47af7e1e04472ca15b3f1cd98281221579344b3660dc81cd0d0fc99be1ce"
+    ]
+  },
+  "provenance": "atomic_bootstrap_search",
+  "canon_evidence": {
+    "charged_clause_kappa": 9,
+    "bar_distance": {
+      "num": 20720,
+      "den": 98559
+    },
+    "clears_bar": true,
+    "late_step_claim": {
+      "status": "not_applicable",
+      "adopted_step": 0,
+      "adopted_label": "",
+      "adopted_nu": 0,
+      "matches_accepted": false,
+      "note": ""
+    }
+  },
+  "replay_ablation": {
+    "status": "matches_reference_replay",
+    "reference_candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+    "reference_canonical_hash": "blake3:435eaca75694e1e58b26739b2f6d8c5d77cc0c601c2681e63ced81692f25c67d",
+    "rho_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "objective_bar_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "overshoot_delta": {
+      "num": 0,
+      "den": 1
+    },
+    "nu_delta": 0,
+    "clause_kappa_delta": 0,
+    "note": "matches reference replay baseline"
+  },
+  "narrative_events": [
+    {
+      "step_index": 14,
+      "ordinal": 1,
+      "kind": "step_open",
+      "message": "opened step 14 with bar 73138/10951 and clause band 9..9",
+      "detail": "mode=desktop_claim_shadow exact_legality_rejections=0 structural_cap_rejections=0 admitted_focus_aligned=6561 admitted_deprioritized=0",
+      "progress": {
+        "elapsed_millis": 1794,
+        "generated_surface": 12027,
+        "exact_screened_surface": 1462,
+        "full_telescopes_evaluated": 4
+      }
+    },
+    {
+      "step_index": 14,
+      "ordinal": 2,
+      "kind": "surface_summary",
+      "message": "generated 12027 structural candidates; 6561 were well formed and 0 were rejected by admissibility",
+      "detail": "malformed=0 full_evaluated=4 canonical=4 semantically_minimal=4",
+      "progress": {
+        "elapsed_millis": 1794,
+        "generated_surface": 12027,
+        "exact_screened_surface": 1462,
+        "full_telescopes_evaluated": 4
+      }
+    },
+    {
+      "step_index": 14,
+      "ordinal": 3,
+      "kind": "prefix_summary",
+      "message": "prefix frontier created=5466 explored=1821 merged=12 exact_pruned=1458 heuristic_dropped=2",
+      "detail": "hot_states=2 cold_states=2 frontier_window=4",
+      "progress": {
+        "elapsed_millis": 1794,
+        "generated_surface": 12027,
+        "exact_screened_surface": 1462,
+        "full_telescopes_evaluated": 4
+      }
+    },
+    {
+      "step_index": 14,
+      "ordinal": 4,
+      "kind": "memo_summary",
+      "message": "memo path hits: legality=33285 active_window=0 terminal_completion=2193 partial_bounds=2064",
+      "detail": "connectivity_shortcuts=6561 clause_family_prunes=0 terminal_rank_prunes=6551 terminal_prefix_bar_prunes=0",
+      "progress": {
+        "elapsed_millis": 1794,
+        "generated_surface": 12027,
+        "exact_screened_surface": 1462,
+        "full_telescopes_evaluated": 4
+      }
+    },
+    {
+      "step_index": 14,
+      "ordinal": 5,
+      "kind": "frontier_summary",
+      "message": "retained 4 candidates with frontier hot=2 cold=2 dropped=0",
+      "detail": "pressure_state=green pressure_action=none resident_cold=0 spill_backed=0",
+      "progress": {
+        "elapsed_millis": 1794,
+        "generated_surface": 12027,
+        "exact_screened_surface": 1462,
+        "full_telescopes_evaluated": 4
+      }
+    },
+    {
+      "step_index": 14,
+      "ordinal": 6,
+      "kind": "acceptance_summary",
+      "phase": "seal",
+      "message": "accepted blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c with overshoot 20720/98559 (nu=62 kappa=9)",
+      "detail": "bar_clearers=4 near_misses=3 candidate_hash=blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c canonical_hash=blake3:435eaca75694e1e58b26739b2f6d8c5d77cc0c601c2681e63ced81692f25c67d",
+      "progress": {
+        "elapsed_millis": 1794,
+        "generated_surface": 12027,
+        "exact_screened_surface": 1462,
+        "full_telescopes_evaluated": 4
+      }
+    },
+    {
+      "step_index": 14,
+      "ordinal": 7,
+      "kind": "step_complete",
+      "phase": "seal",
+      "message": "completed step 14 in 1794 ms",
+      "detail": "discovery_ms=255 frontier_plan_ms=0 selection_ms=1538",
+      "progress": {
+        "elapsed_millis": 1794,
+        "generated_surface": 12027,
+        "exact_screened_surface": 1462,
+        "full_telescopes_evaluated": 4
+      }
+    }
+  ]
+}

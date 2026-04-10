@@ -29,6 +29,8 @@ Treat these as stable repo truths:
 - Claim artifacts, manifests, live checkpoints, and certification surfaces are
   real; the lane must stay at `bounded live recovery` until a stored
   certificate passes.
+- Current post-probe stored rerun evidence already keeps step-`15` repair
+  ahead of any step-`1` reopening on newer code.
 - Live claim-lane counters, active hypotheses, current blockers, and probe
   history no longer live in this skill file. Read the autonomous docs for that
   operating state:
@@ -55,7 +57,8 @@ The current architecture focus is split between three active tracks:
 - stronger exact late-step pruning and ordering on
   `realistic_frontier_shadow`
 - honest breadth, budget, and evidence surfacing on `demo_breadth_shadow`
-- stored breadth repair, rerun evidence, and certification work on
+- rerun-confirmed step-`15` repair, stored breadth repair, and certification
+  work on
   `desktop_claim_shadow`
 
 ## Current-State References
@@ -345,10 +348,10 @@ Focus on:
 - use `scripts/compare_runs.py`, `scripts/benchmark_claim_lane.py`, and
   `scripts/certify_claim_lane.py` as the evidence surfaces before moving the
   search code again
-- when the late-step local probes are exhausted, use stored `v11` / `v12`
-  evidence plus `run.json` build fingerprints to settle rerun-vs-step-`1`
-  ordering; default to a rerun-backed step-`15` reset before reopening
-  step `1` unless the newer rerun changes the diagnosis
+- use the current canonical rerun plus earlier stored evidence and
+  `run.json` build fingerprints to keep step-`15` repair ahead of step-`1`
+  theory work; do not spend another turn on rerun-vs-step-`1` ordering
+  unless a later stored bundle changes the diagnosis
 - treat the step-`15` partial-prefix wall, the dominant clause-`0` / clause-`1`
   pairings, and the live clause-`4` split as live diagnosis owned by
   [../../autonomous_progress.md](../../autonomous_progress.md)

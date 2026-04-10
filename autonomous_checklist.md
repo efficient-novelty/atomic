@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Checklist
 
-Last updated: 2026-04-09
+Last updated: 2026-04-10
 
 This file owns only binary gates for `desktop_claim_shadow`.
 
@@ -14,7 +14,7 @@ This file owns only binary gates for `desktop_claim_shadow`.
 ## Local Repair Gate
 
 - [ ] Clean step-`15` partial-prefix wall is below `553` on top of canonical
-      `v12`.
+      `v13`.
 - [ ] Accepted step-`15` winner remains canonical `103 / 8`.
 - [ ] Isolated `single` pocket remains fenced.
 - [ ] Unsafe lifted `89 / 8` terminals remain fenced.
@@ -25,8 +25,6 @@ This file owns only binary gates for `desktop_claim_shadow`.
 - [ ] Stored step `15` generated count is at least `5000` with
       accepted-hash parity preserved.
 - [ ] Stored step `1` generated count is restored to exactly `2144`.
-- [ ] Compare, benchmark, and certification are refreshed for the new
-      canonical bundle.
 - [ ] `full_telescopes_evaluated` remains within a certified moderate
       threshold.
 

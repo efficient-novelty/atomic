@@ -686,3 +686,17 @@ This file is the append-only history for `desktop_claim_shadow`.
   Consequence: the first honest follow-on is a rerun-backed step-`15` reset
   on newer code, and a step-`1` reopening stays deferred unless that rerun
   changes the diagnosis.
+- Scope: run the first post-local-probe stored rerun on newer code and refresh
+  claim-lane evidence.
+  Result: canonical `v13` on commit
+  `ffbbd34abfbdef0abcf40e4ce8eddb259276dec6` reproduced the same breadth-only
+  miss as `v12`: step `1 = 546 / 2144` with the same step-`01` surface and
+  step `15 = 4331 / 5000` with the same canonical `553` partial-prefix wall,
+  `3` incumbent prunes, and `small_cluster = 3132 / 522 / 522 / 0`. Compare
+  stayed ready, benchmark refreshed across `v11` / `v12` / `v13`,
+  certification still failed only on breadth, and runtime stayed under the
+  threshold at `4387 ms`.
+  Consequence: `v13` becomes the canonical stored bundle, the rerun-backed
+  step-`15` reset is confirmed on newer code, and the next honest slice is no
+  longer another rerun-ordering pass but a fresh code-side step-`15` repair
+  while step `1` stays deferred.

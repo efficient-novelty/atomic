@@ -1,0 +1,17 @@
+Claim Certification: attention
+claim run: C:\DEV\atomic\runs\codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13
+guarded run: C:\DEV\atomic\runs\codex-guarded-claim-cert-v1
+runtime threshold ms: 600000
+accepted_hash_parity: pass - accepted hashes match guarded through step 15
+search_policy: pass - claim search policy matches the expected claim-specific metadata
+fallback_honesty: pass - no replay or non-claim fallback evidence detected
+narrative_artifacts: pass - claim narrative artifacts are complete
+early_breadth: fail - early breadth failed at step 1
+  step 1: actual=546 target=2144 gap=1598 catalog=648 widths=[18, 36] roots=seen18 enqueued16 exact_rejected0 anchor=none axes=path0,trunc0,coupling0,support0,modal0,temporal0,reanchor0,closure0 well_formed=288 exact_screened=1 retained=1 heuristic=0 exact=bar=0 completion=0 incumbent=0 legality=435
+late_generated_floors: fail - late generated floors failed at step 15
+  step 15: actual=4331 target=5000 gap=669 catalog=6561 widths=[3, 3, 3, 3, 3, 3, 3, 3] roots=seen3 enqueued3 exact_rejected0 surface=claim_generic kappa=8..8 anchor=modal@10 widen=7,8,9 packages=temporal_shell axes=path0,trunc0,coupling2,support2,modal0,temporal1,reanchor2,closure3 well_formed=261 exact_screened=554 retained=1 heuristic=257 exact=bar=553 completion=0 incumbent=3 legality=0
+runtime_threshold: pass - stored runtime 4387 ms is within the certified threshold
+exact_screen_reason_completeness: pass - exact-screen reasons are fully persisted in step artifacts
+prune_class_completeness: pass - prune class counts are fully persisted in step artifacts
+manifest_completeness: pass - manifest includes all required provenance fields
+failing checks: early_breadth, late_generated_floors

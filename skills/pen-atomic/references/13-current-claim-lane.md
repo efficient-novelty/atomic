@@ -43,14 +43,17 @@ telemetry, claim-lane narratives, or the autonomy-certification roadmap.
   - frontier items reuse the shared clause catalog and serialized prefix key
 - Claim-lane work must stay separate from demo-only behavior even when probes
   temporarily reuse demo-family clauses under test-only overrides.
+- The current post-probe canonical rerun has already refreshed compare,
+  benchmark, and certification on newer code and re-confirmed that step `15`,
+  not step `1`, is the first stored breadth miss.
 
 ## Stable Working Invariants
 
 - Prefer stored evidence over terminal impressions.
 - Keep the accepted path fixed until stored evidence clearly replaces it.
-- Once the local late-step probes are exhausted, keep a rerun-backed
-  step-`15` evidence refresh ahead of a step-`1` theory pass; only reopen
-  step `1` if that newer rerun changes the diagnosis.
+- The post-probe rerun has now reconfirmed the same step-`15` miss on newer
+  code, so keep step-`15` repair work ahead of step-`1` theory work unless a
+  later stored bundle changes the diagnosis.
 - Do not use stronger wording such as `unguided` before certification passes.
 - Do not treat the lane as family-agnostic end to end while stored breadth is
   still open.
@@ -105,14 +108,18 @@ Do:
   changes
 - keep claim-lane edits narrow and staged
 - use the certificate first when you need stored breadth anatomy
-- compare stored `v11` / `v12` artifacts plus `run.json` build fingerprints
-  before reopening step `1`
+- compare the earlier and current canonical reruns plus `run.json` build
+  fingerprints before reopening step `1`, and if the newer rerun reconfirms
+  the same breadth-only miss, keep step-`15` repair ahead of step `1`
 - use the autonomous files as intended instead of restating live state here
 
 Do not:
 
 - restate live counters in this file
 - treat negative controls as if they were still open hypotheses
+- spend another turn on rerun-vs-step-`1` ordering after the current
+  canonical rerun has already reconfirmed the same breadth-only miss on newer
+  code
 - reopen or re-summarize the exhausted mismatch-`1`
   `reference + demo_flat_codomain` ladder first; the live off-branch priority
   order now belongs in the autonomous docs rather than in this stable

@@ -1,0 +1,61 @@
+step 08 claim narrative
+label        S3
+profile      claim-10h
+accepted     blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0 nu=18 kappa=5 overshoot=87/520
+time         [#...............] 42ms / 24.0s (within limit)
+generated    5 generated
+exact_screen 1 screened
+full_eval    1 evaluated
+closure      [................] 0% frontier_total=1 certified_nonwinning=0
+phase_eval   materialize=0 proof_close=0 overrun=0 cap=none cap_triggered=false breadth_exit=none proof_close_reason=none overrun_reason=none
+proof_close  reserve=0ms elapsed=0ms remaining=0ms reserve_overrun=0ms exhausted=false groups_closed=0/0 groups_remaining=0 closure=0%
+timing       discovery=42ms frontier_plan=0ms selection=0ms
+funnel       enumerated=1 well_formed=1 malformed=0 admissibility_rejected=0 scored=1 canonical=1 semantically_minimal=1
+demo_funnel  raw=5 canonical_prefixes=4 hard_admissible=1 exact_pruned=0 heuristic_dropped=0 bar_clearers=1 semantically_minimal_clearers=1 winner_overshoot=87/520
+prune_totals quotient_dedupe=0 sound_minimality=0 heuristic_shaping=0
+prefixes     created=4 explored=1 merged=0 exact_pruned=0 heuristic_dropped=0 hot=1 cold=0
+memo         legality_hits=7 active_window_hits=7 terminal_completion_hits=2 partial_bound_hits=0 terminal_rank_prunes=0
+demo_buckets k5:structural_generic:bridge_reanchor:local_only:single gen=2 adm=2 screen=2 pruned=0 scored=1 best=87/520
+
+events
+  [step_open] opened step 8 with bar 357/104 and clause band 5..5
+    mode=desktop_claim_shadow exact_legality_rejections=0 structural_cap_rejections=0 admitted_focus_aligned=1 admitted_deprioritized=0
+  [surface_summary] generated 5 structural candidates; 1 were well formed and 0 were rejected by admissibility
+    malformed=0 full_evaluated=1 canonical=1 semantically_minimal=1
+  [prefix_summary] prefix frontier created=4 explored=1 merged=0 exact_pruned=0 heuristic_dropped=0
+    hot_states=1 cold_states=0 frontier_window=1
+  [memo_summary] memo path hits: legality=7 active_window=7 terminal_completion=2 partial_bounds=0
+    connectivity_shortcuts=1 clause_family_prunes=0 terminal_rank_prunes=0 terminal_prefix_bar_prunes=0
+  [frontier_summary] retained 1 candidates with frontier hot=1 cold=0 dropped=0
+    pressure_state=green pressure_action=none resident_cold=0 spill_backed=0
+  [acceptance_summary seal] accepted blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0 with overshoot 87/520 (nu=18 kappa=5)
+    bar_clearers=1 near_misses=0 candidate_hash=blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0 canonical_hash=blake3:c6fc7673d107487f21fb29064e7ce8c9418f9fb2f0688613380e116ea77230aa
+  [step_complete seal] completed step 8 in 42 ms
+    discovery_ms=42 frontier_plan_ms=0 selection_ms=0
+
+retained candidates
+  accepted blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0 rho=18/5 distance=87/520 frontier=hot headline=Higher-inductive candidate with 5 clauses; uses only the current local scope; contains Path^3.
+
+prunes
+  totals quotient_dedupe=0 sound_minimality=0 heuristic_shaping=0
+  sampled: none
+
+accepted trace
+  source=structural-ast
+  nu_g=5
+  nu_h=10
+  nu_c=3
+  bonus_distributive=0
+  bonus_universe_poly=0
+  bonus_infinitesimal_shift=0
+  nu_total=18
+  node_trace_count=9
+  node=entry1|ctor=App
+  node=entry1/0|ctor=Univ
+  node=entry1/1|ctor=Var
+  node=entry2|ctor=Var
+  node=entry3|ctor=PathCon
+  node=entry4|ctor=Lam
+  node=entry4/0|ctor=Var
+  node=entry5|ctor=Lam
+  node=entry5/0|ctor=Var

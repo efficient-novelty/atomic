@@ -1,0 +1,644 @@
+{
+  "certificate_version": 1,
+  "checks": {
+    "accepted_hash_parity": {
+      "baseline_missing_steps": [],
+      "detail": "accepted hashes match guarded through step 15",
+      "lane_missing_steps": [],
+      "matches_baseline": true,
+      "status": "pass"
+    },
+    "early_breadth": {
+      "detail": "early breadth failed at step 1",
+      "status": "fail",
+      "steps": [
+        {
+          "actual": 546,
+          "diagnosis": {
+            "claim_root_seeding": {
+              "roots_enqueued": 16,
+              "roots_rejected_by_exact_screen": 0,
+              "roots_rejected_by_insert_root": 2,
+              "roots_seen": 18
+            },
+            "claim_step_open": {
+              "anchor_policy": "",
+              "claim_debt_axes": {
+                "closure_pressure": 0,
+                "coupling_pressure": 0,
+                "kappa_max": 0,
+                "kappa_min": 0,
+                "modal_pressure": 0,
+                "path_pressure": 0,
+                "reanchor_pressure": 0,
+                "support_pressure": 0,
+                "temporal_pressure": 0,
+                "trunc_pressure": 0
+              },
+              "claim_widening_band7_active": false,
+              "claim_widening_band8_active": false,
+              "claim_widening_band9_active": false,
+              "historical_anchor_ref": null,
+              "kappa_max": 0,
+              "kappa_min": 0,
+              "late_family_surface": "",
+              "package_flags": {
+                "hilbert_functional": false,
+                "operator_bundle": false,
+                "temporal_shell": false
+              }
+            },
+            "exact_screen_reasons": {
+              "incumbent_dominance": 0,
+              "legality_connectivity_exact_rejection": 435,
+              "partial_prefix_bar_failure": 0,
+              "terminal_prefix_completion_failure": 0
+            },
+            "raw_catalog_clause_widths": [
+              18,
+              36
+            ],
+            "raw_catalog_telescope_count": 648,
+            "search_space": {
+              "admissibility_rejections": 287,
+              "candidate_heuristic_drops": 0,
+              "enumerated_candidates": 288,
+              "exact_bound_screened": 1,
+              "full_telescopes_evaluated": 1,
+              "heuristic_dropped": 0,
+              "retained_candidates": 1,
+              "well_formed_candidates": 288
+            },
+            "source": "summary_plus_live_checkpoints",
+            "summary": "actual=546 target=2144 gap=1598 catalog=648 widths=[18, 36] roots=seen18 enqueued16 exact_rejected0 anchor=none axes=path0,trunc0,coupling0,support0,modal0,temporal0,reanchor0,closure0 well_formed=288 exact_screened=1 retained=1 heuristic=0 exact=bar=0 completion=0 incumbent=0 legality=435"
+          },
+          "gap_to_target": 1598,
+          "status": "miss",
+          "step_index": 1,
+          "target": 2144
+        }
+      ]
+    },
+    "exact_screen_reason_completeness": {
+      "coverage": {
+        "derived_steps": [],
+        "expected_steps": 15,
+        "missing_steps": [],
+        "persisted_steps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "source_counts": {
+          "summary": 15
+        },
+        "status": "complete",
+        "totals": {
+          "incumbent_dominance": 6829,
+          "legality_connectivity_exact_rejection": 14742,
+          "partial_prefix_bar_failure": 2020,
+          "terminal_prefix_completion_failure": 401
+        }
+      },
+      "detail": "exact-screen reasons are fully persisted in step artifacts",
+      "status": "pass"
+    },
+    "fallback_honesty": {
+      "detail": "no replay or non-claim fallback evidence detected",
+      "reference_replay_steps": [],
+      "resume_steps": [],
+      "run_mode": "atomic_search_bootstrap",
+      "status": "pass",
+      "unexpected_provenance": []
+    },
+    "late_generated_floors": {
+      "detail": "late generated floors failed at step 15",
+      "status": "fail",
+      "steps": [
+        {
+          "actual": 1428,
+          "diagnosis": {
+            "claim_root_seeding": {
+              "roots_enqueued": 6,
+              "roots_rejected_by_exact_screen": 0,
+              "roots_rejected_by_insert_root": 0,
+              "roots_seen": 6
+            },
+            "claim_step_open": {
+              "anchor_policy": "loop",
+              "claim_debt_axes": {
+                "closure_pressure": 2,
+                "coupling_pressure": 0,
+                "kappa_max": 4,
+                "kappa_min": 4,
+                "modal_pressure": 1,
+                "path_pressure": 3,
+                "reanchor_pressure": 1,
+                "support_pressure": 3,
+                "temporal_pressure": 0,
+                "trunc_pressure": 1
+              },
+              "claim_widening_band7_active": false,
+              "claim_widening_band8_active": false,
+              "claim_widening_band9_active": false,
+              "historical_anchor_ref": 7,
+              "kappa_max": 4,
+              "kappa_min": 4,
+              "late_family_surface": "claim_generic",
+              "package_flags": {
+                "hilbert_functional": false,
+                "operator_bundle": false,
+                "temporal_shell": false
+              }
+            },
+            "exact_screen_reasons": {
+              "incumbent_dominance": 0,
+              "legality_connectivity_exact_rejection": 609,
+              "partial_prefix_bar_failure": 3,
+              "terminal_prefix_completion_failure": 144
+            },
+            "raw_catalog_clause_widths": [
+              6,
+              6,
+              6,
+              6
+            ],
+            "raw_catalog_telescope_count": 1296,
+            "search_space": {
+              "admissibility_rejections": 0,
+              "candidate_heuristic_drops": 0,
+              "enumerated_candidates": 597,
+              "exact_bound_screened": 228,
+              "full_telescopes_evaluated": 81,
+              "heuristic_dropped": 0,
+              "retained_candidates": 81,
+              "well_formed_candidates": 597
+            },
+            "source": "summary_plus_live_checkpoints",
+            "summary": "actual=1428 target=500 gap=-928 catalog=1296 widths=[6, 6, 6, 6] roots=seen6 enqueued6 exact_rejected0 surface=claim_generic kappa=4..4 anchor=loop@7 axes=path3,trunc1,coupling0,support3,modal1,temporal0,reanchor1,closure2 well_formed=597 exact_screened=228 retained=81 heuristic=0 exact=bar=3 completion=144 incumbent=0 legality=609"
+          },
+          "gap_to_target": -928,
+          "status": "hit",
+          "step_index": 10,
+          "target": 500
+        },
+        {
+          "actual": 1338,
+          "diagnosis": {
+            "claim_root_seeding": {
+              "roots_enqueued": 3,
+              "roots_rejected_by_exact_screen": 0,
+              "roots_rejected_by_insert_root": 0,
+              "roots_seen": 3
+            },
+            "claim_step_open": {
+              "anchor_policy": "none",
+              "claim_debt_axes": {
+                "closure_pressure": 3,
+                "coupling_pressure": 0,
+                "kappa_max": 6,
+                "kappa_min": 5,
+                "modal_pressure": 1,
+                "path_pressure": 0,
+                "reanchor_pressure": 0,
+                "support_pressure": 2,
+                "temporal_pressure": 0,
+                "trunc_pressure": 0
+              },
+              "claim_widening_band7_active": false,
+              "claim_widening_band8_active": false,
+              "claim_widening_band9_active": false,
+              "historical_anchor_ref": null,
+              "kappa_max": 6,
+              "kappa_min": 5,
+              "late_family_surface": "claim_generic",
+              "package_flags": {
+                "hilbert_functional": false,
+                "operator_bundle": false,
+                "temporal_shell": false
+              }
+            },
+            "exact_screen_reasons": {
+              "incumbent_dominance": 78,
+              "legality_connectivity_exact_rejection": 0,
+              "partial_prefix_bar_failure": 3,
+              "terminal_prefix_completion_failure": 247
+            },
+            "raw_catalog_clause_widths": [
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "raw_catalog_telescope_count": 729,
+            "search_space": {
+              "admissibility_rejections": 0,
+              "candidate_heuristic_drops": 0,
+              "enumerated_candidates": 891,
+              "exact_bound_screened": 322,
+              "full_telescopes_evaluated": 72,
+              "heuristic_dropped": 0,
+              "retained_candidates": 72,
+              "well_formed_candidates": 891
+            },
+            "source": "summary_plus_live_checkpoints",
+            "summary": "actual=1338 target=800 gap=-538 catalog=729 widths=[3, 3, 3, 3, 3, 3] roots=seen3 enqueued3 exact_rejected0 surface=claim_generic kappa=5..6 anchor=none axes=path0,trunc0,coupling0,support2,modal1,temporal0,reanchor0,closure3 well_formed=891 exact_screened=322 retained=72 heuristic=0 exact=bar=3 completion=247 incumbent=78 legality=0"
+          },
+          "gap_to_target": -538,
+          "status": "hit",
+          "step_index": 11,
+          "target": 800
+        },
+        {
+          "actual": 1338,
+          "diagnosis": {
+            "claim_root_seeding": {
+              "roots_enqueued": 3,
+              "roots_rejected_by_exact_screen": 0,
+              "roots_rejected_by_insert_root": 0,
+              "roots_seen": 3
+            },
+            "claim_step_open": {
+              "anchor_policy": "none",
+              "claim_debt_axes": {
+                "closure_pressure": 3,
+                "coupling_pressure": 2,
+                "kappa_max": 6,
+                "kappa_min": 5,
+                "modal_pressure": 1,
+                "path_pressure": 0,
+                "reanchor_pressure": 0,
+                "support_pressure": 2,
+                "temporal_pressure": 0,
+                "trunc_pressure": 0
+              },
+              "claim_widening_band7_active": true,
+              "claim_widening_band8_active": true,
+              "claim_widening_band9_active": false,
+              "historical_anchor_ref": null,
+              "kappa_max": 6,
+              "kappa_min": 5,
+              "late_family_surface": "claim_generic",
+              "package_flags": {
+                "hilbert_functional": false,
+                "operator_bundle": false,
+                "temporal_shell": false
+              }
+            },
+            "exact_screen_reasons": {
+              "incumbent_dominance": 194,
+              "legality_connectivity_exact_rejection": 0,
+              "partial_prefix_bar_failure": 3,
+              "terminal_prefix_completion_failure": 4
+            },
+            "raw_catalog_clause_widths": [
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "raw_catalog_telescope_count": 729,
+            "search_space": {
+              "admissibility_rejections": 0,
+              "candidate_heuristic_drops": 0,
+              "enumerated_candidates": 891,
+              "exact_bound_screened": 123,
+              "full_telescopes_evaluated": 116,
+              "heuristic_dropped": 119,
+              "retained_candidates": 116,
+              "well_formed_candidates": 891
+            },
+            "source": "summary_plus_live_checkpoints",
+            "summary": "actual=1338 target=1200 gap=-138 catalog=729 widths=[3, 3, 3, 3, 3, 3] roots=seen3 enqueued3 exact_rejected0 surface=claim_generic kappa=5..6 anchor=none widen=7,8 axes=path0,trunc0,coupling2,support2,modal1,temporal0,reanchor0,closure3 well_formed=891 exact_screened=123 retained=116 heuristic=119 exact=bar=3 completion=4 incumbent=194 legality=0"
+          },
+          "gap_to_target": -138,
+          "status": "hit",
+          "step_index": 12,
+          "target": 1200
+        },
+        {
+          "actual": 2320,
+          "diagnosis": {
+            "claim_root_seeding": {
+              "roots_enqueued": 5,
+              "roots_rejected_by_exact_screen": 0,
+              "roots_rejected_by_insert_root": 0,
+              "roots_seen": 5
+            },
+            "claim_step_open": {
+              "anchor_policy": "none",
+              "claim_debt_axes": {
+                "closure_pressure": 3,
+                "coupling_pressure": 3,
+                "kappa_max": 7,
+                "kappa_min": 7,
+                "modal_pressure": 1,
+                "path_pressure": 0,
+                "reanchor_pressure": 0,
+                "support_pressure": 2,
+                "temporal_pressure": 0,
+                "trunc_pressure": 0
+              },
+              "claim_widening_band7_active": true,
+              "claim_widening_band8_active": true,
+              "claim_widening_band9_active": false,
+              "historical_anchor_ref": null,
+              "kappa_max": 7,
+              "kappa_min": 7,
+              "late_family_surface": "claim_generic",
+              "package_flags": {
+                "hilbert_functional": false,
+                "operator_bundle": true,
+                "temporal_shell": false
+              }
+            },
+            "exact_screen_reasons": {
+              "incumbent_dominance": 0,
+              "legality_connectivity_exact_rejection": 576,
+              "partial_prefix_bar_failure": 0,
+              "terminal_prefix_completion_failure": 0
+            },
+            "raw_catalog_clause_widths": [
+              5,
+              1,
+              3,
+              3,
+              5,
+              3,
+              2
+            ],
+            "raw_catalog_telescope_count": 1350,
+            "search_space": {
+              "admissibility_rejections": 0,
+              "candidate_heuristic_drops": 0,
+              "enumerated_candidates": 774,
+              "exact_bound_screened": 8,
+              "full_telescopes_evaluated": 8,
+              "heuristic_dropped": 401,
+              "retained_candidates": 8,
+              "well_formed_candidates": 774
+            },
+            "source": "summary_plus_live_checkpoints",
+            "summary": "actual=2320 target=2200 gap=-120 catalog=1350 widths=[5, 1, 3, 3, 5, 3, 2] roots=seen5 enqueued5 exact_rejected0 surface=claim_generic kappa=7..7 anchor=none widen=7,8 packages=operator_bundle axes=path0,trunc0,coupling3,support2,modal1,temporal0,reanchor0,closure3 well_formed=774 exact_screened=8 retained=8 heuristic=401 exact=bar=0 completion=0 incumbent=0 legality=576"
+          },
+          "gap_to_target": -120,
+          "status": "hit",
+          "step_index": 13,
+          "target": 2200
+        },
+        {
+          "actual": 12027,
+          "diagnosis": {
+            "claim_root_seeding": {
+              "roots_enqueued": 3,
+              "roots_rejected_by_exact_screen": 0,
+              "roots_rejected_by_insert_root": 0,
+              "roots_seen": 3
+            },
+            "claim_step_open": {
+              "anchor_policy": "none",
+              "claim_debt_axes": {
+                "closure_pressure": 3,
+                "coupling_pressure": 2,
+                "kappa_max": 9,
+                "kappa_min": 9,
+                "modal_pressure": 0,
+                "path_pressure": 0,
+                "reanchor_pressure": 0,
+                "support_pressure": 2,
+                "temporal_pressure": 0,
+                "trunc_pressure": 0
+              },
+              "claim_widening_band7_active": true,
+              "claim_widening_band8_active": true,
+              "claim_widening_band9_active": true,
+              "historical_anchor_ref": null,
+              "kappa_max": 9,
+              "kappa_min": 9,
+              "late_family_surface": "claim_generic",
+              "package_flags": {
+                "hilbert_functional": true,
+                "operator_bundle": false,
+                "temporal_shell": false
+              }
+            },
+            "exact_screen_reasons": {
+              "incumbent_dominance": 6551,
+              "legality_connectivity_exact_rejection": 13122,
+              "partial_prefix_bar_failure": 1458,
+              "terminal_prefix_completion_failure": 0
+            },
+            "raw_catalog_clause_widths": [
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "raw_catalog_telescope_count": 19683,
+            "search_space": {
+              "admissibility_rejections": 0,
+              "candidate_heuristic_drops": 0,
+              "enumerated_candidates": 6561,
+              "exact_bound_screened": 1462,
+              "full_telescopes_evaluated": 4,
+              "heuristic_dropped": 2,
+              "retained_candidates": 4,
+              "well_formed_candidates": 6561
+            },
+            "source": "summary_plus_live_checkpoints",
+            "summary": "actual=12027 target=3500 gap=-8527 catalog=19683 widths=[3, 3, 3, 3, 3, 3, 3, 3, 3] roots=seen3 enqueued3 exact_rejected0 surface=claim_generic kappa=9..9 anchor=none widen=7,8,9 packages=hilbert_functional axes=path0,trunc0,coupling2,support2,modal0,temporal0,reanchor0,closure3 well_formed=6561 exact_screened=1462 retained=4 heuristic=2 exact=bar=1458 completion=0 incumbent=6551 legality=13122"
+          },
+          "gap_to_target": -8527,
+          "status": "hit",
+          "step_index": 14,
+          "target": 3500
+        },
+        {
+          "actual": 4331,
+          "diagnosis": {
+            "claim_root_seeding": {
+              "roots_enqueued": 3,
+              "roots_rejected_by_exact_screen": 0,
+              "roots_rejected_by_insert_root": 0,
+              "roots_seen": 3
+            },
+            "claim_step_open": {
+              "anchor_policy": "modal",
+              "claim_debt_axes": {
+                "closure_pressure": 3,
+                "coupling_pressure": 2,
+                "kappa_max": 8,
+                "kappa_min": 8,
+                "modal_pressure": 0,
+                "path_pressure": 0,
+                "reanchor_pressure": 2,
+                "support_pressure": 2,
+                "temporal_pressure": 1,
+                "trunc_pressure": 0
+              },
+              "claim_widening_band7_active": true,
+              "claim_widening_band8_active": true,
+              "claim_widening_band9_active": true,
+              "historical_anchor_ref": 10,
+              "kappa_max": 8,
+              "kappa_min": 8,
+              "late_family_surface": "claim_generic",
+              "package_flags": {
+                "hilbert_functional": false,
+                "operator_bundle": false,
+                "temporal_shell": true
+              }
+            },
+            "exact_screen_reasons": {
+              "incumbent_dominance": 3,
+              "legality_connectivity_exact_rejection": 0,
+              "partial_prefix_bar_failure": 553,
+              "terminal_prefix_completion_failure": 0
+            },
+            "raw_catalog_clause_widths": [
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "raw_catalog_telescope_count": 6561,
+            "search_space": {
+              "admissibility_rejections": 0,
+              "candidate_heuristic_drops": 0,
+              "enumerated_candidates": 261,
+              "exact_bound_screened": 554,
+              "full_telescopes_evaluated": 1,
+              "heuristic_dropped": 257,
+              "retained_candidates": 1,
+              "well_formed_candidates": 261
+            },
+            "source": "summary_plus_live_checkpoints",
+            "summary": "actual=4331 target=5000 gap=669 catalog=6561 widths=[3, 3, 3, 3, 3, 3, 3, 3] roots=seen3 enqueued3 exact_rejected0 surface=claim_generic kappa=8..8 anchor=modal@10 widen=7,8,9 packages=temporal_shell axes=path0,trunc0,coupling2,support2,modal0,temporal1,reanchor2,closure3 well_formed=261 exact_screened=554 retained=1 heuristic=257 exact=bar=553 completion=0 incumbent=3 legality=0"
+          },
+          "gap_to_target": 669,
+          "status": "miss",
+          "step_index": 15,
+          "target": 5000
+        }
+      ]
+    },
+    "manifest_completeness": {
+      "detail": "manifest includes all required provenance fields",
+      "missing_fields": [],
+      "present_fields": {
+        "arch": "x86_64",
+        "binary_sha256": "97d9619b8b8f8a2496edd894fcaaf2110d0fda4584e24384149b9f21101077e7",
+        "build_profile": "release",
+        "cargo_lock_sha256": "0e69f79462261b9360797a7ff7874f6da9177a1c08815eb48b2ae2cba4096dab",
+        "cpu_model": "AMD Ryzen 5 7600 6-Core Processor",
+        "dirty_tree": false,
+        "git_commit_sha": "ffbbd34abfbdef0abcf40e4ce8eddb259276dec6",
+        "logical_cpus": 12,
+        "os": "windows",
+        "physical_core_count": 6,
+        "ram_bytes": 16217264128,
+        "resolved_worker_count": 8,
+        "target_cpu": "default",
+        "target_triple": "x86_64-pc-windows-msvc"
+      },
+      "status": "pass"
+    },
+    "narrative_artifacts": {
+      "artifact_status": "complete",
+      "detail": "claim narrative artifacts are complete",
+      "missing_event_steps": [],
+      "missing_narrative_steps": [],
+      "status": "pass"
+    },
+    "prune_class_completeness": {
+      "coverage": {
+        "derived_steps": [],
+        "expected_steps": 15,
+        "missing_steps": [],
+        "persisted_steps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "source_counts": {
+          "summary": 15
+        },
+        "status": "complete",
+        "totals": {
+          "heuristic_shaping": 779,
+          "quotient_dedupe": 0,
+          "sound_minimality": 23992
+        }
+      },
+      "detail": "prune class counts are fully persisted in step artifacts",
+      "status": "pass"
+    },
+    "runtime_threshold": {
+      "detail": "stored runtime 4387 ms is within the certified threshold",
+      "status": "pass",
+      "threshold_ms": 600000,
+      "total_runtime_ms": 4387
+    },
+    "search_policy": {
+      "actual": {
+        "bucket_policy": "structural_generic",
+        "guidance_style": "claim_debt_guided",
+        "late_expansion_policy": "claim_generic"
+      },
+      "detail": "claim search policy matches the expected claim-specific metadata",
+      "expected": {
+        "bucket_policy": "structural_generic",
+        "guidance_style": "claim_debt_guided",
+        "late_expansion_policy": "claim_generic"
+      },
+      "mismatches": [],
+      "status": "pass"
+    }
+  },
+  "claim_run": "C:\\DEV\\atomic\\runs\\codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13",
+  "failing_checks": [
+    "early_breadth",
+    "late_generated_floors"
+  ],
+  "generated_utc": "2026-04-10T05:57:51.176948+00:00",
+  "guarded_run": "C:\\DEV\\atomic\\runs\\codex-guarded-claim-cert-v1",
+  "runtime_threshold_ms": 600000,
+  "status": "attention"
+}

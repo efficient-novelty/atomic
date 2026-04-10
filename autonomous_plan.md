@@ -1,6 +1,6 @@
 # Autonomous Claim Lane Plan
 
-Last updated: 2026-04-08
+Last updated: 2026-04-10
 Status: active
 
 This file owns the medium-horizon path from the current canonical claim bundle
@@ -26,11 +26,36 @@ Produce one stored `desktop_claim_shadow` bundle that:
 
 Until then, wording stays at `bounded live recovery`.
 
-## Phase 1: Land One Step-15 Repair
+## Phase 1: Confirm Post-Probe Stored Baseline
 
 Goal:
 
-- improve the clean step-`15` miss on top of canonical `v12`
+- store one clean rerun beyond `v12` on newer code and settle whether
+  step `15` or step `1` is the first stored miss
+
+Current status:
+
+- complete via canonical `v13`
+
+Completed output:
+
+- one canonical stored run beyond `v12`
+- full-profile completion through step `15`
+- accepted-hash parity preserved through step `15`
+- refreshed compare, benchmark, and certification outputs
+- diagnosis reconfirmed on newer code as breadth-only at
+  step `1 = 546 / 2144` and step `15 = 4331 / 5000`
+
+Exit criterion:
+
+- a newer stored bundle exists on post-probe code and either changes the
+  diagnosis or confirms that step `15` still stays ahead of step `1`
+
+## Phase 2: Land One Step-15 Repair
+
+Goal:
+
+- improve the clean step-`15` miss on top of canonical `v13`
 
 Must keep true:
 
@@ -41,6 +66,8 @@ Must keep true:
 
 Do not use:
 
+- another same-code rerun-only pass
+- a step-`1`-first theory slice
 - blanket, exact-family, or subset-local same-primary relief
 - whole-tier remaining-two mismatch-`0` claim-domain
   `CannotClearBar -> Unknown` relief at the parent
@@ -50,23 +77,22 @@ Do not use:
 - claim-safe clause-`4` or clause-`5` reopenings
 - exact remaining-two mismatch-`0` or mismatch-`1` clause-`5`
   bridge-slice reopenings
-- a rerun-first or step-`1`-first pass
 
 Exit criterion:
 
 - one focused local repair is regression-backed and clearly better than the
-  current `4331 / 553` local surface
+  current `4331 / 553` surface without regressing the fence conditions
 
-## Phase 2: Re-Earn Stored Breadth
+## Phase 3: Re-Earn Stored Breadth
 
 Goal:
 
-- consume the landed local repair in one new clean full-profile bundle beyond
-  `v12`
+- consume the landed step-`15` repair in one new clean full-profile bundle
+  beyond `v13`
 
 Required output:
 
-- one canonical stored run beyond `v12`
+- one canonical stored run beyond `v13`
 - full-profile completion through step `15`
 - accepted-hash parity preserved through step `15`
 - refreshed compare, benchmark, and certification outputs
@@ -74,9 +100,9 @@ Required output:
 Exit criterion:
 
 - stored step `15` either passes or the new stored miss is narrower and
-  cleaner than `v12`
+  cleaner than `v13`
 
-## Phase 3: Close Remaining Breadth Gates
+## Phase 4: Close Remaining Breadth Gates
 
 Goal:
 
@@ -90,10 +116,11 @@ Open gates:
 
 Decision rule:
 
-- keep step `1` explicit, but do not reopen it before the next stored
-  step-`15` rerun unless that rerun itself changes the diagnosis
+- keep step `1` explicit, but do not reopen it before a later stored
+  step-`15` bundle changes the diagnosis away from the rerun-confirmed
+  `4331 / 553` miss
 
-## Phase 4: Certification
+## Phase 5: Certification
 
 Goal:
 
@@ -109,7 +136,7 @@ Exit criterion:
 
 - another reviewer can audit the lane from one stable stored bundle
 
-## Phase 5: Language Gate
+## Phase 6: Language Gate
 
 Goal:
 
@@ -126,7 +153,7 @@ Rules:
 ## Operating Rules
 
 - Trust stored evidence over terminal impressions.
-- Treat `v12` as canonical until a newer stored bundle clearly replaces it.
+- Treat `v13` as canonical until a newer stored bundle clearly replaces it.
 - Keep live numbers in [autonomous_progress.md](autonomous_progress.md).
 - Keep current execution instructions in
   [autonomous_next_steps.md](autonomous_next_steps.md).

@@ -1,0 +1,4371 @@
+{
+  "accepted_hash_consistency": {
+    "baseline_fingerprint": "95208910bf4835cdee0387f54a2f8eda49c893f68d28dfd4dbb1854ebcf74743",
+    "baseline_label": "guarded",
+    "matching_lanes": [
+      "guarded",
+      "claim"
+    ],
+    "mismatched_lanes": [],
+    "status": "all_match_baseline"
+  },
+  "admissibility_diagnostics_consistency": {
+    "baseline_fingerprint": "d9cc1aa9c8a38bb5cf3e364565059e4054c9e7b4506c793da38325bc829f5a5e",
+    "baseline_label": "guarded",
+    "matching_lanes": [
+      "guarded"
+    ],
+    "mismatched_lanes": [
+      "claim"
+    ],
+    "status": "deltas_present"
+  },
+  "baseline_lane": "guarded",
+  "claim_lane_audit": {
+    "attention_lanes": [],
+    "lanes": [
+      {
+        "accepted_hash_parity": {
+          "baseline_missing_steps": [],
+          "lane_missing_steps": [],
+          "matches_baseline": true,
+          "status": "ready"
+        },
+        "baseline_label": "guarded",
+        "completed_step": 15,
+        "exact_screen_reasons": {
+          "derived_steps": [],
+          "expected_steps": 15,
+          "missing_steps": [],
+          "persisted_steps": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "source_counts": {
+            "summary": 15
+          },
+          "status": "complete",
+          "totals": {
+            "incumbent_dominance": 6829,
+            "legality_connectivity_exact_rejection": 14742,
+            "partial_prefix_bar_failure": 2020,
+            "terminal_prefix_completion_failure": 401
+          }
+        },
+        "fallback_honesty": {
+          "reference_replay_steps": [],
+          "resume_steps": [],
+          "run_mode": "atomic_search_bootstrap",
+          "run_mode_fallback": false,
+          "status": "clear",
+          "unexpected_provenance": []
+        },
+        "label": "claim",
+        "narrative_artifacts": "complete",
+        "prune_classes": {
+          "derived_steps": [],
+          "expected_steps": 15,
+          "missing_steps": [],
+          "persisted_steps": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "source_counts": {
+            "summary": 15
+          },
+          "status": "complete",
+          "totals": {
+            "heuristic_shaping": 779,
+            "quotient_dedupe": 0,
+            "sound_minimality": 23992
+          }
+        },
+        "reasons": [],
+        "search_policy": {
+          "actual": {
+            "bucket_policy": "structural_generic",
+            "guidance_style": "claim_debt_guided",
+            "late_expansion_policy": "claim_generic"
+          },
+          "expected": {
+            "bucket_policy": "structural_generic",
+            "guidance_style": "claim_debt_guided",
+            "late_expansion_policy": "claim_generic"
+          },
+          "mismatches": [],
+          "status": "honest"
+        },
+        "status": "ready"
+      }
+    ],
+    "ready_lanes": [
+      "claim"
+    ],
+    "status": "ready"
+  },
+  "comparison_version": 5,
+  "lane_order": [
+    "guarded",
+    "claim"
+  ],
+  "lanes": [
+    {
+      "accepted_hashes": [
+        {
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "canonical_hash": "blake3:23ab301fcb806f4f151974b767119ea66f8ee39bcf5b7d9c95924fc2902663b2",
+          "step_index": 1
+        },
+        {
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "canonical_hash": "blake3:cd72c5935198d40c0ef48ae172c9ccba1ef9c90435494569121c8dccd3466476",
+          "step_index": 2
+        },
+        {
+          "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "canonical_hash": "blake3:2e85e04d43f4ef6ae6c9b00f4460ba7b8507b8c371743c97b7262ca014fd2987",
+          "step_index": 3
+        },
+        {
+          "candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+          "canonical_hash": "blake3:c7a99c10bbc01197aec9fa0c4605b4763dda6dc22ea95310fae37e9ff5ee65a1",
+          "step_index": 4
+        },
+        {
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "canonical_hash": "blake3:6db82a1b3484f3373986e9f2986d6472521448379495ab3b66da36c0d2507085",
+          "step_index": 5
+        },
+        {
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "canonical_hash": "blake3:05d6509e1d870b0169bf74091e2a4ac86e7a337540c6dc53957ec18aa02ac28a",
+          "step_index": 6
+        },
+        {
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "canonical_hash": "blake3:8fd79581fd71b586ff52b3be14ade3ec63cf520232577617aa7918bbdc80ece4",
+          "step_index": 7
+        },
+        {
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "canonical_hash": "blake3:c6fc7673d107487f21fb29064e7ce8c9418f9fb2f0688613380e116ea77230aa",
+          "step_index": 8
+        },
+        {
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "canonical_hash": "blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+          "step_index": 9
+        },
+        {
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "canonical_hash": "blake3:09bed8af6371d3ac8be4c5d4bd59321753f2a027ff9685808b8bab6ce8ac4ef5",
+          "step_index": 10
+        },
+        {
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "canonical_hash": "blake3:0b747d5eea40ef4cece4f40b64c7dbdff0db9ed74f209e5c6c79346f7165ae27",
+          "step_index": 11
+        },
+        {
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "canonical_hash": "blake3:fd636363062e2cc44259d330cd96e319979d8ae7ff02eb065599bb2541d03cac",
+          "step_index": 12
+        },
+        {
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "canonical_hash": "blake3:4eefcc446fb659c101cb538dcf4b06695c165d6e977e64ab7580a2451af0f5ae",
+          "step_index": 13
+        },
+        {
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "canonical_hash": "blake3:435eaca75694e1e58b26739b2f6d8c5d77cc0c601c2681e63ced81692f25c67d",
+          "step_index": 14
+        },
+        {
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "canonical_hash": "blake3:6f4b65c28060999af4bac3fa46a9da3bd8e1bbdbc99f41ecc94291012a0573a4",
+          "step_index": 15
+        }
+      ],
+      "accepted_hashes_vs_baseline": {
+        "baseline_label": "guarded",
+        "deltas": [],
+        "matches": true
+      },
+      "admissibility_diagnostics": [
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 287,
+          "step_index": 1,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 287,
+              "reason": "bootstrap_universe_shape"
+            },
+            {
+              "count": 1,
+              "reason": "bootstrap_universe_intro"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 32,
+          "step_index": 2,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 33,
+              "reason": "bootstrap_unit_shape"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 55,
+          "step_index": 3,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 56,
+              "reason": "bootstrap_type_shape"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 4,
+          "exact_legality_rejections": 0,
+          "step_index": 4,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 4,
+              "reason": "focus_former_eliminator"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 5,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_initial_hit"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 6,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_truncation_hit"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 7,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_higher_hit"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 8,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_sphere_lift"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 9,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_axiomatic_bundle"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 10,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_modal_shell"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 11,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_connection_shell"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 12,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_curvature_shell"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 13,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_operator_bundle"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 14,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_hilbert_functional"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 15,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_temporal_shell"
+            }
+          ]
+        }
+      ],
+      "admissibility_diagnostics_vs_baseline": {
+        "baseline_label": "guarded",
+        "deltas": [],
+        "matches": true
+      },
+      "claim_lane_audit": {
+        "baseline_label": "guarded",
+        "label": "guarded",
+        "status": "not_applicable"
+      },
+      "completed_step": 15,
+      "demo_phase_evidence": [
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 288,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 288,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 1,
+          "winner_overshoot": "0/1"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 33,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 33,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 2,
+          "winner_overshoot": "1/2"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 56,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 56,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 3,
+          "winner_overshoot": "2/3"
+        },
+        {
+          "bar_clearers": 4,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 4,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 4,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 4,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 4,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 4,
+          "hard_admissible": 4,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 4,
+          "step_index": 4,
+          "winner_overshoot": "1/6"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 1,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 5,
+          "winner_overshoot": "4/21"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 1,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 6,
+          "winner_overshoot": "8/75"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 1,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 7,
+          "winner_overshoot": "1/3"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 1,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 8,
+          "winner_overshoot": "87/520"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 1,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 9,
+          "winner_overshoot": "425/1764"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 1,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 10,
+          "winner_overshoot": "97/340"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 1,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 11,
+          "winner_overshoot": "42/145"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 1,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 12,
+          "winner_overshoot": "1097/4539"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 1,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 13,
+          "winner_overshoot": "5893/10080"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 1,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 14,
+          "winner_overshoot": "20720/98559"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 1,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 15,
+          "winner_overshoot": "115657/21112"
+        }
+      ],
+      "exact_screen_reason_coverage": {
+        "derived_steps": [],
+        "expected_steps": 15,
+        "missing_steps": [],
+        "persisted_steps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "source_counts": {
+          "summary": 15
+        },
+        "status": "complete",
+        "totals": {
+          "incumbent_dominance": 0,
+          "legality_connectivity_exact_rejection": 0,
+          "partial_prefix_bar_failure": 0,
+          "terminal_prefix_completion_failure": 0
+        }
+      },
+      "frontier_retention_delta_by_step": [
+        {
+          "delta": 1,
+          "step_index": 1
+        },
+        {
+          "delta": 1,
+          "step_index": 2
+        },
+        {
+          "delta": 1,
+          "step_index": 3
+        },
+        {
+          "delta": 4,
+          "step_index": 4
+        },
+        {
+          "delta": 1,
+          "step_index": 5
+        },
+        {
+          "delta": 1,
+          "step_index": 6
+        },
+        {
+          "delta": 1,
+          "step_index": 7
+        },
+        {
+          "delta": 1,
+          "step_index": 8
+        },
+        {
+          "delta": 1,
+          "step_index": 9
+        },
+        {
+          "delta": 1,
+          "step_index": 10
+        },
+        {
+          "delta": 1,
+          "step_index": 11
+        },
+        {
+          "delta": 1,
+          "step_index": 12
+        },
+        {
+          "delta": 1,
+          "step_index": 13
+        },
+        {
+          "delta": 1,
+          "step_index": 14
+        },
+        {
+          "delta": 1,
+          "step_index": 15
+        }
+      ],
+      "frontier_retention_delta_total": 18,
+      "frontier_retention_totals": {
+        "hot": 18
+      },
+      "governor_summary": {
+        "actions": {
+          "none": 15
+        },
+        "max_rss_bytes": 1476395392,
+        "sequence": [
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 1,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 2,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 3,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395392,
+            "state": "green",
+            "step_index": 4,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 5,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 6,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 7,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 8,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 9,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 10,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 11,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 12,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 13,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 14,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1476395104,
+            "state": "green",
+            "step_index": 15,
+            "value": "green/none"
+          }
+        ],
+        "states": {
+          "green": 15
+        }
+      },
+      "label": "guarded",
+      "late_step_competition": [
+        {
+          "below_bar": 0,
+          "clears_bar": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "step_index": 10,
+          "terminal_rank_prunes": 0
+        },
+        {
+          "below_bar": 0,
+          "clears_bar": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "step_index": 11,
+          "terminal_rank_prunes": 0
+        },
+        {
+          "below_bar": 0,
+          "clears_bar": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "step_index": 12,
+          "terminal_rank_prunes": 0
+        },
+        {
+          "below_bar": 0,
+          "clears_bar": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "step_index": 13,
+          "terminal_rank_prunes": 0
+        },
+        {
+          "below_bar": 0,
+          "clears_bar": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "step_index": 14,
+          "terminal_rank_prunes": 0
+        },
+        {
+          "below_bar": 0,
+          "clears_bar": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "step_index": 15,
+          "terminal_rank_prunes": 0
+        }
+      ],
+      "late_step_competition_vs_baseline": {
+        "baseline_label": "guarded",
+        "deltas": [],
+        "matches": true
+      },
+      "latest_frontier": {
+        "band_index": 8,
+        "cold_states": 0,
+        "dedupe_keys": 1,
+        "frontier_epoch": 12,
+        "governor_state": "green",
+        "hot_states": 1,
+        "prefix_exact_pruned": 0,
+        "prefix_explored": 0,
+        "prefix_heuristic_dropped": 0,
+        "present": true,
+        "pressure_action": "none",
+        "resident_cold_records": 0,
+        "spill_generation": 0,
+        "spilled_cold_records": 0,
+        "step_index": 15,
+        "worker_count": 10
+      },
+      "narrative_artifacts": {
+        "expected_steps": 0,
+        "missing_event_steps": [],
+        "missing_narrative_steps": [],
+        "present_event_steps": 0,
+        "present_narrative_steps": 0,
+        "status": "not_applicable"
+      },
+      "path": "C:\\DEV\\atomic\\runs\\codex-guarded-claim-cert-v1",
+      "provenance_sequence": [
+        {
+          "step_index": 1,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 2,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 3,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 4,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 5,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 6,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 7,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 8,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 9,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 10,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 11,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 12,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 13,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 14,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 15,
+          "value": "atomic_bootstrap_search"
+        }
+      ],
+      "provenance_summary": {
+        "atomic_bootstrap_search": 15
+      },
+      "prune_class_coverage": {
+        "derived_steps": [],
+        "expected_steps": 15,
+        "missing_steps": [],
+        "persisted_steps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "source_counts": {
+          "summary": 15
+        },
+        "status": "complete",
+        "totals": {
+          "heuristic_shaping": 0,
+          "quotient_dedupe": 0,
+          "sound_minimality": 0
+        }
+      },
+      "prune_class_totals": {
+        "heuristic_shaping": 0,
+        "quotient_dedupe": 0,
+        "sound_minimality": 0
+      },
+      "prune_sample_totals": {
+        "heuristic_shaping": 0,
+        "quotient_dedupe": 0,
+        "sound_minimality": 0
+      },
+      "replay_ablation_sequence": [
+        {
+          "step_index": 1,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 2,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 3,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 4,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 5,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 6,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 7,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 8,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 9,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 10,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 11,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 12,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 13,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 14,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 15,
+          "value": "matches_reference_replay"
+        }
+      ],
+      "replay_ablation_summary": {
+        "matches_reference_replay": 15
+      },
+      "run_id": "codex-guarded-claim-cert-v1",
+      "run_mode": "atomic_search_bootstrap",
+      "search_policy": {
+        "bucket_policy": "guarded_structural",
+        "guidance_style": "legacy_family_guided",
+        "late_expansion_policy": "guarded_exact"
+      },
+      "search_profile": "strict_canon_guarded",
+      "search_space_counts": [
+        {
+          "admissibility_rejected": 287,
+          "canonical": 1,
+          "enumerated": 288,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 1,
+          "well_formed": 288
+        },
+        {
+          "admissibility_rejected": 32,
+          "canonical": 1,
+          "enumerated": 33,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 2,
+          "well_formed": 33
+        },
+        {
+          "admissibility_rejected": 55,
+          "canonical": 1,
+          "enumerated": 56,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 3,
+          "well_formed": 56
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 4,
+          "enumerated": 4,
+          "evaluated": 4,
+          "retained": 4,
+          "semantically_minimal": 4,
+          "step_index": 4,
+          "well_formed": 4
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 5,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 6,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 7,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 8,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 9,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 10,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 11,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 12,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 13,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 14,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 15,
+          "well_formed": 1
+        }
+      ],
+      "search_space_counts_vs_baseline": {
+        "baseline_label": "guarded",
+        "deltas": [],
+        "matches": true
+      },
+      "step15_claim": {
+        "adopted_label": "DCT",
+        "adopted_nu": 103,
+        "adopted_step": 15,
+        "matches_accepted": true,
+        "present": true,
+        "status": "executable_canon"
+      },
+      "trajectory": [
+        {
+          "bit_kappa": 14,
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "canonical_hash": "blake3:23ab301fcb806f4f151974b767119ea66f8ee39bcf5b7d9c95924fc2902663b2",
+          "clause_kappa": 2,
+          "label": "Universe",
+          "nu": 1,
+          "objective_bar": "1/2",
+          "overshoot": "0/1",
+          "rho": "1/2",
+          "step_index": 1
+        },
+        {
+          "bit_kappa": 10,
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "canonical_hash": "blake3:cd72c5935198d40c0ef48ae172c9ccba1ef9c90435494569121c8dccd3466476",
+          "clause_kappa": 1,
+          "label": "Unit",
+          "nu": 1,
+          "objective_bar": "1/2",
+          "overshoot": "1/2",
+          "rho": "1/1",
+          "step_index": 2
+        },
+        {
+          "bit_kappa": 12,
+          "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "canonical_hash": "blake3:2e85e04d43f4ef6ae6c9b00f4460ba7b8507b8c371743c97b7262ca014fd2987",
+          "clause_kappa": 1,
+          "label": "Witness",
+          "nu": 2,
+          "objective_bar": "4/3",
+          "overshoot": "2/3",
+          "rho": "2/1",
+          "step_index": 3
+        },
+        {
+          "bit_kappa": 49,
+          "candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+          "canonical_hash": "blake3:c7a99c10bbc01197aec9fa0c4605b4763dda6dc22ea95310fae37e9ff5ee65a1",
+          "clause_kappa": 3,
+          "label": "Pi",
+          "nu": 5,
+          "objective_bar": "3/2",
+          "overshoot": "1/6",
+          "rho": "5/3",
+          "step_index": 4
+        },
+        {
+          "bit_kappa": 21,
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "canonical_hash": "blake3:6db82a1b3484f3373986e9f2986d6472521448379495ab3b66da36c0d2507085",
+          "clause_kappa": 3,
+          "label": "S1",
+          "nu": 7,
+          "objective_bar": "15/7",
+          "overshoot": "4/21",
+          "rho": "7/3",
+          "step_index": 5
+        },
+        {
+          "bit_kappa": 35,
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "canonical_hash": "blake3:05d6509e1d870b0169bf74091e2a4ac86e7a337540c6dc53957ec18aa02ac28a",
+          "clause_kappa": 3,
+          "label": "Trunc",
+          "nu": 8,
+          "objective_bar": "64/25",
+          "overshoot": "8/75",
+          "rho": "8/3",
+          "step_index": 6
+        },
+        {
+          "bit_kappa": 23,
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "canonical_hash": "blake3:8fd79581fd71b586ff52b3be14ade3ec63cf520232577617aa7918bbdc80ece4",
+          "clause_kappa": 3,
+          "label": "S2",
+          "nu": 10,
+          "objective_bar": "3/1",
+          "overshoot": "1/3",
+          "rho": "10/3",
+          "step_index": 7
+        },
+        {
+          "bit_kappa": 37,
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "canonical_hash": "blake3:c6fc7673d107487f21fb29064e7ce8c9418f9fb2f0688613380e116ea77230aa",
+          "clause_kappa": 5,
+          "label": "S3",
+          "nu": 18,
+          "objective_bar": "357/104",
+          "overshoot": "87/520",
+          "rho": "18/5",
+          "step_index": 8
+        },
+        {
+          "bit_kappa": 78,
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "canonical_hash": "blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+          "clause_kappa": 4,
+          "label": "Hopf",
+          "nu": 17,
+          "objective_bar": "1768/441",
+          "overshoot": "425/1764",
+          "rho": "17/4",
+          "step_index": 9
+        },
+        {
+          "bit_kappa": 45,
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "canonical_hash": "blake3:09bed8af6371d3ac8be4c5d4bd59321753f2a027ff9685808b8bab6ce8ac4ef5",
+          "clause_kappa": 4,
+          "label": "Cohesion",
+          "nu": 19,
+          "objective_bar": "759/170",
+          "overshoot": "97/340",
+          "rho": "19/4",
+          "step_index": 10
+        },
+        {
+          "bit_kappa": 79,
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "canonical_hash": "blake3:0b747d5eea40ef4cece4f40b64c7dbdff0db9ed74f209e5c6c79346f7165ae27",
+          "clause_kappa": 5,
+          "label": "Connections",
+          "nu": 26,
+          "objective_bar": "712/145",
+          "overshoot": "42/145",
+          "rho": "26/5",
+          "step_index": 11
+        },
+        {
+          "bit_kappa": 121,
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "canonical_hash": "blake3:fd636363062e2cc44259d330cd96e319979d8ae7ff02eb065599bb2541d03cac",
+          "clause_kappa": 6,
+          "label": "Curvature",
+          "nu": 34,
+          "objective_bar": "8208/1513",
+          "overshoot": "1097/4539",
+          "rho": "17/3",
+          "step_index": 12
+        },
+        {
+          "bit_kappa": 138,
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "canonical_hash": "blake3:4eefcc446fb659c101cb538dcf4b06695c165d6e977e64ab7580a2451af0f5ae",
+          "clause_kappa": 7,
+          "label": "Metric",
+          "nu": 46,
+          "objective_bar": "8621/1440",
+          "overshoot": "5893/10080",
+          "rho": "46/7",
+          "step_index": 13
+        },
+        {
+          "bit_kappa": 169,
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "canonical_hash": "blake3:435eaca75694e1e58b26739b2f6d8c5d77cc0c601c2681e63ced81692f25c67d",
+          "clause_kappa": 9,
+          "label": "Hilbert",
+          "nu": 62,
+          "objective_bar": "73138/10951",
+          "overshoot": "20720/98559",
+          "rho": "62/9",
+          "step_index": 14
+        },
+        {
+          "bit_kappa": 229,
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "canonical_hash": "blake3:6f4b65c28060999af4bac3fa46a9da3bd8e1bbdbc99f41ecc94291012a0573a4",
+          "clause_kappa": 8,
+          "label": "DCT",
+          "nu": 103,
+          "objective_bar": "19520/2639",
+          "overshoot": "115657/21112",
+          "rho": "103/8",
+          "step_index": 15
+        }
+      ],
+      "trajectory_fingerprint": "2048cf11d10f42051dcc5e184af86b233b6d800066b678d494311ed5d217d53e",
+      "trajectory_vs_baseline": {
+        "baseline_label": "guarded",
+        "deltas": [],
+        "matches": true
+      }
+    },
+    {
+      "accepted_hashes": [
+        {
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "canonical_hash": "blake3:23ab301fcb806f4f151974b767119ea66f8ee39bcf5b7d9c95924fc2902663b2",
+          "step_index": 1
+        },
+        {
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "canonical_hash": "blake3:cd72c5935198d40c0ef48ae172c9ccba1ef9c90435494569121c8dccd3466476",
+          "step_index": 2
+        },
+        {
+          "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "canonical_hash": "blake3:2e85e04d43f4ef6ae6c9b00f4460ba7b8507b8c371743c97b7262ca014fd2987",
+          "step_index": 3
+        },
+        {
+          "candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+          "canonical_hash": "blake3:c7a99c10bbc01197aec9fa0c4605b4763dda6dc22ea95310fae37e9ff5ee65a1",
+          "step_index": 4
+        },
+        {
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "canonical_hash": "blake3:6db82a1b3484f3373986e9f2986d6472521448379495ab3b66da36c0d2507085",
+          "step_index": 5
+        },
+        {
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "canonical_hash": "blake3:05d6509e1d870b0169bf74091e2a4ac86e7a337540c6dc53957ec18aa02ac28a",
+          "step_index": 6
+        },
+        {
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "canonical_hash": "blake3:8fd79581fd71b586ff52b3be14ade3ec63cf520232577617aa7918bbdc80ece4",
+          "step_index": 7
+        },
+        {
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "canonical_hash": "blake3:c6fc7673d107487f21fb29064e7ce8c9418f9fb2f0688613380e116ea77230aa",
+          "step_index": 8
+        },
+        {
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "canonical_hash": "blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+          "step_index": 9
+        },
+        {
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "canonical_hash": "blake3:09bed8af6371d3ac8be4c5d4bd59321753f2a027ff9685808b8bab6ce8ac4ef5",
+          "step_index": 10
+        },
+        {
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "canonical_hash": "blake3:0b747d5eea40ef4cece4f40b64c7dbdff0db9ed74f209e5c6c79346f7165ae27",
+          "step_index": 11
+        },
+        {
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "canonical_hash": "blake3:fd636363062e2cc44259d330cd96e319979d8ae7ff02eb065599bb2541d03cac",
+          "step_index": 12
+        },
+        {
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "canonical_hash": "blake3:4eefcc446fb659c101cb538dcf4b06695c165d6e977e64ab7580a2451af0f5ae",
+          "step_index": 13
+        },
+        {
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "canonical_hash": "blake3:435eaca75694e1e58b26739b2f6d8c5d77cc0c601c2681e63ced81692f25c67d",
+          "step_index": 14
+        },
+        {
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "canonical_hash": "blake3:6f4b65c28060999af4bac3fa46a9da3bd8e1bbdbc99f41ecc94291012a0573a4",
+          "step_index": 15
+        }
+      ],
+      "accepted_hashes_vs_baseline": {
+        "baseline_label": "guarded",
+        "deltas": [],
+        "matches": true
+      },
+      "admissibility_diagnostics": [
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 287,
+          "step_index": 1,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 287,
+              "reason": "bootstrap_universe_shape"
+            },
+            {
+              "count": 1,
+              "reason": "bootstrap_universe_intro"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 32,
+          "step_index": 2,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 33,
+              "reason": "bootstrap_unit_shape"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 55,
+          "step_index": 3,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 56,
+              "reason": "bootstrap_type_shape"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 4,
+          "exact_legality_rejections": 0,
+          "step_index": 4,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 4,
+              "reason": "focus_former_eliminator"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 5,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_initial_hit"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 6,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_truncation_hit"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 7,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_higher_hit"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 1,
+          "exact_legality_rejections": 0,
+          "step_index": 8,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 1,
+              "reason": "focus_sphere_lift"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 81,
+          "exact_legality_rejections": 0,
+          "step_index": 9,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 81,
+              "reason": "open_band_structural"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 597,
+          "exact_legality_rejections": 0,
+          "step_index": 10,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 597,
+              "reason": "open_band_structural"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 891,
+          "exact_legality_rejections": 0,
+          "step_index": 11,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 891,
+              "reason": "open_band_structural"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 891,
+          "exact_legality_rejections": 0,
+          "step_index": 12,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 891,
+              "reason": "open_band_structural"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 774,
+          "exact_legality_rejections": 0,
+          "step_index": 13,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 774,
+              "reason": "open_band_structural"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 6561,
+          "exact_legality_rejections": 0,
+          "step_index": 14,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 6561,
+              "reason": "open_band_structural"
+            }
+          ]
+        },
+        {
+          "admitted_deprioritized": 0,
+          "admitted_focus_aligned": 261,
+          "exact_legality_rejections": 0,
+          "step_index": 15,
+          "structural_debt_cap_rejections": 0,
+          "top_reasons": [
+            {
+              "count": 261,
+              "reason": "open_band_structural"
+            }
+          ]
+        }
+      ],
+      "admissibility_diagnostics_vs_baseline": {
+        "baseline_label": "guarded",
+        "deltas": [
+          {
+            "baseline": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 1,
+              "exact_legality_rejections": 0,
+              "step_index": 9,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 1,
+                  "reason": "focus_axiomatic_bundle"
+                }
+              ]
+            },
+            "changed_keys": [
+              "admitted_focus_aligned",
+              "top_reasons"
+            ],
+            "current": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 81,
+              "exact_legality_rejections": 0,
+              "step_index": 9,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 81,
+                  "reason": "open_band_structural"
+                }
+              ]
+            },
+            "step_index": 9
+          },
+          {
+            "baseline": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 1,
+              "exact_legality_rejections": 0,
+              "step_index": 10,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 1,
+                  "reason": "focus_modal_shell"
+                }
+              ]
+            },
+            "changed_keys": [
+              "admitted_focus_aligned",
+              "top_reasons"
+            ],
+            "current": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 597,
+              "exact_legality_rejections": 0,
+              "step_index": 10,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 597,
+                  "reason": "open_band_structural"
+                }
+              ]
+            },
+            "step_index": 10
+          },
+          {
+            "baseline": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 1,
+              "exact_legality_rejections": 0,
+              "step_index": 11,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 1,
+                  "reason": "focus_connection_shell"
+                }
+              ]
+            },
+            "changed_keys": [
+              "admitted_focus_aligned",
+              "top_reasons"
+            ],
+            "current": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 891,
+              "exact_legality_rejections": 0,
+              "step_index": 11,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 891,
+                  "reason": "open_band_structural"
+                }
+              ]
+            },
+            "step_index": 11
+          },
+          {
+            "baseline": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 1,
+              "exact_legality_rejections": 0,
+              "step_index": 12,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 1,
+                  "reason": "focus_curvature_shell"
+                }
+              ]
+            },
+            "changed_keys": [
+              "admitted_focus_aligned",
+              "top_reasons"
+            ],
+            "current": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 891,
+              "exact_legality_rejections": 0,
+              "step_index": 12,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 891,
+                  "reason": "open_band_structural"
+                }
+              ]
+            },
+            "step_index": 12
+          },
+          {
+            "baseline": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 1,
+              "exact_legality_rejections": 0,
+              "step_index": 13,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 1,
+                  "reason": "focus_operator_bundle"
+                }
+              ]
+            },
+            "changed_keys": [
+              "admitted_focus_aligned",
+              "top_reasons"
+            ],
+            "current": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 774,
+              "exact_legality_rejections": 0,
+              "step_index": 13,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 774,
+                  "reason": "open_band_structural"
+                }
+              ]
+            },
+            "step_index": 13
+          },
+          {
+            "baseline": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 1,
+              "exact_legality_rejections": 0,
+              "step_index": 14,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 1,
+                  "reason": "focus_hilbert_functional"
+                }
+              ]
+            },
+            "changed_keys": [
+              "admitted_focus_aligned",
+              "top_reasons"
+            ],
+            "current": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 6561,
+              "exact_legality_rejections": 0,
+              "step_index": 14,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 6561,
+                  "reason": "open_band_structural"
+                }
+              ]
+            },
+            "step_index": 14
+          },
+          {
+            "baseline": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 1,
+              "exact_legality_rejections": 0,
+              "step_index": 15,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 1,
+                  "reason": "focus_temporal_shell"
+                }
+              ]
+            },
+            "changed_keys": [
+              "admitted_focus_aligned",
+              "top_reasons"
+            ],
+            "current": {
+              "admitted_deprioritized": 0,
+              "admitted_focus_aligned": 261,
+              "exact_legality_rejections": 0,
+              "step_index": 15,
+              "structural_debt_cap_rejections": 0,
+              "top_reasons": [
+                {
+                  "count": 261,
+                  "reason": "open_band_structural"
+                }
+              ]
+            },
+            "step_index": 15
+          }
+        ],
+        "matches": false
+      },
+      "claim_lane_audit": {
+        "accepted_hash_parity": {
+          "baseline_missing_steps": [],
+          "lane_missing_steps": [],
+          "matches_baseline": true,
+          "status": "ready"
+        },
+        "baseline_label": "guarded",
+        "completed_step": 15,
+        "exact_screen_reasons": {
+          "derived_steps": [],
+          "expected_steps": 15,
+          "missing_steps": [],
+          "persisted_steps": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "source_counts": {
+            "summary": 15
+          },
+          "status": "complete",
+          "totals": {
+            "incumbent_dominance": 6829,
+            "legality_connectivity_exact_rejection": 14742,
+            "partial_prefix_bar_failure": 2020,
+            "terminal_prefix_completion_failure": 401
+          }
+        },
+        "fallback_honesty": {
+          "reference_replay_steps": [],
+          "resume_steps": [],
+          "run_mode": "atomic_search_bootstrap",
+          "run_mode_fallback": false,
+          "status": "clear",
+          "unexpected_provenance": []
+        },
+        "label": "claim",
+        "narrative_artifacts": "complete",
+        "prune_classes": {
+          "derived_steps": [],
+          "expected_steps": 15,
+          "missing_steps": [],
+          "persisted_steps": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "source_counts": {
+            "summary": 15
+          },
+          "status": "complete",
+          "totals": {
+            "heuristic_shaping": 779,
+            "quotient_dedupe": 0,
+            "sound_minimality": 23992
+          }
+        },
+        "reasons": [],
+        "search_policy": {
+          "actual": {
+            "bucket_policy": "structural_generic",
+            "guidance_style": "claim_debt_guided",
+            "late_expansion_policy": "claim_generic"
+          },
+          "expected": {
+            "bucket_policy": "structural_generic",
+            "guidance_style": "claim_debt_guided",
+            "late_expansion_policy": "claim_generic"
+          },
+          "mismatches": [],
+          "status": "honest"
+        },
+        "status": "ready"
+      },
+      "completed_step": 15,
+      "demo_phase_evidence": [
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k2:structural_generic:local_plain:local_only:broad gen=297 adm=2 screen=2 pruned=0 scored=0 best=none | k2:structural_generic:local_plain:local_only:single gen=0 adm=0 screen=0 pruned=0 scored=1 best=0/1 | k2:structural_generic:binder_heavy:local_only:broad gen=132 adm=0 screen=0 pruned=0 scored=0 best=none | ... 1 more",
+          "canonical_prefix_signatures": 16,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 546,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 1,
+          "winner_overshoot": "0/1"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 33,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 33,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 2,
+          "winner_overshoot": "1/2"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "none",
+          "canonical_prefix_signatures": 56,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 56,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 3,
+          "winner_overshoot": "2/3"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k3:structural_generic:binder_heavy:local_only:single gen=5 adm=5 screen=5 pruned=3 scored=1 best=1/6",
+          "canonical_prefix_signatures": 6,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 10,
+          "hard_admissible": 4,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 4,
+          "winner_overshoot": "1/6"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k3:structural_generic:local_plain:local_only:single gen=2 adm=2 screen=2 pruned=0 scored=1 best=4/21",
+          "canonical_prefix_signatures": 2,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 3,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 5,
+          "winner_overshoot": "4/21"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k3:structural_generic:support_form:local_only:single gen=2 adm=2 screen=2 pruned=0 scored=1 best=8/75",
+          "canonical_prefix_signatures": 2,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 3,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 6,
+          "winner_overshoot": "8/75"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k3:structural_generic:local_plain:local_only:single gen=2 adm=2 screen=2 pruned=0 scored=1 best=1/3",
+          "canonical_prefix_signatures": 2,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 3,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 7,
+          "winner_overshoot": "1/3"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k5:structural_generic:bridge_reanchor:local_only:single gen=2 adm=2 screen=2 pruned=0 scored=1 best=87/520",
+          "canonical_prefix_signatures": 4,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 1,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 1,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 5,
+          "hard_admissible": 1,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 8,
+          "winner_overshoot": "87/520"
+        },
+        {
+          "bar_clearers": 63,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k4:structural_generic:support_form:library_backed:small_cluster gen=144 adm=144 screen=144 pruned=18 scored=63 best=425/1764",
+          "canonical_prefix_signatures": 39,
+          "closure_percent": 8,
+          "exact_bound_pruned": 6,
+          "exact_bound_screened": 69,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 6,
+          "frontier_total_seen": 69,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 63,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 120,
+          "hard_admissible": 81,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 63,
+          "step_index": 9,
+          "winner_overshoot": "425/1764"
+        },
+        {
+          "bar_clearers": 81,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k4:structural_generic:modal_operator:library_backed:broad gen=864 adm=354 screen=354 pruned=354 scored=0 best=none | k4:structural_generic:modal_operator:local_only:broad gen=324 adm=162 screen=162 pruned=0 scored=0 best=none | k4:structural_generic:support_form:library_backed:broad gen=162 adm=162 screen=162 pruned=162 scored=0 best=none | ... 1 more",
+          "canonical_prefix_signatures": 240,
+          "closure_percent": 64,
+          "exact_bound_pruned": 147,
+          "exact_bound_screened": 228,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 147,
+          "frontier_total_seen": 228,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 81,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1428,
+          "hard_admissible": 597,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 81,
+          "step_index": 10,
+          "winner_overshoot": "97/340"
+        },
+        {
+          "bar_clearers": 72,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k6:structural_generic:binder_heavy:library_backed:small_cluster gen=729 adm=729 screen=729 pruned=729 scored=0 best=none | k5:structural_generic:binder_heavy:library_backed:small_cluster gen=234 adm=234 screen=234 pruned=90 scored=72 best=42/145",
+          "canonical_prefix_signatures": 447,
+          "closure_percent": 77,
+          "exact_bound_pruned": 250,
+          "exact_bound_screened": 322,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 250,
+          "frontier_total_seen": 322,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 72,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1338,
+          "hard_admissible": 891,
+          "heuristic_dropped": 0,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 72,
+          "step_index": 11,
+          "winner_overshoot": "42/145"
+        },
+        {
+          "bar_clearers": 116,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k6:structural_generic:binder_heavy:library_backed:small_cluster gen=1305 adm=1305 screen=1305 pruned=155 scored=4 best=1097/4539 | k5:structural_generic:binder_heavy:library_backed:small_cluster gen=279 adm=279 screen=279 pruned=51 scored=6 best=8889/7565 | k6:structural_generic:binder_heavy:library_backed:single gen=0 adm=0 screen=0 pruned=0 scored=106 best=1097/4539",
+          "canonical_prefix_signatures": 447,
+          "closure_percent": 5,
+          "exact_bound_pruned": 7,
+          "exact_bound_screened": 123,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 7,
+          "frontier_total_seen": 123,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 116,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 1338,
+          "hard_admissible": 891,
+          "heuristic_dropped": 119,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 116,
+          "step_index": 12,
+          "winner_overshoot": "1097/4539"
+        },
+        {
+          "bar_clearers": 8,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k7:structural_generic:binder_heavy:library_backed:pair gen=2160 adm=1548 screen=1548 pruned=0 scored=8 best=5893/10080",
+          "canonical_prefix_signatures": 970,
+          "closure_percent": 0,
+          "exact_bound_pruned": 0,
+          "exact_bound_screened": 8,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 0,
+          "frontier_total_seen": 8,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 8,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 2320,
+          "hard_admissible": 774,
+          "heuristic_dropped": 401,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 8,
+          "step_index": 13,
+          "winner_overshoot": "5893/10080"
+        },
+        {
+          "bar_clearers": 4,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k9:structural_generic:binder_heavy:library_backed:small_cluster gen=6579 adm=6579 screen=6579 pruned=6551 scored=4 best=20720/98559",
+          "canonical_prefix_signatures": 5466,
+          "closure_percent": 99,
+          "exact_bound_pruned": 1458,
+          "exact_bound_screened": 1462,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 1458,
+          "frontier_total_seen": 1462,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 4,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 12027,
+          "hard_admissible": 6561,
+          "heuristic_dropped": 2,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 4,
+          "step_index": 14,
+          "winner_overshoot": "20720/98559"
+        },
+        {
+          "bar_clearers": 1,
+          "breadth_harvest_exit_reason": null,
+          "bucket_summary": "k8:structural_generic:temporal_operator:library_backed:small_cluster gen=3132 adm=522 screen=522 pruned=0 scored=0 best=none | k8:structural_generic:temporal_operator:library_backed:single gen=0 adm=0 screen=0 pruned=3 scored=1 best=115657/21112",
+          "canonical_prefix_signatures": 1982,
+          "closure_percent": 99,
+          "exact_bound_pruned": 553,
+          "exact_bound_screened": 554,
+          "exact_screened_floor": null,
+          "exact_screened_floor_status": "not_applicable",
+          "frontier_certified_nonwinning": 553,
+          "frontier_total_seen": 554,
+          "full_eval_soft_cap": null,
+          "full_eval_soft_cap_status": "not_applicable",
+          "full_telescopes_evaluated": 1,
+          "generated_floor": null,
+          "generated_floor_status": "not_applicable",
+          "generated_raw_prefixes": 4331,
+          "hard_admissible": 261,
+          "heuristic_dropped": 257,
+          "materialize_full_evals": 0,
+          "materialize_soft_cap_triggered": false,
+          "proof_close_closure_percent": 0,
+          "proof_close_elapsed_millis": 0,
+          "proof_close_entry_reason": null,
+          "proof_close_frontier_groups_closed": 0,
+          "proof_close_frontier_groups_remaining": 0,
+          "proof_close_frontier_total_groups": 0,
+          "proof_close_full_evals": 0,
+          "proof_close_overrun_full_evals": 0,
+          "proof_close_overrun_reason": null,
+          "proof_close_remaining_millis": 0,
+          "proof_close_reserve_exhausted": false,
+          "proof_close_reserve_overrun_millis": 0,
+          "proof_close_reserved_millis": 0,
+          "semantically_minimal_clearers": 1,
+          "step_index": 15,
+          "winner_overshoot": "115657/21112"
+        }
+      ],
+      "exact_screen_reason_coverage": {
+        "derived_steps": [],
+        "expected_steps": 15,
+        "missing_steps": [],
+        "persisted_steps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "source_counts": {
+          "summary": 15
+        },
+        "status": "complete",
+        "totals": {
+          "incumbent_dominance": 6829,
+          "legality_connectivity_exact_rejection": 14742,
+          "partial_prefix_bar_failure": 2020,
+          "terminal_prefix_completion_failure": 401
+        }
+      },
+      "frontier_retention_delta_by_step": [
+        {
+          "delta": 1,
+          "step_index": 1
+        },
+        {
+          "delta": 1,
+          "step_index": 2
+        },
+        {
+          "delta": 1,
+          "step_index": 3
+        },
+        {
+          "delta": 1,
+          "step_index": 4
+        },
+        {
+          "delta": 1,
+          "step_index": 5
+        },
+        {
+          "delta": 1,
+          "step_index": 6
+        },
+        {
+          "delta": 1,
+          "step_index": 7
+        },
+        {
+          "delta": 1,
+          "step_index": 8
+        },
+        {
+          "delta": 63,
+          "step_index": 9
+        },
+        {
+          "delta": 81,
+          "step_index": 10
+        },
+        {
+          "delta": 72,
+          "step_index": 11
+        },
+        {
+          "delta": 116,
+          "step_index": 12
+        },
+        {
+          "delta": 8,
+          "step_index": 13
+        },
+        {
+          "delta": 4,
+          "step_index": 14
+        },
+        {
+          "delta": 1,
+          "step_index": 15
+        }
+      ],
+      "frontier_retention_delta_total": 353,
+      "frontier_retention_totals": {
+        "hot": 353
+      },
+      "governor_summary": {
+        "actions": {
+          "none": 15
+        },
+        "max_rss_bytes": 1342188032,
+        "sequence": [
+          {
+            "action": "none",
+            "rss_bytes": 1342177376,
+            "state": "green",
+            "step_index": 1,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 0,
+            "state": "green",
+            "step_index": 2,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 0,
+            "state": "green",
+            "step_index": 3,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1342177376,
+            "state": "green",
+            "step_index": 4,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1342177376,
+            "state": "green",
+            "step_index": 5,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1342177376,
+            "state": "green",
+            "step_index": 6,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1342177376,
+            "state": "green",
+            "step_index": 7,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1342177376,
+            "state": "green",
+            "step_index": 8,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1342179296,
+            "state": "green",
+            "step_index": 9,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1342179872,
+            "state": "green",
+            "step_index": 10,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1342179584,
+            "state": "green",
+            "step_index": 11,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1342188032,
+            "state": "green",
+            "step_index": 12,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1342177664,
+            "state": "green",
+            "step_index": 13,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1342177664,
+            "state": "green",
+            "step_index": 14,
+            "value": "green/none"
+          },
+          {
+            "action": "none",
+            "rss_bytes": 1342177664,
+            "state": "green",
+            "step_index": 15,
+            "value": "green/none"
+          }
+        ],
+        "states": {
+          "green": 15
+        }
+      },
+      "label": "claim",
+      "late_step_competition": [
+        {
+          "below_bar": 0,
+          "clears_bar": 81,
+          "evaluated": 81,
+          "retained": 81,
+          "step_index": 10,
+          "terminal_rank_prunes": 0
+        },
+        {
+          "below_bar": 0,
+          "clears_bar": 72,
+          "evaluated": 72,
+          "retained": 72,
+          "step_index": 11,
+          "terminal_rank_prunes": 78
+        },
+        {
+          "below_bar": 0,
+          "clears_bar": 116,
+          "evaluated": 116,
+          "retained": 116,
+          "step_index": 12,
+          "terminal_rank_prunes": 194
+        },
+        {
+          "below_bar": 0,
+          "clears_bar": 8,
+          "evaluated": 8,
+          "retained": 8,
+          "step_index": 13,
+          "terminal_rank_prunes": 0
+        },
+        {
+          "below_bar": 0,
+          "clears_bar": 4,
+          "evaluated": 4,
+          "retained": 4,
+          "step_index": 14,
+          "terminal_rank_prunes": 6551
+        },
+        {
+          "below_bar": 0,
+          "clears_bar": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "step_index": 15,
+          "terminal_rank_prunes": 3
+        }
+      ],
+      "late_step_competition_vs_baseline": {
+        "baseline_label": "guarded",
+        "deltas": [
+          {
+            "baseline": {
+              "below_bar": 0,
+              "clears_bar": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "step_index": 10,
+              "terminal_rank_prunes": 0
+            },
+            "changed_keys": [
+              "clears_bar",
+              "evaluated",
+              "retained"
+            ],
+            "current": {
+              "below_bar": 0,
+              "clears_bar": 81,
+              "evaluated": 81,
+              "retained": 81,
+              "step_index": 10,
+              "terminal_rank_prunes": 0
+            },
+            "step_index": 10
+          },
+          {
+            "baseline": {
+              "below_bar": 0,
+              "clears_bar": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "step_index": 11,
+              "terminal_rank_prunes": 0
+            },
+            "changed_keys": [
+              "clears_bar",
+              "evaluated",
+              "retained",
+              "terminal_rank_prunes"
+            ],
+            "current": {
+              "below_bar": 0,
+              "clears_bar": 72,
+              "evaluated": 72,
+              "retained": 72,
+              "step_index": 11,
+              "terminal_rank_prunes": 78
+            },
+            "step_index": 11
+          },
+          {
+            "baseline": {
+              "below_bar": 0,
+              "clears_bar": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "step_index": 12,
+              "terminal_rank_prunes": 0
+            },
+            "changed_keys": [
+              "clears_bar",
+              "evaluated",
+              "retained",
+              "terminal_rank_prunes"
+            ],
+            "current": {
+              "below_bar": 0,
+              "clears_bar": 116,
+              "evaluated": 116,
+              "retained": 116,
+              "step_index": 12,
+              "terminal_rank_prunes": 194
+            },
+            "step_index": 12
+          },
+          {
+            "baseline": {
+              "below_bar": 0,
+              "clears_bar": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "step_index": 13,
+              "terminal_rank_prunes": 0
+            },
+            "changed_keys": [
+              "clears_bar",
+              "evaluated",
+              "retained"
+            ],
+            "current": {
+              "below_bar": 0,
+              "clears_bar": 8,
+              "evaluated": 8,
+              "retained": 8,
+              "step_index": 13,
+              "terminal_rank_prunes": 0
+            },
+            "step_index": 13
+          },
+          {
+            "baseline": {
+              "below_bar": 0,
+              "clears_bar": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "step_index": 14,
+              "terminal_rank_prunes": 0
+            },
+            "changed_keys": [
+              "clears_bar",
+              "evaluated",
+              "retained",
+              "terminal_rank_prunes"
+            ],
+            "current": {
+              "below_bar": 0,
+              "clears_bar": 4,
+              "evaluated": 4,
+              "retained": 4,
+              "step_index": 14,
+              "terminal_rank_prunes": 6551
+            },
+            "step_index": 14
+          },
+          {
+            "baseline": {
+              "below_bar": 0,
+              "clears_bar": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "step_index": 15,
+              "terminal_rank_prunes": 0
+            },
+            "changed_keys": [
+              "terminal_rank_prunes"
+            ],
+            "current": {
+              "below_bar": 0,
+              "clears_bar": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "step_index": 15,
+              "terminal_rank_prunes": 3
+            },
+            "step_index": 15
+          }
+        ],
+        "matches": false
+      },
+      "latest_frontier": {
+        "band_index": 8,
+        "cold_states": 2,
+        "dedupe_keys": 4,
+        "frontier_epoch": 12,
+        "governor_state": "green",
+        "hot_states": 2,
+        "prefix_exact_pruned": 553,
+        "prefix_explored": 646,
+        "prefix_heuristic_dropped": 257,
+        "present": true,
+        "pressure_action": "none",
+        "resident_cold_records": 2,
+        "spill_generation": 0,
+        "spilled_cold_records": 0,
+        "step_index": 15,
+        "worker_count": 8
+      },
+      "narrative_artifacts": {
+        "expected_steps": 15,
+        "missing_event_steps": [],
+        "missing_narrative_steps": [],
+        "present_event_steps": 15,
+        "present_narrative_steps": 15,
+        "status": "complete"
+      },
+      "path": "C:\\DEV\\atomic\\runs\\codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13",
+      "provenance_sequence": [
+        {
+          "step_index": 1,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 2,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 3,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 4,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 5,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 6,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 7,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 8,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 9,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 10,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 11,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 12,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 13,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 14,
+          "value": "atomic_bootstrap_search"
+        },
+        {
+          "step_index": 15,
+          "value": "atomic_bootstrap_search"
+        }
+      ],
+      "provenance_summary": {
+        "atomic_bootstrap_search": 15
+      },
+      "prune_class_coverage": {
+        "derived_steps": [],
+        "expected_steps": 15,
+        "missing_steps": [],
+        "persisted_steps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "source_counts": {
+          "summary": 15
+        },
+        "status": "complete",
+        "totals": {
+          "heuristic_shaping": 779,
+          "quotient_dedupe": 0,
+          "sound_minimality": 23992
+        }
+      },
+      "prune_class_totals": {
+        "heuristic_shaping": 779,
+        "quotient_dedupe": 0,
+        "sound_minimality": 23992
+      },
+      "prune_sample_totals": {
+        "heuristic_shaping": 779,
+        "quotient_dedupe": 0,
+        "sound_minimality": 23992
+      },
+      "replay_ablation_sequence": [
+        {
+          "step_index": 1,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 2,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 3,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 4,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 5,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 6,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 7,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 8,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 9,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 10,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 11,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 12,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 13,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 14,
+          "value": "matches_reference_replay"
+        },
+        {
+          "step_index": 15,
+          "value": "matches_reference_replay"
+        }
+      ],
+      "replay_ablation_summary": {
+        "matches_reference_replay": 15
+      },
+      "run_id": "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v13",
+      "run_mode": "atomic_search_bootstrap",
+      "search_policy": {
+        "bucket_policy": "structural_generic",
+        "guidance_style": "claim_debt_guided",
+        "late_expansion_policy": "claim_generic"
+      },
+      "search_profile": "desktop_claim_shadow",
+      "search_space_counts": [
+        {
+          "admissibility_rejected": 287,
+          "canonical": 1,
+          "enumerated": 288,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 1,
+          "well_formed": 288
+        },
+        {
+          "admissibility_rejected": 32,
+          "canonical": 1,
+          "enumerated": 33,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 2,
+          "well_formed": 33
+        },
+        {
+          "admissibility_rejected": 55,
+          "canonical": 1,
+          "enumerated": 56,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 3,
+          "well_formed": 56
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 4,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 4,
+          "well_formed": 4
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 5,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 6,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 7,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 1,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 8,
+          "well_formed": 1
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 63,
+          "enumerated": 81,
+          "evaluated": 63,
+          "retained": 63,
+          "semantically_minimal": 63,
+          "step_index": 9,
+          "well_formed": 81
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 81,
+          "enumerated": 597,
+          "evaluated": 81,
+          "retained": 81,
+          "semantically_minimal": 81,
+          "step_index": 10,
+          "well_formed": 597
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 72,
+          "enumerated": 891,
+          "evaluated": 72,
+          "retained": 72,
+          "semantically_minimal": 72,
+          "step_index": 11,
+          "well_formed": 891
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 116,
+          "enumerated": 891,
+          "evaluated": 116,
+          "retained": 116,
+          "semantically_minimal": 116,
+          "step_index": 12,
+          "well_formed": 891
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 8,
+          "enumerated": 774,
+          "evaluated": 8,
+          "retained": 8,
+          "semantically_minimal": 8,
+          "step_index": 13,
+          "well_formed": 774
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 4,
+          "enumerated": 6561,
+          "evaluated": 4,
+          "retained": 4,
+          "semantically_minimal": 4,
+          "step_index": 14,
+          "well_formed": 6561
+        },
+        {
+          "admissibility_rejected": 0,
+          "canonical": 1,
+          "enumerated": 261,
+          "evaluated": 1,
+          "retained": 1,
+          "semantically_minimal": 1,
+          "step_index": 15,
+          "well_formed": 261
+        }
+      ],
+      "search_space_counts_vs_baseline": {
+        "baseline_label": "guarded",
+        "deltas": [
+          {
+            "baseline": {
+              "admissibility_rejected": 0,
+              "canonical": 4,
+              "enumerated": 4,
+              "evaluated": 4,
+              "retained": 4,
+              "semantically_minimal": 4,
+              "step_index": 4,
+              "well_formed": 4
+            },
+            "changed_keys": [
+              "canonical",
+              "evaluated",
+              "retained",
+              "semantically_minimal"
+            ],
+            "current": {
+              "admissibility_rejected": 0,
+              "canonical": 1,
+              "enumerated": 4,
+              "evaluated": 1,
+              "retained": 1,
+              "semantically_minimal": 1,
+              "step_index": 4,
+              "well_formed": 4
+            },
+            "step_index": 4
+          },
+          {
+            "baseline": {
+              "admissibility_rejected": 0,
+              "canonical": 1,
+              "enumerated": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "semantically_minimal": 1,
+              "step_index": 9,
+              "well_formed": 1
+            },
+            "changed_keys": [
+              "canonical",
+              "enumerated",
+              "evaluated",
+              "retained",
+              "semantically_minimal",
+              "well_formed"
+            ],
+            "current": {
+              "admissibility_rejected": 0,
+              "canonical": 63,
+              "enumerated": 81,
+              "evaluated": 63,
+              "retained": 63,
+              "semantically_minimal": 63,
+              "step_index": 9,
+              "well_formed": 81
+            },
+            "step_index": 9
+          },
+          {
+            "baseline": {
+              "admissibility_rejected": 0,
+              "canonical": 1,
+              "enumerated": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "semantically_minimal": 1,
+              "step_index": 10,
+              "well_formed": 1
+            },
+            "changed_keys": [
+              "canonical",
+              "enumerated",
+              "evaluated",
+              "retained",
+              "semantically_minimal",
+              "well_formed"
+            ],
+            "current": {
+              "admissibility_rejected": 0,
+              "canonical": 81,
+              "enumerated": 597,
+              "evaluated": 81,
+              "retained": 81,
+              "semantically_minimal": 81,
+              "step_index": 10,
+              "well_formed": 597
+            },
+            "step_index": 10
+          },
+          {
+            "baseline": {
+              "admissibility_rejected": 0,
+              "canonical": 1,
+              "enumerated": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "semantically_minimal": 1,
+              "step_index": 11,
+              "well_formed": 1
+            },
+            "changed_keys": [
+              "canonical",
+              "enumerated",
+              "evaluated",
+              "retained",
+              "semantically_minimal",
+              "well_formed"
+            ],
+            "current": {
+              "admissibility_rejected": 0,
+              "canonical": 72,
+              "enumerated": 891,
+              "evaluated": 72,
+              "retained": 72,
+              "semantically_minimal": 72,
+              "step_index": 11,
+              "well_formed": 891
+            },
+            "step_index": 11
+          },
+          {
+            "baseline": {
+              "admissibility_rejected": 0,
+              "canonical": 1,
+              "enumerated": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "semantically_minimal": 1,
+              "step_index": 12,
+              "well_formed": 1
+            },
+            "changed_keys": [
+              "canonical",
+              "enumerated",
+              "evaluated",
+              "retained",
+              "semantically_minimal",
+              "well_formed"
+            ],
+            "current": {
+              "admissibility_rejected": 0,
+              "canonical": 116,
+              "enumerated": 891,
+              "evaluated": 116,
+              "retained": 116,
+              "semantically_minimal": 116,
+              "step_index": 12,
+              "well_formed": 891
+            },
+            "step_index": 12
+          },
+          {
+            "baseline": {
+              "admissibility_rejected": 0,
+              "canonical": 1,
+              "enumerated": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "semantically_minimal": 1,
+              "step_index": 13,
+              "well_formed": 1
+            },
+            "changed_keys": [
+              "canonical",
+              "enumerated",
+              "evaluated",
+              "retained",
+              "semantically_minimal",
+              "well_formed"
+            ],
+            "current": {
+              "admissibility_rejected": 0,
+              "canonical": 8,
+              "enumerated": 774,
+              "evaluated": 8,
+              "retained": 8,
+              "semantically_minimal": 8,
+              "step_index": 13,
+              "well_formed": 774
+            },
+            "step_index": 13
+          },
+          {
+            "baseline": {
+              "admissibility_rejected": 0,
+              "canonical": 1,
+              "enumerated": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "semantically_minimal": 1,
+              "step_index": 14,
+              "well_formed": 1
+            },
+            "changed_keys": [
+              "canonical",
+              "enumerated",
+              "evaluated",
+              "retained",
+              "semantically_minimal",
+              "well_formed"
+            ],
+            "current": {
+              "admissibility_rejected": 0,
+              "canonical": 4,
+              "enumerated": 6561,
+              "evaluated": 4,
+              "retained": 4,
+              "semantically_minimal": 4,
+              "step_index": 14,
+              "well_formed": 6561
+            },
+            "step_index": 14
+          },
+          {
+            "baseline": {
+              "admissibility_rejected": 0,
+              "canonical": 1,
+              "enumerated": 1,
+              "evaluated": 1,
+              "retained": 1,
+              "semantically_minimal": 1,
+              "step_index": 15,
+              "well_formed": 1
+            },
+            "changed_keys": [
+              "enumerated",
+              "well_formed"
+            ],
+            "current": {
+              "admissibility_rejected": 0,
+              "canonical": 1,
+              "enumerated": 261,
+              "evaluated": 1,
+              "retained": 1,
+              "semantically_minimal": 1,
+              "step_index": 15,
+              "well_formed": 261
+            },
+            "step_index": 15
+          }
+        ],
+        "matches": false
+      },
+      "step15_claim": {
+        "adopted_label": "DCT",
+        "adopted_nu": 103,
+        "adopted_step": 15,
+        "matches_accepted": true,
+        "present": true,
+        "status": "executable_canon"
+      },
+      "trajectory": [
+        {
+          "bit_kappa": 14,
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "canonical_hash": "blake3:23ab301fcb806f4f151974b767119ea66f8ee39bcf5b7d9c95924fc2902663b2",
+          "clause_kappa": 2,
+          "label": "Universe",
+          "nu": 1,
+          "objective_bar": "1/2",
+          "overshoot": "0/1",
+          "rho": "1/2",
+          "step_index": 1
+        },
+        {
+          "bit_kappa": 10,
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "canonical_hash": "blake3:cd72c5935198d40c0ef48ae172c9ccba1ef9c90435494569121c8dccd3466476",
+          "clause_kappa": 1,
+          "label": "Unit",
+          "nu": 1,
+          "objective_bar": "1/2",
+          "overshoot": "1/2",
+          "rho": "1/1",
+          "step_index": 2
+        },
+        {
+          "bit_kappa": 12,
+          "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "canonical_hash": "blake3:2e85e04d43f4ef6ae6c9b00f4460ba7b8507b8c371743c97b7262ca014fd2987",
+          "clause_kappa": 1,
+          "label": "Witness",
+          "nu": 2,
+          "objective_bar": "4/3",
+          "overshoot": "2/3",
+          "rho": "2/1",
+          "step_index": 3
+        },
+        {
+          "bit_kappa": 49,
+          "candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+          "canonical_hash": "blake3:c7a99c10bbc01197aec9fa0c4605b4763dda6dc22ea95310fae37e9ff5ee65a1",
+          "clause_kappa": 3,
+          "label": "Pi",
+          "nu": 5,
+          "objective_bar": "3/2",
+          "overshoot": "1/6",
+          "rho": "5/3",
+          "step_index": 4
+        },
+        {
+          "bit_kappa": 21,
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "canonical_hash": "blake3:6db82a1b3484f3373986e9f2986d6472521448379495ab3b66da36c0d2507085",
+          "clause_kappa": 3,
+          "label": "S1",
+          "nu": 7,
+          "objective_bar": "15/7",
+          "overshoot": "4/21",
+          "rho": "7/3",
+          "step_index": 5
+        },
+        {
+          "bit_kappa": 35,
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "canonical_hash": "blake3:05d6509e1d870b0169bf74091e2a4ac86e7a337540c6dc53957ec18aa02ac28a",
+          "clause_kappa": 3,
+          "label": "Trunc",
+          "nu": 8,
+          "objective_bar": "64/25",
+          "overshoot": "8/75",
+          "rho": "8/3",
+          "step_index": 6
+        },
+        {
+          "bit_kappa": 23,
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "canonical_hash": "blake3:8fd79581fd71b586ff52b3be14ade3ec63cf520232577617aa7918bbdc80ece4",
+          "clause_kappa": 3,
+          "label": "S2",
+          "nu": 10,
+          "objective_bar": "3/1",
+          "overshoot": "1/3",
+          "rho": "10/3",
+          "step_index": 7
+        },
+        {
+          "bit_kappa": 37,
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "canonical_hash": "blake3:c6fc7673d107487f21fb29064e7ce8c9418f9fb2f0688613380e116ea77230aa",
+          "clause_kappa": 5,
+          "label": "S3",
+          "nu": 18,
+          "objective_bar": "357/104",
+          "overshoot": "87/520",
+          "rho": "18/5",
+          "step_index": 8
+        },
+        {
+          "bit_kappa": 78,
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "canonical_hash": "blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+          "clause_kappa": 4,
+          "label": "Hopf",
+          "nu": 17,
+          "objective_bar": "1768/441",
+          "overshoot": "425/1764",
+          "rho": "17/4",
+          "step_index": 9
+        },
+        {
+          "bit_kappa": 45,
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "canonical_hash": "blake3:09bed8af6371d3ac8be4c5d4bd59321753f2a027ff9685808b8bab6ce8ac4ef5",
+          "clause_kappa": 4,
+          "label": "Cohesion",
+          "nu": 19,
+          "objective_bar": "759/170",
+          "overshoot": "97/340",
+          "rho": "19/4",
+          "step_index": 10
+        },
+        {
+          "bit_kappa": 79,
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "canonical_hash": "blake3:0b747d5eea40ef4cece4f40b64c7dbdff0db9ed74f209e5c6c79346f7165ae27",
+          "clause_kappa": 5,
+          "label": "Connections",
+          "nu": 26,
+          "objective_bar": "712/145",
+          "overshoot": "42/145",
+          "rho": "26/5",
+          "step_index": 11
+        },
+        {
+          "bit_kappa": 121,
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "canonical_hash": "blake3:fd636363062e2cc44259d330cd96e319979d8ae7ff02eb065599bb2541d03cac",
+          "clause_kappa": 6,
+          "label": "Curvature",
+          "nu": 34,
+          "objective_bar": "8208/1513",
+          "overshoot": "1097/4539",
+          "rho": "17/3",
+          "step_index": 12
+        },
+        {
+          "bit_kappa": 138,
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "canonical_hash": "blake3:4eefcc446fb659c101cb538dcf4b06695c165d6e977e64ab7580a2451af0f5ae",
+          "clause_kappa": 7,
+          "label": "Metric",
+          "nu": 46,
+          "objective_bar": "8621/1440",
+          "overshoot": "5893/10080",
+          "rho": "46/7",
+          "step_index": 13
+        },
+        {
+          "bit_kappa": 169,
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "canonical_hash": "blake3:435eaca75694e1e58b26739b2f6d8c5d77cc0c601c2681e63ced81692f25c67d",
+          "clause_kappa": 9,
+          "label": "Hilbert",
+          "nu": 62,
+          "objective_bar": "73138/10951",
+          "overshoot": "20720/98559",
+          "rho": "62/9",
+          "step_index": 14
+        },
+        {
+          "bit_kappa": 229,
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "canonical_hash": "blake3:6f4b65c28060999af4bac3fa46a9da3bd8e1bbdbc99f41ecc94291012a0573a4",
+          "clause_kappa": 8,
+          "label": "DCT",
+          "nu": 103,
+          "objective_bar": "19520/2639",
+          "overshoot": "115657/21112",
+          "rho": "103/8",
+          "step_index": 15
+        }
+      ],
+      "trajectory_fingerprint": "2048cf11d10f42051dcc5e184af86b233b6d800066b678d494311ed5d217d53e",
+      "trajectory_vs_baseline": {
+        "baseline_label": "guarded",
+        "deltas": [],
+        "matches": true
+      }
+    }
+  ],
+  "late_step_competition_consistency": {
+    "baseline_fingerprint": "2b02b85b9e5f85a56df2ff3660273a1b43d6b44434bf484782d1c949c8ae631d",
+    "baseline_label": "guarded",
+    "matching_lanes": [
+      "guarded"
+    ],
+    "mismatched_lanes": [
+      "claim"
+    ],
+    "status": "deltas_present"
+  },
+  "search_space_count_consistency": {
+    "baseline_fingerprint": "607e3f2d4431589d01ab5d14334184beca23d780f902dda9f1870646aef88122",
+    "baseline_label": "guarded",
+    "matching_lanes": [
+      "guarded"
+    ],
+    "mismatched_lanes": [
+      "claim"
+    ],
+    "status": "deltas_present"
+  },
+  "signoff": {
+    "status": "ready",
+    "summary": "all 2 lanes preserve baseline guarded and the step-15 DCT claim boundary"
+  },
+  "step15_claim_boundary": {
+    "baseline": {
+      "adopted_label": "DCT",
+      "adopted_nu": 103,
+      "adopted_step": 15,
+      "matches_accepted": true,
+      "present": true,
+      "status": "executable_canon"
+    },
+    "matching_lanes": [
+      "guarded",
+      "claim"
+    ],
+    "mismatches": [],
+    "status": "consistent"
+  },
+  "trajectory_consistency": {
+    "baseline_fingerprint": "2048cf11d10f42051dcc5e184af86b233b6d800066b678d494311ed5d217d53e",
+    "baseline_label": "guarded",
+    "matching_lanes": [
+      "guarded",
+      "claim"
+    ],
+    "mismatched_lanes": [],
+    "status": "all_match_baseline"
+  },
+  "workstream4_rollout": {
+    "authoritative_lane": "guarded",
+    "baseline_label": "guarded",
+    "parity_set": {
+      "attention_lanes": [],
+      "lanes": [],
+      "missing_modes": [],
+      "present_modes": [],
+      "ready_lanes": [],
+      "required_modes": [],
+      "status": "not_present"
+    },
+    "pressure_set": {
+      "attention_lanes": [],
+      "lanes": [],
+      "missing_modes": [],
+      "present_modes": [],
+      "ready_lanes": [],
+      "required_modes": [],
+      "status": "not_present"
+    },
+    "realistic_profile": "realistic_frontier_shadow",
+    "resume_set": {
+      "attention_lanes": [],
+      "lanes": [],
+      "missing_modes": [
+        "frontier_checkpoint_resume",
+        "step_checkpoint_resume",
+        "step_checkpoint_reevaluate"
+      ],
+      "present_modes": [],
+      "ready_lanes": [],
+      "required_modes": [
+        "frontier_checkpoint_resume",
+        "step_checkpoint_resume",
+        "step_checkpoint_reevaluate"
+      ],
+      "status": "not_present"
+    },
+    "status": "not_present"
+  }
+}
