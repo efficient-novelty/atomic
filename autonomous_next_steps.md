@@ -19,8 +19,9 @@ Keep the active work order on the rerun-confirmed post-local-probe
 step-`15` miss: use canonical `v13` as the stored baseline for the next
 code-side step-`15` repair search, while keeping the demoted claim-safe
 mismatch-`1` checkpoint, both representative mismatch-`0` dead-child
-checkpoints, the spent `reference / reference` tail, and the looser
-representative claim-safe backup frozen as controls rather than fresh leads.
+checkpoints, the spent `reference / reference` tail, the isolated clause-`1`
+`demo_flat_codomain` exact-suffix side pocket, and the looser representative
+claim-safe backup frozen as controls rather than fresh leads.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -617,6 +618,17 @@ later stored bundle changes the diagnosis.
     promotion again unless that tighter mismatch-`0` backup is ruled out
     by a later broader comparison rather than by another representative
     dead-shell reland
+- The isolated clause-`1` `demo_flat_codomain` exact-suffix side pocket is
+  now also exhausted as a looser side-pocket control:
+  - a search-only exact-bound override on that lone isolated exact-suffix
+    prefix lands `4349 / 556 / 2268`
+  - it widens `small_cluster` to `3141 / 522 / 522 / 0`
+  - accepted step `15` still stays canonical `103 / 8`
+  - `terminal_prefix_completion_failure` stays `0`
+  - the isolated `single` pocket stays fenced
+  - consequence: that exact-suffix side pocket is not the missing clean-wall
+    repair; it only reproduces the same wider mismatch-`0` broader-backup
+    shell while also worsening the clean wall from `553` to `556`
 - Do not spend another turn on clause-`5` tail reopenings or exact
   remaining-two clause-`5` bridge-slice reopenings or on another exact
   claim-flat / claim-sharp single-sheet restatement. Those surfaces are
@@ -644,7 +656,8 @@ later stored bundle changes the diagnosis.
 4. Spend the next execution turn on the first fresh code-side step-`15`
    repair above the exhausted controls:
    - keep the claim-safe mismatch-`1` clause-`5` wall, both representative
-     mismatch-`0` dead shells, the spent `reference / reference` tail, and
+     mismatch-`0` dead shells, the spent `reference / reference` tail, the
+     isolated clause-`1` `demo_flat_codomain` exact-suffix side pocket, and
      the looser representative claim-safe backup frozen as controls rather
      than fresh leads
    - use the known mismatch-`0` claim-`next_bridge` exact-summary tradeoff
@@ -732,6 +745,7 @@ later stored bundle changes the diagnosis.
 - `current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_dead_child_reason_progress_stays_uniformly_blocked_at_clause_two`
 - `current_claim_step_fifteen_representative_mismatch_zero_claim_sharp_first_finer_reason_split_stays_uniform_below_the_dead_child_shell`
 - `current_claim_step_fifteen_alternate_broader_backup_comparison_keeps_the_tighter_representative_mismatch_zero_claim_side_shell_ahead_of_the_claim_safe_shell`
+- `current_claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief_stays_a_looser_side_pocket_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_zero_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_clause_five_remaining_two_mismatch_one_bridge_slice_stays_a_negative_control`
 - `current_claim_step_fifteen_survivor_buckets_stay_on_one_small_cluster_plus_one_single_pocket`
@@ -770,6 +784,8 @@ later stored bundle changes the diagnosis.
   ordering again
 - another representative claim-safe dead-prefix terminal-family reland under
   `reference / claim_next_codomain / claim_flat_domain / demo_sharp_codomain`
+- another isolated clause-`1` `demo_flat_codomain` exact-suffix relief pass
+  on the lone exact-suffix side pocket
 - another representative claim-safe dead-prefix clause-`6` or terminal-family
   reason reland after the exact-pair blocker has already been localized
   to the clause-`5` wall and its off-reference dead controls
@@ -874,8 +890,9 @@ later stored bundle changes the diagnosis.
 - step `1` stays explicit but deferred because `v13` re-confirms the same
   breadth-only step-`15` miss
 - the next operational slice is a fresh code-side step-`15` repair attempt
-  above the exhausted claim-safe, representative mismatch-`0`, and
-  `reference / reference` controls rather than another rerun-ordering pass
+  above the exhausted claim-safe, representative mismatch-`0`,
+  `reference / reference`, and isolated clause-`1` exact-suffix controls
+  rather than another rerun-ordering pass
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

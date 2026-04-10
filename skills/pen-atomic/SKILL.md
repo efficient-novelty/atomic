@@ -453,6 +453,12 @@ Focus on:
   summaries and the same uniform clause-`2` blocker plus nonqualifying
   connectivity vector, route there instead of reopening that sharper dead
   child as if another mismatch-`0` identity or reason reland were still fresh
+- treat the isolated clause-`1` `demo_flat_codomain` exact-suffix side
+  pocket as live autonomy detail too; if the live docs have already pinned
+  that lone reland at `4349 / 556 / 2268` with
+  `small_cluster = 3141 / 522 / 522 / 0` and the isolated `single` pocket
+  still fenced, route there instead of reopening that side pocket as if it
+  were still a fresh repair lead
 - treat the promoted `reference / reference` tail split as live autonomy
   detail too; if the live docs have already localized that tail to mismatch
   `2 = 42` versus mismatch `3 = 12` with mismatch-`2` clause-`4` pressure

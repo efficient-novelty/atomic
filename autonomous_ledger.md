@@ -717,3 +717,17 @@ This file is the append-only history for `desktop_claim_shadow`.
   Consequence: the sibling active clause-`5` `reference` family is exhausted
   one layer deeper too, so clause-`5` family identity is no longer a fresh
   mismatch-`0` lead below representative pair-cell scope.
+- Scope: test whether the lone isolated clause-`1` `demo_flat_codomain`
+  exact-suffix side pocket can clear the canonical step-`15` wall without
+  reopening the fenced pockets.
+  Result: a search-only exact-bound override on that single isolated
+  exact-suffix prefix landed `4349 / 556 / 2268` with
+  `small_cluster = 3141 / 522 / 522 / 0`, accepted step `15` still
+  canonical at `103 / 8`, `terminal_prefix_completion_failure = 0`, and the
+  isolated `single` pocket still fenced at `3` residual prunes plus `1`
+  fully scored non-winner.
+  Consequence: the isolated clause-`1` exact-suffix side pocket is now spent
+  as a looser side-pocket control. It only reproduces the same wider
+  mismatch-`0` broader-backup shell while worsening the clean wall from
+  `553` to `556`, so the next repair should stay above another isolated
+  clause-`1` exact-suffix reland.

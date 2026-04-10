@@ -258,6 +258,17 @@ Until that exists, wording stays at `bounded live recovery`.
     untouched and instead inflates first-mismatch-`1` from `177` to `179`
   - consequence: the representative mismatch-`0` claim-side shell stays
     promoted ahead of the representative claim-safe shell
+- The isolated clause-`1` `demo_flat_codomain` exact-suffix side pocket is
+  now also exhausted as a looser side-pocket control:
+  - a search-only exact-bound override on that lone isolated exact-suffix
+    prefix lands `4349 / 556 / 2268`
+  - it widens `small_cluster` to `3141 / 522 / 522 / 0`
+  - accepted step `15` still stays canonical `103 / 8`
+  - `terminal_prefix_completion_failure` stays `0`
+  - the isolated `single` pocket stays fenced
+  - consequence: that exact-suffix side pocket is not the missing clean-wall
+    repair; it only reproduces the same wider mismatch-`0` broader-backup
+    shell while also worsening the clean wall from `553` to `556`
 - A direct parent-level exact-bound bypass on the whole remaining-two
   mismatch-`0` claim-domain tier is now ruled out:
   - redirecting that tier from `CannotClearBar` to `Unknown` at
@@ -786,6 +797,11 @@ Until that exists, wording stays at `bounded live recovery`.
   - do not spend another turn below that same representative mismatch-`0`
     claim-sharp dead shell unless a later broader-backup comparison changes
     the priority order again
+- Do not reopen the isolated clause-`1` `demo_flat_codomain` exact-suffix
+  side pocket first either; its narrow exact-summary relief only lands
+  `4349 / 556 / 2268` with `small_cluster = 3141 / 522 / 522 / 0` while the
+  isolated `single` pocket stays fenced, so it is a looser side-pocket
+  control rather than a promotable repair.
 - If the mismatch-`0` claim-domain surface is revisited, stay below the broad
   clause-`1` `demo_flat_codomain` reopening and below whole-tier parent
   exact-bound relief; the former reaches `4985` only by widening the clean

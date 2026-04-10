@@ -203,6 +203,12 @@ Do not:
   clause-`2` blocker plus nonqualifying connectivity vector; keep that
   deeper claim-sharp partition in the autonomy docs rather than stabilizing
   it here
+- reopen the isolated clause-`1` `demo_flat_codomain` exact-suffix side
+  pocket first either after the live docs have already pinned that lone
+  reland at `4349 / 556 / 2268` with
+  `small_cluster = 3141 / 522 / 522 / 0` and the isolated `single` pocket
+  still fenced; keep that looser side-pocket control in the autonomy ledger
+  rather than stabilizing it here
 - reopen broader mismatch-`0` or claim-safe shells first either after the
   live docs have already localized the promoted `reference / reference` tail
   to mismatch `2 = 42` versus mismatch `3 = 12` with mismatch-`2`

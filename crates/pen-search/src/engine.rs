@@ -6001,6 +6001,12 @@ thread_local! {
 
 #[cfg(test)]
 thread_local! {
+    static CLAIM_STEP_FIFTEEN_CLAUSE_ONE_DEMO_FLAT_CODOMAIN_EXACT_SUFFIX_RELIEF_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
+thread_local! {
     static CLAIM_STEP_FIFTEEN_CLAUSE_ONE_FLAT_CODOMAIN_ON_CLAUSE_ZERO_CLAIM_FLAT_OVERRIDE:
         std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
 }
@@ -6259,6 +6265,9 @@ struct ClaimStepFifteenFamilyLocalSamePrimaryReliefOverrideGuard;
 struct ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard;
 
 #[cfg(test)]
+struct ClaimStepFifteenClauseOneDemoFlatCodomainExactSuffixReliefOverrideGuard;
+
+#[cfg(test)]
 struct ClaimStepFifteenClauseOneFlatCodomainOnClauseZeroClaimFlatOverrideGuard;
 
 #[cfg(test)]
@@ -6353,6 +6362,28 @@ fn override_claim_step_fifteen_clause_one_eventually_codomain_side_pocket()
         },
     );
     ClaimStepFifteenClauseOneEventuallyCodomainSidePocketOverrideGuard
+}
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenClauseOneDemoFlatCodomainExactSuffixReliefOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_CLAUSE_ONE_DEMO_FLAT_CODOMAIN_EXACT_SUFFIX_RELIEF_OVERRIDE.with(
+            |override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief()
+-> ClaimStepFifteenClauseOneDemoFlatCodomainExactSuffixReliefOverrideGuard {
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_DEMO_FLAT_CODOMAIN_EXACT_SUFFIX_RELIEF_OVERRIDE.with(
+        |override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        },
+    );
+    ClaimStepFifteenClauseOneDemoFlatCodomainExactSuffixReliefOverrideGuard
 }
 
 #[cfg(test)]
@@ -6845,6 +6876,19 @@ fn claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enable
 
 #[cfg(not(test))]
 fn claim_step_fifteen_clause_one_eventually_codomain_side_pocket_override_enabled() -> bool {
+    false
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief_override_enabled() -> bool
+{
+    CLAIM_STEP_FIFTEEN_CLAUSE_ONE_DEMO_FLAT_CODOMAIN_EXACT_SUFFIX_RELIEF_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief_override_enabled() -> bool
+{
     false
 }
 
@@ -7818,6 +7862,61 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_c
         })
 }
 
+fn claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief_matches(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    prefix_telescope: &Telescope,
+) -> bool {
+    if !claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief_override_enabled()
+        || !matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
+        || step_index != 15
+        || prefix_telescope.clauses.len() != 7
+    {
+        return false;
+    }
+
+    let reference = Telescope::reference(15);
+    prefix_telescope.clauses.first() == reference.clauses.first()
+        && prefix_telescope.clauses.get(1).is_some_and(|clause| {
+            clause.role == ClauseRole::Formation
+                && matches!(
+                    &clause.expr,
+                    Expr::Eventually(body)
+                        if matches!(
+                            body.as_ref(),
+                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                        )
+                )
+        })
+        && prefix_telescope.clauses.get(2) == reference.clauses.get(2)
+        && prefix_telescope.clauses.get(3) == reference.clauses.get(3)
+        && prefix_telescope.clauses.get(4) == reference.clauses.get(4)
+        && prefix_telescope.clauses.get(5) == reference.clauses.get(5)
+        && prefix_telescope.clauses.get(6) == reference.clauses.get(6)
+}
+
+fn maybe_override_claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    prefix_telescope: &Telescope,
+    decision: ExactPartialPrefixBoundDecision,
+) -> ExactPartialPrefixBoundDecision {
+    #[cfg(test)]
+    {
+        if matches!(decision, ExactPartialPrefixBoundDecision::CannotClearBar)
+            && claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief_matches(
+                step_index,
+                admissibility,
+                prefix_telescope,
+            )
+        {
+            return ExactPartialPrefixBoundDecision::Unknown;
+        }
+    }
+
+    decision
+}
+
 fn maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half(
     step_index: u32,
     admissibility: StrictAdmissibility,
@@ -7934,6 +8033,13 @@ fn maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_misma
     prefix_telescope: &Telescope,
     decision: ExactPartialPrefixBoundDecision,
 ) -> ExactPartialPrefixBoundDecision {
+    let decision =
+        maybe_override_claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief(
+            step_index,
+            admissibility,
+            prefix_telescope,
+            decision,
+        );
     let decision =
         maybe_override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail(
             step_index,
@@ -19589,6 +19695,108 @@ mod tests {
             .into_iter()
             .collect(),
             "exact-terminal-only local recovery would still create stronger isolated clause-2 and clause-3 rivals, while the new clause-1 side pocket only restores the same-primary 103/8 reference-terminal profile and clause-4 and clause-5 stay repaired out of the captured isolated surface"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief_stays_a_looser_side_pocket_control()
+     {
+        let surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let reference_prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let isolated_clause_one_prefixes = surface
+            .pruned_terminal_prefixes
+            .iter()
+            .filter(|work_item| {
+                let clauses = &work_item.prefix_telescope.clauses;
+                clauses[0] == reference_prefix.clauses[0]
+                    && clauses[1] != reference_prefix.clauses[1]
+                    && clauses[2..] == reference_prefix.clauses[2..]
+            })
+            .collect::<Vec<_>>();
+
+        assert_eq!(isolated_clause_one_prefixes.len(), 1);
+        assert_eq!(
+            current_claim_step_fifteen_partial_prefix_clause_zero_one_label(
+                1,
+                &isolated_clause_one_prefixes[0].prefix_telescope.clauses[1],
+            ),
+            "demo_flat_codomain",
+            "the lone current isolated clause-one exact-suffix prefix should still be the demo-flat-codomain side pocket"
+        );
+
+        let _override =
+            super::override_claim_step_fifteen_clause_one_demo_flat_codomain_exact_suffix_relief();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+        assert_eq!(
+            step_fifteen.telescope,
+            Telescope::reference(15),
+            "isolated clause-one exact-suffix relief should keep the canonical step-15 winner"
+        );
+        assert_eq!(
+            step_fifteen.demo_funnel.generated_raw_prefixes, 4349,
+            "isolated clause-one exact-suffix relief should only broaden the local surface slightly"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 556,
+            "isolated clause-one exact-suffix relief should stay only a looser side-pocket control rather than lowering the clean wall"
+        );
+        assert_eq!(
+            step_fifteen
+                .exact_screen_reasons
+                .terminal_prefix_completion_failure,
+            0,
+            "isolated clause-one exact-suffix relief should not convert the side pocket into a terminal-completion failure"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "isolated clause-one exact-suffix relief should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 556);
+        assert_eq!(zero_summary.captured_prefixes, 2268);
+        assert_eq!(
+            bucket_stats.get(
+                "k8:structural_generic:temporal_operator:library_backed:small_cluster"
+            ),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3141,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "isolated clause-one exact-suffix relief should widen the same noncanonical small-cluster shell seen on the tighter mismatch-zero broader backup"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "isolated clause-one exact-suffix relief should keep the isolated single pocket fenced"
         );
     }
 
