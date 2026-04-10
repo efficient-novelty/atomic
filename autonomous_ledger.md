@@ -1141,3 +1141,32 @@ This file is the append-only history for `desktop_claim_shadow`.
   either. The next honest repair therefore has to stay above that recombined
   hybrid rather than recombining already-spent parent-route and active-window
   controls.
+- Scope: test the sibling recombined parent-level qualification family above
+  that same remaining-one lattice by granting the targeted representative
+  mismatch-`0` claim-side parent shell both historical-reanchor and
+  self-contained qualification at once.
+  Result: on both active clause-`5` families
+  `claim_flat_codomain / reference`, the recombined historical-reanchor plus
+  self-contained override still qualifies the targeted claim-side parent shell
+  while keeping lifted terminals fenced, but the full step-`15` search
+  surface simply relands the exact same unsafe shell as the already-spent
+  self-contained family:
+  - accepted step `15` again shifts to noncanonical `60 / 8`
+  - retained breadth again becomes `4427` with `retained = 2`
+  - partial-prefix bar failures again land at `545`
+  - incumbent-dominance again lands at `110`
+  - zero-admitted captures again land at `2247`
+  - the first-mismatch distribution again stays `304 / 177 / 50 / 14`
+  - `small_cluster` again relands as `2952 / 558 / 558 / 108`
+  - the isolated `single` bucket again reopens to `2` fully scored
+    non-winners plus `2` residual prunes at best overshoot `545 / 5278`
+  - the representative clause-`2` spread again stays `11 / 11 / 12`
+  - the representative clause-`4` split again stays `20 / 14`
+  - the active clause-`4` `claim_next_bridge` plus active clause-`5` bucket
+    again contracts to `44`
+  Consequence: adding historical reanchor on top of the already-spent
+  self-contained family does not create a fresh parent-level repair class
+  either. The next honest repair therefore has to stay above both recombined
+  hybrids and move to a looser recombined parent-level qualification family
+  rather than reopening narrower clause-`3` / clause-`6` selectors or
+  reassembling already-spent parent-route plus self-contained controls.

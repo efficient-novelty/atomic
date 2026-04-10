@@ -246,9 +246,14 @@ Do not:
   belongs to the autonomy ledger rather than as a fresh repair lead
 - reopen recombined representative mismatch-`0` claim-side parent-route plus
   alternate qualification families first either; if the live docs already pin
-  one of those hybrids as a spent control above the same remaining-one
-  lattice, that recombined family also belongs to the autonomy ledger rather
-  than as a fresh repair lead
+  both historical-reanchor plus active-window and historical-reanchor plus
+  self-contained hybrids across the active clause-`5`
+  `claim_flat_codomain / reference` buckets at the same unsafe
+  `4427 / 545 / 2247` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 110`,
+  `small_cluster = 2952 / 558 / 558 / 108`, and the same reopened `single`
+  bucket, those recombined families also belong to the autonomy ledger rather
+  than as fresh repair leads
 - reopen the representative claim-flat clause-`3` refinement inside that same
   mismatch-`0` claim-side parent-route family first either; if the live docs
   already pin both `claim_flat_argument / claim_eventual_argument` branches on

@@ -497,9 +497,14 @@ Focus on:
   fresh repair class
 - treat recombined representative mismatch-`0` claim-side parent-route plus
   alternate qualification families as live autonomy detail too; if the live
-  docs already pin a hybrid reland above that same remaining-one lattice as a
-  spent control, route there instead of reopening the recombination as if it
-  were fresh leverage
+  docs already pin both historical-reanchor plus active-window and
+  historical-reanchor plus self-contained hybrids across the active
+  clause-`5` `claim_flat_codomain / reference` buckets at the same unsafe
+  `4427 / 545 / 2247` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 110`,
+  `small_cluster = 2952 / 558 / 558 / 108`, and the same reopened `single`
+  bucket, route there instead of reopening either recombination as if it were
+  fresh leverage
 - treat the representative claim-flat clause-`3` refinement inside that same
   mismatch-`0` claim-side parent-route family as live autonomy detail too; if
   the live docs already pin both `claim_flat_argument /
