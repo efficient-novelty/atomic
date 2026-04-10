@@ -1061,6 +1061,37 @@ Until that exists, wording stays at `bounded live recovery`.
   follow-on has to change the parent-level qualification family itself rather
   than retargeting the same active clause-`5` bucket or re-running another
   route-identity reland, while step `1` remains deferred.
+- Narrowing that same parent-route class to only the representative
+  clause-`6` `reference` continuation is now also spent across both active
+  clause-`5` families:
+  - on either active clause-`5` family, the narrowed route relands a
+    different unsafe negative control with noncanonical `74 / 8`,
+    `retained = 1`, `generated = 4427`, `partial_prefix_bar_failure = 545`,
+    `incumbent_dominance = 111`, and zero-admitted captures `2247`
+  - the first-mismatch distribution relands as clause `0 = 304`,
+    clause `1 = 177`, clause `2 = 50`, and clause `3 = 14`
+  - `small_cluster` contracts further to `2904 / 430 / 430 / 108`
+  - the isolated `single` bucket stays fenced at `3` residual prunes plus `1`
+    fully scored non-winner at best overshoot `19563 / 10556`
+  - the representative clause-`2` spread stays contracted at `11 / 11 / 12`
+  - the representative clause-`4` split stays contracted at `20 / 14`
+  - it contracts only the chosen active clause-`4`
+    `claim_next_bridge` plus clause-`5` bucket to `44`
+- Consequence: the marginally narrower `reference` clause-`6` parent-route
+  refinement is not the missing clean repair either. It preserves the tighter
+  targeted delta and keeps the `single` pocket fenced, but it still displaces
+  the canonical `103 / 8` winner and remains an unsafe negative control
+  rather than a landed repair.
+- That narrower parent-route refinement is also localized to the same
+  targeted delta shape:
+  - on the chosen active clause-`5` bucket, it removes the same four
+    remaining-two exact-prune parent cells
+  - it removes the same `8` zero-admitted captures and the same `24`
+    remaining-one pruned prefixes
+  - it introduces no off-target exact-prune or pruned-prefix family
+- Consequence: the next honest follow-on has to stay above not just the broad
+  representative claim-side parent-route class, but also the narrower
+  `reference` clause-`6` refinement on both active clause-`5` families.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

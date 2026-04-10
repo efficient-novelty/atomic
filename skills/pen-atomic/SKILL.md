@@ -441,6 +441,16 @@ Focus on:
   cells plus their `24` matching remaining-one pruned prefixes on the chosen
   active clause-`5` bucket, route there instead of reopening either
   parent-route sibling as if it were a fresh repair class
+- treat the narrower clause-`6` `reference` refinement of that same
+  representative mismatch-`0` claim-side parent-route class as live autonomy
+  detail too; if the live docs already pin both active clause-`5`
+  `claim_flat_codomain / reference` refinements at unsafe noncanonical
+  `74 / 8` with `retained = 1`, the same `4427 / 545 / 2247`,
+  `incumbent_dominance = 111`,
+  `small_cluster = 2904 / 430 / 430 / 108`, a still-fenced `single` bucket,
+  and the same four-cell plus `24`-pruned-prefix delta, route there instead
+  of reopening that marginally narrower clause-`6` selector as if it were a
+  fresh repair class
 - treat the representative `claim_flat_domain` clause-`2` sheet's marginally
   best clause-`6` `reference` continuation's clause-`3` split as live
   autonomy detail too; the `claim_flat_argument` and

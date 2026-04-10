@@ -190,6 +190,16 @@ Do not:
   cells plus their `24` matching remaining-one pruned prefixes on the chosen
   active clause-`5` bucket, those parent-route probes also belong to the
   autonomy ledger rather than as fresh repair leads
+- reopen the narrower clause-`6` `reference` refinement of that same
+  representative mismatch-`0` claim-side parent-route first either; if the
+  live docs already pin both active clause-`5`
+  `claim_flat_codomain / reference` refinements at unsafe noncanonical
+  `74 / 8` with `retained = 1`, the same `4427 / 545 / 2247`,
+  `incumbent_dominance = 111`,
+  `small_cluster = 2904 / 430 / 430 / 108`, a still-fenced `single` bucket,
+  and the same four targeted remaining-two parent cells plus their `24`
+  matching remaining-one pruned prefixes, that narrower refinement also
+  belongs to the autonomy ledger rather than as a fresh repair lead
 - reopen another deeper remaining-one exact-summary reland inside that same
   representative mismatch-`0` shell first either after the live docs have
   already shown the latest reconstructive control stays on that same

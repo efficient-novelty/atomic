@@ -859,3 +859,67 @@ This file is the append-only history for `desktop_claim_shadow`.
   clause-`5` family is chosen. The next honest repair therefore has to change
   the parent-level qualification family itself rather than merely retrying
   route identity or another delta relocalization on those same active buckets.
+- Scope: test whether narrowing that spent representative mismatch-`0`
+  claim-side parent-route class to only the representative clause-`6`
+  `reference` continuation on the active clause-`5`
+  `claim_flat_codomain` bucket isolates a safer repair.
+  Result: the narrower connectivity override still qualifies the targeted
+  claim-side parent shell while keeping sibling claim clause-`6` variants, the
+  reference clause-`2` sheet, and lifted terminals fenced, but the full
+  step-`15` search surface still lands an unsafe negative control:
+  - accepted step `15` shifts to noncanonical `74 / 8`
+  - retained breadth becomes `4427` with `retained = 1`
+  - partial-prefix bar failures stay at `545`
+  - incumbent-dominance contracts only to `111`
+  - zero-admitted captures stay at `2247`
+  - the first-mismatch distribution stays `304 / 177 / 50 / 14`
+  - `small_cluster` contracts further to `2904 / 430 / 430 / 108`
+  - the isolated `single` bucket stays fenced at `3` residual prunes plus `1`
+    fully scored non-winner at best overshoot `19563 / 10556`
+  - the representative clause-`2` spread stays at `11 / 11 / 12`
+  - the representative clause-`4` split stays at `20 / 14`
+  - the active clause-`4` `claim_next_bridge` plus clause-`5`
+    `claim_flat_codomain` bucket contracts to `44`
+  Consequence: the narrower clause-`6` `reference` refinement is still unsafe.
+  It preserves the targeted contraction and keeps the `single` pocket fenced,
+  but it still displaces the canonical `103 / 8` winner and is not the
+  missing repair.
+- Scope: test the sibling active clause-`5` `reference` family's same narrow
+  clause-`6` `reference` refinement above the current remaining-one lattice.
+  Result: the sibling refinement relands the same unsafe negative-control
+  surface exactly:
+  - accepted step `15` again shifts to noncanonical `74 / 8`
+  - retained breadth again becomes `4427` with `retained = 1`
+  - partial-prefix bar failures again land at `545`
+  - incumbent-dominance again lands at `111`
+  - zero-admitted captures again land at `2247`
+  - the first-mismatch distribution again stays `304 / 177 / 50 / 14`
+  - `small_cluster` again lands at `2904 / 430 / 430 / 108`
+  - the isolated `single` bucket again stays fenced at `3` residual prunes
+    plus `1` fully scored non-winner at best overshoot `19563 / 10556`
+  - the representative clause-`2` spread again stays `11 / 11 / 12`
+  - the representative clause-`4` split again stays `20 / 14`
+  - the sibling active clause-`4` `claim_next_bridge` plus clause-`5`
+    `reference` bucket contracts to `44`
+  Consequence: the narrower clause-`6` `reference` refinement is matched
+  across both active clause-`5` families too, so clause-`5` identity remains
+  exhausted at that parent-route depth.
+- Scope: localize that narrower clause-`6` `reference` parent-route class
+  against the canonical baseline to see whether it hides any off-target delta
+  above the current remaining-one lattice.
+  Result: both active clause-`5` narrow refinements are now localized at the
+  same delta shape:
+  - on the chosen active clause-`5` bucket, each refinement removes exactly
+    four remaining-two exact-prune parent cells:
+    `claim_flat_domain / claim_sharp_codomain` crossed with clause-`4`
+    `claim_next_bridge / reference`
+  - each refinement removes exactly `8` zero-admitted captures in total and
+    introduces none
+  - each refinement removes exactly `24` remaining-one pruned prefixes in
+    total and introduces none
+  - no off-target exact-prune or pruned-prefix family appears under either
+    active clause-`5` refinement
+  Consequence: even the marginally better narrow reference-only parent-route
+  refinement is fully localized and spent. The next honest repair has to
+  change the parent-level qualification family rather than retargeting the
+  same parent shell with another clause-`6` reland.

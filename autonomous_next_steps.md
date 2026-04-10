@@ -18,23 +18,28 @@ This file owns the single active work order for `desktop_claim_shadow`.
 Keep the active work order on the rerun-confirmed post-local-probe
 step-`15` miss: use canonical `v13` as the stored baseline for the next
 code-side step-`15` repair search above the exhausted mismatch-`0`
-remaining-one exact-summary lattice, but now stay above both representative
-mismatch-`0` claim-side parent-route probes too. The scoped
-historical-reanchor route on each active clause-`5`
-`claim_flat_codomain / reference` family qualified its targeted claim-side
-parent shell, yet both full step-`15` search surfaces relanded the same
-noncanonical `60 / 8` winner at `4427 / 545 / 2247` with
+remaining-one exact-summary lattice, above both representative mismatch-`0`
+claim-side parent-route probes, and above their narrower clause-`6`
+`reference` refinements too. The scoped historical-reanchor route on each
+active clause-`5` `claim_flat_codomain / reference` family qualified its
+targeted claim-side parent shell, yet the broad full surfaces relanded unsafe
+noncanonical `60 / 8` at `4427 / 545 / 2247` with
 `incumbent_dominance = 117`,
-`small_cluster = 2931 / 455 / 455 / 115`, and a reopened `single` bucket, so
-the route class is frozen as an unsafe matched negative control rather than
-the landed repair. Keep the demoted claim-safe mismatch-`1` checkpoint, both
-representative mismatch-`0` dead-child checkpoints, the spent
-`reference / reference` tail, the isolated clause-`1`
-`demo_flat_codomain` exact-suffix side pocket, the reconstructive
+`small_cluster = 2931 / 455 / 455 / 115`, and a reopened `single` bucket,
+while narrowing that same route to clause-`6` `reference` only relanded a
+different unsafe noncanonical `74 / 8` at the same `4427 / 545 / 2247` with
+`incumbent_dominance = 111`,
+`small_cluster = 2904 / 430 / 430 / 108`, and a still-fenced `single`
+bucket. The parent-route family is therefore frozen as an unsafe matched
+negative-control lattice rather than the landed repair. Keep the demoted
+claim-safe mismatch-`1` checkpoint, both representative mismatch-`0`
+dead-child checkpoints, the spent `reference / reference` tail, the isolated
+clause-`1` `demo_flat_codomain` exact-suffix side pocket, the reconstructive
 representative mismatch-`0` claim-side clause-`6` `reference` union under
 `claim_next_bridge / claim_flat_codomain`, both representative claim-side
-parent-route probes, and the looser representative claim-safe backup frozen
-as controls rather than fresh leads.
+parent-route probes, their narrower clause-`6` `reference` refinements, and
+the looser representative claim-safe backup frozen as controls rather than
+fresh leads.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -198,6 +203,33 @@ later stored bundle changes the diagnosis.
   route-identity reland or delta relocalization of those same active
   clause-`5` buckets either. The next honest probe has to swap to a different
   parent-level qualification family above the current remaining-one lattice.
+- Narrowing that same parent-route class to only the representative
+  clause-`6` `reference` continuation is now also spent across both active
+  clause-`5` families:
+  - on `claim_flat_codomain` and `reference`, the narrowed route relands
+    noncanonical `74 / 8` with `retained = 1`, `generated = 4427`,
+    `partial_prefix_bar_failure = 545`, `incumbent_dominance = 111`,
+    zero-admitted captures `2247`, and
+    `small_cluster = 2904 / 430 / 430 / 108`
+  - the isolated `single` bucket stays on `3` residual prunes plus `1` fully
+    scored non-winner at best overshoot `19563 / 10556`
+  - the representative clause-`2` spread stays `11 / 11 / 12`
+  - the representative clause-`4` split stays `20 / 14`
+  - it contracts only the chosen active clause-`4`
+    `claim_next_bridge` plus active clause-`5` bucket to `44`
+- That narrower clause-`6` `reference` parent-route refinement is also
+  already localized at the same delta level:
+  - on the chosen active clause-`5` bucket, it removes the same four
+    remaining-two exact-prune parent cells
+  - it removes the same `8` zero-admitted captures and the same `24`
+    remaining-one pruned prefixes
+  - it introduces no off-target exact-prune or pruned-prefix family
+- Any remaining step-`15` leverage is therefore no longer on the broad
+  representative mismatch-`0` claim-side parent-route class or on its
+  marginally narrower clause-`6` `reference` refinement across either active
+  clause-`5` family. The next honest probe has to change parent-level
+  qualification family again rather than retargeting the same route with a
+  narrower clause-`6` selector.
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -982,6 +1014,22 @@ later stored bundle changes the diagnosis.
   the same `small_cluster = 2931 / 455 / 455 / 115`, the same reopened
   `single` bucket, and the same targeted four-cell plus `24`-pruned-prefix
   delta on the active `reference` bucket
+- another representative mismatch-`0` claim-side parent-route reland narrowed
+  to clause-`6` `reference` on `claim_eventual_domain / claim_next_codomain /
+  claim_next_bridge / claim_flat_codomain`; that refinement now relands the
+  unsafe `4427 / 545 / 2247` shell on a different noncanonical `74 / 8`
+  winner with `retained = 1`, `incumbent_dominance = 111`,
+  `small_cluster = 2904 / 430 / 430 / 108`, a still-fenced `single` bucket,
+  and the same targeted four-cell plus `24`-pruned-prefix delta on the active
+  `claim_flat_codomain` bucket
+- another representative mismatch-`0` claim-side parent-route reland narrowed
+  to clause-`6` `reference` on `claim_eventual_domain / claim_next_codomain /
+  claim_next_bridge / reference`; that sibling refinement now relands the
+  same unsafe `4427 / 545 / 2247` shell with the same noncanonical `74 / 8`,
+  the same `retained = 1`, the same `incumbent_dominance = 111`, the same
+  `small_cluster = 2904 / 430 / 430 / 108`, the same fenced `single` bucket,
+  and the same targeted four-cell plus `24`-pruned-prefix delta on the active
+  `reference` bucket
 - another whole joint clause-`3` continuation reopen under that same
   representative clause-`6` `reference` shell
 - another representative claim-flat parent/child-shell completion pass that
@@ -1049,12 +1097,18 @@ later stored bundle changes the diagnosis.
   claim-side remaining-two parent cells plus their `24` corresponding
   remaining-one pruned prefixes on the chosen active clause-`5` bucket, with
   no off-target capture or prune families introduced
+- the narrower clause-`6` `reference` refinement of that same parent-route
+  class is also pinned across both active clause-`5` families at unsafe
+  noncanonical `74 / 8` with `retained = 1`, the same `4427 / 545 / 2247`
+  surface, `incumbent_dominance = 111`,
+  `small_cluster = 2904 / 430 / 430 / 108`, a still-fenced `single` bucket,
+  and the same four-cell plus `24`-pruned-prefix targeted delta
 - the next operational slice stays above the exhausted claim-safe,
   representative mismatch-`0`, `reference / reference`, isolated
   clause-`1` exact-suffix, representative claim-side clause-`6`
-  `reference` union, and both representative claim-side parent-route controls
-  while now targeting a different parent-level qualification above the
-  current remaining-one lattice
+  `reference` union, both representative claim-side parent-route controls, and
+  their narrower clause-`6` `reference` refinements while now targeting a
+  different parent-level qualification above the current remaining-one lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`
