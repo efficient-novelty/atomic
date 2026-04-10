@@ -160,6 +160,12 @@ Do not:
   two claim-side clause-`2` sheets are now matching smaller tradeoff controls
   while the sibling reference sheet is neutral, so that axis also belongs to
   the autonomy ledger rather than as a fresh lead
+- reopen the sibling active mismatch-`0` clause-`5` `reference` family's
+  representative pair-cell clause-`2` identity split first; if the live docs
+  already localize it to the same `4343 / 552 / 2268` smaller tradeoff shell
+  on the two claim-side sheets with the sibling reference sheet neutral at
+  `4331 / 553 / 2271`, that axis also belongs to the autonomy ledger rather
+  than as a fresh lead
 - reopen the representative `claim_flat_domain` clause-`2` sheet's clause-`6`
   identity split first; those `claim_next_codomain`,
   `claim_sharp_codomain`, and `reference` continuations are now matching

@@ -224,10 +224,28 @@ later stored bundle changes the diagnosis.
     `48` to `47`
   - the sibling `reference` sheet is a neutral control on
     `4331 / 553 / 2271`
+- The sibling active clause-`5` `reference` family's representative
+  mismatch-`0` pair cell now relands the same clause-`2` split one layer
+  deeper:
+  - under
+    `claim_eventual_domain / claim_next_codomain / claim_next_bridge / reference`,
+    the `claim_flat_domain` and `claim_sharp_codomain` sheets each land
+    `4343 / 552 / 2268`
+  - each keeps `small_cluster` at `3141 / 522 / 522 / 0`
+  - each lowers only its own clause-`2` share from `15` to `14`, while the
+    sibling claim sheet stays at `15` and the sibling `reference` sheet stays
+    at `12`
+  - each contracts the representative pair's clause-`4` split only from
+    `24 / 18` to `23 / 18`
+  - each contracts the representative clause-`4` `claim_next_bridge` plus
+    clause-`5` `reference` bucket only from `48` to `47`
+  - the sibling `reference` sheet is a neutral control on
+    `4331 / 553 / 2271`
 - Any remaining mismatch-`0` leverage below that representative pair cell is
-  therefore no longer on clause-`2` sheet identity either. The next honest
-  slice should move below one representative claim-side clause-`2` sheet into
-  a finer remaining-one exact-summary partition before considering the smaller
+  therefore no longer on clause-`2` sheet identity either, including on the
+  sibling active clause-`5` `reference` family. The next honest slice should
+  move below one representative claim-side clause-`2` sheet into a finer
+  remaining-one exact-summary partition before considering the smaller
   claim-safe mismatch-`1` tier.
 - That representative `claim_flat_domain` clause-`2` sheet is now also
   exhausted at clause-`6` identity scope:
@@ -700,6 +718,7 @@ later stored bundle changes the diagnosis.
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_pair_cells_below_the_active_mismatch_zero_clause_five_cells_stay_uniform_smaller_tradeoff_controls`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_a_representative_mismatch_zero_pair_cell_stays_a_smaller_tradeoff_control`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_pair_cell_clause_two_sheets_split_into_two_claim_side_smaller_tradeoff_controls_plus_one_reference_neutral_control`
+- `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_reference_clause_five_pair_cell_clause_two_sheets_split_into_two_claim_side_smaller_tradeoff_controls_plus_one_reference_neutral_control`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_flat_sheet_clause_six_sheets_stay_matched_smaller_tradeoff_controls`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_sharp_sheet_clause_six_sheets_stay_matched_smaller_tradeoff_controls`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_clause_three_sheets_stay_individually_neutral_controls`
@@ -775,6 +794,10 @@ later stored bundle changes the diagnosis.
   the `claim_flat_domain`, `claim_sharp_codomain`, or `reference` sheet under
   `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
   claim_flat_codomain`
+- another representative mismatch-`0` pair-cell clause-`2` identity pass on
+  the `claim_flat_domain`, `claim_sharp_codomain`, or `reference` sheet under
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+  reference`
 - promoting the representative claim-safe claim-side clause-`2` shell ahead
   of the tighter representative mismatch-`0` claim-side shell after the
   broader-backup comparison has already settled that ordering

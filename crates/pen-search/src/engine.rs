@@ -27730,6 +27730,328 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_reference_clause_five_pair_cell_clause_two_sheets_split_into_two_claim_side_smaller_tradeoff_controls_plus_one_reference_neutral_control()
+     {
+        let clause_two_labels = [
+            (
+                "claim_flat_domain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain,
+            ),
+            (
+                "claim_sharp_codomain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimSharpCodomain,
+            ),
+            (
+                "reference",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::Reference,
+            ),
+        ];
+        let mut outcomes = BTreeMap::new();
+
+        for (clause_two_name, clause_two) in clause_two_labels {
+            let _search_override =
+                super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                    super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                        clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                        clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                        clause_two: Some(clause_two),
+                        clause_three: None,
+                        clause_six: None,
+                        clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::Reference,
+                    },
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let clause_two_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_two_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_zero, clause_one, _clause_two), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *clause_zero == "claim_eventual_domain"
+                            && *clause_one == "claim_next_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let clause_four_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_zero, clause_one, _clause_four), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *clause_zero == "claim_eventual_domain"
+                            && *clause_one == "claim_next_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let clause_four_five_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                    .into_iter()
+                    .filter(|((mismatch, clause_four, clause_five), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *clause_four == "claim_next_bridge"
+                            && *clause_five == "reference"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("claim prefix through step 14 should build");
+            let prefix = claim_steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+            outcomes.insert(
+                clause_two_name,
+                (
+                    step_fifteen.demo_funnel.generated_raw_prefixes,
+                    step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
+                    zero_summary.captured_prefixes,
+                    wall_summary.first_mismatch_position_counts,
+                    bucket_stats
+                        .get("k8:structural_generic:temporal_operator:library_backed:small_cluster")
+                        .map(|stats| stats.generated_terminal_candidates)
+                        .expect("small_cluster bucket should stay present"),
+                    clause_two_counts,
+                    clause_four_counts,
+                    clause_four_five_counts,
+                ),
+            );
+        }
+
+        assert_eq!(outcomes.len(), 3);
+        assert_eq!(
+            outcomes.get("claim_flat_domain"),
+            Some(&(
+                4343,
+                552,
+                2268,
+                [
+                    (Some(0_usize), 311_usize),
+                    (Some(1), 177),
+                    (Some(2), 50),
+                    (Some(3), 14)
+                ]
+                .into_iter()
+                .collect(),
+                3141,
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_flat_domain",
+                        ),
+                        14_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_sharp_codomain",
+                        ),
+                        15,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "reference",
+                        ),
+                        12,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_next_bridge",
+                        ),
+                        23_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "reference",
+                        ),
+                        18,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+                [((Some(0_usize), "claim_next_bridge", "reference",), 47_usize,)]
+                    .into_iter()
+                    .collect(),
+            )),
+            "the reference-family claim-flat clause-two sheet should reland the same one-prefix smaller tradeoff, this time lowering only the active clause-4 claim-next-bridge plus clause-5 reference bucket from 48 to 47"
+        );
+        assert_eq!(
+            outcomes.get("claim_sharp_codomain"),
+            Some(&(
+                4343,
+                552,
+                2268,
+                [
+                    (Some(0_usize), 311_usize),
+                    (Some(1), 177),
+                    (Some(2), 50),
+                    (Some(3), 14)
+                ]
+                .into_iter()
+                .collect(),
+                3141,
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_flat_domain",
+                        ),
+                        15_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_sharp_codomain",
+                        ),
+                        14,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "reference",
+                        ),
+                        12,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_next_bridge",
+                        ),
+                        23_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "reference",
+                        ),
+                        18,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+                [((Some(0_usize), "claim_next_bridge", "reference",), 47_usize,)]
+                    .into_iter()
+                    .collect(),
+            )),
+            "the reference-family claim-sharp clause-two sheet should reland the same one-prefix smaller tradeoff, only swapping which claim-side clause-two share drops from 15 to 14"
+        );
+        assert_eq!(
+            outcomes.get("reference"),
+            Some(&(
+                4331,
+                553,
+                2271,
+                [
+                    (Some(0_usize), 312_usize),
+                    (Some(1), 177),
+                    (Some(2), 50),
+                    (Some(3), 14)
+                ]
+                .into_iter()
+                .collect(),
+                3132,
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_flat_domain",
+                        ),
+                        15_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_sharp_codomain",
+                        ),
+                        15,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "reference",
+                        ),
+                        12,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_next_bridge",
+                        ),
+                        24_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "reference",
+                        ),
+                        18,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+                [((Some(0_usize), "claim_next_bridge", "reference",), 48_usize,)]
+                    .into_iter()
+                    .collect(),
+            )),
+            "the reference-family reference clause-two sheet should stay neutral, confirming that the sibling active clause-five family also lives entirely on the two claim-side clause-two sheets"
+        );
+    }
+
+    #[test]
     fn current_claim_step_fifteen_alternate_broader_backup_comparison_keeps_the_tighter_representative_mismatch_zero_claim_side_shell_ahead_of_the_claim_safe_shell()
      {
         #[derive(Debug, Eq, PartialEq)]

@@ -700,3 +700,20 @@ This file is the append-only history for `desktop_claim_shadow`.
   step-`15` reset is confirmed on newer code, and the next honest slice is no
   longer another rerun-ordering pass but a fresh code-side step-`15` repair
   while step `1` stays deferred.
+- Scope: localize the sibling active mismatch-`0` clause-`5` `reference`
+  family one layer deeper below its representative pair-cell clause-`2`
+  split.
+  Result: beneath
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge / reference`,
+  the `claim_flat_domain` and `claim_sharp_codomain` sheets each reland the
+  same smaller tradeoff shell at `4343 / 552 / 2268` with
+  `small_cluster = 3141 / 522 / 522 / 0`, while the sibling `reference`
+  sheet stays neutral on `4331 / 553 / 2271` with
+  `small_cluster = 3132 / 522 / 522 / 0`. Each claim-side probe lowers only
+  its own clause-`2` share from `15` to `14`, contracts the clause-`4` split
+  only from `24 / 18` to `23 / 18`, and lowers the active clause-`4`
+  `claim_next_bridge` plus clause-`5` `reference` bucket only from `48` to
+  `47`.
+  Consequence: the sibling active clause-`5` `reference` family is exhausted
+  one layer deeper too, so clause-`5` family identity is no longer a fresh
+  mismatch-`0` lead below representative pair-cell scope.

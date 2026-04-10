@@ -408,6 +408,13 @@ Focus on:
   tradeoff controls while the reference sheet is neutral, so route to the live
   docs before retrying clause-`2` identity instead of assuming one sheet is
   newly privileged
+- treat the sibling active mismatch-`0` clause-`5` `reference` family's
+  representative clause-`2` split as live autonomy detail too; if the live
+  docs already localize it to the same `4343 / 552 / 2268` smaller tradeoff
+  shell with `small_cluster = 3141 / 522 / 522 / 0` on the two claim-side
+  sheets and a neutral `4331 / 553 / 2271` sibling `reference` sheet, route
+  there instead of retrying clause-`5` family identity one layer deeper as if
+  it were fresh leverage
 - treat the representative `claim_flat_domain` clause-`2` sheet's clause-`6`
   continuations as live autonomy detail too; the `claim_next_codomain`,
   `claim_sharp_codomain`, and `reference` continuations now all reland the

@@ -374,6 +374,27 @@ Until that exists, wording stays at `bounded live recovery`.
     revisit has to move below clause-`2` sheet identity into a finer
     remaining-one exact-summary partition under one representative claim-side
     sheet rather than swapping between the two claim sheets again
+- The sibling active clause-`5` `reference` family's representative
+  mismatch-`0` pair cell is now also localized one layer deeper across its
+  clause-`2` sheets:
+  - under
+    `claim_eventual_domain / claim_next_codomain / claim_next_bridge / reference`,
+    the `claim_flat_domain` and `claim_sharp_codomain` sheets each reland the
+    same smaller tradeoff at `4343 / 552 / 2268`
+  - each keeps `small_cluster` at `3141 / 522 / 522 / 0`
+  - each lowers only its own clause-`2` share from `15` to `14`, while the
+    sibling claim sheet stays at `15` and the sibling `reference` sheet stays
+    at `12`
+  - each contracts the representative pair's clause-`4` split only from
+    `24 / 18` to `23 / 18`
+  - each contracts the representative clause-`4` `claim_next_bridge` plus
+    clause-`5` `reference` bucket only from `48` to `47`
+  - the sibling `reference` sheet is a neutral control on
+    `4331 / 553 / 2271`
+  - consequence: the sibling active clause-`5` `reference` family repeats the
+    same claim-side clause-`2` tradeoff one layer deeper too, so clause-`5`
+    family identity is now exhausted below representative pair-cell scope as
+    well
 - The representative `claim_flat_domain` clause-`2` sheet is now also
   localized one layer deeper across its clause-`6` remaining-one
   continuations:
@@ -873,6 +894,16 @@ Until that exists, wording stays at `bounded live recovery`.
   smaller tradeoff controls and the reference sheet is inert, both
   representative claim-side sheets are now frozen context rather than fresh
   mismatch-`0` leads.
+- Do not stop at the sibling active clause-`5` `reference` family's
+  representative pair-cell clause-`2` split either; its
+  `claim_flat_domain` and `claim_sharp_codomain` sheets reland the same
+  `4343 / 552 / 2268` smaller tradeoff shell with
+  `small_cluster = 3141 / 522 / 522 / 0`, while the sibling `reference`
+  sheet is a neutral control on `4331 / 553 / 2271`.
+- Because that sibling active clause-`5` `reference` family repeats the same
+  representative claim-side clause-`2` tradeoff one layer deeper too,
+  clause-`5` family identity is now exhausted below representative pair-cell
+  scope as well.
 - Do not stop at the representative `claim_flat_domain` clause-`2` sheet's
   clause-`6` `claim_next_codomain`, `claim_sharp_codomain`, or `reference`
   continuations either; all three reland the same `4343 / 552 / 3141`
