@@ -1030,6 +1030,23 @@ Until that exists, wording stays at `bounded live recovery`.
   follow-on still has to stay above another reland of that same
   representative mismatch-`0` claim-side parent route while step `1` remains
   deferred.
+- The sibling active clause-`5` `reference` family's representative
+  mismatch-`0` claim-side parent-route probe is now also spent as the same
+  unsafe negative control:
+  - it relands the same noncanonical `60 / 8` winner, the same
+    `4427 / 545 / 2247` late surface, the same `incumbent_dominance = 117`,
+    and the same reopened `single` bucket
+  - it relands the same contracted first-mismatch-`0` tier at `304`
+  - it relands the same `small_cluster = 2931 / 455 / 455 / 115`
+  - it relands the same representative clause-`2` spread `11 / 11 / 12`
+  - it relands the same representative clause-`4` split `20 / 14`
+  - it contracts only the sibling active clause-`4` `claim_next_bridge` plus
+    clause-`5` `reference` bucket to `44`
+- Consequence: representative mismatch-`0` claim-side parent-route identity
+  is now exhausted across both active clause-`5` families. The next honest
+  follow-on has to move to a different parent-level qualification above the
+  current remaining-one lattice rather than reopening either claim-side route
+  sibling, while step `1` remains deferred.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

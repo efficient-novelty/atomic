@@ -18,20 +18,23 @@ This file owns the single active work order for `desktop_claim_shadow`.
 Keep the active work order on the rerun-confirmed post-local-probe
 step-`15` miss: use canonical `v13` as the stored baseline for the next
 code-side step-`15` repair search above the exhausted mismatch-`0`
-remaining-one exact-summary lattice, but now stay above the first
-representative mismatch-`0` claim-side parent-route probe too. That scoped
-historical-reanchor route qualified the targeted claim-side parent shell, yet
-the full step-`15` surface landed a noncanonical `60 / 8` winner at
-`4427 / 545 / 2247` with `incumbent_dominance = 117`,
+remaining-one exact-summary lattice, but now stay above both representative
+mismatch-`0` claim-side parent-route probes too. The scoped
+historical-reanchor route on each active clause-`5`
+`claim_flat_codomain / reference` family qualified its targeted claim-side
+parent shell, yet both full step-`15` search surfaces relanded the same
+noncanonical `60 / 8` winner at `4427 / 545 / 2247` with
+`incumbent_dominance = 117`,
 `small_cluster = 2931 / 455 / 455 / 115`, and a reopened `single` bucket, so
-it is frozen as an unsafe negative control rather than the landed repair.
-Keep the demoted claim-safe mismatch-`1` checkpoint, both representative
-mismatch-`0` dead-child checkpoints, the spent `reference / reference` tail,
-the isolated clause-`1` `demo_flat_codomain` exact-suffix side pocket, the
-reconstructive representative mismatch-`0` claim-side clause-`6`
-`reference` union under `claim_next_bridge / claim_flat_codomain`, that
-representative claim-side parent-route probe, and the looser representative
-claim-safe backup frozen as controls rather than fresh leads.
+the route class is frozen as an unsafe matched negative control rather than
+the landed repair. Keep the demoted claim-safe mismatch-`1` checkpoint, both
+representative mismatch-`0` dead-child checkpoints, the spent
+`reference / reference` tail, the isolated clause-`1`
+`demo_flat_codomain` exact-suffix side pocket, the reconstructive
+representative mismatch-`0` claim-side clause-`6` `reference` union under
+`claim_next_bridge / claim_flat_codomain`, both representative claim-side
+parent-route probes, and the looser representative claim-safe backup frozen
+as controls rather than fresh leads.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -165,6 +168,23 @@ later stored bundle changes the diagnosis.
   representative mismatch-`0` claim-side parent-route reopening either; it
   narrows the wall only by displacing the canonical `103 / 8` winner and by
   reshaping both survivor buckets.
+- The sibling active clause-`5` `reference` family's representative
+  mismatch-`0` claim-side parent-route probe is now also spent as the same
+  unsafe negative control:
+  - it relands the same noncanonical `60 / 8` winner, the same
+    `4427 / 545 / 2247` late surface, and the same
+    `incumbent_dominance = 117`
+  - it relands the same contracted first-mismatch-`0` tier at `304`
+  - it relands the same `small_cluster = 2931 / 455 / 455 / 115`
+  - it relands the same reopened `single` bucket
+  - it relands the same representative clause-`2` spread `11 / 11 / 12`
+  - it relands the same representative clause-`4` split `20 / 14`
+  - it contracts only the sibling active clause-`4` `claim_next_bridge` plus
+    clause-`5` `reference` bucket to `44`
+- Any remaining step-`15` leverage is therefore no longer on representative
+  mismatch-`0` claim-side parent-route identity across either active
+  clause-`5` family. The next honest probe has to move to a different
+  parent-level qualification above the current remaining-one lattice.
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -938,6 +958,13 @@ later stored bundle changes the diagnosis.
   the unsafe `4427 / 545 / 2247` negative control with noncanonical
   `60 / 8`, `incumbent_dominance = 117`,
   `small_cluster = 2931 / 455 / 455 / 115`, and a reopened `single` bucket
+- another representative mismatch-`0` claim-side parent-route reland on
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+  reference`; that sibling scoped historical-reanchor route now relands the
+  same unsafe `4427 / 545 / 2247` negative control with the same noncanonical
+  `60 / 8`, the same `incumbent_dominance = 117`,
+  the same `small_cluster = 2931 / 455 / 455 / 115`, and the same reopened
+  `single` bucket
 - another whole joint clause-`3` continuation reopen under that same
   representative clause-`6` `reference` shell
 - another representative claim-flat parent/child-shell completion pass that
@@ -996,16 +1023,16 @@ later stored bundle changes the diagnosis.
 - canonical `v13` stands as the newer stored baseline on current-head code
 - step `1` stays explicit but deferred because `v13` re-confirms the same
   breadth-only step-`15` miss
-- the first parent-level representative mismatch-`0` claim-side route probe
-  is pinned as an unsafe negative control on
-  `4427 / 545 / 2247` with noncanonical `60 / 8`,
-  `incumbent_dominance = 117`,
+- both representative mismatch-`0` claim-side parent-route probes on the
+  active clause-`5` `claim_flat_codomain / reference` families are pinned as
+  the same unsafe negative control on `4427 / 545 / 2247` with noncanonical
+  `60 / 8`, `incumbent_dominance = 117`,
   `small_cluster = 2931 / 455 / 455 / 115`, and a reopened `single` bucket
 - the next operational slice stays above the exhausted claim-safe,
   representative mismatch-`0`, `reference / reference`, isolated
   clause-`1` exact-suffix, representative claim-side clause-`6`
-  `reference` union, and representative claim-side parent-route controls
-  while still targeting a different parent-level step-`15` repair above the
+  `reference` union, and both representative claim-side parent-route controls
+  while now targeting a different parent-level qualification above the
   current remaining-one lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and

@@ -815,3 +815,25 @@ This file is the append-only history for `desktop_claim_shadow`.
   canonical `103 / 8` winner and by reshaping both survivor buckets, so the
   next repair still has to stay above another reland of that same
   representative mismatch-`0` claim-side parent route.
+- Scope: test the sibling active clause-`5` `reference` family's
+  representative mismatch-`0` claim-side historical-reanchor route above that
+  same exhausted remaining-one lattice.
+  Result: the sibling route relands the same unsafe negative-control surface
+  exactly:
+  - accepted step `15` again shifts to noncanonical `60 / 8`
+  - retained breadth again becomes `4427`
+  - partial-prefix bar failures again land at `545`
+  - incumbent-dominance again jumps to `117`
+  - zero-admitted captures again land at `2247`
+  - the first-mismatch-`0` tier again contracts to `304`
+  - `small_cluster` again lands at `2931 / 455 / 455 / 115`
+  - the isolated `single` bucket again reopens to `2` fully scored non-winners
+    plus `2` residual prunes at best overshoot `545 / 5278`
+  - the representative clause-`2` spread again contracts to `11 / 11 / 12`
+  - the representative clause-`4` split again contracts to `20 / 14`
+  - the sibling active clause-`4` `claim_next_bridge` plus clause-`5`
+    `reference` bucket contracts to `44`
+  Consequence: representative mismatch-`0` claim-side parent-route identity is
+  now exhausted across both active clause-`5` families. The next honest repair
+  has to move to a different parent-level qualification above the current
+  remaining-one lattice rather than reopening either claim-side route sibling.
