@@ -1047,6 +1047,20 @@ Until that exists, wording stays at `bounded live recovery`.
   follow-on has to move to a different parent-level qualification above the
   current remaining-one lattice rather than reopening either claim-side route
   sibling, while step `1` remains deferred.
+- That matched unsafe parent-route class is now also localized at delta level:
+  - on the chosen active clause-`5` bucket, each route removes exactly four
+    remaining-two exact-prune parent cells:
+    `claim_flat_domain / claim_sharp_codomain` crossed with clause-`4`
+    `claim_next_bridge / reference`
+  - those four parent cells contribute exactly `8` removed zero-admitted
+    captures and exactly `24` removed remaining-one pruned prefixes
+  - neither route introduces any off-target exact-prune or pruned-prefix
+    family
+- Consequence: the unsafe parent-route class is exhausted not just by the
+  landed `4427 / 545 / 2247` surface but by localization too. The next honest
+  follow-on has to change the parent-level qualification family itself rather
+  than retargeting the same active clause-`5` bucket or re-running another
+  route-identity reland, while step `1` remains deferred.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

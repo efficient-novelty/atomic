@@ -837,3 +837,25 @@ This file is the append-only history for `desktop_claim_shadow`.
   now exhausted across both active clause-`5` families. The next honest repair
   has to move to a different parent-level qualification above the current
   remaining-one lattice rather than reopening either claim-side route sibling.
+- Scope: localize that matched unsafe parent-route class against the canonical
+  baseline to see whether either active clause-`5` route hides any off-target
+  capture or prune family above the current remaining-one lattice.
+  Result: both active clause-`5` parent-route probes are now localized at the
+  same narrow delta shape:
+  - on the chosen active clause-`5` bucket, each route removes exactly four
+    remaining-two exact-prune parent cells:
+    `claim_flat_domain / claim_sharp_codomain` crossed with clause-`4`
+    `claim_next_bridge / reference`
+  - each removed parent cell contributes `2` zero-admitted captures, so each
+    route removes exactly `8` captured prefixes in total and introduces none
+  - each removed parent cell also contributes `6` remaining-one pruned
+    prefixes, so each route removes exactly `24` pruned prefixes in total and
+    introduces none
+  - no off-target exact-prune or pruned-prefix family appears under either
+    active clause-`5` route
+  Consequence: the unsafe parent-route class is now exhausted at delta scope
+  too. It is not a broader qualification family hiding relief elsewhere; it
+  only requalifies the same targeted claim-side bucket on whichever active
+  clause-`5` family is chosen. The next honest repair therefore has to change
+  the parent-level qualification family itself rather than merely retrying
+  route identity or another delta relocalization on those same active buckets.

@@ -185,6 +185,19 @@ later stored bundle changes the diagnosis.
   mismatch-`0` claim-side parent-route identity across either active
   clause-`5` family. The next honest probe has to move to a different
   parent-level qualification above the current remaining-one lattice.
+- That matched unsafe parent-route class is now also localized at delta level:
+  - on the chosen active clause-`5` bucket, each route removes exactly four
+    remaining-two exact-prune parent cells:
+    `claim_flat_domain / claim_sharp_codomain` crossed with clause-`4`
+    `claim_next_bridge / reference`
+  - those four parent cells contribute exactly `8` removed zero-admitted
+    captures and exactly `24` removed remaining-one pruned prefixes
+  - neither route introduces any off-target exact-prune or pruned-prefix
+    family
+- Any remaining step-`15` leverage is therefore no longer on another
+  route-identity reland or delta relocalization of those same active
+  clause-`5` buckets either. The next honest probe has to swap to a different
+  parent-level qualification family above the current remaining-one lattice.
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -957,14 +970,18 @@ later stored bundle changes the diagnosis.
   claim_flat_codomain`; that scoped historical-reanchor route now only lands
   the unsafe `4427 / 545 / 2247` negative control with noncanonical
   `60 / 8`, `incumbent_dominance = 117`,
-  `small_cluster = 2931 / 455 / 455 / 115`, and a reopened `single` bucket
+  `small_cluster = 2931 / 455 / 455 / 115`, a reopened `single` bucket, and a
+  delta localized only to the four targeted claim-side remaining-two parent
+  cells plus their `24` matching remaining-one pruned prefixes on the active
+  `claim_flat_codomain` bucket
 - another representative mismatch-`0` claim-side parent-route reland on
   `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
   reference`; that sibling scoped historical-reanchor route now relands the
   same unsafe `4427 / 545 / 2247` negative control with the same noncanonical
   `60 / 8`, the same `incumbent_dominance = 117`,
-  the same `small_cluster = 2931 / 455 / 455 / 115`, and the same reopened
-  `single` bucket
+  the same `small_cluster = 2931 / 455 / 455 / 115`, the same reopened
+  `single` bucket, and the same targeted four-cell plus `24`-pruned-prefix
+  delta on the active `reference` bucket
 - another whole joint clause-`3` continuation reopen under that same
   representative clause-`6` `reference` shell
 - another representative claim-flat parent/child-shell completion pass that
@@ -1028,6 +1045,10 @@ later stored bundle changes the diagnosis.
   the same unsafe negative control on `4427 / 545 / 2247` with noncanonical
   `60 / 8`, `incumbent_dominance = 117`,
   `small_cluster = 2931 / 455 / 455 / 115`, and a reopened `single` bucket
+- that matched unsafe route class is also localized to only the four targeted
+  claim-side remaining-two parent cells plus their `24` corresponding
+  remaining-one pruned prefixes on the chosen active clause-`5` bucket, with
+  no off-target capture or prune families introduced
 - the next operational slice stays above the exhausted claim-safe,
   representative mismatch-`0`, `reference / reference`, isolated
   clause-`1` exact-suffix, representative claim-side clause-`6`

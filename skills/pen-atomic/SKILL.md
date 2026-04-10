@@ -436,9 +436,11 @@ Focus on:
   `claim_flat_codomain / reference` families at the same unsafe
   `4427 / 545 / 2247` negative-control shell with noncanonical `60 / 8`,
   `incumbent_dominance = 117`,
-  `small_cluster = 2931 / 455 / 455 / 115`, and a reopened `single` bucket,
-  route there instead of reopening either parent-route sibling as if it were
-  a fresh repair class
+  `small_cluster = 2931 / 455 / 455 / 115`, a reopened `single` bucket, and a
+  delta localized only to the four targeted claim-side remaining-two parent
+  cells plus their `24` matching remaining-one pruned prefixes on the chosen
+  active clause-`5` bucket, route there instead of reopening either
+  parent-route sibling as if it were a fresh repair class
 - treat the representative `claim_flat_domain` clause-`2` sheet's marginally
   best clause-`6` `reference` continuation's clause-`3` split as live
   autonomy detail too; the `claim_flat_argument` and

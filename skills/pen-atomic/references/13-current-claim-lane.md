@@ -185,9 +185,11 @@ Do not:
   on the active clause-`5` `claim_flat_codomain / reference` families at the
   same unsafe `4427 / 545 / 2247` negative-control shell with noncanonical
   `60 / 8`, `incumbent_dominance = 117`,
-  `small_cluster = 2931 / 455 / 455 / 115`, and a reopened `single` bucket,
-  those parent-route probes also belong to the autonomy ledger rather than as
-  fresh repair leads
+  `small_cluster = 2931 / 455 / 455 / 115`, a reopened `single` bucket, and
+  a delta localized only to the four targeted claim-side remaining-two parent
+  cells plus their `24` matching remaining-one pruned prefixes on the chosen
+  active clause-`5` bucket, those parent-route probes also belong to the
+  autonomy ledger rather than as fresh repair leads
 - reopen another deeper remaining-one exact-summary reland inside that same
   representative mismatch-`0` shell first either after the live docs have
   already shown the latest reconstructive control stays on that same
