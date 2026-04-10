@@ -1125,6 +1125,29 @@ Until that exists, wording stays at `bounded live recovery`.
   honest follow-on has to change parent-level qualification family again
   rather than swapping between the historical-reanchor, active-window, and
   self-contained controls.
+- The narrower clause-`6` `reference` refinements of those same alternate
+  active-window and self-contained families are now also spent:
+  - on `claim_flat_codomain`, both refinements reland noncanonical `60 / 8`
+    with `retained = 4`, `generated = 4427`,
+    `partial_prefix_bar_failure = 545`, `incumbent_dominance = 113`, and
+    zero-admitted captures `2247`
+  - on `reference`, both sibling refinements reland noncanonical `60 / 8`
+    with `retained = 2`, the same `4427 / 545 / 2247`, and
+    `incumbent_dominance = 115`
+  - both clause-`5` siblings keep first-mismatch distribution
+    `304 / 177 / 50 / 14`, clause-`2` spread `11 / 11 / 12`, clause-`4`
+    split `20 / 14`, and the chosen active clause-`4`
+    `claim_next_bridge` plus clause-`5` bucket at `44`
+  - both reland `small_cluster = 2904 / 462 / 462 / 109 / 2` with best
+    overshoot `545 / 5278` and no `single` bucket
+  - both also keep the same targeted four remaining-two parent cells plus the
+    same `24` remaining-one pruned prefixes, with no off-target capture or
+    prune family introduced
+- Consequence: clause-`6` narrowing does not rescue the alternate
+  active-window or self-contained families either. It tightens the broader
+  `2952 / 558 / 558 / 108` shell into a narrower unsafe split control, but it
+  still displaces the canonical `103 / 8` winner and therefore stays below
+  the active frontier rather than becoming the landed repair.
 - Narrowing that same parent-route class to only the representative
   clause-`6` `reference` continuation is now also spent across both active
   clause-`5` families:

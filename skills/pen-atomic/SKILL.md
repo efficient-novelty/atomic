@@ -461,6 +461,18 @@ Focus on:
   bucket, and the same four-cell plus `24`-pruned-prefix targeted delta,
   route there instead of reopening that alternate qualification family as if
   it were a fresh repair class
+- treat the narrower clause-`6` `reference` refinements of those same
+  alternate active-window and self-contained families as live autonomy detail
+  too; if the live docs already pin `claim_flat_codomain` at unsafe
+  noncanonical `60 / 8` with `retained = 4`,
+  `incumbent_dominance = 113`,
+  `small_cluster = 2904 / 462 / 462 / 109 / 2`, and pin `reference` at the
+  same unsafe `60 / 8` with `retained = 2`,
+  `incumbent_dominance = 115`, the same
+  `2904 / 462 / 462 / 109 / 2` `small_cluster`, no `single` bucket, best
+  overshoot `545 / 5278`, and the same four-cell plus `24`-pruned-prefix
+  targeted delta, route there instead of reopening either narrower alternate
+  selector as if it were a fresh repair class
 - treat the narrower clause-`6` `reference` refinement of that same
   representative mismatch-`0` claim-side parent-route class as live autonomy
   detail too; if the live docs already pin both active clause-`5`

@@ -1038,3 +1038,51 @@ This file is the append-only history for `desktop_claim_shadow`.
   next honest repair has to change parent-level qualification family again
   rather than swapping between historical-reanchor, active-window, and
   self-contained controls.
+- Scope: narrow the alternate active-window qualification family one layer
+  deeper, to only the representative clause-`6` `reference` continuation on
+  each active clause-`5` bucket above the current remaining-one lattice.
+  Result: the narrower active-window refinements are still unsafe split
+  controls rather than clean repairs:
+  - on `claim_flat_codomain`, the refinement relands noncanonical `60 / 8`
+    with `retained = 4`, `generated = 4427`,
+    `partial_prefix_bar_failure = 545`, `incumbent_dominance = 113`, and
+    zero-admitted captures `2247`
+  - on `reference`, the sibling refinement relands noncanonical `60 / 8`
+    with `retained = 2`, the same `4427 / 545 / 2247`, and
+    `incumbent_dominance = 115`
+  - both clause-`5` siblings keep first-mismatch distribution
+    `304 / 177 / 50 / 14`, clause-`2` spread `11 / 11 / 12`, clause-`4`
+    split `20 / 14`, and the chosen active clause-`4`
+    `claim_next_bridge` plus clause-`5` bucket at `44`
+  - both also reland `small_cluster = 2904 / 462 / 462 / 109 / 2` with best
+    overshoot `545 / 5278` and no `single` bucket
+  - both keep the same targeted four remaining-two parent cells plus the same
+    `24` remaining-one pruned prefixes, with no off-target capture or prune
+    family introduced
+  Consequence: narrowing active-window to clause-`6` `reference` does not
+  expose a safe repair class. It improves the bucket shape relative to the
+  broader `2952 / 558 / 558 / 108` shell, but it still displaces the
+  canonical `103 / 8` winner and only repartitions survivor pressure inside
+  the same targeted claim-side bucket.
+- Scope: narrow the alternate self-contained qualification family one layer
+  deeper, to only the representative clause-`6` `reference` continuation on
+  each active clause-`5` bucket above the current remaining-one lattice.
+  Result: the narrower self-contained refinements reland the exact same unsafe
+  clause-`5` split control as the active-window refinements:
+  - `claim_flat_codomain` again lands noncanonical `60 / 8` with
+    `retained = 4`, `generated = 4427`, `partial_prefix_bar_failure = 545`,
+    `incumbent_dominance = 113`, zero-admitted captures `2247`, and
+    `small_cluster = 2904 / 462 / 462 / 109 / 2`
+  - `reference` again lands noncanonical `60 / 8` with `retained = 2`, the
+    same `4427 / 545 / 2247`, `incumbent_dominance = 115`, and the same
+    `2904 / 462 / 462 / 109 / 2` `small_cluster`
+  - both siblings keep best overshoot `545 / 5278`, no `single` bucket, the
+    same `304 / 177 / 50 / 14` first-mismatch distribution, the same
+    `11 / 11 / 12` clause-`2` spread, the same `20 / 14` clause-`4` split,
+    the same chosen active clause-`4` plus clause-`5` bucket at `44`, and
+    the same four-cell plus `24`-pruned-prefix targeted delta
+  Consequence: self-contained clause-`6` narrowing is now spent too. It is not
+  a distinct recovery class hiding below the broad self-contained family;
+  below that narrower selector it still just relands the active-window split
+  control. The next honest repair therefore has to stay above both alternate
+  clause-`6` refinements as well as above their broader parent families.

@@ -210,6 +210,18 @@ Do not:
   `24` matching remaining-one pruned prefixes, that alternate qualification
   family also belongs to the autonomy ledger rather than as a fresh repair
   lead
+- reopen the narrower clause-`6` `reference` refinement of those same
+  alternate active-window or self-contained families first either; if the
+  live docs already pin `claim_flat_codomain` at unsafe noncanonical `60 / 8`
+  with `retained = 4`, `incumbent_dominance = 113`,
+  `small_cluster = 2904 / 462 / 462 / 109 / 2`, and pin `reference` at the
+  same unsafe `60 / 8` with `retained = 2`,
+  `incumbent_dominance = 115`, the same
+  `2904 / 462 / 462 / 109 / 2` `small_cluster`, no `single` bucket, best
+  overshoot `545 / 5278`, and the same four targeted remaining-two parent
+  cells plus their `24` matching remaining-one pruned prefixes, those
+  narrower alternate refinements also belong to the autonomy ledger rather
+  than as fresh repair leads
 - reopen the narrower clause-`6` `reference` refinement of that same
   representative mismatch-`0` claim-side parent-route first either; if the
   live docs already pin both active clause-`5`
