@@ -15164,6 +15164,110 @@ mod tests {
         (exact_prune_family_summary, terminal_connectivity_summary)
     }
 
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    struct ReleasedRemainingOneGroupSummary {
+        bucket_label: String,
+        generated_candidate_count: usize,
+        admitted_candidate_count: usize,
+        has_bound: bool,
+        can_clear_bar: bool,
+        prune_disconnected_candidates: usize,
+        needs_fallback_candidates: usize,
+        keep_without_fallback_candidates: usize,
+    }
+
+    fn current_claim_step_fifteen_released_remaining_one_group_summary(
+        surface: &LateStepPrunedTerminalSurface,
+        work_item: &OnlinePrefixWorkItem,
+    ) -> ReleasedRemainingOneGroupSummary {
+        assert_eq!(
+            work_item.remaining_clause_slots, 1,
+            "released group summary should stay on remaining-one prefixes"
+        );
+
+        let mut cache = PrefixLegalityCache::default();
+        assert!(cache.insert_root(
+            work_item.signature.clone(),
+            work_item.clause_kappa,
+            &surface.library,
+            &work_item.prefix_telescope,
+            surface.admissibility,
+            LateFamilySurface::ClaimGeneric,
+        ));
+
+        let connectivity_facts = work_item
+            .next_clause_connectivity_facts(&surface.clause_catalog)
+            .expect("released remaining-one prefixes should still expose connectivity facts");
+        let terminal_clauses = terminal_prefix_clause_candidates(
+            surface.step_index,
+            &surface.library,
+            surface.admissibility,
+            &work_item.signature,
+            work_item.next_clauses(&surface.clause_catalog),
+            Some(connectivity_facts),
+            work_item.next_clause_nu_facts(&surface.clause_catalog),
+            &mut cache,
+            None,
+        );
+        let direct = direct_terminal_assessment_from_terminal_candidates(
+            surface.step_index,
+            &surface.library,
+            surface.admissibility,
+            surface.objective_bar,
+            &surface.nu_history,
+            &work_item.prefix_telescope,
+            &terminal_clauses,
+        );
+        let bucket_key = crate::engine::demo_bucket_key(
+            surface.admissibility.mode,
+            &work_item.signature,
+            &work_item.prefix_telescope,
+            work_item.clause_kappa,
+            direct.generated_candidate_count,
+            direct.admitted_candidate_count,
+        );
+
+        let mut prune_disconnected_candidates = 0usize;
+        let mut needs_fallback_candidates = 0usize;
+        let mut keep_without_fallback_candidates = 0usize;
+        for (clause, facts) in work_item
+            .next_clauses(&surface.clause_catalog)
+            .iter()
+            .zip(connectivity_facts.iter())
+        {
+            let decision = cache
+                .terminal_connectivity_with_facts(
+                    &work_item.signature,
+                    &surface.library,
+                    clause,
+                    Some(facts),
+                )
+                .expect("released remaining-one prefix should still classify every terminal");
+            match decision {
+                TerminalConnectivityDecision::PruneDisconnected => {
+                    prune_disconnected_candidates += 1;
+                }
+                TerminalConnectivityDecision::NeedsFallback => {
+                    needs_fallback_candidates += 1;
+                }
+                TerminalConnectivityDecision::KeepWithoutFallback => {
+                    keep_without_fallback_candidates += 1;
+                }
+            }
+        }
+
+        ReleasedRemainingOneGroupSummary {
+            bucket_label: bucket_key.label(),
+            generated_candidate_count: direct.generated_candidate_count,
+            admitted_candidate_count: direct.admitted_candidate_count,
+            has_bound: direct.bound.is_some(),
+            can_clear_bar: direct.can_clear_bar,
+            prune_disconnected_candidates,
+            needs_fallback_candidates,
+            keep_without_fallback_candidates,
+        }
+    }
+
     fn current_claim_step_fifteen_pruned_terminal_prefixes_on_reference_reference_tail_mismatch_two_clause_four_probe(
         label: super::ClaimStepFifteenReferenceReferenceTailMismatchTwoClauseFourLabel,
     ) -> Vec<OnlinePrefixWorkItem> {
@@ -29127,6 +29231,203 @@ mod tests {
         assert_eq!(
             claim_side_union_summaries.1, expected_terminal_connectivity_summary,
             "the deeper claim-side union should also keep every promoted remaining-one continuation inside the same structurally connected but unqualified needs-fallback shell as the pair-cell tradeoff"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_side_clause_six_reference_union_small_cluster_delta_localizes_to_six_zero_admitted_groups()
+     {
+        let baseline_surface = current_claim_step_fifteen_pruned_terminal_surface(usize::MAX);
+        let claim_side_union_selector =
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimSide),
+                clause_three: None,
+                clause_six: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseSixLabel::Reference),
+                clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimFlatCodomain,
+            };
+        let claim_side_union_surface = {
+            let _search_override =
+                super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                    claim_side_union_selector,
+                );
+            current_claim_step_fifteen_pruned_terminal_surface(usize::MAX)
+        };
+        let union_pruned_keys = claim_side_union_surface
+            .pruned_terminal_prefixes
+            .iter()
+            .map(|work_item| {
+                serde_json::to_string(&work_item.prefix_telescope)
+                    .expect("captured prune prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let released_prefixes = baseline_surface
+            .pruned_terminal_prefixes
+            .iter()
+            .filter(|work_item| {
+                !union_pruned_keys.contains(
+                    &serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize"),
+                )
+            })
+            .collect::<Vec<_>>();
+        let released_prefix_counts =
+            released_prefixes
+                .iter()
+                .fold(BTreeMap::new(), |mut summary, work_item| {
+                    *summary
+                        .entry((
+                            current_claim_step_fifteen_partial_prefix_clause_two_label(
+                                &work_item.prefix_telescope.clauses[2],
+                            ),
+                            current_claim_step_fifteen_partial_prefix_clause_six_label(
+                                &work_item.prefix_telescope.clauses[6],
+                            ),
+                        ))
+                        .or_insert(0usize) += 1;
+                    summary
+                });
+        let released_group_summaries =
+            released_prefixes
+                .iter()
+                .fold(BTreeMap::new(), |mut summaries, work_item| {
+                    summaries.insert(
+                        (
+                            current_claim_step_fifteen_partial_prefix_clause_two_label(
+                                &work_item.prefix_telescope.clauses[2],
+                            ),
+                            current_claim_step_fifteen_partial_prefix_clause_six_label(
+                                &work_item.prefix_telescope.clauses[6],
+                            ),
+                        ),
+                        current_claim_step_fifteen_released_remaining_one_group_summary(
+                            &baseline_surface,
+                            work_item,
+                        ),
+                    );
+                    summaries
+                });
+        let total_released_small_cluster_generated = released_group_summaries
+            .values()
+            .map(|summary| summary.generated_candidate_count)
+            .sum::<usize>();
+
+        assert_eq!(
+            released_prefix_counts,
+            [
+                (("claim_flat_domain", "claim_next_codomain"), 1_usize),
+                (("claim_flat_domain", "claim_sharp_codomain"), 1),
+                (("claim_flat_domain", "reference"), 1),
+                (("claim_sharp_codomain", "claim_next_codomain"), 1),
+                (("claim_sharp_codomain", "claim_sharp_codomain"), 1),
+                (("claim_sharp_codomain", "reference"), 1),
+            ]
+            .into_iter()
+            .collect(),
+            "the representative claim-side clause-six reference union should reopen exactly six remaining-one prefixes: both claim-side clause-two sheets times the three clause-six labels"
+        );
+        assert_eq!(
+            total_released_small_cluster_generated, 18,
+            "those six released remaining-one prefixes should account for the full +18 small-cluster generated delta on the 3150-vs-3132 tradeoff shell"
+        );
+        assert_eq!(
+            released_group_summaries,
+            [
+                (
+                    ("claim_flat_domain", "claim_next_codomain"),
+                    ReleasedRemainingOneGroupSummary {
+                        bucket_label:
+                            "k8:structural_generic:temporal_operator:library_backed:small_cluster"
+                                .to_string(),
+                        generated_candidate_count: 3,
+                        admitted_candidate_count: 0,
+                        has_bound: false,
+                        can_clear_bar: false,
+                        prune_disconnected_candidates: 0,
+                        needs_fallback_candidates: 3,
+                        keep_without_fallback_candidates: 0,
+                    },
+                ),
+                (
+                    ("claim_flat_domain", "claim_sharp_codomain"),
+                    ReleasedRemainingOneGroupSummary {
+                        bucket_label:
+                            "k8:structural_generic:temporal_operator:library_backed:small_cluster"
+                                .to_string(),
+                        generated_candidate_count: 3,
+                        admitted_candidate_count: 0,
+                        has_bound: false,
+                        can_clear_bar: false,
+                        prune_disconnected_candidates: 0,
+                        needs_fallback_candidates: 3,
+                        keep_without_fallback_candidates: 0,
+                    },
+                ),
+                (
+                    ("claim_flat_domain", "reference"),
+                    ReleasedRemainingOneGroupSummary {
+                        bucket_label:
+                            "k8:structural_generic:temporal_operator:library_backed:small_cluster"
+                                .to_string(),
+                        generated_candidate_count: 3,
+                        admitted_candidate_count: 0,
+                        has_bound: false,
+                        can_clear_bar: false,
+                        prune_disconnected_candidates: 0,
+                        needs_fallback_candidates: 3,
+                        keep_without_fallback_candidates: 0,
+                    },
+                ),
+                (
+                    ("claim_sharp_codomain", "claim_next_codomain"),
+                    ReleasedRemainingOneGroupSummary {
+                        bucket_label:
+                            "k8:structural_generic:temporal_operator:library_backed:small_cluster"
+                                .to_string(),
+                        generated_candidate_count: 3,
+                        admitted_candidate_count: 0,
+                        has_bound: false,
+                        can_clear_bar: false,
+                        prune_disconnected_candidates: 0,
+                        needs_fallback_candidates: 3,
+                        keep_without_fallback_candidates: 0,
+                    },
+                ),
+                (
+                    ("claim_sharp_codomain", "claim_sharp_codomain"),
+                    ReleasedRemainingOneGroupSummary {
+                        bucket_label:
+                            "k8:structural_generic:temporal_operator:library_backed:small_cluster"
+                                .to_string(),
+                        generated_candidate_count: 3,
+                        admitted_candidate_count: 0,
+                        has_bound: false,
+                        can_clear_bar: false,
+                        prune_disconnected_candidates: 0,
+                        needs_fallback_candidates: 3,
+                        keep_without_fallback_candidates: 0,
+                    },
+                ),
+                (
+                    ("claim_sharp_codomain", "reference"),
+                    ReleasedRemainingOneGroupSummary {
+                        bucket_label:
+                            "k8:structural_generic:temporal_operator:library_backed:small_cluster"
+                                .to_string(),
+                        generated_candidate_count: 3,
+                        admitted_candidate_count: 0,
+                        has_bound: false,
+                        can_clear_bar: false,
+                        prune_disconnected_candidates: 0,
+                        needs_fallback_candidates: 3,
+                        keep_without_fallback_candidates: 0,
+                    },
+                ),
+            ]
+            .into_iter()
+            .collect(),
+            "every released remaining-one group on that representative claim-side union should still be the same zero-admitted three-terminal small-cluster shell with no bound and only needs-fallback connectivity, so the tradeoff's small-cluster regression carries no hidden qualifying pocket"
         );
     }
 

@@ -17,9 +17,13 @@ This file owns the single active work order for `desktop_claim_shadow`.
 
 Keep the active work order on the rerun-confirmed post-local-probe
 step-`15` miss: use canonical `v13` as the stored baseline for the next
-code-side step-`15` repair search, while keeping the demoted claim-safe
-mismatch-`1` checkpoint, both representative mismatch-`0` dead-child
-checkpoints, the spent `reference / reference` tail, the isolated clause-`1`
+code-side step-`15` repair search above the exhausted mismatch-`0`
+remaining-one exact-summary lattice, specifically by targeting the
+parent-level route or qualification that releases the six zero-admitted
+claim-side `small_cluster` groups beneath the representative clause-`6`
+`reference` union, while keeping the demoted claim-safe mismatch-`1`
+checkpoint, both representative mismatch-`0` dead-child checkpoints, the
+spent `reference / reference` tail, the isolated clause-`1`
 `demo_flat_codomain` exact-suffix side pocket, the reconstructive
 representative mismatch-`0` claim-side clause-`6` `reference` union under
 `claim_next_bridge / claim_flat_codomain`, and the looser representative
@@ -115,10 +119,26 @@ later stored bundle changes the diagnosis.
   - terminal-connectivity summary stays on `6795` generated candidates, all
     `NeedsFallback`, all structurally connected but unqualified, and none on
     historical reanchor
+- That reconstructive claim-side union's `small_cluster` widening is now also
+  fully localized:
+  - the widened `3150` shell is exactly `+18` generated candidates from six
+    released remaining-one groups
+  - those groups are the two claim-side clause-`2` sheets
+    `claim_flat_domain / claim_sharp_codomain` crossed with the three
+    clause-`6` labels `claim_next_codomain / claim_sharp_codomain / reference`
+  - every released group is the same dead `small_cluster` shell:
+    `3` generated, `0` admitted, no bound, cannot clear bar, and only
+    `NeedsFallback`
 - Any remaining step-`15` leverage is therefore no longer inside that
   representative mismatch-`0` remaining-one exact-summary lattice either; the
   next repair class has to move above those dead-shell relands instead of
   reopening another deeper remaining-one tradeoff.
+- The next repair class therefore has to live above that remaining-one
+  exact-summary lattice:
+  - the next honest probe should target the parent-level route or
+    qualification that releases those six groups
+  - the goal is to preserve the current wall gain without reopening that same
+    `+18` `small_cluster` shell
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -883,9 +903,9 @@ later stored bundle changes the diagnosis.
 - another deeper remaining-one exact-summary reland inside that same
   representative mismatch-`0` pair-cell shell now that the latest
   reconstructive control still keeps the promoted surface on one
-  zero-admitted `((0, None, None), 2265)` family with no cached bound and only
-  structurally connected but unqualified `NeedsFallback` terminal
-  continuations
+  zero-admitted `((0, None, None), 2265)` family, with the entire widened
+  `small_cluster` shell localized to six released `3`-generated /
+  `0`-admitted `NeedsFallback` groups rather than to a hidden live pocket
 - another whole joint clause-`3` continuation reopen under that same
   representative clause-`6` `reference` shell
 - another representative claim-flat parent/child-shell completion pass that
@@ -944,11 +964,12 @@ later stored bundle changes the diagnosis.
 - canonical `v13` stands as the newer stored baseline on current-head code
 - step `1` stays explicit but deferred because `v13` re-confirms the same
   breadth-only step-`15` miss
-- the next operational slice is a fresh code-side step-`15` repair attempt
-  above the exhausted claim-safe, representative mismatch-`0`,
+- the next operational slice is a parent-level step-`15` repair probe above
+  the exhausted claim-safe, representative mismatch-`0`,
   `reference / reference`, isolated clause-`1` exact-suffix, and
-  representative claim-side clause-`6` `reference` union controls rather
-  than another rerun-ordering pass
+  representative claim-side clause-`6` `reference` union controls, aimed at
+  keeping the wall gain without reopening the six zero-admitted
+  `small_cluster` groups from that representative union
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

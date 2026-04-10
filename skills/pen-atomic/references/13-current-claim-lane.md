@@ -175,10 +175,11 @@ Do not:
   `reference` union first either; if the live docs already pin that
   cross-sheet union at the same `4355 / 551 / 2265` smaller pair-cell
   tradeoff with `small_cluster = 3150 / 522 / 522 / 0`, the same
-  zero-admitted `((0, None, None), 2265)` remaining-one family, no cached
-  bound, and only structurally connected but unqualified `NeedsFallback`
-  terminals, that union also belongs to the autonomy ledger rather than as a
-  fresh lead
+  zero-admitted `((0, None, None), 2265)` remaining-one family, the full
+  `+18` `small_cluster` widening localized to six released
+  `3`-generated / `0`-admitted `NeedsFallback` groups, no cached bound, and
+  no hidden live pocket, that union also belongs to the autonomy ledger
+  rather than as a fresh lead
 - reopen another deeper remaining-one exact-summary reland inside that same
   representative mismatch-`0` shell first either after the live docs have
   already shown the latest reconstructive control stays on that same

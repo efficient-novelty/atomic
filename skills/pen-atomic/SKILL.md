@@ -425,10 +425,11 @@ Focus on:
   `reference` union as live autonomy detail too; if the live docs already pin
   that cross-sheet union at the same `4355 / 551 / 2265` pair-cell shell with
   `small_cluster = 3150 / 522 / 522 / 0`, plus the same zero-admitted
-  `((0, None, None), 2265)` remaining-one family with no cached bound and only
-  structurally connected but unqualified `NeedsFallback` terminals, route
-  there instead of reopening a claim-side union as if it were a fresh repair
-  class
+  `((0, None, None), 2265)` remaining-one family, the full `+18`
+  `small_cluster` widening localized to six released `3`-generated /
+  `0`-admitted `NeedsFallback` groups, and no cached bound or hidden live
+  pocket, route there instead of reopening a claim-side union as if it were a
+  fresh repair class
 - treat the representative `claim_flat_domain` clause-`2` sheet's marginally
   best clause-`6` `reference` continuation's clause-`3` split as live
   autonomy detail too; the `claim_flat_argument` and

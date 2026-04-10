@@ -752,6 +752,21 @@ Until that exists, wording stays at `bounded live recovery`.
   - consequence: there is still no hidden bound-carrying or live
     remaining-one child below that representative mismatch-`0`
     claim-side clause-`6` `reference` shell either
+- That same reconstructive union's `small_cluster` widening is now also fully
+  localized:
+  - relative to the canonical `3132` shell, the widened `3150` shell is
+    exactly `+18` generated candidates from six released remaining-one groups
+  - those groups are the two claim-side clause-`2` sheets
+    `claim_flat_domain / claim_sharp_codomain` crossed with the three
+    clause-`6` labels `claim_next_codomain / claim_sharp_codomain / reference`
+  - every released group stays in the same
+    `k8:structural_generic:temporal_operator:library_backed:small_cluster`
+    bucket with `3` generated, `0` admitted, no bound, no bar-clear, and only
+    `NeedsFallback` connectivity
+  - consequence: the union's `+18` widening carries no hidden qualifying or
+    bound-carrying pocket; the next repair has to target the parent-level
+    route or qualification that releases those six groups rather than another
+    deeper remaining-one reland
 - The residual `3` `single`-bucket incumbent prunes remain fenced and are now
   secondary to the partial-prefix wall.
 
@@ -985,11 +1000,12 @@ Until that exists, wording stays at `bounded live recovery`.
 - Because the representative claim-sharp sheet is now exhausted through both
   clause-`6` identity and its deeper dead-child fail-fast checkpoint, the
   next honest slice no longer sits on another mismatch-`0` claim-side reland.
-  With the broader-backup comparison now settled and both representative
-  claim-side shells frozen, the post-local-probe fallback is now explicit:
-  the next honest follow-on is a rerun-backed step-`15` reset on the newer
-  post-probe codebase rather than another claim-side dead-shell reland or a
-  step-`1`-first reopening.
+  With the broader-backup comparison now settled, the rerun-backed reset
+  already complete, and both representative claim-side shells frozen, the next
+  honest follow-on is now the parent-level route or qualification above the
+  current remaining-one lattice that releases the six zero-admitted
+  `small_cluster` groups under the representative claim-side clause-`6`
+  `reference` union, while step `1` stays deferred.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

@@ -765,3 +765,25 @@ This file is the append-only history for `desktop_claim_shadow`.
   same zero-admitted remaining-one dead surface. The next repair has to move
   above that remaining-one lattice rather than another deeper reland inside
   it.
+- Scope: localize the widened `small_cluster` shell inside that same
+  reconstructive representative mismatch-`0` claim-side clause-`6`
+  `reference` union to see whether any hidden qualifying or bound-carrying
+  pocket remains below the existing pair-cell tradeoff.
+  Result: the union's widened `small_cluster = 3150 / 522 / 522 / 0` shell is
+  exactly `+18` generated candidates relative to the canonical `3132` shell,
+  and all `18` candidates come from exactly six released remaining-one groups:
+  `(claim_flat_domain, claim_next_codomain)`,
+  `(claim_flat_domain, claim_sharp_codomain)`,
+  `(claim_flat_domain, reference)`,
+  `(claim_sharp_codomain, claim_next_codomain)`,
+  `(claim_sharp_codomain, claim_sharp_codomain)`, and
+  `(claim_sharp_codomain, reference)`. Every released group stays in the same
+  `k8:structural_generic:temporal_operator:library_backed:small_cluster`
+  bucket with `3` generated candidates, `0` admitted candidates, no bound, no
+  bar-clear, `PruneDisconnected = 0`, `NeedsFallback = 3`, and
+  `KeepWithoutFallback = 0`.
+  Consequence: the reconstructive union's `+18` widening carries no hidden
+  live or bound-carrying pocket at child scope. The next honest repair class
+  has to target the parent-level route or qualification that releases those
+  six groups rather than another deeper remaining-one reland inside the same
+  exact-summary lattice.
