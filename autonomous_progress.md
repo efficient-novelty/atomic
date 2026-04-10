@@ -1006,6 +1006,30 @@ Until that exists, wording stays at `bounded live recovery`.
   current remaining-one lattice that releases the six zero-admitted
   `small_cluster` groups under the representative claim-side clause-`6`
   `reference` union, while step `1` stays deferred.
+- The first parent-level route probe above that remaining-one lattice is now
+  also spent as an unsafe negative control:
+  - a scoped representative mismatch-`0` claim-side historical-reanchor route
+    does qualify the targeted claim-side clause-`2` / clause-`3` /
+    clause-`6` parent shell
+  - it keeps the sibling reference clause-`2` sheet closed
+  - it also keeps lifted terminals fenced
+  - but the full step-`15` search surface lands noncanonical `60 / 8` with
+    `retained = 2`, `generated = 4427`, `partial_prefix_bar_failure = 545`,
+    `incumbent_dominance = 117`, and zero-admitted captures `2247`
+  - the first-mismatch-`0` tier contracts from `312` to `304`
+  - `small_cluster` contracts to `2931 / 455 / 455 / 115`
+  - the isolated `single` bucket reopens to `2` fully scored non-winners plus
+    `2` residual prunes at best overshoot `545 / 5278`
+  - the representative clause-`2` spread contracts to `11 / 11 / 12`
+  - the representative clause-`4` split contracts to `20 / 14`
+  - the active clause-`4` `claim_next_bridge` plus clause-`5`
+    `claim_flat_codomain` bucket contracts to `44`
+- Consequence: that first parent-level claim-side route is not the missing
+  clean repair. It narrows the wall only by displacing the canonical
+  `103 / 8` winner and by reshaping both survivor buckets, so the next honest
+  follow-on still has to stay above another reland of that same
+  representative mismatch-`0` claim-side parent route while step `1` remains
+  deferred.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

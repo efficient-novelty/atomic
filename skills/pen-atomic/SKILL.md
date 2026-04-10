@@ -430,6 +430,14 @@ Focus on:
   `0`-admitted `NeedsFallback` groups, and no cached bound or hidden live
   pocket, route there instead of reopening a claim-side union as if it were a
   fresh repair class
+- treat the representative mismatch-`0` claim-side parent-route probe as live
+  autonomy detail too; if the live docs already pin that scoped
+  historical-reanchor route at the unsafe `4427 / 545 / 2247`
+  negative-control shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 117`,
+  `small_cluster = 2931 / 455 / 455 / 115`, and a reopened `single` bucket,
+  route there instead of reopening that same parent route as if it were a
+  fresh repair class
 - treat the representative `claim_flat_domain` clause-`2` sheet's marginally
   best clause-`6` `reference` continuation's clause-`3` split as live
   autonomy detail too; the `claim_flat_argument` and

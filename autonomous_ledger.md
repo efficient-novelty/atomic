@@ -787,3 +787,31 @@ This file is the append-only history for `desktop_claim_shadow`.
   has to target the parent-level route or qualification that releases those
   six groups rather than another deeper remaining-one reland inside the same
   exact-summary lattice.
+- Scope: test the first parent-level route probe above that exhausted
+  representative mismatch-`0` exact-summary lattice by adding a narrowly
+  scoped claim-side historical-reanchor route for the representative
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+  claim_flat_codomain` shell.
+  Result: the connectivity override does qualify the targeted claim-side
+  parent shell while keeping the sibling reference clause-`2` sheet closed and
+  keeping lifted terminals fenced, but the full step-`15` search surface lands
+  an unsafe negative control:
+  - accepted step `15` shifts off the canonical winner to noncanonical
+    `60 / 8`
+  - retained breadth becomes `4427`
+  - partial-prefix bar failures contract only to `545`
+  - incumbent-dominance pressure jumps from `3` to `117`
+  - zero-admitted captures contract to `2247`
+  - the first-mismatch-`0` tier contracts from `312` to `304`
+  - `small_cluster` contracts to `2931 / 455 / 455 / 115`
+  - the isolated `single` bucket reopens to `2` fully scored non-winners plus
+    `2` residual prunes at best overshoot `545 / 5278`
+  - the representative clause-`2` spread contracts to `11 / 11 / 12`
+  - the representative clause-`4` split contracts to `20 / 14`
+  - the active clause-`4` `claim_next_bridge` plus clause-`5`
+    `claim_flat_codomain` bucket contracts to `44`
+  Consequence: the first parent-level claim-side route probe is now spent as
+  an unsafe negative control. It narrows the wall only by displacing the
+  canonical `103 / 8` winner and by reshaping both survivor buckets, so the
+  next repair still has to stay above another reland of that same
+  representative mismatch-`0` claim-side parent route.

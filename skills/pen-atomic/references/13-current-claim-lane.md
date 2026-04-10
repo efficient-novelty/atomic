@@ -180,6 +180,13 @@ Do not:
   `3`-generated / `0`-admitted `NeedsFallback` groups, no cached bound, and
   no hidden live pocket, that union also belongs to the autonomy ledger
   rather than as a fresh lead
+- reopen the representative mismatch-`0` claim-side parent-route first
+  either; if the live docs already pin that scoped historical-reanchor route
+  at the unsafe `4427 / 545 / 2247` negative-control shell with noncanonical
+  `60 / 8`, `incumbent_dominance = 117`,
+  `small_cluster = 2931 / 455 / 455 / 115`, and a reopened `single` bucket,
+  that parent-route probe also belongs to the autonomy ledger rather than as a
+  fresh repair lead
 - reopen another deeper remaining-one exact-summary reland inside that same
   representative mismatch-`0` shell first either after the live docs have
   already shown the latest reconstructive control stays on that same
