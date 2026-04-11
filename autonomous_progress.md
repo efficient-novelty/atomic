@@ -1364,6 +1364,38 @@ Until that exists, wording stays at `bounded live recovery`.
   `single` bucket, so the next honest follow-on has to move to a different
   code-side repair class again rather than retrying this route split or
   dropping back to narrower clause-`3` / clause-`6` selectors.
+- The sibling clause-`4` `reference` splits inside the alternate
+  active-window and self-contained qualification families are now also spent
+  across both active clause-`5` families:
+  - a scoped clause-`4` `reference` override on either alternate family does
+    qualify the targeted claim-side parent shell while keeping the sibling
+    `claim_next_bridge` branch, the sibling reference clause-`2` sheet, and
+    lifted terminals fenced
+  - on either active clause-`5` family, both alternate clause-`4` splits
+    reland the same smaller unsafe control with noncanonical `60 / 8`,
+    `retained = 2`, `generated = 4391`,
+    `partial_prefix_bar_failure = 557`, `incumbent_dominance = 110`,
+    zero-admitted captures `2271`, first-mismatch distribution
+    `312 / 177 / 50 / 14`, `small_cluster = 2880 / 486 / 486 / 108`, and
+    the same reopened `single` bucket at best overshoot `545 / 5278`
+  - the representative clause-`2` spread stays `15 / 15 / 12`
+  - the representative clause-`4` split stays `24 / 18`
+  - each contracts only the chosen clause-`4` `reference` plus active
+    clause-`5` bucket to `36`
+- Those alternate clause-`4` splits are also localized at delta level:
+  - on the chosen active clause-`5` bucket, each probe removes only the two
+    remaining-three clause-`4` `reference` parent captures
+  - it removes `4` zero-admitted captures in total and the matching `12`
+    remaining-one pruned prefixes
+  - it introduces four targeted remaining-two clause-`4` `reference`
+    capture families and no introduced pruned-prefix family
+- Consequence: clause-`4` `reference` narrowing inside the alternate
+  active-window or self-contained families is not the missing clean repair
+  either. It stays matched across both alternate families and both active
+  clause-`5` buckets, only reconstructing a smaller unsafe split control, so
+  the next honest follow-on has to stay above those alternate clause-`4`
+  splits too rather than cycling among clause-`4` families or dropping back
+  to narrower clause-`3` / clause-`6` selectors.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

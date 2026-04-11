@@ -1304,3 +1304,38 @@ This file is the append-only history for `desktop_claim_shadow`.
   canonical `103 / 8` winner and reopening the `single` bucket, so the next
   honest probe has to move to a different code-side repair class again
   rather than retrying this route split on either active clause-`5` bucket.
+- Scope: test the sibling clause-`4` `reference` split above that exhausted
+  parent-level qualification-family lattice by narrowing the representative
+  mismatch-`0` claim-side active-window and self-contained families to the
+  clause-`4` `reference` branch on each active clause-`5` bucket.
+  Result: the alternate clause-`4` `reference` splits do qualify the targeted
+  claim-side parent shell while keeping the sibling `claim_next_bridge`
+  branch, the sibling reference clause-`2` sheet, and lifted terminals
+  fenced, but on both active clause-`5` families and on both alternate
+  qualification families they still reland the same matched smaller unsafe
+  shell:
+  - accepted step `15` again shifts to noncanonical `60 / 8`
+  - retained breadth again becomes `4391` with `retained = 2`
+  - partial-prefix bar failures again land at `557`
+  - incumbent-dominance again lands at `110`
+  - zero-admitted captures again land at `2271`
+  - the first-mismatch distribution again stays `312 / 177 / 50 / 14`
+  - `small_cluster` again relands as `2880 / 486 / 486 / 108`
+  - the isolated `single` bucket again reopens to `2` fully scored
+    non-winners plus `2` residual prunes at best overshoot `545 / 5278`
+  - the representative clause-`2` spread again stays `15 / 15 / 12`
+  - the representative clause-`4` split again stays `24 / 18`
+  - the chosen clause-`4` `reference` plus active clause-`5` bucket again
+    contracts to `36`
+  - on the chosen active clause-`5` bucket, each probe removes only the two
+    remaining-three clause-`4` `reference` parent captures, removes `4`
+    zero-admitted captures plus `12` remaining-one pruned prefixes in total,
+    introduces four targeted remaining-two clause-`4` `reference` capture
+    families, and introduces no pruned-prefix family
+  Consequence: the alternate active-window and self-contained clause-`4`
+  `reference` splits are now spent too. They stay matched across both
+  alternate families and both active clause-`5` buckets, only reconstructing
+  a smaller unsafe split control rather than a clean repair, so the next
+  honest probe has to move above those alternate clause-`4` splits too
+  rather than cycling among clause-`4` families or dropping back to narrower
+  clause-`3` / clause-`6` selectors.

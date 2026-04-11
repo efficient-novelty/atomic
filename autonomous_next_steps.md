@@ -33,8 +33,11 @@ historical-reanchor plus self-contained hybrids too, and above the first
 looser recombined active-window plus self-contained family too, and above the
 full historical-reanchor plus active-window plus self-contained qualification
 triad too while now targeting a different code-side step-`15` repair class
-above the exhausted parent-level qualification-family lattice before
-reopening narrower clause-`3` / clause-`6` selectors.
+above the exhausted parent-level qualification-family lattice, above the
+first clause-`4` `reference` split on that representative parent-route shell,
+and above the matched alternate clause-`4` `reference` splits on the same
+active-window and self-contained families too before reopening narrower
+clause-`3` / clause-`6` selectors.
 The scoped historical-reanchor route on each
 active clause-`5` `claim_flat_codomain / reference` family qualified its
 targeted claim-side parent shell, yet the broad full surfaces relanded unsafe
@@ -107,8 +110,11 @@ and self-contained families, their narrower clause-`6` `reference`
 refinements too, their narrower active clause-`5`
 `claim_flat_codomain` clause-`3` refinements too, and the representative
 claim-flat clause-`3` refinements inside that same parent-route family, plus
-the looser representative claim-safe backup frozen as controls rather than
-fresh leads.
+the first clause-`4` `reference` split above that exhausted parent-level
+qualification-family lattice, the matched alternate active-window and
+self-contained clause-`4` `reference` splits above that same lattice too,
+and the looser representative claim-safe backup frozen as controls rather
+than fresh leads.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -572,10 +578,40 @@ later stored bundle changes the diagnosis.
   winner, so the next honest probe has to move to a different code-side
   repair class again rather than retrying this split or dropping back to
   narrower clause-`3` / clause-`6` selectors.
-- If the next slice stays on this representative mismatch-`0` shell, the
-  first unresolved sibling is the same clause-`4` `reference` split on the
-  alternate active-window and self-contained families rather than another
-  narrower parent-route selector.
+- The sibling clause-`4` `reference` splits on those same alternate
+  active-window and self-contained families are now also spent across both
+  active clause-`5` buckets:
+  - a scoped clause-`4` `reference` override on either alternate family does
+    qualify the targeted claim-side parent shell while keeping the sibling
+    `claim_next_bridge` branch, the sibling reference clause-`2` sheet, and
+    lifted terminals fenced
+  - on `claim_flat_codomain` and `reference`, both alternate clause-`4`
+    splits reland the same smaller unsafe matched control with noncanonical
+    `60 / 8`, `retained = 2`, `generated = 4391`,
+    `partial_prefix_bar_failure = 557`, `incumbent_dominance = 110`,
+    zero-admitted captures `2271`, first-mismatch distribution
+    `312 / 177 / 50 / 14`, and `small_cluster = 2880 / 486 / 486 / 108`
+  - the isolated `single` bucket reopens to `2` fully scored non-winners plus
+    `2` residual prunes at best overshoot `545 / 5278`
+  - the representative clause-`2` spread stays `15 / 15 / 12`
+  - the representative clause-`4` split stays `24 / 18`
+  - each contracts only the chosen clause-`4` `reference` plus active
+    clause-`5` bucket to `36`
+- Those alternate clause-`4` splits are also already localized at delta
+  level:
+  - on the chosen active clause-`5` bucket, each probe removes only the two
+    remaining-three clause-`4` `reference` parent captures
+  - it removes `4` zero-admitted captures in total and the matching `12`
+    remaining-one pruned prefixes
+  - it introduces four targeted remaining-two clause-`4` `reference`
+    capture families and no introduced pruned-prefix family
+- Any remaining step-`15` leverage is therefore no longer on those alternate
+  active-window or self-contained clause-`4` `reference` splits either.
+  They stay matched across both alternate families and both active
+  clause-`5` buckets, only reconstructing a smaller unsafe split control, so
+  the next honest probe has to move above those alternate clause-`4` splits
+  too rather than cycling among clause-`4` families or dropping back to
+  narrower clause-`3` / clause-`6` selectors.
 - The exact claim-pair clause-`4` `reference` side is now exhausted as a
   smaller tradeoff control: it only reproduces the older
   `4379 / 549 / 2259` clause-`4` `reference`-sheet tradeoff and still widens
@@ -1439,6 +1475,28 @@ later stored bundle changes the diagnosis.
   bucket, and the same targeted four-cell plus `24`-pruned-prefix delta on
   the active `reference` bucket
 - another representative mismatch-`0` claim-side active-window or
+  self-contained clause-`4` `reference` split on
+  `claim_eventual_domain / claim_next_codomain / reference /
+  claim_flat_codomain`; those narrower alternate qualification families now
+  only reland the same smaller unsafe `4391 / 557 / 2271` shell with
+  noncanonical `60 / 8`, `incumbent_dominance = 110`,
+  `small_cluster = 2880 / 486 / 486 / 108`, the same reopened `single`
+  bucket, the same `15 / 15 / 12` clause-`2` spread, the same
+  `24 / 18` clause-`4` split, and the same two-remaining-three-to-four-
+  remaining-two targeted clause-`4` `reference` delta on the active
+  `claim_flat_codomain` bucket
+- another representative mismatch-`0` claim-side active-window or
+  self-contained clause-`4` `reference` split on
+  `claim_eventual_domain / claim_next_codomain / reference / reference`;
+  those sibling narrower alternate qualification families now reland the
+  same smaller unsafe `4391 / 557 / 2271` shell with the same noncanonical
+  `60 / 8`, the same `incumbent_dominance = 110`, the same
+  `small_cluster = 2880 / 486 / 486 / 108`, the same reopened `single`
+  bucket, the same `15 / 15 / 12` clause-`2` spread, the same
+  `24 / 18` clause-`4` split, and the same two-remaining-three-to-four-
+  remaining-two targeted clause-`4` `reference` delta on the active
+  `reference` bucket
+- another representative mismatch-`0` claim-side active-window or
   self-contained reland narrowed to clause-`6` `reference` on
   `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
   claim_flat_codomain`; those narrower alternate refinements now only reland
@@ -1580,6 +1638,21 @@ later stored bundle changes the diagnosis.
   introduced targeted remaining-two clause-`4` `reference` capture families,
   and `12` removed remaining-one pruned prefixes on the chosen active
   clause-`5` bucket, with no introduced pruned-prefix family
+- the sibling clause-`4` `reference` splits on those same alternate
+  active-window and self-contained families are also pinned across both
+  active clause-`5` `claim_flat_codomain / reference` buckets as a matched
+  smaller unsafe split control rather than fresh repairs:
+  noncanonical `60 / 8`, `retained = 2`, `generated = 4391`,
+  `partial_prefix_bar_failure = 557`, `incumbent_dominance = 110`,
+  zero-admitted captures `2271`,
+  `small_cluster = 2880 / 486 / 486 / 108`, the same reopened `single`
+  bucket, the same `15 / 15 / 12` clause-`2` spread, and the same
+  `24 / 18` clause-`4` split
+- those alternate clause-`4` splits are also localized to only two removed
+  remaining-three clause-`4` `reference` parent captures, four introduced
+  targeted remaining-two clause-`4` `reference` capture families, and `12`
+  removed remaining-one pruned prefixes on the chosen active clause-`5`
+  bucket, with no introduced pruned-prefix family
 - the first alternate active-window qualification family on those same active
   clause-`5` `claim_flat_codomain / reference` buckets is also pinned as a
   matched unsafe negative control on the same `4427 / 545 / 2247` with
@@ -1693,8 +1766,10 @@ later stored bundle changes the diagnosis.
   self-contained hybrids, plus the first looser recombined
   active-window plus self-contained family too, plus the full
   historical-reanchor plus active-window plus self-contained qualification
-  triad too, while now targeting a different code-side step-`15` repair
-  class above the exhausted parent-level qualification-family lattice
+  triad too, plus the matched alternate active-window and self-contained
+  clause-`4` `reference` splits too, while now targeting a different
+  code-side step-`15` repair class above the exhausted parent-level
+  qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

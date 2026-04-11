@@ -536,6 +536,16 @@ Focus on:
   bucket, and the same four-cell plus `24`-pruned-prefix targeted delta,
   route there instead of reopening that full qualification triad as if it
   were fresh leverage
+- treat the alternate active-window or self-contained clause-`4`
+  `reference` split as live autonomy detail too; if the live docs already pin
+  both active clause-`5` `claim_flat_codomain / reference` probes at the
+  same smaller unsafe `4391 / 557 / 2271` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 110`,
+  `small_cluster = 2880 / 486 / 486 / 108`, the same reopened `single`
+  bucket, the same `15 / 15 / 12` clause-`2` spread, the same
+  `24 / 18` clause-`4` split, and the same two-remaining-three-to-four-
+  remaining-two targeted clause-`4` `reference` delta, route there instead
+  of reopening that alternate clause-`4` split as if it were fresh leverage
 - treat the representative claim-flat clause-`3` refinement inside that same
   mismatch-`0` claim-side parent-route family as live autonomy detail too; if
   the live docs already pin both `claim_flat_argument /

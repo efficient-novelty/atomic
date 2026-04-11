@@ -286,6 +286,17 @@ Do not:
   bucket, and the same four targeted remaining-two parent cells plus their
   `24` matching remaining-one pruned prefixes, that full qualification triad
   also belongs to the autonomy ledger rather than as a fresh repair lead
+- reopen the alternate active-window or self-contained clause-`4`
+  `reference` split first either; if the live docs already pin both active
+  clause-`5` `claim_flat_codomain / reference` probes at the same smaller
+  unsafe `4391 / 557 / 2271` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 110`,
+  `small_cluster = 2880 / 486 / 486 / 108`, the same reopened `single`
+  bucket, the same `15 / 15 / 12` clause-`2` spread, the same
+  `24 / 18` clause-`4` split, and the same two-remaining-three-to-four-
+  remaining-two targeted clause-`4` `reference` delta, that alternate
+  clause-`4` split also belongs to the autonomy ledger rather than as a
+  fresh repair lead
 - reopen the representative claim-flat clause-`3` refinement inside that same
   mismatch-`0` claim-side parent-route family first either; if the live docs
   already pin both `claim_flat_argument / claim_eventual_argument` branches on
