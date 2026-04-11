@@ -217,6 +217,40 @@ Do not:
   clause-`2` blocker with `max_lib_ref = 10`, that claim-flat clause-`6`
   axis also belongs to the autonomy ledger rather than as a fresh repair
   lead
+- reopen the representative exact-screen `claim_sharp_codomain` clause-`6`
+  identity split inside that same `claim_next_codomain` cell first either; if
+  the live docs already pin that claim-sharp clause-`2` tradeoff to exactly
+  one removed six-clause exact-prune capture with no introduced capture or
+  pruned-prefix family, clause `6` is still out of scope at that exact-screen
+  boundary and that claim-sharp clause-`6` axis also belongs to the autonomy
+  ledger rather than as a fresh repair lead
+- reopen remaining-one exact-summary relief beneath that released exact-screen
+  representative `claim_sharp_codomain` plus clause-`5`
+  `claim_next_codomain` parent first either; if the live docs already pin the
+  stacked follow-on as a neutral control on the same `4343 / 552 / 2271`
+  shell with first-mismatch counts `311 / 177 / 50 / 14`,
+  `small_cluster generated = 3141`, the same zero-admitted exact-prune
+  family `((0, None, None), 2271)`, and no released remaining-one
+  pruned-terminal group, that claim-sharp summary-relief axis also belongs to
+  the autonomy ledger rather than as a fresh repair lead
+- reopen direct remaining-one completion or terminal-scope identity beneath
+  that same released exact-screen representative `claim_sharp_codomain` plus
+  clause-`5` `claim_next_codomain` parent first either; if the live docs
+  already pin all three clause-`6` continuations at the same dead
+  `3`-generated / `0`-admitted completion summary with no bound, no
+  best-rank profile, no survivor sketch, the same
+  `reference / eventual_lift / next_lift` `NeedsFallback` trio, and the same
+  clause-`2` blocker with `max_lib_ref = 10`, that claim-sharp clause-`6`
+  axis also belongs to the autonomy ledger rather than as a fresh repair
+  lead
+- reopen the same representative exact-screen pair beneath
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+  claim_next_codomain` first either; if the live docs already pin both
+  claim-side sheets and their deeper remaining-one follow-ons as spent while
+  the sibling `reference` sheet stays neutral, that representative pair also
+  belongs to the autonomy ledger rather than as a fresh repair lead, and the
+  next honest slice should move to a sibling exact-screen pair on the same
+  `claim_next_codomain` cell instead
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
   tradeoffs first; those smaller tradeoff controls now also belong in the

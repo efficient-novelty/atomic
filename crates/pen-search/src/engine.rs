@@ -29139,6 +29139,172 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_exact_partial_prefix_relief_on_representative_mismatch_zero_claim_next_codomain_pair_cell_claim_sharp_sheet_delta_stays_above_clause_six_boundary()
+     {
+        let baseline_captures = current_claim_step_fifteen_partial_prefix_bound_prune_captures();
+        let baseline_capture_keys = baseline_captures
+            .iter()
+            .map(|capture| {
+                serde_json::to_string(&capture.prefix_telescope)
+                    .expect("captured prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let baseline_pruned_prefixes = current_claim_step_fifteen_pruned_terminal_prefixes();
+        let baseline_pruned_keys = baseline_pruned_prefixes
+            .iter()
+            .map(|work_item| {
+                serde_json::to_string(&work_item.prefix_telescope)
+                    .expect("captured prune prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+
+        let _search_override =
+            super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_pair_cell(
+                super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroPairCellSelector {
+                    clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                    clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                    clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimSharpCodomain),
+                    clause_five:
+                        super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClauseFiveLabel::ClaimNextCodomain,
+                },
+            );
+        let probe_captures = current_claim_step_fifteen_partial_prefix_bound_prune_captures();
+        let probe_capture_keys = probe_captures
+            .iter()
+            .map(|capture| {
+                serde_json::to_string(&capture.prefix_telescope)
+                    .expect("captured prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let probe_pruned_prefixes = current_claim_step_fifteen_pruned_terminal_prefixes();
+        let probe_pruned_keys = probe_pruned_prefixes
+            .iter()
+            .map(|work_item| {
+                serde_json::to_string(&work_item.prefix_telescope)
+                    .expect("captured prune prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+
+        let removed_captures = baseline_captures
+            .iter()
+            .filter(|capture| {
+                !probe_capture_keys.contains(
+                    &serde_json::to_string(&capture.prefix_telescope)
+                        .expect("captured prefix should serialize"),
+                )
+            })
+            .map(|capture| {
+                (
+                    capture.prefix_telescope.clauses.len(),
+                    current_claim_step_fifteen_prefix_group_delta_label(&capture.prefix_telescope),
+                    capture
+                        .prefix_telescope
+                        .clauses
+                        .get(6)
+                        .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+                        .unwrap_or("out_of_scope"),
+                )
+            })
+            .collect::<Vec<_>>();
+        let introduced_captures = probe_captures
+            .iter()
+            .filter(|capture| {
+                !baseline_capture_keys.contains(
+                    &serde_json::to_string(&capture.prefix_telescope)
+                        .expect("captured prefix should serialize"),
+                )
+            })
+            .map(|capture| {
+                (
+                    capture.prefix_telescope.clauses.len(),
+                    current_claim_step_fifteen_prefix_group_delta_label(&capture.prefix_telescope),
+                    capture
+                        .prefix_telescope
+                        .clauses
+                        .get(6)
+                        .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+                        .unwrap_or("out_of_scope"),
+                )
+            })
+            .collect::<Vec<_>>();
+        let removed_pruned_prefixes = baseline_pruned_prefixes
+            .iter()
+            .filter(|work_item| {
+                !probe_pruned_keys.contains(
+                    &serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize"),
+                )
+            })
+            .map(|work_item| {
+                (
+                    work_item.prefix_telescope.clauses.len(),
+                    current_claim_step_fifteen_prefix_group_delta_label(
+                        &work_item.prefix_telescope,
+                    ),
+                    work_item
+                        .prefix_telescope
+                        .clauses
+                        .get(6)
+                        .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+                        .unwrap_or("out_of_scope"),
+                )
+            })
+            .collect::<Vec<_>>();
+        let introduced_pruned_prefixes = probe_pruned_prefixes
+            .iter()
+            .filter(|work_item| {
+                !baseline_pruned_keys.contains(
+                    &serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize"),
+                )
+            })
+            .map(|work_item| {
+                (
+                    work_item.prefix_telescope.clauses.len(),
+                    current_claim_step_fifteen_prefix_group_delta_label(
+                        &work_item.prefix_telescope,
+                    ),
+                    work_item
+                        .prefix_telescope
+                        .clauses
+                        .get(6)
+                        .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+                        .unwrap_or("out_of_scope"),
+                )
+            })
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            removed_captures,
+            vec![(
+                6_usize,
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "claim_sharp_codomain",
+                    "claim_next_bridge",
+                    "claim_next_codomain",
+                ),
+                "out_of_scope",
+            )],
+            "the representative exact-screen claim-sharp clause-two tradeoff should remove exactly one six-clause exact-prune capture, so the delta still stops before any clause-six identity is fixed"
+        );
+        assert!(
+            introduced_captures.is_empty(),
+            "that representative exact-screen claim-sharp tradeoff should not introduce any new exact-prune capture family at the same layer"
+        );
+        assert!(
+            removed_pruned_prefixes.is_empty(),
+            "that representative exact-screen claim-sharp tradeoff should not remove any deeper pruned-terminal family; the delta is confined to the one released six-clause parent capture"
+        );
+        assert!(
+            introduced_pruned_prefixes.is_empty(),
+            "that representative exact-screen claim-sharp tradeoff should not introduce any deeper pruned-terminal family either"
+        );
+    }
+
+    #[test]
     fn current_claim_step_fifteen_exact_screen_representative_claim_flat_sheet_remaining_one_exact_summary_relief_on_claim_next_codomain_parent_stays_a_neutral_control()
      {
         let exact_screen_selector =
@@ -29388,8 +29554,258 @@ mod tests {
         );
     }
 
+    #[test]
+    fn current_claim_step_fifteen_exact_screen_representative_claim_sharp_sheet_remaining_one_exact_summary_relief_on_claim_next_codomain_parent_stays_a_neutral_control()
+     {
+        let exact_screen_selector =
+            super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroPairCellSelector {
+                clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimSharpCodomain),
+                clause_five:
+                    super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClauseFiveLabel::ClaimNextCodomain,
+            };
+        let selector =
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroPairCellSelector {
+                clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimSharpCodomain),
+                clause_three: None,
+                clause_six: None,
+                clause_five: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseFiveLabel::ClaimNextCodomain,
+            };
+        let expected_outcome = (
+            4343,
+            552,
+            2271,
+            [(2_usize, 450_usize), (3, 102)]
+                .into_iter()
+                .collect::<BTreeMap<_, _>>(),
+            [
+                (Some(0_usize), 311_usize),
+                (Some(1), 177),
+                (Some(2), 50),
+                (Some(3), 14),
+            ]
+            .into_iter()
+            .collect::<BTreeMap<_, _>>(),
+            Some(DemoBucketStats {
+                generated_terminal_candidates: 3141,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            LateStepExactPruneFamilySummary {
+                raw_generated_surface: 4343,
+                roots_seen: 3,
+                roots_enqueued: 3,
+                partial_prefix_bound_prunes: 552,
+                captured_prefixes: 2271,
+                cached_bound_count: 0,
+                family_counts: [((0_usize, None, None), 2271_usize)].into_iter().collect(),
+            },
+            LateStepTerminalConnectivitySummary {
+                captured_prefixes: 2271,
+                generated_candidates: 6813,
+                prune_disconnected_candidates: 0,
+                needs_fallback_candidates: 6813,
+                keep_without_fallback_candidates: 0,
+                structurally_disconnected_candidates: 0,
+                structurally_connected_but_unqualified_candidates: 6813,
+                structurally_connected_via_historical_reanchor_candidates: 0,
+            },
+        );
+        let baseline_outcome = {
+            let _exact_screen_override =
+                super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_pair_cell(
+                    exact_screen_selector,
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("claim prefix through step 14 should build");
+            let prefix = claim_steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+            let exact_prune_summary = late_step_exact_prune_family_summary(&prefix, 15, usize::MAX);
+            let terminal_connectivity_summary =
+                late_step_terminal_connectivity_summary(&prefix, 15, usize::MAX);
+            (
+                step_fifteen.demo_funnel.generated_raw_prefixes,
+                step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
+                zero_summary.captured_prefixes,
+                wall_summary.remaining_clause_slot_counts,
+                wall_summary.first_mismatch_position_counts,
+                bucket_stats
+                    .get("k8:structural_generic:temporal_operator:library_backed:small_cluster")
+                    .cloned(),
+                exact_prune_summary,
+                terminal_connectivity_summary,
+            )
+        };
+        let stacked_outcome = {
+            let _exact_screen_override =
+                super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_pair_cell(
+                    exact_screen_selector,
+                );
+            let _search_override =
+                super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                    selector,
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("claim prefix through step 14 should build");
+            let prefix = claim_steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+            let exact_prune_summary = late_step_exact_prune_family_summary(&prefix, 15, usize::MAX);
+            let terminal_connectivity_summary =
+                late_step_terminal_connectivity_summary(&prefix, 15, usize::MAX);
+            (
+                step_fifteen.demo_funnel.generated_raw_prefixes,
+                step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
+                zero_summary.captured_prefixes,
+                wall_summary.remaining_clause_slot_counts,
+                wall_summary.first_mismatch_position_counts,
+                bucket_stats
+                    .get("k8:structural_generic:temporal_operator:library_backed:small_cluster")
+                    .cloned(),
+                exact_prune_summary,
+                terminal_connectivity_summary,
+            )
+        };
+        let baseline_surface = {
+            let _exact_screen_override =
+                super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_pair_cell(
+                    exact_screen_selector,
+                );
+            current_claim_step_fifteen_pruned_terminal_surface(usize::MAX)
+        };
+        let stacked_surface = {
+            let _exact_screen_override =
+                super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_pair_cell(
+                    exact_screen_selector,
+                );
+            let _search_override =
+                super::override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_pair_cell(
+                    selector,
+                );
+            current_claim_step_fifteen_pruned_terminal_surface(usize::MAX)
+        };
+        let stacked_keys = stacked_surface
+            .pruned_terminal_prefixes
+            .iter()
+            .map(|work_item| {
+                serde_json::to_string(&work_item.prefix_telescope)
+                    .expect("captured prune prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let baseline_keys = baseline_surface
+            .pruned_terminal_prefixes
+            .iter()
+            .map(|work_item| {
+                serde_json::to_string(&work_item.prefix_telescope)
+                    .expect("captured prune prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let removed_pruned_labels = baseline_surface
+            .pruned_terminal_prefixes
+            .iter()
+            .filter(|work_item| {
+                !stacked_keys.contains(
+                    &serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize"),
+                )
+            })
+            .fold(BTreeMap::new(), |mut summary, work_item| {
+                *summary
+                    .entry((
+                        current_claim_step_fifteen_prefix_group_delta_label(
+                            &work_item.prefix_telescope,
+                        ),
+                        current_claim_step_fifteen_partial_prefix_clause_six_label(
+                            &work_item.prefix_telescope.clauses[6],
+                        ),
+                    ))
+                    .or_insert(0usize) += 1;
+                summary
+            });
+        let introduced_pruned_labels = stacked_surface
+            .pruned_terminal_prefixes
+            .iter()
+            .filter(|work_item| {
+                !baseline_keys.contains(
+                    &serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize"),
+                )
+            })
+            .fold(BTreeMap::new(), |mut summary, work_item| {
+                *summary
+                    .entry((
+                        current_claim_step_fifteen_prefix_group_delta_label(
+                            &work_item.prefix_telescope,
+                        ),
+                        current_claim_step_fifteen_partial_prefix_clause_six_label(
+                            &work_item.prefix_telescope.clauses[6],
+                        ),
+                    ))
+                    .or_insert(0usize) += 1;
+                summary
+            });
+
+        assert_eq!(
+            baseline_outcome, expected_outcome,
+            "the exact-screen representative claim-sharp sheet should keep the known 4343 / 552 / 2271 smaller tradeoff shell before any deeper remaining-one follow-on is layered on"
+        );
+        assert_eq!(
+            stacked_outcome, expected_outcome,
+            "relaxing remaining-one exact-summary relief only beneath the exact-screen representative claim-sharp plus claim-next-codomain parent should stay a neutral control rather than opening a new follow-on tradeoff"
+        );
+        assert_eq!(
+            stacked_outcome, baseline_outcome,
+            "that remaining-one exact-summary follow-on should leave the exact-screen representative claim-sharp tradeoff completely unchanged on wall size, zero-admitted shell, and small-cluster pressure"
+        );
+        assert!(
+            removed_pruned_labels.is_empty(),
+            "the stacked follow-on should not release any remaining-one pruned-terminal group beneath the exact-screen representative claim-sharp parent"
+        );
+        assert!(
+            introduced_pruned_labels.is_empty(),
+            "the stacked follow-on should not introduce any new remaining-one pruned-terminal group either"
+        );
+    }
+
     #[derive(Clone, Debug, Eq, PartialEq)]
-    struct ExactScreenRepresentativeClaimFlatParentClauseSixCompletionProfile {
+    struct ExactScreenRepresentativeClaimSideParentClauseSixCompletionProfile {
         matched_clause_count: usize,
         first_mismatch_position: Option<usize>,
         generated_candidate_count: usize,
@@ -29402,14 +29818,16 @@ mod tests {
             BTreeMap<&'static str, (TerminalConnectivityDecision, ConnectivityWitness, bool)>,
     }
 
-    fn current_claim_step_fifteen_exact_screen_representative_claim_flat_parent_clause_six_completion_profiles()
-    -> BTreeMap<&'static str, ExactScreenRepresentativeClaimFlatParentClauseSixCompletionProfile>
+    fn current_claim_step_fifteen_exact_screen_representative_claim_side_parent_clause_six_completion_profiles(
+        clause_two: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel,
+        clause_two_label: &'static str,
+    ) -> BTreeMap<&'static str, ExactScreenRepresentativeClaimSideParentClauseSixCompletionProfile>
     {
         let selector =
             super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroPairCellSelector {
                 clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
                 clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
-                clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain),
+                clause_two: Some(clause_two),
                 clause_five:
                     super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClauseFiveLabel::ClaimNextCodomain,
             };
@@ -29462,12 +29880,12 @@ mod tests {
                             Some(0_usize),
                             "claim_eventual_domain",
                             "claim_next_codomain",
-                            "claim_flat_domain",
+                            clause_two_label,
                             "claim_next_bridge",
                             "claim_next_codomain",
                         )
             })
-            .expect("the representative exact-screen claim-flat tradeoff should release one six-clause parent");
+            .expect("the representative exact-screen claim-side tradeoff should release one six-clause parent");
         let mut parent_cache = PrefixLegalityCache::default();
         let parent_signature =
             PrefixSignature::new(15, &library, &released_parent.prefix_telescope);
@@ -29604,7 +30022,7 @@ mod tests {
             );
             profiles.insert(
                 current_claim_step_fifteen_partial_prefix_clause_six_label(clause_six),
-                ExactScreenRepresentativeClaimFlatParentClauseSixCompletionProfile {
+                ExactScreenRepresentativeClaimSideParentClauseSixCompletionProfile {
                     matched_clause_count: HistoricalReanchorSummary::from_telescope(
                         &library,
                         &prefix_telescope,
@@ -29629,12 +30047,30 @@ mod tests {
         profiles
     }
 
+    fn current_claim_step_fifteen_exact_screen_representative_claim_flat_parent_clause_six_completion_profiles()
+    -> BTreeMap<&'static str, ExactScreenRepresentativeClaimSideParentClauseSixCompletionProfile>
+    {
+        current_claim_step_fifteen_exact_screen_representative_claim_side_parent_clause_six_completion_profiles(
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain,
+            "claim_flat_domain",
+        )
+    }
+
+    fn current_claim_step_fifteen_exact_screen_representative_claim_sharp_parent_clause_six_completion_profiles()
+    -> BTreeMap<&'static str, ExactScreenRepresentativeClaimSideParentClauseSixCompletionProfile>
+    {
+        current_claim_step_fifteen_exact_screen_representative_claim_side_parent_clause_six_completion_profiles(
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimSharpCodomain,
+            "claim_sharp_codomain",
+        )
+    }
+
     #[test]
     fn current_claim_step_fifteen_exact_screen_representative_claim_flat_parent_clause_six_children_stay_on_three_matched_dead_completion_summaries()
      {
         let profiles =
             current_claim_step_fifteen_exact_screen_representative_claim_flat_parent_clause_six_completion_profiles();
-        let expected_profile = ExactScreenRepresentativeClaimFlatParentClauseSixCompletionProfile {
+        let expected_profile = ExactScreenRepresentativeClaimSideParentClauseSixCompletionProfile {
             matched_clause_count: 2,
             first_mismatch_position: Some(2),
             generated_candidate_count: 3,
@@ -29768,6 +30204,148 @@ mod tests {
                         .collect::<BTreeMap<_, _>>()
             }),
             "each clause-six continuation below that released exact-screen parent should stay uniformly blocked at clause 2 and keep only the same structurally connected but unqualified reference / eventual_lift / next_lift terminal trio"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_screen_representative_claim_sharp_parent_clause_six_children_stay_on_three_matched_dead_completion_summaries()
+     {
+        let profiles =
+            current_claim_step_fifteen_exact_screen_representative_claim_sharp_parent_clause_six_completion_profiles();
+        let expected_profile = ExactScreenRepresentativeClaimSideParentClauseSixCompletionProfile {
+            matched_clause_count: 2,
+            first_mismatch_position: Some(2),
+            generated_candidate_count: 3,
+            admitted_candidate_count: 0,
+            has_bound: false,
+            has_best_accept_primary_rank: false,
+            has_best_accept_rank: false,
+            has_survivor_sketch: false,
+            terminal_profiles: [
+                (
+                    "eventual_lift",
+                    (
+                        TerminalConnectivityDecision::NeedsFallback,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        },
+                        false,
+                    ),
+                ),
+                (
+                    "next_lift",
+                    (
+                        TerminalConnectivityDecision::NeedsFallback,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        },
+                        false,
+                    ),
+                ),
+                (
+                    "reference",
+                    (
+                        TerminalConnectivityDecision::NeedsFallback,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        },
+                        false,
+                    ),
+                ),
+            ]
+            .into_iter()
+            .collect(),
+        };
+
+        assert_eq!(
+            profiles,
+            [
+                ("claim_next_codomain", expected_profile.clone()),
+                ("claim_sharp_codomain", expected_profile.clone()),
+                ("reference", expected_profile),
+            ]
+            .into_iter()
+            .collect(),
+            "below the released exact-screen representative claim-sharp parent, all three clause-six continuations should also collapse to the same dead 3-generated / 0-admitted completion summary with no bound, no best-rank profile, and no survivor sketch"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_screen_representative_claim_sharp_parent_clause_six_children_keep_only_uniform_nonlive_terminal_choices()
+     {
+        let profiles =
+            current_claim_step_fifteen_exact_screen_representative_claim_sharp_parent_clause_six_completion_profiles();
+
+        assert_eq!(
+            profiles.len(),
+            3,
+            "the released exact-screen representative claim-sharp parent should split only across the three clause-six continuations"
+        );
+        assert!(
+            profiles.values().all(|profile| {
+                profile.matched_clause_count == 2
+                    && profile.first_mismatch_position == Some(2)
+                    && profile.terminal_profiles
+                        == [
+                            (
+                                "eventual_lift",
+                                (
+                                    TerminalConnectivityDecision::NeedsFallback,
+                                    ConnectivityWitness {
+                                        connected: true,
+                                        references_active_window: false,
+                                        self_contained: false,
+                                        max_lib_ref: 10,
+                                        historical_reanchor: false,
+                                    },
+                                    false,
+                                ),
+                            ),
+                            (
+                                "next_lift",
+                                (
+                                    TerminalConnectivityDecision::NeedsFallback,
+                                    ConnectivityWitness {
+                                        connected: true,
+                                        references_active_window: false,
+                                        self_contained: false,
+                                        max_lib_ref: 10,
+                                        historical_reanchor: false,
+                                    },
+                                    false,
+                                ),
+                            ),
+                            (
+                                "reference",
+                                (
+                                    TerminalConnectivityDecision::NeedsFallback,
+                                    ConnectivityWitness {
+                                        connected: true,
+                                        references_active_window: false,
+                                        self_contained: false,
+                                        max_lib_ref: 10,
+                                        historical_reanchor: false,
+                                    },
+                                    false,
+                                ),
+                            ),
+                        ]
+                        .into_iter()
+                        .collect::<BTreeMap<_, _>>()
+            }),
+            "each clause-six continuation below the released exact-screen representative claim-sharp parent should stay uniformly blocked at clause 2 and keep only the same structurally connected but unqualified reference / eventual_lift / next_lift terminal trio"
         );
     }
 

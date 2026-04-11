@@ -471,6 +471,65 @@ later stored bundle changes the diagnosis.
   `claim_sharp_codomain` sheet on the same pair cell rather than retrying
   claim-flat clause-`6` identity, the same summary override, the neutral
   `reference` sheet, or sibling exact-screen pairs.
+- That sibling exact-screen pair-cell `claim_sharp_codomain` sheet is now
+  also localized at delta scope:
+  - under
+    `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
+    the claim-sharp clause-`2` tradeoff removes exactly one remaining-two
+    exact-prune capture on that six-clause parent shell
+  - that removed capture still has only six fixed clauses, so clause `6`
+    stays out of scope at this exact-screen boundary
+  - the tradeoff introduces no new exact-prune capture family and removes no
+    pruned-terminal family either
+- Consequence: exact-screen clause-`6` identity on that representative
+  claim-sharp sheet is not available at this layer either. The next honest
+  follow-on has to move below the remaining-two exact-screen boundary and
+  localize that single released six-clause parent at remaining-one scope
+  rather than reopening the spent claim-flat sheet, the neutral `reference`
+  sheet, or sibling exact-screen pairs.
+- That same released exact-screen `claim_sharp_codomain` plus clause-`5`
+  `claim_next_codomain` parent is now also spent on remaining-one
+  exact-summary relief:
+  - stacking remaining-one exact-summary relief beneath the exact-screen
+    representative claim-sharp tradeoff keeps the full step-`15` surface on
+    the same `4343 / 552 / 2271`
+  - it keeps the same `311 / 177 / 50 / 14` first-mismatch distribution
+  - it keeps the same `small_cluster = 3141 / 522 / 522 / 0`
+  - it keeps the same zero-admitted exact-prune family
+    `((0, None, None), 2271)` and the same remaining-one terminal
+    connectivity summary with `6813` structurally connected but unqualified
+    generated candidates
+  - it releases no remaining-one pruned-terminal group at all
+- Consequence: remaining-one exact-summary relief is not the missing lever on
+  that released exact-screen representative claim-sharp parent either. The
+  next honest follow-on has to move below summary-prune relief and localize
+  the same six-clause parent at direct remaining-one completion or terminal
+  scope rather than retrying the same summary override, reopening the spent
+  claim-flat sheet, the neutral `reference` sheet, or sibling exact-screen
+  pairs.
+- That same released exact-screen representative `claim_sharp_codomain` plus
+  clause-`5` `claim_next_codomain` parent is now also spent at direct
+  remaining-one completion and terminal scope:
+  - its three clause-`6` continuations `claim_next_codomain`,
+    `claim_sharp_codomain`, and `reference` each reland the same dead
+    `3`-generated / `0`-admitted completion summary
+  - none carries a bound, a best-accept primary rank, a best-accept rank, or
+    a survivor sketch
+  - each keeps only the same `reference / eventual_lift / next_lift` terminal
+    trio, and every one of those terminal continuations still classifies as
+    `NeedsFallback`
+  - every completed telescope stays structurally connected but outside the
+    active window, outside self-containedness, and outside historical
+    reanchor with `max_lib_ref = 10`
+  - all three clause-`6` continuations stay uniformly blocked at clause `2`
+    with `matched_clause_count = 2` and `first_mismatch_position = 2`
+- Consequence: both representative exact-screen claim-side sheets on
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+  claim_next_codomain` are now exhausted below the clause-`2` split. The
+  next honest follow-on has to stop below that spent representative pair and
+  move sideways to a sibling exact-screen pair on the same
+  `claim_next_codomain` cell rather than reopening either claim-side sheet,
+  the neutral `reference` sheet, or the same remaining-one follow-ons.
 - The first fresh post-rerun code-side repair probe on the mismatch-`0`
   exact-summary ladder is now also spent:
   - reopening both representative claim-side clause-`2` sheets together, but
@@ -2322,6 +2381,25 @@ later stored bundle changes the diagnosis.
   `claim_next_bridge` plus clause-`5` `claim_next_codomain` bucket only from
   `48` to `47`, while the sibling claim-side sheet and the sibling
   `reference` sheet stay at `15` and `12`
+- the representative exact-screen `claim_sharp_codomain` sheet on that same
+  pair cell is also pinned as a same-boundary control rather than fresh
+  leverage:
+  it removes exactly one remaining-two exact-prune capture on
+  `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain /
+  claim_next_bridge / claim_next_codomain`, still leaves clause `6` out of
+  scope at the exact-screen boundary, and introduces no new exact-prune or
+  pruned-terminal family
+- the remaining-one exact-summary and direct completion follow-ons beneath
+  that released exact-screen representative `claim_sharp_codomain` plus
+  clause-`5` `claim_next_codomain` parent are also pinned as spent controls:
+  the stacked summary override stays on the same `4343 / 552 / 2271` shell
+  with the same `311 / 177 / 50 / 14`, the same
+  `small_cluster = 3141 / 522 / 522 / 0`, the same zero-admitted exact-prune
+  family `((0, None, None), 2271)`, and no released pruned-terminal group,
+  while the three clause-`6` continuations each reland the same dead
+  `3`-generated / `0`-admitted completion summary with no bound, no
+  best-rank profile, no survivor sketch, and the same
+  `reference / eventual_lift / next_lift` `NeedsFallback` trio
 - the next operational slice stays above the exhausted claim-safe,
   representative mismatch-`0`, `reference / reference`, isolated
   clause-`1` exact-suffix, representative claim-side clause-`6`
@@ -2347,12 +2425,13 @@ later stored bundle changes the diagnosis.
   clause-`5` exact-screen cell splits too, plus the six narrower
   clause-`0` / clause-`1` exact-screen pair splits inside the representative
   `claim_next_codomain` cell too, plus the representative exact-screen
-  pair-cell clause-`2` split there too, while now targeting a representative
-  clause-`6` continuation inside the `claim_flat_domain` sheet on the
-  `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
-  claim_next_codomain` exact-screen pair cell below that spent exact-screen
-  pair and clause-`2` lattice, above deeper remaining-one relands, and still
-  above the exhausted parent-level qualification-family lattice
+  pair-cell clause-`2` split there too, plus both representative exact-screen
+  claim-side sheets and their spent remaining-one follow-ons beneath that
+  same pair too, while now targeting a sibling exact-screen pair on the same
+  `claim_next_codomain` cell below that spent representative pair, above the
+  neutral `reference` sheet and above deeper remaining-one relands on the
+  spent pair, and still above the exhausted parent-level
+  qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

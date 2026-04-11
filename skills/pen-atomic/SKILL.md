@@ -437,6 +437,41 @@ Focus on:
   clause-`2` blocker with `max_lib_ref = 10`, route there instead of
   reopening that claim-flat clause-`6` path as if one continuation were newly
   privileged
+- keep the next repair above the representative exact-screen
+  `claim_sharp_codomain` clause-`6` split inside that same
+  `claim_next_codomain` cell too; once the live docs pin that claim-sharp
+  clause-`2` tradeoff to exactly one removed six-clause exact-prune capture
+  with no introduced capture or pruned-prefix family, clause `6` is still out
+  of scope at that exact-screen boundary, so route there instead of reopening
+  exact-screen clause-`6` identity on the claim-sharp sheet as if one
+  continuation were newly privileged
+- keep the next repair above remaining-one exact-summary relief beneath that
+  released exact-screen representative `claim_sharp_codomain` plus
+  clause-`5` `claim_next_codomain` parent too; once the live docs pin the
+  stacked follow-on as a neutral control on the same `4343 / 552 / 2271`
+  shell with first-mismatch counts `311 / 177 / 50 / 14`,
+  `small_cluster generated = 3141`, the same zero-admitted exact-prune
+  family `((0, None, None), 2271)`, and no released remaining-one
+  pruned-terminal group, route there instead of reopening that claim-sharp
+  summary-relief slice as if it were fresh leverage
+- keep the next repair above direct remaining-one completion or terminal
+  identity beneath that same released exact-screen representative
+  `claim_sharp_codomain` plus clause-`5` `claim_next_codomain` parent too;
+  once the live docs pin all three clause-`6` continuations at the same dead
+  `3`-generated / `0`-admitted completion summary with no bound, no
+  best-rank profile, no survivor sketch, the same
+  `reference / eventual_lift / next_lift` `NeedsFallback` trio, and the same
+  clause-`2` blocker with `max_lib_ref = 10`, route there instead of
+  reopening that claim-sharp clause-`6` path as if one continuation were
+  newly privileged
+- once the live docs pin both representative exact-screen claim-side sheets
+  and their deeper remaining-one follow-ons beneath
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+  claim_next_codomain`, keep the next repair above that spent representative
+  pair and route to a sibling exact-screen pair on the same
+  `claim_next_codomain` cell instead of reopening either claim-side sheet,
+  the neutral `reference` sheet, or the same remaining-one follow-ons as if
+  they were fresh leverage
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by
