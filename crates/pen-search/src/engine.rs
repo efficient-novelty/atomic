@@ -28648,7 +28648,7 @@ mod tests {
 
         for (clause_two_name, clause_two) in clause_two_labels {
             let _search_override =
-                super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_pair_cell(
+                    super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_pair_cell(
                     super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroPairCellSelector {
                         clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
                         clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
@@ -28963,6 +28963,172 @@ mod tests {
                 .collect(),
             )),
             "the reference clause-two sheet should stay a neutral control, confirming that the representative exact-screen pair-cell tradeoff is exactly the union of the two claim-side sheets"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_partial_prefix_relief_on_representative_mismatch_zero_claim_next_codomain_pair_cell_claim_flat_sheet_delta_stays_above_clause_six_boundary()
+     {
+        let baseline_captures = current_claim_step_fifteen_partial_prefix_bound_prune_captures();
+        let baseline_capture_keys = baseline_captures
+            .iter()
+            .map(|capture| {
+                serde_json::to_string(&capture.prefix_telescope)
+                    .expect("captured prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let baseline_pruned_prefixes = current_claim_step_fifteen_pruned_terminal_prefixes();
+        let baseline_pruned_keys = baseline_pruned_prefixes
+            .iter()
+            .map(|work_item| {
+                serde_json::to_string(&work_item.prefix_telescope)
+                    .expect("captured prune prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+
+        let _search_override =
+            super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_pair_cell(
+                super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroPairCellSelector {
+                    clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                    clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                    clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain),
+                    clause_five:
+                        super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClauseFiveLabel::ClaimNextCodomain,
+                },
+            );
+        let probe_captures = current_claim_step_fifteen_partial_prefix_bound_prune_captures();
+        let probe_capture_keys = probe_captures
+            .iter()
+            .map(|capture| {
+                serde_json::to_string(&capture.prefix_telescope)
+                    .expect("captured prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let probe_pruned_prefixes = current_claim_step_fifteen_pruned_terminal_prefixes();
+        let probe_pruned_keys = probe_pruned_prefixes
+            .iter()
+            .map(|work_item| {
+                serde_json::to_string(&work_item.prefix_telescope)
+                    .expect("captured prune prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+
+        let removed_captures = baseline_captures
+            .iter()
+            .filter(|capture| {
+                !probe_capture_keys.contains(
+                    &serde_json::to_string(&capture.prefix_telescope)
+                        .expect("captured prefix should serialize"),
+                )
+            })
+            .map(|capture| {
+                (
+                    capture.prefix_telescope.clauses.len(),
+                    current_claim_step_fifteen_prefix_group_delta_label(&capture.prefix_telescope),
+                    capture
+                        .prefix_telescope
+                        .clauses
+                        .get(6)
+                        .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+                        .unwrap_or("out_of_scope"),
+                )
+            })
+            .collect::<Vec<_>>();
+        let introduced_captures = probe_captures
+            .iter()
+            .filter(|capture| {
+                !baseline_capture_keys.contains(
+                    &serde_json::to_string(&capture.prefix_telescope)
+                        .expect("captured prefix should serialize"),
+                )
+            })
+            .map(|capture| {
+                (
+                    capture.prefix_telescope.clauses.len(),
+                    current_claim_step_fifteen_prefix_group_delta_label(&capture.prefix_telescope),
+                    capture
+                        .prefix_telescope
+                        .clauses
+                        .get(6)
+                        .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+                        .unwrap_or("out_of_scope"),
+                )
+            })
+            .collect::<Vec<_>>();
+        let removed_pruned_prefixes = baseline_pruned_prefixes
+            .iter()
+            .filter(|work_item| {
+                !probe_pruned_keys.contains(
+                    &serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize"),
+                )
+            })
+            .map(|work_item| {
+                (
+                    work_item.prefix_telescope.clauses.len(),
+                    current_claim_step_fifteen_prefix_group_delta_label(
+                        &work_item.prefix_telescope,
+                    ),
+                    work_item
+                        .prefix_telescope
+                        .clauses
+                        .get(6)
+                        .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+                        .unwrap_or("out_of_scope"),
+                )
+            })
+            .collect::<Vec<_>>();
+        let introduced_pruned_prefixes = probe_pruned_prefixes
+            .iter()
+            .filter(|work_item| {
+                !baseline_pruned_keys.contains(
+                    &serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize"),
+                )
+            })
+            .map(|work_item| {
+                (
+                    work_item.prefix_telescope.clauses.len(),
+                    current_claim_step_fifteen_prefix_group_delta_label(
+                        &work_item.prefix_telescope,
+                    ),
+                    work_item
+                        .prefix_telescope
+                        .clauses
+                        .get(6)
+                        .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+                        .unwrap_or("out_of_scope"),
+                )
+            })
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            removed_captures,
+            vec![(
+                6_usize,
+                (
+                    Some(0_usize),
+                    "claim_eventual_domain",
+                    "claim_next_codomain",
+                    "claim_flat_domain",
+                    "claim_next_bridge",
+                    "claim_next_codomain",
+                ),
+                "out_of_scope",
+            )],
+            "the representative exact-screen claim-flat clause-two tradeoff should remove exactly one six-clause exact-prune capture, so the delta still stops before any clause-six identity is fixed"
+        );
+        assert!(
+            introduced_captures.is_empty(),
+            "that representative exact-screen claim-flat tradeoff should not introduce any new exact-prune capture family at the same layer"
+        );
+        assert!(
+            removed_pruned_prefixes.is_empty(),
+            "that representative exact-screen claim-flat tradeoff should not remove any deeper pruned-terminal family; the delta is confined to the one released six-clause parent capture"
+        );
+        assert!(
+            introduced_pruned_prefixes.is_empty(),
+            "that representative exact-screen claim-flat tradeoff should not introduce any deeper pruned-terminal family either"
         );
     }
 

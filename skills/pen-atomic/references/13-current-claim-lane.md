@@ -191,6 +191,13 @@ Do not:
   sibling `reference` sheet is neutral on the untouched
   `4331 / 553 / 2271` baseline, that exact-screen clause-`2` axis also
   belongs to the autonomy ledger rather than as a fresh repair lead
+- reopen the representative exact-screen `claim_flat_domain` clause-`6`
+  identity split inside that same `claim_next_codomain` cell first either; if
+  the live docs already pin that claim-flat clause-`2` tradeoff to exactly
+  one removed six-clause exact-prune capture with no introduced capture or
+  pruned-prefix family, clause `6` is still out of scope at that
+  exact-screen boundary and that axis also belongs to the autonomy ledger
+  rather than as a fresh repair lead
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
   tradeoffs first; those smaller tradeoff controls now also belong in the

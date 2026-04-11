@@ -1585,10 +1585,26 @@ Until that exists, wording stays at `bounded live recovery`.
   pair cell is now spent too. The pair-cell tradeoff is exactly the union of
   the two claim-side sheets while the sibling reference sheet stays inert, so
   the next honest follow-on has to stay below that spent clause-`2` split and
-  localize a representative clause-`6` continuation inside the
-  `claim_flat_domain` sheet of that same exact-screen pair rather than
-  reopening the sibling claim-side sheet, the neutral reference sheet, or
-  deeper remaining-one relands.
+  localize the released representative claim-flat parent beneath the
+  remaining-two exact-screen boundary rather than reopening the sibling
+  claim-side sheet, the neutral reference sheet, or deeper remaining-one
+  relands indiscriminately.
+- That representative exact-screen pair-cell `claim_flat_domain` sheet is now
+  also localized at delta scope:
+  - under
+    `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / claim_next_codomain`,
+    the claim-flat clause-`2` tradeoff removes exactly one remaining-two
+    exact-prune capture on that six-clause parent shell
+  - that removed capture still has only six fixed clauses, so clause `6`
+    stays out of scope at this exact-screen boundary
+  - the tradeoff introduces no new exact-prune capture family and removes no
+    pruned-terminal family either
+- Consequence: exact-screen clause-`6` identity on that representative
+  claim-flat sheet is not available at this layer. The next honest follow-on
+  has to move below the remaining-two exact-screen boundary and localize that
+  single released six-clause parent at remaining-one scope rather than
+  retrying another same-layer clause-`6` split, reopening the sibling
+  claim-sharp sheet, or bouncing back to sibling exact-screen pairs.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh

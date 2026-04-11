@@ -183,12 +183,25 @@ clause-`4` split only to `23 / 18`, and contract the representative
 `48` to `47`, while the sibling `reference` sheet is a neutral control on
 the untouched `4331 / 553 / 2271` baseline. The next honest slice therefore
 has to stay below this now-spent exact-screen pair-cell clause-`2` lattice
-and localize a representative clause-`6` continuation inside the
-`claim_flat_domain` sheet on that same
+and localize the released representative claim-flat parent beneath the
+remaining-two exact-screen boundary on that same
 `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
 claim_next_codomain` pair cell rather than reopening the sibling claim-side
 sheet, the neutral reference sheet, sibling exact-screen pairs, or deeper
-remaining-one relands.
+remaining-one relands indiscriminately.
+Most recently, that representative exact-screen `claim_flat_domain`
+follow-on was localized one layer further: relative to baseline, the
+claim-flat clause-`2` tradeoff removes exactly one remaining-two exact-prune
+capture on
+`claim_eventual_domain / claim_next_codomain / claim_flat_domain /
+claim_next_bridge / claim_next_codomain`, and that removed capture still has
+only six fixed clauses, so clause `6` stays out of scope at this
+exact-screen boundary. The tradeoff introduces no new exact-prune capture
+family and removes no pruned-terminal family. The next honest slice
+therefore has to move below this boundary and localize that single released
+six-clause parent at remaining-one scope rather than retrying another
+same-layer clause-`6` split, reopening the sibling claim-sharp sheet, or
+bouncing back to sibling exact-screen pairs.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -364,11 +377,29 @@ later stored bundle changes the diagnosis.
   identity inside that representative exact-screen pair cell either. The
   pair-cell tradeoff is exactly the union of the two claim-side sheets while
   the sibling reference sheet stays inert, so the next honest follow-on has
-  to stay below that spent clause-`2` split and localize a representative
-  clause-`6` continuation inside the `claim_flat_domain` sheet on that same
-  exact-screen pair rather than reopening the sibling claim-side sheet, the
-  neutral reference sheet, sibling exact-screen pairs, or deeper
-  remaining-one relands.
+  to stay below that spent clause-`2` split and localize the released
+  representative claim-flat parent beneath the remaining-two exact-screen
+  boundary rather than reopening the sibling claim-side sheet, the neutral
+  reference sheet, sibling exact-screen pairs, or deeper remaining-one
+  relands indiscriminately.
+- That representative exact-screen pair-cell `claim_flat_domain` sheet is now
+  also localized at delta scope:
+  - under
+    `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
+    claim_next_bridge / claim_next_codomain`, the claim-flat clause-`2`
+    tradeoff removes exactly one remaining-two exact-prune capture on that
+    six-clause parent shell
+  - that removed capture still has only six fixed clauses, so clause `6`
+    stays out of scope at this exact-screen boundary
+  - the tradeoff introduces no new exact-prune capture family and removes no
+    pruned-terminal family either
+- Any remaining step-`15` leverage is therefore no longer on a same-layer
+  exact-screen clause-`6` identity split inside that representative
+  claim-flat sheet either. The next honest follow-on has to move below the
+  remaining-two exact-screen boundary and localize that single released
+  six-clause parent at remaining-one scope rather than reopening the sibling
+  claim-sharp sheet, the neutral `reference` sheet, or sibling exact-screen
+  pairs.
 - The first fresh post-rerun code-side repair probe on the mismatch-`0`
   exact-summary ladder is now also spent:
   - reopening both representative claim-side clause-`2` sheets together, but
@@ -1614,6 +1645,12 @@ later stored bundle changes the diagnosis.
   `23 / 18` clause-`4` split plus `47` active clause-`5` bucket, while the
   sibling `reference` sheet is neutral on the untouched
   `4331 / 553 / 2271` baseline
+- another exact-screen clause-`6` identity pass inside the representative
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
+  claim_next_bridge / claim_next_codomain` sheet; the claim-flat clause-`2`
+  tradeoff there now removes exactly one six-clause exact-prune capture and
+  no pruned-prefix family, so clause `6` remains out of scope at that
+  exact-screen boundary
 - exact remaining-two mismatch-`0` or mismatch-`1` clause-`5`
   bridge-slice reopenings
 - another exact claim-pair clause-`4` `reference`-side relocalization pass

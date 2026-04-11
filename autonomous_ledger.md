@@ -1563,3 +1563,21 @@ This file is the append-only history for `desktop_claim_shadow`.
   sheet rather than reopening the sibling claim-side sheet, the neutral
   `reference` sheet, sibling exact-screen pairs, or deeper remaining-one
   relands.
+- Scope: split the representative exact-screen `claim_flat_domain` sheet
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
+  claim_next_bridge / claim_next_codomain` one layer deeper across its
+  clause-`6` continuations.
+  Result: the attempted clause-`6` split does not exist at this layer. The
+  representative claim-flat clause-`2` tradeoff removes exactly one
+  remaining-two exact-prune capture on
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
+  claim_next_bridge / claim_next_codomain`, that removed capture still has
+  only six fixed clauses, and clause `6` is therefore still out of scope at
+  the exact-screen boundary. The tradeoff introduces no new exact-prune
+  capture family and removes no pruned-terminal family either.
+  Consequence: same-layer exact-screen clause-`6` identity is unavailable on
+  that representative claim-flat sheet. The next honest probe has to move
+  below the remaining-two exact-screen boundary and localize the single
+  released six-clause parent at remaining-one scope rather than retrying
+  another clause-`6` split, reopening the sibling claim-sharp sheet, or
+  bouncing back to sibling exact-screen pairs.
