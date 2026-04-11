@@ -909,9 +909,10 @@ partial-prefix breadth wall on the canonical 4331 generated surface.
 
 The broad incumbent wall is already repaired. The residual single bucket is
 already fenced. The representative mismatch-zero remaining-one lattice and the
-first parent-route class above it are both now exhausted. The next live work
-therefore has to remove some of the 553 partial-prefix bar failures by finding
-a different parent-level qualification family, without widening small_cluster,
-reopening the wrong tradeoff controls, or unfencing the unsafe 89/8 lifted
-shell.
+representative parent-route / qualification / clause-`4` / clause-`2`
+selector lattice above it are now exhausted too. The next live work therefore
+has to remove some of the 553 partial-prefix bar failures by finding a
+different engine-side exact-screen repair class, without widening
+small_cluster, reopening the wrong tradeoff controls, or unfencing the unsafe
+89/8 lifted shell.
 ```

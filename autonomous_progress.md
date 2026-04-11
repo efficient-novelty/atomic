@@ -1494,6 +1494,11 @@ Until that exists, wording stays at `bounded live recovery`.
   next honest follow-on has to stay above these clause-`2` sheet splits too
   and move to a different code-side repair class rather than reopening
   another selector inside the same parent shell.
+- Stable repo context should now mirror that ordering too:
+  once the representative mismatch-`0` parent-route, qualification-family,
+  clause-`4`, and clause-`2` lattice is frozen, the first fresh lever moves
+  back to the step-`15` exact-screen engine path rather than to another
+  connectivity-family retry.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh

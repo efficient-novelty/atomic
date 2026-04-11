@@ -112,6 +112,14 @@ Do:
   fingerprints before reopening step `1`, and if the newer rerun reconfirms
   the same breadth-only miss, keep step-`15` repair ahead of step `1`
 - use the autonomous files as intended instead of restating live state here
+- once the live docs say the representative mismatch-`0` parent-route,
+  qualification-family, clause-`4`, and clause-`2` selector lattice is spent,
+  start with the step-`15` exact-screen engine path before inventing another
+  connectivity family:
+  `screen_prefix_for_frontier(...)`,
+  `exact_partial_prefix_bound_decision(...)`,
+  `exact_terminal_prefix_bound_decision(...)`, and
+  `claim_try_summary_prune_before_materialization(...)`
 
 Do not:
 
@@ -224,6 +232,10 @@ Do not:
   reopening a two-retained unsafe `60 / 8` at
   `small_cluster = 2844 / 468 / 468 / 127`, that clause-`2` axis also
   belongs to the autonomy ledger rather than as a fresh repair lead
+- keep treating the representative mismatch-`0` connectivity overrides as
+  regression baselines once that lattice is spent; the next honest slice then
+  lives in engine-side exact screening above those frozen controls rather than
+  in another route / qualification / clause selector reland
 - reopen the first alternate representative mismatch-`0` claim-side
   active-window qualification family first either; if the live docs already
   pin both active clause-`5` `claim_flat_codomain / reference` probes at the

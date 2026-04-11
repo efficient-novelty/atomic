@@ -61,7 +61,9 @@ remaining-one exact-summary lattice is already exhausted, and the first
 parent-level historical-reanchor route on each active clause-`5`
 `claim_flat_codomain / reference` family is also exhausted as a matched unsafe
 negative control. The active bottleneck is now finding a different
-parent-level qualification family above that lattice.
+engine-side exact-screen repair class above that lattice, above the exhausted
+parent-level qualification family lattice, and above its spent clause-`4` and
+clause-`2` selector refinements.
 
 ## Canonical stored evidence
 
@@ -152,15 +154,22 @@ prefix wall.
 
 ### It is now above the exhausted representative mismatch-`0` lattice
 
-The current autonomy docs now pin two deeper facts that matter for the next
-repair:
+The current autonomy docs now pin the broader exact shape of what is already
+spent:
 
 - the representative mismatch-`0` claim-side clause-`6` `reference` union is
   spent and still stays on the same zero-admitted remaining-one family
 - the first parent-level claim-side historical-reanchor route on each active
   clause-`5` `claim_flat_codomain / reference` family is also spent
+- the alternate active-window and self-contained qualification families, their
+  recombinations, and the full qualification triad are also spent matched
+  unsafe controls
+- the clause-`4` `reference` and clause-`4` `claim_next_bridge` branch splits
+  above that qualification lattice are spent too
+- the representative clause-`2` sheet splits on the parent-route,
+  active-window, and self-contained shells are also spent unsafe controls
 
-Those two parent-route probes are not fresh search leads:
+Those probes are not fresh search leads:
 
 - each lands the same unsafe `4427 / 545 / 2247` surface
 - each displaces canonical acceptance to noncanonical `60 / 8`
@@ -171,9 +180,10 @@ Those two parent-route probes are not fresh search leads:
   chosen active clause-`5` bucket, with no off-target families introduced
 
 So the current bottleneck is not another deeper reland inside that same
-remaining-one lattice, and not another claim-side parent-route identity pass.
-It is the missing parent-level qualification family above those already spent
-surfaces.
+remaining-one lattice, not another claim-side parent-route identity pass, and
+not another qualification / clause-`4` / clause-`2` selector retry on that
+same representative shell. It is the missing exact-screen repair class above
+those already spent surfaces.
 
 ### Current live step-open anatomy
 
@@ -619,7 +629,9 @@ lane broader somehow." It is:
   `reference + demo_flat_codomain` ladder,
 - above the exhausted representative mismatch-`0` remaining-one lattice and
   above the matched unsafe claim-side parent-route class,
-- by changing the parent-level qualification family on the live mismatch-`0`
-  claim-domain tier rather than replaying route identity,
+- above the spent representative qualification-family, clause-`4`, and
+  clause-`2` selector lattice on that same live mismatch-`0` shell,
+- by changing the engine-side exact-screen behavior on the live mismatch-`0`
+  claim-domain tier rather than replaying another connectivity family,
 - while preserving the current canonical winner and every existing safety
   fence.

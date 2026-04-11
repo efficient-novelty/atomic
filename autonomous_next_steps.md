@@ -1361,6 +1361,10 @@ later stored bundle changes the diagnosis.
      clause-`4` branch splits above that exhausted parent-level
      qualification-family lattice before reopening narrower clause-`3` /
      clause-`6` selectors
+   - keep the stable repo context aligned with that ordering too: route future
+     work to the step-`15` exact-screen engine path once this representative
+     connectivity lattice is frozen, rather than leaving the stable docs on
+     the older "missing parent-level qualification family" framing
 5. Treat a new local or stored candidate as promotable only if all of the
    following stay true:
    - accepted step `15` winner stays canonical `103 / 8`

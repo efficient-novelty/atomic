@@ -260,8 +260,10 @@ For the claim lane, the most important fact is that
 Step-15 work depends especially on `connectivity.rs`, because the late blocker
 is no longer raw generation alone; it is qualifier and reanchor evidence on a
 connected temporal-shell surface, and the current local bottleneck now sits on
-which parent-level qualification family can honestly reopen the live
-mismatch-`0` shell above an already exhausted remaining-one lattice.
+which exact-screen repair class can honestly change the live mismatch-`0`
+shell once the representative remaining-one lattice and the
+parent-level qualification / clause-`4` / clause-`2` selector lattice are
+already exhausted.
 
 ## How The Claim Lane Differs From Guarded Search
 
@@ -452,22 +454,27 @@ Given the current autonomy docs, the code hotspots are:
     `exact_partial_prefix_bound_decision(...)`,
     `exact_terminal_prefix_bound_decision(...)`, and
     `claim_try_summary_prune_before_materialization(...)`
-- Step `15` parent-level qualification and historical-reanchor routing above
-  the exhausted representative mismatch-`0` remaining-one lattice
+- Step `15` representative mismatch-`0` connectivity and historical-reanchor
+  probes above the exhausted remaining-one lattice
   - start in `connectivity.rs` and the step-`15` late tests in `engine.rs`
   - especially `HistoricalReanchorSummary`,
     `allows_historical_reanchor(...)`, the representative mismatch-`0`
     parent-route override helpers, and the matched unsafe parent-route tests
+  - treat these as regression baselines and probe history once the autonomy
+    docs say the parent-level qualification family lattice and its narrower
+    clause-`4` / clause-`2` selectors are spent; they are no longer the first
+    fresh lever
 - Stored parity and breadth signoff
   - start in `StepReport`, `run.json`, `compare_runs.py`, and
     `certify_claim_lane.py`
 
 Those are the relevant places for the current "full 15-step autonomous
-discovery" gap. The active follow-on is no longer step-`13` widening first or
-another deeper mismatch-`0` reland; it is the missing parent-level
-qualification family above the current remaining-one lattice. Agda export,
-optional acceleration, and donor Haskell are not the first places to spend
-time.
+discovery" gap. The active follow-on is no longer step-`13` widening first,
+another deeper mismatch-`0` reland, or another parent-level qualification
+family retry. It is an engine-side exact-screen repair class above the current
+remaining-one lattice and above the spent representative connectivity lattice.
+Agda export, optional acceleration, and donor Haskell are not the first
+places to spend time.
 
 ## What Not To Read First
 

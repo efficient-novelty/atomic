@@ -355,6 +355,13 @@ Focus on:
 - treat the step-`15` partial-prefix wall, the dominant clause-`0` / clause-`1`
   pairings, and the live clause-`4` split as live diagnosis owned by
   [../../autonomous_progress.md](../../autonomous_progress.md)
+- once the live docs mark the representative mismatch-`0` parent-route,
+  qualification-family, clause-`4`, and clause-`2` selector lattice as spent,
+  treat `engine.rs` exact screening as the first fresh lever:
+  `screen_prefix_for_frontier(...)`,
+  `exact_partial_prefix_bound_decision(...)`,
+  `exact_terminal_prefix_bound_decision(...)`, and
+  `claim_try_summary_prune_before_materialization(...)`
 - treat the active slice and the exact next move as owned by
   [../../autonomous_next_steps.md](../../autonomous_next_steps.md), not by
   this skill file
@@ -389,6 +396,11 @@ Focus on:
   only changing the noncanonical winner to `74 / 8` and the alternate
   `reference` sheet reopening a two-retained unsafe control, route there
   instead of treating clause-`2` identity as fresh leverage
+- keep the next repair above the spent representative mismatch-`0`
+  connectivity lattice as a whole; once parent-route, alternate
+  qualification-family, clause-`4`, and clause-`2` relands are all frozen,
+  route back to the live autonomy docs and the exact-screen engine path
+  instead of inventing another connectivity-family retry here
 - keep the next repair above remaining-one exact-summary relief on the
   mismatch-`0` clause-`4` `reference` plus clause-`5` `reference` tail too;
   that deeper negative control now also belongs to
