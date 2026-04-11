@@ -1498,3 +1498,39 @@ This file is the append-only history for `desktop_claim_shadow`.
   to a narrower remaining-two selector, most naturally a representative
   clause-`0` / clause-`1` pair inside one chosen exact-screen cell, rather
   than reopening connectivity or deeper remaining-one relands.
+- Scope: split the newly live mismatch-`0` clause-`4` `claim_next_bridge`
+  plus clause-`5` `claim_next_codomain` exact-screen cell one layer deeper
+  across its clause-`0` / clause-`1` pairs.
+  Result: all six live pair probes reland the same smaller exact-screen
+  tradeoff:
+  - generated breadth rises to `4355`
+  - partial-prefix bar failures contract to `551`
+  - `incumbent_dominance` stays `3`
+  - zero-admitted captures stay fixed at `2271`
+  - `small_cluster` widens only to `3150 / 522 / 522 / 0`
+  - each probe keeps accepted step `15` canonical `103 / 8` and the isolated
+    `single` pocket fenced
+  - each probe contracts only its targeted live pair from `42` to `40`
+  - each probe contracts only its targeted clause-`4`
+    `claim_next_bridge` share from `24` to `22` while leaving the sibling
+    `reference` share at `18`
+  - each probe contracts only the targeted clause-`4` `claim_next_bridge`
+    plus clause-`5` `claim_next_codomain` bucket from `48` to `46`
+  Consequence: clause-`0` / clause-`1` identity inside that exact-screen
+  `claim_next_codomain` cell is now spent too. It only reconstructs a
+  uniform smaller exact-screen tradeoff above the same zero-admitted shell,
+  so the next honest probe has to move below that exact-screen pair lattice
+  rather than reopening sibling exact-screen pairs.
+- Scope: localize one representative exact-screen pair inside that spent
+  `claim_next_codomain` cell before dropping into deeper remaining-one
+  relands.
+  Result: the representative
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+  claim_next_codomain` pair lands the same `4355 / 551 / 2271` tradeoff, the
+  same `3150 / 522 / 522 / 0` `small_cluster`, remaining-clause-slot counts
+  `449 / 102`, first-mismatch counts `310 / 177 / 50 / 14`, and the same
+  targeted `40`-capture pair plus `22 / 18` clause-`4` split.
+  Consequence: the next honest probe has to stay below the exact-screen
+  pair-cell lattice and localize a representative claim-side clause-`2`
+  sheet inside that same exact-screen pair rather than re-running pair-cell
+  identity.

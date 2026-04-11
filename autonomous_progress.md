@@ -1539,11 +1539,29 @@ Until that exists, wording stays at `bounded live recovery`.
   now spent too. The broad `4763 / 517 / 2271` release is exactly the union of
   three symmetric smaller tradeoffs, and `claim_next_codomain` is now live on
   this remaining-two exact-screen path even though it stayed inert on the
-  remaining-one exact-summary ladder. The next honest follow-on has to move
-  below that spent clause-`5` lattice and localize a representative
-  remaining-two exact-screen cell by clause-`0` / clause-`1` pair or another
-  narrower remaining-two selector rather than revisiting connectivity or deeper
-  remaining-one relands.
+  remaining-one exact-summary ladder.
+- That newly live `claim_next_codomain` exact-screen cell is now also spent
+  one layer deeper across its clause-`0` / clause-`1` pairs:
+  - every live pair under that cell lands the same smaller
+    `4355 / 551 / 2271` tradeoff
+  - `small_cluster` widens only to `3150 / 522 / 522 / 0`
+  - accepted step `15` stays canonical `103 / 8` and the isolated `single`
+    pocket stays fenced
+  - each probe contracts only its targeted live pair from `42` to `40`
+  - each probe contracts only its targeted clause-`4`
+    `claim_next_bridge` share from `24` to `22` while leaving the sibling
+    `reference` share at `18`
+  - each probe contracts only the chosen clause-`4` `claim_next_bridge` plus
+    clause-`5` `claim_next_codomain` bucket from `48` to `46`
+  - zero-admitted captures stay fixed at `2271`
+- Consequence: clause-`0` / clause-`1` identity inside that exact-screen
+  `claim_next_codomain` cell is now spent too. It only reconstructs a uniform
+  smaller exact-screen tradeoff above the same zero-admitted shell, so the
+  next honest follow-on has to stay below that spent exact-screen pair-cell
+  lattice and localize a representative claim-side clause-`2` sheet inside
+  that same `claim_next_bridge / claim_next_codomain` pair cell rather than
+  reopening sibling exact-screen pairs or dropping into deeper remaining-one
+  relands.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh

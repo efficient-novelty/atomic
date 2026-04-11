@@ -172,6 +172,16 @@ Do not:
   the same `42 -> 40` pair contraction, and the same `24 / 18 -> 22 / 18`
   clause-`4` split, those exact-screen cell relands also belong in the
   autonomy ledger rather than as fresh repair leads
+- reopen the narrower exact-screen clause-`0` / clause-`1` pair split inside
+  the representative `claim_next_codomain` cell first either; if the live
+  docs already pin all six pair probes there at the same
+  `4355 / 551 / 2271` smaller tradeoff with fixed zero-admitted captures
+  `2271`, widened `small_cluster = 3150 / 522 / 522 / 0`, the same fenced
+  `single` pocket, a targeted `42 -> 40` pair contraction, a targeted
+  `24 / 18 -> 22 / 18` clause-`4` split, and a targeted
+  `48 -> 46` `claim_next_bridge` plus `claim_next_codomain` bucket
+  contraction, that exact-screen pair lattice also belongs to the autonomy
+  ledger rather than as a fresh repair lead
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
   tradeoffs first; those smaller tradeoff controls now also belong in the

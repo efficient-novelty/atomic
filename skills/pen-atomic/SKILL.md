@@ -392,6 +392,16 @@ Focus on:
   `42 -> 40` pair contraction, and the same `24 / 18 -> 22 / 18`
   clause-`4` split, route there instead of reopening clause-`5` identity as
   if one remaining-two exact-screen cell were newly privileged
+- keep the next repair above the narrower exact-screen clause-`0` /
+  clause-`1` pair splits inside the representative `claim_next_codomain`
+  cell too; once the live docs pin all six pair probes there at the same
+  `4355 / 551 / 2271` smaller tradeoff with fixed zero-admitted captures
+  `2271`, widened `small_cluster = 3150 / 522 / 522 / 0`, a fenced
+  `single` pocket, a targeted `42 -> 40` pair contraction, a targeted
+  `24 / 18 -> 22 / 18` clause-`4` split, and a targeted `48 -> 46`
+  `claim_next_bridge` plus `claim_next_codomain` bucket contraction, route
+  there instead of reopening exact-screen pair identity as if one
+  representative pair were newly privileged
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by
