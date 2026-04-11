@@ -6114,6 +6114,12 @@ thread_local! {
 
 #[cfg(test)]
 thread_local! {
+    static CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_HALF_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
+thread_local! {
     static CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_FLAT_CODOMAIN_OVERRIDE:
         std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
 }
@@ -6311,6 +6317,9 @@ struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroReferenceTail
 
 #[cfg(test)]
 struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard;
 
 #[cfg(test)]
 struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimFlatCodomainOverrideGuard;
@@ -6782,6 +6791,26 @@ fn override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_ze
 }
 
 #[cfg(test)]
+impl Drop for ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_HALF_OVERRIDE
+            .with(|override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            });
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half()
+-> ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard {
+    CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_HALF_OVERRIDE
+        .with(|override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        });
+    ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard
+}
+
+#[cfg(test)]
 impl Drop for ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimFlatCodomainOverrideGuard {
     fn drop(&mut self) {
         CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_FLAT_CODOMAIN_OVERRIDE.with(
@@ -7106,8 +7135,21 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_
         .with(|override_enabled| *override_enabled.borrow())
 }
 
+#[cfg(test)]
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_HALF_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
 #[cfg(not(test))]
 fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half_override_enabled()
+-> bool {
+    false
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_override_enabled()
 -> bool {
     false
 }
@@ -7578,6 +7620,89 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_p
                 claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_clause_two_matches,
             )
         && prefix_telescope.clauses.get(3) == reference.clauses.get(3)
+}
+
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_matches(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    work_item: &OnlinePrefixWorkItem,
+) -> bool {
+    claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_override_enabled()
+        && matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
+        && step_index == 15
+        && work_item.clause_kappa == 8
+        && work_item.remaining_clause_slots == 2
+        && work_item.prefix_telescope.clauses.len() == 6
+        && work_item.prefix_telescope.clauses.first().is_some_and(
+            claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_clause_zero_matches,
+        )
+        && work_item.prefix_telescope.clauses.get(1).is_some_and(
+            claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_clause_one_matches,
+        )
+        && work_item.prefix_telescope.clauses.get(2).is_some_and(
+            claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_clause_two_matches,
+        )
+        && work_item.prefix_telescope.clauses.get(3) == Telescope::reference(15).clauses.get(3)
+        && work_item.prefix_telescope.clauses.get(4).is_some_and(|clause| {
+            matches!(
+                &clause.expr,
+                Expr::Pi(domain, codomain)
+                    if matches!(
+                        domain.as_ref(),
+                        Expr::Flat(body)
+                            if matches!(
+                                body.as_ref(),
+                                Expr::Next(inner)
+                                    if matches!(
+                                        inner.as_ref(),
+                                        Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
+                                    )
+                            )
+                    ) && matches!(
+                        codomain.as_ref(),
+                        Expr::Next(body)
+                            if matches!(
+                                body.as_ref(),
+                                Expr::Flat(inner)
+                                    if matches!(
+                                        inner.as_ref(),
+                                        Expr::Next(deeper)
+                                            if matches!(
+                                                deeper.as_ref(),
+                                                Expr::Eventually(tail) if matches!(tail.as_ref(), Expr::Var(1))
+                                            )
+                                    )
+                            )
+                    )
+            )
+        })
+        && work_item.prefix_telescope.clauses.get(5).is_some_and(|clause| {
+            claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_flat_codomain_clause_five_matches(clause)
+                || claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_codomain_clause_five_matches(clause)
+                || claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_clause_five_matches(clause)
+        })
+}
+
+fn maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    work_item: &OnlinePrefixWorkItem,
+    decision: ExactPartialPrefixBoundDecision,
+) -> ExactPartialPrefixBoundDecision {
+    #[cfg(test)]
+    {
+        if matches!(decision, ExactPartialPrefixBoundDecision::CannotClearBar)
+            && claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_matches(
+                step_index,
+                admissibility,
+                work_item,
+            )
+        {
+            return ExactPartialPrefixBoundDecision::Unknown;
+        }
+    }
+
+    decision
 }
 
 fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_tail_matches(
@@ -10161,6 +10286,13 @@ fn exact_partial_prefix_bound_decision(
                 work_item,
                 decision,
             );
+        let decision =
+            maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half(
+                step_index,
+                admissibility,
+                work_item,
+                decision,
+            );
         #[cfg(test)]
         maybe_capture_pruned_terminal_prefix(work_item, decision);
         return decision;
@@ -10293,7 +10425,13 @@ fn exact_partial_prefix_bound_decision(
             work_item,
             ExactPartialPrefixBoundDecision::CannotClearBar,
         );
-    maybe_override_claim_step_fifteen_reference_reference_tail_mismatch_three_clause_four(
+    let decision = maybe_override_claim_step_fifteen_reference_reference_tail_mismatch_three_clause_four(
+        step_index,
+        admissibility,
+        work_item,
+        decision,
+    );
+    maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half(
         step_index,
         admissibility,
         work_item,
@@ -27066,6 +27204,172 @@ mod tests {
             .into_iter()
             .collect(),
             "the mismatch-0 reference-tail exact-summary relief should widen only the clause-4 reference half from 18 to 28 per live pair while leaving the claim-next-bridge half unchanged"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_stays_a_broader_tradeoff_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, _clause_one), _count)| *mismatch == Some(0_usize))
+                .collect::<BTreeMap<_, _>>();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, _clause_one, _clause_four), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let clause_four_five_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_four, _clause_five), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4763);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 517,
+            "relaxing remaining-two exact partial-prefix screening on the whole mismatch-0 claim-next-bridge half should narrow the clean wall, but it still remains only a broader tradeoff because the noncanonical survivor shell grows even more aggressively than the earlier remaining-one tradeoff"
+        );
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.incumbent_dominance, 3,
+            "the mismatch-0 claim-next-bridge-half exact partial-prefix relief should keep the residual single-bucket incumbent fence unchanged"
+        );
+        assert_eq!(wall_summary.capture_count, 517);
+        assert_eq!(
+            wall_summary.remaining_clause_slot_counts,
+            [(2_usize, 415_usize), (3, 102)].into_iter().collect(),
+            "the mismatch-0 claim-next-bridge-half exact partial-prefix relief should contract only the remaining-two wall while leaving the smaller remaining-three spill unchanged"
+        );
+        assert_eq!(
+            wall_summary.first_mismatch_position_counts,
+            [
+                (Some(0_usize), 276_usize),
+                (Some(1), 177),
+                (Some(2), 50),
+                (Some(3), 14)
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-0 claim-next-bridge-half exact partial-prefix relief should contract only the first-mismatch-0 tier"
+        );
+        assert_eq!(
+            zero_summary.captured_prefixes, 2271,
+            "the broader exact partial-prefix relief should still sit on the same zero-admitted late shell; it only converts more of that shell from exact-pruned wall pressure into generated survivor mass"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3456,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the mismatch-0 claim-next-bridge-half exact partial-prefix relief should widen the noncanonical small-cluster shell even beyond the earlier remaining-one tradeoff"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the mismatch-0 claim-next-bridge-half exact partial-prefix relief should still keep the isolated single pocket fenced"
+        );
+        assert_eq!(
+            pair_counts,
+            [
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain"
+                    ),
+                    36_usize
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_sharp_codomain"
+                    ),
+                    36
+                ),
+                ((Some(0_usize), "claim_eventual_domain", "reference"), 36),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_next_codomain"),
+                    36
+                ),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_sharp_codomain"),
+                    36
+                ),
+                ((Some(0_usize), "claim_flat_domain", "reference"), 36),
+            ]
+            .into_iter()
+            .collect(),
+            "the mismatch-0 claim-next-bridge-half exact partial-prefix relief should contract every live mismatch-0 pair by the same six-capture spread instead of isolating one representative branch"
+        );
+        assert_eq!(clause_four_counts.len(), 12);
+        assert_eq!(
+            clause_four_counts
+                .values()
+                .copied()
+                .collect::<std::collections::BTreeSet<_>>(),
+            [18_usize].into_iter().collect(),
+            "the broader exact partial-prefix relief should equalize both clause-4 branches at the same 18-capture floor per live pair rather than preserving the old 24 / 18 split"
+        );
+        assert_eq!(
+            clause_four_five_counts,
+            [
+                (
+                    (Some(0_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    36_usize
+                ),
+                (
+                    (Some(0_usize), "claim_next_bridge", "claim_next_codomain"),
+                    36
+                ),
+                ((Some(0_usize), "claim_next_bridge", "reference"), 36),
+                ((Some(0_usize), "reference", "claim_flat_codomain"), 36),
+                ((Some(0_usize), "reference", "claim_next_codomain"), 36),
+                ((Some(0_usize), "reference", "reference"), 36),
+            ]
+            .into_iter()
+            .collect(),
+            "the broader exact partial-prefix relief should spread its wall contraction across every live clause-4/clause-5 cell on the mismatch-0 tier, which is why it remains a broader tradeoff rather than the landed repair"
         );
     }
 

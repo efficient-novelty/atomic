@@ -136,6 +136,14 @@ Do not:
   relocalization now only reproduces the older broader clause-`4`
   `reference`-sheet tradeoff and belongs in the autonomy ledger rather than as
   a fresh lead
+- reopen the broader remaining-two exact partial-prefix relief on the whole
+  mismatch-`0` clause-`4` `claim_next_bridge` half first either; if the live
+  docs already pin that release at canonical `103 / 8` with
+  `4763 / 517 / 2271`, a fenced `single` pocket, and widened
+  `small_cluster = 3456 / 522 / 522 / 0` while every live mismatch-`0`
+  clause-`4` / clause-`5` cell equalizes to `36`, that broader exact-screen
+  release also belongs to the autonomy ledger rather than as a fresh repair
+  lead
 - split the exact claim-pair clause-`4` `claim_next_bridge` half into the
   claim-flat or claim-sharp single-sheet relocalizations first; those smaller
   tradeoff controls now also belong in the autonomy ledger rather than as a

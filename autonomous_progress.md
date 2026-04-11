@@ -1499,6 +1499,27 @@ Until that exists, wording stays at `bounded live recovery`.
   clause-`4`, and clause-`2` lattice is frozen, the first fresh lever moves
   back to the step-`15` exact-screen engine path rather than to another
   connectivity-family retry.
+- The first exact-screen engine probe above that spent connectivity lattice is
+  now also spent as a broader tradeoff control:
+  - relaxing remaining-two `exact_partial_prefix_bound_decision(...)` on the
+    whole mismatch-`0` clause-`4` `claim_next_bridge` half lands
+    `4763 / 517 / 2271`
+  - accepted step `15` stays canonical `103 / 8`
+  - `incumbent_dominance` stays `3` and the isolated `single` pocket stays
+    fenced
+  - `small_cluster` widens to `3456 / 522 / 522 / 0`
+  - every live mismatch-`0` clause-`0` / clause-`1` pair contracts from `42`
+    to `36`
+  - both clause-`4` branches equalize at `18` per live pair
+  - all six live clause-`4` / clause-`5` cells equalize at `36`
+  - zero-admitted captures stay `2271`
+- Consequence: broad remaining-two exact partial-prefix relief on the whole
+  mismatch-`0` `claim_next_bridge` half is not the landed repair either. It
+  converts more of the same zero-admitted shell from exact-pruned wall pressure
+  into generated survivor mass, so the next honest follow-on has to stay below
+  that broad release and split the remaining-two exact-screen class by active
+  clause-`5` cell or another narrower remaining-two selector rather than
+  reopening connectivity or deeper remaining-one relands.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh

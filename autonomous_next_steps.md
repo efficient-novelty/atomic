@@ -143,6 +143,19 @@ probes only removes the same two targeted remaining-two parent cells plus
 clause-`5` bucket, so the next honest slice has to stay above those
 clause-`2` sheet splits too.
 
+Most recently on the exact-screen engine path, the first broader
+remaining-two follow-on above that spent connectivity lattice was also spent.
+Relaxing `exact_partial_prefix_bound_decision(...)` on the whole mismatch-`0`
+clause-`4` `claim_next_bridge` half lands `4763 / 517 / 2271`, keeps the
+canonical `103 / 8` winner and the fenced `single` pocket, but widens
+`small_cluster` to `3456 / 522 / 522 / 0` while contracting every live
+mismatch-`0` pair to `36`, equalizing both clause-`4` branches to `18`, and
+equalizing all six live clause-`4` / clause-`5` cells to `36`. The next
+honest slice therefore has to stay below this broad whole-half exact-screen
+release and split that remaining-two exact-screen class by active
+clause-`5` cell or another narrower remaining-two selector rather than
+reopening connectivity or deeper remaining-one relands.
+
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
 reproduces the same breadth-only miss, so step `1` stays deferred unless a
@@ -234,6 +247,27 @@ later stored bundle changes the diagnosis.
   identity inside that representative mismatch-`0` parent shell either; the
   next honest follow-on has to stay above those clause-`2` sheet splits too
   and move to a different code-side repair class.
+- The first exact-screen engine probe above that spent connectivity lattice is
+  now also spent as a broader tradeoff control:
+  - relaxing remaining-two `exact_partial_prefix_bound_decision(...)` on the
+    whole mismatch-`0` clause-`4` `claim_next_bridge` half lands
+    `4763 / 517 / 2271`
+  - accepted step `15` stays canonical `103 / 8`
+  - `incumbent_dominance` stays `3` and the isolated `single` pocket stays
+    fenced
+  - `small_cluster` widens to `3456 / 522 / 522 / 0`
+  - every live mismatch-`0` clause-`0` / clause-`1` pair contracts from `42`
+    to `36`
+  - both clause-`4` branches equalize at `18` per live pair
+  - all six live clause-`4` / clause-`5` cells equalize at `36`
+  - zero-admitted captures stay `2271`
+- Any remaining step-`15` leverage is therefore no longer on that broad
+  whole-half exact-screen release either; it narrows the wall only by turning
+  more of the same zero-admitted mismatch-`0` shell into generated survivor
+  mass. The next honest follow-on has to stay below that broad release and
+  split the remaining-two exact-screen class by active clause-`5` cell or
+  another narrower remaining-two selector rather than reopening connectivity
+  or deeper remaining-one relands.
 - The first fresh post-rerun code-side repair probe on the mismatch-`0`
   exact-summary ladder is now also spent:
   - reopening both representative claim-side clause-`2` sheets together, but
@@ -2006,6 +2040,18 @@ later stored bundle changes the diagnosis.
   targeted remaining-two parent cells plus `12` removed remaining-one
   pruned prefixes on the chosen active clause-`5` bucket, with no off-target
   capture or prune family introduced
+- the first exact-screen engine probe above that spent connectivity lattice is
+  also pinned as a broader tradeoff control rather than the landed repair:
+  relaxing remaining-two `exact_partial_prefix_bound_decision(...)` on the
+  whole mismatch-`0` clause-`4` `claim_next_bridge` half lands
+  `4763 / 517 / 2271`, keeps accepted step `15` canonical `103 / 8`, keeps
+  the isolated `single` pocket fenced, but widens
+  `small_cluster` to `3456 / 522 / 522 / 0`
+- that broader exact-screen release is also localized as a uniform live-tier
+  contraction rather than a safe focused repair:
+  every live mismatch-`0` clause-`0` / clause-`1` pair contracts to `36`,
+  both clause-`4` branches equalize at `18`, all six live clause-`4` /
+  clause-`5` cells equalize at `36`, and zero-admitted captures stay `2271`
 - the next operational slice stays above the exhausted claim-safe,
   representative mismatch-`0`, `reference / reference`, isolated
   clause-`1` exact-suffix, representative claim-side clause-`6`
@@ -2026,9 +2072,11 @@ later stored bundle changes the diagnosis.
   active-window and self-contained clause-`4` `claim_next_bridge` splits
   too, plus the representative mismatch-`0` claim-side clause-`2` sheet
   splits on the parent-route, active-window, and self-contained shells too,
-  while now targeting a different code-side step-`15` repair class above
-  both clause-`4` branch splits, above those exhausted clause-`2` sheet
-  splits, and above the exhausted parent-level qualification-family lattice
+  plus the broader remaining-two exact partial-prefix release on the whole
+  mismatch-`0` `claim_next_bridge` half too, while now targeting a narrower
+  remaining-two exact-screen class below that broad release, above deeper
+  remaining-one relands, and still above the exhausted
+  parent-level qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

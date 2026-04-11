@@ -1451,3 +1451,26 @@ This file is the append-only history for `desktop_claim_shadow`.
   Consequence: the active slice must now move to a different code-side repair
   class above both clause-`4` branch splits and above these clause-`2` sheet
   splits instead of reopening another selector inside the same parent shell.
+- Scope: test the first broader exact-screen follow-on above that spent
+  connectivity lattice by relaxing remaining-two
+  `exact_partial_prefix_bound_decision(...)` on the whole mismatch-`0`
+  clause-`4` `claim_next_bridge` half.
+  Result: the broader exact-screen release keeps accepted step `15`
+  canonical at `103 / 8` and keeps the isolated `single` pocket fenced, but
+  it still lands only a broader tradeoff control:
+  - generated breadth rises to `4763`
+  - partial-prefix bar failures contract to `517`
+  - `incumbent_dominance` stays `3`
+  - zero-admitted captures stay `2271`
+  - `small_cluster` widens to `3456 / 522 / 522 / 0`
+  - every live mismatch-`0` clause-`0` / clause-`1` pair contracts from `42`
+    to `36`
+  - both clause-`4` branches equalize at `18` per live pair
+  - all six live clause-`4` / clause-`5` cells equalize at `36`
+  Consequence: broad remaining-two exact partial-prefix relief on the whole
+  mismatch-`0` `claim_next_bridge` half is spent too. It narrows the wall
+  only by converting more of the same zero-admitted shell into generated
+  survivor mass, so the next honest probe has to stay below that broad
+  release and split the remaining-two exact-screen class by active
+  clause-`5` cell or another narrower remaining-two selector rather than
+  reopening connectivity or deeper remaining-one relands.

@@ -376,6 +376,14 @@ Focus on:
   now a ruled-out widening control owned by the autonomous docs and ledger, so
   read those files before touching exact-bound relief on the current step-`15`
   wall
+- keep the next repair above the broader remaining-two exact partial-prefix
+  relief on the whole mismatch-`0` clause-`4` `claim_next_bridge` half; that
+  probe now lands only a broader `4763 / 517 / 2271` tradeoff with canonical
+  `103 / 8` and a fenced `single` pocket, but it widens
+  `small_cluster` to `3456 / 522 / 522 / 0` and equalizes every live
+  mismatch-`0` clause-`4` / clause-`5` cell to `36`, so route to the live
+  docs before reopening that broad exact-screen release as if it were the
+  landing
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by
