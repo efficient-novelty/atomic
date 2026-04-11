@@ -1400,3 +1400,54 @@ This file is the append-only history for `desktop_claim_shadow`.
   parent-route and alternate families rather than cycling among
   clause-`4` families or dropping back to narrower clause-`3` / clause-`6`
   selectors.
+
+## 2026-04-11
+
+- Scope: test the representative mismatch-`0` claim-side clause-`2` sheet
+  splits above the exhausted parent-level qualification-family lattice and
+  above both clause-`4` branch splits by narrowing the parent-route shell to
+  each clause-`2` sheet on both active clause-`5` buckets.
+  Result: on both active clause-`5` families, the
+  `claim_flat_domain` and `claim_sharp_codomain` clause-`2` sheets each
+  reland unsafe noncanonical `60 / 8` with `retained = 1`,
+  `generated = 4379`, `partial_prefix_bar_failure = 549`, and
+  `small_cluster = 2871 / 435 / 435 / 111`, while the sibling
+  clause-`2` `reference` sheet relands unsafe noncanonical `74 / 8` with
+  `retained = 1`, the same `4379 / 549`, and
+  `small_cluster = 2844 / 426 / 426 / 120`. Each split keeps the `single`
+  pocket fenced and localizes its delta to only two targeted remaining-two
+  parent cells plus `12` removed remaining-one pruned prefixes on the chosen
+  active clause-`5` bucket, with no off-target family introduced.
+  Consequence: clause-`2` identity on the representative parent-route shell
+  is now spent too. It only relands unsafe controls rather than a fresh clean
+  repair, so the next honest probe has to stay above those clause-`2`
+  selectors.
+- Scope: test the sibling clause-`2` sheet splits above that same
+  clause-`4` / parent-qualification lattice inside the alternate
+  active-window and self-contained qualification families on both active
+  clause-`5` buckets.
+  Result: on either alternate family, the `claim_flat_domain` and
+  `claim_sharp_codomain` clause-`2` sheets reland the same smaller unsafe
+  `60 / 8` with `retained = 1`, `generated = 4379`,
+  `partial_prefix_bar_failure = 549`, and
+  `small_cluster = 2880 / 486 / 486 / 108`, while the sibling
+  clause-`2` `reference` sheet relands a different unsafe matched control
+  with noncanonical `60 / 8`, `retained = 2`, the same `4379 / 549`, and
+  `small_cluster = 2844 / 468 / 468 / 127`. Each split removes the same two
+  targeted remaining-two parent cells plus `12` removed remaining-one pruned
+  prefixes on the chosen active clause-`5` bucket and introduces no
+  off-target family.
+  Consequence: the alternate active-window and self-contained clause-`2`
+  sheet splits are spent too. They stay matched across both alternate
+  families and both active clause-`5` buckets, so the next honest probe has
+  to move above those clause-`2` selectors as well rather than reopening
+  another narrower split inside the same representative parent shell.
+- Scope: decide the next honest repair class after exhausting the
+  representative mismatch-`0` claim-side clause-`2` sheet splits above the
+  clause-`4` and parent-level qualification lattices.
+  Result: the parent-route, active-window, and self-contained clause-`2`
+  selectors all reland unsafe controls rather than the canonical
+  `103 / 8` winner.
+  Consequence: the active slice must now move to a different code-side repair
+  class above both clause-`4` branch splits and above these clause-`2` sheet
+  splits instead of reopening another selector inside the same parent shell.

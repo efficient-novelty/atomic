@@ -382,6 +382,13 @@ Focus on:
   `reference`-side relocalization too; that sharper negative control now also
   belongs to [../../autonomous_ledger.md](../../autonomous_ledger.md), so
   route to the live docs before retrying that same connectivity-only slice
+- keep the next repair above the representative mismatch-`0` claim-side
+  clause-`2` sheet splits on the parent-route, active-window, and
+  self-contained shells too; if the live docs already pin those sheet splits
+  at unsafe `4379 / 549` controls, with the parent-route `reference` sheet
+  only changing the noncanonical winner to `74 / 8` and the alternate
+  `reference` sheet reopening a two-retained unsafe control, route there
+  instead of treating clause-`2` identity as fresh leverage
 - keep the next repair above remaining-one exact-summary relief on the
   mismatch-`0` clause-`4` `reference` plus clause-`5` `reference` tail too;
   that deeper negative control now also belongs to

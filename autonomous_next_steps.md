@@ -40,7 +40,8 @@ active-window and self-contained families too, and above the sibling
 clause-`4` `claim_next_bridge` split on that same representative parent-route
 shell, and above the matched alternate clause-`4`
 `claim_next_bridge` splits on those same active-window and self-contained
-families too before reopening narrower clause-`3` / clause-`6` selectors.
+families too before reopening narrower clause-`2` / clause-`3` /
+clause-`6` selectors.
 The scoped historical-reanchor route on each
 active clause-`5` `claim_flat_codomain / reference` family qualified its
 targeted claim-side parent shell, yet the broad full surfaces relanded unsafe
@@ -122,6 +123,26 @@ and self-contained clause-`4` `claim_next_bridge` splits above that same
 lattice too, and the looser representative claim-safe backup frozen as
 controls rather than fresh leads.
 
+Most recently, the representative mismatch-`0` claim-side clause-`2` sheet
+splits above that exhausted parent-level and clause-`4` lattice were spent
+too. On the representative parent-route shell, the two claim-side sheets
+reland unsafe noncanonical `60 / 8` with `retained = 1`,
+`generated = 4379`, `partial_prefix_bar_failure = 549`, and
+`small_cluster = 2871 / 435 / 435 / 111`, while the sibling `reference`
+sheet relands unsafe noncanonical `74 / 8` with `retained = 1`, the same
+`4379 / 549`, and `small_cluster = 2844 / 426 / 426 / 120`. On the
+alternate active-window and self-contained shells, the two claim-side sheets
+reland the same smaller unsafe `60 / 8` with `retained = 1`,
+`generated = 4379`, `partial_prefix_bar_failure = 549`, and
+`small_cluster = 2880 / 486 / 486 / 108`, while the sibling `reference`
+sheet relands a different unsafe matched control with noncanonical `60 / 8`,
+`retained = 2`, the same `4379 / 549`, and
+`small_cluster = 2844 / 468 / 468 / 127`. Every one of those clause-`2`
+probes only removes the same two targeted remaining-two parent cells plus
+`12` matching remaining-one pruned prefixes on the chosen active
+clause-`5` bucket, so the next honest slice has to stay above those
+clause-`2` sheet splits too.
+
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
 reproduces the same breadth-only miss, so step `1` stays deferred unless a
@@ -185,6 +206,34 @@ later stored bundle changes the diagnosis.
 - The newer stored rerun has now done its job: it confirmed the step-`15`
   reset rather than changing the diagnosis enough to justify reopening step
   `1`.
+- Above the exhausted parent-level qualification-family lattice and above
+  both clause-`4` branch splits, the representative mismatch-`0` claim-side
+  clause-`2` sheet splits are now also spent across both active clause-`5`
+  families:
+  - on the representative parent-route shell, the `claim_flat_domain` and
+    `claim_sharp_codomain` sheets reland unsafe noncanonical `60 / 8` with
+    `retained = 1`, `generated = 4379`,
+    `partial_prefix_bar_failure = 549`, and
+    `small_cluster = 2871 / 435 / 435 / 111`, while the sibling
+    `reference` sheet relands unsafe noncanonical `74 / 8` with
+    `retained = 1`, the same `4379 / 549`, and
+    `small_cluster = 2844 / 426 / 426 / 120`
+  - on the alternate active-window and self-contained shells, the two
+    claim-side clause-`2` sheets reland the same smaller unsafe `60 / 8`
+    with `retained = 1`, `generated = 4379`,
+    `partial_prefix_bar_failure = 549`, and
+    `small_cluster = 2880 / 486 / 486 / 108`, while the sibling
+    `reference` sheet relands a different unsafe matched control with
+    noncanonical `60 / 8`, `retained = 2`, the same `4379 / 549`, and
+    `small_cluster = 2844 / 468 / 468 / 127`
+  - every one of those clause-`2` probes is localized to the same two
+    targeted remaining-two parent cells plus `12` removed remaining-one
+    pruned prefixes on the chosen active clause-`5` bucket, with no
+    off-target family introduced
+- Any remaining step-`15` leverage is therefore no longer on clause-`2`
+  identity inside that representative mismatch-`0` parent shell either; the
+  next honest follow-on has to stay above those clause-`2` sheet splits too
+  and move to a different code-side repair class.
 - The first fresh post-rerun code-side repair probe on the mismatch-`0`
   exact-summary ladder is now also spent:
   - reopening both representative claim-side clause-`2` sheets together, but
@@ -1678,6 +1727,33 @@ later stored bundle changes the diagnosis.
   same `incumbent_dominance = 113`, the same
   `small_cluster = 2871 / 435 / 435 / 111`, and the same reopened `single`
   bucket
+- another representative mismatch-`0` claim-side parent-route clause-`2`
+  `claim_flat_domain` or `claim_sharp_codomain` split on either active
+  clause-`5` `claim_flat_codomain / reference` bucket; those claim-side
+  sheet refinements now only reland unsafe `4379 / 549` with noncanonical
+  `60 / 8`, `retained = 1`, `small_cluster = 2871 / 435 / 435 / 111`, the
+  same fenced `single` bucket, and the same two-cell plus
+  `12`-pruned-prefix delta
+- another representative mismatch-`0` claim-side parent-route clause-`2`
+  `reference` split on either active clause-`5`
+  `claim_flat_codomain / reference` bucket; that sibling sheet refinement
+  now relands unsafe `4379 / 549` on a different noncanonical `74 / 8`
+  winner with `retained = 1`, `small_cluster = 2844 / 426 / 426 / 120`, a
+  still-fenced `single` bucket, and the same two-cell plus
+  `12`-pruned-prefix delta
+- another representative mismatch-`0` claim-side active-window or
+  self-contained clause-`2` `claim_flat_domain` or `claim_sharp_codomain`
+  split on either active clause-`5` `claim_flat_codomain / reference`
+  bucket; those narrower alternate sheet refinements now only reland unsafe
+  `4379 / 549` with noncanonical `60 / 8`, `retained = 1`,
+  `small_cluster = 2880 / 486 / 486 / 108`, the same fenced `single`
+  bucket, and the same two-cell plus `12`-pruned-prefix delta
+- another representative mismatch-`0` claim-side active-window or
+  self-contained clause-`2` `reference` split on either active clause-`5`
+  `claim_flat_codomain / reference` bucket; that sibling alternate sheet
+  refinement now relands unsafe noncanonical `60 / 8` with `retained = 2`,
+  `small_cluster = 2844 / 468 / 468 / 127`, and the same two-cell plus
+  `12`-pruned-prefix delta
 - another whole joint clause-`3` continuation reopen under that same
   representative clause-`6` `reference` shell
 - another representative claim-flat parent/child-shell completion pass that
@@ -1900,6 +1976,32 @@ later stored bundle changes the diagnosis.
   bucket, the same `11 / 11 / 12` clause-`2` spread, the same
   `20 / 14` clause-`4` split, and the same chosen active clause-`4` plus
   clause-`5` bucket at `44`
+- the representative mismatch-`0` claim-side parent-route clause-`2` sheet
+  splits are also pinned across both active clause-`5`
+  `claim_flat_codomain / reference` buckets as unsafe controls rather than
+  fresh repairs: the `claim_flat_domain` and `claim_sharp_codomain` sheets
+  reland noncanonical `60 / 8` with `retained = 1`,
+  `generated = 4379`, `partial_prefix_bar_failure = 549`, and
+  `small_cluster = 2871 / 435 / 435 / 111`, while the sibling `reference`
+  sheet relands noncanonical `74 / 8` with `retained = 1`, the same
+  `4379 / 549`, and `small_cluster = 2844 / 426 / 426 / 120`
+- those representative parent-route clause-`2` splits are also localized to
+  only two targeted remaining-two parent cells plus `12` removed
+  remaining-one pruned prefixes on the chosen active clause-`5` bucket, with
+  no off-target capture or prune family introduced
+- the matched alternate active-window and self-contained clause-`2` sheet
+  splits are also pinned across both active clause-`5`
+  `claim_flat_codomain / reference` buckets as smaller unsafe controls rather
+  than fresh repairs: the two claim-side sheets reland noncanonical
+  `60 / 8` with `retained = 1`, `generated = 4379`,
+  `partial_prefix_bar_failure = 549`, and
+  `small_cluster = 2880 / 486 / 486 / 108`, while the sibling `reference`
+  sheet relands unsafe noncanonical `60 / 8` with `retained = 2`, the same
+  `4379 / 549`, and `small_cluster = 2844 / 468 / 468 / 127`
+- those alternate clause-`2` splits are also localized to the same two
+  targeted remaining-two parent cells plus `12` removed remaining-one
+  pruned prefixes on the chosen active clause-`5` bucket, with no off-target
+  capture or prune family introduced
 - the next operational slice stays above the exhausted claim-safe,
   representative mismatch-`0`, `reference / reference`, isolated
   clause-`1` exact-suffix, representative claim-side clause-`6`
@@ -1918,9 +2020,11 @@ later stored bundle changes the diagnosis.
   clause-`4` `reference` splits too, plus the sibling parent-route
   clause-`4` `claim_next_bridge` split too, plus the matched alternate
   active-window and self-contained clause-`4` `claim_next_bridge` splits
-  too, while now targeting a different code-side step-`15` repair class
-  above both clause-`4` branch splits and above the exhausted parent-level
-  qualification-family lattice
+  too, plus the representative mismatch-`0` claim-side clause-`2` sheet
+  splits on the parent-route, active-window, and self-contained shells too,
+  while now targeting a different code-side step-`15` repair class above
+  both clause-`4` branch splits, above those exhausted clause-`2` sheet
+  splits, and above the exhausted parent-level qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

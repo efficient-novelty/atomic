@@ -1454,6 +1454,50 @@ Until that exists, wording stays at `bounded live recovery`.
   honest follow-on has to stay above both clause-`4` branch splits across the
   parent-route and alternate families rather than cycling among clause-`4`
   families or dropping back to narrower clause-`3` / clause-`6` selectors.
+- The representative mismatch-`0` claim-side clause-`2` sheet splits above
+  that exhausted parent-level qualification-family lattice and above both
+  clause-`4` branch splits are now also spent across both active clause-`5`
+  families:
+  - on the representative parent-route shell, the `claim_flat_domain` and
+    `claim_sharp_codomain` clause-`2` overrides each reland unsafe
+    noncanonical `60 / 8` with `retained = 1`, `generated = 4379`,
+    `partial_prefix_bar_failure = 549`, and
+    `small_cluster = 2871 / 435 / 435 / 111`, while the sibling
+    clause-`2` `reference` override relands unsafe noncanonical `74 / 8` with
+    `retained = 1`, the same `4379 / 549`, and
+    `small_cluster = 2844 / 426 / 426 / 120`
+  - every parent-route clause-`2` split keeps the `single` pocket fenced at
+    `3` residual prunes plus `1` fully scored non-winner and localizes its
+    delta to only two targeted remaining-two parent cells plus `12` removed
+    remaining-one pruned prefixes on the chosen active clause-`5` bucket,
+    with no off-target family introduced
+- The sibling clause-`2` sheet splits inside the alternate active-window and
+  self-contained qualification families are now also spent across both active
+  clause-`5` families:
+  - on either alternate family, the `claim_flat_domain` and
+    `claim_sharp_codomain` clause-`2` overrides reland the same smaller
+    unsafe `60 / 8` with `retained = 1`, `generated = 4379`,
+    `partial_prefix_bar_failure = 549`, and
+    `small_cluster = 2880 / 486 / 486 / 108`
+  - the sibling clause-`2` `reference` override on either alternate family
+    relands a different unsafe matched control with noncanonical `60 / 8`,
+    `retained = 2`, the same `4379 / 549`, and
+    `small_cluster = 2844 / 468 / 468 / 127`
+  - every alternate-family clause-`2` split localizes to the same two
+    targeted remaining-two parent cells plus `12` removed remaining-one
+    pruned prefixes on the chosen active clause-`5` bucket, with no
+    off-target family introduced
+- Consequence: even above the exhausted parent-level qualification-family
+  lattice and above both clause-`4` branch splits, clause-`2` identity on
+  the representative parent-route, active-window, and self-contained shells
+  is now spent as unsafe control rather than the missing clean repair. The
+  next honest follow-on has to stay above these clause-`2` sheet splits too
+  and move to a different code-side repair class rather than reopening
+  another selector inside the same parent shell.
+- Do not reopen representative claim-side clause-`2` sheet identity first on
+  the parent-route, active-window, or self-contained shells; those clause-`2`
+  splits now belong to the live autonomy docs and ledger rather than as fresh
+  leads.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

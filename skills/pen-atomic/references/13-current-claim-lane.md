@@ -212,6 +212,18 @@ Do not:
   `24`-pruned-prefix targeted delta on the chosen active clause-`5` bucket,
   that broader route split also belongs to the autonomy ledger rather than as
   a fresh repair lead
+- reopen representative mismatch-`0` claim-side clause-`2` sheet identity
+  first either; if the live docs already pin the parent-route
+  `claim_flat_domain / claim_sharp_codomain` sheets at unsafe `4379 / 549`
+  with noncanonical `60 / 8`, `retained = 1`, and
+  `small_cluster = 2871 / 435 / 435 / 111`, the sibling parent-route
+  `reference` sheet at unsafe noncanonical `74 / 8` with the same
+  `4379 / 549` and `small_cluster = 2844 / 426 / 426 / 120`, and the
+  alternate active-window / self-contained clause-`2` sheets as matched
+  smaller unsafe controls with the sibling alternate `reference` sheet
+  reopening a two-retained unsafe `60 / 8` at
+  `small_cluster = 2844 / 468 / 468 / 127`, that clause-`2` axis also
+  belongs to the autonomy ledger rather than as a fresh repair lead
 - reopen the first alternate representative mismatch-`0` claim-side
   active-window qualification family first either; if the live docs already
   pin both active clause-`5` `claim_flat_codomain / reference` probes at the
