@@ -402,6 +402,15 @@ Focus on:
   `claim_next_bridge` plus `claim_next_codomain` bucket contraction, route
   there instead of reopening exact-screen pair identity as if one
   representative pair were newly privileged
+- keep the next repair above the representative exact-screen pair-cell
+  clause-`2` split inside that same `claim_next_codomain` cell too; once the
+  live docs pin the `claim_flat_domain` and `claim_sharp_codomain` sheets at
+  the same `4343 / 552 / 2271` smaller tradeoff with first-mismatch counts
+  `311 / 177 / 50 / 14`, `small_cluster generated = 3141`, and a targeted
+  `23 / 18` clause-`4` split plus `47` active clause-`5` bucket, while the
+  sibling `reference` sheet is neutral on the untouched
+  `4331 / 553 / 2271` baseline, route there instead of reopening exact-screen
+  clause-`2` identity as if one claim-side sheet were newly privileged
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by

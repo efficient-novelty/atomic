@@ -1534,3 +1534,32 @@ This file is the append-only history for `desktop_claim_shadow`.
   pair-cell lattice and localize a representative claim-side clause-`2`
   sheet inside that same exact-screen pair rather than re-running pair-cell
   identity.
+- Scope: split the representative exact-screen pair cell
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+  claim_next_codomain` one layer deeper across its clause-`2` sheets.
+  Result: the two claim-side sheets are matching smaller tradeoff controls
+  while the sibling `reference` sheet is neutral:
+  - `claim_flat_domain` lands `4343 / 552 / 2271`, keeps accepted step `15`
+    canonical `103 / 8`, keeps `incumbent_dominance = 3`, shifts
+    first-mismatch counts only to `311 / 177 / 50 / 14`, widens
+    `small_cluster` only to generated `3141`, shifts the representative
+    clause-`2` spread to `14 / 15 / 12`, contracts the representative
+    clause-`4` split only to `23 / 18`, and contracts the representative
+    `claim_next_bridge` plus clause-`5` `claim_next_codomain` bucket only to
+    `47`
+  - `claim_sharp_codomain` lands the same `4343 / 552 / 2271` tradeoff with
+    the same fences, the same `311 / 177 / 50 / 14`, the same
+    `small_cluster generated = 3141`, the mirrored representative
+    clause-`2` spread `15 / 14 / 12`, the same `23 / 18` clause-`4` split,
+    and the same `47` active clause-`5` bucket
+  - the sibling `reference` sheet is a neutral control on the untouched
+    `4331 / 553 / 2271` baseline with first-mismatch counts
+    `312 / 177 / 50 / 14` and `small_cluster generated = 3132`
+  Consequence: clause-`2` identity inside that representative exact-screen
+  pair cell is spent too. The pair-cell tradeoff is exactly the union of the
+  two claim-side sheets while the sibling `reference` sheet stays inert, so
+  the next honest probe has to stay below this clause-`2` split and localize
+  a representative clause-`6` continuation inside the `claim_flat_domain`
+  sheet rather than reopening the sibling claim-side sheet, the neutral
+  `reference` sheet, sibling exact-screen pairs, or deeper remaining-one
+  relands.

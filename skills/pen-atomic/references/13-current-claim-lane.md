@@ -182,6 +182,15 @@ Do not:
   `48 -> 46` `claim_next_bridge` plus `claim_next_codomain` bucket
   contraction, that exact-screen pair lattice also belongs to the autonomy
   ledger rather than as a fresh repair lead
+- reopen the representative exact-screen pair-cell clause-`2` split inside
+  that same `claim_next_codomain` cell first either; if the live docs
+  already pin the `claim_flat_domain` and `claim_sharp_codomain` sheets at
+  the same `4343 / 552 / 2271` smaller tradeoff with first-mismatch counts
+  `311 / 177 / 50 / 14`, `small_cluster generated = 3141`, and a targeted
+  `23 / 18` clause-`4` split plus `47` active clause-`5` bucket, while the
+  sibling `reference` sheet is neutral on the untouched
+  `4331 / 553 / 2271` baseline, that exact-screen clause-`2` axis also
+  belongs to the autonomy ledger rather than as a fresh repair lead
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
   tradeoffs first; those smaller tradeoff controls now also belong in the

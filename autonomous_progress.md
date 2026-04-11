@@ -1562,6 +1562,33 @@ Until that exists, wording stays at `bounded live recovery`.
   that same `claim_next_bridge / claim_next_codomain` pair cell rather than
   reopening sibling exact-screen pairs or dropping into deeper remaining-one
   relands.
+- That representative exact-screen pair-cell clause-`2` split is now also
+  spent:
+  - on `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+    claim_next_codomain`, the `claim_flat_domain` and
+    `claim_sharp_codomain` sheets each land the same smaller
+    `4343 / 552 / 2271` tradeoff
+  - both keep accepted step `15` canonical `103 / 8` and keep
+    `incumbent_dominance = 3`
+  - both shift first-mismatch counts only to `311 / 177 / 50 / 14`
+  - both widen `small_cluster` only to generated `3141`
+  - each cuts only its own claim-side clause-`2` share from `15` to `14`,
+    shifts the representative clause-`2` spread to `14 / 15 / 12` or
+    `15 / 14 / 12`, contracts the representative clause-`4`
+    `claim_next_bridge / reference` split only to `23 / 18`, and contracts
+    the representative `claim_next_bridge` plus clause-`5`
+    `claim_next_codomain` bucket only from `48` to `47`
+  - the sibling `reference` sheet is a neutral control on the untouched
+    `4331 / 553 / 2271` baseline with first-mismatch counts
+    `312 / 177 / 50 / 14` and `small_cluster generated = 3132`
+- Consequence: clause-`2` identity inside that representative exact-screen
+  pair cell is now spent too. The pair-cell tradeoff is exactly the union of
+  the two claim-side sheets while the sibling reference sheet stays inert, so
+  the next honest follow-on has to stay below that spent clause-`2` split and
+  localize a representative clause-`6` continuation inside the
+  `claim_flat_domain` sheet of that same exact-screen pair rather than
+  reopening the sibling claim-side sheet, the neutral reference sheet, or
+  deeper remaining-one relands.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh

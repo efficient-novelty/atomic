@@ -169,12 +169,26 @@ keep zero-admitted captures fixed at `2271`, widen `small_cluster` only to
 `40`, contract only the targeted clause-`4` `claim_next_bridge` share from
 `24` to `22`, and contract only the targeted clause-`4`
 `claim_next_bridge` plus clause-`5` `claim_next_codomain` bucket from
-`48` to `46`. The next honest slice therefore has to stay below this
-now-spent exact-screen pair-cell lattice and localize a representative
-claim-side clause-`2` sheet inside the representative
+`48` to `46`. Narrowing that representative exact-screen pair cell one layer
+deeper across clause-`2` is now spent too: on
 `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
-claim_next_codomain` pair cell rather than reopening sibling exact-screen
-pairs or dropping into deeper remaining-one relands.
+claim_next_codomain`, the `claim_flat_domain` and `claim_sharp_codomain`
+sheets each land the same smaller `4343 / 552 / 2271` tradeoff, keep
+accepted step `15` canonical `103 / 8`, keep `incumbent_dominance = 3`,
+shift first-mismatch counts only to `311 / 177 / 50 / 14`, widen
+`small_cluster` only to generated `3141`, contract only the chosen
+claim-side clause-`2` share from `15` to `14`, contract the representative
+clause-`4` split only to `23 / 18`, and contract the representative
+`claim_next_bridge` plus clause-`5` `claim_next_codomain` bucket only from
+`48` to `47`, while the sibling `reference` sheet is a neutral control on
+the untouched `4331 / 553 / 2271` baseline. The next honest slice therefore
+has to stay below this now-spent exact-screen pair-cell clause-`2` lattice
+and localize a representative clause-`6` continuation inside the
+`claim_flat_domain` sheet on that same
+`claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+claim_next_codomain` pair cell rather than reopening the sibling claim-side
+sheet, the neutral reference sheet, sibling exact-screen pairs, or deeper
+remaining-one relands.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -327,6 +341,34 @@ later stored bundle changes the diagnosis.
   `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
   claim_next_codomain` pair cell rather than reopening sibling exact-screen
   pairs or dropping into deeper remaining-one relands.
+- That representative exact-screen pair-cell clause-`2` split is now also
+  spent:
+  - on `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+    claim_next_codomain`, the `claim_flat_domain` and
+    `claim_sharp_codomain` sheets each land the same smaller
+    `4343 / 552 / 2271` tradeoff
+  - both keep accepted step `15` canonical `103 / 8` and keep
+    `incumbent_dominance = 3`
+  - both shift first-mismatch counts only to `311 / 177 / 50 / 14`
+  - both widen `small_cluster` only to generated `3141`
+  - each cuts only its chosen claim-side clause-`2` share from `15` to `14`,
+    shifts the representative clause-`2` spread to `14 / 15 / 12` or
+    `15 / 14 / 12`, contracts the representative clause-`4`
+    `claim_next_bridge / reference` split only to `23 / 18`, and contracts
+    the representative `claim_next_bridge` plus clause-`5`
+    `claim_next_codomain` bucket only from `48` to `47`
+  - the sibling `reference` sheet is a neutral control on the untouched
+    `4331 / 553 / 2271` baseline with first-mismatch counts
+    `312 / 177 / 50 / 14` and `small_cluster generated = 3132`
+- Any remaining step-`15` leverage is therefore no longer on clause-`2`
+  identity inside that representative exact-screen pair cell either. The
+  pair-cell tradeoff is exactly the union of the two claim-side sheets while
+  the sibling reference sheet stays inert, so the next honest follow-on has
+  to stay below that spent clause-`2` split and localize a representative
+  clause-`6` continuation inside the `claim_flat_domain` sheet on that same
+  exact-screen pair rather than reopening the sibling claim-side sheet, the
+  neutral reference sheet, sibling exact-screen pairs, or deeper
+  remaining-one relands.
 - The first fresh post-rerun code-side repair probe on the mismatch-`0`
   exact-summary ladder is now also spent:
   - reopening both representative claim-side clause-`2` sheets together, but
@@ -1563,6 +1605,15 @@ later stored bundle changes the diagnosis.
   `42 -> 40` pair contraction, a targeted `24 / 18 -> 22 / 18` clause-`4`
   split, and a targeted `48 -> 46` `claim_next_bridge` plus
   `claim_next_codomain` bucket contraction
+- another exact-screen clause-`2` sheet reland inside the representative
+  `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
+  claim_next_codomain` pair cell; the `claim_flat_domain` and
+  `claim_sharp_codomain` sheets now match at the same smaller
+  `4343 / 552 / 2271` tradeoff with first-mismatch counts
+  `311 / 177 / 50 / 14`, `small_cluster generated = 3141`, and a targeted
+  `23 / 18` clause-`4` split plus `47` active clause-`5` bucket, while the
+  sibling `reference` sheet is neutral on the untouched
+  `4331 / 553 / 2271` baseline
 - exact remaining-two mismatch-`0` or mismatch-`1` clause-`5`
   bridge-slice reopenings
 - another exact claim-pair clause-`4` `reference`-side relocalization pass
@@ -2147,6 +2198,22 @@ later stored bundle changes the diagnosis.
   its targeted clause-`4` `claim_next_bridge` share from `24` to `22`, and
   only the chosen clause-`4` `claim_next_bridge` plus clause-`5`
   `claim_next_codomain` bucket from `48` to `46`
+- the representative exact-screen pair-cell clause-`2` split inside that same
+  `claim_next_codomain` cell is also pinned as a split smaller tradeoff
+  control rather than a fresh repair:
+  the `claim_flat_domain` and `claim_sharp_codomain` sheets each land
+  `4343 / 552 / 2271` with accepted step `15` canonical `103 / 8`,
+  `incumbent_dominance = 3`, first-mismatch counts `311 / 177 / 50 / 14`,
+  and `small_cluster generated = 3141`, while the sibling `reference` sheet
+  is neutral on the untouched `4331 / 553 / 2271` baseline
+- that representative exact-screen pair-cell clause-`2` split is also
+  localized as a one-sheet contraction rather than a distinct repair class:
+  each claim-side sheet cuts only its own clause-`2` share from `15` to `14`,
+  contracts the representative clause-`4` `claim_next_bridge / reference`
+  split only to `23 / 18`, and contracts the representative
+  `claim_next_bridge` plus clause-`5` `claim_next_codomain` bucket only from
+  `48` to `47`, while the sibling claim-side sheet and the sibling
+  `reference` sheet stay at `15` and `12`
 - the next operational slice stays above the exhausted claim-safe,
   representative mismatch-`0`, `reference / reference`, isolated
   clause-`1` exact-suffix, representative claim-side clause-`6`
@@ -2171,12 +2238,13 @@ later stored bundle changes the diagnosis.
   mismatch-`0` `claim_next_bridge` half too, plus its three narrower
   clause-`5` exact-screen cell splits too, plus the six narrower
   clause-`0` / clause-`1` exact-screen pair splits inside the representative
-  `claim_next_codomain` cell too, while now targeting a representative
-  claim-side clause-`2` sheet inside the
+  `claim_next_codomain` cell too, plus the representative exact-screen
+  pair-cell clause-`2` split there too, while now targeting a representative
+  clause-`6` continuation inside the `claim_flat_domain` sheet on the
   `claim_eventual_domain / claim_next_codomain / claim_next_bridge /
   claim_next_codomain` exact-screen pair cell below that spent exact-screen
-  pair lattice, above deeper remaining-one relands, and still above the
-  exhausted parent-level qualification-family lattice
+  pair and clause-`2` lattice, above deeper remaining-one relands, and still
+  above the exhausted parent-level qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`
