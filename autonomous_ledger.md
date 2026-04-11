@@ -1474,3 +1474,27 @@ This file is the append-only history for `desktop_claim_shadow`.
   release and split the remaining-two exact-screen class by active
   clause-`5` cell or another narrower remaining-two selector rather than
   reopening connectivity or deeper remaining-one relands.
+- Scope: split that broader remaining-two exact-screen release one layer
+  deeper across the mismatch-`0` clause-`4` `claim_next_bridge` clause-`5`
+  cells.
+  Result: the `claim_flat_codomain`, `claim_next_codomain`, and `reference`
+  clause-`5` cells each land the same smaller tradeoff control:
+  - generated breadth rises to `4475`
+  - partial-prefix bar failures contract to `541`
+  - `incumbent_dominance` stays `3`
+  - zero-admitted captures stay `2271`
+  - `small_cluster` widens to `3240 / 522 / 522 / 0`
+  - every live mismatch-`0` clause-`0` / clause-`1` pair contracts from `42`
+    to `40`
+  - the clause-`4` split contracts only from `24 / 18` to `22 / 18`
+  - each probe localizes to only its chosen `claim_next_bridge`
+    clause-`5` family, leaving the two sibling `claim_next_bridge` cells at
+    `48` and the whole `reference` half at `36`
+  Consequence: clause-`5` identity on the remaining-two exact-screen path is
+  spent too. The broader `4763 / 517 / 2271` release is exactly the union of
+  these three symmetric smaller tradeoffs, and the previously inert
+  `claim_next_codomain` cell is now live on the remaining-two exact-screen
+  path. The next honest probe has to move below that spent clause-`5` lattice
+  to a narrower remaining-two selector, most naturally a representative
+  clause-`0` / clause-`1` pair inside one chosen exact-screen cell, rather
+  than reopening connectivity or deeper remaining-one relands.

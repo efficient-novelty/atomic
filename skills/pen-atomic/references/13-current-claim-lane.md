@@ -164,6 +164,14 @@ Do not:
   remaining-one exact-summary relief as if it were already the landed repair;
   that wall-narrowing tradeoff still belongs in the autonomy docs and ledger
   rather than as a stable resolved lead
+- reopen the narrower remaining-two exact partial-prefix clause-`5`
+  `claim_flat_codomain`, `claim_next_codomain`, or `reference` split first;
+  if the live docs already pin all three cells at the same
+  `4475 / 541 / 2271` smaller tradeoff with widened
+  `small_cluster = 3240 / 522 / 522 / 0`, the same fenced `single` pocket,
+  the same `42 -> 40` pair contraction, and the same `24 / 18 -> 22 / 18`
+  clause-`4` split, those exact-screen cell relands also belong in the
+  autonomy ledger rather than as fresh repair leads
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
   tradeoffs first; those smaller tradeoff controls now also belong in the

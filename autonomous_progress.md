@@ -1520,6 +1520,30 @@ Until that exists, wording stays at `bounded live recovery`.
   that broad release and split the remaining-two exact-screen class by active
   clause-`5` cell or another narrower remaining-two selector rather than
   reopening connectivity or deeper remaining-one relands.
+- That broader exact-screen release now also splits cleanly one layer deeper
+  across its clause-`5` cells:
+  - the `claim_flat_codomain` cell lands `4475 / 541 / 2271`
+  - the `claim_next_codomain` cell lands the same `4475 / 541 / 2271`
+  - the `reference` cell lands the same `4475 / 541 / 2271`
+  - all three keep accepted step `15` canonical `103 / 8`,
+    `incumbent_dominance = 3`, and the isolated `single` pocket fenced
+  - all three widen `small_cluster` only to `3240 / 522 / 522 / 0`
+  - all three contract every live mismatch-`0` pair from `42` to `40`
+  - all three contract the clause-`4` split only from `24 / 18` to
+    `22 / 18`
+  - all three keep zero-admitted captures fixed at `2271`
+  - each single-cell probe localizes to only its chosen
+    `claim_next_bridge` clause-`5` family while leaving the two sibling
+    `claim_next_bridge` cells at `48` and the whole `reference` half at `36`
+- Consequence: clause-`5` identity on the remaining-two exact-screen path is
+  now spent too. The broad `4763 / 517 / 2271` release is exactly the union of
+  three symmetric smaller tradeoffs, and `claim_next_codomain` is now live on
+  this remaining-two exact-screen path even though it stayed inert on the
+  remaining-one exact-summary ladder. The next honest follow-on has to move
+  below that spent clause-`5` lattice and localize a representative
+  remaining-two exact-screen cell by clause-`0` / clause-`1` pair or another
+  narrower remaining-two selector rather than revisiting connectivity or deeper
+  remaining-one relands.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh

@@ -384,6 +384,14 @@ Focus on:
   mismatch-`0` clause-`4` / clause-`5` cell to `36`, so route to the live
   docs before reopening that broad exact-screen release as if it were the
   landing
+- keep the next repair above the narrower remaining-two exact partial-prefix
+  clause-`5` splits below that same `claim_next_bridge` half too; once the
+  live docs pin `claim_flat_codomain`, `claim_next_codomain`, and
+  `reference` at the same `4475 / 541 / 2271` smaller tradeoff with widened
+  `small_cluster = 3240 / 522 / 522 / 0`, a fenced `single` pocket, the same
+  `42 -> 40` pair contraction, and the same `24 / 18 -> 22 / 18`
+  clause-`4` split, route there instead of reopening clause-`5` identity as
+  if one remaining-two exact-screen cell were newly privileged
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by

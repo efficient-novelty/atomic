@@ -6120,6 +6120,24 @@ thread_local! {
 
 #[cfg(test)]
 thread_local! {
+    static CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_FLAT_CODOMAIN_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_NEXT_CODOMAIN_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_REFERENCE_OVERRIDE:
+        std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+}
+
+#[cfg(test)]
+thread_local! {
     static CLAIM_STEP_FIFTEEN_REMAINING_ONE_EXACT_SUMMARY_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_FLAT_CODOMAIN_OVERRIDE:
         std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
 }
@@ -6320,6 +6338,15 @@ struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBrid
 
 #[cfg(test)]
 struct ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimFlatCodomainOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimNextCodomainOverrideGuard;
+
+#[cfg(test)]
+struct ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeClauseFiveReferenceOverrideGuard;
 
 #[cfg(test)]
 struct ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimFlatCodomainOverrideGuard;
@@ -6791,7 +6818,9 @@ fn override_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_ze
 }
 
 #[cfg(test)]
-impl Drop for ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard {
+impl Drop
+    for ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard
+{
     fn drop(&mut self) {
         CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_HALF_OVERRIDE
             .with(|override_enabled| {
@@ -6808,6 +6837,72 @@ fn override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_clai
             *override_enabled.borrow_mut() = true;
         });
     ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeHalfOverrideGuard
+}
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimFlatCodomainOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_FLAT_CODOMAIN_OVERRIDE.with(
+            |override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain()
+-> ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimFlatCodomainOverrideGuard{
+    CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_FLAT_CODOMAIN_OVERRIDE.with(
+        |override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        },
+    );
+    ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimFlatCodomainOverrideGuard
+}
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimNextCodomainOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_NEXT_CODOMAIN_OVERRIDE.with(
+            |override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain()
+-> ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimNextCodomainOverrideGuard{
+    CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_NEXT_CODOMAIN_OVERRIDE.with(
+        |override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        },
+    );
+    ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeClauseFiveClaimNextCodomainOverrideGuard
+}
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeClauseFiveReferenceOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_REFERENCE_OVERRIDE.with(
+            |override_enabled| {
+                *override_enabled.borrow_mut() = false;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+fn override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference()
+-> ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeClauseFiveReferenceOverrideGuard{
+    CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_REFERENCE_OVERRIDE.with(
+        |override_enabled| {
+            *override_enabled.borrow_mut() = true;
+        },
+    );
+    ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClaimNextBridgeClauseFiveReferenceOverrideGuard
 }
 
 #[cfg(test)]
@@ -7150,6 +7245,45 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_
 
 #[cfg(not(test))]
 fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_override_enabled()
+-> bool {
+    false
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_FLAT_CODOMAIN_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain_override_enabled()
+-> bool {
+    false
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_CLAIM_NEXT_CODOMAIN_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain_override_enabled()
+-> bool {
+    false
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference_override_enabled()
+-> bool {
+    CLAIM_STEP_FIFTEEN_EXACT_PARTIAL_PREFIX_RELIEF_ON_MISMATCH_ZERO_CLAIM_NEXT_BRIDGE_CLAUSE_FIVE_REFERENCE_OVERRIDE
+        .with(|override_enabled| *override_enabled.borrow())
+}
+
+#[cfg(not(test))]
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference_override_enabled()
 -> bool {
     false
 }
@@ -7622,13 +7756,12 @@ fn claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_live_p
         && prefix_telescope.clauses.get(3) == reference.clauses.get(3)
 }
 
-fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_matches(
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_base_matches(
     step_index: u32,
     admissibility: StrictAdmissibility,
     work_item: &OnlinePrefixWorkItem,
 ) -> bool {
-    claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_override_enabled()
-        && matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
+    matches!(admissibility.mode, AdmissibilityMode::DesktopClaimShadow)
         && step_index == 15
         && work_item.clause_kappa == 8
         && work_item.remaining_clause_slots == 2
@@ -7683,6 +7816,67 @@ fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_br
         })
 }
 
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_matches(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    work_item: &OnlinePrefixWorkItem,
+) -> bool {
+    claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_override_enabled()
+        && claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_base_matches(
+            step_index,
+            admissibility,
+            work_item,
+        )
+}
+
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain_matches(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    work_item: &OnlinePrefixWorkItem,
+) -> bool {
+    claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain_override_enabled()
+        && claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_base_matches(
+            step_index,
+            admissibility,
+            work_item,
+        )
+        && work_item.prefix_telescope.clauses.get(5).is_some_and(
+            claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_flat_codomain_clause_five_matches,
+        )
+}
+
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain_matches(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    work_item: &OnlinePrefixWorkItem,
+) -> bool {
+    claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain_override_enabled()
+        && claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_base_matches(
+            step_index,
+            admissibility,
+            work_item,
+        )
+        && work_item.prefix_telescope.clauses.get(5).is_some_and(
+            claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_codomain_clause_five_matches,
+        )
+}
+
+fn claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference_matches(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    work_item: &OnlinePrefixWorkItem,
+) -> bool {
+    claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference_override_enabled()
+        && claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_base_matches(
+            step_index,
+            admissibility,
+            work_item,
+        )
+        && work_item.prefix_telescope.clauses.get(5).is_some_and(
+            claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_reference_clause_five_matches,
+        )
+}
+
 fn maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half(
     step_index: u32,
     admissibility: StrictAdmissibility,
@@ -7693,6 +7887,72 @@ fn maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zer
     {
         if matches!(decision, ExactPartialPrefixBoundDecision::CannotClearBar)
             && claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half_matches(
+                step_index,
+                admissibility,
+                work_item,
+            )
+        {
+            return ExactPartialPrefixBoundDecision::Unknown;
+        }
+    }
+
+    decision
+}
+
+fn maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    work_item: &OnlinePrefixWorkItem,
+    decision: ExactPartialPrefixBoundDecision,
+) -> ExactPartialPrefixBoundDecision {
+    #[cfg(test)]
+    {
+        if matches!(decision, ExactPartialPrefixBoundDecision::CannotClearBar)
+            && claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain_matches(
+                step_index,
+                admissibility,
+                work_item,
+            )
+        {
+            return ExactPartialPrefixBoundDecision::Unknown;
+        }
+    }
+
+    decision
+}
+
+fn maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    work_item: &OnlinePrefixWorkItem,
+    decision: ExactPartialPrefixBoundDecision,
+) -> ExactPartialPrefixBoundDecision {
+    #[cfg(test)]
+    {
+        if matches!(decision, ExactPartialPrefixBoundDecision::CannotClearBar)
+            && claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain_matches(
+                step_index,
+                admissibility,
+                work_item,
+            )
+        {
+            return ExactPartialPrefixBoundDecision::Unknown;
+        }
+    }
+
+    decision
+}
+
+fn maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference(
+    step_index: u32,
+    admissibility: StrictAdmissibility,
+    work_item: &OnlinePrefixWorkItem,
+    decision: ExactPartialPrefixBoundDecision,
+) -> ExactPartialPrefixBoundDecision {
+    #[cfg(test)]
+    {
+        if matches!(decision, ExactPartialPrefixBoundDecision::CannotClearBar)
+            && claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference_matches(
                 step_index,
                 admissibility,
                 work_item,
@@ -10293,6 +10553,27 @@ fn exact_partial_prefix_bound_decision(
                 work_item,
                 decision,
             );
+        let decision =
+            maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain(
+                step_index,
+                admissibility,
+                work_item,
+                decision,
+            );
+        let decision =
+            maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain(
+                step_index,
+                admissibility,
+                work_item,
+                decision,
+            );
+        let decision =
+            maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference(
+                step_index,
+                admissibility,
+                work_item,
+                decision,
+            );
         #[cfg(test)]
         maybe_capture_pruned_terminal_prefix(work_item, decision);
         return decision;
@@ -10425,13 +10706,35 @@ fn exact_partial_prefix_bound_decision(
             work_item,
             ExactPartialPrefixBoundDecision::CannotClearBar,
         );
-    let decision = maybe_override_claim_step_fifteen_reference_reference_tail_mismatch_three_clause_four(
-        step_index,
-        admissibility,
-        work_item,
-        decision,
-    );
-    maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half(
+    let decision =
+        maybe_override_claim_step_fifteen_reference_reference_tail_mismatch_three_clause_four(
+            step_index,
+            admissibility,
+            work_item,
+            decision,
+        );
+    let decision =
+        maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_half(
+            step_index,
+            admissibility,
+            work_item,
+            decision,
+        );
+    let decision =
+        maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain(
+            step_index,
+            admissibility,
+            work_item,
+            decision,
+        );
+    let decision =
+        maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain(
+            step_index,
+            admissibility,
+            work_item,
+            decision,
+        );
+    maybe_override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference(
         step_index,
         admissibility,
         work_item,
@@ -27223,7 +27526,9 @@ mod tests {
         let pair_counts =
             current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
                 .into_iter()
-                .filter(|((mismatch, _clause_zero, _clause_one), _count)| *mismatch == Some(0_usize))
+                .filter(|((mismatch, _clause_zero, _clause_one), _count)| {
+                    *mismatch == Some(0_usize)
+                })
                 .collect::<BTreeMap<_, _>>();
         let clause_four_counts =
             current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
@@ -27285,7 +27590,8 @@ mod tests {
             "the broader exact partial-prefix relief should still sit on the same zero-admitted late shell; it only converts more of that shell from exact-pruned wall pressure into generated survivor mass"
         );
         assert_eq!(
-            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
             Some(&DemoBucketStats {
                 generated_terminal_candidates: 3456,
                 admissible_terminal_candidates: 522,
@@ -27370,6 +27676,483 @@ mod tests {
             .into_iter()
             .collect(),
             "the broader exact partial-prefix relief should spread its wall contraction across every live clause-4/clause-5 cell on the mismatch-0 tier, which is why it remains a broader tradeoff rather than the landed repair"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain_stays_a_smaller_tradeoff_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_flat_codomain();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, _clause_one), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, _clause_one, _clause_four), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let clause_four_five_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_four, _clause_five), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4475);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 541,
+            "relaxing remaining-two exact partial-prefix screening only on the mismatch-0 claim-next-bridge plus clause-5 claim-flat-codomain cell should narrow the wall, but it still remains only a smaller tradeoff because the same zero-admitted late shell survives and the noncanonical small-cluster bucket grows"
+        );
+        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 3);
+        assert_eq!(wall_summary.capture_count, 541);
+        assert_eq!(
+            wall_summary.remaining_clause_slot_counts,
+            [(2_usize, 439_usize), (3, 102)].into_iter().collect(),
+            "the exact partial-prefix claim-flat-codomain cell probe should contract only the remaining-two wall while leaving the smaller remaining-three spill unchanged"
+        );
+        assert_eq!(
+            wall_summary.first_mismatch_position_counts,
+            [
+                (Some(0_usize), 300_usize),
+                (Some(1), 177),
+                (Some(2), 50),
+                (Some(3), 14)
+            ]
+            .into_iter()
+            .collect(),
+            "the exact partial-prefix claim-flat-codomain cell probe should localize its whole wall win to the first-mismatch-0 tier"
+        );
+        assert_eq!(
+            zero_summary.captured_prefixes, 2271,
+            "the exact partial-prefix claim-flat-codomain cell probe should keep the same zero-admitted late shell and only convert part of it from exact-pruned wall pressure into generated survivor mass"
+        );
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3240,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            }),
+            "the exact partial-prefix claim-flat-codomain cell probe should still widen the noncanonical small-cluster shell, so it is not a safe landing"
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            }),
+            "the exact partial-prefix claim-flat-codomain cell probe should keep the isolated single bucket fenced"
+        );
+        assert_eq!(
+            pair_counts,
+            [
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain"
+                    ),
+                    40_usize
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_sharp_codomain"
+                    ),
+                    40
+                ),
+                ((Some(0_usize), "claim_eventual_domain", "reference"), 40),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_next_codomain"),
+                    40
+                ),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_sharp_codomain"),
+                    40
+                ),
+                ((Some(0_usize), "claim_flat_domain", "reference"), 40),
+            ]
+            .into_iter()
+            .collect(),
+            "the exact partial-prefix claim-flat-codomain cell probe should contract every live mismatch-0 pair by the same two-capture spread"
+        );
+        assert_eq!(
+            clause_four_counts
+                .values()
+                .copied()
+                .collect::<std::collections::BTreeSet<_>>(),
+            [18_usize, 22_usize].into_iter().collect(),
+            "the exact partial-prefix claim-flat-codomain cell probe should contract only the claim-next-bridge clause-4 share from 24 to 22 per live pair"
+        );
+        assert_eq!(
+            clause_four_five_counts,
+            [
+                (
+                    (Some(0_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    36_usize
+                ),
+                (
+                    (Some(0_usize), "claim_next_bridge", "claim_next_codomain"),
+                    48
+                ),
+                ((Some(0_usize), "claim_next_bridge", "reference"), 48),
+                ((Some(0_usize), "reference", "claim_flat_codomain"), 36),
+                ((Some(0_usize), "reference", "claim_next_codomain"), 36),
+                ((Some(0_usize), "reference", "reference"), 36),
+            ]
+            .into_iter()
+            .collect(),
+            "the exact partial-prefix claim-flat-codomain cell probe should localize entirely onto that single claim-next-bridge clause-5 family while leaving the sibling claim-next-codomain and reference cells untouched"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain_stays_a_smaller_tradeoff_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_claim_next_codomain();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, _clause_one), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, _clause_one, _clause_four), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let clause_four_five_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_four, _clause_five), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4475);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 541,
+            "relaxing remaining-two exact partial-prefix screening only on the mismatch-0 claim-next-bridge plus clause-5 claim-next-codomain cell should still land only a smaller tradeoff because the same zero-admitted late shell survives and the noncanonical small-cluster bucket grows"
+        );
+        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 3);
+        assert_eq!(wall_summary.capture_count, 541);
+        assert_eq!(
+            wall_summary.remaining_clause_slot_counts,
+            [(2_usize, 439_usize), (3, 102)].into_iter().collect()
+        );
+        assert_eq!(
+            wall_summary.first_mismatch_position_counts,
+            [
+                (Some(0_usize), 300_usize),
+                (Some(1), 177),
+                (Some(2), 50),
+                (Some(3), 14)
+            ]
+            .into_iter()
+            .collect()
+        );
+        assert_eq!(zero_summary.captured_prefixes, 2271);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3240,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            })
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            })
+        );
+        assert_eq!(
+            pair_counts,
+            [
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain"
+                    ),
+                    40_usize
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_sharp_codomain"
+                    ),
+                    40
+                ),
+                ((Some(0_usize), "claim_eventual_domain", "reference"), 40),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_next_codomain"),
+                    40
+                ),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_sharp_codomain"),
+                    40
+                ),
+                ((Some(0_usize), "claim_flat_domain", "reference"), 40),
+            ]
+            .into_iter()
+            .collect()
+        );
+        assert_eq!(
+            clause_four_counts
+                .values()
+                .copied()
+                .collect::<std::collections::BTreeSet<_>>(),
+            [18_usize, 22_usize].into_iter().collect()
+        );
+        assert_eq!(
+            clause_four_five_counts,
+            [
+                (
+                    (Some(0_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    48_usize
+                ),
+                (
+                    (Some(0_usize), "claim_next_bridge", "claim_next_codomain"),
+                    36
+                ),
+                ((Some(0_usize), "claim_next_bridge", "reference"), 48),
+                ((Some(0_usize), "reference", "claim_flat_codomain"), 36),
+                ((Some(0_usize), "reference", "claim_next_codomain"), 36),
+                ((Some(0_usize), "reference", "reference"), 36),
+            ]
+            .into_iter()
+            .collect(),
+            "the exact partial-prefix claim-next-codomain cell probe should localize entirely onto that single claim-next-bridge clause-5 family while leaving the sibling claim-flat-codomain and reference cells untouched"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference_stays_a_smaller_tradeoff_control()
+     {
+        let _search_override =
+            super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_claim_next_bridge_clause_five_reference();
+        let step_fifteen =
+            profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+        let bucket_stats = step_fifteen
+            .demo_bucket_stats
+            .iter()
+            .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+            .collect::<BTreeMap<_, _>>();
+        let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+        let pair_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, _clause_one), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let clause_four_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_four_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_zero, _clause_one, _clause_four), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let clause_four_five_counts =
+            current_claim_step_fifteen_remaining_two_partial_prefix_clause_four_five_counts()
+                .into_iter()
+                .filter(|((mismatch, _clause_four, _clause_five), _count)| {
+                    *mismatch == Some(0_usize)
+                })
+                .collect::<BTreeMap<_, _>>();
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+        assert_eq!(step_fifteen.telescope, Telescope::reference(15));
+        assert_eq!(step_fifteen.demo_funnel.generated_raw_prefixes, 4475);
+        assert_eq!(
+            step_fifteen.exact_screen_reasons.partial_prefix_bar_failure, 541,
+            "relaxing remaining-two exact partial-prefix screening only on the mismatch-0 claim-next-bridge plus clause-5 reference cell should narrow the wall, but it still remains only a smaller tradeoff because the same zero-admitted late shell survives and the noncanonical small-cluster bucket grows"
+        );
+        assert_eq!(step_fifteen.exact_screen_reasons.incumbent_dominance, 3);
+        assert_eq!(wall_summary.capture_count, 541);
+        assert_eq!(
+            wall_summary.remaining_clause_slot_counts,
+            [(2_usize, 439_usize), (3, 102)].into_iter().collect()
+        );
+        assert_eq!(
+            wall_summary.first_mismatch_position_counts,
+            [
+                (Some(0_usize), 300_usize),
+                (Some(1), 177),
+                (Some(2), 50),
+                (Some(3), 14)
+            ]
+            .into_iter()
+            .collect()
+        );
+        assert_eq!(zero_summary.captured_prefixes, 2271);
+        assert_eq!(
+            bucket_stats
+                .get("k8:structural_generic:temporal_operator:library_backed:small_cluster"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 3240,
+                admissible_terminal_candidates: 522,
+                exact_screened_terminal_candidates: 522,
+                pruned_terminal_candidates: 0,
+                fully_scored_terminal_candidates: 0,
+                best_overshoot: None,
+            })
+        );
+        assert_eq!(
+            bucket_stats.get("k8:structural_generic:temporal_operator:library_backed:single"),
+            Some(&DemoBucketStats {
+                generated_terminal_candidates: 0,
+                admissible_terminal_candidates: 0,
+                exact_screened_terminal_candidates: 0,
+                pruned_terminal_candidates: 3,
+                fully_scored_terminal_candidates: 1,
+                best_overshoot: Some(Rational::new(115657, 21112)),
+            })
+        );
+        assert_eq!(
+            pair_counts,
+            [
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_next_codomain"
+                    ),
+                    40_usize
+                ),
+                (
+                    (
+                        Some(0_usize),
+                        "claim_eventual_domain",
+                        "claim_sharp_codomain"
+                    ),
+                    40
+                ),
+                ((Some(0_usize), "claim_eventual_domain", "reference"), 40),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_next_codomain"),
+                    40
+                ),
+                (
+                    (Some(0_usize), "claim_flat_domain", "claim_sharp_codomain"),
+                    40
+                ),
+                ((Some(0_usize), "claim_flat_domain", "reference"), 40),
+            ]
+            .into_iter()
+            .collect()
+        );
+        assert_eq!(
+            clause_four_counts
+                .values()
+                .copied()
+                .collect::<std::collections::BTreeSet<_>>(),
+            [18_usize, 22_usize].into_iter().collect()
+        );
+        assert_eq!(
+            clause_four_five_counts,
+            [
+                (
+                    (Some(0_usize), "claim_next_bridge", "claim_flat_codomain"),
+                    48_usize
+                ),
+                (
+                    (Some(0_usize), "claim_next_bridge", "claim_next_codomain"),
+                    48
+                ),
+                ((Some(0_usize), "claim_next_bridge", "reference"), 36),
+                ((Some(0_usize), "reference", "claim_flat_codomain"), 36),
+                ((Some(0_usize), "reference", "claim_next_codomain"), 36),
+                ((Some(0_usize), "reference", "reference"), 36),
+            ]
+            .into_iter()
+            .collect(),
+            "the exact partial-prefix reference cell probe should localize entirely onto that single claim-next-bridge clause-5 family while leaving the sibling claim-flat-codomain and claim-next-codomain cells untouched"
         );
     }
 

@@ -143,18 +143,30 @@ probes only removes the same two targeted remaining-two parent cells plus
 clause-`5` bucket, so the next honest slice has to stay above those
 clause-`2` sheet splits too.
 
-Most recently on the exact-screen engine path, the first broader
-remaining-two follow-on above that spent connectivity lattice was also spent.
-Relaxing `exact_partial_prefix_bound_decision(...)` on the whole mismatch-`0`
-clause-`4` `claim_next_bridge` half lands `4763 / 517 / 2271`, keeps the
-canonical `103 / 8` winner and the fenced `single` pocket, but widens
-`small_cluster` to `3456 / 522 / 522 / 0` while contracting every live
-mismatch-`0` pair to `36`, equalizing both clause-`4` branches to `18`, and
-equalizing all six live clause-`4` / clause-`5` cells to `36`. The next
-honest slice therefore has to stay below this broad whole-half exact-screen
-release and split that remaining-two exact-screen class by active
-clause-`5` cell or another narrower remaining-two selector rather than
-reopening connectivity or deeper remaining-one relands.
+Most recently on the exact-screen engine path, that broader remaining-two
+follow-on was split one layer deeper across its clause-`5` cells too. The
+whole mismatch-`0` clause-`4` `claim_next_bridge` release still lands the
+broader `4763 / 517 / 2271` tradeoff with widened
+`small_cluster = 3456 / 522 / 522 / 0`, but the three narrower clause-`5`
+cells all reland the same smaller control:
+- `claim_flat_codomain = 4475 / 541 / 2271`
+- `claim_next_codomain = 4475 / 541 / 2271`
+- `reference = 4475 / 541 / 2271`
+
+All three keep accepted step `15` canonical `103 / 8`, keep
+`incumbent_dominance = 3`, keep the fenced `single` pocket, widen
+`small_cluster` only to `3240 / 522 / 522 / 0`, contract every live
+mismatch-`0` pair from `42` to `40`, contract the clause-`4` split only from
+`24 / 18` to `22 / 18`, and keep zero-admitted captures fixed at `2271`.
+Each probe localizes to only its chosen `claim_next_bridge` clause-`5` cell,
+leaving the sibling `claim_next_bridge` cells at `48` and the whole
+`reference` half at `36`. The next honest slice therefore has to stay below
+this now-spent clause-`5` exact-screen lattice and localize a representative
+remaining-two exact-screen cell by clause-`0` / clause-`1` pair. Use the
+newly live `claim_next_codomain` cell as the representative next move,
+because that cell stayed inert on the remaining-one exact-summary ladder and
+is the first exact-screen branch that genuinely diverges from the earlier
+remaining-one story rather than simply replaying it one level higher.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -264,9 +276,29 @@ later stored bundle changes the diagnosis.
 - Any remaining step-`15` leverage is therefore no longer on that broad
   whole-half exact-screen release either; it narrows the wall only by turning
   more of the same zero-admitted mismatch-`0` shell into generated survivor
-  mass. The next honest follow-on has to stay below that broad release and
-  split the remaining-two exact-screen class by active clause-`5` cell or
-  another narrower remaining-two selector rather than reopening connectivity
+  mass.
+- That broader exact-screen release is now also spent one layer deeper across
+  its clause-`5` cells:
+  - the `claim_flat_codomain`, `claim_next_codomain`, and `reference` cells
+    each reland the same smaller `4475 / 541 / 2271` tradeoff
+  - all three keep accepted step `15` canonical `103 / 8`,
+    `incumbent_dominance = 3`, and the fenced `single` pocket
+  - all three widen `small_cluster` only to `3240 / 522 / 522 / 0`
+  - all three contract every live mismatch-`0` pair from `42` to `40`
+  - all three contract the clause-`4` split only from `24 / 18` to
+    `22 / 18`
+  - all three keep zero-admitted captures fixed at `2271`
+  - each probe localizes to only its chosen `claim_next_bridge`
+    clause-`5` cell while leaving the two sibling `claim_next_bridge` cells
+    at `48` and the whole `reference` half at `36`
+- Any remaining step-`15` leverage is therefore no longer on clause-`5`
+  identity inside that exact-screen class either. The broad whole-half
+  release is exactly the union of three symmetric smaller tradeoffs, and the
+  previously inert `claim_next_codomain` cell is now live on the
+  remaining-two exact-screen path. The next honest follow-on has to stay
+  below those clause-`5` cell relands too and localize a representative
+  clause-`0` / clause-`1` pair inside the newly live
+  `claim_next_codomain` exact-screen cell rather than reopening connectivity
   or deeper remaining-one relands.
 - The first fresh post-rerun code-side repair probe on the mismatch-`0`
   exact-summary ladder is now also spent:
@@ -2052,6 +2084,21 @@ later stored bundle changes the diagnosis.
   every live mismatch-`0` clause-`0` / clause-`1` pair contracts to `36`,
   both clause-`4` branches equalize at `18`, all six live clause-`4` /
   clause-`5` cells equalize at `36`, and zero-admitted captures stay `2271`
+- the three narrower clause-`5` exact-screen splits below that broad release
+  are also pinned as symmetric smaller tradeoff controls rather than fresh
+  repairs:
+  `claim_flat_codomain = 4475 / 541 / 2271`,
+  `claim_next_codomain = 4475 / 541 / 2271`, and
+  `reference = 4475 / 541 / 2271`, all with accepted step `15` canonical
+  `103 / 8`, `incumbent_dominance = 3`, a fenced `single` pocket, and
+  widened `small_cluster = 3240 / 522 / 522 / 0`
+- those narrower clause-`5` exact-screen splits are also localized as
+  single-cell contractions rather than distinct repair classes:
+  every live mismatch-`0` clause-`0` / clause-`1` pair contracts only to
+  `40`, the clause-`4` split contracts only to `22 / 18`, zero-admitted
+  captures stay `2271`, and each probe touches only its chosen
+  `claim_next_bridge` clause-`5` cell while leaving the sibling
+  `claim_next_bridge` cells at `48` and the whole `reference` half at `36`
 - the next operational slice stays above the exhausted claim-safe,
   representative mismatch-`0`, `reference / reference`, isolated
   clause-`1` exact-suffix, representative claim-side clause-`6`
@@ -2073,9 +2120,11 @@ later stored bundle changes the diagnosis.
   too, plus the representative mismatch-`0` claim-side clause-`2` sheet
   splits on the parent-route, active-window, and self-contained shells too,
   plus the broader remaining-two exact partial-prefix release on the whole
-  mismatch-`0` `claim_next_bridge` half too, while now targeting a narrower
-  remaining-two exact-screen class below that broad release, above deeper
-  remaining-one relands, and still above the exhausted
+  mismatch-`0` `claim_next_bridge` half too, plus its three narrower
+  clause-`5` exact-screen cell splits too, while now targeting a
+  representative clause-`0` / clause-`1` pair inside the newly live
+  `claim_next_codomain` exact-screen cell below that spent exact-screen cell
+  lattice, above deeper remaining-one relands, and still above the exhausted
   parent-level qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
