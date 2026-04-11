@@ -1396,6 +1396,64 @@ Until that exists, wording stays at `bounded live recovery`.
   the next honest follow-on has to stay above those alternate clause-`4`
   splits too rather than cycling among clause-`4` families or dropping back
   to narrower clause-`3` / clause-`6` selectors.
+- The sibling clause-`4` `claim_next_bridge` split above that exhausted
+  parent-level qualification-family lattice is now also spent on the
+  representative mismatch-`0` claim-side parent-route shell across both
+  active clause-`5` families:
+  - on either active clause-`5` family, the narrowed route relands a broader
+    unsafe control with noncanonical `60 / 8`, `retained = 2`,
+    `generated = 4427`, `partial_prefix_bar_failure = 545`,
+    `incumbent_dominance = 117`, and zero-admitted captures `2271`
+  - the first-mismatch distribution stays `312 / 177 / 50 / 14`
+  - `small_cluster` relands as `2931 / 455 / 455 / 115`
+  - the isolated `single` bucket reopens to `2` fully scored non-winners plus
+    `2` residual prunes at best overshoot `545 / 5278`
+  - the representative clause-`2` spread stays `15 / 15 / 12`
+  - the representative clause-`4` split stays `24 / 18`
+  - it keeps the chosen clause-`4` `claim_next_bridge` plus active
+    clause-`5` bucket at `48`
+- That narrow clause-`4` `claim_next_bridge` parent-route split is also
+  localized at delta level:
+  - on the chosen active clause-`5` bucket, it removes the same four targeted
+    remaining-two parent cells
+  - it removes `8` zero-admitted captures in total and the matching `24`
+    remaining-one pruned prefixes
+  - it introduces no capture family and no pruned-prefix family
+- Consequence: even above the exhausted parent-level qualification-family
+  lattice, the representative parent-route clause-`4`
+  `claim_next_bridge` split is not the missing clean repair either. It keeps
+  the same unsafe `4427 / 545` shell and the same four-cell plus
+  `24`-pruned-prefix delta while failing to contract clause-`2` or
+  clause-`4` pressure, so the next honest follow-on has to stay above both
+  clause-`4` branch splits on that parent-route shell.
+- The matched clause-`4` `claim_next_bridge` splits inside the alternate
+  active-window and self-contained qualification families are now also spent
+  across both active clause-`5` families:
+  - on either active clause-`5` family, both alternate clause-`4`
+    `claim_next_bridge` splits reland the same broader unsafe control with
+    noncanonical `60 / 8`, `retained = 2`, `generated = 4427`,
+    `partial_prefix_bar_failure = 545`, `incumbent_dominance = 110`,
+    zero-admitted captures `2271`, first-mismatch distribution
+    `312 / 177 / 50 / 14`, `small_cluster = 2952 / 558 / 558 / 108`, and the
+    same reopened `single` bucket at best overshoot `545 / 5278`
+  - the representative clause-`2` spread stays `15 / 15 / 12`
+  - the representative clause-`4` split stays `24 / 18`
+  - each keeps the chosen clause-`4` `claim_next_bridge` plus active
+    clause-`5` bucket at `48`
+- Those alternate clause-`4` `claim_next_bridge` splits are also localized at
+  delta level:
+  - on the chosen active clause-`5` bucket, each probe removes the same four
+    targeted remaining-two parent cells
+  - it removes `8` zero-admitted captures in total and the matching `24`
+    remaining-one pruned prefixes
+  - it introduces no capture family and no pruned-prefix family
+- Consequence: clause-`4` `claim_next_bridge` narrowing inside the alternate
+  active-window or self-contained families is not the missing clean repair
+  either. It stays matched across both alternate families and both active
+  clause-`5` buckets, only relanding broader unsafe controls, so the next
+  honest follow-on has to stay above both clause-`4` branch splits across the
+  parent-route and alternate families rather than cycling among clause-`4`
+  families or dropping back to narrower clause-`3` / clause-`6` selectors.
 - Do not reopen the exact claim-flat or claim-sharp single-sheet splits on the
   clause-`4` `claim_next_bridge` half first; they are now smaller tradeoff
   controls rather than the landed repair.

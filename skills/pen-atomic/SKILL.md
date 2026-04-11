@@ -452,6 +452,17 @@ Focus on:
   remaining-two clause-`4` `reference` capture families plus `12` removed
   pruned prefixes on the chosen active clause-`5` bucket, route there instead
   of reopening that narrower route split as if it were a fresh repair class
+- treat the representative mismatch-`0` claim-side parent-route
+  clause-`4` `claim_next_bridge` split as live autonomy detail too; if the
+  live docs already pin both active clause-`5`
+  `claim_flat_codomain / reference` probes at the broader unsafe
+  `4427 / 545 / 2271` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 117`, `small_cluster = 2931 / 455 / 455 / 115`, the
+  same reopened `single` bucket, the same `15 / 15 / 12` clause-`2` spread,
+  the same `24 / 18` clause-`4` split, and the same four-cell plus
+  `24`-pruned-prefix targeted delta on the chosen active clause-`5` bucket,
+  route there instead of reopening that broader route split as if it were a
+  fresh repair class
 - treat the first alternate representative mismatch-`0` claim-side
   active-window qualification family as live autonomy detail too; if the live
   docs already pin both active clause-`5`
@@ -472,6 +483,16 @@ Focus on:
   bucket, and the same four-cell plus `24`-pruned-prefix targeted delta,
   route there instead of reopening that alternate qualification family as if
   it were a fresh repair class
+- treat the matched alternate active-window and self-contained clause-`4`
+  `claim_next_bridge` splits as live autonomy detail too; if the live docs
+  already pin both active clause-`5` `claim_flat_codomain / reference`
+  probes at the broader unsafe `4427 / 545 / 2271` shell with noncanonical
+  `60 / 8`, `incumbent_dominance = 110`,
+  `small_cluster = 2952 / 558 / 558 / 108`, the same reopened `single`
+  bucket, the same `15 / 15 / 12` clause-`2` spread, the same
+  `24 / 18` clause-`4` split, and the same four-cell plus
+  `24`-pruned-prefix targeted delta, route there instead of reopening those
+  broader branch splits as if they were a fresh repair class
 - treat the narrower clause-`6` `reference` refinements of those same
   alternate active-window and self-contained families as live autonomy detail
   too; if the live docs already pin `claim_flat_codomain` at unsafe

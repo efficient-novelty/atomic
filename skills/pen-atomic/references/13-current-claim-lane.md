@@ -202,6 +202,16 @@ Do not:
   pruned prefixes on the chosen active clause-`5` bucket, that narrower route
   split also belongs to the autonomy ledger rather than as a fresh repair
   lead
+- reopen the representative mismatch-`0` claim-side parent-route clause-`4`
+  `claim_next_bridge` split first either; if the live docs already pin both
+  active clause-`5` `claim_flat_codomain / reference` probes at the broader
+  unsafe `4427 / 545 / 2271` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 117`, `small_cluster = 2931 / 455 / 455 / 115`, the
+  same reopened `single` bucket, the same `15 / 15 / 12` clause-`2` spread,
+  the same `24 / 18` clause-`4` split, and the same four-cell plus
+  `24`-pruned-prefix targeted delta on the chosen active clause-`5` bucket,
+  that broader route split also belongs to the autonomy ledger rather than as
+  a fresh repair lead
 - reopen the first alternate representative mismatch-`0` claim-side
   active-window qualification family first either; if the live docs already
   pin both active clause-`5` `claim_flat_codomain / reference` probes at the
@@ -222,6 +232,15 @@ Do not:
   `24` matching remaining-one pruned prefixes, that alternate qualification
   family also belongs to the autonomy ledger rather than as a fresh repair
   lead
+- reopen the matched alternate active-window and self-contained clause-`4`
+  `claim_next_bridge` splits first either; if the live docs already pin both
+  active clause-`5` `claim_flat_codomain / reference` probes at the broader
+  unsafe `4427 / 545 / 2271` shell with noncanonical `60 / 8`,
+  `incumbent_dominance = 110`, `small_cluster = 2952 / 558 / 558 / 108`, the
+  same reopened `single` bucket, the same `15 / 15 / 12` clause-`2` spread,
+  the same `24 / 18` clause-`4` split, and the same four-cell plus
+  `24`-pruned-prefix targeted delta, those broader branch splits also belong
+  to the autonomy ledger rather than as fresh repair leads
 - reopen the narrower clause-`6` `reference` refinement of those same
   alternate active-window or self-contained families first either; if the
   live docs already pin `claim_flat_codomain` at unsafe noncanonical `60 / 8`

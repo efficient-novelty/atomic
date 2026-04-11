@@ -1339,3 +1339,64 @@ This file is the append-only history for `desktop_claim_shadow`.
   honest probe has to move above those alternate clause-`4` splits too
   rather than cycling among clause-`4` families or dropping back to narrower
   clause-`3` / clause-`6` selectors.
+- Scope: test the sibling clause-`4` `claim_next_bridge` split above that
+  exhausted parent-level qualification-family lattice by narrowing the
+  representative mismatch-`0` claim-side parent-route shell to the
+  clause-`4` `claim_next_bridge` branch on each active clause-`5` bucket.
+  Result: on both active clause-`5` families it relands a broader unsafe
+  negative control:
+  - both `claim_flat_codomain` and `reference` reland noncanonical `60 / 8`
+    with `retained = 2`, `generated = 4427`,
+    `partial_prefix_bar_failure = 545`, `incumbent_dominance = 117`, and
+    zero-admitted captures `2271`
+  - both keep the same first-mismatch distribution
+    `312 / 177 / 50 / 14`
+  - both reland the same
+    `small_cluster = 2931 / 455 / 455 / 115`
+  - both reopen the same isolated `single` bucket to `2` fully scored
+    non-winners plus `2` residual prunes at best overshoot `545 / 5278`
+  - both keep the representative clause-`2` spread at `15 / 15 / 12`
+  - both keep the representative clause-`4` split at `24 / 18`
+  - each keeps the chosen clause-`4` `claim_next_bridge` plus active
+    clause-`5` bucket at `48`
+  - on the chosen active clause-`5` bucket, each probe removes the same four
+    targeted remaining-two parent cells, removes `8` zero-admitted captures
+    plus `24` remaining-one pruned prefixes in total, and introduces no
+    capture or pruned-prefix family
+  Consequence: the parent-route clause-`4` `claim_next_bridge` split is not a
+  fresh clean repair class either. It preserves the unsafe `4427 / 545`
+  shell and the same four-cell plus `24`-pruned-prefix delta while failing
+  to contract clause-`2` or clause-`4` pressure, so the next honest probe
+  has to stay above both clause-`4` branch splits on that parent-route shell.
+- Scope: test the matched clause-`4` `claim_next_bridge` split above that
+  exhausted parent-level qualification-family lattice by narrowing the
+  representative mismatch-`0` claim-side active-window and self-contained
+  families to the clause-`4` `claim_next_bridge` branch on each active
+  clause-`5` bucket.
+  Result: on both active clause-`5` families and on both alternate
+  qualification families they reland the same broader unsafe control:
+  - accepted step `15` again shifts to noncanonical `60 / 8`
+  - retained breadth again becomes `4427` with `retained = 2`
+  - partial-prefix bar failures again land at `545`
+  - incumbent-dominance again lands at `110`
+  - zero-admitted captures again land at `2271`
+  - the first-mismatch distribution again stays `312 / 177 / 50 / 14`
+  - `small_cluster` again relands as `2952 / 558 / 558 / 108`
+  - the isolated `single` bucket again reopens to `2` fully scored
+    non-winners plus `2` residual prunes at best overshoot `545 / 5278`
+  - the representative clause-`2` spread again stays `15 / 15 / 12`
+  - the representative clause-`4` split again stays `24 / 18`
+  - the chosen clause-`4` `claim_next_bridge` plus active clause-`5` bucket
+    again stays at `48`
+  - on the chosen active clause-`5` bucket, each probe removes the same four
+    targeted remaining-two parent cells, removes `8` zero-admitted captures
+    plus `24` remaining-one pruned prefixes in total, and introduces no
+    capture or pruned-prefix family
+  Consequence: the alternate active-window and self-contained clause-`4`
+  `claim_next_bridge` splits are now spent too. They stay matched across
+  both alternate families and both active clause-`5` buckets, only relanding
+  broader unsafe controls rather than a clean repair, so the next honest
+  probe has to move above both clause-`4` branch splits across the
+  parent-route and alternate families rather than cycling among
+  clause-`4` families or dropping back to narrower clause-`3` / clause-`6`
+  selectors.
