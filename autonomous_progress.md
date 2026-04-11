@@ -1624,6 +1624,28 @@ Until that exists, wording stays at `bounded live recovery`.
   same six-clause parent at direct remaining-one completion or terminal scope
   rather than retrying the same summary override, reopening the sibling
   claim-sharp sheet, or bouncing back to sibling exact-screen pairs.
+- That same released exact-screen `claim_flat_domain` plus clause-`5`
+  `claim_next_codomain` parent is now also spent at direct remaining-one
+  completion and terminal scope:
+  - its three clause-`6` continuations `claim_next_codomain`,
+    `claim_sharp_codomain`, and `reference` each reland the same dead
+    `3`-generated / `0`-admitted completion summary
+  - none carries a bound, a best-accept primary rank, a best-accept rank, or
+    a survivor sketch
+  - each keeps only the same `reference / eventual_lift / next_lift` terminal
+    trio, and every one of those terminal continuations still classifies as
+    `NeedsFallback`
+  - every completed telescope stays structurally connected but outside the
+    active window, outside self-containedness, and outside historical
+    reanchor with `max_lib_ref = 10`
+  - all three clause-`6` continuations stay uniformly blocked at clause `2`
+    with `matched_clause_count = 2` and `first_mismatch_position = 2`
+- Consequence: direct remaining-one completion and terminal identity on that
+  released exact-screen representative claim-flat parent are now spent too.
+  The next honest follow-on has to move sideways to the sibling exact-screen
+  representative `claim_sharp_codomain` sheet on the same pair cell rather
+  than retrying claim-flat clause-`6` identity, the same summary override, or
+  sibling exact-screen pairs.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh

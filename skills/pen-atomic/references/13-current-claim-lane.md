@@ -207,6 +207,16 @@ Do not:
   family `((0, None, None), 2271)`, and no released remaining-one
   pruned-terminal group, that axis also belongs to the autonomy ledger rather
   than as a fresh repair lead
+- reopen direct remaining-one completion or terminal-scope identity beneath
+  that same released exact-screen representative `claim_flat_domain` plus
+  clause-`5` `claim_next_codomain` parent first either; if the live docs
+  already pin all three clause-`6` continuations at the same dead
+  `3`-generated / `0`-admitted completion summary with no bound, no
+  best-rank profile, no survivor sketch, the same
+  `reference / eventual_lift / next_lift` `NeedsFallback` trio, and the same
+  clause-`2` blocker with `max_lib_ref = 10`, that claim-flat clause-`6`
+  axis also belongs to the autonomy ledger rather than as a fresh repair
+  lead
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
   tradeoffs first; those smaller tradeoff controls now also belong in the

@@ -427,6 +427,16 @@ Focus on:
   family `((0, None, None), 2271)`, and no released remaining-one
   pruned-terminal group, route there instead of reopening that summary-relief
   slice as if it were fresh leverage
+- keep the next repair above direct remaining-one completion or terminal
+  identity beneath that same released exact-screen representative
+  `claim_flat_domain` plus clause-`5` `claim_next_codomain` parent too; once
+  the live docs pin all three clause-`6` continuations at the same dead
+  `3`-generated / `0`-admitted completion summary with no bound, no
+  best-rank profile, no survivor sketch, the same
+  `reference / eventual_lift / next_lift` `NeedsFallback` trio, and the same
+  clause-`2` blocker with `max_lib_ref = 10`, route there instead of
+  reopening that claim-flat clause-`6` path as if one continuation were newly
+  privileged
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by

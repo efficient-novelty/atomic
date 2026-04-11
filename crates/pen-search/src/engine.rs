@@ -29388,6 +29388,389 @@ mod tests {
         );
     }
 
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    struct ExactScreenRepresentativeClaimFlatParentClauseSixCompletionProfile {
+        matched_clause_count: usize,
+        first_mismatch_position: Option<usize>,
+        generated_candidate_count: usize,
+        admitted_candidate_count: usize,
+        has_bound: bool,
+        has_best_accept_primary_rank: bool,
+        has_best_accept_rank: bool,
+        has_survivor_sketch: bool,
+        terminal_profiles:
+            BTreeMap<&'static str, (TerminalConnectivityDecision, ConnectivityWitness, bool)>,
+    }
+
+    fn current_claim_step_fifteen_exact_screen_representative_claim_flat_parent_clause_six_completion_profiles()
+    -> BTreeMap<&'static str, ExactScreenRepresentativeClaimFlatParentClauseSixCompletionProfile>
+    {
+        let selector =
+            super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroPairCellSelector {
+                clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimEventualDomain,
+                clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimNextCodomain,
+                clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain),
+                clause_five:
+                    super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClauseFiveLabel::ClaimNextCodomain,
+            };
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            14,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 14 should build");
+        let prefix = claim_steps
+            .into_iter()
+            .map(|step| step.telescope)
+            .collect::<Vec<_>>();
+        let (library, history, nu_history) = history_from_prefix(&prefix);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let objective_bar = compute_bar(2, 15, &history).bar;
+        let clause_catalog = build_clause_catalog(
+            EnumerationContext::from_admissibility(&library, admissibility),
+            8,
+        );
+        let baseline_captures = current_claim_step_fifteen_partial_prefix_bound_prune_captures();
+        let probe_captures = {
+            let _exact_screen_override =
+                super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_pair_cell(
+                    selector,
+                );
+            current_claim_step_fifteen_partial_prefix_bound_prune_captures()
+        };
+        let probe_capture_keys = probe_captures
+            .iter()
+            .map(|capture| {
+                serde_json::to_string(&capture.prefix_telescope)
+                    .expect("captured prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let released_parent = baseline_captures
+            .into_iter()
+            .filter(|capture| {
+                !probe_capture_keys.contains(
+                    &serde_json::to_string(&capture.prefix_telescope)
+                        .expect("captured prefix should serialize"),
+                )
+            })
+            .find(|capture| {
+                capture.remaining_clause_slots == 2
+                    && current_claim_step_fifteen_prefix_group_delta_label(&capture.prefix_telescope)
+                        == (
+                            Some(0_usize),
+                            "claim_eventual_domain",
+                            "claim_next_codomain",
+                            "claim_flat_domain",
+                            "claim_next_bridge",
+                            "claim_next_codomain",
+                        )
+            })
+            .expect("the representative exact-screen claim-flat tradeoff should release one six-clause parent");
+        let mut parent_cache = PrefixLegalityCache::default();
+        let parent_signature =
+            PrefixSignature::new(15, &library, &released_parent.prefix_telescope);
+        assert!(parent_cache.insert_root(
+            parent_signature.clone(),
+            8,
+            &library,
+            &released_parent.prefix_telescope,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        let released_parent_work_item = create_online_prefix_work_item(
+            8,
+            released_parent.prefix_telescope.clone(),
+            parent_signature,
+            &library,
+            admissibility,
+            &clause_catalog,
+            &mut parent_cache,
+        );
+        assert_eq!(released_parent_work_item.remaining_clause_slots, 2);
+
+        let reference_terminal = Telescope::reference(15)
+            .clauses
+            .last()
+            .cloned()
+            .expect("reference step 15 should have a terminal clause");
+        let next_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                    Box::new(Expr::Var(1)),
+                )))))),
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+            ),
+        );
+        let eventual_lift_terminal = ClauseRec::new(
+            ClauseRole::Formation,
+            Expr::Pi(
+                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                    Expr::Eventually(Box::new(Expr::Var(1))),
+                ))))),
+                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                    1,
+                )))))),
+            ),
+        );
+        let mut profiles = BTreeMap::new();
+
+        for clause_six in released_parent_work_item.next_clauses(&clause_catalog) {
+            let mut prefix_telescope = released_parent.prefix_telescope.clone();
+            prefix_telescope.clauses.push(clause_six.clone());
+            let signature = PrefixSignature::new(15, &library, &prefix_telescope);
+            let mut cache = PrefixLegalityCache::default();
+            assert!(cache.insert_root(
+                signature.clone(),
+                8,
+                &library,
+                &prefix_telescope,
+                admissibility,
+                LateFamilySurface::ClaimGeneric
+            ));
+            let work_item = create_online_prefix_work_item(
+                8,
+                prefix_telescope.clone(),
+                signature.clone(),
+                &library,
+                admissibility,
+                &clause_catalog,
+                &mut cache,
+            );
+            assert_eq!(work_item.remaining_clause_slots, 1);
+            let connectivity_facts = work_item
+                .next_clause_connectivity_facts(&clause_catalog)
+                .expect("released exact-screen children should still expose terminal connectivity facts");
+            let terminal_profiles = work_item
+                .next_clauses(&clause_catalog)
+                .iter()
+                .zip(connectivity_facts.iter())
+                .map(|(clause, facts)| {
+                    let label = if *clause == reference_terminal {
+                        "reference"
+                    } else if *clause == next_lift_terminal {
+                        "next_lift"
+                    } else if *clause == eventual_lift_terminal {
+                        "eventual_lift"
+                    } else {
+                        "other"
+                    };
+                    let decision = cache
+                        .terminal_connectivity_with_facts(
+                            &signature,
+                            &library,
+                            clause,
+                            Some(facts),
+                        )
+                        .expect("released exact-screen child should classify each terminal continuation");
+                    let mut telescope = prefix_telescope.clone();
+                    telescope.clauses.push(clause.clone());
+                    (
+                        label,
+                        (
+                            decision,
+                            analyze_connectivity(&library, &telescope),
+                            passes_connectivity(&library, &telescope),
+                        ),
+                    )
+                })
+                .collect::<BTreeMap<_, _>>();
+            let summary = super::compute_terminal_prefix_completion_summary_from_candidates(
+                15,
+                &library,
+                admissibility,
+                objective_bar,
+                &nu_history,
+                &signature,
+                &prefix_telescope,
+                super::TerminalPrefixSummaryPayload::Full,
+                super::terminal_prefix_clause_candidates(
+                    15,
+                    &library,
+                    admissibility,
+                    &signature,
+                    work_item.next_clauses(&clause_catalog),
+                    Some(connectivity_facts),
+                    work_item.next_clause_nu_facts(&clause_catalog),
+                    &mut cache,
+                    None,
+                ),
+                None,
+                &mut cache,
+                None,
+                None,
+            );
+            profiles.insert(
+                current_claim_step_fifteen_partial_prefix_clause_six_label(clause_six),
+                ExactScreenRepresentativeClaimFlatParentClauseSixCompletionProfile {
+                    matched_clause_count: HistoricalReanchorSummary::from_telescope(
+                        &library,
+                        &prefix_telescope,
+                    )
+                    .matched_clause_count(),
+                    first_mismatch_position: HistoricalReanchorSummary::from_telescope(
+                        &library,
+                        &prefix_telescope,
+                    )
+                    .first_mismatch_position(),
+                    generated_candidate_count: summary.generated_candidate_count,
+                    admitted_candidate_count: summary.admitted_candidate_count,
+                    has_bound: summary.bound.is_some(),
+                    has_best_accept_primary_rank: summary.best_accept_primary_rank.is_some(),
+                    has_best_accept_rank: summary.best_accept_rank.is_some(),
+                    has_survivor_sketch: summary.compact_survivor_sketch.is_some(),
+                    terminal_profiles,
+                },
+            );
+        }
+
+        profiles
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_screen_representative_claim_flat_parent_clause_six_children_stay_on_three_matched_dead_completion_summaries()
+     {
+        let profiles =
+            current_claim_step_fifteen_exact_screen_representative_claim_flat_parent_clause_six_completion_profiles();
+        let expected_profile = ExactScreenRepresentativeClaimFlatParentClauseSixCompletionProfile {
+            matched_clause_count: 2,
+            first_mismatch_position: Some(2),
+            generated_candidate_count: 3,
+            admitted_candidate_count: 0,
+            has_bound: false,
+            has_best_accept_primary_rank: false,
+            has_best_accept_rank: false,
+            has_survivor_sketch: false,
+            terminal_profiles: [
+                (
+                    "eventual_lift",
+                    (
+                        TerminalConnectivityDecision::NeedsFallback,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        },
+                        false,
+                    ),
+                ),
+                (
+                    "next_lift",
+                    (
+                        TerminalConnectivityDecision::NeedsFallback,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        },
+                        false,
+                    ),
+                ),
+                (
+                    "reference",
+                    (
+                        TerminalConnectivityDecision::NeedsFallback,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        },
+                        false,
+                    ),
+                ),
+            ]
+            .into_iter()
+            .collect(),
+        };
+
+        assert_eq!(
+            profiles,
+            [
+                ("claim_next_codomain", expected_profile.clone()),
+                ("claim_sharp_codomain", expected_profile.clone()),
+                ("reference", expected_profile),
+            ]
+            .into_iter()
+            .collect(),
+            "below the released exact-screen representative claim-flat parent, all three clause-six continuations should collapse to the same dead 3-generated / 0-admitted completion summary with no bound, no best-rank profile, and no survivor sketch"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_screen_representative_claim_flat_parent_clause_six_children_keep_only_uniform_nonlive_terminal_choices()
+     {
+        let profiles =
+            current_claim_step_fifteen_exact_screen_representative_claim_flat_parent_clause_six_completion_profiles();
+
+        assert_eq!(
+            profiles.len(),
+            3,
+            "the released exact-screen representative claim-flat parent should split only across the three clause-six continuations"
+        );
+        assert!(
+            profiles.values().all(|profile| {
+                profile.matched_clause_count == 2
+                    && profile.first_mismatch_position == Some(2)
+                    && profile.terminal_profiles
+                        == [
+                            (
+                                "eventual_lift",
+                                (
+                                    TerminalConnectivityDecision::NeedsFallback,
+                                    ConnectivityWitness {
+                                        connected: true,
+                                        references_active_window: false,
+                                        self_contained: false,
+                                        max_lib_ref: 10,
+                                        historical_reanchor: false,
+                                    },
+                                    false,
+                                ),
+                            ),
+                            (
+                                "next_lift",
+                                (
+                                    TerminalConnectivityDecision::NeedsFallback,
+                                    ConnectivityWitness {
+                                        connected: true,
+                                        references_active_window: false,
+                                        self_contained: false,
+                                        max_lib_ref: 10,
+                                        historical_reanchor: false,
+                                    },
+                                    false,
+                                ),
+                            ),
+                            (
+                                "reference",
+                                (
+                                    TerminalConnectivityDecision::NeedsFallback,
+                                    ConnectivityWitness {
+                                        connected: true,
+                                        references_active_window: false,
+                                        self_contained: false,
+                                        max_lib_ref: 10,
+                                        historical_reanchor: false,
+                                    },
+                                    false,
+                                ),
+                            ),
+                        ]
+                        .into_iter()
+                        .collect::<BTreeMap<_, _>>()
+            }),
+            "each clause-six continuation below that released exact-screen parent should stay uniformly blocked at clause 2 and keep only the same structurally connected but unqualified reference / eventual_lift / next_lift terminal trio"
+        );
+    }
+
     #[test]
     fn current_claim_step_fifteen_remaining_one_exact_summary_relief_on_mismatch_zero_claim_next_bridge_half_stays_a_tradeoff_control()
      {

@@ -215,6 +215,22 @@ slice therefore has to move below summary-prune relief and localize that same
 six-clause parent at direct remaining-one completion or terminal scope
 rather than retrying the same summary override, reopening the sibling
 claim-sharp sheet, or bouncing back to sibling exact-screen pairs.
+Most recently, that direct remaining-one completion / terminal follow-on
+under the same released exact-screen `claim_flat_domain` plus clause-`5`
+`claim_next_codomain` parent is now spent too: its three clause-`6`
+continuations `claim_next_codomain`, `claim_sharp_codomain`, and `reference`
+each reland the same dead `3`-generated / `0`-admitted completion summary,
+none carries a bound, best-rank profile, or survivor sketch, and each keeps
+only the same `reference / eventual_lift / next_lift` terminal trio with
+every terminal continuation still on `NeedsFallback`. All of those completed
+telescopes stay structurally connected but outside the active window, outside
+self-containedness, and outside historical reanchor with `max_lib_ref = 10`,
+and all three clause-`6` continuations stay uniformly blocked at clause `2`
+with `matched_clause_count = 2` and `first_mismatch_position = 2`. The next
+honest slice therefore has to move sideways to the sibling exact-screen
+representative `claim_sharp_codomain` sheet on the same pair cell rather than
+retrying claim-flat clause-`6` identity, the same summary override, or
+sibling exact-screen pairs.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -431,6 +447,29 @@ later stored bundle changes the diagnosis.
   summary-prune relief and localize the same six-clause parent at direct
   remaining-one completion or terminal scope rather than retrying the same
   summary override, reopening the sibling claim-sharp sheet, the neutral
+  `reference` sheet, or sibling exact-screen pairs.
+- That same released exact-screen representative `claim_flat_domain` plus
+  clause-`5` `claim_next_codomain` parent is now also spent at direct
+  remaining-one completion and terminal scope:
+  - its three clause-`6` continuations `claim_next_codomain`,
+    `claim_sharp_codomain`, and `reference` each reland the same dead
+    `3`-generated / `0`-admitted completion summary
+  - none carries a bound, a best-accept primary rank, a best-accept rank, or
+    a survivor sketch
+  - each keeps only the same `reference / eventual_lift / next_lift` terminal
+    trio, and every one of those terminal continuations still classifies as
+    `NeedsFallback`
+  - every completed telescope stays structurally connected but outside the
+    active window, outside self-containedness, and outside historical
+    reanchor with `max_lib_ref = 10`
+  - all three clause-`6` continuations stay uniformly blocked at clause `2`
+    with `matched_clause_count = 2` and `first_mismatch_position = 2`
+- Any remaining step-`15` leverage is therefore no longer on claim-flat
+  clause-`6` identity or terminal-family identity beneath that released
+  exact-screen representative parent either. The next honest follow-on has to
+  move sideways to the sibling exact-screen representative
+  `claim_sharp_codomain` sheet on the same pair cell rather than retrying
+  claim-flat clause-`6` identity, the same summary override, the neutral
   `reference` sheet, or sibling exact-screen pairs.
 - The first fresh post-rerun code-side repair probe on the mismatch-`0`
   exact-summary ladder is now also spent:
