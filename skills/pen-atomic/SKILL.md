@@ -372,14 +372,14 @@ Focus on:
   dead clause-`6` follow-ons, route to the next sibling exact-screen pair on
   the same `claim_next_codomain` cell instead of reopening either spent
   first-sibling sheet as if it were fresh leverage
-- if the live docs also mark the next sibling exact-screen pair on
-  `claim_eventual_domain / reference / claim_next_bridge / claim_next_codomain`
+- if the live docs also mark the first clause-`0` sibling exact-screen pair on
+  `claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`
   as spent through its clause-`2` split, both claim-side exact-screen
   boundaries, neutral summary-relief, and dead clause-`6` follow-ons, route
-  to the first clause-`0` sibling exact-screen pair on the same
-  `claim_next_codomain` cell,
-  `claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`,
-  instead of reopening any spent `claim_eventual_domain` pair as if it were
+  to the first clause-`1` sibling exact-screen pair on the same clause-`0`
+  `claim_flat_domain` family,
+  `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
+  instead of reopening that spent `claim_next_codomain` pair as if it were
   fresh leverage
 - keep the next repair above exhausted clause-`5` tail probes and above
   demo-only reopenings and above another exact claim-pair clause-`4`
@@ -505,15 +505,16 @@ Focus on:
   `claim_sharp_codomain` sheet on the same pair instead of reopening the
   neutral `reference` sheet, the same claim-flat follow-ons, or the spent
   representative pair as if they were fresh leverage
-- once the live docs also pin the next sibling exact-screen
+- once the live docs also pin the first clause-`0` sibling exact-screen
   `claim_sharp_codomain` sheet and its deeper remaining-one follow-ons as
-  spent beneath `claim_eventual_domain / reference / claim_next_bridge /
+  spent beneath `claim_flat_domain / claim_next_codomain / claim_next_bridge /
   claim_next_codomain`, keep the next repair above that exhausted
-  `claim_eventual_domain` trio too and route to the first clause-`0` sibling
-  exact-screen pair on the same `claim_next_codomain` cell,
-  `claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`,
-  instead of reopening the spent representative, first-sibling, or
-  next-sibling pairs as if they were fresh leverage
+  `claim_next_codomain` clause-`1` branch on the `claim_flat_domain`
+  clause-`0` family too and route to the first clause-`1` sibling exact-screen
+  pair there,
+  `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
+  instead of reopening the spent `claim_eventual_domain` trio or the spent
+  first clause-`0` sibling pair as if they were fresh leverage
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by

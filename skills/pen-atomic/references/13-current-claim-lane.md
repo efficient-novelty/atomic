@@ -305,18 +305,19 @@ Do not:
   claim-flat branch also belongs to the autonomy ledger rather than as a
   fresh repair lead, and the next honest slice should move sideways to the
   sibling `claim_sharp_codomain` sheet on that same pair instead
-- reopen the next sibling exact-screen `claim_sharp_codomain` sheet beneath
-  `claim_eventual_domain / reference / claim_next_bridge / claim_next_codomain`
+- reopen the first clause-`0` sibling exact-screen `claim_sharp_codomain`
+  sheet beneath
+  `claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`
   first either; if the live docs already pin its remaining-two delta to one
   released six-clause parent, pin its stacked remaining-one exact-summary
   relief as neutral on the same `4343 / 552 / 2271` shell, and pin its
   direct clause-`6` completion split to the same dead
-  `3`-generated / `0`-admitted `NeedsFallback` trio, that next-sibling
-  claim-sharp branch also belongs to the autonomy ledger rather than as a
-  fresh repair lead, and the next honest slice should move sideways to the
-  first clause-`0` sibling exact-screen pair on the same
-  `claim_next_codomain` cell,
-  `claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`,
+  `3`-generated / `0`-admitted `NeedsFallback` trio, that first-clause-`0`-
+  sibling claim-sharp branch also belongs to the autonomy ledger rather than
+  as a fresh repair lead, and the next honest slice should move sideways to
+  the first clause-`1` sibling exact-screen pair on the same clause-`0`
+  `claim_flat_domain` family,
+  `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
   instead
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary

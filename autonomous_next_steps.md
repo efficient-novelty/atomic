@@ -1,6 +1,6 @@
 # Autonomous Claim Lane: Next Operational Slice
 
-Last updated: 2026-04-11
+Last updated: 2026-04-12
 
 This file owns the single active work order for `desktop_claim_shadow`.
 
@@ -315,6 +315,41 @@ rather than retrying the spent representative, first sibling, or next
 sibling claim-side sheets, the same summary overrides, the neutral
 `reference` sheet inside any of those spent pairs, or the already-spent
 `claim_eventual_domain` clause-`0` family.
+Most recently after that, the first clause-`0` sibling exact-screen pair on
+`claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`
+was also spent at clause-`2` identity scope: its `claim_flat_domain` and
+`claim_sharp_codomain` sheets each reland the same smaller
+`4343 / 552 / 2271` tradeoff with first-mismatch counts
+`311 / 177 / 50 / 14`, `small_cluster = 3141 / 522 / 522 / 0`, and the
+targeted pair contracted only from `42` to `41`, while the sibling
+`reference` sheet stays neutral on the untouched `4331 / 553 / 2271`
+baseline. The next honest slice therefore had to move below the first
+clause-`0` sibling `claim_flat_domain` sheet rather than reopening the
+sibling `claim_sharp_codomain` or `reference` sheets there.
+Most recently, both first-clause-`0`-sibling exact-screen claim-side
+follow-ons on that same pair were then exhausted through the same
+remaining-two boundary and remaining-one sequence too: each exact-screen
+delta removes exactly one remaining-two exact-prune capture on its released
+six-clause parent shell, still leaves clause `6` out of scope at the
+exact-screen boundary, and introduces no new exact-prune or pruned-terminal
+family; stacking remaining-one exact-summary relief beneath either released
+parent stays completely neutral on the same `4343 / 552 / 2271`, the same
+`311 / 177 / 50 / 14`, the same `small_cluster = 3141 / 522 / 522 / 0`, the
+same zero-admitted exact-prune family `((0, None, None), 2271)`, and the
+same `6813` structurally connected but unqualified generated candidates,
+with no released remaining-one pruned-terminal group; and each released
+parent's three clause-`6` continuations reland the same dead
+`3`-generated / `0`-admitted completion summary with no bound, no
+best-rank profile, no survivor sketch, and the same
+`reference / eventual_lift / next_lift` `NeedsFallback` trio.
+The next honest slice therefore has to stop below that spent first
+clause-`0` sibling pair and move sideways to the first clause-`1` sibling
+exact-screen pair on the same clause-`0` `claim_flat_domain` family, namely
+`claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
+rather than retrying the spent `claim_eventual_domain` representative,
+first-sibling, or next-sibling pairs, the spent first clause-`0` sibling
+pair, the same summary overrides, or the neutral `reference` sheet inside
+any of those spent pairs.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -2635,13 +2670,14 @@ later stored bundle changes the diagnosis.
   split too, plus the next sibling exact-screen `claim_flat_domain` sheet and
   its spent remaining-one follow-ons too, plus the next sibling exact-screen
   `claim_sharp_codomain` sheet and its spent remaining-one follow-ons too,
-  while now targeting the first clause-`0` sibling exact-screen pair on that
-  same `claim_next_codomain` cell,
-  `claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`,
+  while now targeting the first clause-`1` sibling exact-screen pair on that
+  same clause-`0` `claim_flat_domain` family,
+  `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
   above any clause-`2` sheet split inside that new pair, above deeper
   remaining-one relands on the spent `claim_eventual_domain` representative,
-  first-sibling, and next-sibling pairs, and still above the exhausted
-  parent-level qualification-family lattice
+  first-sibling, and next-sibling pairs, above deeper remaining-one relands
+  on the spent first clause-`0` sibling pair too, and still above the
+  exhausted parent-level qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`
