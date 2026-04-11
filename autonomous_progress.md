@@ -1843,13 +1843,60 @@ Until that exists, wording stays at `bounded live recovery`.
   - all three clause-`6` continuations stay uniformly blocked at clause `2`
     with `matched_clause_count = 2` and `first_mismatch_position = 2`
 - Consequence: both claim-side sheets on that first sibling exact-screen pair
-  are now spent too. The next honest follow-on has to stop below that spent
-  first sibling pair and move sideways to the next sibling exact-screen pair
-  on the same `claim_next_codomain` cell, namely
+  are now spent too. The next honest follow-on therefore had to move sideways
+  to the next sibling exact-screen pair on the same `claim_next_codomain`
+  cell, namely
   `claim_eventual_domain / reference / claim_next_bridge / claim_next_codomain`,
   rather than reopening the spent first sibling claim-flat or claim-sharp
   sheets, the same remaining-one follow-ons, or the already-spent
   representative pair.
+- That next sibling exact-screen pair on the same `claim_next_codomain` cell
+  is now also spent at clause-`2` identity scope:
+  - on `claim_eventual_domain / reference / claim_next_bridge /
+    claim_next_codomain`, the `claim_flat_domain` and
+    `claim_sharp_codomain` sheets each land the same smaller
+    `4343 / 552 / 2271` tradeoff
+  - both keep accepted step `15` canonical `103 / 8` and keep
+    `incumbent_dominance = 3`
+  - both shift first-mismatch counts only to `311 / 177 / 50 / 14`
+  - both widen `small_cluster` only to generated `3141`
+  - each cuts only its own claim-side clause-`2` share from `15` to `14`,
+    leaving the sibling claim-side sheet at `15` and the sibling
+    `reference` sheet at `12`
+  - each contracts the targeted exact-screen pair only from `42` to `41`
+  - the sibling `reference` sheet is a neutral control on the untouched
+    `4331 / 553 / 2271` baseline with first-mismatch counts
+    `312 / 177 / 50 / 14`, `small_cluster generated = 3132`, and the same
+    targeted pair still at `42`
+- Both next-sibling exact-screen claim-side sheets on that same pair are now
+  also exhausted through the same remaining-two boundary and remaining-one
+  sequence:
+  - each exact-screen delta removes exactly one remaining-two exact-prune
+    capture on its released six-clause parent shell, still leaves clause `6`
+    out of scope at the exact-screen boundary, and introduces no new
+    exact-prune or pruned-terminal family
+  - stacking remaining-one exact-summary relief beneath either released
+    parent stays completely neutral on the same `4343 / 552 / 2271`, the same
+    `311 / 177 / 50 / 14`, the same `small_cluster = 3141 / 522 / 522 / 0`,
+    the same zero-admitted exact-prune family `((0, None, None), 2271)`, and
+    the same `6813` structurally connected but unqualified generated
+    candidates, with no released remaining-one pruned-terminal group
+  - each released parent's three clause-`6` continuations reland the same
+    dead `3`-generated / `0`-admitted completion summary with no bound, no
+    best-rank profile, no survivor sketch, and the same
+    `reference / eventual_lift / next_lift` `NeedsFallback` trio
+  - every one of those clause-`6` continuations stays uniformly blocked at
+    clause `2` with `matched_clause_count = 2` and
+    `first_mismatch_position = 2`
+- Consequence: all three `claim_eventual_domain` exact-screen pairs on the
+  active clause-`5` `claim_next_codomain` cell are now spent too. The next
+  honest follow-on has to stop below that exhausted clause-`0` family and
+  move sideways to the first clause-`0` sibling exact-screen pair on the same
+  cell, namely
+  `claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`,
+  rather than reopening the spent representative, first sibling, or next
+  sibling pairs, their neutral `reference` sheets, or the same remaining-one
+  follow-ons.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh

@@ -274,13 +274,47 @@ its three clause-`6` continuations again reland the same dead
 `3`-generated / `0`-admitted completion summary with no bound, no
 best-rank profile, no survivor sketch, and the same
 `reference / eventual_lift / next_lift` `NeedsFallback` trio.
-The next honest slice therefore has to stop below that spent first sibling
+The next honest slice therefore had to stop below that spent first sibling
 pair and move sideways to the next sibling exact-screen pair on the same
 `claim_next_codomain` cell, namely
 `claim_eventual_domain / reference / claim_next_bridge / claim_next_codomain`,
 rather than retrying the spent first sibling claim-flat or claim-sharp
 clause-`6` identities, the same summary overrides, the neutral `reference`
 sheet inside either spent pair, or the already-spent representative pair.
+Most recently after that, the next sibling exact-screen pair on
+`claim_eventual_domain / reference / claim_next_bridge / claim_next_codomain`
+was also spent at clause-`2` identity scope: its `claim_flat_domain` and
+`claim_sharp_codomain` sheets each reland the same smaller
+`4343 / 552 / 2271` tradeoff with first-mismatch counts
+`311 / 177 / 50 / 14`, `small_cluster = 3141 / 522 / 522 / 0`, and the
+targeted pair contracted only from `42` to `41`, while the sibling
+`reference` sheet stays neutral on the untouched `4331 / 553 / 2271`
+baseline. The next honest slice therefore had to move below the next
+sibling `claim_flat_domain` sheet rather than reopening the sibling
+`claim_sharp_codomain` or `reference` sheets there.
+Most recently, both next sibling exact-screen claim-side follow-ons on that
+same pair were then exhausted through the same boundary and remaining-one
+sequence too: each exact-screen delta removes exactly one remaining-two
+exact-prune capture on its released six-clause parent shell, still leaves
+clause `6` out of scope at the exact-screen boundary, and introduces no new
+exact-prune or pruned-terminal family; stacking remaining-one exact-summary
+relief beneath either released parent stays completely neutral on the same
+`4343 / 552 / 2271`, the same `311 / 177 / 50 / 14`, the same
+`small_cluster = 3141 / 522 / 522 / 0`, the same zero-admitted exact-prune
+family `((0, None, None), 2271)`, and the same `6813` structurally connected
+but unqualified generated candidates; and each released parent's three
+clause-`6` continuations again reland the same dead
+`3`-generated / `0`-admitted completion summary with no bound, no
+best-rank profile, no survivor sketch, and the same
+`reference / eventual_lift / next_lift` `NeedsFallback` trio.
+The next honest slice therefore has to stop below that spent next sibling
+pair and move sideways to the first clause-`0` sibling exact-screen pair on
+the same `claim_next_codomain` cell, namely
+`claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`,
+rather than retrying the spent representative, first sibling, or next
+sibling claim-side sheets, the same summary overrides, the neutral
+`reference` sheet inside any of those spent pairs, or the already-spent
+`claim_eventual_domain` clause-`0` family.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -1775,6 +1809,12 @@ later stored bundle changes the diagnosis.
      ladder only as geometry for choosing a new repair class; do not simply
      reland the same whole-half, whole-cell, pair-cell, or representative
      dead-shell controls verbatim
+   - with all three `claim_eventual_domain` exact-screen pairs on the active
+     clause-`5` `claim_next_codomain` cell now spent, localize the first
+     clause-`0` sibling exact-screen pair
+     `claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`
+     before reopening any deeper clause-`2` or remaining-one follow-on
+     beneath that new pair
    - stay above another claim-side union reassembly inside the current
      representative pair-cell exact-summary selector lattice; the next repair
      class has to move beyond a deeper restatement of the same `4355 / 551`
@@ -2591,12 +2631,17 @@ later stored bundle changes the diagnosis.
   split too, plus the first sibling exact-screen `claim_flat_domain` sheet
   and its spent remaining-one follow-ons too, plus the first sibling
   exact-screen `claim_sharp_codomain` sheet and its spent remaining-one
-  follow-ons too, while now targeting the next sibling
-  exact-screen pair on that same `claim_next_codomain` cell,
-  `claim_eventual_domain / reference / claim_next_bridge / claim_next_codomain`,
+  follow-ons too, plus the next sibling exact-screen pair-cell clause-`2`
+  split too, plus the next sibling exact-screen `claim_flat_domain` sheet and
+  its spent remaining-one follow-ons too, plus the next sibling exact-screen
+  `claim_sharp_codomain` sheet and its spent remaining-one follow-ons too,
+  while now targeting the first clause-`0` sibling exact-screen pair on that
+  same `claim_next_codomain` cell,
+  `claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`,
   above any clause-`2` sheet split inside that new pair, above deeper
-  remaining-one relands on the spent representative and first sibling pairs,
-  and still above the exhausted parent-level qualification-family lattice
+  remaining-one relands on the spent `claim_eventual_domain` representative,
+  first-sibling, and next-sibling pairs, and still above the exhausted
+  parent-level qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

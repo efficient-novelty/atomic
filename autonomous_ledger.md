@@ -1847,3 +1847,88 @@ This file is the append-only history for `desktop_claim_shadow`.
   rather than reopening the spent first sibling claim-flat or claim-sharp
   sheets, the same remaining-one follow-ons, or the already-spent
   representative pair.
+- Scope: split the next sibling exact-screen pair's clause-`2` identity on
+  `claim_eventual_domain / reference / claim_next_bridge /
+  claim_next_codomain`.
+  Result: the next sibling pair relands the same smaller exact-screen
+  clause-`2` lattice as the spent representative and first sibling pairs
+  rather than exposing fresh leverage.
+  - the `claim_flat_domain` and `claim_sharp_codomain` sheets each land the
+    same `4343 / 552 / 2271` tradeoff
+  - both keep accepted step `15` canonical `103 / 8`
+  - both keep `incumbent_dominance = 3`
+  - both shift first-mismatch counts only to `311 / 177 / 50 / 14`
+  - both widen `small_cluster` only to `3141 / 522 / 522 / 0`
+  - each cuts only its own claim-side clause-`2` share from `15` to `14`,
+    leaving the sibling claim-side sheet at `15` and the sibling
+    `reference` sheet at `12`
+  - each contracts the targeted exact-screen pair only from `42` to `41`
+  - the sibling `reference` sheet is a neutral control on the untouched
+    `4331 / 553 / 2271` baseline with the targeted pair still at `42`
+  Consequence: clause-`2` identity on that next sibling exact-screen pair is
+  spent too. The next honest probe has to move below the representative
+  `claim_flat_domain` sheet on
+  `claim_eventual_domain / reference / claim_next_bridge /
+  claim_next_codomain` rather than reopening the sibling
+  `claim_sharp_codomain` sheet, the neutral `reference` sheet, or any
+  remaining-one relands on the spent `claim_eventual_domain` pairs.
+- Scope: exhaust the next sibling exact-screen `claim_flat_domain` sheet
+  `claim_eventual_domain / reference / claim_flat_domain / claim_next_bridge /
+  claim_next_codomain` through its exact-screen boundary and first
+  remaining-one follow-on.
+  Result: the claim-flat side repeats the same spent pattern as the earlier
+  exact-screen pairs.
+  - the exact-screen delta removes exactly one remaining-two exact-prune
+    capture on that released six-clause parent shell
+  - clause `6` stays out of scope at the exact-screen boundary
+  - the delta introduces no new exact-prune capture family and removes no
+    pruned-terminal family
+  - stacking remaining-one exact-summary relief stays completely neutral on
+    the same `4343 / 552 / 2271`, the same `311 / 177 / 50 / 14`, the same
+    `small_cluster = 3141 / 522 / 522 / 0`, the same
+    `((0, None, None), 2271)` exact-prune family, and the same `6813`
+    structurally connected but unqualified generated candidates
+  - the stacked follow-on releases no remaining-one pruned-terminal group
+  - the three clause-`6` continuations `claim_next_codomain`,
+    `claim_sharp_codomain`, and `reference` each reland the same dead
+    `3`-generated / `0`-admitted completion summary with no bound, no
+    best-rank profile, no survivor sketch, and the same
+    `reference / eventual_lift / next_lift` `NeedsFallback` trio
+  - all three clause-`6` continuations stay uniformly blocked at clause `2`
+    with `matched_clause_count = 2` and `first_mismatch_position = 2`
+  Consequence: the next sibling exact-screen claim-flat branch is spent too.
+  The next honest probe has to move sideways to the sibling
+  `claim_sharp_codomain` sheet on that same pair rather than reopening the
+  neutral `reference` sheet, the same claim-flat follow-ons, or the spent
+  representative and first sibling pairs.
+- Scope: exhaust the next sibling exact-screen `claim_sharp_codomain` sheet
+  `claim_eventual_domain / reference / claim_sharp_codomain /
+  claim_next_bridge / claim_next_codomain` through its exact-screen boundary
+  and first remaining-one follow-on.
+  Result: the claim-sharp side also repeats the same spent pattern.
+  - the exact-screen delta removes exactly one remaining-two exact-prune
+    capture on that released six-clause parent shell
+  - clause `6` stays out of scope at the exact-screen boundary
+  - the delta introduces no new exact-prune capture family and removes no
+    pruned-terminal family
+  - stacking remaining-one exact-summary relief stays completely neutral on
+    the same `4343 / 552 / 2271`, the same `311 / 177 / 50 / 14`, the same
+    `small_cluster = 3141 / 522 / 522 / 0`, the same
+    `((0, None, None), 2271)` exact-prune family, and the same `6813`
+    structurally connected but unqualified generated candidates
+  - the stacked follow-on releases no remaining-one pruned-terminal group
+  - the three clause-`6` continuations `claim_next_codomain`,
+    `claim_sharp_codomain`, and `reference` each reland the same dead
+    `3`-generated / `0`-admitted completion summary with no bound, no
+    best-rank profile, no survivor sketch, and the same
+    `reference / eventual_lift / next_lift` `NeedsFallback` trio
+  - all three clause-`6` continuations stay uniformly blocked at clause `2`
+    with `matched_clause_count = 2` and `first_mismatch_position = 2`
+  Consequence: the whole `claim_eventual_domain` exact-screen trio on the
+  active clause-`5` `claim_next_codomain` cell is now spent. The next honest
+  probe has to move sideways to the first clause-`0` sibling exact-screen
+  pair on that same cell,
+  `claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`,
+  rather than reopening the spent representative, first sibling, or next
+  sibling pairs, their neutral `reference` sheets, or the same
+  remaining-one follow-ons.
