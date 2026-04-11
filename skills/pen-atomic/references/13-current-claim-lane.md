@@ -198,6 +198,15 @@ Do not:
   pruned-prefix family, clause `6` is still out of scope at that
   exact-screen boundary and that axis also belongs to the autonomy ledger
   rather than as a fresh repair lead
+- reopen remaining-one exact-summary relief beneath that released exact-screen
+  representative `claim_flat_domain` plus clause-`5`
+  `claim_next_codomain` parent first either; if the live docs already pin the
+  stacked follow-on as a neutral control on the same `4343 / 552 / 2271`
+  shell with first-mismatch counts `311 / 177 / 50 / 14`,
+  `small_cluster generated = 3141`, the same zero-admitted exact-prune
+  family `((0, None, None), 2271)`, and no released remaining-one
+  pruned-terminal group, that axis also belongs to the autonomy ledger rather
+  than as a fresh repair lead
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
   tradeoffs first; those smaller tradeoff controls now also belong in the

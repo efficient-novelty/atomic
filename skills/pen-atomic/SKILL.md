@@ -418,6 +418,15 @@ Focus on:
   capture or pruned-prefix family, clause `6` is still out of scope at that
   exact-screen boundary, so route there instead of reopening exact-screen
   clause-`6` identity as if one continuation were newly privileged
+- keep the next repair above remaining-one exact-summary relief beneath that
+  released exact-screen representative `claim_flat_domain` plus clause-`5`
+  `claim_next_codomain` parent too; once the live docs pin the stacked
+  follow-on as a neutral control on the same `4343 / 552 / 2271` shell with
+  first-mismatch counts `311 / 177 / 50 / 14`,
+  `small_cluster generated = 3141`, the same zero-admitted exact-prune
+  family `((0, None, None), 2271)`, and no released remaining-one
+  pruned-terminal group, route there instead of reopening that summary-relief
+  slice as if it were fresh leverage
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by

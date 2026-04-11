@@ -202,6 +202,19 @@ therefore has to move below this boundary and localize that single released
 six-clause parent at remaining-one scope rather than retrying another
 same-layer clause-`6` split, reopening the sibling claim-sharp sheet, or
 bouncing back to sibling exact-screen pairs.
+Most recently, that first stacked remaining-one follow-on under the same
+released exact-screen `claim_flat_domain` plus clause-`5`
+`claim_next_codomain` parent stayed completely neutral too: layering
+remaining-one exact-summary relief beneath the exact-screen representative
+claim-flat tradeoff keeps the same `4343 / 552 / 2271`, the same
+`311 / 177 / 50 / 14`, the same `small_cluster = 3141 / 522 / 522 / 0`, the
+same zero-admitted exact-prune family `((0, None, None), 2271)`, the same
+`6813` structurally connected but unqualified generated candidates, and
+releases no remaining-one pruned-terminal groups at all. The next honest
+slice therefore has to move below summary-prune relief and localize that same
+six-clause parent at direct remaining-one completion or terminal scope
+rather than retrying the same summary override, reopening the sibling
+claim-sharp sheet, or bouncing back to sibling exact-screen pairs.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -400,6 +413,25 @@ later stored bundle changes the diagnosis.
   six-clause parent at remaining-one scope rather than reopening the sibling
   claim-sharp sheet, the neutral `reference` sheet, or sibling exact-screen
   pairs.
+- That same released exact-screen `claim_flat_domain` plus clause-`5`
+  `claim_next_codomain` parent is now also spent on remaining-one
+  exact-summary relief:
+  - stacking remaining-one exact-summary relief beneath the exact-screen
+    representative claim-flat tradeoff keeps the full step-`15` surface on
+    the same `4343 / 552 / 2271`
+  - it keeps the same `311 / 177 / 50 / 14` first-mismatch counts
+  - it keeps the same `small_cluster = 3141 / 522 / 522 / 0`
+  - it keeps the same zero-admitted exact-prune family
+    `((0, None, None), 2271)` and the same `6813` structurally connected but
+    unqualified generated candidates
+  - it releases no remaining-one pruned-terminal group at all
+- Any remaining step-`15` leverage is therefore no longer on remaining-one
+  exact-summary relief beneath that released exact-screen representative
+  claim-flat parent either. The next honest follow-on has to move below
+  summary-prune relief and localize the same six-clause parent at direct
+  remaining-one completion or terminal scope rather than retrying the same
+  summary override, reopening the sibling claim-sharp sheet, the neutral
+  `reference` sheet, or sibling exact-screen pairs.
 - The first fresh post-rerun code-side repair probe on the mismatch-`0`
   exact-summary ladder is now also spent:
   - reopening both representative claim-side clause-`2` sheets together, but

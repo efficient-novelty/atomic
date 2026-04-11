@@ -1581,3 +1581,25 @@ This file is the append-only history for `desktop_claim_shadow`.
   released six-clause parent at remaining-one scope rather than retrying
   another clause-`6` split, reopening the sibling claim-sharp sheet, or
   bouncing back to sibling exact-screen pairs.
+- Scope: test the first remaining-one follow-on beneath that released
+  exact-screen representative `claim_flat_domain` plus clause-`5`
+  `claim_next_codomain` parent by stacking remaining-one exact-summary relief
+  under the same exact-screen representative claim-flat tradeoff.
+  Result: the stacked follow-on is a neutral control rather than a new
+  tradeoff.
+  - the full step-`15` surface stays on the same `4343 / 552 / 2271`
+  - it keeps accepted step `15` canonical `103 / 8`
+  - it keeps the same `311 / 177 / 50 / 14` first-mismatch distribution
+  - it keeps the same `small_cluster = 3141 / 522 / 522 / 0`
+  - it keeps the same zero-admitted exact-prune family
+    `((0, None, None), 2271)`
+  - it keeps the same remaining-one terminal connectivity summary with
+    `6813` structurally connected but unqualified generated candidates
+  - it releases no remaining-one pruned-terminal prefixes and introduces no
+    new remaining-one pruned-terminal group either
+  Consequence: remaining-one exact-summary relief is not the missing lever on
+  that released exact-screen representative claim-flat parent either. The
+  next honest probe has to move below summary-prune relief and localize the
+  same six-clause parent at direct remaining-one completion or terminal scope
+  rather than retrying the same summary override, reopening the sibling
+  claim-sharp sheet, or bouncing back to sibling exact-screen pairs.
