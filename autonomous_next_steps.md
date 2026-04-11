@@ -258,12 +258,29 @@ its three clause-`6` continuations again reland the same dead
 `3`-generated / `0`-admitted completion summary with no bound, no
 best-rank profile, no survivor sketch, and the same
 `reference / eventual_lift / next_lift` `NeedsFallback` trio.
-The next honest slice therefore has to move sideways to the sibling
-exact-screen `claim_sharp_codomain` sheet on that same
-`claim_eventual_domain / claim_sharp_codomain / claim_next_bridge /
-claim_next_codomain` pair cell rather than retrying the spent first sibling
-claim-flat clause-`6` identity, the same summary override, the neutral
-`reference` sheet there, or the already-spent representative pair.
+Most recently after that, the sibling exact-screen `claim_sharp_codomain`
+follow-on on that same pair was then exhausted through the same boundary and
+remaining-one sequence too: its exact-screen delta removes exactly one
+remaining-two exact-prune capture on
+`claim_eventual_domain / claim_sharp_codomain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
+still leaves clause `6` out of scope at the exact-screen boundary, and
+introduces no new exact-prune or pruned-terminal family; stacking
+remaining-one exact-summary relief beneath that released parent stays
+completely neutral on the same `4343 / 552 / 2271`, the same
+`311 / 177 / 50 / 14`, the same `small_cluster = 3141 / 522 / 522 / 0`, the
+same zero-admitted exact-prune family `((0, None, None), 2271)`, and the
+same `6813` structurally connected but unqualified generated candidates; and
+its three clause-`6` continuations again reland the same dead
+`3`-generated / `0`-admitted completion summary with no bound, no
+best-rank profile, no survivor sketch, and the same
+`reference / eventual_lift / next_lift` `NeedsFallback` trio.
+The next honest slice therefore has to stop below that spent first sibling
+pair and move sideways to the next sibling exact-screen pair on the same
+`claim_next_codomain` cell, namely
+`claim_eventual_domain / reference / claim_next_bridge / claim_next_codomain`,
+rather than retrying the spent first sibling claim-flat or claim-sharp
+clause-`6` identities, the same summary overrides, the neutral `reference`
+sheet inside either spent pair, or the already-spent representative pair.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -2572,13 +2589,14 @@ later stored bundle changes the diagnosis.
   claim-side sheets and their spent remaining-one follow-ons beneath that
   same pair too, plus the first sibling exact-screen pair-cell clause-`2`
   split too, plus the first sibling exact-screen `claim_flat_domain` sheet
-  and its spent remaining-one follow-ons too, while now targeting the
-  sibling `claim_sharp_codomain` sheet on
-  `claim_eventual_domain / claim_sharp_codomain / claim_next_bridge /
-  claim_next_codomain` below that newly spent first sibling claim-flat
-  branch, above the neutral `reference` sheet there, above deeper
-  remaining-one relands on the spent representative pair, and still above
-  the exhausted parent-level qualification-family lattice
+  and its spent remaining-one follow-ons too, plus the first sibling
+  exact-screen `claim_sharp_codomain` sheet and its spent remaining-one
+  follow-ons too, while now targeting the next sibling
+  exact-screen pair on that same `claim_next_codomain` cell,
+  `claim_eventual_domain / reference / claim_next_bridge / claim_next_codomain`,
+  above any clause-`2` sheet split inside that new pair, above deeper
+  remaining-one relands on the spent representative and first sibling pairs,
+  and still above the exhausted parent-level qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

@@ -365,6 +365,13 @@ Focus on:
 - treat the active slice and the exact next move as owned by
   [../../autonomous_next_steps.md](../../autonomous_next_steps.md), not by
   this skill file
+- if the live docs already mark both first-sibling exact-screen claim-side
+  sheets on
+  `claim_eventual_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`
+  as spent through their exact-screen boundary, neutral summary-relief, and
+  dead clause-`6` follow-ons, route to the next sibling exact-screen pair on
+  the same `claim_next_codomain` cell instead of reopening either spent
+  first-sibling sheet as if it were fresh leverage
 - keep the next repair above exhausted clause-`5` tail probes and above
   demo-only reopenings and above another exact claim-pair clause-`4`
   `reference`-side relocalization pass; that narrower reference-side tradeoff
