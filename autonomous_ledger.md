@@ -1717,3 +1717,67 @@ This file is the append-only history for `desktop_claim_shadow`.
   claim_next_codomain` rather than reopening the sibling
   `claim_sharp_codomain` sheet, the neutral `reference` sheet, or any
   remaining-one relands on the spent representative pair.
+- Scope: split the first sibling exact-screen `claim_flat_domain` sheet
+  `claim_eventual_domain / claim_sharp_codomain / claim_flat_domain /
+  claim_next_bridge / claim_next_codomain` one layer deeper across its
+  remaining-two boundary.
+  Result: the attempted clause-`6` split does not exist at this layer on the
+  first sibling claim-flat sheet either. The claim-flat clause-`2` tradeoff
+  removes exactly one remaining-two exact-prune capture on that six-clause
+  parent shell, that removed capture still has only six fixed clauses, and
+  clause `6` is therefore still out of scope at the exact-screen boundary.
+  The tradeoff introduces no new exact-prune capture family and removes no
+  pruned-terminal family either.
+  Consequence: same-layer exact-screen clause-`6` identity is unavailable on
+  that first sibling claim-flat sheet too. The next honest probe has to move
+  below the remaining-two exact-screen boundary and localize that single
+  released six-clause parent at remaining-one scope rather than reopening the
+  sibling claim-sharp sheet, the neutral `reference` sheet, or the same
+  remaining-one relands on the spent representative pair.
+- Scope: test the first remaining-one follow-on beneath that released first
+  sibling exact-screen `claim_flat_domain` plus clause-`5`
+  `claim_next_codomain` parent by stacking remaining-one exact-summary relief
+  under the same exact-screen claim-flat tradeoff.
+  Result: the stacked follow-on is a neutral control rather than a new
+  tradeoff.
+  - the full step-`15` surface stays on the same `4343 / 552 / 2271`
+  - it keeps accepted step `15` canonical `103 / 8`
+  - it keeps the same `311 / 177 / 50 / 14` first-mismatch distribution
+  - it keeps the same `small_cluster = 3141 / 522 / 522 / 0`
+  - it keeps the same zero-admitted exact-prune family
+    `((0, None, None), 2271)`
+  - it keeps the same remaining-one terminal connectivity summary with
+    `6813` structurally connected but unqualified generated candidates
+  - it releases no remaining-one pruned-terminal prefixes and introduces no
+    new remaining-one pruned-terminal group either
+  Consequence: remaining-one exact-summary relief is not the missing lever on
+  that released first sibling exact-screen claim-flat parent either. The next
+  honest probe has to move below summary-prune relief and localize the same
+  six-clause parent at direct remaining-one completion or terminal scope
+  rather than retrying the same summary override, reopening the sibling
+  claim-sharp sheet, the neutral `reference` sheet, or bouncing back to the
+  spent representative pair.
+- Scope: localize that same released first sibling exact-screen
+  `claim_flat_domain` plus clause-`5` `claim_next_codomain` parent one layer
+  deeper at direct remaining-one completion and terminal scope by splitting
+  its clause-`6` continuations.
+  Result: all three clause-`6` continuations reland the same dead shell on
+  the first sibling claim-flat side too:
+  - `claim_next_codomain`, `claim_sharp_codomain`, and `reference` each land
+    the same `3`-generated / `0`-admitted completion summary
+  - none carries a bound, a best-accept primary rank, a best-accept rank, or
+    a survivor sketch
+  - each keeps only the same `reference / eventual_lift / next_lift` terminal
+    trio, and every one of those terminal continuations still classifies as
+    `NeedsFallback`
+  - every completed telescope stays structurally connected but outside the
+    active window, outside self-containedness, and outside historical
+    reanchor with `max_lib_ref = 10`
+  - all three clause-`6` continuations stay uniformly blocked at clause `2`
+    with `matched_clause_count = 2` and `first_mismatch_position = 2`
+  Consequence: direct remaining-one completion and terminal identity on that
+  released first sibling exact-screen claim-flat parent are now spent too.
+  The next honest probe has to move sideways to the sibling exact-screen
+  `claim_sharp_codomain` sheet on the same pair cell rather than retrying
+  claim-flat clause-`6` identity, the same summary override, the neutral
+  `reference` sheet, or the spent representative pair.

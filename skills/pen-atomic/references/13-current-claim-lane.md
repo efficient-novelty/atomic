@@ -263,6 +263,16 @@ Do not:
   ledger rather than as a fresh repair lead, and the next honest slice
   should move below the representative `claim_flat_domain` sheet on that
   sibling pair instead
+- reopen the first sibling exact-screen `claim_flat_domain` sheet beneath
+  `claim_eventual_domain / claim_sharp_codomain / claim_next_bridge /
+  claim_next_codomain` first either; if the live docs already pin its
+  remaining-two delta to one released six-clause parent, pin its stacked
+  remaining-one exact-summary relief as neutral on the same
+  `4343 / 552 / 2271` shell, and pin its direct clause-`6` completion split
+  to the same dead `3`-generated / `0`-admitted `NeedsFallback` trio, that
+  first sibling claim-flat branch also belongs to the autonomy ledger rather
+  than as a fresh repair lead, and the next honest slice should move sideways
+  to the sibling `claim_sharp_codomain` sheet on that same pair instead
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
   tradeoffs first; those smaller tradeoff controls now also belong in the
