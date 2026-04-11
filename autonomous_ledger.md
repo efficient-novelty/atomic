@@ -1692,3 +1692,28 @@ This file is the append-only history for `desktop_claim_shadow`.
   sideways to a sibling exact-screen pair on the same `claim_next_codomain`
   cell rather than reopening either claim-side sheet, the neutral
   `reference` sheet, or the same remaining-one follow-ons.
+- Scope: split the first sibling exact-screen pair's clause-`2` identity on
+  `claim_eventual_domain / claim_sharp_codomain / claim_next_bridge /
+  claim_next_codomain`.
+  Result: the sibling pair relands the same smaller exact-screen clause-`2`
+  lattice as the spent representative pair rather than exposing fresh
+  leverage.
+  - the `claim_flat_domain` and `claim_sharp_codomain` sheets each land the
+    same `4343 / 552 / 2271` tradeoff
+  - both keep accepted step `15` canonical `103 / 8`
+  - both keep `incumbent_dominance = 3`
+  - both shift first-mismatch counts only to `311 / 177 / 50 / 14`
+  - both widen `small_cluster` only to `3141 / 522 / 522 / 0`
+  - each cuts only its own claim-side clause-`2` share from `15` to `14`,
+    leaving the sibling claim-side sheet at `15` and the sibling
+    `reference` sheet at `12`
+  - each contracts the targeted exact-screen pair only from `42` to `41`
+  - the sibling `reference` sheet is a neutral control on the untouched
+    `4331 / 553 / 2271` baseline with the same targeted pair still at `42`
+  Consequence: clause-`2` identity on that first sibling exact-screen pair is
+  spent too. The next honest probe has to move below the representative
+  `claim_flat_domain` sheet on
+  `claim_eventual_domain / claim_sharp_codomain / claim_next_bridge /
+  claim_next_codomain` rather than reopening the sibling
+  `claim_sharp_codomain` sheet, the neutral `reference` sheet, or any
+  remaining-one relands on the spent representative pair.

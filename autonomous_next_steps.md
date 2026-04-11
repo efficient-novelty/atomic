@@ -530,6 +530,31 @@ later stored bundle changes the diagnosis.
   move sideways to a sibling exact-screen pair on the same
   `claim_next_codomain` cell rather than reopening either claim-side sheet,
   the neutral `reference` sheet, or the same remaining-one follow-ons.
+- That first sibling exact-screen pair on the same `claim_next_codomain`
+  cell is now also spent at clause-`2` identity scope:
+  - on `claim_eventual_domain / claim_sharp_codomain / claim_next_bridge /
+    claim_next_codomain`, the `claim_flat_domain` and
+    `claim_sharp_codomain` sheets each land the same smaller
+    `4343 / 552 / 2271` tradeoff
+  - both keep accepted step `15` canonical `103 / 8` and keep
+    `incumbent_dominance = 3`
+  - both shift first-mismatch counts only to `311 / 177 / 50 / 14`
+  - both widen `small_cluster` only to generated `3141`
+  - each cuts only its own claim-side clause-`2` share from `15` to `14`,
+    leaving the sibling claim-side sheet at `15` and the sibling
+    `reference` sheet at `12`
+  - each contracts the targeted exact-screen pair only from `42` to `41`
+  - the sibling `reference` sheet is a neutral control on the untouched
+    `4331 / 553 / 2271` baseline with first-mismatch counts
+    `312 / 177 / 50 / 14`, `small_cluster generated = 3132`, and the same
+    targeted pair still at `42`
+- Consequence: clause-`2` identity on that first sibling exact-screen pair is
+  not the missing repair either. The next honest follow-on has to move below
+  the representative `claim_flat_domain` sheet on
+  `claim_eventual_domain / claim_sharp_codomain / claim_next_bridge /
+  claim_next_codomain` rather than reopening the sibling
+  `claim_sharp_codomain` sheet, the neutral `reference` sheet, or any
+  remaining-one relands on the spent representative pair.
 - The first fresh post-rerun code-side repair probe on the mismatch-`0`
   exact-summary ladder is now also spent:
   - reopening both representative claim-side clause-`2` sheets together, but
@@ -1775,6 +1800,15 @@ later stored bundle changes the diagnosis.
   `23 / 18` clause-`4` split plus `47` active clause-`5` bucket, while the
   sibling `reference` sheet is neutral on the untouched
   `4331 / 553 / 2271` baseline
+- another exact-screen clause-`2` sheet reland inside the first sibling
+  `claim_eventual_domain / claim_sharp_codomain / claim_next_bridge /
+  claim_next_codomain` pair cell; the `claim_flat_domain` and
+  `claim_sharp_codomain` sheets there now match at the same smaller
+  `4343 / 552 / 2271` tradeoff with first-mismatch counts
+  `311 / 177 / 50 / 14`, `small_cluster generated = 3141`, and the targeted
+  pair contracted only to `41`, while the sibling `reference` sheet is
+  neutral on the untouched `4331 / 553 / 2271` baseline with that same
+  targeted pair still at `42`
 - another exact-screen clause-`6` identity pass inside the representative
   `claim_eventual_domain / claim_next_codomain / claim_flat_domain /
   claim_next_bridge / claim_next_codomain` sheet; the claim-flat clause-`2`
@@ -2381,6 +2415,23 @@ later stored bundle changes the diagnosis.
   `claim_next_bridge` plus clause-`5` `claim_next_codomain` bucket only from
   `48` to `47`, while the sibling claim-side sheet and the sibling
   `reference` sheet stay at `15` and `12`
+- the first sibling exact-screen pair-cell clause-`2` split on that same
+  `claim_next_codomain` cell is also pinned as the same split smaller
+  tradeoff control rather than a fresh repair:
+  on `claim_eventual_domain / claim_sharp_codomain / claim_next_bridge /
+  claim_next_codomain`, the `claim_flat_domain` and
+  `claim_sharp_codomain` sheets each land `4343 / 552 / 2271` with accepted
+  step `15` canonical `103 / 8`, `incumbent_dominance = 3`,
+  first-mismatch counts `311 / 177 / 50 / 14`, and
+  `small_cluster generated = 3141`, while the sibling `reference` sheet is
+  neutral on the untouched `4331 / 553 / 2271` baseline
+- that first sibling exact-screen pair-cell clause-`2` split is also
+  localized as a one-sheet contraction rather than a distinct repair class:
+  each claim-side sheet cuts only its own clause-`2` share from `15` to
+  `14`, contracts the targeted exact-screen pair only from `42` to `41`,
+  and leaves the sibling claim-side sheet at `15` plus the sibling
+  `reference` sheet at `12`, while the sibling `reference` sheet's full
+  neutral control keeps that same targeted pair at `42`
 - the representative exact-screen `claim_sharp_codomain` sheet on that same
   pair cell is also pinned as a same-boundary control rather than fresh
   leverage:
@@ -2427,10 +2478,13 @@ later stored bundle changes the diagnosis.
   `claim_next_codomain` cell too, plus the representative exact-screen
   pair-cell clause-`2` split there too, plus both representative exact-screen
   claim-side sheets and their spent remaining-one follow-ons beneath that
-  same pair too, while now targeting a sibling exact-screen pair on the same
-  `claim_next_codomain` cell below that spent representative pair, above the
-  neutral `reference` sheet and above deeper remaining-one relands on the
-  spent pair, and still above the exhausted parent-level
+  same pair too, plus the first sibling exact-screen pair-cell clause-`2`
+  split too, while now targeting the representative `claim_flat_domain`
+  sheet on `claim_eventual_domain / claim_sharp_codomain /
+  claim_next_bridge / claim_next_codomain` below that newly spent sibling
+  pair split, above the sibling `claim_sharp_codomain` sheet, above the
+  neutral `reference` sheet there, above deeper remaining-one relands on the
+  spent representative pair, and still above the exhausted parent-level
   qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
