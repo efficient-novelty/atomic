@@ -32210,6 +32210,410 @@ mod tests {
     }
 
     #[test]
+    fn current_claim_step_fifteen_exact_partial_prefix_relief_on_first_clause_one_sibling_mismatch_zero_claim_next_codomain_pair_cell_clause_two_sheets_split_into_two_claim_side_smaller_tradeoff_controls_plus_one_reference_neutral_control()
+     {
+        let mut outcomes = BTreeMap::new();
+        for (clause_two_name, clause_two_label) in [
+            (
+                "claim_flat_domain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain,
+            ),
+            (
+                "claim_sharp_codomain",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimSharpCodomain,
+            ),
+            (
+                "reference",
+                super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::Reference,
+            ),
+        ] {
+            let _search_override =
+                super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_pair_cell(
+                    super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroPairCellSelector {
+                        clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimFlatDomain,
+                        clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimSharpCodomain,
+                        clause_two: Some(clause_two_label),
+                        clause_five:
+                            super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClauseFiveLabel::ClaimNextCodomain,
+                    },
+                );
+            let step_fifteen =
+                profile_step_from_reference_prefix(15, SearchProfile::DesktopClaimShadow);
+            let bucket_stats = step_fifteen
+                .demo_bucket_stats
+                .iter()
+                .map(|bucket| (bucket.bucket_label.clone(), bucket.stats.clone()))
+                .collect::<BTreeMap<_, _>>();
+            let wall_summary = current_claim_step_fifteen_partial_prefix_wall_summary();
+            let pair_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_pair_counts()
+                    .into_iter()
+                    .filter(|((mismatch, _pair_clause_zero, _pair_clause_one), _count)| {
+                        *mismatch == Some(0_usize)
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let clause_two_counts =
+                current_claim_step_fifteen_remaining_two_partial_prefix_clause_zero_one_clause_two_counts()
+                    .into_iter()
+                    .filter(|((mismatch, pair_clause_zero, pair_clause_one, _clause_two), _count)| {
+                        *mismatch == Some(0_usize)
+                            && *pair_clause_zero == "claim_flat_domain"
+                            && *pair_clause_one == "claim_sharp_codomain"
+                    })
+                    .collect::<BTreeMap<_, _>>();
+            let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+                14,
+                2,
+                SearchProfile::DesktopClaimShadow,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("claim prefix through step 14 should build");
+            let prefix = claim_steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+            let zero_summary = late_step_zero_admitted_failure_summary(&prefix, 15, usize::MAX);
+
+            outcomes.insert(
+                clause_two_name,
+                (
+                    step_fifteen.demo_funnel.generated_raw_prefixes,
+                    step_fifteen.exact_screen_reasons.partial_prefix_bar_failure,
+                    zero_summary.captured_prefixes,
+                    wall_summary.first_mismatch_position_counts,
+                    bucket_stats
+                        .get("k8:structural_generic:temporal_operator:library_backed:small_cluster")
+                        .map(|stats| stats.generated_terminal_candidates)
+                        .expect("small_cluster bucket should stay present"),
+                    pair_counts
+                        .get(&(Some(0_usize), "claim_flat_domain", "claim_sharp_codomain"))
+                        .copied()
+                        .expect("the targeted mismatch-0 pair should stay visible"),
+                    clause_two_counts,
+                ),
+            );
+        }
+
+        assert_eq!(outcomes.len(), 3);
+        assert_eq!(
+            outcomes.get("claim_flat_domain"),
+            Some(&(
+                4343,
+                552,
+                2271,
+                [
+                    (Some(0_usize), 311_usize),
+                    (Some(1), 177),
+                    (Some(2), 50),
+                    (Some(3), 14)
+                ]
+                .into_iter()
+                .collect(),
+                3141,
+                41,
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_flat_domain",
+                            "claim_sharp_codomain",
+                            "claim_flat_domain",
+                        ),
+                        14_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_flat_domain",
+                            "claim_sharp_codomain",
+                            "claim_sharp_codomain",
+                        ),
+                        15,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_flat_domain",
+                            "claim_sharp_codomain",
+                            "reference",
+                        ),
+                        12,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+            )),
+            "the first clause-one sibling exact-screen pair's claim-flat clause-two sheet should land the same one-prefix smaller 4343 / 552 tradeoff, lowering only its own 15-capture share to 14 while the sibling claim-sharp and reference sheets stay at 15 and 12"
+        );
+        assert_eq!(
+            outcomes.get("claim_sharp_codomain"),
+            Some(&(
+                4343,
+                552,
+                2271,
+                [
+                    (Some(0_usize), 311_usize),
+                    (Some(1), 177),
+                    (Some(2), 50),
+                    (Some(3), 14)
+                ]
+                .into_iter()
+                .collect(),
+                3141,
+                41,
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_flat_domain",
+                            "claim_sharp_codomain",
+                            "claim_flat_domain",
+                        ),
+                        15_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_flat_domain",
+                            "claim_sharp_codomain",
+                            "claim_sharp_codomain",
+                        ),
+                        14,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_flat_domain",
+                            "claim_sharp_codomain",
+                            "reference",
+                        ),
+                        12,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+            )),
+            "the first clause-one sibling exact-screen pair's claim-sharp clause-two sheet should mirror the claim-flat sibling, only swapping which claim-side sheet drops from 15 to 14 while the reference share stays neutral at 12"
+        );
+        assert_eq!(
+            outcomes.get("reference"),
+            Some(&(
+                4331,
+                553,
+                2271,
+                [
+                    (Some(0_usize), 312_usize),
+                    (Some(1), 177),
+                    (Some(2), 50),
+                    (Some(3), 14)
+                ]
+                .into_iter()
+                .collect(),
+                3132,
+                42,
+                [
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_flat_domain",
+                            "claim_sharp_codomain",
+                            "claim_flat_domain",
+                        ),
+                        15_usize,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_flat_domain",
+                            "claim_sharp_codomain",
+                            "claim_sharp_codomain",
+                        ),
+                        15,
+                    ),
+                    (
+                        (
+                            Some(0_usize),
+                            "claim_flat_domain",
+                            "claim_sharp_codomain",
+                            "reference",
+                        ),
+                        12,
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+            )),
+            "the first clause-one sibling exact-screen pair's reference clause-two sheet should stay neutral too, confirming that this sibling 4343 / 552 tradeoff is again exactly the union of the two claim-side sheets"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_partial_prefix_relief_on_first_clause_one_sibling_mismatch_zero_claim_next_codomain_pair_cell_claim_flat_sheet_delta_stays_above_clause_six_boundary()
+     {
+        let baseline_captures = current_claim_step_fifteen_partial_prefix_bound_prune_captures();
+        let baseline_capture_keys = baseline_captures
+            .iter()
+            .map(|capture| {
+                serde_json::to_string(&capture.prefix_telescope)
+                    .expect("captured prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let baseline_pruned_prefixes = current_claim_step_fifteen_pruned_terminal_prefixes();
+        let baseline_pruned_keys = baseline_pruned_prefixes
+            .iter()
+            .map(|work_item| {
+                serde_json::to_string(&work_item.prefix_telescope)
+                    .expect("captured prune prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+
+        let _search_override =
+            super::override_claim_step_fifteen_exact_partial_prefix_relief_on_mismatch_zero_pair_cell(
+                super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroPairCellSelector {
+                    clause_zero: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimFlatDomain,
+                    clause_one: super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimSharpCodomain,
+                    clause_two: Some(super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain),
+                    clause_five:
+                        super::ClaimStepFifteenExactPartialPrefixReliefOnMismatchZeroClauseFiveLabel::ClaimNextCodomain,
+                },
+            );
+        let probe_captures = current_claim_step_fifteen_partial_prefix_bound_prune_captures();
+        let probe_capture_keys = probe_captures
+            .iter()
+            .map(|capture| {
+                serde_json::to_string(&capture.prefix_telescope)
+                    .expect("captured prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+        let probe_pruned_prefixes = current_claim_step_fifteen_pruned_terminal_prefixes();
+        let probe_pruned_keys = probe_pruned_prefixes
+            .iter()
+            .map(|work_item| {
+                serde_json::to_string(&work_item.prefix_telescope)
+                    .expect("captured prune prefix should serialize")
+            })
+            .collect::<BTreeSet<_>>();
+
+        let removed_captures = baseline_captures
+            .iter()
+            .filter(|capture| {
+                !probe_capture_keys.contains(
+                    &serde_json::to_string(&capture.prefix_telescope)
+                        .expect("captured prefix should serialize"),
+                )
+            })
+            .map(|capture| {
+                (
+                    capture.prefix_telescope.clauses.len(),
+                    current_claim_step_fifteen_prefix_group_delta_label(&capture.prefix_telescope),
+                    capture
+                        .prefix_telescope
+                        .clauses
+                        .get(6)
+                        .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+                        .unwrap_or("out_of_scope"),
+                )
+            })
+            .collect::<Vec<_>>();
+        let introduced_captures = probe_captures
+            .iter()
+            .filter(|capture| {
+                !baseline_capture_keys.contains(
+                    &serde_json::to_string(&capture.prefix_telescope)
+                        .expect("captured prefix should serialize"),
+                )
+            })
+            .map(|capture| {
+                (
+                    capture.prefix_telescope.clauses.len(),
+                    current_claim_step_fifteen_prefix_group_delta_label(&capture.prefix_telescope),
+                    capture
+                        .prefix_telescope
+                        .clauses
+                        .get(6)
+                        .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+                        .unwrap_or("out_of_scope"),
+                )
+            })
+            .collect::<Vec<_>>();
+        let removed_pruned_prefixes = baseline_pruned_prefixes
+            .iter()
+            .filter(|work_item| {
+                !probe_pruned_keys.contains(
+                    &serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize"),
+                )
+            })
+            .map(|work_item| {
+                (
+                    work_item.prefix_telescope.clauses.len(),
+                    current_claim_step_fifteen_prefix_group_delta_label(
+                        &work_item.prefix_telescope,
+                    ),
+                    work_item
+                        .prefix_telescope
+                        .clauses
+                        .get(6)
+                        .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+                        .unwrap_or("out_of_scope"),
+                )
+            })
+            .collect::<Vec<_>>();
+        let introduced_pruned_prefixes = probe_pruned_prefixes
+            .iter()
+            .filter(|work_item| {
+                !baseline_pruned_keys.contains(
+                    &serde_json::to_string(&work_item.prefix_telescope)
+                        .expect("captured prune prefix should serialize"),
+                )
+            })
+            .map(|work_item| {
+                (
+                    work_item.prefix_telescope.clauses.len(),
+                    current_claim_step_fifteen_prefix_group_delta_label(
+                        &work_item.prefix_telescope,
+                    ),
+                    work_item
+                        .prefix_telescope
+                        .clauses
+                        .get(6)
+                        .map(current_claim_step_fifteen_partial_prefix_clause_six_label)
+                        .unwrap_or("out_of_scope"),
+                )
+            })
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            removed_captures,
+            vec![(
+                6_usize,
+                (
+                    Some(0_usize),
+                    "claim_flat_domain",
+                    "claim_sharp_codomain",
+                    "claim_flat_domain",
+                    "claim_next_bridge",
+                    "claim_next_codomain",
+                ),
+                "out_of_scope",
+            )],
+            "the first clause-one sibling exact-screen claim-flat clause-two tradeoff should also remove exactly one six-clause exact-prune capture, so the delta still stops before any clause-six identity is fixed"
+        );
+        assert!(
+            introduced_captures.is_empty(),
+            "that first clause-one sibling exact-screen claim-flat tradeoff should not introduce any new exact-prune capture family at the same layer"
+        );
+        assert!(
+            removed_pruned_prefixes.is_empty(),
+            "that first clause-one sibling exact-screen claim-flat tradeoff should not remove any deeper pruned-terminal family; the delta is confined to the one released six-clause parent capture"
+        );
+        assert!(
+            introduced_pruned_prefixes.is_empty(),
+            "that first clause-one sibling exact-screen claim-flat tradeoff should not introduce any deeper pruned-terminal family either"
+        );
+    }
+
+    #[test]
     fn current_claim_step_fifteen_exact_partial_prefix_relief_on_representative_mismatch_zero_claim_next_codomain_pair_cell_claim_flat_sheet_delta_stays_above_clause_six_boundary()
      {
         let baseline_captures = current_claim_step_fifteen_partial_prefix_bound_prune_captures();

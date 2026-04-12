@@ -1943,6 +1943,50 @@ Until that exists, wording stays at `bounded live recovery`.
   rather than reopening the spent `claim_eventual_domain` representative,
   first-sibling, or next-sibling pairs, their neutral `reference` sheets, or
   the spent first clause-`0` sibling pair.
+- That first clause-`1` sibling exact-screen pair on the same
+  `claim_flat_domain` clause-`0` family is now also spent at clause-`2`
+  identity scope:
+  - on `claim_flat_domain / claim_sharp_codomain / claim_next_bridge /
+    claim_next_codomain`, the `claim_flat_domain` and
+    `claim_sharp_codomain` sheets each land the same smaller
+    `4343 / 552 / 2271` tradeoff
+  - both keep accepted step `15` canonical `103 / 8` and keep
+    `incumbent_dominance = 3`
+  - both shift first-mismatch counts only to `311 / 177 / 50 / 14`
+  - both widen `small_cluster` only to generated `3141`
+  - each cuts only its own claim-side clause-`2` share from `15` to `14`,
+    leaving the sibling claim-side sheet at `15` and the sibling
+    `reference` sheet at `12`
+  - each contracts the targeted exact-screen pair only from `42` to `41`
+  - the sibling `reference` sheet is a neutral control on the untouched
+    `4331 / 553 / 2271` baseline with first-mismatch counts
+    `312 / 177 / 50 / 14`, `small_cluster generated = 3132`, and the same
+    targeted pair still at `42`
+- Consequence: clause-`2` identity on that first clause-`1` sibling
+  exact-screen pair is not the missing repair either. The next honest
+  follow-on has to move below the representative `claim_flat_domain` sheet on
+  `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`
+  rather than reopening the sibling `claim_sharp_codomain` sheet, the
+  neutral `reference` sheet, or any remaining-one relands on the spent
+  representative, first-sibling, next-sibling, or first-clause-`0`-sibling
+  pairs.
+- That first clause-`1` sibling exact-screen `claim_flat_domain` sheet is now
+  also localized at delta scope:
+  - under
+    `claim_flat_domain / claim_sharp_codomain / claim_flat_domain / claim_next_bridge / claim_next_codomain`,
+    the claim-flat clause-`2` tradeoff removes exactly one remaining-two
+    exact-prune capture on that six-clause parent shell
+  - that removed capture still has only six fixed clauses, so clause `6`
+    stays out of scope at this exact-screen boundary
+  - the tradeoff introduces no new exact-prune capture family and removes no
+    pruned-terminal family either
+- Consequence: exact-screen clause-`6` identity on that first clause-`1`
+  sibling claim-flat sheet is not available at this layer either. The next
+  honest follow-on has to move below the remaining-two exact-screen boundary
+  and localize that single released six-clause parent at remaining-one
+  exact-summary scope rather than reopening the sibling claim-sharp sheet,
+  the neutral `reference` sheet, or the spent representative, first-sibling,
+  next-sibling, or first-clause-`0`-sibling pairs.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh

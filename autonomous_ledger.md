@@ -2018,3 +2018,47 @@ This file is the append-only history for `desktop_claim_shadow`.
   first-sibling, or next-sibling pairs, their neutral `reference` sheets, or
   the same remaining-one follow-ons on the spent first clause-`0` sibling
   pair.
+- Scope: split the first clause-`1` sibling exact-screen pair's clause-`2`
+  identity on `claim_flat_domain / claim_sharp_codomain / claim_next_bridge /
+  claim_next_codomain`.
+  Result: the first clause-`1` sibling pair relands the same smaller
+  exact-screen clause-`2` lattice as the spent `claim_eventual_domain` trio
+  and first clause-`0` sibling pair rather than exposing fresh leverage.
+  - the `claim_flat_domain` and `claim_sharp_codomain` sheets each land the
+    same `4343 / 552 / 2271` tradeoff
+  - both keep accepted step `15` canonical `103 / 8`
+  - both keep `incumbent_dominance = 3`
+  - both shift first-mismatch counts only to `311 / 177 / 50 / 14`
+  - both widen `small_cluster` only to `3141 / 522 / 522 / 0`
+  - each cuts only its own claim-side clause-`2` share from `15` to `14`,
+    leaving the sibling claim-side sheet at `15` and the sibling
+    `reference` sheet at `12`
+  - each contracts the targeted exact-screen pair only from `42` to `41`
+  - the sibling `reference` sheet is a neutral control on the untouched
+    `4331 / 553 / 2271` baseline with the targeted pair still at `42`
+  Consequence: clause-`2` identity on that first clause-`1` sibling
+  exact-screen pair is spent too. The next honest probe has to move below the
+  representative `claim_flat_domain` sheet on
+  `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`
+  rather than reopening the sibling `claim_sharp_codomain` sheet, the
+  neutral `reference` sheet, or any remaining-one relands on the spent
+  representative, first-sibling, next-sibling, or first-clause-`0`-sibling
+  pairs.
+- Scope: split the first clause-`1` sibling exact-screen `claim_flat_domain`
+  sheet `claim_flat_domain / claim_sharp_codomain / claim_flat_domain /
+  claim_next_bridge / claim_next_codomain` one layer deeper across its
+  remaining-two boundary.
+  Result: the attempted clause-`6` split does not exist at this layer on the
+  first clause-`1` sibling claim-flat sheet either. The claim-flat
+  clause-`2` tradeoff removes exactly one remaining-two exact-prune capture
+  on that six-clause parent shell, that removed capture still has only six
+  fixed clauses, and clause `6` is therefore still out of scope at the
+  exact-screen boundary. The tradeoff introduces no new exact-prune capture
+  family and removes no pruned-terminal family either.
+  Consequence: same-layer exact-screen clause-`6` identity is unavailable on
+  that first clause-`1` sibling claim-flat sheet too. The next honest probe
+  has to move below the remaining-two exact-screen boundary and test the
+  released six-clause parent at remaining-one exact-summary scope rather than
+  reopening the sibling `claim_sharp_codomain` sheet, the neutral
+  `reference` sheet there, or the spent representative, first-sibling,
+  next-sibling, or first-clause-`0`-sibling pairs.

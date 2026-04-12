@@ -2635,6 +2635,32 @@ later stored bundle changes the diagnosis.
   `3`-generated / `0`-admitted completion summary with no bound, no
   best-rank profile, no survivor sketch, and the same
   `reference / eventual_lift / next_lift` `NeedsFallback` trio
+- the first clause-`1` sibling exact-screen pair-cell clause-`2` split on
+  that same clause-`0` `claim_flat_domain` family is also pinned as the same
+  split smaller tradeoff control rather than a fresh repair:
+  on `claim_flat_domain / claim_sharp_codomain / claim_next_bridge /
+  claim_next_codomain`, the `claim_flat_domain` and
+  `claim_sharp_codomain` sheets each land `4343 / 552 / 2271` with accepted
+  step `15` canonical `103 / 8`, `incumbent_dominance = 3`,
+  first-mismatch counts `311 / 177 / 50 / 14`, and
+  `small_cluster generated = 3141`, while the sibling `reference` sheet is
+  neutral on the untouched `4331 / 553 / 2271` baseline
+- that first clause-`1` sibling exact-screen pair-cell clause-`2` split is
+  also localized as a one-sheet contraction rather than a distinct repair
+  class:
+  each claim-side sheet cuts only its own clause-`2` share from `15` to
+  `14`, contracts the targeted exact-screen pair only from `42` to `41`, and
+  leaves the sibling claim-side sheet at `15` plus the sibling `reference`
+  sheet at `12`, while the sibling `reference` sheet's full neutral control
+  keeps that same targeted pair at `42`
+- the first clause-`1` sibling exact-screen `claim_flat_domain` sheet on that
+  same pair is also pinned as a same-boundary control rather than fresh
+  leverage:
+  it removes exactly one remaining-two exact-prune capture on
+  `claim_flat_domain / claim_sharp_codomain / claim_flat_domain /
+  claim_next_bridge / claim_next_codomain`, still leaves clause `6` out of
+  scope at the exact-screen boundary, and introduces no new exact-prune or
+  pruned-terminal family
 - the next operational slice stays above the exhausted claim-safe,
   representative mismatch-`0`, `reference / reference`, isolated
   clause-`1` exact-suffix, representative claim-side clause-`6`
@@ -2670,14 +2696,20 @@ later stored bundle changes the diagnosis.
   split too, plus the next sibling exact-screen `claim_flat_domain` sheet and
   its spent remaining-one follow-ons too, plus the next sibling exact-screen
   `claim_sharp_codomain` sheet and its spent remaining-one follow-ons too,
-  while now targeting the first clause-`1` sibling exact-screen pair on that
-  same clause-`0` `claim_flat_domain` family,
+  plus the first clause-`1` sibling exact-screen pair-cell clause-`2` split
+  too, plus the first clause-`1` sibling exact-screen `claim_flat_domain`
+  sheet's same-boundary remaining-two reland too, while now targeting
+  remaining-one exact-summary relief beneath that released first clause-`1`
+  sibling exact-screen `claim_flat_domain` plus clause-`5`
+  `claim_next_codomain` parent on
   `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
-  above any clause-`2` sheet split inside that new pair, above deeper
-  remaining-one relands on the spent `claim_eventual_domain` representative,
-  first-sibling, and next-sibling pairs, above deeper remaining-one relands
-  on the spent first clause-`0` sibling pair too, and still above the
-  exhausted parent-level qualification-family lattice
+  above the sibling `claim_sharp_codomain` sheet and the neutral `reference`
+  sheet on that same pair, above deeper clause-`6` identity relands there,
+  above deeper remaining-one relands on the spent representative,
+  first-sibling, next-sibling, and first clause-`0` sibling pairs, above
+  direct completion or terminal relands beneath the new first clause-`1`
+  sibling claim-flat parent before its remaining-one summary pass, and still
+  above the exhausted parent-level qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

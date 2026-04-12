@@ -515,6 +515,15 @@ Focus on:
   `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
   instead of reopening the spent `claim_eventual_domain` trio or the spent
   first clause-`0` sibling pair as if they were fresh leverage
+- once the live docs also pin that first clause-`1` sibling exact-screen pair
+  at the same smaller clause-`2` tradeoff lattice and pin the first
+  clause-`1` sibling `claim_flat_domain` sheet's exact-screen boundary to one
+  released six-clause parent with clause `6` still out of scope, keep the
+  next repair above that spent pair-level identity pass too and route below
+  the released first clause-`1` sibling claim-flat parent to remaining-one
+  exact-summary relief instead of reopening the sibling
+  `claim_sharp_codomain` sheet, the neutral `reference` sheet, or the spent
+  first clause-`0` sibling pair as if they were fresh leverage
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by
