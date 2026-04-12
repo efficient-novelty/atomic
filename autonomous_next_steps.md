@@ -1857,13 +1857,22 @@ later stored bundle changes the diagnosis.
      `((0, None, None), 2271)`, keeps `6813` structurally connected but
      unqualified generated candidates, and releases no remaining-one
      pruned-terminal group
-   - spend the next execution turn on direct remaining-one completion or
-     terminal scope beneath that released first clause-`1` sibling
-     `claim_flat_domain` parent on
+   - keep that same released first clause-`1` sibling exact-screen
+     `claim_flat_domain` plus clause-`5` `claim_next_codomain` parent frozen
+     at direct remaining-one completion too: its three clause-`6`
+     continuations each reland the same dead `3`-generated /
+     `0`-admitted completion summary, keep
+     `matched_clause_count = 2`, keep
+     `first_mismatch_position = 2`, carry no bound, no best-rank profile,
+     and no survivor sketch, and keep only the same structurally connected
+     but unqualified `reference / eventual_lift / next_lift` terminal trio
+     with `NeedsFallback` and `max_lib_ref = 10`
+   - spend the next execution turn on the sibling exact-screen
+     `claim_sharp_codomain` sheet on
      `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
-     above the sibling `claim_sharp_codomain` sheet, the neutral `reference`
-     sheet, and the spent representative, first-sibling, next-sibling, and
-     first clause-`0` sibling pair relands
+     above the neutral `reference` sheet and the spent first clause-`1`
+     sibling claim-flat parent, and above the spent representative,
+     first-sibling, next-sibling, and first clause-`0` sibling pair relands
    - stay above another claim-side union reassembly inside the current
      representative pair-cell exact-summary selector lattice; the next repair
      class has to move beyond a deeper restatement of the same `4355 / 551`
@@ -2732,14 +2741,13 @@ later stored bundle changes the diagnosis.
   plus the first clause-`1` sibling exact-screen pair-cell clause-`2` split
   too, plus the first clause-`1` sibling exact-screen `claim_flat_domain`
   sheet's same-boundary remaining-two reland too, plus its stacked
-  remaining-one exact-summary neutral control too, while now targeting direct
-  remaining-one completion or terminal scope beneath that released first
-  clause-`1` sibling exact-screen `claim_flat_domain` plus clause-`5`
-  `claim_next_codomain` parent on
+  remaining-one exact-summary neutral control too, plus its direct
+  remaining-one completion / terminal reland too, while now targeting the
+  sibling exact-screen `claim_sharp_codomain` sheet on
   `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
-  above the sibling `claim_sharp_codomain` sheet and the neutral `reference`
-  sheet on that same pair, above retrying the same remaining-one
-  exact-summary override on that parent,
+  above the neutral `reference` sheet on that same pair, above retrying the
+  spent claim-flat parent or the same remaining-one exact-summary override on
+  that parent,
   above deeper remaining-one relands on the spent representative,
   first-sibling, next-sibling, and first clause-`0` sibling pairs, and still
   above the exhausted parent-level qualification-family lattice

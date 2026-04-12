@@ -522,12 +522,14 @@ Focus on:
   the stacked remaining-one exact-summary relief beneath that released
   claim-flat parent as a neutral control on the same `4343 / 552 / 2271`
   shell with no released remaining-one pruned-terminal group, keep the next
-  repair above that spent pair-level and summary-prune lattice too and route
-  below summary-prune relief to direct remaining-one completion or terminal
-  scope beneath the released first clause-`1` sibling claim-flat parent
-  instead of reopening the sibling `claim_sharp_codomain` sheet, the neutral
-  `reference` sheet, or the spent first clause-`0` sibling pair as if they
-  were fresh leverage
+  repair above that spent pair-level and summary-prune lattice too; once the
+  live docs also pin direct remaining-one completion beneath that released
+  claim-flat parent as the same dead `3`-generated / `0`-admitted
+  clause-`6` triad with only the nonlive
+  `reference / eventual_lift / next_lift` terminal trio, route sideways to
+  the sibling `claim_sharp_codomain` sheet instead of reopening the spent
+  claim-flat parent, the neutral `reference` sheet, or the spent first
+  clause-`0` sibling pair as if they were fresh leverage
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by

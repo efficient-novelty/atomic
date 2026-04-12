@@ -347,11 +347,20 @@ Do not:
   `small_cluster generated = 3141`, the same zero-admitted exact-prune
   family `((0, None, None), 2271)`, the same `6813` structurally connected
   but unqualified generated candidates, and no released remaining-one
-  pruned-terminal group, route below summary-prune relief to direct
-  remaining-one completion or terminal-scope identity beneath that released
-  claim-flat parent instead of reopening the sibling
-  `claim_sharp_codomain` sheet or the neutral `reference` sheet there as if
-  they were fresh leverage
+  pruned-terminal group, keep that summary-relief axis in the autonomy docs
+  and ledger rather than as a fresh repair lead
+- reopen direct remaining-one completion or terminal-scope identity beneath
+  that same released first clause-`1` sibling exact-screen
+  `claim_flat_domain` plus clause-`5` `claim_next_codomain` parent first
+  either; if the live docs already pin all three clause-`6` continuations as
+  the same dead `3`-generated / `0`-admitted completion summary with
+  `matched_clause_count = 2`, `first_mismatch_position = 2`, no bound, no
+  best-rank profile, no survivor sketch, and only the same nonlive
+  `reference / eventual_lift / next_lift` terminal trio with
+  `NeedsFallback` and `max_lib_ref = 10`, route sideways to the sibling
+  `claim_sharp_codomain` sheet instead of reopening the spent claim-flat
+  parent or the neutral `reference` sheet there as if they were fresh
+  leverage
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
   tradeoffs first; those smaller tradeoff controls now also belong in the

@@ -33996,6 +33996,19 @@ mod tests {
         )
     }
 
+    fn current_claim_step_fifteen_exact_screen_first_clause_one_sibling_claim_flat_parent_clause_six_completion_profiles()
+    -> BTreeMap<&'static str, ExactScreenRepresentativeClaimSideParentClauseSixCompletionProfile>
+    {
+        current_claim_step_fifteen_exact_screen_representative_claim_side_parent_clause_six_completion_profiles(
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseZeroLabel::ClaimFlatDomain,
+            "claim_flat_domain",
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseOneLabel::ClaimSharpCodomain,
+            "claim_sharp_codomain",
+            super::ClaimStepFifteenRemainingOneExactSummaryReliefOnMismatchZeroClauseTwoLabel::ClaimFlatDomain,
+            "claim_flat_domain",
+        )
+    }
+
     fn current_claim_step_fifteen_exact_screen_next_sibling_claim_flat_parent_clause_six_completion_profiles()
     -> BTreeMap<&'static str, ExactScreenRepresentativeClaimSideParentClauseSixCompletionProfile>
     {
@@ -34613,6 +34626,148 @@ mod tests {
                         .collect::<BTreeMap<_, _>>()
             }),
             "each clause-six continuation below the released first sibling exact-screen claim-sharp parent should stay uniformly blocked at clause 2 and keep only the same structurally connected but unqualified reference / eventual_lift / next_lift terminal trio"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_screen_first_clause_one_sibling_claim_flat_parent_clause_six_children_stay_on_three_matched_dead_completion_summaries()
+     {
+        let profiles =
+            current_claim_step_fifteen_exact_screen_first_clause_one_sibling_claim_flat_parent_clause_six_completion_profiles();
+        let expected_profile = ExactScreenRepresentativeClaimSideParentClauseSixCompletionProfile {
+            matched_clause_count: 2,
+            first_mismatch_position: Some(2),
+            generated_candidate_count: 3,
+            admitted_candidate_count: 0,
+            has_bound: false,
+            has_best_accept_primary_rank: false,
+            has_best_accept_rank: false,
+            has_survivor_sketch: false,
+            terminal_profiles: [
+                (
+                    "eventual_lift",
+                    (
+                        TerminalConnectivityDecision::NeedsFallback,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        },
+                        false,
+                    ),
+                ),
+                (
+                    "next_lift",
+                    (
+                        TerminalConnectivityDecision::NeedsFallback,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        },
+                        false,
+                    ),
+                ),
+                (
+                    "reference",
+                    (
+                        TerminalConnectivityDecision::NeedsFallback,
+                        ConnectivityWitness {
+                            connected: true,
+                            references_active_window: false,
+                            self_contained: false,
+                            max_lib_ref: 10,
+                            historical_reanchor: false,
+                        },
+                        false,
+                    ),
+                ),
+            ]
+            .into_iter()
+            .collect(),
+        };
+
+        assert_eq!(
+            profiles,
+            [
+                ("claim_next_codomain", expected_profile.clone()),
+                ("claim_sharp_codomain", expected_profile.clone()),
+                ("reference", expected_profile),
+            ]
+            .into_iter()
+            .collect(),
+            "below the released first clause-one sibling exact-screen claim-flat parent, all three clause-six continuations should collapse to the same dead 3-generated / 0-admitted completion summary with no bound, no best-rank profile, and no survivor sketch"
+        );
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_exact_screen_first_clause_one_sibling_claim_flat_parent_clause_six_children_keep_only_uniform_nonlive_terminal_choices()
+     {
+        let profiles =
+            current_claim_step_fifteen_exact_screen_first_clause_one_sibling_claim_flat_parent_clause_six_completion_profiles();
+
+        assert_eq!(
+            profiles.len(),
+            3,
+            "the released first clause-one sibling exact-screen claim-flat parent should split only across the three clause-six continuations"
+        );
+        assert!(
+            profiles.values().all(|profile| {
+                profile.matched_clause_count == 2
+                    && profile.first_mismatch_position == Some(2)
+                    && profile.terminal_profiles
+                        == [
+                            (
+                                "eventual_lift",
+                                (
+                                    TerminalConnectivityDecision::NeedsFallback,
+                                    ConnectivityWitness {
+                                        connected: true,
+                                        references_active_window: false,
+                                        self_contained: false,
+                                        max_lib_ref: 10,
+                                        historical_reanchor: false,
+                                    },
+                                    false,
+                                ),
+                            ),
+                            (
+                                "next_lift",
+                                (
+                                    TerminalConnectivityDecision::NeedsFallback,
+                                    ConnectivityWitness {
+                                        connected: true,
+                                        references_active_window: false,
+                                        self_contained: false,
+                                        max_lib_ref: 10,
+                                        historical_reanchor: false,
+                                    },
+                                    false,
+                                ),
+                            ),
+                            (
+                                "reference",
+                                (
+                                    TerminalConnectivityDecision::NeedsFallback,
+                                    ConnectivityWitness {
+                                        connected: true,
+                                        references_active_window: false,
+                                        self_contained: false,
+                                        max_lib_ref: 10,
+                                        historical_reanchor: false,
+                                    },
+                                    false,
+                                ),
+                            ),
+                        ]
+                        .into_iter()
+                        .collect::<BTreeMap<_, _>>()
+            }),
+            "each clause-six continuation below the released first clause-one sibling exact-screen claim-flat parent should stay uniformly blocked at clause 2 and keep only the same structurally connected but unqualified reference / eventual_lift / next_lift terminal trio"
         );
     }
 

@@ -2085,3 +2085,25 @@ This file is the append-only history for `desktop_claim_shadow`.
   `claim_sharp_codomain` sheet, the neutral `reference` sheet there, or
   bouncing back to the spent representative, first-sibling, next-sibling, or
   first-clause-`0`-sibling pairs.
+- Scope: localize that same released first clause-`1` sibling exact-screen
+  `claim_flat_domain` plus clause-`5` `claim_next_codomain` parent at direct
+  remaining-one completion / terminal scope under
+  `claim_flat_domain / claim_sharp_codomain / claim_flat_domain / claim_next_bridge / claim_next_codomain`.
+  Result: the released first clause-`1` sibling claim-flat parent is spent at
+  direct completion too rather than hiding a live child.
+  - its three clause-`6` continuations `claim_next_codomain`,
+    `claim_sharp_codomain`, and `reference` each reland the same dead
+    `3`-generated / `0`-admitted completion summary
+  - each keeps `matched_clause_count = 2` and
+    `first_mismatch_position = 2`
+  - none carries a bound, a best-rank profile, or a survivor sketch
+  - each keeps only the same structurally connected but unqualified
+    `reference / eventual_lift / next_lift` terminal trio with
+    `NeedsFallback`, no active-window support, no self-containedness, no
+    historical reanchor, and `max_lib_ref = 10`
+  Consequence: the next honest probe has to move sideways to the sibling
+  exact-screen `claim_sharp_codomain` sheet on
+  `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`
+  rather than retrying the spent claim-flat parent, the same summary
+  override, the neutral `reference` sheet, or the spent representative,
+  first-sibling, next-sibling, and first-clause-`0`-sibling pairs.
