@@ -383,8 +383,16 @@ Do not:
   `42`, and once the live docs also pin that pair's representative
   `claim_flat_domain` sheet through its same-boundary one-parent reland,
   neutral remaining-one exact-summary follow-on, and dead clause-`6`
-  completion split, the next honest slice should move sideways to the
-  sibling `claim_sharp_codomain` sheet on that pair instead
+  completion split, and once the live docs also pin that pair's sibling
+  `claim_sharp_codomain` sheet through its matching same-boundary one-parent
+  reland, neutral remaining-one exact-summary follow-on, and dead
+  clause-`6` completion split, the exact-screen `claim_next_codomain` cell
+  also belongs to the autonomy ledger; the next honest slice should move
+  sideways to the sibling active mismatch-`0` clause-`5` `reference`
+  family, below its representative `claim_flat_domain` clause-`2` sheet at
+  finer remaining-one exact-summary scope under
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`
+  instead
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
   tradeoffs first; those smaller tradeoff controls now also belong in the

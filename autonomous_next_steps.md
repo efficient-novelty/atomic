@@ -350,6 +350,24 @@ rather than retrying the spent `claim_eventual_domain` representative,
 first-sibling, or next-sibling pairs, the spent first clause-`0` sibling
 pair, the same summary overrides, or the neutral `reference` sheet inside
 any of those spent pairs.
+Since then, the remaining exact-screen clause-`1` sibling pairs on that same
+clause-`0` `claim_flat_domain` family were exhausted too: on both
+`claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`
+and `claim_flat_domain / reference / claim_next_bridge / claim_next_codomain`,
+the representative `claim_flat_domain` and sibling `claim_sharp_codomain`
+follow-ons each remove only one released six-clause parent at the exact-screen
+boundary, stay completely neutral under remaining-one exact-summary relief on
+the same `4343 / 552 / 2271` shell, and reland the same dead
+`3`-generated / `0`-admitted clause-`6` completion triad with only the
+nonlive `reference / eventual_lift / next_lift` terminal trio. The next
+honest slice therefore has to leave the exhausted exact-screen
+`claim_next_codomain` cell and move sideways to the sibling active
+mismatch-`0` clause-`5` `reference` family, below its representative
+`claim_flat_domain` clause-`2` sheet at finer remaining-one exact-summary
+scope under
+`claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`,
+rather than reopening any spent exact-screen pair-cell split, claim-side
+sheet, or neutral `reference` sheet on that exhausted exact-screen cell.
 
 Do not spend another turn re-running the rerun-vs-step-`1` decision on the
 same code. The newer stored rerun has already shown that current-head code
@@ -2750,16 +2768,20 @@ later stored bundle changes the diagnosis.
   clause-`2` split too, plus the representative next clause-`1` sibling
   exact-screen `claim_flat_domain` sheet's same-boundary remaining-two
   reland too, plus its stacked remaining-one exact-summary neutral control
-  too, plus its direct remaining-one completion / terminal reland too, while
-  now targeting the sibling `claim_sharp_codomain` sheet on that same next
-  clause-`1` sibling pair,
-  `claim_flat_domain / reference / claim_next_bridge / claim_next_codomain`,
-  above reopening the spent first clause-`1` sibling claim-flat or
-  claim-sharp sheets, above the spent representative `claim_flat_domain`
-  sheet on that same next clause-`1` sibling pair, above the neutral
-  `reference` sheet on that same pair, above deeper remaining-one relands on
-  the spent representative, first-sibling, next-sibling, first clause-`0`
-  sibling, and first clause-`1` sibling pairs, and still above the exhausted
+  too, plus its direct remaining-one completion / terminal reland too, plus
+  the sibling next clause-`1` exact-screen `claim_sharp_codomain` sheet's
+  same-boundary remaining-two reland too, plus its stacked remaining-one
+  exact-summary neutral control too, plus its direct remaining-one
+  completion / terminal reland too, while now targeting the sibling active
+  mismatch-`0` clause-`5` `reference` family's representative
+  `claim_flat_domain` clause-`2` sheet at finer remaining-one exact-summary
+  scope under
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`,
+  above reopening any spent exact-screen pair-cell split, claim-side sheet,
+  or neutral `reference` sheet on the exhausted `claim_next_codomain`
+  exact-screen cell, above deeper remaining-one relands on the spent
+  representative, first-sibling, next-sibling, first clause-`0` sibling,
+  and both clause-`1` sibling pairs, and still above the exhausted
   parent-level qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and

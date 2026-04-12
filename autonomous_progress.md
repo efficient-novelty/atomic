@@ -2179,6 +2179,39 @@ Until that exists, wording stays at `bounded live recovery`.
   neutral `reference` sheet on that pair, or the spent representative,
   first-sibling, next-sibling, first-clause-`0`-sibling, or
   first-clause-`1`-sibling pairs.
+- That sibling next clause-`1` exact-screen `claim_sharp_codomain` sheet on
+  the same pair is now also spent through the same boundary and
+  remaining-one sequence:
+  - under
+    `claim_flat_domain / reference / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
+    the exact-screen delta removes exactly one remaining-two exact-prune
+    capture on the released six-clause parent shell
+  - clause `6` stays out of scope at the exact-screen boundary
+  - the delta introduces no new exact-prune capture family and removes no
+    pruned-terminal family
+  - stacking remaining-one exact-summary relief stays completely neutral on
+    the same `4343 / 552 / 2271`, the same `311 / 177 / 50 / 14`, the same
+    `small_cluster = 3141 / 522 / 522 / 0`, the same
+    `((0, None, None), 2271)` exact-prune family, and the same `6813`
+    structurally connected but unqualified generated candidates
+  - the stacked follow-on releases no remaining-one pruned-terminal group
+  - its three clause-`6` continuations `claim_next_codomain`,
+    `claim_sharp_codomain`, and `reference` each reland the same dead
+    `3`-generated / `0`-admitted completion summary with no bound, no
+    best-rank profile, no survivor sketch, and the same
+    `reference / eventual_lift / next_lift` `NeedsFallback` trio
+  - all three clause-`6` continuations stay uniformly blocked at clause `2`
+    with `matched_clause_count = 2` and `first_mismatch_position = 2`
+- Consequence: all six exact-screen pair cells on the active clause-`5`
+  `claim_next_codomain` cell are now spent through both claim-side sheets.
+  The next honest follow-on has to move sideways to the sibling active
+  mismatch-`0` clause-`5` `reference` family, starting below its
+  representative `claim_flat_domain` clause-`2` sheet at finer
+  remaining-one exact-summary scope under
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`,
+  rather than reopening any spent exact-screen pair-cell split, claim-side
+  sheet, or neutral `reference` sheet on the exhausted
+  `claim_next_codomain` exact-screen cell.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh

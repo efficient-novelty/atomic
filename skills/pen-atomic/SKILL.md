@@ -542,12 +542,17 @@ Focus on:
   `41` while the sibling `reference` sheet stays neutral at `42`, and once
   the live docs also pin that pair's representative `claim_flat_domain`
   sheet through its same-boundary one-parent reland, neutral remaining-one
-  exact-summary follow-on, and dead clause-`6` completion split, route
-  sideways to the sibling `claim_sharp_codomain` sheet on that same pair
-  instead of reopening the spent representative claim-flat sheet there, the
-  neutral `reference` sheet on that same pair, or the spent first
-  clause-`1` sibling claim-flat or claim-sharp sheets as if they were fresh
-  leverage
+  exact-summary follow-on, and dead clause-`6` completion split, and once
+  the live docs also pin that pair's sibling `claim_sharp_codomain` sheet
+  through its matching same-boundary one-parent reland, neutral
+  remaining-one exact-summary follow-on, and dead clause-`6` completion
+  split, route sideways to the sibling active mismatch-`0` clause-`5`
+  `reference` family, below its representative `claim_flat_domain`
+  clause-`2` sheet at finer remaining-one exact-summary scope under
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`
+  instead of reopening any spent exact-screen pair-cell split, claim-side
+  sheet, or neutral `reference` sheet on that exhausted
+  `claim_next_codomain` exact-screen cell
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by
