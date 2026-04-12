@@ -337,8 +337,19 @@ Do not:
   `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`
   first either; if the live docs already pin its remaining-two delta to one
   released six-clause parent shell, keep clause `6` out of scope at that
-  exact-screen boundary and route to remaining-one exact-summary relief under
-  that released claim-flat parent instead of reopening the sibling
+  exact-screen boundary and treat that same-boundary claim-flat sheet as
+  spent rather than as fresh leverage
+- reopen remaining-one exact-summary relief beneath that released first
+  clause-`1` sibling exact-screen `claim_flat_domain` plus clause-`5`
+  `claim_next_codomain` parent first either; if the live docs already pin the
+  stacked follow-on as neutral on the same `4343 / 552 / 2271` shell with
+  first-mismatch counts `311 / 177 / 50 / 14`,
+  `small_cluster generated = 3141`, the same zero-admitted exact-prune
+  family `((0, None, None), 2271)`, the same `6813` structurally connected
+  but unqualified generated candidates, and no released remaining-one
+  pruned-terminal group, route below summary-prune relief to direct
+  remaining-one completion or terminal-scope identity beneath that released
+  claim-flat parent instead of reopening the sibling
   `claim_sharp_codomain` sheet or the neutral `reference` sheet there as if
   they were fresh leverage
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus

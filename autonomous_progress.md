@@ -1987,6 +1987,27 @@ Until that exists, wording stays at `bounded live recovery`.
   exact-summary scope rather than reopening the sibling claim-sharp sheet,
   the neutral `reference` sheet, or the spent representative, first-sibling,
   next-sibling, or first-clause-`0`-sibling pairs.
+- That same released first clause-`1` sibling exact-screen
+  `claim_flat_domain` plus clause-`5` `claim_next_codomain` parent is now
+  also spent on remaining-one exact-summary relief:
+  - stacking remaining-one exact-summary relief beneath the first clause-`1`
+    sibling exact-screen claim-flat tradeoff keeps the full step-`15`
+    surface on the same `4343 / 552 / 2271`
+  - it keeps the same `311 / 177 / 50 / 14` first-mismatch counts
+  - it keeps the same `small_cluster generated = 3141`
+  - it keeps the same zero-admitted exact-prune family
+    `((0, None, None), 2271)` and the same remaining-one terminal
+    connectivity summary with `6813` structurally connected but unqualified
+    generated candidates
+  - it releases no remaining-one pruned-terminal group at all
+- Consequence: remaining-one exact-summary relief on that released first
+  clause-`1` sibling exact-screen claim-flat parent is only a neutral control
+  too. The next honest follow-on therefore has to move below summary-prune
+  relief and localize the same six-clause parent at direct remaining-one
+  completion or terminal scope rather than retrying the same summary
+  override, reopening the sibling claim-sharp sheet, the neutral
+  `reference` sheet, or bouncing back to the spent representative,
+  first-sibling, next-sibling, or first-clause-`0`-sibling pairs.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh

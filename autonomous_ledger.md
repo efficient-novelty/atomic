@@ -2062,3 +2062,26 @@ This file is the append-only history for `desktop_claim_shadow`.
   reopening the sibling `claim_sharp_codomain` sheet, the neutral
   `reference` sheet there, or the spent representative, first-sibling,
   next-sibling, or first-clause-`0`-sibling pairs.
+- Scope: test the first remaining-one follow-on beneath that released first
+  clause-`1` sibling exact-screen `claim_flat_domain` plus clause-`5`
+  `claim_next_codomain` parent by stacking remaining-one exact-summary relief
+  under
+  `claim_flat_domain / claim_sharp_codomain / claim_flat_domain / claim_next_bridge / claim_next_codomain`.
+  Result: remaining-one exact-summary relief on that first clause-`1`
+  sibling claim-flat parent is only a neutral control too.
+  - it keeps the same `4343 / 552 / 2271`
+  - it keeps the same `311 / 177 / 50 / 14`
+  - it keeps the same `small_cluster = 3141 / 522 / 522 / 0`
+  - it keeps the same zero-admitted exact-prune family
+    `((0, None, None), 2271)` and the same remaining-one terminal
+    connectivity summary with `6813` structurally connected but unqualified
+    generated candidates
+  - it releases no remaining-one pruned-terminal group
+  Consequence: remaining-one exact-summary relief on that released first
+  clause-`1` sibling exact-screen claim-flat parent is spent too. The next
+  honest probe has to move below summary-prune relief and localize the same
+  six-clause parent at direct remaining-one completion or terminal scope
+  rather than retrying the same summary override, reopening the sibling
+  `claim_sharp_codomain` sheet, the neutral `reference` sheet there, or
+  bouncing back to the spent representative, first-sibling, next-sibling, or
+  first-clause-`0`-sibling pairs.
