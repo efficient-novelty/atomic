@@ -2089,6 +2089,96 @@ Until that exists, wording stays at `bounded live recovery`.
   neutral `reference` sheet inside that spent pair, or the spent
   representative, first-sibling, next-sibling, or first-clause-`0`-sibling
   pairs.
+- That next clause-`1` sibling exact-screen pair on the same
+  `claim_flat_domain` clause-`0` family is now also spent at clause-`2`
+  identity scope:
+  - on `claim_flat_domain / reference / claim_next_bridge /
+    claim_next_codomain`, the `claim_flat_domain` and
+    `claim_sharp_codomain` sheets each land the same smaller
+    `4343 / 552 / 2271` tradeoff
+  - both keep accepted step `15` canonical `103 / 8` and keep
+    `incumbent_dominance = 3`
+  - both shift first-mismatch counts only to `311 / 177 / 50 / 14`
+  - both widen `small_cluster` only to generated `3141`
+  - each cuts only its own claim-side clause-`2` share from `15` to `14`,
+    leaving the sibling claim-side sheet at `15` and the sibling
+    `reference` sheet at `12`
+  - each contracts the targeted exact-screen pair only from `42` to `41`
+  - the sibling `reference` sheet is a neutral control on the untouched
+    `4331 / 553 / 2271` baseline with first-mismatch counts
+    `312 / 177 / 50 / 14`, `small_cluster generated = 3132`, and the same
+    targeted pair still at `42`
+- Consequence: clause-`2` identity on that next clause-`1` sibling
+  exact-screen pair is now spent too. The next honest follow-on has to move
+  below the representative `claim_flat_domain` sheet on
+  `claim_flat_domain / reference / claim_next_bridge / claim_next_codomain`
+  rather than reopening the sibling `claim_sharp_codomain` sheet, the
+  neutral `reference` sheet, or any remaining-one relands on the spent
+  representative, first-sibling, next-sibling, first-clause-`0`-sibling, or
+  first-clause-`1`-sibling pairs.
+- That representative next clause-`1` sibling exact-screen
+  `claim_flat_domain` sheet on that same pair is now also localized at delta
+  scope:
+  - under
+    `claim_flat_domain / reference / claim_flat_domain / claim_next_bridge / claim_next_codomain`,
+    the claim-flat clause-`2` tradeoff removes exactly one remaining-two
+    exact-prune capture on that released six-clause parent shell
+  - that removed capture still has only six fixed clauses, so clause `6`
+    stays out of scope at this exact-screen boundary
+  - the tradeoff introduces no new exact-prune capture family and removes no
+    pruned-terminal family either
+- Consequence: exact-screen clause-`6` identity on that next clause-`1`
+  sibling claim-flat sheet is not available at this layer either. The next
+  honest follow-on therefore has to move below the remaining-two exact-screen
+  boundary and localize the released six-clause parent at remaining-one scope
+  rather than reopening the spent pair-cell split, the sibling
+  `claim_sharp_codomain` sheet, the neutral `reference` sheet there, or the
+  spent representative, first-sibling, next-sibling, first-clause-`0`-
+  sibling, or first-clause-`1`-sibling pairs.
+- That same released next clause-`1` sibling exact-screen
+  `claim_flat_domain` plus clause-`5` `claim_next_codomain` parent is now
+  also spent on remaining-one exact-summary relief:
+  - stacking remaining-one exact-summary relief beneath that next
+    clause-`1` sibling exact-screen claim-flat tradeoff keeps the full
+    step-`15` surface on the same `4343 / 552 / 2271`
+  - it keeps the same `311 / 177 / 50 / 14` first-mismatch counts
+  - it keeps the same `small_cluster generated = 3141`
+  - it keeps the same zero-admitted exact-prune family
+    `((0, None, None), 2271)` and the same remaining-one terminal
+    connectivity summary with `6813` structurally connected but unqualified
+    generated candidates
+  - it releases no remaining-one pruned-terminal group at all
+- Consequence: remaining-one exact-summary relief on that released next
+  clause-`1` sibling exact-screen claim-flat parent is only a neutral control
+  too. The next honest follow-on therefore has to move below summary-prune
+  relief and localize the same six-clause parent at direct remaining-one
+  completion or terminal scope rather than retrying the same summary
+  override, reopening the spent pair-cell split, the sibling
+  `claim_sharp_codomain` sheet, the neutral `reference` sheet there, or
+  bouncing back to the spent representative, first-sibling, next-sibling,
+  first-clause-`0`-sibling, or first-clause-`1`-sibling pairs.
+- That same released next clause-`1` sibling exact-screen
+  `claim_flat_domain` plus clause-`5` `claim_next_codomain` parent is now
+  also spent at direct remaining-one completion / terminal scope:
+  - its three clause-`6` continuations `claim_next_codomain`,
+    `claim_sharp_codomain`, and `reference` each reland the same dead
+    `3`-generated / `0`-admitted completion summary
+  - each keeps `matched_clause_count = 2` and
+    `first_mismatch_position = 2`
+  - none carries a bound, a best-rank profile, or a survivor sketch
+  - each keeps only the same structurally connected but unqualified
+    `reference / eventual_lift / next_lift` terminal trio with
+    `NeedsFallback`, no active-window support, no self-containedness, no
+    historical reanchor, and `max_lib_ref = 10`
+- Consequence: the representative claim-flat sheet on that next clause-`1`
+  sibling exact-screen pair is now spent too. The next honest follow-on has
+  to move sideways to the sibling exact-screen `claim_sharp_codomain` sheet
+  on that same pair,
+  `claim_flat_domain / reference / claim_next_bridge / claim_next_codomain`,
+  rather than reopening the spent representative claim-flat sheet there, the
+  neutral `reference` sheet on that pair, or the spent representative,
+  first-sibling, next-sibling, first-clause-`0`-sibling, or
+  first-clause-`1`-sibling pairs.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh

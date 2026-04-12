@@ -534,12 +534,20 @@ Focus on:
   `claim_sharp_codomain` sheet and its deeper remaining-one follow-ons as
   spent beneath `claim_flat_domain / claim_sharp_codomain / claim_next_bridge /
   claim_next_codomain`, keep the next repair above that exhausted
-  `claim_sharp_codomain` branch too and route to the next clause-`1` sibling
-  exact-screen pair on the same clause-`0` `claim_flat_domain` family,
+  `claim_sharp_codomain` branch too; once the live docs also pin the next
+  clause-`1` sibling exact-screen pair on that same clause-`0`
+  `claim_flat_domain` family,
   `claim_flat_domain / reference / claim_next_bridge / claim_next_codomain`,
-  instead of reopening the spent claim-flat or claim-sharp sheets, the
-  neutral `reference` sheet inside that spent pair, or the spent first
-  clause-`0` sibling pair as if they were fresh leverage
+  at the same smaller clause-`2` tradeoff lattice with the targeted pair at
+  `41` while the sibling `reference` sheet stays neutral at `42`, and once
+  the live docs also pin that pair's representative `claim_flat_domain`
+  sheet through its same-boundary one-parent reland, neutral remaining-one
+  exact-summary follow-on, and dead clause-`6` completion split, route
+  sideways to the sibling `claim_sharp_codomain` sheet on that same pair
+  instead of reopening the spent representative claim-flat sheet there, the
+  neutral `reference` sheet on that same pair, or the spent first
+  clause-`1` sibling claim-flat or claim-sharp sheets as if they were fresh
+  leverage
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by

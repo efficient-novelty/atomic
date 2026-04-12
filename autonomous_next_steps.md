@@ -2746,15 +2746,21 @@ later stored bundle changes the diagnosis.
   clause-`1` exact-screen `claim_sharp_codomain` sheet's same-boundary
   remaining-two reland too, plus its stacked remaining-one exact-summary
   neutral control too, plus its direct remaining-one completion / terminal
-  reland too, while now targeting the next clause-`1` sibling exact-screen
-  pair on the same clause-`0` `claim_flat_domain` family, namely
+  reland too, plus the next clause-`1` sibling exact-screen pair-cell
+  clause-`2` split too, plus the representative next clause-`1` sibling
+  exact-screen `claim_flat_domain` sheet's same-boundary remaining-two
+  reland too, plus its stacked remaining-one exact-summary neutral control
+  too, plus its direct remaining-one completion / terminal reland too, while
+  now targeting the sibling `claim_sharp_codomain` sheet on that same next
+  clause-`1` sibling pair,
   `claim_flat_domain / reference / claim_next_bridge / claim_next_codomain`,
   above reopening the spent first clause-`1` sibling claim-flat or
-  claim-sharp sheets, above the neutral `reference` sheet inside that spent
-  pair, above deeper remaining-one relands on the spent representative,
-  first-sibling, next-sibling, first clause-`0` sibling, and first
-  clause-`1` sibling pairs, and still above the exhausted parent-level
-  qualification-family lattice
+  claim-sharp sheets, above the spent representative `claim_flat_domain`
+  sheet on that same next clause-`1` sibling pair, above the neutral
+  `reference` sheet on that same pair, above deeper remaining-one relands on
+  the spent representative, first-sibling, next-sibling, first clause-`0`
+  sibling, and first clause-`1` sibling pairs, and still above the exhausted
+  parent-level qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

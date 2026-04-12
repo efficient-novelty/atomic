@@ -374,11 +374,17 @@ Do not:
   `NeedsFallback` trio with `matched_clause_count = 2`,
   `first_mismatch_position = 2`, and `max_lib_ref = 10`, that first
   clause-`1` sibling claim-sharp branch also belongs to the autonomy ledger
-  rather than as a fresh repair lead, and the next honest slice should move
-  sideways to the next clause-`1` sibling exact-screen pair on the same
-  clause-`0` `claim_flat_domain` family,
+  rather than as a fresh repair lead; once the live docs also pin the next
+  clause-`1` sibling exact-screen pair on that same clause-`0`
+  `claim_flat_domain` family,
   `claim_flat_domain / reference / claim_next_bridge / claim_next_codomain`,
-  instead
+  at the same `4343 / 552 / 2271` smaller clause-`2` tradeoff with the
+  targeted pair at `41` while the sibling `reference` sheet stays neutral at
+  `42`, and once the live docs also pin that pair's representative
+  `claim_flat_domain` sheet through its same-boundary one-parent reland,
+  neutral remaining-one exact-summary follow-on, and dead clause-`6`
+  completion split, the next honest slice should move sideways to the
+  sibling `claim_sharp_codomain` sheet on that pair instead
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
   tradeoffs first; those smaller tradeoff controls now also belong in the
