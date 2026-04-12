@@ -305,6 +305,19 @@ Do not:
   claim-flat branch also belongs to the autonomy ledger rather than as a
   fresh repair lead, and the next honest slice should move sideways to the
   sibling `claim_sharp_codomain` sheet on that same pair instead
+- reopen the sibling active mismatch-`0` clause-`5` `reference` family's
+  representative `claim_flat_domain` clause-`6` siblings beneath
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`
+  first either; if the live docs already pin the `claim_next_codomain`,
+  `claim_sharp_codomain`, and `reference` continuations at the same
+  `4343 / 552` shell with `small_cluster = 3141 / 522 / 522 / 0`,
+  representative clause-`2` spread `14 / 15 / 12`, representative
+  clause-`4` split `23 / 18`, the active `claim_next_bridge` plus
+  clause-`5` `reference` bucket at `47`, and only a tiny deeper
+  zero-admitted tail delta `2270 / 2269 / 2268`, that clause-`6` axis also
+  belongs to the autonomy ledger rather than as a fresh repair lead, and
+  the next honest slice should move below the marginally best clause-`6`
+  `reference` continuation on that same sheet instead
 - reopen the first clause-`0` sibling exact-screen `claim_sharp_codomain`
   sheet beneath
   `claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_next_codomain`

@@ -1979,6 +1979,7 @@ later stored bundle changes the diagnosis.
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_a_representative_mismatch_zero_pair_cell_stays_a_smaller_tradeoff_control`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_pair_cell_clause_two_sheets_split_into_two_claim_side_smaller_tradeoff_controls_plus_one_reference_neutral_control`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_reference_clause_five_pair_cell_clause_two_sheets_split_into_two_claim_side_smaller_tradeoff_controls_plus_one_reference_neutral_control`
+- `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_reference_clause_five_claim_flat_sheet_clause_six_sheets_stay_matched_smaller_tradeoff_controls`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_flat_sheet_clause_six_sheets_stay_matched_smaller_tradeoff_controls`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_sharp_sheet_clause_six_sheets_stay_matched_smaller_tradeoff_controls`
 - `current_claim_step_fifteen_remaining_one_exact_summary_relief_on_representative_mismatch_zero_claim_flat_sheet_clause_six_reference_clause_three_sheets_stay_individually_neutral_controls`
@@ -2772,17 +2773,37 @@ later stored bundle changes the diagnosis.
   the sibling next clause-`1` exact-screen `claim_sharp_codomain` sheet's
   same-boundary remaining-two reland too, plus its stacked remaining-one
   exact-summary neutral control too, plus its direct remaining-one
-  completion / terminal reland too, while now targeting the sibling active
+  completion / terminal reland too, while now targeting the marginally best
+  clause-`6` `reference` continuation below that same sibling active
   mismatch-`0` clause-`5` `reference` family's representative
-  `claim_flat_domain` clause-`2` sheet at finer remaining-one exact-summary
-  scope under
+  `claim_flat_domain` claim-side sheet under
   `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`,
-  above reopening any spent exact-screen pair-cell split, claim-side sheet,
-  or neutral `reference` sheet on the exhausted `claim_next_codomain`
-  exact-screen cell, above deeper remaining-one relands on the spent
-  representative, first-sibling, next-sibling, first clause-`0` sibling,
-  and both clause-`1` sibling pairs, and still above the exhausted
-  parent-level qualification-family lattice
+  above reopening the spent `claim_next_codomain` or
+  `claim_sharp_codomain` clause-`6` siblings on that same reference-family
+  sheet, above reopening the spent representative clause-`2` split on that
+  same reference family, above any spent exact-screen pair-cell split,
+  claim-side sheet, or neutral `reference` sheet on the exhausted
+  `claim_next_codomain` exact-screen cell, above deeper remaining-one
+  relands on the spent representative, first-sibling, next-sibling, first
+  clause-`0` sibling, and both clause-`1` sibling pairs, and still above
+  the exhausted parent-level qualification-family lattice
+- Most recently, the sibling active clause-`5` `reference` family's
+  representative `claim_flat_domain` clause-`6` remaining-one continuations
+  were spent too. Beneath
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`,
+  the `claim_next_codomain`, `claim_sharp_codomain`, and `reference`
+  continuations each reland the same matched smaller `4343 / 552` shell,
+  keep `small_cluster = 3141 / 522 / 522 / 0`, keep the representative
+  clause-`2` spread at `14 / 15 / 12`, keep the representative clause-`4`
+  split at `23 / 18`, and keep the active clause-`4`
+  `claim_next_bridge` plus clause-`5` `reference` bucket at `47`, differing
+  only in the deeper zero-admitted tail `2270 / 2269 / 2268`.
+- The next honest slice therefore has to move below the marginally best
+  clause-`6` `reference` continuation on that same sibling active
+  clause-`5` `reference` family's representative claim-flat sheet rather
+  than swapping among the spent clause-`6` siblings there, reopening the
+  spent representative clause-`2` split, or bouncing back to the exhausted
+  `claim_next_codomain` exact-screen cell.
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

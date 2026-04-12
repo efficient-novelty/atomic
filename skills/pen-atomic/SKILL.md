@@ -547,11 +547,18 @@ Focus on:
   through its matching same-boundary one-parent reland, neutral
   remaining-one exact-summary follow-on, and dead clause-`6` completion
   split, route sideways to the sibling active mismatch-`0` clause-`5`
-  `reference` family, below its representative `claim_flat_domain`
-  clause-`2` sheet at finer remaining-one exact-summary scope under
-  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`
-  instead of reopening any spent exact-screen pair-cell split, claim-side
-  sheet, or neutral `reference` sheet on that exhausted
+  `reference` family, and once the live docs also pin that sibling
+  reference-family representative `claim_flat_domain` sheet's clause-`6`
+  `claim_next_codomain`, `claim_sharp_codomain`, and `reference`
+  continuations at the same `4343 / 552` shell with
+  `small_cluster = 3141 / 522 / 522 / 0`, representative clause-`2` spread
+  `14 / 15 / 12`, representative clause-`4` split `23 / 18`, the active
+  `claim_next_bridge` plus clause-`5` `reference` bucket at `47`, and only
+  a tiny deeper zero-admitted tail delta `2270 / 2269 / 2268`, route below
+  the marginally best clause-`6` `reference` continuation on that same
+  sheet instead of reopening the spent clause-`6` siblings there, any spent
+  exact-screen pair-cell split, claim-side sheet, or neutral `reference`
+  sheet on that exhausted
   `claim_next_codomain` exact-screen cell
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is

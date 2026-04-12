@@ -2234,3 +2234,21 @@ This file is the append-only history for `desktop_claim_shadow`.
   `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`,
   rather than reopening any spent exact-screen pair-cell split, claim-side
   sheet, or neutral `reference` sheet on the exhausted exact-screen cell.
+- Scope: localize the sibling active mismatch-`0` clause-`5` `reference`
+  family's representative `claim_flat_domain` clause-`2` sheet one layer
+  deeper across its clause-`6` remaining-one continuations.
+  Result: beneath
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`,
+  the `claim_next_codomain`, `claim_sharp_codomain`, and `reference`
+  continuations all reland the same matched smaller `4343 / 552` shell with
+  `small_cluster = 3141 / 522 / 522 / 0`, the representative clause-`2`
+  spread fixed at `14 / 15 / 12`, the representative clause-`4` split fixed
+  at `23 / 18`, and the active clause-`4` `claim_next_bridge` plus
+  clause-`5` `reference` bucket fixed at `47`, differing only in the deeper
+  zero-admitted tail `2270 / 2269 / 2268`.
+  Consequence: clause-`6` identity is now spent on that sibling active
+  `reference`-family representative claim-flat sheet too. The next honest
+  probe has to move below the marginally best clause-`6` `reference`
+  continuation on that same sheet rather than swapping among the spent
+  clause-`6` siblings, reopening the representative clause-`2` split, or
+  bouncing back to the exhausted `claim_next_codomain` exact-screen cell.

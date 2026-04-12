@@ -2212,6 +2212,29 @@ Until that exists, wording stays at `bounded live recovery`.
   rather than reopening any spent exact-screen pair-cell split, claim-side
   sheet, or neutral `reference` sheet on the exhausted
   `claim_next_codomain` exact-screen cell.
+- The sibling active clause-`5` `reference` family's representative
+  `claim_flat_domain` clause-`2` sheet is now also localized one layer
+  deeper across its clause-`6` remaining-one continuations:
+  - under
+    `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`,
+    the clause-`6` `claim_next_codomain`, `claim_sharp_codomain`, and
+    `reference` continuations all land the same matched smaller tradeoff
+    shell at `4343 / 552`
+  - each keeps `small_cluster` at `3141 / 522 / 522 / 0`
+  - each keeps the representative clause-`2` spread at `14 / 15 / 12`
+  - each keeps the representative clause-`4` split at `23 / 18`
+  - each keeps the active clause-`4` `claim_next_bridge` plus clause-`5`
+    `reference` bucket at `47`
+  - they differ only in the deeper zero-admitted tail:
+    `claim_next_codomain = 2270`, `claim_sharp_codomain = 2269`,
+    `reference = 2268`
+- Consequence: clause-`6` identity is now exhausted on that sibling active
+  clause-`5` `reference` family's representative claim-flat sheet too. The
+  next honest follow-on has to move below the marginally best clause-`6`
+  `reference` continuation on that same sheet rather than swapping among the
+  spent `claim_next_codomain` or `claim_sharp_codomain` clause-`6`
+  siblings, reopening the representative clause-`2` split there, or
+  bouncing back to the exhausted `claim_next_codomain` exact-screen cell.
 - Do not reopen representative claim-side clause-`2` sheet identity first on
   the parent-route, active-window, or self-contained shells; those clause-`2`
   splits now belong to the live autonomy docs and ledger rather than as fresh
