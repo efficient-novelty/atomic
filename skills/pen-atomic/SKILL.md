@@ -530,6 +530,16 @@ Focus on:
   the sibling `claim_sharp_codomain` sheet instead of reopening the spent
   claim-flat parent, the neutral `reference` sheet, or the spent first
   clause-`0` sibling pair as if they were fresh leverage
+- once the live docs also pin that first clause-`1` sibling exact-screen
+  `claim_sharp_codomain` sheet and its deeper remaining-one follow-ons as
+  spent beneath `claim_flat_domain / claim_sharp_codomain / claim_next_bridge /
+  claim_next_codomain`, keep the next repair above that exhausted
+  `claim_sharp_codomain` branch too and route to the next clause-`1` sibling
+  exact-screen pair on the same clause-`0` `claim_flat_domain` family,
+  `claim_flat_domain / reference / claim_next_bridge / claim_next_codomain`,
+  instead of reopening the spent claim-flat or claim-sharp sheets, the
+  neutral `reference` sheet inside that spent pair, or the spent first
+  clause-`0` sibling pair as if they were fresh leverage
 - keep the next repair above the broad clause-`1` `demo_flat_codomain`
   reopening across the full mismatch-`0` claim-domain surface; that control is
   now a widening negative result owned by

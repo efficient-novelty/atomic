@@ -2742,15 +2742,19 @@ later stored bundle changes the diagnosis.
   too, plus the first clause-`1` sibling exact-screen `claim_flat_domain`
   sheet's same-boundary remaining-two reland too, plus its stacked
   remaining-one exact-summary neutral control too, plus its direct
-  remaining-one completion / terminal reland too, while now targeting the
-  sibling exact-screen `claim_sharp_codomain` sheet on
-  `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`,
-  above the neutral `reference` sheet on that same pair, above retrying the
-  spent claim-flat parent or the same remaining-one exact-summary override on
-  that parent,
-  above deeper remaining-one relands on the spent representative,
-  first-sibling, next-sibling, and first clause-`0` sibling pairs, and still
-  above the exhausted parent-level qualification-family lattice
+  remaining-one completion / terminal reland too, plus the sibling first
+  clause-`1` exact-screen `claim_sharp_codomain` sheet's same-boundary
+  remaining-two reland too, plus its stacked remaining-one exact-summary
+  neutral control too, plus its direct remaining-one completion / terminal
+  reland too, while now targeting the next clause-`1` sibling exact-screen
+  pair on the same clause-`0` `claim_flat_domain` family, namely
+  `claim_flat_domain / reference / claim_next_bridge / claim_next_codomain`,
+  above reopening the spent first clause-`1` sibling claim-flat or
+  claim-sharp sheets, above the neutral `reference` sheet inside that spent
+  pair, above deeper remaining-one relands on the spent representative,
+  first-sibling, next-sibling, first clause-`0` sibling, and first
+  clause-`1` sibling pairs, and still above the exhausted parent-level
+  qualification-family lattice
 - any new surface is judged against the unchanged fences:
   canonical `103 / 8`, fenced `single`, fenced lifted `89 / 8`, and
   `small_cluster <= 3132 / 522 / 522 / 0`

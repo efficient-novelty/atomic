@@ -2107,3 +2107,36 @@ This file is the append-only history for `desktop_claim_shadow`.
   rather than retrying the spent claim-flat parent, the same summary
   override, the neutral `reference` sheet, or the spent representative,
   first-sibling, next-sibling, and first-clause-`0`-sibling pairs.
+- Scope: exhaust the first clause-`1` sibling exact-screen
+  `claim_sharp_codomain` sheet `claim_flat_domain / claim_sharp_codomain /
+  claim_sharp_codomain / claim_next_bridge / claim_next_codomain` through its
+  exact-screen boundary, stacked remaining-one exact-summary follow-on, and
+  direct remaining-one completion / terminal scope.
+  Result: the claim-sharp side also repeats the same spent pattern.
+  - the exact-screen delta removes exactly one remaining-two exact-prune
+    capture on that released six-clause parent shell
+  - clause `6` stays out of scope at the exact-screen boundary
+  - the delta introduces no new exact-prune capture family and removes no
+    pruned-terminal family
+  - stacking remaining-one exact-summary relief stays completely neutral on
+    the same `4343 / 552 / 2271`, the same `311 / 177 / 50 / 14`, the same
+    `small_cluster = 3141 / 522 / 522 / 0`, the same
+    `((0, None, None), 2271)` exact-prune family, and the same `6813`
+    structurally connected but unqualified generated candidates
+  - the stacked follow-on releases no remaining-one pruned-terminal group
+  - the three clause-`6` continuations `claim_next_codomain`,
+    `claim_sharp_codomain`, and `reference` each reland the same dead
+    `3`-generated / `0`-admitted completion summary with no bound, no
+    best-rank profile, no survivor sketch, and the same
+    `reference / eventual_lift / next_lift` `NeedsFallback` trio
+  - all three clause-`6` continuations stay uniformly blocked at clause `2`
+    with `matched_clause_count = 2` and `first_mismatch_position = 2`
+  Consequence: both claim-side sheets on that first clause-`1` sibling
+  exact-screen pair are now spent too. The next honest probe has to move
+  sideways to the next clause-`1` sibling exact-screen pair on the same
+  clause-`0` `claim_flat_domain` family,
+  `claim_flat_domain / reference / claim_next_bridge / claim_next_codomain`,
+  rather than reopening the spent claim-flat or claim-sharp sheets, the
+  neutral `reference` sheet inside that spent pair, or the spent
+  representative, first-sibling, next-sibling, or first-clause-`0`-sibling
+  pairs.

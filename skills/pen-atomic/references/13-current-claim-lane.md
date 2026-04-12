@@ -361,6 +361,24 @@ Do not:
   `claim_sharp_codomain` sheet instead of reopening the spent claim-flat
   parent or the neutral `reference` sheet there as if they were fresh
   leverage
+- reopen the first clause-`1` sibling exact-screen `claim_sharp_codomain`
+  sheet beneath
+  `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_next_codomain`
+  first either; if the live docs already pin its remaining-two delta to one
+  released six-clause parent, pin its stacked remaining-one exact-summary
+  relief as neutral on the same `4343 / 552 / 2271` shell with the same
+  `311 / 177 / 50 / 14`, the same `small_cluster generated = 3141`, the same
+  zero-admitted exact-prune family `((0, None, None), 2271)`, and no released
+  remaining-one pruned-terminal group, and pin its direct clause-`6`
+  completion split to the same dead `3`-generated / `0`-admitted
+  `NeedsFallback` trio with `matched_clause_count = 2`,
+  `first_mismatch_position = 2`, and `max_lib_ref = 10`, that first
+  clause-`1` sibling claim-sharp branch also belongs to the autonomy ledger
+  rather than as a fresh repair lead, and the next honest slice should move
+  sideways to the next clause-`1` sibling exact-screen pair on the same
+  clause-`0` `claim_flat_domain` family,
+  `claim_flat_domain / reference / claim_next_bridge / claim_next_codomain`,
+  instead
 - reopen the whole-cell mismatch-`0` clause-`4` `claim_next_bridge` plus
   clause-`5` `claim_flat_codomain` or clause-`5` `reference` exact-summary
   tradeoffs first; those smaller tradeoff controls now also belong in the
