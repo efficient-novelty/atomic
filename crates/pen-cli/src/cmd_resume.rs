@@ -449,6 +449,7 @@ mod tests {
     use super::resume;
     use crate::cli::{ResumeArgs, RunArgs};
     use crate::cmd_run::run;
+    use crate::report::{load_step_reports, write_step_report};
     use std::fs;
     use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -484,6 +485,56 @@ mod tests {
         .expect("resume should succeed");
 
         assert!(output.contains("completed_step: 4"));
+        fs::remove_dir_all(root).ok();
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_completed_resume_with_narrative_uses_the_stored_demo_closure_surface()
+     {
+        let root = temp_dir("claim-resume-closure");
+        run(RunArgs {
+            config: "configs/desktop_claim_shadow_smoke.toml".into(),
+            root: root.clone(),
+            run_id: Some("claim-resume".to_owned()),
+            until_step: Some(15),
+            debug: false,
+            narrative: false,
+        })
+        .expect("initial claim run should succeed");
+
+        let run_dir = root.join("claim-resume");
+        let mut steps = load_step_reports(&run_dir).expect("step reports should load");
+        let step = steps.last_mut().expect("late claim step should exist");
+        let stored_closure = step.search_stats.demo_closure.clone();
+        step.search_stats.demo_funnel.exact_bound_screened = 7;
+        step.search_stats.demo_funnel.exact_bound_pruned = 1;
+        write_step_report(&run_dir, step).expect("drifted step report should persist");
+
+        let output = resume(ResumeArgs {
+            run_dir: run_dir.clone(),
+            until_step: Some(15),
+            debug: true,
+            narrative: true,
+        })
+        .expect("resume should reuse the completed run");
+
+        assert!(output.contains(&format!(
+            "  demo closure: frontier_total_seen={} frontier_certified_nonwinning={} closure_percent={}",
+            stored_closure.frontier_total_seen,
+            stored_closure.frontier_certified_nonwinning,
+            stored_closure.closure_percent
+        )));
+        assert!(output.contains(&format!(
+            "{}% frontier_total={} certified_nonwinning={}",
+            stored_closure.closure_percent,
+            stored_closure.frontier_total_seen,
+            stored_closure.frontier_certified_nonwinning
+        )));
+        assert!(!output.contains(
+            "  demo closure: frontier_total_seen=7 frontier_certified_nonwinning=1 closure_percent=14"
+        ));
+        assert!(!output.contains("14% frontier_total=7 certified_nonwinning=1"));
+
         fs::remove_dir_all(root).ok();
     }
 }

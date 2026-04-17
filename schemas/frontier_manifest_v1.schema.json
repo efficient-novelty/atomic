@@ -179,6 +179,18 @@
           "default": 0,
           "minimum": 0
         },
+        "incremental_terminal_prefix_rank_hits": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
+        "incremental_terminal_rank_prunes": {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "minimum": 0
+        },
         "incremental_trivial_derivability_hits": {
           "type": "integer",
           "format": "uint64",

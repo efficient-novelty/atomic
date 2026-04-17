@@ -1,24 +1,25 @@
 use crate::cli::RunArgs;
 use crate::narrative::{
-    NarrativeOutputConfig, write_step_narrative_artifact, write_step_narrative_artifacts,
+    write_step_narrative_artifact, write_step_narrative_artifacts, NarrativeOutputConfig,
 };
-use crate::output::{OutputStyle, render_run_output};
+use crate::output::{render_run_output, OutputStyle};
 use crate::progress::TerminalStepProgress;
 use crate::report::{
-    GeneratedSteps, StepGenerationMode, StepProgressObserver, StepReport, annotate_search_profile,
-    annotate_single_step_replay_ablation, generate_steps_with_config_and_runtime_and_progress,
-    stored_exact_screen_reasons, stored_prune_class_stats, write_step_report, write_step_reports,
+    annotate_search_profile, annotate_single_step_replay_ablation,
+    generate_steps_with_config_and_runtime_and_progress, stored_exact_screen_reasons,
+    stored_prune_class_stats, write_step_report, write_step_reports, GeneratedSteps,
+    StepGenerationMode, StepProgressObserver, StepReport,
 };
-use anyhow::{Context, Result, bail};
+use anyhow::{bail, Context, Result};
 use pen_core::hash::blake3_hex;
 use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{LibrarySnapshot, LibrarySnapshotEntry};
 use pen_search::config::{RuntimeConfig, SearchProfile, WorkerSetting};
 use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
-use pen_search::engine::StepLiveCheckpoint;
 use pen_search::engine::supports_live_atomic_search;
+use pen_search::engine::StepLiveCheckpoint;
 use pen_search::frontier::FrontierWindow;
-use pen_search::priority::{PriorityInputs, build_priority_key};
+use pen_search::priority::{build_priority_key, PriorityInputs};
 use pen_search::resume::CurrentCompat;
 use pen_search::scheduler::build_schedule;
 use pen_search::state::{FrontierStateRecV1, PrefixState};
@@ -30,7 +31,7 @@ use pen_store::manifest::{
     RuntimeInfo, SearchPolicyInfo, StepCheckpointV1, StepObjective, StepStats,
 };
 use pen_store::memory::GovernorConfig;
-use pen_store::spill::{FrontierRuntimeInput, SpillConfig, persist_frontier_runtime};
+use pen_store::spill::{persist_frontier_runtime, FrontierRuntimeInput, SpillConfig};
 use pen_store::sqlite::{FrontierGenerationRow, MetadataDb};
 use pen_store::telemetry::TelemetryEventV1;
 use serde_json::json;
@@ -39,9 +40,9 @@ use std::collections::BTreeSet;
 use std::fs::{self, OpenOptions};
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use sysinfo::{ProcessRefreshKind, ProcessesToUpdate, System, get_current_pid};
-use time::OffsetDateTime;
+use sysinfo::{get_current_pid, ProcessRefreshKind, ProcessesToUpdate, System};
 use time::format_description::well_known::Rfc3339;
+use time::OffsetDateTime;
 
 pub fn run(args: RunArgs) -> Result<String> {
     let config_path = absolute_from_repo(&args.config)?;
@@ -153,6 +154,7 @@ pub(crate) struct RunManifestBase {
     pub host: HostInfo,
     pub runtime: RuntimeInfo,
     pub config: ConfigFingerprint,
+    pub grammar_profile: String,
     pub search_policy: SearchPolicyInfo,
     pub build: BuildInfo,
     pub artifacts: RunArtifacts,
@@ -251,6 +253,7 @@ pub(crate) fn build_run_manifest_base(
             path: "config.toml".to_owned(),
             sha256: sha256_hex(config_text.as_bytes()),
         },
+        grammar_profile: config.mode.grammar_profile.as_str().to_owned(),
         search_policy: search_policy_info(config.mode.search_profile),
         build: build_info(&workspace_root)?,
         artifacts: RunArtifacts {
@@ -291,6 +294,7 @@ pub(crate) fn build_run_manifest(
         host: manifest_base.host.clone(),
         runtime: manifest_base.runtime.clone(),
         config: manifest_base.config.clone(),
+        grammar_profile: manifest_base.grammar_profile.clone(),
         search_policy: manifest_base.search_policy.clone(),
         build: manifest_base.build.clone(),
         position: RunPosition {
@@ -708,6 +712,7 @@ fn run_started_event(
             "created_utc": manifest.created_utc,
             "mode": mode,
             "search_profile": search_profile,
+            "grammar_profile": manifest.grammar_profile,
             "search_policy": {
                 "guidance_style": manifest.search_policy.guidance_style,
                 "late_expansion_policy": manifest.search_policy.late_expansion_policy,
@@ -1551,9 +1556,15 @@ fn truncated_hash64(bytes: &[u8]) -> u64 {
 
 #[cfg(test)]
 mod tests {
-    use super::{RunArtifactWriter, build_run_manifest_base, now_utc, planned_run_mode, run};
+    use super::{
+        build_run_manifest_base, now_utc, planned_run_mode, run, terminal_narrative_config,
+        RunArtifactWriter,
+    };
     use crate::cli::RunArgs;
-    use crate::report::generate_steps_with_config_and_runtime;
+    use crate::report::{
+        generate_steps_with_config_and_runtime, render_debug_report, render_standard_report,
+        StepReport,
+    };
     use pen_search::diversify::FrontierRuntimeLimits;
     use pen_search::engine::StepLiveCheckpoint;
     use pen_store::frontier::frontier_checkpoint_dir;
@@ -1571,6 +1582,29 @@ mod tests {
         dir
     }
 
+    fn claim_steps_with_drifted_funnel() -> (
+        &'static str,
+        pen_search::config::RuntimeConfig,
+        Vec<StepReport>,
+        pen_search::engine::DemoClosureStats,
+    ) {
+        let config_text = include_str!("../../../configs/desktop_claim_shadow_smoke.toml");
+        let config = pen_search::config::RuntimeConfig::from_toml_str(config_text)
+            .expect("claim config should parse");
+        let mut steps =
+            generate_steps_with_config_and_runtime(15, &config, FrontierRuntimeLimits::unlimited())
+                .expect("claim steps should build")
+                .steps;
+        let stored_closure = {
+            let step = steps.last_mut().expect("late claim step should exist");
+            let stored_closure = step.search_stats.demo_closure.clone();
+            step.search_stats.demo_funnel.exact_bound_screened = 7;
+            step.search_stats.demo_funnel.exact_bound_pruned = 1;
+            stored_closure
+        };
+        (config_text, config, steps, stored_closure)
+    }
+
     #[test]
     fn run_command_writes_frozen_manifest_and_reports() {
         let root = temp_dir("run");
@@ -1586,13 +1620,12 @@ mod tests {
 
         assert!(output.contains("completed_step: 3"));
         assert!(root.join("test-run").join("run.json").exists());
-        assert!(
-            root.join("test-run")
-                .join("reports")
-                .join("steps")
-                .join("step-03-summary.json")
-                .exists()
-        );
+        assert!(root
+            .join("test-run")
+            .join("reports")
+            .join("steps")
+            .join("step-03-summary.json")
+            .exists());
 
         fs::remove_dir_all(root).ok();
     }
@@ -1643,6 +1676,7 @@ mod tests {
             "claim_generic"
         );
         assert_eq!(manifest.search_policy.bucket_policy, "structural_generic");
+        assert_eq!(manifest.grammar_profile, "canonical_mbtt_v1");
         assert!(manifest.host.ram_bytes > 0);
         assert!(manifest.host.physical_core_count > 0);
         assert!(!manifest.host.cpu_model.is_empty());
@@ -1657,6 +1691,7 @@ mod tests {
         let telemetry =
             fs::read_to_string(run_dir.join("telemetry.ndjson")).expect("telemetry should exist");
         assert!(telemetry.contains("\"search_profile\":\"desktop_claim_shadow\""));
+        assert!(telemetry.contains("\"grammar_profile\":\"canonical_mbtt_v1\""));
         assert!(telemetry.contains("\"guidance_style\":\"claim_debt_guided\""));
         assert!(telemetry.contains("\"late_expansion_policy\":\"claim_generic\""));
         assert!(telemetry.contains("\"bucket_policy\":\"structural_generic\""));
@@ -1667,6 +1702,30 @@ mod tests {
         assert!(steps_dir.join("step-03-events.ndjson").exists());
 
         fs::remove_dir_all(root).ok();
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_terminal_narrative_config_only_opens_for_requested_claim_demo_runs(
+    ) {
+        let claim_config = pen_search::config::RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/desktop_claim_shadow_smoke.toml"
+        ))
+        .expect("claim config should parse");
+        let debug_config = pen_search::config::RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/debug.toml"
+        ))
+        .expect("debug config should parse");
+
+        let claim_narrative =
+            terminal_narrative_config(&claim_config, true).expect("claim narrative should open");
+
+        assert_eq!(
+            claim_narrative.search_profile,
+            claim_config.mode.search_profile
+        );
+        assert_eq!(claim_narrative.demo.profile, claim_config.demo.profile);
+        assert!(terminal_narrative_config(&claim_config, false).is_none());
+        assert!(terminal_narrative_config(&debug_config, true).is_none());
     }
 
     #[test]
@@ -1919,13 +1978,11 @@ mod tests {
         assert!(steps_dir.join("step-03-summary.json").exists());
         assert!(steps_dir.join("step-03-narrative.txt").exists());
         assert!(steps_dir.join("step-03-events.ndjson").exists());
-        assert!(
-            run_dir
-                .join("checkpoints")
-                .join("steps")
-                .join("step-03.json")
-                .exists()
-        );
+        assert!(run_dir
+            .join("checkpoints")
+            .join("steps")
+            .join("step-03.json")
+            .exists());
 
         let latest =
             fs::read_to_string(run_dir.join("reports").join("latest.txt")).expect("latest report");
@@ -1936,6 +1993,204 @@ mod tests {
         assert!(telemetry.contains("\"event\":\"run_started\""));
         assert!(telemetry.contains("\"event\":\"step_accepted\""));
         assert!(telemetry.contains("\"event\":\"run_failed\""));
+
+        fs::remove_dir_all(root).ok();
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_persist_step_and_finalize_success_preserve_the_stored_demo_closure_surface(
+    ) {
+        let root = temp_dir("claim-finalize-success");
+        let run_dir = root.join("claim-finalize-success");
+        let (config_text, config, steps, stored_closure) = claim_steps_with_drifted_funnel();
+        let worker_count = super::resolved_worker_count(&config);
+        let manifest_base = build_run_manifest_base(
+            "claim-finalize-success",
+            config_text,
+            &config,
+            worker_count,
+            now_utc().expect("timestamp should render"),
+        )
+        .expect("manifest base should build");
+        let mut writer = RunArtifactWriter::start(
+            &run_dir,
+            config_text,
+            manifest_base,
+            &config,
+            worker_count,
+            planned_run_mode(15).as_str(),
+            config.mode.search_profile.as_str(),
+            now_utc().expect("timestamp should render"),
+            Vec::new(),
+            None,
+        )
+        .expect("writer should initialize");
+        for step in &steps {
+            writer.persist_step(step).expect("step should persist");
+        }
+
+        let persisted_step: StepReport = serde_json::from_str(
+            &fs::read_to_string(
+                run_dir
+                    .join("reports")
+                    .join("steps")
+                    .join("step-15-summary.json"),
+            )
+            .expect("step summary should exist"),
+        )
+        .expect("step summary should parse");
+        let step_narrative = fs::read_to_string(
+            run_dir
+                .join("reports")
+                .join("steps")
+                .join("step-15-narrative.txt"),
+        )
+        .expect("step narrative should exist");
+
+        assert_eq!(persisted_step.accepted.nu, 103);
+        assert_eq!(persisted_step.search_stats.demo_closure, stored_closure);
+        assert_eq!(
+            persisted_step.search_stats.demo_funnel.exact_bound_screened, 7,
+            "the test fixture should keep the drifted funnel on disk while persist_step(...) preserves the stored demo_closure surface alongside it"
+        );
+        assert!(step_narrative.contains(&format!(
+            "{}% frontier_total={} certified_nonwinning={}",
+            stored_closure.closure_percent,
+            stored_closure.frontier_total_seen,
+            stored_closure.frontier_certified_nonwinning
+        )));
+        assert!(!step_narrative.contains("14% frontier_total=7 certified_nonwinning=1"));
+
+        writer
+            .finalize_success(planned_run_mode(15).as_str())
+            .expect("success finalization should persist");
+
+        let latest_debug = fs::read_to_string(run_dir.join("reports").join("latest.debug.txt"))
+            .expect("latest debug report should exist");
+        assert!(latest_debug.contains(&format!(
+            "  demo closure: frontier_total_seen={} frontier_certified_nonwinning={} closure_percent={}",
+            stored_closure.frontier_total_seen,
+            stored_closure.frontier_certified_nonwinning,
+            stored_closure.closure_percent
+        )));
+        assert!(!latest_debug.contains(
+            "  demo closure: frontier_total_seen=7 frontier_certified_nonwinning=1 closure_percent=14"
+        ));
+
+        fs::remove_dir_all(root).ok();
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_latest_reports_preserve_the_live_reported_surface() {
+        let root = temp_dir("claim-latest-reports");
+        let run_dir = root.join("claim-latest");
+        let config_text = include_str!("../../../configs/desktop_claim_shadow_smoke.toml");
+        let config = pen_search::config::RuntimeConfig::from_toml_str(config_text)
+            .expect("claim config should parse");
+        let mut steps =
+            generate_steps_with_config_and_runtime(15, &config, FrontierRuntimeLimits::unlimited())
+                .expect("claim steps should build")
+                .steps;
+        let stored_closure = {
+            let step = steps.last_mut().expect("late claim step should exist");
+            let stored_closure = step.search_stats.demo_closure.clone();
+            step.search_stats.demo_funnel.exact_bound_screened = 7;
+            step.search_stats.demo_funnel.exact_bound_pruned = 1;
+            stored_closure
+        };
+
+        super::write_latest_reports(&run_dir, "claim-run", &steps)
+            .expect("latest reports should persist");
+
+        let latest = fs::read_to_string(run_dir.join("reports").join("latest.txt"))
+            .expect("latest report should exist");
+        let latest_debug = fs::read_to_string(run_dir.join("reports").join("latest.debug.txt"))
+            .expect("latest debug report should exist");
+
+        assert_eq!(steps.last().expect("late claim step").accepted.nu, 103);
+        assert_eq!(latest, render_standard_report("claim-run", &steps));
+        assert_eq!(latest_debug, render_debug_report("claim-run", &steps));
+        assert!(latest_debug.contains(&format!(
+            "  demo closure: frontier_total_seen={} frontier_certified_nonwinning={} closure_percent={}",
+            stored_closure.frontier_total_seen,
+            stored_closure.frontier_certified_nonwinning,
+            stored_closure.closure_percent
+        )));
+        assert!(!latest_debug.contains(
+            "  demo closure: frontier_total_seen=7 frontier_certified_nonwinning=1 closure_percent=14"
+        ));
+
+        fs::remove_dir_all(root).ok();
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_failed_run_finalization_preserves_the_stored_demo_closure_surface(
+    ) {
+        let root = temp_dir("claim-finalize-failure");
+        let run_dir = root.join("claim-finalize-failure");
+        let (config_text, config, steps, stored_closure) = claim_steps_with_drifted_funnel();
+        let worker_count = super::resolved_worker_count(&config);
+        let manifest_base = build_run_manifest_base(
+            "claim-finalize-failure",
+            config_text,
+            &config,
+            worker_count,
+            now_utc().expect("timestamp should render"),
+        )
+        .expect("manifest base should build");
+        let mut writer = RunArtifactWriter::start(
+            &run_dir,
+            config_text,
+            manifest_base,
+            &config,
+            worker_count,
+            planned_run_mode(15).as_str(),
+            config.mode.search_profile.as_str(),
+            now_utc().expect("timestamp should render"),
+            Vec::new(),
+            None,
+        )
+        .expect("writer should initialize");
+        for step in &steps {
+            writer.persist_step(step).expect("step should persist");
+        }
+
+        let error = super::finalize_failed_run(writer, anyhow::anyhow!("simulated claim failure"));
+        assert!(error.to_string().contains("simulated claim failure"));
+
+        let manifest: RunManifestV1 = serde_json::from_str(
+            &fs::read_to_string(run_dir.join("run.json")).expect("manifest should exist"),
+        )
+        .expect("manifest should parse");
+        assert_eq!(manifest.status, RunStatus::Failed);
+        assert!(manifest.failure_note.contains("simulated claim failure"));
+
+        let latest_debug = fs::read_to_string(run_dir.join("reports").join("latest.debug.txt"))
+            .expect("latest debug report should exist");
+        let step_narrative = fs::read_to_string(
+            run_dir
+                .join("reports")
+                .join("steps")
+                .join("step-15-narrative.txt"),
+        )
+        .expect("step narrative should exist");
+
+        assert!(latest_debug.contains(&format!(
+            "  demo closure: frontier_total_seen={} frontier_certified_nonwinning={} closure_percent={}",
+            stored_closure.frontier_total_seen,
+            stored_closure.frontier_certified_nonwinning,
+            stored_closure.closure_percent
+        )));
+        assert!(!latest_debug.contains(
+            "  demo closure: frontier_total_seen=7 frontier_certified_nonwinning=1 closure_percent=14"
+        ));
+        assert!(step_narrative.contains(&format!(
+            "{}% frontier_total={} certified_nonwinning={}",
+            stored_closure.closure_percent,
+            stored_closure.frontier_total_seen,
+            stored_closure.frontier_certified_nonwinning
+        )));
+        assert!(!step_narrative.contains("14% frontier_total=7 certified_nonwinning=1"));
 
         fs::remove_dir_all(root).ok();
     }
@@ -1988,11 +2243,9 @@ mod tests {
         assert_eq!(manifest.position.frontier_epoch, 1);
 
         let band_index = u32::from(generated.steps[3].accepted.clause_kappa);
-        assert!(
-            frontier_checkpoint_dir(&run_dir, 4, band_index)
-                .join("frontier.manifest.json")
-                .exists()
-        );
+        assert!(frontier_checkpoint_dir(&run_dir, 4, band_index)
+            .join("frontier.manifest.json")
+            .exists());
 
         fs::remove_dir_all(root).ok();
     }

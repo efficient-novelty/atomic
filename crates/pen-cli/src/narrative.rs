@@ -776,7 +776,10 @@ fn prune_class_label(prune_class: PruneReportClass) -> &'static str {
 
 #[cfg(test)]
 mod tests {
-    use super::{NarrativeOutputConfig, render_step_narrative, write_step_narrative_artifacts};
+    use super::{
+        NarrativeOutputConfig, render_run_narrative, render_step_narrative, stored_demo_closure,
+        write_step_narrative_artifact, write_step_narrative_artifacts,
+    };
     use crate::report::generate_steps_with_config_and_runtime;
     use pen_search::config::RuntimeConfig;
     use pen_search::diversify::FrontierRuntimeLimits;
@@ -792,6 +795,30 @@ mod tests {
         let dir = std::env::temp_dir().join(format!("pen-cli-{name}-{id}"));
         fs::create_dir_all(&dir).expect("temp dir should exist");
         dir
+    }
+
+    fn claim_steps_with_drifted_funnel() -> (
+        RuntimeConfig,
+        Vec<crate::report::StepReport>,
+        pen_search::engine::DemoClosureStats,
+    ) {
+        let config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/desktop_claim_shadow_smoke.toml"
+        ))
+        .expect("claim config should parse");
+        let mut steps =
+            generate_steps_with_config_and_runtime(15, &config, FrontierRuntimeLimits::unlimited())
+                .expect("claim steps should build")
+                .steps;
+        let stored_closure = {
+            let step = steps.last_mut().expect("late claim step should exist");
+            let stored_closure = step.search_stats.demo_closure.clone();
+            step.search_stats.demo_funnel.exact_bound_screened = 7;
+            step.search_stats.demo_funnel.exact_bound_pruned = 1;
+            stored_closure
+        };
+
+        (config, steps, stored_closure)
     }
 
     #[test]
@@ -935,5 +962,108 @@ mod tests {
 
         assert!(text.contains("claim narrative"));
         assert!(!text.contains("demo narrative"));
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_stored_demo_closure_prefers_the_reported_surface() {
+        let config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/desktop_claim_shadow_smoke.toml"
+        ))
+        .expect("claim config should parse");
+        let mut steps =
+            generate_steps_with_config_and_runtime(15, &config, FrontierRuntimeLimits::unlimited())
+                .expect("claim steps should build")
+                .steps;
+        let mut step = steps.pop().expect("late claim step should exist");
+        let stored_closure = step.search_stats.demo_closure.clone();
+        let original_funnel = step.search_stats.demo_funnel.clone();
+
+        step.search_stats.demo_funnel.exact_bound_screened = 7;
+        step.search_stats.demo_funnel.exact_bound_pruned = 1;
+
+        assert_eq!(step.accepted.nu, 103);
+        assert_eq!(
+            stored_closure.frontier_total_seen,
+            original_funnel.exact_bound_screened
+        );
+        assert_eq!(
+            stored_closure.frontier_certified_nonwinning,
+            original_funnel.exact_bound_pruned
+        );
+        assert_eq!(stored_closure.closure_percent, 99);
+        assert_eq!(stored_demo_closure(&step), stored_closure);
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_narrative_render_uses_the_stored_demo_closure_surface() {
+        let config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/desktop_claim_shadow_smoke.toml"
+        ))
+        .expect("claim config should parse");
+        let mut steps =
+            generate_steps_with_config_and_runtime(15, &config, FrontierRuntimeLimits::unlimited())
+                .expect("claim steps should build")
+                .steps;
+        let mut step = steps.pop().expect("late claim step should exist");
+        let stored_closure = step.search_stats.demo_closure.clone();
+
+        step.search_stats.demo_funnel.exact_bound_screened = 7;
+        step.search_stats.demo_funnel.exact_bound_pruned = 1;
+
+        let text = render_step_narrative(&step, NarrativeOutputConfig::from_runtime(&config));
+
+        assert_eq!(step.accepted.nu, 103);
+        assert!(text.contains(&format!(
+            "{}% frontier_total={} certified_nonwinning={}",
+            stored_closure.closure_percent,
+            stored_closure.frontier_total_seen,
+            stored_closure.frontier_certified_nonwinning
+        )));
+        assert!(!text.contains("14% frontier_total=7 certified_nonwinning=1"));
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_run_narrative_uses_the_stored_demo_closure_surface() {
+        let (config, steps, stored_closure) = claim_steps_with_drifted_funnel();
+
+        let text = render_run_narrative(&steps, NarrativeOutputConfig::from_runtime(&config));
+
+        assert_eq!(steps.last().expect("late claim step").accepted.nu, 103);
+        assert!(text.contains(&format!(
+            "{}% frontier_total={} certified_nonwinning={}",
+            stored_closure.closure_percent,
+            stored_closure.frontier_total_seen,
+            stored_closure.frontier_certified_nonwinning
+        )));
+        assert!(!text.contains("14% frontier_total=7 certified_nonwinning=1"));
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_narrative_artifact_uses_the_stored_demo_closure_surface() {
+        let (config, mut steps, stored_closure) = claim_steps_with_drifted_funnel();
+        let step = steps.pop().expect("late claim step should exist");
+        let run_dir = temp_dir("claim-step-narrative");
+
+        write_step_narrative_artifact(&run_dir, &step, &config)
+            .expect("claim narrative artifact should persist");
+
+        let text = fs::read_to_string(
+            run_dir
+                .join("reports")
+                .join("steps")
+                .join("step-15-narrative.txt"),
+        )
+        .expect("claim narrative artifact should exist");
+
+        assert_eq!(step.accepted.nu, 103);
+        assert!(text.contains(&format!(
+            "{}% frontier_total={} certified_nonwinning={}",
+            stored_closure.closure_percent,
+            stored_closure.frontier_total_seen,
+            stored_closure.frontier_certified_nonwinning
+        )));
+        assert!(!text.contains("14% frontier_total=7 certified_nonwinning=1"));
+
+        fs::remove_dir_all(run_dir).ok();
     }
 }

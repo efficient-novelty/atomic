@@ -2,13 +2,17 @@
 from __future__ import annotations
 
 import argparse
+import io
 import hashlib
 import json
 import re
 import sys
+import tempfile
+import unittest
 from collections import Counter
 from pathlib import Path
 from typing import Any
+from unittest import mock
 
 PRUNE_KEYS = ("quotient_dedupe", "sound_minimality", "heuristic_shaping")
 CLAIM_KEYS = (
@@ -1707,10 +1711,14 @@ def has_pressure_evidence(lane: dict[str, Any]) -> bool:
 
 
 def render_text_summary(summary: dict[str, Any]) -> str:
+    signoff = summary["signoff"]
+    signoff_line = f"Comparison Signoff: {signoff['status']}"
+    if signoff.get("summary"):
+        signoff_line += f" ({signoff['summary']})"
     workstream4_rollout = summary["workstream4_rollout"]
     claim_lane_audit = summary["claim_lane_audit"]
     lines = [
-        f"Comparison Signoff: {summary['signoff']['status']}",
+        signoff_line,
         f"baseline: {summary['baseline_lane']}",
         f"lanes: {', '.join(summary['lane_order'])}",
         f"trajectory: {render_trajectory_status(summary)}",
@@ -2106,6 +2114,436 @@ def ordered_dict(items: Any) -> dict[str, Any]:
 def write_text(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
+
+
+class CompareRunsClaimClosureSurfaceTests(unittest.TestCase):
+    @staticmethod
+    def claim_step_with_drifted_funnel() -> dict[str, Any]:
+        return {
+            "step_index": 15,
+            "search_stats": {
+                "demo_funnel": {
+                    "generated_raw_prefixes": 4331,
+                    "canonical_prefix_signatures": 1,
+                    "hard_admissible": 1,
+                    "exact_bound_screened": 7,
+                    "exact_bound_pruned": 1,
+                    "heuristic_dropped": 0,
+                    "full_telescopes_evaluated": 1,
+                    "bar_clearers": 1,
+                    "semantically_minimal_clearers": 1,
+                    "winner_overshoot": {"num": 115657, "den": 21112},
+                },
+                "demo_closure": {
+                    "frontier_total_seen": 554,
+                    "frontier_certified_nonwinning": 553,
+                    "closure_percent": 99,
+                },
+                "demo_phase": {
+                    "generated_floor": 5000,
+                    "exact_screened_floor": 554,
+                    "full_eval_soft_cap": 32,
+                    "breadth_harvest_exit_reason": "proof_close_ready",
+                    "proof_close_entry_reason": "bar_clearing_candidate",
+                    "proof_close_overrun_reason": None,
+                    "proof_close_reserved_millis": 250,
+                    "proof_close_elapsed_millis": 100,
+                    "proof_close_remaining_millis": 150,
+                    "proof_close_reserve_overrun_millis": 0,
+                    "proof_close_reserve_exhausted": False,
+                    "proof_close_frontier_total_groups": 554,
+                    "proof_close_frontier_groups_closed": 553,
+                    "proof_close_frontier_groups_remaining": 1,
+                    "proof_close_closure_percent": 99,
+                    "materialize_full_evals": 0,
+                    "proof_close_full_evals": 0,
+                    "proof_close_overrun_full_evals": 0,
+                    "materialize_soft_cap_triggered": False,
+                },
+                "demo_bucket_stats": [
+                    {
+                        "bucket_label": (
+                            "k8:structural_generic:temporal_operator:"
+                            "library_backed:single"
+                        ),
+                        "stats": {
+                            "generated_terminal_candidates": 1,
+                            "admissible_terminal_candidates": 1,
+                            "exact_screened_terminal_candidates": 1,
+                            "pruned_terminal_candidates": 0,
+                            "fully_scored_terminal_candidates": 1,
+                            "best_overshoot": {"num": 115657, "den": 21112},
+                        },
+                    }
+                ],
+            },
+        }
+
+    @staticmethod
+    def lane_with_demo_phase_evidence(
+        latest_demo: dict[str, Any],
+        label: str = "claim",
+        run_id: str = "claim-lane",
+        trajectory_fingerprint: str = "claim-fingerprint",
+    ) -> dict[str, Any]:
+        return {
+            "label": label,
+            "run_id": run_id,
+            "search_profile": CLAIM_SEARCH_PROFILE,
+            "run_mode": "atomic_bootstrap_search",
+            "completed_step": 15,
+            "trajectory": [],
+            "trajectory_fingerprint": trajectory_fingerprint,
+            "trajectory_vs_baseline": {"deltas": []},
+            "accepted_hashes": [],
+            "accepted_hashes_vs_baseline": {"deltas": []},
+            "search_space_counts": [],
+            "search_space_counts_vs_baseline": {"deltas": []},
+            "admissibility_diagnostics": [],
+            "admissibility_diagnostics_vs_baseline": {"deltas": []},
+            "late_step_competition_vs_baseline": {"deltas": []},
+            "late_step_competition": [],
+            "provenance_sequence": [
+                {"step_index": 15, "value": "atomic_bootstrap_search"}
+            ],
+            "replay_ablation_sequence": [{"step_index": 15, "value": "not_recorded"}],
+            "prune_class_totals": ordered_dict((key, 0) for key in PRUNE_KEYS),
+            "frontier_retention_delta_total": 0,
+            "frontier_retention_delta_by_step": [{"step_index": 15, "delta": 0}],
+            "governor_summary": {
+                "sequence": [
+                    {
+                        "step_index": 15,
+                        "state": "green",
+                        "action": "none",
+                        "rss_bytes": 0,
+                        "value": "green/none",
+                    }
+                ],
+                "max_rss_bytes": 0,
+            },
+            "latest_frontier": {"present": False},
+            "step15_claim": {
+                "status": "matched",
+                "adopted_step": 15,
+                "adopted_label": "reference",
+                "adopted_nu": 103,
+                "matches_accepted": True,
+            },
+            "demo_phase_evidence": [latest_demo] if latest_demo else [],
+            "narrative_artifacts": {"status": "not_applicable"},
+            "claim_lane_audit": {"status": "not_applicable"},
+        }
+
+    @staticmethod
+    def claim_accepted_hashes() -> list[dict[str, Any]]:
+        return [
+            ordered_dict(
+                [
+                    ("step_index", step_index),
+                    ("candidate_hash", f"candidate-{step_index}"),
+                    ("canonical_hash", f"canonical-{step_index}"),
+                ]
+            )
+            for step_index in range(1, CLAIM_REQUIRED_COMPLETED_STEP + 1)
+        ]
+
+    @staticmethod
+    def complete_coverage(keys: tuple[str, ...]) -> dict[str, Any]:
+        expected_steps = list(range(1, CLAIM_REQUIRED_COMPLETED_STEP + 1))
+        return ordered_dict(
+            [
+                ("status", "complete"),
+                ("expected_steps", len(expected_steps)),
+                ("persisted_steps", expected_steps),
+                ("derived_steps", []),
+                ("missing_steps", []),
+                ("source_counts", summarize_counter(Counter({"summary": len(expected_steps)}))),
+                ("totals", ordered_dict((key, 0) for key in keys)),
+            ]
+        )
+
+    @classmethod
+    def ready_claim_lane(
+        cls,
+        latest_demo: dict[str, Any] | None = None,
+        narrative_artifacts: dict[str, Any] | None = None,
+        label: str = "claim",
+        run_id: str = "claim-lane",
+        trajectory_fingerprint: str = "claim-fingerprint",
+    ) -> dict[str, Any]:
+        lane = cls.lane_with_demo_phase_evidence(
+            latest_demo or {},
+            label=label,
+            run_id=run_id,
+            trajectory_fingerprint=trajectory_fingerprint,
+        )
+        lane["search_policy"] = ordered_dict(CLAIM_REQUIRED_SEARCH_POLICY.items())
+        lane["accepted_hashes"] = cls.claim_accepted_hashes()
+        lane["accepted_hashes_vs_baseline"] = {"matches": True, "deltas": []}
+        lane["exact_screen_reason_coverage"] = cls.complete_coverage(
+            EXACT_SCREEN_REASON_KEYS
+        )
+        lane["prune_class_coverage"] = cls.complete_coverage(PRUNE_KEYS)
+        lane["narrative_artifacts"] = narrative_artifacts or ordered_dict(
+            [
+                ("status", "complete"),
+                ("expected_steps", 1),
+                ("present_narrative_steps", 1),
+                ("present_event_steps", 1),
+                ("missing_narrative_steps", []),
+                ("missing_event_steps", []),
+            ]
+        )
+        return lane
+
+    @classmethod
+    def ready_claim_comparison_lanes(cls) -> list[dict[str, Any]]:
+        latest_demo = demo_phase_entry(
+            cls.claim_step_with_drifted_funnel(),
+            CLAIM_SEARCH_PROFILE,
+        )
+        assert latest_demo is not None
+        return [
+            cls.ready_claim_lane(
+                dict(latest_demo),
+                label="claim-baseline",
+                run_id="claim-baseline-run",
+                trajectory_fingerprint="claim-ready-fingerprint",
+            ),
+            cls.ready_claim_lane(
+                dict(latest_demo),
+                label="claim-current",
+                run_id="claim-current-run",
+                trajectory_fingerprint="claim-ready-fingerprint",
+            ),
+        ]
+
+    def test_claim_demo_phase_evidence_stays_present_for_stored_closure_only(self) -> None:
+        self.assertTrue(
+            has_demo_phase_evidence(
+                CLAIM_SEARCH_PROFILE,
+                {},
+                {"frontier_total_seen": 554},
+                {},
+            )
+        )
+
+    def test_claim_demo_phase_entry_prefers_the_stored_demo_closure_surface(self) -> None:
+        step = self.claim_step_with_drifted_funnel()
+
+        entry = demo_phase_entry(step, CLAIM_SEARCH_PROFILE)
+
+        self.assertIsNotNone(entry)
+        entry = dict(entry or {})
+        self.assertEqual(entry["step_index"], 15)
+        self.assertEqual(entry["generated_raw_prefixes"], 4331)
+        self.assertEqual(entry["exact_bound_screened"], 7)
+        self.assertEqual(entry["exact_bound_pruned"], 1)
+        self.assertEqual(entry["frontier_total_seen"], 554)
+        self.assertEqual(entry["frontier_certified_nonwinning"], 553)
+        self.assertEqual(entry["closure_percent"], 99)
+        self.assertEqual(entry["winner_overshoot"], "115657/21112")
+
+    def test_claim_lane_summary_uses_the_stored_demo_closure_surface(self) -> None:
+        latest_demo = demo_phase_entry(
+            self.claim_step_with_drifted_funnel(),
+            CLAIM_SEARCH_PROFILE,
+        )
+        self.assertIsNotNone(latest_demo)
+        latest_demo = dict(latest_demo or {})
+        text = "\n".join(render_lane_summary(self.lane_with_demo_phase_evidence(latest_demo)))
+
+        self.assertIn("demo phase latest: step 15", text)
+        self.assertIn("generated_floor=miss (4331/5000)", text)
+        self.assertIn("proof_close_closure=99%", text)
+        self.assertIn(
+            (
+                "demo funnel latest: generated=4331 hard_admissible=1 "
+                "exact_screened=7 exact_pruned=1 full_eval=1 "
+                "closure=99% winner_overshoot=115657/21112"
+            ),
+            text,
+        )
+        self.assertNotIn("closure=14%", text)
+
+    def test_claim_narrative_artifact_entry_tracks_complete_claim_step_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            steps_dir = Path(temp_dir)
+            (steps_dir / "step-15-narrative.txt").write_text(
+                "step 15 narrative\n", encoding="utf-8"
+            )
+            (steps_dir / "step-15-events.ndjson").write_text(
+                "{}\n", encoding="utf-8"
+            )
+
+            entry = narrative_artifact_entry(
+                steps_dir,
+                [{"step_index": 15}],
+                CLAIM_SEARCH_PROFILE,
+            )
+
+        self.assertEqual(entry["status"], "complete")
+        self.assertEqual(entry["expected_steps"], 1)
+        self.assertEqual(entry["present_narrative_steps"], 1)
+        self.assertEqual(entry["present_event_steps"], 1)
+        self.assertEqual(entry["missing_narrative_steps"], [])
+        self.assertEqual(entry["missing_event_steps"], [])
+
+    def test_claim_lane_audit_ready_for_complete_honest_claim_lane(self) -> None:
+        lane = self.ready_claim_lane()
+        baseline = dict(lane)
+
+        audit = build_claim_lane_audit(lane, baseline, "baseline")
+        lane["claim_lane_audit"] = audit
+        summary = summarize_claim_lane_audit([lane])
+
+        self.assertEqual(audit["status"], "ready")
+        self.assertEqual(audit["reasons"], [])
+        self.assertEqual(audit["narrative_artifacts"], "complete")
+        self.assertEqual(audit["search_policy"]["status"], "honest")
+        self.assertEqual(audit["fallback_honesty"]["status"], "clear")
+        self.assertEqual(summary["status"], "ready")
+        self.assertEqual(summary["ready_lanes"], ["claim"])
+        self.assertEqual(summary["attention_lanes"], [])
+
+    def test_claim_lane_summary_renders_claim_audit_lines_from_ready_audit_surface(
+        self,
+    ) -> None:
+        latest_demo = demo_phase_entry(
+            self.claim_step_with_drifted_funnel(),
+            CLAIM_SEARCH_PROFILE,
+        )
+        self.assertIsNotNone(latest_demo)
+        lane = self.ready_claim_lane(dict(latest_demo or {}))
+        lane["claim_lane_audit"] = build_claim_lane_audit(lane, dict(lane), "baseline")
+        text = "\n".join(render_lane_summary(lane))
+
+        self.assertIn("narrative artifacts: complete (text=1/1, events=1/1)", text)
+        self.assertIn("claim audit: ready (none)", text)
+        self.assertIn(
+            (
+                "search policy: honest guidance_style=claim_debt_guided "
+                "late_expansion_policy=claim_generic "
+                "bucket_policy=structural_generic"
+            ),
+            text,
+        )
+        self.assertIn(
+            (
+                "fallback honesty: clear run_mode=atomic_bootstrap_search "
+                "resume_steps=none reference_replay_steps=none"
+            ),
+            text,
+        )
+
+    def test_claim_comparison_build_summary_keeps_ready_signoff_and_audit_surface(
+        self,
+    ) -> None:
+        summary = build_summary(self.ready_claim_comparison_lanes(), "claim-baseline")
+
+        self.assertEqual(summary["signoff"]["status"], "ready")
+        self.assertEqual(
+            summary["signoff"]["summary"],
+            (
+                "all 2 lanes preserve baseline claim-baseline and the step-15 "
+                "reference claim boundary"
+            ),
+        )
+        self.assertEqual(summary["step15_claim_boundary"]["status"], "consistent")
+        self.assertEqual(summary["claim_lane_audit"]["status"], "ready")
+        self.assertEqual(
+            summary["claim_lane_audit"]["ready_lanes"],
+            ["claim-baseline", "claim-current"],
+        )
+        self.assertEqual(summary["claim_lane_audit"]["attention_lanes"], [])
+
+    def test_claim_top_level_audit_renderer_reports_ready_claim_lanes(self) -> None:
+        summary = build_summary(self.ready_claim_comparison_lanes(), "claim-baseline")
+
+        self.assertEqual(
+            render_claim_lane_audit(summary["claim_lane_audit"]),
+            "ready (claim-baseline, claim-current)",
+        )
+
+    def test_claim_text_summary_top_level_lines_keep_ready_signoff_and_audit_surface(
+        self,
+    ) -> None:
+        summary = build_summary(self.ready_claim_comparison_lanes(), "claim-baseline")
+
+        text = render_text_summary(summary)
+
+        self.assertIn(
+            (
+                "Comparison Signoff: ready (all 2 lanes preserve baseline "
+                "claim-baseline and the step-15 reference claim boundary)"
+            ),
+            text,
+        )
+        self.assertIn(
+            "claim lane audit: ready (claim-baseline, claim-current)",
+            text,
+        )
+        self.assertNotIn("Comparison Signoff: attention", text)
+        self.assertNotIn("claim lane audit: attention", text)
+
+    def test_claim_compare_main_writes_text_json_and_stdout_from_ready_summary(
+        self,
+    ) -> None:
+        lanes = self.ready_claim_comparison_lanes()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            baseline_dir = temp_path / "claim-baseline"
+            current_dir = temp_path / "claim-current"
+            baseline_dir.mkdir()
+            current_dir.mkdir()
+            text_out = temp_path / "artifacts" / "compare" / "summary.txt"
+            json_out = temp_path / "artifacts" / "compare" / "summary.json"
+            stdout = io.StringIO()
+            argv = [
+                "compare_runs.py",
+                "--lane",
+                f"claim-baseline={baseline_dir}",
+                "--lane",
+                f"claim-current={current_dir}",
+                "--baseline",
+                "claim-baseline",
+                "--text-out",
+                str(text_out),
+                "--json-out",
+                str(json_out),
+            ]
+
+            with (
+                mock.patch.object(sys, "argv", argv),
+                mock.patch.object(sys, "stdout", stdout),
+                mock.patch(f"{__name__}.load_lane", side_effect=lanes),
+            ):
+                exit_code = main()
+
+            self.assertEqual(exit_code, 0)
+            self.assertTrue(text_out.exists())
+            self.assertTrue(json_out.exists())
+
+            text_summary = text_out.read_text(encoding="utf-8")
+            json_summary = json.loads(json_out.read_text(encoding="utf-8"))
+
+        self.assertEqual(stdout.getvalue(), text_summary)
+        self.assertIn(
+            (
+                "Comparison Signoff: ready (all 2 lanes preserve baseline "
+                "claim-baseline and the step-15 reference claim boundary)"
+            ),
+            text_summary,
+        )
+        self.assertIn(
+            "claim lane audit: ready (claim-baseline, claim-current)",
+            text_summary,
+        )
+        self.assertEqual(json_summary["baseline_lane"], "claim-baseline")
+        self.assertEqual(json_summary["signoff"]["status"], "ready")
+        self.assertEqual(json_summary["claim_lane_audit"]["status"], "ready")
 
 
 if __name__ == "__main__":

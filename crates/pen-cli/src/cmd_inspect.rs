@@ -1,11 +1,10 @@
 use crate::cli::InspectArgs;
 use crate::cmd_run::current_search_compat;
 use crate::report::{
-    LateStepClaimStatus, StepReport, load_step_reports, render_debug_report,
-    render_replay_ablation, render_standard_report, stored_prune_class_stats,
-    summarize_prune_reports,
+    load_step_reports, render_debug_report, render_replay_ablation, render_standard_report,
+    stored_prune_class_stats, summarize_prune_reports, LateStepClaimStatus, StepReport,
 };
-use anyhow::{Context, Result, bail};
+use anyhow::{bail, Context, Result};
 use pen_search::resume::decide_resume;
 use pen_store::frontier::read_frontier_manifest;
 use pen_store::manifest::{FrontierManifestV1, RunManifestV1};
@@ -304,10 +303,16 @@ fn inspect_run_dir(run_dir: &Path) -> Result<String> {
         .with_context(|| format!("read {}", manifest_path.display()))?;
     let manifest: RunManifestV1 = serde_json::from_str(&run_text).context("parse run manifest")?;
     let steps = load_step_reports(run_dir)?;
+    let grammar_profile = if manifest.grammar_profile.is_empty() {
+        "unknown"
+    } else {
+        manifest.grammar_profile.as_str()
+    };
 
     Ok(format!(
-        "{}\n\n{}",
+        "{}\ngrammar_profile: {}\n\n{}",
         render_standard_report(&manifest.run_id, &steps),
+        grammar_profile,
         render_debug_report(&manifest.run_id, &steps)
     ))
 }

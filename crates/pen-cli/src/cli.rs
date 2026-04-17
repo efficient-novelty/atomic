@@ -14,6 +14,9 @@ pub enum Commands {
     Resume(ResumeArgs),
     Inspect(InspectArgs),
     ExportAgda(ExportAgdaArgs),
+    CompareClaimLane(CompareClaimLaneArgs),
+    CertifyClaimLane(CertifyClaimLaneArgs),
+    BenchmarkClaimLane(BenchmarkClaimLaneArgs),
 }
 
 #[derive(Debug, Clone, Args)]
@@ -64,4 +67,44 @@ pub struct ExportAgdaArgs {
     pub until_step: Option<u32>,
     #[arg(long)]
     pub verify: bool,
+}
+
+#[derive(Debug, Clone, Args)]
+pub struct CompareClaimLaneArgs {
+    #[arg(long)]
+    pub guarded_run: PathBuf,
+    #[arg(long)]
+    pub claim_run: PathBuf,
+    #[arg(long)]
+    pub json_out: Option<PathBuf>,
+    #[arg(long)]
+    pub text_out: Option<PathBuf>,
+}
+
+#[derive(Debug, Clone, Args)]
+pub struct CertifyClaimLaneArgs {
+    #[arg(long)]
+    pub guarded_run: PathBuf,
+    #[arg(long)]
+    pub claim_run: PathBuf,
+    #[arg(long)]
+    pub runtime_threshold_ms: Option<u64>,
+    #[arg(long)]
+    pub json_out: Option<PathBuf>,
+    #[arg(long)]
+    pub text_out: Option<PathBuf>,
+}
+
+#[derive(Debug, Clone, Args)]
+pub struct BenchmarkClaimLaneArgs {
+    #[arg(long)]
+    pub guarded_run: PathBuf,
+    #[arg(long)]
+    pub claim_run: Vec<PathBuf>,
+    #[arg(long)]
+    pub runtime_threshold_ms: Option<u64>,
+    #[arg(long)]
+    pub json_out: Option<PathBuf>,
+    #[arg(long)]
+    pub text_out: Option<PathBuf>,
 }

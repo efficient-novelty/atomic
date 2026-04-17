@@ -4351,7 +4351,8 @@ mod tests {
     use pen_core::library::{Library, LibraryEntry};
     use pen_core::telescope::Telescope;
     use pen_type::admissibility::{
-        AdmissibilityMode, StrictAdmissibility, strict_admissibility, strict_admissibility_for_mode,
+        AdmissibilityMode, PackagePolicy, StrictAdmissibility, StructuralFamily,
+        strict_admissibility, strict_admissibility_for_mode,
     };
     use std::collections::BTreeMap;
 
@@ -4380,6 +4381,152 @@ mod tests {
         let context = context_from_admissibility(&library, admissibility);
 
         assert_eq!(context.late_family_surface, LateFamilySurface::ClaimGeneric);
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fifteen_enumeration_context_derivation_stays_claim_generic_until_the_mode_changes()
+     {
+        let library = library_until(14);
+        let live_admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let mut bypassed_temporal_focus = live_admissibility;
+        bypassed_temporal_focus.focus_family = Some(StructuralFamily::TemporalShell);
+        bypassed_temporal_focus.package_policies.temporal_shell = PackagePolicy::Prefer;
+        let mut demo_surface_override = live_admissibility;
+        demo_surface_override.mode = AdmissibilityMode::DemoBreadthShadow;
+
+        let live_context = context_from_admissibility(&library, live_admissibility);
+        let bypassed_temporal_focus_context =
+            context_from_admissibility(&library, bypassed_temporal_focus);
+        let demo_surface_override_context =
+            context_from_admissibility(&library, demo_surface_override);
+        let live_catalog = build_clause_catalog(live_context, 8);
+        let bypassed_temporal_focus_catalog =
+            build_clause_catalog(bypassed_temporal_focus_context, 8);
+
+        assert_eq!(
+            live_context.late_family_surface,
+            LateFamilySurface::ClaimGeneric,
+            "the live step-15 constructor should still derive ClaimGeneric directly from DesktopClaimShadow mode"
+        );
+        assert_eq!(
+            bypassed_temporal_focus_context, live_context,
+            "reintroducing a temporal-shell focus family plus Prefer policy on the same DesktopClaimShadow admissibility should not change the enumeration context until a later explicit surface override fires"
+        );
+        assert_eq!(
+            live_catalog.clauses_at(7),
+            bypassed_temporal_focus_catalog.clauses_at(7),
+            "the mode-derived claim-generic constructor should keep the same live reference/eventual-lift/next-lift terminal trio even if a bypassed temporal focus is reintroduced upstream"
+        );
+        assert_eq!(
+            live_catalog.clauses_at(7).len(),
+            3,
+            "the live step-15 claim-generic constructor should keep the already-pinned three-clause remaining-one terminal catalog"
+        );
+        assert_eq!(
+            demo_surface_override_context.late_family_surface,
+            LateFamilySurface::DemoBreadthShadow,
+            "changing the admissibility mode is the constructor-level mechanism that actually leaves the default claim-generic surface"
+        );
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fifteen_claim_generic_band8_raw_catalog_stays_three_wide_across_all_positions()
+     {
+        let library = library_until(14);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = context_from_admissibility(&library, admissibility);
+        let mut realistic_context = claim_context;
+        realistic_context.late_family_surface = LateFamilySurface::RealisticShadow;
+        let claim_widths = raw_clause_catalog_widths(claim_context, 8);
+        let realistic_widths = raw_clause_catalog_widths(realistic_context, 8);
+        let claim_raw = enumerate_raw_telescopes(claim_context, 8);
+        let realistic_raw = enumerate_raw_telescopes(realistic_context, 8);
+        let claim_raw_options = super::raw_clause_options_by_position(claim_context, 8);
+        let expected_terminal_family = super::dedupe_sorted_clauses(
+            super::claim_generic_band8_clauses(7, claim_context)
+                .into_iter()
+                .map(|expr| ClauseRec::new(super::primary_role(&expr), expr))
+                .collect::<Vec<_>>(),
+        );
+
+        assert_eq!(
+            claim_widths,
+            vec![3, 3, 3, 3, 3, 3, 3, 3],
+            "the raw claim-generic band-8 emitter should stay three-wide at every live step-15 position"
+        );
+        assert_eq!(
+            realistic_widths,
+            vec![1, 1, 1, 1, 2, 1, 1, 1],
+            "the realistic temporal-shell control should stay narrow everywhere except for its already-pinned extra clause at position 4"
+        );
+        assert_eq!(
+            claim_raw.len(),
+            6561,
+            "three claim-generic choices at all eight positions should keep the live raw band-8 catalog at 3^8 combinations"
+        );
+        assert_eq!(
+            realistic_raw.len(),
+            2,
+            "the realistic temporal-shell control should still enumerate only the reference path plus its single extra position-4 variant"
+        );
+        assert_eq!(
+            claim_raw_options[7], expected_terminal_family,
+            "the raw claim-generic band-8 emitter should materialize the live three-clause terminal family directly at position 7"
+        );
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fifteen_late_clause_selector_uses_the_claim_generic_band8_family_until_the_surface_changes()
+     {
+        let library = library_until(14);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let claim_context = context_from_admissibility(&library, admissibility);
+        let mut realistic_context = claim_context;
+        realistic_context.late_family_surface = LateFamilySurface::RealisticShadow;
+        let mut demo_context = claim_context;
+        demo_context.late_family_surface = LateFamilySurface::DemoBreadthShadow;
+
+        for position in 0..8 {
+            let selected = super::late_clause_options(position, claim_context, 8)
+                .expect("the live step-15 claim context should keep a band-8 late-clause family");
+            let expected = super::dedupe_sorted_clauses(
+                super::claim_generic_band8_clauses(position, claim_context)
+                    .into_iter()
+                    .map(|expr| ClauseRec::new(super::primary_role(&expr), expr))
+                    .collect::<Vec<_>>(),
+            );
+            assert_eq!(
+                selected, expected,
+                "the live step-15 late-clause selector should delegate directly to the raw claim-generic band-8 family at position {position}"
+            );
+        }
+
+        let claim_terminal_trio = super::late_clause_options(7, claim_context, 8)
+            .expect("the live claim surface should expose a terminal trio");
+        let realistic_terminal_only = super::late_clause_options(7, realistic_context, 8)
+            .expect("the realistic control should expose its temporal-shell terminal clause");
+        let demo_terminal_family = super::late_clause_options(7, demo_context, 8)
+            .expect("the demo control should expose its wider temporal-shell family");
+        let realistic_reference = super::temporal_shell_reference_clause(7, realistic_context)
+            .expect("the realistic control should keep its reference terminal clause");
+
+        assert_eq!(claim_terminal_trio.len(), 3);
+        assert_eq!(
+            realistic_terminal_only,
+            vec![ClauseRec::new(
+                super::primary_role(&realistic_reference),
+                realistic_reference,
+            )],
+            "changing only the late family surface to RealisticShadow should collapse the live claim-generic terminal trio back to the lone temporal-shell reference clause"
+        );
+        assert_eq!(
+            demo_terminal_family.len(),
+            5,
+            "changing only the late family surface to DemoBreadthShadow should widen the same terminal position to the demo temporal-shell family"
+        );
     }
 
     #[test]

@@ -6,6 +6,18 @@
     "artifacts": {
       "$ref": "#/$defs/RunArtifacts"
     },
+    "build": {
+      "$ref": "#/$defs/BuildInfo",
+      "default": {
+        "binary_sha256": "",
+        "cargo_lock_sha256": "",
+        "dirty_tree": false,
+        "git_commit_sha": "",
+        "profile": "",
+        "target_cpu": "",
+        "target_triple": ""
+      }
+    },
     "compat": {
       "$ref": "#/$defs/RunCompat"
     },
@@ -13,6 +25,12 @@
       "$ref": "#/$defs/ConfigFingerprint"
     },
     "created_utc": {
+      "type": "string"
+    },
+    "failure_note": {
+      "type": "string"
+    },
+    "grammar_profile": {
       "type": "string"
     },
     "host": {
@@ -24,10 +42,24 @@
     "run_id": {
       "type": "string"
     },
+    "runtime": {
+      "$ref": "#/$defs/RuntimeInfo",
+      "default": {
+        "resolved_worker_count": 0
+      }
+    },
     "schema_version": {
       "type": "integer",
       "format": "uint32",
       "minimum": 0
+    },
+    "search_policy": {
+      "$ref": "#/$defs/SearchPolicyInfo",
+      "default": {
+        "bucket_policy": "",
+        "guidance_style": "",
+        "late_expansion_policy": ""
+      }
     },
     "status": {
       "$ref": "#/$defs/RunStatus"
@@ -53,6 +85,39 @@
     "artifacts"
   ],
   "$defs": {
+    "BuildInfo": {
+      "type": "object",
+      "properties": {
+        "binary_sha256": {
+          "type": "string",
+          "default": ""
+        },
+        "cargo_lock_sha256": {
+          "type": "string",
+          "default": ""
+        },
+        "dirty_tree": {
+          "type": "boolean",
+          "default": false
+        },
+        "git_commit_sha": {
+          "type": "string",
+          "default": ""
+        },
+        "profile": {
+          "type": "string",
+          "default": ""
+        },
+        "target_cpu": {
+          "type": "string",
+          "default": ""
+        },
+        "target_triple": {
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
     "ConfigFingerprint": {
       "type": "object",
       "properties": {
@@ -72,28 +137,36 @@
       "type": "object",
       "properties": {
         "arch": {
-          "type": "string"
+          "type": "string",
+          "default": ""
+        },
+        "cpu_model": {
+          "type": "string",
+          "default": ""
         },
         "logical_cpus": {
           "type": "integer",
           "format": "uint32",
+          "default": 0,
           "minimum": 0
         },
         "os": {
-          "type": "string"
+          "type": "string",
+          "default": ""
+        },
+        "physical_core_count": {
+          "type": "integer",
+          "format": "uint32",
+          "default": 0,
+          "minimum": 0
         },
         "ram_bytes": {
           "type": "integer",
           "format": "uint64",
+          "default": 0,
           "minimum": 0
         }
-      },
-      "required": [
-        "os",
-        "arch",
-        "logical_cpus",
-        "ram_bytes"
-      ]
+      }
     },
     "RunArtifacts": {
       "type": "object",
@@ -179,6 +252,37 @@
         "paused",
         "completed",
         "failed"
+      ]
+    },
+    "RuntimeInfo": {
+      "type": "object",
+      "properties": {
+        "resolved_worker_count": {
+          "type": "integer",
+          "format": "uint16",
+          "default": 0,
+          "maximum": 65535,
+          "minimum": 0
+        }
+      }
+    },
+    "SearchPolicyInfo": {
+      "type": "object",
+      "properties": {
+        "bucket_policy": {
+          "type": "string"
+        },
+        "guidance_style": {
+          "type": "string"
+        },
+        "late_expansion_policy": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "guidance_style",
+        "late_expansion_policy",
+        "bucket_policy"
       ]
     }
   }

@@ -22,6 +22,8 @@ use pen_type::connectivity::{
 };
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
+#[cfg(test)]
+use std::collections::BTreeSet;
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct PrefixLegalityCacheStats {
@@ -43,6 +45,113 @@ pub struct PrefixLegalityCacheStats {
     pub terminal_prefix_bound_hits: usize,
     pub terminal_prefix_rank_hits: usize,
     pub partial_prefix_bound_hits: usize,
+}
+
+#[cfg(test)]
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_OPEN_BAND_TERMINAL_FILTER_OVERRIDE:
+        std::cell::RefCell<Option<BTreeSet<&'static str>>> =
+            const { std::cell::RefCell::new(None) };
+}
+
+#[cfg(test)]
+pub struct ClaimStepFifteenOpenBandTerminalFilterOverrideGuard;
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenOpenBandTerminalFilterOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_OPEN_BAND_TERMINAL_FILTER_OVERRIDE.with(|override_labels| {
+            *override_labels.borrow_mut() = None;
+        });
+    }
+}
+
+#[cfg(test)]
+pub fn override_claim_step_fifteen_open_band_terminal_filter(
+    labels: &[&'static str],
+) -> ClaimStepFifteenOpenBandTerminalFilterOverrideGuard {
+    CLAIM_STEP_FIFTEEN_OPEN_BAND_TERMINAL_FILTER_OVERRIDE.with(|override_labels| {
+        *override_labels.borrow_mut() = Some(labels.iter().copied().collect());
+    });
+    ClaimStepFifteenOpenBandTerminalFilterOverrideGuard
+}
+
+#[cfg(test)]
+thread_local! {
+    static CLAIM_STEP_FIFTEEN_PREFIX_LOCAL_OPEN_BAND_TERMINAL_FILTER_OVERRIDE:
+        std::cell::RefCell<Option<BTreeMap<PrefixSignature, BTreeSet<&'static str>>>> =
+            const { std::cell::RefCell::new(None) };
+}
+
+#[cfg(test)]
+pub struct ClaimStepFifteenPrefixLocalOpenBandTerminalFilterOverrideGuard;
+
+#[cfg(test)]
+impl Drop for ClaimStepFifteenPrefixLocalOpenBandTerminalFilterOverrideGuard {
+    fn drop(&mut self) {
+        CLAIM_STEP_FIFTEEN_PREFIX_LOCAL_OPEN_BAND_TERMINAL_FILTER_OVERRIDE.with(
+            |override_labels| {
+                *override_labels.borrow_mut() = None;
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+pub fn override_claim_step_fifteen_prefix_local_open_band_terminal_filter(
+    prefixes: &[PrefixSignature],
+    labels: &[&'static str],
+) -> ClaimStepFifteenPrefixLocalOpenBandTerminalFilterOverrideGuard {
+    let allowed_labels = labels.iter().copied().collect::<BTreeSet<_>>();
+    CLAIM_STEP_FIFTEEN_PREFIX_LOCAL_OPEN_BAND_TERMINAL_FILTER_OVERRIDE.with(|override_labels| {
+        *override_labels.borrow_mut() = Some(
+            prefixes
+                .iter()
+                .cloned()
+                .map(|signature| (signature, allowed_labels.clone()))
+                .collect(),
+        );
+    });
+    ClaimStepFifteenPrefixLocalOpenBandTerminalFilterOverrideGuard
+}
+
+#[cfg(test)]
+fn claim_step_fifteen_open_band_terminal_label(clause: &ClauseRec) -> Option<&'static str> {
+    let reference_terminal = Telescope::reference(15)
+        .clauses
+        .last()
+        .cloned()
+        .expect("reference step 15 should have a terminal clause");
+    let next_lift_terminal = ClauseRec::new(
+        pen_core::clause::ClauseRole::Formation,
+        Expr::Pi(
+            Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
+                Box::new(Expr::Var(1)),
+            )))))),
+            Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+        ),
+    );
+    let eventual_lift_terminal = ClauseRec::new(
+        pen_core::clause::ClauseRole::Formation,
+        Expr::Pi(
+            Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
+                Expr::Eventually(Box::new(Expr::Var(1))),
+            ))))),
+            Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
+                1,
+            )))))),
+        ),
+    );
+
+    if *clause == reference_terminal {
+        Some("reference")
+    } else if *clause == next_lift_terminal {
+        Some("next_lift")
+    } else if *clause == eventual_lift_terminal {
+        Some("eventual_lift")
+    } else {
+        None
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -684,6 +793,37 @@ impl PrefixLegalityCache {
                 continue;
             }
 
+            #[cfg(test)]
+            {
+                let allowed = claim_step_fifteen_open_band_terminal_label(clause)
+                    .map(|label| {
+                        let globally_allowed =
+                            CLAIM_STEP_FIFTEEN_OPEN_BAND_TERMINAL_FILTER_OVERRIDE.with(
+                                |override_labels| {
+                                    override_labels
+                                        .borrow()
+                                        .as_ref()
+                                        .is_none_or(|labels| labels.contains(label))
+                                },
+                            );
+                        let locally_allowed =
+                            CLAIM_STEP_FIFTEEN_PREFIX_LOCAL_OPEN_BAND_TERMINAL_FILTER_OVERRIDE
+                                .with(|override_labels| {
+                                    override_labels
+                                        .borrow()
+                                        .as_ref()
+                                        .and_then(|labels| labels.get(parent_signature))
+                                        .is_none_or(|labels| labels.contains(label))
+                                });
+                        globally_allowed && locally_allowed
+                    })
+                    .unwrap_or(true);
+                if !allowed {
+                    self.stats.terminal_clause_filter_prunes += 1;
+                    continue;
+                }
+            }
+
             filtered.push(clause);
         }
 
@@ -762,6 +902,39 @@ impl PrefixLegalityCache {
         self.uses_family_surface_override(signature, admissibility)
     }
 
+    pub fn override_family_surface_for_signature(
+        &mut self,
+        signature: &PrefixSignature,
+        clause_kappa: u16,
+        library: &Library,
+        prefix_telescope: &Telescope,
+        admissibility: StrictAdmissibility,
+        late_family_surface: LateFamilySurface,
+    ) -> bool {
+        if !self.summaries.contains_key(signature) {
+            return false;
+        }
+
+        if let Some(filter_summary) = PrefixFamilyFilterSummary::from_prefix(
+            clause_kappa,
+            prefix_telescope,
+            library,
+            admissibility,
+            late_family_surface,
+        ) {
+            if filter_summary.is_empty() {
+                return false;
+            }
+            self.family_filters
+                .insert(signature.clone(), filter_summary);
+        } else {
+            self.family_filters.remove(signature);
+        }
+        self.family_surfaces
+            .insert(signature.clone(), late_family_surface);
+        true
+    }
+
     fn family_surface(
         &self,
         signature: &PrefixSignature,
@@ -828,8 +1001,9 @@ mod tests {
     use pen_core::rational::Rational;
     use pen_core::telescope::Telescope;
     use pen_type::admissibility::{
-        AdmissibilityDecisionClass, AdmissibilityDiagnostics, AdmissibilityMode,
-        assess_strict_admissibility, strict_admissibility, strict_admissibility_for_mode,
+        AdmissibilityDecisionClass, AdmissibilityDiagnostics, AdmissibilityMode, PackagePolicies,
+        PackagePolicy, StrictAdmissibility, StructuralFamily, assess_strict_admissibility,
+        strict_admissibility, strict_admissibility_for_mode,
     };
     use pen_type::connectivity::analyze_connectivity;
 
@@ -1087,6 +1261,95 @@ mod tests {
     }
 
     #[test]
+    fn claim_step_fifteen_family_summary_stays_disabled_until_a_focus_family_is_reintroduced() {
+        let library = library_until(14);
+        let default_admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let context = EnumerationContext::from_admissibility(&library, default_admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let focused_admissibility = StrictAdmissibility {
+            focus_family: Some(StructuralFamily::TemporalShell),
+            package_policies: PackagePolicies {
+                temporal_shell: PackagePolicy::Prefer,
+                ..PackagePolicies::default()
+            },
+            ..default_admissibility
+        };
+        let mut default_cache = PrefixLegalityCache::default();
+        let mut focused_cache = PrefixLegalityCache::default();
+
+        assert!(default_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            default_admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        assert_eq!(
+            default_cache.entry_counts().family_filters,
+            0,
+            "the live step-15 claim profile should not materialize a family summary while it stays no-focus"
+        );
+        assert_eq!(
+            default_cache.family_option_count(&signature),
+            None,
+            "search-side family-option counts should stay absent on the default claim-generic route"
+        );
+        assert_eq!(
+            default_cache.filter_active_window_clauses(
+                &signature,
+                7,
+                &library,
+                default_admissibility,
+                clause_catalog.clauses_at(7),
+            ),
+            None,
+            "without a focus family, the first search-side consumer should fall through rather than activate family filtering"
+        );
+
+        assert!(focused_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            focused_admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        assert_eq!(
+            focused_cache.entry_counts().family_filters,
+            1,
+            "reintroducing a focused structural route should re-enable the cached family summary on the same prefix"
+        );
+        let focused_filtered = focused_cache
+            .filter_active_window_clauses(
+                &signature,
+                7,
+                &library,
+                focused_admissibility,
+                clause_catalog.clauses_at(7),
+            )
+            .expect("a focused structural route should expose an active-window family filter");
+        assert_eq!(
+            focused_cache.family_option_count(&signature),
+            Some(1),
+            "the same step-15 prefix should collapse to one remaining family option once temporal focus is reinstated"
+        );
+        assert_eq!(
+            focused_cache.stats().active_window_clause_filter_hits,
+            1,
+            "reintroducing focus should make the first search-side active-window consumer observable again on the same prefix"
+        );
+        assert_eq!(
+            focused_filtered,
+            clause_catalog.clauses_at(7).iter().collect::<Vec<_>>(),
+            "the focused replay should still run through the family-summary path even when this exact step-15 terminal catalog remains fully compatible with the temporal route"
+        );
+    }
+
+    #[test]
     fn active_window_clause_filter_skips_impossible_terminal_continuations() {
         let library = library_until(10);
         let admissibility =
@@ -1209,6 +1472,94 @@ mod tests {
             clause_catalog.clauses_at(7).len() - direct_admitted.len()
         );
         assert!(cache.stats().terminal_admissibility_hits > 0);
+    }
+
+    #[test]
+    fn claim_open_band_terminal_clause_filter_requires_default_claim_generic_route() {
+        let library = library_until(14);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 8);
+        let prefix = Telescope::new(Telescope::reference(15).clauses[..7].to_vec());
+        let signature = PrefixSignature::new(15, &library, &prefix);
+        let focused_admissibility = StrictAdmissibility {
+            focus_family: Some(StructuralFamily::TemporalShell),
+            ..admissibility
+        };
+        let package_constrained_admissibility = StrictAdmissibility {
+            require_temporal_shell_package: true,
+            package_policies: PackagePolicies {
+                temporal_shell: PackagePolicy::Require,
+                ..PackagePolicies::default()
+            },
+            ..admissibility
+        };
+        let mut default_cache = PrefixLegalityCache::default();
+        let mut overridden_surface_cache = PrefixLegalityCache::default();
+
+        assert!(default_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::ClaimGeneric
+        ));
+        assert!(overridden_surface_cache.insert_root(
+            signature.clone(),
+            8,
+            &library,
+            &prefix,
+            admissibility,
+            LateFamilySurface::DemoBreadthShadow
+        ));
+
+        let default_terminal_filtered = default_cache
+            .filter_claim_open_band_terminal_clauses(
+                15,
+                &signature,
+                admissibility,
+                clause_catalog.clauses_at(7),
+            )
+            .expect(
+                "the claim open-band route should stay available on the live default claim-generic admissibility profile",
+            );
+        assert_eq!(
+            default_terminal_filtered,
+            clause_catalog.clauses_at(7).iter().collect::<Vec<_>>(),
+            "the live default claim-generic route should keep the full three-clause step-15 claim-generic terminal trio available before any alternate caller profile closes the selector"
+        );
+        assert_eq!(
+            default_cache.filter_claim_open_band_terminal_clauses(
+                15,
+                &signature,
+                focused_admissibility,
+                clause_catalog.clauses_at(7),
+            ),
+            None,
+            "adding a family focus should exit the open-band route so the caller must fall back to the general terminal path"
+        );
+        assert_eq!(
+            default_cache.filter_claim_open_band_terminal_clauses(
+                15,
+                &signature,
+                package_constrained_admissibility,
+                clause_catalog.clauses_at(7),
+            ),
+            None,
+            "adding any nondefault package policy should also exit the open-band route before terminal filtering continues"
+        );
+        assert_eq!(
+            overridden_surface_cache.filter_claim_open_band_terminal_clauses(
+                15,
+                &signature,
+                admissibility,
+                clause_catalog.clauses_at(7),
+            ),
+            None,
+            "changing the late family surface away from ClaimGeneric should keep the route selector closed even on the same step-15 prefix"
+        );
     }
 
     #[test]

@@ -26,11 +26,517 @@ Treat these as stable repo truths:
 - Claim-lane mechanisms such as claim-debt admissibility, a claim-generic late
   surface, structural-generic bucket scheduling, later `kappa 7-9` mutators,
   and claim-path exactness rechecks are landed in code and tests.
+- The focused-three no-bound flat-shell exact-bound gate is pinned too:
+  baseline `exact_partial_prefix_bound_decision(...)` caches
+  `CannotClearBar` on those `3` residues with the same compact dead
+  `3`-generated / `0`-admitted no-bound summary, while the pair-cell
+  remaining-one summary override only reclassifies that gate to `Unknown`
+  without changing the underlying dead summary.
 - Claim artifacts, manifests, live checkpoints, and certification surfaces are
-  real; the lane must stay at `bounded live recovery` until a stored
-  certificate passes.
-- Current post-probe stored rerun evidence already keeps step-`15` repair
-  ahead of any step-`1` reopening on newer code.
+  real; the lane now has a stored compare / benchmark / certify-passing bundle,
+  and any stronger user-facing claim must be tied directly to that stored
+  certificate and disclosed desktop bundle.
+- Focused current-machine Rust verification was rerun and remains green on
+  the claim-profile dispatch/accessor layer, the claim-open-band route
+  selector, the live caller/work-item/proof-close/demo-closure path, the
+  qualification-triad and focused-three no-bound flat-shell controls, and the
+  CLI/report/narrative/resume closure surface; direct script execution still
+  awaits a `python`, `python3`, `py`, or `uv` launcher, but native
+  `pen-cli compare-claim-lane`, `certify-claim-lane`, and
+  `benchmark-claim-lane` now cover current-head claim evidence refresh on this
+  machine.
+- Current post-probe stored rerun evidence now has both a previous audited
+  head and a current certified head: the earlier audited bundle keeps the
+  step-`15` repair explicit on newer code, and the current stored rerun on
+  current head preserves accepted-hash parity through step `15`, keeps the
+  repaired stored step-`15` surface at `7211 / 553 / 2052`, restores stored
+  step `1` to `2144 / 1285 / 1 / 475`, and carries ready native compare,
+  benchmark, and certificate artifacts beside that rerun.
+- The repaired step-`15` survivor accounting is now stored as well as
+  regression-backed too: demo buckets collapse on the repaired current head to
+  one live temporal `small_cluster` at `2052 / 522 / 522 / 0`, one
+  zero-admitted `broad` bucket at `3600 / 0 / 0 / 0`, and one fenced `single`
+  pocket at `0 / 0 / 0 / 3 / 1`; the residual proof-close pressure is
+  localized to three exact claim families, and family-local same-primary
+  relief only trades those prunes for extra fully scored non-winning
+  reference terminals.
+- The repaired-head partial-prefix wall is regression-backed too: the
+  unchanged clean `553` wall now localizes to exactly eight queued frontier
+  remainder branches, with the direct top-level `reference` remainder at
+  `241 / 199 / 42`, the top-level `claim_eventual_domain` remainder at
+  `156 / 126 / 30`, the six `claim_flat_domain` descendant branches carrying
+  the other `156`, and queued branches `0 .. 3` contributing none on the
+  repaired head; inside that direct `reference` remainder, mismatch `1`
+  carries `177 / 145 / 32`, mismatch `2` carries `50 / 42 / 8`, mismatch `3`
+  carries `14 / 12 / 2`, and the largest single remaining-two pairing stays
+  `reference / demo_flat_codomain = 61`; inside that pairing, the next exact
+  slice is now narrower too at remaining-two clause-`4`
+  `claim_next_bridge = 33` versus clause-`4` `reference = 28`, while the
+  whole remaining-three spill is another `12` captures on clause-`4`
+  `reference`. That `claim_next_bridge = 33` side is now explicit too as tied
+  clause-`2`
+  `claim_flat_domain = 12` and
+  `claim_sharp_codomain = 12`
+  ahead of clause-`2` `reference = 9`; the first repaired-head exact
+  claim-pair reopening under that side is frozen as a tradeoff control at
+  `generated_raw_prefixes = 7485`,
+  `partial_prefix_bar_failure = 539`,
+  direct `reference` remainder `= 227`,
+  `reference / demo_flat_codomain = 45`,
+  slot split `27 / 18 / 14`,
+  and
+  `small_cluster = 2112 / 542 / 542 / 0`,
+  while the tied repaired-head exact `claim_flat_domain` and exact
+  `claim_sharp_codomain` single-sheet reopenings under that same side are
+  frozen as matched smaller tradeoff controls at
+  `generated_raw_prefixes = 7317`,
+  `partial_prefix_bar_failure = 545`,
+  direct `reference` remainder `= 233`,
+  `reference / demo_flat_codomain = 51`,
+  slot split `30 / 21 / 14`,
+  and
+  `small_cluster = 2076 / 530 / 530 / 0`,
+  while the exact clause-`2` `reference = 9` sheet under that same side is
+  now frozen too as the first non-widening safe side-control at
+  `generated_raw_prefixes = 7149`,
+  `partial_prefix_bar_failure = 551`,
+  direct `reference` remainder `= 239`,
+  `reference / demo_flat_codomain = 57`,
+  slot split `33 / 24 / 14`,
+  and
+  `small_cluster = 2040 / 518 / 518 / 0`.
+  That safe control trims only the clause-`4` `reference` companion while
+  leaving the live clause-`4` `claim_next_bridge = 33` blocker untouched.
+  The attempted landing extension there is now frozen too: reopening that
+  same exact clause-`2` `reference` sheet together with its clause-`4`
+  `reference` companion is completely neutral and relands the same
+  `7149 / 551 / 2040 / 518 / 518 / 0` surface, with the same
+  `33 / 24 / 14` slot split and the same
+  `12 / 12 / 9`,
+  `9 / 9 / 6`,
+  and
+  `5 / 5 / 4`
+  clause-`2` grid across
+  `claim_flat_domain / claim_sharp_codomain / reference`.
+  The first exact `claim_flat_domain` and exact `claim_sharp_codomain`
+  reopenings under that broader clause-`4` `reference` companion are now
+  frozen too as spill-only tradeoff controls at
+  `7236 / 550 / 2058 / 524 / 524 / 0`;
+  they keep the remaining-two clause-`4` `reference` row pinned at
+  `9 / 9 / 6`
+  and trim only one remaining-three spill capture to
+  `4 / 5 / 4`
+  or
+  `5 / 4 / 4`.
+  The next honest move is therefore the smaller exact `reference = 6` slice
+  below that same clause-`4` `reference` companion before the whole
+  remaining-three spill.
+- The reverted clause-`1` exact-pocket family is now regression-backed too:
+  the `demo_eventually_codomain` exact-pocket reland and the widened
+  clause-`0` claim-flat `demo_flat_codomain` exact-pocket reland both
+  collapse to the same widening negative control at `4466 / 626` with the
+  same `3156 / 526 / 526 / 0` `small_cluster`, the same fenced `single`
+  pocket, and the same disconnected zero-admitted shell at `2562 / 7686`.
+- The representative mismatch-`0` `reference` clause-`5` remaining-one slice
+  is now regression-backed too: the pair-cell clause-`2` split, both
+  claim-side clause-`6` sibling sets, both clause-`6` `reference`
+  clause-`3` branches, and both joint-continuation delta probes all stay on
+  the already-pinned `4343 / 552 / 2268-2270` or neutral surfaces, so that
+  slice is frozen as geometry rather than a fresh repair class.
+- The live step-`15` caller setup is now regression-backed too: on the actual
+  step-`14` claim prefix, `DesktopClaimShadow` keeps no named focus family,
+  keeps `PackagePolicies::default()`, keeps `historical_anchor_ref = 10`,
+  keeps the `ClaimGeneric` late surface at `kappa = 8`, and now pins the
+  first temporal-shell claim-debt snapshot too:
+  `anchor_policy = Modal` with only `temporal_shell` package pressure and
+  `claim_debt_axes = 8 / 8` carrying `coupling = 2`, `support = 2`,
+  `temporal = 1`, `reanchor = 2`, and `closure = 3`.
+- On the canonical seven-clause reference prefix, the default claim-open-band
+  route now keeps the full
+  `reference + eventual_lift + next_lift` claim-generic `kappa = 8` trio
+  live.
+- The raw claim-generic band-`8` family emitter / late clause selector is now
+  regression-backed too: on the live step-`15` claim library the raw
+  `kappa = 8` catalog stays uniformly `3 / 3 / 3 / 3 / 3 / 3 / 3 / 3` for
+  exactly `6561` raw telescopes, `late_clause_options(..., 8)` stays
+  identical to `claim_generic_band8_clauses(...)` at every live position
+  under `LateFamilySurface::ClaimGeneric`, the live remaining-one selector
+  emits the same sorted `reference + eventual_lift + next_lift` trio
+  directly, the realistic control stays only
+  `1 / 1 / 1 / 1 / 2 / 1 / 1 / 1` with `2` raw telescopes, and changing only
+  `LateFamilySurface` to `RealisticShadow` or `DemoBreadthShadow` collapses
+  or widens that same terminal selector to the lone reference clause or the
+  five-clause demo family instead.
+- That default claim route is now derivation-backed too: on the same live
+  step-`14` claim library, the raw structural debt still resolves to
+  `TemporalShell`, but `DesktopClaimShadow` step `15` bypasses that
+  structural focus because `claim_guarded_early_focus_family(...)` only
+  applies on steps `4 ..= 8`; it dispatches through
+  `claim_strict_admissibility(...)` instead, preserving the same
+  `kappa = 8`, modal/temporal budget, and modal anchor `10` while keeping
+  `focus_family = None` and `PackagePolicies::default()`.
+- That claim-profile helper layer is now regression-backed too:
+  `claim_debt_axes_for_step(14, ...)` promotes the divergent operator-bundle
+  claim snapshot from raw `7 / 7` to `9 / 9`, while on the actual live
+  step-`14` claim library `claim_debt_axes_for_step(15, ...)` keeps the raw
+  temporal-shell `8 / 8` axes unchanged and
+  `claim_historical_anchor_ref(...)` keeps the modal anchor `10`.
+- The modal/temporal inclusion layer above those helpers is now
+  regression-backed too: on the divergent step-`13` operator-bundle claim
+  library, `claim_include_modal(...)` and `claim_include_temporal(...)` both
+  stay closed after the step-`14` `9 / 9` band promotion, while on the
+  actual live step-`14` claim library the step-`15` temporal-shell `8 / 8`
+  snapshot opens both helpers because `temporal_pressure = 1` even though
+  `modal_pressure = 0`.
+- The claim-profile sizing helpers above that inclusion layer are now
+  regression-backed too: on both the divergent step-`13` operator-bundle
+  control after the step-`14` `9 / 9` promotion and the actual live
+  step-`15` temporal-shell `8 / 8` claim profile,
+  `claim_max_expr_nodes(...)` relands the same wide `7`-node envelope while
+  `claim_max_path_dimension(...)` stays closed at `0`.
+- The claim-profile truncation/quota layer above that sizing layer is now
+  regression-backed too: on both the divergent step-`13` operator-bundle
+  control after the step-`14` `9 / 9` promotion and the actual live
+  step-`15` temporal-shell `8 / 8` claim profile,
+  `claim_include_trunc(...)` stays closed with
+  `max_path_dimension = 0` and `truncated_entries = 0`, while
+  `quota_per_bucket()` stays wide at `64` by inheriting the raw
+  operator-bundle or temporal-shell package pressure.
+- The claim-profile package-requirement layer above that truncation/quota
+  surface is now regression-backed too: on both the divergent step-`13`
+  operator-bundle control after the step-`14` `9 / 9` promotion and the
+  actual live step-`15` temporal-shell `8 / 8` claim profile, the raw debt
+  snapshot still keeps only the corresponding operator-bundle or
+  temporal-shell package pressure, but `claim_strict_admissibility(...)`
+  leaves `PackagePolicies::default()` intact and keeps every
+  `require_*_package` flag closed on the no-focus claim route.
+- The downstream package-policy consumer accessor layer above that helper-
+  local package surface is now regression-backed too: on both no-focus claim
+  profiles, `required_focus_family()` stays `None` and `policy_for(...)`
+  stays `Allow` for every structural family, while the bypassed step-`15`
+  structural temporal-shell route still yields no required focus family and
+  only `policy_for(TemporalShell) = Prefer`.
+- The first search-side claim-family-summary / work-item layer above those
+  accessors is now regression-backed too: on the actual live step-`15`
+  claim prefix, `PrefixFamilySummary::for_admissibility(...)` short-circuits
+  on `focus_family = None`, so `PrefixLegalityCache` stores no family
+  filter, `family_option_count()` stays absent, and
+  `create_online_prefix_work_item(...)` keeps
+  `remaining_family_options = u8::MAX` plus the full step-`8` catalog on the
+  default claim-generic route; replaying that same prefix through the
+  bypassed temporal-shell focused route re-enables one cached family option
+  and the active-window consumer path.
+- The frontier ordering / queue-pop consumer above that first work-item layer
+  is now regression-backed too: on the live seven-clause reference prefix and
+  the already-spent focused-three no-bound flat-shell residues used only as
+  comparison geometry, `prefix_frontier_work_key(...)` ties on
+  `remaining_clause_slots = 1`,
+  `next_clause_count = 3`,
+  `remaining_family_options = u8::MAX`, and
+  `clause_count = 7`, then still prefers the live reference prefix because
+  its `bit_cost = 191` stays below each focused-three residue, so
+  `pop_best_prefix(...)` still pops the live reference work item first.
+- The post-pop remaining-one consumer above that frontier layer is now
+  regression-backed too: on the same live seven-clause reference prefix,
+  `collapse_single_continuation_chain(...)` is a no-op at
+  `remaining_clause_slots = 1`, while
+  `claim_try_summary_prune_before_materialization(...)` does not pre-prune
+  either and instead caches a compact claim-open-band shell with
+  `generated = 3`, `admitted = 1`, a bar-clearing bound, and a single
+  survivor whose best accept rank already matches the canonical
+  `reference(15)` `103 / 8` completion.
+- The remaining-one materialization handoff above that post-pop layer is now
+  regression-backed too: on the same live seven-clause reference prefix,
+  `materialize_remaining_one_prefix_group(...)` increments the remaining-one
+  materialization telemetry and delegates to
+  `materialize_terminal_prefix_group(...)`; because the cached compact summary
+  there carries no full evaluations and only one survivor sketch,
+  materialization reuses that cached summary rather than reopening direct
+  compact replay, relanding `generated = 3`, `admitted = 1`, a bar-clearing
+  bound, and only the canonical `reference(15)` `103 / 8` survivor.
+- The first post-materialize bucket/rank consumer above that handoff is now
+  regression-backed too: on that same live reference prefix, summary
+  pre-prune has already recorded the live `small_cluster` shell once at
+  `3 / 1 / 1`; the post-materialize
+  `record_demo_bucket_surface(...)` plus
+  `record_demo_bucket_exact_screened(...)` pass lifts that running
+  prefix-local total to `6 / 2 / 2`; the retained bound still clears the bar;
+  no incumbent rank exists yet; and `best_prefix_group_accept_rank(...)`
+  still relands only the canonical `reference(15)` `103 / 8` survivor.
+- The candidate-cache handoff above that first post-materialize consumer is
+  now regression-backed too: on that same live reference prefix,
+  `cache_evaluated_terminal_prefix_group_candidates(...)` sorts the lone
+  retained candidate, evaluates it once because no incumbent exists yet,
+  seeds `discovery.terminal_rank_incumbent` with the canonical
+  `reference(15)` `103 / 8` rank, and then compacts away the evaluated
+  payload because `DesktopClaimShadow` stays on the compact claim path;
+  `PrefixCache::record_group_with_surface_counts(...)` then records that same
+  prefix as a one-survivor compact cache group with `generated = 3`,
+  `admitted = 1`, the same bar-clearing bound, and the same canonical best
+  accept rank.
+- The first proof-close intake above that candidate-cache handoff is now
+  regression-backed too: on that same live reference prefix,
+  `load_terminal_prefix_group_for_proof_close(...)` immediately takes the
+  compact one-survivor group back out of `PrefixCache`; the reloaded group
+  still carries `generated = 3`, `admitted = 1`, the same bar-clearing
+  bound, and the canonical `reference(15)` `103 / 8` survivor with no
+  retained evaluated payload; `demo_bucket_key_for_group(...)` rebuckets that
+  intake onto the `single` bucket so the earlier small-cluster same-primary
+  relief no longer applies there; and the first intake stays live because
+  proof-close starts with a fresh local incumbent rather than reusing the
+  earlier candidate-cache incumbent.
+- The proof-close candidate-order / candidate-level incumbent gate above that
+  intake is now regression-backed too: on that same live reference prefix,
+  `sort_terminal_prefix_group_candidates_for_certification(...)` still sees
+  only the compact canonical `reference(15)` `103 / 8` survivor, so
+  certification sort does not widen or reorder the live one-survivor claim
+  group before evaluation; that sorted survivor still carries no retained
+  evaluated payload; and the candidate-level
+  `accept_rank_can_survive_incumbent(...)` gate stays open only because
+  proof-close starts with no local incumbent, since same-primary relief is
+  already closed on the rebucketed `single` bucket and the same canonical
+  survivor would fail that gate once a same-rank local incumbent exists.
+- The proof-close candidate evaluation / rank-recomputation / minimality layer
+  above that gate is now regression-backed too: on that same live reference
+  prefix, `evaluate_checked_candidate(...)` re-evaluates the compact canonical
+  `reference(15)` survivor because proof-close kept no retained evaluated
+  payload; `acceptance_rank(...)` recomputes the same canonical `103 / 8`
+  accept rank from the fully scored survivor;
+  `analyze_semantic_minimality(...)` keeps it semantically minimal with no
+  admissible bar-clearing detachable subbundle; and proof-close seeds its
+  fresh local incumbent only after that re-evaluation rather than by reusing
+  `discovery.terminal_rank_incumbent`.
+- The first post-evaluation fully scored bucket / proof-close full-eval
+  accounting consumer above that proof-close evaluation layer is now
+  regression-backed too: on that same live reference prefix, the rebucketed
+  `single` pocket records the lone fully scored canonical `reference(15)`
+  replay with `best_overshoot = 115657 / 21112`, the earlier `small_cluster`
+  shell keeps zero fully scored candidates, both
+  `demo_phase.materialize_full_evals` and
+  `demo_phase.proof_close_full_evals` stay `0` on the live non-budgeted claim
+  path, and the lone replay is carried instead by top-level
+  `full_telescopes_evaluated = demo_funnel.full_telescopes_evaluated = 1`.
+- The top-level full-telescope / demo-funnel accounting consumer above that
+  post-evaluation layer is now regression-backed too: rebuilding the public
+  funnel with `build_demo_funnel_stats(...)` relands the same live step-`15`
+  surface on the canonical reference prefix, keeping
+  `generated_raw_prefixes = 4331`,
+  `full_telescopes_evaluated = 1`,
+  `exact_bound_screened = exact_bound_pruned + 1`,
+  `bar_clearers = 1`,
+  `semantically_minimal_clearers = 1`, and canonical
+  `winner_overshoot = 115657 / 21112`.
+- The top-level demo-closure consumer above that funnel layer is now
+  regression-backed too: rebuilding the public closure with
+  `build_demo_closure_stats(...)` relands the same live step-`15` closure
+  surface on the canonical reference prefix, keeping
+  `frontier_total_seen = exact_bound_screened`,
+  `frontier_certified_nonwinning = exact_bound_pruned`,
+  `frontier_total_seen = frontier_certified_nonwinning + 1`, and
+  `closure_percent = 99`.
+- The report-side demo-closure handoff above that public closure builder is
+  now regression-backed too: `step_to_report(...)` copies the live
+  `DemoClosureStats` straight into `StepReport.search_stats.demo_closure`,
+  serialized step reports keep the same step-`15` closure surface at
+  `frontier_total_seen = 554`,
+  `frontier_certified_nonwinning = 553`,
+  `closure_percent = 99`, and `stored_demo_closure(...)` prefers that stored
+  surface over any `demo_funnel` fallback whenever those stored counts are
+  present.
+- The first report/narrative closure render consumer above that handoff is now
+  regression-backed too: `render_step_narrative(...)` feeds
+  `closure_line(...)` from `stored_demo_closure(...)`, so even a drifted
+  `demo_funnel` at `exact_bound_screened = 7` and
+  `exact_bound_pruned = 1` still renders the stored
+  `frontier_total_seen = 554`,
+  `frontier_certified_nonwinning = 553`,
+  `closure_percent = 99` surface; `render_debug_report(...)` keeps that same
+  stored `demo closure:` line too.
+- The first caller/output emission layer above that render consumer is now
+  regression-backed too: `render_run_narrative(...)` keeps that same stored
+  step-`15` closure line on the drifted claim run, so
+  `write_step_narrative_artifact(...)` persists it into
+  `reports/steps/step-15-narrative.txt`, `render_run_output(...)` appends it
+  when narrative output is requested, and `write_latest_reports(...)`
+  persists `latest.debug.txt` from `render_debug_report(...)` with the same
+  stored `frontier_total_seen = 554`,
+  `frontier_certified_nonwinning = 553`,
+  `closure_percent = 99` surface.
+- The caller-side narrative toggle / emission-dispatch layer above that
+  caller/output emission layer is now regression-backed too:
+  `terminal_narrative_config(...)` keeps claim narrative output opt-in,
+  `RunArtifactWriter::persist_step(...)` preserves the stored
+  `frontier_total_seen = 554`,
+  `frontier_certified_nonwinning = 553`,
+  `closure_percent = 99` surface in drifted step summaries and step
+  narratives, `RunArtifactWriter::finalize_success(...)` plus
+  `finalize_failed_run(...)` / `RunArtifactWriter::finalize_failed(...)`
+  keep that same stored surface in `latest.debug.txt`, and a completed
+  `resume(...)` call reuses the stored closure rather than a drifted
+  `7 / 1 / 14` fallback.
+- The first downstream stored-artifact consumer in `scripts/compare_runs.py`
+  above that caller-side dispatch layer is now regression-backed too:
+  `has_demo_phase_evidence(...)` stays live on stored-closure evidence alone,
+  `demo_phase_entry(...)` keeps the drifted step-`15` funnel on
+  `4331 / 7 / 1 / 1 / 115657 / 21112` while preserving stored closure
+  `554 / 553 / 99`, and `render_lane_summary(...)` keeps the
+  `demo phase latest:` / `demo funnel latest:` lines on that stored `99%`
+  closure rather than the drifted `14%` fallback.
+- The live docs now mark the top-level compare summary / signoff consumer in
+  `scripts/compare_runs.py` as regression-backed too:
+  `build_summary(...)` / `signoff_summary(...)` keep a ready two-lane claim
+  comparison on `signoff.status = ready` with
+  `signoff.summary = all 2 lanes preserve baseline claim-baseline and the
+  step-15 reference claim boundary`, `render_claim_lane_audit(...)` keeps
+  `ready (claim-baseline, claim-current)`, and `render_text_summary(...)`
+  now surfaces that signoff explanation directly in the top-level
+  `Comparison Signoff:` line while preserving the top-level
+  `claim lane audit:` line on that ready audit surface even against the known
+  drifted `7 / 1 / 14` funnel plus stored closure `554 / 553 / 99`.
+- The compare script caller/output layer in `scripts/compare_runs.py` is now
+  regression-backed too: direct `unittest` coverage drives `main()` through
+  real `--lane` / `--baseline` / `--text-out` / `--json-out` parsing on the
+  ready claim-comparison surface, `write_text(...)` creates nested
+  `summary.txt` and `summary.json` outputs, `--json-out` preserves
+  `baseline_lane = claim-baseline` together with `signoff.status = ready`
+  and `claim_lane_audit.status = ready`, and stdout matches the ready
+  top-level `Comparison Signoff:` / `claim lane audit:` summary byte-for-byte
+  with `--text-out`.
+- The stored breadth/runtime/completeness certification consumers in
+  `scripts/certify_claim_lane.py` are now regression-backed too: direct
+  `unittest` coverage pins the passing helper surface for
+  `breadth_check(...)`, `breadth_diagnosis(...)`,
+  `runtime_threshold_check(...)`, `completeness_check(...)`, and
+  `manifest_completeness_check(...)`, proves that the stored
+  `4331 / 5000` step-`15` miss keeps the live `catalog = 64`,
+  `widths = [2, 3, 4, 5, 6, 7, 8]`, root seeding `64 / 57 / 7`, and
+  `ClaimGeneric` / `Modal@10` / `temporal_shell` claim-step-open surface
+  through a real `step-15-live.ndjson` checkpoint, and drives `main()`
+  through real CLI parsing on an isolated-failure certificate surface where
+  only `early_breadth`, `late_generated_floors`, `runtime_threshold`,
+  `exact_screen_reason_completeness`, `prune_class_completeness`, and
+  `manifest_completeness` fail while parity, policy, fallback, and narrative
+  checks stay green.
+- The remaining certification text/output consumer in
+  `scripts/certify_claim_lane.py` is now regression-backed too: direct
+  `unittest` coverage pins `render_text_summary(...)` on the ready
+  `Claim Certification:` surface, suppresses `failing checks:` on the pass
+  path, and drives `main()` through real ready-path `--json-out` /
+  `--text-out` parsing while preserving `status = ready`,
+  `failing_checks = []`, nested certificate artifacts, and stdout parity with
+  the written text summary.
+- The first reintroduced late temporal-focus replay on the live seven-clause
+  reference prefix is now regression-backed too: replaying that same prefix
+  with `focus_family = TemporalShell` and
+  `package_policies.temporal_shell = Prefer` reactivates one remaining family
+  option but keeps no filtered terminal-clause list resident at remaining-one,
+  closes `ClaimAdmittedOpenBand`, and still relands the same compact
+  `generated = 3`, `admitted = 1`, bar-clearing single-survivor canonical
+  `103 / 8` summary with zero pre-materialize terminal-prefix-bar and
+  terminal-rank prunes.
+- The first caller-level late-family-surface override replay on that same live
+  seven-clause reference prefix is now regression-backed too: keeping the same
+  live `DesktopClaimShadow` admissibility profile but overriding
+  `LateFamilySurface` from `ClaimGeneric` to `DemoBreadthShadow` closes
+  `ClaimAdmittedOpenBand`, leaves no cached family summary plus no filtered
+  next-clause list on the work item, widens the remaining-one terminal catalog
+  from `3` to `5`, and still relands a compact `generated = 5`,
+  `admitted = 1`, `open_band_structural = 1`, bar-clearing single-survivor
+  canonical `103 / 8` summary with zero pre-materialize terminal-prefix-bar
+  and terminal-rank prunes.
+- The first enumeration-context constructor above that late-family-surface
+  override replay is now regression-backed too:
+  `EnumerationContext::from_admissibility(...)` still derives
+  `LateFamilySurface::ClaimGeneric` directly from
+  `AdmissibilityMode::DesktopClaimShadow` on the live step-`15` claim
+  profile; replaying that same live admissibility with a bypassed synthetic
+  `focus_family = TemporalShell` plus
+  `package_policies.temporal_shell = Prefer` still yields an identical
+  enumeration context and the same live
+  `reference + eventual_lift + next_lift` remaining-one catalog; only an
+  explicit mode change to `DemoBreadthShadow` leaves that default
+  claim-generic surface at constructor time.
+- Focused current-machine Rust verification now passes for the matching
+  `pen-type`, `pen-search`, and `pen-cli` claim surfaces via
+  `cargo test -p pen-type desktop_claim_shadow_step_`,
+  `cargo test -p pen-search desktop_claim_shadow_step_fifteen_enumeration_context_derivation_stays_claim_generic_until_the_mode_changes -- --nocapture`,
+  `cargo test -p pen-search live_reference_reintroduced_temporal_focus -- --nocapture`,
+  `cargo test -p pen-search live_reference_late_family_surface_override -- --nocapture`,
+  `cargo test -p pen-search claim_generic_kappa_eight_catalog_adds_modal_temporal_exchange_variants -- --nocapture`,
+  `cargo test -p pen-search current_claim_step_fifteen_live_reference_`,
+  `cargo test -p pen-search current_claim_step_fifteen_live_reference_proof_close_ -- --nocapture`,
+  `cargo test -p pen-search current_claim_step_fifteen_live_reference_top_level_demo_ -- --nocapture`,
+  `cargo test -p pen-search current_claim_step_fifteen_live_caller_setup_stays_on_default_claim_generic_profile`,
+  `cargo test -p pen-search current_claim_step_fifteen_live_work_item_keeps_the_default_claim_profile_family_agnostic`,
+  `cargo test -p pen-search claim_step_fifteen_family_summary_stays_disabled_until_a_focus_family_is_reintroduced`,
+  `cargo test -p pen-search claim_open_band_terminal_clause_filter_requires_default_claim_generic_route`,
+  `cargo test -p pen-search current_claim_step_fifteen_frontier_queue_pops_the_live_reference_work_item_before_the_tighter_focused_three_prefixes_on_bit_cost`,
+  `cargo test -p pen-search current_claim_step_fifteen_remaining_two_`,
+  `cargo test -p pen-search current_claim_step_fifteen_reference_reference_tail_`,
+  `cargo test -p pen-search current_claim_step_fifteen_clause_one_demo_flat_codomain_`,
+  and `cargo test -p pen-cli current_claim_step_fifteen_`, while direct
+  `compare_runs.py` / `certify_claim_lane.py` execution still awaits a
+  `python`, `python3`, `py`, or `uv` launcher.
+- The first raw-catalog / scout consumer above that live claim-generic
+  band-`8` emitter is now regression-backed too: direct `pen-search` coverage
+  pins the step-`15` `claim_regular_clause_catalog` checkpoint at raw widths
+  `3 / 3 / 3 / 3 / 3 / 3 / 3 / 3`, raw telescopes `6561`, zero generated
+  surface, and pre-root-seeding `3 / 0 / 0 / 0`, while the matching
+  `claim_root_seeding_summary` checkpoint keeps that same `6561` raw catalog
+  and shrinks only to `generated_raw_surface = 3`, `prefixes_created = 3`,
+  `frontier_queue_len = 3`, and public root seeding `3 / 0 / 0 / 3`.
+- The first in-flight discovery checkpoint above that scout branch is now
+  regression-backed too: direct `pen-search` coverage pins
+  `current_claim_step_fifteen_live_regular_frontier_progress_checkpoint_keeps_the_same_three_root_shell_before_queue_pop`,
+  and the engine now force-emits the first
+  `claim_regular_frontier_progress` note even on fast runs while later loop
+  emissions stay throttled. That first in-loop checkpoint still keeps the same
+  `clause_kappa = 8`, raw widths `3 / 3 / 3 / 3 / 3 / 3 / 3 / 3`, raw
+  telescopes `6561`, zero prefix-state exploration, zero exact-screen prunes,
+  and the same public root seeding `3 / 0 / 0 / 3` before any queue-pop.
+- The next honest slice now moves above the fully pinned compare /
+  certification evidence surface, the exhausted broader-backup lattice, the
+  whole qualification-triad exact-shell remaining-one lattice, the newly
+  frozen pure temporal-focus replay, the newly frozen caller-level
+  late-family-surface override replay, the newly frozen constructor-level
+  claim-generic derivation, the newly frozen raw claim-generic band-`8`
+  emitter / selector, the newly frozen regular-catalog plus root-seeding
+  scout branch, the newly frozen first in-loop discovery checkpoint, the
+  newly frozen live seven-clause reference-prefix queue-pop / post-pop /
+  proof-close stack, and the newly frozen first post-reference
+  `claim_regular_frontier_remainder` checkpoint above that canonical branch;
+  keep the exact live move in
+  [../../autonomous_next_steps.md](../../autonomous_next_steps.md).
+- The first post-reference exact-two-step frontier family above that remainder
+  checkpoint is now regression-backed too: direct `pen-search` coverage pins
+  the exact `12` queued post-reference labels plus frontier work keys, and the
+  test-only blanket `DemoBreadthShadow` override across all queued exact-two-
+  step children widens the local step-`15` surface from `4331` to `8507`
+  while keeping `partial_prefix_bar_failure = 553`, accepted `103 / 8`, no
+  fully scored lifted `89 / 8`, the fenced `single` pocket, and
+  `small_cluster = 1566 / 522 / 522 / 0`; treat that as proof of breadth
+  headroom rather than as the final landed repair.
+- That same frontier family is now localized too: direct `pen-search`
+  coverage also pins the per-branch scoped replay, so the queued remainder
+  branches can be widened one by one without touching unrelated claim
+  exact-two-step surfaces; every scoped replay preserves `553`, accepted
+  `103 / 8`, the fenced `single` pocket, and zero fully scored lifted
+  `89 / 8`, while the dominant localized gains sit on the top-level queued
+  `reference` remainder at `5915 / 2538` and the top-level queued
+  `claim_eventual_domain` remainder at `5627 / 2646`, and the two queued
+  `4`-slot `claim_flat_domain / reference / reference` controls stay dead at
+  the baseline `4331 / 3132` surface.
+- The dominant pair above that localized frontier family is now the landed
+  local repair too: direct `pen-search` coverage pins the combined top-level
+  `reference + claim_eventual_domain` ancestry replay at
+  `generated_raw_prefixes = 7211` with
+  `small_cluster = 2052 / 522 / 522 / 0`, and the non-test
+  `DesktopClaimShadow` exact-two-step path now matches that same widened
+  surface while still preserving `partial_prefix_bar_failure = 553`,
+  accepted `103 / 8`, the fenced `single` pocket, and zero fully scored
+  lifted `89 / 8`; keep the historical `4331` local control surfaces pinned
+  in tests and move the next honest slice to stored evidence rather than to
+  more local scout geometry.
 - Live claim-lane counters, active hypotheses, current blockers, and probe
   history no longer live in this skill file. Read the autonomous docs for that
   operating state:
@@ -41,8 +547,8 @@ Treat these as stable repo truths:
   [../../autonomous_ledger.md](../../autonomous_ledger.md).
 - Keep this skill file focused on stable repository truths; current probe
   outcomes belong in the autonomous docs rather than here.
-- User-facing wording stays at `bounded live recovery` until stored breadth
-  and certification pass.
+- User-facing wording for the certified bundle must now be tied directly to the
+  stored certificate and disclosed desktop bundle.
 - The accepted executable late-step canon is the current Rust truth, including
   step `15` / `DCT` at `nu = 103`
 
@@ -343,15 +849,14 @@ Focus on:
 - use [../../autonomous_plan.md](../../autonomous_plan.md) for
   medium-horizon sequencing and exit criteria rather than re-explaining the
   current slice
-- keep certification language honest: the claim lane remains at
-  `bounded live recovery` until a stored certificate passes
+- keep certification language honest: stronger wording is now allowed only when
+  it is tied directly to the stored certificate and disclosed desktop bundle
 - use `scripts/compare_runs.py`, `scripts/benchmark_claim_lane.py`, and
   `scripts/certify_claim_lane.py` as the evidence surfaces before moving the
   search code again
-- use the current canonical rerun plus earlier stored evidence and
-  `run.json` build fingerprints to keep step-`15` repair ahead of step-`1`
-  theory work; do not spend another turn on rerun-vs-step-`1` ordering
-  unless a later stored bundle changes the diagnosis
+- use the current canonical certified rerun plus earlier stored evidence and
+  `run.json` build fingerprints to keep post-certification step-`15`
+  hardening ahead of reopening step-`1`, storage, or tooling work
 - treat the step-`15` partial-prefix wall, the dominant clause-`0` / clause-`1`
   pairings, and the live clause-`4` split as live diagnosis owned by
   [../../autonomous_progress.md](../../autonomous_progress.md)
@@ -361,7 +866,37 @@ Focus on:
   `screen_prefix_for_frontier(...)`,
   `exact_partial_prefix_bound_decision(...)`,
   `exact_terminal_prefix_bound_decision(...)`, and
-  `claim_try_summary_prune_before_materialization(...)`
+  `claim_try_summary_prune_before_materialization(...)`; once the live docs
+  also mark that post-pop collapse/summary handoff as spent on the live
+  seven-clause reference prefix, move above it to
+  `materialize_remaining_one_prefix_group(...)` and
+  `materialize_terminal_prefix_group(...)`; once the live docs also mark that
+  remaining-one materialization handoff as spent on the live reference prefix,
+  move above it again to the first post-materialize retained-bound /
+  incumbent-rank / candidate-cache consumer:
+  `record_demo_bucket_surface(...)`,
+  `record_demo_bucket_exact_screened(...)`,
+  `terminal_prefix_rank_prune_count(...)`,
+  `best_prefix_group_accept_rank(...)`,
+  `cache_evaluated_terminal_prefix_group_candidates(...)`, and
+  `PrefixCache::record_group_with_surface_counts(...)`; the live docs now also
+  mark that candidate-cache handoff, the first proof-close intake, and the
+  proof-close candidate-order / candidate-level incumbent gate, and the
+  proof-close candidate evaluation / rank-recomputation / minimality path, and
+  the first post-evaluation fully scored bucket / proof-close full-eval
+  accounting consumer, and the top-level full-telescope / demo-funnel
+  accounting consumer, and the top-level demo-closure consumer, and the
+  report-side demo-closure handoff, and the first report/narrative closure
+  render consumer, and the first caller/output emission layer as spent on the
+  live reference prefix, and the caller-side narrative toggle /
+  emission-dispatch layer plus the first compare-side demo-phase consumer as
+  spent too, move above them to the top-level compare summary / signoff
+  consumer in `scripts/compare_runs.py` beginning at
+  `build_summary(...)`,
+  `signoff_summary(...)`,
+  `render_claim_lane_audit(...)`,
+  `render_text_summary(...)`, and the top-level
+  `Comparison Signoff:` / `claim lane audit:` lines
 - treat the active slice and the exact next move as owned by
   [../../autonomous_next_steps.md](../../autonomous_next_steps.md), not by
   this skill file
@@ -794,6 +1329,325 @@ Focus on:
   continuations, so route to the live docs before retrying the whole joint
   continuation and instead localize the next probe to a finer terminal or
   remaining-one completion partition inside that parent/child shell
+- treat the sibling active clause-`5` `reference` family's representative
+  `claim_flat_domain` marginally best clause-`6` `reference`
+  continuation's clause-`3` split as live autonomy detail too; its
+  `claim_flat_argument` and `claim_eventual_argument` branches are now
+  individually neutral on the untouched `4331 / 553 / 2271` baseline with
+  the same `312 / 177 / 50 / 14` first-mismatch counts and the same
+  `small_cluster = 3132 / 522 / 522 / 0`, so route to the live docs before
+  privileging either branch as if it were newly productive
+- treat the broader joint clause-`3` continuation below that same sibling
+  active clause-`5` `reference` family shell as live autonomy detail too;
+  once those two clause-`3` branches are pinned as individually neutral, the
+  next probe should localize the joint continuation beneath the same
+  marginally best clause-`6` `reference` shell rather than swapping among
+  spent clause-`6` siblings or reopening the representative clause-`2`
+  split there
+- treat that same sibling active clause-`5` `reference` family's
+  representative claim-flat parent/child shell as live autonomy detail too;
+  the broader joint clause-`3` continuation now differs from either
+  individually neutral clause-`3` branch only by one remaining-two parent
+  capture on
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`
+  plus the same three clause-`6` remaining-one child continuations
+  `claim_next_codomain / claim_sharp_codomain / reference`, so route to the
+  live docs before retrying the whole joint continuation and localize the
+  next probe to a finer remaining-one completion or terminal partition inside
+  that shell
+- treat that same sibling active clause-`5` `reference` family's
+  representative claim-flat parent/child shell as live autonomy detail too;
+  its six clause-`3` / clause-`6` child continuations now all collapse to
+  matched dead `3`-generated / `0`-admitted completion summaries with no
+  bound, no survivor sketch, and only the same nonlive
+  `reference / eventual_lift / next_lift` open-band structural terminal trio,
+  so route to the live docs before spending another turn on that exhausted
+  claim-flat shell as if a finer completion or terminal partition were still
+  unresolved
+- treat that same sibling active clause-`5` `reference` family's
+  representative claim-flat dead-child reason split as live autonomy detail
+  too; its first finer reason pass is now uniform at clause `2` with the
+  same structurally connected but nonqualifying connectivity vector across
+  all clause-`3` / clause-`6` / terminal continuations, so route to the live
+  docs before reopening that claim-flat shell as if a finer reason partition
+  were still unresolved
+- once the live docs mark that sibling active clause-`5` `reference`
+  family's representative `claim_flat_domain` shell as spent through both
+  completion and first finer reason split, move sideways to the sibling
+  `claim_sharp_codomain` sheet on
+  `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain / claim_next_bridge / reference`
+  instead of retrying the spent claim-flat shell again
+- treat that same sibling active clause-`5` `reference` family's
+  representative `claim_sharp_codomain` clause-`6` continuations as live
+  autonomy detail too; they now all reland the same `4343 / 552` shell with
+  `small_cluster = 3141 / 522 / 522 / 0`, representative clause-`2` spread
+  `15 / 14 / 12`, representative clause-`4` split `23 / 18`, the active
+  `claim_next_bridge` plus clause-`5` `reference` bucket at `47`, and only
+  a tiny deeper zero-admitted tail delta `2270 / 2269 / 2268`, so route
+  below the marginally best clause-`6` `reference` continuation instead of
+  reopening the spent clause-`6` siblings there
+- treat that same sibling active clause-`5` `reference` family's
+  representative `claim_sharp_codomain` marginally best clause-`6`
+  `reference` continuation's clause-`3` split as live autonomy detail too;
+  its `claim_flat_argument` and `claim_eventual_argument` branches are now
+  individually neutral on the untouched `4331 / 553 / 2271` baseline with
+  the same `312 / 177 / 50 / 14` first-mismatch counts and the same
+  `small_cluster = 3132 / 522 / 522 / 0`, so route to the live docs before
+  privileging either branch as if it were newly productive
+- treat the broader joint clause-`3` continuation below that same sibling
+  active clause-`5` `reference` family claim-sharp shell as live autonomy
+  detail too; it now differs from either individually neutral clause-`3`
+  branch only by one remaining-two parent capture on
+  `claim_eventual_domain / claim_next_codomain / claim_sharp_codomain / claim_next_bridge / reference`
+  plus the same three clause-`6` remaining-one child continuations
+  `claim_next_codomain / claim_sharp_codomain / reference`, so route to the
+  live docs before rerunning the whole joint continuation and localize the
+  next probe to a finer remaining-one completion or terminal partition
+  inside that shell
+- treat that same sibling active clause-`5` `reference` family's
+  representative claim-sharp parent/child shell as live autonomy detail too;
+  its six clause-`3` / clause-`6` child continuations now all collapse to
+  matched dead `3`-generated / `0`-admitted completion summaries with no
+  bound, no survivor sketch, and only the same nonlive
+  `reference / eventual_lift / next_lift` open-band structural terminal trio,
+  so route to the live docs before spending another turn on that exhausted
+  claim-sharp shell as if a finer completion or terminal partition were
+  still unresolved
+- treat that same sibling active clause-`5` `reference` family's
+  representative claim-sharp dead-child reason split as live autonomy detail
+  too; its first finer reason pass is now uniform at clause `2` with the
+  same structurally connected but nonqualifying connectivity vector across
+  all clause-`3` / clause-`6` / terminal continuations, so route to the live
+  docs before reopening that claim-sharp shell as if a finer reason
+  partition were still unresolved
+- once the live docs mark that sibling active clause-`5` `reference`
+  family's representative `claim_sharp_codomain` shell as spent through both
+  completion and first finer reason split, move sideways to the first
+  sibling exact-screen pair on that same active clause-`5` `reference`
+  family, starting with the representative `claim_flat_domain` sheet on
+  `claim_eventual_domain / claim_sharp_codomain / claim_flat_domain / claim_next_bridge / reference`,
+  instead of retrying the spent representative pair again
+- treat that first sibling exact-screen pair on the same active clause-`5`
+  `reference` family as live autonomy detail too; its
+  `claim_flat_domain` and `claim_sharp_codomain` clause-`2` sheets now each
+  land the same smaller `4343 / 552 / 2271` tradeoff with the targeted exact
+  pair only at `41` and the localized clause-`2` split only at
+  `14 / 15 / 12` or `15 / 14 / 12`, while the sibling `reference` sheet is
+  neutral on the untouched `4331 / 553 / 2271` baseline with that pair still
+  at `42`, so route to the live docs before reopening the sibling
+  claim-sharp or neutral reference sheet as if one were a fresh lead
+- treat that same first sibling exact-screen `claim_flat_domain` sheet on the
+  active clause-`5` `reference` family as live autonomy detail too; its
+  exact-screen delta now removes exactly one six-clause exact-prune capture
+  on
+  `claim_eventual_domain / claim_sharp_codomain / claim_flat_domain / claim_next_bridge / reference`
+  with no new exact-prune family and no deeper pruned-terminal change, so
+  route to the live docs before pretending clause-`6` identity is already in
+  scope there
+- treat the stacked remaining-one exact-summary relief beneath that same
+  released first sibling exact-screen `claim_flat_domain` plus clause-`5`
+  `reference` parent as live autonomy detail too; it keeps the same
+  `4343 / 552` wall, the same `311 / 177 / 50 / 14`, and the same
+  `small_cluster = 3141 / 522 / 522 / 0`, but sharpens the deeper
+  zero-admitted tail to `2268` and the structurally connected but
+  unqualified generated surface to `6804` by shaving exactly three
+  remaining-one pruned prefixes, so route to the live docs before moving
+  sideways to the sibling `claim_sharp_codomain` sheet and instead localize
+  the clause-`6` continuations beneath that sharper `4343 / 552 / 2268`
+  shell
+- treat that same first sibling exact-screen `claim_flat_domain` plus
+  clause-`5` `reference` shell's clause-`6` continuations as live autonomy
+  detail too; they now all reland the same matched smaller `4343 / 552`
+  shell, keep first-mismatch counts `311 / 177 / 50 / 14`, keep
+  `small_cluster = 3141 / 522 / 522 / 0`, keep the localized clause-`2`
+  spread at `14 / 15 / 12`, keep the localized clause-`4` split at `23 / 18`,
+  keep the active clause-`4` `claim_next_bridge` plus clause-`5`
+  `reference` bucket at `47`, and differ only in the deeper zero-admitted
+  tail `2270 / 2269 / 2268`, so route below the marginally best clause-`6`
+  `reference` continuation instead of reopening the spent
+  `claim_next_codomain` or `claim_sharp_codomain` siblings or moving sideways
+  to the sibling exact-screen `claim_sharp_codomain` sheet
+- treat that same first sibling exact-screen `claim_flat_domain` plus
+  clause-`5` `reference` shell's marginally best clause-`6` `reference`
+  continuation's clause-`3` split as live autonomy detail too; both
+  `claim_flat_argument` and `claim_eventual_argument` branches now land the
+  same matched smaller `4343 / 552 / 2271` shell with first-mismatch counts
+  `311 / 177 / 50 / 14` and `small_cluster = 3141 / 522 / 522 / 0`, so
+  route there instead of privileging either branch as a fresh repair class
+- treat that same first sibling exact-screen `claim_flat_domain` plus
+  clause-`5` `reference` shell's broader joint clause-`3` continuation as
+  live autonomy detail too; relative to either matched clause-`3` branch, it
+  changes no remaining-two partial-prefix capture and differs only by
+  reopening the same three clause-`6` remaining-one continuations
+  `claim_next_codomain / claim_sharp_codomain / reference`, so route there
+  instead of rerunning the whole joint continuation as if it were still an
+  undifferentiated repair class, and localize the next probe to a finer
+  remaining-one completion or terminal partition beneath those same three
+  clause-`6` continuations
+- treat that same first sibling exact-screen `claim_flat_domain` plus
+  clause-`5` `reference` shell's localized parent/child shell as live
+  autonomy detail too; its six clause-`3` / clause-`6` child continuations
+  now all collapse to matched dead `3`-generated / `0`-admitted completion
+  summaries with no bound, no survivor sketch, and only the same nonlive
+  `reference / eventual_lift / next_lift` open-band structural terminal trio,
+  so route to the live docs before spending another turn on that exhausted
+  exact-screen claim-flat shell as if a finer completion or terminal
+  partition were still unresolved
+- treat that same first sibling exact-screen `claim_flat_domain` plus
+  clause-`5` `reference` shell's dead-child reason split as live autonomy
+  detail too; its first finer reason pass is now uniform at clause `2` with
+  the same structurally connected but nonqualifying connectivity vector
+  across all clause-`3` / clause-`6` / terminal continuations, so route to
+  the live docs before reopening that exact-screen claim-flat shell as if a
+  finer reason partition were still unresolved
+- once the live docs mark that first sibling exact-screen
+  `claim_flat_domain` plus clause-`5` `reference` shell as spent through both
+  completion and first finer reason split, move sideways to the sibling
+  `claim_sharp_codomain` sheet on
+  `claim_eventual_domain / claim_sharp_codomain / claim_sharp_codomain / claim_next_bridge / reference`
+  instead of retrying the spent claim-flat shell again
+- treat that same first sibling exact-screen `claim_sharp_codomain` sheet on
+  the active clause-`5` `reference` family as live autonomy detail too; if
+  the live docs already localize its exact-screen delta to exactly one
+  released six-clause exact-prune capture on
+  `claim_eventual_domain / claim_sharp_codomain / claim_sharp_codomain / claim_next_bridge / reference`
+  with no new exact-prune family and no deeper pruned-terminal change, route
+  there instead of pretending clause-`6` identity is already in scope
+- treat the stacked remaining-one exact-summary relief beneath that same
+  released first sibling exact-screen `claim_sharp_codomain` plus clause-`5`
+  `reference` parent as live autonomy detail too; if the live docs already
+  pin it at the same `4343 / 552` wall, the same
+  `311 / 177 / 50 / 14`, the same
+  `small_cluster = 3141 / 522 / 522 / 0`, but with a sharper deeper
+  zero-admitted tail `2268` and a sharper structurally connected but
+  unqualified generated surface `6804` from shaving exactly three
+  remaining-one pruned prefixes, route there instead of reopening the spent
+  claim-flat shell or the neutral `reference` sheet on that same first
+  sibling pair
+- treat that same first sibling exact-screen `claim_sharp_codomain` plus
+  clause-`5` `reference` shell's clause-`6` continuations as live autonomy
+  detail too; if the live docs already pin them all at the same matched
+  smaller `4343 / 552` shell with first-mismatch counts
+  `311 / 177 / 50 / 14`, `small_cluster = 3141 / 522 / 522 / 0`, the
+  localized clause-`2` spread `15 / 14 / 12`, the localized clause-`4`
+  split `23 / 18`, the active clause-`4` `claim_next_bridge` plus
+  clause-`5` `reference` bucket at `47`, and only a deeper zero-admitted
+  tail delta `2270 / 2269 / 2268`, route there instead of reopening the
+  spent `claim_next_codomain` or `claim_sharp_codomain` siblings or the
+  neutral `reference` clause-`2` sheet as if one were a fresh repair class
+- treat that same first sibling exact-screen `claim_sharp_codomain` plus
+  clause-`5` `reference` shell's marginally best clause-`6` `reference`
+  continuation's clause-`3` split as live autonomy detail too; both
+  `claim_flat_argument` and `claim_eventual_argument` branches now land the
+  same matched smaller `4343 / 552 / 2271` shell with first-mismatch counts
+  `311 / 177 / 50 / 14` and `small_cluster = 3141 / 522 / 522 / 0`, so
+  route there instead of privileging either branch as a fresh repair class
+- treat that same first sibling exact-screen `claim_sharp_codomain` plus
+  clause-`5` `reference` shell's broader joint clause-`3` continuation as
+  live autonomy detail too; relative to either matched clause-`3` branch, it
+  changes no remaining-two partial-prefix capture and differs only by
+  reopening the same three clause-`6` remaining-one continuations
+  `claim_next_codomain / claim_sharp_codomain / reference`, so route there
+  instead of rerunning the whole joint continuation as if it were still an
+  undifferentiated repair class, and localize the next probe to a finer
+  remaining-one completion or terminal partition beneath those same three
+  clause-`6` continuations
+- treat that same first sibling exact-screen `claim_sharp_codomain` plus
+  clause-`5` `reference` shell's localized parent/child shell as live
+  autonomy detail too; if the live docs already pin all six
+  clause-`3` / clause-`6` child continuations there to the same dead
+  `3`-generated / `0`-admitted completion summary with no bound, no
+  survivor sketch, and only the same nonlive
+  `reference / eventual_lift / next_lift` open-band structural terminal trio,
+  route there instead of spending another turn on that exhausted exact-screen
+  claim-sharp shell as if a finer completion or terminal partition were still
+  unresolved
+- treat that same first sibling exact-screen `claim_sharp_codomain` plus
+  clause-`5` `reference` shell's dead-child reason split as live autonomy
+  detail too; if the live docs already pin its first finer reason pass as
+  uniform at clause `2` with the same structurally connected but
+  nonqualifying connectivity vector across all clause-`3` / clause-`6` /
+  terminal continuations, route there instead of reopening that exact-screen
+  claim-sharp shell as if a finer reason partition were still unresolved
+- once the live docs mark that first sibling exact-screen
+  `claim_sharp_codomain` plus clause-`5` `reference` shell as spent through
+  both completion and first finer reason split, move sideways to the next
+  sibling exact-screen pair on that same active clause-`5` `reference`
+  family, starting with the representative `claim_flat_domain` sheet on
+  `claim_eventual_domain / reference / claim_flat_domain / claim_next_bridge / reference`,
+  instead of retrying the spent first sibling pair again
+- once the live docs mark the next sibling exact-screen pair on the same
+  active clause-`5` `reference` family as two claim-side `4343 / 552 / 2271`
+  smaller tradeoff controls plus one neutral `reference` sheet on
+  `claim_eventual_domain / reference / claim_flat_domain / claim_next_bridge / reference`,
+  route below the representative `claim_flat_domain` sheet there instead of
+  reopening the sibling `claim_sharp_codomain` or neutral `reference`
+  sheets as if one were newly productive
+- treat that same next sibling exact-screen `claim_flat_domain` sheet on the
+  active clause-`5` `reference` family as live autonomy detail too; its
+  exact-screen delta now removes exactly one six-clause exact-prune capture
+  on
+  `claim_eventual_domain / reference / claim_flat_domain / claim_next_bridge / reference`
+  with no new exact-prune family and no deeper pruned-terminal change, and
+  stacking remaining-one exact-summary relief beneath that same released
+  parent keeps the same `4343 / 552` wall and the same
+  `311 / 177 / 50 / 14`, but sharpens the deeper zero-admitted tail to
+  `2268` and the structurally connected but unqualified generated surface to
+  `6804`
+- treat that same next sibling exact-screen `claim_flat_domain` plus
+  clause-`5` `reference` shell's clause-`6` and clause-`3` identities as
+  live autonomy detail too; its three clause-`6` continuations now reland
+  the same matched smaller `4343 / 552` shell and differ only in the deeper
+  zero-admitted tail `2270 / 2269 / 2268`, while both
+  `claim_flat_argument` and `claim_eventual_argument` branches beneath the
+  marginally best clause-`6` `reference` continuation reland the same
+  matched smaller `4343 / 552 / 2271` shell, so route there instead of
+  privileging either clause label as a fresh repair class
+- once the live docs also mark that next sibling active `reference`-family
+  claim-flat parent as dead across all three clause-`6` completion profiles
+  with the same `3`-generated / `0`-admitted summary, the same
+  `reference / eventual_lift / next_lift` `NeedsFallback` trio, and the same
+  `matched_clause_count = 2` plus `first_mismatch_position = 2`, move
+  sideways to the sibling `claim_sharp_codomain` sheet on
+  `claim_eventual_domain / reference / claim_sharp_codomain / claim_next_bridge / reference`
+  instead of retrying the spent claim-flat shell again
+- treat that same next sibling exact-screen `claim_sharp_codomain` sheet on
+  the active clause-`5` `reference` family as live autonomy detail too; if
+  the live docs already pin its exact-screen delta to exactly one released
+  six-clause exact-prune capture on
+  `claim_eventual_domain / reference / claim_sharp_codomain / claim_next_bridge / reference`,
+  already pin the stacked remaining-one exact-summary follow-on at the same
+  `4343 / 552` wall and the same `311 / 177 / 50 / 14` with the same
+  `small_cluster = 3141 / 522 / 522 / 0` but the sharper deeper
+  zero-admitted tail `2268`, already pin its three clause-`6`
+  continuations to the same matched smaller `4343 / 552` shell with only the
+  deeper zero-tail delta `2270 / 2269 / 2268`, already pin both
+  `claim_flat_argument` and `claim_eventual_argument` branches beneath the
+  marginally best clause-`6` `reference` continuation to the same matched
+  smaller `4343 / 552 / 2271` shell, and already pin the released parent's
+  clause-`6` completion profiles to the same dead `3`-generated /
+  `0`-admitted summary with the same
+  `reference / eventual_lift / next_lift` `NeedsFallback` trio plus the same
+  `matched_clause_count = 2` and `first_mismatch_position = 2`, route there
+  instead of reopening the spent claim-flat sibling, privileging the neutral
+  `reference` sheet, or bouncing back to the spent higher-level
+  `reference`-family shell
+- treat that same next sibling exact-screen `claim_sharp_codomain` plus
+  clause-`5` `reference` shell's dead-child reason split as live autonomy
+  detail too; if the live docs already pin its first finer reason pass as
+  uniform at clause `2` with the same structurally connected but
+  nonqualifying connectivity vector across all clause-`3` / clause-`6` /
+  terminal continuations, route there instead of reopening that exact-screen
+  claim-sharp shell as if a finer reason partition were still unresolved
+- once the live docs mark the full `claim_eventual_domain / reference` row on
+  that active clause-`5` `reference` family as spent through both completion
+  and first finer reason split, move sideways to the first clause-`0`
+  sibling exact-screen pair on that same active clause-`5` `reference`
+  family, starting with the representative `claim_flat_domain` sheet on
+  `claim_flat_domain / claim_next_codomain / claim_next_bridge / reference`,
+  instead of retrying the exhausted `claim_eventual_domain / reference` row,
+  privileging the neutral `reference` sheet, or bouncing back to claim-safe
+  controls
 - treat that representative claim-flat parent/child shell as live autonomy
   detail too; its six clause-`3` / clause-`6` child continuations now all
   collapse to matched dead `3`-generated / `0`-admitted completion summaries
@@ -898,15 +1752,280 @@ Focus on:
   the completed shell to the clause-`5` qualification wall, route there
   instead of reopening clause-`6` or terminal-family identity as if those
   controls were newly privileged
-- keep the next slice above another mismatch-`0` representative claim-side
-  reland; with both claim-side sheets now frozen through their deeper
-  completion and first finer reason passes, and with the deeper
-  clause-`6` `reference` union now also pinned as a reconstructive control,
-  and with that union now shown to stay inside the same zero-admitted
-  remaining-one dead surface as the pair-cell tradeoff, route to the live
-  docs before spending another turn below the representative mismatch-`0`
-  pair unless a later broader-backup comparison explicitly promotes a new
-  branch
+- once the live docs mark that first clause-`0` sibling exact-screen pair on
+  the active clause-`5` `reference` family as spent through both claim-side
+  shells' deeper completion and first finer reason passes, keep that pair
+  frozen and move sideways to the first clause-`1` sibling exact-screen pair
+  on that same active clause-`5` `reference` family, starting with
+  `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / reference`,
+  instead of reopening the spent clause-`0` pair or the exhausted
+  `claim_eventual_domain / reference` row
+- treat that same next clause-`1` sibling exact-screen pair on the active
+  clause-`5` `reference` family as live autonomy detail too; if the live docs
+  already pin its clause-`2` split on
+  `claim_flat_domain / reference / claim_next_bridge / reference` as two
+  claim-side `4343 / 552 / 2271` smaller tradeoff controls with
+  first-mismatch `311 / 177 / 50 / 14`,
+  `small_cluster = 3141 / 522 / 522 / 0`, localized `14 / 15 / 12` versus
+  `15 / 14 / 12`, and a neutral `reference` sheet on `4331 / 553 / 2271`,
+  route below the representative `claim_flat_domain` sheet there instead of
+  reopening the sibling `claim_sharp_codomain` or neutral `reference` sheet
+- treat both claim-side sheets beneath that same next clause-`1` sibling
+  pair as live autonomy detail too; if the live docs already pin each sheet
+  to the same one-parent exact-screen contraction, the same stacked
+  remaining-one relief on `4343 / 552 / 2268`, the same clause-`6` /
+  clause-`3` relands, the same dead `3`-generated / `0`-admitted completion
+  profile, and the same uniform first finer reason vector
+  `(2, Some(2), true, false, false, 10, false, false)` across all `18`
+  continuations, keep both sheets frozen instead of reopening either
+  claim-side shell or its neutral `reference` control as if it were fresh
+  leverage
+- once the live docs mark the full next clause-`1` sibling exact-screen pair
+  on the active clause-`5` `reference` family as spent through both
+  claim-side shells' deeper completion and first finer reason passes, keep
+  that full active `reference`-family pair lattice frozen; if the live docs
+  also pin it as the same tighter `4343 / 552 / 2268` broader-backup shell
+  already seen on the earlier representative mismatch-`0` claim-side backup
+  while the looser claim-safe shell still trails at `4347 / 555 / 2277` and
+  the dedicated engine regressions already re-confirm that same ordering,
+  move to the next broader-backup comparison rather than reopening the spent
+  next clause-`1` pair, the spent first clause-`1` pair, the exhausted first
+  clause-`0` sibling pair, the exhausted
+  `claim_eventual_domain / reference` row, or looser claim-safe controls
+- treat the full active clause-`5` `claim_flat_codomain` broader-backup
+  lattice as live autonomy detail too; if the live docs already pin all five
+  nonrepresentative siblings
+  `claim_eventual_domain / claim_sharp_codomain / claim_next_bridge / claim_flat_codomain`
+  and
+  `claim_eventual_domain / reference / claim_next_bridge / claim_flat_codomain`
+  and
+  `claim_flat_domain / claim_next_codomain / claim_next_bridge / claim_flat_codomain`
+  and
+  `claim_flat_domain / claim_sharp_codomain / claim_next_bridge / claim_flat_codomain`
+  and
+  `claim_flat_domain / reference / claim_next_bridge / claim_flat_codomain`
+  as the same tighter `4343 / 552 / 2268` shell with first-mismatch
+  `311 / 177 / 50 / 14` and `small_cluster = 3141 / 522 / 522 / 0`, while
+  the looser claim-safe shell still trails at `4347 / 555 / 2277`, keep
+  the whole family frozen and move above that fully exhausted
+  broader-backup lattice to a different code-side repair family rather than
+  reopening looser claim-safe controls or any spent exact-screen sibling
+- if those five active `claim_flat_codomain` sibling comparisons are already
+  explicit in the live docs, use the dedicated engine regressions as the
+  ordering baseline and continue above the exhausted broader-backup lattice
+  rather than rechecking the representative claim-side backup, any spent
+  `claim_eventual_domain` sibling, the spent first clause-`1`
+  `claim_flat_codomain` sibling, the spent first clause-`0`
+  `claim_flat_codomain` sibling, the spent next clause-`1`
+  `claim_flat_codomain` sibling, or the exhausted next clause-`1`
+  `reference`-family reland first
+- if the live docs also pin the first combined active-window plus
+  representative tighter broader-backup shell, the sibling
+  self-contained plus representative tighter broader-backup shell, and the
+  looser recombined active-window plus self-contained plus representative
+  tighter broader-backup shell on the active clause-`5`
+  `claim_flat_codomain` and `reference` families at the same unsafe
+  noncanonical `60 / 8` with `4439 / 544 / 2244`,
+  `small_cluster = 2961 / 558 / 558 / 108`, the same reopened `single`
+  bucket, and only a `43` contraction on the targeted active clause-`4`
+  plus clause-`5` bucket, keep that whole combined exact-shell lattice
+  frozen as unsafe controls
+- if the live docs also pin the full historical-reanchor plus active-window
+  plus self-contained plus exact-shell family on those same active
+  clause-`5` families at that same unsafe `4439 / 544 / 2244` shell with the
+  same reopened `single` bucket, the same targeted `43` active clause-`4`
+  plus clause-`5` bucket, and no off-target delta beyond the same targeted
+  active bucket, keep that whole qualification-triad exact-shell lattice
+  frozen and move above it to a different code-side repair family rather than
+  reopening the spent broader-backup lattice or any narrower combined family
+  alone
+- if the live docs also pin the first pre-materialization
+  summary/materialization follow-on above that qualification-triad exact-shell
+  lattice on the representative active clause-`5` `reference` claim-flat
+  shell as removing `27` baseline remaining-one pruned prefixes while
+  pre-pruning only `3` and letting the other `24` materialize the same unsafe
+  clause-kappa `8` rank at overshoot `545 / 5278`, with zero terminal-prefix-
+  bar and zero terminal-rank prunes, keep that follow-on frozen too and move
+  above it rather than reopening the spent broader-backup lattice, any
+  narrower combined family, or the pre-materialization branch itself
+- if the live docs also pin the first exact-terminal follow-on above that
+  pre-materialization branch on the representative active clause-`5`
+  `reference` claim-flat shell as splitting the same `27` removed
+  remaining-one prefixes into `24` cached `CanClearBar` terminal summaries
+  across the same four `6`-prefix labels plus `3` focused no-bound
+  `Unknown` groups on
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`,
+  keep that exact-terminal follow-on frozen too and move above it rather than
+  reopening the spent broader-backup lattice, any narrower combined family,
+  the pre-materialization branch, or that exact-terminal branch itself
+- if the live docs also pin the first remaining-one rank-profile follow-on
+  above that exact-terminal branch on the representative active clause-`5`
+  `reference` claim-flat shell as keeping the surviving `24`
+  `CanClearBar` groups on the same
+  `generated = 3`, `admitted = 3`,
+  `best_accept_rank = best_accept_primary_rank = 8 / 545 / 5278` profile
+  with `terminal_prefix_rank_prune_count(...) = 0` even when same-primary
+  relief is disabled, and as splitting only on compact survivor-sketch
+  cardinality `1` versus `3`, keep that rank-profile follow-on frozen too and
+  move to compact survivor-sketch / materialization behavior rather than
+  reopening same-primary relief, rank-prune logic, the pre-materialization
+  branch, or that exact-terminal branch itself
+- if the live docs also pin the first compact survivor-sketch /
+  materialization follow-on above that same rank-profile branch on the
+  representative active clause-`5` `reference` claim-flat shell as
+  materializing the same retained candidates from cached survivor sketches and
+  the live no-cache compact path across the same `24` `CanClearBar` groups,
+  with every group still on `generated = 3`, `admitted = 3`,
+  `best_accept_rank = 8 / 545 / 5278`, and the same `1`-versus-`3`
+  survivor/materialization split inside each of the same four live
+  `6`-prefix labels, keep that materialization follow-on frozen too
+- if the live docs also pin the retained-candidate / terminal-family
+  follow-on above that same materialization branch as splitting each of the
+  same four live `6`-prefix labels into `2` one-survivor
+  `claim_next_codomain` continuations, `2` one-survivor
+`claim_sharp_codomain` continuations, and `2` three-survivor
+`reference` continuations where only clause-`6` `reference` keeps the full
+retained `reference + eventual_lift + next_lift` family, keep that
+candidate-identity follow-on frozen too; the clause-`6` `reference`
+accept-rank / retained-order follow-on is frozen too, with the shared retained
+order `reference -> eventual_lift -> next_lift`, the weaker leading
+`reference` survivor on `8 / 19563 / 10556`, both lifts on the best primary
+`8 / 545 / 5278` tier, and only `next_lift` owning the full best rank; move
+above the whole qualification-triad exact-shell remaining-one lattice rather
+than reopening same-primary relief, rank-prune logic, the pre-materialization
+branch, the exact-terminal branch, materialization parity, or the clause-`6`
+controls
+- if the live docs also pin the residual proof-close `single` bucket as the
+  canonical accepted `reference(15)` completion on the seven-clause reference
+  prefix plus only three weaker same-primary `103 / 8` reference-terminal
+  siblings on `clause-0 claim_flat_domain`,
+  `clause-2 claim_flat_domain plus anchor-11 exact-argument`, and
+  `clause-5 claim_flat_codomain`, and exact-family or subset-local
+  same-primary relief there only grows the `single` bucket from `1` to `4`
+  while leaving `4331 / 553` and
+  `small_cluster = 3132 / 522 / 522 / 0` unchanged, keep that proof-close
+  family frozen too and move above it rather than reopening same-primary
+  relief there
+- if the live docs also pin the first fresh code-side family above that
+  proof-close pocket as the representative active clause-`5` `reference`
+  claim-flat shell's `24` unsafe survivors bypassing
+  `terminal_completion_can_compete_for_acceptance(...)` and arriving instead
+  through `TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand` as the full
+  `reference + eventual_lift + next_lift` trio, with only the focused `3`
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`
+  prefixes still pre-pruning earlier, and the live docs also pin the whole
+  terminal-label subset lattice there as unsafe too
+  (`reference`-containing subsets relanding unsafe `60 / 8` reference-terminal
+  winners on the flat/sharp `reference / reference` shells, single-lift
+  subsets shrinking only to `568 / 347 / 7`, and the lift-only pair staying
+  unsafe at `616 / 361 / 14`), do not reopen the generic focus-aligned /
+  deprioritized competition gate or any whole-label subset first; move instead
+  below that subset lattice to the first prefix-local claim-open-band
+  filtering / competition pass on the surviving `reference / reference`
+  shells; if the live docs also pin that targeted-shell family as unsafe too,
+  with local single-label subsets `reference`, `eventual_lift`, and
+  `next_lift` plus the lift-only pair rerouting unsafe
+  `60 / 8 / 295 / 545 / 5278` reference winners onto the sibling
+  `claim_next_bridge / reference` shells while `reference` plus either lift
+  relands the original unsafe
+  `60 / 8 / 277 / 545 / 5278` `reference / reference` winners, keep that
+  targeted-shell family frozen too and move below it to the sibling
+  `claim_next_bridge / reference` shells rather than reopening the whole-label
+  subset lattice or the spent targeted `reference / reference` shells
+- if the live docs also pin the sibling prefix-local claim-open-band pass on
+  those same
+  `claim_eventual_domain / claim_next_codomain / {claim_flat_domain, claim_sharp_codomain} / claim_next_bridge / reference`
+  shells as another unsafe control, with an asymmetric `9 + 6` removed-prefix
+  split because the focused `3` no-bound flat-shell groups still live only on
+  `claim_flat_domain / claim_next_bridge / reference`, and with every local
+  subset rerouting back onto the same unsafe
+  `60 / 8 / 277 / 545 / 5278` `reference / reference` winners, keep that
+  sibling-shell family frozen too and move below it to the focused `3`
+  no-bound flat-shell prefixes on
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`
+  rather than reopening the full `15`-prefix sibling shell, the spent
+  targeted `reference / reference` shells, or the whole-label subset lattice
+- if the live docs also pin the focused `3` no-bound flat-shell prefix-local
+  subset lattice on those same
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`
+  prefixes as another unsafe control, with every local subset still relanding
+  the same unsafe `60 / 8 / 277 / 545 / 5278` `reference / reference` winner
+  while single-label subsets land `4433 / 544 / 110` with
+  `small_cluster = 2952 / 558 / 558 / 108` and
+  `single = 3 / 0 / 0 / 2 / 2`, the three pair subsets land
+  `4436 / 544 / 110` with the same smaller `2952 / 558 / 558 / 108` shell,
+  and only the full trio returns `4439 / 544 / 110`, keep that focused-three
+  family frozen too and move below it to the earlier pre-prune /
+  exact-terminal path on those same `3` prefixes rather than reopening any
+  terminal-label subset, the full sibling shell, the spent targeted
+  `reference / reference` shells, or the whole-label subset lattice
+- if the live docs also pin that earlier focused-three pre-prune /
+  exact-terminal path on those same
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`
+  prefixes as the same dead `3`-generated / `0`-admitted no-bound control,
+  with pre-materialization consuming that summary directly, zero
+  terminal-prefix-bar prunes, zero terminal-rank prunes, no cached survivor
+  sketch, and live exact-terminal replay still staying `Unknown` with no
+  retained accept-rank or primary-rank profile, keep that focused-three
+  pre-prune / exact-terminal family frozen too and move below it to direct
+  connectivity / exact-admissibility makeup on those same `3` prefixes rather
+  than reopening any terminal-label subset, the full sibling shell, the spent
+  targeted `reference / reference` shells, or the broader exact-shell lattice
+- if the live docs also pin that direct connectivity / exact-admissibility
+  follow-on on those same
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`
+  prefixes as another dead control, with each full direct terminal summary
+  still generating the same `reference + eventual_lift + next_lift` trio but
+  all `3` candidates disconnecting before exact admissibility so each prefix
+  stays `3` disconnected, `0` admissibility-rejected, and `0` admitted with
+  no bound or retained-rank profile, keep that family frozen too and move
+  below it to terminal connectivity identity / fallback makeup on those same
+  `3` prefixes rather than reopening any terminal-label subset, the full
+  sibling shell, the spent targeted `reference / reference` shells, or the
+  broader exact-shell lattice
+- if the live docs also pin that focused-three terminal connectivity identity /
+  fallback makeup on those same
+  `claim_eventual_domain / claim_next_codomain / claim_flat_domain / claim_next_bridge / reference`
+  prefixes as another dead control, with each prefix still exposing only the
+  same `reference + eventual_lift + next_lift` trio, all `9` generated
+  candidates first classifying as `NeedsFallback`, none classifying as
+  `PruneDisconnected` or `KeepWithoutFallback`, and every fallback failing
+  with the same structurally connected but unqualified witness
+  `connected = true`,
+  `references_active_window = false`,
+  `self_contained = false`,
+  `max_lib_ref = 10`,
+  `historical_reanchor = false`, and if the live docs also pin the
+  focused-three historical-reanchor blocker / first-mismatch reason makeup on
+  those same `3` prefixes as uniform too, with all `9` completed telescopes
+  across those prefixes and their `reference + eventual_lift + next_lift`
+  terminal families sharing `matched_clause_count = 2`,
+  `first_mismatch_position = 2`, and the same structurally connected but
+  unqualified `max_lib_ref = 10` witness, keep that whole branch frozen and
+  move above it to a different code-side step-`15` repair family rather than
+  reopening terminal-label subsets, the full sibling shell, the spent
+  targeted `reference / reference` shells, or the broader exact-shell lattice
+- if the live docs also mark the whole claim-open-band terminal-filter branch
+  above that same removed-prefix family as spent through the whole-label
+  subsets, the targeted `reference / reference` shells, the sibling
+  `claim_next_bridge / reference` shells, and the focused `3` no-bound
+  flat-shell follow-ons, and if the live docs also pin the route selector
+  itself as a caller-level gate that only opens
+  `PrefixLegalityCache::filter_claim_open_band_terminal_clauses(...)` and the
+  `TerminalPrefixClauseCandidates::ClaimAdmittedOpenBand(...)` split while the
+  live path stays on default `DesktopClaimShadow` with
+  `focus_family = None`,
+  `package_policies = PackagePolicies::default()`, and no late family-surface
+  override away from `ClaimGeneric`, and if the live docs also pin that
+  caller-side setup itself on the actual step-`15` path with
+  `historical_anchor_ref = Some(10)` plus `ClaimGeneric` at `kappa = 8 .. 8`,
+  and if the live docs also pin the underlying modal-anchor temporal debt
+  snapshot plus the full
+  `reference + eventual_lift + next_lift` claim-generic band-`8` trio on the
+  canonical seven-clause reference prefix, move above that whole stack to the
+  derivation that chooses that default claim-generic path rather than
+  reopening any spent subset/filter shell or focused-three continuation
+  beneath it
 - treat negative controls, tradeoff controls, and probe outcomes as ledger
   entries owned by [../../autonomous_ledger.md](../../autonomous_ledger.md)
 - keep the remaining local guardrails green while moving toward
@@ -989,8 +2108,54 @@ Reject designs that:
   demo-lane docs and `references/12-current-demo-lane.md` as the regression
   baseline for future work.
 - The claim lane has real configs, artifacts, compare/certify/benchmark
-  tooling, and landed claim-specific mechanics, but live counters and probe
+  tooling, landed claim-specific mechanics, and a current certified stored
+  head beyond the previous audited head that preserves the ancestry-gated
+  post-reference exact-two-step `7211 / 553 / 2052` step-`15` repair while
+  closing stored step `1` at `2144 / 1285 / 1 / 475`; live counters and probe
   history now live in the autonomous docs rather than in this skill file.
+- Rust-side claim report and narrative consumers now keep the stored
+  step-`15` `demo_closure` surface honest across step reports, latest reports,
+  and completed resume output, so report honesty is no longer the blocker.
+- Native `pen-cli` compare/certify/benchmark commands now refresh current-head
+  claim evidence locally, and the first current-head step-`1` repair is now
+  stored rather than local-only: `DesktopClaimShadow` config runs borrow the
+  shared claim/demo exhaustive path only at step `1`, restoring
+  `generated = 2144` on the smoke config while keeping accepted parity through
+  step `8` and leaving step `5+` on the non-budgeted claim path, and the
+  certified stored head now reflects that same repair. The next honest
+  claim-lane blocker is the branch-localized local step-`15`
+  `partial_prefix_bar_failure = 553` wall: all clean captures now sit below
+  queued frontier remainder branches `4 .. 11`, and the largest single live
+  blocker is now the mismatch-`1` surface inside the direct top-level
+  `reference` remainder at `177 / 145 / 32`; within that slice, the first
+  narrow pairing to attack is `reference / demo_flat_codomain = 61`, and the
+  next exact lead inside it is the remaining-two clause-`4`
+  `claim_next_bridge = 33` side. The broadest repaired-head exact claim-pair
+  reopening under that side is now frozen as a tradeoff control at
+  `7485 / 539 / 2112 / 542 / 542 / 0` with direct `reference` remainder
+  `227` and targeted pairing `45`; the tied exact
+  `claim_flat_domain` / `claim_sharp_codomain` single-sheet reopenings are
+  now frozen too at `7317 / 545 / 2076 / 530 / 530 / 0` with direct
+  `reference` remainder `233`, targeted pairing `51`, and slot split
+  `30 / 21 / 14`; the exact clause-`2` `reference = 9` sheet is now frozen
+  too at `7149 / 551 / 2040 / 518 / 518 / 0` with direct `reference`
+  remainder `239`, targeted pairing `57`, and slot split `33 / 24 / 14`.
+  That safe control trims only the clause-`4` `reference` companion, not the
+  live `claim_next_bridge = 33` blocker, and its attempted landing extension
+  is now frozen too: reopening the clause-`4` `reference` companion under the
+  same exact reference sheet is completely neutral and relands the same
+  `7149 / 551 / 2040 / 518 / 518 / 0` surface. The first exact
+  `claim_flat_domain` and exact `claim_sharp_codomain` reopenings under that
+  broader clause-`4` `reference` companion are now frozen too as spill-only
+  tradeoff controls at `7236 / 550 / 2058 / 524 / 524 / 0`; they keep the
+  remaining-two clause-`4` `reference` row pinned at `9 / 9 / 6` and trim
+  only one remaining-three spill capture to `4 / 5 / 4` or `5 / 4 / 4`.
+  The next move is therefore the smaller exact `reference = 6` slice below
+  that same clause-`4` `reference` companion before the whole remaining-three
+  spill or another step-`1`, storage, or tooling slice.
+- Script execution still has no local `python`, `python3`, `py`, or `uv`
+  launcher in common paths or repo virtualenvs, but that no longer blocks
+  current-head claim evidence refresh on this machine.
 - For current claim-lane status, read
   [references/13-current-claim-lane.md](references/13-current-claim-lane.md),
   [../../autonomous_progress.md](../../autonomous_progress.md),

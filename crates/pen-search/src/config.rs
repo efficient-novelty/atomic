@@ -22,6 +22,7 @@ impl RuntimeConfig {
                 strict: true,
                 debug: false,
                 search_profile: SearchProfile::StrictCanonGuarded,
+                grammar_profile: GrammarProfile::CanonicalMbttV1,
             },
             search: SearchConfig {
                 until_step: 15,
@@ -72,6 +73,27 @@ impl RuntimeConfig {
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
+pub enum GrammarProfile {
+    #[default]
+    CanonicalMbttV1,
+    NoTemporal,
+    LinearExponentialSwap,
+    EpistemicSwap,
+}
+
+impl GrammarProfile {
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::CanonicalMbttV1 => "canonical_mbtt_v1",
+            Self::NoTemporal => "no_temporal",
+            Self::LinearExponentialSwap => "linear_exponential_swap",
+            Self::EpistemicSwap => "epistemic_swap",
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum SearchProfile {
     #[default]
     Unknown,
@@ -111,12 +133,18 @@ const fn default_search_profile() -> SearchProfile {
     SearchProfile::StrictCanonGuarded
 }
 
+const fn default_grammar_profile() -> GrammarProfile {
+    GrammarProfile::CanonicalMbttV1
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct ModeConfig {
     pub strict: bool,
     pub debug: bool,
     #[serde(default = "default_search_profile")]
     pub search_profile: SearchProfile,
+    #[serde(default = "default_grammar_profile")]
+    pub grammar_profile: GrammarProfile,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -457,7 +485,7 @@ fn default_demo_full_eval_soft_cap() -> BTreeMap<String, u64> {
 
 #[cfg(test)]
 mod tests {
-    use super::{DemoConfig, RuntimeConfig, SearchProfile, WorkerSetting};
+    use super::{DemoConfig, GrammarProfile, RuntimeConfig, SearchProfile, WorkerSetting};
     use std::fs;
 
     fn load_config(name: &str) -> RuntimeConfig {
@@ -487,6 +515,7 @@ mod tests {
             config.mode.search_profile,
             SearchProfile::StrictCanonGuarded
         );
+        assert_eq!(config.mode.grammar_profile, GrammarProfile::CanonicalMbttV1);
     }
 
     #[test]
@@ -494,6 +523,24 @@ mod tests {
         assert_eq!(
             load_config("strict_canon_guarded.toml").mode.search_profile,
             SearchProfile::StrictCanonGuarded
+        );
+        assert_eq!(
+            load_config("strict_canon_guarded.toml")
+                .mode
+                .grammar_profile,
+            GrammarProfile::CanonicalMbttV1
+        );
+        assert_eq!(
+            load_config("grammar_ablation_baseline.toml")
+                .mode
+                .search_profile,
+            SearchProfile::StrictCanonGuarded
+        );
+        assert_eq!(
+            load_config("grammar_ablation_baseline.toml")
+                .mode
+                .grammar_profile,
+            GrammarProfile::CanonicalMbttV1
         );
         assert_eq!(
             load_config("relaxed_shadow.toml").mode.search_profile,
@@ -560,6 +607,22 @@ mod tests {
             config.mode.search_profile,
             SearchProfile::StrictCanonGuarded
         );
+        assert_eq!(config.mode.grammar_profile, GrammarProfile::CanonicalMbttV1);
+    }
+
+    #[test]
+    fn missing_grammar_profile_defaults_to_canonical_mbtt_v1() {
+        let source = fs::read_to_string(
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .ancestors()
+                .nth(2)
+                .expect("workspace root")
+                .join("configs")
+                .join("debug.toml"),
+        )
+        .expect("config file should exist");
+        let config = RuntimeConfig::from_toml_str(&source).expect("config should parse");
+        assert_eq!(config.mode.grammar_profile, GrammarProfile::CanonicalMbttV1);
     }
 
     #[test]

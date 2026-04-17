@@ -2087,6 +2087,8 @@ mod tests {
         AdmissibilityMode, PackagePolicies, PackagePolicy, StrictAdmissibility, StructuralFamily,
         passes_strict_admissibility, strict_admissibility, strict_admissibility_for_mode,
     };
+    use pen_core::clause::{ClauseRec, ClauseRole};
+    use pen_core::expr::Expr;
     use pen_core::library::{Library, LibraryEntry};
     use pen_core::telescope::Telescope;
 
@@ -2098,6 +2100,121 @@ mod tests {
             library.push(entry);
         }
         library
+    }
+
+    fn claim_long_rerun_v3_divergent_library() -> Library {
+        fn formation_pi(domain: Expr, codomain: Expr) -> ClauseRec {
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(Box::new(domain), Box::new(codomain)),
+            )
+        }
+
+        let mut telescopes = (1..=9).map(Telescope::reference).collect::<Vec<_>>();
+        for lib_ref in 8..=11 {
+            telescopes.push(Telescope::new(vec![
+                formation_pi(Expr::Var(1), Expr::Var(1)),
+                formation_pi(Expr::Var(1), Expr::Var(1)),
+                formation_pi(Expr::Lib(lib_ref), Expr::Var(1)),
+            ]));
+        }
+
+        let mut library = Vec::new();
+        for telescope in telescopes {
+            let entry = LibraryEntry::from_telescope(&telescope, &library);
+            library.push(entry);
+        }
+        library
+    }
+
+    fn assert_claim_profile_keeps_all_required_package_flags_closed(
+        admissibility: StrictAdmissibility,
+        context: &str,
+    ) {
+        assert_eq!(admissibility.package_policies, PackagePolicies::default());
+        for (package_name, required) in [
+            (
+                "former_eliminator",
+                admissibility.require_former_eliminator_package,
+            ),
+            ("initial_hit", admissibility.require_initial_hit_package),
+            (
+                "truncation_hit",
+                admissibility.require_truncation_hit_package,
+            ),
+            ("higher_hit", admissibility.require_higher_hit_package),
+            ("sphere_lift", admissibility.require_sphere_lift_package),
+            (
+                "axiomatic_bundle",
+                admissibility.require_axiomatic_bundle_package,
+            ),
+            ("modal_shell", admissibility.require_modal_shell_package),
+            (
+                "connection_shell",
+                admissibility.require_connection_shell_package,
+            ),
+            (
+                "curvature_shell",
+                admissibility.require_curvature_shell_package,
+            ),
+            (
+                "operator_bundle",
+                admissibility.require_operator_bundle_package,
+            ),
+            (
+                "hilbert_functional",
+                admissibility.require_hilbert_functional_package,
+            ),
+            (
+                "temporal_shell",
+                admissibility.require_temporal_shell_package,
+            ),
+        ] {
+            assert!(
+                !required,
+                "{context}: DesktopClaimShadow should keep require_{package_name}_package disabled on the no-focus claim route"
+            );
+        }
+    }
+
+    fn assert_claim_profile_keeps_all_package_policies_open(
+        admissibility: StrictAdmissibility,
+        context: &str,
+    ) {
+        assert_eq!(admissibility.focus_family, None);
+        assert_eq!(admissibility.required_focus_family(), None);
+        for family in StructuralFamily::ALL {
+            assert_eq!(
+                admissibility.policy_for(family),
+                PackagePolicy::Allow,
+                "{context}: DesktopClaimShadow should keep policy_for({}) at Allow on the no-focus claim route",
+                family.slug()
+            );
+        }
+    }
+
+    fn assert_relaxed_structural_focus_keeps_only_one_preferred_package_policy(
+        admissibility: StrictAdmissibility,
+        focus_family: StructuralFamily,
+        context: &str,
+    ) {
+        assert_eq!(admissibility.focus_family, Some(focus_family));
+        assert_eq!(admissibility.required_focus_family(), None);
+        for family in StructuralFamily::ALL {
+            let expected_policy = if family == focus_family {
+                PackagePolicy::Prefer
+            } else {
+                PackagePolicy::Allow
+            };
+            assert_eq!(
+                admissibility.policy_for(family),
+                expected_policy,
+                "{context}: the downstream package-policy consumer view should keep only {} preferred while leaving {} at {:?}",
+                focus_family.slug(),
+                family.slug(),
+                expected_policy
+            );
+        }
     }
 
     #[test]
@@ -2502,6 +2619,458 @@ mod tests {
             );
             assert!(!admissibility.require_temporal_shell_package, "step {step}");
         }
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fifteen_dispatches_to_claim_profile_instead_of_structural_temporal_focus()
+     {
+        let library = library_until(14);
+        let debt = super::summarize_structural_debt(&library, 2);
+        let loop_anchor = super::historical_loop_anchor_ref(&library, 2);
+        let modal_anchor = super::historical_modal_shell_anchor_ref(&library, 2);
+        let debt_focus = super::focus_family_from_debt(debt, loop_anchor, modal_anchor);
+        let claim_admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let direct_claim_admissibility = super::claim_strict_admissibility(
+            15,
+            AdmissibilityMode::DesktopClaimShadow,
+            debt,
+            loop_anchor,
+            modal_anchor,
+        );
+        let structural_temporal_admissibility = super::structural_focus_strict_admissibility(
+            AdmissibilityMode::DesktopClaimShadow,
+            debt,
+            debt_focus,
+            loop_anchor,
+            modal_anchor,
+        );
+
+        assert_eq!(
+            debt_focus,
+            Some(StructuralFamily::TemporalShell),
+            "the raw step-15 structural debt still points at the temporal-shell family before the DesktopClaimShadow dispatch decides whether to keep that focus"
+        );
+        assert_eq!(
+            super::claim_guarded_early_focus_family(15, debt, loop_anchor, modal_anchor),
+            None,
+            "the guarded structural-focus shortcut should already be disabled by step 15, so DesktopClaimShadow must leave the named family route"
+        );
+        assert_eq!(
+            claim_admissibility, direct_claim_admissibility,
+            "DesktopClaimShadow step 15 should dispatch through claim_strict_admissibility once the guarded early-focus window closes"
+        );
+        assert_eq!(claim_admissibility.focus_family, None);
+        assert_eq!(
+            claim_admissibility.package_policies,
+            PackagePolicies::default()
+        );
+        assert_eq!(claim_admissibility.historical_anchor_ref, modal_anchor);
+        assert_eq!(
+            structural_temporal_admissibility.focus_family,
+            Some(StructuralFamily::TemporalShell),
+            "the bypassed structural route would still keep the temporal-shell focus family live on the same debt snapshot"
+        );
+        assert_eq!(
+            structural_temporal_admissibility
+                .package_policies
+                .temporal_shell,
+            PackagePolicy::Prefer,
+            "under DesktopClaimShadow, the bypassed structural temporal-shell route would still add a nondefault package preference that closes the claim open-band selector"
+        );
+        assert_eq!(
+            structural_temporal_admissibility.historical_anchor_ref, modal_anchor,
+            "both routes should agree on the live modal anchor; the divergence is the named family focus and package surface, not the anchor itself"
+        );
+        assert_eq!(
+            claim_admissibility.min_clause_kappa,
+            structural_temporal_admissibility.min_clause_kappa,
+            "the claim route keeps the same step-15 clause band while dropping the structural temporal-shell focus surface"
+        );
+        assert_eq!(
+            claim_admissibility.max_clause_kappa,
+            structural_temporal_admissibility.max_clause_kappa,
+            "the claim route keeps the same step-15 clause band while dropping the structural temporal-shell focus surface"
+        );
+        assert_eq!(
+            claim_admissibility.include_modal, structural_temporal_admissibility.include_modal,
+            "the claim route keeps the same modal budget; only the focus dispatch changes"
+        );
+        assert_eq!(
+            claim_admissibility.include_temporal,
+            structural_temporal_admissibility.include_temporal,
+            "the claim route keeps the same temporal budget; only the focus dispatch changes"
+        );
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fourteen_claim_axes_helper_promotes_operator_bundle_snapshot_to_hilbert_band()
+     {
+        let library = claim_long_rerun_v3_divergent_library();
+        let debt = super::summarize_structural_debt(&library, 2);
+        let raw_claim_axes = debt.claim_debt_axes();
+        let promoted_claim_axes = super::claim_debt_axes_for_step(14, debt);
+        let admissibility =
+            strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert!(debt.requires_operator_bundle_package());
+        assert!(!debt.requires_hilbert_functional_package());
+        assert_eq!(raw_claim_axes.kappa_min, 7);
+        assert_eq!(raw_claim_axes.kappa_max, 7);
+        assert_eq!(promoted_claim_axes.kappa_min, 9);
+        assert_eq!(promoted_claim_axes.kappa_max, 9);
+        assert_eq!(
+            promoted_claim_axes.path_pressure, raw_claim_axes.path_pressure,
+            "step-14 claim-band promotion should only widen the clause band, not rewrite the underlying debt pressures"
+        );
+        assert_eq!(
+            promoted_claim_axes.coupling_pressure, raw_claim_axes.coupling_pressure,
+            "step-14 claim-band promotion should keep the same operator-bundle coupling pressure"
+        );
+        assert_eq!(
+            promoted_claim_axes.support_pressure, raw_claim_axes.support_pressure,
+            "step-14 claim-band promotion should keep the same operator-bundle support pressure"
+        );
+        assert_eq!(
+            promoted_claim_axes.closure_pressure, raw_claim_axes.closure_pressure,
+            "step-14 claim-band promotion should keep the same operator-bundle closure pressure"
+        );
+        assert_eq!(
+            admissibility.min_clause_kappa,
+            promoted_claim_axes.kappa_min
+        );
+        assert_eq!(
+            admissibility.max_clause_kappa,
+            promoted_claim_axes.kappa_max
+        );
+        assert_eq!(admissibility.focus_family, None);
+        assert_eq!(admissibility.package_policies, PackagePolicies::default());
+        assert_eq!(admissibility.historical_anchor_ref, None);
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fifteen_claim_axes_and_anchor_helpers_match_live_temporal_claim_profile()
+     {
+        let library = library_until(14);
+        let debt = super::summarize_structural_debt(&library, 2);
+        let raw_claim_axes = debt.claim_debt_axes();
+        let claim_axes = super::claim_debt_axes_for_step(15, debt);
+        let loop_anchor = super::historical_loop_anchor_ref(&library, 2);
+        let modal_anchor = super::historical_modal_shell_anchor_ref(&library, 2);
+        let historical_anchor = super::claim_historical_anchor_ref(debt, loop_anchor, modal_anchor);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert_eq!(
+            debt.claim_anchor_policy(),
+            crate::obligations::ClaimAnchorPolicy::Modal,
+            "the live step-15 claim route should choose its historical anchor through the temporal-shell modal policy"
+        );
+        assert_eq!(
+            claim_axes, raw_claim_axes,
+            "the live step-15 claim profile should reuse the raw temporal-shell debt axes directly rather than taking another late helper promotion"
+        );
+        assert_eq!(claim_axes.kappa_min, 8);
+        assert_eq!(claim_axes.kappa_max, 8);
+        assert_eq!(claim_axes.path_pressure, 0);
+        assert_eq!(claim_axes.trunc_pressure, 0);
+        assert_eq!(claim_axes.coupling_pressure, 2);
+        assert_eq!(claim_axes.support_pressure, 2);
+        assert_eq!(claim_axes.modal_pressure, 0);
+        assert_eq!(claim_axes.temporal_pressure, 1);
+        assert_eq!(claim_axes.reanchor_pressure, 2);
+        assert_eq!(claim_axes.closure_pressure, 3);
+        assert_eq!(
+            historical_anchor, modal_anchor,
+            "the live step-15 claim profile should take the modal anchor selected by the temporal debt window"
+        );
+        assert_eq!(historical_anchor, Some(10));
+        assert_eq!(admissibility.min_clause_kappa, claim_axes.kappa_min);
+        assert_eq!(admissibility.max_clause_kappa, claim_axes.kappa_max);
+        assert_eq!(admissibility.historical_anchor_ref, historical_anchor);
+        assert_eq!(admissibility.focus_family, None);
+        assert_eq!(admissibility.package_policies, PackagePolicies::default());
+        assert!(admissibility.include_modal);
+        assert!(admissibility.include_temporal);
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fourteen_modal_and_temporal_helpers_stay_closed_on_promoted_operator_bundle_snapshot()
+     {
+        let library = claim_long_rerun_v3_divergent_library();
+        let debt = super::summarize_structural_debt(&library, 2);
+        let claim_axes = super::claim_debt_axes_for_step(14, debt);
+        let include_modal = super::claim_include_modal(debt, claim_axes);
+        let include_temporal = super::claim_include_temporal(claim_axes);
+        let admissibility =
+            strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert_eq!(claim_axes.kappa_min, 9);
+        assert_eq!(claim_axes.kappa_max, 9);
+        assert_eq!(claim_axes.modal_pressure, 0);
+        assert_eq!(claim_axes.temporal_pressure, 0);
+        assert!(
+            !include_modal,
+            "the step-14 operator-bundle helper promotion should only widen the clause band; it should not reopen modal syntax before temporal pressure appears"
+        );
+        assert!(
+            !include_temporal,
+            "the step-14 operator-bundle helper promotion should keep temporal syntax closed while the claim snapshot still has no temporal pressure"
+        );
+        assert_eq!(admissibility.include_modal, include_modal);
+        assert_eq!(admissibility.include_temporal, include_temporal);
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fifteen_modal_and_temporal_helpers_open_from_live_temporal_pressure()
+     {
+        let library = library_until(14);
+        let debt = super::summarize_structural_debt(&library, 2);
+        let claim_axes = super::claim_debt_axes_for_step(15, debt);
+        let include_modal = super::claim_include_modal(debt, claim_axes);
+        let include_temporal = super::claim_include_temporal(claim_axes);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert_eq!(claim_axes.kappa_min, 8);
+        assert_eq!(claim_axes.kappa_max, 8);
+        assert_eq!(claim_axes.modal_pressure, 0);
+        assert_eq!(claim_axes.temporal_pressure, 1);
+        assert!(
+            include_modal,
+            "the live step-15 claim route should keep modal syntax open because temporal pressure widens the same default claim-generic surface even with zero modal-only pressure"
+        );
+        assert!(
+            include_temporal,
+            "the live step-15 claim route should keep temporal syntax open because the temporal-shell debt snapshot carries temporal pressure"
+        );
+        assert_eq!(admissibility.include_modal, include_modal);
+        assert_eq!(admissibility.include_temporal, include_temporal);
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fourteen_claim_size_helpers_keep_promoted_operator_bundle_snapshot_on_seven_node_zero_path_budget()
+     {
+        let library = claim_long_rerun_v3_divergent_library();
+        let debt = super::summarize_structural_debt(&library, 2);
+        let claim_axes = super::claim_debt_axes_for_step(14, debt);
+        let max_expr_nodes = super::claim_max_expr_nodes(debt, claim_axes);
+        let max_path_dimension = super::claim_max_path_dimension(debt, claim_axes);
+        let admissibility =
+            strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert_eq!(claim_axes.kappa_min, 9);
+        assert_eq!(claim_axes.kappa_max, 9);
+        assert_eq!(
+            claim_axes.path_pressure, 0,
+            "the divergent operator-bundle control should promote the clause band without reopening any path-pressure budget"
+        );
+        assert_eq!(
+            max_expr_nodes, 7,
+            "the promoted step-14 claim profile should stay on the wide seven-node envelope once the helper lifts the clause band to 9"
+        );
+        assert_eq!(
+            max_path_dimension, 0,
+            "the promoted step-14 claim profile should keep path dimension closed once the promoted claim axes still carry zero path pressure"
+        );
+        assert_eq!(admissibility.max_expr_nodes, max_expr_nodes);
+        assert_eq!(admissibility.max_path_dimension, max_path_dimension);
+        assert!(!admissibility.include_trunc);
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fifteen_claim_size_helpers_keep_live_temporal_profile_on_seven_node_zero_path_budget()
+     {
+        let library = library_until(14);
+        let debt = super::summarize_structural_debt(&library, 2);
+        let claim_axes = super::claim_debt_axes_for_step(15, debt);
+        let max_expr_nodes = super::claim_max_expr_nodes(debt, claim_axes);
+        let max_path_dimension = super::claim_max_path_dimension(debt, claim_axes);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert_eq!(claim_axes.kappa_min, 8);
+        assert_eq!(claim_axes.kappa_max, 8);
+        assert_eq!(claim_axes.path_pressure, 0);
+        assert_eq!(
+            max_expr_nodes, 7,
+            "the live step-15 temporal-shell claim profile should keep the same wide seven-node envelope while it stays on the default claim-generic route"
+        );
+        assert_eq!(
+            max_path_dimension, 0,
+            "the live step-15 temporal-shell claim profile should not reopen path dimension once the claim axes already stay at zero path pressure"
+        );
+        assert_eq!(admissibility.max_expr_nodes, max_expr_nodes);
+        assert_eq!(admissibility.max_path_dimension, max_path_dimension);
+        assert!(!admissibility.include_trunc);
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fourteen_trunc_and_quota_helpers_keep_promoted_operator_bundle_snapshot_closed_with_wide_bucket_cap()
+     {
+        let library = claim_long_rerun_v3_divergent_library();
+        let debt = super::summarize_structural_debt(&library, 2);
+        let include_trunc = super::claim_include_trunc(debt);
+        let quota_per_bucket = debt.quota_per_bucket();
+        let admissibility =
+            strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert_eq!(debt.max_path_dimension, 0);
+        assert_eq!(debt.truncated_entries, 0);
+        assert!(
+            debt.requires_operator_bundle_package(),
+            "the divergent step-14 control should still carry the raw operator-bundle package pressure even though DesktopClaimShadow stays on the no-focus claim profile"
+        );
+        assert!(
+            !include_trunc,
+            "the promoted step-14 claim profile should keep truncation syntax closed because the underlying debt snapshot never reopens path dimension one"
+        );
+        assert_eq!(
+            quota_per_bucket, 64,
+            "the promoted step-14 claim profile should still inherit the wide per-bucket quota from the raw operator-bundle package pressure"
+        );
+        assert_eq!(admissibility.include_trunc, include_trunc);
+        assert_eq!(admissibility.quota_per_bucket, quota_per_bucket);
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fifteen_trunc_and_quota_helpers_keep_live_temporal_profile_closed_with_wide_bucket_cap()
+     {
+        let library = library_until(14);
+        let debt = super::summarize_structural_debt(&library, 2);
+        let include_trunc = super::claim_include_trunc(debt);
+        let quota_per_bucket = debt.quota_per_bucket();
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert_eq!(debt.max_path_dimension, 0);
+        assert_eq!(debt.truncated_entries, 0);
+        assert!(
+            debt.requires_temporal_shell_package(),
+            "the live step-15 control should still carry the raw temporal-shell package pressure even though DesktopClaimShadow stays on the no-focus claim profile"
+        );
+        assert!(
+            !include_trunc,
+            "the live step-15 temporal claim profile should keep truncation syntax closed because the underlying debt snapshot never reopens path dimension one"
+        );
+        assert_eq!(
+            quota_per_bucket, 64,
+            "the live step-15 temporal claim profile should still inherit the wide per-bucket quota from the raw temporal-shell package pressure"
+        );
+        assert_eq!(admissibility.include_trunc, include_trunc);
+        assert_eq!(admissibility.quota_per_bucket, quota_per_bucket);
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fourteen_package_requirement_flags_stay_closed_even_with_raw_operator_bundle_pressure()
+     {
+        let library = claim_long_rerun_v3_divergent_library();
+        let debt = super::summarize_structural_debt(&library, 2);
+        let admissibility =
+            strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert!(
+            debt.requires_operator_bundle_package(),
+            "the divergent step-14 control should still surface raw operator-bundle package pressure before the no-focus claim route packages it"
+        );
+        assert!(
+            !debt.requires_hilbert_functional_package(),
+            "the divergent step-14 control should stay below the hilbert-functional package threshold even while the helper promotes the clause band to 9"
+        );
+        assert!(
+            !debt.requires_temporal_shell_package(),
+            "the divergent step-14 control should not inherit the later temporal-shell package pressure from the live step-15 route"
+        );
+        assert_claim_profile_keeps_all_required_package_flags_closed(
+            admissibility,
+            "the promoted step-14 operator-bundle claim profile should keep raw package pressure diagnostic-only once DesktopClaimShadow stays on the no-focus claim surface",
+        );
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fifteen_package_requirement_flags_stay_closed_even_with_live_temporal_pressure()
+     {
+        let library = library_until(14);
+        let debt = super::summarize_structural_debt(&library, 2);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert!(
+            !debt.requires_operator_bundle_package(),
+            "the live step-15 control should no longer carry the earlier operator-bundle package pressure on the actual temporal-shell claim library"
+        );
+        assert!(
+            !debt.requires_hilbert_functional_package(),
+            "the live step-15 control should stay off the hilbert-functional package as it keeps the default claim-generic route at kappa 8"
+        );
+        assert!(
+            debt.requires_temporal_shell_package(),
+            "the live step-15 control should still surface raw temporal-shell package pressure before the no-focus claim route packages it"
+        );
+        assert_claim_profile_keeps_all_required_package_flags_closed(
+            admissibility,
+            "the live step-15 temporal claim profile should keep raw package pressure diagnostic-only once DesktopClaimShadow stays on the no-focus claim surface",
+        );
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fourteen_package_policy_consumers_keep_promoted_operator_bundle_profile_open_band()
+     {
+        let library = claim_long_rerun_v3_divergent_library();
+        let debt = super::summarize_structural_debt(&library, 2);
+        let admissibility =
+            strict_admissibility_for_mode(14, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert!(
+            debt.requires_operator_bundle_package(),
+            "the divergent step-14 control should still surface raw operator-bundle pressure before the assembled claim profile reaches its downstream package-policy consumers"
+        );
+        assert!(!debt.requires_temporal_shell_package());
+        assert_claim_profile_keeps_all_package_policies_open(
+            admissibility,
+            "the promoted step-14 operator-bundle claim profile should still look fully open-band at required_focus_family()/policy_for(...) once DesktopClaimShadow stays no-focus",
+        );
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fifteen_package_policy_consumers_keep_live_temporal_profile_open_band()
+     {
+        let library = library_until(14);
+        let debt = super::summarize_structural_debt(&library, 2);
+        let admissibility =
+            strict_admissibility_for_mode(15, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+
+        assert!(
+            debt.requires_temporal_shell_package(),
+            "the live step-15 control should still surface raw temporal-shell pressure before the assembled claim profile reaches its downstream package-policy consumers"
+        );
+        assert!(!debt.requires_operator_bundle_package());
+        assert_claim_profile_keeps_all_package_policies_open(
+            admissibility,
+            "the live step-15 temporal claim profile should still look fully open-band at required_focus_family()/policy_for(...) once DesktopClaimShadow stays on the no-focus claim-generic route",
+        );
+    }
+
+    #[test]
+    fn desktop_claim_shadow_step_fifteen_bypassed_structural_temporal_route_only_prefers_temporal_shell_for_package_consumers()
+     {
+        let library = library_until(14);
+        let debt = super::summarize_structural_debt(&library, 2);
+        let loop_anchor = super::historical_loop_anchor_ref(&library, 2);
+        let modal_anchor = super::historical_modal_shell_anchor_ref(&library, 2);
+        let admissibility = super::structural_focus_strict_admissibility(
+            AdmissibilityMode::DesktopClaimShadow,
+            debt,
+            Some(StructuralFamily::TemporalShell),
+            loop_anchor,
+            modal_anchor,
+        );
+
+        assert_relaxed_structural_focus_keeps_only_one_preferred_package_policy(
+            admissibility,
+            StructuralFamily::TemporalShell,
+            "the bypassed structural temporal-shell route should only expose a preferred downstream temporal-shell policy rather than a required focus family",
+        );
     }
 
     #[test]

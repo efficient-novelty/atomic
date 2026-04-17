@@ -2630,6 +2630,7 @@ mod tests {
     use super::{
         CandidateStatus, FrontierRetention, PruneClassStats, StepGenerationMode,
         StepProgressObserver, StepProvenance, extend_steps_from_reports, generate_steps,
+        generate_steps_with_config_and_runtime,
         generate_steps_with_config_and_runtime_and_progress, reevaluate_steps_from_reports,
         render_debug_report, render_standard_report, replay_reference_steps,
         search_atomic_bootstrap_steps, search_atomic_bootstrap_steps_with_runtime,
@@ -2881,6 +2882,90 @@ mod tests {
         assert!(claim_root_seeding.roots_seen > 0);
         assert!(serialized.contains("\"claim_step_open\""));
         assert!(serialized.contains("\"claim_root_seeding\""));
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_step_report_preserves_the_live_demo_closure_surface() {
+        let config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/desktop_claim_shadow_smoke.toml"
+        ))
+        .expect("claim config should parse");
+        let prefix =
+            generate_steps_with_config_and_runtime(14, &config, FrontierRuntimeLimits::unlimited())
+                .expect("claim prefix should build")
+                .steps
+                .into_iter()
+                .map(|step| step.telescope)
+                .collect::<Vec<_>>();
+        let mut generated =
+            pen_search::engine::search_bootstrap_from_prefix_for_profile_with_runtime(
+                &prefix,
+                15,
+                2,
+                pen_search::config::SearchProfile::DesktopClaimShadow,
+                FrontierRuntimeLimits::unlimited(),
+            )
+            .expect("live claim step should build");
+        let step = generated.pop().expect("live claim step should exist");
+        let expected_closure = step.demo_closure.clone();
+        let report = super::step_to_report(step);
+        let serialized = serde_json::to_string(&report).expect("claim report should serialize");
+
+        assert_eq!(report.accepted.nu, 103);
+        assert_eq!(report.search_stats.demo_closure, expected_closure);
+        assert_eq!(
+            report.search_stats.demo_closure.frontier_total_seen,
+            report.search_stats.demo_funnel.exact_bound_screened
+        );
+        assert_eq!(
+            report
+                .search_stats
+                .demo_closure
+                .frontier_certified_nonwinning,
+            report.search_stats.demo_funnel.exact_bound_pruned
+        );
+        assert_eq!(report.search_stats.demo_closure.closure_percent, 99);
+        assert!(serialized.contains("\"demo_closure\""));
+        assert!(serialized.contains(&format!(
+            "\"frontier_total_seen\":{}",
+            report.search_stats.demo_closure.frontier_total_seen
+        )));
+        assert!(serialized.contains(&format!(
+            "\"frontier_certified_nonwinning\":{}",
+            report.search_stats.demo_closure.frontier_certified_nonwinning
+        )));
+    }
+
+    #[test]
+    fn current_claim_step_fifteen_debug_report_demo_closure_line_uses_the_reported_surface() {
+        let config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/desktop_claim_shadow_smoke.toml"
+        ))
+        .expect("claim config should parse");
+        let mut steps =
+            generate_steps_with_config_and_runtime(15, &config, FrontierRuntimeLimits::unlimited())
+                .expect("claim steps should build")
+                .steps;
+        let (stored_closure, accepted_nu) = {
+            let step = steps.last_mut().expect("late claim step should exist");
+            let stored_closure = step.search_stats.demo_closure.clone();
+            step.search_stats.demo_funnel.exact_bound_screened = 7;
+            step.search_stats.demo_funnel.exact_bound_pruned = 1;
+            (stored_closure, step.accepted.nu)
+        };
+
+        let debug = render_debug_report("run-1", &steps);
+
+        assert_eq!(accepted_nu, 103);
+        assert!(debug.contains(&format!(
+            "  demo closure: frontier_total_seen={} frontier_certified_nonwinning={} closure_percent={}",
+            stored_closure.frontier_total_seen,
+            stored_closure.frontier_certified_nonwinning,
+            stored_closure.closure_percent
+        )));
+        assert!(!debug.contains(
+            "  demo closure: frontier_total_seen=7 frontier_certified_nonwinning=1 closure_percent=14"
+        ));
     }
 
     #[test]

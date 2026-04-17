@@ -20,6 +20,8 @@ pub struct RunManifestV1 {
     #[serde(default)]
     pub runtime: RuntimeInfo,
     pub config: ConfigFingerprint,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub grammar_profile: String,
     #[serde(default)]
     pub search_policy: SearchPolicyInfo,
     #[serde(default)]
@@ -42,6 +44,7 @@ impl Default for RunManifestV1 {
             host: HostInfo::default(),
             runtime: RuntimeInfo::default(),
             config: ConfigFingerprint::default(),
+            grammar_profile: String::new(),
             search_policy: SearchPolicyInfo::default(),
             build: BuildInfo::default(),
             position: RunPosition::default(),
@@ -390,6 +393,7 @@ mod tests {
                 path: "config.toml".to_owned(),
                 sha256: "sha".to_owned(),
             },
+            grammar_profile: "canonical_mbtt_v1".to_owned(),
             search_policy: SearchPolicyInfo {
                 guidance_style: "legacy_family_guided".to_owned(),
                 late_expansion_policy: "realistic_shadow".to_owned(),
@@ -423,6 +427,7 @@ mod tests {
         assert!(json.contains("\"guidance_style\": \"legacy_family_guided\""));
         assert!(json.contains("\"target_triple\": \"x86_64-pc-windows-msvc\""));
         assert!(json.contains("\"resolved_worker_count\": 12"));
+        assert!(json.contains("\"grammar_profile\": \"canonical_mbtt_v1\""));
 
         let round_trip: RunManifestV1 =
             serde_json::from_str(&json).expect("deserialize run manifest");
