@@ -1,28 +1,27 @@
 # Grammar Ablation Findings
 
-Last updated: 2026-04-17
-Status: preliminary implementation findings only
+Last updated: 2026-04-19
+Status: hostile evidence is unchanged, and the
+`2026-04-19T15:02:20.8495808+02:00` drift sweep found only the
+grammar-ablation operational docs plus grammar-ablation skill context newer
+than the prior `2026-04-19T14:02:03.8717831+02:00` checkpoint.
 
 ## Findings
 
-- The grammar is currently hardcoded across the AST, bit-cost audit, typed
-  enumeration, admissibility, and reporting layers rather than modeled as a
-  swappable runtime object.
-- Temporal availability is presently exposed through search/admissibility
-  switches such as `include_temporal` plus temporal-shell clause-family logic.
-  That makes `no_temporal` the cleanest first hostile grammar to implement.
-- Historical `run.json` artifacts do not record a grammar profile. The new
-  `inspect` path handles that honestly by printing `grammar_profile: unknown`
-  for old runs.
-- The canonical path still parses and tests as before after adding
-  `grammar_profile`; the new field is additive so far, not behavioral.
-- Regenerating schemas after the manifest change refreshed
-  `schemas/run_manifest_v1.schema.json` as expected and also refreshed
-  `schemas/frontier_manifest_v1.schema.json`, revealing existing schema drift
-  relative to the current code-generated manifest model.
-
-## Non-Findings Yet
-
-- No hostile-grammar search run has been executed yet.
-- No empirical independence verdict exists yet.
-- No divergence step or halt step has been measured yet.
+- `grammar_ablation_report.md` remains the direct comparison verdict: exact
+  replay survives through step `14` / `Hilbert` under both hostile profiles,
+  but the concrete step-`15` finish is still grammar-sensitive.
+- The canonical control
+  `runs/grammar-ablation-baseline-v15-initial` still completes through step
+  `15` under `grammar_profile: canonical_mbtt_v1` with the canonical `DCT`
+  finish.
+- `runs/grammar-ablation-no-temporal-v15-initial` still fails inside the
+  step-`15` connectivity witness path after a long live window dominated by
+  structurally disconnected leaves; downstream candidate-filter counters
+  remain `0`.
+- `runs/grammar-ablation-linear-exponential-v15-initial` still fails earlier
+  on a tiny connected-but-unqualified hostile shell with zero atomic
+  candidates.
+- Since `2026-04-19T14:02:03.8717831+02:00`, no repo-facing theory or summary
+  `.md` / `.tex` surface changed; the only newer files were the operational
+  docs and grammar-ablation skill context.

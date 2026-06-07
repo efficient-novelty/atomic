@@ -21,7 +21,7 @@ use pen_search::engine::{
 use pen_search::expand::evaluate_candidate;
 use pen_search::narrative::NarrativeEvent;
 use pen_search::state::FrontierStateRecV1;
-use pen_store::manifest::{AcceptedCandidate, NearMiss, SearchTiming};
+use pen_store::manifest::{AcceptedCandidate, NearMiss, RunManifestV1, SearchTiming};
 use pen_type::admissibility::AdmissibilityDiagnostics;
 use pen_type::obligations::{RetentionClass, RetentionPolicy};
 use serde::{Deserialize, Serialize};
@@ -1238,6 +1238,29 @@ pub fn render_standard_report(run_id: &str, steps: &[StepReport]) -> String {
         summarize_replay_ablation(steps),
         last.accepted.overshoot,
         late_step_claim,
+    )
+}
+
+pub fn render_standard_report_with_manifest(
+    manifest: &RunManifestV1,
+    steps: &[StepReport],
+) -> String {
+    let base = render_standard_report(&manifest.run_id, steps);
+    let failure_note = if manifest.failure_note.is_empty() {
+        String::new()
+    } else {
+        format!("\nfailure_note: {}", manifest.failure_note)
+    };
+
+    format!(
+        "{base}\nstatus: {}\nactive_step: {}\nactive_band: {}\nfrontier_epoch: {}\nupdated_utc: {}\nfirst_divergence_step: {}{}",
+        manifest.status.as_str(),
+        manifest.position.active_step,
+        manifest.position.active_band,
+        manifest.position.frontier_epoch,
+        manifest.updated_utc,
+        summarize_first_divergence_step(steps),
+        failure_note,
     )
 }
 
@@ -2536,6 +2559,21 @@ fn summarize_replay_ablation(steps: &[StepReport]) -> String {
         .join(", ")
 }
 
+fn summarize_first_divergence_step(steps: &[StepReport]) -> String {
+    if let Some(step) = steps.iter().find(|step| {
+        step.replay_ablation.status == ReplayAblationStatus::DivergesFromReferenceReplay
+    }) {
+        return step.step_index.to_string();
+    }
+
+    steps
+        .iter()
+        .rev()
+        .find(|step| step.replay_ablation.status != ReplayAblationStatus::NotRecorded)
+        .map(|step| format!("none_through_step_{}", step.step_index))
+        .unwrap_or_else(|| "not_recorded".to_owned())
+}
+
 fn summarize_named_counts(counts: &BTreeMap<String, usize>) -> String {
     counts
         .iter()
@@ -2632,13 +2670,14 @@ mod tests {
         StepProgressObserver, StepProvenance, extend_steps_from_reports, generate_steps,
         generate_steps_with_config_and_runtime,
         generate_steps_with_config_and_runtime_and_progress, reevaluate_steps_from_reports,
-        render_debug_report, render_standard_report, replay_reference_steps,
-        search_atomic_bootstrap_steps, search_atomic_bootstrap_steps_with_runtime,
-        stored_prune_class_stats,
+        render_debug_report, render_standard_report, render_standard_report_with_manifest,
+        replay_reference_steps, search_atomic_bootstrap_steps,
+        search_atomic_bootstrap_steps_with_runtime, stored_prune_class_stats,
     };
     use pen_search::config::RuntimeConfig;
     use pen_search::diversify::FrontierRuntimeLimits;
     use pen_store::{
+        manifest::{RunManifestV1, RunPosition, RunStatus},
         memory::{GovernorConfig, PressureAction},
         spill::SpillConfig,
     };
@@ -2752,6 +2791,53 @@ mod tests {
             render_debug_report("run-1", &steps)
                 .contains("ACCEPTED clears bar with minimal overshoot")
         );
+    }
+
+    #[test]
+    fn manifest_backed_standard_report_surfaces_run_status_and_divergence_summary() {
+        let mut steps = replay_reference_steps(2, 2).expect("reference replay should succeed");
+        let report = render_standard_report_with_manifest(
+            &RunManifestV1 {
+                run_id: "run-1".to_owned(),
+                status: RunStatus::Running,
+                updated_utc: "2026-04-17T12:34:56Z".to_owned(),
+                position: RunPosition {
+                    completed_step: 2,
+                    active_step: 3,
+                    active_band: 1,
+                    frontier_epoch: 0,
+                },
+                ..RunManifestV1::default()
+            },
+            &steps,
+        );
+
+        assert!(report.contains("status: running"));
+        assert!(report.contains("active_step: 3"));
+        assert!(report.contains("updated_utc: 2026-04-17T12:34:56Z"));
+        assert!(report.contains("first_divergence_step: none_through_step_2"));
+
+        steps[1].replay_ablation.status = super::ReplayAblationStatus::DivergesFromReferenceReplay;
+        let failed_report = render_standard_report_with_manifest(
+            &RunManifestV1 {
+                run_id: "run-1".to_owned(),
+                status: RunStatus::Failed,
+                failure_note: "no admissible bar-clearer remained".to_owned(),
+                updated_utc: "2026-04-17T12:35:56Z".to_owned(),
+                position: RunPosition {
+                    completed_step: 2,
+                    active_step: 3,
+                    active_band: 1,
+                    frontier_epoch: 0,
+                },
+                ..RunManifestV1::default()
+            },
+            &steps,
+        );
+
+        assert!(failed_report.contains("status: failed"));
+        assert!(failed_report.contains("first_divergence_step: 2"));
+        assert!(failed_report.contains("failure_note: no admissible bar-clearer remained"));
     }
 
     #[test]

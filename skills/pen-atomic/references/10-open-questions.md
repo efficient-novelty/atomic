@@ -121,10 +121,38 @@ If the atomic-only rewrite still cannot recover the full 15-step trajectory, tha
 - precise failure statistics,
 - and a cleaner account of where atomic discovery breaks.
 
+## 11. How Far Must The Small-`kappa` Independence Language Narrow?
+
+The first hostile-grammar evidence now exists.
+
+- `grammar_ablation_report.md` shows that both `no_temporal` and
+  `linear_exponential_swap` preserve exact replay through step `14` /
+  `Hilbert`.
+- Neither hostile profile recovers a stored step-`15` terminal:
+  `no_temporal` still dies on a long connectivity-local wall, while
+  `linear_exponential_swap` collapses almost immediately on a tiny
+  connected-unqualified shell with no atomic candidates.
+
+The remaining open question is therefore not whether the first hostile matrix
+exists, but how far the repo and manuscript language must narrow at small
+`kappa`:
+
+- which claim surfaces still imply grammar-robust step-`15` terminality,
+- how to distinguish exact robustness through `Hilbert` from grammar
+  sensitivity at the final step,
+- and which uses of Kolmogorov invariance need explicit "canonical grammar
+  only" scoping.
+
 ## Primary Source Files
 
 - `strict_intelligence_plan.md`
 - `pseudo_code.md`
-- `runs/review_hardening/ablation_report.md`
+- `grammar_ablation_gap.md`
+- `grammar_ablation_report.md`
+- `grammar_ablation_progress.md`
+- `grammar_ablation_next_steps.md`
+- `tex/automated_theory_synthesis_jar_draft.tex`
+- `tex/synthetic_framework_abstraction_mscs_draft.tex`
+- `tex/pen_paper.tex`
 - `engine/src/StrictMolecules.hs`
 - `engine/src/RunAbInitio.hs`

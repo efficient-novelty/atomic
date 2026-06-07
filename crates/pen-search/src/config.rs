@@ -90,6 +90,10 @@ impl GrammarProfile {
             Self::EpistemicSwap => "epistemic_swap",
         }
     }
+
+    pub const fn allows_temporal_modality(self) -> bool {
+        matches!(self, Self::CanonicalMbttV1)
+    }
 }
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
@@ -541,6 +545,18 @@ mod tests {
                 .mode
                 .grammar_profile,
             GrammarProfile::CanonicalMbttV1
+        );
+        assert_eq!(
+            load_config("grammar_ablation_no_temporal.toml")
+                .mode
+                .grammar_profile,
+            GrammarProfile::NoTemporal
+        );
+        assert_eq!(
+            load_config("grammar_ablation_linear_exponential.toml")
+                .mode
+                .grammar_profile,
+            GrammarProfile::LinearExponentialSwap
         );
         assert_eq!(
             load_config("relaxed_shadow.toml").mode.search_profile,

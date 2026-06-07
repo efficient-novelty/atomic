@@ -200,7 +200,9 @@ fn accumulate_expr_signals(expr: &Expr, signals: &mut StructuralSignals) {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => accumulate_expr_signals(body, signals),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => accumulate_expr_signals(body, signals),
         Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_) => {}
     }
 }

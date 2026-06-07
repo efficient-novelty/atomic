@@ -1,6 +1,6 @@
 ---
 name: pen-atomic
-description: Current-state architecture and donor guide for the `pen-atomic` Rust workspace. Use when working on live strict search, `realistic_frontier_shadow`, `demo_breadth_shadow`, `desktop_claim_shadow`, MBTT/kernel design, admissibility, exact selection, reporting, checkpoints, Agda export, or when you need to reconcile current Rust behavior with donor theory and Haskell provenance.
+description: Current-state architecture and donor guide for the `pen-atomic` Rust workspace. Use when working on live strict search, `realistic_frontier_shadow`, `demo_breadth_shadow`, `desktop_claim_shadow`, grammar ablation / hostile grammar profiles, MBTT/kernel design, admissibility, exact selection, reporting, checkpoints, Agda export, or when you need to reconcile current Rust behavior with donor theory and Haskell provenance.
 ---
 
 # PEN Atomic
@@ -558,7 +558,7 @@ Treat these as still incomplete:
 - the anti-junk frontier engine is not yet the full long-range design
 - the Agda bridge is still lighter than the final proof-facing target
 
-The current architecture focus is split between three active tracks:
+The current architecture focus is split between four active tracks:
 
 - stronger exact late-step pruning and ordering on
   `realistic_frontier_shadow`
@@ -566,6 +566,8 @@ The current architecture focus is split between three active tracks:
 - rerun-confirmed step-`15` repair, stored breadth repair, and certification
   work on
   `desktop_claim_shadow`
+- hostile-grammar independence testing on top of the preserved canonical /
+  claim-lane evidence bundle
 
 ## Current-State References
 
@@ -579,6 +581,14 @@ Read only the track-specific detail you need:
   [references/12-current-demo-lane.md](references/12-current-demo-lane.md).
 - For the current claim-lane scaffold state, read
   [references/13-current-claim-lane.md](references/13-current-claim-lane.md).
+- For the current grammar-ablation lane, hostile grammar profile status, and
+  execution ledger, read
+  [references/14-current-grammar-ablation.md](references/14-current-grammar-ablation.md),
+  [../../grammar_ablation_progress.md](../../grammar_ablation_progress.md),
+  [../../grammar_ablation_next_steps.md](../../grammar_ablation_next_steps.md),
+  [../../grammar_ablation_findings.md](../../grammar_ablation_findings.md),
+  [../../grammar_ablation_gap.md](../../grammar_ablation_gap.md), and
+  [../../grammar_abalation_checklist.md](../../grammar_abalation_checklist.md).
 - For live demo-lane targets and signoff criteria, read
   [../../demo_lane_progress.md](../../demo_lane_progress.md),
   [../../demo_lane_plan.md](../../demo_lane_plan.md), and
@@ -667,7 +677,12 @@ For most tasks, read in this order:
    [../../autonomous_plan.md](../../autonomous_plan.md), and
    [../../autonomous_ledger.md](../../autonomous_ledger.md) when the task
    touches `desktop_claim_shadow`
-7. [theory/README.md](theory/README.md) when you need the theorem or manuscript
+7. [../../grammar_ablation_progress.md](../../grammar_ablation_progress.md),
+   [../../grammar_ablation_next_steps.md](../../grammar_ablation_next_steps.md),
+   and [references/14-current-grammar-ablation.md](references/14-current-grammar-ablation.md)
+   when the task touches grammar profiles, hostile grammars, or independence
+   claims
+8. [theory/README.md](theory/README.md) when you need the theorem or manuscript
    map
 
 Then branch based on the task.
@@ -2049,6 +2064,32 @@ Focus on:
 - making inspect/debug output explain current behavior honestly
 - not pretending frontier evidence already exists when it does not
 
+### If you are working on grammar ablation or hostile grammar profiles
+
+Read:
+
+- [references/14-current-grammar-ablation.md](references/14-current-grammar-ablation.md)
+- [../../grammar_ablation_gap.md](../../grammar_ablation_gap.md)
+- [../../grammar_ablation_progress.md](../../grammar_ablation_progress.md)
+- [../../grammar_ablation_next_steps.md](../../grammar_ablation_next_steps.md)
+- [../../grammar_ablation_findings.md](../../grammar_ablation_findings.md)
+- [references/04-mbtt-kernel.md](references/04-mbtt-kernel.md)
+- [references/05-search-and-selection.md](references/05-search-and-selection.md)
+- [theory/README.md](theory/README.md)
+- [theory/genesis.md](theory/genesis.md)
+
+Focus on:
+
+- preserving the current canonical and claim-lane evidence as read-only controls
+- landing hostile grammar behavior in code and tests before claiming empirical
+  ablation results
+- treating `canonical_mbtt_v1` as the executable control grammar unless the
+  current run config says otherwise
+- treating historical manifests without a grammar field as `unknown`, not as
+  retroactively canonical
+- keeping the distinction explicit between metadata plumbing, behaviorally live
+  grammar changes, and completed stored ablation runs
+
 ### If you are implementing resume or storage
 
 Read:
@@ -2113,6 +2154,104 @@ Reject designs that:
   post-reference exact-two-step `7211 / 553 / 2052` step-`15` repair while
   closing stored step `1` at `2144 / 1285 / 1 / 475`; live counters and probe
   history now live in the autonomous docs rather than in this skill file.
+- Grammar ablation is now a first-class repo workstream: manifests and inspect
+  output carry `grammar_profile`, `canonical_mbtt_v1` remains the control, the
+  first hostile slice (`no_temporal`) changes live
+  admissibility/enumeration behavior in code and tests, and the first stored
+  hostile run `grammar-ablation-no-temporal-v15-initial` still matches replay
+  through step `14`. The corrected current-head branch now streams the huge
+  terminal exact-expression bucket directly into clause materialization, keeps
+  raw-width preallocation hints terminal-only, emits
+  `strict_clause_materialization_position_*_sort_started_clause_count_*`
+  immediately before the post-ready clause sort, and now uses the safe cached
+  clause sorter again after the first live `position_0_sort_started = 3016662`
+  retry tripped Rust's total-order assertion on the earlier custom comparator.
+  Current-head `pen-cli inspect` now reports that hostile run as
+  `status: failed`, `active_step: 15`,
+  `updated_utc: 2026-04-18T18:37:26.7553791Z`,
+  `first_divergence_step: none_through_step_14`,
+  `grammar_profile: no_temporal`, with `failure_note: stale running manifest:
+  owner pid 19812 disappeared on current host before step 15 persisted a
+  terminal status`. In the latest fixed-binary run segment, step `15` clears
+  materialization positions `4 .. 7` to ready at
+  `358938 / 453308 / 590071 / 779492 ms`; the explicit
+  `strict_telescope_enumeration_handoff_started` note now lands at `976407 ms`,
+  and the first emitted `strict_telescope_enumeration_progress` checkpoint
+  follows at `976417 ms`. Current head now also emits
+  `dfs_prefix_rejections`,
+  `dfs_leaf_rejections`,
+  `dfs_leaf_check_rejections`,
+  `dfs_leaf_connectivity_rejections`,
+  `dfs_leaf_disconnected_rejections`, and
+  `dfs_leaf_connected_unqualified_rejections` in that same live surface. The
+  first disconnected leaf lands at `976653 ms`, the first
+  connected-unqualified leaf lands later at `987366 ms`, and the latest
+  post-ready window then stays inside telescope enumeration through
+  `1858587 ms`, growing to
+  `generated_raw_surface = 30789`,
+  `enumerated_candidates = 12478`,
+  `prefix_states_explored = 29034`,
+  `prefixes_created = 1`,
+  `dfs_prefix_rejections = 1755`,
+  `dfs_leaf_rejections = 16548`,
+  `dfs_leaf_check_rejections = 0`,
+  `dfs_leaf_connectivity_rejections = 16548`,
+  `dfs_leaf_disconnected_rejections = 15730`, and
+  `dfs_leaf_connected_unqualified_rejections = 818` while
+  `well_formed_candidates`, exact-screen / admissibility counters, and the
+  filter-stage counters in the emitted checkpoint surface all remain `0`. The
+  zeroed filter counters are stage-local too:
+  `enumerate_telescopes_dfs(...)` emits the live progress stream before the
+  engine's candidate-filter loop begins, and the new split shows the current
+  grammar-ablation blocker is the connectivity witness path after the explicit
+  handoff, dominated by structurally disconnected leaves rather than by the
+  smaller connected-but-unqualified pocket. The control lane now also has a
+  fresh stored baseline rerun:
+  `grammar-ablation-baseline-v15-initial` completes through step `15` under
+  `canonical_mbtt_v1`, and current-head inspect reports
+  `status: completed`,
+  `updated_utc: 2026-04-18T19:06:10.8931279Z`,
+  `first_divergence_step: none_through_step_15`,
+  `grammar_profile: canonical_mbtt_v1`, plus the canonical `DCT` finish at
+  `nu = 103`, `kappa = 8`, `rho = 103/8`, `bar = 19520/2639`, and
+  `replay_ablation: matches_reference_replay x15`. The first stored
+  `linear_exponential_swap` hostile run now exists too:
+  `grammar-ablation-linear-exponential-v15-initial` still matches replay
+  through step `14`, but current-head inspect reports `status: failed`,
+  `active_step: 15`,
+  `updated_utc: 2026-04-18T21:03:52.2947225Z`,
+  `first_divergence_step: none_through_step_14`,
+  `grammar_profile: linear_exponential_swap`, and
+  `failure_note: no atomic candidates were generated for step 15`. Its live
+  step-`15` surface is much narrower than the `no_temporal` wall:
+  `raw_catalog_telescope_count = 1`,
+  `generated_raw_surface = 8`,
+  `prefixes_created = 1`, and only one
+  `dfs_leaf_connected_unqualified_rejections = 1` with
+  `dfs_leaf_disconnected_rejections = 0` before downstream candidate-filter
+  counters stay at `0`. `grammar_ablation_report.md` now exists too: it says
+  both hostile profiles preserve exact replay through step `14` / `Hilbert`,
+  but neither hostile profile recovers a stored step-`15` terminal, so the
+  executable MBTT grammar is currently load-bearing for the concrete
+  step-`15` finish at this scale. The broader wording sweep is now closed
+  across `tex/automated_theory_synthesis_jar_draft.tex`,
+  `tex/synthetic_framework_abstraction_mscs_draft.tex`,
+  `tex/pen_paper.tex`, `tex/pen_lmcs.tex`,
+  `tex/constructive_idealism.tex`,
+  `skills/pen-atomic/theory/README.md`, and
+  `skills/pen-atomic/theory/terminal-dct.md`; those surfaces now scope step
+  `15` terminality to the disclosed canonical grammar / lane and stop
+  presenting it as grammar-independent executable evidence. `epistemic_swap`
+  remains metadata-only. Repeated repo-facing theory/manuscript drift sweeps,
+  most recently the 2026-04-19T15:02:20.8495808+02:00 pass, again found only
+  the grammar-ablation working docs and skill context newer than the prior
+  `2026-04-19T14:02:03.8717831+02:00` checkpoint and no new grammar-robust
+  step-`15` overclaim or newer repo-facing claim surface, so the
+  grammar-ablation lane remains in
+  hold-mode monitoring: only reopen wording work if a later changed
+  repo-facing claim surface reintroduces grammar-robust step-`15` language
+  or if new hostile evidence changes the current step-`14` / step-`15`
+  boundary.
 - Rust-side claim report and narrative consumers now keep the stored
   step-`15` `demo_closure` surface honest across step reports, latest reports,
   and completed resume output, so report honesty is no longer the blocker.

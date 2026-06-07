@@ -1,8 +1,8 @@
 use crate::cli::ResumeArgs;
 use crate::cmd_run::{
     RunArtifactWriter, RunStepObserver, build_run_manifest_base, current_search_compat,
-    finalize_failed_run, frontier_runtime_limits, now_utc, resolved_worker_count,
-    terminal_narrative_config,
+    finalize_failed_run, frontier_runtime_limits, now_utc, reconcile_stale_running_manifest,
+    resolved_worker_count, terminal_narrative_config,
 };
 use crate::output::{OutputStyle, render_run_output};
 use crate::report::{
@@ -12,6 +12,7 @@ use crate::report::{
 };
 use anyhow::{Context, Result, bail};
 use pen_search::config::RuntimeConfig;
+use pen_search::engine::{LiveStepCheckpointPhase, StepLiveCheckpoint};
 use pen_search::frontier::FrontierWindow;
 use pen_search::resume::{
     ResumeDecision, checkpoint_compat_from_resume, decide_resume, decide_step_resume,
@@ -38,21 +39,20 @@ pub fn resume(args: ResumeArgs) -> Result<String> {
         .with_context(|| format!("read {}", config_path.display()))?;
     let config = RuntimeConfig::from_toml_str(&config_text).context("parse runtime config")?;
     let target = args.until_step.unwrap_or(config.search.until_step);
+    let mut existing_steps = load_step_reports(&run_dir)?;
+    annotate_search_profile(&mut existing_steps, config.mode.search_profile);
+    let manifest = reconcile_stale_running_manifest(&run_dir, manifest, &existing_steps)?;
 
     if manifest.position.completed_step >= target {
-        let mut steps = load_step_reports(&run_dir)?;
-        annotate_search_profile(&mut steps, config.mode.search_profile);
-        steps.truncate(target as usize);
+        existing_steps.truncate(target as usize);
         return Ok(render_run_output(
             OutputStyle::from_debug(args.debug),
             &manifest.run_id,
-            &steps,
+            &existing_steps,
             terminal_narrative_config(&config, args.narrative),
         ));
     }
 
-    let mut existing_steps = load_step_reports(&run_dir)?;
-    annotate_search_profile(&mut existing_steps, config.mode.search_profile);
     let plan = plan_resume(&run_dir, &manifest, &config, &existing_steps)?;
     let manifest_base = build_run_manifest_base(
         &manifest.run_id,
@@ -80,6 +80,11 @@ pub fn resume(args: ResumeArgs) -> Result<String> {
             | ResumeExecutionPlan::StepCheckpointReevaluate { .. } => None,
         },
     )?;
+    let mut writer = writer;
+    writer.on_step_live_checkpoint(&resume_started_live_checkpoint(&plan, &manifest));
+    if let Some(error) = writer.take_error() {
+        return Err(finalize_failed_run(writer, error));
+    }
     let mut observer = RunStepObserver::new(writer, target);
     let generated = execute_resume(
         &plan,
@@ -108,9 +113,16 @@ pub fn resume(args: ResumeArgs) -> Result<String> {
 }
 
 enum ResumeExecutionPlan {
-    FrontierCheckpoint { worker_count: u16 },
-    StepCheckpoint { worker_count: u16 },
-    StepCheckpointReevaluate { worker_count: u16 },
+    FrontierCheckpoint {
+        worker_count: u16,
+        frontier_queue_len: usize,
+    },
+    StepCheckpoint {
+        worker_count: u16,
+    },
+    StepCheckpointReevaluate {
+        worker_count: u16,
+    },
 }
 
 impl ResumeExecutionPlan {
@@ -124,7 +136,7 @@ impl ResumeExecutionPlan {
 
     fn worker_count(&self) -> u16 {
         match self {
-            Self::FrontierCheckpoint { worker_count }
+            Self::FrontierCheckpoint { worker_count, .. }
             | Self::StepCheckpoint { worker_count }
             | Self::StepCheckpointReevaluate { worker_count } => *worker_count,
         }
@@ -148,6 +160,7 @@ fn plan_resume(
                 validate_frontier_checkpoint(run_dir, manifest, existing_steps, &frontier)?;
                 Ok(ResumeExecutionPlan::FrontierCheckpoint {
                     worker_count: frontier.manifest.scheduler.worker_count.max(1),
+                    frontier_queue_len: frontier.total_records(),
                 })
             }
             ResumeDecision::StepCheckpoint => plan_step_resume(latest_step_decision, worker_count),
@@ -170,7 +183,7 @@ fn execute_resume(
     progress: Option<&mut dyn StepProgressObserver>,
 ) -> Result<GeneratedSteps> {
     match plan {
-        ResumeExecutionPlan::FrontierCheckpoint { worker_count } => {
+        ResumeExecutionPlan::FrontierCheckpoint { worker_count, .. } => {
             let mut generated = extend_steps_from_reports_with_config_and_runtime_and_progress(
                 existing_steps,
                 target,
@@ -204,6 +217,53 @@ fn execute_resume(
                 progress,
             )
         }
+    }
+}
+
+fn resume_started_live_checkpoint(
+    plan: &ResumeExecutionPlan,
+    manifest: &RunManifestV1,
+) -> StepLiveCheckpoint {
+    let (note, frontier_queue_len) = match plan {
+        ResumeExecutionPlan::FrontierCheckpoint {
+            frontier_queue_len, ..
+        } => ("frontier_checkpoint_resume_started", *frontier_queue_len),
+        ResumeExecutionPlan::StepCheckpoint { .. } => ("step_checkpoint_resume_started", 0),
+        ResumeExecutionPlan::StepCheckpointReevaluate { .. } => {
+            ("step_checkpoint_reevaluate_started", 0)
+        }
+    };
+
+    StepLiveCheckpoint {
+        step_index: manifest.position.active_step,
+        phase: LiveStepCheckpointPhase::Discovery,
+        elapsed_millis: 0,
+        clause_kappa: manifest.position.active_band.try_into().ok(),
+        raw_catalog_clause_widths: Vec::new(),
+        raw_catalog_telescope_count: None,
+        generated_raw_surface: 0,
+        enumerated_candidates: 0,
+        well_formed_candidates: 0,
+        admissibility_rejections: 0,
+        prefixes_created: 0,
+        prefix_states_explored: 0,
+        dfs_prefix_rejections: 0,
+        dfs_leaf_rejections: 0,
+        dfs_leaf_check_rejections: 0,
+        dfs_leaf_connectivity_rejections: 0,
+        dfs_leaf_disconnected_rejections: 0,
+        dfs_leaf_connected_unqualified_rejections: 0,
+        frontier_queue_len,
+        candidate_pool_len: 0,
+        prefix_cache_groups: 0,
+        prefix_cache_candidates: 0,
+        legality_cache_entries: Default::default(),
+        exact_screen_prunes: 0,
+        claim_surface: None,
+        claim_step_open: None,
+        claim_root_seeding: None,
+        remaining_one_telemetry: None,
+        note: Some(note.to_owned()),
     }
 }
 
@@ -485,6 +545,40 @@ mod tests {
         .expect("resume should succeed");
 
         assert!(output.contains("completed_step: 4"));
+        fs::remove_dir_all(root).ok();
+    }
+
+    #[test]
+    fn frontier_resume_writes_a_resume_started_live_checkpoint() {
+        let root = temp_dir("frontier-resume-start");
+        run(RunArgs {
+            config: "configs/debug.toml".into(),
+            root: root.clone(),
+            run_id: Some("frontier-resume-run".to_owned()),
+            until_step: Some(4),
+            debug: false,
+            narrative: false,
+        })
+        .expect("initial run should succeed");
+
+        resume(ResumeArgs {
+            run_dir: root.join("frontier-resume-run"),
+            until_step: Some(5),
+            debug: false,
+            narrative: false,
+        })
+        .expect("resume should succeed");
+
+        let live = fs::read_to_string(
+            root.join("frontier-resume-run")
+                .join("reports")
+                .join("steps")
+                .join("step-05-live.ndjson"),
+        )
+        .expect("step 5 live checkpoints should exist");
+        assert!(live.contains("\"note\":\"frontier_checkpoint_resume_started\""));
+        assert!(live.contains("\"step_index\":5"));
+
         fs::remove_dir_all(root).ok();
     }
 

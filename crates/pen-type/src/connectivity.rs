@@ -2510,7 +2510,9 @@ fn later_clause_depends_on(
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => {
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => {
             later_clause_depends_on(earlier_index, later_index, body, binder_depth + 1)
         }
         Expr::Var(index) => {
@@ -2547,7 +2549,9 @@ fn expr_contains_raw_var_ref(expr: &Expr, target: u32) -> bool {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => expr_contains_raw_var_ref(body, target),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => expr_contains_raw_var_ref(body, target),
         Expr::Id(ty, left, right) => {
             expr_contains_raw_var_ref(ty, target)
                 || expr_contains_raw_var_ref(left, target)
@@ -2609,7 +2613,9 @@ fn collect_terminal_clause_connectivity_facts(
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => collect_terminal_clause_connectivity_facts(
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => collect_terminal_clause_connectivity_facts(
             body,
             binder_depth + 1,
             lib_refs,
@@ -2667,7 +2673,9 @@ fn summarize_lib_refs(expr: &Expr, active_window_refs: Option<(u32, u32)>) -> Li
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => summarize_lib_refs(body, active_window_refs),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => summarize_lib_refs(body, active_window_refs),
         Expr::Id(ty, left, right) => summarize_lib_refs(ty, active_window_refs)
             .merge(summarize_lib_refs(left, active_window_refs))
             .merge(summarize_lib_refs(right, active_window_refs)),

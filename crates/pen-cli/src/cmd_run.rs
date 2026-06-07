@@ -1,25 +1,24 @@
 use crate::cli::RunArgs;
 use crate::narrative::{
-    write_step_narrative_artifact, write_step_narrative_artifacts, NarrativeOutputConfig,
+    NarrativeOutputConfig, write_step_narrative_artifact, write_step_narrative_artifacts,
 };
-use crate::output::{render_run_output, OutputStyle};
+use crate::output::{OutputStyle, render_run_output};
 use crate::progress::TerminalStepProgress;
 use crate::report::{
-    annotate_search_profile, annotate_single_step_replay_ablation,
-    generate_steps_with_config_and_runtime_and_progress, stored_exact_screen_reasons,
-    stored_prune_class_stats, write_step_report, write_step_reports, GeneratedSteps,
-    StepGenerationMode, StepProgressObserver, StepReport,
+    GeneratedSteps, StepGenerationMode, StepProgressObserver, StepReport, annotate_search_profile,
+    annotate_single_step_replay_ablation, generate_steps_with_config_and_runtime_and_progress,
+    stored_exact_screen_reasons, stored_prune_class_stats, write_step_report, write_step_reports,
 };
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use pen_core::hash::blake3_hex;
 use pen_core::ids::{ClauseId, ObligationSetId, StateId};
 use pen_core::library::{LibrarySnapshot, LibrarySnapshotEntry};
 use pen_search::config::{RuntimeConfig, SearchProfile, WorkerSetting};
 use pen_search::diversify::{FrontierPressure, FrontierRuntimeLimits};
-use pen_search::engine::supports_live_atomic_search;
 use pen_search::engine::StepLiveCheckpoint;
+use pen_search::engine::supports_live_atomic_search;
 use pen_search::frontier::FrontierWindow;
-use pen_search::priority::{build_priority_key, PriorityInputs};
+use pen_search::priority::{PriorityInputs, build_priority_key};
 use pen_search::resume::CurrentCompat;
 use pen_search::scheduler::build_schedule;
 use pen_search::state::{FrontierStateRecV1, PrefixState};
@@ -31,7 +30,7 @@ use pen_store::manifest::{
     RuntimeInfo, SearchPolicyInfo, StepCheckpointV1, StepObjective, StepStats,
 };
 use pen_store::memory::GovernorConfig;
-use pen_store::spill::{persist_frontier_runtime, FrontierRuntimeInput, SpillConfig};
+use pen_store::spill::{FrontierRuntimeInput, SpillConfig, persist_frontier_runtime};
 use pen_store::sqlite::{FrontierGenerationRow, MetadataDb};
 use pen_store::telemetry::TelemetryEventV1;
 use serde_json::json;
@@ -40,9 +39,9 @@ use std::collections::BTreeSet;
 use std::fs::{self, OpenOptions};
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use sysinfo::{get_current_pid, ProcessRefreshKind, ProcessesToUpdate, System};
-use time::format_description::well_known::Rfc3339;
+use sysinfo::{Pid, ProcessRefreshKind, ProcessesToUpdate, System, get_current_pid};
 use time::OffsetDateTime;
+use time::format_description::well_known::Rfc3339;
 
 pub fn run(args: RunArgs) -> Result<String> {
     let config_path = absolute_from_repo(&args.config)?;
@@ -228,7 +227,7 @@ pub(crate) fn write_run_artifacts(
     write_step_checkpoints(run_dir, manifest, steps, config.objective.window_depth)?;
     write_frontier_snapshots(run_dir, manifest, steps, worker_count, config, &metadata)?;
     write_telemetry(run_dir, manifest, steps, mode, search_profile)?;
-    write_latest_reports(run_dir, &manifest.run_id, steps)?;
+    write_latest_reports(run_dir, manifest, steps)?;
     Ok(())
 }
 
@@ -287,6 +286,7 @@ pub(crate) fn build_run_manifest(
         run_id: manifest_base.run_id.clone(),
         status,
         failure_note,
+        owner_pid: running_owner_pid(status),
         created_utc: manifest_base.created_utc.clone(),
         updated_utc,
         workspace_version: manifest_base.workspace_version.clone(),
@@ -335,7 +335,7 @@ impl<'a> RunArtifactWriter<'a> {
         let manifest =
             writer.build_manifest(initial_updated_utc, RunStatus::Running, String::new());
         write_json_file(&writer.run_dir.join("run.json"), &manifest)?;
-        write_latest_reports(&writer.run_dir, &manifest.run_id, &writer.persisted_steps)?;
+        write_latest_reports(&writer.run_dir, &manifest, &writer.persisted_steps)?;
         append_telemetry_event(
             &writer.run_dir,
             &run_started_event(&manifest, mode, search_profile),
@@ -352,7 +352,7 @@ impl<'a> RunArtifactWriter<'a> {
         }
     }
 
-    fn on_step_live_checkpoint(&mut self, checkpoint: &StepLiveCheckpoint) {
+    pub(crate) fn on_step_live_checkpoint(&mut self, checkpoint: &StepLiveCheckpoint) {
         if self.error.is_some() {
             return;
         }
@@ -368,7 +368,7 @@ impl<'a> RunArtifactWriter<'a> {
     pub(crate) fn finalize_success(&mut self, mode: &str) -> Result<()> {
         let manifest = self.current_manifest(RunStatus::Completed, String::new())?;
         write_json_file(&self.run_dir.join("run.json"), &manifest)?;
-        write_latest_reports(&self.run_dir, &manifest.run_id, &self.persisted_steps)?;
+        write_latest_reports(&self.run_dir, &manifest, &self.persisted_steps)?;
         write_telemetry(
             &self.run_dir,
             &manifest,
@@ -383,7 +383,7 @@ impl<'a> RunArtifactWriter<'a> {
         let failure_note = render_failure_note(error);
         let manifest = self.current_manifest(RunStatus::Failed, failure_note)?;
         write_json_file(&self.run_dir.join("run.json"), &manifest)?;
-        write_latest_reports(&self.run_dir, &manifest.run_id, &self.persisted_steps)?;
+        write_latest_reports(&self.run_dir, &manifest, &self.persisted_steps)?;
         append_telemetry_event(&self.run_dir, &run_status_event(&manifest))?;
         Ok(())
     }
@@ -423,7 +423,7 @@ impl<'a> RunArtifactWriter<'a> {
             &self.metadata,
         )?;
         append_telemetry_event(&self.run_dir, &step_accepted_event(&manifest, &persisted))?;
-        write_latest_reports(&self.run_dir, &manifest.run_id, &self.persisted_steps)?;
+        write_latest_reports(&self.run_dir, &manifest, &self.persisted_steps)?;
         Ok(())
     }
 
@@ -475,6 +475,81 @@ impl<'a> RunArtifactWriter<'a> {
     }
 }
 
+fn running_owner_pid(status: RunStatus) -> Option<u32> {
+    if status != RunStatus::Running {
+        return None;
+    }
+
+    get_current_pid().ok().map(|pid| pid.as_u32())
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum RunOwnerProcessState {
+    Live { owner_pid: u32 },
+    Missing { owner_pid: u32 },
+}
+
+pub(crate) fn running_owner_process_state(
+    manifest: &RunManifestV1,
+) -> Option<RunOwnerProcessState> {
+    if manifest.status != RunStatus::Running {
+        return None;
+    }
+
+    let owner_pid = manifest.owner_pid?;
+    let pid = Pid::from_u32(owner_pid);
+    let mut system = System::new();
+    system.refresh_processes_specifics(
+        ProcessesToUpdate::Some(&[pid]),
+        false,
+        ProcessRefreshKind::nothing(),
+    );
+
+    Some(if system.process(pid).is_some() {
+        RunOwnerProcessState::Live { owner_pid }
+    } else {
+        RunOwnerProcessState::Missing { owner_pid }
+    })
+}
+
+pub(crate) fn render_running_owner_process_status(state: RunOwnerProcessState) -> String {
+    match state {
+        RunOwnerProcessState::Live { owner_pid } => format!("live pid {owner_pid}"),
+        RunOwnerProcessState::Missing { owner_pid } => {
+            format!("missing pid {owner_pid} on current host; stale running manifest")
+        }
+    }
+}
+
+pub(crate) fn reconcile_stale_running_manifest(
+    run_dir: &Path,
+    manifest: RunManifestV1,
+    steps: &[StepReport],
+) -> Result<RunManifestV1> {
+    let Some(RunOwnerProcessState::Missing { owner_pid }) = running_owner_process_state(&manifest)
+    else {
+        return Ok(manifest);
+    };
+
+    let mut reconciled = manifest;
+    reconciled.status = RunStatus::Failed;
+    reconciled.failure_note =
+        stale_running_failure_note(owner_pid, reconciled.position.active_step);
+    reconciled.owner_pid = None;
+    reconciled.updated_utc = now_utc()?;
+
+    write_json_file(&run_dir.join("run.json"), &reconciled)?;
+    write_latest_reports(run_dir, &reconciled, steps)?;
+    append_telemetry_event(run_dir, &run_status_event(&reconciled))?;
+    Ok(reconciled)
+}
+
+fn stale_running_failure_note(owner_pid: u32, active_step: u32) -> String {
+    format!(
+        "stale running manifest: owner pid {owner_pid} disappeared on current host before step {active_step} persisted a terminal status"
+    )
+}
+
 pub(crate) fn finalize_failed_run(
     mut writer: RunArtifactWriter<'_>,
     error: anyhow::Error,
@@ -505,15 +580,19 @@ fn prepare_run_directory(run_dir: &Path, config_text: &str) -> Result<MetadataDb
     MetadataDb::open(&run_dir.join("meta.sqlite3"))
 }
 
-fn write_latest_reports(run_dir: &Path, run_id: &str, steps: &[StepReport]) -> Result<()> {
+fn write_latest_reports(
+    run_dir: &Path,
+    manifest: &RunManifestV1,
+    steps: &[StepReport],
+) -> Result<()> {
     fs::create_dir_all(run_dir.join("reports"))?;
     fs::write(
         run_dir.join("reports").join("latest.txt"),
-        crate::report::render_standard_report(run_id, steps),
+        crate::report::render_standard_report_with_manifest(manifest, steps),
     )?;
     fs::write(
         run_dir.join("reports").join("latest.debug.txt"),
-        crate::report::render_debug_report(run_id, steps),
+        crate::report::render_debug_report(&manifest.run_id, steps),
     )?;
     Ok(())
 }
@@ -838,6 +917,12 @@ fn step_live_checkpoint_event(
             "admissibility_rejections": checkpoint.admissibility_rejections,
             "prefixes_created": checkpoint.prefixes_created,
             "prefix_states_explored": checkpoint.prefix_states_explored,
+            "dfs_prefix_rejections": checkpoint.dfs_prefix_rejections,
+            "dfs_leaf_rejections": checkpoint.dfs_leaf_rejections,
+            "dfs_leaf_check_rejections": checkpoint.dfs_leaf_check_rejections,
+            "dfs_leaf_connectivity_rejections": checkpoint.dfs_leaf_connectivity_rejections,
+            "dfs_leaf_disconnected_rejections": checkpoint.dfs_leaf_disconnected_rejections,
+            "dfs_leaf_connected_unqualified_rejections": checkpoint.dfs_leaf_connected_unqualified_rejections,
             "frontier_queue_len": checkpoint.frontier_queue_len,
             "candidate_pool_len": checkpoint.candidate_pool_len,
             "prefix_cache_groups": checkpoint.prefix_cache_groups,
@@ -886,6 +971,12 @@ fn append_live_checkpoint_artifact(run_dir: &Path, checkpoint: &StepLiveCheckpoi
             "admissibility_rejections": checkpoint.admissibility_rejections,
             "prefixes_created": checkpoint.prefixes_created,
             "prefix_states_explored": checkpoint.prefix_states_explored,
+            "dfs_prefix_rejections": checkpoint.dfs_prefix_rejections,
+            "dfs_leaf_rejections": checkpoint.dfs_leaf_rejections,
+            "dfs_leaf_check_rejections": checkpoint.dfs_leaf_check_rejections,
+            "dfs_leaf_connectivity_rejections": checkpoint.dfs_leaf_connectivity_rejections,
+            "dfs_leaf_disconnected_rejections": checkpoint.dfs_leaf_disconnected_rejections,
+            "dfs_leaf_connected_unqualified_rejections": checkpoint.dfs_leaf_connected_unqualified_rejections,
             "frontier_queue_len": checkpoint.frontier_queue_len,
             "candidate_pool_len": checkpoint.candidate_pool_len,
             "prefix_cache_groups": checkpoint.prefix_cache_groups,
@@ -1557,20 +1648,19 @@ fn truncated_hash64(bytes: &[u8]) -> u64 {
 #[cfg(test)]
 mod tests {
     use super::{
-        build_run_manifest_base, now_utc, planned_run_mode, run, terminal_narrative_config,
-        RunArtifactWriter,
+        RunArtifactWriter, RunOwnerProcessState, build_run_manifest, build_run_manifest_base,
+        now_utc, planned_run_mode, reconcile_stale_running_manifest, run,
+        running_owner_process_state, terminal_narrative_config,
     };
     use crate::cli::RunArgs;
-    use crate::report::{
-        generate_steps_with_config_and_runtime, render_debug_report, render_standard_report,
-        StepReport,
-    };
+    use crate::report::{StepReport, generate_steps_with_config_and_runtime, render_debug_report};
     use pen_search::diversify::FrontierRuntimeLimits;
     use pen_search::engine::StepLiveCheckpoint;
     use pen_store::frontier::frontier_checkpoint_dir;
-    use pen_store::manifest::{RunManifestV1, RunStatus};
+    use pen_store::manifest::{RunManifestV1, RunPosition, RunStatus};
     use std::fs;
     use std::time::{SystemTime, UNIX_EPOCH};
+    use sysinfo::get_current_pid;
 
     fn temp_dir(name: &str) -> std::path::PathBuf {
         let id = SystemTime::now()
@@ -1620,12 +1710,13 @@ mod tests {
 
         assert!(output.contains("completed_step: 3"));
         assert!(root.join("test-run").join("run.json").exists());
-        assert!(root
-            .join("test-run")
-            .join("reports")
-            .join("steps")
-            .join("step-03-summary.json")
-            .exists());
+        assert!(
+            root.join("test-run")
+                .join("reports")
+                .join("steps")
+                .join("step-03-summary.json")
+                .exists()
+        );
 
         fs::remove_dir_all(root).ok();
     }
@@ -1705,8 +1796,8 @@ mod tests {
     }
 
     #[test]
-    fn current_claim_step_fifteen_terminal_narrative_config_only_opens_for_requested_claim_demo_runs(
-    ) {
+    fn current_claim_step_fifteen_terminal_narrative_config_only_opens_for_requested_claim_demo_runs()
+     {
         let claim_config = pen_search::config::RuntimeConfig::from_toml_str(include_str!(
             "../../../configs/desktop_claim_shadow_smoke.toml"
         ))
@@ -1726,6 +1817,126 @@ mod tests {
         assert_eq!(claim_narrative.demo.profile, claim_config.demo.profile);
         assert!(terminal_narrative_config(&claim_config, false).is_none());
         assert!(terminal_narrative_config(&debug_config, true).is_none());
+    }
+
+    #[test]
+    fn running_manifest_records_owner_pid_and_terminal_statuses_clear_it() {
+        let config_text = include_str!("../../../configs/debug.toml");
+        let config =
+            pen_search::config::RuntimeConfig::from_toml_str(config_text).expect("config parses");
+        let manifest_base = build_run_manifest_base(
+            "owner-pid-run",
+            config_text,
+            &config,
+            1,
+            "2026-04-17T12:00:00Z".to_owned(),
+        )
+        .expect("manifest base builds");
+
+        let running = build_run_manifest(
+            &manifest_base,
+            &[],
+            "2026-04-17T12:00:01Z".to_owned(),
+            RunStatus::Running,
+            String::new(),
+        );
+        assert_eq!(
+            running.owner_pid,
+            Some(get_current_pid().expect("current pid").as_u32())
+        );
+
+        let completed = build_run_manifest(
+            &manifest_base,
+            &[],
+            "2026-04-17T12:00:02Z".to_owned(),
+            RunStatus::Completed,
+            String::new(),
+        );
+        assert_eq!(completed.owner_pid, None);
+    }
+
+    #[test]
+    fn running_owner_process_state_distinguishes_live_and_missing_pids() {
+        let live_owner_pid = get_current_pid().expect("current pid").as_u32();
+        assert_eq!(
+            running_owner_process_state(&RunManifestV1 {
+                status: RunStatus::Running,
+                owner_pid: Some(live_owner_pid),
+                ..RunManifestV1::default()
+            }),
+            Some(RunOwnerProcessState::Live {
+                owner_pid: live_owner_pid,
+            })
+        );
+        assert_eq!(
+            running_owner_process_state(&RunManifestV1 {
+                status: RunStatus::Running,
+                owner_pid: Some(u32::MAX),
+                ..RunManifestV1::default()
+            }),
+            Some(RunOwnerProcessState::Missing {
+                owner_pid: u32::MAX,
+            })
+        );
+    }
+
+    #[test]
+    fn reconcile_stale_running_manifest_marks_missing_owner_as_failed() {
+        let root = temp_dir("stale-run-manifest");
+        let run_dir = root.join("stale-run-manifest");
+        fs::create_dir_all(run_dir.join("reports")).expect("reports dir should exist");
+        let config = pen_search::config::RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/debug.toml"
+        ))
+        .expect("config parses");
+        let steps =
+            generate_steps_with_config_and_runtime(2, &config, FrontierRuntimeLimits::unlimited())
+                .expect("steps should build")
+                .steps;
+        let manifest = RunManifestV1 {
+            run_id: "stale-run-manifest".to_owned(),
+            status: RunStatus::Running,
+            owner_pid: Some(u32::MAX),
+            updated_utc: "2026-04-17T12:34:56Z".to_owned(),
+            position: RunPosition {
+                completed_step: 14,
+                active_step: 15,
+                active_band: 9,
+                frontier_epoch: 11,
+            },
+            ..RunManifestV1::default()
+        };
+        super::write_json_file(&run_dir.join("run.json"), &manifest)
+            .expect("run manifest should persist");
+
+        let reconciled = reconcile_stale_running_manifest(&run_dir, manifest, &steps)
+            .expect("stale manifests should reconcile");
+
+        assert_eq!(reconciled.status, RunStatus::Failed);
+        assert_eq!(reconciled.owner_pid, None);
+        assert!(reconciled.failure_note.contains("stale running manifest"));
+        assert!(reconciled.failure_note.contains("pid 4294967295"));
+        assert!(reconciled.failure_note.contains("step 15"));
+
+        let stored: RunManifestV1 =
+            serde_json::from_str(&fs::read_to_string(run_dir.join("run.json")).expect("manifest"))
+                .expect("reconciled manifest should parse");
+        assert_eq!(stored.status, RunStatus::Failed);
+        assert_eq!(stored.owner_pid, None);
+        assert_eq!(stored.failure_note, reconciled.failure_note);
+
+        let latest =
+            fs::read_to_string(run_dir.join("reports").join("latest.txt")).expect("latest report");
+        assert!(latest.contains("status: failed"));
+        assert!(latest.contains("failure_note: stale running manifest"));
+        assert!(latest.contains("first_divergence_step: none_through_step_2"));
+
+        let telemetry =
+            fs::read_to_string(run_dir.join("telemetry.ndjson")).expect("telemetry should exist");
+        assert!(telemetry.contains("\"event\":\"run_failed\""));
+        assert!(telemetry.contains("stale running manifest"));
+
+        fs::remove_dir_all(root).ok();
     }
 
     #[test]
@@ -1769,6 +1980,12 @@ mod tests {
             admissibility_rejections: 55,
             prefixes_created: 21,
             prefix_states_explored: 8,
+            dfs_prefix_rejections: 3,
+            dfs_leaf_rejections: 2,
+            dfs_leaf_check_rejections: 1,
+            dfs_leaf_connectivity_rejections: 1,
+            dfs_leaf_disconnected_rejections: 0,
+            dfs_leaf_connected_unqualified_rejections: 1,
             frontier_queue_len: 13,
             candidate_pool_len: 0,
             prefix_cache_groups: 0,
@@ -1876,6 +2093,10 @@ mod tests {
         assert!(telemetry.contains("\"terminal_prefix_clause_filter_micros\":23456"));
         assert!(telemetry.contains("\"terminal_summary_exact_nu_millis\":37"));
         assert!(telemetry.contains("\"terminal_summary_exact_nu_micros\":37777"));
+        assert!(telemetry.contains("\"dfs_leaf_check_rejections\":1"));
+        assert!(telemetry.contains("\"dfs_leaf_connectivity_rejections\":1"));
+        assert!(telemetry.contains("\"dfs_leaf_disconnected_rejections\":0"));
+        assert!(telemetry.contains("\"dfs_leaf_connected_unqualified_rejections\":1"));
 
         let live_step_four = fs::read_to_string(
             run_dir
@@ -1891,6 +2112,10 @@ mod tests {
         assert!(live_step_four.contains("\"remaining_one_prefixes_seen\":21"));
         assert!(live_step_four.contains("\"terminal_summary_plateau_activations\":1"));
         assert!(live_step_four.contains("\"terminal_summary_build_micros\":33333"));
+        assert!(live_step_four.contains("\"dfs_leaf_check_rejections\":1"));
+        assert!(live_step_four.contains("\"dfs_leaf_connectivity_rejections\":1"));
+        assert!(live_step_four.contains("\"dfs_leaf_disconnected_rejections\":0"));
+        assert!(live_step_four.contains("\"dfs_leaf_connected_unqualified_rejections\":1"));
         assert!(!live_step_four.contains("demo_breadth_shadow"));
 
         fs::remove_dir_all(root).ok();
@@ -1978,11 +2203,13 @@ mod tests {
         assert!(steps_dir.join("step-03-summary.json").exists());
         assert!(steps_dir.join("step-03-narrative.txt").exists());
         assert!(steps_dir.join("step-03-events.ndjson").exists());
-        assert!(run_dir
-            .join("checkpoints")
-            .join("steps")
-            .join("step-03.json")
-            .exists());
+        assert!(
+            run_dir
+                .join("checkpoints")
+                .join("steps")
+                .join("step-03.json")
+                .exists()
+        );
 
         let latest =
             fs::read_to_string(run_dir.join("reports").join("latest.txt")).expect("latest report");
@@ -1998,8 +2225,8 @@ mod tests {
     }
 
     #[test]
-    fn current_claim_step_fifteen_persist_step_and_finalize_success_preserve_the_stored_demo_closure_surface(
-    ) {
+    fn current_claim_step_fifteen_persist_step_and_finalize_success_preserve_the_stored_demo_closure_surface()
+     {
         let root = temp_dir("claim-finalize-success");
         let run_dir = root.join("claim-finalize-success");
         let (config_text, config, steps, stored_closure) = claim_steps_with_drifted_funnel();
@@ -2099,7 +2326,20 @@ mod tests {
             stored_closure
         };
 
-        super::write_latest_reports(&run_dir, "claim-run", &steps)
+        let manifest = RunManifestV1 {
+            run_id: "claim-run".to_owned(),
+            status: RunStatus::Completed,
+            updated_utc: "2026-04-17T12:34:56Z".to_owned(),
+            position: RunPosition {
+                completed_step: 15,
+                active_step: 16,
+                active_band: 8,
+                frontier_epoch: 12,
+            },
+            ..RunManifestV1::default()
+        };
+
+        super::write_latest_reports(&run_dir, &manifest, &steps)
             .expect("latest reports should persist");
 
         let latest = fs::read_to_string(run_dir.join("reports").join("latest.txt"))
@@ -2108,8 +2348,13 @@ mod tests {
             .expect("latest debug report should exist");
 
         assert_eq!(steps.last().expect("late claim step").accepted.nu, 103);
-        assert_eq!(latest, render_standard_report("claim-run", &steps));
+        assert_eq!(
+            latest,
+            crate::report::render_standard_report_with_manifest(&manifest, &steps)
+        );
         assert_eq!(latest_debug, render_debug_report("claim-run", &steps));
+        assert!(latest.contains("status: completed"));
+        assert!(latest.contains("first_divergence_step: none_through_step_15"));
         assert!(latest_debug.contains(&format!(
             "  demo closure: frontier_total_seen={} frontier_certified_nonwinning={} closure_percent={}",
             stored_closure.frontier_total_seen,
@@ -2124,8 +2369,8 @@ mod tests {
     }
 
     #[test]
-    fn current_claim_step_fifteen_failed_run_finalization_preserves_the_stored_demo_closure_surface(
-    ) {
+    fn current_claim_step_fifteen_failed_run_finalization_preserves_the_stored_demo_closure_surface()
+     {
         let root = temp_dir("claim-finalize-failure");
         let run_dir = root.join("claim-finalize-failure");
         let (config_text, config, steps, stored_closure) = claim_steps_with_drifted_funnel();
@@ -2243,9 +2488,11 @@ mod tests {
         assert_eq!(manifest.position.frontier_epoch, 1);
 
         let band_index = u32::from(generated.steps[3].accepted.clause_kappa);
-        assert!(frontier_checkpoint_dir(&run_dir, 4, band_index)
-            .join("frontier.manifest.json")
-            .exists());
+        assert!(
+            frontier_checkpoint_dir(&run_dir, 4, band_index)
+                .join("frontier.manifest.json")
+                .exists()
+        );
 
         fs::remove_dir_all(root).ok();
     }

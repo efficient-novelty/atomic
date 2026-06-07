@@ -12,6 +12,8 @@ pub struct RunManifestV1 {
     pub status: RunStatus,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub failure_note: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner_pid: Option<u32>,
     pub created_utc: String,
     pub updated_utc: String,
     pub workspace_version: String,
@@ -37,6 +39,7 @@ impl Default for RunManifestV1 {
             run_id: String::new(),
             status: RunStatus::Running,
             failure_note: String::new(),
+            owner_pid: None,
             created_utc: String::new(),
             updated_utc: String::new(),
             workspace_version: String::new(),
@@ -368,6 +371,7 @@ mod tests {
             run_id: "2026-03-13T14-32-21Z-desktop16".to_owned(),
             status: RunStatus::Running,
             failure_note: String::new(),
+            owner_pid: Some(4242),
             created_utc: "2026-03-13T14:32:21Z".to_owned(),
             updated_utc: "2026-03-13T17:05:09Z".to_owned(),
             workspace_version: "0.1.0".to_owned(),

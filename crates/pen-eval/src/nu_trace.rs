@@ -51,7 +51,9 @@ fn trace_expr(path: &str, expr: &Expr) -> Vec<String> {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => {
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => {
             lines.extend(trace_expr(&format!("{path}/0"), body));
         }
         Expr::Id(ty, left, right) => {
@@ -83,6 +85,8 @@ fn ctor_name(expr: &Expr) -> &'static str {
         Expr::Shape(_) => "Shape",
         Expr::Next(_) => "Next",
         Expr::Eventually(_) => "Eventually",
+        Expr::Bang(_) => "Bang",
+        Expr::WhyNot(_) => "WhyNot",
     }
 }
 

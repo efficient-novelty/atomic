@@ -312,6 +312,7 @@ pub struct StrictAdmissibility {
     pub include_trunc: bool,
     pub include_modal: bool,
     pub include_temporal: bool,
+    pub include_linear_exponential: bool,
     pub quota_per_bucket: usize,
     pub require_former_eliminator_package: bool,
     pub require_initial_hit_package: bool,
@@ -375,6 +376,7 @@ pub fn assess_strict_admissibility(
         telescope,
         admissibility.historical_anchor_ref,
         admissibility.mode,
+        admissibility.include_linear_exponential,
     )
     .to_match_mask();
     assess_strict_admissibility_from_family_matches(
@@ -535,6 +537,7 @@ pub fn strict_admissibility_for_mode(
             include_trunc: false,
             include_modal: false,
             include_temporal: false,
+            include_linear_exponential: false,
             quota_per_bucket: 16,
             require_former_eliminator_package: false,
             require_initial_hit_package: false,
@@ -562,6 +565,7 @@ pub fn strict_admissibility_for_mode(
             include_trunc: false,
             include_modal: false,
             include_temporal: false,
+            include_linear_exponential: false,
             quota_per_bucket: 16,
             require_former_eliminator_package: false,
             require_initial_hit_package: false,
@@ -589,6 +593,7 @@ pub fn strict_admissibility_for_mode(
             include_trunc: false,
             include_modal: false,
             include_temporal: false,
+            include_linear_exponential: false,
             quota_per_bucket: 16,
             require_former_eliminator_package: false,
             require_initial_hit_package: false,
@@ -663,6 +668,7 @@ fn structural_focus_strict_admissibility(
         include_trunc: include_trunc_for_focus(focus_family, debt),
         include_modal: include_modal_for_focus(focus_family, debt),
         include_temporal: include_temporal_for_focus(focus_family, debt),
+        include_linear_exponential: false,
         quota_per_bucket: debt.quota_per_bucket(),
         require_former_eliminator_package: package_policies.former_eliminator.is_required(),
         require_initial_hit_package: package_policies.initial_hit.is_required(),
@@ -930,6 +936,7 @@ fn claim_strict_admissibility(
         include_trunc: claim_include_trunc(debt),
         include_modal: claim_include_modal(debt, claim_axes),
         include_temporal: claim_include_temporal(claim_axes),
+        include_linear_exponential: false,
         quota_per_bucket: debt.quota_per_bucket(),
         require_former_eliminator_package: false,
         require_initial_hit_package: false,
@@ -1103,6 +1110,7 @@ fn package_match_profile(
     telescope: &Telescope,
     historical_anchor_ref: Option<u32>,
     mode: AdmissibilityMode,
+    include_linear_exponential: bool,
 ) -> PackageMatchProfile {
     PackageMatchProfile {
         former_eliminator: matches_former_eliminator_package(telescope),
@@ -1125,6 +1133,7 @@ fn package_match_profile(
             telescope,
             historical_anchor_ref,
             mode,
+            include_linear_exponential,
         ),
     }
 }
@@ -1749,11 +1758,44 @@ fn matches_hilbert_functional_package(
         )
 }
 
+fn temporal_shell_left_body(expr: &Expr, include_linear_exponential: bool) -> Option<&Expr> {
+    match (include_linear_exponential, expr) {
+        (false, Expr::Next(body)) | (true, Expr::Bang(body)) => Some(body.as_ref()),
+        _ => None,
+    }
+}
+
+fn temporal_shell_right_body(expr: &Expr, include_linear_exponential: bool) -> Option<&Expr> {
+    match (include_linear_exponential, expr) {
+        (false, Expr::Eventually(body)) | (true, Expr::WhyNot(body)) => Some(body.as_ref()),
+        _ => None,
+    }
+}
+
+fn matches_temporal_shell_left_var(
+    expr: &Expr,
+    index: u32,
+    include_linear_exponential: bool,
+) -> bool {
+    temporal_shell_left_body(expr, include_linear_exponential)
+        .is_some_and(|body| matches!(body, Expr::Var(found) if *found == index))
+}
+
+fn matches_temporal_shell_right_var(
+    expr: &Expr,
+    index: u32,
+    include_linear_exponential: bool,
+) -> bool {
+    temporal_shell_right_body(expr, include_linear_exponential)
+        .is_some_and(|body| matches!(body, Expr::Var(found) if *found == index))
+}
+
 fn matches_temporal_shell_package(
     library: &Library,
     telescope: &Telescope,
     historical_anchor_ref: Option<u32>,
     mode: AdmissibilityMode,
+    include_linear_exponential: bool,
 ) -> bool {
     let Some(anchor) = historical_anchor_ref else {
         return false;
@@ -1762,143 +1804,35 @@ fn matches_temporal_shell_package(
         return false;
     }
 
-    if matches!(
+    let allow_realistic_position_four_variant = matches!(
         mode,
         AdmissibilityMode::RealisticShadow | AdmissibilityMode::DesktopClaimShadow
-    ) {
-        return telescope.path_dimensions().is_empty()
-            && telescope.clauses.len() == 8
-            && matches!(
-                &telescope.clauses[0].expr,
-                Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
-            )
-            && matches!(
-                &telescope.clauses[1].expr,
-                Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
-            )
-            && matches!(
-                &telescope.clauses[2].expr,
-                Expr::Pi(domain, codomain)
-                    if matches!(
-                        domain.as_ref(),
-                        Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
-                    ) && matches!(
-                        codomain.as_ref(),
-                        Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
-                    )
-            )
-            && matches!(
-                &telescope.clauses[3].expr,
-                Expr::Lam(body)
-                    if matches!(
-                        body.as_ref(),
-                        Expr::App(function, argument)
-                            if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
-                                && matches!(
-                                    argument.as_ref(),
-                                    Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                                )
-                    )
-            )
-            && matches!(
-                &telescope.clauses[4].expr,
-                Expr::Pi(domain, codomain)
-                    if matches!(
-                        domain.as_ref(),
-                        Expr::Flat(body)
-                            if matches!(
-                                body.as_ref(),
-                                Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                            )
-                    ) && (
-                        matches!(
-                            codomain.as_ref(),
-                            Expr::Next(body)
-                                if matches!(
-                                    body.as_ref(),
-                                    Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                                )
-                        )
-                        || matches!(
-                            codomain.as_ref(),
-                            Expr::Next(body)
-                                if matches!(
-                                    body.as_ref(),
-                                    Expr::Flat(inner)
-                                        if matches!(
-                                            inner.as_ref(),
-                                            Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
-                                        )
-                                )
-                        )
-                    )
-            )
-            && matches!(
-                &telescope.clauses[5].expr,
-                Expr::Pi(domain, codomain)
-                    if matches!(
-                        domain.as_ref(),
-                        Expr::Sharp(body)
-                            if matches!(
-                                body.as_ref(),
-                                Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                            )
-                    ) && matches!(
-                        codomain.as_ref(),
-                        Expr::Eventually(body)
-                            if matches!(
-                                body.as_ref(),
-                                Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                            )
-                    )
-            )
-            && matches!(
-                &telescope.clauses[6].expr,
-                Expr::Lam(body)
-                    if matches!(
-                        body.as_ref(),
-                        Expr::App(function, argument)
-                            if matches!(
-                                function.as_ref(),
-                                Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                            ) && matches!(argument.as_ref(), Expr::Var(2))
-                    )
-            )
-            && matches!(
-                &telescope.clauses[7].expr,
-                Expr::Pi(domain, codomain)
-                    if matches!(
-                        domain.as_ref(),
-                        Expr::Next(body)
-                            if matches!(
-                                body.as_ref(),
-                                Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                            )
-                    ) && matches!(
-                        codomain.as_ref(),
-                        Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
-                    )
-            );
-    }
+    );
 
     telescope.path_dimensions().is_empty()
         && telescope.clauses.len() == 8
-        && matches!(
+        && matches_temporal_shell_left_var(
             &telescope.clauses[0].expr,
-            Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+            1,
+            include_linear_exponential,
         )
-        && matches!(
+        && matches_temporal_shell_right_var(
             &telescope.clauses[1].expr,
-            Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+            1,
+            include_linear_exponential,
         )
         && matches!(
             &telescope.clauses[2].expr,
             Expr::Pi(domain, codomain)
-                if matches!(domain.as_ref(), Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1)))
-                    && matches!(
-                        codomain.as_ref(),
-                        Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
-                    )
+                if matches_temporal_shell_left_var(
+                    domain.as_ref(),
+                    1,
+                    include_linear_exponential,
+                ) && matches_temporal_shell_right_var(
+                    codomain.as_ref(),
+                    1,
+                    include_linear_exponential,
+                )
         )
         && matches!(
             &telescope.clauses[3].expr,
@@ -1907,9 +1841,10 @@ fn matches_temporal_shell_package(
                     body.as_ref(),
                     Expr::App(function, argument)
                         if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
-                            && matches!(
+                            && matches_temporal_shell_left_var(
                                 argument.as_ref(),
-                                Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                1,
+                                include_linear_exponential,
                             )
                 )
         )
@@ -1919,18 +1854,27 @@ fn matches_temporal_shell_package(
                 if matches!(
                     domain.as_ref(),
                     Expr::Flat(body)
-                        if matches!(
+                        if matches_temporal_shell_left_var(
                             body.as_ref(),
-                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                            1,
+                            include_linear_exponential,
                         )
-                ) && matches!(
-                    codomain.as_ref(),
-                    Expr::Next(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                ) && temporal_shell_left_body(codomain.as_ref(), include_linear_exponential)
+                    .is_some_and(|body| {
+                        matches!(
+                            body,
+                            Expr::Flat(inner)
+                                if matches!(inner.as_ref(), Expr::Var(1))
+                                    || allow_realistic_position_four_variant
+                                        && temporal_shell_left_body(
+                                            inner.as_ref(),
+                                            include_linear_exponential,
+                                        )
+                                        .is_some_and(|deeper| {
+                                            matches!(deeper, Expr::Var(found) if *found == 1)
+                                        })
                         )
-                )
+                    })
         )
         && matches!(
             &telescope.clauses[5].expr,
@@ -1938,18 +1882,15 @@ fn matches_temporal_shell_package(
                 if matches!(
                     domain.as_ref(),
                     Expr::Sharp(body)
-                        if matches!(
+                        if matches_temporal_shell_right_var(
                             body.as_ref(),
-                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                            1,
+                            include_linear_exponential,
                         )
-                ) && matches!(
-                    codomain.as_ref(),
-                    Expr::Eventually(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                )
+                ) && temporal_shell_right_body(codomain.as_ref(), include_linear_exponential)
+                    .is_some_and(|body| {
+                        matches!(body, Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1)))
+                    })
         )
         && matches!(
             &telescope.clauses[6].expr,
@@ -1957,26 +1898,25 @@ fn matches_temporal_shell_package(
                 if matches!(
                     body.as_ref(),
                     Expr::App(function, argument)
-                        if matches!(
+                        if matches_temporal_shell_right_var(
                             function.as_ref(),
-                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                            1,
+                            include_linear_exponential,
                         ) && matches!(argument.as_ref(), Expr::Var(2))
                 )
         )
         && matches!(
             &telescope.clauses[7].expr,
             Expr::Pi(domain, codomain)
-                if matches!(
-                    domain.as_ref(),
-                    Expr::Next(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                ) && matches!(
-                    codomain.as_ref(),
-                    Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
-                )
+                if temporal_shell_left_body(domain.as_ref(), include_linear_exponential)
+                    .is_some_and(|body| {
+                        matches_temporal_shell_left_var(body, 1, include_linear_exponential)
+                    })
+                    && matches_temporal_shell_left_var(
+                        codomain.as_ref(),
+                        1,
+                        include_linear_exponential,
+                    )
         )
 }
 
@@ -2021,7 +1961,9 @@ fn contains_former_expr(expr: &Expr) -> bool {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => contains_former_expr(body),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => contains_former_expr(body),
         Expr::Id(ty, left, right) => {
             contains_former_expr(ty) || contains_former_expr(left) || contains_former_expr(right)
         }
@@ -2043,7 +1985,9 @@ fn contains_lambda_expr(expr: &Expr) -> bool {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => contains_lambda_expr(body),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => contains_lambda_expr(body),
         Expr::Id(ty, left, right) => {
             contains_lambda_expr(ty) || contains_lambda_expr(left) || contains_lambda_expr(right)
         }
@@ -2067,7 +2011,9 @@ fn contains_eliminator_expr(expr: &Expr) -> bool {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => contains_eliminator_expr(body),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => contains_eliminator_expr(body),
         Expr::Pi(left, right) | Expr::Sigma(left, right) => {
             contains_eliminator_expr(left) || contains_eliminator_expr(right)
         }
@@ -2279,6 +2225,7 @@ mod tests {
                 include_trunc: false,
                 include_modal: false,
                 include_temporal: false,
+                include_linear_exponential: false,
                 quota_per_bucket: 16,
                 require_former_eliminator_package: false,
                 require_initial_hit_package: false,

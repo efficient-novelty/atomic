@@ -23,6 +23,8 @@ pub enum Atom {
     Shape,
     Next,
     Eventually,
+    Bang,
+    WhyNot,
 }
 
 pub const FROZEN_V1_ATOMS: [Atom; 18] = [
@@ -67,6 +69,8 @@ impl Atom {
             Self::Shape => "Shape",
             Self::Next => "Next",
             Self::Eventually => "Eventually",
+            Self::Bang => "Bang",
+            Self::WhyNot => "WhyNot",
         }
     }
 }

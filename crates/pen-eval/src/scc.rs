@@ -84,7 +84,9 @@ fn entry_deps(current: ClauseIx, binder_depth: usize, expr: &Expr) -> BTreeSet<C
         | Expr::Disc(expr)
         | Expr::Shape(expr)
         | Expr::Next(expr)
-        | Expr::Eventually(expr) => entry_deps(current, binder_depth, expr),
+        | Expr::Eventually(expr)
+        | Expr::Bang(expr)
+        | Expr::WhyNot(expr) => entry_deps(current, binder_depth, expr),
     }
 }
 

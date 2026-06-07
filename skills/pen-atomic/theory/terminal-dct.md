@@ -1,10 +1,14 @@
 # Terminal DCT
 
-This file explains the step-15 terminal shell, the DCT completion story, and the current executable novelty account now frozen in the repo.
+This file explains the canonical step-15 terminal shell, the DCT completion
+story, and the current executable novelty account now frozen in the repo. It
+is the theorem-facing surface for the disclosed control grammar, not a claim
+that current hostile grammars empirically recover the same terminal.
 
 ## The Current Executable Step 15
 
-The frozen live artifact and structural evaluator now agree on the step-15 row:
+Within the current `canonical_mbtt_v1` control lane, the frozen live artifact
+and structural evaluator now agree on the step-15 row:
 
 - selected shell:
   temporal-cohesive shell (semantic DCT completion)
@@ -18,6 +22,11 @@ The frozen live artifact and structural evaluator now agree on the step-15 row:
 
 Rounded, this is `rho ~= 12.88`, `Bar ~= 7.40`, and overshoot `~= 5.48`.
 This is the largest overshoot in the current executable sequence.
+
+Current hostile-grammar ablations are a separate empirical lane: they still
+match replay only through step 14 / `Hilbert` and do not recover a stored
+hostile step-15 terminal. Read the repo-root grammar-ablation docs for that
+boundary.
 
 ## What The Shell Contains
 
@@ -42,14 +51,16 @@ The infinitesimal reading is a semantic consequence, not a hot-path primitive.
 
 ## Why 103 Is Now The Canonical Repo Value
 
-The current repo no longer has an executable late-step split for DCT.
+The current repo no longer has an executable late-step split for DCT inside
+the canonical control lane.
 
 - `crates/pen-eval/src/nu.rs` freezes the reference sequence at `...103` and asserts it in tests.
 - `tests/fixtures/trajectory/reference_steps_until_15.json` freezes the live step-15 artifact with `nu = 103` and `rho = 103/8`.
 - `overall_plan.md` records step 15 as structurally live-discoverable at `nu = 103`.
 
-The older mismatched DCT claim now survives only in superseded theory and manuscript commentary.
-For the repo's current truth surface, `103` is the DCT total to cite.
+The older mismatched DCT claim now survives only in superseded theory and
+manuscript commentary. For the repo's canonical truth surface, `103` is the
+DCT total to cite.
 
 ## Current Structural Decomposition
 
@@ -120,6 +131,8 @@ This matters because the geometric branch dies early if the quadratic term is re
 - Keep DCT as a post-hoc semantic completion, not a target label.
 - Default to the executable `nu = 103` canon for replay, checkpoint, and report fixtures.
 - Treat older mismatched donor notes as superseded provenance, not as the repo's current claim boundary.
+- Treat grammar robustness as a separate empirical question owned by the
+  repo-root grammar-ablation report and working docs.
 
 ## Cross-Links
 

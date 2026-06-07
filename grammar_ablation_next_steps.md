@@ -1,43 +1,51 @@
 # Grammar Ablation Next Steps
 
-Last updated: 2026-04-17
+Last updated: 2026-04-19
 
 This file owns the single active next slice for the grammar-ablation lane.
 
 ## Objective
 
-Implement an honest `no_temporal` grammar path in the live search engine while
-keeping `canonical_mbtt_v1` behavior unchanged.
+Watch for the first repo-facing theory or summary `.md` / `.tex` surface
+changed after the current `2026-04-19T15:02:20.8495808+02:00` verification
+that reintroduces step-`15` grammar-independence shorthand.
 
-## Hypothesis
+## Working Boundary
 
-The first real leverage is to make `grammar_profile` affect enumeration and
-admissibility before touching more invasive AST surgery. In practice that means
-gating temporal constructor generation and temporal-shell clause families on
-the selected grammar profile, then adding a clear halt/report path when the run
-can no longer clear the bar.
+- Since `2026-04-19T14:02:03.8717831+02:00`, only the grammar-ablation
+  operational docs plus `skills/pen-atomic/SKILL.md` and
+  `skills/pen-atomic/references/14-current-grammar-ablation.md` changed.
+- The keyword scan on that newer set hit only the working docs and skill
+  context, not a repo-facing manuscript, theory, or summary surface.
+- `grammar_ablation_report.md` remains the governing verdict:
+  both hostile profiles preserve exact replay through step `14` / `Hilbert`,
+  but neither hostile profile recovers a stored step-`15` terminal.
+- Keep this lane in doc-drift monitoring only. Do not reopen deeper
+  `no_temporal` instrumentation, rerun the canonical control, or start
+  `epistemic_swap` unless a changed repo-facing claim surface or new hostile
+  evidence creates a concrete contradiction.
 
 ## Start From
 
-- `crates/pen-search/src/enumerate.rs`
-- `crates/pen-type/src/admissibility.rs`
-- `crates/pen-search/src/engine.rs`
-- `configs/grammar_ablation_baseline.toml`
+- `grammar_ablation_report.md`
 - `grammar_ablation_findings.md`
+- `skills/pen-atomic/references/14-current-grammar-ablation.md`
+- a repo-wide list of `.md` / `.tex` files newer than
+  `2026-04-19T15:02:20.8495808+02:00`
 
 ## Immediate Tasks
 
-- Add the minimal helper(s) that answer whether temporal constructors are
-  allowed under the active `grammar_profile`.
-- Use those helpers to suppress `Next` / `Eventually` generation for
-  `no_temporal`.
-- Prevent temporal-shell clause-family opening under `no_temporal`.
-- Add focused tests:
-  canonical profile still emits the current temporal surface,
-  `no_temporal` does not.
-- Decide the exact halt/report contract for a hostile run that cannot advance.
+- Enumerate repo `.md` / `.tex` files newer than the current verification.
+- If only the operational docs or grammar-ablation skill context moved again,
+  record the no-op verification briefly and keep the docs / checklist lean.
+- If newer repo-facing theory or summary surfaces exist and mention step `15`,
+  `DCT`, `terminal fixed point`, `grammar-independent`, or similar shorthand,
+  inspect only those files.
+- If a contradiction does appear, patch the smallest affected surface and
+  sync skill/doc summaries only where they become stale.
 
 ## Stop Condition For The Next Slice
 
-- A `no_temporal` profile changes the reachable search space in code and tests,
-  while the canonical profile remains regression-green.
+- Every repo-facing theory or summary `.md` / `.tex` surface newer than
+  `2026-04-19T15:02:20.8495808+02:00` either stays within the
+  canonical-lane / hostile-ablation boundary or is patched to do so.

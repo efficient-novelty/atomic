@@ -22,6 +22,8 @@ pub const fn atom_prefix_bits(atom: Atom) -> u16 {
         Atom::Shape => 8,
         Atom::Next => 9,
         Atom::Eventually => 9,
+        Atom::Bang => 9,
+        Atom::WhyNot => 9,
     }
 }
 
@@ -53,7 +55,10 @@ pub fn expr_bit_length(expr: &Expr) -> u32 {
         Expr::PathCon(dimension) => 6 + u32::from(elias_gamma_bits(*dimension)),
         Expr::Flat(body) | Expr::Sharp(body) | Expr::Disc(body) => 7 + expr_bit_length(body),
         Expr::Shape(body) => 8 + expr_bit_length(body),
-        Expr::Next(body) | Expr::Eventually(body) => 9 + expr_bit_length(body),
+        Expr::Next(body)
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => 9 + expr_bit_length(body),
     }
 }
 

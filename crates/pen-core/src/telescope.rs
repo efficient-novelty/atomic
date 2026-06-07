@@ -168,11 +168,17 @@ impl Telescope {
         if exprs.iter().any(|expr| matches!(expr, Expr::PathCon(_))) {
             return TelescopeClass::Hit;
         }
-        if exprs.iter().any(|expr| expr.is_modal()) && !exprs.iter().any(|expr| expr.is_temporal())
+        if exprs.iter().any(|expr| expr.is_modal())
+            && !exprs
+                .iter()
+                .any(|expr| expr.is_temporal() || expr.is_linear_exponential())
         {
             return TelescopeClass::Modal;
         }
-        if exprs.iter().any(|expr| expr.is_temporal()) {
+        if exprs
+            .iter()
+            .any(|expr| expr.is_temporal() || expr.is_linear_exponential())
+        {
             return TelescopeClass::Synthesis;
         }
         if exprs.iter().any(|expr| matches!(expr, Expr::Susp(_))) {
@@ -463,6 +469,8 @@ fn desugared_roles(expr: &Expr) -> Vec<ClauseRole> {
         | Expr::Shape(_)
         | Expr::Next(_)
         | Expr::Eventually(_)
+        | Expr::Bang(_)
+        | Expr::WhyNot(_)
         | Expr::Lib(_) => vec![ClauseRole::Formation],
     }
 }

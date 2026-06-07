@@ -201,7 +201,7 @@ impl TelescopeNuProfile {
             if is_parametric_formation(expr) {
                 profile.any_parametric_formation = true;
             }
-            if expr.is_temporal() {
+            if expr.is_temporal_like() {
                 profile.has_temporal = true;
             }
             if matches!(expr, Expr::Susp(_)) {
@@ -219,7 +219,10 @@ impl TelescopeNuProfile {
             if matches!(expr, Expr::Shape(_)) {
                 has_shape = true;
             }
-            if matches!(expr, Expr::Next(_) | Expr::Eventually(_)) {
+            if matches!(
+                expr,
+                Expr::Next(_) | Expr::Eventually(_) | Expr::Bang(_) | Expr::WhyNot(_)
+            ) {
                 profile.temporal_formation_count += 1;
             }
 
@@ -527,7 +530,10 @@ impl TerminalClauseNuFacts {
             is_elim: is_elim_expr(expr),
             is_axiomatic_intro: is_axiomatic_intro(expr),
             modal_kind_mask: modal_kind_mask_for_expr(expr),
-            is_temporal_formation: matches!(expr, Expr::Next(_) | Expr::Eventually(_)),
+            is_temporal_formation: matches!(
+                expr,
+                Expr::Next(_) | Expr::Eventually(_) | Expr::Bang(_) | Expr::WhyNot(_)
+            ),
             is_univ: is_univ_expr(expr),
             is_single_foundation_expr: matches!(
                 classify_single_entry_expr(expr),
@@ -536,7 +542,7 @@ impl TerminalClauseNuFacts {
             is_single_map_expr: matches!(expr, Expr::App(left, _) if matches!(left.as_ref(), Expr::Lib(_))),
             has_formation: is_type_formation(expr),
             is_parametric_formation: is_parametric_formation(expr),
-            is_temporal: expr.is_temporal(),
+            is_temporal: expr.is_temporal_like(),
             is_suspension: matches!(expr, Expr::Susp(_)),
             has_lib_pointer,
             is_basic_formation: is_basic_formation_expr(expr),
@@ -1279,7 +1285,9 @@ fn accumulate_terminal_clause_acceptance_signals(
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => accumulate_terminal_clause_acceptance_signals(body, signals),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => accumulate_terminal_clause_acceptance_signals(body, signals),
         Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_) => {}
     }
 }
@@ -1301,7 +1309,9 @@ fn expr_contains_var_refs(expr: &Expr) -> bool {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => expr_contains_var_refs(body),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => expr_contains_var_refs(body),
         Expr::Id(ty, left, right) => {
             expr_contains_var_refs(ty)
                 || expr_contains_var_refs(left)
@@ -1324,7 +1334,10 @@ fn is_distributive_law(expr: &Expr) -> bool {
 fn is_modal_wrapping_temporal(expr: &Expr) -> bool {
     match expr {
         Expr::Flat(inner) | Expr::Sharp(inner) | Expr::Disc(inner) | Expr::Shape(inner) => {
-            matches!(inner.as_ref(), Expr::Next(_) | Expr::Eventually(_))
+            matches!(
+                inner.as_ref(),
+                Expr::Next(_) | Expr::Eventually(_) | Expr::Bang(_) | Expr::WhyNot(_)
+            )
         }
         _ => false,
     }
@@ -1332,7 +1345,8 @@ fn is_modal_wrapping_temporal(expr: &Expr) -> bool {
 
 fn is_temporal_wrapping_modal(expr: &Expr) -> bool {
     match expr {
-        Expr::Next(inner) | Expr::Eventually(inner) => matches!(
+        Expr::Next(inner) | Expr::Eventually(inner) | Expr::Bang(inner) | Expr::WhyNot(inner) =>
+            matches!(
             inner.as_ref(),
             Expr::Flat(_) | Expr::Sharp(_) | Expr::Disc(_) | Expr::Shape(_)
         ),
@@ -1341,18 +1355,18 @@ fn is_temporal_wrapping_modal(expr: &Expr) -> bool {
 }
 
 fn is_polymorphic_temporal_elim(expr: &Expr) -> bool {
-    matches!(expr, Expr::Lam(body) if matches!(body.as_ref(), Expr::App(function, _) if matches!(function.as_ref(), Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(_)))))
+    matches!(expr, Expr::Lam(body) if matches!(body.as_ref(), Expr::App(function, _) if matches!(function.as_ref(), Expr::Eventually(inner) | Expr::WhyNot(inner) if matches!(inner.as_ref(), Expr::Var(_)))))
         || matches!(
             expr,
             Expr::Pi(domain, codomain)
-                if matches!(domain.as_ref(), Expr::Next(inner) if matches!(inner.as_ref(), Expr::Next(inner2) if matches!(inner2.as_ref(), Expr::Var(_))))
-                    && matches!(codomain.as_ref(), Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(_)))
+                if matches!(domain.as_ref(), Expr::Next(inner) | Expr::Bang(inner) if matches!(inner.as_ref(), Expr::Next(inner2) | Expr::Bang(inner2) if matches!(inner2.as_ref(), Expr::Var(_))))
+                    && matches!(codomain.as_ref(), Expr::Next(inner) | Expr::Bang(inner) if matches!(inner.as_ref(), Expr::Var(_)))
         )
         || matches!(
             expr,
             Expr::Pi(domain, codomain)
-                if matches!(domain.as_ref(), Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(_)))
-                    && matches!(codomain.as_ref(), Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(_)))
+                if matches!(domain.as_ref(), Expr::Next(inner) | Expr::Bang(inner) if matches!(inner.as_ref(), Expr::Var(_)))
+                    && matches!(codomain.as_ref(), Expr::Eventually(inner) | Expr::WhyNot(inner) if matches!(inner.as_ref(), Expr::Var(_)))
         )
 }
 
@@ -1366,7 +1380,10 @@ fn is_spatial_temporal_clause(expr: &Expr) -> bool {
                     if matches!(function.as_ref(), Expr::Lib(_))
                         && matches!(
                             argument.as_ref(),
-                            Expr::Next(inner) | Expr::Eventually(inner)
+                            Expr::Next(inner)
+                                | Expr::Eventually(inner)
+                                | Expr::Bang(inner)
+                                | Expr::WhyNot(inner)
                                 if matches!(inner.as_ref(), Expr::Var(_))
                         )
             )
@@ -1469,6 +1486,8 @@ fn has_direct_lib(expr: &Expr) -> bool {
         | Expr::Shape(expr)
         | Expr::Next(expr)
         | Expr::Eventually(expr)
+        | Expr::Bang(expr)
+        | Expr::WhyNot(expr)
         | Expr::Refl(expr)
         | Expr::Susp(expr)
         | Expr::Trunc(expr) => has_direct_lib(expr),
@@ -1486,7 +1505,9 @@ fn has_operator_ref(expr: &Expr) -> bool {
         | Expr::Disc(_)
         | Expr::Shape(_)
         | Expr::Next(_)
-        | Expr::Eventually(_) => true,
+        | Expr::Eventually(_)
+        | Expr::Bang(_)
+        | Expr::WhyNot(_) => true,
         Expr::Pi(left, right) | Expr::Sigma(left, right) | Expr::App(left, right) => {
             has_operator_ref(left) || has_operator_ref(right)
         }
@@ -1515,7 +1536,12 @@ fn count_temporal_formations(exprs: &[&Expr]) -> u32 {
     u32_from_len(
         exprs
             .iter()
-            .filter(|expr| matches!(expr, Expr::Next(_) | Expr::Eventually(_)))
+            .filter(|expr| {
+                matches!(
+                    expr,
+                    Expr::Next(_) | Expr::Eventually(_) | Expr::Bang(_) | Expr::WhyNot(_)
+                )
+            })
             .count(),
     )
 }

@@ -5,12 +5,15 @@ use crate::accept::{
 };
 use crate::bounds::PrefixBound;
 use crate::branch_bound::{AcceptRank, better_rank, same_primary_rank_tier};
-use crate::config::{DemoConfig, RuntimeConfig, SearchProfile};
+use crate::config::{DemoConfig, GrammarProfile, RuntimeConfig, SearchProfile};
 use crate::diversify::{FrontierPressure, FrontierRuntimeLimits, plan_pressure_cold_retention};
 use crate::enumerate::{
-    ClauseCatalog, EnumerationContext, EnumerationSurfaceDiagnostics, LateFamilySurface,
-    build_clause_catalog, enumerate_next_clauses, enumerate_raw_telescopes, enumerate_telescopes,
-    raw_clause_catalog_widths,
+    ClauseCatalog, ClauseCatalogBuildProgress, EnumerationContext, EnumerationSurfaceDiagnostics,
+    LateFamilySurface, RawClauseCatalogWidthProgress, TelescopeEnumerationProgress,
+    TelescopeEnumerationProgressEvent, build_clause_catalog, enumerate_next_clauses,
+    enumerate_raw_telescopes, enumerate_telescopes,
+    enumerate_telescopes_with_progress_with_raw_catalog_widths, raw_clause_catalog_widths,
+    raw_clause_catalog_widths_with_progress,
 };
 use crate::expand::{
     ExpandedCandidate, evaluate_candidate, evaluate_checked_candidate,
@@ -52,7 +55,8 @@ use pen_eval::nu::{
 use pen_store::manifest::{NearMiss, SearchTiming};
 use pen_type::admissibility::{
     AdmissibilityDecision, AdmissibilityDecisionClass, AdmissibilityDiagnostics, AdmissibilityMode,
-    StrictAdmissibility, assess_strict_admissibility, strict_admissibility_for_mode,
+    PackagePolicy, StrictAdmissibility, StructuralFamily, assess_strict_admissibility,
+    strict_admissibility_for_mode,
 };
 use pen_type::check::{CheckResult, check_telescope};
 use pen_type::connectivity::TerminalClauseConnectivityFacts;
@@ -683,6 +687,18 @@ pub struct StepLiveCheckpoint {
     #[serde(default)]
     pub prefix_states_explored: usize,
     #[serde(default)]
+    pub dfs_prefix_rejections: usize,
+    #[serde(default)]
+    pub dfs_leaf_rejections: usize,
+    #[serde(default)]
+    pub dfs_leaf_check_rejections: usize,
+    #[serde(default)]
+    pub dfs_leaf_connectivity_rejections: usize,
+    #[serde(default)]
+    pub dfs_leaf_disconnected_rejections: usize,
+    #[serde(default)]
+    pub dfs_leaf_connected_unqualified_rejections: usize,
+    #[serde(default)]
     pub frontier_queue_len: usize,
     #[serde(default)]
     pub candidate_pool_len: usize,
@@ -1035,6 +1051,258 @@ fn maybe_emit_claim_live_checkpoint(
     }
 }
 
+fn strict_clause_catalog_live_checkpoint(
+    step_index: u32,
+    step_start: Instant,
+    clause_kappa: u16,
+    raw_catalog_clause_widths: Vec<usize>,
+) -> StepLiveCheckpoint {
+    StepLiveCheckpoint {
+        step_index,
+        phase: LiveStepCheckpointPhase::Discovery,
+        elapsed_millis: elapsed_millis(step_start.elapsed()),
+        clause_kappa: Some(clause_kappa),
+        raw_catalog_telescope_count: Some(
+            raw_catalog_clause_widths
+                .iter()
+                .copied()
+                .fold(1usize, usize::saturating_mul),
+        ),
+        raw_catalog_clause_widths,
+        generated_raw_surface: 0,
+        enumerated_candidates: 0,
+        well_formed_candidates: 0,
+        admissibility_rejections: 0,
+        prefixes_created: 0,
+        prefix_states_explored: 0,
+        dfs_prefix_rejections: 0,
+        dfs_leaf_rejections: 0,
+        dfs_leaf_check_rejections: 0,
+        dfs_leaf_connectivity_rejections: 0,
+        dfs_leaf_disconnected_rejections: 0,
+        dfs_leaf_connected_unqualified_rejections: 0,
+        frontier_queue_len: 0,
+        candidate_pool_len: 0,
+        prefix_cache_groups: 0,
+        prefix_cache_candidates: 0,
+        legality_cache_entries: LiveLegalityCacheEntries::default(),
+        exact_screen_prunes: 0,
+        claim_surface: None,
+        claim_step_open: None,
+        claim_root_seeding: None,
+        remaining_one_telemetry: None,
+        note: Some("strict_clause_catalog_ready".to_owned()),
+    }
+}
+
+fn strict_clause_catalog_build_started_live_checkpoint(
+    step_index: u32,
+    step_start: Instant,
+    clause_kappa: u16,
+) -> StepLiveCheckpoint {
+    StepLiveCheckpoint {
+        step_index,
+        phase: LiveStepCheckpointPhase::Discovery,
+        elapsed_millis: elapsed_millis(step_start.elapsed()),
+        clause_kappa: Some(clause_kappa),
+        raw_catalog_clause_widths: Vec::new(),
+        raw_catalog_telescope_count: None,
+        generated_raw_surface: 0,
+        enumerated_candidates: 0,
+        well_formed_candidates: 0,
+        admissibility_rejections: 0,
+        prefixes_created: 0,
+        prefix_states_explored: 0,
+        dfs_prefix_rejections: 0,
+        dfs_leaf_rejections: 0,
+        dfs_leaf_check_rejections: 0,
+        dfs_leaf_connectivity_rejections: 0,
+        dfs_leaf_disconnected_rejections: 0,
+        dfs_leaf_connected_unqualified_rejections: 0,
+        frontier_queue_len: 0,
+        candidate_pool_len: 0,
+        prefix_cache_groups: 0,
+        prefix_cache_candidates: 0,
+        legality_cache_entries: LiveLegalityCacheEntries::default(),
+        exact_screen_prunes: 0,
+        claim_surface: None,
+        claim_step_open: None,
+        claim_root_seeding: None,
+        remaining_one_telemetry: None,
+        note: Some("strict_clause_catalog_build_started".to_owned()),
+    }
+}
+
+fn strict_clause_catalog_position_live_checkpoint(
+    step_index: u32,
+    step_start: Instant,
+    clause_kappa: u16,
+    _position: usize,
+    raw_catalog_clause_widths: Vec<usize>,
+    note: String,
+) -> StepLiveCheckpoint {
+    StepLiveCheckpoint {
+        step_index,
+        phase: LiveStepCheckpointPhase::Discovery,
+        elapsed_millis: elapsed_millis(step_start.elapsed()),
+        clause_kappa: Some(clause_kappa),
+        raw_catalog_clause_widths,
+        raw_catalog_telescope_count: None,
+        generated_raw_surface: 0,
+        enumerated_candidates: 0,
+        well_formed_candidates: 0,
+        admissibility_rejections: 0,
+        prefixes_created: 0,
+        prefix_states_explored: 0,
+        dfs_prefix_rejections: 0,
+        dfs_leaf_rejections: 0,
+        dfs_leaf_check_rejections: 0,
+        dfs_leaf_connectivity_rejections: 0,
+        dfs_leaf_disconnected_rejections: 0,
+        dfs_leaf_connected_unqualified_rejections: 0,
+        frontier_queue_len: 0,
+        candidate_pool_len: 0,
+        prefix_cache_groups: 0,
+        prefix_cache_candidates: 0,
+        legality_cache_entries: LiveLegalityCacheEntries::default(),
+        exact_screen_prunes: 0,
+        claim_surface: None,
+        claim_step_open: None,
+        claim_root_seeding: None,
+        remaining_one_telemetry: None,
+        note: Some(note),
+    }
+}
+
+fn strict_telescope_enumeration_live_checkpoint(
+    step_index: u32,
+    step_start: Instant,
+    clause_kappa: u16,
+    raw_catalog_clause_widths: &[usize],
+    progress: TelescopeEnumerationProgress,
+    exact_telescope_count: Option<usize>,
+    note: &str,
+) -> StepLiveCheckpoint {
+    StepLiveCheckpoint {
+        step_index,
+        phase: LiveStepCheckpointPhase::Discovery,
+        elapsed_millis: elapsed_millis(step_start.elapsed()),
+        clause_kappa: Some(clause_kappa),
+        raw_catalog_clause_widths: raw_catalog_clause_widths.to_vec(),
+        raw_catalog_telescope_count: exact_telescope_count,
+        generated_raw_surface: progress.prefix_attempts,
+        enumerated_candidates: progress.completed_telescopes,
+        well_formed_candidates: 0,
+        admissibility_rejections: 0,
+        prefixes_created: progress.terminal_prefixes,
+        prefix_states_explored: progress.prefix_states_explored,
+        dfs_prefix_rejections: progress.dfs_prefix_rejections,
+        dfs_leaf_rejections: progress.dfs_leaf_rejections,
+        dfs_leaf_check_rejections: progress.dfs_leaf_check_rejections,
+        dfs_leaf_connectivity_rejections: progress.dfs_leaf_connectivity_rejections,
+        dfs_leaf_disconnected_rejections: progress.dfs_leaf_disconnected_rejections,
+        dfs_leaf_connected_unqualified_rejections: progress
+            .dfs_leaf_connected_unqualified_rejections,
+        frontier_queue_len: 0,
+        candidate_pool_len: 0,
+        prefix_cache_groups: 0,
+        prefix_cache_candidates: 0,
+        legality_cache_entries: LiveLegalityCacheEntries::default(),
+        exact_screen_prunes: 0,
+        claim_surface: None,
+        claim_step_open: None,
+        claim_root_seeding: None,
+        remaining_one_telemetry: None,
+        note: Some(note.to_owned()),
+    }
+}
+
+fn strict_candidate_filter_live_checkpoint(
+    step_index: u32,
+    step_start: Instant,
+    clause_kappa: u16,
+    raw_catalog_clause_widths: &[usize],
+    enumeration_progress: TelescopeEnumerationProgress,
+    well_formed_candidates: usize,
+    admissibility_rejections: usize,
+    candidate_pool_len: usize,
+    note: &str,
+) -> StepLiveCheckpoint {
+    StepLiveCheckpoint {
+        step_index,
+        phase: LiveStepCheckpointPhase::Discovery,
+        elapsed_millis: elapsed_millis(step_start.elapsed()),
+        clause_kappa: Some(clause_kappa),
+        raw_catalog_clause_widths: raw_catalog_clause_widths.to_vec(),
+        raw_catalog_telescope_count: Some(enumeration_progress.completed_telescopes),
+        generated_raw_surface: enumeration_progress.prefix_attempts,
+        enumerated_candidates: enumeration_progress.completed_telescopes,
+        well_formed_candidates,
+        admissibility_rejections,
+        prefixes_created: enumeration_progress.terminal_prefixes,
+        prefix_states_explored: enumeration_progress.prefix_states_explored,
+        dfs_prefix_rejections: enumeration_progress.dfs_prefix_rejections,
+        dfs_leaf_rejections: enumeration_progress.dfs_leaf_rejections,
+        dfs_leaf_check_rejections: enumeration_progress.dfs_leaf_check_rejections,
+        dfs_leaf_connectivity_rejections: enumeration_progress.dfs_leaf_connectivity_rejections,
+        dfs_leaf_disconnected_rejections: enumeration_progress.dfs_leaf_disconnected_rejections,
+        dfs_leaf_connected_unqualified_rejections: enumeration_progress
+            .dfs_leaf_connected_unqualified_rejections,
+        frontier_queue_len: 0,
+        candidate_pool_len,
+        prefix_cache_groups: 0,
+        prefix_cache_candidates: 0,
+        legality_cache_entries: LiveLegalityCacheEntries::default(),
+        exact_screen_prunes: 0,
+        claim_surface: None,
+        claim_step_open: None,
+        claim_root_seeding: None,
+        remaining_one_telemetry: None,
+        note: Some(note.to_owned()),
+    }
+}
+
+fn resume_prefix_replay_live_checkpoint(
+    step_index: u32,
+    replay_started: Instant,
+    replayed_steps: usize,
+    total_steps: usize,
+) -> StepLiveCheckpoint {
+    StepLiveCheckpoint {
+        step_index,
+        phase: LiveStepCheckpointPhase::Discovery,
+        elapsed_millis: elapsed_millis(replay_started.elapsed()),
+        clause_kappa: None,
+        raw_catalog_clause_widths: Vec::new(),
+        raw_catalog_telescope_count: None,
+        generated_raw_surface: 0,
+        enumerated_candidates: 0,
+        well_formed_candidates: 0,
+        admissibility_rejections: 0,
+        prefixes_created: 0,
+        prefix_states_explored: 0,
+        dfs_prefix_rejections: 0,
+        dfs_leaf_rejections: 0,
+        dfs_leaf_check_rejections: 0,
+        dfs_leaf_connectivity_rejections: 0,
+        dfs_leaf_disconnected_rejections: 0,
+        dfs_leaf_connected_unqualified_rejections: 0,
+        frontier_queue_len: 0,
+        candidate_pool_len: 0,
+        prefix_cache_groups: 0,
+        prefix_cache_candidates: 0,
+        legality_cache_entries: LiveLegalityCacheEntries::default(),
+        exact_screen_prunes: 0,
+        claim_surface: None,
+        claim_step_open: None,
+        claim_root_seeding: None,
+        remaining_one_telemetry: None,
+        note: Some(format!(
+            "resume_prefix_replay_progress_{replayed_steps}_of_{total_steps}"
+        )),
+    }
+}
+
 fn maybe_emit_claim_regular_frontier_remainder_checkpoint(
     progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
     last_checkpoint_elapsed_millis: &mut u64,
@@ -1076,6 +1344,12 @@ fn maybe_emit_claim_regular_frontier_remainder_checkpoint(
             admissibility_rejections: discovery.admissibility_rejections,
             prefixes_created: discovery.prefixes_created,
             prefix_states_explored: discovery.prefix_states_explored,
+            dfs_prefix_rejections: 0,
+            dfs_leaf_rejections: 0,
+            dfs_leaf_check_rejections: 0,
+            dfs_leaf_connectivity_rejections: 0,
+            dfs_leaf_disconnected_rejections: 0,
+            dfs_leaf_connected_unqualified_rejections: 0,
             frontier_queue_len: frontier.len(),
             candidate_pool_len: discovery.candidates.len(),
             prefix_cache_groups: discovery.prefix_cache.len(),
@@ -1150,7 +1424,7 @@ fn claim_bucket_category(
     let has_temporal_ops = prefix_telescope
         .clauses
         .iter()
-        .any(|clause| clause.expr.is_temporal());
+        .any(|clause| clause.expr.is_temporal_like());
 
     if has_modal_ops && has_temporal_ops {
         SearchBucketCategory::ModalTemporalMix
@@ -1263,14 +1537,14 @@ impl OnlinePrefixWorkItem {
         &'a self,
         clause_catalog: &'a ClauseCatalog,
     ) -> Option<&'a [TerminalClauseConnectivityFacts]> {
-        self.filtered_next_clause_connectivity_facts
-            .as_deref()
-            .or_else(|| {
-                self.filtered_next_clauses.is_none().then(|| {
-                    clause_catalog
-                        .terminal_connectivity_facts_at(self.prefix_telescope.clauses.len())
-                })
-            })
+        if let Some(facts) = self.filtered_next_clause_connectivity_facts.as_deref() {
+            return Some(facts);
+        }
+        if self.filtered_next_clauses.is_some() {
+            return None;
+        }
+        clause_catalog
+            .precomputed_terminal_connectivity_facts_at(self.prefix_telescope.clauses.len())
     }
 
     fn next_clause_nu_facts<'a>(
@@ -2852,6 +3126,7 @@ pub fn search_bootstrap_prefix_for_profile_with_runtime_and_observer(
         until_step,
         window_depth,
         search_profile,
+        GrammarProfile::CanonicalMbttV1,
         retention_runtime,
         None,
         progress_observer,
@@ -2933,6 +3208,7 @@ pub fn search_bootstrap_from_prefix_for_profile_with_runtime_and_observer(
         until_step,
         window_depth,
         search_profile,
+        GrammarProfile::CanonicalMbttV1,
         retention_runtime,
         None,
         progress_observer,
@@ -2972,6 +3248,7 @@ pub fn search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observe
         until_step,
         window_depth,
         config.mode.search_profile,
+        config.mode.grammar_profile,
         retention_runtime,
         DemoBudgetController::maybe_new(config, until_step, demo_budget_seed)?,
         progress_observer,
@@ -2983,6 +3260,7 @@ fn search_bootstrap_from_prefix_internal(
     until_step: u32,
     window_depth: u16,
     search_profile: SearchProfile,
+    grammar_profile: GrammarProfile,
     retention_runtime: FrontierRuntimeLimits,
     mut demo_budget_controller: Option<DemoBudgetController>,
     mut progress_observer: Option<&mut dyn AtomicSearchProgressObserver>,
@@ -2991,6 +3269,9 @@ fn search_bootstrap_from_prefix_internal(
     let mut history: Vec<DiscoveryRecord> = Vec::new();
     let mut steps = Vec::new();
     let admissibility_mode = admissibility_mode_for_profile(search_profile);
+    let start_step = u32::try_from(accepted_prefix.len()).expect("prefix length exceeded u32") + 1;
+    let resume_replay_started = Instant::now();
+    let mut last_resume_replay_checkpoint_elapsed_millis = 0u64;
 
     for (offset, telescope) in accepted_prefix.iter().enumerate() {
         let step_index = u32::try_from(offset + 1).expect("accepted prefix length exceeded u32");
@@ -3001,9 +3282,19 @@ fn search_bootstrap_from_prefix_internal(
             u32::from(accepted.clause_kappa),
         ));
         library.push(LibraryEntry::from_telescope(telescope, &library));
+        maybe_emit_claim_live_checkpoint(
+            &mut progress_observer,
+            &mut last_resume_replay_checkpoint_elapsed_millis,
+            resume_prefix_replay_live_checkpoint(
+                start_step,
+                resume_replay_started,
+                offset + 1,
+                accepted_prefix.len(),
+            ),
+            true,
+        );
     }
 
-    let start_step = u32::try_from(accepted_prefix.len()).expect("prefix length exceeded u32") + 1;
     for step_index in start_step..=until_step.min(LIVE_BOOTSTRAP_MAX_STEP) {
         if let Some(observer) = progress_observer.as_deref_mut() {
             observer.on_step_started(step_index);
@@ -3012,12 +3303,13 @@ fn search_bootstrap_from_prefix_internal(
             should_plan_demo_budget_for_profile_step(search_profile, step_index)
                 .then(|| controller.plan_step(step_index))
         });
-        let outcome = search_next_step(
+        let outcome = search_next_step_with_grammar_profile(
             step_index,
             window_depth,
             &library,
             &history,
             admissibility_mode,
+            grammar_profile,
             retention_runtime,
             demo_step_budget,
             &mut progress_observer,
@@ -3055,6 +3347,7 @@ fn search_profile_supports_demo_budget_controller(search_profile: SearchProfile)
     )
 }
 
+#[cfg_attr(not(test), allow(dead_code))]
 fn search_next_step(
     step_index: u32,
     window_depth: u16,
@@ -3065,12 +3358,37 @@ fn search_next_step(
     demo_step_budget: Option<DemoStepBudget>,
     progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
 ) -> Result<AtomicSearchStep> {
-    search_next_step_internal(
+    search_next_step_with_grammar_profile(
         step_index,
         window_depth,
         library,
         history,
         admissibility_mode,
+        GrammarProfile::CanonicalMbttV1,
+        retention_runtime,
+        demo_step_budget,
+        progress_observer,
+    )
+}
+
+fn search_next_step_with_grammar_profile(
+    step_index: u32,
+    window_depth: u16,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility_mode: AdmissibilityMode,
+    grammar_profile: GrammarProfile,
+    retention_runtime: FrontierRuntimeLimits,
+    demo_step_budget: Option<DemoStepBudget>,
+    progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
+) -> Result<AtomicSearchStep> {
+    search_next_step_internal_with_grammar_profile(
+        step_index,
+        window_depth,
+        library,
+        history,
+        admissibility_mode,
+        grammar_profile,
         retention_runtime,
         demo_step_budget,
         progress_observer,
@@ -3078,6 +3396,7 @@ fn search_next_step(
     )
 }
 
+#[cfg_attr(not(test), allow(dead_code))]
 fn search_next_step_internal(
     step_index: u32,
     window_depth: u16,
@@ -3089,12 +3408,39 @@ fn search_next_step_internal(
     progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
     allow_claim_viability_tiebreak: bool,
 ) -> Result<AtomicSearchStep> {
-    search_next_step_internal_with_clause_catalog_override(
+    search_next_step_internal_with_grammar_profile(
         step_index,
         window_depth,
         library,
         history,
         admissibility_mode,
+        GrammarProfile::CanonicalMbttV1,
+        retention_runtime,
+        demo_step_budget,
+        progress_observer,
+        allow_claim_viability_tiebreak,
+    )
+}
+
+fn search_next_step_internal_with_grammar_profile(
+    step_index: u32,
+    window_depth: u16,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility_mode: AdmissibilityMode,
+    grammar_profile: GrammarProfile,
+    retention_runtime: FrontierRuntimeLimits,
+    demo_step_budget: Option<DemoStepBudget>,
+    progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
+    allow_claim_viability_tiebreak: bool,
+) -> Result<AtomicSearchStep> {
+    search_next_step_internal_with_clause_catalog_override_and_grammar_profile(
+        step_index,
+        window_depth,
+        library,
+        history,
+        admissibility_mode,
+        grammar_profile,
         retention_runtime,
         demo_step_budget,
         progress_observer,
@@ -3103,6 +3449,7 @@ fn search_next_step_internal(
     )
 }
 
+#[cfg_attr(not(test), allow(dead_code))]
 fn search_next_step_internal_with_clause_catalog_override(
     step_index: u32,
     window_depth: u16,
@@ -3115,11 +3462,44 @@ fn search_next_step_internal_with_clause_catalog_override(
     clause_catalog_override: Option<&ClauseCatalog>,
     allow_claim_viability_tiebreak: bool,
 ) -> Result<AtomicSearchStep> {
+    search_next_step_internal_with_clause_catalog_override_and_grammar_profile(
+        step_index,
+        window_depth,
+        library,
+        history,
+        admissibility_mode,
+        GrammarProfile::CanonicalMbttV1,
+        retention_runtime,
+        demo_step_budget,
+        progress_observer,
+        clause_catalog_override,
+        allow_claim_viability_tiebreak,
+    )
+}
+
+fn search_next_step_internal_with_clause_catalog_override_and_grammar_profile(
+    step_index: u32,
+    window_depth: u16,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility_mode: AdmissibilityMode,
+    grammar_profile: GrammarProfile,
+    retention_runtime: FrontierRuntimeLimits,
+    demo_step_budget: Option<DemoStepBudget>,
+    progress_observer: &mut Option<&mut dyn AtomicSearchProgressObserver>,
+    clause_catalog_override: Option<&ClauseCatalog>,
+    allow_claim_viability_tiebreak: bool,
+) -> Result<AtomicSearchStep> {
     let step_start = Instant::now();
     let mut last_live_checkpoint_elapsed_millis = 0u64;
     let structural_debt = summarize_structural_debt(library, window_depth);
-    let admissibility =
-        strict_admissibility_for_mode(step_index, window_depth, library, admissibility_mode);
+    let admissibility = runtime_admissibility_for_profile(
+        step_index,
+        window_depth,
+        library,
+        admissibility_mode,
+        grammar_profile,
+    );
     let retention_policy = structural_debt.retention_policy();
     let objective_bar = compute_bar(window_depth as usize, step_index, history).bar;
     let mut demo_step_budget = demo_step_budget;
@@ -3263,12 +3643,253 @@ fn search_next_step_internal_with_clause_catalog_override(
         demo_phase.breadth_harvest_exit_reason = discovery_stop_reason;
     } else {
         for clause_kappa in admissibility.min_clause_kappa..=admissibility.max_clause_kappa {
-            let telescopes = enumerate_telescopes(
-                library,
-                EnumerationContext::from_admissibility(library, admissibility),
-                clause_kappa,
+            let enumeration_context =
+                EnumerationContext::from_admissibility(library, admissibility);
+            maybe_emit_claim_live_checkpoint(
+                progress_observer,
+                &mut last_live_checkpoint_elapsed_millis,
+                strict_clause_catalog_build_started_live_checkpoint(
+                    step_index,
+                    step_start,
+                    clause_kappa,
+                ),
+                clause_kappa == admissibility.min_clause_kappa,
             );
-            enumerated_candidates += telescopes.len();
+            let raw_catalog_clause_widths = raw_clause_catalog_widths_with_progress(
+                enumeration_context,
+                clause_kappa,
+                |progress, widths_so_far| {
+                    let (position, note) = match progress {
+                        RawClauseCatalogWidthProgress::PositionStarted { position } => (
+                            position,
+                            format!("strict_clause_catalog_position_{position}_started"),
+                        ),
+                        RawClauseCatalogWidthProgress::PositionExprNodesReady {
+                            position,
+                            expr_nodes,
+                            max_expr_nodes,
+                            width_so_far,
+                        } => (
+                            position,
+                            format!(
+                                "strict_clause_catalog_position_{position}_expr_nodes_{expr_nodes}_of_{max_expr_nodes}_ready_width_{width_so_far}"
+                            ),
+                        ),
+                        RawClauseCatalogWidthProgress::PositionReady { position, .. } => (
+                            position,
+                            format!("strict_clause_catalog_position_{position}_ready"),
+                        ),
+                    };
+                    maybe_emit_claim_live_checkpoint(
+                        progress_observer,
+                        &mut last_live_checkpoint_elapsed_millis,
+                        strict_clause_catalog_position_live_checkpoint(
+                            step_index,
+                            step_start,
+                            clause_kappa,
+                            position,
+                            widths_so_far.to_vec(),
+                            note,
+                        ),
+                        true,
+                    );
+                },
+            );
+            maybe_emit_claim_live_checkpoint(
+                progress_observer,
+                &mut last_live_checkpoint_elapsed_millis,
+                strict_clause_catalog_live_checkpoint(
+                    step_index,
+                    step_start,
+                    clause_kappa,
+                    raw_catalog_clause_widths.clone(),
+                ),
+                clause_kappa == admissibility.min_clause_kappa,
+            );
+            maybe_emit_claim_live_checkpoint(
+                progress_observer,
+                &mut last_live_checkpoint_elapsed_millis,
+                strict_telescope_enumeration_live_checkpoint(
+                    step_index,
+                    step_start,
+                    clause_kappa,
+                    &raw_catalog_clause_widths,
+                    TelescopeEnumerationProgress::default(),
+                    None,
+                    "strict_telescope_enumeration_started",
+                ),
+                true,
+            );
+            let (telescopes, enumeration_progress) =
+                enumerate_telescopes_with_progress_with_raw_catalog_widths(
+                    library,
+                    enumeration_context,
+                    clause_kappa,
+                    &raw_catalog_clause_widths,
+                    |progress| match progress {
+                        TelescopeEnumerationProgressEvent::ClauseCatalog(progress) => {
+                            let (position, note) = match progress {
+                            ClauseCatalogBuildProgress::PositionStarted { position } => (
+                                position,
+                                format!(
+                                    "strict_clause_materialization_position_{position}_started"
+                                ),
+                            ),
+                            ClauseCatalogBuildProgress::PositionExprNodesGenerated {
+                                position,
+                                expr_nodes,
+                                max_expr_nodes,
+                                expr_count,
+                            } => (
+                                position,
+                                format!(
+                                    "strict_clause_materialization_position_{position}_expr_nodes_{expr_nodes}_of_{max_expr_nodes}_generated_expr_count_{expr_count}"
+                                ),
+                            ),
+                            ClauseCatalogBuildProgress::PositionExprNodesAccumulationProgress {
+                                position,
+                                expr_nodes,
+                                max_expr_nodes,
+                                scanned_expr_count,
+                                clause_count_so_far,
+                            } => (
+                                position,
+                                format!(
+                                    "strict_clause_materialization_position_{position}_expr_nodes_{expr_nodes}_of_{max_expr_nodes}_scan_progress_{scanned_expr_count}_ready_clause_count_{clause_count_so_far}"
+                                ),
+                            ),
+                            ClauseCatalogBuildProgress::PositionExprNodesReady {
+                                position,
+                                expr_nodes,
+                                max_expr_nodes,
+                                clause_count_so_far,
+                            } => (
+                                position,
+                                format!(
+                                    "strict_clause_materialization_position_{position}_expr_nodes_{expr_nodes}_of_{max_expr_nodes}_ready_clause_count_{clause_count_so_far}"
+                                ),
+                            ),
+                            ClauseCatalogBuildProgress::PositionSortStarted {
+                                position,
+                                clause_count,
+                            } => (
+                                position,
+                                format!(
+                                    "strict_clause_materialization_position_{position}_sort_started_clause_count_{clause_count}"
+                                ),
+                            ),
+                            ClauseCatalogBuildProgress::PositionSorted {
+                                position,
+                                clause_count,
+                            } => (
+                                position,
+                                format!(
+                                    "strict_clause_materialization_position_{position}_sorted_clause_count_{clause_count}"
+                                ),
+                            ),
+                            ClauseCatalogBuildProgress::PositionConnectivityFactsReady {
+                                position,
+                                clause_count,
+                            } => (
+                                position,
+                                format!(
+                                    "strict_clause_materialization_position_{position}_connectivity_facts_ready_clause_count_{clause_count}"
+                                ),
+                            ),
+                            ClauseCatalogBuildProgress::PositionNuFactsReady {
+                                position,
+                                clause_count,
+                            } => (
+                                position,
+                                format!(
+                                    "strict_clause_materialization_position_{position}_nu_facts_ready_clause_count_{clause_count}"
+                                ),
+                            ),
+                            ClauseCatalogBuildProgress::PositionReady { position, .. } => (
+                                position,
+                                format!("strict_clause_materialization_position_{position}_ready"),
+                            ),
+                        };
+                            maybe_emit_claim_live_checkpoint(
+                                progress_observer,
+                                &mut last_live_checkpoint_elapsed_millis,
+                                strict_clause_catalog_position_live_checkpoint(
+                                    step_index,
+                                    step_start,
+                                    clause_kappa,
+                                    position,
+                                    raw_catalog_clause_widths.clone(),
+                                    note,
+                                ),
+                                true,
+                            );
+                        }
+                        TelescopeEnumerationProgressEvent::EnumerationHandoff(progress) => {
+                            maybe_emit_claim_live_checkpoint(
+                                progress_observer,
+                                &mut last_live_checkpoint_elapsed_millis,
+                                strict_telescope_enumeration_live_checkpoint(
+                                    step_index,
+                                    step_start,
+                                    clause_kappa,
+                                    &raw_catalog_clause_widths,
+                                    progress,
+                                    None,
+                                    "strict_telescope_enumeration_handoff_started",
+                                ),
+                                true,
+                            );
+                        }
+                        TelescopeEnumerationProgressEvent::Enumeration(progress) => {
+                            maybe_emit_claim_live_checkpoint(
+                                progress_observer,
+                                &mut last_live_checkpoint_elapsed_millis,
+                                strict_telescope_enumeration_live_checkpoint(
+                                    step_index,
+                                    step_start,
+                                    clause_kappa,
+                                    &raw_catalog_clause_widths,
+                                    progress,
+                                    None,
+                                    "strict_telescope_enumeration_progress",
+                                ),
+                                true,
+                            );
+                        }
+                    },
+                );
+            maybe_emit_claim_live_checkpoint(
+                progress_observer,
+                &mut last_live_checkpoint_elapsed_millis,
+                strict_telescope_enumeration_live_checkpoint(
+                    step_index,
+                    step_start,
+                    clause_kappa,
+                    &raw_catalog_clause_widths,
+                    enumeration_progress,
+                    Some(enumeration_progress.completed_telescopes),
+                    "strict_telescope_enumeration_ready",
+                ),
+                true,
+            );
+            enumerated_candidates += enumeration_progress.completed_telescopes;
+            maybe_emit_claim_live_checkpoint(
+                progress_observer,
+                &mut last_live_checkpoint_elapsed_millis,
+                strict_candidate_filter_live_checkpoint(
+                    step_index,
+                    step_start,
+                    clause_kappa,
+                    &raw_catalog_clause_widths,
+                    enumeration_progress,
+                    well_formed_candidates,
+                    admissibility_rejections,
+                    candidates.len(),
+                    "strict_candidate_filter_started",
+                ),
+                true,
+            );
+            let mut filtered_telescopes = 0usize;
 
             for telescope in telescopes {
                 match check_telescope(library, &telescope) {
@@ -3280,6 +3901,25 @@ fn search_next_step_internal_with_clause_catalog_override(
                         *malformed_rejection_reasons
                             .entry(error.kind_label().to_owned())
                             .or_insert(0) += 1;
+                        filtered_telescopes += 1;
+                        if filtered_telescopes.is_power_of_two() {
+                            maybe_emit_claim_live_checkpoint(
+                                progress_observer,
+                                &mut last_live_checkpoint_elapsed_millis,
+                                strict_candidate_filter_live_checkpoint(
+                                    step_index,
+                                    step_start,
+                                    clause_kappa,
+                                    &raw_catalog_clause_widths,
+                                    enumeration_progress,
+                                    well_formed_candidates,
+                                    admissibility_rejections,
+                                    candidates.len(),
+                                    "strict_candidate_filter_progress",
+                                ),
+                                true,
+                            );
+                        }
                         continue;
                     }
                 }
@@ -3288,11 +3928,65 @@ fn search_next_step_internal_with_clause_catalog_override(
                 admissibility_diagnostics.record(&admissibility_decision);
                 if !admissibility_decision.is_admitted() {
                     admissibility_rejections += 1;
+                    filtered_telescopes += 1;
+                    if filtered_telescopes.is_power_of_two() {
+                        maybe_emit_claim_live_checkpoint(
+                            progress_observer,
+                            &mut last_live_checkpoint_elapsed_millis,
+                            strict_candidate_filter_live_checkpoint(
+                                step_index,
+                                step_start,
+                                clause_kappa,
+                                &raw_catalog_clause_widths,
+                                enumeration_progress,
+                                well_formed_candidates,
+                                admissibility_rejections,
+                                candidates.len(),
+                                "strict_candidate_filter_progress",
+                            ),
+                            true,
+                        );
+                    }
                     continue;
                 }
                 let candidate = evaluate_checked_candidate(library, history, telescope)?;
                 candidates.push(candidate);
+                filtered_telescopes += 1;
+                if filtered_telescopes.is_power_of_two() {
+                    maybe_emit_claim_live_checkpoint(
+                        progress_observer,
+                        &mut last_live_checkpoint_elapsed_millis,
+                        strict_candidate_filter_live_checkpoint(
+                            step_index,
+                            step_start,
+                            clause_kappa,
+                            &raw_catalog_clause_widths,
+                            enumeration_progress,
+                            well_formed_candidates,
+                            admissibility_rejections,
+                            candidates.len(),
+                            "strict_candidate_filter_progress",
+                        ),
+                        true,
+                    );
+                }
             }
+            maybe_emit_claim_live_checkpoint(
+                progress_observer,
+                &mut last_live_checkpoint_elapsed_millis,
+                strict_candidate_filter_live_checkpoint(
+                    step_index,
+                    step_start,
+                    clause_kappa,
+                    &raw_catalog_clause_widths,
+                    enumeration_progress,
+                    well_formed_candidates,
+                    admissibility_rejections,
+                    candidates.len(),
+                    "strict_candidate_filter_ready",
+                ),
+                true,
+            );
         }
         generated_raw_surface = usize::try_from(generated_surface_from_counts(
             prefixes_created,
@@ -3381,6 +4075,12 @@ fn search_next_step_internal_with_clause_catalog_override(
                 admissibility_rejections,
                 prefixes_created,
                 prefix_states_explored,
+                dfs_prefix_rejections: 0,
+                dfs_leaf_rejections: 0,
+                dfs_leaf_check_rejections: 0,
+                dfs_leaf_connectivity_rejections: 0,
+                dfs_leaf_disconnected_rejections: 0,
+                dfs_leaf_connected_unqualified_rejections: 0,
                 frontier_queue_len: retained_prefix_groups,
                 candidate_pool_len: candidates.len(),
                 prefix_cache_groups: prefix_cache.len(),
@@ -3465,6 +4165,12 @@ fn search_next_step_internal_with_clause_catalog_override(
                         admissibility_rejections,
                         prefixes_created,
                         prefix_states_explored,
+                        dfs_prefix_rejections: 0,
+                        dfs_leaf_rejections: 0,
+                        dfs_leaf_check_rejections: 0,
+                        dfs_leaf_connectivity_rejections: 0,
+                        dfs_leaf_disconnected_rejections: 0,
+                        dfs_leaf_connected_unqualified_rejections: 0,
                         frontier_queue_len: pending_group_signatures.len(),
                         candidate_pool_len: candidates.len(),
                         prefix_cache_groups: prefix_cache.len(),
@@ -3873,12 +4579,13 @@ fn search_next_step_internal_with_clause_catalog_override(
     if retained.is_empty() {
         bail!("no semantically minimal candidates survived for step {step_index}");
     }
-    let acceptance = select_acceptance_for_step(
+    let acceptance = select_acceptance_for_step_with_grammar_profile(
         step_index,
         window_depth,
         library,
         history,
         admissibility_mode,
+        grammar_profile,
         retention_runtime,
         objective_bar,
         &retained,
@@ -4622,7 +5329,9 @@ fn expr_former_count(expr: &Expr) -> u16 {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => expr_former_count(body),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => expr_former_count(body),
         Expr::Id(ty, left, right) => expr_former_count(ty)
             .saturating_add(expr_former_count(left))
             .saturating_add(expr_former_count(right)),
@@ -4644,7 +5353,9 @@ fn expr_application_count(expr: &Expr) -> u16 {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => expr_application_count(body),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => expr_application_count(body),
         Expr::Pi(left, right) | Expr::Sigma(left, right) => {
             expr_application_count(left).saturating_add(expr_application_count(right))
         }
@@ -4670,7 +5381,9 @@ fn expr_library_ref_sum(expr: &Expr) -> u32 {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => expr_library_ref_sum(body),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => expr_library_ref_sum(body),
         Expr::Id(ty, left, right) => expr_library_ref_sum(ty)
             .saturating_add(expr_library_ref_sum(left))
             .saturating_add(expr_library_ref_sum(right)),
@@ -4706,12 +5419,35 @@ fn claim_step_thirteen_seed_node_count(telescope: &Telescope) -> u32 {
         .unwrap_or(0)
 }
 
+#[cfg_attr(not(test), allow(dead_code))]
 fn claim_candidate_keeps_next_step_alive(
     step_index: u32,
     window_depth: u16,
     library: &Library,
     history: &[DiscoveryRecord],
     admissibility_mode: AdmissibilityMode,
+    retention_runtime: FrontierRuntimeLimits,
+    candidate: &ExpandedCandidate,
+) -> bool {
+    claim_candidate_keeps_next_step_alive_with_grammar_profile(
+        step_index,
+        window_depth,
+        library,
+        history,
+        admissibility_mode,
+        GrammarProfile::CanonicalMbttV1,
+        retention_runtime,
+        candidate,
+    )
+}
+
+fn claim_candidate_keeps_next_step_alive_with_grammar_profile(
+    step_index: u32,
+    window_depth: u16,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility_mode: AdmissibilityMode,
+    grammar_profile: GrammarProfile,
     retention_runtime: FrontierRuntimeLimits,
     candidate: &ExpandedCandidate,
 ) -> bool {
@@ -4726,12 +5462,13 @@ fn claim_candidate_keeps_next_step_alive(
     next_library.push(LibraryEntry::from_telescope(&candidate.telescope, library));
 
     let mut progress_observer: Option<&mut dyn AtomicSearchProgressObserver> = None;
-    search_next_step_internal(
+    search_next_step_internal_with_grammar_profile(
         step_index + 1,
         window_depth,
         &next_library,
         &next_history,
         admissibility_mode,
+        grammar_profile,
         retention_runtime,
         None,
         &mut progress_observer,
@@ -4746,6 +5483,7 @@ fn claim_candidate_next_step_continuation_rank(
     library: &Library,
     history: &[DiscoveryRecord],
     admissibility_mode: AdmissibilityMode,
+    grammar_profile: GrammarProfile,
     retention_runtime: FrontierRuntimeLimits,
     candidate: &ExpandedCandidate,
 ) -> Option<(u16, AcceptRank)> {
@@ -4760,12 +5498,13 @@ fn claim_candidate_next_step_continuation_rank(
     next_library.push(LibraryEntry::from_telescope(&candidate.telescope, library));
 
     let mut progress_observer: Option<&mut dyn AtomicSearchProgressObserver> = None;
-    let next_step = search_next_step(
+    let next_step = search_next_step_with_grammar_profile(
         step_index + 1,
         window_depth,
         &next_library,
         &next_history,
         admissibility_mode,
+        grammar_profile,
         retention_runtime,
         None,
         &mut progress_observer,
@@ -4775,12 +5514,39 @@ fn claim_candidate_next_step_continuation_rank(
     Some((next_step.accepted.clause_kappa, next_rank))
 }
 
+#[cfg_attr(not(test), allow(dead_code))]
 fn select_acceptance_for_step(
     step_index: u32,
     window_depth: u16,
     library: &Library,
     history: &[DiscoveryRecord],
     admissibility_mode: AdmissibilityMode,
+    retention_runtime: FrontierRuntimeLimits,
+    objective_bar: Rational,
+    retained: &[ExpandedCandidate],
+    allow_claim_viability_tiebreak: bool,
+) -> Option<AcceptanceOutcome> {
+    select_acceptance_for_step_with_grammar_profile(
+        step_index,
+        window_depth,
+        library,
+        history,
+        admissibility_mode,
+        GrammarProfile::CanonicalMbttV1,
+        retention_runtime,
+        objective_bar,
+        retained,
+        allow_claim_viability_tiebreak,
+    )
+}
+
+fn select_acceptance_for_step_with_grammar_profile(
+    step_index: u32,
+    window_depth: u16,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility_mode: AdmissibilityMode,
+    grammar_profile: GrammarProfile,
     retention_runtime: FrontierRuntimeLimits,
     objective_bar: Rational,
     retained: &[ExpandedCandidate],
@@ -4829,9 +5595,14 @@ fn select_acceptance_for_step(
 
     let mut selected_candidate = accepted_candidate;
     if apply_claim_step_nine_same_primary_tiebreak {
-        let historical_anchor_ref =
-            strict_admissibility_for_mode(step_index, window_depth, library, admissibility_mode)
-                .historical_anchor_ref;
+        let historical_anchor_ref = runtime_admissibility_for_profile(
+            step_index,
+            window_depth,
+            library,
+            admissibility_mode,
+            grammar_profile,
+        )
+        .historical_anchor_ref;
         selected_candidate = tied_candidates
             .iter()
             .filter(|(candidate, _)| {
@@ -4903,12 +5674,13 @@ fn select_acceptance_for_step(
         .iter()
         .map(|(candidate, _)| *candidate)
         .filter(|candidate| {
-            claim_candidate_keeps_next_step_alive(
+            claim_candidate_keeps_next_step_alive_with_grammar_profile(
                 step_index,
                 window_depth,
                 library,
                 history,
                 admissibility_mode,
+                grammar_profile,
                 retention_runtime,
                 candidate,
             )
@@ -4928,6 +5700,7 @@ fn select_acceptance_for_step(
                     library,
                     history,
                     admissibility_mode,
+                    grammar_profile,
                     retention_runtime,
                     candidate,
                 )
@@ -4983,6 +5756,42 @@ fn admissibility_mode_for_profile(search_profile: SearchProfile) -> Admissibilit
         SearchProfile::RealisticFrontierShadow | SearchProfile::DemoBreadthShadow => {
             AdmissibilityMode::RealisticShadow
         }
+    }
+}
+
+fn runtime_admissibility_for_profile(
+    step_index: u32,
+    window_depth: u16,
+    library: &Library,
+    admissibility_mode: AdmissibilityMode,
+    grammar_profile: GrammarProfile,
+) -> StrictAdmissibility {
+    let mut admissibility =
+        strict_admissibility_for_mode(step_index, window_depth, library, admissibility_mode);
+    apply_grammar_profile_to_admissibility(&mut admissibility, grammar_profile);
+    admissibility
+}
+
+fn apply_grammar_profile_to_admissibility(
+    admissibility: &mut StrictAdmissibility,
+    grammar_profile: GrammarProfile,
+) {
+    match grammar_profile {
+        GrammarProfile::CanonicalMbttV1 => {}
+        GrammarProfile::NoTemporal => {
+            admissibility.include_temporal = false;
+            admissibility.include_linear_exponential = false;
+            admissibility.require_temporal_shell_package = false;
+            admissibility.package_policies.temporal_shell = PackagePolicy::Forbid;
+            if admissibility.focus_family == Some(StructuralFamily::TemporalShell) {
+                admissibility.focus_family = None;
+            }
+        }
+        GrammarProfile::LinearExponentialSwap => {
+            admissibility.include_temporal = false;
+            admissibility.include_linear_exponential = true;
+        }
+        GrammarProfile::EpistemicSwap => {}
     }
 }
 
@@ -5195,6 +6004,12 @@ fn discover_realistic_shadow_candidates_with_clause_catalog_override(
                 admissibility_rejections: discovery.admissibility_rejections,
                 prefixes_created: discovery.prefixes_created,
                 prefix_states_explored: discovery.prefix_states_explored,
+                dfs_prefix_rejections: 0,
+                dfs_leaf_rejections: 0,
+                dfs_leaf_check_rejections: 0,
+                dfs_leaf_connectivity_rejections: 0,
+                dfs_leaf_disconnected_rejections: 0,
+                dfs_leaf_connected_unqualified_rejections: 0,
                 frontier_queue_len: 0,
                 candidate_pool_len: discovery.candidates.len(),
                 prefix_cache_groups: discovery.prefix_cache.len(),
@@ -5303,6 +6118,12 @@ fn discover_realistic_shadow_candidates_with_clause_catalog_override(
                 admissibility_rejections: discovery.admissibility_rejections,
                 prefixes_created: discovery.prefixes_created,
                 prefix_states_explored: discovery.prefix_states_explored,
+                dfs_prefix_rejections: 0,
+                dfs_leaf_rejections: 0,
+                dfs_leaf_check_rejections: 0,
+                dfs_leaf_connectivity_rejections: 0,
+                dfs_leaf_disconnected_rejections: 0,
+                dfs_leaf_connected_unqualified_rejections: 0,
                 frontier_queue_len: frontier.len(),
                 candidate_pool_len: discovery.candidates.len(),
                 prefix_cache_groups: discovery.prefix_cache.len(),
@@ -5346,6 +6167,12 @@ fn discover_realistic_shadow_candidates_with_clause_catalog_override(
                     admissibility_rejections: discovery.admissibility_rejections,
                     prefixes_created: discovery.prefixes_created,
                     prefix_states_explored: discovery.prefix_states_explored,
+                    dfs_prefix_rejections: 0,
+                    dfs_leaf_rejections: 0,
+                    dfs_leaf_check_rejections: 0,
+                    dfs_leaf_connectivity_rejections: 0,
+                    dfs_leaf_disconnected_rejections: 0,
+                    dfs_leaf_connected_unqualified_rejections: 0,
                     frontier_queue_len: frontier.len(),
                     candidate_pool_len: discovery.candidates.len(),
                     prefix_cache_groups: discovery.prefix_cache.len(),
@@ -5912,6 +6739,12 @@ fn discover_demo_early_exhaustive_candidates(
                 admissibility_rejections: discovery.admissibility_rejections,
                 prefixes_created: discovery.prefixes_created,
                 prefix_states_explored: discovery.prefix_states_explored,
+                dfs_prefix_rejections: 0,
+                dfs_leaf_rejections: 0,
+                dfs_leaf_check_rejections: 0,
+                dfs_leaf_connectivity_rejections: 0,
+                dfs_leaf_disconnected_rejections: 0,
+                dfs_leaf_connected_unqualified_rejections: 0,
                 frontier_queue_len: 0,
                 candidate_pool_len: discovery.candidates.len(),
                 prefix_cache_groups: discovery.prefix_cache.len(),
@@ -5951,6 +6784,12 @@ fn discover_demo_early_exhaustive_candidates(
                     admissibility_rejections: discovery.admissibility_rejections,
                     prefixes_created: discovery.prefixes_created,
                     prefix_states_explored: discovery.prefix_states_explored,
+                    dfs_prefix_rejections: 0,
+                    dfs_leaf_rejections: 0,
+                    dfs_leaf_check_rejections: 0,
+                    dfs_leaf_connectivity_rejections: 0,
+                    dfs_leaf_disconnected_rejections: 0,
+                    dfs_leaf_connected_unqualified_rejections: 0,
                     frontier_queue_len: 0,
                     candidate_pool_len: discovery.candidates.len(),
                     prefix_cache_groups: discovery.prefix_cache.len(),
@@ -6075,11 +6914,9 @@ fn materialize_online_prefix_work_item_catalog(
 ) {
     let prefix_len = work_item.prefix_telescope.clauses.len();
     work_item.filtered_next_clauses = Some(clause_catalog.clauses_at(prefix_len).to_vec());
-    work_item.filtered_next_clause_connectivity_facts = Some(
-        clause_catalog
-            .terminal_connectivity_facts_at(prefix_len)
-            .to_vec(),
-    );
+    work_item.filtered_next_clause_connectivity_facts = clause_catalog
+        .precomputed_terminal_connectivity_facts_at(prefix_len)
+        .map(|facts| facts.to_vec());
     work_item.filtered_next_clause_nu_facts =
         Some(clause_catalog.terminal_nu_facts_at(prefix_len).to_vec());
     work_item.next_clause_count = work_item.filtered_next_clauses.as_ref().map_or(0, Vec::len);
@@ -10921,7 +11758,7 @@ fn create_online_prefix_work_item(
 
     fn clone_filtered_terminal_clause_data(
         catalog_clauses: &[pen_core::clause::ClauseRec],
-        catalog_connectivity_facts: &[TerminalClauseConnectivityFacts],
+        catalog_connectivity_facts: Option<&[TerminalClauseConnectivityFacts]>,
         catalog_nu_facts: &[TerminalClauseNuFacts],
         filtered_clauses: Vec<&pen_core::clause::ClauseRec>,
     ) -> (
@@ -10944,9 +11781,9 @@ fn create_online_prefix_work_item(
             cloned_clauses.push(clause.clone());
             cloned_connectivity_facts.push(
                 catalog_connectivity_facts
-                    .get(clause_index)
-                    .expect("connectivity facts should align with clause catalog")
-                    .clone(),
+                    .and_then(|facts| facts.get(clause_index))
+                    .cloned()
+                    .unwrap_or_else(|| TerminalClauseConnectivityFacts::from_clause(clause)),
             );
             cloned_nu_facts.push(
                 catalog_nu_facts
@@ -10969,7 +11806,8 @@ fn create_online_prefix_work_item(
         (Some(Vec::new()), Some(Vec::new()), Some(Vec::new()), 0)
     } else {
         let catalog_clauses = clause_catalog.clauses_at(prefix_len);
-        let catalog_connectivity_facts = clause_catalog.terminal_connectivity_facts_at(prefix_len);
+        let catalog_connectivity_facts =
+            clause_catalog.precomputed_terminal_connectivity_facts_at(prefix_len);
         let catalog_nu_facts = clause_catalog.terminal_nu_facts_at(prefix_len);
         let mut injected_clauses = Vec::new();
         if let Some(clause) = injected_claim_step_fifteen_anchor_eleven_clause_zero_side_clause(
@@ -14740,8 +15578,8 @@ mod tests {
         demo_proof_close_order_mode, demo_proof_close_order_mode_with_closure_pressure,
         discover_realistic_shadow_candidates, discovery_enumeration_context,
         exact_partial_prefix_bound_decision, maybe_retune_demo_budget_live, pop_best_prefix,
-        prefix_frontier_work_key, screen_prefix_for_frontier, search_bootstrap_from_prefix,
-        search_bootstrap_from_prefix_for_profile_with_runtime,
+        prefix_frontier_work_key, runtime_admissibility_for_profile, screen_prefix_for_frontier,
+        search_bootstrap_from_prefix, search_bootstrap_from_prefix_for_profile_with_runtime,
         search_bootstrap_from_prefix_for_profile_with_runtime_and_observer,
         search_bootstrap_prefix, search_bootstrap_prefix_for_config_with_runtime,
         search_next_step_internal, search_next_step_internal_with_clause_catalog_override,
@@ -14750,10 +15588,11 @@ mod tests {
     };
     use crate::bounds::PrefixBound;
     use crate::branch_bound::AcceptRank;
-    use crate::config::{RuntimeConfig, SearchProfile};
+    use crate::config::{GrammarProfile, RuntimeConfig, SearchProfile};
     use crate::enumerate::{
         ClauseCatalog, EnumerationContext, LateFamilySurface, build_clause_catalog,
         build_clause_catalog_from_options,
+        build_clause_catalog_from_options_with_deferred_connectivity_facts, enumerate_next_clauses,
     };
     use crate::expand::{evaluate_candidate, evaluate_checked_candidate};
     use crate::narrative::{NarrativeEventKind, StepPhase, narrative_progress_snapshot};
@@ -14814,6 +15653,56 @@ mod tests {
             library.push(LibraryEntry::from_telescope(&telescope, &library));
         }
         library
+    }
+
+    fn contains_temporal_expr(expr: &Expr) -> bool {
+        match expr {
+            Expr::Next(_) | Expr::Eventually(_) => true,
+            Expr::Lam(body)
+            | Expr::Trunc(body)
+            | Expr::Flat(body)
+            | Expr::Sharp(body)
+            | Expr::Disc(body)
+            | Expr::Shape(body)
+            | Expr::Refl(body)
+            | Expr::Susp(body)
+            | Expr::Bang(body)
+            | Expr::WhyNot(body) => contains_temporal_expr(body),
+            Expr::App(left, right) | Expr::Pi(left, right) | Expr::Sigma(left, right) => {
+                contains_temporal_expr(left) || contains_temporal_expr(right)
+            }
+            Expr::Id(ty, left, right) => {
+                contains_temporal_expr(ty)
+                    || contains_temporal_expr(left)
+                    || contains_temporal_expr(right)
+            }
+            Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_) => false,
+        }
+    }
+
+    fn contains_linear_exponential_expr(expr: &Expr) -> bool {
+        match expr {
+            Expr::Bang(_) | Expr::WhyNot(_) => true,
+            Expr::Lam(body)
+            | Expr::Trunc(body)
+            | Expr::Flat(body)
+            | Expr::Sharp(body)
+            | Expr::Disc(body)
+            | Expr::Shape(body)
+            | Expr::Refl(body)
+            | Expr::Susp(body)
+            | Expr::Next(body)
+            | Expr::Eventually(body) => contains_linear_exponential_expr(body),
+            Expr::App(left, right) | Expr::Pi(left, right) | Expr::Sigma(left, right) => {
+                contains_linear_exponential_expr(left) || contains_linear_exponential_expr(right)
+            }
+            Expr::Id(ty, left, right) => {
+                contains_linear_exponential_expr(ty)
+                    || contains_linear_exponential_expr(left)
+                    || contains_linear_exponential_expr(right)
+            }
+            Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_) => false,
+        }
     }
 
     fn reference_history_until(
@@ -20892,6 +21781,205 @@ mod tests {
         assert_eq!(
             demo_shadow_surface.late_family_surface,
             LateFamilySurface::DemoBreadthShadow
+        );
+    }
+
+    #[test]
+    fn no_temporal_grammar_profile_disables_step_fifteen_temporal_admissibility() {
+        let library = library_until(14);
+        let canonical = runtime_admissibility_for_profile(
+            15,
+            2,
+            &library,
+            AdmissibilityMode::DesktopClaimShadow,
+            GrammarProfile::CanonicalMbttV1,
+        );
+        let no_temporal = runtime_admissibility_for_profile(
+            15,
+            2,
+            &library,
+            AdmissibilityMode::DesktopClaimShadow,
+            GrammarProfile::NoTemporal,
+        );
+
+        assert!(
+            canonical.include_temporal,
+            "the canonical claim step-15 admissibility should still expose temporal syntax"
+        );
+        assert!(
+            !no_temporal.include_temporal,
+            "the hostile no_temporal profile should close temporal syntax at step 15"
+        );
+        assert_eq!(
+            no_temporal.package_policies.temporal_shell,
+            PackagePolicy::Forbid,
+            "the hostile no_temporal profile should forbid the temporal-shell package explicitly"
+        );
+    }
+
+    #[test]
+    fn no_temporal_grammar_profile_removes_temporal_constructors_from_runtime_driven_enumeration() {
+        let library = library_until(14);
+        let canonical = runtime_admissibility_for_profile(
+            15,
+            2,
+            &library,
+            AdmissibilityMode::DesktopClaimShadow,
+            GrammarProfile::CanonicalMbttV1,
+        );
+        let no_temporal = runtime_admissibility_for_profile(
+            15,
+            2,
+            &library,
+            AdmissibilityMode::DesktopClaimShadow,
+            GrammarProfile::NoTemporal,
+        );
+        let mut canonical_context = EnumerationContext::from_admissibility(&library, canonical);
+        canonical_context.max_expr_nodes = 2;
+        canonical_context.historical_anchor_ref = None;
+        canonical_context.late_family_surface = LateFamilySurface::None;
+        let mut no_temporal_context = EnumerationContext::from_admissibility(&library, no_temporal);
+        no_temporal_context.max_expr_nodes = 2;
+        no_temporal_context.historical_anchor_ref = None;
+        no_temporal_context.late_family_surface = LateFamilySurface::None;
+        let canonical_clauses = enumerate_next_clauses(canonical_context);
+        let no_temporal_clauses = enumerate_next_clauses(no_temporal_context);
+
+        assert!(
+            canonical_clauses
+                .iter()
+                .any(|clause| contains_temporal_expr(&clause.expr)),
+            "the canonical runtime-driven context should still enumerate temporal constructors"
+        );
+        assert!(
+            no_temporal_clauses
+                .iter()
+                .all(|clause| !contains_temporal_expr(&clause.expr)),
+            "the hostile no_temporal profile should remove temporal constructors from runtime-driven enumeration"
+        );
+    }
+
+    #[test]
+    fn linear_exponential_grammar_profile_swaps_step_fifteen_guarded_admissibility() {
+        let library = library_until(14);
+        let canonical = runtime_admissibility_for_profile(
+            15,
+            2,
+            &library,
+            AdmissibilityMode::Guarded,
+            GrammarProfile::CanonicalMbttV1,
+        );
+        let linear_exponential = runtime_admissibility_for_profile(
+            15,
+            2,
+            &library,
+            AdmissibilityMode::Guarded,
+            GrammarProfile::LinearExponentialSwap,
+        );
+
+        assert!(canonical.include_temporal);
+        assert!(!canonical.include_linear_exponential);
+        assert!(
+            !linear_exponential.include_temporal,
+            "the swapped hostile grammar should close temporal constructors on the guarded run surface"
+        );
+        assert!(
+            linear_exponential.include_linear_exponential,
+            "the swapped hostile grammar should open the replacement constructor pair on the guarded run surface"
+        );
+        assert_eq!(
+            linear_exponential.require_temporal_shell_package,
+            canonical.require_temporal_shell_package,
+            "the grammar swap should keep the step-15 shell-family slot live while changing only the constructors"
+        );
+    }
+
+    #[test]
+    fn linear_exponential_grammar_profile_replaces_temporal_constructors_in_guarded_enumeration() {
+        let library = library_until(14);
+        let canonical = runtime_admissibility_for_profile(
+            15,
+            2,
+            &library,
+            AdmissibilityMode::Guarded,
+            GrammarProfile::CanonicalMbttV1,
+        );
+        let linear_exponential = runtime_admissibility_for_profile(
+            15,
+            2,
+            &library,
+            AdmissibilityMode::Guarded,
+            GrammarProfile::LinearExponentialSwap,
+        );
+        let mut canonical_context = EnumerationContext::from_admissibility(&library, canonical);
+        canonical_context.max_expr_nodes = 2;
+        let mut linear_context =
+            EnumerationContext::from_admissibility(&library, linear_exponential);
+        linear_context.max_expr_nodes = 2;
+
+        let canonical_clauses = enumerate_next_clauses(canonical_context);
+        let linear_clauses = enumerate_next_clauses(linear_context);
+
+        assert!(canonical_clauses.iter().any(|clause| contains_temporal_expr(&clause.expr)));
+        assert!(
+            canonical_clauses
+                .iter()
+                .all(|clause| !contains_linear_exponential_expr(&clause.expr)),
+            "the canonical guarded surface should stay on the temporal constructor pair"
+        );
+        assert!(
+            linear_clauses
+                .iter()
+                .all(|clause| !contains_temporal_expr(&clause.expr)),
+            "the swapped hostile grammar should remove temporal constructors from guarded enumeration"
+        );
+        assert!(
+            linear_clauses
+                .iter()
+                .any(|clause| contains_linear_exponential_expr(&clause.expr)),
+            "the swapped hostile grammar should expose the replacement constructor pair in guarded enumeration"
+        );
+    }
+
+    #[test]
+    fn linear_exponential_grammar_profile_swaps_the_guarded_step_fifteen_shell_catalog() {
+        let library = library_until(14);
+        let canonical = runtime_admissibility_for_profile(
+            15,
+            2,
+            &library,
+            AdmissibilityMode::Guarded,
+            GrammarProfile::CanonicalMbttV1,
+        );
+        let linear_exponential = runtime_admissibility_for_profile(
+            15,
+            2,
+            &library,
+            AdmissibilityMode::Guarded,
+            GrammarProfile::LinearExponentialSwap,
+        );
+
+        let canonical_catalog =
+            build_clause_catalog(EnumerationContext::from_admissibility(&library, canonical), 8);
+        let linear_catalog = build_clause_catalog(
+            EnumerationContext::from_admissibility(&library, linear_exponential),
+            8,
+        );
+
+        let temporal_reference =
+            ClauseRec::new(ClauseRole::Formation, Expr::Next(Box::new(Expr::Var(1))));
+        let linear_reference =
+            ClauseRec::new(ClauseRole::Formation, Expr::Bang(Box::new(Expr::Var(1))));
+
+        assert!(canonical_catalog.clauses_at(0).contains(&temporal_reference));
+        assert!(!canonical_catalog.clauses_at(0).contains(&linear_reference));
+        assert!(
+            linear_catalog.clauses_at(0).contains(&linear_reference),
+            "the guarded step-15 shell catalog should admit the swapped constructor in position 0"
+        );
+        assert!(
+            !linear_catalog.clauses_at(0).contains(&temporal_reference),
+            "the guarded step-15 shell catalog should drop the temporal constructor after the swap"
         );
     }
 
@@ -72806,6 +73894,122 @@ mod tests {
     }
 
     #[test]
+    fn claim_step_eleven_terminal_summary_matches_with_deferred_catalog_connectivity_facts() {
+        let claim_steps = super::search_bootstrap_prefix_for_profile_with_runtime(
+            10,
+            2,
+            SearchProfile::DesktopClaimShadow,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("claim prefix through step 10 should build");
+        let claim_prefix = claim_steps
+            .iter()
+            .map(|step| step.telescope.clone())
+            .collect::<Vec<_>>();
+        let (library, history, nu_history) = history_from_prefix(&claim_prefix);
+        let prefix = Telescope::new(Telescope::reference(11).clauses[..4].to_vec());
+        let admissibility =
+            strict_admissibility_for_mode(11, 2, &library, AdmissibilityMode::DesktopClaimShadow);
+        let context = EnumerationContext::from_admissibility(&library, admissibility);
+        let clause_catalog = build_clause_catalog(context, 5);
+        let deferred_catalog = build_clause_catalog_from_options_with_deferred_connectivity_facts(
+            5,
+            (0..5)
+                .map(|position| clause_catalog.clauses_at(position).to_vec())
+                .collect(),
+            &[4],
+        );
+        let signature = PrefixSignature::new(11, &library, &prefix);
+        let objective_bar = compute_bar(2, 11, &history).bar;
+
+        let eager_summary = {
+            let mut cache = PrefixLegalityCache::default();
+            assert!(cache.insert_root(
+                signature.clone(),
+                5,
+                &library,
+                &prefix,
+                admissibility,
+                LateFamilySurface::ClaimGeneric
+            ));
+            let terminal_clauses = super::terminal_prefix_clause_candidates(
+                11,
+                &library,
+                admissibility,
+                &signature,
+                clause_catalog.clauses_at(4),
+                clause_catalog.precomputed_terminal_connectivity_facts_at(4),
+                clause_catalog.terminal_nu_facts_at(4),
+                &mut cache,
+                None,
+            );
+            super::compute_terminal_prefix_completion_summary_from_candidates(
+                11,
+                &library,
+                admissibility,
+                objective_bar,
+                &nu_history,
+                &signature,
+                &prefix,
+                super::TerminalPrefixSummaryPayload::Full,
+                terminal_clauses,
+                None,
+                &mut cache,
+                None,
+                None,
+            )
+        };
+
+        let deferred_summary = {
+            let mut cache = PrefixLegalityCache::default();
+            assert!(cache.insert_root(
+                signature.clone(),
+                5,
+                &library,
+                &prefix,
+                admissibility,
+                LateFamilySurface::ClaimGeneric
+            ));
+            let terminal_clauses = super::terminal_prefix_clause_candidates(
+                11,
+                &library,
+                admissibility,
+                &signature,
+                deferred_catalog.clauses_at(4),
+                deferred_catalog.precomputed_terminal_connectivity_facts_at(4),
+                deferred_catalog.terminal_nu_facts_at(4),
+                &mut cache,
+                None,
+            );
+            super::compute_terminal_prefix_completion_summary_from_candidates(
+                11,
+                &library,
+                admissibility,
+                objective_bar,
+                &nu_history,
+                &signature,
+                &prefix,
+                super::TerminalPrefixSummaryPayload::Full,
+                terminal_clauses,
+                None,
+                &mut cache,
+                None,
+                None,
+            )
+        };
+
+        assert_eq!(
+            deferred_catalog.precomputed_terminal_connectivity_facts_at(4),
+            None,
+            "the deferred test catalog should not precompute the terminal connectivity side table"
+        );
+        assert_eq!(
+            eager_summary, deferred_summary,
+            "deferring the catalog-level connectivity facts should not change the remaining-one step-11 summary"
+        );
+    }
+
+    #[test]
     fn claim_step_eleven_now_hits_the_generated_floor_without_losing_the_guarded_winner() {
         let step = super::search_bootstrap_prefix_for_profile_with_runtime(
             11,
@@ -74051,6 +75255,829 @@ mod tests {
             frontier_progress,
             frontier_remainder,
         )
+    }
+
+    #[test]
+    fn strict_no_temporal_step_one_emits_a_clause_catalog_checkpoint_before_enumeration() {
+        let config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/grammar_ablation_no_temporal.toml"
+        ))
+        .expect("no_temporal config should parse");
+        let mut recorder = LiveCheckpointRecorder::default();
+
+        let steps =
+            super::search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observer(
+                &[],
+                1,
+                2,
+                &config,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+                DemoBudgetSeed::default(),
+                Some(&mut recorder),
+            )
+            .expect("strict no_temporal step 1 should build");
+        let checkpoint = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| checkpoint.note.as_deref() == Some("strict_clause_catalog_ready"))
+            .expect("strict search should emit a pre-enumeration clause-catalog checkpoint");
+        let build_started = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_clause_catalog_build_started")
+            })
+            .expect("strict search should announce when clause-catalog construction begins");
+        let position_zero_started = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_clause_catalog_position_0_started")
+            })
+            .expect("strict search should surface when raw clause-catalog position 0 begins");
+        let position_zero_ready = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_clause_catalog_position_0_ready")
+            })
+            .expect("strict search should surface when raw clause-catalog position 0 completes");
+        let position_zero_partial = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint
+                    .note
+                    .as_deref()
+                    .is_some_and(|note| {
+                        note.starts_with("strict_clause_catalog_position_0_expr_nodes_")
+                    })
+            })
+            .expect("strict search should expose in-position raw expr-node progress before position 0 completes");
+        let build_started_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_clause_catalog_build_started")
+            })
+            .expect("build-started checkpoint should be recorded");
+        let position_zero_started_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_clause_catalog_position_0_started")
+            })
+            .expect("position-0-started checkpoint should be recorded");
+        let position_zero_ready_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_clause_catalog_position_0_ready")
+            })
+            .expect("position-0-ready checkpoint should be recorded");
+        let position_zero_partial_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with("strict_clause_catalog_position_0_expr_nodes_")
+                })
+            })
+            .expect("position-0 partial checkpoint should be recorded");
+        let catalog_ready_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_clause_catalog_ready")
+            })
+            .expect("catalog-ready checkpoint should be recorded");
+
+        assert_eq!(steps.len(), 1);
+        assert_eq!(build_started.step_index, 1);
+        assert_eq!(
+            build_started.phase,
+            super::LiveStepCheckpointPhase::Discovery
+        );
+        assert_eq!(build_started.clause_kappa, checkpoint.clause_kappa);
+        assert_eq!(build_started.raw_catalog_clause_widths, Vec::<usize>::new());
+        assert_eq!(build_started.raw_catalog_telescope_count, None);
+        assert_eq!(position_zero_started.step_index, 1);
+        assert_eq!(
+            position_zero_started.phase,
+            super::LiveStepCheckpointPhase::Discovery
+        );
+        assert_eq!(position_zero_started.clause_kappa, checkpoint.clause_kappa);
+        assert_eq!(
+            position_zero_started.raw_catalog_clause_widths,
+            Vec::<usize>::new()
+        );
+        assert_eq!(position_zero_started.raw_catalog_telescope_count, None);
+        assert_eq!(position_zero_partial.step_index, 1);
+        assert_eq!(
+            position_zero_partial.phase,
+            super::LiveStepCheckpointPhase::Discovery
+        );
+        assert_eq!(position_zero_partial.clause_kappa, checkpoint.clause_kappa);
+        assert_eq!(
+            position_zero_partial.raw_catalog_clause_widths,
+            Vec::<usize>::new()
+        );
+        assert_eq!(position_zero_partial.raw_catalog_telescope_count, None);
+        assert_eq!(position_zero_ready.step_index, 1);
+        assert_eq!(
+            position_zero_ready.phase,
+            super::LiveStepCheckpointPhase::Discovery
+        );
+        assert_eq!(position_zero_ready.clause_kappa, checkpoint.clause_kappa);
+        assert_eq!(position_zero_ready.raw_catalog_telescope_count, None);
+        assert_eq!(position_zero_ready.raw_catalog_clause_widths.len(), 1);
+        assert!(position_zero_ready.raw_catalog_clause_widths[0] > 0);
+        assert!(build_started_index < position_zero_started_index);
+        assert!(position_zero_started_index < position_zero_partial_index);
+        assert!(position_zero_partial_index < position_zero_ready_index);
+        assert!(position_zero_started_index < position_zero_ready_index);
+        assert!(position_zero_ready_index < catalog_ready_index);
+        assert_eq!(checkpoint.step_index, 1);
+        assert_eq!(checkpoint.phase, super::LiveStepCheckpointPhase::Discovery);
+        assert!(checkpoint.clause_kappa.is_some());
+        assert!(!checkpoint.raw_catalog_clause_widths.is_empty());
+        assert_eq!(
+            checkpoint.raw_catalog_telescope_count,
+            Some(
+                checkpoint
+                    .raw_catalog_clause_widths
+                    .iter()
+                    .copied()
+                    .fold(1usize, usize::saturating_mul)
+            )
+        );
+        assert_eq!(checkpoint.generated_raw_surface, 0);
+        assert_eq!(checkpoint.enumerated_candidates, 0);
+        assert_eq!(checkpoint.well_formed_candidates, 0);
+        assert_eq!(checkpoint.admissibility_rejections, 0);
+        assert_eq!(checkpoint.prefixes_created, 0);
+        assert_eq!(checkpoint.prefix_states_explored, 0);
+        assert_eq!(checkpoint.frontier_queue_len, 0);
+        assert_eq!(checkpoint.candidate_pool_len, 0);
+        assert_eq!(checkpoint.claim_surface, None);
+        assert_eq!(checkpoint.claim_step_open, None);
+        assert_eq!(checkpoint.claim_root_seeding, None);
+        assert_eq!(checkpoint.remaining_one_telemetry, None);
+    }
+
+    #[test]
+    fn strict_no_temporal_step_one_emits_clause_materialization_checkpoints_before_dfs_progress() {
+        let config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/grammar_ablation_no_temporal.toml"
+        ))
+        .expect("no_temporal config should parse");
+        let mut recorder = LiveCheckpointRecorder::default();
+
+        let steps =
+            super::search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observer(
+                &[],
+                1,
+                2,
+                &config,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+                DemoBudgetSeed::default(),
+                Some(&mut recorder),
+            )
+            .expect("strict no_temporal step 1 should build");
+        let step = steps.first().expect("step 1 should exist");
+        let catalog_checkpoint = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| checkpoint.note.as_deref() == Some("strict_clause_catalog_ready"))
+            .expect("catalog-ready checkpoint should be recorded");
+        let catalog_ready_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_clause_catalog_ready")
+            })
+            .expect("catalog-ready checkpoint should be recorded");
+        let enumeration_started = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_telescope_enumeration_started")
+            })
+            .expect("strict search should announce the start of post-catalog telescope work");
+        let enumeration_started_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_telescope_enumeration_started")
+            })
+            .expect("enumeration-started checkpoint should be recorded");
+        let materialization_started = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_clause_materialization_position_0_started")
+            })
+            .expect("strict search should surface the first real clause-materialization position boundary");
+        let materialization_started_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref()
+                    == Some("strict_clause_materialization_position_0_started")
+            })
+            .expect("materialization-started checkpoint should be recorded");
+        let materialization_progress = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with("strict_clause_materialization_position_0_expr_nodes_")
+                        && note.contains("_generated_expr_count_")
+                })
+            })
+            .expect("strict search should expose in-position clause-generation progress");
+        let materialization_progress_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with("strict_clause_materialization_position_0_expr_nodes_")
+                        && note.contains("_generated_expr_count_")
+                })
+            })
+            .expect("materialization-generation checkpoint should be recorded");
+        let materialization_clause_ready = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with("strict_clause_materialization_position_0_expr_nodes_")
+                        && note.contains("_ready_clause_count_")
+                })
+            })
+            .expect("strict search should expose filtered clause-materialization progress");
+        let materialization_clause_ready_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with("strict_clause_materialization_position_0_expr_nodes_")
+                        && note.contains("_ready_clause_count_")
+                })
+            })
+            .expect("materialization clause-ready checkpoint should be recorded");
+        let materialization_sort_started = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with(
+                        "strict_clause_materialization_position_0_sort_started_clause_count_",
+                    )
+                })
+            })
+            .expect("strict search should expose when the post-ready clause sort begins");
+        let materialization_sort_started_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with(
+                        "strict_clause_materialization_position_0_sort_started_clause_count_",
+                    )
+                })
+            })
+            .expect("materialization sort-started checkpoint should be recorded");
+        let materialization_sorted = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with(
+                        "strict_clause_materialization_position_0_sorted_clause_count_",
+                    )
+                })
+            })
+            .expect("strict search should expose the post-sort clause-materialization boundary");
+        let materialization_sorted_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with(
+                        "strict_clause_materialization_position_0_sorted_clause_count_",
+                    )
+                })
+            })
+            .expect("materialization sorted checkpoint should be recorded");
+        let materialization_connectivity_ready = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with(
+                        "strict_clause_materialization_position_0_connectivity_facts_ready_clause_count_",
+                    )
+                })
+            })
+            .expect("strict search should expose when clause connectivity facts are ready");
+        let materialization_connectivity_ready_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with(
+                        "strict_clause_materialization_position_0_connectivity_facts_ready_clause_count_",
+                    )
+                })
+            })
+            .expect("materialization connectivity-facts checkpoint should be recorded");
+        let materialization_nu_ready = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with(
+                        "strict_clause_materialization_position_0_nu_facts_ready_clause_count_",
+                    )
+                })
+            })
+            .expect("strict search should expose when clause nu facts are ready");
+        let materialization_nu_ready_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref().is_some_and(|note| {
+                    note.starts_with(
+                        "strict_clause_materialization_position_0_nu_facts_ready_clause_count_",
+                    )
+                })
+            })
+            .expect("materialization nu-facts checkpoint should be recorded");
+        let materialization_ready = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_clause_materialization_position_0_ready")
+            })
+            .expect("strict search should surface when the first clause-materialization position completes");
+        let materialization_ready_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_clause_materialization_position_0_ready")
+            })
+            .expect("materialization-ready checkpoint should be recorded");
+        let enumeration_handoff = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_telescope_enumeration_handoff_started")
+            })
+            .expect("strict search should surface the post-ready handoff into telescope DFS");
+        let enumeration_handoff_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_telescope_enumeration_handoff_started")
+            })
+            .expect("enumeration-handoff checkpoint should be recorded");
+        let enumeration_progress_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_telescope_enumeration_progress")
+            })
+            .expect("enumeration-progress checkpoint should be recorded");
+
+        assert_eq!(steps.len(), 1);
+        assert_eq!(enumeration_started.step_index, 1);
+        assert_eq!(
+            enumeration_started.phase,
+            super::LiveStepCheckpointPhase::Discovery
+        );
+        assert_eq!(
+            enumeration_started.clause_kappa,
+            Some(step.accepted.clause_kappa)
+        );
+        assert_eq!(
+            materialization_started.raw_catalog_clause_widths,
+            catalog_checkpoint.raw_catalog_clause_widths,
+            "clause-materialization checkpoints should keep the finished raw-width surface visible for context"
+        );
+        assert_eq!(materialization_started.raw_catalog_telescope_count, None);
+        assert_eq!(materialization_started.generated_raw_surface, 0);
+        assert_eq!(materialization_started.enumerated_candidates, 0);
+        assert_eq!(materialization_started.prefixes_created, 0);
+        assert_eq!(materialization_started.prefix_states_explored, 0);
+        assert_eq!(
+            materialization_progress.raw_catalog_clause_widths,
+            catalog_checkpoint.raw_catalog_clause_widths
+        );
+        assert_eq!(materialization_progress.raw_catalog_telescope_count, None);
+        assert_eq!(materialization_progress.generated_raw_surface, 0);
+        assert_eq!(materialization_progress.enumerated_candidates, 0);
+        assert_eq!(
+            materialization_clause_ready.raw_catalog_clause_widths,
+            catalog_checkpoint.raw_catalog_clause_widths
+        );
+        assert_eq!(
+            materialization_clause_ready.raw_catalog_telescope_count,
+            None
+        );
+        assert_eq!(materialization_clause_ready.generated_raw_surface, 0);
+        assert_eq!(materialization_clause_ready.enumerated_candidates, 0);
+        assert_eq!(
+            materialization_sort_started.raw_catalog_clause_widths,
+            catalog_checkpoint.raw_catalog_clause_widths
+        );
+        assert_eq!(
+            materialization_sort_started.raw_catalog_telescope_count,
+            None
+        );
+        assert_eq!(materialization_sort_started.generated_raw_surface, 0);
+        assert_eq!(materialization_sort_started.enumerated_candidates, 0);
+        assert_eq!(
+            materialization_sorted.raw_catalog_clause_widths,
+            catalog_checkpoint.raw_catalog_clause_widths
+        );
+        assert_eq!(materialization_sorted.raw_catalog_telescope_count, None);
+        assert_eq!(materialization_sorted.generated_raw_surface, 0);
+        assert_eq!(materialization_sorted.enumerated_candidates, 0);
+        assert_eq!(
+            materialization_connectivity_ready.raw_catalog_clause_widths,
+            catalog_checkpoint.raw_catalog_clause_widths
+        );
+        assert_eq!(
+            materialization_connectivity_ready.raw_catalog_telescope_count,
+            None
+        );
+        assert_eq!(materialization_connectivity_ready.generated_raw_surface, 0);
+        assert_eq!(materialization_connectivity_ready.enumerated_candidates, 0);
+        assert_eq!(
+            materialization_nu_ready.raw_catalog_clause_widths,
+            catalog_checkpoint.raw_catalog_clause_widths
+        );
+        assert_eq!(materialization_nu_ready.raw_catalog_telescope_count, None);
+        assert_eq!(materialization_nu_ready.generated_raw_surface, 0);
+        assert_eq!(materialization_nu_ready.enumerated_candidates, 0);
+        assert_eq!(
+            materialization_ready.raw_catalog_clause_widths,
+            catalog_checkpoint.raw_catalog_clause_widths
+        );
+        assert_eq!(materialization_ready.raw_catalog_telescope_count, None);
+        assert_eq!(materialization_ready.generated_raw_surface, 0);
+        assert_eq!(materialization_ready.enumerated_candidates, 0);
+        assert_eq!(
+            enumeration_handoff.raw_catalog_clause_widths,
+            catalog_checkpoint.raw_catalog_clause_widths
+        );
+        assert_eq!(enumeration_handoff.raw_catalog_telescope_count, None);
+        assert_eq!(enumeration_handoff.generated_raw_surface, 0);
+        assert_eq!(enumeration_handoff.enumerated_candidates, 0);
+        assert_eq!(enumeration_handoff.prefixes_created, 0);
+        assert_eq!(enumeration_handoff.prefix_states_explored, 0);
+        assert!(catalog_ready_index < enumeration_started_index);
+        assert!(enumeration_started_index < materialization_started_index);
+        assert!(materialization_started_index < materialization_progress_index);
+        assert!(materialization_progress_index < materialization_clause_ready_index);
+        assert!(materialization_clause_ready_index < materialization_sort_started_index);
+        assert!(materialization_sort_started_index < materialization_sorted_index);
+        assert!(materialization_clause_ready_index < materialization_sorted_index);
+        assert!(materialization_sorted_index < materialization_connectivity_ready_index);
+        assert!(materialization_connectivity_ready_index < materialization_nu_ready_index);
+        assert!(materialization_nu_ready_index < materialization_ready_index);
+        assert!(materialization_clause_ready_index < materialization_ready_index);
+        assert!(materialization_progress_index < materialization_ready_index);
+        assert!(materialization_ready_index < enumeration_handoff_index);
+        assert!(enumeration_handoff_index < enumeration_progress_index);
+        assert!(materialization_ready_index < enumeration_progress_index);
+    }
+
+    #[test]
+    fn strict_no_temporal_step_one_emits_post_catalog_enumeration_and_filter_checkpoints() {
+        let config = RuntimeConfig::from_toml_str(include_str!(
+            "../../../configs/grammar_ablation_no_temporal.toml"
+        ))
+        .expect("no_temporal config should parse");
+        let mut recorder = LiveCheckpointRecorder::default();
+
+        let steps =
+            super::search_bootstrap_from_prefix_for_config_with_runtime_and_seed_and_observer(
+                &[],
+                1,
+                2,
+                &config,
+                crate::diversify::FrontierRuntimeLimits::unlimited(),
+                DemoBudgetSeed::default(),
+                Some(&mut recorder),
+            )
+            .expect("strict no_temporal step 1 should build");
+        let step = steps.first().expect("step 1 should exist");
+        let catalog_ready_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_clause_catalog_ready")
+            })
+            .expect("catalog-ready checkpoint should be recorded");
+        let enumeration_progress = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_telescope_enumeration_progress")
+            })
+            .expect("strict search should surface post-catalog DFS progress");
+        let enumeration_progress_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_telescope_enumeration_progress")
+            })
+            .expect("enumeration-progress checkpoint should be recorded");
+        let enumeration_handoff = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_telescope_enumeration_handoff_started")
+            })
+            .expect("strict search should surface the post-ready enumeration handoff");
+        let enumeration_handoff_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_telescope_enumeration_handoff_started")
+            })
+            .expect("enumeration-handoff checkpoint should be recorded");
+        let enumeration_ready = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_telescope_enumeration_ready")
+            })
+            .expect(
+                "strict search should surface when post-catalog telescope enumeration completes",
+            );
+        let enumeration_ready_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_telescope_enumeration_ready")
+            })
+            .expect("enumeration-ready checkpoint should be recorded");
+        let filter_started = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_candidate_filter_started")
+            })
+            .expect("strict search should mark the start of the post-enumeration filter loop");
+        let filter_started_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_candidate_filter_started")
+            })
+            .expect("filter-started checkpoint should be recorded");
+        let filter_progress = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_candidate_filter_progress")
+            })
+            .expect(
+                "strict search should surface progress inside the post-enumeration filter loop",
+            );
+        let filter_ready = recorder
+            .checkpoints
+            .iter()
+            .find(|checkpoint| checkpoint.note.as_deref() == Some("strict_candidate_filter_ready"))
+            .expect("strict search should surface when the post-enumeration filter loop completes");
+        let filter_ready_index = recorder
+            .checkpoints
+            .iter()
+            .position(|checkpoint| {
+                checkpoint.note.as_deref() == Some("strict_candidate_filter_ready")
+            })
+            .expect("filter-ready checkpoint should be recorded");
+
+        assert_eq!(steps.len(), 1);
+        assert!(catalog_ready_index < enumeration_handoff_index);
+        assert!(enumeration_handoff_index < enumeration_progress_index);
+        assert!(enumeration_progress_index < enumeration_ready_index);
+        assert!(enumeration_ready_index < filter_started_index);
+        assert!(filter_started_index < filter_ready_index);
+        assert_eq!(enumeration_handoff.step_index, 1);
+        assert_eq!(
+            enumeration_handoff.phase,
+            super::LiveStepCheckpointPhase::Discovery
+        );
+        assert_eq!(
+            enumeration_handoff.clause_kappa,
+            Some(step.accepted.clause_kappa)
+        );
+        assert_eq!(enumeration_handoff.raw_catalog_telescope_count, None);
+        assert_eq!(enumeration_handoff.generated_raw_surface, 0);
+        assert_eq!(enumeration_handoff.enumerated_candidates, 0);
+        assert_eq!(enumeration_handoff.prefixes_created, 0);
+        assert_eq!(enumeration_handoff.prefix_states_explored, 0);
+        assert_eq!(enumeration_handoff.dfs_prefix_rejections, 0);
+        assert_eq!(enumeration_handoff.dfs_leaf_rejections, 0);
+        assert_eq!(enumeration_handoff.dfs_leaf_check_rejections, 0);
+        assert_eq!(enumeration_handoff.dfs_leaf_connectivity_rejections, 0);
+        assert_eq!(enumeration_handoff.dfs_leaf_disconnected_rejections, 0);
+        assert_eq!(
+            enumeration_handoff.dfs_leaf_connected_unqualified_rejections,
+            0
+        );
+        assert_eq!(enumeration_progress.step_index, 1);
+        assert_eq!(
+            enumeration_progress.phase,
+            super::LiveStepCheckpointPhase::Discovery
+        );
+        assert_eq!(enumeration_ready.step_index, 1);
+        assert_eq!(
+            enumeration_ready.phase,
+            super::LiveStepCheckpointPhase::Discovery
+        );
+        assert_eq!(
+            enumeration_ready.clause_kappa,
+            Some(step.accepted.clause_kappa)
+        );
+        assert_eq!(
+            enumeration_ready.raw_catalog_telescope_count,
+            Some(step.enumerated_candidates),
+            "the enumeration-ready checkpoint should expose the exact post-DFS telescope count, not the saturating raw-width product"
+        );
+        assert_eq!(
+            enumeration_ready.enumerated_candidates,
+            step.enumerated_candidates
+        );
+        assert!(enumeration_ready.prefix_states_explored > 0);
+        assert!(
+            enumeration_progress.dfs_prefix_rejections <= enumeration_ready.dfs_prefix_rejections
+        );
+        assert!(enumeration_progress.dfs_leaf_rejections <= enumeration_ready.dfs_leaf_rejections);
+        assert!(
+            enumeration_progress.dfs_leaf_check_rejections
+                <= enumeration_ready.dfs_leaf_check_rejections
+        );
+        assert!(
+            enumeration_progress.dfs_leaf_connectivity_rejections
+                <= enumeration_ready.dfs_leaf_connectivity_rejections
+        );
+        assert!(
+            enumeration_progress.dfs_leaf_disconnected_rejections
+                <= enumeration_ready.dfs_leaf_disconnected_rejections
+        );
+        assert!(
+            enumeration_progress.dfs_leaf_connected_unqualified_rejections
+                <= enumeration_ready.dfs_leaf_connected_unqualified_rejections
+        );
+        assert_eq!(
+            enumeration_progress.dfs_leaf_rejections,
+            enumeration_progress.dfs_leaf_check_rejections
+                + enumeration_progress.dfs_leaf_connectivity_rejections
+        );
+        assert_eq!(
+            enumeration_progress.dfs_leaf_connectivity_rejections,
+            enumeration_progress.dfs_leaf_disconnected_rejections
+                + enumeration_progress.dfs_leaf_connected_unqualified_rejections
+        );
+        assert_eq!(
+            enumeration_ready.dfs_leaf_rejections,
+            enumeration_ready.dfs_leaf_check_rejections
+                + enumeration_ready.dfs_leaf_connectivity_rejections
+        );
+        assert_eq!(
+            enumeration_ready.dfs_leaf_connectivity_rejections,
+            enumeration_ready.dfs_leaf_disconnected_rejections
+                + enumeration_ready.dfs_leaf_connected_unqualified_rejections
+        );
+        assert!(
+            enumeration_progress.generated_raw_surface > 0
+                || enumeration_progress.prefix_states_explored > 0
+                || enumeration_progress.enumerated_candidates > 0
+        );
+        assert_eq!(
+            filter_started.raw_catalog_telescope_count,
+            Some(step.enumerated_candidates)
+        );
+        assert_eq!(
+            filter_started.enumerated_candidates,
+            step.enumerated_candidates
+        );
+        assert_eq!(filter_started.well_formed_candidates, 0);
+        assert_eq!(filter_started.admissibility_rejections, 0);
+        assert_eq!(
+            filter_started.dfs_prefix_rejections,
+            enumeration_ready.dfs_prefix_rejections
+        );
+        assert_eq!(
+            filter_started.dfs_leaf_rejections,
+            enumeration_ready.dfs_leaf_rejections
+        );
+        assert_eq!(
+            filter_started.dfs_leaf_check_rejections,
+            enumeration_ready.dfs_leaf_check_rejections
+        );
+        assert_eq!(
+            filter_started.dfs_leaf_connectivity_rejections,
+            enumeration_ready.dfs_leaf_connectivity_rejections
+        );
+        assert_eq!(
+            filter_started.dfs_leaf_disconnected_rejections,
+            enumeration_ready.dfs_leaf_disconnected_rejections
+        );
+        assert_eq!(
+            filter_started.dfs_leaf_connected_unqualified_rejections,
+            enumeration_ready.dfs_leaf_connected_unqualified_rejections
+        );
+        assert!(filter_progress.well_formed_candidates > 0);
+        assert_eq!(
+            filter_ready.enumerated_candidates,
+            step.enumerated_candidates
+        );
+        assert_eq!(
+            filter_ready.well_formed_candidates,
+            step.well_formed_candidates
+        );
+        assert_eq!(
+            filter_ready.admissibility_rejections,
+            step.admissibility_rejections
+        );
+        assert_eq!(filter_ready.candidate_pool_len, step.evaluated_candidates);
+        assert_eq!(
+            filter_ready.dfs_prefix_rejections,
+            enumeration_ready.dfs_prefix_rejections
+        );
+        assert_eq!(
+            filter_ready.dfs_leaf_rejections,
+            enumeration_ready.dfs_leaf_rejections
+        );
+        assert_eq!(
+            filter_ready.dfs_leaf_check_rejections,
+            enumeration_ready.dfs_leaf_check_rejections
+        );
+        assert_eq!(
+            filter_ready.dfs_leaf_connectivity_rejections,
+            enumeration_ready.dfs_leaf_connectivity_rejections
+        );
+        assert_eq!(
+            filter_ready.dfs_leaf_disconnected_rejections,
+            enumeration_ready.dfs_leaf_disconnected_rejections
+        );
+        assert_eq!(
+            filter_ready.dfs_leaf_connected_unqualified_rejections,
+            enumeration_ready.dfs_leaf_connected_unqualified_rejections
+        );
+    }
+
+    #[test]
+    fn prefix_replay_search_emits_resume_prefix_progress_checkpoints_before_the_next_step() {
+        let prefix = super::search_bootstrap_prefix_for_profile_with_runtime(
+            2,
+            2,
+            SearchProfile::StrictCanonGuarded,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+        )
+        .expect("strict prefix should build")
+        .into_iter()
+        .map(|step| step.telescope)
+        .collect::<Vec<_>>();
+        let mut recorder = LiveCheckpointRecorder::default();
+
+        let steps = super::search_bootstrap_from_prefix_for_profile_with_runtime_and_observer(
+            &prefix,
+            3,
+            2,
+            SearchProfile::StrictCanonGuarded,
+            crate::diversify::FrontierRuntimeLimits::unlimited(),
+            Some(&mut recorder),
+        )
+        .expect("strict continuation should build");
+        let replay_notes = recorder
+            .checkpoints
+            .iter()
+            .filter_map(|checkpoint| checkpoint.note.clone())
+            .filter(|note| note.starts_with("resume_prefix_replay_progress_"))
+            .collect::<Vec<_>>();
+
+        assert_eq!(steps.len(), 1);
+        assert_eq!(
+            replay_notes,
+            vec![
+                "resume_prefix_replay_progress_1_of_2".to_owned(),
+                "resume_prefix_replay_progress_2_of_2".to_owned(),
+            ]
+        );
+        assert!(
+            recorder
+                .checkpoints
+                .iter()
+                .all(|checkpoint| checkpoint.step_index == 3),
+            "prefix replay progress should be written into the next-step live artifact"
+        );
     }
 
     #[test]
@@ -84192,6 +86219,7 @@ mod tests {
                 include_trunc: false,
                 include_modal: true,
                 include_temporal: true,
+                include_linear_exponential: false,
                 quota_per_bucket: 64,
                 require_former_eliminator_package: false,
                 require_initial_hit_package: false,

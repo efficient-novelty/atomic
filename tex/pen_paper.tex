@@ -133,6 +133,7 @@ Late-stage discovery in the current executable artifact therefore means objectiv
 This differs from the dominant theorem-prover use pattern.
 Interactive provers and ATP systems typically consume a human-specified conjecture and produce or check a proof object for that target.
 PEN instead treats \emph{library growth} itself as the optimization target: the engine generates admissible structural extensions, scores them with a fixed objective, and selects without goal-specific theorem injection in the evaluator.
+At each step, the selector reads only the current library, the candidate specification, and the immediate inferential surface unlocked by sealing that candidate against the active interface; it does not reward candidates for matching a predeclared future target or a remotely simulated trajectory.
 The mathematically central claim is therefore metatheoretic rather than anthropomorphic: under maximal interface density, a fixed MBTT vocabulary, and the fully coupled CCHM/HoTT lane studied here, the proof-theoretic growth dynamics force a narrow efficiency ordering in which cohesive and differential structure dominate discrete alternatives.
 The current Rust atomic engine is the computational verification of this claim, not an argument that the system ``invented'' its own vocabulary.
 
@@ -151,7 +152,7 @@ Different signatures could in principle yield different trajectories; the contri
 
 \paragraph{Conjecture versus finding.}
 The paper makes one conjectural claim and one implemented claim, and they should not be conflated.
-\emph{Conjecture:} with sufficiently large compute and materially weaker pruning, the same PEN objective over the same admissible MBTT space would recover the same 15-step structural trajectory, including the same temporal-cohesive endpoint later semantically read as DCT.
+\emph{Conjecture:} with sufficiently large compute and materially weaker pruning, the same PEN objective over the same disclosed canonical MBTT space would recover the same 15-step structural trajectory, including the same temporal-cohesive endpoint later semantically read as DCT.
 \emph{Finding:} the current implementation recovers that trajectory in a bounded live atomic strict lane suitable for standard desktop hardware by combining exact-band admissibility, atomic MBTT enumeration, hybrid novelty evaluation, semantic minimality filtering, and deterministic minimal-overshoot selection.
 These tractability devices are part of the implementation status report, not part of the mathematical theorem.
 Legacy structural audits, donor Haskell artifacts, and reference telescopes remain diagnostics or provenance only and do not override the strict canon reported in this manuscript.
@@ -170,7 +171,7 @@ Starting from an initially empty accepted library under this fixed signature, th
     \item \textbf{Bootstrap} (steps 1--4): A universe, unit type, witness, and dependent function/sum types---the minimal infrastructure of type theory.
     \item \textbf{Geometric Ascent} (steps 5--9): The circle $S^1$, propositional truncation, the sphere $S^2$, the H-space $S^3$, and the Hopf fibration---the core objects of homotopy theory.
     \item \textbf{Framework Abstraction} (steps 10--14): Cohesion, connections, curvature, an endomorphic operator bundle (metric-equivalent semantic reading), and Hilbert-functional structure.
-    \item \textbf{Synthesis} (step 15): A temporal-cohesive shell, later semantically completed as the Dynamical Cohesive Topos (DCT), fuses spatial logic with Nakano temporal modalities and explicit exchange axioms, clears the selection bar with the largest absolute overshoot in the sequence ($\rho = 12.88$, bar $= 7.40$), and triggers PEN's local halting condition.
+    \item \textbf{Synthesis} (step 15): In the disclosed canonical MBTT lane, a temporal-cohesive shell, later semantically completed as the Dynamical Cohesive Topos (DCT), fuses spatial logic with Nakano temporal modalities and explicit exchange axioms, clears the selection bar with the largest absolute overshoot in the sequence ($\rho = 12.88$, bar $= 7.40$), and triggers PEN's local halting condition.
 \end{enumerate}
 Termination is not a failure of the search: the Step-15 temporal-cohesive shell internalizes continuous evolution on the connected component of the Univalent Universe, so every subsequent continuous proposal has zero marginal novelty up to equivalence, while disconnected axiomatic jumps cannot amortize the required Step-16 interface debt $\Delta_{16}=F_{16}=987$ under PEN's bar.
 We call this boundary the \emph{Univalent Horizon}---the connected-component boundary of the type-theoretic moduli space beyond which only external axiomatic jumps can reach.
@@ -180,7 +181,7 @@ The model produces several structural results:
     \item The \textbf{Coherence Window Theorems} establish $d = 1$ for extensional type theory (constant costs, stagnation) and $d = 2$ for the fully coupled CCHM/HoTT intensional lane analyzed here (Fibonacci costs, sustained evolution), via three independent arguments from categorical, homological, and topological perspectives.
     \item The \textbf{Complexity Scaling Theorem} shows that this $d = 2$ coherence regime forces $\Delta_n = F_n$ (the Fibonacci sequence), making the Golden Ratio $\varphi$ the dominant eigenvalue of mathematical evolution.
     \item The \textbf{Combinatorial Novelty Theorem} proves that novelty grows superlinearly, ensuring that efficiency permanently outpaces the rising selection bar.
-    \item The \textbf{Terminal Fixed-Point Analysis} shows that the temporal-cohesive endpoint, whose semantic completion is read as DCT, is selected with a large deterministic overshoot in the current bounded live atomic lane and realizes the unique high-interaction structural fixed point available inside the connected component explored by the engine.
+    \item The \textbf{Terminal Fixed-Point Analysis} shows that, in the current bounded live atomic canonical MBTT lane, the temporal-cohesive endpoint, whose semantic completion is read as DCT, is selected with a large deterministic overshoot and realizes the unique high-interaction structural fixed point available inside the connected component explored by the engine.
 \end{itemize}
 Computational verification is provided by the current Rust atomic engine, which recovers the 15-step sequence in its current bounded live strict lane.
 The manuscript's canonical values come from that strict run; auxiliary audits are used only as consistency checks and never override the strict canon.
@@ -445,7 +446,7 @@ $\Diamond(A)$          & \texttt{111111111} & 9 & Eventually modality \\
 The exact binary description length of a specification depends on the chosen prefix-free universal grammar, here MBTT.
 By the Invariance Theorem of Kolmogorov Complexity~\cite{kolmogorov}, replacing MBTT by any other universal grammar changes that description length by at most an additive constant $O(1)$.
 PEN uses clause count as the coarse primary denominator and MBTT bit-length as an audit/tiebreak layer, so the encoding choice contributes only bounded bias at the granularity used here.
-Because the $d=2$ survival bar is later shown to grow with the Fibonacci debt sequence (\cref{cor:fibonacci}), this $O(1)$ grammar dependence can affect only finitely many low-complexity edge cases and is asymptotically negligible.
+Because the $d=2$ survival bar is later shown to grow with the Fibonacci debt sequence (\cref{cor:fibonacci}), this $O(1)$ grammar dependence can affect only finitely many low-complexity edge cases and is asymptotically negligible. But that asymptotic observation is not empirical protection for the concrete small-$\kappa$ late endpoint: at the current 15-step scale an $O(1)$ grammar shift can still change the ranking, and the current hostile-grammar ablation report keeps exact replay only through Hilbert (step~14) rather than recovering a grammar-independent step-15 temporal shell.
 \end{remark}
 
 \begin{definition}[API dependency graph and structural bundle]
@@ -790,12 +791,13 @@ After each idle tick: $H \leftarrow H + 1$.
 
 \begin{axiom}[Admissibility]
 \label{ax:admissibility}
-Candidate $X$ is admissible iff derivable from $\mathcal{B}$ and $\kappa(X) \leq H$.
+Candidate $X$ is admissible iff it is a well-typed extension over the current library~$\mathcal{B}$, is not definitionally derivable from~$\mathcal{B}$, and satisfies the active horizon bound $\kappa(X) \leq H$.
+For bundled specifications, every charged clause of $X$ must be constructively irreducible relative to~$\mathcal{B}$ in the sense of \cref{def:derivability}.
 \end{axiom}
 
 \begin{remark}[Admissibility constraints for axiomatic extensions]
 \label{rem:admissibility-constraints}
-For steps in the axiomatic regime (Steps~10--14), where candidates are type-theoretic axioms rather than explicit constructions, admissibility imposes four structural constraints:
+For steps in the axiomatic regime (Steps~10--14), where candidates are type-theoretic axioms rather than explicit constructions, the generic admissibility axiom specializes to four structural constraints:
 \begin{enumerate}[nosep]
     \item \emph{Structural unity:} Each candidate introduces a single structural bundle in the sense of \cref{def:api-graph,def:minimal-api}.  (For example, Cohesion's four modalities $\flat \dashv \Disc \dashv \sharp$ form an indivisible adjoint string; proposing $\flat$ alone would violate the adjunction.)
     \item \emph{Well-formedness:} All type signatures in the specification must be well-typed in the current library~$\mathcal{B}$.
@@ -829,19 +831,25 @@ Otherwise $\mathcal{S}$ is \emph{constructively prime}.
 \label{ax:selection}
 The Selection Bar is $\mathrm{Bar}_n := \Phi_n \cdot \Omega_{n-1}$. Rather than a greedy, unconstrained maximization of novelty, PEN operates via the minimization of a structural objective functional over the moduli space of candidate MBTT telescopes. For any candidate $X$, we define the cost functional:
 \begin{equation}
-    \mathcal{J}_n(X) = \mathcal{P}_{\mathrm{adm}}(X) + \mathcal{P}_{\mathrm{bar}}(X) + \gamma \big( \rho(X) - \mathrm{Bar}_n \big) + \epsilon \kappa(X)
+    \mathcal{J}_n(X) = \mathcal{P}_{\mathrm{adm}}(X) + \mathcal{P}_{\mathrm{bar}}(X) + \mathcal{P}_{\mathrm{prime}}(X) + \gamma \big( \rho(X) - \mathrm{Bar}_n \big) + \epsilon \kappa(X)
 \end{equation}
 Where:
 \begin{itemize}[nosep]
-    \item $\mathcal{P}_{\mathrm{adm}}(X)$ applies an infinite penalty to ill-typed or non-canonical telescopes (enforcing absolute constraint satisfaction).
+    \item $\mathcal{P}_{\mathrm{adm}}(X)$ applies an infinite penalty to ill-typed, non-canonical, or definitionally redundant telescopes (enforcing absolute constraint satisfaction).
     \item $\mathcal{P}_{\mathrm{bar}}(X)$ applies an infinite penalty if $\rho(X) < \mathrm{Bar}_n$ (the sub-criticality barrier).
+    \item $\mathcal{P}_{\mathrm{prime}}(X)$ applies an infinite penalty when $X$ is constructively composite in the sense of \cref{def:primality}, i.e.\ when a proper terminal SCC sub-bundle already clears the active bar.
     \item $\gamma > 0$ weights the positive efficiency surplus, and $0 < \epsilon \ll \gamma$ acts as a Kolmogorov tie-breaker favoring minimal syntax.
 \end{itemize}
-The selected candidate $X_{n+1}$ is the global minimum $\arg\min_X \mathcal{J}_n(X)$. This uniquely and analytically enforces the \emph{minimal positive overshoot} criterion.
+The selected candidate $X_{n+1}$ is the global minimum $\arg\min_X \mathcal{J}_n(X)$. This uniquely and analytically enforces the \emph{minimal positive overshoot} criterion on the admissible, bar-clearing, constructively prime frontier.
 \end{axiom}
 
 \begin{remark}[Minimal overshoot as least structural action]
 Formulating selection as the minimization of $\mathcal{J}_n(X)$ replaces heuristic sorting with formal constrained optimization. If the engine greedily maximized $\rho$, it would be vulnerable to ``axiom packing''—absorbing multiple independent components into a single composite update. By selecting the global minimum of the objective functional, the system dynamically tracks the frontier of the optimization landscape. It settles into the nearest admissible structural ground state, absorbing exactly the required capacity to clear the historical debt while leaving no unmotivated structural excitations.
+\end{remark}
+
+\begin{remark}[Stage-locality and sufficiency]
+\label{rem:selection-locality}
+The bar $\mathrm{Bar}_n$ should be read as a stagewise sufficiency threshold: PEN does not maximize novelty over all admissible futures, but selects on the current admissible field the least-surplus candidate that is admissible, bar-clearing, and constructively prime. All quantities entering $\mathcal{J}_n(X)$ are computed from the current library state~$\mathcal{B}_n$, the specification of~$X$, and the immediate interaction surface exposed by sealing~$X$ against the active interface. In particular, $\nu(X)$ measures marginal derivational capacity available at the present stage, not reward for a downstream realized trajectory. The selector therefore compares candidates contemporaneously within the current admissible field rather than by forward simulation of remote future libraries.
 \end{remark}
 
 \begin{remark}[Algorithmic API assembly and compositional synergy]
@@ -1508,14 +1516,14 @@ The halting claim is therefore algorithmic and PEN-local, not a claim that mathe
 \label{sec:dct-discovery}
 
 This section consolidates the manuscript's Step-15 claim in the order the paper intends it to be read: first the selected temporal-cohesive AST, then the executable quantities attached to that shell, and only then its semantic DCT completion.
-Under fixed fully coupled settings, the PEN objective realizes the temporal-cohesive shell as the terminal high-yield extension, and the current bounded live atomic engine recovers that shell under bounded search.
+Under fixed fully coupled settings and the disclosed canonical MBTT vocabulary, the PEN objective realizes the temporal-cohesive shell as the terminal high-yield extension, and the current bounded live atomic engine recovers that shell under bounded search.
 The key claim is therefore structural rather than label-driven: a typed search-and-selection engine with no target theorem injection in its scoring path reaches a PEN-local fixed point at the Univalent Horizon of the current $d=2$ lane.
 
 \subsection{Why the Temporal-Cohesive Shell Is a Terminal Signal}
 
 \begin{observation}[Terminal temporal-cohesive fixed-point signal]
 \label{thm:spectral}
-In the current bounded live atomic mode, the engine selects a Step-15 temporal-cohesive shell with $\kappa=8$, $\nu=103$, and $\rho=12.88$, clearing the step-15 bar (7.40) by an absolute overshoot of $5.48$, the largest in the sequence.
+In the current bounded live atomic canonical MBTT mode, the engine selects a Step-15 temporal-cohesive shell with $\kappa=8$, $\nu=103$, and $\rho=12.88$, clearing the step-15 bar (7.40) by an absolute overshoot of $5.48$, the largest in the sequence.
 The selection is made from admissible typed candidates under fixed rules and bounded budgets, without step-indexed target conditioning or reference-candidate replay in the scoring-selection lane.
 \end{observation}
 
@@ -1811,7 +1819,7 @@ This provides computational evidence that, among the tested values $d \in \{1, 2
     \item Schema Canonicality (\cref{prop:grammar-canonical}): depth-1 schemas are window-independent, verified computationally for steps 1--7.
     \item The $S^2 \equiv S^3$ Syntactic Identity (\cref{prop:s2s3}).
     \item \textbf{The Topological Projection} (\cref{thm:topological-projection}): The formula $\nu_H = m + d^2$ is derived from the cubical path algebra within the CCHM framework.  The derivation relies on framework-specific properties (connection maps, Kan operations, spectral degeneration at $E_2$) and should be read as a structural derivation within CCHM cubical type theory rather than a theorem of arbitrary cubical frameworks.
-    \item The terminal DCT fixed-point signal (\cref{thm:spectral}): in the current bounded live atomic lane, the temporal-cohesive shell is selected at step~15 with $\nu=103$, $\kappa=8$, and the largest absolute overshoot in the sequence.
+    \item The terminal DCT fixed-point signal (\cref{thm:spectral}): in the current bounded live atomic canonical MBTT lane, the temporal-cohesive shell is selected at step~15 with $\nu=103$, $\kappa=8$, and the largest absolute overshoot in the sequence.
 \end{itemize}
 
 \paragraph{Assumed.}
@@ -1852,6 +1860,7 @@ The result should therefore be read as a strong mechanized existence claim in on
 \paragraph{Objective dependence.}
 The decisive quantities $\nu$, $\kappa$, admissibility, and minimal overshoot are PEN's operational invariants of library growth, not canonical invariants of all possible foundational dynamics.
 The manuscript's theorems are therefore conditional: once these quantities are fixed by constructive irreducibility, canonicity preservation, and universal coding, the induced trajectory is deterministic.
+More abstractly, PEN should be read as one executable articulation of a broader stage-local selective schema: admissibility fixes the viable field, the bar enforces context-sensitive sufficiency, semantic minimality enforces constructive primeness, and integration updates the realized library. Other implementations could refine the local comparative functional or tie-breaking discipline without changing that abstract architecture.
 
 The topological projection $\nu_H = m + d^2$ is now a derived quantity (\cref{thm:topological-projection}), but the derivation relies on Spectral Degeneration at $E_2$ and the cubical interaction matrix, which are structural properties of the path algebra rather than consequences of the PEN axioms alone.
 In the present manuscript that formula is used only for the explicit path-style payload preserved by the strict evaluator, where it functions as a theorem-backed shortcut rather than as a hand-tuned late-stage heuristic.
@@ -1909,15 +1918,15 @@ The Principle of Efficient Novelty determines a 15-step PEN Synthesis Trajectory
 \end{enumerate}
 and two structural results:
 \begin{enumerate}[nosep, start=4]
-    \item \textbf{Terminal temporal-cohesive fixed point.} In PEN's current bounded live atomic lane, the temporal-cohesive Step-15 AST is selected with $\nu=103$, $\kappa=8$, and maximal absolute overshoot; its semantic completion is read as DCT, and Step~16 then halts by the internal/external combinatorial squeeze.
-    This identifies the terminal fixed point of PEN within the connected component explored by the engine.
+    \item \textbf{Terminal temporal-cohesive fixed point.} In PEN's current bounded live atomic canonical MBTT lane, the temporal-cohesive Step-15 AST is selected with $\nu=103$, $\kappa=8$, and maximal absolute overshoot; its semantic completion is read as DCT, and Step~16 then halts by the internal/external combinatorial squeeze.
+    This identifies a terminal fixed point of PEN only within that disclosed lane and connected component, not as grammar-independent empirical evidence across hostile grammars.
     \item \textbf{Mechanical Verification.} The bounded live atomic engine recovers the full 15-step sequence with the machine values reported in \cref{tab:genesis}. Auxiliary audits validate portions of that computation but do not override those totals.
 \end{enumerate}
 
 The paper's final claim splits in two.
-\emph{Conjecture:} with sufficiently powerful search over the same admissible MBTT space, the same structural PEN trajectory, including the same temporal-cohesive endpoint and the same semantic identifications, would emerge without the current tractability guidance.
+\emph{Conjecture:} with sufficiently powerful search over the same disclosed canonical MBTT space, the same structural PEN trajectory, including the same temporal-cohesive endpoint and the same semantic identifications, would emerge without the current tractability guidance.
 \emph{Finding:} the present executable artifact recovers that trajectory in a bounded live atomic strict lane using exact-band admissibility, atomic MBTT enumeration, hybrid novelty evaluation, and semantic minimality filtering.
-Taken together, these results support a conditional metatheory of typed library growth rather than an anthropomorphic discovery claim: under PEN's fixed MBTT vocabulary, admissibility policy, minimal-overshoot rule, and maximal-interface-density requirement, the fully coupled CCHM/HoTT $d=2$ coherence regime forces Fibonacci integration debt, superlinear novelty, asymptotic rejection of purely discrete families, and convergence to a Step-15 temporal-cohesive fixed point whose semantic completion is DCT and whose external continuation is halted inside the connected component of $\U_0$ explored by the engine.
+Taken together, these results support a conditional metatheory of typed library growth rather than an anthropomorphic discovery claim: under PEN's fixed MBTT vocabulary, admissibility policy, minimal-overshoot rule, and maximal-interface-density requirement, the fully coupled CCHM/HoTT $d=2$ coherence regime forces Fibonacci integration debt, superlinear novelty, asymptotic rejection of purely discrete families, and convergence, in the disclosed canonical MBTT lane, to a Step-15 temporal-cohesive fixed point whose semantic completion is DCT and whose external continuation is halted inside the connected component of $\U_0$ explored by the engine. The current hostile-grammar ablations keep exact replay only through Hilbert, so that terminal step should presently be read as a canonical-grammar result rather than as grammar-independent executable evidence.
 Reproducibility details, extended arithmetic checks, boundary-case clarifications, and full MBTT audits are deferred to the appendices.
 
 % ============================================

@@ -164,6 +164,8 @@ fn expr_to_agda_with_ctx(ctx: &[String], expr: &Expr) -> String {
         Expr::Shape(body) => format!("(Shape {})", expr_to_agda_with_ctx(ctx, body)),
         Expr::Next(body) => format!("(Next {})", expr_to_agda_with_ctx(ctx, body)),
         Expr::Eventually(body) => format!("(Eventually {})", expr_to_agda_with_ctx(ctx, body)),
+        Expr::Bang(body) => format!("(Bang {})", expr_to_agda_with_ctx(ctx, body)),
+        Expr::WhyNot(body) => format!("(WhyNot {})", expr_to_agda_with_ctx(ctx, body)),
     }
 }
 

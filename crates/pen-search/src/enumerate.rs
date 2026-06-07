@@ -7,9 +7,11 @@ use pen_core::telescope::Telescope;
 use pen_eval::nu::TerminalClauseNuFacts;
 use pen_type::admissibility::{AdmissibilityMode, StrictAdmissibility, StructuralFamily};
 use pen_type::check::{CheckResult, check_telescope};
-use pen_type::connectivity::{TerminalClauseConnectivityFacts, passes_connectivity};
+use pen_type::connectivity::{TerminalClauseConnectivityFacts, analyze_connectivity};
 use serde::{Deserialize, Serialize};
+use std::cmp::Ordering;
 use std::collections::{BTreeMap, BTreeSet};
+use std::rc::Rc;
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -48,6 +50,7 @@ pub struct EnumerationContext {
     pub include_trunc: bool,
     pub include_modal: bool,
     pub include_temporal: bool,
+    pub include_linear_exponential: bool,
     pub max_expr_nodes: u8,
     pub require_former_eliminator_clauses: bool,
     pub require_initial_hit_clauses: bool,
@@ -75,8 +78,123 @@ pub struct TelescopeEnumeration {
 pub struct ClauseCatalog {
     clause_kappa: u16,
     options_by_position: Vec<Vec<ClauseRec>>,
-    terminal_connectivity_facts_by_position: Vec<Vec<TerminalClauseConnectivityFacts>>,
+    terminal_connectivity_facts_by_position: Vec<TerminalConnectivityFactsByPosition>,
     terminal_nu_facts_by_position: Vec<Vec<TerminalClauseNuFacts>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+enum TerminalConnectivityFactsByPosition {
+    Eager(Vec<TerminalClauseConnectivityFacts>),
+    Deferred,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum RawClauseCatalogWidthProgress {
+    PositionStarted {
+        position: usize,
+    },
+    PositionExprNodesReady {
+        position: usize,
+        expr_nodes: u8,
+        max_expr_nodes: u8,
+        width_so_far: usize,
+    },
+    PositionReady {
+        position: usize,
+        width: usize,
+    },
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ClauseCatalogBuildProgress {
+    PositionStarted {
+        position: usize,
+    },
+    PositionExprNodesGenerated {
+        position: usize,
+        expr_nodes: u8,
+        max_expr_nodes: u8,
+        expr_count: usize,
+    },
+    PositionExprNodesAccumulationProgress {
+        position: usize,
+        expr_nodes: u8,
+        max_expr_nodes: u8,
+        scanned_expr_count: usize,
+        clause_count_so_far: usize,
+    },
+    PositionExprNodesReady {
+        position: usize,
+        expr_nodes: u8,
+        max_expr_nodes: u8,
+        clause_count_so_far: usize,
+    },
+    PositionSortStarted {
+        position: usize,
+        clause_count: usize,
+    },
+    PositionSorted {
+        position: usize,
+        clause_count: usize,
+    },
+    PositionConnectivityFactsReady {
+        position: usize,
+        clause_count: usize,
+    },
+    PositionNuFactsReady {
+        position: usize,
+        clause_count: usize,
+    },
+    PositionReady {
+        position: usize,
+        clause_count: usize,
+    },
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub struct TelescopeEnumerationProgress {
+    pub prefix_attempts: usize,
+    pub prefix_states_explored: usize,
+    pub terminal_prefixes: usize,
+    pub dfs_prefix_rejections: usize,
+    pub dfs_leaf_rejections: usize,
+    pub dfs_leaf_check_rejections: usize,
+    pub dfs_leaf_connectivity_rejections: usize,
+    pub dfs_leaf_disconnected_rejections: usize,
+    pub dfs_leaf_connected_unqualified_rejections: usize,
+    pub completed_telescopes: usize,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum TelescopeEnumerationProgressEvent {
+    ClauseCatalog(ClauseCatalogBuildProgress),
+    EnumerationHandoff(TelescopeEnumerationProgress),
+    Enumeration(TelescopeEnumerationProgress),
+}
+
+const CLAUSE_MATERIALIZATION_PROGRESS_CHUNK: usize = 1_000_000;
+const MAX_EAGER_TERMINAL_CONNECTIVITY_FACTS_PER_POSITION: usize = 1_000_000;
+const MIN_STREAMED_EXACT_EXPR_BUCKET_SIZE: usize = 5_000_000;
+
+impl TerminalConnectivityFactsByPosition {
+    fn for_clauses(clauses: &[ClauseRec]) -> Self {
+        if clauses.len() > MAX_EAGER_TERMINAL_CONNECTIVITY_FACTS_PER_POSITION {
+            return Self::Deferred;
+        }
+        Self::Eager(
+            clauses
+                .iter()
+                .map(TerminalClauseConnectivityFacts::from_clause)
+                .collect(),
+        )
+    }
+
+    fn as_slice(&self) -> Option<&[TerminalClauseConnectivityFacts]> {
+        match self {
+            Self::Eager(facts) => Some(facts),
+            Self::Deferred => None,
+        }
+    }
 }
 
 impl ClauseCatalog {
@@ -95,10 +213,17 @@ impl ClauseCatalog {
         &self,
         position: usize,
     ) -> &[TerminalClauseConnectivityFacts] {
+        self.precomputed_terminal_connectivity_facts_at(position)
+            .unwrap_or(&[])
+    }
+
+    pub(crate) fn precomputed_terminal_connectivity_facts_at(
+        &self,
+        position: usize,
+    ) -> Option<&[TerminalClauseConnectivityFacts]> {
         self.terminal_connectivity_facts_by_position
             .get(position)
-            .map(Vec::as_slice)
-            .unwrap_or(&[])
+            .and_then(TerminalConnectivityFactsByPosition::as_slice)
     }
 
     pub fn terminal_nu_facts_at(&self, position: usize) -> &[TerminalClauseNuFacts] {
@@ -122,6 +247,7 @@ impl EnumerationContext {
             include_trunc: admissibility.include_trunc,
             include_modal: admissibility.include_modal,
             include_temporal: admissibility.include_temporal,
+            include_linear_exponential: admissibility.include_linear_exponential,
             max_expr_nodes: admissibility.max_expr_nodes,
             require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
             require_initial_hit_clauses: admissibility.require_initial_hit_package,
@@ -182,7 +308,11 @@ pub fn enumerate_next_clauses(context: EnumerationContext) -> Vec<ClauseRec> {
                     || supports_operator_bundle_clause(expr))
                 && (!context.require_hilbert_functional_clauses
                     || supports_hilbert_functional_clause(expr))
-                && (!context.require_temporal_shell_clauses || supports_temporal_shell_clause(expr))
+                && (!context.require_temporal_shell_clauses
+                    || supports_temporal_shell_clause(
+                        expr,
+                        context.include_linear_exponential,
+                    ))
         })
         .map(|expr| ClauseRec::new(primary_role(&expr), expr))
         .collect()
@@ -191,45 +321,31 @@ pub fn enumerate_next_clauses(context: EnumerationContext) -> Vec<ClauseRec> {
 fn enumerate_raw_next_clauses(context: EnumerationContext) -> Vec<ClauseRec> {
     enumerate_exprs_raw(context)
         .into_iter()
-        .filter(|expr| {
-            (!context.require_former_eliminator_clauses || supports_former_eliminator_clause(expr))
-                && (!context.require_initial_hit_clauses
-                    || supports_initial_hit_clause(expr, context.late_family_surface))
-                && (!context.require_truncation_hit_clauses
-                    || supports_truncation_hit_clause(expr, context.late_family_surface))
-                && (!context.require_higher_hit_clauses
-                    || supports_higher_hit_clause(expr, context.late_family_surface))
-                && (!context.require_sphere_lift_clauses
-                    || supports_sphere_lift_clause(expr, context.late_family_surface))
-                && (!context.require_axiomatic_bundle_clauses
-                    || supports_axiomatic_bundle_clause(expr))
-                && (!context.require_modal_shell_clauses || supports_modal_shell_clause(expr))
-                && (!context.require_connection_shell_clauses
-                    || supports_connection_shell_clause(expr))
-                && (!context.require_curvature_shell_clauses
-                    || supports_curvature_shell_clause(expr))
-                && (!context.require_operator_bundle_clauses
-                    || supports_operator_bundle_clause(expr))
-                && (!context.require_hilbert_functional_clauses
-                    || supports_hilbert_functional_clause(expr))
-                && (!context.require_temporal_shell_clauses || supports_temporal_shell_clause(expr))
-        })
+        .filter(|expr| raw_clause_matches_context(expr, context))
         .map(|expr| ClauseRec::new(primary_role(&expr), expr))
         .collect()
 }
 
-fn dedupe_sorted_clauses(clauses: Vec<ClauseRec>) -> Vec<ClauseRec> {
-    let mut keyed = BTreeMap::new();
-    for clause in clauses {
-        keyed
-            .entry((
-                clause.role as u8,
-                expr_sort_key(&clause.expr),
-                serde_json::to_string(&clause.expr).expect("expr should serialize"),
-            ))
-            .or_insert(clause);
-    }
-    keyed.into_values().collect()
+fn dedupe_sorted_clauses(mut clauses: Vec<ClauseRec>) -> Vec<ClauseRec> {
+    sort_clauses_in_place(&mut clauses);
+    clauses.dedup();
+    clauses
+}
+
+fn sort_clauses_in_place(clauses: &mut [ClauseRec]) {
+    clauses.sort_by_cached_key(clause_sort_key);
+}
+
+#[cfg_attr(not(test), allow(dead_code))]
+fn compare_clause_sort_order(left: &ClauseRec, right: &ClauseRec) -> Ordering {
+    (left.role as u8)
+        .cmp(&(right.role as u8))
+        .then_with(|| compare_expr_sort_order(&left.expr, &right.expr))
+}
+
+#[cfg_attr(not(test), allow(dead_code))]
+fn clause_sort_key(clause: &ClauseRec) -> (u8, (u8, u32, String)) {
+    (clause.role as u8, expr_sort_key(&clause.expr))
 }
 
 fn relaxed_modal_shell_clause(position: usize) -> Option<Expr> {
@@ -582,136 +698,284 @@ fn claim_generic_band7_clauses(position: usize, context: EnumerationContext) -> 
     }
 }
 
+fn temporal_shell_left_expr(body: Expr, include_linear_exponential: bool) -> Expr {
+    if include_linear_exponential {
+        Expr::Bang(Box::new(body))
+    } else {
+        Expr::Next(Box::new(body))
+    }
+}
+
+fn temporal_shell_right_expr(body: Expr, include_linear_exponential: bool) -> Expr {
+    if include_linear_exponential {
+        Expr::WhyNot(Box::new(body))
+    } else {
+        Expr::Eventually(Box::new(body))
+    }
+}
+
+fn temporal_shell_left_body(expr: &Expr, include_linear_exponential: bool) -> Option<&Expr> {
+    match (include_linear_exponential, expr) {
+        (false, Expr::Next(body)) | (true, Expr::Bang(body)) => Some(body.as_ref()),
+        _ => None,
+    }
+}
+
+fn temporal_shell_right_body(expr: &Expr, include_linear_exponential: bool) -> Option<&Expr> {
+    match (include_linear_exponential, expr) {
+        (false, Expr::Eventually(body)) | (true, Expr::WhyNot(body)) => Some(body.as_ref()),
+        _ => None,
+    }
+}
+
+fn matches_temporal_shell_left_var(
+    expr: &Expr,
+    include_linear_exponential: bool,
+    index: u32,
+) -> bool {
+    temporal_shell_left_body(expr, include_linear_exponential)
+        .is_some_and(|body| matches!(body, Expr::Var(found) if *found == index))
+}
+
+fn matches_temporal_shell_right_var(
+    expr: &Expr,
+    include_linear_exponential: bool,
+    index: u32,
+) -> bool {
+    temporal_shell_right_body(expr, include_linear_exponential)
+        .is_some_and(|body| matches!(body, Expr::Var(found) if *found == index))
+}
+
+fn temporal_shell_realistic_position_four_extension(context: EnumerationContext) -> Expr {
+    let include_linear_exponential = context.include_linear_exponential;
+    Expr::Pi(
+        Box::new(Expr::Flat(Box::new(temporal_shell_left_expr(
+            Expr::Var(1),
+            include_linear_exponential,
+        )))),
+        Box::new(temporal_shell_left_expr(
+            Expr::Flat(Box::new(temporal_shell_left_expr(
+                Expr::Var(1),
+                include_linear_exponential,
+            ))),
+            include_linear_exponential,
+        )),
+    )
+}
+
 fn claim_generic_band8_clauses(position: usize, context: EnumerationContext) -> Vec<Expr> {
     let Some(anchor) = context.historical_anchor_ref else {
         return Vec::new();
     };
+    let include_linear_exponential = context.include_linear_exponential;
 
     match position {
         0 => vec![
-            Expr::Next(Box::new(Expr::Var(1))),
-            Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
-            Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+            temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+            temporal_shell_left_expr(
+                Expr::Flat(Box::new(Expr::Var(1))),
+                include_linear_exponential,
+            ),
+            temporal_shell_left_expr(
+                temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+                include_linear_exponential,
+            ),
         ],
         1 => vec![
-            Expr::Eventually(Box::new(Expr::Var(1))),
-            Expr::Eventually(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
-            Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
+            temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+            temporal_shell_right_expr(
+                Expr::Sharp(Box::new(Expr::Var(1))),
+                include_linear_exponential,
+            ),
+            temporal_shell_right_expr(
+                temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                include_linear_exponential,
+            ),
         ],
         2 => vec![
             Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
-                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
-            ),
-            Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
-                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
-            ),
-            Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                Box::new(temporal_shell_left_expr(
                     Expr::Var(1),
-                ))))),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )),
+            ),
+            Expr::Pi(
+                Box::new(temporal_shell_left_expr(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )),
+            ),
+            Expr::Pi(
+                Box::new(temporal_shell_left_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ),
         ],
         3 => vec![
             Expr::Lam(Box::new(Expr::App(
                 Box::new(Expr::Lib(anchor)),
-                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )),
             ))),
             Expr::Lam(Box::new(Expr::App(
                 Box::new(Expr::Lib(anchor)),
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ))),
             Expr::Lam(Box::new(Expr::App(
                 Box::new(Expr::Lib(anchor)),
-                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
-                    1,
-                )))))),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )),
             ))),
         ],
         4 => vec![
             Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Flat(Box::new(temporal_shell_left_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(
-                    Expr::Eventually(Box::new(Expr::Var(1))),
-                ))))),
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Flat(Box::new(temporal_shell_left_expr(
+                    temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Next(
-                    Box::new(Expr::Var(1)),
-                )))))),
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
-                    Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
-                )))))),
+                Box::new(Expr::Flat(Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Flat(Box::new(temporal_shell_left_expr(
+                        temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+                        include_linear_exponential,
+                    ))),
+                    include_linear_exponential,
+                )),
             ),
         ],
         5 => vec![
             Expr::Pi(
-                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                Box::new(Expr::Sharp(Box::new(temporal_shell_right_expr(
                     Expr::Var(1),
-                ))))),
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
-                    Expr::Var(1),
-                ))))),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                Box::new(Expr::Sharp(Box::new(temporal_shell_right_expr(
                     Expr::Var(1),
-                ))))),
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
-                    Expr::Next(Box::new(Expr::Var(1))),
-                ))))),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(temporal_shell_left_expr(
+                        Expr::Var(1),
+                        include_linear_exponential,
+                    ))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                Box::new(Expr::Sharp(Box::new(temporal_shell_right_expr(
                     Expr::Flat(Box::new(Expr::Var(1))),
-                ))))),
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
-                    Expr::Var(1),
-                ))))),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ),
         ],
         6 => vec![
             Expr::Lam(Box::new(Expr::App(
-                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
-                Box::new(Expr::Var(2)),
-            ))),
-            Expr::Lam(Box::new(Expr::App(
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                Box::new(temporal_shell_right_expr(
                     Expr::Var(1),
-                ))))),
+                    include_linear_exponential,
+                )),
                 Box::new(Expr::Var(2)),
             ))),
             Expr::Lam(Box::new(Expr::App(
-                Box::new(Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(
-                    1,
-                )))))),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(temporal_shell_right_expr(
+                    temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )),
                 Box::new(Expr::Var(2)),
             ))),
         ],
         7 => vec![
             Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
-                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
-                    Box::new(Expr::Var(1)),
-                )))))),
-                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(
+                        temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                        include_linear_exponential,
+                    ),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
-                    Expr::Eventually(Box::new(Expr::Var(1))),
-                ))))),
-                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
-                    1,
-                )))))),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(
+                        temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+                        include_linear_exponential,
+                    ),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )),
             ),
         ],
         _ => Vec::new(),
@@ -1728,37 +1992,64 @@ fn demo_hilbert_functional_clauses(position: usize, context: EnumerationContext)
 
 fn temporal_shell_reference_clause(position: usize, context: EnumerationContext) -> Option<Expr> {
     let anchor = context.historical_anchor_ref?;
+    let include_linear_exponential = context.include_linear_exponential;
 
     Some(match position {
-        0 => Expr::Next(Box::new(Expr::Var(1))),
-        1 => Expr::Eventually(Box::new(Expr::Var(1))),
+        0 => temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+        1 => temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
         2 => Expr::Pi(
-            Box::new(Expr::Next(Box::new(Expr::Var(1)))),
-            Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+            Box::new(temporal_shell_left_expr(
+                Expr::Var(1),
+                include_linear_exponential,
+            )),
+            Box::new(temporal_shell_right_expr(
+                Expr::Var(1),
+                include_linear_exponential,
+            )),
         ),
         3 => Expr::Lam(Box::new(Expr::App(
             Box::new(Expr::Lib(anchor)),
-            Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+            Box::new(temporal_shell_left_expr(
+                Expr::Var(1),
+                include_linear_exponential,
+            )),
         ))),
         4 => Expr::Pi(
-            Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
-            Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+            Box::new(Expr::Flat(Box::new(temporal_shell_left_expr(
+                Expr::Var(1),
+                include_linear_exponential,
+            )))),
+            Box::new(temporal_shell_left_expr(
+                Expr::Flat(Box::new(Expr::Var(1))),
+                include_linear_exponential,
+            )),
         ),
         5 => Expr::Pi(
-            Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+            Box::new(Expr::Sharp(Box::new(temporal_shell_right_expr(
                 Expr::Var(1),
-            ))))),
-            Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
-                Expr::Var(1),
-            ))))),
+                include_linear_exponential,
+            )))),
+            Box::new(temporal_shell_right_expr(
+                Expr::Sharp(Box::new(Expr::Var(1))),
+                include_linear_exponential,
+            )),
         ),
         6 => Expr::Lam(Box::new(Expr::App(
-            Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+            Box::new(temporal_shell_right_expr(
+                Expr::Var(1),
+                include_linear_exponential,
+            )),
             Box::new(Expr::Var(2)),
         ))),
         7 => Expr::Pi(
-            Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
-            Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+            Box::new(temporal_shell_left_expr(
+                temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                include_linear_exponential,
+            )),
+            Box::new(temporal_shell_left_expr(
+                Expr::Var(1),
+                include_linear_exponential,
+            )),
         ),
         _ => return None,
     })
@@ -1768,216 +2059,364 @@ fn demo_temporal_shell_clauses(position: usize, context: EnumerationContext) -> 
     let Some(anchor) = context.historical_anchor_ref else {
         return Vec::new();
     };
+    let include_linear_exponential = context.include_linear_exponential;
 
     match position {
         0 => vec![
-            Expr::Next(Box::new(Expr::Var(1))),
-            Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
-            Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
-            Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
-            Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
+            temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+            temporal_shell_left_expr(
+                Expr::Flat(Box::new(Expr::Var(1))),
+                include_linear_exponential,
+            ),
+            temporal_shell_left_expr(
+                Expr::Sharp(Box::new(Expr::Var(1))),
+                include_linear_exponential,
+            ),
+            temporal_shell_left_expr(
+                temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+                include_linear_exponential,
+            ),
+            temporal_shell_left_expr(
+                temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                include_linear_exponential,
+            ),
         ],
         1 => vec![
-            Expr::Eventually(Box::new(Expr::Var(1))),
-            Expr::Eventually(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
-            Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
-            Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(1))))),
-            Expr::Eventually(Box::new(Expr::Eventually(Box::new(Expr::Var(1))))),
+            temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+            temporal_shell_right_expr(
+                Expr::Sharp(Box::new(Expr::Var(1))),
+                include_linear_exponential,
+            ),
+            temporal_shell_right_expr(
+                Expr::Flat(Box::new(Expr::Var(1))),
+                include_linear_exponential,
+            ),
+            temporal_shell_right_expr(
+                temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                include_linear_exponential,
+            ),
+            temporal_shell_right_expr(
+                temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+                include_linear_exponential,
+            ),
         ],
         2 => vec![
             Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
-                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
-            ),
-            Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
-                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
-            ),
-            Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                Box::new(temporal_shell_left_expr(
                     Expr::Var(1),
-                ))))),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
-                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
-                Box::new(Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(
-                    1,
-                )))))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
+            ),
+            Expr::Pi(
+                Box::new(temporal_shell_left_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )),
+            ),
+            Expr::Pi(
+                Box::new(temporal_shell_left_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ),
         ],
         3 => vec![
             Expr::Lam(Box::new(Expr::App(
                 Box::new(Expr::Lib(anchor)),
-                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )),
             ))),
             Expr::Lam(Box::new(Expr::App(
                 Box::new(Expr::Lib(anchor)),
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ))),
             Expr::Lam(Box::new(Expr::App(
                 Box::new(Expr::Lib(anchor)),
-                Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ))),
             Expr::Lam(Box::new(Expr::App(
                 Box::new(Expr::Lib(anchor)),
-                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )),
             ))),
             Expr::Lam(Box::new(Expr::App(
                 Box::new(Expr::Lib(anchor)),
-                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
-                    1,
-                )))))),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )),
             ))),
         ],
         4 => vec![
             Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                Box::new(Expr::Flat(Box::new(temporal_shell_left_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
-                    Box::new(Expr::Var(1)),
-                )))))),
+                Box::new(Expr::Flat(Box::new(temporal_shell_left_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Flat(Box::new(temporal_shell_left_expr(
+                        Expr::Var(1),
+                        include_linear_exponential,
+                    ))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Next(
-                    Box::new(Expr::Var(1)),
-                )))))),
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
-                    Box::new(Expr::Var(1)),
-                )))))),
+                Box::new(Expr::Flat(Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Flat(Box::new(temporal_shell_left_expr(
+                        Expr::Var(1),
+                        include_linear_exponential,
+                    ))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Sharp(
-                    Box::new(Expr::Var(1)),
-                )))))),
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Sharp(
-                    Box::new(Expr::Var(1)),
-                )))))),
+                Box::new(Expr::Flat(Box::new(temporal_shell_left_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Flat(Box::new(Expr::Sharp(Box::new(Expr::Var(1))))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
-                Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Flat(
-                    Box::new(Expr::Var(1)),
-                )))))),
+                Box::new(Expr::Flat(Box::new(temporal_shell_left_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Sharp(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                    include_linear_exponential,
+                )),
             ),
         ],
         5 => vec![
             Expr::Pi(
-                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                Box::new(Expr::Sharp(Box::new(temporal_shell_right_expr(
                     Expr::Var(1),
-                ))))),
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
-                    Expr::Var(1),
-                ))))),
-            ),
-            Expr::Pi(
-                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_right_expr(
                     Expr::Sharp(Box::new(Expr::Var(1))),
-                ))))),
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
-                    Expr::Var(1),
-                ))))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
-                    Expr::Var(1),
-                ))))),
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
-                    Expr::Eventually(Box::new(Expr::Var(1))),
-                ))))),
+                Box::new(Expr::Sharp(Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                Box::new(Expr::Sharp(Box::new(temporal_shell_right_expr(
                     Expr::Var(1),
-                ))))),
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
-                    Expr::Next(Box::new(Expr::Var(1))),
-                ))))),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(temporal_shell_right_expr(
+                        Expr::Var(1),
+                        include_linear_exponential,
+                    ))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                Box::new(Expr::Sharp(Box::new(temporal_shell_right_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(temporal_shell_left_expr(
+                        Expr::Var(1),
+                        include_linear_exponential,
+                    ))),
+                    include_linear_exponential,
+                )),
+            ),
+            Expr::Pi(
+                Box::new(Expr::Sharp(Box::new(temporal_shell_right_expr(
                     Expr::Flat(Box::new(Expr::Var(1))),
-                ))))),
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
-                    Expr::Var(1),
-                ))))),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Sharp(Box::new(Expr::Eventually(Box::new(
+                Box::new(Expr::Sharp(Box::new(temporal_shell_right_expr(
                     Expr::Var(1),
-                ))))),
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
-                    Expr::Flat(Box::new(Expr::Var(1))),
-                ))))),
+                    include_linear_exponential,
+                )))),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(Expr::Flat(Box::new(Expr::Var(1))))),
+                    include_linear_exponential,
+                )),
             ),
         ],
         6 => vec![
             Expr::Lam(Box::new(Expr::App(
-                Box::new(Expr::Eventually(Box::new(Expr::Var(1)))),
-                Box::new(Expr::Var(2)),
-            ))),
-            Expr::Lam(Box::new(Expr::App(
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
+                Box::new(temporal_shell_right_expr(
                     Expr::Var(1),
-                ))))),
+                    include_linear_exponential,
+                )),
                 Box::new(Expr::Var(2)),
             ))),
             Expr::Lam(Box::new(Expr::App(
-                Box::new(Expr::Eventually(Box::new(Expr::Flat(Box::new(Expr::Var(
-                    1,
-                )))))),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
                 Box::new(Expr::Var(2)),
             ))),
             Expr::Lam(Box::new(Expr::App(
-                Box::new(Expr::Eventually(Box::new(Expr::Next(Box::new(Expr::Var(
-                    1,
-                )))))),
+                Box::new(temporal_shell_right_expr(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
                 Box::new(Expr::Var(2)),
             ))),
             Expr::Lam(Box::new(Expr::App(
-                Box::new(Expr::Eventually(Box::new(Expr::Sharp(Box::new(
-                    Expr::Next(Box::new(Expr::Var(1))),
-                ))))),
+                Box::new(temporal_shell_right_expr(
+                    temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )),
+                Box::new(Expr::Var(2)),
+            ))),
+            Expr::Lam(Box::new(Expr::App(
+                Box::new(temporal_shell_right_expr(
+                    Expr::Sharp(Box::new(temporal_shell_left_expr(
+                        Expr::Var(1),
+                        include_linear_exponential,
+                    ))),
+                    include_linear_exponential,
+                )),
                 Box::new(Expr::Var(2)),
             ))),
         ],
         7 => vec![
             Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
-                Box::new(Expr::Next(Box::new(Expr::Var(1)))),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Var(1),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Flat(
-                    Box::new(Expr::Var(1)),
-                )))))),
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Var(1)))))),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(
+                        Expr::Flat(Box::new(Expr::Var(1))),
+                        include_linear_exponential,
+                    ),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Flat(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Sharp(
-                    Box::new(Expr::Var(1)),
-                )))))),
-                Box::new(Expr::Next(Box::new(Expr::Sharp(Box::new(Expr::Var(1)))))),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(
+                        Expr::Sharp(Box::new(Expr::Var(1))),
+                        include_linear_exponential,
+                    ),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_left_expr(
+                    Expr::Sharp(Box::new(Expr::Var(1))),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Next(
-                    Box::new(Expr::Var(1)),
-                )))))),
-                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(
+                        temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                        include_linear_exponential,
+                    ),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )),
             ),
             Expr::Pi(
-                Box::new(Expr::Next(Box::new(Expr::Next(Box::new(
-                    Expr::Eventually(Box::new(Expr::Var(1))),
-                ))))),
-                Box::new(Expr::Next(Box::new(Expr::Eventually(Box::new(Expr::Var(
-                    1,
-                )))))),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_left_expr(
+                        temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+                        include_linear_exponential,
+                    ),
+                    include_linear_exponential,
+                )),
+                Box::new(temporal_shell_left_expr(
+                    temporal_shell_right_expr(Expr::Var(1), include_linear_exponential),
+                    include_linear_exponential,
+                )),
             ),
         ],
         _ => Vec::new(),
@@ -2030,12 +2469,7 @@ fn temporal_shell_family_clauses(position: usize, context: EnumerationContext) -
         LateFamilySurface::None => vec![reference],
         LateFamilySurface::RealisticShadow if position == 4 => vec![
             reference,
-            Expr::Pi(
-                Box::new(Expr::Flat(Box::new(Expr::Next(Box::new(Expr::Var(1)))))),
-                Box::new(Expr::Next(Box::new(Expr::Flat(Box::new(Expr::Next(
-                    Box::new(Expr::Var(1)),
-                )))))),
-            ),
+            temporal_shell_realistic_position_four_extension(context),
         ],
         LateFamilySurface::RealisticShadow => vec![reference],
         LateFamilySurface::ClaimGeneric => claim_generic_band8_clauses(position, context),
@@ -2186,7 +2620,7 @@ fn late_clause_options(
         && context.max_expr_nodes >= 7
         && context.max_path_dimension == 0
         && context.include_modal
-        && context.include_temporal
+        && (context.include_temporal || context.include_linear_exponential)
         && context.historical_anchor_ref.is_some()
     {
         let clauses = match context.late_family_surface {
@@ -2207,7 +2641,100 @@ pub fn enumerate_telescopes(
     base_context: EnumerationContext,
     clause_kappa: u16,
 ) -> Vec<Telescope> {
-    enumerate_telescopes_with_terminal_prefixes(library, base_context, clause_kappa).telescopes
+    enumerate_telescopes_with_progress(library, base_context, clause_kappa, |_| {}).0
+}
+
+pub fn enumerate_telescopes_with_progress<F>(
+    library: &Library,
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+    on_progress: F,
+) -> (Vec<Telescope>, TelescopeEnumerationProgress)
+where
+    F: FnMut(TelescopeEnumerationProgressEvent),
+{
+    let (enumeration, progress) =
+        enumerate_telescopes_with_terminal_prefixes_and_progress_with_raw_catalog_widths(
+            library,
+            base_context,
+            clause_kappa,
+            None,
+            on_progress,
+        );
+    (enumeration.telescopes, progress)
+}
+
+pub(crate) fn enumerate_telescopes_with_progress_with_raw_catalog_widths<F>(
+    library: &Library,
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+    raw_catalog_clause_widths: &[usize],
+    on_progress: F,
+) -> (Vec<Telescope>, TelescopeEnumerationProgress)
+where
+    F: FnMut(TelescopeEnumerationProgressEvent),
+{
+    let (enumeration, progress) =
+        enumerate_telescopes_with_terminal_prefixes_and_progress_with_raw_catalog_widths(
+            library,
+            base_context,
+            clause_kappa,
+            Some(raw_catalog_clause_widths),
+            on_progress,
+        );
+    (enumeration.telescopes, progress)
+}
+
+fn enumerate_telescopes_with_terminal_prefixes_and_progress_with_raw_catalog_widths<F>(
+    library: &Library,
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+    raw_catalog_clause_widths: Option<&[usize]>,
+    mut on_progress: F,
+) -> (TelescopeEnumeration, TelescopeEnumerationProgress)
+where
+    F: FnMut(TelescopeEnumerationProgressEvent),
+{
+    let clause_catalog = build_clause_catalog_with_progress_and_raw_catalog_widths(
+        base_context,
+        clause_kappa,
+        raw_catalog_clause_widths,
+        |progress| on_progress(TelescopeEnumerationProgressEvent::ClauseCatalog(progress)),
+    );
+    if clause_catalog.is_empty() {
+        return (
+            TelescopeEnumeration::default(),
+            TelescopeEnumerationProgress::default(),
+        );
+    }
+
+    let mut telescopes = Vec::new();
+    let mut terminal_prefixes = Vec::new();
+    let mut prefix = Vec::new();
+    let mut progress = TelescopeEnumerationProgress::default();
+    on_progress(TelescopeEnumerationProgressEvent::EnumerationHandoff(
+        progress,
+    ));
+    enumerate_telescopes_dfs(
+        library,
+        clause_catalog.clause_kappa(),
+        &clause_catalog.options_by_position,
+        &mut prefix,
+        &mut telescopes,
+        &mut terminal_prefixes,
+        &mut progress,
+        &mut on_progress,
+    );
+    telescopes.sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
+    terminal_prefixes.sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
+    terminal_prefixes.dedup();
+    (
+        TelescopeEnumeration {
+            telescopes,
+            terminal_prefixes,
+        },
+        progress,
+    )
 }
 
 pub fn enumerate_raw_telescopes(
@@ -2235,10 +2762,88 @@ pub(crate) fn raw_clause_catalog_widths(
     base_context: EnumerationContext,
     clause_kappa: u16,
 ) -> Vec<usize> {
-    raw_clause_options_by_position(base_context, clause_kappa)
-        .into_iter()
-        .map(|clauses| clauses.len())
-        .collect()
+    raw_clause_catalog_widths_with_progress(base_context, clause_kappa, |_, _| {})
+}
+
+pub(crate) fn raw_clause_catalog_widths_with_progress<F>(
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+    mut on_progress: F,
+) -> Vec<usize>
+where
+    F: FnMut(RawClauseCatalogWidthProgress, &[usize]),
+{
+    let mut widths = Vec::with_capacity(usize::from(clause_kappa));
+    for position in 0..usize::from(clause_kappa) {
+        on_progress(
+            RawClauseCatalogWidthProgress::PositionStarted { position },
+            widths.as_slice(),
+        );
+        let width = raw_clause_width_for_position_with_progress(
+            base_context,
+            clause_kappa,
+            position,
+            |progress| on_progress(progress, widths.as_slice()),
+        );
+        widths.push(width);
+        on_progress(
+            RawClauseCatalogWidthProgress::PositionReady { position, width },
+            widths.as_slice(),
+        );
+    }
+    widths
+}
+
+type ExactExprCache = BTreeMap<u8, Rc<[Expr]>>;
+type RawExprCache = BTreeMap<u8, Rc<[Expr]>>;
+
+fn leaf_expr_count(context: EnumerationContext) -> usize {
+    let mut count = 1usize + context.scope_size as usize;
+    if context.library_size > 0 {
+        let start = context.library_size.saturating_sub(1).max(1);
+        count += (context.library_size - start + 1) as usize;
+        if let Some(anchor) = context.historical_anchor_ref {
+            if (1..=context.library_size).contains(&anchor) && anchor < start {
+                count += 1;
+            }
+        }
+    }
+    count + context.max_path_dimension as usize
+}
+
+fn unary_variant_count(context: EnumerationContext) -> usize {
+    1usize
+        + usize::from(context.include_trunc)
+        + (4 * usize::from(context.include_modal))
+        + (2 * usize::from(context.include_temporal))
+        + (2 * usize::from(context.include_linear_exponential))
+}
+
+fn exact_expr_count(context: EnumerationContext, nodes: u8) -> usize {
+    let mut count = 0usize;
+
+    if nodes == 1 {
+        count = leaf_expr_count(context);
+    }
+
+    if nodes >= 2 {
+        count = count.saturating_add(
+            exact_expr_count(context, nodes - 1).saturating_mul(unary_variant_count(context)),
+        );
+    }
+
+    if nodes >= 3 {
+        for left_nodes in 1..=nodes - 2 {
+            let right_nodes = nodes - 1 - left_nodes;
+            count = count.saturating_add(
+                exact_expr_count(context, left_nodes)
+                    .saturating_mul(exact_expr_count(context, right_nodes))
+                    .saturating_mul(3),
+            );
+        }
+    }
+
+    count
 }
 
 pub fn enumerate_telescopes_with_terminal_prefixes(
@@ -2246,52 +2851,116 @@ pub fn enumerate_telescopes_with_terminal_prefixes(
     base_context: EnumerationContext,
     clause_kappa: u16,
 ) -> TelescopeEnumeration {
-    let clause_catalog = build_clause_catalog(base_context, clause_kappa);
-    if clause_catalog.is_empty() {
-        return TelescopeEnumeration::default();
-    }
-
-    let mut telescopes = Vec::new();
-    let mut terminal_prefixes = Vec::new();
-    let mut prefix = Vec::new();
-    enumerate_telescopes_dfs(
+    enumerate_telescopes_with_terminal_prefixes_and_progress(
         library,
-        clause_catalog.clause_kappa(),
-        &clause_catalog.options_by_position,
-        &mut prefix,
-        &mut telescopes,
-        &mut terminal_prefixes,
-    );
-    telescopes.sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
-    terminal_prefixes.sort_by_key(|telescope| serde_json::to_string(telescope).expect("serialize"));
-    terminal_prefixes.dedup();
-    TelescopeEnumeration {
-        telescopes,
-        terminal_prefixes,
-    }
+        base_context,
+        clause_kappa,
+        |_| {},
+    )
+    .0
+}
+
+pub fn enumerate_telescopes_with_terminal_prefixes_and_progress<F>(
+    library: &Library,
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+    on_progress: F,
+) -> (TelescopeEnumeration, TelescopeEnumerationProgress)
+where
+    F: FnMut(TelescopeEnumerationProgressEvent),
+{
+    enumerate_telescopes_with_terminal_prefixes_and_progress_with_raw_catalog_widths(
+        library,
+        base_context,
+        clause_kappa,
+        None,
+        on_progress,
+    )
 }
 
 pub fn build_clause_catalog(base_context: EnumerationContext, clause_kappa: u16) -> ClauseCatalog {
+    build_clause_catalog_with_progress(base_context, clause_kappa, |_| {})
+}
+
+fn build_clause_catalog_with_progress<F>(
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+    mut on_progress: F,
+) -> ClauseCatalog
+where
+    F: FnMut(ClauseCatalogBuildProgress),
+{
+    build_clause_catalog_with_progress_and_raw_catalog_widths(
+        base_context,
+        clause_kappa,
+        None,
+        |progress| on_progress(progress),
+    )
+}
+
+fn build_clause_catalog_with_progress_and_raw_catalog_widths<F>(
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+    raw_catalog_clause_widths: Option<&[usize]>,
+    mut on_progress: F,
+) -> ClauseCatalog
+where
+    F: FnMut(ClauseCatalogBuildProgress),
+{
     if base_context.require_curvature_shell_clauses && clause_kappa < 6 {
         return ClauseCatalog::default();
+    }
+    if let Some(widths) = raw_catalog_clause_widths {
+        debug_assert_eq!(widths.len(), usize::from(clause_kappa));
     }
 
     let mut options_by_position = Vec::with_capacity(usize::from(clause_kappa));
     let mut terminal_connectivity_facts_by_position = Vec::with_capacity(usize::from(clause_kappa));
     let mut terminal_nu_facts_by_position = Vec::with_capacity(usize::from(clause_kappa));
     for position in 0..usize::from(clause_kappa) {
-        let clauses = clauses_for_position(base_context, clause_kappa, position);
-        let connectivity_facts = clauses
-            .iter()
-            .map(TerminalClauseConnectivityFacts::from_clause)
-            .collect::<Vec<_>>();
+        on_progress(ClauseCatalogBuildProgress::PositionStarted { position });
+        // The raw-width probe uses the widest scope at every position, so its
+        // reported width is an exact clause count only at the terminal slot.
+        let raw_clause_width_hint = if position + 1 == usize::from(clause_kappa) {
+            raw_catalog_clause_widths
+                .and_then(|widths| widths.get(position))
+                .copied()
+        } else {
+            None
+        };
+        let clauses = clauses_for_position_with_progress(
+            base_context,
+            clause_kappa,
+            position,
+            raw_clause_width_hint,
+            |progress| {
+                on_progress(progress);
+            },
+        );
+        let clause_count = clauses.len();
+        // Large positions keep the catalog-level connectivity side table
+        // deferred so clause materialization does not retain a second
+        // 1:1 allocation before any remaining-one path asks for it.
+        let connectivity_facts = TerminalConnectivityFactsByPosition::for_clauses(&clauses);
+        on_progress(ClauseCatalogBuildProgress::PositionConnectivityFactsReady {
+            position,
+            clause_count,
+        });
         let nu_facts = clauses
             .iter()
             .map(TerminalClauseNuFacts::from_clause)
             .collect::<Vec<_>>();
+        on_progress(ClauseCatalogBuildProgress::PositionNuFactsReady {
+            position,
+            clause_count,
+        });
         options_by_position.push(clauses);
         terminal_connectivity_facts_by_position.push(connectivity_facts);
         terminal_nu_facts_by_position.push(nu_facts);
+        on_progress(ClauseCatalogBuildProgress::PositionReady {
+            position,
+            clause_count,
+        });
     }
 
     ClauseCatalog {
@@ -2312,10 +2981,7 @@ pub(crate) fn build_clause_catalog_from_options(
     let mut terminal_connectivity_facts_by_position = Vec::with_capacity(usize::from(clause_kappa));
     let mut terminal_nu_facts_by_position = Vec::with_capacity(usize::from(clause_kappa));
     for clauses in &options_by_position {
-        let connectivity_facts = clauses
-            .iter()
-            .map(TerminalClauseConnectivityFacts::from_clause)
-            .collect::<Vec<_>>();
+        let connectivity_facts = TerminalConnectivityFactsByPosition::for_clauses(clauses);
         let nu_facts = clauses
             .iter()
             .map(TerminalClauseNuFacts::from_clause)
@@ -2332,125 +2998,207 @@ pub(crate) fn build_clause_catalog_from_options(
     }
 }
 
-fn clauses_for_position(
+#[cfg(test)]
+pub(crate) fn build_clause_catalog_from_options_with_deferred_connectivity_facts(
+    clause_kappa: u16,
+    options_by_position: Vec<Vec<ClauseRec>>,
+    deferred_positions: &[usize],
+) -> ClauseCatalog {
+    assert_eq!(options_by_position.len(), usize::from(clause_kappa));
+
+    let mut terminal_connectivity_facts_by_position = Vec::with_capacity(usize::from(clause_kappa));
+    let mut terminal_nu_facts_by_position = Vec::with_capacity(usize::from(clause_kappa));
+    for (position, clauses) in options_by_position.iter().enumerate() {
+        let connectivity_facts = if deferred_positions.contains(&position) {
+            TerminalConnectivityFactsByPosition::Deferred
+        } else {
+            TerminalConnectivityFactsByPosition::for_clauses(clauses)
+        };
+        let nu_facts = clauses
+            .iter()
+            .map(TerminalClauseNuFacts::from_clause)
+            .collect::<Vec<_>>();
+        terminal_connectivity_facts_by_position.push(connectivity_facts);
+        terminal_nu_facts_by_position.push(nu_facts);
+    }
+
+    ClauseCatalog {
+        clause_kappa,
+        options_by_position,
+        terminal_connectivity_facts_by_position,
+        terminal_nu_facts_by_position,
+    }
+}
+
+fn clauses_for_position_with_progress<F>(
     base_context: EnumerationContext,
     clause_kappa: u16,
     position: usize,
-) -> Vec<ClauseRec> {
+    raw_clause_width_hint: Option<usize>,
+    mut on_progress: F,
+) -> Vec<ClauseRec>
+where
+    F: FnMut(ClauseCatalogBuildProgress),
+{
     let clause_context = EnumerationContext {
         scope_size: base_context.scope_size + position as u32,
         ..base_context
     };
-    let mut clauses = late_clause_options(position, clause_context, clause_kappa)
-        .unwrap_or_else(|| enumerate_next_clauses(clause_context));
-    if base_context.require_former_eliminator_clauses {
-        clauses.retain(|clause| supports_former_package_clause_at_position(position, &clause.expr));
+    if let Some(clauses) = late_clause_options(position, clause_context, clause_kappa) {
+        return filter_clauses_for_position(
+            clauses,
+            base_context,
+            clause_context,
+            clause_kappa,
+            position,
+        );
     }
-    if base_context.require_initial_hit_clauses {
-        clauses.retain(|clause| {
-            supports_initial_hit_clause_at_position(
+
+    let mut cache = ExactExprCache::new();
+    let mut clauses = raw_clause_width_hint.map_or_else(Vec::new, Vec::with_capacity);
+    for expr_nodes in 1..=clause_context.max_expr_nodes {
+        let stream_exact_bucket = expr_nodes == clause_context.max_expr_nodes;
+        if stream_exact_bucket {
+            let expr_count = exact_expr_count(clause_context, expr_nodes);
+            on_progress(ClauseCatalogBuildProgress::PositionExprNodesGenerated {
                 position,
-                &clause.expr,
-                base_context.late_family_surface,
-            )
+                expr_nodes,
+                max_expr_nodes: clause_context.max_expr_nodes,
+                expr_count,
+            });
+            if raw_clause_width_hint.is_none() {
+                clauses.reserve_exact(expr_count);
+            }
+            let mut scanned_expr_count = 0usize;
+            if expr_count >= MIN_STREAMED_EXACT_EXPR_BUCKET_SIZE {
+                stream_exact_exprs(clause_context, expr_nodes, &mut cache, |expr| {
+                    scanned_expr_count += 1;
+                    if raw_clause_matches_context(&expr, clause_context)
+                        && raw_clause_matches_position(base_context, clause_kappa, position, &expr)
+                    {
+                        let role = primary_role(&expr);
+                        clauses.push(ClauseRec::new(role, expr));
+                    }
+                    if scanned_expr_count % CLAUSE_MATERIALIZATION_PROGRESS_CHUNK == 0
+                        && scanned_expr_count < expr_count
+                    {
+                        on_progress(
+                            ClauseCatalogBuildProgress::PositionExprNodesAccumulationProgress {
+                                position,
+                                expr_nodes,
+                                max_expr_nodes: clause_context.max_expr_nodes,
+                                scanned_expr_count,
+                                clause_count_so_far: clauses.len(),
+                            },
+                        );
+                    }
+                });
+            } else {
+                let exprs = enumerate_exprs_exact(clause_context, expr_nodes, &mut cache);
+                debug_assert_eq!(exprs.len(), expr_count);
+                for expr in exprs.iter() {
+                    scanned_expr_count += 1;
+                    if raw_clause_matches_context(expr, clause_context)
+                        && raw_clause_matches_position(base_context, clause_kappa, position, expr)
+                    {
+                        clauses.push(ClauseRec::new(primary_role(expr), expr.clone()));
+                    }
+                    if scanned_expr_count % CLAUSE_MATERIALIZATION_PROGRESS_CHUNK == 0
+                        && scanned_expr_count < expr_count
+                    {
+                        on_progress(
+                            ClauseCatalogBuildProgress::PositionExprNodesAccumulationProgress {
+                                position,
+                                expr_nodes,
+                                max_expr_nodes: clause_context.max_expr_nodes,
+                                scanned_expr_count,
+                                clause_count_so_far: clauses.len(),
+                            },
+                        );
+                    }
+                }
+            }
+            debug_assert_eq!(scanned_expr_count, expr_count);
+        } else {
+            let exprs = enumerate_exprs_exact(clause_context, expr_nodes, &mut cache);
+            let expr_count = exprs.len();
+            on_progress(ClauseCatalogBuildProgress::PositionExprNodesGenerated {
+                position,
+                expr_nodes,
+                max_expr_nodes: clause_context.max_expr_nodes,
+                expr_count,
+            });
+            if raw_clause_width_hint.is_none() {
+                clauses.reserve_exact(expr_count);
+            }
+            let mut scanned_expr_count = 0usize;
+            for expr in exprs.iter() {
+                scanned_expr_count += 1;
+                if raw_clause_matches_context(expr, clause_context)
+                    && raw_clause_matches_position(base_context, clause_kappa, position, expr)
+                {
+                    clauses.push(ClauseRec::new(primary_role(expr), expr.clone()));
+                }
+                if scanned_expr_count % CLAUSE_MATERIALIZATION_PROGRESS_CHUNK == 0
+                    && scanned_expr_count < expr_count
+                {
+                    on_progress(
+                        ClauseCatalogBuildProgress::PositionExprNodesAccumulationProgress {
+                            position,
+                            expr_nodes,
+                            max_expr_nodes: clause_context.max_expr_nodes,
+                            scanned_expr_count,
+                            clause_count_so_far: clauses.len(),
+                        },
+                    );
+                }
+            }
+        };
+        if expr_nodes == clause_context.max_expr_nodes {
+            cache.clear();
+        }
+        on_progress(ClauseCatalogBuildProgress::PositionExprNodesReady {
+            position,
+            expr_nodes,
+            max_expr_nodes: clause_context.max_expr_nodes,
+            clause_count_so_far: clauses.len(),
         });
     }
-    if base_context.require_truncation_hit_clauses {
-        clauses.retain(|clause| {
-            supports_truncation_hit_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_higher_hit_clauses {
-        clauses.retain(|clause| {
-            supports_higher_hit_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_sphere_lift_clauses {
-        clauses.retain(|clause| {
-            supports_sphere_lift_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_axiomatic_bundle_clauses {
-        clauses.retain(|clause| {
-            supports_axiomatic_bundle_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.library_size,
-                base_context.historical_anchor_ref,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_modal_shell_clauses {
-        clauses.retain(|clause| supports_modal_shell_clause_at_position(position, &clause.expr));
-    }
-    if base_context.require_connection_shell_clauses {
-        clauses.retain(|clause| {
-            supports_connection_shell_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.library_size,
-            )
-        });
-    }
-    if base_context.require_curvature_shell_clauses {
-        clauses.retain(|clause| {
-            supports_curvature_shell_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.library_size,
-            )
-        });
-    }
-    if base_context.require_operator_bundle_clauses
-        || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 7)
-    {
-        clauses.retain(|clause| {
-            supports_operator_bundle_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.library_size,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_hilbert_functional_clauses
-        || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 9)
-    {
-        clauses.retain(|clause| {
-            supports_hilbert_functional_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.library_size,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_temporal_shell_clauses
-        || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 8)
-    {
-        clauses.retain(|clause| {
-            supports_temporal_shell_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.historical_anchor_ref,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    dedupe_sorted_clauses(clauses)
+    // Exact-node buckets are already unique and disjoint, so the fallback path
+    // only needs one final deterministic ordering pass after filtering.
+    on_progress(ClauseCatalogBuildProgress::PositionSortStarted {
+        position,
+        clause_count: clauses.len(),
+    });
+    sort_clauses_in_place(&mut clauses);
+    on_progress(ClauseCatalogBuildProgress::PositionSorted {
+        position,
+        clause_count: clauses.len(),
+    });
+    clauses
+}
+
+fn filter_clauses_for_position(
+    clauses: Vec<ClauseRec>,
+    base_context: EnumerationContext,
+    clause_context: EnumerationContext,
+    clause_kappa: u16,
+    position: usize,
+) -> Vec<ClauseRec> {
+    dedupe_sorted_clauses(
+        clauses
+            .into_iter()
+            .filter(|clause| {
+                raw_clause_matches_context(&clause.expr, clause_context)
+                    && raw_clause_matches_position(
+                        base_context,
+                        clause_kappa,
+                        position,
+                        &clause.expr,
+                    )
+            })
+            .collect(),
+    )
 }
 
 fn raw_clauses_for_position(
@@ -2466,114 +3214,157 @@ fn raw_clauses_for_position(
     };
     let mut clauses = late_clause_options(position, clause_context, clause_kappa)
         .unwrap_or_else(|| enumerate_raw_next_clauses(clause_context));
-    if base_context.require_former_eliminator_clauses {
-        clauses.retain(|clause| supports_former_package_clause_at_position(position, &clause.expr));
-    }
-    if base_context.require_initial_hit_clauses {
-        clauses.retain(|clause| {
-            supports_initial_hit_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_truncation_hit_clauses {
-        clauses.retain(|clause| {
-            supports_truncation_hit_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_higher_hit_clauses {
-        clauses.retain(|clause| {
-            supports_higher_hit_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_sphere_lift_clauses {
-        clauses.retain(|clause| {
-            supports_sphere_lift_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_axiomatic_bundle_clauses {
-        clauses.retain(|clause| {
-            supports_axiomatic_bundle_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.library_size,
-                base_context.historical_anchor_ref,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_modal_shell_clauses {
-        clauses.retain(|clause| supports_modal_shell_clause_at_position(position, &clause.expr));
-    }
-    if base_context.require_connection_shell_clauses {
-        clauses.retain(|clause| {
-            supports_connection_shell_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.library_size,
-            )
-        });
-    }
-    if base_context.require_curvature_shell_clauses {
-        clauses.retain(|clause| {
-            supports_curvature_shell_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.library_size,
-            )
-        });
-    }
-    if base_context.require_operator_bundle_clauses
-        || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 7)
-    {
-        clauses.retain(|clause| {
-            supports_operator_bundle_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.library_size,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_hilbert_functional_clauses
-        || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 9)
-    {
-        clauses.retain(|clause| {
-            supports_hilbert_functional_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.library_size,
-                base_context.late_family_surface,
-            )
-        });
-    }
-    if base_context.require_temporal_shell_clauses
-        || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 8)
-    {
-        clauses.retain(|clause| {
-            supports_temporal_shell_clause_at_position(
-                position,
-                &clause.expr,
-                base_context.historical_anchor_ref,
-                base_context.late_family_surface,
-            )
-        });
-    }
+    clauses.retain(|clause| {
+        raw_clause_matches_position(base_context, clause_kappa, position, &clause.expr)
+    });
     clauses
+}
+
+fn raw_clause_width_for_position_with_progress<F>(
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+    position: usize,
+    mut on_progress: F,
+) -> usize
+where
+    F: FnMut(RawClauseCatalogWidthProgress),
+{
+    let clause_context = EnumerationContext {
+        scope_size: base_context
+            .scope_size
+            .saturating_add(u32::from(clause_kappa).saturating_sub(1)),
+        ..base_context
+    };
+    if let Some(clauses) = late_clause_options(position, clause_context, clause_kappa) {
+        return clauses
+            .into_iter()
+            .filter(|clause| {
+                raw_clause_matches_position(base_context, clause_kappa, position, &clause.expr)
+            })
+            .count();
+    }
+
+    let mut cache = RawExprCache::new();
+    let mut width = 0usize;
+    for expr_nodes in 1..=clause_context.max_expr_nodes {
+        let exprs = enumerate_exprs_exact_raw(clause_context, expr_nodes, &mut cache);
+        width += exprs
+            .iter()
+            .filter(|expr| raw_clause_matches_context(expr, clause_context))
+            .filter(|expr| raw_clause_matches_position(base_context, clause_kappa, position, expr))
+            .count();
+        on_progress(RawClauseCatalogWidthProgress::PositionExprNodesReady {
+            position,
+            expr_nodes,
+            max_expr_nodes: clause_context.max_expr_nodes,
+            width_so_far: width,
+        });
+    }
+    width
+}
+
+fn raw_clause_matches_context(expr: &Expr, context: EnumerationContext) -> bool {
+    (!context.require_former_eliminator_clauses || supports_former_eliminator_clause(expr))
+        && (!context.require_initial_hit_clauses
+            || supports_initial_hit_clause(expr, context.late_family_surface))
+        && (!context.require_truncation_hit_clauses
+            || supports_truncation_hit_clause(expr, context.late_family_surface))
+        && (!context.require_higher_hit_clauses
+            || supports_higher_hit_clause(expr, context.late_family_surface))
+        && (!context.require_sphere_lift_clauses
+            || supports_sphere_lift_clause(expr, context.late_family_surface))
+        && (!context.require_axiomatic_bundle_clauses || supports_axiomatic_bundle_clause(expr))
+        && (!context.require_modal_shell_clauses || supports_modal_shell_clause(expr))
+        && (!context.require_connection_shell_clauses || supports_connection_shell_clause(expr))
+        && (!context.require_curvature_shell_clauses || supports_curvature_shell_clause(expr))
+        && (!context.require_operator_bundle_clauses || supports_operator_bundle_clause(expr))
+        && (!context.require_hilbert_functional_clauses || supports_hilbert_functional_clause(expr))
+        && (!context.require_temporal_shell_clauses
+            || supports_temporal_shell_clause(
+                expr,
+                context.include_linear_exponential,
+            ))
+}
+
+fn raw_clause_matches_position(
+    base_context: EnumerationContext,
+    clause_kappa: u16,
+    position: usize,
+    expr: &Expr,
+) -> bool {
+    (!base_context.require_former_eliminator_clauses
+        || supports_former_package_clause_at_position(position, expr))
+        && (!base_context.require_initial_hit_clauses
+            || supports_initial_hit_clause_at_position(
+                position,
+                expr,
+                base_context.late_family_surface,
+            ))
+        && (!base_context.require_truncation_hit_clauses
+            || supports_truncation_hit_clause_at_position(
+                position,
+                expr,
+                base_context.late_family_surface,
+            ))
+        && (!base_context.require_higher_hit_clauses
+            || supports_higher_hit_clause_at_position(
+                position,
+                expr,
+                base_context.late_family_surface,
+            ))
+        && (!base_context.require_sphere_lift_clauses
+            || supports_sphere_lift_clause_at_position(
+                position,
+                expr,
+                base_context.late_family_surface,
+            ))
+        && (!base_context.require_axiomatic_bundle_clauses
+            || supports_axiomatic_bundle_clause_at_position(
+                position,
+                expr,
+                base_context.library_size,
+                base_context.historical_anchor_ref,
+                base_context.late_family_surface,
+            ))
+        && (!base_context.require_modal_shell_clauses
+            || supports_modal_shell_clause_at_position(position, expr))
+        && (!base_context.require_connection_shell_clauses
+            || supports_connection_shell_clause_at_position(
+                position,
+                expr,
+                base_context.library_size,
+            ))
+        && (!base_context.require_curvature_shell_clauses
+            || supports_curvature_shell_clause_at_position(
+                position,
+                expr,
+                base_context.library_size,
+            ))
+        && (!(base_context.require_operator_bundle_clauses
+            || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 7))
+            || supports_operator_bundle_clause_at_position(
+                position,
+                expr,
+                base_context.library_size,
+                base_context.late_family_surface,
+            ))
+        && (!(base_context.require_hilbert_functional_clauses
+            || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 9))
+            || supports_hilbert_functional_clause_at_position(
+                position,
+                expr,
+                base_context.library_size,
+                base_context.late_family_surface,
+            ))
+        && (!(base_context.require_temporal_shell_clauses
+            || (base_context.late_family_surface != LateFamilySurface::None && clause_kappa == 8))
+            || supports_temporal_shell_clause_at_position(
+                position,
+                expr,
+                base_context.historical_anchor_ref,
+                base_context.include_linear_exponential,
+                base_context.late_family_surface,
+            ))
 }
 
 fn raw_clause_options_by_position(
@@ -2691,25 +3482,28 @@ pub(crate) fn clause_supports_structural_family_at_position(
             position,
             &clause.expr,
             context.historical_anchor_ref,
+            context.include_linear_exponential,
             context.late_family_surface,
         ),
     }
 }
 
 pub fn enumerate_exprs(context: EnumerationContext) -> Vec<Expr> {
-    let mut cache = BTreeMap::new();
+    let mut cache = ExactExprCache::new();
     let mut all = Vec::new();
     for nodes in 1..=context.max_expr_nodes {
-        all.extend(enumerate_exprs_exact(context, nodes, &mut cache));
+        let exprs = enumerate_exprs_exact(context, nodes, &mut cache);
+        all.extend(exprs.iter().cloned());
     }
     unique_sorted_exprs(all)
 }
 
 fn enumerate_exprs_raw(context: EnumerationContext) -> Vec<Expr> {
-    let mut cache = BTreeMap::new();
+    let mut cache = RawExprCache::new();
     let mut all = Vec::new();
     for nodes in 1..=context.max_expr_nodes {
-        all.extend(enumerate_exprs_exact_raw(context, nodes, &mut cache));
+        let exprs = enumerate_exprs_exact_raw(context, nodes, &mut cache);
+        all.extend(exprs.iter().cloned());
     }
     all
 }
@@ -2721,25 +3515,49 @@ fn enumerate_telescopes_dfs(
     prefix: &mut Vec<ClauseRec>,
     out: &mut Vec<Telescope>,
     terminal_prefixes: &mut Vec<Telescope>,
+    progress: &mut TelescopeEnumerationProgress,
+    on_progress: &mut impl FnMut(TelescopeEnumerationProgressEvent),
 ) {
     if remaining == 0 {
         let telescope = Telescope::new(prefix.clone());
-        if check_telescope(library, &telescope) == CheckResult::Ok
-            && passes_connectivity(library, &telescope)
-        {
-            out.push(telescope);
+        if check_telescope(library, &telescope) == CheckResult::Ok {
+            let witness = analyze_connectivity(library, &telescope);
+            if !witness.connected {
+                progress.dfs_leaf_rejections += 1;
+                progress.dfs_leaf_connectivity_rejections += 1;
+                progress.dfs_leaf_disconnected_rejections += 1;
+            } else if witness.references_active_window
+                || witness.self_contained
+                || witness.historical_reanchor
+            {
+                out.push(telescope);
+                progress.completed_telescopes += 1;
+            } else {
+                progress.dfs_leaf_rejections += 1;
+                progress.dfs_leaf_connectivity_rejections += 1;
+                progress.dfs_leaf_connected_unqualified_rejections += 1;
+            }
+        } else {
+            progress.dfs_leaf_rejections += 1;
+            progress.dfs_leaf_check_rejections += 1;
         }
+        maybe_report_telescope_enumeration_progress(*progress, on_progress);
         return;
     }
 
     let position = prefix.len();
     for clause in &clause_options_by_position[position] {
         prefix.push(clause.clone());
+        progress.prefix_attempts += 1;
         let partial = Telescope::new(prefix.clone());
+        maybe_report_telescope_enumeration_progress(*progress, on_progress);
         if check_telescope(library, &partial) == CheckResult::Ok {
+            progress.prefix_states_explored += 1;
             if remaining == 2 {
                 terminal_prefixes.push(partial.clone());
+                progress.terminal_prefixes += 1;
             }
+            maybe_report_telescope_enumeration_progress(*progress, on_progress);
             enumerate_telescopes_dfs(
                 library,
                 remaining - 1,
@@ -2747,9 +3565,35 @@ fn enumerate_telescopes_dfs(
                 prefix,
                 out,
                 terminal_prefixes,
+                progress,
+                on_progress,
             );
+        } else {
+            progress.dfs_prefix_rejections += 1;
+            maybe_report_telescope_enumeration_progress(*progress, on_progress);
         }
         prefix.pop();
+    }
+}
+
+fn maybe_report_telescope_enumeration_progress(
+    progress: TelescopeEnumerationProgress,
+    on_progress: &mut impl FnMut(TelescopeEnumerationProgressEvent),
+) {
+    if progress.prefix_states_explored.is_power_of_two()
+        || progress.prefix_attempts.is_power_of_two()
+        || progress.terminal_prefixes.is_power_of_two()
+        || progress.dfs_prefix_rejections.is_power_of_two()
+        || progress.dfs_leaf_rejections.is_power_of_two()
+        || progress.dfs_leaf_check_rejections.is_power_of_two()
+        || progress.dfs_leaf_connectivity_rejections.is_power_of_two()
+        || progress.dfs_leaf_disconnected_rejections.is_power_of_two()
+        || progress
+            .dfs_leaf_connected_unqualified_rejections
+            .is_power_of_two()
+        || progress.completed_telescopes.is_power_of_two()
+    {
+        on_progress(TelescopeEnumerationProgressEvent::Enumeration(progress));
     }
 }
 
@@ -2775,13 +3619,16 @@ fn enumerate_raw_telescopes_dfs(
 fn enumerate_exprs_exact(
     context: EnumerationContext,
     nodes: u8,
-    cache: &mut BTreeMap<u8, Vec<Expr>>,
-) -> Vec<Expr> {
+    cache: &mut ExactExprCache,
+) -> Rc<[Expr]> {
     if let Some(cached) = cache.get(&nodes) {
-        return cached.clone();
+        return Rc::clone(cached);
     }
 
-    let mut exprs = Vec::new();
+    // Exact-node generation is structurally unique, so sizing once up front
+    // avoids the allocator doubling into a much wider final slab.
+    let expected_len = exact_expr_count(context, nodes);
+    let mut exprs = Vec::with_capacity(expected_len);
 
     if nodes == 1 {
         exprs.push(Expr::Univ);
@@ -2810,7 +3657,7 @@ fn enumerate_exprs_exact(
 
     if nodes >= 2 {
         let subexprs = enumerate_exprs_exact(context, nodes - 1, cache);
-        for body in subexprs {
+        for body in subexprs.iter() {
             exprs.push(Expr::Lam(Box::new(body.clone())));
             if context.include_trunc {
                 exprs.push(Expr::Trunc(Box::new(body.clone())));
@@ -2823,7 +3670,11 @@ fn enumerate_exprs_exact(
             }
             if context.include_temporal {
                 exprs.push(Expr::Next(Box::new(body.clone())));
-                exprs.push(Expr::Eventually(Box::new(body)));
+                exprs.push(Expr::Eventually(Box::new(body.clone())));
+            }
+            if context.include_linear_exponential {
+                exprs.push(Expr::Bang(Box::new(body.clone())));
+                exprs.push(Expr::WhyNot(Box::new(body.clone())));
             }
         }
     }
@@ -2833,8 +3684,8 @@ fn enumerate_exprs_exact(
             let right_nodes = nodes - 1 - left_nodes;
             let left_exprs = enumerate_exprs_exact(context, left_nodes, cache);
             let right_exprs = enumerate_exprs_exact(context, right_nodes, cache);
-            for left in &left_exprs {
-                for right in &right_exprs {
+            for left in left_exprs.iter() {
+                for right in right_exprs.iter() {
                     exprs.push(Expr::App(Box::new(left.clone()), Box::new(right.clone())));
                     exprs.push(Expr::Pi(Box::new(left.clone()), Box::new(right.clone())));
                     exprs.push(Expr::Sigma(Box::new(left.clone()), Box::new(right.clone())));
@@ -2843,21 +3694,103 @@ fn enumerate_exprs_exact(
         }
     }
 
-    let unique = unique_sorted_exprs(exprs);
-    cache.insert(nodes, unique.clone());
+    let unique: Rc<[Expr]> = unique_sorted_exprs(exprs).into();
+    debug_assert_eq!(unique.len(), expected_len);
+    cache.insert(nodes, Rc::clone(&unique));
     unique
+}
+
+fn stream_exact_exprs<F>(
+    context: EnumerationContext,
+    nodes: u8,
+    cache: &mut ExactExprCache,
+    mut on_expr: F,
+) where
+    F: FnMut(Expr),
+{
+    if let Some(cached) = cache.get(&nodes) {
+        for expr in cached.iter() {
+            on_expr(expr.clone());
+        }
+        return;
+    }
+
+    if nodes == 1 {
+        on_expr(Expr::Univ);
+        for index in 1..=context.scope_size {
+            on_expr(Expr::Var(index));
+        }
+        if context.library_size > 0 {
+            let start = context.library_size.saturating_sub(1).max(1);
+            let mut refs = BTreeSet::new();
+            for index in start..=context.library_size {
+                refs.insert(index);
+            }
+            if let Some(anchor) = context.historical_anchor_ref {
+                if (1..=context.library_size).contains(&anchor) {
+                    refs.insert(anchor);
+                }
+            }
+            for index in refs {
+                on_expr(Expr::Lib(index));
+            }
+        }
+        for dimension in 1..=context.max_path_dimension {
+            on_expr(Expr::PathCon(dimension));
+        }
+    }
+
+    if nodes >= 2 {
+        let subexprs = enumerate_exprs_exact(context, nodes - 1, cache);
+        for body in subexprs.iter() {
+            on_expr(Expr::Lam(Box::new(body.clone())));
+            if context.include_trunc {
+                on_expr(Expr::Trunc(Box::new(body.clone())));
+            }
+            if context.include_modal {
+                on_expr(Expr::Flat(Box::new(body.clone())));
+                on_expr(Expr::Sharp(Box::new(body.clone())));
+                on_expr(Expr::Disc(Box::new(body.clone())));
+                on_expr(Expr::Shape(Box::new(body.clone())));
+            }
+            if context.include_temporal {
+                on_expr(Expr::Next(Box::new(body.clone())));
+                on_expr(Expr::Eventually(Box::new(body.clone())));
+            }
+            if context.include_linear_exponential {
+                on_expr(Expr::Bang(Box::new(body.clone())));
+                on_expr(Expr::WhyNot(Box::new(body.clone())));
+            }
+        }
+    }
+
+    if nodes >= 3 {
+        for left_nodes in 1..=nodes - 2 {
+            let right_nodes = nodes - 1 - left_nodes;
+            let left_exprs = enumerate_exprs_exact(context, left_nodes, cache);
+            let right_exprs = enumerate_exprs_exact(context, right_nodes, cache);
+            for left in left_exprs.iter() {
+                for right in right_exprs.iter() {
+                    on_expr(Expr::App(Box::new(left.clone()), Box::new(right.clone())));
+                    on_expr(Expr::Pi(Box::new(left.clone()), Box::new(right.clone())));
+                    on_expr(Expr::Sigma(Box::new(left.clone()), Box::new(right.clone())));
+                }
+            }
+        }
+    }
 }
 
 fn enumerate_exprs_exact_raw(
     context: EnumerationContext,
     nodes: u8,
-    cache: &mut BTreeMap<u8, Vec<Expr>>,
-) -> Vec<Expr> {
+    cache: &mut RawExprCache,
+) -> Rc<[Expr]> {
     if let Some(cached) = cache.get(&nodes) {
-        return cached.clone();
+        return Rc::clone(cached);
     }
 
-    let mut exprs = Vec::new();
+    let expected_len = exact_expr_count(context, nodes);
+    let mut exprs = Vec::with_capacity(expected_len);
 
     if nodes == 1 {
         exprs.push(Expr::Univ);
@@ -2886,7 +3819,7 @@ fn enumerate_exprs_exact_raw(
 
     if nodes >= 2 {
         let subexprs = enumerate_exprs_exact_raw(context, nodes - 1, cache);
-        for body in subexprs {
+        for body in subexprs.iter() {
             exprs.push(Expr::Lam(Box::new(body.clone())));
             if context.include_trunc {
                 exprs.push(Expr::Trunc(Box::new(body.clone())));
@@ -2899,7 +3832,11 @@ fn enumerate_exprs_exact_raw(
             }
             if context.include_temporal {
                 exprs.push(Expr::Next(Box::new(body.clone())));
-                exprs.push(Expr::Eventually(Box::new(body)));
+                exprs.push(Expr::Eventually(Box::new(body.clone())));
+            }
+            if context.include_linear_exponential {
+                exprs.push(Expr::Bang(Box::new(body.clone())));
+                exprs.push(Expr::WhyNot(Box::new(body.clone())));
             }
         }
     }
@@ -2909,8 +3846,8 @@ fn enumerate_exprs_exact_raw(
             let right_nodes = nodes - 1 - left_nodes;
             let left_exprs = enumerate_exprs_exact_raw(context, left_nodes, cache);
             let right_exprs = enumerate_exprs_exact_raw(context, right_nodes, cache);
-            for left in &left_exprs {
-                for right in &right_exprs {
+            for left in left_exprs.iter() {
+                for right in right_exprs.iter() {
                     exprs.push(Expr::App(Box::new(left.clone()), Box::new(right.clone())));
                     exprs.push(Expr::Pi(Box::new(left.clone()), Box::new(right.clone())));
                     exprs.push(Expr::Sigma(Box::new(left.clone()), Box::new(right.clone())));
@@ -2919,7 +3856,9 @@ fn enumerate_exprs_exact_raw(
         }
     }
 
-    cache.insert(nodes, exprs.clone());
+    debug_assert_eq!(exprs.len(), expected_len);
+    let exprs: Rc<[Expr]> = exprs.into();
+    cache.insert(nodes, Rc::clone(&exprs));
     exprs
 }
 
@@ -2954,6 +3893,8 @@ fn primary_role(expr: &Expr) -> ClauseRole {
         | Expr::Shape(_)
         | Expr::Next(_)
         | Expr::Eventually(_)
+        | Expr::Bang(_)
+        | Expr::WhyNot(_)
         | Expr::Lib(_) => ClauseRole::Formation,
     }
 }
@@ -2966,6 +3907,18 @@ fn expr_sort_key(expr: &Expr) -> (u8, u32, String) {
     )
 }
 
+#[cfg_attr(not(test), allow(dead_code))]
+fn compare_expr_sort_order(left: &Expr, right: &Expr) -> Ordering {
+    atom_rank(left.atom())
+        .cmp(&atom_rank(right.atom()))
+        .then_with(|| expr_bit_length(left).cmp(&expr_bit_length(right)))
+        .then_with(|| {
+            serde_json::to_string(left)
+                .expect("expr should serialize")
+                .cmp(&serde_json::to_string(right).expect("expr should serialize"))
+        })
+}
+
 fn atom_rank(atom: Atom) -> u8 {
     atom as u8
 }
@@ -2973,7 +3926,7 @@ fn atom_rank(atom: Atom) -> u8 {
 fn supports_former_eliminator_clause(expr: &Expr) -> bool {
     !expr.has_lib_pointer()
         && !expr.is_modal()
-        && !expr.is_temporal()
+        && !expr.is_temporal_like()
         && (contains_former_expr(expr)
             || contains_lambda_expr(expr)
             || contains_eliminator_expr(expr))
@@ -3281,90 +4234,88 @@ fn supports_hilbert_functional_clause(expr: &Expr) -> bool {
     )
 }
 
-fn supports_temporal_shell_clause(expr: &Expr) -> bool {
-    matches!(
-        expr,
-        Expr::Next(body) | Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(_))
-    ) || matches!(
-        expr,
-        Expr::Pi(domain, codomain)
-            if matches!(
-                domain.as_ref(),
-                Expr::Next(body) if matches!(body.as_ref(), Expr::Var(_))
-            ) && matches!(
-                codomain.as_ref(),
-                Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(_))
-            )
-    ) || matches!(
-        expr,
-        Expr::Lam(body)
-            if matches!(
-                body.as_ref(),
-                Expr::App(function, argument)
-                    if matches!(function.as_ref(), Expr::Lib(_))
-                        && matches!(
-                            argument.as_ref(),
-                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(_))
+fn supports_temporal_shell_clause(expr: &Expr, include_linear_exponential: bool) -> bool {
+    matches_temporal_shell_left_var(expr, include_linear_exponential, 1)
+        || matches_temporal_shell_right_var(expr, include_linear_exponential, 1)
+        || matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches_temporal_shell_left_var(
+                    domain.as_ref(),
+                    include_linear_exponential,
+                    1,
+                ) && matches_temporal_shell_right_var(
+                    codomain.as_ref(),
+                    include_linear_exponential,
+                    1,
+                )
+        )
+        || matches!(
+            expr,
+            Expr::Lam(body)
+                if matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches!(function.as_ref(), Expr::Lib(_))
+                            && matches_temporal_shell_left_var(
+                                argument.as_ref(),
+                                include_linear_exponential,
+                                1,
+                            )
+                ) || matches!(
+                    body.as_ref(),
+                    Expr::App(function, argument)
+                        if matches_temporal_shell_right_var(
+                            function.as_ref(),
+                            include_linear_exponential,
+                            1,
+                        ) && matches!(argument.as_ref(), Expr::Var(_))
+                )
+        )
+        || matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Flat(body)
+                        if matches_temporal_shell_left_var(
+                            body.as_ref(),
+                            include_linear_exponential,
+                            1,
                         )
-            ) || matches!(
-                body.as_ref(),
-                Expr::App(function, argument)
-                    if matches!(
-                        function.as_ref(),
-                        Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(_))
-                    ) && matches!(argument.as_ref(), Expr::Var(_))
-            )
-    ) || matches!(
-        expr,
-        Expr::Pi(domain, codomain)
-            if matches!(
-                domain.as_ref(),
-                Expr::Flat(body)
-                    if matches!(
-                        body.as_ref(),
-                        Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(_))
+                ) && temporal_shell_left_body(codomain.as_ref(), include_linear_exponential)
+                    .is_some_and(|body| {
+                        matches!(body, Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(_)))
+                    })
+        )
+        || matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if matches!(
+                    domain.as_ref(),
+                    Expr::Sharp(body)
+                        if matches_temporal_shell_right_var(
+                            body.as_ref(),
+                            include_linear_exponential,
+                            1,
+                        )
+                ) && temporal_shell_right_body(codomain.as_ref(), include_linear_exponential)
+                    .is_some_and(|body| {
+                        matches!(body, Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(_)))
+                    })
+        )
+        || matches!(
+            expr,
+            Expr::Pi(domain, codomain)
+                if temporal_shell_left_body(domain.as_ref(), include_linear_exponential)
+                    .is_some_and(|body| {
+                        matches_temporal_shell_left_var(body, include_linear_exponential, 1)
+                    }) && matches_temporal_shell_left_var(
+                        codomain.as_ref(),
+                        include_linear_exponential,
+                        1,
                     )
-            ) && matches!(
-                codomain.as_ref(),
-                Expr::Next(body)
-                    if matches!(
-                        body.as_ref(),
-                        Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(_))
-                    )
-            )
-    ) || matches!(
-        expr,
-        Expr::Pi(domain, codomain)
-            if matches!(
-                domain.as_ref(),
-                Expr::Sharp(body)
-                    if matches!(
-                        body.as_ref(),
-                        Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(_))
-                    )
-            ) && matches!(
-                codomain.as_ref(),
-                Expr::Eventually(body)
-                    if matches!(
-                        body.as_ref(),
-                        Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(_))
-                    )
-            )
-    ) || matches!(
-        expr,
-        Expr::Pi(domain, codomain)
-            if matches!(
-                domain.as_ref(),
-                Expr::Next(body)
-                    if matches!(
-                        body.as_ref(),
-                        Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(_))
-                    )
-            ) && matches!(
-                codomain.as_ref(),
-                Expr::Next(body) if matches!(body.as_ref(), Expr::Var(_))
-            )
-    )
+        )
 }
 
 fn supports_initial_hit_clause_at_position(
@@ -3475,6 +4426,7 @@ fn supports_axiomatic_bundle_clause_at_position(
             include_trunc: false,
             include_modal: false,
             include_temporal: false,
+            include_linear_exponential: false,
             max_expr_nodes: 0,
             require_former_eliminator_clauses: false,
             require_initial_hit_clauses: false,
@@ -3682,6 +4634,7 @@ fn supports_operator_bundle_clause_at_position(
             include_trunc: false,
             include_modal: false,
             include_temporal: false,
+            include_linear_exponential: false,
             max_expr_nodes: 0,
             require_former_eliminator_clauses: false,
             require_initial_hit_clauses: false,
@@ -3711,6 +4664,7 @@ fn supports_operator_bundle_clause_at_position(
             include_trunc: false,
             include_modal: false,
             include_temporal: false,
+            include_linear_exponential: false,
             max_expr_nodes: 0,
             require_former_eliminator_clauses: false,
             require_initial_hit_clauses: false,
@@ -3838,6 +4792,7 @@ fn supports_hilbert_functional_clause_at_position(
             include_trunc: false,
             include_modal: false,
             include_temporal: false,
+            include_linear_exponential: false,
             max_expr_nodes: 0,
             require_former_eliminator_clauses: false,
             require_initial_hit_clauses: false,
@@ -3867,6 +4822,7 @@ fn supports_hilbert_functional_clause_at_position(
             include_trunc: false,
             include_modal: false,
             include_temporal: false,
+            include_linear_exponential: false,
             max_expr_nodes: 0,
             require_former_eliminator_clauses: false,
             require_initial_hit_clauses: false,
@@ -3999,199 +4955,39 @@ fn supports_temporal_shell_clause_at_position(
     position: usize,
     expr: &Expr,
     historical_anchor_ref: Option<u32>,
+    include_linear_exponential: bool,
     late_family_surface: LateFamilySurface,
 ) -> bool {
     let Some(anchor) = historical_anchor_ref else {
         return false;
     };
-
-    if late_family_surface == LateFamilySurface::DemoBreadthShadow {
-        let context = EnumerationContext {
-            library_size: anchor.max(1),
-            scope_size: 0,
-            max_path_dimension: 0,
-            include_trunc: false,
-            include_modal: true,
-            include_temporal: true,
-            max_expr_nodes: 0,
-            require_former_eliminator_clauses: false,
-            require_initial_hit_clauses: false,
-            require_truncation_hit_clauses: false,
-            require_higher_hit_clauses: false,
-            require_sphere_lift_clauses: false,
-            require_axiomatic_bundle_clauses: false,
-            require_modal_shell_clauses: false,
-            require_connection_shell_clauses: false,
-            require_curvature_shell_clauses: false,
-            require_operator_bundle_clauses: false,
-            require_hilbert_functional_clauses: false,
-            require_temporal_shell_clauses: false,
-            historical_anchor_ref: Some(anchor),
-            late_family_surface,
-        };
-        return demo_temporal_shell_clauses(position, context)
-            .into_iter()
-            .any(|candidate| candidate == *expr);
-    }
-
-    if late_family_surface == LateFamilySurface::ClaimGeneric {
-        let context = EnumerationContext {
-            library_size: anchor.max(1),
-            scope_size: 0,
-            max_path_dimension: 0,
-            include_trunc: false,
-            include_modal: true,
-            include_temporal: true,
-            max_expr_nodes: 0,
-            require_former_eliminator_clauses: false,
-            require_initial_hit_clauses: false,
-            require_truncation_hit_clauses: false,
-            require_higher_hit_clauses: false,
-            require_sphere_lift_clauses: false,
-            require_axiomatic_bundle_clauses: false,
-            require_modal_shell_clauses: false,
-            require_connection_shell_clauses: false,
-            require_curvature_shell_clauses: false,
-            require_operator_bundle_clauses: false,
-            require_hilbert_functional_clauses: false,
-            require_temporal_shell_clauses: false,
-            historical_anchor_ref: Some(anchor),
-            late_family_surface,
-        };
-        return claim_generic_band8_clauses(position, context)
-            .into_iter()
-            .any(|candidate| candidate == *expr);
-    }
-
-    if late_family_surface == LateFamilySurface::RealisticShadow && position == 4 {
-        return matches!(
-            expr,
-            Expr::Pi(domain, codomain)
-                if matches!(
-                    domain.as_ref(),
-                    Expr::Flat(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                ) && (
-                    matches!(
-                        codomain.as_ref(),
-                        Expr::Next(body)
-                            if matches!(
-                                body.as_ref(),
-                                Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                            )
-                    )
-                    || matches!(
-                        codomain.as_ref(),
-                        Expr::Next(body)
-                            if matches!(
-                                body.as_ref(),
-                                Expr::Flat(inner)
-                                    if matches!(
-                                        inner.as_ref(),
-                                        Expr::Next(deeper) if matches!(deeper.as_ref(), Expr::Var(1))
-                                    )
-                            )
-                    )
-                )
-        );
-    }
-
-    match position {
-        0 => matches!(expr, Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))),
-        1 => matches!(expr, Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))),
-        2 => matches!(
-            expr,
-            Expr::Pi(domain, codomain)
-                if matches!(
-                    domain.as_ref(),
-                    Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
-                ) && matches!(
-                    codomain.as_ref(),
-                    Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
-                )
-        ),
-        3 => matches!(
-            expr,
-            Expr::Lam(body)
-                if matches!(
-                    body.as_ref(),
-                    Expr::App(function, argument)
-                        if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
-                            && matches!(
-                                argument.as_ref(),
-                                Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                            )
-                )
-        ),
-        4 => matches!(
-            expr,
-            Expr::Pi(domain, codomain)
-                if matches!(
-                    domain.as_ref(),
-                    Expr::Flat(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                ) && matches!(
-                    codomain.as_ref(),
-                    Expr::Next(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                )
-        ),
-        5 => matches!(
-            expr,
-            Expr::Pi(domain, codomain)
-                if matches!(
-                    domain.as_ref(),
-                    Expr::Sharp(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                ) && matches!(
-                    codomain.as_ref(),
-                    Expr::Eventually(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                )
-        ),
-        6 => matches!(
-            expr,
-            Expr::Lam(body)
-                if matches!(
-                    body.as_ref(),
-                    Expr::App(function, argument)
-                        if matches!(
-                            function.as_ref(),
-                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        ) && matches!(argument.as_ref(), Expr::Var(2))
-                )
-        ),
-        _ => matches!(
-            expr,
-            Expr::Pi(domain, codomain)
-                if matches!(
-                    domain.as_ref(),
-                    Expr::Next(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                ) && matches!(
-                    codomain.as_ref(),
-                    Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
-                )
-        ),
-    }
+    let context = EnumerationContext {
+        library_size: anchor.max(1),
+        scope_size: 0,
+        max_path_dimension: 0,
+        include_trunc: false,
+        include_modal: true,
+        include_temporal: !include_linear_exponential,
+        include_linear_exponential,
+        max_expr_nodes: 0,
+        require_former_eliminator_clauses: false,
+        require_initial_hit_clauses: false,
+        require_truncation_hit_clauses: false,
+        require_higher_hit_clauses: false,
+        require_sphere_lift_clauses: false,
+        require_axiomatic_bundle_clauses: false,
+        require_modal_shell_clauses: false,
+        require_connection_shell_clauses: false,
+        require_curvature_shell_clauses: false,
+        require_operator_bundle_clauses: false,
+        require_hilbert_functional_clauses: false,
+        require_temporal_shell_clauses: false,
+        historical_anchor_ref: Some(anchor),
+        late_family_surface,
+    };
+    temporal_shell_family_clauses(position, context)
+        .into_iter()
+        .any(|candidate| candidate == *expr)
 }
 
 fn is_minimal_former_intro_clause(expr: &Expr) -> bool {
@@ -4274,7 +5070,9 @@ fn contains_former_expr(expr: &Expr) -> bool {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => contains_former_expr(body),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => contains_former_expr(body),
         Expr::Id(ty, left, right) => {
             contains_former_expr(ty) || contains_former_expr(left) || contains_former_expr(right)
         }
@@ -4296,7 +5094,9 @@ fn contains_lambda_expr(expr: &Expr) -> bool {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => contains_lambda_expr(body),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => contains_lambda_expr(body),
         Expr::Id(ty, left, right) => {
             contains_lambda_expr(ty) || contains_lambda_expr(left) || contains_lambda_expr(right)
         }
@@ -4320,7 +5120,9 @@ fn contains_eliminator_expr(expr: &Expr) -> bool {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => contains_eliminator_expr(body),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => contains_eliminator_expr(body),
         Expr::Pi(left, right) | Expr::Sigma(left, right) => {
             contains_eliminator_expr(left) || contains_eliminator_expr(right)
         }
@@ -4336,9 +5138,10 @@ fn contains_eliminator_expr(expr: &Expr) -> bool {
 #[cfg(test)]
 mod tests {
     use super::{
-        EnumerationContext, LateFamilySurface, build_clause_catalog, enumerate_exprs,
-        enumerate_next_clauses, enumerate_raw_telescopes, enumerate_telescopes,
-        raw_clause_catalog_widths, supports_axiomatic_bundle_clause_at_position,
+        EnumerationContext, LateFamilySurface, build_clause_catalog, clause_sort_key,
+        compare_clause_sort_order, enumerate_exprs, enumerate_next_clauses,
+        enumerate_raw_telescopes, enumerate_telescopes, raw_clause_catalog_widths,
+        raw_clause_catalog_widths_with_progress, supports_axiomatic_bundle_clause_at_position,
         supports_connection_shell_clause_at_position, supports_curvature_shell_clause_at_position,
         supports_former_package_clause_at_position, supports_higher_hit_clause_at_position,
         supports_hilbert_functional_clause_at_position, supports_initial_hit_clause_at_position,
@@ -4370,6 +5173,166 @@ mod tests {
         admissibility: StrictAdmissibility,
     ) -> EnumerationContext {
         EnumerationContext::from_admissibility(library, admissibility)
+    }
+
+    #[test]
+    fn clause_sort_comparator_matches_cached_key_order() {
+        let clauses = vec![
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(Box::new(Expr::Var(2)), Box::new(Expr::Var(1))),
+            ),
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Var(2)),
+                ))),
+            ),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(2))),
+            ),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::App(Box::new(Expr::Var(2)), Box::new(Expr::Var(1))),
+            ),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(2))),
+            ),
+            ClauseRec::new(ClauseRole::Formation, Expr::Var(10)),
+            ClauseRec::new(ClauseRole::Formation, Expr::Var(2)),
+        ];
+        let mut expected = clauses.clone();
+        expected.sort_by_cached_key(clause_sort_key);
+        let mut actual = clauses;
+        actual.sort_by(compare_clause_sort_order);
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn exact_expr_count_matches_materialized_len_for_small_context() {
+        let context = EnumerationContext {
+            library_size: 4,
+            scope_size: 3,
+            max_path_dimension: 0,
+            include_trunc: false,
+            include_modal: true,
+            include_temporal: false,
+            include_linear_exponential: false,
+            max_expr_nodes: 5,
+            require_former_eliminator_clauses: false,
+            require_initial_hit_clauses: false,
+            require_truncation_hit_clauses: false,
+            require_higher_hit_clauses: false,
+            require_sphere_lift_clauses: false,
+            require_axiomatic_bundle_clauses: false,
+            require_modal_shell_clauses: false,
+            require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
+            historical_anchor_ref: Some(2),
+            late_family_surface: LateFamilySurface::None,
+        };
+        let mut cache = super::ExactExprCache::new();
+
+        for nodes in 1..=context.max_expr_nodes {
+            let exprs = super::enumerate_exprs_exact(context, nodes, &mut cache);
+            assert_eq!(exprs.len(), super::exact_expr_count(context, nodes));
+        }
+    }
+
+    #[test]
+    fn exact_expr_count_matches_live_no_temporal_position_seven_counts() {
+        let library = library_until(14);
+        let admissibility = strict_admissibility(15, 2, &library);
+        let mut context = context_from_admissibility(&library, admissibility);
+        context.scope_size += 7;
+        context.include_temporal = false;
+
+        let counts = (1..=7)
+            .map(|nodes| super::exact_expr_count(context, nodes))
+            .collect::<Vec<_>>();
+
+        assert_eq!(counts, vec![13, 65, 832, 9230, 123721, 1663025, 23641735]);
+    }
+
+    #[test]
+    fn streamed_exact_expr_bucket_matches_materialized_small_context() {
+        let context = EnumerationContext {
+            library_size: 4,
+            scope_size: 3,
+            max_path_dimension: 0,
+            include_trunc: false,
+            include_modal: true,
+            include_temporal: false,
+            include_linear_exponential: false,
+            max_expr_nodes: 5,
+            require_former_eliminator_clauses: false,
+            require_initial_hit_clauses: false,
+            require_truncation_hit_clauses: false,
+            require_higher_hit_clauses: false,
+            require_sphere_lift_clauses: false,
+            require_axiomatic_bundle_clauses: false,
+            require_modal_shell_clauses: false,
+            require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
+            historical_anchor_ref: Some(2),
+            late_family_surface: LateFamilySurface::None,
+        };
+        let expected = super::enumerate_exprs_exact(
+            context,
+            context.max_expr_nodes,
+            &mut super::ExactExprCache::new(),
+        );
+        let mut actual = Vec::new();
+
+        super::stream_exact_exprs(
+            context,
+            context.max_expr_nodes,
+            &mut super::ExactExprCache::new(),
+            |expr| actual.push(expr),
+        );
+        actual.sort_by(super::compare_expr_sort_order);
+
+        assert_eq!(actual, expected.iter().cloned().collect::<Vec<_>>());
+    }
+
+    #[test]
+    fn raw_width_hinted_clause_materialization_matches_unhinted_small_context() {
+        let library = library_until(0);
+        let admissibility = strict_admissibility(1, 2, &library);
+        let context = context_from_admissibility(&library, admissibility);
+        let position = 1usize;
+        let raw_width = super::raw_clause_width_for_position_with_progress(
+            context,
+            admissibility.min_clause_kappa,
+            position,
+            |_| {},
+        );
+        let baseline = super::clauses_for_position_with_progress(
+            context,
+            admissibility.min_clause_kappa,
+            position,
+            None,
+            |_| {},
+        );
+        let hinted = super::clauses_for_position_with_progress(
+            context,
+            admissibility.min_clause_kappa,
+            position,
+            Some(raw_width),
+            |_| {},
+        );
+
+        assert_eq!(hinted.len(), raw_width);
+        assert_eq!(hinted, baseline);
     }
 
     #[test]
@@ -4919,6 +5882,7 @@ mod tests {
             include_trunc: true,
             include_modal: true,
             include_temporal: true,
+            include_linear_exponential: false,
             max_expr_nodes: 3,
             require_former_eliminator_clauses: false,
             require_initial_hit_clauses: false,
@@ -4966,6 +5930,7 @@ mod tests {
             include_trunc: false,
             include_modal: false,
             include_temporal: false,
+            include_linear_exponential: false,
             max_expr_nodes: 4,
             require_former_eliminator_clauses: false,
             require_initial_hit_clauses: false,
@@ -5005,6 +5970,7 @@ mod tests {
                 include_trunc: false,
                 include_modal: false,
                 include_temporal: false,
+                include_linear_exponential: false,
                 max_expr_nodes: 3,
                 require_former_eliminator_clauses: false,
                 require_initial_hit_clauses: false,
@@ -5040,6 +6006,7 @@ mod tests {
             include_trunc: false,
             include_modal: false,
             include_temporal: false,
+            include_linear_exponential: false,
             max_expr_nodes: 5,
             require_former_eliminator_clauses: true,
             require_initial_hit_clauses: false,
@@ -5517,6 +6484,7 @@ mod tests {
                 include_trunc: admissibility.include_trunc,
                 include_modal: admissibility.include_modal,
                 include_temporal: admissibility.include_temporal,
+                include_linear_exponential: admissibility.include_linear_exponential,
                 max_expr_nodes: admissibility.max_expr_nodes,
                 require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
                 require_initial_hit_clauses: admissibility.require_initial_hit_package,
@@ -5557,6 +6525,7 @@ mod tests {
                 include_trunc: admissibility.include_trunc,
                 include_modal: admissibility.include_modal,
                 include_temporal: admissibility.include_temporal,
+                include_linear_exponential: admissibility.include_linear_exponential,
                 max_expr_nodes: admissibility.max_expr_nodes,
                 require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
                 require_initial_hit_clauses: admissibility.require_initial_hit_package,
@@ -5597,6 +6566,7 @@ mod tests {
                 include_trunc: admissibility.include_trunc,
                 include_modal: admissibility.include_modal,
                 include_temporal: admissibility.include_temporal,
+                include_linear_exponential: admissibility.include_linear_exponential,
                 max_expr_nodes: admissibility.max_expr_nodes,
                 require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
                 require_initial_hit_clauses: admissibility.require_initial_hit_package,
@@ -5637,6 +6607,7 @@ mod tests {
                 include_trunc: admissibility.include_trunc,
                 include_modal: admissibility.include_modal,
                 include_temporal: admissibility.include_temporal,
+                include_linear_exponential: admissibility.include_linear_exponential,
                 max_expr_nodes: admissibility.max_expr_nodes,
                 require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
                 require_initial_hit_clauses: admissibility.require_initial_hit_package,
@@ -5677,6 +6648,7 @@ mod tests {
                 include_trunc: admissibility.include_trunc,
                 include_modal: admissibility.include_modal,
                 include_temporal: admissibility.include_temporal,
+                include_linear_exponential: admissibility.include_linear_exponential,
                 max_expr_nodes: admissibility.max_expr_nodes,
                 require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
                 require_initial_hit_clauses: admissibility.require_initial_hit_package,
@@ -5717,6 +6689,7 @@ mod tests {
                 include_trunc: admissibility.include_trunc,
                 include_modal: admissibility.include_modal,
                 include_temporal: admissibility.include_temporal,
+                include_linear_exponential: admissibility.include_linear_exponential,
                 max_expr_nodes: admissibility.max_expr_nodes,
                 require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
                 require_initial_hit_clauses: admissibility.require_initial_hit_package,
@@ -5907,6 +6880,7 @@ mod tests {
                 include_trunc: admissibility.include_trunc,
                 include_modal: admissibility.include_modal,
                 include_temporal: admissibility.include_temporal,
+                include_linear_exponential: admissibility.include_linear_exponential,
                 max_expr_nodes: admissibility.max_expr_nodes,
                 require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
                 require_initial_hit_clauses: admissibility.require_initial_hit_package,
@@ -5949,6 +6923,42 @@ mod tests {
     }
 
     #[test]
+    fn raw_clause_catalog_width_progress_reports_expr_node_checkpoints_on_fallback_surfaces() {
+        let library = library_until(0);
+        let admissibility = strict_admissibility(1, 2, &library);
+        let context = context_from_admissibility(&library, admissibility);
+        let mut progress = Vec::new();
+
+        let widths = raw_clause_catalog_widths_with_progress(
+            context,
+            admissibility.min_clause_kappa,
+            |event, widths_so_far| progress.push((event, widths_so_far.to_vec())),
+        );
+
+        assert_eq!(widths, vec![36, 36]);
+        assert!(
+            progress.iter().any(|(event, widths_so_far)| matches!(
+                event,
+                super::RawClauseCatalogWidthProgress::PositionExprNodesReady {
+                    position: 0,
+                    ..
+                } if widths_so_far.is_empty()
+            )),
+            "raw width reporting should expose in-position fallback progress before position 0 is complete"
+        );
+        assert!(
+            progress.iter().any(|(event, widths_so_far)| matches!(
+                event,
+                super::RawClauseCatalogWidthProgress::PositionExprNodesReady {
+                    position: 1,
+                    ..
+                } if widths_so_far == &vec![36]
+            )),
+            "raw width reporting should keep completed widths separate from the next in-flight position"
+        );
+    }
+
+    #[test]
     fn relaxed_shadow_step_ten_enumeration_exposes_more_than_one_telescope() {
         let library = library_until(9);
         let admissibility =
@@ -5980,6 +6990,7 @@ mod tests {
                 include_trunc: admissibility.include_trunc,
                 include_modal: admissibility.include_modal,
                 include_temporal: admissibility.include_temporal,
+                include_linear_exponential: admissibility.include_linear_exponential,
                 max_expr_nodes: admissibility.max_expr_nodes,
                 require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
                 require_initial_hit_clauses: admissibility.require_initial_hit_package,
@@ -6046,6 +7057,7 @@ mod tests {
                 include_trunc: admissibility.include_trunc,
                 include_modal: admissibility.include_modal,
                 include_temporal: admissibility.include_temporal,
+                include_linear_exponential: admissibility.include_linear_exponential,
                 max_expr_nodes: admissibility.max_expr_nodes,
                 require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
                 require_initial_hit_clauses: admissibility.require_initial_hit_package,
@@ -6232,6 +7244,7 @@ mod tests {
                 include_trunc: admissibility.include_trunc,
                 include_modal: admissibility.include_modal,
                 include_temporal: admissibility.include_temporal,
+                include_linear_exponential: admissibility.include_linear_exponential,
                 max_expr_nodes: admissibility.max_expr_nodes,
                 require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
                 require_initial_hit_clauses: admissibility.require_initial_hit_package,
@@ -6321,6 +7334,7 @@ mod tests {
                 include_trunc: admissibility.include_trunc,
                 include_modal: admissibility.include_modal,
                 include_temporal: admissibility.include_temporal,
+                include_linear_exponential: admissibility.include_linear_exponential,
                 max_expr_nodes: admissibility.max_expr_nodes,
                 require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
                 require_initial_hit_clauses: admissibility.require_initial_hit_package,
@@ -6403,12 +7417,14 @@ mod tests {
             0,
             &pen_core::expr::Expr::Next(Box::new(pen_core::expr::Expr::Var(1))),
             Some(10),
+            false,
             LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
             1,
             &pen_core::expr::Expr::Eventually(Box::new(pen_core::expr::Expr::Var(1))),
             Some(10),
+            false,
             LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
@@ -6422,6 +7438,7 @@ mod tests {
                 ))),
             ),
             Some(10),
+            false,
             LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
@@ -6433,6 +7450,7 @@ mod tests {
                 ))),
             ))),
             Some(10),
+            false,
             LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
@@ -6446,6 +7464,7 @@ mod tests {
                 ))),
             ),
             Some(10),
+            false,
             LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
@@ -6459,6 +7478,7 @@ mod tests {
                 ))),
             ),
             Some(10),
+            false,
             LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
@@ -6470,6 +7490,7 @@ mod tests {
                 Box::new(pen_core::expr::Expr::Var(2)),
             ))),
             Some(10),
+            false,
             LateFamilySurface::None,
         ));
         assert!(supports_temporal_shell_clause_at_position(
@@ -6483,6 +7504,7 @@ mod tests {
                 ))),
             ),
             Some(10),
+            false,
             LateFamilySurface::None,
         ));
     }
@@ -6500,6 +7522,7 @@ mod tests {
                 include_trunc: admissibility.include_trunc,
                 include_modal: admissibility.include_modal,
                 include_temporal: admissibility.include_temporal,
+                include_linear_exponential: admissibility.include_linear_exponential,
                 max_expr_nodes: admissibility.max_expr_nodes,
                 require_former_eliminator_clauses: admissibility.require_former_eliminator_package,
                 require_initial_hit_clauses: admissibility.require_initial_hit_package,

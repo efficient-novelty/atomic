@@ -86,7 +86,7 @@ impl LibraryEntry {
             has_curvature: exprs.iter().any(is_curvature_expr),
             has_metric: exprs.iter().any(is_metric_expr),
             has_hilbert: matches_hilbert_functional_shell(telescope, library),
-            has_temporal_ops: exprs.iter().any(|expr| expr.is_temporal()),
+            has_temporal_ops: exprs.iter().any(|expr| expr.is_temporal_like()),
             has_temporal_shell: matches_temporal_cohesive_shell(telescope, library),
         };
 
@@ -152,6 +152,8 @@ fn is_operator_top(expr: &&Expr) -> bool {
             | Expr::Shape(_)
             | Expr::Next(_)
             | Expr::Eventually(_)
+            | Expr::Bang(_)
+            | Expr::WhyNot(_)
             | Expr::Trunc(_)
     )
 }
@@ -177,7 +179,9 @@ fn contains_modal_expr(expr: &Expr) -> bool {
         | Expr::Susp(body)
         | Expr::Trunc(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => contains_modal_expr(body),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => contains_modal_expr(body),
         Expr::Id(ty, left, right) => {
             contains_modal_expr(ty) || contains_modal_expr(left) || contains_modal_expr(right)
         }
@@ -298,6 +302,34 @@ fn matches_hilbert_functional_shell(telescope: &Telescope, library: &Library) ->
         )
 }
 
+fn temporal_shell_left_body(expr: &Expr, include_linear_exponential: bool) -> Option<&Expr> {
+    match (include_linear_exponential, expr) {
+        (false, Expr::Next(body)) | (true, Expr::Bang(body)) => Some(body.as_ref()),
+        _ => None,
+    }
+}
+
+fn temporal_shell_right_body(expr: &Expr, include_linear_exponential: bool) -> Option<&Expr> {
+    match (include_linear_exponential, expr) {
+        (false, Expr::Eventually(body)) | (true, Expr::WhyNot(body)) => Some(body.as_ref()),
+        _ => None,
+    }
+}
+
+fn matches_temporal_shell_left_var(expr: &Expr, index: u32, include_linear_exponential: bool) -> bool {
+    temporal_shell_left_body(expr, include_linear_exponential)
+        .is_some_and(|body| matches!(body, Expr::Var(found) if *found == index))
+}
+
+fn matches_temporal_shell_right_var(
+    expr: &Expr,
+    index: u32,
+    include_linear_exponential: bool,
+) -> bool {
+    temporal_shell_right_body(expr, include_linear_exponential)
+        .is_some_and(|body| matches!(body, Expr::Var(found) if *found == index))
+}
+
 fn matches_temporal_cohesive_shell(telescope: &Telescope, library: &Library) -> bool {
     let Some(anchor) = latest_modal_shell_anchor_ref(library) else {
         return false;
@@ -306,24 +338,31 @@ fn matches_temporal_cohesive_shell(telescope: &Telescope, library: &Library) -> 
         return false;
     }
 
-    telescope.path_dimensions().is_empty()
+    [false, true].into_iter().any(|include_linear_exponential| {
+        telescope.path_dimensions().is_empty()
         && telescope.clauses.len() == 8
-        && matches!(
+        && matches_temporal_shell_left_var(
             &telescope.clauses[0].expr,
-            Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
+            1,
+            include_linear_exponential,
         )
-        && matches!(
+        && matches_temporal_shell_right_var(
             &telescope.clauses[1].expr,
-            Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
+            1,
+            include_linear_exponential,
         )
         && matches!(
             &telescope.clauses[2].expr,
             Expr::Pi(domain, codomain)
-                if matches!(domain.as_ref(), Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1)))
-                    && matches!(
-                        codomain.as_ref(),
-                        Expr::Eventually(body) if matches!(body.as_ref(), Expr::Var(1))
-                    )
+                if matches_temporal_shell_left_var(
+                    domain.as_ref(),
+                    1,
+                    include_linear_exponential,
+                ) && matches_temporal_shell_right_var(
+                    codomain.as_ref(),
+                    1,
+                    include_linear_exponential,
+                )
         )
         && matches!(
             &telescope.clauses[3].expr,
@@ -332,9 +371,10 @@ fn matches_temporal_cohesive_shell(telescope: &Telescope, library: &Library) -> 
                     body.as_ref(),
                     Expr::App(function, argument)
                         if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
-                            && matches!(
+                            && matches_temporal_shell_left_var(
                                 argument.as_ref(),
-                                Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                                1,
+                                include_linear_exponential,
                             )
                 )
         )
@@ -344,18 +384,15 @@ fn matches_temporal_cohesive_shell(telescope: &Telescope, library: &Library) -> 
                 if matches!(
                     domain.as_ref(),
                     Expr::Flat(body)
-                        if matches!(
+                        if matches_temporal_shell_left_var(
                             body.as_ref(),
-                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                            1,
+                            include_linear_exponential,
                         )
-                ) && matches!(
-                    codomain.as_ref(),
-                    Expr::Next(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                )
+                ) && temporal_shell_left_body(codomain.as_ref(), include_linear_exponential)
+                    .is_some_and(|body| {
+                    matches!(body, Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1)))
+                })
         )
         && matches!(
             &telescope.clauses[5].expr,
@@ -363,18 +400,15 @@ fn matches_temporal_cohesive_shell(telescope: &Telescope, library: &Library) -> 
                 if matches!(
                     domain.as_ref(),
                     Expr::Sharp(body)
-                        if matches!(
+                        if matches_temporal_shell_right_var(
                             body.as_ref(),
-                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
+                            1,
+                            include_linear_exponential,
                         )
-                ) && matches!(
-                    codomain.as_ref(),
-                    Expr::Eventually(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                )
+                ) && temporal_shell_right_body(codomain.as_ref(), include_linear_exponential)
+                    .is_some_and(|body| {
+                    matches!(body, Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1)))
+                })
         )
         && matches!(
             &telescope.clauses[6].expr,
@@ -382,27 +416,28 @@ fn matches_temporal_cohesive_shell(telescope: &Telescope, library: &Library) -> 
                 if matches!(
                     body.as_ref(),
                     Expr::App(function, argument)
-                        if matches!(
+                        if matches_temporal_shell_right_var(
                             function.as_ref(),
-                            Expr::Eventually(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        ) && matches!(argument.as_ref(), Expr::Var(2))
+                            1,
+                            include_linear_exponential,
+                        )
+                            && matches!(argument.as_ref(), Expr::Var(2))
                 )
         )
         && matches!(
             &telescope.clauses[7].expr,
             Expr::Pi(domain, codomain)
-                if matches!(
-                    domain.as_ref(),
-                    Expr::Next(body)
-                        if matches!(
-                            body.as_ref(),
-                            Expr::Next(inner) if matches!(inner.as_ref(), Expr::Var(1))
-                        )
-                ) && matches!(
-                    codomain.as_ref(),
-                    Expr::Next(body) if matches!(body.as_ref(), Expr::Var(1))
-                )
+                if temporal_shell_left_body(domain.as_ref(), include_linear_exponential)
+                    .is_some_and(|body| {
+                        matches_temporal_shell_left_var(body, 1, include_linear_exponential)
+                    })
+                    && matches_temporal_shell_left_var(
+                        codomain.as_ref(),
+                        1,
+                        include_linear_exponential,
+                    )
         )
+    })
 }
 
 fn latest_modal_shell_anchor_ref(library: &Library) -> Option<u32> {

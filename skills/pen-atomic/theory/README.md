@@ -10,7 +10,7 @@ It distills the TeX corpus into the theory we actually need for the `pen-atomic`
 3. [novelty-selection-and-rejection.md](novelty-selection-and-rejection.md) for `nu`, minimal overshoot, and why discrete branches lose.
 4. [genesis.md](genesis.md) for the exact 15-step executable canon used by the rewrite.
 5. [late-framework-abstraction.md](late-framework-abstraction.md) for the shell-first reading of steps 10 to 14.
-6. [terminal-dct.md](terminal-dct.md) for the step-15 temporal shell, the DCT completion story, and the halting claim.
+6. [terminal-dct.md](terminal-dct.md) for the canonical step-15 temporal shell, the DCT completion story, and the halting claim inside the disclosed late vocabulary.
 7. [downstream-interpretations.md](downstream-interpretations.md) for the physics and RH papers that depend on the late PEN library but must not steer search.
 8. [source-map.md](source-map.md) for the full manuscript-by-manuscript map of what was kept, merged, or demoted.
 
@@ -22,6 +22,12 @@ It distills the TeX corpus into the theory we actually need for the `pen-atomic`
   - the coherence-depth and Fibonacci recurrence package in [coherence-and-scaling.md](coherence-and-scaling.md),
   - the novelty and rejection theorems in [novelty-selection-and-rejection.md](novelty-selection-and-rejection.md).
 - Steps 10 to 15 should be read shell-first, not as target labels. That boundary is captured in [late-framework-abstraction.md](late-framework-abstraction.md) and [terminal-dct.md](terminal-dct.md).
+- This theory tree defines the canonical control sequence. Grammar-ablation work
+  at repo root tests how load-bearing the current executable MBTT grammar is;
+  those ablation docs are empirical work logs, not new theorems.
+- If the question is whether step 15 survives hostile grammars, start with the
+  repo-root grammar-ablation docs and report rather than treating this folder
+  as grammar-robust empirical evidence.
 
 ## Proof-Status Boundary
 
@@ -34,6 +40,10 @@ It distills the TeX corpus into the theory we actually need for the `pen-atomic`
 - Expository but still important:
   - the semantic readings of steps 10 to 14,
   - the API-style clause bundles used to explain late shells.
+- Empirical rather than theorem-level:
+  - whether hostile grammars reproduce the step-15 terminal,
+  - the current repo evidence for grammar robustness stops at step 14 /
+    `Hilbert`, not at a hostile step-15 terminal.
 - Explicitly non-canonical for the rewrite unless the user asks for them:
   - superseded donor-manuscript late totals that disagree with the frozen executable fixtures,
   - cosmology, physics, or RH interpretations built on top of steps 14 and 15.

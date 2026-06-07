@@ -24,6 +24,8 @@ pub enum Expr {
     Shape(Box<Expr>),
     Next(Box<Expr>),
     Eventually(Box<Expr>),
+    Bang(Box<Expr>),
+    WhyNot(Box<Expr>),
 }
 
 impl Expr {
@@ -47,6 +49,8 @@ impl Expr {
             Self::Shape(_) => Atom::Shape,
             Self::Next(_) => Atom::Next,
             Self::Eventually(_) => Atom::Eventually,
+            Self::Bang(_) => Atom::Bang,
+            Self::WhyNot(_) => Atom::WhyNot,
         }
     }
 
@@ -79,10 +83,41 @@ impl Expr {
             | Self::Flat(body)
             | Self::Sharp(body)
             | Self::Disc(body)
-            | Self::Shape(body) => body.is_temporal(),
+            | Self::Shape(body)
+            | Self::Bang(body)
+            | Self::WhyNot(body) => body.is_temporal(),
             Self::Id(a, x, y) => a.is_temporal() || x.is_temporal() || y.is_temporal(),
             Self::Univ | Self::Var(_) | Self::Lib(_) | Self::PathCon(_) => false,
         }
+    }
+
+    pub fn is_linear_exponential(&self) -> bool {
+        match self {
+            Self::Bang(_) | Self::WhyNot(_) => true,
+            Self::App(left, right) | Self::Pi(left, right) | Self::Sigma(left, right) => {
+                left.is_linear_exponential() || right.is_linear_exponential()
+            }
+            Self::Lam(body)
+            | Self::Refl(body)
+            | Self::Susp(body)
+            | Self::Trunc(body)
+            | Self::Flat(body)
+            | Self::Sharp(body)
+            | Self::Disc(body)
+            | Self::Shape(body)
+            | Self::Next(body)
+            | Self::Eventually(body) => body.is_linear_exponential(),
+            Self::Id(a, x, y) => {
+                a.is_linear_exponential()
+                    || x.is_linear_exponential()
+                    || y.is_linear_exponential()
+            }
+            Self::Univ | Self::Var(_) | Self::Lib(_) | Self::PathCon(_) => false,
+        }
+    }
+
+    pub fn is_temporal_like(&self) -> bool {
+        self.is_temporal() || self.is_linear_exponential()
     }
 
     pub fn is_modal(&self) -> bool {
@@ -103,7 +138,9 @@ impl Expr {
             | Self::Disc(body)
             | Self::Shape(body)
             | Self::Next(body)
-            | Self::Eventually(body) => body.is_trunc_context(),
+            | Self::Eventually(body)
+            | Self::Bang(body)
+            | Self::WhyNot(body) => body.is_trunc_context(),
             Self::Pi(left, right) | Self::Sigma(left, right) => {
                 left.is_trunc_context() && right.is_trunc_context()
             }
@@ -129,7 +166,9 @@ impl Expr {
             | Self::Disc(body)
             | Self::Shape(body)
             | Self::Next(body)
-            | Self::Eventually(body) => body.collect_lib_refs(refs),
+            | Self::Eventually(body)
+            | Self::Bang(body)
+            | Self::WhyNot(body) => body.collect_lib_refs(refs),
             Self::Id(a, x, y) => {
                 a.collect_lib_refs(refs);
                 x.collect_lib_refs(refs);
@@ -157,7 +196,9 @@ impl Expr {
             | Self::Disc(body)
             | Self::Shape(body)
             | Self::Next(body)
-            | Self::Eventually(body) => body.collect_var_refs(refs),
+            | Self::Eventually(body)
+            | Self::Bang(body)
+            | Self::WhyNot(body) => body.collect_var_refs(refs),
             Self::Id(a, x, y) => {
                 a.collect_var_refs(refs);
                 x.collect_var_refs(refs);
@@ -230,6 +271,12 @@ pub enum ExprNode {
     Eventually {
         expr: ExprId,
     },
+    Bang {
+        expr: ExprId,
+    },
+    WhyNot {
+        expr: ExprId,
+    },
 }
 
 impl ExprNode {
@@ -253,6 +300,8 @@ impl ExprNode {
             Self::Shape { .. } => Atom::Shape,
             Self::Next { .. } => Atom::Next,
             Self::Eventually { .. } => Atom::Eventually,
+            Self::Bang { .. } => Atom::Bang,
+            Self::WhyNot { .. } => Atom::WhyNot,
         }
     }
 
@@ -268,7 +317,9 @@ impl ExprNode {
             | Self::Disc { expr: body }
             | Self::Shape { expr: body }
             | Self::Next { expr: body }
-            | Self::Eventually { expr: body } => vec![*body],
+            | Self::Eventually { expr: body }
+            | Self::Bang { expr: body }
+            | Self::WhyNot { expr: body } => vec![*body],
             Self::Pi { domain, codomain } | Self::Sigma { domain, codomain } => {
                 vec![*domain, *codomain]
             }

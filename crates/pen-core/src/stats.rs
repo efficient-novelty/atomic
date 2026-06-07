@@ -52,7 +52,9 @@ fn walk(expr: &Expr, depth: u16) -> (u32, u16) {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => {
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => {
             let (count, max_depth) = walk(body, depth + 1);
             (1 + count, max_depth)
         }

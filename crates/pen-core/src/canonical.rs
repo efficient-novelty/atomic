@@ -35,6 +35,8 @@ pub fn canonicalize_expr(expr: &Expr) -> Expr {
         Expr::Shape(body) => Expr::Shape(Box::new(canonicalize_expr(body))),
         Expr::Next(body) => Expr::Next(Box::new(canonicalize_expr(body))),
         Expr::Eventually(body) => Expr::Eventually(Box::new(canonicalize_expr(body))),
+        Expr::Bang(body) => Expr::Bang(Box::new(canonicalize_expr(body))),
+        Expr::WhyNot(body) => Expr::WhyNot(Box::new(canonicalize_expr(body))),
         Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_) => expr.clone(),
     }
 }
@@ -108,6 +110,8 @@ fn encode_expr(expr: &Expr) -> String {
         Expr::Shape(body) => format!("G({})", encode_expr(body)),
         Expr::Next(body) => format!("N({})", encode_expr(body)),
         Expr::Eventually(body) => format!("E({})", encode_expr(body)),
+        Expr::Bang(body) => format!("!({})", encode_expr(body)),
+        Expr::WhyNot(body) => format!("?({})", encode_expr(body)),
     }
 }
 

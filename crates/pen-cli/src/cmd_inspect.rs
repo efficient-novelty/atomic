@@ -1,10 +1,13 @@
 use crate::cli::InspectArgs;
-use crate::cmd_run::current_search_compat;
-use crate::report::{
-    load_step_reports, render_debug_report, render_replay_ablation, render_standard_report,
-    stored_prune_class_stats, summarize_prune_reports, LateStepClaimStatus, StepReport,
+use crate::cmd_run::{
+    current_search_compat, reconcile_stale_running_manifest, render_running_owner_process_status,
+    running_owner_process_state,
 };
-use anyhow::{bail, Context, Result};
+use crate::report::{
+    LateStepClaimStatus, StepReport, load_step_reports, render_debug_report,
+    render_replay_ablation, stored_prune_class_stats, summarize_prune_reports,
+};
+use anyhow::{Context, Result, bail};
 use pen_search::resume::decide_resume;
 use pen_store::frontier::read_frontier_manifest;
 use pen_store::manifest::{FrontierManifestV1, RunManifestV1};
@@ -303,18 +306,27 @@ fn inspect_run_dir(run_dir: &Path) -> Result<String> {
         .with_context(|| format!("read {}", manifest_path.display()))?;
     let manifest: RunManifestV1 = serde_json::from_str(&run_text).context("parse run manifest")?;
     let steps = load_step_reports(run_dir)?;
+    let manifest = reconcile_stale_running_manifest(run_dir, manifest, &steps)?;
     let grammar_profile = if manifest.grammar_profile.is_empty() {
         "unknown"
     } else {
         manifest.grammar_profile.as_str()
     };
+    let owner_process = render_owner_process_status(&manifest)
+        .map(|status| format!("\nowner_process: {status}"))
+        .unwrap_or_default();
 
     Ok(format!(
-        "{}\ngrammar_profile: {}\n\n{}",
-        render_standard_report(&manifest.run_id, &steps),
+        "{}\ngrammar_profile: {}{}\n\n{}",
+        crate::report::render_standard_report_with_manifest(&manifest, &steps),
         grammar_profile,
+        owner_process,
         render_debug_report(&manifest.run_id, &steps)
     ))
+}
+
+fn render_owner_process_status(manifest: &RunManifestV1) -> Option<String> {
+    running_owner_process_state(manifest).map(render_running_owner_process_status)
 }
 
 fn absolute(path: PathBuf) -> Result<PathBuf> {
@@ -322,5 +334,42 @@ fn absolute(path: PathBuf) -> Result<PathBuf> {
         Ok(path)
     } else {
         Ok(std::env::current_dir()?.join(path))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::render_owner_process_status;
+    use pen_store::manifest::{RunManifestV1, RunPosition, RunStatus};
+
+    #[test]
+    fn running_manifest_reports_missing_owner_pid_as_stale() {
+        let status = render_owner_process_status(&RunManifestV1 {
+            status: RunStatus::Running,
+            owner_pid: Some(u32::MAX),
+            position: RunPosition {
+                completed_step: 14,
+                active_step: 15,
+                active_band: 9,
+                frontier_epoch: 11,
+            },
+            ..RunManifestV1::default()
+        })
+        .expect("running manifests should surface owner state");
+
+        assert!(status.contains("missing pid"));
+        assert!(status.contains("stale running manifest"));
+    }
+
+    #[test]
+    fn completed_manifest_omits_owner_process_status() {
+        assert_eq!(
+            render_owner_process_status(&RunManifestV1 {
+                status: RunStatus::Completed,
+                owner_pid: Some(1234),
+                ..RunManifestV1::default()
+            }),
+            None
+        );
     }
 }

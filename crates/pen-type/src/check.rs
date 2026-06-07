@@ -195,7 +195,9 @@ fn check_expr(context: CheckContext, expr: &Expr) -> CheckResult {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => {
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => {
             let body_context = CheckContext {
                 clause_depth: context.clause_depth + 1,
                 ..context
@@ -218,7 +220,9 @@ fn required_ambient_expr(clause_depth: u32, expr: &Expr) -> u32 {
         | Expr::Disc(body)
         | Expr::Shape(body)
         | Expr::Next(body)
-        | Expr::Eventually(body) => required_ambient_expr(clause_depth + 1, body),
+        | Expr::Eventually(body)
+        | Expr::Bang(body)
+        | Expr::WhyNot(body) => required_ambient_expr(clause_depth + 1, body),
         Expr::Pi(domain, codomain) | Expr::Sigma(domain, codomain) => {
             required_ambient_expr(clause_depth, domain)
                 .max(required_ambient_expr(clause_depth + 1, codomain))

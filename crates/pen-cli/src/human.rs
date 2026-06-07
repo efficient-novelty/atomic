@@ -25,7 +25,7 @@ pub fn step_label(step_index: u32) -> &'static str {
 
 pub fn translation_guide() -> [&'static str; 4] {
     [
-        "Universe, Pi, Sigma, Trunc, Flat, Sharp, Disc, Shape, Next, Eventually, and Path^d are ASCII renderings of the MBTT constructors.",
+        "Universe, Pi, Sigma, Trunc, Flat, Sharp, Disc, Shape, Next, Eventually, Bang, WhyNot, and Path^d are ASCII renderings of the executable grammar constructors.",
         "x1, x2, ... are bound variables in de Bruijn order, with x1 the nearest enclosing binder.",
         "StepNN (Label) names an earlier accepted telescope when a candidate imports prior structure.",
         "Each clause line shows the clause role first, then the translated expression.",
@@ -88,6 +88,13 @@ pub fn describe_candidate(telescope: &Telescope, telescope_class: TelescopeClass
         .any(|clause| clause.expr.is_temporal())
     {
         details.push("contains temporal structure".to_owned());
+    }
+    if telescope
+        .clauses
+        .iter()
+        .any(|clause| clause.expr.is_linear_exponential())
+    {
+        details.push("contains linear-exponential structure".to_owned());
     }
 
     format!(
@@ -157,6 +164,8 @@ fn render_expr_with_ctx(ctx: &[String], expr: &Expr) -> String {
         Expr::Shape(body) => format!("(Shape {})", render_expr_with_ctx(ctx, body)),
         Expr::Next(body) => format!("(Next {})", render_expr_with_ctx(ctx, body)),
         Expr::Eventually(body) => format!("(Eventually {})", render_expr_with_ctx(ctx, body)),
+        Expr::Bang(body) => format!("(Bang {})", render_expr_with_ctx(ctx, body)),
+        Expr::WhyNot(body) => format!("(WhyNot {})", render_expr_with_ctx(ctx, body)),
     }
 }
 
