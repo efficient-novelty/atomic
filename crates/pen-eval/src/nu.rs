@@ -88,6 +88,15 @@ struct TelescopeNuProfile {
     first_two_lib_pointer_count: u8,
     path_count: u32,
     max_path_dimension: u32,
+    /// Sum of squared path-constructor dimensions. Per Lemma L1
+    /// (docs/LEMMA_L1_D_SQUARED.md), each d-dimensional path constructor
+    /// contributes d^2 Kan schemas (d monodromies + d(d-1) variation fillers),
+    /// so multi-constructor telescopes are priced per constructor:
+    /// nu_H = path_count + sum(d_i^2), replacing the earlier max(d)^2 form.
+    /// Identical on all single-path-constructor telescopes (every selected
+    /// Genesis step); diverges only off-trace. V2b: strict-lane rerun required
+    /// before trace claims are re-asserted under this correction.
+    path_dim_sq_sum: u32,
     pre_path_count: u32,
     post_path_entry_count: u32,
     has_higher_path: bool,
@@ -239,6 +248,7 @@ impl TelescopeNuProfile {
                 }
                 profile.path_count += 1;
                 profile.max_path_dimension = profile.max_path_dimension.max(*dimension);
+                profile.path_dim_sq_sum += *dimension * *dimension;
                 profile.has_higher_path |= *dimension > 1;
             } else {
                 if saw_path {
@@ -338,7 +348,8 @@ impl TelescopeNuProfile {
 
     fn base_nu_h(&self) -> u32 {
         if self.path_count > 0 {
-            self.path_count + self.max_path_dimension * self.max_path_dimension
+            // Lemma L1: one beta-schema per constructor plus its d^2 Kan matrix.
+            self.path_count + self.path_dim_sq_sum
         } else {
             0
         }
@@ -357,7 +368,7 @@ impl TelescopeNuProfile {
             TelescopeClass::Hit => {
                 if self.has_formation {
                     let post_count = self.post_path_entry_count;
-                    post_count + (post_count + 1) / 2
+                    post_count + canonical_operation_count(post_count)
                 } else {
                     self.kappa + u32_from_len(library.len())
                 }
@@ -702,7 +713,9 @@ impl SingleClauseStructuralNuContext {
         let first_two_lib_pointer_count = profile.first_two_lib_pointer_count
             + u8::from(profile.kappa < 2 && facts.has_lib_pointer);
         let path_count = profile.path_count + u32::from(facts.is_path_con);
-        let max_path_dimension = profile.max_path_dimension.max(facts.path_dimension);
+        // facts.path_dimension is 0 for non-path clauses, so this is a no-op there.
+        let path_dim_sq_sum =
+            profile.path_dim_sq_sum + facts.path_dimension * facts.path_dimension;
         let (pre_path_count, post_path_entry_count) = if profile.path_count == 0 {
             if facts.is_path_con {
                 (profile.kappa, 0)
@@ -817,7 +830,8 @@ impl SingleClauseStructuralNuContext {
             TelescopeClass::Unknown => intro_count,
         };
         let base_nu_h = if path_count > 0 {
-            path_count + max_path_dimension * max_path_dimension
+            // Lemma L1: per-constructor d^2, not max(d)^2.
+            path_count + path_dim_sq_sum
         } else {
             0
         };
@@ -832,7 +846,7 @@ impl SingleClauseStructuralNuContext {
             TelescopeClass::Former => intro_count + elim_count,
             TelescopeClass::Hit => {
                 if has_formation {
-                    post_path_entry_count + (post_path_entry_count + 1) / 2
+                    post_path_entry_count + canonical_operation_count(post_path_entry_count)
                 } else {
                     kappa + self.library_size
                 }
@@ -982,11 +996,14 @@ pub fn compute_nu_g(class: TelescopeClass, telescope: &Telescope) -> u32 {
 
 pub fn compute_nu_h(telescope: &Telescope) -> u32 {
     let dims = telescope.path_dimensions();
-    let max_dimension = dims.iter().copied().max().unwrap_or(0);
     let path_count = u32_from_len(dims.len());
+    // Lemma L1 (docs/LEMMA_L1_D_SQUARED.md): each d-dimensional path
+    // constructor contributes one beta-schema plus its d^2 Kan matrix
+    // (d monodromies + d(d-1) variation fillers), summed per constructor.
+    let dim_sq_sum: u32 = dims.iter().map(|dimension| dimension * dimension).sum();
 
     if path_count > 0 {
-        path_count + max_dimension * max_dimension
+        path_count + dim_sq_sum
     } else {
         0
     }
@@ -1147,6 +1164,30 @@ fn former_nu_c(telescope: &Telescope) -> u32 {
     intros + eliminations
 }
 
+/// Number of *operation* clauses among the post-path operative entries of a
+/// HIT telescope, under the canonical (operation, coherence) pairing
+/// convention: operative structure is canonicalized as op/coherence pairs,
+/// with an odd remainder read as an unaccompanied operation, so
+/// `ops = ceil(post / 2)`.
+///
+/// Derivation (docs/HSPACE_ENUMERATION.md, principle P2 + the L2 face
+/// principle): each operative clause contributes exactly one forward face
+/// (the `post` term at the call sites), and each *operation* additionally
+/// contributes exactly one cell-action schema — its action on the HIT's path
+/// payload. Coherence clauses act only through their operation and contribute
+/// no independent cell action. At Step 8 (post = 2: multiplication + unit
+/// coherence) the three schemas are: apply-mu, unit-rewrite, and
+/// translate-the-cell — the third being precisely the capability the Step 9
+/// Hopf construction consumes.
+///
+/// The pairing convention is a canonical-form assumption about charged
+/// operative telescopes (enforceable in canonical dedup); deviant packings
+/// (e.g. one operation with two charged coherences) are non-canonical
+/// presentations. Cross-checked by the V1 direct enumerator.
+fn canonical_operation_count(post_count: u32) -> u32 {
+    (post_count + 1) / 2
+}
+
 fn hit_nu_c(telescope: &Telescope, library: &Library) -> u32 {
     let exprs = exprs(telescope);
     let has_formation = exprs.iter().any(|expr| is_type_formation(expr));
@@ -1159,7 +1200,7 @@ fn hit_nu_c(telescope: &Telescope, library: &Library) -> u32 {
             .skip(1)
             .collect();
         let post_count = u32_from_len(post_path_entries.len());
-        let post_adjoint = (post_count + 1) / 2;
+        let post_adjoint = canonical_operation_count(post_count);
         post_count + post_adjoint
     } else {
         kappa_u32(telescope) + u32_from_len(library.len())
@@ -1822,7 +1863,7 @@ impl SingleClauseStructuralNuPotential {
     fn hit_upper_with_new_path(&self, profile: &TelescopeNuProfile) -> u32 {
         self.hit_total(
             1,
-            self.max_path_dimension,
+            self.max_path_dimension.saturating_mul(self.max_path_dimension),
             profile.has_formation,
             profile.kappa,
             u32::from(profile.any_parametric_formation),
@@ -1832,15 +1873,19 @@ impl SingleClauseStructuralNuPotential {
 
     fn hit_upper_from_existing_path(&self, profile: &TelescopeNuProfile) -> u32 {
         let post_path_count = profile.post_path_entry_count.saturating_add(1);
+        // Lemma L1 upper bound: nu_H sums d^2 per constructor, so the bound on
+        // the square-sum is the accumulated sum plus (at most one addable
+        // clause in this context) the largest permitted dimension squared.
+        let addable_sq = if self.can_add_path {
+            self.max_path_dimension.saturating_mul(self.max_path_dimension)
+        } else {
+            0
+        };
         let mut best = self.hit_total(
             profile
                 .path_count
                 .saturating_add(u32::from(self.can_add_path)),
-            profile.max_path_dimension.max(if self.can_add_path {
-                self.max_path_dimension
-            } else {
-                0
-            }),
+            profile.path_dim_sq_sum.saturating_add(addable_sq),
             profile.has_formation,
             profile.pre_path_count,
             u32::from(profile.any_parametric_formation),
@@ -1850,7 +1895,7 @@ impl SingleClauseStructuralNuPotential {
         if profile.has_formation || self.can_add_univ_expr || self.can_add_parametric_formation {
             best = best.max(self.hit_total(
                 profile.path_count,
-                profile.max_path_dimension,
+                profile.path_dim_sq_sum,
                 true,
                 profile.pre_path_count,
                 u32::from(profile.any_parametric_formation || self.can_add_parametric_formation),
@@ -1864,20 +1909,20 @@ impl SingleClauseStructuralNuPotential {
     fn hit_total(
         &self,
         path_count: u32,
-        max_path_dimension: u32,
+        path_dim_sq_upper: u32,
         has_formation: bool,
         pre_path_count: u32,
         parametric_bonus: u32,
         post_path_count: u32,
     ) -> u32 {
-        let nu_h = path_count.saturating_add(max_path_dimension.saturating_mul(max_path_dimension));
+        let nu_h = path_count.saturating_add(path_dim_sq_upper);
         if has_formation {
             pre_path_count
                 .saturating_add(3)
                 .saturating_add(parametric_bonus)
                 .saturating_add(nu_h)
                 .saturating_add(post_path_count)
-                .saturating_add((post_path_count + 1) / 2)
+                .saturating_add(canonical_operation_count(post_path_count))
         } else {
             nu_h.saturating_add(self.final_kappa)
                 .saturating_add(self.library_size)
