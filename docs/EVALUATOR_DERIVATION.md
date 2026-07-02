@@ -292,3 +292,27 @@ theorem-backed. The 15-step trace is currently "principled modulo L1, L2, and on
 H-space count." That is a radically smaller exposure than "nineteen hand-tuned
 formulas," and it is now stated precisely enough to be closed — or to break the
 trace, which would be equally valuable to know.
+
+---
+
+## 8. V2b Verification Result (2026-07-02)
+
+The Sigma d_i^2 evaluator correction was verified on the current machine with
+run id `v2b-l1-sigma-dsq`.
+
+- `pen-eval` compiled and its package test suite passed with no code fixes.
+- The full workspace suite exposed two non-strict-lane integration fixture
+  assertions to review: relaxed-shadow step 11/12 enumerated/rejected counts
+  moved from `24/22` to `32/30` with the accepted sequence unchanged, and the
+  incomplete claim smoke certificate now reports `early_breadth: pass` while
+  still returning overall `attention`.
+- The strict canonical rerun using `configs/strict_canon_guarded.toml`
+  completed step 15 and reported `replay_ablation: matches_reference_replay x15`.
+- A direct comparison with
+  `tests/fixtures/trajectory/reference_steps_until_15.json` matched every step
+  on `label`, `clause_kappa`, `nu`, `rho`, `objective_bar`, `candidate_hash`,
+  and `canonical_hash`.
+
+V2b status: PASSED. The final accepted/canonical hashes are
+`blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4` and
+`blake3:6f4b65c28060999af4bac3fa46a9da3bd8e1bbdbc99f41ecc94291012a0573a4`.

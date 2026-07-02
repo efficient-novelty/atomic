@@ -143,3 +143,36 @@ With this enumeration, every component of the evaluator is now
 The evaluator's degrees-of-freedom problem, as posed, is closed at the
 sketch level. What remains is engineering: mechanize L1/L2's flagged steps,
 build the V1 direct enumerator, and run V2b.
+
+---
+
+## 7. V2b Verification Result (2026-07-02)
+
+Current-machine verification was run from `C:\DEV\atomic` with the Rust
+toolchain available.
+
+- `cargo build -p pen-eval`: passed. No compile fixes were made.
+- `cargo test -p pen-eval`: passed, 16 tests.
+- `cargo test --workspace`: failed only in two existing integration assertions:
+  `relaxed_shadow_run_preserves_reference_sequence_and_exposes_late_competition`
+  now sees relaxed-shadow step 11/12 enumerated/rejected counts `32/30`
+  instead of the hardcoded `24/22`, while the accepted trajectory and evaluated
+  candidate distribution remain unchanged; and
+  `claim_certification_script_emits_failing_certificate_for_incomplete_smoke_run`
+  now sees `early_breadth: pass` for the incomplete smoke run while the
+  certificate remains overall `attention` with `accepted_hash_parity: fail` and
+  `late_generated_floors: fail`. No fixtures were changed.
+- V2b strict lane:
+  `cargo run --release -p pen-cli -- run --config configs/strict_canon_guarded.toml --root runs --run-id v2b-l1-sigma-dsq`
+  completed through step 15 with `replay_ablation: matches_reference_replay x15`.
+- `cargo run -p pen-cli -- inspect runs/v2b-l1-sigma-dsq` confirmed per-step
+  replay deltas `0` against the reference baseline.
+- Direct JSON comparison against
+  `tests/fixtures/trajectory/reference_steps_until_15.json` matched all 15
+  steps on `label`, `clause_kappa`, `nu`, `rho`, `objective_bar`,
+  `candidate_hash`, and `canonical_hash`.
+
+V2b verdict: PASSED for the strict canonical lane. Final accepted hash:
+`blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4`.
+Final canonical hash:
+`blake3:6f4b65c28060999af4bac3fa46a9da3bd8e1bbdbc99f41ecc94291012a0573a4`.

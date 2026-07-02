@@ -1,6 +1,9 @@
 # Rust build outputs
 /target/
 **/target/
+# Alternate / experiment build target directories
+/target-*/
+**/target-*/
 
 # Cargo / rustup local state
 .cargo/credentials.toml

@@ -334,3 +334,53 @@ end.
     certified bundle itself
   - any stronger wording must still be tied directly to the stored `v15`
     certificate and disclosed desktop bundle
+
+## 2026-07-02 V2b Evaluator Verification
+
+- Scope:
+  - followed `new_run_instructions.md` for the evaluator derivation changes
+  - source sanity found no working-tree diff in `crates/pen-eval/src/nu.rs`;
+    the requested `path_dim_sq_sum`, `canonical_operation_count`, and
+    `hit_total`/upper-bound changes are present in the tracked source
+  - pre-existing working-tree dirt before this run: `.gitignore`
+- Compile fixes:
+  - none
+  - exact source diffs made for compilation: none
+- Test results:
+  - `cargo build -p pen-eval`: passed
+  - `cargo test -p pen-eval`: passed, 16 tests
+  - `cargo test --workspace`: failed in two integration assertions while all
+    completed strict reference-facing tests stayed green
+    - `relaxed_shadow_run_preserves_reference_sequence_and_exposes_late_competition`:
+      relaxed-shadow step 11 enumerated/rejected counts are now `32/30`
+      instead of the hardcoded `24/22`; step 12 also reports `32/30`; accepted
+      labels/nu/kappa and evaluated candidate counts remain unchanged
+    - `claim_certification_script_emits_failing_certificate_for_incomplete_smoke_run`:
+      the generated certificate now reports `early_breadth: pass` instead of
+      the hardcoded expected `fail`; the certificate still returns overall
+      `attention`, with `accepted_hash_parity: fail` and
+      `late_generated_floors: fail`
+  - no fixtures were updated
+- V2b strict lane:
+  - command:
+    `cargo run --release -p pen-cli -- run --config configs/strict_canon_guarded.toml --root runs --run-id v2b-l1-sigma-dsq`
+  - config used: `configs/strict_canon_guarded.toml`
+  - result: completed step 15, `replay_ablation: matches_reference_replay x15`
+  - inspect command:
+    `cargo run -p pen-cli -- inspect runs/v2b-l1-sigma-dsq`
+  - direct JSON comparison against
+    `tests/fixtures/trajectory/reference_steps_until_15.json` matched all 15
+    steps on `label`, `clause_kappa`, `nu`, `rho`, `objective_bar`,
+    `candidate_hash`, and `canonical_hash`
+  - final accepted hash:
+    `blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4`
+  - final canonical hash:
+    `blake3:6f4b65c28060999af4bac3fa46a9da3bd8e1bbdbc99f41ecc94291012a0573a4`
+- Verdict:
+  - Outcome A for the strict canonical lane: V2b PASSED
+  - caveat: two non-strict/claim integration fixture assertions need Halvor
+    review before any fixture updates
+- Recommended next action:
+  - review whether the relaxed-shadow `32/30` counts and the claim smoke
+    `early_breadth: pass` certificate subcheck should replace their old
+    fixture expectations, then proceed to V1 direct-counter work
