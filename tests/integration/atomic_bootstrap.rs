@@ -519,13 +519,16 @@ fn relaxed_shadow_run_preserves_reference_sequence_and_exposes_late_competition(
         Some(1)
     );
 
+    // Counts under the L1-corrected sound upper bound; the old max(d)^2 bound
+    // over-pruned 8 multi-constructor candidates per step. Accepted sequence
+    // unchanged. See docs/HSPACE_ENUMERATION.md §7.
     assert_eq!(
         step11["search_stats"]["enumerated_candidates"].as_u64(),
-        Some(24)
+        Some(32)
     );
     assert_eq!(
         step11["search_stats"]["admissibility_rejections"].as_u64(),
-        Some(22)
+        Some(30)
     );
     assert_eq!(
         step11["search_stats"]["evaluated_candidates"].as_u64(),
@@ -544,11 +547,11 @@ fn relaxed_shadow_run_preserves_reference_sequence_and_exposes_late_competition(
 
     assert_eq!(
         step12["search_stats"]["enumerated_candidates"].as_u64(),
-        Some(24)
+        Some(32)
     );
     assert_eq!(
         step12["search_stats"]["admissibility_rejections"].as_u64(),
-        Some(22)
+        Some(30)
     );
     assert_eq!(
         step12["search_stats"]["evaluated_candidates"].as_u64(),
@@ -1239,7 +1242,7 @@ fn claim_certification_script_emits_failing_certificate_for_incomplete_smoke_run
     );
     assert_eq!(
         certificate["checks"]["early_breadth"]["status"].as_str(),
-        Some("fail")
+        Some("pass")
     );
     assert_eq!(
         certificate["checks"]["late_generated_floors"]["status"].as_str(),

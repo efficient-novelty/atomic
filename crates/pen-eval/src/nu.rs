@@ -2074,6 +2074,20 @@ mod tests {
     }
 
     #[test]
+    fn hit_nu_h_sums_path_constructor_squares() {
+        let telescope = Telescope::new(vec![
+            ClauseRec::new(pen_core::clause::ClauseRole::Formation, Expr::Univ),
+            ClauseRec::new(pen_core::clause::ClauseRole::PathAttach, Expr::PathCon(1)),
+            ClauseRec::new(pen_core::clause::ClauseRole::PathAttach, Expr::PathCon(2)),
+        ]);
+
+        // Lemma L1 gives per-constructor beta plus d^2 payload:
+        // 2 path constructors + (1^2 + 2^2) = 7. The retired max(d)^2 rule
+        // would have returned 2 + 4 = 6, now refuted by Lemma L1.
+        assert_eq!(compute_nu_h(&telescope), 7);
+    }
+
+    #[test]
     fn structural_nu_fast_path_matches_legacy_helper_composition() {
         let (library, history) = replay_reference_library(14);
         let surfaces = vec![

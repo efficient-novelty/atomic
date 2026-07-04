@@ -157,8 +157,9 @@ pub fn constant_stratum_crossing(nu: u64, kappa: u64, max_n: usize) -> usize {
 
 /// No-go (C2): debt crossing when capacity is read as specification kappa.
 ///
-/// Returns the first n with F_n > kappa_spec. For kappa_spec <= 21 this is
-/// at most 8; crossing at 16 would require kappa_spec in [610, 987).
+/// Returns the first n with F_n > kappa_spec. For the Genesis-range
+/// kappa_spec <= 10 this is at most 7; crossing at 16 would require
+/// kappa_spec in [610, 987).
 pub fn spec_kappa_debt_crossing(kappa_spec: u64) -> usize {
     (1..=64)
         .find(|n| fib(*n) > kappa_spec)
@@ -326,9 +327,11 @@ mod tests {
 
     #[test]
     fn no_go_c2_spec_kappa_cannot_reach_sixteen() {
-        for kappa in 1..=21 {
-            assert!(spec_kappa_debt_crossing(kappa) <= 8);
+        for kappa in 1..=10 {
+            assert!(spec_kappa_debt_crossing(kappa) <= 7);
         }
+        assert_eq!(spec_kappa_debt_crossing(20), 8);
+        assert_eq!(spec_kappa_debt_crossing(21), 9);
         // Crossing at 16 would require spec kappa in [F_15, F_16) = [610, 987).
         assert_eq!(spec_kappa_debt_crossing(610), 16);
         assert_eq!(spec_kappa_debt_crossing(986), 16);
