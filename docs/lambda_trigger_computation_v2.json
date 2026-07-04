@@ -1,0 +1,63 @@
+{
+  "date": "2026-07-04",
+  "phase": "v2-diagnosis",
+  "freeze_commit": "434d709",
+  "eval_commit": "9493bec",
+  "v1_assessment": {
+    "recorded_verdict": "miss",
+    "corrected_verdict": "invalid-run",
+    "reasons": [
+      "v1 schemas had no library references, no path clauses, and no recognized formation: evaluator scored nu = 0, rho = 0; a rho = 0 candidate is inadmissible and cannot be the plateaued runtime producer",
+      "v1 C2 capacity was specification kappa (1..3), not discharge throughput; the target band [610, 987) was never probeable",
+      "v1 C3 band was hardcoded from the C2 crossing step; no obligation-band machinery was consulted"
+    ]
+  },
+  "no_go": {
+    "c1_constant_stratum_crossing": 3,
+    "c1_statement": "for any constant-(nu,kappa) stratum with rho > 0, Bar_n = Phi_n * rho-bar and Phi_3 = 2 is the first inflation factor > 1, so the crossing is always n = 3; H16 is unprobeable by any frozen constant schema under current C1 semantics",
+    "c2_max_crossing_for_genesis_range_kappa": 7,
+    "c2_statement": "for specification kappa in the Genesis range (<= 10), the debt crossing is <= 7; crossing at 16 requires throughput capacity in [610, 987) clause units per cadence step, a quantity the calculus does not yet define"
+  },
+  "v2_variants": [
+    {
+      "name": "bound_interface_minimal",
+      "rationale": "Formation of the bound-structure type over the Step-13 metric shell, transport of the overdensity along the Step-11 connection, and the binding (virial-closure) path.",
+      "nu_total": 7,
+      "nu_g": 5,
+      "nu_c": 0,
+      "nu_h": 2,
+      "kappa": 3,
+      "rho": "7/3",
+      "reading": "mechanics demonstration only; NOT an H16 probe (see no_go)"
+    },
+    {
+      "name": "bound_interface_weighted",
+      "rationale": "Adds hierarchical pairing (merger) and Step-14 measure compatibility as post-path entries.",
+      "nu_total": 10,
+      "nu_g": 5,
+      "nu_c": 3,
+      "nu_h": 2,
+      "kappa": 5,
+      "rho": "2/1",
+      "reading": "mechanics demonstration only; NOT an H16 probe (see no_go)"
+    },
+    {
+      "name": "bound_interface_persistent",
+      "rationale": "Adds Step-15 temporal persistence of the bound interface as a further post-path entry.",
+      "nu_total": 12,
+      "nu_g": 5,
+      "nu_c": 5,
+      "nu_h": 2,
+      "kappa": 6,
+      "rho": "2/1",
+      "reading": "mechanics demonstration only; NOT an H16 probe (see no_go)"
+    }
+  ],
+  "blocked_on": [
+    "runtime multiplicity: clause-throughput units per cadence step (needed by C2)",
+    "novelty deduplication across repeated schema application: the declining per-step rho profile (needed by C1)",
+    "runtime obligation-band export at the crossing step (needed by C3; Premise A check)"
+  ],
+  "consolidation": "the internal derivation of n* = 16 (L-Lambda1), Premises A/B of the coefficient note (L-Lambda2), and the w_eff(z) response profile are three faces of one missing layer: the runtime extension of the clause calculus",
+  "verdict": "blocked-on-runtime-calculus"
+}
