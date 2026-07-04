@@ -5,6 +5,7 @@ pub mod coherence;
 pub mod halting;
 pub mod lambda_structure;
 pub mod lambda_trigger;
+pub mod lambda_trigger_v2;
 pub mod minimality;
 pub mod nu;
 pub mod nu_trace;

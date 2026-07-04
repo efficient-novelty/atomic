@@ -134,13 +134,31 @@ concrete work item, already named as the companion paper's acceptance test.
   "why so small" into "why now" — already dissolved qualitatively (trigger,
   not tuning). A quantitative residual estimate (saturation imbalance ×
   horizon count) is conceivable but currently underdetermined.
-  **Engine verdict, 2026-07-04:** the frozen L-Lambda1
-  gravitational-collapse schema variants were evaluated in
-  `docs/lambda_trigger_computation.json` after the required pre-evaluation
-  freeze commit. All three variants miss: C1 never crosses, C2 crosses at
-  step 3 or 4 rather than 16, and C3 exports a mixed band rather than
-  depth-2. H16 therefore remains observation-selected under this registered
-  clause computation; this is not license to retune the frozen schemas.
+  **Engine verdict, 2026-07-04 (v1, superseded):** the frozen v1 schema
+  variants were evaluated in `docs/lambda_trigger_computation.json` and
+  recorded "miss". **Corrected verdict (v2 diagnosis, same date):
+  invalid-run, not miss.** The v1 run never measured the specified
+  quantities: (i) the v1 schemas carried no library references, path
+  clauses, or recognized formation structure, so the evaluator scored
+  nu = 0 (rho = 0 candidates are inadmissible and cannot be the plateaued
+  runtime producer); (ii) C2 used specification kappa (1-3) where the test
+  requires discharge throughput — the band [610, 987) was never probeable;
+  (iii) C3 was hardcoded from the C2 step. Two no-go results
+  (`crates/pen-eval/src/lambda_trigger_v2.rs`) sharpen this: any
+  constant-(nu,kappa) stratum crosses its fresh bar at n = 3 (Phi_3 = 2 is
+  the first inflation factor > 1), and any Genesis-range specification
+  kappa crosses the debt at n <= 7 — so under CURRENT evaluator semantics
+  no frozen schema whatsoever can probe H16. Status:
+  **blocked-on-runtime-calculus.** The missing capabilities are runtime
+  multiplicity (throughput units), novelty deduplication across repeated
+  application (declining rho profile), and runtime obligation-band export.
+  Consolidation: these are the same missing layer as the coefficient
+  note's Premises A/B and the w_eff(z) profile — one runtime extension,
+  not four separate debts. An invalid run does not burn the H16
+  hypothesis; the firewall's no-retuning clause applies to informative
+  misses, and the v2 re-freeze is documented under the protocol's
+  formalization-error provision. H16 remains observation-selected
+  (see `pen/book/note_lambda_trigger_lemma.md` §5).
 - **The baryon asymmetry** (η ~ 6×10⁻¹⁰) via the CP floor: the framework fixes
   that CP violation *exists* (N=3); the magnitude is a runtime integral.
   Unlikely to be structural. Listed to be honest about not attempting it.
