@@ -134,6 +134,13 @@ concrete work item, already named as the companion paper's acceptance test.
   "why so small" into "why now" — already dissolved qualitatively (trigger,
   not tuning). A quantitative residual estimate (saturation imbalance ×
   horizon count) is conceivable but currently underdetermined.
+  **Engine verdict, 2026-07-04:** the frozen L-Lambda1
+  gravitational-collapse schema variants were evaluated in
+  `docs/lambda_trigger_computation.json` after the required pre-evaluation
+  freeze commit. All three variants miss: C1 never crosses, C2 crosses at
+  step 3 or 4 rather than 16, and C3 exports a mixed band rather than
+  depth-2. H16 therefore remains observation-selected under this registered
+  clause computation; this is not license to retune the frozen schemas.
 - **The baryon asymmetry** (η ~ 6×10⁻¹⁰) via the CP floor: the framework fixes
   that CP violation *exists* (N=3); the magnitude is a runtime integral.
   Unlikely to be structural. Listed to be honest about not attempting it.

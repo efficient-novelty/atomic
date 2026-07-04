@@ -1,0 +1,175 @@
+{
+  "date": "2026-07-04",
+  "freeze_commit": "26b2c357be8ab6394334b9fb7bc87f4fffb75200",
+  "eval_commit": "8b117d3df32ada2cbef450b31cb6c67fefd235b2",
+  "task_a": {
+    "inherited_bars_16_24": [
+      [
+        "354333",
+        "39040"
+      ],
+      [
+        "573323",
+        "63168"
+      ],
+      [
+        "115957",
+        "12776"
+      ],
+      [
+        "1500979",
+        "165376"
+      ],
+      [
+        "2428635",
+        "267584"
+      ],
+      [
+        "1964807",
+        "216480"
+      ],
+      [
+        "6358249",
+        "700544"
+      ],
+      [
+        "10287863",
+        "1133504"
+      ],
+      [
+        "520191",
+        "57314"
+      ]
+    ],
+    "omega_frozen": "359/64"
+  },
+  "variants": [
+    {
+      "name": "collapse_only",
+      "rationale": "Minimal formation rule: an overdensity premise opens a bound-interface stratum.",
+      "nu": {
+        "G": 0,
+        "C": 0,
+        "H": 0
+      },
+      "kappa": 1,
+      "rho": "0/1",
+      "c1_crossing_step": 0,
+      "c1_stratum_bars": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1"
+      ],
+      "c2_capacity_clause_units": "1/1",
+      "c2_crossing_step": 3,
+      "c3_exported_band": "mixed",
+      "c3_exported_share": "1/2"
+    },
+    {
+      "name": "collapse_virial",
+      "rationale": "Adds the balance/closure equation expressing virialized self-consistency of the bound interface.",
+      "nu": {
+        "G": 0,
+        "C": 0,
+        "H": 0
+      },
+      "kappa": 2,
+      "rho": "0/1",
+      "c1_crossing_step": 0,
+      "c1_stratum_bars": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1"
+      ],
+      "c2_capacity_clause_units": "1/1",
+      "c2_crossing_step": 3,
+      "c3_exported_band": "mixed",
+      "c3_exported_share": "1/2"
+    },
+    {
+      "name": "collapse_virial_merger",
+      "rationale": "Adds hierarchical composition: a paired bound interface composes back into a bound interface.",
+      "nu": {
+        "G": 0,
+        "C": 0,
+        "H": 0
+      },
+      "kappa": 3,
+      "rho": "0/1",
+      "c1_crossing_step": 0,
+      "c1_stratum_bars": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1"
+      ],
+      "c2_capacity_clause_units": "2/1",
+      "c2_crossing_step": 4,
+      "c3_exported_band": "mixed",
+      "c3_exported_share": "1/3"
+    }
+  ],
+  "verdict": "miss"
+}
