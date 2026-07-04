@@ -434,6 +434,7 @@ dependencies = [
  "pen-core",
  "pen-type",
  "serde",
+ "serde_json",
  "thiserror",
 ]
 

@@ -9,4 +9,5 @@ rust-version.workspace = true
 pen-core = { path = "../pen-core" }
 pen-type = { path = "../pen-type" }
 serde.workspace = true
+serde_json.workspace = true
 thiserror.workspace = true
