@@ -190,3 +190,47 @@ and union-staging steps.
 One last reminder, because it is the point of everything above: this exercise
 exists to make the evaluator *answerable to its definitions*. If the numbers
 and the derivation ever disagree, the derivation is the senior partner. ⚠
+
+---
+
+# Round 2 — Approved Actions (Halvor, 2026-07-02 evening)
+
+V2b PASSED (run `v2b-l1-sigma-dsq`, hash-identical ×15). The following are now
+**approved**:
+
+1. **Update the two stale integration assertions** to the corrected-evaluator
+   reality (they encoded the old unsound bound's over-pruned surface):
+   - `relaxed_shadow_run_preserves_reference_sequence_and_exposes_late_competition`:
+     step 11/12 enumerated/rejected expectations `24/22` → `32/30`. Add a
+     comment: `// Counts under the L1-corrected sound upper bound; the old
+     max(d)^2 bound over-pruned 8 multi-constructor candidates per step.
+     Accepted sequence unchanged. See docs/HSPACE_ENUMERATION.md §7.`
+   - `claim_certification_script_emits_failing_certificate_for_incomplete_smoke_run`:
+     update the `early_breadth` expectation to `pass`, keeping the assertions
+     that the certificate remains overall `attention` with
+     `accepted_hash_parity: fail` and `late_generated_floors: fail` (those are
+     the load-bearing checks of that test; keep them strict).
+2. **Add the multi-constructor pin test** in `pen-eval` (permanent lock on
+   Change B's intent): a telescope with formation + `PathCon(1)` + `PathCon(2)`
+   must give `compute_nu_h = 2 + (1 + 4) = 7` (the retired max-rule value `6`
+   in a comment, marked refuted by Lemma L1).
+3. Re-run `cargo test --workspace` — expected fully green after (1)+(2).
+4. Commit with a message referencing `docs/EVALUATOR_DERIVATION.md`,
+   `docs/LEMMA_L1_D_SQUARED.md`, `docs/LEMMA_L2_R_SQUARED.md`,
+   `docs/HSPACE_ENUMERATION.md` and the V2b run id.
+5. Then proceed, in order, to the next pre-registered targets:
+   a. **V1 direct enumerator** (new `pen-eval` module): definition-faithful
+      schema counting per D1–D3, no class dispatch. First test targets: the
+      Möbius two-stratum anchor (`LEMMA_L2_R_SQUARED.md` §5.3) and the
+      operation/coherence packing check (`HSPACE_ENUMERATION.md` §3).
+   b. **V3 archaeology**: reconstruct the `nu.rs` formula-change timeline from
+      git history vs. trace-fixture changes; report principled-refactor vs.
+      trace-preservation motivations per change.
+   c. **Signature-extension ablation (U2 empirical twin — see
+      `docs/UNIVERSALITY_PROGRAM.md`)**: add *definable/redundant* primitive
+      nodes to the grammar (the mirror image of the hostile ablations) and
+      confirm trace invariance under canonical dedup. This is the cheapest
+      new point in the universality moduli space.
+
+Standing rules unchanged: fresh run-ids, keep artifacts, escalate trace
+changes, derivation over fixtures.
