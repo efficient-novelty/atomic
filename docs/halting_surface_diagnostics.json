@@ -1,0 +1,77 @@
+{
+  "artifact": "genesis_halting_surface_diagnostics",
+  "date": "2026-07-05",
+  "diagnostics": {
+    "admissibility": {
+      "ambient_depth": 2,
+      "focus_family": null,
+      "historical_anchor_ref": null,
+      "include_linear_exponential": false,
+      "include_modal": true,
+      "include_temporal": true,
+      "include_trunc": false,
+      "max_clause_kappa": 4,
+      "max_expr_nodes": 6,
+      "max_path_dimension": 1,
+      "min_clause_kappa": 2,
+      "mode": "guarded",
+      "package_policies": {
+        "axiomatic_bundle": "allow",
+        "connection_shell": "allow",
+        "curvature_shell": "allow",
+        "former_eliminator": "allow",
+        "higher_hit": "allow",
+        "hilbert_functional": "allow",
+        "initial_hit": "allow",
+        "modal_shell": "allow",
+        "operator_bundle": "allow",
+        "sphere_lift": "allow",
+        "temporal_shell": "allow",
+        "truncation_hit": "allow"
+      },
+      "quota_per_bucket": 2,
+      "require_axiomatic_bundle_package": false,
+      "require_connection_shell_package": false,
+      "require_curvature_shell_package": false,
+      "require_former_eliminator_package": false,
+      "require_higher_hit_package": false,
+      "require_hilbert_functional_package": false,
+      "require_initial_hit_package": false,
+      "require_modal_shell_package": false,
+      "require_operator_bundle_package": false,
+      "require_sphere_lift_package": false,
+      "require_temporal_shell_package": false,
+      "require_truncation_hit_package": false
+    },
+    "per_kappa": [
+      {
+        "clause_kappa": 2,
+        "position_widths": [
+          910182,
+          910182
+        ],
+        "raw_telescope_product": "828431273124"
+      },
+      {
+        "clause_kappa": 3,
+        "position_widths": [
+          1207872,
+          1207872,
+          1207872
+        ],
+        "raw_telescope_product": "1762230613997518848"
+      },
+      {
+        "clause_kappa": 4,
+        "position_widths": [
+          1559142,
+          1559142,
+          1559142,
+          1559142
+        ],
+        "raw_telescope_product": "5909390405519441174554896"
+      }
+    ]
+  },
+  "phase": "surface-diagnostics (no search; pass --search for the lane verdict)"
+}

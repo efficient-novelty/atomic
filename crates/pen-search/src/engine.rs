@@ -3371,6 +3371,35 @@ fn search_next_step(
     )
 }
 
+/// T1 probe entry (2026-07-05, `halting_probe`): a single unclamped step
+/// search with no demo budget and no observer — the exact per-step
+/// machinery the bootstrap loop runs, which itself clamps at
+/// LIVE_BOOTSTRAP_MAX_STEP = 15 and therefore cannot probe step 16. This
+/// wrapper exists so the probe needs no visibility into `DemoStepBudget`;
+/// behavior is untouched.
+pub(crate) fn probe_next_step_unclamped(
+    step_index: u32,
+    window_depth: u16,
+    library: &Library,
+    history: &[DiscoveryRecord],
+    admissibility_mode: AdmissibilityMode,
+    grammar_profile: GrammarProfile,
+    retention_runtime: FrontierRuntimeLimits,
+) -> Result<AtomicSearchStep> {
+    let mut observer: Option<&mut dyn AtomicSearchProgressObserver> = None;
+    search_next_step_with_grammar_profile(
+        step_index,
+        window_depth,
+        library,
+        history,
+        admissibility_mode,
+        grammar_profile,
+        retention_runtime,
+        None,
+        &mut observer,
+    )
+}
+
 fn search_next_step_with_grammar_profile(
     step_index: u32,
     window_depth: u16,

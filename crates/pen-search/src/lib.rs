@@ -8,6 +8,7 @@ pub mod engine;
 pub mod enumerate;
 pub mod expand;
 pub mod frontier;
+pub mod halting_probe;
 pub mod motif;
 pub mod narrative;
 pub mod prefix_cache;
