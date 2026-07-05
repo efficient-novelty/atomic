@@ -333,8 +333,10 @@ fn rebind_internal_vars(expr: &Expr, clause_index: u32, target: u32) -> Expr {
 }
 
 /// Structure-preserving map over an expression: `leaf` may replace any node;
-/// unreplaced interior nodes recurse.
-fn map_expr(expr: &Expr, leaf: &dyn Fn(&Expr) -> Option<Expr>) -> Expr {
+/// unreplaced interior nodes recurse. Traversal order is deterministic
+/// (pre-order, left to right) — the field generator (`runtime_field`) relies
+/// on this for its slot numbering.
+pub(crate) fn map_expr(expr: &Expr, leaf: &dyn Fn(&Expr) -> Option<Expr>) -> Expr {
     if let Some(replacement) = leaf(expr) {
         return replacement;
     }

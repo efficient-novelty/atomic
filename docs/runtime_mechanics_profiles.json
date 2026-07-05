@@ -1,0 +1,87 @@
+{
+  "artifact": "runtime_mechanics_profiles",
+  "date": "2026-07-05",
+  "design": "docs/RUNTIME_CALCULUS.md (Stage 1; §8 corollary, §9 checklist item 3)",
+  "discipline": "nu numbers only — no engagement fractions, no ledger demand, no crossing index",
+  "field_cadence_steps": 4,
+  "field_schedule_nu_per_step": {
+    "bound_interface_minimal": {
+      "budget_exhaustive": [
+        [
+          7
+        ],
+        [],
+        [],
+        []
+      ]
+    },
+    "bound_interface_persistent": {
+      "budget_exhaustive": [
+        [
+          12,
+          13,
+          31,
+          31,
+          42,
+          42,
+          57,
+          57,
+          72,
+          72,
+          72
+        ],
+        [],
+        [],
+        []
+      ]
+    },
+    "bound_interface_weighted": {
+      "budget_exhaustive": [
+        [
+          10,
+          10,
+          20,
+          20,
+          31,
+          31,
+          42,
+          42,
+          42
+        ],
+        [],
+        [],
+        []
+      ]
+    }
+  },
+  "field_search_budgets": [
+    "exhaustive"
+  ],
+  "single_chain_levels": 6,
+  "single_chain_nu_profiles": {
+    "bound_interface_minimal": [
+      7,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "bound_interface_persistent": [
+      12,
+      24,
+      0,
+      0,
+      0,
+      0
+    ],
+    "bound_interface_weighted": [
+      10,
+      15,
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}
