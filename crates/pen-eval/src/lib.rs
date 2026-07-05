@@ -10,4 +10,5 @@ pub mod minimality;
 pub mod nu;
 pub mod nu_trace;
 pub mod runtime_bar;
+pub mod runtime_dedup;
 pub mod scc;
