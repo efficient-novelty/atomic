@@ -1,0 +1,914 @@
+{
+  "date": "2026-07-05",
+  "phase": "stage-2-blind-run",
+  "freeze_commit": "3c32bdb",
+  "eval_commit": "3c32bdb",
+  "semantics": "RUNTIME_CALCULUS.md §§1-3 with §8 resolutions, §9 schedule, §9.1 pins; exhaustive field rounds (budget dial retired); demand window split Δ_k = Δ_{k−1} (attachment) + Δ_{k−2} (echo), echo = 0 for k ≤ 2",
+  "cadence_steps_computed": 24,
+  "single_chain_levels": 6,
+  "variants": [
+    {
+      "name": "bound_interface_minimal",
+      "kappa_spec": 3,
+      "single_chain_nu_profile": [
+        7,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "accepted_nu": [
+            7
+          ],
+          "accepted_kappa": [
+            3
+          ],
+          "d_serv": 3,
+          "d_tot": 1,
+          "engagement": "1/1"
+        },
+        {
+          "step": 2,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 1,
+          "engagement": "0/1"
+        },
+        {
+          "step": 3,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 2,
+          "engagement": "0/1"
+        },
+        {
+          "step": 4,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 3,
+          "engagement": "0/1"
+        },
+        {
+          "step": 5,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 5,
+          "engagement": "0/1"
+        },
+        {
+          "step": 6,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 8,
+          "engagement": "0/1"
+        },
+        {
+          "step": 7,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 13,
+          "engagement": "0/1"
+        },
+        {
+          "step": 8,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 21,
+          "engagement": "0/1"
+        },
+        {
+          "step": 9,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 34,
+          "engagement": "0/1"
+        },
+        {
+          "step": 10,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 55,
+          "engagement": "0/1"
+        },
+        {
+          "step": 11,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 89,
+          "engagement": "0/1"
+        },
+        {
+          "step": 12,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 144,
+          "engagement": "0/1"
+        },
+        {
+          "step": 13,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 233,
+          "engagement": "0/1"
+        },
+        {
+          "step": 14,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 377,
+          "engagement": "0/1"
+        },
+        {
+          "step": 15,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 610,
+          "engagement": "0/1"
+        },
+        {
+          "step": 16,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 987,
+          "engagement": "0/1"
+        },
+        {
+          "step": 17,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 1597,
+          "engagement": "0/1"
+        },
+        {
+          "step": 18,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 2584,
+          "engagement": "0/1"
+        },
+        {
+          "step": 19,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 4181,
+          "engagement": "0/1"
+        },
+        {
+          "step": 20,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 6765,
+          "engagement": "0/1"
+        },
+        {
+          "step": 21,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 10946,
+          "engagement": "0/1"
+        },
+        {
+          "step": 22,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 17711,
+          "engagement": "0/1"
+        },
+        {
+          "step": 23,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 28657,
+          "engagement": "0/1"
+        },
+        {
+          "step": 24,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 46368,
+          "engagement": "0/1"
+        }
+      ],
+      "omega_course": [
+        {
+          "cadence_step": 1,
+          "sealing_index": 1,
+          "nu": 7,
+          "kappa": 3,
+          "rho": "7/3",
+          "bar": "0/1",
+          "omega_after": "7/3"
+        }
+      ],
+      "crossing_index": 2,
+      "crossing": {
+        "step": 2,
+        "d_serv": 0,
+        "d_tot": 1,
+        "engagement": "0/1",
+        "demand_attachment": 1,
+        "demand_echo": 0,
+        "sealed": false,
+        "attachment_exported": 1,
+        "echo_exported": 0,
+        "exported_share": "1/1",
+        "band": "unsealed-full-export"
+      }
+    },
+    {
+      "name": "bound_interface_weighted",
+      "kappa_spec": 5,
+      "single_chain_nu_profile": [
+        10,
+        15,
+        0,
+        0,
+        0,
+        0
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "accepted_nu": [
+            10,
+            10,
+            20,
+            20,
+            31,
+            31,
+            42,
+            42,
+            42
+          ],
+          "accepted_kappa": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "d_serv": 45,
+          "d_tot": 1,
+          "engagement": "1/1"
+        },
+        {
+          "step": 2,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 1,
+          "engagement": "0/1"
+        },
+        {
+          "step": 3,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 2,
+          "engagement": "0/1"
+        },
+        {
+          "step": 4,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 3,
+          "engagement": "0/1"
+        },
+        {
+          "step": 5,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 5,
+          "engagement": "0/1"
+        },
+        {
+          "step": 6,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 8,
+          "engagement": "0/1"
+        },
+        {
+          "step": 7,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 13,
+          "engagement": "0/1"
+        },
+        {
+          "step": 8,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 21,
+          "engagement": "0/1"
+        },
+        {
+          "step": 9,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 34,
+          "engagement": "0/1"
+        },
+        {
+          "step": 10,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 55,
+          "engagement": "0/1"
+        },
+        {
+          "step": 11,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 89,
+          "engagement": "0/1"
+        },
+        {
+          "step": 12,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 144,
+          "engagement": "0/1"
+        },
+        {
+          "step": 13,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 233,
+          "engagement": "0/1"
+        },
+        {
+          "step": 14,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 377,
+          "engagement": "0/1"
+        },
+        {
+          "step": 15,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 610,
+          "engagement": "0/1"
+        },
+        {
+          "step": 16,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 987,
+          "engagement": "0/1"
+        },
+        {
+          "step": 17,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 1597,
+          "engagement": "0/1"
+        },
+        {
+          "step": 18,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 2584,
+          "engagement": "0/1"
+        },
+        {
+          "step": 19,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 4181,
+          "engagement": "0/1"
+        },
+        {
+          "step": 20,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 6765,
+          "engagement": "0/1"
+        },
+        {
+          "step": 21,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 10946,
+          "engagement": "0/1"
+        },
+        {
+          "step": 22,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 17711,
+          "engagement": "0/1"
+        },
+        {
+          "step": 23,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 28657,
+          "engagement": "0/1"
+        },
+        {
+          "step": 24,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 46368,
+          "engagement": "0/1"
+        }
+      ],
+      "omega_course": [
+        {
+          "cadence_step": 1,
+          "sealing_index": 1,
+          "nu": 10,
+          "kappa": 5,
+          "rho": "2/1",
+          "bar": "0/1",
+          "omega_after": "2/1"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 2,
+          "nu": 10,
+          "kappa": 5,
+          "rho": "2/1",
+          "bar": "2/1",
+          "omega_after": "2/1"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 3,
+          "nu": 20,
+          "kappa": 5,
+          "rho": "4/1",
+          "bar": "4/1",
+          "omega_after": "8/3"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 4,
+          "nu": 20,
+          "kappa": 5,
+          "rho": "4/1",
+          "bar": "4/1",
+          "omega_after": "3/1"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 5,
+          "nu": 31,
+          "kappa": 5,
+          "rho": "31/5",
+          "bar": "5/1",
+          "omega_after": "91/25"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 6,
+          "nu": 31,
+          "kappa": 5,
+          "rho": "31/5",
+          "bar": "728/125",
+          "omega_after": "61/15"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 7,
+          "nu": 42,
+          "kappa": 5,
+          "rho": "42/5",
+          "bar": "793/120",
+          "omega_after": "164/35"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 8,
+          "nu": 42,
+          "kappa": 5,
+          "rho": "42/5",
+          "bar": "492/65",
+          "omega_after": "103/20"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 9,
+          "nu": 42,
+          "kappa": 5,
+          "rho": "42/5",
+          "bar": "1751/210",
+          "omega_after": "248/45"
+        }
+      ],
+      "crossing_index": 2,
+      "crossing": {
+        "step": 2,
+        "d_serv": 0,
+        "d_tot": 1,
+        "engagement": "0/1",
+        "demand_attachment": 1,
+        "demand_echo": 0,
+        "sealed": false,
+        "attachment_exported": 1,
+        "echo_exported": 0,
+        "exported_share": "1/1",
+        "band": "unsealed-full-export"
+      }
+    },
+    {
+      "name": "bound_interface_persistent",
+      "kappa_spec": 6,
+      "single_chain_nu_profile": [
+        12,
+        24,
+        0,
+        0,
+        0,
+        0
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "accepted_nu": [
+            12,
+            13,
+            31,
+            31,
+            42,
+            42,
+            57,
+            57,
+            72,
+            72,
+            72
+          ],
+          "accepted_kappa": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "d_serv": 66,
+          "d_tot": 1,
+          "engagement": "1/1"
+        },
+        {
+          "step": 2,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 1,
+          "engagement": "0/1"
+        },
+        {
+          "step": 3,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 2,
+          "engagement": "0/1"
+        },
+        {
+          "step": 4,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 3,
+          "engagement": "0/1"
+        },
+        {
+          "step": 5,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 5,
+          "engagement": "0/1"
+        },
+        {
+          "step": 6,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 8,
+          "engagement": "0/1"
+        },
+        {
+          "step": 7,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 13,
+          "engagement": "0/1"
+        },
+        {
+          "step": 8,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 21,
+          "engagement": "0/1"
+        },
+        {
+          "step": 9,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 34,
+          "engagement": "0/1"
+        },
+        {
+          "step": 10,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 55,
+          "engagement": "0/1"
+        },
+        {
+          "step": 11,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 89,
+          "engagement": "0/1"
+        },
+        {
+          "step": 12,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 144,
+          "engagement": "0/1"
+        },
+        {
+          "step": 13,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 233,
+          "engagement": "0/1"
+        },
+        {
+          "step": 14,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 377,
+          "engagement": "0/1"
+        },
+        {
+          "step": 15,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 610,
+          "engagement": "0/1"
+        },
+        {
+          "step": 16,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 987,
+          "engagement": "0/1"
+        },
+        {
+          "step": 17,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 1597,
+          "engagement": "0/1"
+        },
+        {
+          "step": 18,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 2584,
+          "engagement": "0/1"
+        },
+        {
+          "step": 19,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 4181,
+          "engagement": "0/1"
+        },
+        {
+          "step": 20,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 6765,
+          "engagement": "0/1"
+        },
+        {
+          "step": 21,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 10946,
+          "engagement": "0/1"
+        },
+        {
+          "step": 22,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 17711,
+          "engagement": "0/1"
+        },
+        {
+          "step": 23,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 28657,
+          "engagement": "0/1"
+        },
+        {
+          "step": 24,
+          "accepted_nu": [],
+          "accepted_kappa": [],
+          "d_serv": 0,
+          "d_tot": 46368,
+          "engagement": "0/1"
+        }
+      ],
+      "omega_course": [
+        {
+          "cadence_step": 1,
+          "sealing_index": 1,
+          "nu": 12,
+          "kappa": 6,
+          "rho": "2/1",
+          "bar": "0/1",
+          "omega_after": "2/1"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 2,
+          "nu": 13,
+          "kappa": 6,
+          "rho": "13/6",
+          "bar": "2/1",
+          "omega_after": "25/12"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 3,
+          "nu": 31,
+          "kappa": 6,
+          "rho": "31/6",
+          "bar": "25/6",
+          "omega_after": "28/9"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 4,
+          "nu": 31,
+          "kappa": 6,
+          "rho": "31/6",
+          "bar": "14/3",
+          "omega_after": "29/8"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 5,
+          "nu": 42,
+          "kappa": 6,
+          "rho": "7/1",
+          "bar": "145/24",
+          "omega_after": "43/10"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 6,
+          "nu": 42,
+          "kappa": 6,
+          "rho": "7/1",
+          "bar": "172/25",
+          "omega_after": "19/4"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 7,
+          "nu": 57,
+          "kappa": 6,
+          "rho": "19/2",
+          "bar": "247/32",
+          "omega_after": "38/7"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 8,
+          "nu": 57,
+          "kappa": 6,
+          "rho": "19/2",
+          "bar": "114/13",
+          "omega_after": "95/16"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 9,
+          "nu": 72,
+          "kappa": 6,
+          "rho": "12/1",
+          "bar": "1615/168",
+          "omega_after": "119/18"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 10,
+          "nu": 72,
+          "kappa": 6,
+          "rho": "12/1",
+          "bar": "385/36",
+          "omega_after": "143/20"
+        },
+        {
+          "cadence_step": 1,
+          "sealing_index": 11,
+          "nu": 72,
+          "kappa": 6,
+          "rho": "12/1",
+          "bar": "1157/100",
+          "omega_after": "167/22"
+        }
+      ],
+      "crossing_index": 2,
+      "crossing": {
+        "step": 2,
+        "d_serv": 0,
+        "d_tot": 1,
+        "engagement": "0/1",
+        "demand_attachment": 1,
+        "demand_echo": 0,
+        "sealed": false,
+        "attachment_exported": 1,
+        "echo_exported": 0,
+        "exported_share": "1/1",
+        "band": "unsealed-full-export"
+      }
+    }
+  ]
+}
