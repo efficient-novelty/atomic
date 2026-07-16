@@ -94,6 +94,31 @@ Calculus (candidate: equal ν-per-schema weighting across sealed gauge shells);
 (c) run the desert RG (textbook) and publish the number with its error
 budget, whatever it is.
 
+**Addendum (2026-07-12, adversarial review):** the trace identity's stated
+derivation has a gap on this framework's own matter content. With three
+Dirac nu_R, B-L is anomaly-free, so anomaly cancellation + Yukawa invariance
+admit the family Y_eps = Y + eps(B-L), under which
+Tr Q_eps^2 = (16/3)(1+eps+eps^2) and the equal-trace value is
+3/(8(1+eps+eps^2)). The 3/8 presupposes eps = 0 (eps = -1 also lands on 3/8
+and must be shown convention-equivalent). Registered closure candidate
+(eps-closure lemma): eps != 0 buys an EM interface for a sterile field at
+nu = 0 -> rho = 0, inadmissible; discharge also settles q_nu = 0 and opens
+the global-form question (SU(3)xSU(2)xU(1))/Z_6. Finite enumeration,
+blind-runnable; next engine project after runtime-calculus Phase 2. Record:
+pen/book/note_weinberg_matching.md section 8.
+
+**v2 (2026-07-16, pre-freeze):** first closure candidate WITHDRAWN — the family
+has a kappa-trap at eps = -1/2 (Q and L decharge together: 5 charged slots vs 6
+at eps = 0; naive minimality selects right-handed isospin, sin^2 = 1/2).
+Resolution: sequential derivation. Theorem A (nu-less content): anomalies +
+Yukawas force y_H = 3y_Q, cubic vanishes identically -> hypercharges UNIQUE up
+to normalization (strengthens ch14). Theorem B (sealed extension): Dirac Yukawa
+gate alone forces y_nu = 0. eps-closure = A + B, conditional on sealing-order
+premise (= cumulative growth). Quotient derived: eps ~ -1-eps (so eps = -1 is
+convention-equal to eps = 0; fixed point -1/2). Engine spec frozen:
+atomic/d2_engine_instructions.md (v2; blind outcomes B1-B5, trap kept as
+diagnostic). Record: note_weinberg_matching.md section 8-v2.
+
 ## 4. Tier 2 — The Framework's Fingerprint: φ in the Sky
 
 The most *distinctive* target is not a single number but a functional form
