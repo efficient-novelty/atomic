@@ -1,0 +1,541 @@
+{
+  "protocol": {
+    "date": "2026-07-16",
+    "freeze_commit": "b7f89751e257e6c8eb30edb6f8253706249d9005",
+    "specification": "d2_engine_instructions.md (v2)",
+    "specification_sha256": "D263B0E298B3008CE8272A6B80C76C5A4EABF2D8B13D733188B6EE8DBE42FD84",
+    "exact_backend": "num_rational::Ratio<i128>; checked i128 primitives on every operation",
+    "floating_point_values": 0,
+    "blind_runs": 1
+  },
+  "stageA": {
+    "forcing_line": "Agrav -> y_H - 3*y_Q = 0 -> y_H = 3*y_Q",
+    "ray": {
+      "parameter": "alpha in Q*",
+      "normalization": "M1 gauge: y_H = 1/2",
+      "assignment": {
+        "Q": "1/6",
+        "u^c": "-2/3",
+        "d^c": "1/3",
+        "L": "-1/2",
+        "e^c": "1",
+        "H": "1/2"
+      }
+    },
+    "identities": {
+      "A111_after_forcing": "0",
+      "A221_after_three_yukawa_lines": "3*y_Q + y_L",
+      "A331_after_three_yukawa_lines": "0",
+      "Agrav_after_A221": "y_H - 3*y_Q"
+    },
+    "linear_rank": 5,
+    "solution_dimension": 1,
+    "automatic_conditions": {
+      "triality_expansion": "2*(+1) + (-1) + (-1) = 0",
+      "fermion_doublet_expansion": "3(Q colors) + 1(L) = 4; 4 is even; H is exempt",
+      "unchanged_by_extension": true
+    }
+  },
+  "stageB": {
+    "forcings": [
+      {
+        "gate": "extension Yukawa line",
+        "reduced_polynomial": "y_nu",
+        "unique_solution": "y_nu = 0"
+      },
+      {
+        "gate": "Agrav",
+        "reduced_polynomial": "y_nu",
+        "unique_solution": "y_nu = 0"
+      },
+      {
+        "gate": "A111",
+        "reduced_polynomial": "y_nu^3",
+        "unique_solution": "y_nu = 0"
+      }
+    ],
+    "winner": {
+      "Q": "1/6",
+      "u^c": "-2/3",
+      "d^c": "1/3",
+      "L": "-1/2",
+      "e^c": "1",
+      "ν^c": "0",
+      "H": "1/2"
+    },
+    "sealed_values_rewritten": false
+  },
+  "simultaneous": {
+    "family_basis": {
+      "Y": {
+        "Q": "1/6",
+        "u^c": "-2/3",
+        "d^c": "1/3",
+        "L": "-1/2",
+        "e^c": "1",
+        "ν^c": "0",
+        "H": "1/2"
+      },
+      "B-L": {
+        "Q": "1/3",
+        "u^c": "-1/3",
+        "d^c": "-1/3",
+        "L": "-1",
+        "e^c": "1",
+        "ν^c": "1",
+        "H": "0"
+      }
+    },
+    "rank": 5,
+    "solution_dimension": 2,
+    "derived_family": {
+      "Q": "1/6 + 1/3*epsilon",
+      "u^c": "-2/3 - 1/3*epsilon",
+      "d^c": "1/3 - 1/3*epsilon",
+      "L": "-1/2 - epsilon",
+      "e^c": "1 + epsilon",
+      "ν^c": "epsilon",
+      "H": "1/2"
+    },
+    "identities": {
+      "A111_after_A221": "0",
+      "A221_after_four_yukawa_lines": "3*y_Q + y_L",
+      "A331_after_four_yukawa_lines": "0",
+      "Agrav_after_A221": "0"
+    },
+    "branch_points": [
+      {
+        "epsilon": "-2",
+        "zero_slots": [
+          "u^c"
+        ],
+        "active_slots": 6
+      },
+      {
+        "epsilon": "-1",
+        "zero_slots": [
+          "e^c"
+        ],
+        "active_slots": 6
+      },
+      {
+        "epsilon": "-1/2",
+        "zero_slots": [
+          "Q",
+          "L"
+        ],
+        "active_slots": 5
+      },
+      {
+        "epsilon": "0",
+        "zero_slots": [
+          "ν^c"
+        ],
+        "active_slots": 6
+      },
+      {
+        "epsilon": "1",
+        "zero_slots": [
+          "d^c"
+        ],
+        "active_slots": 6
+      }
+    ],
+    "no_finite_zero_slots": [
+      "H"
+    ],
+    "infinite_branch": {
+      "Q": "1/3",
+      "u^c": "-1/3",
+      "d^c": "-1/3",
+      "L": "-1",
+      "e^c": "1",
+      "ν^c": "1",
+      "H": "0"
+    },
+    "classes": [
+      {
+        "id": "generic",
+        "representatives": [
+          "{epsilon, -1-epsilon}, excluding branch points"
+        ],
+        "canonical_representative": "epsilon > -1/2",
+        "active_slots": 7
+      },
+      {
+        "id": "zero_class",
+        "representatives": [
+          "0",
+          "-1"
+        ],
+        "canonical_representative": "0",
+        "active_slots": 6
+      },
+      {
+        "id": "one_class",
+        "representatives": [
+          "1",
+          "-2"
+        ],
+        "canonical_representative": "1",
+        "active_slots": 6
+      },
+      {
+        "id": "minus_half_class",
+        "representatives": [
+          "-1/2"
+        ],
+        "canonical_representative": "-1/2",
+        "active_slots": 5
+      },
+      {
+        "id": "infinite_class",
+        "representatives": [
+          "epsilon = infinity"
+        ],
+        "canonical_representative": "pure B-L; y_Q = 1/3",
+        "active_slots": 6
+      }
+    ],
+    "quotient": {
+      "finite_gauge": "M1: y_H = 1/2",
+      "infinite_gauge": "M1: y_H = 0, y_Q = 1/3",
+      "involution": "M2 o M3: epsilon -> -1-epsilon",
+      "canonical_rule": "choose epsilon >= -1/2",
+      "canonicalizer_idempotent": true,
+      "minus_one_equals_zero": true,
+      "one_equals_minus_two": true,
+      "minus_half_fixed": true,
+      "finite_kappa_6_classes": 2,
+      "finite_kappa_5_classes": 1,
+      "component_orientation_absent_from_key": true,
+      "same_record_permutations_sorted": true
+    },
+    "automatic_conditions": {
+      "triality_expansion": "2*(+1) + (-1) + (-1) = 0",
+      "fermion_doublet_expansion": "3(Q colors) + 1(L) = 4; 4 is even; H is exempt",
+      "unchanged_by_extension": true
+    }
+  },
+  "scoring_diagnostic": {
+    "accounting_a": {
+      "semantics": "one clause per active slot",
+      "rows": [
+        {
+          "class": "generic",
+          "kappa": 7
+        },
+        {
+          "class": "zero_class",
+          "kappa": 6
+        },
+        {
+          "class": "one_class",
+          "kappa": 6
+        },
+        {
+          "class": "minus_half_class",
+          "kappa": 5
+        },
+        {
+          "class": "infinite_class",
+          "kappa": 6
+        }
+      ],
+      "minimum_kappa": 5,
+      "minimum_classes": [
+        "minus_half_class"
+      ]
+    },
+    "accounting_b": {
+      "semantics": "one U(1) embedding-direction clause, then active-record description length",
+      "rows": [
+        {
+          "class": "generic",
+          "embedding_direction_clauses": 1,
+          "description_units": 7
+        },
+        {
+          "class": "zero_class",
+          "embedding_direction_clauses": 1,
+          "description_units": 6
+        },
+        {
+          "class": "one_class",
+          "embedding_direction_clauses": 1,
+          "description_units": 6
+        },
+        {
+          "class": "minus_half_class",
+          "embedding_direction_clauses": 1,
+          "description_units": 5
+        },
+        {
+          "class": "infinite_class",
+          "embedding_direction_clauses": 1,
+          "description_units": 6
+        }
+      ],
+      "lexicographic_minimum": [
+        1,
+        5
+      ],
+      "minimum_classes": [
+        "minus_half_class"
+      ]
+    },
+    "accounting_c": {
+      "semantics": "marginal epsilon shift over the sealed zero-class completion",
+      "rows": [
+        {
+          "class": "generic",
+          "marginal_kappa": ">=1",
+          "nu": 0,
+          "admissible": false,
+          "verdict": "inadmissible marginal shift"
+        },
+        {
+          "class": "zero_class",
+          "marginal_kappa": "0",
+          "nu": 0,
+          "admissible": true,
+          "verdict": "sealed baseline; no shift"
+        },
+        {
+          "class": "one_class",
+          "marginal_kappa": ">=1",
+          "nu": 0,
+          "admissible": false,
+          "verdict": "inadmissible marginal shift"
+        },
+        {
+          "class": "minus_half_class",
+          "marginal_kappa": ">=1",
+          "nu": 0,
+          "admissible": false,
+          "verdict": "inadmissible marginal shift"
+        },
+        {
+          "class": "infinite_class",
+          "marginal_kappa": ">=1",
+          "nu": 0,
+          "admissible": false,
+          "verdict": "inadmissible marginal shift"
+        }
+      ],
+      "all_nonzero_shifts_blocked": true
+    },
+    "module_declares_winner": false
+  },
+  "post_run": {
+    "q_table": [
+      {
+        "name": "q_nu",
+        "formula": "-epsilon",
+        "value": "0"
+      },
+      {
+        "name": "q_e",
+        "formula": "-1-epsilon",
+        "value": "-1"
+      },
+      {
+        "name": "q_u",
+        "formula": "2/3+epsilon/3",
+        "value": "2/3"
+      },
+      {
+        "name": "q_d",
+        "formula": "-1/3+epsilon/3",
+        "value": "-1/3"
+      }
+    ],
+    "traces": {
+      "Tr_T3_squared": "2",
+      "Tr_Y_squared": "10/3",
+      "Tr_Q_squared": "16/3"
+    },
+    "normalization": "3/8",
+    "stabilizer_winner": {
+      "lattice_normalizer": "1/6",
+      "integer_weights": [
+        {
+          "slot": "Q",
+          "value": "1"
+        },
+        {
+          "slot": "u^c",
+          "value": "-4"
+        },
+        {
+          "slot": "d^c",
+          "value": "2"
+        },
+        {
+          "slot": "L",
+          "value": "-3"
+        },
+        {
+          "slot": "e^c",
+          "value": "6"
+        },
+        {
+          "slot": "ν^c",
+          "value": "0"
+        },
+        {
+          "slot": "H",
+          "value": "3"
+        }
+      ],
+      "order": 6,
+      "cyclic": true,
+      "generator": {
+        "a_mod_3": 1,
+        "b_mod_2": 1,
+        "theta_mod_1": "1/6"
+      },
+      "elements": [
+        {
+          "a_mod_3": 0,
+          "b_mod_2": 0,
+          "theta_mod_1": "0"
+        },
+        {
+          "a_mod_3": 0,
+          "b_mod_2": 1,
+          "theta_mod_1": "1/2"
+        },
+        {
+          "a_mod_3": 1,
+          "b_mod_2": 0,
+          "theta_mod_1": "2/3"
+        },
+        {
+          "a_mod_3": 1,
+          "b_mod_2": 1,
+          "theta_mod_1": "1/6"
+        },
+        {
+          "a_mod_3": 2,
+          "b_mod_2": 0,
+          "theta_mod_1": "1/3"
+        },
+        {
+          "a_mod_3": 2,
+          "b_mod_2": 1,
+          "theta_mod_1": "5/6"
+        }
+      ],
+      "integrality_formula": "a*t/3 + b*d/2 + theta*(y/y_unit)",
+      "integrality_witness": [
+        {
+          "slot": "Q",
+          "value": "1"
+        },
+        {
+          "slot": "u^c",
+          "value": "-1"
+        },
+        {
+          "slot": "d^c",
+          "value": "0"
+        },
+        {
+          "slot": "L",
+          "value": "0"
+        },
+        {
+          "slot": "e^c",
+          "value": "1"
+        },
+        {
+          "slot": "ν^c",
+          "value": "0"
+        },
+        {
+          "slot": "H",
+          "value": "1"
+        }
+      ]
+    },
+    "stabilizer_minus_half": {
+      "lattice_normalizer": "1/2",
+      "integer_weights": [
+        {
+          "slot": "Q",
+          "value": "0"
+        },
+        {
+          "slot": "u^c",
+          "value": "-1"
+        },
+        {
+          "slot": "d^c",
+          "value": "1"
+        },
+        {
+          "slot": "L",
+          "value": "0"
+        },
+        {
+          "slot": "e^c",
+          "value": "1"
+        },
+        {
+          "slot": "ν^c",
+          "value": "-1"
+        },
+        {
+          "slot": "H",
+          "value": "1"
+        }
+      ],
+      "order": 1,
+      "cyclic": true,
+      "generator": {
+        "a_mod_3": 0,
+        "b_mod_2": 0,
+        "theta_mod_1": "0"
+      },
+      "elements": [
+        {
+          "a_mod_3": 0,
+          "b_mod_2": 0,
+          "theta_mod_1": "0"
+        }
+      ],
+      "integrality_formula": "a*t/3 + b*d/2 + theta*(y/y_unit)",
+      "integrality_witness": [
+        {
+          "slot": "Q",
+          "value": "0"
+        },
+        {
+          "slot": "u^c",
+          "value": "0"
+        },
+        {
+          "slot": "d^c",
+          "value": "0"
+        },
+        {
+          "slot": "L",
+          "value": "0"
+        },
+        {
+          "slot": "e^c",
+          "value": "0"
+        },
+        {
+          "slot": "ν^c",
+          "value": "0"
+        },
+        {
+          "slot": "H",
+          "value": "0"
+        }
+      ]
+    }
+  }
+}
