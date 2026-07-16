@@ -2,6 +2,8 @@ pub mod audit;
 pub mod bar;
 pub mod bounds;
 pub mod coherence;
+pub mod epsilon_closure;
+pub mod epsilon_closure_post_run;
 pub mod halting;
 pub mod lambda_structure;
 pub mod lambda_trigger;
