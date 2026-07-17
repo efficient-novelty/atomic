@@ -1,0 +1,165 @@
+{
+  "date": "2026-07-06",
+  "claim": "Guard-Rail Thm 2, engine face: O(16) = ∅ — after Step 15's law-like completion no directive demand stands; stages 4–15 were each guarded; 16 is the sequence's first debt-free stage (debt_guard_theorem.tex; ch_open_problems Problem Two)",
+  "window_depth": 2,
+  "timeline": [
+    {
+      "stage": 1,
+      "required_packages": [],
+      "debt_free": true,
+      "focus_family": "None",
+      "pre_structural_band": true
+    },
+    {
+      "stage": 2,
+      "required_packages": [],
+      "debt_free": true,
+      "focus_family": "None",
+      "pre_structural_band": true
+    },
+    {
+      "stage": 3,
+      "required_packages": [
+        "former_eliminator"
+      ],
+      "debt_free": false,
+      "focus_family": "None",
+      "pre_structural_band": true
+    },
+    {
+      "stage": 4,
+      "required_packages": [
+        "former_eliminator"
+      ],
+      "debt_free": false,
+      "focus_family": "Some(FormerEliminator)",
+      "pre_structural_band": false
+    },
+    {
+      "stage": 5,
+      "required_packages": [
+        "initial_hit"
+      ],
+      "debt_free": false,
+      "focus_family": "Some(InitialHit)",
+      "pre_structural_band": false
+    },
+    {
+      "stage": 6,
+      "required_packages": [
+        "truncation_hit"
+      ],
+      "debt_free": false,
+      "focus_family": "Some(TruncationHit)",
+      "pre_structural_band": false
+    },
+    {
+      "stage": 7,
+      "required_packages": [
+        "higher_hit"
+      ],
+      "debt_free": false,
+      "focus_family": "Some(HigherHit)",
+      "pre_structural_band": false
+    },
+    {
+      "stage": 8,
+      "required_packages": [
+        "sphere_lift"
+      ],
+      "debt_free": false,
+      "focus_family": "Some(SphereLift)",
+      "pre_structural_band": false
+    },
+    {
+      "stage": 9,
+      "required_packages": [
+        "axiomatic_bundle"
+      ],
+      "debt_free": false,
+      "focus_family": "Some(AxiomaticBundle)",
+      "pre_structural_band": false
+    },
+    {
+      "stage": 10,
+      "required_packages": [
+        "modal_shell"
+      ],
+      "debt_free": false,
+      "focus_family": "Some(ModalShell)",
+      "pre_structural_band": false
+    },
+    {
+      "stage": 11,
+      "required_packages": [
+        "connection_shell"
+      ],
+      "debt_free": false,
+      "focus_family": "Some(ConnectionShell)",
+      "pre_structural_band": false
+    },
+    {
+      "stage": 12,
+      "required_packages": [
+        "curvature_shell"
+      ],
+      "debt_free": false,
+      "focus_family": "Some(CurvatureShell)",
+      "pre_structural_band": false
+    },
+    {
+      "stage": 13,
+      "required_packages": [
+        "operator_bundle"
+      ],
+      "debt_free": false,
+      "focus_family": "Some(OperatorBundle)",
+      "pre_structural_band": false
+    },
+    {
+      "stage": 14,
+      "required_packages": [
+        "hilbert_functional"
+      ],
+      "debt_free": false,
+      "focus_family": "Some(HilbertFunctional)",
+      "pre_structural_band": false
+    },
+    {
+      "stage": 15,
+      "required_packages": [
+        "temporal_shell"
+      ],
+      "debt_free": false,
+      "focus_family": "Some(TemporalShell)",
+      "pre_structural_band": false
+    },
+    {
+      "stage": 16,
+      "required_packages": [],
+      "debt_free": true,
+      "focus_family": "None",
+      "pre_structural_band": false
+    }
+  ],
+  "o16_empty": true,
+  "guarded_stages": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "unguarded_structural_stages": [],
+  "first_debt_free_stage": 16,
+  "discharge_persistence_holds": true,
+  "persistence_violations": [],
+  "guard_rail_verified": true
+}

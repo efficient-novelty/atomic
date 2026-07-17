@@ -1,5 +1,13 @@
 # runtime_calculus_results.md — Stage-2 Blind Run: Grading and Honesty-Ledger Updates
 
+> **Archival interpretation (2026-07-16).** The frozen outputs and their
+> grading below still stand. The later audit in `RUNTIME_AXIOMS_NO_GO.md`
+> changes only the inference drawn from them: the separation of cadence and
+> sealing clocks is a consequence of the experiment's added schedule, not a
+> theorem derivable from `nu` and `kappa`. The successor program formerly
+> assigned to Stages 3–4 is therefore refiled as a bridge problem requiring an
+> explicit clock, demand schedule, and observable map.
+
 **Date:** 2026-07-05. **Run:** `docs/runtime_calculus_run.json` (freeze/eval commit `3c32bdb`, single post-freeze execution, 24 cadence steps, exhaustive field rounds). **Semantics:** `RUNTIME_CALCULUS.md` §§1–3 with §8 resolutions, §9 schedule, §9.1 pins. **Status of this document:** grading per the pre-registered failure semantics, plus paste-ready honesty-ledger inserts for the three book notes. Nothing here adjusts, reinterprets, or proposes recovery of any missed registration.
 
 ---

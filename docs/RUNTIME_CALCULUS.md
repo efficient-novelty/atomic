@@ -1,5 +1,13 @@
 # RUNTIME_CALCULUS.md — Stage-0 Design (Freeze Candidate)
 
+> **Archival notice (2026-07-16).** This is the immutable design record for
+> the 2026-07-05 blind run, not the current definition-derived runtime
+> semantics. The later audit in `RUNTIME_AXIOMS_NO_GO.md` proves that the
+> cadence and demand schedule used here are extra premises: `nu` and `kappa`
+> determine a realized-order ledger, but no physical throughput clock. Keep
+> this document and its implementation unchanged as evidence of the burned
+> experiment; do not read its Stage 3–4 program as following from the Two Laws.
+
 **Date:** 2026-07-05. **Status:** design for freeze. No crossing has been computed under these semantics; no numerical output of the rules below has been consulted in writing them. The H16/ε/band predictions are stated in §6 as *blind outcomes to be checked after freeze*, not as design inputs.
 
 **Purpose.** Extend the clause calculus from one-shot library selection (Genesis) to repeated application at runtime. Three capabilities: (RC-1) repeated-application deduplication, (RC-2) throughput/engagement units, (RC-3) runtime obligation-band export. This single layer closes or grades: L-Λ1's n* (blind), L-Λ2's Premises A/B, the w_eff(z) profile (Stage 3), the stalling-state search (Stage 4), C-COURSE T2.
