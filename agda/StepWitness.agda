@@ -25,6 +25,17 @@ open import CertifiedHalt using
    debt-free-step16-at-most-four; debt-free-step16-at-most-nine;
    nine-kappa-below-bar16;
    class-ceiling-below-maximum; certified-maximum-below-bar16)
+-- Phase 4 of the semantic normalization program: the typed ValidAnchor
+-- witnesses and debt-free inputs that DISCHARGE the conditional AtMost
+-- boundary for the four certified falsifiers (AtMost Marginal (4 * kappa)
+-- per stratum) and the identity TransparentExtension instantiating the
+-- guarded Step-15 internality theorem (AtMost Marginal zero). Importing
+-- them here makes every exported bundle's typecheck re-verify the
+-- discharged theorems.
+open import ProvenanceWitness16 using
+  (hit-at-most-four-kappa; temporal-at-most-four-kappa;
+   single-l15-at-most-four-kappa; inheritance-at-most-four-kappa;
+   guarded-step15-marginal-zero)
 
 record StepWitness (payload : BridgePayload) (carrier : Set) : Set1 where
   constructor mkStepWitness

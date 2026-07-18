@@ -27,6 +27,7 @@ const SUPPORT_MODULES: &[&str] = &[
     "ProvenanceBound.agda",
     "P5RecordBoundary.agda",
     "CertifiedHalt.agda",
+    "ProvenanceWitness16.agda",
     "StepWitness.agda",
 ];
 
