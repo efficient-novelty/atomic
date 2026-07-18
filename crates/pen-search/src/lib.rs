@@ -18,6 +18,7 @@ pub mod prefix_memo;
 pub mod priority;
 pub mod resume;
 pub mod scheduler;
+pub mod semantic_reselection;
 pub mod state;
 pub mod step16_automaton;
 pub mod step16_semantic_exhaustion;

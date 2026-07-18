@@ -42,7 +42,7 @@
 //! `family_answers_package` — the same predicate validates historical
 //! answers, so classes and answers cannot drift apart.
 
-use crate::debt_guard::{DirectiveDebtRecord, directive_debt_timeline};
+use crate::debt_guard::directive_debt_timeline;
 use crate::semantic_provenance::{
     DemandOrbitId, DemandOutputPosition, DemandOutputPositionId, OrbitResolution,
     SemanticAssumptionRef, SemanticDemandOrbit, StageOrbitInventory, UnivalentClassId,
@@ -255,13 +255,36 @@ pub fn kernel_stage_inventories(
     signature: &SealedSignature,
     closure: &PredecessorClosure,
 ) -> Result<KernelOrbitExtraction, OrbitExtractionError> {
-    let timeline: Vec<DirectiveDebtRecord> = directive_debt_timeline();
-    let mut inventories = Vec::with_capacity(16);
+    let timeline: Vec<(u32, Vec<String>)> = directive_debt_timeline()
+        .into_iter()
+        .map(|record| {
+            (
+                record.stage,
+                record
+                    .required_packages
+                    .iter()
+                    .map(|package| (*package).to_string())
+                    .collect(),
+            )
+        })
+        .collect();
+    stage_inventories_for_timeline(signature, closure, &timeline)
+}
+
+/// The same total extraction over an EXPLICIT demand timeline — the
+/// reselection (Phase 5b) supplies the timeline of a REVISED prefix; the
+/// frozen entry point above supplies the sealed one.
+pub fn stage_inventories_for_timeline(
+    signature: &SealedSignature,
+    closure: &PredecessorClosure,
+    timeline: &[(u32, Vec<String>)],
+) -> Result<KernelOrbitExtraction, OrbitExtractionError> {
+    let mut inventories = Vec::with_capacity(timeline.len());
     let mut transitions = Vec::new();
     let mut expiries = Vec::new();
 
-    for (index, record) in timeline.iter().enumerate() {
-        let stage = record.stage;
+    for (index, (stage, required_packages)) in timeline.iter().enumerate() {
+        let stage = *stage;
         let window = stage_window(stage);
         let mut orbits = Vec::new();
 
@@ -272,7 +295,7 @@ pub fn kernel_stage_inventories(
         // kernel content; the guard-rail correspondence is a program
         // requirement, but the grounding makes the refinement
         // falsifiable rather than a relabeling of the timeline).
-        for package in &record.required_packages {
+        for package in required_packages {
             let grounding = if stage >= 4 {
                 let newest = window[1];
                 let window_families = step_families(closure, newest);
@@ -316,14 +339,14 @@ pub fn kernel_stage_inventories(
         // ANSWERED orbits and locality transitions: compare with the
         // previous stage's requirements.
         if index > 0 {
-            let previous = &timeline[index - 1];
-            let answer_step = previous.stage; // the step accepted at stage N-1
-            for package in &previous.required_packages {
-                let still_required = record.required_packages.contains(package);
+            let (previous_stage, previous_required) = &timeline[index - 1];
+            let answer_step = *previous_stage; // the step accepted at stage N-1
+            for package in previous_required {
+                let still_required = required_packages.contains(package);
                 if still_required {
                     transitions.push(LocalityTransition::Transported {
                         package: (*package).to_string(),
-                        from_stage: previous.stage,
+                        from_stage: *previous_stage,
                         to_stage: stage,
                     });
                     continue;
@@ -341,7 +364,7 @@ pub fn kernel_stage_inventories(
                 let Some(answering_family) = answering_family else {
                     expiries.push(LocalityTransition::Expired {
                         package: (*package).to_string(),
-                        from_stage: previous.stage,
+                        from_stage: *previous_stage,
                     });
                     return Err(OrbitExtractionError::AnswerNotExhibited {
                         stage,
@@ -351,7 +374,7 @@ pub fn kernel_stage_inventories(
                 };
                 transitions.push(LocalityTransition::Discharged {
                     package: (*package).to_string(),
-                    from_stage: previous.stage,
+                    from_stage: *previous_stage,
                     discharged_by_step: answer_step,
                     answer_family: answering_family.id.as_str().to_string(),
                 });

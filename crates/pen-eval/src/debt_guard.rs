@@ -69,6 +69,13 @@ pub const PACKAGE_NAMES: [&str; 12] = [
     "temporal_shell",
 ];
 
+/// Public face of the package-demand mapping, for the Phase 5b
+/// reselection (which must derive the demand timeline of a REVISED
+/// library prefix rather than the frozen reference one).
+pub fn required_packages_for(debt: StructuralDebt) -> Vec<&'static str> {
+    required_packages(debt)
+}
+
 fn required_packages(debt: StructuralDebt) -> Vec<&'static str> {
     let flags = [
         debt.requires_former_eliminator_package(),

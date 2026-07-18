@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "date": "2026-07-18",
+  "burned_run": true,
+  "outcome": {
+    "kind": "halted_no_clearing_candidate",
+    "stage": 2,
+    "bar": "1/2"
+  },
+  "stages": [
+    {
+      "stage": 1,
+      "bar": "1/2",
+      "cone_enumerated": 288,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:37d834bf7d8dbd43eeb9aa2098f0acf9dd1f36d0081c65beab474a6f0d629c63",
+      "identified": 0,
+      "clearing": 1,
+      "scored": [
+        {
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "canonical_key": "b7b3b3c3",
+          "kappa": 2,
+          "identified_with_accepted": false,
+          "kernel_invalid": null,
+          "classifier_rejection": null,
+          "marginal_families": 2,
+          "revised_nu": 2,
+          "rho": "1/1",
+          "clears_bar": true,
+          "overshoot": "1/2"
+        }
+      ],
+      "winner": {
+        "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+        "canonical_key": "b7b3b3c3",
+        "kappa": 2,
+        "revised_nu": 2,
+        "rho": "1/1",
+        "overshoot": "1/2",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": "Univ"
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "ledger": {
+        "required_packages": [],
+        "live_orbits": 0,
+        "answered_orbits": 0
+      },
+      "winner_matches_legacy": true,
+      "score_matches_legacy": false,
+      "bar_matches_legacy": true,
+      "legacy_nu": 1
+    },
+    {
+      "stage": 2,
+      "bar": "1/2",
+      "cone_enumerated": 33,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:fdfaacf53c53b4c5a3f788d2434c170af2e54fb72b5094c1465186d0c7a7eeb6",
+      "identified": 0,
+      "clearing": 0,
+      "scored": [
+        {
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "canonical_key": "71b84e92",
+          "kappa": 1,
+          "identified_with_accepted": false,
+          "kernel_invalid": null,
+          "classifier_rejection": null,
+          "marginal_families": 0,
+          "revised_nu": 0,
+          "rho": "0/1",
+          "clears_bar": false,
+          "overshoot": null
+        }
+      ],
+      "winner": null,
+      "ledger": {
+        "required_packages": [],
+        "live_orbits": 0,
+        "answered_orbits": 0
+      },
+      "winner_matches_legacy": false,
+      "score_matches_legacy": false,
+      "bar_matches_legacy": true,
+      "legacy_nu": 1
+    }
+  ],
+  "revised_history": [
+    [
+      1,
+      2,
+      2
+    ]
+  ],
+  "legacy_history": [
+    [
+      1,
+      1,
+      2
+    ],
+    [
+      2,
+      1,
+      1
+    ],
+    [
+      3,
+      2,
+      1
+    ],
+    [
+      4,
+      5,
+      3
+    ],
+    [
+      5,
+      7,
+      3
+    ],
+    [
+      6,
+      8,
+      3
+    ],
+    [
+      7,
+      10,
+      3
+    ],
+    [
+      8,
+      18,
+      5
+    ],
+    [
+      9,
+      17,
+      4
+    ],
+    [
+      10,
+      19,
+      4
+    ],
+    [
+      11,
+      26,
+      5
+    ],
+    [
+      12,
+      34,
+      6
+    ],
+    [
+      13,
+      46,
+      7
+    ],
+    [
+      14,
+      62,
+      9
+    ],
+    [
+      15,
+      103,
+      8
+    ]
+  ],
+  "semantic_reenactment": false,
+  "winners_reenact": false,
+  "first_divergence": {
+    "stage": 1,
+    "field": "score",
+    "legacy": "1",
+    "revised": "2"
+  },
+  "revised_bar_16": null,
+  "legacy_bar_16": "354333/39040",
+  "bar_16_matches": false,
+  "lawful_continuations": [
+    "declare the shipped structural audit a constitutive scoring bridge with a separately justified semantic halt gate",
+    "adopt the semantic audit and continue re-deriving its history"
+  ],
+  "digest": "blake3:0a24ec121a8441180b862f9d033382a2a5a054ef12820830bd430d2ec31159dd"
+}
