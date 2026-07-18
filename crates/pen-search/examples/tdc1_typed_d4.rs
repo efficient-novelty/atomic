@@ -7,7 +7,8 @@
 
 use anyhow::{Context, Result, bail};
 use pen_eval::tdc1::{
-    Tdc1Certificate, build_tdc1_certificate, compare_frozen_certificate, replay_tdc1_certificate,
+    Tdc1Certificate, Tdc1Comparison, build_tdc1_certificate, compare_frozen_certificate,
+    replay_tdc1_certificate, replay_tdc1_comparison,
 };
 use std::fs::OpenOptions;
 use std::io::Write;
@@ -33,12 +34,18 @@ fn usage() -> ! {
     eprintln!(
         "usage:\n  tdc1_typed_d4 certificate <new-certificate.json>\n  \
          tdc1_typed_d4 compare <frozen-certificate.json> <new-comparison.json>\n  \
-         tdc1_typed_d4 replay <certificate.json>"
+         tdc1_typed_d4 replay <certificate.json>\n  \
+         tdc1_typed_d4 replay-comparison <certificate.json> <comparison.json>"
     );
     std::process::exit(2)
 }
 
 fn read_certificate(path: &Path) -> Result<Tdc1Certificate> {
+    let bytes = std::fs::read(path).with_context(|| format!("read {}", path.display()))?;
+    serde_json::from_slice(&bytes).with_context(|| format!("parse {}", path.display()))
+}
+
+fn read_comparison(path: &Path) -> Result<Tdc1Comparison> {
     let bytes = std::fs::read(path).with_context(|| format!("read {}", path.display()))?;
     serde_json::from_slice(&bytes).with_context(|| format!("parse {}", path.display()))
 }
@@ -89,6 +96,17 @@ fn main() -> Result<()> {
             let certificate = read_certificate(&certificate_path)?;
             replay_tdc1_certificate(&certificate).context("replay TDC-1 certificate")?;
             println!("replay passed: {}", certificate.certificate_digest);
+        }
+        "replay-comparison" => {
+            if args.len() != 3 {
+                usage();
+            }
+            let certificate_path = PathBuf::from(&args[1]);
+            let comparison_path = PathBuf::from(&args[2]);
+            let certificate = read_certificate(&certificate_path)?;
+            let comparison = read_comparison(&comparison_path)?;
+            replay_tdc1_comparison(&certificate, &comparison).context("replay TDC-1 comparison")?;
+            println!("comparison replay passed: {}", comparison.comparison_digest);
         }
         _ => usage(),
     }

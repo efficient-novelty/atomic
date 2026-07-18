@@ -53,11 +53,24 @@ cargo run -p pen-search --example tdc1_typed_d4 -- `
   docs/tdc1_typed_d4_comparison.json
 ```
 
+Replay the frozen comparison by exact recomputation, including its digest:
+
+```powershell
+cargo run -p pen-search --example tdc1_typed_d4 -- `
+  replay-comparison docs/tdc1_typed_d4_certificate.json `
+  docs/tdc1_typed_d4_comparison.json
+```
+
 The comparison first re-derives the certificate byte-for-byte, then computes
 `rho = nu/2`, compares it with `Bar16 = 354333/39040`, and assigns the
 pre-registered Z1–Z4 zone. A failed historical regression sets F-T1 and makes
 any Step-16 numerical verdict void; history is never adjusted to fit the new
 fragment.
+
+Even when `nu` is defined, a valid Step-16 verdict additionally requires an
+exact basis partition, complete typed realization and semantic weakening,
+injective and complete marginal anchors, historical regression, every
+registered mutation rejection, and a basis count within the frozen ceiling.
 
 ## Source map
 

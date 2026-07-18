@@ -1,0 +1,18 @@
+{
+  "schema": "tdc1-zone-comparison-v1",
+  "certificate_digest": "blake3:c6fd0e40f08e24c6088691ce3d8ac352ca41a5ce4dfcfd8fa2d97d9ccc44bd2f",
+  "kappa": 2,
+  "certified_nu": null,
+  "rho": null,
+  "bar": "354333/39040",
+  "clearing_threshold": 19,
+  "clears_bar": null,
+  "registered_zone": "Z4",
+  "historical_regression_passed": false,
+  "step16_verdict_valid": false,
+  "falsifier_f_t1": true,
+  "falsifier_f_t2": false,
+  "falsifier_f_t3": false,
+  "meaning": "fragment insufficient: novelty remains undefined; no numeric verdict",
+  "comparison_digest": "blake3:af10d7b3807db8c008d84ec223e5a11814d2481380d3f7b2b2c01e76e3f19894"
+}

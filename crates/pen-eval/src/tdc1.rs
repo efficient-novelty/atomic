@@ -204,6 +204,8 @@ pub enum Tdc1Error {
     Basis(String),
     #[error("presented certificate does not replay byte-for-byte")]
     ReplayMismatch,
+    #[error("presented comparison does not replay byte-for-byte")]
+    ComparisonReplayMismatch,
 }
 
 fn tagged_hash(domain: &str, payload: &impl Serialize) -> String {
@@ -616,7 +618,7 @@ pub fn compare_frozen_certificate(
         clears_bar: rho.as_ref().map(|value| value >= &bar),
         registered_zone: zone,
         historical_regression_passed: certificate.historical_regression_passed,
-        step16_verdict_valid: certified_nu.is_some() && !f_t1 && !f_t2 && !f_t3,
+        step16_verdict_valid: step16_verdict_is_valid(certificate),
         falsifier_f_t1: f_t1,
         falsifier_f_t2: f_t2,
         falsifier_f_t3: f_t3,
@@ -625,6 +627,34 @@ pub fn compare_frozen_certificate(
     };
     comparison.comparison_digest = tagged_hash("comparison", &comparison);
     Ok(comparison)
+}
+
+fn step16_verdict_is_valid(certificate: &Tdc1Certificate) -> bool {
+    certificate.novelty.certified_nu().is_some()
+        && certificate.basis.exact_partition
+        && certificate.basis.typed_realization_complete
+        && certificate.basis.semantic_weakening_complete
+        && certificate.provenance.anchors_injective
+        && certificate.provenance.all_marginal_sites_anchored
+        && certificate.historical_regression_passed
+        && certificate.falsifiers.dimension_mutation_rejected
+        && certificate.falsifiers.duplicate_basis_site_rejected
+        && certificate.falsifiers.missing_basis_site_rejected
+        && certificate.falsifiers.anchor_collision_rejected
+        && certificate.falsifiers.over_ceiling_basis_rejected
+        && certificate.basis.raw_basis_count <= certificate.basis.raw_ceiling_one_plus_d_squared
+}
+
+pub fn replay_tdc1_comparison(
+    certificate: &Tdc1Certificate,
+    comparison: &Tdc1Comparison,
+) -> Result<(), Tdc1Error> {
+    let replay = compare_frozen_certificate(certificate)?;
+    if &replay == comparison {
+        Ok(())
+    } else {
+        Err(Tdc1Error::ComparisonReplayMismatch)
+    }
 }
 
 #[cfg(test)]
@@ -653,5 +683,119 @@ mod tests {
             role: LocalRole::Coherence,
         };
         assert!(!anchors_injective(&[slot.clone(), slot]));
+    }
+
+    #[test]
+    fn full_certificate_replays_byte_for_byte() {
+        let certificate = build_tdc1_certificate().expect("certificate builds");
+        replay_tdc1_certificate(&certificate).expect("fresh certificate replays");
+    }
+
+    #[test]
+    fn replay_rejects_site_verdict_and_completeness_mutations() {
+        let certificate = build_tdc1_certificate().expect("certificate builds");
+
+        let mut site_verdict_mutation = certificate.clone();
+        site_verdict_mutation.basis.sites[0].semantic_disposition =
+            SemanticSiteDisposition::Marginal;
+        assert_eq!(
+            replay_tdc1_certificate(&site_verdict_mutation),
+            Err(Tdc1Error::ReplayMismatch)
+        );
+
+        let mut regression_verdict_mutation = certificate.clone();
+        regression_verdict_mutation.historical_regression[0].rederived_recorded_score = true;
+        assert_eq!(
+            replay_tdc1_certificate(&regression_verdict_mutation),
+            Err(Tdc1Error::ReplayMismatch)
+        );
+
+        let mut completeness_mutation = certificate;
+        completeness_mutation.basis.typed_realization_complete = true;
+        assert_eq!(
+            replay_tdc1_certificate(&completeness_mutation),
+            Err(Tdc1Error::ReplayMismatch)
+        );
+    }
+
+    #[test]
+    fn frozen_comparison_is_registered_z4_with_f_t1_only() {
+        let certificate = build_tdc1_certificate().expect("certificate builds");
+        let comparison =
+            compare_frozen_certificate(&certificate).expect("frozen certificate compares");
+
+        assert_eq!(comparison.registered_zone, Tdc1Zone::Z4);
+        assert!(comparison.falsifier_f_t1);
+        assert!(!comparison.falsifier_f_t2);
+        assert!(!comparison.falsifier_f_t3);
+        assert!(!comparison.step16_verdict_valid);
+        assert_eq!(comparison.certified_nu, None);
+        assert_eq!(comparison.rho, None);
+        assert_eq!(comparison.clears_bar, None);
+    }
+
+    #[test]
+    fn full_comparison_replays_and_rejects_mutation() {
+        let certificate = build_tdc1_certificate().expect("certificate builds");
+        let comparison =
+            compare_frozen_certificate(&certificate).expect("frozen certificate compares");
+        replay_tdc1_comparison(&certificate, &comparison).expect("fresh comparison replays");
+
+        let mut verdict_mutation = comparison.clone();
+        verdict_mutation.step16_verdict_valid = true;
+        assert_eq!(
+            replay_tdc1_comparison(&certificate, &verdict_mutation),
+            Err(Tdc1Error::ComparisonReplayMismatch)
+        );
+
+        let mut digest_mutation = comparison;
+        digest_mutation.comparison_digest = "blake3:00".to_owned();
+        assert_eq!(
+            replay_tdc1_comparison(&certificate, &digest_mutation),
+            Err(Tdc1Error::ComparisonReplayMismatch)
+        );
+    }
+
+    #[test]
+    fn step16_validity_requires_every_semantic_and_falsifier_gate() {
+        let mut certificate = build_tdc1_certificate().expect("certificate builds");
+        certificate.novelty = Tdc1Novelty::Certified { nu: 19 };
+        certificate.basis.typed_realization_complete = true;
+        certificate.basis.semantic_weakening_complete = true;
+        certificate.provenance.all_marginal_sites_anchored = true;
+        certificate.historical_regression_passed = true;
+        assert!(step16_verdict_is_valid(&certificate));
+
+        let mut mutation = certificate.clone();
+        mutation.basis.exact_partition = false;
+        assert!(!step16_verdict_is_valid(&mutation));
+
+        let mut mutation = certificate.clone();
+        mutation.basis.typed_realization_complete = false;
+        assert!(!step16_verdict_is_valid(&mutation));
+
+        let mut mutation = certificate.clone();
+        mutation.basis.semantic_weakening_complete = false;
+        assert!(!step16_verdict_is_valid(&mutation));
+
+        let mut mutation = certificate.clone();
+        mutation.provenance.anchors_injective = false;
+        assert!(!step16_verdict_is_valid(&mutation));
+
+        let mut mutation = certificate.clone();
+        mutation.provenance.all_marginal_sites_anchored = false;
+        assert!(!step16_verdict_is_valid(&mutation));
+
+        let mut mutation = certificate.clone();
+        mutation.historical_regression_passed = false;
+        assert!(!step16_verdict_is_valid(&mutation));
+
+        let mut mutation = certificate.clone();
+        mutation.falsifiers.dimension_mutation_rejected = false;
+        assert!(!step16_verdict_is_valid(&mutation));
+
+        let mut mutation = certificate;
+        mutation.basis.raw_basis_count = mutation.basis.raw_ceiling_one_plus_d_squared + 1;
+        assert!(!step16_verdict_is_valid(&mutation));
     }
 }
