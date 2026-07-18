@@ -1,0 +1,799 @@
+{
+  "schema": "tdc1-typed-d4-certificate-v1",
+  "bar_independent": true,
+  "candidate": {
+    "typing": {
+      "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+      "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+      "visible_library": 15,
+      "kappa": 2,
+      "formation_clause": 0,
+      "formation_normal_form": {
+        "App": [
+          "Univ",
+          {
+            "Lib": 15
+          }
+        ]
+      },
+      "path_clause": 1,
+      "dimension": 4,
+      "elaboration_derivation_hash": "blake3:bfa319360f8a8b4d29abbff3ceedceeb99e074d6a09d35cb867ed29c146266cd"
+    },
+    "fuel_within_bound": true,
+    "formation_family_count": 1,
+    "shallow_surface_family_count": 2,
+    "shallow_surface_marginal_count": 1,
+    "extraction_derivation_hash": "blake3:cccb20e4b6062dad6491fe4a5a21c41f80ab62d14294736cadfc81d44a3330ad"
+  },
+  "aggregate_eliminator": {
+    "outcome": "no_motive_typed_eliminator",
+    "derivation_hash": null,
+    "beta_clause_count": 0,
+    "kan_dimensions": []
+  },
+  "basis": {
+    "dimension": 4,
+    "beta_count": 1,
+    "diagonal_count": 4,
+    "off_diagonal_count": 12,
+    "raw_basis_count": 17,
+    "raw_ceiling_one_plus_d_squared": 17,
+    "exact_partition": true,
+    "sites": [
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "beta"
+            },
+            "judgement": "constructor_computation"
+          },
+          "normal_form_digest": "blake3:1674d695438c2fe5ddae2d837490457816d26a596bb7ed2e55973f6cb3fe0690"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "beta"
+            },
+            "missing": "constructor_eliminator_computation",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 0,
+              "probe": 0
+            },
+            "judgement": "fiber_automorphism"
+          },
+          "normal_form_digest": "blake3:8aaa4d7b56ef782e547e34e5d351a04980f9d49f7d324c6e8a77ebca95122200"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 0,
+              "probe": 0
+            },
+            "missing": "coe",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 0,
+              "probe": 1
+            },
+            "judgement": "automorphism_naturality"
+          },
+          "normal_form_digest": "blake3:3dbe3fef82250bab3f8dad15294cb12913ccef96689c1a87473ce1dad302d24f"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 0,
+              "probe": 1
+            },
+            "missing": "hcom_naturality",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 0,
+              "probe": 2
+            },
+            "judgement": "automorphism_naturality"
+          },
+          "normal_form_digest": "blake3:080aa2b5091f155e1796a221a9e062629f794bf9a5f1377bcc1d987bb699f9f3"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 0,
+              "probe": 2
+            },
+            "missing": "hcom_naturality",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 0,
+              "probe": 3
+            },
+            "judgement": "automorphism_naturality"
+          },
+          "normal_form_digest": "blake3:943ae13639cc2f571f61b3dda0f71a5da9c2c3f7bae7e4743e157ae1649ce943"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 0,
+              "probe": 3
+            },
+            "missing": "hcom_naturality",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 1,
+              "probe": 0
+            },
+            "judgement": "automorphism_naturality"
+          },
+          "normal_form_digest": "blake3:7961a38f84a1549e4001acbfd8822e4f1f515955908408ba8e447d532e2e5fb0"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 1,
+              "probe": 0
+            },
+            "missing": "hcom_naturality",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 1,
+              "probe": 1
+            },
+            "judgement": "fiber_automorphism"
+          },
+          "normal_form_digest": "blake3:c0236dd2cc5a34de09f3b23d6056f5e895995bf1ca84467cb464d8ae124e1507"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 1,
+              "probe": 1
+            },
+            "missing": "coe",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 1,
+              "probe": 2
+            },
+            "judgement": "automorphism_naturality"
+          },
+          "normal_form_digest": "blake3:9a5ada9ad891ffb381b1b889de2c773ada68686ceabd64b50cd0e097a4c8b11d"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 1,
+              "probe": 2
+            },
+            "missing": "hcom_naturality",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 1,
+              "probe": 3
+            },
+            "judgement": "automorphism_naturality"
+          },
+          "normal_form_digest": "blake3:887b0894252c3518754b13e9ee2cf29a5144ed606e35537626e509f07e4c8867"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 1,
+              "probe": 3
+            },
+            "missing": "hcom_naturality",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 2,
+              "probe": 0
+            },
+            "judgement": "automorphism_naturality"
+          },
+          "normal_form_digest": "blake3:89aa7fc73486b5c3099efc85631e3380417038d1dc384027624291054ceeffc4"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 2,
+              "probe": 0
+            },
+            "missing": "hcom_naturality",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 2,
+              "probe": 1
+            },
+            "judgement": "automorphism_naturality"
+          },
+          "normal_form_digest": "blake3:ba8d2aad08f49c188cf9dcc681951b8bbd088aff1498e7f789d9d77be8f2dd1f"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 2,
+              "probe": 1
+            },
+            "missing": "hcom_naturality",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 2,
+              "probe": 2
+            },
+            "judgement": "fiber_automorphism"
+          },
+          "normal_form_digest": "blake3:81a1befb41b2c7a349f1ae6e89242fab9b67fc8a4486579a9d109fec46e6dcb8"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 2,
+              "probe": 2
+            },
+            "missing": "coe",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 2,
+              "probe": 3
+            },
+            "judgement": "automorphism_naturality"
+          },
+          "normal_form_digest": "blake3:d151505e808b348b59d515173f392b3279952ed2b8d85349f0f9583249e0bdf6"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 2,
+              "probe": 3
+            },
+            "missing": "hcom_naturality",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 3,
+              "probe": 0
+            },
+            "judgement": "automorphism_naturality"
+          },
+          "normal_form_digest": "blake3:b5a9dfe67009633c07722f46a7ac59124d757b2e3616ace275c878648743b5d1"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 3,
+              "probe": 0
+            },
+            "missing": "hcom_naturality",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 3,
+              "probe": 1
+            },
+            "judgement": "automorphism_naturality"
+          },
+          "normal_form_digest": "blake3:b65bfb96e9fce7d5958e9af37a9d16ec34ed4bc19d5694a461ebc9cd095c760c"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 3,
+              "probe": 1
+            },
+            "missing": "hcom_naturality",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 3,
+              "probe": 2
+            },
+            "judgement": "automorphism_naturality"
+          },
+          "normal_form_digest": "blake3:d61dec2dc4943ec42a34d86cd568b29f2345ea151b9163c3bb08981ac7f42be1"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 3,
+              "probe": 2
+            },
+            "missing": "hcom_naturality",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      },
+      {
+        "site": {
+          "normal_form": {
+            "owner_normal_form": {
+              "App": [
+                "Univ",
+                {
+                  "Lib": 15
+                }
+              ]
+            },
+            "path_dimension": 4,
+            "key": {
+              "kind": "kan",
+              "principal": 3,
+              "probe": 3
+            },
+            "judgement": "fiber_automorphism"
+          },
+          "normal_form_digest": "blake3:d96b9daf24ed1df7bae40dc96a485c546b0f3fc79a7f36c73c9300764879f698"
+        },
+        "exact_predecessor_index_matches": [],
+        "realization": {
+          "Err": {
+            "key": {
+              "kind": "kan",
+              "principal": 3,
+              "probe": 3
+            },
+            "missing": "coe",
+            "required_scope_increment": "extend the typed kernel with interval/cofibration contexts, coe and hcom typing/computation, a motive-typed constructor eliminator, and a replayable schema/basis realization token"
+          }
+        },
+        "semantic_disposition": "undefined",
+        "provenance_anchor": null
+      }
+    ],
+    "typed_realization_complete": false,
+    "semantic_weakening_complete": false,
+    "certified_path_nu": null
+  },
+  "provenance": {
+    "candidate_stage": 16,
+    "kappa": 2,
+    "local_roles_per_clause": 4,
+    "local_capacity": 8,
+    "live_demand_orbits": 0,
+    "live_demand_outputs": 0,
+    "orbit_derivation_hash": "blake3:3c057f16a4c48a1b3d93554f5746768b98f4d7e0153b34f8b433f0dc3af3dc2a",
+    "assigned_anchors": [],
+    "anchors_injective": true,
+    "all_marginal_sites_anchored": false
+  },
+  "conditional_raw_ceiling_including_formation": 18,
+  "novelty": {
+    "status": "undefined",
+    "missing_obligations": [
+      "typed constructor-eliminator computation family for beta",
+      "typed coe monodromy family for each diagonal Kan site",
+      "typed hcom naturality family for each ordered off-diagonal site",
+      "schema/basis isomorphism proving availability, independence, and exhaustiveness",
+      "semantic weakening/univalent-equality decisions for the realized cubical families",
+      "injective EGP anchors for every family surviving weakening",
+      "historical HIT score regression through the same typed machinery"
+    ]
+  },
+  "historical_regression": [
+    {
+      "step": 5,
+      "label": "S1",
+      "dimension": 1,
+      "recorded_total_nu": 7,
+      "recorded_path_nu": 2,
+      "surface_elaborated": true,
+      "aggregate_eliminator": {
+        "outcome": "no_motive_typed_eliminator",
+        "derivation_hash": null,
+        "beta_clause_count": 0,
+        "kan_dimensions": []
+      },
+      "raw_basis_count": 2,
+      "certified_path_nu": null,
+      "certified_total_nu": null,
+      "rederived_recorded_path_score": false,
+      "rederived_recorded_score": false,
+      "blockers": [
+        "2 of 2 L1 sites lack typed cubical realization tokens",
+        "aggregate eliminator token: no_motive_typed_eliminator",
+        "full historical non-path channels are not reconstructed by this minimal fragment"
+      ]
+    },
+    {
+      "step": 6,
+      "label": "Trunc",
+      "dimension": 1,
+      "recorded_total_nu": 8,
+      "recorded_path_nu": 2,
+      "surface_elaborated": true,
+      "aggregate_eliminator": {
+        "outcome": "issued",
+        "derivation_hash": "blake3:5a3e545692f58c873a0741860e79362906ab1302f331115c72e7c544f0f6f942",
+        "beta_clause_count": 0,
+        "kan_dimensions": [
+          1
+        ]
+      },
+      "raw_basis_count": 2,
+      "certified_path_nu": null,
+      "certified_total_nu": null,
+      "rederived_recorded_path_score": false,
+      "rederived_recorded_score": false,
+      "blockers": [
+        "2 of 2 L1 sites lack typed cubical realization tokens",
+        "aggregate eliminator token has no per-site schema/basis isomorphism",
+        "full historical non-path channels are not reconstructed by this minimal fragment"
+      ]
+    },
+    {
+      "step": 7,
+      "label": "S2",
+      "dimension": 2,
+      "recorded_total_nu": 10,
+      "recorded_path_nu": 5,
+      "surface_elaborated": true,
+      "aggregate_eliminator": {
+        "outcome": "no_motive_typed_eliminator",
+        "derivation_hash": null,
+        "beta_clause_count": 0,
+        "kan_dimensions": []
+      },
+      "raw_basis_count": 5,
+      "certified_path_nu": null,
+      "certified_total_nu": null,
+      "rederived_recorded_path_score": false,
+      "rederived_recorded_score": false,
+      "blockers": [
+        "5 of 5 L1 sites lack typed cubical realization tokens",
+        "aggregate eliminator token: no_motive_typed_eliminator",
+        "full historical non-path channels are not reconstructed by this minimal fragment"
+      ]
+    },
+    {
+      "step": 8,
+      "label": "S3",
+      "dimension": 3,
+      "recorded_total_nu": 18,
+      "recorded_path_nu": 10,
+      "surface_elaborated": true,
+      "aggregate_eliminator": {
+        "outcome": "no_motive_typed_eliminator",
+        "derivation_hash": null,
+        "beta_clause_count": 0,
+        "kan_dimensions": []
+      },
+      "raw_basis_count": 10,
+      "certified_path_nu": null,
+      "certified_total_nu": null,
+      "rederived_recorded_path_score": false,
+      "rederived_recorded_score": false,
+      "blockers": [
+        "10 of 10 L1 sites lack typed cubical realization tokens",
+        "aggregate eliminator token: no_motive_typed_eliminator",
+        "full historical non-path channels are not reconstructed by this minimal fragment"
+      ]
+    }
+  ],
+  "historical_regression_passed": false,
+  "falsifiers": {
+    "dimension_mutation_rejected": true,
+    "duplicate_basis_site_rejected": true,
+    "missing_basis_site_rejected": true,
+    "anchor_collision_rejected": true,
+    "over_ceiling_basis_rejected": true
+  },
+  "next_scope_increment": [
+    "add interval variables and a cofibration lattice to pen-type",
+    "add typed coe/hcom terms with oriented computation and union-staging replay",
+    "add a motive-typed PathCon eliminator and constructor beta rule",
+    "mint opaque per-site realization tokens only from those derivations",
+    "extend typed univalent equality/weakening to the new cubical family terms",
+    "rerun historical HIT regression before reading the Step-16 score"
+  ],
+  "certificate_digest": "blake3:c6fd0e40f08e24c6088691ce3d8ac352ca41a5ce4dfcfd8fa2d97d9ccc44bd2f"
+}

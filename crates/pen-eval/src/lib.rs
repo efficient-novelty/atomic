@@ -28,3 +28,4 @@ pub mod semantic_provenance;
 pub mod sh1_capacity;
 pub mod sh1_staircase;
 pub mod typed_families;
+pub mod tdc1;

@@ -7,3 +7,4 @@ pub mod equality;
 pub mod infer;
 pub mod normalize;
 pub mod obligations;
+pub mod tdc1;
