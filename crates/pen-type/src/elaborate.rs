@@ -477,6 +477,67 @@ pub fn minimal_ambient_parameters(telescope: &Telescope) -> u32 {
         .unwrap_or(0)
 }
 
+/// The ambient shortfall of one clause expression at `priors` prior
+/// fields: the minimal ambient context it demands on its own.
+pub fn required_clause_ambient(expr: &Expr, priors: u32) -> u32 {
+    required_ambient(expr, priors, 0)
+}
+
+/// A single clause elaborated in an EXPLICIT context (ambient size and
+/// prior kernel roles), for streaming counters that cannot afford whole
+/// telescopes. Same rules as `elaborate_telescope`; the caller supplies
+/// the ambient (which for a full telescope is the max clause shortfall).
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct SingleClauseElaboration {
+    pub kernel_ty: KernelTy,
+    pub kernel_role: ClauseRole,
+    pub normal_form: Expr,
+    pub beta_steps: u32,
+    pub coarse_assumptions: u32,
+    pub stuck_applications: Vec<StuckApplication>,
+}
+
+pub fn elaborate_single_clause(
+    expr: &Expr,
+    ambient: u32,
+    prior_roles: &[ClauseRole],
+    visible_library: u32,
+) -> Result<SingleClauseElaboration, ElabError> {
+    if ambient > MAX_AMBIENT_PARAMETERS {
+        return Err(ElabError::AmbientContextTooLarge {
+            required: ambient,
+            max: MAX_AMBIENT_PARAMETERS,
+        });
+    }
+    let node_count = StructuralStats::from_expr(expr).node_count;
+    let fuel = node_count.saturating_mul((prior_roles.len() as u32 + 1).max(1)).max(16);
+    let mut state = ElabState {
+        visible_library,
+        ambient,
+        prior_roles: prior_roles.to_vec(),
+        locals: Vec::new(),
+        clause_index: prior_roles.len() as u16,
+        stuck: Vec::new(),
+        coarse: 0,
+        fuel_budget: fuel,
+        fuel_used: 0,
+    };
+    let (kernel_ty, _derivation) = synth(&mut state, expr)?;
+    let scope_len = ambient + prior_roles.len() as u32;
+    let normalized = normalize(expr, scope_len, state.remaining_fuel())?;
+    let is_beta_redex =
+        matches!(expr, Expr::App(function, _) if matches!(function.as_ref(), Expr::Lam(_)));
+    let kernel_role = derive_kernel_role(expr, &kernel_ty, is_beta_redex);
+    Ok(SingleClauseElaboration {
+        kernel_ty,
+        kernel_role,
+        normal_form: normalized.expr,
+        beta_steps: normalized.steps,
+        coarse_assumptions: state.coarse,
+        stuck_applications: state.stuck,
+    })
+}
+
 /// Elaborate a telescope against the visible prefix of the sealed
 /// signature. Total over the frozen fragment: success carries derivations
 /// and verdicts (including stuckness); failure names the exact clause and

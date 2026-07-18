@@ -20,4 +20,5 @@ pub mod resume;
 pub mod scheduler;
 pub mod state;
 pub mod step16_automaton;
+pub mod step16_semantic_exhaustion;
 pub mod worker;

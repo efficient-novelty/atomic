@@ -1,0 +1,53 @@
+{
+  "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+  "closure_digest": "blake3:bad84e9cb1e6f0075af529ef0eb32d82b91292b2341e3b66d09a18d4dada9e70",
+  "strata": [
+    {
+      "kappa": 2,
+      "per_position_widths": [
+        662184,
+        910182
+      ],
+      "raw_total": "602707957488",
+      "internal": "134405441711",
+      "egp_marginal": "436447700533",
+      "invalid_named_bare_univ": "31854815244",
+      "unclassified": "0",
+      "sums_match": true,
+      "unclassified_is_zero": true
+    },
+    {
+      "kappa": 3,
+      "per_position_widths": [
+        662184,
+        910182,
+        1207872
+      ],
+      "raw_total": "727994066026945536",
+      "internal": "85462881238554189",
+      "egp_marginal": "587614074893363379",
+      "invalid_named_bare_univ": "54917109895027968",
+      "unclassified": "0",
+      "sums_match": true,
+      "unclassified_is_zero": true
+    },
+    {
+      "kappa": 4,
+      "per_position_widths": [
+        662184,
+        910182,
+        1207872,
+        1559142
+      ],
+      "raw_total": "1135046124093383916890112",
+      "internal": "70452049326669225329863",
+      "egp_marginal": "955581751062132991906361",
+      "invalid_named_bare_univ": "109012323704581699653888",
+      "unclassified": "0",
+      "sums_match": true,
+      "unclassified_is_zero": true
+    }
+  ],
+  "every_stratum_classified": true,
+  "digest": "blake3:5f2ff655260c7c5a7894557aef445d97bd45907e41a522f626c836aaf75bade8"
+}

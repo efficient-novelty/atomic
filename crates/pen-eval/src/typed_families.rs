@@ -743,6 +743,42 @@ fn extract_from_elaboration(
     }
 }
 
+/// Public wrapper over the canonicalization pipeline for streaming
+/// counters (Phase 4 exhaustion): one clause normal form at an explicit
+/// context, yielding its canonical presentation.
+pub fn clause_presentation(
+    normal_form: &Expr,
+    free_scope_len: u32,
+    prior_roles: &[ClauseRole],
+    ambient: u32,
+) -> CanonicalPresentation {
+    canonicalize(normal_form, free_scope_len, prior_roles, ambient)
+}
+
+/// The clause-local closure disposition used by the exhaustion counter.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+pub enum ClauseClosureDisposition {
+    Internal,
+    Marginal,
+}
+
+/// Decide one clause presentation against the typed predecessor closure
+/// (identical family or rigid-pattern instance ⇒ internal; otherwise
+/// marginal). Exactly the marginality rule of the full extractor.
+pub fn closure_clause_disposition(
+    signature: &SealedSignature,
+    closure: &PredecessorClosure,
+    presentation: &CanonicalPresentation,
+) -> ClauseClosureDisposition {
+    let id = family_id(signature, presentation);
+    match decide_marginality(closure, &id, presentation) {
+        MarginalityDisposition::MarginalNoClosurePreimage { .. } => {
+            ClauseClosureDisposition::Marginal
+        }
+        _ => ClauseClosureDisposition::Internal,
+    }
+}
+
 fn decide_marginality(
     closure: &PredecessorClosure,
     id: &NaturalFamilyId,
