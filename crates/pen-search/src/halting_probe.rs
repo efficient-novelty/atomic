@@ -31,6 +31,7 @@
 //! ν = 0) is verified by `pen_eval::halting`'s exemplars, independent of
 //! the search.
 
+use crate::accept::acceptance_rank_for_telescope;
 use crate::config::GrammarProfile;
 use crate::diversify::FrontierRuntimeLimits;
 use crate::engine::probe_next_step_unclamped;
@@ -39,9 +40,12 @@ use crate::enumerate::{
 };
 use pen_core::canonical::canonical_key_telescope;
 use pen_core::clause::{ClauseRec, ClauseRole};
+use pen_core::encode::telescope_bit_cost;
 use pen_core::expr::Expr;
+use pen_core::library::{Library, LibraryEntry};
+use pen_core::rational::Rational;
 use pen_core::telescope::Telescope;
-use pen_eval::bar::{clears_bar, compute_bar, compute_rho};
+use pen_eval::bar::{DiscoveryRecord, clears_bar, compute_bar, compute_rho};
 use pen_eval::halting::{
     InternalExemplar, accepted_canonical_keys, genesis_bar_16, genesis_history,
     internal_case_exemplars,
@@ -57,6 +61,8 @@ use pen_type::admissibility::{
 use pen_type::check::{CheckResult, check_telescope};
 use pen_type::connectivity::passes_connectivity;
 use serde::Serialize;
+use std::collections::BTreeSet;
+use thiserror::Error;
 
 pub const T1_DATE: &str = "2026-07-05";
 /// Date of the raw-surface and semantic-minimality correction to the
@@ -294,6 +300,105 @@ pub struct AdversarialProbeReport {
     pub squeeze_supported: bool,
 }
 
+/// Minimum number of sealing attempts accepted by the continuation probe.
+/// Four attempts cover the designated Step-16 seal and three independently
+/// recomputed successor probes (Steps 17--19).
+pub const SEAL_AND_CONTINUE_MIN_STEPS: usize = 4;
+
+/// The lowest-overshoot survivor in the registered Step-16 adversarial table.
+pub const DEFAULT_STEP16_CONTINUATION_SURVIVOR: &str = "hit_no_formation_d1";
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct ContinuationNuDecomposition {
+    pub nu_g: u32,
+    pub nu_c: u32,
+    pub nu_h: u32,
+    pub nu_total: u32,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct ContinuationLedgerSummary {
+    pub records: usize,
+    pub last_step: Option<u32>,
+    pub sum_nu: u64,
+    pub sum_kappa: u64,
+    pub omega: String,
+}
+
+/// A candidate in one continuation round. This is deliberately a fact-only
+/// trace: clause shapes, gate booleans, the structural-nu split, and exact
+/// rational arithmetic. It carries no hypothesis grading or interpretation.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct ContinuationCandidateTrace {
+    pub name: String,
+    pub clause_shapes: Vec<ClauseRec>,
+    pub clause_kappa: u32,
+    pub identified_with_sealed_structure: bool,
+    pub admitted: bool,
+    pub raw_surface_member: bool,
+    pub type_checks: bool,
+    pub connectivity_passes: bool,
+    pub semantically_minimal: bool,
+    pub nu: ContinuationNuDecomposition,
+    pub rho: Option<String>,
+    /// Signed `rho - bar`, reduced exactly. `None` means identification made
+    /// the candidate zero-credit before rho was formed.
+    pub exact_margin: Option<String>,
+    pub clears_bar: bool,
+    pub survives_all_gates_and_clears: bool,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct ContinuationBarTrace {
+    pub phi: String,
+    pub omega: String,
+    pub bar: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct SealAndContinueStep {
+    pub step_index: u32,
+    pub prefix_entries_before: usize,
+    pub ledger_before: ContinuationLedgerSummary,
+    pub bar: ContinuationBarTrace,
+    pub candidates: Vec<ContinuationCandidateTrace>,
+    pub selected: Option<ContinuationCandidateTrace>,
+    pub prefix_entries_after: usize,
+    pub ledger_after: ContinuationLedgerSummary,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum SealAndContinueTermination {
+    RequestedStepsCompleted,
+    NoClearingSurvivor { step_index: u32 },
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct SealAndContinueReport {
+    pub mode: String,
+    pub scope_disclosure: String,
+    pub start_step: u32,
+    pub window_depth: u16,
+    pub designated_step16_survivor: String,
+    pub requested_steps: usize,
+    pub completed_seals: usize,
+    pub initial_ledger: ContinuationLedgerSummary,
+    pub steps: Vec<SealAndContinueStep>,
+    pub final_ledger: ContinuationLedgerSummary,
+    pub termination: SealAndContinueTermination,
+}
+
+#[derive(Clone, Debug, Eq, Error, PartialEq)]
+pub enum SealAndContinueError {
+    #[error("seal-and-continue requires at least {minimum} steps, but {requested} were requested")]
+    TooFewSteps { requested: usize, minimum: usize },
+    #[error("designated Step-16 candidate `{name}` was not generated")]
+    UnknownStep16Candidate { name: String },
+    #[error("designated Step-16 candidate `{name}` did not survive every gate and clear the bar")]
+    Step16CandidateDidNotSurvive { name: String },
+}
+
 fn nested_pi_over(refs: &[u32]) -> Expr {
     let mut iter = refs.iter().rev();
     let innermost = *iter.next().expect("weave clause needs at least one ref");
@@ -309,9 +414,14 @@ fn nested_pi_over(refs: &[u32]) -> Expr {
 /// than the latest-two window).  `run_adversarial_probe` records that fact
 /// explicitly; such a shape can diagnose formula behavior but cannot count as
 /// a lane survivor.
-fn adversarial_candidates(admissibility: &StrictAdmissibility) -> Vec<(String, String, Telescope)> {
+fn adversarial_candidates(
+    admissibility: &StrictAdmissibility,
+    latest_step: u32,
+) -> Vec<(String, String, Telescope)> {
     let mut candidates = Vec::new();
     let band = admissibility.min_clause_kappa..=admissibility.max_clause_kappa;
+    let previous_step = latest_step.saturating_sub(1).max(1);
+    let older_step = latest_step.saturating_sub(2).max(1);
     // A right-nested Pi chain of k Lib refs costs 2k−1 expression nodes.
     let refs_per_clause = usize::from((admissibility.max_expr_nodes + 1) / 2).max(1);
 
@@ -319,14 +429,14 @@ fn adversarial_candidates(admissibility: &StrictAdmissibility) -> Vec<(String, S
     // the runtime-field ladder climbed; r drawn newest-first, distinct
     // across the telescope.
     for kappa in band.clone() {
-        let mut pool: Vec<u32> = (1..=15).rev().collect();
+        let mut pool: Vec<u32> = (1..=latest_step).rev().collect();
         let clauses: Vec<ClauseRec> = (0..kappa)
             .map(|_| {
                 let take = refs_per_clause.min(pool.len().max(1));
                 let refs: Vec<u32> = if pool.len() >= take {
                     pool.drain(..take).collect()
                 } else {
-                    vec![15] // pool exhausted: reuse the window anchor
+                    vec![latest_step] // pool exhausted: reuse the window anchor
                 };
                 ClauseRec::new(ClauseRole::Formation, nested_pi_over(&refs))
             })
@@ -345,14 +455,14 @@ fn adversarial_candidates(admissibility: &StrictAdmissibility) -> Vec<(String, S
     // unique-dominant-import premise: its only direct import is L15.
     if band.contains(&3) {
         candidates.push((
-            "axiomatic_single_l15_kappa3".to_owned(),
+            format!("axiomatic_single_l{latest_step}_kappa3"),
             "single-import Axiomatic boundary: inherits nu(L15) while satisfying the \
              unique-dominant-import graph premise"
                 .to_owned(),
             Telescope::new(vec![
                 ClauseRec::new(
                     ClauseRole::Formation,
-                    Expr::Pi(Box::new(Expr::Lib(15)), Box::new(Expr::Var(1))),
+                    Expr::Pi(Box::new(Expr::Lib(latest_step)), Box::new(Expr::Var(1))),
                 ),
                 ClauseRec::new(
                     ClauseRole::Formation,
@@ -360,7 +470,7 @@ fn adversarial_candidates(admissibility: &StrictAdmissibility) -> Vec<(String, S
                 ),
                 ClauseRec::new(
                     ClauseRole::Introduction,
-                    Expr::App(Box::new(Expr::Lib(15)), Box::new(Expr::Var(1))),
+                    Expr::App(Box::new(Expr::Lib(latest_step)), Box::new(Expr::Var(1))),
                 ),
             ]),
         ));
@@ -402,11 +512,17 @@ fn adversarial_candidates(admissibility: &StrictAdmissibility) -> Vec<(String, S
             Telescope::new(vec![
                 ClauseRec::new(
                     ClauseRole::Formation,
-                    Expr::Pi(Box::new(Expr::Lib(15)), Box::new(Expr::Lib(14))),
+                    Expr::Pi(
+                        Box::new(Expr::Lib(latest_step)),
+                        Box::new(Expr::Lib(previous_step)),
+                    ),
                 ),
                 ClauseRec::new(
                     ClauseRole::Formation,
-                    Expr::Pi(Box::new(Expr::Lib(14)), Box::new(Expr::Lib(15))),
+                    Expr::Pi(
+                        Box::new(Expr::Lib(previous_step)),
+                        Box::new(Expr::Lib(latest_step)),
+                    ),
                 ),
             ]),
         ));
@@ -422,7 +538,7 @@ fn adversarial_candidates(admissibility: &StrictAdmissibility) -> Vec<(String, S
         let mut clauses = vec![
             ClauseRec::new(
                 ClauseRole::Formation,
-                Expr::Pi(Box::new(Expr::Lib(15)), Box::new(Expr::Var(1))),
+                Expr::Pi(Box::new(Expr::Lib(latest_step)), Box::new(Expr::Var(1))),
             ),
             ClauseRec::new(
                 ClauseRole::Formation,
@@ -434,13 +550,13 @@ fn adversarial_candidates(admissibility: &StrictAdmissibility) -> Vec<(String, S
                 // the hand-built witness expression-valid but absent from
                 // the actual clause catalog.
                 ClauseRole::Introduction,
-                Expr::App(Box::new(Expr::Lib(14)), Box::new(Expr::Var(1))),
+                Expr::App(Box::new(Expr::Lib(previous_step)), Box::new(Expr::Var(1))),
             ),
         ];
         if kappa == 4 {
             clauses.push(ClauseRec::new(
                 ClauseRole::Formation,
-                Expr::Pi(Box::new(Expr::Lib(13)), Box::new(Expr::Var(1))),
+                Expr::Pi(Box::new(Expr::Lib(older_step)), Box::new(Expr::Var(1))),
             ));
         }
         candidates.push((
@@ -462,7 +578,7 @@ fn adversarial_candidates(admissibility: &StrictAdmissibility) -> Vec<(String, S
                 Telescope::new(vec![
                     ClauseRec::new(
                         ClauseRole::Formation,
-                        Expr::App(Box::new(Expr::Univ), Box::new(Expr::Lib(15))),
+                        Expr::App(Box::new(Expr::Univ), Box::new(Expr::Lib(latest_step))),
                     ),
                     ClauseRec::new(ClauseRole::PathAttach, Expr::PathCon(dimension)),
                 ]),
@@ -550,7 +666,7 @@ pub fn run_adversarial_probe() -> AdversarialProbeReport {
     let orbits = pen_eval::demand_orbits::kernel_stage_inventories(&signature, &closure)
         .expect("the sealed timeline yields kernel orbit inventories");
 
-    let candidates = adversarial_candidates(&admissibility)
+    let candidates = adversarial_candidates(&admissibility, 15)
         .into_iter()
         .map(|(name, rationale, telescope)| {
             let identified = accepted_keys.contains(&canonical_key_telescope(&telescope));
@@ -650,12 +766,382 @@ pub fn run_adversarial_probe() -> AdversarialProbeReport {
     }
 }
 
+fn continuation_ledger_summary(history: &[DiscoveryRecord]) -> ContinuationLedgerSummary {
+    let (sum_nu, sum_kappa) = history.iter().fold((0_u64, 0_u64), |acc, record| {
+        (
+            acc.0 + u64::from(record.nu),
+            acc.1 + u64::from(record.kappa),
+        )
+    });
+    let omega = if sum_kappa == 0 {
+        Rational::one()
+    } else {
+        Rational::new(
+            i64::try_from(sum_nu).expect("continuation nu ledger exceeds i64"),
+            i64::try_from(sum_kappa).expect("continuation kappa ledger exceeds i64"),
+        )
+    };
+
+    ContinuationLedgerSummary {
+        records: history.len(),
+        last_step: history.last().map(|record| record.step_index),
+        sum_nu,
+        sum_kappa,
+        omega: rational_string(omega),
+    }
+}
+
+fn continuation_candidate_traces(
+    step_index: u32,
+    library: &Library,
+    pairs: &[(u32, u32)],
+    records: &[DiscoveryRecord],
+    accepted_telescopes: &[Telescope],
+) -> (ContinuationBarTrace, Vec<ContinuationCandidateTrace>) {
+    let admissibility =
+        strict_admissibility_for_mode(step_index, 2, library, AdmissibilityMode::Guarded);
+    let enumeration_context = EnumerationContext::from_admissibility(library, admissibility);
+    let bar_computation = compute_bar(2, step_index, records);
+    let accepted_keys = accepted_telescopes
+        .iter()
+        .map(canonical_key_telescope)
+        .collect::<BTreeSet<_>>();
+    let latest_step = u32::try_from(library.len()).expect("continuation prefix length fits u32");
+
+    let traces = adversarial_candidates(&admissibility, latest_step)
+        .into_iter()
+        .map(|(name, _, telescope)| {
+            let identified = accepted_keys.contains(&canonical_key_telescope(&telescope));
+            let decision =
+                assess_strict_admissibility(step_index, library, &telescope, admissibility);
+            let raw_surface = assess_raw_surface_membership(enumeration_context, &telescope);
+            let type_checks = matches!(check_telescope(library, &telescope), CheckResult::Ok);
+            let connectivity = passes_connectivity(library, &telescope);
+            let structural = structural_nu(&telescope, library, pairs);
+            let kappa = u32::try_from(telescope.kappa()).expect("kappa fits u32");
+            let nu = if identified {
+                ContinuationNuDecomposition {
+                    nu_g: 0,
+                    nu_c: 0,
+                    nu_h: 0,
+                    nu_total: 0,
+                }
+            } else {
+                ContinuationNuDecomposition {
+                    nu_g: structural.nu_g,
+                    nu_c: structural.nu_c,
+                    nu_h: structural.nu_h,
+                    nu_total: structural.total,
+                }
+            };
+            let rho = compute_rho(nu.nu_total, kappa).filter(|_| !identified);
+            let exact_margin = rho.map(|value| rational_string(value - bar_computation.bar));
+            let clears = rho
+                .map(|value| clears_bar(value, bar_computation.bar))
+                .unwrap_or(false);
+            let minimality = analyze_semantic_minimality(
+                step_index,
+                bar_computation.bar,
+                admissibility,
+                &telescope,
+                library,
+                pairs,
+            );
+            let semantically_minimal = minimality.is_minimal();
+            let survives = !identified
+                && decision.is_admitted()
+                && raw_surface.is_member
+                && type_checks
+                && connectivity
+                && semantically_minimal
+                && clears;
+
+            ContinuationCandidateTrace {
+                name,
+                clause_shapes: telescope.clauses,
+                clause_kappa: kappa,
+                identified_with_sealed_structure: identified,
+                admitted: decision.is_admitted(),
+                raw_surface_member: raw_surface.is_member,
+                type_checks,
+                connectivity_passes: connectivity,
+                semantically_minimal,
+                nu,
+                rho: rho.map(rational_string),
+                exact_margin,
+                clears_bar: clears,
+                survives_all_gates_and_clears: survives,
+            }
+        })
+        .collect();
+
+    (
+        ContinuationBarTrace {
+            phi: rational_string(bar_computation.phi),
+            omega: rational_string(bar_computation.omega),
+            bar: rational_string(bar_computation.bar),
+        },
+        traces,
+    )
+}
+
+fn select_continuation_survivor(
+    candidates: &[ContinuationCandidateTrace],
+    bar: Rational,
+) -> Option<ContinuationCandidateTrace> {
+    candidates
+        .iter()
+        .filter(|candidate| candidate.survives_all_gates_and_clears)
+        .min_by(|left, right| {
+            let left_telescope = Telescope::new(left.clause_shapes.clone());
+            let right_telescope = Telescope::new(right.clause_shapes.clone());
+            let left_rank = acceptance_rank_for_telescope(
+                bar,
+                &left_telescope,
+                u16::try_from(left.nu.nu_total).expect("continuation nu fits u16"),
+                u16::try_from(telescope_bit_cost(&left_telescope))
+                    .expect("continuation bit kappa fits u16"),
+                u16::try_from(left.clause_kappa).expect("continuation clause kappa fits u16"),
+            )
+            .expect("a continuation survivor has an acceptance rank");
+            let right_rank = acceptance_rank_for_telescope(
+                bar,
+                &right_telescope,
+                u16::try_from(right.nu.nu_total).expect("continuation nu fits u16"),
+                u16::try_from(telescope_bit_cost(&right_telescope))
+                    .expect("continuation bit kappa fits u16"),
+                u16::try_from(right.clause_kappa).expect("continuation clause kappa fits u16"),
+            )
+            .expect("a continuation survivor has an acceptance rank");
+            left_rank.cmp(&right_rank)
+        })
+        .cloned()
+}
+
+/// Seal a named Step-16 adversarial survivor, append its actual telescope to
+/// both the structural library and the canonical-identification prefix, and
+/// repeat the same adversarial probe against a freshly replayed bar. After
+/// Step 16, selection uses the engine's exact acceptance rank (minimum exact
+/// overshoot followed by its registered tie-break tuple).
+pub fn run_seal_and_continue_probe(
+    designated_step16_survivor: &str,
+    requested_steps: usize,
+) -> Result<SealAndContinueReport, SealAndContinueError> {
+    if requested_steps < SEAL_AND_CONTINUE_MIN_STEPS {
+        return Err(SealAndContinueError::TooFewSteps {
+            requested: requested_steps,
+            minimum: SEAL_AND_CONTINUE_MIN_STEPS,
+        });
+    }
+
+    let (mut library, mut pairs, mut records) = genesis_history();
+    let mut accepted_telescopes = (1..=15).map(Telescope::reference).collect::<Vec<_>>();
+    let initial_ledger = continuation_ledger_summary(&records);
+    let mut steps = Vec::with_capacity(requested_steps);
+    let mut completed_seals = 0;
+    let mut termination = SealAndContinueTermination::RequestedStepsCompleted;
+
+    for offset in 0..requested_steps {
+        let step_index = 16 + u32::try_from(offset).expect("requested continuation fits u32");
+        let prefix_entries_before = library.len();
+        let ledger_before = continuation_ledger_summary(&records);
+        let bar_computation = compute_bar(2, step_index, &records);
+        let (bar, candidates) = continuation_candidate_traces(
+            step_index,
+            &library,
+            &pairs,
+            &records,
+            &accepted_telescopes,
+        );
+
+        let selected = if offset == 0 {
+            let designated = candidates
+                .iter()
+                .find(|candidate| candidate.name == designated_step16_survivor)
+                .ok_or_else(|| SealAndContinueError::UnknownStep16Candidate {
+                    name: designated_step16_survivor.to_owned(),
+                })?;
+            if !designated.survives_all_gates_and_clears {
+                return Err(SealAndContinueError::Step16CandidateDidNotSurvive {
+                    name: designated_step16_survivor.to_owned(),
+                });
+            }
+            Some(designated.clone())
+        } else {
+            select_continuation_survivor(&candidates, bar_computation.bar)
+        };
+
+        let Some(selected_trace) = selected else {
+            let ledger_after = continuation_ledger_summary(&records);
+            steps.push(SealAndContinueStep {
+                step_index,
+                prefix_entries_before,
+                ledger_before,
+                bar,
+                candidates,
+                selected: None,
+                prefix_entries_after: library.len(),
+                ledger_after,
+            });
+            termination = SealAndContinueTermination::NoClearingSurvivor { step_index };
+            break;
+        };
+
+        let selected_telescope = Telescope::new(selected_trace.clause_shapes.clone());
+        let selected_nu = selected_trace.nu.nu_total;
+        let selected_kappa = selected_trace.clause_kappa;
+        library.push(LibraryEntry::from_telescope(&selected_telescope, &library));
+        pairs.push((step_index, selected_nu));
+        records.push(DiscoveryRecord::new(
+            step_index,
+            selected_nu,
+            selected_kappa,
+        ));
+        accepted_telescopes.push(selected_telescope);
+        completed_seals += 1;
+
+        let ledger_after = continuation_ledger_summary(&records);
+        steps.push(SealAndContinueStep {
+            step_index,
+            prefix_entries_before,
+            ledger_before,
+            bar,
+            candidates,
+            selected: Some(selected_trace),
+            prefix_entries_after: library.len(),
+            ledger_after,
+        });
+    }
+
+    Ok(SealAndContinueReport {
+        mode: "adversarial_seal_and_continue".to_owned(),
+        scope_disclosure: "non-exhaustive continuation probe over the registered adversarial candidate table; every candidate is rerun through identification, raw-surface membership, guarded admissibility, type, connectivity, semantic-minimality, structural valuation, and acceptance rank, but this is not the infeasible full catalog DFS"
+            .to_owned(),
+        start_step: 16,
+        window_depth: 2,
+        designated_step16_survivor: designated_step16_survivor.to_owned(),
+        requested_steps,
+        completed_seals,
+        initial_ledger,
+        steps,
+        final_ledger: continuation_ledger_summary(&records),
+        termination,
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::{
-        LaneStep16Outcome, run_adversarial_probe, step16_surface_diagnostics,
-        verify_genesis_squeeze,
+        DEFAULT_STEP16_CONTINUATION_SURVIVOR, LaneStep16Outcome, SEAL_AND_CONTINUE_MIN_STEPS,
+        SealAndContinueError, SealAndContinueTermination, run_adversarial_probe,
+        run_seal_and_continue_probe, step16_surface_diagnostics, verify_genesis_squeeze,
     };
+
+    #[test]
+    fn seal_and_continue_requires_four_steps() {
+        assert_eq!(
+            run_seal_and_continue_probe(DEFAULT_STEP16_CONTINUATION_SURVIVOR, 3),
+            Err(SealAndContinueError::TooFewSteps {
+                requested: 3,
+                minimum: SEAL_AND_CONTINUE_MIN_STEPS,
+            })
+        );
+    }
+
+    #[test]
+    fn seal_and_continue_rejects_an_unknown_or_non_surviving_designation() {
+        assert_eq!(
+            run_seal_and_continue_probe("missing_candidate", SEAL_AND_CONTINUE_MIN_STEPS),
+            Err(SealAndContinueError::UnknownStep16Candidate {
+                name: "missing_candidate".to_owned(),
+            })
+        );
+        assert_eq!(
+            run_seal_and_continue_probe("hit_path_d4", SEAL_AND_CONTINUE_MIN_STEPS),
+            Err(SealAndContinueError::Step16CandidateDidNotSurvive {
+                name: "hit_path_d4".to_owned(),
+            })
+        );
+    }
+
+    #[test]
+    fn seal_and_continue_replays_the_ledger_and_carries_identification_forward() {
+        let report = run_seal_and_continue_probe(
+            DEFAULT_STEP16_CONTINUATION_SURVIVOR,
+            SEAL_AND_CONTINUE_MIN_STEPS,
+        )
+        .expect("the registered Step-16 survivor should launch the continuation probe");
+
+        assert_eq!(report.initial_ledger.records, 15);
+        assert_eq!(report.initial_ledger.last_step, Some(15));
+        assert_eq!(report.initial_ledger.sum_nu, 359);
+        assert_eq!(report.initial_ledger.sum_kappa, 64);
+        assert_eq!(report.initial_ledger.omega, "359/64");
+        assert_eq!(report.completed_seals, SEAL_AND_CONTINUE_MIN_STEPS);
+        assert_eq!(report.steps.len(), SEAL_AND_CONTINUE_MIN_STEPS);
+        assert_eq!(
+            report.termination,
+            SealAndContinueTermination::RequestedStepsCompleted
+        );
+
+        let step16 = &report.steps[0];
+        assert_eq!(step16.step_index, 16);
+        assert_eq!(step16.prefix_entries_before, 15);
+        assert_eq!(step16.bar.phi, "987/610");
+        assert_eq!(step16.bar.omega, "359/64");
+        assert_eq!(step16.bar.bar, "354333/39040");
+        let selected16 = step16.selected.as_ref().expect("Step 16 seals");
+        assert_eq!(selected16.name, DEFAULT_STEP16_CONTINUATION_SURVIVOR);
+        assert_eq!(
+            (
+                selected16.nu.nu_g,
+                selected16.nu.nu_c,
+                selected16.nu.nu_h,
+                selected16.nu.nu_total,
+            ),
+            (0, 17, 2, 19)
+        );
+        assert_eq!(selected16.rho.as_deref(), Some("19/2"));
+        assert_eq!(selected16.exact_margin.as_deref(), Some("16547/39040"));
+        assert_eq!(step16.ledger_after.sum_nu, 378);
+        assert_eq!(step16.ledger_after.sum_kappa, 66);
+
+        let step17 = &report.steps[1];
+        assert_eq!(step17.step_index, 17);
+        assert_eq!(step17.prefix_entries_before, 16);
+        assert_eq!(step17.bar.omega, step17.ledger_before.omega);
+        let repeated = step17
+            .candidates
+            .iter()
+            .find(|candidate| candidate.name == DEFAULT_STEP16_CONTINUATION_SURVIVOR)
+            .expect("the structural fallback shape remains in the probe table");
+        assert!(repeated.identified_with_sealed_structure);
+        assert_eq!(repeated.nu.nu_total, 0);
+        assert!(repeated.rho.is_none());
+        assert!(repeated.exact_margin.is_none());
+        assert!(!repeated.survives_all_gates_and_clears);
+
+        for step in &report.steps {
+            let selected = step.selected.as_ref().expect("all four rounds seal");
+            assert_eq!(step.prefix_entries_after, step.prefix_entries_before + 1);
+            assert_eq!(step.ledger_after.records, step.ledger_before.records + 1);
+            assert_eq!(
+                step.ledger_after.sum_nu,
+                step.ledger_before.sum_nu + u64::from(selected.nu.nu_total)
+            );
+            assert_eq!(
+                step.ledger_after.sum_kappa,
+                step.ledger_before.sum_kappa + u64::from(selected.clause_kappa)
+            );
+            assert_eq!(step.bar.omega, step.ledger_before.omega);
+        }
+
+        let json = serde_json::to_string(&report).expect("continuation report serializes");
+        assert!(json.contains("clause_shapes"));
+        assert!(json.contains("exact_margin"));
+        assert!(!json.contains("rationale"));
+        assert!(!json.contains("squeeze_supported"));
+    }
 
     /// T1 (adversarial form): preserve the currently known, raw-generable,
     /// semantically minimal Step-16 clearer as falsifier evidence.  The test
@@ -847,8 +1333,7 @@ mod tests {
             Some("no_oriented_basis")
         );
         assert!(temporal_disposition.token_attempts.iter().any(|attempt| {
-            attempt.token.starts_with("naturality[")
-                && attempt.outcome == "not_a_naturality_square"
+            attempt.token.starts_with("naturality[") && attempt.outcome == "not_a_naturality_square"
         }));
         assert_eq!(temporal_disposition.marginal_families.len(), 0);
         assert_eq!(temporal_disposition.egp_marginal_nu, Some(0));
@@ -904,11 +1389,14 @@ mod tests {
             // extraction derivation hash.
             assert!(semantic.extraction_derivation_hash.is_some());
         }
-        let serialized =
-            serde_json::to_string(&report.candidates.iter().map(|trace| {
-                (&trace.name, &trace.semantic_disposition)
-            }).collect::<Vec<_>>())
-            .expect("dispositions serialize");
+        let serialized = serde_json::to_string(
+            &report
+                .candidates
+                .iter()
+                .map(|trace| (&trace.name, &trace.semantic_disposition))
+                .collect::<Vec<_>>(),
+        )
+        .expect("dispositions serialize");
         assert!(serialized.contains("no_formation_clause"));
         assert!(serialized.contains("no_dominant_import"));
     }
