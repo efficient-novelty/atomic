@@ -22,7 +22,7 @@ use crate::p5_record::{ImportDag, P5ImportAudit};
 use pen_core::canonical::{canonical_key_expr, canonical_key_telescope};
 use pen_core::clause::ClauseRole;
 use pen_core::expr::Expr;
-use pen_core::library::Library;
+use pen_core::library::{Library, LibraryEntry};
 use pen_core::telescope::{Telescope, TelescopeClass};
 use pen_type::elaborate::{
     SealedSignature, TokenReplayError, TypedLiftToken, candidate_hash as kernel_candidate_hash,
@@ -523,6 +523,7 @@ pub struct ReplayedP5LiftCapability {
     signature_digest: String,
     derivation_hash: String,
     visible_library: u32,
+    direct_imports: BTreeSet<u32>,
     dominant_import: u32,
     lift_clauses: BTreeSet<u16>,
 }
@@ -547,6 +548,7 @@ impl ReplayedP5LiftCapability {
             signature_digest: token.signature_digest().to_owned(),
             derivation_hash: token.derivation_hash().to_owned(),
             visible_library,
+            direct_imports: token.direct_imports().iter().copied().collect(),
             dominant_import: token.dominant_import(),
             lift_clauses,
         })
@@ -572,6 +574,10 @@ impl ReplayedP5LiftCapability {
         self.dominant_import
     }
 
+    pub fn direct_imports(&self) -> &BTreeSet<u32> {
+        &self.direct_imports
+    }
+
     pub fn lift_clauses(&self) -> &BTreeSet<u16> {
         &self.lift_clauses
     }
@@ -583,6 +589,19 @@ pub enum P5KernelAdapterError {
     Replay(#[from] TokenReplayError),
     #[error("kernel P5 token has an empty or duplicate lift-clause set")]
     InvalidLiftClauseSet,
+}
+
+/// Independent evidence that the opaque heads form an irreducible minimal
+/// record API with a typed record eliminator.  A typed lift does not prove
+/// this fact.  The fields are private and there is deliberately no public
+/// constructor until the kernel can derive the required internality/API
+/// theorem rather than accepting `assert_all_clauses_opaque` as evidence.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct TrustedP5RecordInternalityCapability {
+    candidate_key: String,
+    signature_digest: String,
+    api_clauses: BTreeSet<u16>,
+    derivation_hash: String,
 }
 
 /// Frozen support-local P5 certificate.
@@ -599,6 +618,7 @@ pub struct FrozenP5Certificate {
     pub bridges: BTreeSet<P5BridgeSchema>,
     pub local_lifts: BTreeSet<P5LocalLift>,
     pub replayed_typed_lift: ReplayedP5LiftCapability,
+    pub record_internality: TrustedP5RecordInternalityCapability,
 }
 
 impl FrozenP5Certificate {
@@ -612,6 +632,7 @@ impl FrozenP5Certificate {
         graph: &ImportDag,
         kernel: &FreshKernelCertificate,
         token: &TypedLiftToken,
+        record_internality: TrustedP5RecordInternalityCapability,
     ) -> Result<Self, P5CertificateError> {
         let replayed_typed_lift =
             ReplayedP5LiftCapability::from_kernel_token(
@@ -634,12 +655,20 @@ impl FrozenP5Certificate {
             || replayed_typed_lift.signature_digest != signature.digest()
             || replayed_typed_lift.derivation_hash != token.derivation_hash()
             || replayed_typed_lift.visible_library != visible_library
+            || replayed_typed_lift.direct_imports != candidate.lib_refs()
             || replayed_typed_lift.dominant_import != dominant_import
             || !replayed_typed_lift
                 .lift_clauses
                 .is_subset(&kernel.irreducible_clauses)
         {
             return Err(P5CertificateError::KernelLiftCapabilityMismatch);
+        }
+        if record_internality.candidate_key != candidate_key
+            || record_internality.signature_digest != signature.digest()
+            || record_internality.api_clauses != kernel.irreducible_clauses
+            || record_internality.derivation_hash.is_empty()
+        {
+            return Err(P5CertificateError::RecordInternalityCapabilityMismatch);
         }
         let bridges = candidate
             .lib_refs()
@@ -666,6 +695,7 @@ impl FrozenP5Certificate {
             bridges,
             local_lifts,
             replayed_typed_lift,
+            record_internality,
         })
     }
 }
@@ -683,6 +713,8 @@ pub enum P5CertificateError {
     KernelAdapter(#[from] P5KernelAdapterError),
     #[error("replayed kernel P5 lift capability does not match the candidate API")]
     KernelLiftCapabilityMismatch,
+    #[error("typed P5 record-internality capability does not match the candidate API")]
+    RecordInternalityCapabilityMismatch,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
@@ -965,10 +997,12 @@ fn ceil_div(numerator: u32, denominator: u32) -> u32 {
 pub fn evaluate_certified_novelty(
     candidate: &Telescope,
     certificate: &ExtensionCertificate,
+    signature: &SealedSignature,
     library: &Library,
     graph: &ImportDag,
     caps: &CertifiedSurfaceCaps,
 ) -> Result<CertifiedNoveltyReport, CertifiedNoveltyError> {
+    validate_signature_library_context(signature, library)?;
     validate_surface(candidate, caps)?;
     let theorem = derive_linear_bound(caps)?;
     let normalized = NormalizedCandidate::from_telescope(candidate, library);
@@ -985,8 +1019,15 @@ pub fn evaluate_certified_novelty(
         }
         ExtensionCertificate::Opaque(opaque) => {
             validate_kernel(candidate, &opaque.kernel, &normalized)?;
-            let (components, uncredited) =
-                evaluate_opaque(candidate, opaque, &normalized, library, graph, caps)?;
+            let (components, uncredited) = evaluate_opaque(
+                candidate,
+                opaque,
+                &normalized,
+                signature,
+                library,
+                graph,
+                caps,
+            )?;
             (
                 CertifiedDisposition::CertifiedOpaque,
                 components,
@@ -1019,6 +1060,31 @@ pub fn evaluate_certified_novelty(
     })
 }
 
+/// The sidecar consumes a semantic token in the same sealed context in
+/// which the kernel issued it.  `Library` is only a derived summary, so it
+/// must replay exactly from the signature rather than being paired with a
+/// token by convention.
+fn validate_signature_library_context(
+    signature: &SealedSignature,
+    library: &Library,
+) -> Result<(), CertifiedNoveltyError> {
+    if signature.len() != library.len() {
+        return Err(CertifiedNoveltyError::SignatureLibraryMismatch);
+    }
+    let mut replayed = Library::new();
+    for (offset, entry) in signature.entries().iter().enumerate() {
+        if entry.step != u32::try_from(offset + 1).expect("signature length fits u32") {
+            return Err(CertifiedNoveltyError::SignatureLibraryMismatch);
+        }
+        let summary = LibraryEntry::from_telescope(&entry.telescope, &replayed);
+        if library.get(offset) != Some(&summary) {
+            return Err(CertifiedNoveltyError::SignatureLibraryMismatch);
+        }
+        replayed.push(summary);
+    }
+    Ok(())
+}
+
 fn zero_components() -> SupportLocalComponents {
     SupportLocalComponents {
         native_kernel: 0,
@@ -1036,6 +1102,7 @@ fn evaluate_opaque(
     candidate: &Telescope,
     opaque: &OpaqueExtensionCertificate,
     normalized: &NormalizedCandidate,
+    signature: &SealedSignature,
     _library: &Library,
     graph: &ImportDag,
     caps: &CertifiedSurfaceCaps,
@@ -1087,7 +1154,8 @@ fn evaluate_opaque(
                     requirement: "FrozenP5Certificate",
                 },
             )?;
-            let (bridges, lifts) = validate_p5(candidate, &opaque.kernel, p5, dominant)?;
+            let (bridges, lifts) =
+                validate_p5(candidate, &opaque.kernel, p5, dominant, signature)?;
             components(kernel, k, 0, 0, bridges, lifts, 0)
         }
         TelescopeClass::Synthesis => {
@@ -1387,6 +1455,7 @@ fn validate_p5(
     kernel: &FreshKernelCertificate,
     certificate: &FrozenP5Certificate,
     dominant: u32,
+    signature: &SealedSignature,
 ) -> Result<(u32, u32), CertifiedNoveltyError> {
     if certificate.candidate_key != canonical_key_telescope(candidate).0 {
         return Err(CertifiedNoveltyError::CandidateKeyMismatch);
@@ -1404,8 +1473,10 @@ fn validate_p5(
     if certificate.replayed_typed_lift.candidate_key != certificate.candidate_key
         || certificate.replayed_typed_lift.kernel_subject_hash
             != kernel_candidate_hash(candidate)
-        || certificate.replayed_typed_lift.signature_digest.is_empty()
+        || certificate.replayed_typed_lift.signature_digest != signature.digest()
         || certificate.replayed_typed_lift.derivation_hash.is_empty()
+        || certificate.replayed_typed_lift.visible_library != signature.len() as u32
+        || certificate.replayed_typed_lift.direct_imports != candidate.lib_refs()
         || certificate.replayed_typed_lift.dominant_import != dominant
         || certificate.replayed_typed_lift.lift_clauses.is_empty()
         || !certificate
@@ -1415,6 +1486,15 @@ fn validate_p5(
     {
         return Err(CertifiedNoveltyError::InvalidP5Certificate {
             reason: "replayed kernel lift binding does not match the candidate API".to_owned(),
+        });
+    }
+    if certificate.record_internality.candidate_key != certificate.candidate_key
+        || certificate.record_internality.signature_digest != signature.digest()
+        || certificate.record_internality.api_clauses != kernel.irreducible_clauses
+        || certificate.record_internality.derivation_hash.is_empty()
+    {
+        return Err(CertifiedNoveltyError::InvalidP5Certificate {
+            reason: "typed record-internality binding does not match the candidate API".to_owned(),
         });
     }
     let expected_bridges = candidate
@@ -1634,6 +1714,8 @@ pub enum CertifiedNoveltyError {
     InvalidSurfaceCaps { reason: String },
     #[error("candidate is outside the frozen surface: {reason}")]
     SurfaceViolation { reason: String },
+    #[error("sealed signature and evaluation library do not replay to the same context")]
+    SignatureLibraryMismatch,
     #[error("certificate belongs to a different canonical candidate")]
     CandidateKeyMismatch,
     #[error("transparent certificate must contain exactly one witness per clause")]
@@ -1692,6 +1774,15 @@ mod tests {
 
     fn graph() -> ImportDag {
         ImportDag::genesis_prefix(15)
+    }
+
+    fn library_for_signature(signature: &SealedSignature) -> Library {
+        let mut library = Library::new();
+        for entry in signature.entries() {
+            let summary = LibraryEntry::from_telescope(&entry.telescope, &library);
+            library.push(summary);
+        }
+        library
     }
 
     fn p5_survivor() -> Telescope {
@@ -1763,6 +1854,19 @@ mod tests {
             candidate_key: canonical_key_telescope(candidate).0,
             formation_clause,
             theorem_id: "test-only:typed-h-eliminator".to_owned(),
+        }
+    }
+
+    fn trusted_p5_record_internality(
+        signature: &SealedSignature,
+        candidate: &Telescope,
+        kernel: &FreshKernelCertificate,
+    ) -> TrustedP5RecordInternalityCapability {
+        TrustedP5RecordInternalityCapability {
+            candidate_key: canonical_key_telescope(candidate).0,
+            signature_digest: signature.digest().to_owned(),
+            api_clauses: kernel.irreducible_clauses.clone(),
+            derivation_hash: "test-only:typed-record-internality".to_owned(),
         }
     }
 
@@ -1856,7 +1960,14 @@ mod tests {
             .expect("test elaboration token matches"),
         );
         let report =
-            evaluate_certified_novelty(&candidate, &certificate, &library, &graph(), &caps())
+            evaluate_certified_novelty(
+                &candidate,
+                &certificate,
+                &SealedSignature::genesis_del_h15(),
+                &library,
+                &graph(),
+                &caps(),
+            )
                 .expect("exact old-library presentation is transparent");
 
         assert_eq!(report.disposition, CertifiedDisposition::Transparent);
@@ -1879,7 +1990,14 @@ mod tests {
             .expect("test elaboration token matches"),
         );
         assert_eq!(
-            evaluate_certified_novelty(&candidate, &certificate, &library, &graph(), &caps(),),
+            evaluate_certified_novelty(
+                &candidate,
+                &certificate,
+                &SealedSignature::genesis_del_h15(),
+                &library,
+                &graph(),
+                &caps(),
+            ),
             Err(CertifiedNoveltyError::TransparentRealizerUsesFreshHead { clause: 1 })
         );
     }
@@ -1907,7 +2025,14 @@ mod tests {
         let certificate =
             ExtensionCertificate::Opaque(OpaqueExtensionCertificate::local(&candidate, &library));
         assert_eq!(
-            evaluate_certified_novelty(&candidate, &certificate, &library, &graph(), &caps(),),
+            evaluate_certified_novelty(
+                &candidate,
+                &certificate,
+                &SealedSignature::genesis_del_h15(),
+                &library,
+                &graph(),
+                &caps(),
+            ),
             Err(CertifiedNoveltyError::MissingAmplificationCertificate {
                 amplification: AmplificationKind::WholeLibraryHitInheritance,
                 requirement: "FrozenHFormCertificate",
@@ -1946,6 +2071,7 @@ mod tests {
         let report = evaluate_certified_novelty(
             &candidate,
             &ExtensionCertificate::Opaque(opaque),
+            &SealedSignature::genesis_del_h15(),
             &library,
             &graph(),
             &caps(),
@@ -1969,7 +2095,14 @@ mod tests {
         let certificate =
             ExtensionCertificate::Opaque(OpaqueExtensionCertificate::local(&candidate, &library));
         assert_eq!(
-            evaluate_certified_novelty(&candidate, &certificate, &library, &graph(), &caps(),),
+            evaluate_certified_novelty(
+                &candidate,
+                &certificate,
+                &SealedSignature::genesis_del_h15(),
+                &library,
+                &graph(),
+                &caps(),
+            ),
             Err(CertifiedNoveltyError::P5NoUniqueDominantImport {
                 direct_imports: vec![14, 15],
                 dominant_imports: vec![],
@@ -1997,7 +2130,14 @@ mod tests {
         let certificate =
             ExtensionCertificate::Opaque(OpaqueExtensionCertificate::local(&candidate, &library));
         assert_eq!(
-            evaluate_certified_novelty(&candidate, &certificate, &library, &graph(), &caps(),),
+            evaluate_certified_novelty(
+                &candidate,
+                &certificate,
+                &SealedSignature::genesis_del_h15(),
+                &library,
+                &graph(),
+                &caps(),
+            ),
             Err(CertifiedNoveltyError::MissingAmplificationCertificate {
                 amplification: AmplificationKind::HistoricalP5Inheritance,
                 requirement: "FrozenP5Certificate",
@@ -2037,6 +2177,7 @@ mod tests {
             &ImportDag::default(),
             &kernel,
             &token,
+            trusted_p5_record_internality(&signature, &candidate, &kernel),
         )
         .expect("replayed kernel token adapts");
 
@@ -2131,6 +2272,108 @@ mod tests {
     }
 
     #[test]
+    fn p5_consumer_rejects_signature_library_and_capability_drift() {
+        let signature = SealedSignature::from_telescopes(vec![(
+            1,
+            Telescope::new(vec![ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Pi(Box::new(Expr::Univ), Box::new(Expr::Univ))),
+                    Box::new(Expr::Univ),
+                ),
+            )]),
+        )]);
+        let library = library_for_signature(&signature);
+        let candidate = Telescope::new(vec![
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::App(
+                    Box::new(Expr::Lib(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Univ), Box::new(Expr::Univ))),
+                ),
+            ),
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1))),
+            ),
+            ClauseRec::new(ClauseRole::Introduction, Expr::Var(1)),
+        ]);
+        let token = pen_type::elaborate::issue_typed_lift_token(&signature, &candidate, 1)
+            .expect("non-vacuous typed lift");
+        let kernel = FreshKernelCertificate::assert_all_clauses_opaque(&candidate, &library);
+        let p5 = FrozenP5Certificate::complete_local_from_kernel(
+            &signature,
+            &candidate,
+            1,
+            &ImportDag::default(),
+            &kernel,
+            &token,
+            trusted_p5_record_internality(&signature, &candidate, &kernel),
+        )
+        .expect("both independent test capabilities are present");
+        let mut opaque = OpaqueExtensionCertificate::local(&candidate, &library);
+        opaque.p5 = Some(p5);
+        let certificate = ExtensionCertificate::Opaque(opaque);
+        let caps = CertifiedSurfaceCaps {
+            min_kappa: 3,
+            max_kappa: 3,
+            max_direct_support: 1,
+            max_path_dimension: 1,
+            max_expr_nodes: 6,
+            allowed_imports: [1].into_iter().collect(),
+            allow_truncation: false,
+            allow_modal: false,
+            allow_temporal: false,
+            allow_linear_exponential: false,
+        };
+
+        evaluate_certified_novelty(
+            &candidate,
+            &certificate,
+            &signature,
+            &library,
+            &ImportDag::default(),
+            &caps,
+        )
+        .expect("matching signature/library context validates");
+
+        assert_eq!(
+            evaluate_certified_novelty(
+                &candidate,
+                &certificate,
+                &signature,
+                &Library::new(),
+                &ImportDag::default(),
+                &caps,
+            ),
+            Err(CertifiedNoveltyError::SignatureLibraryMismatch)
+        );
+
+        let mutated_signature = SealedSignature::from_telescopes(vec![(
+            1,
+            Telescope::new(vec![ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Sigma(Box::new(Expr::Univ), Box::new(Expr::Univ))),
+                    Box::new(Expr::Univ),
+                ),
+            )]),
+        )]);
+        let mutated_library = library_for_signature(&mutated_signature);
+        assert!(matches!(
+            evaluate_certified_novelty(
+                &candidate,
+                &certificate,
+                &mutated_signature,
+                &mutated_library,
+                &ImportDag::default(),
+                &caps,
+            ),
+            Err(CertifiedNoveltyError::InvalidP5Certificate { .. })
+        ));
+    }
+
+    #[test]
     fn step13_and_step14_keep_graph_dominance_but_do_not_mint_vacuous_lifts() {
         let graph = graph();
         let signature = SealedSignature::genesis_del_h15();
@@ -2160,7 +2403,14 @@ mod tests {
         let certificate =
             ExtensionCertificate::Opaque(OpaqueExtensionCertificate::local(&candidate, &library));
         assert_eq!(
-            evaluate_certified_novelty(&candidate, &certificate, &library, &graph(), &caps(),),
+            evaluate_certified_novelty(
+                &candidate,
+                &certificate,
+                &SealedSignature::genesis_del_h15(),
+                &library,
+                &graph(),
+                &caps(),
+            ),
             Err(CertifiedNoveltyError::MissingAmplificationCertificate {
                 amplification: AmplificationKind::WholeLibrarySynthesisMultiplier,
                 requirement: "FrozenSynthesisCertificate",
@@ -2181,6 +2431,7 @@ mod tests {
         let report = evaluate_certified_novelty(
             &candidate,
             &ExtensionCertificate::Opaque(opaque),
+            &SealedSignature::genesis_del_h15(),
             &library,
             &graph(),
             &caps(),
@@ -2218,6 +2469,7 @@ mod tests {
         let report = evaluate_certified_novelty(
             &candidate,
             &ExtensionCertificate::Opaque(opaque),
+            &SealedSignature::genesis_del_h15(),
             &library,
             &graph(),
             &caps(),
@@ -2256,6 +2508,7 @@ mod tests {
             evaluate_certified_novelty(
                 &candidate,
                 &ExtensionCertificate::Opaque(opaque),
+                &SealedSignature::genesis_del_h15(),
                 &library,
                 &graph(),
                 &caps(),
@@ -2293,9 +2546,15 @@ mod tests {
         let hit_certificate = ExtensionCertificate::Opaque(hit_opaque);
 
         for (candidate, certificate) in candidates.iter().zip([map_certificate, hit_certificate]) {
-            let report =
-                evaluate_certified_novelty(candidate, &certificate, &library, &graph(), &caps())
-                    .expect("certified candidate");
+            let report = evaluate_certified_novelty(
+                candidate,
+                &certificate,
+                &SealedSignature::genesis_del_h15(),
+                &library,
+                &graph(),
+                &caps(),
+            )
+            .expect("certified candidate");
             assert!(report.nu <= report.derived_linear_bound);
             assert_eq!(report.derived_linear_coefficient, 4);
         }
